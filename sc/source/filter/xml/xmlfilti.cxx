@@ -745,6 +745,7 @@ void ScXMLDPConditionContext::getOperatorXML(
 void SAL_CALL ScXMLDPConditionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScQueryEntry aFilterField;
+    aFilterField.nField = nField;
     if (pFilterContext->GetConnection())
         aFilterField.eConnect = SC_OR;
     else
@@ -759,7 +760,6 @@ void SAL_CALL ScXMLDPConditionContext::endFastElement( sal_Int32 /*nElement*/ )
         utl::SearchParam::SearchType eSearchType = utl::SearchParam::SearchType::Normal;
         getOperatorXML(sOperator, aFilterField.eOp, eSearchType);
         pFilterContext->SetSearchType(eSearchType);
-        aFilterField.nField = nField;
         ScQueryEntry::Item& rItem = aFilterField.GetQueryItem();
         svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
 
