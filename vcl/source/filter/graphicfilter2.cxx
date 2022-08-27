@@ -119,25 +119,21 @@ void GraphicDescriptor::ImpConstruct()
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkBMP();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkGIF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
@@ -336,13 +332,11 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPCD();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
@@ -425,229 +419,191 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 
 bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPNG();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkTIF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectXBM( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkXBM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectXPM( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkXPM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPBM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPGM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPPM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkRAS();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectTGA( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkTGA();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPSD();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkEPS();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectDXF( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkDXF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectMET( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkMET();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkPCT();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkSVM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool /*bExtendedInfo*/)
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkWMF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkEMF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectSVG( SvStream& rStm, bool /*bExtendedInfo*/ )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkSVG();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_Int32 nStmPos = rStm.Tell();
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
     bool bRet = aDetector.detect();
     bRet &= aDetector.checkWEBP();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
-    rStm.Seek( nStmPos );
     return bRet;
 }
 

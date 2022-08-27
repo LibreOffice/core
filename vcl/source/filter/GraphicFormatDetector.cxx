@@ -400,6 +400,7 @@ bool GraphicFormatDetector::detect()
         mnFirstLong = (mnFirstLong << 8) | sal_uInt32(maFirstBytes[i]);
         mnSecondLong = (mnSecondLong << 8) | sal_uInt32(maFirstBytes[i + 4]);
     }
+    mrStream.Seek(mnStreamPosition);
     return true;
 }
 
@@ -416,21 +417,24 @@ bool GraphicFormatDetector::checkMET()
     for (int i = 0; i < 3; i++)
     {
         if (nFieldSize < 6)
-            return false;
+            goto cleanup;
         if (mnStreamLength < mrStream.Tell() + nFieldSize)
-            return false;
+            goto cleanup;
         mrStream.SeekRel(nFieldSize - 3);
         mrStream.ReadUInt16(nFieldSize).ReadUChar(nMagic);
         if (nMagic != 0xd3)
-            return false;
+            goto cleanup;
     }
     mrStream.SetEndian(SvStreamEndian::LITTLE);
 
     if (mrStream.GetError())
-        return false;
+        goto cleanup;
 
     maMetadata.mnFormat = GraphicFileFormat::MET;
     return true;
+cleanup:
+    mrStream.Seek(mnStreamPosition);
+    return false;
 }
 
 bool GraphicFormatDetector::checkBMP()
@@ -530,6 +534,7 @@ bool GraphicFormatDetector::checkBMP()
             }
         }
     }
+    mrStream.Seek(mnStreamPosition);
     return bRet;
 }
 
@@ -864,6 +869,7 @@ bool GraphicFormatDetector::checkPNG()
                 }
             } while (false);
         }
+        mrStream.Seek(mnStreamPosition);
         return true;
     }
     return false;
@@ -960,6 +966,7 @@ bool GraphicFormatDetector::checkSVM()
 
 bool GraphicFormatDetector::checkPCD()
 {
+    bool bRet = false;
     if (mnStreamLength < 2055)
         return false;
     char sBuffer[8];
@@ -969,9 +976,10 @@ bool GraphicFormatDetector::checkPCD()
     if (strncmp(sBuffer, "PCD_IPI", 7) == 0)
     {
         maMetadata.mnFormat = GraphicFileFormat::PCD;
-        return true;
+        bRet = true;
     }
-    return false;
+    mrStream.Seek(mnStreamPosition);
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkPSD()
@@ -1017,6 +1025,7 @@ bool GraphicFormatDetector::checkPSD()
                 bRet = false;
         }
     }
+    mrStream.Seek(mnStreamPosition);
     return bRet;
 }
 
@@ -1077,12 +1086,14 @@ bool GraphicFormatDetector::checkDXF()
 
 bool GraphicFormatDetector::checkPCT()
 {
+    bool bRet = false;
     if (isPCT(mrStream, mnStreamPosition, mnStreamLength))
     {
         maMetadata.mnFormat = GraphicFileFormat::PCT;
-        return true;
+        bRet = true;
     }
-    return false;
+    mrStream.Seek(mnStreamPosition);
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkPBM()
@@ -1173,6 +1184,7 @@ bool GraphicFormatDetector::checkXPM()
 
 bool GraphicFormatDetector::checkXBM()
 {
+    bool bRet = false;
     sal_uInt64 nSize = std::min<sal_uInt64>(mnStreamLength, 2048);
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize]);
 
@@ -1184,9 +1196,10 @@ bool GraphicFormatDetector::checkXBM()
     if (checkArrayForMatchingStrings(pBufferAsCharArray, nSize, { "#define", "_width" }))
     {
         maMetadata.mnFormat = GraphicFileFormat::XBM;
-        return true;
+        bRet = true;
     }
-    return false;
+    mrStream.Seek(mnStreamPosition);
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkSVG()
@@ -1236,6 +1249,7 @@ bool GraphicFormatDetector::checkSVG()
             nCheckSize = std::min<sal_uInt64>(mnStreamLength, 2048);
             mrStream.Seek(mnStreamPosition);
             nCheckSize = mrStream.ReadBytes(sExtendedOrDecompressedFirstBytes, nCheckSize);
+            mrStream.Seek(mnStreamPosition);
         }
 
         // search for '<svg'
@@ -1269,8 +1283,10 @@ bool GraphicFormatDetector::checkTGA()
             && memcmp(sFooterBytes, "TRUEVISION-XFILE.", SAL_N_ELEMENTS(sFooterBytes)) == 0)
         {
             maMetadata.mnFormat = GraphicFileFormat::TGA;
+            mrStream.Seek(mnStreamPosition);
             return true;
         }
+        mrStream.Seek(mnStreamPosition);
     }
 
     // Fallback to file extension check
@@ -1346,6 +1362,7 @@ sal_uInt8* GraphicFormatDetector::checkAndUncompressBuffer(sal_uInt8* aUncompres
             mnSecondLong = (mnSecondLong << 8) | sal_uInt32(aUncompressedBuffer[i + 4]);
         }
         mbWasCompressed = true;
+        mrStream.Seek(mnStreamPosition);
         return aUncompressedBuffer;
     }
     nRetSize = 0;
