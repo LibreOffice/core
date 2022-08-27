@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "224284b8_df27d46c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-27T09:51:36Z",
+      "side": 1,
+      "message": "Ilmary, should this be backported to the 7.4 branch?",
+      "revId": "33c6dcfaab35a70f8794a67d31fbec636cb485d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
