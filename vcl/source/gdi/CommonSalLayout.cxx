@@ -68,6 +68,8 @@ GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
 
 GenericSalLayout::~GenericSalLayout()
 {
+    if (mpVertGlyphs)
+        hb_set_destroy(mpVertGlyphs);
 }
 
 void GenericSalLayout::ParseFeatures(std::u16string_view aName)
@@ -248,6 +250,7 @@ bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationS
                 hb_set_union(mpVertGlyphs, pGlyphs);
             }
         }
+        hb_set_destroy(pLookups);
     }
 
     return hb_set_has(mpVertGlyphs, nGlyphIndex) != 0;
