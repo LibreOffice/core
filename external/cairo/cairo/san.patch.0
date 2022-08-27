@@ -1,3 +1,15 @@
+--- configure	2022-08-27 10:09:35.721992976 +0100
++++ configure	2022-08-27 10:10:00.363873391 +0100
+@@ -14940,7 +14940,8 @@
+ 
+ MAYBE_WARN="$MAYBE_WARN -fno-strict-aliasing -fno-common"
+ 
+-MAYBE_WARN="$MAYBE_WARN -Wp,-D_FORTIFY_SOURCE=2"
++# breaks msan
++# MAYBE_WARN="$MAYBE_WARN -Wp,-D_FORTIFY_SOURCE=2"
+ 
+ # invalidate cached value if MAYBE_WARN has changed
+ if test "x$cairo_cv_warn_maybe" != "x$MAYBE_WARN"; then
 --- src/cairo-fixed-private.h
 +++ src/cairo-fixed-private.h
 @@ -61,7 +61,7 @@
