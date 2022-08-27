@@ -50,6 +50,23 @@
       "message": "As you can see in the clang plugin output, you should use include here with `\u003c...\u003e` instead of `\"...\"`",
       "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e53430_8d9d776d",
+        "filename": "sc/qa/unit/pivottable_filters_test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-27T12:46:49Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
