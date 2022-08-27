@@ -4626,7 +4626,7 @@ void TestFormula::testFormulaRefUpdateValidity()
         SC_VALID_LIST, ScConditionMode::Equal, "C2:C4", "", *m_pDoc, ScAddress(0,1,0), "", "",
         m_pDoc->GetGrammar(), m_pDoc->GetGrammar());
 
-    sal_uLong nIndex = m_pDoc->AddValidationEntry(aData);
+    sal_uInt32 nIndex = m_pDoc->AddValidationEntry(aData);
     SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
 
     ScPatternAttr aNewAttrs(

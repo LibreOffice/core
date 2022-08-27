@@ -544,7 +544,7 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName 
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SfxStyleFamily::Para );
 }
 
-ScTableValidationObj::ScTableValidationObj(const ScDocument& rDoc, sal_uLong nKey,
+ScTableValidationObj::ScTableValidationObj(const ScDocument& rDoc, sal_uInt32 nKey,
                                            const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {

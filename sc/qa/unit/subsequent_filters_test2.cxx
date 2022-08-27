@@ -1252,7 +1252,7 @@ void checkValidationFormula(const ScAddress& rPos, const ScDocument& rDoc,
 {
     const SfxUInt32Item* pItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
     CPPUNIT_ASSERT(pItem);
-    sal_uLong nKey = pItem->GetValue();
+    sal_uInt32 nKey = pItem->GetValue();
     const ScValidationData* pData = rDoc.GetValidationEntry(nKey);
     CPPUNIT_ASSERT(pData);
 

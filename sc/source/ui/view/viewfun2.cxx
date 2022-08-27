@@ -3456,7 +3456,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 void ScViewFunc::SetValidation( const ScValidationData& rNew )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    sal_uLong nIndex = rDoc.AddValidationEntry(rNew);      // for it there is no Undo
+    sal_uInt32 nIndex = rDoc.AddValidationEntry(rNew);      // for it there is no Undo
     SfxUInt32Item aItem( ATTR_VALIDDATA, nIndex );
 
     ApplyAttr( aItem );         // with Paint and Undo...

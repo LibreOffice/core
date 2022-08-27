@@ -2314,7 +2314,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
 
                             std::unique_ptr<ScValidationData> pNewData(
                                     pValidObj->CreateValidationData( rDoc, eGrammar ));
-                            sal_uLong nIndex = rDoc.AddValidationEntry( *pNewData );
+                            sal_uInt32 nIndex = rDoc.AddValidationEntry( *pNewData );
                             pNewData.reset();
 
                             ScPatternAttr aPattern( rDoc.GetPool() );
