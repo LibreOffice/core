@@ -16,6 +16,24 @@
       "message": "This works. While looking at the surrounding code I got some rough ideas how the entire mechanism could be improved, I might come up with some follow-up change.",
       "revId": "630aaf4f2479fbee532f14302cf18c3c173711cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "354d7fb4_fd02aae5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-27T09:48:59Z",
+      "side": 1,
+      "message": "Thank you very much for your patience and help!",
+      "parentUuid": "f6d927f0_160b77bb",
+      "revId": "630aaf4f2479fbee532f14302cf18c3c173711cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []

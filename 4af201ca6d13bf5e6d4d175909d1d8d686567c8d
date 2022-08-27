@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e9a2731_c77373e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-27T09:48:59Z",
+      "side": 1,
+      "message": "I saw this around the code base so I was not sure if iter !\u003d aStrSet.end() was correct.",
+      "parentUuid": "82a497f6_2fec75b2",
+      "revId": "4af201ca6d13bf5e6d4d175909d1d8d686567c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e62148c3_73cdaab6",
