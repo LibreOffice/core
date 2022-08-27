@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1dfc74e_efdf2a70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-27T12:23:30Z",
+      "side": 1,
+      "message": "Put tdf#73845 at the beginning of the first line of the commit message.",
+      "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
