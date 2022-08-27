@@ -25,6 +25,9 @@
 #include <dpshttab.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <queryentry.hxx>
+#include <queryparam.hxx>
+#include <rtl/string.hxx>
 
 #include <test/xmltesttools.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -96,6 +99,7 @@ public:
     void testTdf125046();
     void testTdf125055();
     void testTdf125086();
+    void testTdf73845();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -149,6 +153,7 @@ public:
     CPPUNIT_TEST(testTdf125046);
     CPPUNIT_TEST(testTdf125055);
     CPPUNIT_TEST(testTdf125086);
+    CPPUNIT_TEST(testTdf73845);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2741,6 +2746,42 @@ void ScPivotTableFiltersTest::testTdf125086()
     assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "axis", "axisRow");
     // "dataField" attribute was not written for this "axisRow" field
     assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "dataField", "1");
+}
+
+void ScPivotTableFiltersTest::testTdf73845()
+{
+    // Query filter is set for individual pivot table in this ODS document.
+    // This test checks the query filter is restored for ByEmpty and ByNonEmpty query.
+    ScDocShellRef xDocSh = loadDoc(u"pivottable_restore_query_filter.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+
+    // Three pivot tables are created in the spreadsheet. Query filters are set as follow:
+    // pivot table 0: Confirmed Date = Not Empty
+    // pivot table 1: Confirmed Date = Empty
+    // pivot table 2: Category > C1 AND Confirmed Date = Not Empty
+    //
+    // Following assertions check the Confirmed Date is restored properly
+    // after file is opened again.
+    const SCCOLROW nConfirmedDateCol = SCCOLROW(2);
+    size_t nDPCount = pDPs->GetCount();
+    for (size_t i = 0; i < nDPCount; i++)
+    {
+        ScDPObject& pDPObj = (*pDPs)[i];
+        ScQueryParam aQueryParam(pDPObj.GetSheetDesc()->GetQueryParam());
+        size_t nEntriesCount = aQueryParam.GetEntryCount();
+        for (size_t j = 0; j < nEntriesCount; j++)
+        {
+            ScQueryEntry rEntry = aQueryParam.GetEntry(j);
+            if (rEntry.IsQueryByEmpty() || rEntry.IsQueryByNonEmpty())
+            {
+                const OString msg = "Query entry " + OString::number(j) + " on pivot table "
+                                    + OString::number(i) + " is not restored.";
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), nConfirmedDateCol, rEntry.nField);
+            }
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
