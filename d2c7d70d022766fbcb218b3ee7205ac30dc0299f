@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "993fadcf_6eb7073a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-27T09:49:41Z",
+      "side": 1,
+      "message": "No need to keep patch changes history in commit message.\nDescribe just what patch does please.",
+      "revId": "d2c7d70d022766fbcb218b3ee7205ac30dc0299f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dbc2c9a_3c3e7c2c",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-27T09:49:41Z",
+      "side": 1,
+      "message": "Don\u0027t comment out, simply remove unused code.",
+      "revId": "d2c7d70d022766fbcb218b3ee7205ac30dc0299f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
