@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8f0c080_e2954d48",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-27T19:40:07Z",
+      "side": 1,
+      "message": "Good! Just you didn\u0027t take my note about this variable representing a *single* attribute, and kept the trailing \u0027s\u0027.",
+      "range": {
+        "startLine": 153,
+        "startChar": 32,
+        "endLine": 153,
+        "endChar": 33
+      },
+      "revId": "2f79fb692cbdb6a193a53740a653c2700836d471",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
