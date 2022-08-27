@@ -3743,6 +3743,8 @@ ErrCode SwWW8Writer::WriteStorage()
 
     if (xPackageEncryption)
     {
+        assert(pSotStorageStream && m_pStg && "because always set if xPackageEncryption was set");
+
         m_pStg->Commit();
         pSotStorageStream->Seek(0);
 
