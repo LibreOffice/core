@@ -16,6 +16,23 @@
       "message": "I bisected a crashtesting assert to this commit.\n\nTo reproduce:\nwget https://bz.apache.org/ooo/attachment.cgi?id\u003d76380 -O ~/ooo117844-1.docx\n./instdir/program/soffice --headless --convert-to odt ~/ooo117844-1.docx\n",
       "revId": "59785c0237f2bc5eaf9e9742bdf30136f3b3d2ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a19bed82_69e2118a",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4352,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-27T12:16:35Z",
+      "side": 1,
+      "message": "the assert is because we end up deleting a SwContentNode that still\nhas a SwContentIndex pointing at it.\n\nthis is the call site that triggers the problem.\n\nstill working out why.",
+      "revId": "59785c0237f2bc5eaf9e9742bdf30136f3b3d2ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
