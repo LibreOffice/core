@@ -264,8 +264,8 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
         {
             xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen - 1)));
             rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
+            lclGetAbsPath( *xLongName, 0 , pDocShell);
         }
-        lclGetAbsPath( *xLongName, 0 , pDocShell);
     }
     // file link or URL
     else if( ::get_flag( nFlags, WW8_HLINK_BODY ) )
