@@ -338,6 +338,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         uno_threadpool_putJob(
             bridge_->getThreadPool(), tid.getHandle(), req.get(), &request,
             !synchronous);
+        // coverity[leaked_storage] - "request" destroys req when executed
         req.release();
     }
 }
