@@ -112,6 +112,8 @@ namespace frm
         if ( pItemHandleItem == _rRHS.pItemHandleItem )
             return true;
 
+        assert(pItemHandleItem && _rRHS.pItemHandleItem && "otherwise have already returned");
+
         return *pItemHandleItem == *_rRHS.pItemHandleItem;
     }
 
