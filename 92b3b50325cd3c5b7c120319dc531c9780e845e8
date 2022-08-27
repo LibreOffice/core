@@ -16,6 +16,23 @@
       "message": "Put tdf#73845 at the beginning of the first line of the commit message.",
       "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eac043f_e50e2e1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-27T12:43:30Z",
+      "side": 1,
+      "message": "License statement:\nhttps://lists.freedesktop.org/archives/libreoffice/2022-August/089310.html",
+      "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
