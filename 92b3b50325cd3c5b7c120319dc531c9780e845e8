@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6b8bd0_6e5b4832",
+        "filename": "sc/qa/unit/pivottable_filters_test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1003667
+      },
+      "writtenOn": "2022-08-27T14:14:02Z",
+      "side": 1,
+      "message": "Hi Hossein, thanks for review. Updated, PTAL.",
+      "parentUuid": "89306431_25161681",
+      "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59e53430_8d9d776d",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-08-27T12:46:49Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4646b437_9a055a91",
+        "filename": "sc/qa/unit/pivottable_filters_test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1003667
+      },
+      "writtenOn": "2022-08-27T14:14:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59e53430_8d9d776d",
       "revId": "92b3b50325cd3c5b7c120319dc531c9780e845e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
