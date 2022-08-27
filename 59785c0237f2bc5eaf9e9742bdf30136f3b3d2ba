@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6299245b_688d8af5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-27T16:33:59Z",
+      "side": 1,
+      "message": "fix for regression at https://gerrit.libreoffice.org/c/core/+/138935",
+      "revId": "59785c0237f2bc5eaf9e9742bdf30136f3b3d2ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a19bed82_69e2118a",
