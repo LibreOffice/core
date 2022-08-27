@@ -1927,9 +1927,9 @@ void DelBookmarks(
 
         if( lcl_Greater( *pRStt, rStt, oStartContentIdx ) && lcl_Lower( *pRStt, rEnd, oEndContentIdx ))
         {
-            pRStt->nNode = rEnd;
+            pRStt->Assign( rEnd );
             if( oEndContentIdx )
-                pRStt->nContent = *oEndContentIdx;
+                pRStt->SetContent( *oEndContentIdx );
             else
             {
                 bool bStt = true;
@@ -1953,9 +1953,9 @@ void DelBookmarks(
         }
         if( lcl_Greater( *pREnd, rStt, oStartContentIdx ) && lcl_Lower( *pREnd, rEnd, oEndContentIdx ))
         {
-            pREnd->nNode = rStt;
+            pREnd->Assign( rStt );
             if( oStartContentIdx )
-                pREnd->nContent = *oStartContentIdx;
+                pREnd->SetContent( *oStartContentIdx );
             else
             {
                 bool bStt = false;
