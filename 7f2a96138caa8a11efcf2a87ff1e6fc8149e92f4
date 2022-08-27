@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7e58081_7007dc9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-27T20:14:01Z",
+      "side": 1,
+      "message": "Nice!\n\nUnfortunately, it still doesn\u0027t solve the issue - at least, when the file is on an UNC path. It only cares about paths containing a drive letter.",
+      "revId": "7f2a96138caa8a11efcf2a87ff1e6fc8149e92f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f2d3945_7daf3f82",
+        "filename": "sc/source/filter/excel/xehelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-27T20:14:01Z",
+      "side": 1,
+      "message": "Basically, either path is used, or rRel, but not both. So the next step could be to only pass the resulting \u0027path\u0027, which would be chosen in the caller, and be either relative or absolute. Indeed, a relative path would not start with a drive, nor with a UNC host, so you would only need a means to disambiguate with \"URL probably points to a document on a Unix-like file system\", to avoid adding the EXC_URL_DRIVEROOT. A boolean argument would be more reasonable.",
+      "revId": "7f2a96138caa8a11efcf2a87ff1e6fc8149e92f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b9f31ab_3de9d08c",
+        "filename": "sc/source/filter/excel/xehelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-27T20:14:01Z",
+      "side": 1,
+      "message": "This is where only the DOS drive is taken into account. But actually, why?\n\nMy proposal would be:\n1. Create an empty DOS path string before everything in the function;\n2. Immediately check if relative URLs are configured (rRoot.IsRelUrl), and if so, use INetURLObject::GetRelURL unconditionally to set the value of the DOS path string: INetURLObject::GetRelURL would still create an absolute URL when relative URL is impossible, so you would get a proper URL in all cases that you would then convert to DOS path;\n3. When relative URLs are not configured, use rAbsUrl to create the DOS path, in which case, you would not even need aDosBase.\n4. Finally, pass the resulting DOS path (either relative, or absolute), along with a flag telling if it\u0027s relative.",
+      "revId": "7f2a96138caa8a11efcf2a87ff1e6fc8149e92f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d64fffa6_da801185",
+        "filename": "sc/source/filter/excel/xehelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-27T20:14:01Z",
+      "side": 1,
+      "message": "I suspect that for a non-ASCII path, this would result in a wrong relative DOS path.",
+      "revId": "7f2a96138caa8a11efcf2a87ff1e6fc8149e92f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
