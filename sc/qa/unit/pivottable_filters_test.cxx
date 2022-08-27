@@ -12,6 +12,8 @@
 #include "helper/qahelper.hxx"
 #include "helper/debughelper.hxx"
 #include "helper/xpath.hxx"
+#include "queryentry.hxx"
+#include "queryparam.hxx"
 
 #include <patattr.hxx>
 #include <scitems.hxx>
@@ -96,6 +98,7 @@ public:
     void testTdf125046();
     void testTdf125055();
     void testTdf125086();
+    void testTdf73845();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -149,6 +152,7 @@ public:
     CPPUNIT_TEST(testTdf125046);
     CPPUNIT_TEST(testTdf125055);
     CPPUNIT_TEST(testTdf125086);
+    CPPUNIT_TEST(testTdf73845);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2741,6 +2745,30 @@ void ScPivotTableFiltersTest::testTdf125086()
     assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "axis", "axisRow");
     // "dataField" attribute was not written for this "axisRow" field
     assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "dataField", "1");
+}
+
+void ScPivotTableFiltersTest::testTdf73845()
+{
+    // Query filter is set for individual pivot table in this ODS document.
+    // This test checks the query filter is restored for ByEmpty and ByNonEmpty query.
+    ScDocShellRef xDocSh = loadDoc(u"pivottable_restore_query_filter.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+    size_t nDPCount = pDPs->GetCount();
+    for (size_t i = 0; i < nDPCount; i++)
+    {
+        ScDPObject& pDPObj = (*pDPs)[i];
+        // Check if Confirmed Date field is restored in query filter.
+        ScQueryParam aQueryParam(pDPObj.GetSheetDesc()->GetQueryParam());
+        size_t nEntriesCount = aQueryParam.GetEntryCount();
+        for (size_t j = 0; j < nEntriesCount; j++)
+        {
+            ScQueryEntry rEntry = aQueryParam.GetEntry(j);
+            if (rEntry.IsQueryByEmpty() || rEntry.IsQueryByNonEmpty())
+                CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), rEntry.nField);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
