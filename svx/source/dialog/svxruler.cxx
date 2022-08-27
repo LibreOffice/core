@@ -2902,6 +2902,7 @@ void SvxRuler::CalcMinMax()
                 break;
             }
           case RulerDragSize::N2:
+            if (mxColumnItem)
             {
                 nMaxLeft = lNullPix + mpBorders[nIdx].nPos;
                 if(nIdx == mxColumnItem->Count()-2) { // last column
@@ -2924,7 +2925,7 @@ void SvxRuler::CalcMinMax()
                         nMaxRight += mpBorders[nIdx].nPos +
                             mpBorders[nIdx].nWidth;
                     }
-            }
+                }
                 nMaxRight -= glMinFrame;
                 nMaxRight -= mpBorders[nIdx].nWidth;
                 break;
