@@ -675,8 +675,9 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
         SfxMedium aMed( rName, StreamMode::READ, nullptr, nullptr );
         SfxFilterMatcher aMatcher( "swriter" );
         aMed.UseInteractionHandler( true );
-        if (!aMatcher.GuessFilter(aMed, pFilter, SfxFilterFlags::NONE))
+        if (aMatcher.GuessFilter(aMed, pFilter, SfxFilterFlags::NONE) == ERRCODE_NONE)
         {
+            assert(pFilter && "success means pFilter was set");
             SwTextBlocks *pGlossary = nullptr;
             aMed.SetFilter( pFilter );
             Reader* pR = SwReaderWriter::GetReader( pFilter->GetUserData() );
