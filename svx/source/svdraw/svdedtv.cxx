@@ -288,6 +288,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
     if( bUndo )
     {
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, *mpModel));
+        // coverity[leaked_storage] - ownership transferred to UndoDeleteLayer
         rLA.RemoveLayer(nLayerNum).release();
         EndUndo();
     }

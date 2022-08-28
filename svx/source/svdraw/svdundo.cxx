@@ -1309,13 +1309,13 @@ SdrUndoLayer::~SdrUndoLayer()
     }
 }
 
-
 void SdrUndoNewLayer::Undo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoNewLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=true;
-    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum).release();
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoNewLayer::Undo(): Removed layer is != pLayer.");
+    // coverity[leaked_storage] - owned by this SdrUndoNewLayer as pLayer
+    SdrLayer* pCmpLayer = pLayerAdmin->RemoveLayer(nNum).release();
+    assert(pCmpLayer == pLayer && "SdrUndoNewLayer::Undo(): Removed layer is != pLayer."); (void)pCmpLayer;
 }
 
 void SdrUndoNewLayer::Redo()
@@ -1342,8 +1342,9 @@ void SdrUndoDelLayer::Redo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoDelLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=true;
+    // coverity[leaked_storage] - owned by this SdrUndoNewLayer as pLayer
     SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum).release();
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoDelLayer::Redo(): Removed layer is != pLayer.");
+    assert(pCmpLayer == pLayer && "SdrUndoDelLayer::Redo(): Removed layer is != pLayer."); (void)pCmpLayer;
 }
 
 OUString SdrUndoDelLayer::GetComment() const
