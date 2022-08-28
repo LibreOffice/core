@@ -265,7 +265,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             // but one that is at least as good as ImplSubdivideBezier was.
             // There, Polygon::AdaptiveSubdivide was used with default parameter
             // 1.0 as quality index.
-            static int nRecurseLimit = utl::ConfigManager::IsFuzzing() ? 15 : 30;
+            static int nRecurseLimit = utl::ConfigManager::IsFuzzing() ? 10 : 30;
             aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0, nRecurseLimit);
         }
 
