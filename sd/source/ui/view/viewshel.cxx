@@ -770,7 +770,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 double deltaBetweenEvents = (pData->mfScaleDelta - mfLastZoomScale) / mfLastZoomScale;
                 mfLastZoomScale = pData->mfScaleDelta;
 
-                if (pData != nullptr && !GetDocSh()->IsUIActive() && !xSlideShowController.is())
+                if (!GetDocSh()->IsUIActive() && !xSlideShowController.is())
                 {
                     const ::tools::Long nOldZoom = GetActiveWindow()->GetZoom();
                     ::tools::Long nNewZoom;
