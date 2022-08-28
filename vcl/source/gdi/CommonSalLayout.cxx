@@ -673,18 +673,56 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
                 nGraphemeCount++;
             }
 
+            std::vector<DeviceCoordinate> aWidths(nGraphemeCount);
+
+            // Check if the glyph has ligature caret positions.
+            unsigned int nCarets = nGraphemeCount;
+            std::vector<hb_position_t> aCarets(nGraphemeCount);
+            hb_ot_layout_get_ligature_carets(GetFont().GetHbFont(),
+                aGlyphItem.IsRTLGlyph() ? HB_DIRECTION_RTL : HB_DIRECTION_LTR,
+                aGlyphItem.glyphId(), 0, &nCarets, aCarets.data());
+
+            // Carets are 1-less than the grapheme count (since the last
+            // position is defined by glyph width), if the count does not
+            // match, ignore it.
+            if (nCarets == nGraphemeCount - 1)
+            {
+                // Scale the carets and apply glyph offset to them since they
+                // are based on the default glyph metrics.
+                double fScale = 0;
+                GetFont().GetScale(&fScale, nullptr);
+                for (size_t i = 0; i < nCarets; i++)
+                    aCarets[i] = (aCarets[i] * fScale) + aGlyphItem.xOffset();
+
+                // Use the glyph width for the last caret.
+                aCarets[nCarets] = aGlyphItem.newWidth();
+
+                // Carets are absolute from the X origin of the glyph, turn
+                // them to relative widths that we need below.
+                for (size_t i = 0; i < nGraphemeCount; i++)
+                    aWidths[i] = aCarets[i] - (i == 0 ? 0 : aCarets[i - 1]);
+
+                // Carets are in visual order, but we want widths in logical
+                // order.
+                if (aGlyphItem.IsRTLGlyph())
+                    std::reverse(aWidths.begin(), aWidths.end());
+            }
+            else
+            {
+                // The glyph has no carets, distribute the width evenly.
+                auto nWidth = aGlyphItem.newWidth() / nGraphemeCount;
+                std::fill(aWidths.begin(), aWidths.end(), nWidth);
+
+                // Add rounding difference to the last component to maintain
+                // ligature width.
+                aWidths[nGraphemeCount - 1] += aGlyphItem.newWidth() - (nWidth * nGraphemeCount);
+            }
+
             // Set the width of each grapheme cluster.
             nPos = aGlyphItem.charPos();
-            auto nWidth = aGlyphItem.newWidth() / nGraphemeCount;
-            // rounding difference
-            auto nDiff = aGlyphItem.newWidth() - (nWidth * nGraphemeCount);
-            for (unsigned int i = 0; i < nGraphemeCount; i++)
+            for (auto nWidth : aWidths)
             {
                 rCharWidths[nPos - mnMinCharPos] += nWidth;
-                // add rounding difference to last component to maintain
-                // ligature width.
-                if (i == nGraphemeCount - 1)
-                    rCharWidths[nPos - mnMinCharPos] += nDiff;
                 nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
                     css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
             }
