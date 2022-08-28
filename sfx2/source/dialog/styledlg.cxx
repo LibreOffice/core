@@ -65,6 +65,7 @@ SfxStyleDialogController::SfxStyleDialogController
 */
 SfxStyleDialogController::~SfxStyleDialogController()
 {
+    // coverity[leaked_storage] - deliberate, ownership is really with m_rStyle
     m_xExampleSet.release();
 }
 
