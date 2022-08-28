@@ -81,9 +81,9 @@ void TestParsing::testSimpleRectangle()
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(10, 10, 110, 110), pDrawRect->maRectangle);
     CPPUNIT_ASSERT_EQUAL(3.0, pDrawRect->mnStrokeWidth);
     CPPUNIT_ASSERT(bool(pDrawRect->mpStrokeColor));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), sal_Int32(Color(*pDrawRect->mpStrokeColor)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(*pDrawRect->mpStrokeColor));
     CPPUNIT_ASSERT(bool(pDrawRect->mpFillColor));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00cc00), sal_Int32(Color(*pDrawRect->mpFillColor)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00cc00), Color(*pDrawRect->mpFillColor));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, pDrawRect->mnOpacity, 1E-12);
 }
 
@@ -113,9 +113,9 @@ void TestParsing::testPath()
                          basegfx::utils::exportToSvgD(pDrawPath->maPolyPolygon, true, true, false));
     CPPUNIT_ASSERT_EQUAL(0.0, pDrawPath->mnStrokeWidth);
     CPPUNIT_ASSERT(bool(pDrawPath->mpStrokeColor));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), sal_Int32(Color(*pDrawPath->mpStrokeColor)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(*pDrawPath->mpStrokeColor));
     CPPUNIT_ASSERT(bool(pDrawPath->mpFillColor));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x007aff), sal_Int32(Color(*pDrawPath->mpFillColor)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x007aff), Color(*pDrawPath->mpFillColor));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, pDrawPath->mnOpacity, 1E-12);
 }
 
