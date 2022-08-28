@@ -3781,6 +3781,24 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     sal_Int32 nCharHeight = -1;
     bool bFirstParagraph = true;
 
+    // tdf#144092 For shapes without text: Export run properties (into
+    // endParaRPr) from the shape's propset instead of the paragraph's.
+    if(xXText->getString().isEmpty() && enumeration->hasMoreElements())
+    {
+        Any aAny (enumeration->nextElement());
+        Reference<XTextContent> xParagraph;
+        if( aAny >>= xParagraph )
+        {
+            mpFS->startElementNS(XML_a, XML_p);
+            WriteParagraphProperties(xParagraph, nCharHeight, XML_pPr);
+            sal_Int16 nDummy = -1;
+            WriteRunProperties(rXPropSet, false, XML_endParaRPr, false,
+                               bOverridingCharHeight, nCharHeight, nDummy, rXPropSet);
+            mpFS->endElementNS(XML_a, XML_p);
+        }
+        return;
+    }
+
     while( enumeration->hasMoreElements() )
     {
         Reference< XTextContent > paragraph;
