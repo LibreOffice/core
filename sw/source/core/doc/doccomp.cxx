@@ -1739,6 +1739,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     if( pTmp->GetNext() != m_pInsertRing.get() )
     {
         do {
+            // coverity[deref_arg] - the SwPaM delete moves a new entry into GetNext()
             SwPosition& rSttEnd = *pTmp->End(),
                       & rEndStt = *pTmp->GetNext()->Start();
             const SwContentNode* pCNd;

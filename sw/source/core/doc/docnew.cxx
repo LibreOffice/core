@@ -466,7 +466,10 @@ SwDoc::~SwDoc()
         SwPaM* pTmp = mpExtInputRing;
         mpExtInputRing = nullptr;
         while( pTmp->GetNext() != pTmp )
+        {
+            // coverity[deref_arg] - the SwPaM delete moves a new entry into GetNext()
             delete pTmp->GetNext();
+        }
         delete pTmp;
     }
 

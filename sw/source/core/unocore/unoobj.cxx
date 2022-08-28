@@ -86,6 +86,7 @@ SwUnoInternalPaM::~SwUnoInternalPaM()
 {
     while( GetNext() != this)
     {
+        // coverity[deref_arg] - the delete moves a new entry into GetNext()
         delete GetNext();
     }
 }

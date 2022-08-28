@@ -259,7 +259,10 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
             rSh.SetSelection(*pPaM);
             // the pPaM has been copied - delete it
             while (pPaM->GetNext() != pPaM)
+            {
+                // coverity[deref_arg] - the SwPaM delete moves a new entry into GetNext()
                 delete pPaM->GetNext();
+            }
             delete pPaM;
             return true;
         }

@@ -44,6 +44,7 @@ SwUnoCursor::~SwUnoCursor()
     while( GetNext() != this )
     {
         Ring* pNxt = GetNextInRing();
+        // coverity[deref_arg] - the delete moves a new entry into GetNext()
         pNxt->MoveTo(nullptr); // remove from chain
         delete pNxt;       // and delete
     }
