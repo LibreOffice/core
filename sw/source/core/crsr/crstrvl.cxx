@@ -389,7 +389,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     Point aPt;
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
     if( !bNext )
-        aFndPos.nNode = SwNodeOffset(0);
+        aFndPos.Assign(SwNodeOffset(0));
     SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     {
@@ -503,7 +503,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     Point aPt;
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
     if( !bNext )
-        aFndPos.nNode = SwNodeOffset(0);
+        aFndPos.Assign(SwNodeOffset(0));
     SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     if( rPos.GetNodeIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
@@ -1262,7 +1262,7 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     // set end to the end of the previous content node
     m_pCurrentCursor->GetPoint()->Assign(*pSttNd);
     m_pCurrentCursor->SetMark();
-    m_pCurrentCursor->GetPoint()->nNode = *pEndNd;
+    m_pCurrentCursor->GetPoint()->Assign(*pEndNd);
     m_pCurrentCursor->Move( fnMoveBackward, GoInNode ); // end of predecessor
 
     // and everything is already selected
@@ -1535,7 +1535,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                         SwCallLink aLk( *this ); // watch Cursor-Moves
                         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                        m_pCurrentCursor->GetPoint()->nNode = *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode();
+                        m_pCurrentCursor->GetPoint()->Assign( *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode() );
                         SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection(
                             m_pCurrentCursor->GetPoint(),
                             true, !IsReadOnlyAvailable() );
@@ -2049,9 +2049,9 @@ bool SwCursorShell::SelectTextModel( const sal_Int32 nStart,
 
     SwPosition& rPos = *m_pCurrentCursor->GetPoint();
     m_pCurrentCursor->DeleteMark();
-    rPos.nContent = nStart;
+    rPos.SetContent(nStart);
     m_pCurrentCursor->SetMark();
-    rPos.nContent = nEnd;
+    rPos.SetContent(nEnd);
 
     if( !m_pCurrentCursor->IsSelOvr() )
     {
@@ -2225,7 +2225,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
 
         if( aEnd.GetNode().IsEndNode() &&
             pCNd->Len() == aPos.GetContentIndex() )
-            aPos.nNode = *pSectNd->EndOfSectionNode();
+            aPos.Assign( *pSectNd->EndOfSectionNode() );
     }
 
     for( sal_uInt16 n = 0; n < aFPos.nParaCnt + aFPos.nColumnCnt; ++n )
@@ -2381,15 +2381,15 @@ const SwRangeRedline* SwCursorShell::GotoRedline_( SwRedlineTable::size_type nAr
 
     *m_pCurrentCursor->GetPoint() = *pFnd->Start();
 
-    SwNodeIndex* pIdx = &m_pCurrentCursor->GetPoint()->nNode;
-    if( !pIdx->GetNode().IsContentNode() )
+    SwPosition* pPtPos = m_pCurrentCursor->GetPoint();
+    if( !pPtPos->GetNode().IsContentNode() )
     {
-        SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( pIdx,
+        SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( pPtPos,
                                 true, IsReadOnlyAvailable() );
         if( pCNd )
         {
-            if( *pIdx <= pFnd->End()->GetNode() )
-                m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
+            if( pPtPos->GetNode() <= pFnd->End()->GetNode() )
+                pPtPos->SetContent( 0 );
             else
                 pFnd = nullptr;
         }
@@ -2400,22 +2400,22 @@ const SwRangeRedline* SwCursorShell::GotoRedline_( SwRedlineTable::size_type nAr
         m_pCurrentCursor->SetMark();
         if( RedlineType::FmtColl == pFnd->GetType() )
         {
-            SwContentNode* pCNd = pIdx->GetNode().GetContentNode();
-            m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
-            m_pCurrentCursor->GetMark()->nContent.Assign( pCNd, 0 );
+            SwContentNode* pCNd = pPtPos->GetNode().GetContentNode();
+            m_pCurrentCursor->GetPoint()->SetContent( pCNd->Len() );
+            m_pCurrentCursor->GetMark()->Assign( *pCNd, 0 );
         }
         else
             *m_pCurrentCursor->GetPoint() = *pFnd->End();
 
-        pIdx = &m_pCurrentCursor->GetPoint()->nNode;
-        if( !pIdx->GetNode().IsContentNode() )
+        pPtPos = m_pCurrentCursor->GetPoint();
+        if( !pPtPos->GetNode().IsContentNode() )
         {
-            SwContentNode* pCNd = SwNodes::GoPrevSection( pIdx,
+            SwContentNode* pCNd = SwNodes::GoPrevSection( pPtPos,
                                         true, IsReadOnlyAvailable() );
             if( pCNd )
             {
-                if( *pIdx >= m_pCurrentCursor->GetMark()->nNode )
-                    m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                if( pPtPos->GetNode() >= m_pCurrentCursor->GetMark()->GetNode() )
+                    pPtPos->SetContent( pCNd->Len() );
                 else
                     pFnd = nullptr;
             }
@@ -2660,7 +2660,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
         aCmpPos.GetPosOfContent( *m_pCurrentCursor->GetPoint() );
         m_pCurrentCursor->DeleteMark();
         m_pCurrentCursor->SetMark();
-        m_pCurrentCursor->GetPoint()->nContent = *pFndAttr->End();
+        m_pCurrentCursor->GetPoint()->SetContent( *pFndAttr->End() );
 
         if( !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
         {
