@@ -1531,8 +1531,8 @@ void SdOOXMLExportTest3::testTdf127372()
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
     awt::Gradient aTransparenceGradient;
     xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aTransparenceGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aTransparenceGradient.EndColor));
 }
 
 void SdOOXMLExportTest3::testTdf127379()
@@ -1558,8 +1558,8 @@ void SdOOXMLExportTest3::testTdf127379()
 
     awt::Gradient aGradient;
     CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2A6099), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2A6099), Color(ColorTransparency, aGradient.EndColor));
 }
 
 void SdOOXMLExportTest3::testTdf98603()

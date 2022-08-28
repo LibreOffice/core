@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_import,\
 	cppu \
 	sal \
 	test \
+	tl \
 	unotest \
 	utl \
 	wpftqahelper \

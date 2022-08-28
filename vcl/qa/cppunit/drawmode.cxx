@@ -343,9 +343,7 @@ void VclDrawModeTest::testDrawModeBitmapEx()
         Bitmap::ScopedReadAccess pReadAccess(aResultBitmap);
 
         const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetRed()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetGreen()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetBlue()));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x26, 0x26, 0x26), rColor);
     }
 
     // any other operation other than DrawModeFlags::GrayBitmap is a noop
@@ -355,9 +353,7 @@ void VclDrawModeTest::testDrawModeBitmapEx()
         Bitmap::ScopedReadAccess pReadAccess(aResultBitmap);
 
         const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x80), sal_Int32(rColor.GetRed()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00), sal_Int32(rColor.GetGreen()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00), sal_Int32(rColor.GetBlue()));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), rColor);
     }
 }
 
