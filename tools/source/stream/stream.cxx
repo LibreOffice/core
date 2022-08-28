@@ -1868,6 +1868,7 @@ OUString read_uInt16s_ToOUString(SvStream& rStrm, std::size_t nLen)
     }
 
     // take ownership of buffer and return, otherwise return empty string
+    // coverity[tainted_data] - unhelpful untrusted loop bound
     return pStr ? OUString(pStr, SAL_NO_ACQUIRE) : OUString();
 }
 
