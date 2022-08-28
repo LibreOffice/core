@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0d6264e_9996c5ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003668
+      },
+      "writtenOn": "2022-08-28T01:26:43Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/121259/ : FAILURE\n\u003e \n\u003e please format your code as shown in the log ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/121281/ )\n\nDone",
+      "revId": "c19511a1c7471c17f9a258dbc6ef061d0cbffc20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
