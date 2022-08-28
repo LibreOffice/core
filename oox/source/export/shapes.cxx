@@ -1797,8 +1797,12 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         WriteOutline( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
-    // write text
-    WriteTextBox( xShape, mnXmlNamespace );
+    // connector shape (cxnSp) cannot contain text (txBody) (according to schema)
+    if( nShapeNode != XML_cxnSp )
+    {
+        // write text
+        WriteTextBox( xShape, mnXmlNamespace );
+    }
 
     pFS->endElementNS(mnXmlNamespace, nShapeNode);
 
@@ -2025,7 +2029,8 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
     }
 
     Reference< XText > xXText( xIface, UNO_QUERY );
-    if( NonEmptyText( xIface ) && xXText.is() )
+    if( (NonEmptyText( xIface ) || GetDocumentType() == DOCUMENT_PPTX)
+        && xXText.is() )
     {
         FSHelperPtr pFS = GetFS();
 
