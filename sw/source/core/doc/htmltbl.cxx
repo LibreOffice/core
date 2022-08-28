@@ -679,6 +679,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     if (xConstraints)
                     {
                         SwHTMLTableLayoutConstraints* pConstraints = xConstraints->InsertNext(pConstr);
+                        // coverity[leaked_storage] - ownership transferred to pConstraints chain
                         xConstraints.release();
                         xConstraints.reset(pConstraints);
                     }
