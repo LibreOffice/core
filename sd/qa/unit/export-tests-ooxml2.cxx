@@ -1034,8 +1034,8 @@ void SdOOXMLExportTest2::testTdf105739()
         com::sun::star::awt::Gradient aFillGradient;
         aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aFillGradient;
         CPPUNIT_ASSERT_EQUAL(int(awt::GradientStyle_LINEAR), static_cast<int>(aFillGradient.Style));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), aFillGradient.StartColor);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), aFillGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aFillGradient.StartColor));
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(ColorTransparency, aFillGradient.EndColor));
     }
 
     xShell->DoClose();
