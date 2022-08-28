@@ -579,6 +579,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     if( p && p->m_aEntry.GetType() != STG_STORAGE )
     {
         pIo->SetError( SVSTREAM_FILE_NOT_FOUND );
+        // coverity[overwrite_var] - ownership is not here, but with StgDirStrm
         p = nullptr;
     }
 
