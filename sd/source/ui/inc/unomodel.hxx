@@ -240,8 +240,12 @@ public:
     virtual VclPtr<vcl::Window> getDocWindow() override;
     bool isMasterViewMode();
 
+    /// @see vcl::ITiledRenderable::setPartMode().
     virtual void setPartMode( int nPartMode ) override;
-
+    /// @see vcl::ITiledRenderable::getEditMode().
+    virtual int getEditMode() override;
+    /// @see vcl::ITiledRenderable::setEditMode().
+    virtual void setEditMode(int) override;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().

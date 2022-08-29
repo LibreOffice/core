@@ -365,6 +365,8 @@ public:
     void setTiledSearching(bool bTiledSearching);
     /// See lok::Document::getPart().
     virtual int getPart() const;
+    /// See lok::Document::getMode().
+    virtual int getEditMode() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;

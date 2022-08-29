@@ -1617,6 +1617,11 @@ int SfxViewShell::getPart() const
     return 0;
 }
 
+int SfxViewShell::getEditMode() const
+{
+    return 0;
+}
+
 ViewShellId SfxViewShell::GetViewShellId() const
 {
     return pImpl->m_nViewShellId;

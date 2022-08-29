@@ -2339,7 +2339,10 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
         OUString::number(static_cast<unsigned int>(bIsSelected)) +
         "\", \"masterPageCount\": \"" +
         OUString::number(nMasterPageCount) +
+        "\", \"mode\": \"" +
+        OUString::number(getEditMode()) +
         "\" }";
+
     return aPartInfo;
 }
 
@@ -2454,6 +2457,26 @@ void SdXImpressDocument::setPartMode( int nPartMode )
         break;
     }
     pViewSh->SetPageKind( aPageKind );
+}
+
+int SdXImpressDocument::getEditMode()
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return 0;
+
+    return pViewSh->GetViewShellBase().getEditMode();
+}
+
+void SdXImpressDocument::setEditMode(int nMode)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return;
+
+    pViewSh->GetViewShellBase().setEditMode(nMode);
 }
 
 Size SdXImpressDocument::getDocumentSize()

@@ -977,6 +977,42 @@ int ViewShellBase::getPart() const
     return 0;
 }
 
+int ViewShellBase::getEditMode() const
+{
+    ViewShell* pViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
+
+    if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell))
+    {
+        switch ( pDrawViewShell->GetEditMode() )
+        {
+        case EditMode::Page:
+            return 0;
+        case EditMode::MasterPage:
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+void ViewShellBase::setEditMode(int nMode)
+{
+    ViewShell* pViewShell = framework::FrameworkHelper::Instance(*this)->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
+
+    if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell))
+    {
+        switch ( nMode )
+        {
+        case 0:
+            pDrawViewShell->ChangeEditMode(EditMode::Page, false);
+            break;
+        case 1:
+            pDrawViewShell->ChangeEditMode(EditMode::MasterPage, false);
+            break;
+        }
+    }
+}
+
 void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
 {
     ViewShell* pThisShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();

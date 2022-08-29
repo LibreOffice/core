@@ -125,6 +125,12 @@ int SfxLokHelper::createView(int nDocId)
     return -1;
 }
 
+void SfxLokHelper::setEditMode(int nMode, vcl::ITiledRenderable* pDoc)
+{
+    DisableCallbacks dc;
+    pDoc->setEditMode(nMode);
+}
+
 void SfxLokHelper::destroyView(int nId)
 {
     const SfxApplication* pApp = SfxApplication::Get();
@@ -359,6 +365,7 @@ static OString lcl_generateJSON(const SfxViewShell* pView, const boost::property
     boost::property_tree::ptree aMessageProps = rTree;
     aMessageProps.put("viewId", SfxLokHelper::getView(pView));
     aMessageProps.put("part", pView->getPart());
+    aMessageProps.put("mode", pView->getEditMode());
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aMessageProps, false /* pretty */);
     const std::string aString = aStream.str();
@@ -370,7 +377,8 @@ static inline OString lcl_generateJSON(const SfxViewShell* pView, int nViewId, s
 {
     assert(pView != nullptr && "pView must be valid");
     return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId)
-           + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"" + rKey + "\": \""
+           + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"mode\": \""
+           + OString::number(pView->getEditMode()) + "\", \"" + rKey + "\": \""
            + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }
 

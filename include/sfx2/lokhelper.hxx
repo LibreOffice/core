@@ -58,6 +58,8 @@ public:
     static void destroyView(int nId);
     /// Set a view shell as current one.
     static void setView(int nId);
+    /// Set the edit mode for a document with callbacks disabled.
+    static void setEditMode(int nMode, vcl::ITiledRenderable* pDoc);
     /// Get view shell with id
     static SfxViewShell* getViewOfId(int nId);
     /// Get the currently active view.

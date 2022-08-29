@@ -118,6 +118,19 @@ public:
     virtual void setPartMode(int) {}
 
     /**
+     * Get the currently used EditMode (supported in Impress).
+     */
+    virtual int getEditMode()
+    {
+        return 0;
+    }
+
+    /**
+     * Set the currently used EditMode (supported in Impress).
+     */
+    virtual void setEditMode(int) {}
+
+    /**
      * Setup various document properties that are needed for the document to
      * be renderable via tiled rendering.
      */
