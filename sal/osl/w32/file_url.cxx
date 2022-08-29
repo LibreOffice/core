@@ -37,6 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "path_helper.hxx"
 
@@ -50,47 +51,45 @@ namespace
 {
 // Internal functions that expect only backslashes as path separators
 
-bool startsWithDriveColon(const sal_Unicode* p) { return rtl::isAsciiAlpha(p[0]) && p[1] == ':'; }
-
-bool startsWithDriveColon(const rtl_uString* p) { return startsWithDriveColon(p->buffer); }
-
-bool startsWithDriveColonSlash(const rtl_uString* p)
+bool startsWithDriveColon(std::u16string_view s)
 {
-    return startsWithDriveColon(p) && p->buffer[2] == '\\';
+    return s.length() >= 2 && rtl::isAsciiAlpha(s[0]) && s[1] == ':';
 }
 
-bool startsWithSlashSlash(const sal_Unicode* p) { return p[0] == '\\' && p[1] == '\\'; }
+bool startsWithDriveColonSlash(std::u16string_view s)
+{
+    return s.length() >= 3 && startsWithDriveColon(s) && s[2] == '\\';
+}
 
-bool startsWithSlashSlash(const rtl_uString* p) { return startsWithSlashSlash(p->buffer); }
+bool startsWithSlashSlash(std::u16string_view s) { return o3tl::starts_with(s, u"\\\\"); }
 
 // An absolute path starts either with \\ (an UNC or device path like \\.\ or \\?\)
 // or with a ASCII alpha character followed by colon followed by backslash.
-bool isAbsolute(const rtl_uString* p)
+bool isAbsolute(std::u16string_view s)
 {
-    return startsWithSlashSlash(p) || startsWithDriveColonSlash(p);
+    return startsWithSlashSlash(s) || startsWithDriveColonSlash(s);
 }
 
-bool onSameDrive(const rtl_uString* p1, const rtl_uString* p2)
+bool onSameDrive(std::u16string_view s1, std::u16string_view s2)
 {
-    return rtl::toAsciiUpperCase(p1->buffer[0]) == rtl::toAsciiUpperCase(p2->buffer[0])
-           && rtl::toAsciiUpperCase(p1->buffer[1]) == rtl::toAsciiUpperCase(p2->buffer[1]);
+    assert(startsWithDriveColon(s1) && startsWithDriveColon(s2));
+    return rtl::toAsciiUpperCase(s1[0]) == rtl::toAsciiUpperCase(s2[0]) && s1[1] == s2[1];
 }
 
-sal_Int32 getRootLength(const rtl_uString* path)
+sal_Int32 getRootLength(std::u16string_view path)
 {
     assert(isAbsolute(path));
-    const sal_Unicode* p = path->buffer;
-    sal_Int32 nResult = 0;
-    if (startsWithSlashSlash(p))
+    size_t nResult = 0;
+    if (startsWithSlashSlash(path))
     {
         // Cases:
         //   1. Device UNC: \\?\UNC\server\share or \\.\UNC\server\share
         //   2. Non-device UNC: \\server\share
         //   3. Device non-UNC: \\?\C: or \\.\C:
         bool bUNC = false;
-        if ((p[2] == '.' || p[2] == '?') && p[3] == '\\')
+        if (path.length() > 3 && (path[2] == '.' || path[2] == '?') && path[3] == '\\')
         {
-            if (p[4] == 'U' && p[5] == 'N' && p[6] == 'C' && p[7] == '\\')
+            if (path.substr(4, 4) == u"UNC\\")
             {
                 // \\?\UNC\server\share or \\.\UNC\server\share
                 nResult = 8;
@@ -99,7 +98,7 @@ sal_Int32 getRootLength(const rtl_uString* path)
             else
             {
                 // \\?\C: or \\.\C:
-                assert(startsWithDriveColon(p + 4));
+                assert(startsWithDriveColon(path.substr(4)));
                 nResult = 6;
             }
         }
@@ -112,11 +111,11 @@ sal_Int32 getRootLength(const rtl_uString* path)
         if (bUNC)
         {
             // \\?\UNC\server\share or \\.\UNC\server\share or \\server\share
-            assert(nResult < path->length && p[nResult] != '\\');
+            assert(nResult < path.length() && path[nResult] != '\\');
             // Skip server name and share name
-            for (int nSlashes = 0; nResult < path->length; ++nResult)
+            for (int nSlashes = 0; nResult < path.length(); ++nResult)
             {
-                if (p[nResult] == '\\' && ++nSlashes == 2)
+                if (path[nResult] == '\\' && ++nSlashes == 2)
                     break;
             }
         }
@@ -124,29 +123,29 @@ sal_Int32 getRootLength(const rtl_uString* path)
     else
     {
         // C:
-        assert(startsWithDriveColon(p));
+        assert(startsWithDriveColon(path));
         nResult = 2;
     }
-    return std::min(nResult, path->length);
+    return std::min(nResult, path.length());
 }
 
-std::u16string_view pathView(const rtl_uString* path, bool bOnlyRoot)
+std::u16string_view pathView(std::u16string_view path, bool bOnlyRoot)
 {
-    return std::u16string_view(path->buffer, bOnlyRoot ? getRootLength(path) : path->length);
+    return bOnlyRoot ? path.substr(0, getRootLength(path)) : path;
 }
 
-OUString combinePath(std::u16string_view basePath, const sal_Unicode* relPath)
+OUString combinePath(std::u16string_view basePath, std::u16string_view relPath)
 {
-    const bool needSep = basePath.back() != '\\' && relPath[0] != '\\';
+    const bool needSep = !o3tl::ends_with(basePath, u'\\');
     const auto sSeparator = needSep ? std::u16string_view(u"\\") : std::u16string_view();
-    if (basePath.back() == '\\' && relPath[0] == '\\')
-        ++relPath; // avoid two adjacent backslashes
+    if (o3tl::starts_with(relPath, u'\\'))
+        relPath.remove_prefix(1); // avoid two adjacent backslashes
     return OUString::Concat(basePath) + sSeparator + relPath;
 }
 
 OUString removeRelativeParts(const OUString& p)
 {
-    const sal_Int32 rootPos = getRootLength(p.pData);
+    const sal_Int32 rootPos = getRootLength(p);
     OUStringBuffer buf(p.getLength());
     buf.append(p.subView(0, rootPos));
     std::stack<sal_Int32> partPositions;
@@ -191,18 +190,24 @@ OUString removeRelativeParts(const OUString& p)
 }
 
 static bool IsValidFilePathComponent(
-    sal_Unicode const * lpComponent, sal_Unicode const **lppComponentEnd,
+    std::optional<std::u16string_view>& roComponent,
     DWORD dwFlags)
 {
-        sal_Unicode const * lpComponentEnd = nullptr;
-        sal_Unicode const * lpCurrent = lpComponent;
-        bool    bValid = true;  /* Assume success */
+        assert(roComponent);
+        auto lpComponentEnd = roComponent->end();
+        auto lpCurrent = roComponent->begin();
+        bool bValid = lpCurrent != lpComponentEnd; // Empty components are not allowed
         sal_Unicode cLast = 0;
 
-        /* Path component length must not exceed MAX_PATH even if long path with "\\?\" prefix is used */
-
-        while ( !lpComponentEnd && lpCurrent && lpCurrent - lpComponent < MAX_PATH )
+        while (bValid)
         {
+            /* Path component length must not exceed MAX_PATH even if long path with "\\?\" prefix is used */
+            if (lpCurrent - roComponent->begin() >= MAX_PATH)
+            {
+                bValid = false;
+                break;
+            }
+
             switch ( *lpCurrent )
             {
                 /* Both backslash and slash determine the end of a path component */
@@ -217,13 +222,13 @@ static bool IsValidFilePathComponent(
                     if ( dwFlags & VALIDATEPATH_ALLOW_ELLIPSE )
                     {
                         if ( (dwFlags & VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD) ||
-                             1 == lpCurrent - lpComponent )
+                             1 == lpCurrent - roComponent->begin() )
                         {
                             /* Either do allow periods anywhere, or current directory */
                             lpComponentEnd = lpCurrent;
                             break;
                         }
-                        else if ( 2 == lpCurrent - lpComponent && '.' == *lpComponent )
+                        else if ( 2 == lpCurrent - roComponent->begin() && '.' == roComponent->front() )
                         {
                             /* Parent directory is O.K. */
                             lpComponentEnd = lpCurrent;
@@ -236,10 +241,7 @@ static bool IsValidFilePathComponent(
                     if ( dwFlags & VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD )
                         lpComponentEnd = lpCurrent;
                     else
-                    {
-                        lpComponentEnd = lpCurrent - 1;
                         bValid = false;
-                    }
                     break;
                 default:
                     lpComponentEnd = lpCurrent;
@@ -254,101 +256,88 @@ static bool IsValidFilePathComponent(
             case '\"':
             case '|':
             case ':':
-                lpComponentEnd = lpCurrent;
                 bValid = false;
                 break;
             default:
                 /* Characters below ASCII 32 are not allowed */
                 if ( *lpCurrent < ' ' )
-                {
-                    lpComponentEnd = lpCurrent;
                     bValid = false;
-                }
                 break;
             }
-            cLast = *lpCurrent++;
-        }
 
-        /*  If we don't reached the end of the component the length of the component was too long
-            (See condition of while loop) */
-        if ( !lpComponentEnd )
-        {
-            bValid = false;
-            lpComponentEnd = lpCurrent;
+            if (lpCurrent != lpComponentEnd)
+                cLast = *lpCurrent++;
+
+            if (lpCurrent == lpComponentEnd)
+                break;
         }
 
         if ( bValid )
         {
             // Empty components are not allowed
-            if ( lpComponentEnd - lpComponent < 1 )
+            if (lpComponentEnd - roComponent->begin() < 1)
                 bValid = false;
-
-            // If we reached the end of the string nullptr is returned
-            else if ( !*lpComponentEnd )
-                lpComponentEnd = nullptr;
-
+            // If we reached the end of the string nullopt is returned
+            else if (lpComponentEnd == roComponent->end())
+                roComponent.reset();
+            else
+                roComponent->remove_prefix(lpComponentEnd - roComponent->begin());
         }
-
-        if ( lppComponentEnd )
-            *lppComponentEnd = lpComponentEnd;
 
         return bValid;
 }
 
-static sal_Int32 countInitialSeparators(sal_Unicode const * path) {
-    sal_Unicode const * p = path;
-    while (*p == '\\' || *p == '/') {
-        ++p;
-    }
-    return p - path;
+static sal_Int32 countInitialSeparators(std::u16string_view path) {
+    size_t n = 0;
+    while (n < path.length() && (path[n] == '\\' || path[n] == '/'))
+        ++n;
+    return n;
 }
 
-DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
+DWORD IsValidFilePath(const OUString& path, DWORD dwFlags, OUString* corrected)
 {
-        sal_Unicode const * lpszPath = path->buffer;
-        sal_Unicode const * lpComponent = lpszPath;
+        std::optional<std::u16string_view> oComponent = path;
         bool    bValid = true;
         DWORD   dwPathType = PATHTYPE_ERROR;
-        sal_Int32 nLength = rtl_uString_getLength( path );
 
         if ( dwFlags & VALIDATEPATH_ALLOW_RELATIVE )
             dwFlags |= VALIDATEPATH_ALLOW_ELLIPSE;
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
-        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX_UNC, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
+        if (path.matchIgnoreAsciiCase(WSTR_LONG_PATH_PREFIX_UNC))
         {
             /* This is long path in UNC notation */
-            lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1;
+            oComponent = path.subView(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1);
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC | PATHTYPE_IS_LONGPATH;
         }
-        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
+        else if (path.matchIgnoreAsciiCase(WSTR_LONG_PATH_PREFIX))
         {
             /* This is long path */
-            lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
+            oComponent = path.subView(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1);
 
-            if (startsWithDriveColon(lpComponent))
+            if (startsWithDriveColon(*oComponent))
             {
-                lpComponent += 2;
+                oComponent->remove_prefix(2);
                 dwCandidatPathType = PATHTYPE_ABSOLUTE_LOCAL | PATHTYPE_IS_LONGPATH;
             }
         }
-        else if ( 2 == countInitialSeparators( lpszPath ) )
+        else if ( 2 == countInitialSeparators(path) )
         {
             /* The UNC path notation */
-            lpComponent = lpszPath + 2;
+            oComponent = path.subView(2);
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC;
         }
-        else if (startsWithDriveColon(lpszPath))
+        else if (startsWithDriveColon(path))
         {
             /* Local path verification. Must start with <drive>: */
-            lpComponent = lpszPath + 2;
+            oComponent = path.subView(2);
             dwCandidatPathType = PATHTYPE_ABSOLUTE_LOCAL;
         }
 
         if ( ( dwCandidatPathType & PATHTYPE_MASK_TYPE ) == PATHTYPE_ABSOLUTE_UNC )
         {
-            bValid = IsValidFilePathComponent( lpComponent, &lpComponent, VALIDATEPATH_ALLOW_ELLIPSE );
+            bValid = IsValidFilePathComponent(oComponent, VALIDATEPATH_ALLOW_ELLIPSE);
 
             /* So far we have a valid servername. Now let's see if we also have a network resource */
 
@@ -356,10 +345,14 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 
             if ( bValid )
             {
-                if ( lpComponent &&  !*++lpComponent )
-                    lpComponent = nullptr;
+                if (oComponent)
+                {
+                    oComponent->remove_prefix(1);
+                    if (oComponent->empty())
+                        oComponent.reset();
+                }
 
-                if ( !lpComponent )
+                if (!oComponent)
                 {
                     dwPathType |= PATHTYPE_IS_SERVER;
                 }
@@ -367,47 +360,53 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
                 {
                     /* Now test the network resource */
 
-                    bValid = IsValidFilePathComponent( lpComponent, &lpComponent, 0 );
+                    bValid = IsValidFilePathComponent(oComponent, 0);
 
                     /* If we now reached the end of the path, everything is O.K. */
 
-                    if ( bValid && (!lpComponent || !*++lpComponent ) )
+                    if (bValid)
                     {
-                        lpComponent = nullptr;
-                        dwPathType |= PATHTYPE_IS_VOLUME;
+                        if (oComponent)
+                        {
+                            oComponent->remove_prefix(1);
+                            if (oComponent->empty())
+                                oComponent.reset();
+                        }
+                        if (!oComponent)
+                            dwPathType |= PATHTYPE_IS_VOLUME;
                     }
                 }
             }
         }
         else if (  ( dwCandidatPathType & PATHTYPE_MASK_TYPE ) == PATHTYPE_ABSOLUTE_LOCAL )
         {
-            if ( 1 == countInitialSeparators( lpComponent ) )
-                lpComponent++;
-            else if ( *lpComponent )
+            if (1 == countInitialSeparators(*oComponent))
+                oComponent->remove_prefix(1);
+            else if (!oComponent->empty())
                 bValid = false;
 
             dwPathType = dwCandidatPathType;
 
             /* Now we are behind the backslash or it was a simple drive without backslash */
 
-            if ( bValid && !*lpComponent )
+            if (bValid && oComponent->empty())
             {
-                lpComponent = nullptr;
+                oComponent.reset();
                 dwPathType |= PATHTYPE_IS_VOLUME;
             }
         }
         else if ( dwFlags & VALIDATEPATH_ALLOW_RELATIVE )
         {
             /* Can be a relative path */
-            lpComponent = lpszPath;
+            oComponent = path;
 
             /* Relative path can start with a backslash */
 
-            if ( 1 == countInitialSeparators( lpComponent ) )
+            if (1 == countInitialSeparators(*oComponent))
             {
-                lpComponent++;
-                if ( !*lpComponent )
-                    lpComponent = nullptr;
+                oComponent->remove_prefix(1);
+                if (oComponent->empty())
+                    oComponent.reset();
             }
 
             dwPathType = PATHTYPE_RELATIVE;
@@ -416,38 +415,36 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         {
             /* Anything else is an error */
             bValid = false;
-            lpComponent = lpszPath;
         }
 
         /* Now validate each component of the path */
-        rtl_uString * lastCorrected = path;
-        while ( bValid && lpComponent )
+        OUString lastCorrected = path;
+        while (bValid && oComponent)
         {
             // Correct path by merging consecutive slashes:
-            if (*lpComponent == '\\' && corrected != nullptr) {
-                sal_Int32 i = lpComponent - lpszPath;
-                rtl_uString_newReplaceStrAt(corrected, lastCorrected, i, 1, nullptr);
+            if (o3tl::starts_with(*oComponent, u"\\") && corrected != nullptr) {
+                sal_Int32 i = oComponent->data() - lastCorrected.getStr();
+                *corrected = lastCorrected.replaceAt(i, 1, {});
                     //TODO: handle out-of-memory
                 lastCorrected = *corrected;
-                lpszPath = (*corrected)->buffer;
-                lpComponent = lpszPath + i;
+                oComponent = lastCorrected.subView(i);
             }
 
-            bValid = IsValidFilePathComponent( lpComponent, &lpComponent, dwFlags | VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD);
+            bValid = IsValidFilePathComponent(oComponent, dwFlags | VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD);
 
-            if ( bValid && lpComponent )
+            if (bValid && oComponent)
             {
-                lpComponent++;
+                oComponent->remove_prefix(1);
 
                 /* If the string behind the backslash is empty, we've done */
 
-                if ( !*lpComponent )
-                    lpComponent = nullptr;
+                if (oComponent->empty())
+                    oComponent.reset();
             }
         }
 
         /* The path can be longer than MAX_PATH only in case it has the longpath prefix */
-        if ( bValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && rtl_ustr_getLength( lpszPath ) >= MAX_PATH )
+        if (bValid && !(dwPathType & PATHTYPE_IS_LONGPATH) && path.getLength() >= MAX_PATH)
         {
             bValid = false;
         }
@@ -570,7 +567,7 @@ static OUString osl_encodeURL_(std::u16string_view sURL)
     return sEncodedURL.makeStringAndClear();
 }
 
-oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, bool bAllowRelative )
+oslFileError osl_getSystemPathFromFileURL_(const OUString& strURL, rtl_uString **pustrPath, bool bAllowRelative)
 {
     OUString sTempPath;
     oslFileError        nError = osl_File_E_INVAL;  /* Assume failure */
@@ -578,15 +575,15 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
     /*  If someone hasn't encoded the complete URL we convert it to UTF8 now to prevent from
         having a mixed encoded URL later */
 
-    OString sUTF8 = OUStringToOString(OUString::unacquired(&strURL), RTL_TEXTENCODING_UTF8);
+    OString sUTF8 = OUStringToOString(strURL, RTL_TEXTENCODING_UTF8);
 
     /* If the length of strUTF8 and strURL differs it indicates that the URL was not correct encoded */
 
     SAL_WARN_IF(
-        sUTF8.getLength() != strURL->length &&
-        0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\", 6 )
+        sUTF8.getLength() != strURL.getLength() &&
+        0 == strURL.matchIgnoreAsciiCase("file:\\")
         , "sal.osl"
-        ,"osl_getSystemPathFromFileURL: \"" << OUString(strURL) << "\" is not encoded !!!");
+        ,"osl_getSystemPathFromFileURL: \"" << strURL << "\" is not encoded !!!");
 
     if (auto sDecodedURL = osl_decodeURL_(sUTF8))
     {
@@ -648,7 +645,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 }
             }
 
-            if ( IsValidFilePath( sTempPath.pData, VALIDATEPATH_ALLOW_ELLIPSE, &sTempPath.pData ) )
+            if (IsValidFilePath(sTempPath, VALIDATEPATH_ALLOW_ELLIPSE, &sTempPath))
                 nError = osl_File_E_None;
         }
         else if ( bAllowRelative )  /* This maybe a relative file URL */
@@ -656,20 +653,20 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
             /* In future the relative path could be converted to absolute if it is too long */
             sTempPath = *sDecodedURL;
 
-            if ( IsValidFilePath( sTempPath.pData, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &sTempPath.pData ) )
+            if (IsValidFilePath(sTempPath, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &sTempPath))
                 nError = osl_File_E_None;
         }
         else
           SAL_INFO_IF(nError, "sal.osl",
-              "osl_getSystemPathFromFileURL: \"" << OUString(strURL) << "\" is not an absolute FileURL");
+              "osl_getSystemPathFromFileURL: \"" << strURL << "\" is not an absolute FileURL");
 
     }
 
     if ( osl_File_E_None == nError )
-        rtl_uString_assign( pustrPath, sTempPath.pData );
+        rtl_uString_assign(pustrPath, sTempPath.pData);
 
     SAL_INFO_IF(nError, "sal.osl",
-        "osl_getSystemPathFromFileURL: \"" << OUString(strURL) << "\" is not a FileURL");
+        "osl_getSystemPathFromFileURL: \"" << strURL << "\" is not a FileURL");
 
     return nError;
 }
@@ -681,7 +678,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
     DWORD dwPathType = PATHTYPE_ERROR;
 
     if (strPath)
-        dwPathType = IsValidFilePath(strPath, VALIDATEPATH_ALLOW_RELATIVE, nullptr);
+        dwPathType = IsValidFilePath(OUString::unacquired(&strPath), VALIDATEPATH_ALLOW_RELATIVE, nullptr);
 
     if (dwPathType)
     {
@@ -748,14 +745,14 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
     }
 
     SAL_INFO_IF(nError, "sal.osl",
-        "osl_getFileURLFromSystemPath: \"" << OUString(strPath) << "\" is not a systemPath");
+        "osl_getFileURLFromSystemPath: \"" << OUString::unacquired(&strPath) << "\" is not a systemPath");
     return nError;
 }
 
 oslFileError SAL_CALL osl_getSystemPathFromFileURL(
     rtl_uString *ustrURL, rtl_uString **pustrPath)
 {
-    return osl_getSystemPathFromFileURL_( ustrURL, pustrPath, true );
+    return osl_getSystemPathFromFileURL_(OUString::unacquired(&ustrURL), pustrPath, true);
 }
 
 oslFileError SAL_CALL osl_searchFileURL(
@@ -763,17 +760,17 @@ oslFileError SAL_CALL osl_searchFileURL(
     rtl_uString *ustrSystemSearchPath,
     rtl_uString **pustrPath)
 {
-    rtl_uString     *ustrUNCPath = nullptr;
-    rtl_uString     *ustrSysPath = nullptr;
+    OUString     ustrUNCPath;
+    OUString     ustrSysPath;
     oslFileError    error;
 
     /* First try to interpret the file name as a URL even a relative one */
-    error = osl_getSystemPathFromFileURL_( ustrFileName, &ustrUNCPath, true );
+    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&ustrFileName), &ustrUNCPath.pData, true);
 
     /* So far we either have an UNC path or something invalid
        Now create a system path */
     if ( osl_File_E_None == error )
-        error = osl_getSystemPathFromFileURL_( ustrUNCPath, &ustrSysPath, true );
+        error = osl_getSystemPathFromFileURL_(ustrUNCPath, &ustrSysPath.pData, true);
 
     if ( osl_File_E_None == error )
     {
@@ -791,7 +788,7 @@ oslFileError SAL_CALL osl_searchFileURL(
         {
             /* If search path is empty use a nullptr pointer instead according to MSDN documentation of SearchPath */
             LPCWSTR lpszSearchPath = ustrSystemSearchPath && ustrSystemSearchPath->length ? o3tl::toW(ustrSystemSearchPath->buffer) : nullptr;
-            LPCWSTR lpszSearchFile = o3tl::toW(ustrSysPath->buffer);
+            LPCWSTR lpszSearchFile = o3tl::toW(ustrSysPath.getStr());
 
             /* Allocate space for buffer according to previous returned count of required chars */
             /* +1 is not necessary if we follow MSDN documentation but for robustness we do so */
@@ -808,8 +805,8 @@ oslFileError SAL_CALL osl_searchFileURL(
 
         if ( dwResult )
         {
-            rtl_uString_newFromStr( &ustrSysPath, o3tl::toU(lpBuffer) );
-            error = osl_getFileURLFromSystemPath( ustrSysPath, pustrPath );
+            ustrSysPath = o3tl::toU(lpBuffer);
+            error = osl_getFileURLFromSystemPath(ustrSysPath.pData, pustrPath);
         }
         else
         {
@@ -819,11 +816,11 @@ oslFileError SAL_CALL osl_searchFileURL(
             /* something went wrong, perhaps the path was absolute */
             error = oslTranslateFileError( GetLastError() );
 
-            hFind = FindFirstFileW( o3tl::toW(ustrSysPath->buffer), &aFindFileData );
+            hFind = FindFirstFileW(o3tl::toW(ustrSysPath.getStr()), &aFindFileData);
 
             if ( IsValidHandle(hFind) )
             {
-                error = osl_getFileURLFromSystemPath( ustrSysPath, pustrPath );
+                error = osl_getFileURLFromSystemPath(ustrSysPath.pData, pustrPath);
                 FindClose( hFind );
             }
         }
@@ -831,30 +828,24 @@ oslFileError SAL_CALL osl_searchFileURL(
         free( lpBuffer );
     }
 
-    if ( ustrSysPath )
-        rtl_uString_release( ustrSysPath );
-
-    if ( ustrUNCPath )
-        rtl_uString_release( ustrUNCPath );
-
     return error;
 }
 
 oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL )
 {
     oslFileError eError = osl_File_E_None;
-    rtl_uString     *ustrRelSysPath = nullptr;
-    rtl_uString     *ustrBaseSysPath = nullptr;
+    OUString     ustrRelSysPath;
+    OUString     ustrBaseSysPath;
 
     if ( ustrBaseURL && ustrBaseURL->length )
     {
-        eError = osl_getSystemPathFromFileURL_( ustrBaseURL, &ustrBaseSysPath, false );
+        eError = osl_getSystemPathFromFileURL_(OUString::unacquired(&ustrBaseURL), &ustrBaseSysPath.pData, false);
         OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with relative or invalid base URL" );
     }
     if (eError == osl_File_E_None)
     {
-        eError = osl_getSystemPathFromFileURL_(ustrRelativeURL, &ustrRelSysPath,
-                                               ustrBaseSysPath != nullptr);
+        eError = osl_getSystemPathFromFileURL_(OUString::unacquired(&ustrRelativeURL), &ustrRelSysPath.pData,
+                                               !ustrBaseSysPath.isEmpty());
         OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL" );
     }
 
@@ -866,7 +857,7 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
   with the rtl/uri class.
 */
         // If ustrRelSysPath is absolute, we don't need ustrBaseSysPath.
-        if (ustrBaseSysPath && !isAbsolute(ustrRelSysPath))
+        if (!ustrBaseSysPath.isEmpty() && !isAbsolute(ustrRelSysPath))
         {
             // ustrBaseSysPath is known here to be a valid absolute path -> its first two characters
             // are ASCII (either alpha + colon, or double backslashes)
@@ -884,13 +875,12 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
                 // as is; otherwise, use current directory on ustrRelSysPath's drive as base path
                 if (onSameDrive(ustrRelSysPath, ustrBaseSysPath))
                 {
-                    sResultPath = combinePath(OUString::unacquired(&ustrBaseSysPath),
-                                              ustrRelSysPath->buffer + 2);
+                    sResultPath = combinePath(ustrBaseSysPath, ustrRelSysPath.subView(2));
                 }
                 else
                 {
                     // Call GetFullPathNameW to get current directory on ustrRelSysPath's drive
-                    wchar_t baseDrive[3] = { ustrRelSysPath->buffer[0], ':' }; // just "C:"
+                    wchar_t baseDrive[3] = { ustrRelSysPath[0], ':' }; // just "C:"
                     osl::LongPathBuffer<wchar_t> aBuf(MAX_LONG_PATH);
                     DWORD dwResult
                         = GetFullPathNameW(baseDrive, aBuf.getBufSizeInSymbols(), aBuf, nullptr);
@@ -899,7 +889,7 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
                         if (dwResult >= aBuf.getBufSizeInSymbols())
                             eError = osl_File_E_INVAL;
                         else
-                            sResultPath = combinePath(o3tl::toU(aBuf), ustrRelSysPath->buffer + 2);
+                            sResultPath = combinePath(o3tl::toU(aBuf), ustrRelSysPath.subView(2));
                     }
                     else
                         eError = oslTranslateFileError(GetLastError());
@@ -913,12 +903,12 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
                 //   => \\server\share\path2\to\file
                 // ustrBaseSysPath is "D:\path1\" and ustrRelSysPath is "\path2\to\file"
                 //   => D:\path2\to\file
-                auto sBaseView(pathView(ustrBaseSysPath, ustrRelSysPath->buffer[0] == '\\'));
-                sResultPath = combinePath(sBaseView, ustrRelSysPath->buffer);
+                auto sBaseView(pathView(ustrBaseSysPath, ustrRelSysPath.startsWith("\\")));
+                sResultPath = combinePath(sBaseView, ustrRelSysPath);
             }
         }
         else
-            sResultPath = OUString::unacquired(&ustrRelSysPath);
+            sResultPath = ustrRelSysPath;
 
         if (eError == osl_File_E_None)
         {
@@ -926,12 +916,6 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
             eError = osl_getFileURLFromSystemPath(sResultPath.pData, pustrAbsoluteURL);
         }
     }
-
-    if ( ustrBaseSysPath )
-        rtl_uString_release( ustrBaseSysPath );
-
-    if ( ustrRelSysPath )
-        rtl_uString_release( ustrRelSysPath );
 
     return  eError;
 }
