@@ -203,7 +203,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 
             const SwStartNode *pStNd =
                 static_cast<const SwStartNode *>( &rContentStIdx.GetNode() );
-            aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex();
+            aDelPam.GetPoint()->Assign( pStNd->EndOfSectionIndex() );
 
             SwSectionData aSection(SectionType::Content, m_xDoc->GetUniqueSectionName());
             if (SwSection* pOldContent = m_xDoc->InsertSwSection(aDelPam, aSection, nullptr, nullptr, false))

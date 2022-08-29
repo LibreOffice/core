@@ -167,8 +167,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             OUString aLNm;
             {
                 SwPaM aPam( aStart );
-                SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
-                ++rIdx;
+                aPam.GetPoint()->Adjust(SwNodeOffset(1));
                 aLNm = aPam.GetPointNode().GetTextNode()->GetText();
 
                 // is AutoText?

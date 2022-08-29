@@ -470,15 +470,15 @@ static bool MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc& rDoc,
 //                                   out: start of valid range
 // rTmpEnd is an out parameter
 // Returns true for valid range
-static bool IterateNumrulePiece( const SwNodeIndex& rEnd,
+static bool IterateNumrulePiece( const SwPosition& rEnd,
                                 SwNodeIndex& rTmpStart, SwNodeIndex& rTmpEnd )
 {
-    while( ( rTmpStart <= rEnd )
+    while( ( rTmpStart <= rEnd.GetNode() )
            && !( rTmpStart.GetNode().IsTextNode() ) )    // look for valid start
         ++rTmpStart;
 
     rTmpEnd = rTmpStart;
-    while( ( rTmpEnd <= rEnd )
+    while( ( rTmpEnd <= rEnd.GetNode() )
            && ( rTmpEnd.GetNode().IsTextNode() ) )       // look for valid end + 1
         ++rTmpEnd;
 
@@ -532,7 +532,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 {
                     SwNodeIndex aTmpStart( aRegion.Start()->GetNode() );
                     SwNodeIndex aTmpEnd( aTmpStart );
-                    SwNodeIndex& rRegEndNd = aRegion.End()->nNode;
+                    SwPosition& rRegEndNd = *aRegion.End();
                     while( IterateNumrulePiece( rRegEndNd,
                                                 aTmpStart, aTmpEnd ) )
                     {

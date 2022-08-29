@@ -179,13 +179,13 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
         "Danger: there are non-final paragraph attributes");
     m_aParaAttrs.clear();
 
-    const SwNodeIndex* pOldEndPara = &m_pPam->GetPoint()->nNode;
+    const SwPosition* pOldEndPara = m_pPam->GetPoint();
 #ifndef NDEBUG
-    auto const nOld(pOldEndPara->GetIndex());
+    auto const nOld(pOldEndPara->GetNodeIndex());
 #endif
     sal_Int32 nOldEndCnt = m_pPam->GetPoint()->GetContentIndex();
 
-    const SwNodeIndex& rNewSttPara = rNewPos.nNode;
+    const SwPosition& rNewSttPara = rNewPos;
     sal_Int32 nNewSttCnt = rNewPos.GetContentIndex();
 
     bool bMoveBack = false;
@@ -202,7 +202,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 
             sal_uInt16 nWhich = pAttr->m_pItem->Which();
             if( !nOldEndCnt && RES_PARATR_BEGIN <= nWhich &&
-                pAttr->GetStartParagraphIdx() < pOldEndPara->GetIndex() )
+                pAttr->GetStartParagraphIdx() < pOldEndPara->GetNodeIndex() )
             {
                 // The attribute needs to be closed one content position beforehand
                 if( !bMoveBack )
@@ -219,8 +219,8 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             }
 
             if( (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
-                pAttr->GetStartParagraphIdx() < pOldEndPara->GetIndex() ||
-                (pAttr->GetStartParagraph() == *pOldEndPara &&
+                pAttr->GetStartParagraphIdx() < pOldEndPara->GetNodeIndex() ||
+                (pAttr->GetStartParagraph() == pOldEndPara->GetNode() &&
                  pAttr->GetStartContent() != nOldEndCnt) )
             {
                 // The attribute needs to be set. Because we still need the original, since
@@ -254,8 +254,8 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             }
 
             // Set the start of the attribute
-            pAttr->m_nStartPara = rNewSttPara;
-            pAttr->m_nEndPara = rNewSttPara;
+            pAttr->m_nStartPara = rNewSttPara.GetNode();
+            pAttr->m_nEndPara = rNewSttPara.GetNode();
             pAttr->m_nStartContent = nNewSttCnt;
             pAttr->m_nEndContent = nNewSttCnt;
             pAttr->m_pPrev = nullptr;
