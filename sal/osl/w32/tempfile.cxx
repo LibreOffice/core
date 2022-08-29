@@ -41,26 +41,20 @@ static oslFileError osl_setup_base_directory_impl_(
     rtl_uString*  pustrDirectoryURL,
     rtl_uString** ppustr_base_dir)
 {
-    rtl_uString* dir_url = nullptr;
-    rtl_uString* dir     = nullptr;
+    OUString dir_url;
+    OUString dir;
     oslFileError error   = osl_File_E_None;
 
     if (pustrDirectoryURL)
-        rtl_uString_assign(&dir_url, pustrDirectoryURL);
+        dir_url = pustrDirectoryURL;
     else
-        error = osl_getTempDirURL(&dir_url);
+        error = osl_getTempDirURL(&dir_url.pData);
 
     if (error == osl_File_E_None)
-    {
-        error = osl_getSystemPathFromFileURL_(dir_url, &dir, false);
-        rtl_uString_release(dir_url);
-    }
+        error = osl_getSystemPathFromFileURL_(dir_url, &dir.pData, false);
 
     if (error == osl_File_E_None)
-    {
-        rtl_uString_assign(ppustr_base_dir, dir);
-        rtl_uString_release(dir);
-    }
+        rtl_uString_assign(ppustr_base_dir, dir.pData);
 
     return error;
 }

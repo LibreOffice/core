@@ -640,8 +640,8 @@ oslFileError SAL_CALL osl_openFile(
     oslFileHandle * pHandle,
     sal_uInt32      uFlags)
 {
-    rtl_uString * strSysPath = nullptr;
-    oslFileError result = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    OUString strSysPath;
+    oslFileError result = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
     if (result != osl_File_E_None)
         return result;
 
@@ -661,7 +661,7 @@ oslFileError SAL_CALL osl_openFile(
         dwCreation |= OPEN_EXISTING;
 
     HANDLE hFile = CreateFileW(
-        o3tl::toW(rtl_uString_getStr(strSysPath)),
+        o3tl::toW(strSysPath.getStr()),
         dwAccess, dwShare, nullptr, dwCreation, 0, nullptr);
 
     // @@@ ERROR HANDLING @@@
@@ -670,7 +670,6 @@ oslFileError SAL_CALL osl_openFile(
 
     *pHandle = osl_createFileHandleFromOSHandle(hFile, uFlags | osl_File_OpenFlag_Read);
 
-    rtl_uString_release(strSysPath);
     return result;
 }
 
@@ -1030,33 +1029,31 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 
 oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
 {
-    rtl_uString *strSysPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    OUString strSysPath;
+    oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
 
     if (error == osl_File_E_None)
     {
-        if (DeleteFileW(o3tl::toW(rtl_uString_getStr(strSysPath))))
+        if (DeleteFileW(o3tl::toW(strSysPath.getStr())))
             error = osl_File_E_None;
         else
             error = oslTranslateFileError(GetLastError());
-
-        rtl_uString_release(strSysPath);
     }
     return error;
 }
 
 oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPath)
 {
-    rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    OUString strSysPath, strSysDestPath;
+    oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
 
     if (error == osl_File_E_None)
-        error = osl_getSystemPathFromFileURL_(strDestPath, &strSysDestPath, false);
+        error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strDestPath), &strSysDestPath.pData, false);
 
     if (error == osl_File_E_None)
     {
-        LPCWSTR src = o3tl::toW(rtl_uString_getStr(strSysPath));
-        LPCWSTR dst = o3tl::toW(rtl_uString_getStr(strSysDestPath));
+        LPCWSTR src = o3tl::toW(strSysPath.getStr());
+        LPCWSTR dst = o3tl::toW(strSysDestPath.getStr());
 
         if (CopyFileW(src, dst, FALSE))
             error = osl_File_E_None;
@@ -1064,26 +1061,21 @@ oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPat
             error = oslTranslateFileError(GetLastError());
     }
 
-    if (strSysPath)
-        rtl_uString_release(strSysPath);
-    if (strSysDestPath)
-        rtl_uString_release(strSysDestPath);
-
     return error;
 }
 
 oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPath)
 {
-    rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    OUString strSysPath, strSysDestPath;
+    oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
 
     if (error == osl_File_E_None)
-        error = osl_getSystemPathFromFileURL_(strDestPath, &strSysDestPath, false);
+        error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strDestPath), &strSysDestPath.pData, false);
 
     if (error == osl_File_E_None)
     {
-        LPCWSTR src = o3tl::toW(rtl_uString_getStr(strSysPath));
-        LPCWSTR dst = o3tl::toW(rtl_uString_getStr(strSysDestPath));
+        LPCWSTR src = o3tl::toW(strSysPath.getStr());
+        LPCWSTR dst = o3tl::toW(strSysDestPath.getStr());
 
         if (MoveFileExW(src, dst, MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING))
             error = osl_File_E_None;
@@ -1091,26 +1083,21 @@ oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPat
             error = oslTranslateFileError(GetLastError());
     }
 
-    if (strSysPath)
-        rtl_uString_release(strSysPath);
-    if (strSysDestPath)
-        rtl_uString_release(strSysDestPath);
-
     return error;
 }
 
 oslFileError SAL_CALL osl_replaceFile(rtl_uString* strPath, rtl_uString* strDestPath)
 {
-    rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    OUString strSysPath, strSysDestPath;
+    oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
 
     if (error == osl_File_E_None)
-        error = osl_getSystemPathFromFileURL_(strDestPath, &strSysDestPath, false);
+        error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strDestPath), &strSysDestPath.pData, false);
 
     if (error == osl_File_E_None)
     {
-        LPCWSTR src = o3tl::toW(rtl_uString_getStr(strSysPath));
-        LPCWSTR dst = o3tl::toW(rtl_uString_getStr(strSysDestPath));
+        LPCWSTR src = o3tl::toW(strSysPath.getStr());
+        LPCWSTR dst = o3tl::toW(strSysDestPath.getStr());
 
         if (!ReplaceFileW(dst, src, nullptr,
                           REPLACEFILE_WRITE_THROUGH | REPLACEFILE_IGNORE_MERGE_ERRORS
@@ -1127,11 +1114,6 @@ oslFileError SAL_CALL osl_replaceFile(rtl_uString* strPath, rtl_uString* strDest
                 error = oslTranslateFileError(dwError);
         }
     }
-
-    if (strSysPath)
-        rtl_uString_release(strSysPath);
-    if (strSysDestPath)
-        rtl_uString_release(strSysDestPath);
 
     return error;
 }
