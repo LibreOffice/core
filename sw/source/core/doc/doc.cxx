@@ -1503,14 +1503,11 @@ bool SwDoc::RemoveInvisibleContent()
                         pSectNd->EndOfSectionIndex() + 1 )
                     {
                         // only delete the content
-                        SwContentNode* pCNd = GetNodes().GoNext(
-                                                &aPam.GetPoint()->nNode );
-                        aPam.GetPoint()->nContent.Assign( pCNd, 0 );
+                        SwContentNode* pCNd = GetNodes().GoNext( aPam.GetPoint() );
                         aPam.SetMark();
-                        aPam.GetPoint()->nNode = *pSectNd->EndOfSectionNode();
-                        pCNd = SwNodes::GoPrevious(
-                                                &aPam.GetPoint()->nNode );
-                        aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                        aPam.GetPoint()->Assign( *pSectNd->EndOfSectionNode() );
+                        pCNd = SwNodes::GoPrevious( aPam.GetPoint() );
+                        aPam.GetPoint()->SetContent( pCNd->Len() );
 
                         getIDocumentContentOperations().DeleteRange( aPam );
                     }
@@ -1518,7 +1515,7 @@ bool SwDoc::RemoveInvisibleContent()
                     {
                         // delete the whole section
                         aPam.SetMark();
-                        aPam.GetPoint()->nNode = *pSectNd->EndOfSectionNode();
+                        aPam.GetPoint()->Assign( *pSectNd->EndOfSectionNode() );
                         getIDocumentContentOperations().DelFullPara( aPam );
                     }
 
@@ -1632,7 +1629,7 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
                     if (pFieldAtEnd && pFieldAtEnd->Which() == RES_TXTATR_INPUTFIELD)
                     {
                         SwPosition &rEndPos = *aInsertPam.GetPoint();
-                        rEndPos.nContent = SwCursorShell::EndOfInputFieldAtPos( *aInsertPam.End() );
+                        rEndPos.SetContent( SwCursorShell::EndOfInputFieldAtPos( *aInsertPam.End() ) );
                     }
                     else
                     {
