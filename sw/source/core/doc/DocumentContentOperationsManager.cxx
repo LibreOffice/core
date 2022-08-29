@@ -3176,21 +3176,21 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     RndStdIds eAnchorId = pAnchor != nullptr ? pAnchor->GetAnchorId() : pFormat->GetAnchor().GetAnchorId();
     const bool bIsAtContent = (RndStdIds::FLY_AT_PAGE != eAnchorId);
 
-    const SwNodeIndex* pChkIdx = nullptr;
+    const SwPosition* pChkPos = nullptr;
     if ( pAnchor == nullptr )
     {
-        pChkIdx = &rRg.GetPoint()->nNode;
+        pChkPos = rRg.GetPoint();
     }
     else if ( bIsAtContent )
     {
-        pChkIdx =
-            pAnchor->GetContentAnchor() ? &pAnchor->GetContentAnchor()->nNode : &rRg.GetPoint()->nNode;
+        pChkPos =
+            pAnchor->GetContentAnchor() ? pAnchor->GetContentAnchor() : rRg.GetPoint();
     }
 
     // allow drawing objects in header/footer, but control objects aren't allowed in header/footer.
-    if( pChkIdx != nullptr
+    if( pChkPos != nullptr
         && ::CheckControlLayer( &rDrawObj )
-        && m_rDoc.IsInHeaderFooter( pChkIdx->GetNode() ) )
+        && m_rDoc.IsInHeaderFooter( pChkPos->GetNode() ) )
     {
         // apply at-page anchor format
         eAnchorId = RndStdIds::FLY_AT_PAGE;
@@ -3428,8 +3428,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
     else
         pCurNode = pCurNode->AppendNode( rPos )->GetTextNode();
 
-    rPos.nNode++;
-    rPos.nContent.Assign( pCurNode, 0 );
+    rPos.Adjust(SwNodeOffset(1));
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3462,7 +3461,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     aPam.Normalize(false);
-    if (aPam.GetPoint()->nNode != aPam.GetMark()->nNode)
+    if (aPam.GetPoint()->GetNode() != aPam.GetMark()->GetNode())
     {
         aPam.Move(fnMoveBackward);
     }
@@ -3620,8 +3619,8 @@ void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(SwPaM& rPaM )
 {
     for (SwPaM& rSel :rPaM.GetRingContainer())
     {
-        SwNodeOffset nStt = rSel.Start()->nNode.GetIndex();
-        SwNodeOffset nEnd = rSel.End()->nNode.GetIndex();
+        SwNodeOffset nStt = rSel.Start()->GetNodeIndex();
+        SwNodeOffset nEnd = rSel.End()->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
             RemoveLeadingWhiteSpace(SwPosition(rSel.GetBound().GetNodes(), nPos));
     }
@@ -3669,10 +3668,10 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPosition targetPos(aSavePos, SwNodeOffset(rRg.aStart != rRg.aEnd ? +1 : 0));
-        if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
+        if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->GetNode())
         {
             // there is 1 (partially selected, maybe) paragraph before
-            assert(SwNodeIndex(rRg.aStart, -1) == pCopiedPaM->first.Start()->nNode);
+            assert(SwNodeIndex(rRg.aStart, -1) == pCopiedPaM->first.Start()->GetNode());
             // only use the passed in target SwPosition if the source PaM point
             // is on a different node; if it was the same node then the target
             // position was likely moved along by the copy operation and now
@@ -3773,7 +3772,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         ::sw::UndoGuard const undoGuard(rDest.GetIDocumentUndoRedo());
         CopyFlyInFlyImpl(rRg, pCopiedPaM ? &pCopiedPaM->first : nullptr,
             // see comment below regarding use of pCopiedPaM->second
-            (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
+            (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->GetNode())
                 ? pCopiedPaM->second.GetNode()
                 : aSavePos.GetNode(),
             bCopyFlyAtFly,
@@ -3906,7 +3905,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             sal_uLong nAnchorTextNdNumInRange( 0 );
             bool bAnchorTextNdFound( false );
             // start at the first node for which flys are copied
-            SwNodeIndex aIdx(pCopiedPaM ? pCopiedPaM->Start()->nNode : rRg.aStart);
+            SwNodeIndex aIdx(pCopiedPaM ? pCopiedPaM->Start()->GetNode() : rRg.aStart.GetNode());
             while ( !bAnchorTextNdFound && aIdx <= rRg.aEnd )
             {
                 if ( aIdx.GetNode().IsTextNode() )
@@ -3955,13 +3954,12 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 }
             }
             // apply found anchor text node as new anchor position
-            newPos.nNode = aAnchorNdIdx;
+            newPos.Assign( aAnchorNdIdx );
         }
         else
         {
             SwNodeOffset nOffset = newPos.GetNodeIndex() - rRg.aStart.GetIndex();
-            SwNodeIndex aIdx( rStartIdx, nOffset );
-            newPos.nNode = aIdx;
+            newPos.Assign( rStartIdx, nOffset );
         }
         // Set the character bound Flys back at the original character
         if ((RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
@@ -4286,7 +4284,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
     if( m_rDoc.GetAutoCorrExceptWord() )
     {
         // if necessary the saved Word for the exception
-        if( m_rDoc.GetAutoCorrExceptWord()->IsDeleted() ||  pStt->nNode != pEnd->nNode ||
+        if( m_rDoc.GetAutoCorrExceptWord()->IsDeleted() ||  pStt->GetNode() != pEnd->GetNode() ||
             pStt->GetContentIndex() + 1 != pEnd->GetContentIndex() ||
             !m_rDoc.GetAutoCorrExceptWord()->CheckDelChar( *pStt ))
                 { m_rDoc.DeleteAutoCorrExceptWord(); }
@@ -4622,8 +4620,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 SwContentIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( nullptr, 0 );
                 aDelPam.GetMark()->nContent = rIdx;
-                rPam.GetPoint()->nNode = SwNodeOffset(0);
-                rPam.GetPoint()->nContent = rIdx;
+                rPam.GetPoint()->Assign( SwNodeOffset(0) );
                 *rPam.GetMark() = *rPam.GetPoint();
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
@@ -4930,12 +4927,12 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     }
     if( !bCanMoveBack )
     {
-        pCopyPam->GetPoint()->nNode--;
+        pCopyPam->GetPoint()->Adjust(SwNodeOffset(-1));
         assert(pCopyPam->GetPoint()->GetContentIndex() == 0);
     }
 
-    SwNodeRange aRg( pStt->nNode, pEnd->nNode );
-    SwNodeIndex aInsPos( rPos.nNode );
+    SwNodeRange aRg( pStt->GetNode(), pEnd->GetNode() );
+    SwNodeIndex aInsPos( rPos.GetNode() );
     const bool bOneNode = pStt->GetNode() == pEnd->GetNode();
     SwTextNode* pSttTextNd = pStt->GetNode().GetTextNode();
     SwTextNode* pEndTextNd = pEnd->GetNode().GetTextNode();
@@ -5033,11 +5030,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     else if( rPos == *pEnd )
                     {
                         // The end was also moved
-                        pEnd->nNode--;
-                        pEnd->nContent.Assign( pDestTextNd, nContentEnd );
+                        pEnd->Adjust(SwNodeOffset(-1));
+                        pEnd->SetContent( nContentEnd );
                     }
                     // tdf#63022 always reset pEndTextNd after SplitNode
-                    aRg.aEnd = pEnd->nNode;
+                    aRg.aEnd = pEnd->GetNode();
                     pEndTextNd = pEnd->GetNode().GetTextNode();
                 }
 
@@ -5114,10 +5111,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 // The end would also be moved
                 else if( rPos == *pEnd )
                 {
-                    rPos.nNode-=SwNodeOffset(2);
-                    rPos.nContent.Assign( rPos.GetNode().GetContentNode(),
-                                            nContentEnd );
-                    rPos.nNode++;
+                    rPos.Adjust(SwNodeOffset(-1));
+                    rPos.SetContent( nContentEnd );
                     aRg.aEnd--;
                 }
             }
@@ -5129,7 +5124,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 // We want to be moved to the table node itself thus we have to set bCanMoveBack
                 // and to manipulate pCopyPam.
                 bCanMoveBack = false;
-                pCopyPam->GetPoint()->nNode--;
+                pCopyPam->GetPoint()->Adjust(SwNodeOffset(-1));
             }
         }
 
@@ -5188,7 +5183,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         }
 
         {
-            SwPosition startPos(pCopyPam->GetPoint()->nNode, SwNodeOffset(+1));
+            SwPosition startPos(pCopyPam->GetPoint()->GetNode(), SwNodeOffset(+1));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());
@@ -5197,10 +5192,10 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             }
             assert(startPos.GetNode().IsContentNode());
             std::pair<SwPaM const&, SwPosition const&> tmp(rPam, startPos);
-            if( aInsPos == pEnd->nNode )
+            if( aInsPos == pEnd->GetNode() )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                assert(pStt->nNode != pEnd->nNode);
+                assert(pStt->GetNode() != pEnd->GetNode());
                 pEnd->nContent = 0; // TODO why this?
                 CopyWithFlyInFly(aRg, aInsPos.GetNode(), &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
                 ++aSaveIdx;
@@ -5219,7 +5214,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         if (pFlysAtInsPos)
         {
             // init *again* - because CopyWithFlyInFly moved startPos
-            SwPosition startPos(pCopyPam->GetPoint()->nNode, SwNodeOffset(+1));
+            SwPosition startPos(pCopyPam->GetPoint()->GetNode(), SwNodeOffset(+1));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());
@@ -5299,10 +5294,9 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         pCopyPam->Move( fnMoveForward, bCanMoveBack ? GoInContent : GoInNode );
     else
     {
-        pCopyPam->GetPoint()->nNode++;
-
         // Reset the offset to 0 as it was before the insertion
-        pCopyPam->GetPoint()->nContent.Assign(pCopyPam->GetPoint()->GetNode().GetContentNode(), 0);
+        pCopyPam->GetPoint()->Adjust(SwNodeOffset(+1));
+
         // If the next node is a start node, then step back: the start node
         // has been copied and needs to be in the selection for the undo
         if (pCopyPam->GetPoint()->GetNode().IsStartNode())
