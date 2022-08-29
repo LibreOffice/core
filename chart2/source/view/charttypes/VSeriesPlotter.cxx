@@ -2928,6 +2928,7 @@ std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbolsForSeries(
         if (xShape.is())
         {
             aEntry.aSymbol.set(xSymbolGroup, uno::UNO_QUERY);
+            aResult.push_back(aEntry);
         }
     }
     catch (const uno::Exception &)
