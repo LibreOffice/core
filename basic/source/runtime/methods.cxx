@@ -975,51 +975,43 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Int(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    else
-    {
-        SbxVariableRef pArg = rPar.Get(1);
-        double aDouble= pArg->GetDouble();
-        /*
-            floor( 2.8 ) =  2.0
-            floor( -2.8 ) = -3.0
-        */
-        aDouble = floor( aDouble );
-        rPar.Get(0)->PutDouble(aDouble);
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariableRef pArg = rPar.Get(1);
+    double aDouble= pArg->GetDouble();
+    /*
+        floor( 2.8 ) =  2.0
+        floor( -2.8 ) = -3.0
+    */
+    aDouble = floor( aDouble );
+    rPar.Get(0)->PutDouble(aDouble);
 }
 
 
 void SbRtl_Fix(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariableRef pArg = rPar.Get(1);
+    double aDouble = pArg->GetDouble();
+    if ( aDouble >= 0.0 )
+        aDouble = floor( aDouble );
     else
-    {
-        SbxVariableRef pArg = rPar.Get(1);
-        double aDouble = pArg->GetDouble();
-        if ( aDouble >= 0.0 )
-            aDouble = floor( aDouble );
-        else
-            aDouble = ceil( aDouble );
-        rPar.Get(0)->PutDouble(aDouble);
-    }
+        aDouble = ceil( aDouble );
+    rPar.Get(0)->PutDouble(aDouble);
 }
 
 
 void SbRtl_LCase(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        const CharClass& rCharClass = GetCharClass();
-        OUString aStr(rPar.Get(1)->GetOUString());
-        aStr = rCharClass.lowercase(aStr);
-        rPar.Get(0)->PutString(aStr);
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    const CharClass& rCharClass = GetCharClass();
+    OUString aStr(rPar.Get(1)->GetOUString());
+    aStr = rCharClass.lowercase(aStr);
+    rPar.Get(0)->PutString(aStr);
 }
 
 void SbRtl_Left(StarBASIC *, SbxArray & rPar, bool)
