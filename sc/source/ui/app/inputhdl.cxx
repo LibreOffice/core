@@ -101,11 +101,6 @@ using namespace formula;
 
 namespace {
 
-// Formula data replacement character for a pair of parentheses at end of
-// function name, to force sorting parentheses before all other characters.
-// Collation may treat parentheses differently.
-const sal_Unicode cParenthesesReplacement = 0x0001;
-
 ScTypedCaseStrSet::const_iterator findText(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
     const OUString& rStart, OUString& rResult, bool bBack)
@@ -1023,38 +1018,10 @@ void ScInputHandler::GetFormulaData()
     const OUString aParenthesesReplacement( cParenthesesReplacement);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     const sal_uInt32 nListCount = pFuncList->GetCount();
-    if (maFunctionNames.mnListCount != nListCount
-            || maFunctionNames.mbEnglishFunctionNames != pFuncList->IsEnglishFunctionNames())
-    {
-        if (maFunctionNames.mnListCount)
-            maFunctionNames = FunctionNames();
-        maFunctionNames.mnListCount = nListCount;
-        maFunctionNames.mbEnglishFunctionNames = pFuncList->IsEnglishFunctionNames();
-        const CharClass* pCharClass = (maFunctionNames.mbEnglishFunctionNames
-                ? ScCompiler::GetCharClassEnglish()
-                : ScCompiler::GetCharClassLocalized());
-        for (sal_uInt32 i=0; i < nListCount; ++i)
-        {
-            const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
-            if ( pDesc->mxFuncName )
-            {
-                OUString aFuncName(pCharClass->uppercase(*(pDesc->mxFuncName)));
-                // fdo#75264 fill maFormulaChar with all characters used in formula names
-                for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
-                    maFunctionNames.maFunctionChar.insert(aFuncName[j]);
-                maFunctionNames.maFunctionData.insert(
-                        ScTypedStrData(*(pDesc->mxFuncName) + aParenthesesReplacement, 0.0, 0.0,
-                            ScTypedStrData::Standard));
-                pDesc->initArgumentInfo();
-                OUString aEntry = pDesc->getSignature();
-                maFunctionNames.maFunctionDataPara.insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
-            }
-        }
-    }
-
-    *pFormulaData     = maFunctionNames.maFunctionData;
-    *pFormulaDataPara = maFunctionNames.maFunctionDataPara;
-    maFormulaChar     = maFunctionNames.maFunctionChar;
+    const InputHandlerFunctionNames& rFunctionNames = ScGlobal::GetInputHandlerFunctionNames();
+    *pFormulaData     = rFunctionNames.maFunctionData;
+    *pFormulaDataPara = rFunctionNames.maFunctionDataPara;
+    maFormulaChar     = rFunctionNames.maFunctionChar;
 
     // Increase suggestion priority of MRU formulas
     const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();

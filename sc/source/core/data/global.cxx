@@ -119,6 +119,9 @@ sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
 bool ScGlobal::bThreadedGroupCalcInProgress = false;
 
+InputHandlerFunctionNames ScGlobal::maInputHandlerFunctionNames;
+
+
 // Static functions
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
@@ -641,6 +644,40 @@ void ScGlobal::ResetFunctionList()
     // FunctionMgr has pointers into FunctionList, must also be updated
     xStarCalcFunctionMgr.reset();
     xStarCalcFunctionList.reset();
+    // Building new names also needs InputHandler data to be refreshed.
+    maInputHandlerFunctionNames = InputHandlerFunctionNames();
+}
+
+const InputHandlerFunctionNames& ScGlobal::GetInputHandlerFunctionNames()
+{
+    if (maInputHandlerFunctionNames.maFunctionData.empty())
+    {
+        const OUString aParenthesesReplacement( cParenthesesReplacement);
+        const ScFunctionList* pFuncList = GetStarCalcFunctionList();
+        const sal_uInt32 nListCount = pFuncList->GetCount();
+        const CharClass* pCharClass = (SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()
+                ? ScCompiler::GetCharClassEnglish()
+                : ScCompiler::GetCharClassLocalized());
+        for (sal_uInt32 i=0; i < nListCount; ++i)
+        {
+            const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
+            if ( pDesc->mxFuncName )
+            {
+                OUString aFuncName(pCharClass->uppercase(*(pDesc->mxFuncName)));
+                // fdo#75264 fill maFormulaChar with all characters used in formula names
+                for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
+                    maInputHandlerFunctionNames.maFunctionChar.insert(aFuncName[j]);
+                maInputHandlerFunctionNames.maFunctionData.insert(
+                        ScTypedStrData(*(pDesc->mxFuncName) + aParenthesesReplacement, 0.0, 0.0,
+                            ScTypedStrData::Standard));
+                pDesc->initArgumentInfo();
+                OUString aEntry = pDesc->getSignature();
+                maInputHandlerFunctionNames.maFunctionDataPara.insert(
+                        ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
+            }
+        }
+    }
+    return maInputHandlerFunctionNames;
 }
 
 ScUnitConverter* ScGlobal::GetUnitConverter()

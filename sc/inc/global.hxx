@@ -20,6 +20,7 @@
 #pragma once
 
 #include "address.hxx"
+#include "typedstrdata.hxx"
 #include <i18nlangtag/lang.h>
 #include <svx/svdtypes.hxx>
 #include <tools/ref.hxx>
@@ -455,6 +456,17 @@ struct ScImportParam
     bool            operator==  ( const ScImportParam& r ) const;
 };
 
+// Formula data replacement character for a pair of parentheses at end of
+// function name, to force sorting parentheses before all other characters.
+// Collation may treat parentheses differently.
+constexpr sal_Unicode cParenthesesReplacement = 0x0001;
+struct InputHandlerFunctionNames
+{
+    ScTypedCaseStrSet       maFunctionData;
+    ScTypedCaseStrSet       maFunctionDataPara;
+    std::set<sal_Unicode>   maFunctionChar;
+};
+
 class ScDocShell;
 class SvxSearchItem;
 class ScAutoFormat;
@@ -522,6 +534,8 @@ class ScGlobal
     static std::unique_ptr<ScFieldEditEngine> xFieldEditEngine;
 
     static std::atomic<sc::SharedStringPoolPurge*> pSharedStringPoolPurge;
+
+    static InputHandlerFunctionNames maInputHandlerFunctionNames;
 
     static void                 InitPPT();
 
@@ -595,6 +609,7 @@ public:
     static ScFunctionList*  GetStarCalcFunctionList();
     static ScFunctionMgr*   GetStarCalcFunctionMgr();
     static void             ResetFunctionList();
+    static const InputHandlerFunctionNames& GetInputHandlerFunctionNames();
 
     static OUString         GetErrorString(FormulaError nErrNumber);
     static OUString         GetLongErrorString(FormulaError nErrNumber);
