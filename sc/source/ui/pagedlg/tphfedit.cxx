@@ -23,6 +23,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -87,6 +88,10 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     if (mbRTL)
         m_xEditEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
+    Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    rDevice.SetBackground(aBgColor);
+    m_xEditView->SetBackgroundColor(aBgColor);
+
     if (auto tmpAcc = mxAcc.get())
     {
         OUString sName;
@@ -146,6 +151,13 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
     pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+    // font color used, suitable header/footer background color set in ScEditWindow::SetDrawingArea
+    Color aFgColor = svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
+    if (aFgColor == COL_AUTO) {
+        Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        aFgColor = aBgColor.IsDark() ? COL_WHITE : COL_BLACK;
+    }
+    pSet->Put(SvxColorItem(aFgColor, EE_CHAR_COLOR));
     if (mbRTL)
         pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
     GetEditEngine()->SetDefaults( std::move(pSet) );
