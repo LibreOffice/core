@@ -1281,23 +1281,30 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     nWidth  = aWinRect.right - aWinRect.left + 1;
     nHeight = aWinRect.bottom - aWinRect.top + 1;
 
-    if ( !(nPosSize & SWP_NOMOVE) && ::GetParent( mhWnd ) )
+    // For dialogs (WS_POPUP && WS_DLGFRAME), we need to find the "real" parent,
+    // in case multiple dialogs are stacked on each other
+    // (wo don't want to position the second dialog relative to the first one, but relative to the main window)
+    HWND hWndParent = ImplGetParentHwnd(mhWnd);
+    while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_POPUP) &&  (GetWindowStyle( hWndParent ) & WS_DLGFRAME) )
+    {
+        hWndParent = ::ImplGetParentHwnd( hWndParent );
+    }
+
+    if ( !(nPosSize & SWP_NOMOVE) && hWndParent )
     {
             RECT aParentRect;
-            GetClientRect( ImplGetParentHwnd( mhWnd ), &aParentRect );
+            GetClientRect( hWndParent, &aParentRect );
             if( AllSettings::GetLayoutRTL() )
                 nX = (aParentRect.right - aParentRect.left) - nWidth-1 - nX;
 
-            //#110386#, do not transform coordinates for system child windows and dialogs
-            if( !(GetWindowStyle( mhWnd ) & WS_CHILD) &&
-                !(GetWindowStyle( mhWnd ) & WS_DLGFRAME) )
+            //#110386#, do not transform coordinates for system child windows
+            if( !(GetWindowStyle( mhWnd ) & WS_CHILD) )
             {
                 POINT aPt;
                 aPt.x = nX;
                 aPt.y = nY;
 
-                HWND parentHwnd = ImplGetParentHwnd( mhWnd );
-                WinSalFrame* pParentFrame = GetWindowPtr( parentHwnd );
+                WinSalFrame* pParentFrame = GetWindowPtr( hWndParent );
                 if ( pParentFrame && pParentFrame->mnShowState == SW_SHOWMAXIMIZED )
                 {
                     // #i42485#: parent will be shown maximized in which case
@@ -1307,7 +1314,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
                     aPt.y +=  pParentFrame->maGeometry.nY;
                 }
                 else
-                    ClientToScreen( parentHwnd, &aPt );
+                    ClientToScreen( hWndParent, &aPt );
 
                 nX = aPt.x;
                 nY = aPt.y;
