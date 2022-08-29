@@ -2275,7 +2275,7 @@ void DesktopLOKTest::testPaintPartTile()
 
     // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
     unsigned char pPixels[256 * 256 * 4];
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 256, 256, 0, 0, 256, 256);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 0, 256, 256, 0, 0, 256, 256);
 
     // Type again.
     Scheduler::ProcessEventsToIdle();
@@ -3624,10 +3624,11 @@ void DesktopLOKTest::testABI()
                          offsetof(struct _LibreOfficeKitDocumentClass, sendContentControlEvent));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), offsetof(struct _LibreOfficeKitDocumentClass, getSelectionTypeAndText));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(66), offsetof(struct _LibreOfficeKitDocumentClass, getDataArea));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(struct _LibreOfficeKitDocumentClass, getEditMode));
 
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(68), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

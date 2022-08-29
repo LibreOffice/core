@@ -126,6 +126,11 @@ public:
         mpDoc->pClass->setPartMode(mpDoc, nMode);
     }
 
+    int getEditMode()
+    {
+        return mpDoc->pClass->getEditMode(mpDoc);
+    }
+
     /**
      * Renders a subset of the document to a pre-allocated buffer.
      *
@@ -604,6 +609,7 @@ public:
      */
     void paintPartTile(unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth,
                               const int nCanvasHeight,
                               const int nTilePosX,
@@ -611,7 +617,7 @@ public:
                               const int nTileWidth,
                               const int nTileHeight)
     {
-        return mpDoc->pClass->paintPartTile(mpDoc, pBuffer, nPart,
+        return mpDoc->pClass->paintPartTile(mpDoc, pBuffer, nPart, nMode,
                                             nCanvasWidth, nCanvasHeight,
                                             nTilePosX, nTilePosY,
                                             nTileWidth, nTileHeight);

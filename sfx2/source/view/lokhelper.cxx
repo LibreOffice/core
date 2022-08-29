@@ -551,8 +551,9 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rect
     if (DisableCallbacks::disabled())
         return;
 
+    // -1 means all parts
     const int nPart = comphelper::LibreOfficeKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
-    const int nMode = comphelper::LibreOfficeKit::isPartInInvalidation() ? pThisView->getEditMode() : 0;
+    const int nMode = pThisView->getEditMode();
     pThisView->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
 }
 
@@ -566,7 +567,8 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
         for (int i = 0; i < pDoc->getParts(); ++i)
         {
             tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
-            pThisView->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, i, 0);
+            const int nMode = pThisView->getEditMode();
+            pThisView->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, i, nMode);
         }
     }
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload.getStr());

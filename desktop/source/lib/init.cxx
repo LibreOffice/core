@@ -998,6 +998,7 @@ static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect
 static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
 static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
+static int doc_getEditMode(LibreOfficeKitDocument* pThis);
 static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -1013,6 +1014,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight);
@@ -1269,6 +1271,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->moveSelectedParts = doc_moveSelectedParts;
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
+        m_pDocumentClass->getEditMode = doc_getEditMode;
         m_pDocumentClass->paintTile = doc_paintTile;
 #ifdef IOS
         m_pDocumentClass->paintTileToCGContext = doc_paintTileToCGContext;
@@ -3641,6 +3644,23 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     }
 }
 
+static int doc_getEditMode(LibreOfficeKitDocument* pThis)
+{
+    comphelper::ProfileZone aZone("doc_getEditMode");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return 0;
+    }
+
+    return pDoc->getEditMode();
+}
+
 static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -3770,6 +3790,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
@@ -3779,13 +3800,20 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
+    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     int nOrigViewId = doc_getView(pThis);
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
 
     if (nOrigViewId < 0)
     {
@@ -3819,13 +3847,17 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         int nOrigPart = 0;
         const int aType = doc_getDocumentType(pThis);
         const bool isText = (aType == LOK_DOCTYPE_TEXT);
+        const bool isCalc = (aType == LOK_DOCTYPE_SPREADSHEET);
+        int nOrigEditMode = 0;
+        bool bPaintTextEdit = true;
         int nViewId = nOrigViewId;
-        int nLastNonEditorView = nViewId;
+        int nLastNonEditorView = -1;
+        int nViewMatchingMode = -1;
         if (!isText)
         {
             // Check if just switching to another view is enough, that has
             // less side-effects.
-            if (nPart != doc_getPart(pThis))
+            if (nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode())
             {
                 SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                 while (pViewShell)
@@ -3835,23 +3867,40 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                     if (!bIsInEdit)
                         nLastNonEditorView = pViewShell->GetViewShellId().get();
 
-                    if (pViewShell->getPart() == nPart && !bIsInEdit)
+                    if (pViewShell->getPart() == nPart &&
+                        pViewShell->getEditMode() == nMode &&
+                        !bIsInEdit)
                     {
                         nViewId = pViewShell->GetViewShellId().get();
+                        nViewMatchingMode = nViewId;
                         nLastNonEditorView = nViewId;
                         doc_setView(pThis, nViewId);
                         break;
                     }
+                    else if (pViewShell->getEditMode() == nMode && !bIsInEdit)
+                    {
+                        nViewMatchingMode = pViewShell->GetViewShellId().get();
+                    }
+
                     pViewShell = SfxViewShell::GetNext(*pViewShell);
                 }
             }
 
-            // if not found view with correct part - at least avoid rendering active textbox
+            // if not found view with correct part
+            // - at least avoid rendering active textbox, This is for Impress.
+            // - prefer view with the same mode
             SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
-            if (pCurrentViewShell && pCurrentViewShell->GetDrawView() &&
+            if (nViewMatchingMode >= 0 && nViewMatchingMode != nViewId)
+            {
+                nViewId = nViewMatchingMode;
+                doc_setView(pThis, nViewId);
+            }
+            else if (!isCalc && nLastNonEditorView >= 0 && nLastNonEditorView != nViewId &&
+                pCurrentViewShell && pCurrentViewShell->GetDrawView() &&
                 pCurrentViewShell->GetDrawView()->GetTextEditOutliner())
             {
-                doc_setView(pThis, nLastNonEditorView);
+                nViewId = nLastNonEditorView;
+                doc_setView(pThis, nViewId);
             }
 
             // Disable callbacks while we are painting - after setting the view
@@ -3867,36 +3916,44 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             {
                 doc_setPartImpl(pThis, nPart, false);
             }
-        }
 
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return;
-        }
+            nOrigEditMode = pDoc->getEditMode();
+            if (nOrigEditMode != nMode)
+            {
+                SfxLokHelper::setEditMode(nMode, pDoc);
+            }
 
-        bool bPaintTextEdit = nPart == nOrigPart;
-        pDoc->setPaintTextEdit( bPaintTextEdit );
+            bPaintTextEdit = (nPart == nOrigPart && nMode == nOrigEditMode);
+            pDoc->setPaintTextEdit(bPaintTextEdit);
+        }
 
         doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-        pDoc->setPaintTextEdit( true );
+        if (!isText)
+        {
+            pDoc->setPaintTextEdit(true);
 
-        if (!isText && nPart != nOrigPart)
-        {
-            doc_setPartImpl(pThis, nOrigPart, false);
-        }
-        if (!isText && nViewId != nOrigViewId)
-        {
-            if (nViewId >= 0)
+            if (nMode != nOrigEditMode)
             {
-                const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nViewId);
-                if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-                    handlerIt->second->enableCallbacks();
+                SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
             }
 
-            doc_setView(pThis, nOrigViewId);
+            if (nPart != nOrigPart)
+            {
+                doc_setPartImpl(pThis, nOrigPart, false);
+            }
+
+            if (nViewId != nOrigViewId)
+            {
+                if (nViewId >= 0)
+                {
+                    const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nViewId);
+                    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+                        handlerIt->second->enableCallbacks();
+                }
+
+                doc_setView(pThis, nOrigViewId);
+            }
         }
     }
     catch (const std::exception&)
