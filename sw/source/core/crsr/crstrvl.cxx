@@ -566,9 +566,6 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
         }
     } while ( !bFnd );
 
-    if( !bFnd )
-        return false;
-
     CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
