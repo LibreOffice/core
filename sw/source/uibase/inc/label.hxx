@@ -31,15 +31,15 @@ class Printer;
 
 class SwLabDlg final : public SfxTabDialogController
 {
-    SwLabelConfig   aLabelsCfg;
-    SwDBManager*    pDBManager;
+    SwLabelConfig   m_aLabelsCfg;
+    SwDBManager*    m_pDBManager;
     SwLabPrtPage* m_pPrtPage;
 
-    std::vector<sal_uInt16> aTypeIds;
-    std::vector<OUString> aMakes;
+    std::vector<sal_uInt16> m_aTypeIds;
+    std::vector<OUString> m_aMakes;
 
     std::unique_ptr<SwLabRecs> m_pRecs;
-    OUString   aLstGroup;
+    OUString   m_aLstGroup;
     OUString   m_sBusinessCardDlg;
     bool       m_bLabel;
     void          ReplaceGroup_( const OUString &rMake );
@@ -57,16 +57,16 @@ public:
           SwLabRecs &Recs()           { return *m_pRecs; }
     const SwLabRecs &Recs()     const { return *m_pRecs; }
 
-          std::vector<sal_uInt16> &TypeIds()       { return aTypeIds; }
-    const std::vector<sal_uInt16> &TypeIds() const { return aTypeIds; }
+          std::vector<sal_uInt16> &TypeIds()       { return m_aTypeIds; }
+    const std::vector<sal_uInt16> &TypeIds() const { return m_aTypeIds; }
 
-    std::vector<OUString> &Makes() { return aMakes; }
-    const std::vector<OUString> &Makes() const { return aMakes; }
+    std::vector<OUString> &Makes() { return m_aMakes; }
+    const std::vector<OUString> &Makes() const { return m_aMakes; }
 
     Printer *GetPrt();
     void ReplaceGroup( const OUString &rMake )
     {
-        if ( rMake != aLstGroup )
+        if ( rMake != m_aLstGroup )
             ReplaceGroup_( rMake );
     }
 
@@ -75,7 +75,7 @@ public:
                                        const SwLabItem& rItem);
     const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
 
-    SwLabelConfig& GetLabelsConfig() {return aLabelsCfg;}
+    SwLabelConfig& GetLabelsConfig() {return m_aLabelsCfg;}
 
 };
 

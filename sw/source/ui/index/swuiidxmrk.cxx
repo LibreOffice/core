@@ -1169,23 +1169,23 @@ bool SwAuthorMarkPane::bIsFromComponent = true;
 
 SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builder& rBuilder, bool bNewDlg)
     : m_rDialog(rDialog)
-    , bNewEntry(bNewDlg)
-    , bBibAccessInitialized(false)
-    , pSh(nullptr)
+    , m_bNewEntry(bNewDlg)
+    , m_bBibAccessInitialized(false)
+    , m_pSh(nullptr)
     , m_xFromComponentRB(rBuilder.weld_radio_button("frombibliography"))
     , m_xFromDocContentRB(rBuilder.weld_radio_button("fromdocument"))
     , m_xAuthorFI(rBuilder.weld_label("author"))
     , m_xTitleFI(rBuilder.weld_label("title"))
     , m_xEntryED(rBuilder.weld_entry("entryed"))
     , m_xEntryLB(rBuilder.weld_combo_box("entrylb"))
-    , m_xActionBT(rBuilder.weld_button(bNewEntry ? OString("insert") : OString("modify")))
+    , m_xActionBT(rBuilder.weld_button(m_bNewEntry ? OString("insert") : OString("modify")))
     , m_xCloseBT(rBuilder.weld_button("close"))
     , m_xCreateEntryPB(rBuilder.weld_button("new"))
     , m_xEditEntryPB(rBuilder.weld_button("edit"))
 {
     m_xActionBT->show();
-    m_xFromComponentRB->set_visible(bNewEntry);
-    m_xFromDocContentRB->set_visible(bNewEntry);
+    m_xFromComponentRB->set_visible(m_bNewEntry);
+    m_xFromDocContentRB->set_visible(m_bNewEntry);
     m_xFromComponentRB->set_active(bIsFromComponent);
     m_xFromDocContentRB->set_active(!bIsFromComponent);
 
@@ -1198,11 +1198,11 @@ SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builde
     m_xEntryED->connect_changed(LINK(this,SwAuthorMarkPane, EditModifyHdl));
 
     m_rDialog.set_title(SwResId(
-                    bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT));
+                    m_bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT));
 
-    m_xEntryED->set_visible(!bNewEntry);
-    m_xEntryLB->set_visible(bNewEntry);
-    if (bNewEntry)
+    m_xEntryED->set_visible(!m_bNewEntry);
+    m_xEntryLB->set_visible(m_bNewEntry);
+    if (m_bNewEntry)
     {
         m_xEntryLB->connect_changed(LINK(this, SwAuthorMarkPane, CompEntryHdl));
     }
@@ -1210,13 +1210,13 @@ SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builde
 
 void SwAuthorMarkPane::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    pSh = &rWrtShell;
+    m_pSh = &rWrtShell;
     InitControls();
 }
 
 IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl, weld::Button&, void)
 {
-    if(bNewEntry)
+    if(m_bNewEntry)
     {
         SfxViewFrame::Current()->GetDispatcher()->Execute(FN_INSERT_AUTH_ENTRY_DLG,
                     SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
@@ -1232,11 +1232,11 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
     const OUString sEntry(rBox.get_active_text());
     if(bIsFromComponent)
     {
-        if(xBibAccess.is() && !sEntry.isEmpty())
+        if(m_xBibAccess.is() && !sEntry.isEmpty())
         {
-            if(xBibAccess->hasByName(sEntry))
+            if(m_xBibAccess->hasByName(sEntry))
             {
-                uno::Any aEntry(xBibAccess->getByName(sEntry));
+                uno::Any aEntry(m_xBibAccess->getByName(sEntry));
                 uno::Sequence<beans::PropertyValue> aFieldProps;
                 if(aEntry >>= aFieldProps)
                 {
@@ -1254,7 +1254,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
         if(!sEntry.isEmpty())
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                        m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : nullptr;
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
@@ -1273,14 +1273,14 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
 IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, weld::Button&, void)
 {
     //insert or update the SwAuthorityField...
-    if(pSh)
+    if(m_pSh)
     {
         bool bDifferent = false;
         OSL_ENSURE(!m_sFields[AUTH_FIELD_IDENTIFIER].isEmpty() , "No Id is set!");
         OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                        m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
         const SwAuthEntry*  pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
                 : nullptr;
@@ -1298,20 +1298,20 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, weld::Button&, void)
             }
         }
 
-        SwFieldMgr aMgr(pSh);
+        SwFieldMgr aMgr(m_pSh);
         OUStringBuffer sFields;
         for(OUString & s : m_sFields)
         {
             sFields.append(s).append(TOX_STYLE_DELIMITER);
         }
-        if(bNewEntry)
+        if(m_bNewEntry)
         {
             if(bDifferent)
             {
                 rtl::Reference<SwAuthEntry> xNewData(new SwAuthEntry);
                 for(int i = 0; i < AUTH_FIELD_END; i++)
                     xNewData->SetAuthorField(static_cast<ToxAuthorityField>(i), m_sFields[i]);
-                pSh->ChangeAuthorityData(xNewData.get());
+                m_pSh->ChangeAuthorityData(xNewData.get());
             }
             SwInsertField_Data aData(SwFieldTypesEnum::Authority, 0, sFields.makeStringAndClear(), OUString(), 0 );
             aMgr.InsertField( aData );
@@ -1321,7 +1321,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, weld::Button&, void)
             aMgr.UpdateCurField(0, sFields.makeStringAndClear(), OUString());
         }
     }
-    if(!bNewEntry)
+    if(!m_bNewEntry)
         CloseHdl(*m_xCloseBT);
 }
 
@@ -1333,8 +1333,8 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
     SwCreateAuthEntryDlg_Impl aDlg(m_rDialog.getDialog(),
                 bCreate ? m_sCreatedEntry : m_sFields,
-                *pSh, bNewEntry, bCreate);
-    if(bNewEntry)
+                *m_pSh, m_bNewEntry, bCreate);
+    if(m_bNewEntry)
     {
         aDlg.SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
     }
@@ -1350,7 +1350,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
         m_sFields[i] = aDlg.GetEntryText(static_cast<ToxAuthorityField>(i));
         m_sCreatedEntry[i] = m_sFields[i];
     }
-    if(bNewEntry && !m_xFromDocContentRB->get_active())
+    if(m_bNewEntry && !m_xFromDocContentRB->get_active())
     {
         m_xFromDocContentRB->set_active(true);
         ChangeSourceHdl(*m_xFromDocContentRB);
@@ -1367,7 +1367,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
     m_xTitleFI->set_label(m_sFields[AUTH_FIELD_TITLE]);
     m_xActionBT->set_sensitive(true);
 
-    if (!bNewEntry)
+    if (!m_bNewEntry)
     {
         // When in edit mode, automatically apply the changed entry to update the field in the doc
         // model.
@@ -1383,11 +1383,11 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
     m_xEntryLB->clear();
     if(bIsFromComponent)
     {
-        if(!bBibAccessInitialized)
+        if(!m_bBibAccessInitialized)
         {
             uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
-            xBibAccess = frame::Bibliography::create( xContext );
-            uno::Reference< beans::XPropertySet >  xPropSet(xBibAccess, uno::UNO_QUERY);
+            m_xBibAccess = frame::Bibliography::create( xContext );
+            uno::Reference< beans::XPropertySet >  xPropSet(m_xBibAccess, uno::UNO_QUERY);
             OUString uPropName("BibliographyDataFieldNames");
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
             {
@@ -1404,11 +1404,11 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
                     }
                 }
             }
-            bBibAccessInitialized = true;
+            m_bBibAccessInitialized = true;
         }
-        if(xBibAccess.is())
+        if(m_xBibAccess.is())
         {
-            const uno::Sequence<OUString> aIdentifiers = xBibAccess->getElementNames();
+            const uno::Sequence<OUString> aIdentifiers = m_xBibAccess->getElementNames();
             for(const OUString& rName : aIdentifiers)
                 m_xEntryLB->append_text(rName);
         }
@@ -1416,7 +1416,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
     else
     {
         const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                    m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
         if(pFType)
         {
             std::vector<OUString> aIds;
@@ -1455,12 +1455,12 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, weld::Entry&, rEdit, bool)
         else if(bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                        m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
         }
         else
         {
-            bAllowed = !xBibAccess.is() || !xBibAccess->hasByName(sEntry);
+            bAllowed = !m_xBibAccess.is() || !m_xBibAccess->hasByName(sEntry);
         }
     }
     return bAllowed;
@@ -1477,12 +1477,12 @@ IMPL_LINK(SwAuthorMarkPane, IsEditAllowedHdl, weld::Entry&, rEdit, bool)
         else if(bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                        m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
         }
         else
         {
-            bAllowed = !xBibAccess.is() || !xBibAccess->hasByName(sEntry);
+            bAllowed = !m_xBibAccess.is() || !m_xBibAccess->hasByName(sEntry);
         }
     }
     return bAllowed;
@@ -1490,10 +1490,10 @@ IMPL_LINK(SwAuthorMarkPane, IsEditAllowedHdl, weld::Entry&, rEdit, bool)
 
 void SwAuthorMarkPane::InitControls()
 {
-    OSL_ENSURE(pSh, "no shell?");
-    SwField* pField = pSh->GetCurField();
-    OSL_ENSURE(bNewEntry || pField, "no current marker");
-    if(bNewEntry)
+    OSL_ENSURE(m_pSh, "no shell?");
+    SwField* pField = m_pSh->GetCurField();
+    OSL_ENSURE(m_bNewEntry || pField, "no current marker");
+    if(m_bNewEntry)
     {
         ChangeSourceHdl(m_xFromComponentRB->get_active() ? *m_xFromComponentRB : *m_xFromDocContentRB);
         m_xCreateEntryPB->set_sensitive(!m_xFromComponentRB->get_active());
@@ -1501,7 +1501,7 @@ void SwAuthorMarkPane::InitControls()
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = m_sCreatedEntry[i];
     }
-    if(bNewEntry || !pField || pField->GetTyp()->Which() != SwFieldIds::TableOfAuthorities)
+    if(m_bNewEntry || !pField || pField->GetTyp()->Which() != SwFieldIds::TableOfAuthorities)
         return;
 
     const SwAuthEntry* pEntry = static_cast<SwAuthorityField*>(pField)->GetAuthEntry();
@@ -1519,7 +1519,7 @@ void SwAuthorMarkPane::InitControls()
 
 void SwAuthorMarkPane::Activate()
 {
-    m_xActionBT->set_sensitive(!pSh->HasReadonlySel());
+    m_xActionBT->set_sensitive(!m_pSh->HasReadonlySel());
 }
 
 namespace

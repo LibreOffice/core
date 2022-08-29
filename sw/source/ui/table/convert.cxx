@@ -100,7 +100,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadersb"))
     , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplitcb"))
     , m_xAutoFormatBtn(m_xBuilder->weld_button("autofmt"))
-    , pShell(&rView.GetWrtShell())
+    , m_pShell(&rView.GetWrtShell())
 {
     if (nSaveButtonState > -1)
     {
@@ -167,7 +167,7 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
     ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(
-        rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
+        rFact.CreateSwAutoFormatDlg(m_xDialog.get(), m_pShell, false, mxTAutoFormat.get()));
     if (RET_OK == pDlg->Execute())
         mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }

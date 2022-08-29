@@ -49,7 +49,7 @@ class SwConvertTableDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xAutoFormatBtn;
 
     std::unique_ptr<SwTableAutoFormat> mxTAutoFormat;
-    SwWrtShell* pShell;
+    SwWrtShell* m_pShell;
 
     DECL_LINK(AutoFormatHdl, weld::Button&, void);
     DECL_LINK(BtnHdl, weld::Toggleable&, void);

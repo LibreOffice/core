@@ -68,15 +68,15 @@ void SwLabDlg::ReplaceGroup_( const OUString &rMake )
 {
     // Remove old entries
     m_pRecs->erase(m_pRecs->begin() + 1, m_pRecs->end());
-    aLabelsCfg.FillLabels(rMake, *m_pRecs);
-    aLstGroup = rMake;
+    m_aLabelsCfg.FillLabels(rMake, *m_pRecs);
+    m_aLstGroup = rMake;
 }
 
 void SwLabDlg::PageCreated(const OString &rId, SfxTabPage &rPage)
 {
     if (rId == "labels")
     {
-        static_cast<SwLabPage*>(&rPage)->SetDBManager(pDBManager);
+        static_cast<SwLabPage*>(&rPage)->SetDBManager(m_pDBManager);
         static_cast<SwLabPage*>(&rPage)->InitDatabaseBox();
         if (!m_bLabel)
             static_cast<SwLabPage*>(&rPage)->SetToBusinessCard();
@@ -88,9 +88,9 @@ void SwLabDlg::PageCreated(const OString &rId, SfxTabPage &rPage)
 SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                 SwDBManager* pDBManager_, bool bLabel)
     : SfxTabDialogController(pParent, "modules/swriter/ui/labeldialog.ui", "LabelDialog", &rSet)
-    , pDBManager(pDBManager_)
+    , m_pDBManager(pDBManager_)
     , m_pPrtPage(nullptr)
-    , aTypeIds(50, 10)
+    , m_aTypeIds(50, 10)
     , m_pRecs(new SwLabRecs)
     , m_bLabel(bLabel)
 {
@@ -118,16 +118,16 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
         m_pRecs->insert( m_pRecs->begin(), std::move(pRec));
 
     size_t nLstGroup = 0;
-    const std::vector<OUString>& rMan = aLabelsCfg.GetManufacturers();
+    const std::vector<OUString>& rMan = m_aLabelsCfg.GetManufacturers();
     for(size_t nMan = 0; nMan < rMan.size(); ++nMan)
     {
-        aMakes.push_back(rMan[nMan]);
+        m_aMakes.push_back(rMan[nMan]);
         if ( rMan[nMan] == aItem.m_aLstMake )
             nLstGroup = nMan;
     }
 
-    if ( !aMakes.empty() )
-        ReplaceGroup_( aMakes[nLstGroup] );
+    if ( !m_aMakes.empty() )
+        ReplaceGroup_( m_aMakes[nLstGroup] );
 
     if (m_xExampleSet)
         m_xExampleSet->Put(aItem);

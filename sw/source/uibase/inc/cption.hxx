@@ -33,14 +33,14 @@ class SwCaptionDialog final : public SfxDialogController
 {
     OUString m_sNone;
     TextFilterAutoConvert m_aTextFilter;
-    SwView& rView; // search per active, avoid View
-    std::unique_ptr<SwFieldMgr> pMgr; // pointer to save the include
+    SwView& m_rView; // search per active, avoid View
+    std::unique_ptr<SwFieldMgr> m_pMgr; // pointer to save the include
 
-    OUString sCharacterStyle;
-    bool bCopyAttributes;
-    bool bOrderNumberingFirst; //#i61007# order of captions
+    OUString m_sCharacterStyle;
+    bool m_bCopyAttributes;
+    bool m_bOrderNumberingFirst; //#i61007# order of captions
 
-    css::uno::Reference<css::container::XNameAccess> xNameAccess;
+    css::uno::Reference<css::container::XNameAccess> m_xNameAccess;
 
     SwCaptionPreview m_aPreview;
     std::unique_ptr<weld::Entry> m_xTextEdit;

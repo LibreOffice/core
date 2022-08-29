@@ -167,17 +167,17 @@ class SwAuthorMarkPane
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
 
-    bool            bNewEntry;
-    bool            bBibAccessInitialized;
+    bool            m_bNewEntry;
+    bool            m_bBibAccessInitialized;
 
-    SwWrtShell*     pSh;
+    SwWrtShell*     m_pSh;
 
     OUString        m_sColumnTitles[AUTH_FIELD_END];
     OUString        m_sFields[AUTH_FIELD_END];
 
     OUString        m_sCreatedEntry[AUTH_FIELD_END];
 
-    css::uno::Reference< css::container::XNameAccess >    xBibAccess;
+    css::uno::Reference< css::container::XNameAccess >    m_xBibAccess;
 
     std::unique_ptr<weld::RadioButton> m_xFromComponentRB;
     std::unique_ptr<weld::RadioButton> m_xFromDocContentRB;
