@@ -233,10 +233,10 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
     m_pTableCursor->DeleteMark();
 
     // set start and end of a column
-    m_pTableCursor->GetPoint()->nNode = *pEnd->GetSttNd();
+    m_pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd() );
     m_pTableCursor->Move( fnMoveForward, GoInContent );
     m_pTableCursor->SetMark();
-    m_pTableCursor->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
+    m_pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
     m_pTableCursor->Move( fnMoveBackward, GoInContent );
 
     // set PtPos 'close' to the reference table, otherwise we might get problems
@@ -271,13 +271,13 @@ bool SwCursorShell::SelTable()
     }
 
     m_pTableCursor->DeleteMark();
-    m_pTableCursor->GetPoint()->nNode = *pTableNd;
+    m_pTableCursor->GetPoint()->Assign( *pTableNd );
     m_pTableCursor->Move( fnMoveForward, GoInContent );
     m_pTableCursor->SetMark();
     // set MkPos 'close' to the master table, otherwise we might get problems
     // with the repeated headlines check in UpdateCursor():
     m_pTableCursor->GetMkPos() = pMasterTabFrame->IsVertical() ? pMasterTabFrame->getFrameArea().TopRight() : pMasterTabFrame->getFrameArea().TopLeft();
-    m_pTableCursor->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
+    m_pTableCursor->GetPoint()->Assign( *pTableNd->EndOfSectionNode() );
     m_pTableCursor->Move( fnMoveBackward, GoInContent );
     UpdateCursor();
     return true;
