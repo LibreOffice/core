@@ -379,8 +379,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
     std::optional<SwPaM> oPam;
     sw::MakeRegion(fnMove, rRegion, oPam);
     const bool bSrchForward = &fnMove == &fnMoveForward;
-    SwNodeIndex& rNdIdx = oPam->GetPoint()->nNode;
-    SwContentIndex& rContentIdx = oPam->GetPoint()->nContent;
+    SwPosition& rPtPos = *oPam->GetPoint();
 
     // If bFound is true then the string was found and is between nStart and nEnd
     bool bFound = false;
@@ -423,7 +422,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             AmbiguousIndex nEnd;
             if (pLayout
                     ? FrameContainsNode(*pFrame, oPam->GetMark()->GetNodeIndex())
-                    : rNdIdx == oPam->GetMark()->nNode)
+                    : rPtPos.GetNode() == oPam->GetMark()->GetNode())
             {
                 if (pLayout)
                 {
@@ -459,7 +458,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             }
             else
             {
-                nStart.SetModelIndex(rContentIdx.GetIndex());
+                nStart.SetModelIndex(rPtPos.GetContentIndex());
             }
 
             /* #i80135# */
@@ -566,16 +565,15 @@ bool FindTextImpl(SwPaM & rSearchPam,
                     aPaM.SetMark();
                     if (pLayout)
                     {
-                        aPaM.GetMark()->nNode = (pFrame->GetMergedPara()
+                        aPaM.GetMark()->Assign( (pFrame->GetMergedPara()
                                 ? *pFrame->GetMergedPara()->pLastNode
                                 : rTextNode)
-                            .GetIndex() + 1;
+                            .GetIndex() + 1 );
                     }
                     else
                     {
-                        aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
+                        aPaM.GetMark()->Assign( rTextNode.GetIndex() + 1 );
                     }
-                    aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->GetNode().GetTextNode(), 0);
                     if (pNode->GetDoc().getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem) && pSdrView)
                     {
                         if (SdrObject* pObject = pSdrView->GetTextEditObject())
