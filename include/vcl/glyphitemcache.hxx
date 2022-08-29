@@ -75,6 +75,7 @@ private:
         double fontScaleY;
         MapMode mapMode;
         bool rtl;
+        bool disabledLigatures; // because of fixed pitch
         vcl::text::ComplexTextLayoutFlags layoutMode;
         LanguageType digitLanguage;
         size_t hashValue;

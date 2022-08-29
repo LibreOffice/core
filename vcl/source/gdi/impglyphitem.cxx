@@ -484,6 +484,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
 {
     const LogicalFontInstance* fi = outputDevice->GetFontInstance();
     fi->GetScale(&fontScaleX, &fontScaleY);
+    disabledLigatures = fi->GetFontSelectPattern().GetPitch() == PITCH_FIXED;
 
     hashValue = 0;
     o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));
@@ -500,6 +501,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     o3tl::hash_combine(hashValue, fontScaleY);
     o3tl::hash_combine(hashValue, mapMode.GetHashValue());
     o3tl::hash_combine(hashValue, rtl);
+    o3tl::hash_combine(hashValue, disabledLigatures);
     o3tl::hash_combine(hashValue, layoutMode);
     o3tl::hash_combine(hashValue, digitLanguage.get());
 }
@@ -508,9 +510,9 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
 {
     return hashValue == other.hashValue && index == other.index && len == other.len
            && logicWidth == other.logicWidth && mapMode == other.mapMode && rtl == other.rtl
-           && layoutMode == other.layoutMode && digitLanguage == other.digitLanguage
-           && fontScaleX == other.fontScaleX && fontScaleY == other.fontScaleY
-           && fontMetric.EqualIgnoreColor(other.fontMetric)
+           && disabledLigatures == other.disabledLigatures && layoutMode == other.layoutMode
+           && digitLanguage == other.digitLanguage && fontScaleX == other.fontScaleX
+           && fontScaleY == other.fontScaleY && fontMetric.EqualIgnoreColor(other.fontMetric)
            && vcl::text::FastStringCompareEqual()(text, other.text);
     // Slower things last in the comparison.
 }
