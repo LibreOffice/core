@@ -24,6 +24,7 @@
 
 #include <sot/storage.hxx>
 #include "sddllapi.h"
+#include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <sfx2/app.hxx>
@@ -42,7 +43,6 @@ class SdTransferable;
 class SvNumberFormatter;
 class SfxErrorHandler;
 class SfxFrame;
-struct SfxItemPropertyMapEntry;
 class VclSimpleEvent;
 namespace svtools { class ColorConfig; }
 enum class SdrObjKind : sal_uInt16;

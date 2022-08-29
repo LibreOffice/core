@@ -20,10 +20,10 @@
 #define INCLUDED_SW_INC_UNOMAP_HXX
 
 #include <sal/types.h>
+#include <svl/itemprop.hxx>
 #include <o3tl/span.hxx>
 
 class SfxItemPropertySet;
-struct SfxItemPropertyMapEntry;
 
 #define PROPERTY_MAP_TEXT_CURSOR            0
 #define PROPERTY_MAP_CHAR_STYLE             1
