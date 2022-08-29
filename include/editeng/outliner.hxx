@@ -370,7 +370,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewShell
 public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const = 0;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const = 0;
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const = 0;
     virtual void libreOfficeKitViewUpdatedCallback(int nType) const = 0;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const = 0;
     virtual void libreOfficeKitViewAddPendingInvalidateTiles() = 0;

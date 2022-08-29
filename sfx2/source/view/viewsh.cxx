@@ -1482,12 +1482,12 @@ static bool ignoreLibreOfficeKitViewCallback(int nType, const SfxViewShell_Impl*
     return false;
 }
 
-void SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const
+void SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const
 {
     if (ignoreLibreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, pImpl.get()))
         return;
     if (pImpl->m_pLibreOfficeKitViewCallback)
-        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart);
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
     else
         SAL_INFO(
             "sfx.view",
