@@ -1136,7 +1136,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     }
 
     // move Pam behind the table
-    rHTMLWrt.m_pCurrentPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
+    rHTMLWrt.m_pCurrentPam->GetPoint()->Assign( *rNode.EndOfSectionNode() );
 
     if( bPreserveForm )
     {

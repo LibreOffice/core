@@ -3098,7 +3098,7 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
 {
     if( m_bNoBreak )
     {
-        m_oNoBreakEndNodeIndex.emplace( rPos.nNode );
+        m_oNoBreakEndNodeIndex.emplace( rPos.GetNode() );
         m_nNoBreakEndContentPos = rPos.GetContentIndex();
         m_bNoBreak = false;
     }
@@ -3453,7 +3453,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                     pTCntxt->SetFrameFormat( pFrameFormat );
                     const SwFormatContent& rFlyContent = pFrameFormat->GetContent();
-                    m_pPam->GetPoint()->nNode = *rFlyContent.GetContentIdx();
+                    m_pPam->GetPoint()->Assign( *rFlyContent.GetContentIdx() );
                     m_xDoc->GetNodes().GoNext( m_pPam->GetPoint() );
                 }
 
