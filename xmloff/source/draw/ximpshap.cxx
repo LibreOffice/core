@@ -2916,6 +2916,12 @@ void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
     if( !mxShape.is() )
         return;
 
+    if (mbMedia)
+    {
+        // The media may have a crop, apply it.
+        SetStyle(/*bSupportsStyle=*/false);
+    }
+
     SetLayer();
 
     if(bIsPresShape)
@@ -3310,6 +3316,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext
             pShapeContext->setHyperlink( msHyperlink );
 
         auto nToken = nElement & TOKEN_MASK;
+        bool bMedia = false;
         // Ignore gltf model if necessary and so the fallback image will be imported
         if( nToken == XML_PLUGIN )
         {
@@ -3319,10 +3326,15 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext
                 mxImplContext = nullptr;
                 return new SvXMLImportContext(GetImport());
             }
+            else if (pPluginContext && pPluginContext->getMimeType() == "application/vnd.sun.star.media")
+            {
+                // The media may have a preview, import it.
+                bMedia = true;
+            }
         }
 
         mxImplContext = xContext;
-        mbSupportsReplacement = (nToken == XML_OBJECT ) || (nToken == XML_OBJECT_OLE);
+        mbSupportsReplacement = (nToken == XML_OBJECT ) || (nToken == XML_OBJECT_OLE) || bMedia;
         setSupportsMultipleContents(nToken == XML_IMAGE);
 
         if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(xContext.get()))
