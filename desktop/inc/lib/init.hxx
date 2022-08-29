@@ -43,6 +43,7 @@ namespace desktop {
     {
         tools::Rectangle m_aRectangle;
         int m_nPart;
+        int m_nMode;
 
         // This is the "EMPTY" rectangle, which somewhat confusingly actually means
         // to drop all rectangles (see LOK_CALLBACK_INVALIDATE_TILES documentation),
@@ -51,12 +52,14 @@ namespace desktop {
 
         RectangleAndPart()
             : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
+            , m_nMode(0)
         {
         }
 
-        RectangleAndPart(const tools::Rectangle* pRect, int nPart)
+        RectangleAndPart(const tools::Rectangle* pRect, int nPart, int nMode)
             : m_aRectangle( pRect ? SanitizedRectangle(*pRect) : emptyAllRectangle)
             , m_nPart(nPart)
+            , m_nMode(nMode)
         {
         }
 
@@ -64,7 +67,7 @@ namespace desktop {
         {
             if (m_nPart >= -1)
                 return (isInfinite() ? "EMPTY" : m_aRectangle.toString())
-                    + ", " + OString::number(m_nPart);
+                    + ", " + OString::number(m_nPart) + ", " + OString::number(m_nMode);
             else
                 return (isInfinite() ? "EMPTY" : m_aRectangle.toString());
         }
@@ -116,7 +119,7 @@ namespace desktop {
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
         virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) override;
-        virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) override;
+        virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
         virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
         virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
         virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;
@@ -137,7 +140,12 @@ namespace desktop {
             }
 
             CallbackData(const tools::Rectangle* pRect, int viewId)
-                : PayloadObject(RectangleAndPart(pRect, viewId))
+                : PayloadObject(RectangleAndPart(pRect, viewId, 0))
+            { // PayloadString will be done on demand
+            }
+
+            CallbackData(const tools::Rectangle* pRect, int part, int mode)
+                : PayloadObject(RectangleAndPart(pRect, part, mode))
             { // PayloadString will be done on demand
             }
 

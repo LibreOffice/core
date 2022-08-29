@@ -39,7 +39,8 @@ public:
     // LOK_CALLBACK_INVALIDATE_TILES
     // nPart is either part, -1 for all-parts, or INT_MIN if
     // comphelper::LibreOfficeKit::isPartInInvalidation() is not set
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart)
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                           int nMode)
         = 0;
     // A message of the given type should be sent, for performance purpose only a notification
     // is given here, details about the message should be queried from SfxViewShell when necessary.

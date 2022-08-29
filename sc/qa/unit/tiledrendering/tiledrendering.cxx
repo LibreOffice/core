@@ -572,6 +572,7 @@ public:
     std::vector<tools::Rectangle> m_aInvalidations;
     tools::Rectangle m_aCellCursorBounds;
     std::vector<int> m_aInvalidationsParts;
+    std::vector<int> m_aInvalidationsMode;
     bool m_bViewLock;
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
@@ -671,15 +672,18 @@ public:
             else
             {
                 uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 6);
                 tools::Rectangle aInvalidationRect;
                 aInvalidationRect.SetLeft(aSeq[0].toInt32());
                 aInvalidationRect.SetTop(aSeq[1].toInt32());
                 aInvalidationRect.setWidth(aSeq[2].toInt32());
                 aInvalidationRect.setHeight(aSeq[3].toInt32());
                 m_aInvalidations.push_back(aInvalidationRect);
-                if (aSeq.getLength() == 5)
+                if (aSeq.getLength() == 6)
+                {
                     m_aInvalidationsParts.push_back(aSeq[4].toInt32());
+                    m_aInvalidationsMode.push_back(aSeq[5].toInt32());
+                }
                 m_bInvalidateTiles = true;
             }
         }
@@ -1908,6 +1912,7 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     aView1.m_aInvalidationsParts.clear();
+    aView1.m_aInvalidationsMode.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
@@ -1921,6 +1926,9 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidationsParts.size());
     CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[0]);
     CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidationsMode.size());
+    CPPUNIT_ASSERT_EQUAL(pModelObj->getEditMode(), aView1.m_aInvalidationsMode[0]);
+    CPPUNIT_ASSERT_EQUAL(pModelObj->getEditMode(), aView1.m_aInvalidationsMode[1]);
     comphelper::LibreOfficeKit::setPartInInvalidation(oldPartInInvalidation);
 }
 
