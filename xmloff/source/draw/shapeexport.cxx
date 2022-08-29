@@ -103,6 +103,7 @@
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/graph.hxx>
 
 #include <xmloff/contextid.hxx>
 #include <xmloff/families.hxx>
@@ -3400,7 +3401,7 @@ void XMLShapeExport::ImpExportMediaShape(
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
 
     // write plugin
-    SvXMLElementExport aPluginOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
+    auto pPluginOBJ = std::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
 
     // export parameters
     const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
@@ -3450,6 +3451,57 @@ void XMLShapeExport::ImpExportMediaShape(
         delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
     }
 
+    pPluginOBJ.reset();
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xPropSet->getPropertyValue("Graphic") >>= xGraphic;
+    Graphic aGraphic(xGraphic);
+    if (!aGraphic.IsNone())
+    {
+        // The media has a preview, export it.
+        uno::Reference<embed::XStorage> xPictureStorage;
+        uno::Reference<embed::XStorage> xStorage;
+        uno::Reference<io::XStream> xPictureStream;
+        OUString sPictureName;
+        xStorage.set(GetExport().GetTargetStorage(), uno::UNO_SET_THROW);
+        xPictureStorage.set(
+            xStorage->openStorageElement("Pictures", embed::ElementModes::READWRITE),
+            uno::UNO_SET_THROW);
+        sal_Int32 nIndex = 0;
+        while (true)
+        {
+            sPictureName = "MediaPreview" + OUString::number(++nIndex) + ".png";
+            if (!xPictureStorage->hasByName(sPictureName))
+            {
+                break;
+            }
+        }
+
+        xPictureStream.set(
+            xPictureStorage->openStreamElement(sPictureName, ::embed::ElementModes::READWRITE),
+            uno::UNO_SET_THROW);
+
+        uno::Reference<uno::XComponentContext> xContext = GetExport().getComponentContext();
+        uno::Reference<graphic::XGraphicProvider> xProvider(
+            graphic::GraphicProvider::create(xContext));
+        uno::Sequence<beans::PropertyValue> aArgs{
+            comphelper::makePropertyValue("MimeType", OUString("image/png")),
+            comphelper::makePropertyValue("OutputStream", xPictureStream->getOutputStream())
+        };
+        xProvider->storeGraphic(xGraphic, aArgs);
+        if (xPictureStorage.is())
+        {
+            uno::Reference<embed::XTransactedObject> xTrans(xPictureStorage, uno::UNO_QUERY);
+            if (xTrans.is())
+                xTrans->commit();
+        }
+        OUString sURL = "Pictures/" + sPictureName;
+        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL);
+        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
+        SvXMLElementExport aImageElem(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, false, true);
+    }
 }
 
 void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)

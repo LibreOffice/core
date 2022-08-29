@@ -24,6 +24,7 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -31,6 +32,9 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/saveopt.hxx>
+#include <svx/unopage.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdomedia.hxx>
 
 using namespace ::com::sun::star;
 
@@ -171,6 +175,52 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     // - XPath '//style:master-page/loext:theme/loext:color-table/loext:color' number of nodes is incorrect
     // i.e. the theme was lost on exporting to ODF.
     assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:color-table/loext:color", 12);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
+{
+    // Execute ODP import:
+    OUString aURL = m_directories.getURLFromSrc(u"xmloff/qa/unit/data/video-snapshot.odp");
+    getComponent() = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(),
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPage.is());
+    auto pUnoPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    SdrPage* pSdrPage = pUnoPage->GetSdrPage();
+    auto pMedia = dynamic_cast<SdrMediaObj*>(pSdrPage->GetObj(0));
+
+    // Check that the preview was imported:
+    const avmedia::MediaItem& rItem = pMedia->getMediaProperties();
+    const Graphic& rGraphic = rItem.getGraphic();
+    CPPUNIT_ASSERT(!rGraphic.IsNone());
+
+    // Check that the crop was imported:
+    const text::GraphicCrop& rCrop = rItem.getCrop();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rCrop.Top);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rCrop.Bottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1356), rCrop.Left);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1356), rCrop.Right);
+
+    // Execute ODP export:
+    utl::TempFile aTempFile;
+    save("impress8", aTempFile);
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Check that the preview was exported:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//draw:frame[@draw:style-name='gr1']/draw:image' number of nodes is incorrect
+    // i.e. the preview wasn't exported to ODP.
+    assertXPath(pXmlDoc, "//draw:frame[@draw:style-name='gr1']/draw:image", "href",
+                "Pictures/MediaPreview1.png");
+    // Check that the crop was exported:
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr1']/style:graphic-properties", "clip",
+                "rect(0cm, 1.356cm, 0cm, 1.356cm)");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)

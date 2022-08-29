@@ -1071,4 +1071,29 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
     }
 }
 
+bool SvxMediaShape::getPropertyStateImpl(const SfxItemPropertyMapEntry* pProperty,
+                                         css::beans::PropertyState& rState)
+{
+#if HAVE_FEATURE_AVMEDIA
+    if (pProperty->nWID == SDRATTR_GRAFCROP)
+    {
+        auto pMedia = static_cast<SdrMediaObj*>(GetSdrObject());
+        const avmedia::MediaItem& rItem = pMedia->getMediaProperties();
+        const text::GraphicCrop& rCrop = rItem.getCrop();
+        if (rCrop.Bottom > 0 || rCrop.Left > 0 || rCrop.Right > 0 || rCrop.Top > 0)
+        {
+            // The media has a crop, expose it to UNO-based export filters.
+            rState = beans::PropertyState_DIRECT_VALUE;
+        }
+        else
+        {
+            rState = beans::PropertyState_AMBIGUOUS_VALUE;
+        }
+        return true;
+    }
+#endif
+
+    return SvxShape::getPropertyStateImpl(pProperty, rState);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
