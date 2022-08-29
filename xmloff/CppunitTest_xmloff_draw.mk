@@ -28,6 +28,9 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_draw, \
     test \
     unotest \
     utl \
+    avmedia \
+    svxcore \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,xmloff_draw))
