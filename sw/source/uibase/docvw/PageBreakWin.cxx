@@ -486,6 +486,7 @@ IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler, Timer *, void)
     {
         Hide();
         m_pLine->DestroyWin();
+        return;
     }
     else
     {
