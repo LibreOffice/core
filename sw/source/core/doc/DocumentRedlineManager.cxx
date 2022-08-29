@@ -1297,7 +1297,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             if( pStt->GetContentIndex() > 0 )
             {
                 OSL_ENSURE( false, "Redline start: non-text-node with content" );
-                pStt->nContent = 0;
+                pStt->SetContent( 0 );
             }
         }
         else
@@ -1305,7 +1305,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             if( pStt->GetContentIndex() > pTextNode->Len() )
             {
                 OSL_ENSURE( false, "Redline start: index after text" );
-                pStt->nContent = pTextNode->Len();
+                pStt->SetContent( pTextNode->Len() );
             }
         }
         pTextNode = pEnd->GetNode().GetTextNode();
@@ -1314,7 +1314,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             if( pEnd->GetContentIndex() > 0 )
             {
                 OSL_ENSURE( false, "Redline end: non-text-node with content" );
-                pEnd->nContent = 0;
+                pEnd->SetContent(0);
             }
         }
         else
@@ -1322,7 +1322,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             if( pEnd->GetContentIndex() > pTextNode->Len() )
             {
                 OSL_ENSURE( false, "Redline end: index after text" );
-                pEnd->nContent = pTextNode->Len();
+                pEnd->SetContent( pTextNode->Len() );
             }
         }
     }
