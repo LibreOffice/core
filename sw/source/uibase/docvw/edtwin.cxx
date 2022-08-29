@@ -5864,11 +5864,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             {
                 const SwPosition& rStart = *pInput->Start();
                 const SwPosition& rEnd = *pInput->End();
-                int nSize = 0;
-                for ( SwContentIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
-                {
-                    ++nSize;
-                }
+                sal_Int32 nSize = rEnd.GetContentIndex() - rStart.GetContentIndex();
                 vcl::Window& rWin = rSh.GetView().GetEditWin();
                 if ( nSize == 0 )
                 {
@@ -5881,9 +5877,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 {
                     std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ nSize ]);
                     int nRectIndex = 0;
-                    for ( SwContentIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
+                    for ( sal_Int32 nIndex = rStart.GetContentIndex(); nIndex < rEnd.GetContentIndex(); ++nIndex )
                     {
-                        const SwPosition aPos( rStart.nNode, nIndex );
+                        const SwPosition aPos( rStart.GetNode(), rStart.GetNode().GetContentNode(), nIndex );
                         SwRect aRect ( rSh.GetCharRect() );
                         rSh.GetCharRectAt( aRect, &aPos );
                         aRects[ nRectIndex ] = tools::Rectangle( aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom() );
