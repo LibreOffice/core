@@ -584,8 +584,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                                 if (pPosition)
                                 {
                                     // Set search position to the shape's anchor point.
-                                    *rSearchPam.GetPoint() = *pPosition;
-                                    rSearchPam.GetPoint()->nContent.Assign(pPosition->GetNode().GetContentNode(), 0);
+                                    rSearchPam.GetPoint()->Assign(pPosition->GetNode());
                                     rSearchPam.SetMark();
                                     bFound = true;
                                     break;
@@ -731,7 +730,7 @@ bool DoSearch(SwPaM & rSearchPam,
         SwRootFrame const*const pLayout, SwPaM* pPam)
 {
     bool bFound = false;
-    SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
+    SwPosition& rPtPos = *pPam->GetPoint();
     OUString sCleanStr;
     std::vector<AmbiguousIndex> aFltArr;
     LanguageType eLastLang = LANGUAGE_SYSTEM;
@@ -851,8 +850,8 @@ bool DoSearch(SwPaM & rSearchPam,
             }
             else
             {
-                rSearchPam.GetMark()->nContent = nStart.GetModelIndex();
-                rSearchPam.GetPoint()->nContent = nEnd.GetModelIndex();
+                rSearchPam.GetMark()->SetContent( nStart.GetModelIndex() );
+                rSearchPam.GetPoint()->SetContent( nEnd.GetModelIndex() );
             }
 
             // if backward search, switch point and mark
@@ -883,16 +882,16 @@ bool DoSearch(SwPaM & rSearchPam,
         }
         else
         {
-            rSearchPam.GetPoint()->nContent = bChkParaEnd ? nTextLen.GetModelIndex() : 0;
+            rSearchPam.GetPoint()->SetContent( bChkParaEnd ? nTextLen.GetModelIndex() : 0 );
         }
         rSearchPam.SetMark();
         const SwNode *const pSttNd = bSrchForward
             ? &rSearchPam.GetPoint()->GetNode() // end of the frame
-            : &rNdIdx.GetNode(); // keep the bug as-is for now...
+            : &rPtPos.GetNode(); // keep the bug as-is for now...
         /* FIXME: this condition does not work for !bSrchForward backward
          * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
          * is never true in this case. */
-        if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
+        if( (bSrchForward || pSttNd != &rPtPos.GetNode()) &&
             rSearchPam.Move(fnMoveForward, GoInContent) &&
             (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->GetNode()) &&
             SwNodeOffset(1) == abs(rSearchPam.GetPoint()->GetNodeIndex() -
@@ -953,8 +952,7 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
     {
         // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms2::REGEXP == m_rSearchOpt.AlgorithmType2);
-        SwContentIndex& rSttCntIdx = rCursor.Start()->nContent;
-        const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
+        const sal_Int32 nSttCnt = rCursor.Start()->GetContentIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrev(nullptr);
         if( bRegExp )
@@ -991,7 +989,7 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             assert(bRet); // if join failed, next node must be SwTextNode
         }
         else
-            rCursor.Start()->nContent = nSttCnt;
+            rCursor.Start()->SetContent(nSttCnt);
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
