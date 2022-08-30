@@ -2658,6 +2658,51 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             }
         }
 
+        // Filter out substitutions where a proprietary font has been substituded by a
+        // metric-compatible one. Onviously this is just a heuristic and implemented only for some
+        // well-known cases.
+
+        for (std::size_t i = 0; i < aFontMappingUseData.size();)
+        {
+            // Again, handle only cases where the original font does not include a style. Unclear
+            // whether there ever will be a style part included in the mOriginalFont.
+
+            if (aFontMappingUseData[i].mOriginalFont.indexOf('/') == -1)
+            {
+                bool bSubstitutedByMetricCompatible = false;
+                for (const auto &j : aFontMappingUseData[i].mUsedFonts)
+                {
+                    if ((aFontMappingUseData[i].mOriginalFont == "Arial" &&
+                         j.startsWith("Liberation Sans/")) ||
+                        (aFontMappingUseData[i].mOriginalFont == "Times New Roman" &&
+                         j.startsWith("Liberation Serif/")) ||
+                        (aFontMappingUseData[i].mOriginalFont == "Courier New" &&
+                         j.startsWith("Liberation Mono/")) ||
+                        (aFontMappingUseData[i].mOriginalFont == "Arial Narrow" &&
+                         j.startsWith("Liberation Sans Narrow/")) ||
+                        (aFontMappingUseData[i].mOriginalFont == "Cambria" &&
+                         j.startsWith("Caladea/")) ||
+                        (aFontMappingUseData[i].mOriginalFont == "Calibri" &&
+                         j.startsWith("Carlito/")) ||
+                        (aFontMappingUseData[i].mOriginalFont == "Palatino Linotype" &&
+                         j.startsWith("P052/")))
+                    {
+                        bSubstitutedByMetricCompatible = true;
+                        break;
+                    }
+                }
+
+                if (bSubstitutedByMetricCompatible)
+                    aFontMappingUseData.erase(aFontMappingUseData.begin() + i);
+                else
+                    i++;
+            }
+            else
+            {
+                i++;
+            }
+        }
+
         if (aFontMappingUseData.size() > 0)
         {
             SAL_INFO("lok.fontsubst", "================ Pruned substitutions:");
