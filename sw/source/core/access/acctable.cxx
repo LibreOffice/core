@@ -1561,7 +1561,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
-    if( isAccessibleColumnSelected( row ) )
+    if( isAccessibleRowSelected( row ) )
         return true;
 
     tools::Long lColumnCount = getAccessibleColumnCount();
