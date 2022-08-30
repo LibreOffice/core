@@ -318,6 +318,7 @@ certain functionality.
 @section LibreOfficeKit
 
 @li @c lok
+@li @c lok.fontsubst
 @li @c lok.tiledrendering
 @li @c lok.dialog
 

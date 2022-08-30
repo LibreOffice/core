@@ -2612,6 +2612,17 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         auto aFontMappingUseData = OutputDevice::FinishTrackingFontMappingUse();
 
+        if (aFontMappingUseData.size() > 0)
+        {
+            SAL_INFO("lok.fontsubst", "================ Original substitutions:");
+            for (const auto &i : aFontMappingUseData)
+            {
+                SAL_INFO("lok.fontsubst", i.mOriginalFont);
+                for (const auto &j : i.mUsedFonts)
+                    SAL_INFO("lok.fontsubst", "    " << j);
+            }
+        }
+
         // Filter out font substitutions that actually aren't any substitutions, like "Liberation
         // Serif" -> "Liberation Serif/Regular". If even one of the "substitutions" of a font is to
         // the same font, don't count that as a missing font.
@@ -2644,6 +2655,17 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             else
             {
                 i++;
+            }
+        }
+
+        if (aFontMappingUseData.size() > 0)
+        {
+            SAL_INFO("lok.fontsubst", "================ Pruned substitutions:");
+            for (const auto &i : aFontMappingUseData)
+            {
+                SAL_INFO("lok.fontsubst", i.mOriginalFont);
+                for (const auto &j : i.mUsedFonts)
+                    SAL_INFO("lok.fontsubst", "    " << j);
             }
         }
 
