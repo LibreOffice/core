@@ -39,10 +39,12 @@
 #include <svl/ownlist.hxx>
 #include <svl/itemprop.hxx>
 #include <sfx2/frmdescr.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <macroloader.hxx>
 
 using namespace ::com::sun::star;
 
@@ -158,6 +160,19 @@ sal_Bool SAL_CALL IFrameObject::load(
 {
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
+        util::URL aTargetURL;
+        aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
+        xTrans->parseStrict( aTargetURL );
+
+        if (INetURLObject(aTargetURL.Complete).GetProtocol() == INetProtocol::Macro)
+        {
+            uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator();
+            SfxObjectShell* pDoc = SfxMacroLoader::GetObjectShell(xParentFrame);
+            if (pDoc && !pDoc->AdjustMacroMode())
+                return false;
+        }
+
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
@@ -179,11 +194,6 @@ sal_Bool SAL_CALL IFrameObject::load(
         uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
         if ( xFramesSupplier.is() )
             mxFrame->setCreator( xFramesSupplier );
-
-        util::URL aTargetURL;
-        aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
-        xTrans->parseStrict( aTargetURL );
 
         uno::Sequence < beans::PropertyValue > aProps(2);
         aProps[0].Name = "PluginMode";
