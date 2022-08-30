@@ -2658,8 +2658,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             }
         }
 
-        // Filter out substitutions where a proprietary font has been substituded by a
-        // metric-compatible one. Onviously this is just a heuristic and implemented only for some
+        // Filter out substitutions where a proprietary font has been substituted by a
+        // metric-compatible one. Obviously this is just a heuristic and implemented only for some
         // well-known cases.
 
         for (std::size_t i = 0; i < aFontMappingUseData.size();)
