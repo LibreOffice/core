@@ -683,6 +683,7 @@ atk_object_wrapper_init (AtkObjectWrapper      *wrapper,
    wrapper->mpImage = nullptr;
    wrapper->mpSelection = nullptr;
    wrapper->mpTable = nullptr;
+   wrapper->mpTableSelection = nullptr;
    wrapper->mpText = nullptr;
    wrapper->mpValue = nullptr;
 }
@@ -996,6 +997,7 @@ void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
     wrapper->mpSelection.clear();
     wrapper->mpMultiLineText.clear();
     wrapper->mpTable.clear();
+    wrapper->mpTableSelection.clear();
     wrapper->mpText.clear();
     wrapper->mpTextMarkup.clear();
     wrapper->mpTextAttributes.clear();

@@ -39,6 +39,7 @@ namespace com::sun::star::accessibility {
     class XAccessibleMultiLineText;
     class XAccessibleSelection;
     class XAccessibleTable;
+    class XAccessibleTableSelection;
     class XAccessibleText;
     class XAccessibleTextMarkup;
     class XAccessibleTextAttributes;
@@ -64,6 +65,7 @@ struct AtkObjectWrapper
         mpMultiLineText;
     css::uno::Reference<css::accessibility::XAccessibleSelection> mpSelection;
     css::uno::Reference<css::accessibility::XAccessibleTable> mpTable;
+    css::uno::Reference<css::accessibility::XAccessibleTableSelection> mpTableSelection;
     css::uno::Reference<css::accessibility::XAccessibleText> mpText;
     css::uno::Reference<css::accessibility::XAccessibleTextMarkup> mpTextMarkup;
     css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
