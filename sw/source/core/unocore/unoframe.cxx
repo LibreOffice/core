@@ -2262,8 +2262,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(WID_LAYOUT_SIZE == pEntry->nWID)
         {
-            // format document completely in order to get correct value
-            pFormat->GetDoc()->GetEditShell()->CalcLayout();
+            // format document completely in order to get correct value (no EditShell for ole embedded case)
+            if (SwEditShell* pEditShell = pFormat->GetDoc()->GetEditShell())
+                pEditShell->CalcLayout();
 
             SwFrame* pTmpFrame = SwIterator<SwFrame,SwFormat>( *pFormat ).First();
             if ( pTmpFrame )
