@@ -111,8 +111,9 @@ else # LIBO_TEST_INSTALL
 				$(if $(and $(filter HELP,$(BUILD_TYPE)), $(filter-out MACOSX,$(OS))), \
 					$(foreach lang,$(gb_HELP_LANGS), \
 						":$(lang)::-helppack:$(pkgformat):nostrip" )) \
-				$(foreach lang,$(instsetoo_native_WITH_LANG), \
-					":$(lang)::-languagepack:$(pkgformat):nostrip" ) )))
+				$(if $(filter-out MACOSX,$(OS)), \
+					$(foreach lang,$(instsetoo_native_WITH_LANG), \
+						":$(lang)::-languagepack:$(pkgformat):nostrip" )) )))
 endif # LIBO_TEST_INSTALL
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
