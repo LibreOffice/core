@@ -471,13 +471,13 @@ SwCacheObj::~SwCacheObj()
 #ifdef DBG_UTIL
 void SwCacheObj::Lock()
 {
-    OSL_ENSURE( m_nLock < UCHAR_MAX, "Too many Locks for CacheObject." );
+    assert( m_nLock < UCHAR_MAX && "Too many Locks for CacheObject." );
     ++m_nLock;
 }
 
 void SwCacheObj::Unlock()
 {
-    OSL_ENSURE( m_nLock, "No more Locks available." );
+    assert( m_nLock && "No more Locks available." );
     --m_nLock;
 }
 #endif
