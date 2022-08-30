@@ -41,6 +41,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/dibtools.hxx>
 #include <editeng/brushitem.hxx>
+#include <vcl/dibtools.hxx>
 
 #include <itabenum.hxx>
 
@@ -1264,6 +1265,38 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
     // - Actual  : Package
     // i.e. a hardcoded class name was written.
     CPPUNIT_ASSERT_EQUAL(OString("PBrush"), aClassName);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PaintBitmapFormat)
+{
+    // Given a document with a 8bpp bitmap:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paint-ole-bitmap-format.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // When exporting to reqif-xhtml with ExportImagesAsOLE enabled:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ExportImagesAsOLE", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure the resulting bitmap is 24bpp:
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aOle1;
+    ParseOle1FromRtfUrl(aRtfUrl, aOle1);
+    OLE1Reader aOle1Reader(aOle1);
+    Bitmap aBitmap;
+    SvMemoryStream aMemory;
+    aMemory.WriteBytes(aOle1Reader.m_aNativeData.data(), aOle1Reader.m_aNativeData.size());
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(ReadDIB(aBitmap, aMemory, true));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 24
+    // - Actual  : 8
+    // i.e. it was not a pixel format ms paint could handle in OLE mode.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap.GetBitCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
