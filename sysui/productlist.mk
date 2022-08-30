@@ -15,6 +15,6 @@ PRODUCTNAME.libreofficedev := LibreOfficeDev
 PRODUCTNAME.ciboffice := CIBOffice
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
-UNIXFILENAME.ciboffice := cibboffice$(PKGVERSIONSHORT)
+UNIXFILENAME.ciboffice := ciboffice$(PKGVERSIONSHORT)
 
 # vim: set noet sw=4 ts=4:
