@@ -63,7 +63,7 @@ public:
 class XMLAutoStylePoolParent
 {
 public:
-    typedef std::vector<std::unique_ptr<XMLAutoStylePoolProperties>> PropertiesListType;
+    typedef std::vector<XMLAutoStylePoolProperties> PropertiesListType;
 
 private:
     OUString msParent;
@@ -86,10 +86,8 @@ public:
 
     const OUString& GetParent() const { return msParent; }
 
-    PropertiesListType& GetPropertiesList()
-    {
-        return m_PropertiesList;
-    }
+    PropertiesListType& GetPropertiesList() { return m_PropertiesList; }
+    const PropertiesListType& GetPropertiesList() const { return m_PropertiesList; }
 
     bool operator< (const XMLAutoStylePoolParent& rOther) const;
 };
@@ -98,8 +96,7 @@ public:
 
 struct XMLAutoStyleFamily
 {
-    typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>,
-        comphelper::UniquePtrValueLess<XMLAutoStylePoolParent>> ParentSetType;
+    typedef std::set<XMLAutoStylePoolParent> ParentSetType;
 
     XmlStyleFamily mnFamily;
     OUString maStrFamilyName;
@@ -132,8 +129,7 @@ struct XMLAutoStyleFamily
 class SvXMLAutoStylePoolP_Impl
 {
     // A set that finds and sorts based only on mnFamily
-    typedef std::set<std::unique_ptr<XMLAutoStyleFamily>,
-            comphelper::UniquePtrValueLess<XMLAutoStyleFamily>> FamilySetType;
+    typedef std::set<XMLAutoStyleFamily> FamilySetType;
 
     SvXMLExport& rExport;
     FamilySetType m_FamilySet;
