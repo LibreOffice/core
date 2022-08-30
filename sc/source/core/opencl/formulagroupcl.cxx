@@ -93,7 +93,6 @@ const char* const publicFunc =
  "double legalize(double a, double b) { return isnan(a)?b:a;}\n"
  "double fsub(double a, double b) { return a-b; }\n"
  "double fdiv(double a, double b) { return a/b; }\n"
- "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
  "int is_representable_integer(double a) {\n"
  "    long kMaxInt = (1L << 53) - 1;\n"
  "    if (a <= as_double(kMaxInt))\n"
@@ -1787,11 +1786,10 @@ public:
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
-        ss << "strequal(" << lhs << "," << rhs << ")";
+        ss << "(" << lhs << " == " << rhs << ")";
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "eq"; }
-    virtual bool takeString() const override { return true; }
 };
 
 class OpLessEqual : public Binary
