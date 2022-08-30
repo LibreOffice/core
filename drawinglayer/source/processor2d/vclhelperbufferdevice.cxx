@@ -359,15 +359,12 @@ void impBufferDevice::paint(double fTrans)
     mpContent->EnableMapMode(false);
 
 #ifdef DBG_UTIL
-    if (bDoSaveForVisualControl)
+    // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
+    static const OUString sDumpPath(OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+
+    if (!sDumpPath.isEmpty() && bDoSaveForVisualControl)
     {
-        SvFileStream aNew(
-#ifdef _WIN32
-            "c:\\content.bmp",
-#else
-            "~/content.bmp",
-#endif
-            StreamMode::WRITE | StreamMode::TRUNC);
+        SvFileStream aNew(sDumpPath + "content.bmp", StreamMode::WRITE | StreamMode::TRUNC);
         Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
         WriteDIB(aContent, aNew, false, true);
     }
@@ -383,15 +380,10 @@ void impBufferDevice::paint(double fTrans)
         AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
-        if (bDoSaveForVisualControl)
+        if (!sDumpPath.isEmpty() && bDoSaveForVisualControl)
         {
-            SvFileStream aNew(
-#ifdef _WIN32
-                "c:\\transparence.bmp",
-#else
-                "~/transparence.bmp",
-#endif
-                StreamMode::WRITE | StreamMode::TRUNC);
+            SvFileStream aNew(sDumpPath + "transparence.bmp",
+                              StreamMode::WRITE | StreamMode::TRUNC);
             WriteDIB(aAlphaMask.GetBitmap(), aNew, false, true);
         }
 #endif

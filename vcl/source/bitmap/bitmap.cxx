@@ -156,7 +156,7 @@ void savePNG(const OUString& sWhere, const Bitmap& rBmp)
 Bitmap::~Bitmap()
 {
 #ifdef DBG_UTIL
-    // VCL_DUMP_BMP_PATH should be like C:/bmpDump.png or ~/bmpDump.png
+    // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
     static const OUString sDumpPath(OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
     // Stepping into the dtor of a bitmap you need, and setting the volatile variable to true in
     // debugger, would dump the bitmap in question
@@ -164,7 +164,7 @@ Bitmap::~Bitmap()
     if (!sDumpPath.isEmpty() && save)
     {
         save = false;
-        savePNG(sDumpPath, *this);
+        savePNG(sDumpPath + "BitmapDump.png", *this);
     }
 #endif
 }
