@@ -1546,7 +1546,7 @@ public:
             vSubArguments[1]->GenSlidingWindowDeclRef()) << ";\n\t";
         ss << "return tmp;\n}";
     }
-    virtual bool takeString() const override { return true; }
+    virtual bool takeString() const override { return false; }
     virtual bool takeNumeric() const override { return true; }
 };
 
@@ -1791,6 +1791,7 @@ public:
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "eq"; }
+    virtual bool takeString() const override { return true; }
 };
 
 class OpLessEqual : public Binary
