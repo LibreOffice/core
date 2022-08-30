@@ -50,11 +50,11 @@ std::string GetPMT_new=
 "    double fPmt;\n"
 "        double  fTerm = pow( 1.0 + fRate, fNper );\n"
 "        if( nPayType > 0 )\n"
-"            fPmt = ( fFv * fRate *pow ( fTerm - 1.0,-1 ) + fPv * fRate *pow( "
-"( 1.0 - pow( fTerm,-1) ),-1) )* pow ( 1.0 + fRate,-1 );\n"
+"            fPmt = ( fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate /"
+"( 1.0 - 1.0 / fTerm ) ) / ( 1.0 + fRate );\n"
 "        else\n"
-"            fPmt = fFv * fRate *pow ( fTerm - 1.0 ,-1) + fPv * fRate *pow( "
-"1.0 - pow( fTerm,-1),-1 );\n"
+"            fPmt = fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate / ( "
+"1.0 - 1.0 / fTerm);\n"
 "    return -fPmt;\n"
 "}\n";
 std::string GetFVDecl =
@@ -92,9 +92,9 @@ std::string GetFV_new =
 "    double  fTerm = pow( 1.0 + fRate, fNper );\n"
 "    if( nPayType > 0 )\n"
 "        fFv = fPv * fTerm + fPmt * ( 1.0 + fRate ) *( fTerm - 1.0 ) "
-"*pow( fRate,-1);\n"
+"/ fRate;\n"
 "    else\n"
-"        fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) *pow( fRate,-1);\n"
+"        fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) / fRate;\n"
 "    return -fFv;\n"
 "}\n";
 
@@ -230,8 +230,8 @@ std::string DateToDays_new=
 "int  DateToDays_new( int nDay, int nMonth, int nYear )\n"
 "{\n"
 "    int nDays = (nYear-1) * 365;\n"
-"    nDays += (int)((nYear-1) *pow(4.0,-1.0)- (nYear-1) *pow( 100.0,-1.0)"
-"+ (nYear-1) *pow(400.0,-1.0));\n"
+"    nDays += (int)((nYear-1) / 4.0 - (nYear-1) / 100.0"
+"+ (nYear-1) / 400.0);\n"
 "    for( int i = 1; i < nMonth; i++ )\n"
 "        nDays += DaysInMonth(i,nYear);\n"
 "    nDays += nDay;\n"
@@ -670,14 +670,14 @@ std::string lcl_Getcoupdays_new=
 "    while(checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
 "rbLastDay,sDay,rDay))\n"
 "    {\n"
-"        double d = -1*12*pow((double)nFreq,-1.0);\n"
+"        double d = -1*12/(double)nFreq;\n"
 "        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,d,&rYear);\n"
 "        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
 "    }\n"
 "    int aNextDate=aDate;int aDay=rDay,aMonth=rMonth, aYear=rYear;\n"
 "    int abLastDayMode=rbLastDayMode, abLastDay=rbLastDay,ab30Days=rb30Days,"
 "abUSMode=rbUSMode,anDay=rnDay;\n"
-"    int tmp = (int)(12*pow((double)nFreq,-1.0));\n"
+"    int tmp = (int)(12/(double)nFreq);\n"
 "    addMonths(ab30Days,abLastDay,&anDay,aDay,&aMonth,tmp,&aYear);\n"
 "    return getDiff( aDate, aNextDate, rDay, rMonth, rYear, rbLastDayMode, "
 "rbLastDay, rb30Days, rbUSMode, rnDay, aDay, aMonth, aYear, abLastDayMode,"
@@ -807,7 +807,7 @@ std::string coupdays_new=
 "    if( nBase == 1 )\n"
 "        return lcl_Getcoupdays_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "    else\n"
-"        return (double)GetDaysInYear(0,0,nBase)*pow((double)nFreq,-1.0);\n"
+"        return (double)GetDaysInYear(0,0,nBase)/(double)nFreq;\n"
 "}\n";
 
 std::string coupdaybsDecl=
@@ -1199,9 +1199,9 @@ std::string GetYieldmat=
 "    double      fIssSet = GetYearFrac_new( nNullDate, nIssue, nSettle, nBase );\n"
 "    double      fSetMat = GetYearFrac_new( nNullDate, nSettle, nMat, nBase );\n"
 "    double      y = 1.0 + fIssMat * fRate;\n"
-"    y =y * pow( (fPrice / 100.0 + fIssSet * fRate),-1);\n"
+"    y =y / (fPrice / 100.0 + fIssSet * fRate);\n"
 "    y-=1.0;\n"
-"    y = y * pow(fSetMat,-1);\n"
+"    y = y / fSetMat;\n"
 "    return y;\n"
 "}\n";
 
@@ -1278,7 +1278,7 @@ std::string GetYearDiff=
 "    int   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate,"
 "nMode, &"
 "nDays1stYear );\n"
-"     return (double)(nTotalDays)*pow((double)nDays1stYear,-1);\n"
+"     return (double)(nTotalDays)/(double)nDays1stYear;\n"
 "}\n";
 
 std::string GetDiffDate360_Decl=
@@ -1380,8 +1380,8 @@ std::string GetDuration_new=
 "        double fNumOfCoups = lcl_Getcoupnum_new(nNullDate,nSettle,nMat,"
 "nFreq,nBase);\n"
 "        double fDur = 0.0;\n"
-"        fCoup = fCoup * 100.0 * pow(nFreq, -1.0);\n"
-"        fYield = fYield * pow(nFreq, -1.0);\n"
+"        fCoup = fCoup * 100.0 / nFreq;\n"
+"        fYield = fYield / nFreq;\n"
 "        fYield += 1.0;\n"
 "        double nDiff = fYearfrac * nFreq - fNumOfCoups;\n"
 "        int  t;\n"
@@ -1389,7 +1389,7 @@ std::string GetDuration_new=
 "        for( t = 1 ; t < fNumOfCoups ; t++ ){\n"
 "            tmp0 = (t + nDiff) * ( fCoup ) ;\n"
 "            tmp1 = pow( fYield, t + nDiff ) ;\n"
-"            tmp2 = tmp0 * pow(tmp1, -1);\n"
+"            tmp2 = tmp0 / tmp1;\n"
 "            fDur += tmp2;\n"
 "        }\n"
 "        fDur += (fNumOfCoups + nDiff) * (fCoup + 100.0) * pow(pow(fYield,"
@@ -1397,10 +1397,10 @@ std::string GetDuration_new=
 "        double  p = 0.0;\n"
 "        for( t = 1 ; t < fNumOfCoups ; t++ ){\n"
 "            tmp0 = pow( fYield, t + nDiff );\n"
-"            p += fCoup * pow(tmp0, -1);}\n"
-"        p += (fCoup + 100.0) * pow(pow(fYield, fNumOfCoups + nDiff), -1);\n"
-"        fDur = fDur * pow(p, -1.0);\n"
-"        fDur = fDur * pow(nFreq, -1.0);\n"
+"            p += fCoup / tmp0;}\n"
+"        p += (fCoup + 100.0) / pow(fYield, fNumOfCoups + nDiff);\n"
+"        fDur = fDur / p;\n"
+"        fDur = fDur / nFreq;\n"
 "        return fDur;\n"
 "    }\n";
 
@@ -1813,7 +1813,7 @@ std::string GetYearDiff_new=
 "    int   nTotalDays = GetDiffDate_new( nNullDate, nStartDate, nEndDate,"
 "nMode, &"
 "nDays1stYear );\n"
-"    return (double)(nTotalDays)* pow((double)nDays1stYear,-1);\n"
+"    return (double)(nTotalDays) / (double)nDays1stYear;\n"
 "}\n";
 
 std::string GetDiffDate_newDecl=

@@ -1513,7 +1513,7 @@ public:
                 "    return 0;\n";
         ss << "return tmp";
         if (isAverage())
-            ss << "*pow((double)nCount,-1.0)";
+            ss << "/(double)nCount";
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }

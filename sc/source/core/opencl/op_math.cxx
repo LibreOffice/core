@@ -87,7 +87,7 @@ void OpSec::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-    ss << "    return pow(cos(arg0),-1 );\n";
+    ss << "    return 1.0 / cos(arg0);\n";
     ss << "}";
 }
 void OpCosh::BinInlineFun(std::set<std::string>& decls,
@@ -118,7 +118,7 @@ void OpSecH::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-    ss << "    return pow(cosh(arg0),-1 );\n";
+    ss << "    return 1.0 / cosh(arg0);\n";
     ss << "}";
 }
 void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
@@ -174,7 +174,7 @@ void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss<<"    if(arg1==0)\n";
     ss<<"        return arg1;\n";
-    ss<<"    tmp=arg1 * round(arg0 * pow(arg1,-1));\n";
+    ss<<"    tmp=arg1 * round(arg0 / arg1);\n";
     ss<<"    return tmp;\n";
     ss<<"}";
 }
@@ -252,7 +252,7 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
         ss << ";\n";
     }
     ss << "    arg0 = arg0 * M_1_PI;\n";
-    ss << "    return cospi(arg0) * pow(sinpi(arg0), -1);\n";
+    ss << "    return cospi(arg0) / sinpi(arg0);\n";
     ss << "}";
 }
 
@@ -1141,7 +1141,7 @@ void OpTan::GenSlidingWindowFunction(std::stringstream &ss,
         ss << ";\n";
     }
     ss << "    arg0 = arg0 * M_1_PI;\n";
-    ss << "    return sinpi(arg0) * pow(cospi(arg0), -1);\n";
+    ss << "    return sinpi(arg0) / cospi(arg0);\n";
     ss << "}";
 }
 void OpTanH::GenSlidingWindowFunction(std::stringstream &ss,
@@ -1364,7 +1364,7 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
         ss << vSubArguments[0]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
-    ss << "    return 0.5 * log(1 + 2 * pown(arg0 - 1.0, -1));\n";
+    ss << "    return 0.5 * log(1 + 2 / (arg0 - 1.0));\n";
     ss << "}";
 }
 void OpArcSin::BinInlineFun(std::set<std::string>& decls,
@@ -1779,7 +1779,7 @@ void OpRadians::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
-    ss << "    tmp = tmp0 * 3.14159265358979 * pow(180.0,-1);\n";
+    ss << "    tmp = tmp0 * 3.14159265358979 / 180.0;\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -2628,7 +2628,7 @@ void OpCombin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "            num_chosen-1.0,\n";
     ss << "            num_chosen-2.0,\n";
     ss << "            num_chosen-3.0};\n";
-    ss << "        db4result = db4num * pown(db4num_chosen, -1);\n";
+    ss << "        db4result = db4num / db4num_chosen;\n";
     ss << "        db2result = db4result.xy * db4result.zw;\n";
     ss << "        result *=  db2result.x * db2result.y;\n";
     ss << "        num = num - 4.0;\n";
@@ -2930,7 +2930,7 @@ void OpDeg::GenSlidingWindowFunction(std::stringstream &ss,
         ss << vSubArguments[0]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
-    ss << "    return arg0 * pown(M_PI, -1) * 180;;\n";
+    ss << "    return arg0 / M_PI * 180;;\n";
     ss << "}";
 }
 

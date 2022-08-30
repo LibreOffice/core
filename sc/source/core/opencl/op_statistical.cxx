@@ -110,7 +110,7 @@ void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -190,7 +190,7 @@ void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    else\n";
-    ss << "        return vSum * pow(fCount - 1.0,-1.0);\n";
+    ss << "        return vSum / (fCount - 1.0);\n";
     ss << "}\n";
 }
 void OpZTest::BinInlineFun(std::set<std::string>& decls,
@@ -275,9 +275,8 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    }\n";
             ss << "    if(fCount <= 1.0)\n";
             ss << "        return DBL_MAX;\n";
-            ss << "    mue = fSum *pow(fCount,-1.0);\n";
-            ss << "    sigma = (fSumSqr-fSum*fSum*";
-            ss << "pow(fCount,-1.0))*pow(fCount-1.0,-1.0);\n";
+            ss << "    mue = fSum / fCount;\n";
+            ss << "    sigma = (fSumSqr-fSum*fSum/fCount)/(fCount-1.0);\n";
         }
         else
         {
@@ -367,7 +366,7 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    }\n";
             ss << "    if(fCount <= 1.0)\n";
             ss << "        return DBL_MAX;\n";
-            ss << "    mue = fSum * pow(fCount,-1.0);\n";
+            ss << "    mue = fSum / fCount;\n";
         }
         else
         {
@@ -882,7 +881,7 @@ void OpVarP::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -960,7 +959,7 @@ void OpVarP::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount == 0.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return vSum * pow(fCount,-1.0);\n";
+    ss << "        return vSum / fCount;\n";
     ss << "}\n";
 }
 
@@ -1389,7 +1388,7 @@ void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if(sigma <= 0.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return (x - mu)*pow(sigma,-1.0);\n";
+    ss << "        return (x - mu)/sigma;\n";
     ss << "}";
 }
 
@@ -1653,7 +1652,7 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    if(fCount <= 2.0)\n";
             ss << "        return DBL_MAX;\n";
             ss << "    else\n";
-            ss << "        fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "        fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -1727,7 +1726,7 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
         }
     }
-    ss << "    double fStdDev = sqrt(vSum * pow(fCount - 1.0,-1.0));\n";
+    ss << "    double fStdDev = sqrt(vSum / (fCount - 1.0));\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xcube = 0.0;\n";
     ss << "    if(fStdDev == 0.0)\n";
@@ -1773,7 +1772,7 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
                 ss << "        if (isnan(arg))\n";
                 ss << "            continue;\n";
-                ss << "        dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+                ss << "        dx = (arg - fMean) / fStdDev;\n";
                 ss << "        xcube = xcube + dx * dx * dx;\n";
                 ss << "    }\n";
             }
@@ -1787,7 +1786,7 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
                 ss << "        if (!isnan(arg))\n";
                 ss << "        {\n";
-                ss << "            dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+                ss << "            dx = (arg - fMean) / fStdDev;\n";
                 ss << "            xcube = xcube + dx * dx * dx;\n";
                 ss << "        }\n";
                 ss << "    }\n";
@@ -1795,7 +1794,7 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
             else
             {
                 ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+                ss << "    dx = (arg - fMean) / fStdDev;\n";
                 ss << "    xcube = xcube + dx * dx * dx;\n";
             }
         }
@@ -1803,12 +1802,12 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "    arg = ";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+            ss << "    dx = (arg - fMean) / fStdDev;\n";
             ss << "    xcube = xcube + dx * dx * dx;\n";
         }
     }
-    ss << "    return ((xcube * fCount) * pow(fCount - 1.0,-1.0))";
-    ss << " * pow(fCount - 2.0,-1.0);\n";
+    ss << "    return ((xcube * fCount) / (fCount - 1.0))";
+    ss << " / (fCount - 2.0);\n";
     ss << "}\n";
 }
 
@@ -1910,7 +1909,7 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    if(fCount <= 2.0)\n";
             ss << "        return DBL_MAX;\n";
             ss << "    else\n";
-            ss << "        fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "        fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -1984,7 +1983,7 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
         }
     }
-    ss << "    double fStdDev = sqrt(vSum * pow(fCount,-1.0));\n";
+    ss << "    double fStdDev = sqrt(vSum / fCount);\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xcube = 0.0;\n";
     ss << "    if(fStdDev == 0.0)\n";
@@ -2030,7 +2029,7 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
                 ss << "        if (isnan(arg))\n";
                 ss << "            continue;\n";
-                ss << "        dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+                ss << "        dx = (arg - fMean) / fStdDev;\n";
                 ss << "        xcube = xcube + dx * dx * dx;\n";
                 ss << "    }\n";
             }
@@ -2044,7 +2043,7 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
                 ss << "        if (!isnan(arg))\n";
                 ss << "        {\n";
-                ss << "            dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+                ss << "            dx = (arg - fMean) / fStdDev;\n";
                 ss << "            xcube = xcube + dx * dx * dx;\n";
                 ss << "        }\n";
                 ss << "    }\n";
@@ -2052,7 +2051,7 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
             else
             {
                 ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+                ss << "    dx = (arg - fMean) / fStdDev;\n";
                 ss << "    xcube = xcube + dx * dx * dx;\n";
             }
         }
@@ -2060,11 +2059,11 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
         {
             ss << "    arg = ";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    dx = (arg - fMean) * pow(fStdDev,-1.0);\n";
+            ss << "    dx = (arg - fMean) / fStdDev;\n";
             ss << "    xcube = xcube + dx * dx * dx;\n";
         }
     }
-    ss << "    return xcube * pow(fCount,-1.0);\n";
+    ss << "    return xcube / fCount;\n";
     ss << "}\n";
 }
 
@@ -2289,7 +2288,7 @@ void OpStDev::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -2365,7 +2364,7 @@ void OpStDev::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return sqrt(vSum * pow(fCount - 1.0,-1.0));\n";
+    ss << "        return sqrt(vSum / (fCount - 1.0));\n";
     ss << "}\n";
 }
 
@@ -2464,7 +2463,7 @@ void OpStDevP::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -2541,7 +2540,7 @@ void OpStDevP::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount == 0.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return sqrt(vSum * pow(fCount,-1.0));\n";
+    ss << "        return sqrt(vSum / fCount);\n";
     ss << "}\n";
 }
 
@@ -2635,8 +2634,8 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "        return CreateDoubleError(NoValue);\n";
         ss << "    else\n";
         ss << "    {\n";
-        ss << "        fMeanX = fSumX * pow(fCount,-1.0);\n";
-        ss << "        fMeanY = fSumY * pow(fCount,-1.0);\n";
+        ss << "        fMeanX = fSumX / fCount;\n";
+        ss << "        fMeanY = fSumY / fCount;\n";
 
         ss << "        for (int i = ";
         if ((!pDVR->IsStartFixed() && pDVR->IsEndFixed())
@@ -2679,7 +2678,7 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "            return CreateDoubleError(DivisionByZero);\n";
         ss << "        else\n";
         ss << "        {\n";
-        ss << "            return fSumDeltaXDeltaY*pow(fSumSqrDeltaX,-1.0);\n";
+        ss << "            return fSumDeltaXDeltaY / fSumSqrDeltaX;\n";
         ss << "        }\n";
         ss << "    }\n";
         ss << "}\n";
@@ -2788,8 +2787,8 @@ void OpSTEYX::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "        return DBL_MAX;\n";
         ss << "    else\n";
         ss << "    {\n";
-        ss << "        fMeanX = fSumX * pow(fCount,-1.0);\n";
-        ss << "        fMeanY = fSumY * pow(fCount,-1.0);\n";
+        ss << "        fMeanX = fSumX / fCount;\n";
+        ss << "        fMeanY = fSumY / fCount;\n";
 
         ss << "        for (int i = ";
         if ((!pDVR->IsStartFixed() && pDVR->IsEndFixed())
@@ -2834,8 +2833,8 @@ void OpSTEYX::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "        else\n";
         ss << "        {\n";
         ss << "            return sqrt((fSumSqrDeltaY - fSumDeltaXDeltaY * \n";
-        ss << "                   fSumDeltaXDeltaY*pow(fSumSqrDeltaX,-1.0))\n";
-        ss << "                   *pow(fCount - 2.0,-1.0));\n";
+        ss << "                   fSumDeltaXDeltaY / fSumSqrDeltaX)\n";
+        ss << "                   /(fCount - 2.0));\n";
         ss << "        }\n";
         ss << "    }\n";
         ss << "}\n";
@@ -2893,7 +2892,7 @@ vSubArguments)
     }
     ss << "    if (fabs(arg0) >= 1.0)\n";
     ss << "        return DBL_MAX;\n";
-    ss << "    double tmp=0.5*log((1+arg0)*pow((1-arg0),-1));\n";
+    ss << "    double tmp=0.5*log((1+arg0)/(1-arg0));\n";
     ss << "    return tmp;\n";
     ss << "}\n";
 }
@@ -3607,7 +3606,7 @@ vSubArguments)
             ss << ";\n";
             ss << "    if(!isnan(tmp))\n";
             ss << "    {\n";
-            ss << "        nVal += (1.0 * pow( tmp,-1));\n";
+            ss << "        nVal += (1.0 / tmp);\n";
             ss << "        totallength +=1;\n";
             ss << "    }\n";
         }
@@ -3616,7 +3615,7 @@ vSubArguments)
            ss << "    tmp = ";
            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
            ss << ";\n";
-           ss << "    nVal += (1.0 *pow( tmp,-1));\n";
+           ss << "    nVal += (1.0 / tmp);\n";
            ss << "    totallength +=1;\n";
         }
         else
@@ -3624,7 +3623,7 @@ vSubArguments)
             ss << "    return DBL_MIN;\n";
         }
     }
-    ss << "    tmp = totallength*pow(nVal,-1);\n";
+    ss << "    tmp = totallength/nVal;\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -3695,8 +3694,7 @@ void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "|| rn < 1.0)\n";
     ss << "        tmp = -DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        tmp = gaussinv(1.0 - alpha * pow(2.0,-1.0)) * sigma ";
-    ss << "* pow(sqrt( rn ),-1);\n";
+    ss << "        tmp = gaussinv(1.0 - alpha / 2.0) * sigma / sqrt( rn );\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -3781,8 +3779,7 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "                uint max =(uint)(rn), i;\n";
     ss << "                for (i = 0; i < max && fSum >= alpha; i++)\n";
     ss << "                {\n";
-    ss << " fFactor *= (rn - i) * pow((double)(i + 1),-1.0) *";
-    ss << " rq * pow(p, -1.0);\n";
+    ss << " fFactor *= (rn - i) / (double)(i + 1) * rq / p;\n";
     ss << "                    fSum -= fFactor;\n";
     ss << "                }\n";
     ss << "                tmp = (rn - i);\n";
@@ -3794,8 +3791,8 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "            uint max = (uint)(rn), i;\n";
     ss << "            for (i = 0; i < max && fSum < alpha; i++)\n";
     ss << "            {\n";
-    ss << " fFactor *= (rn - i) * pow((double)(i + 1), -1.0) *";
-    ss << " p * pow(rq, -1.0);\n";
+    ss << " fFactor *= (rn - i) / (double)(i + 1) *";
+    ss << " p / rq;\n";
     ss << "                fSum += fFactor;\n";
     ss << "            }\n";
     ss << "            tmp = (i);\n";
@@ -4840,7 +4837,7 @@ void OpKurt:: GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    return DBL_MIN;\n";
         }
     }
-    ss << "    double fMean = fSum * pow(totallength,-1);\n";
+    ss << "    double fMean = fSum / totallength;\n";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -5046,8 +5043,8 @@ void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "        return NAN;\n";
         ss << "    else\n";
         ss << "    {\n";
-        ss << "        fMeanX = fSumX * pow(fCount,-1.0);\n";
-        ss << "        fMeanY = fSumY * pow(fCount,-1.0);\n";
+        ss << "        fMeanX = fSumX / fCount;\n";
+        ss << "        fMeanY = fSumY / fCount;\n";
 
         ss << "        for (int i = ";
         if ((!pDVR->IsStartFixed() && pDVR->IsEndFixed())
@@ -5091,7 +5088,7 @@ void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "        else\n";
         ss << "        {\n";
         ss << "            return fMeanY -";
-        ss << " (fSumDeltaXDeltaY*pow(fSumSqrDeltaX,-1.0))*fMeanX;\n";
+        ss << " (fSumDeltaXDeltaY/fSumSqrDeltaX)*fMeanX;\n";
         ss << "        }\n";
         ss << "    }\n";
         ss << "}\n";
@@ -5888,8 +5885,7 @@ void OpBinomdist::GenSlidingWindowFunction(
     ss << "                        for (uint i = 0; i < max && fFactor > 0.0;";
     ss << " i++)\n";
     ss << "                        {\n";
-    ss << "                           fFactor *= (tmp1 - i)*pow((i + 1),-1.0)*";
-    ss << "rq*pow(tmp2,-1.0);\n";
+    ss << "                           fFactor *= (tmp1 - i)/(i + 1)*rq/tmp2;\n";
     ss << "                            fSum -= fFactor;\n";
     ss << "                        }\n";
     ss << "                         return ( (fSum < 0.0) ? 0.0 : fSum );\n";
@@ -6241,10 +6237,9 @@ void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
     "            {\n"
     "                if (fPy!=fQy && fQy!=fRy && fRy!=fPy)\n"
     "                {\n"
-    "                    fSx = fPx * fRy * fQy *pow( (fRy-fPy),-1) *pow"
-    "( (fQy-fPy),-1)"
-    "+ fRx * fQy * fPy *pow( (fQy-fRy),-1) *pow( (fPy-fRy),-1)"
-    "+ fQx * fPy * fRy *pow( (fPy-fQy),-1) *pow( (fRy-fQy),-1);\n"
+    "                    fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)"
+    "+ fRx * fQy * fPy / (fQy-fRy) / (fPy-fRy)"
+    "+ fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);\n"
     "                    bHasToInterpolate = (fAx < fSx) && (fSx < fBx);\n"
     "                }\n"
     "                else\n"
@@ -6427,10 +6422,10 @@ void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
     "        {\n"
     "            if (fPy!=fQy && fQy!=fRy && fRy!=fPy)\n"
     "            {\n"
-    "                fSx = fPx * fRy * fQy *pow( (fRy-fPy),-1)"
-    " *pow( (fQy-fPy),-1)+fRx * fQy * fPy*pow( (fQy-fRy),-1) *"
-    "pow( (fPy-fRy),-1)+ fQx * fPy * fRy *pow( (fPy-fQy),-1)"
-    " *pow((fRy-fQy),-1);\n"
+    "                fSx = fPx * fRy * fQy / (fRy-fPy)"
+    " / (fQy-fPy)+fRx * fQy * fPy / (fQy-fRy)"
+    " / (fPy-fRy)+ fQx * fPy * fRy / (fPy-fQy)"
+    " / (fRy-fQy);\n"
     "                bHasToInterpolate = (fAx < fSx) && (fSx < fBx);\n"
     "            }\n"
     "            else\n"
@@ -6799,7 +6794,7 @@ void OpPoisson::GenSlidingWindowFunction(
     ss << "            {\n";
     ss << "                double fPoissonVar = 1.0;\n";
     ss << "                for ( int f = 0; f < x; ++f )\n";
-    ss << "          fPoissonVar *= lambda * pow(( (double)f + 1.0 ),-1);\n";
+    ss << "          fPoissonVar *= lambda / ( (double)f + 1.0 );\n";
     ss << "                tmp = ( fPoissonVar * exp( -lambda ) );\n";
     ss << "                return tmp;\n";
     ss << "            }\n";
@@ -6831,7 +6826,7 @@ void OpPoisson::GenSlidingWindowFunction(
     ss << "                     int nEnd = (int) (x + 0.5);\n";
     ss << "                     for (int i = 1; i <= nEnd; i++)\n";
     ss << "                     {\n";
-    ss << "                fSummand = (fSummand*lambda)*pow((double)i,-1);\n";
+    ss << "                fSummand = (fSummand*lambda)/((double)i);\n";
     ss << "                         fSum += fSummand;\n";
     ss << "                     }\n";
     ss << "                     tmp = fSum;\n";
@@ -7213,7 +7208,7 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
     "            tmp = 1.0;\n"
     "            return tmp;\n"
     "        }\n"
-    "        arg0 = (arg0-arg3)*pow(fScale,-1);\n"
+    "        arg0 = (arg0-arg3)/fScale;\n"
     "        tmp =  GetBetaDist(arg0, arg1, arg2);\n"
     "    }\n"
     "    else\n"
@@ -7223,8 +7218,8 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
     "            tmp = 0.0;\n"
     "            return tmp;\n"
     "        }\n"
-    "        arg0 = (arg0 - arg3)*pow(fScale,-1);\n"
-    "        tmp = GetBetaDistPDF(arg0, arg1, arg2)*pow(fScale,-1);\n"
+    "        arg0 = (arg0 - arg3)/fScale;\n"
+    "        tmp = GetBetaDistPDF(arg0, arg1, arg2)/fScale;\n"
     "    }\n";
     ss << "    return tmp;\n";
     ss << "}\n";
@@ -7637,7 +7632,7 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
     "        }\n"
     "        else\n"
     "            num[i]=0.5*log(2.0*PI)+(num[i]+0.5)*log(num[i])-num[i]+"
-    "(1.0*pow(12.0*num[i],-1)-1.0*pow(360*pow(num[i],3),-1));\n"
+    "(1.0/(12.0*num[i])-1.0/(360*pow(num[i],3)));\n"
     "    }\n";
     ss << "    tmp=pow(M_E,(num[0]+num[3]+num[7]+num[8]";
     ss << "-num[1]-num[2]-num[4]-num[5]-num[6]));\n";
@@ -8235,7 +8230,7 @@ vSubArguments)
                 ss << "    }\n";
         }
     }
-    ss << "    return tmp0*pow(nCount,-1);\n";
+    ss << "    return tmp0/nCount;\n";
     ss << "}\n";
 }
 void OpVarA::GenSlidingWindowFunction(std::stringstream &ss,
@@ -8432,7 +8427,7 @@ void OpVarA::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -8604,7 +8599,7 @@ void OpVarA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return vSum * pow(fCount - 1.0,-1.0);\n";
+    ss << "        return vSum / (fCount - 1.0);\n";
     ss << "}\n";
 }
 
@@ -8800,7 +8795,7 @@ void OpVarPA::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -8972,7 +8967,7 @@ void OpVarPA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount == 0.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return vSum * pow(fCount,-1.0);\n";
+    ss << "        return vSum / fCount;\n";
     ss << "}\n";
 }
 void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
@@ -9167,7 +9162,7 @@ void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -9339,7 +9334,7 @@ void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return sqrt(vSum * pow(fCount - 1.0,-1.0));\n";
+    ss << "        return sqrt(vSum / (fCount - 1.0));\n";
     ss << "}\n";
 }
 
@@ -9535,7 +9530,7 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+            ss << "    fMean = fSum / fCount;\n";
         }
     }
     i = vSubArguments.size();
@@ -9707,7 +9702,7 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if (fCount == 1.0)\n";
     ss << "        return DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        return sqrt(vSum * pow(fCount,-1.0));\n";
+    ss << "        return sqrt(vSum / fCount);\n";
     ss << "}\n";
 }
 
@@ -9777,7 +9772,7 @@ void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
            ss << "    totallength +=1;\n";
         }
     }
-    ss << "    double mean = sum * pow(totallength,-1);\n";
+    ss << "    double mean = sum / totallength;\n";
     ss << "    sum = 0.0;\n";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
@@ -9821,7 +9816,7 @@ void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
            ss << "    sum += fabs(tmp-mean);\n";
         }
     }
-    ss << "    tmp=sum*pow(totallength,-1);\n";
+    ss << "    tmp=sum/totallength;\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
