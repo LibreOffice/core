@@ -34,6 +34,11 @@ enum SwFootnoteEndPosEnum
     FTNEND_ATTXTEND_END
 };
 
+/**
+ * SfxPoolItem subclass that is a wrapper around an SwFootnoteEndPosEnum, i.e. to decide where
+ * footnotes or endnotes should be collected. Available on the UI as Format -> Sections -> <Name> ->
+ * Options -> Footnotes/Endnotes. This is the shared base class for both footnotes and endnotes.
+ */
 class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem<SwFootnoteEndPosEnum>
 {
     OUString m_sPrefix;
