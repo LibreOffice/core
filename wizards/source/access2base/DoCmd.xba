@@ -2655,7 +2655,7 @@ Private Sub _ShellExecute(sCommand As String)
 
 Dim oShell As Object
 	Set oShell = createUnoService(&quot;com.sun.star.system.SystemShellExecute&quot;)
-	oShell.execute(sCommand, &quot;&quot; , com.sun.star.system.SystemShellExecuteFlags.DEFAULTS)
+	oShell.execute(sCommand, &quot;&quot; , com.sun.star.system.SystemShellExecuteFlags.URIS_ONLY)
 
 End Sub				&apos;	_ShellExecute			V0.8.5
 
