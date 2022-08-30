@@ -30,6 +30,7 @@ Conflicts: %pkgprefix-suse-menus
 Conflicts: %pkgprefix-debian-menus
 Conflicts: %pkgprefix-redhat-menus
 Conflicts: %pkgprefix-mandriva-menus
+Obsoletes: libreofficepoweredbycib6.4-freedesktop-menus
 BuildArch: noarch
 AutoReqProv: no
 %define _binary_filedigest_algorithm 1

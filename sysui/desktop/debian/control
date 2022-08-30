@@ -1,3 +1,5 @@
 Description: %productname desktop integration
 Maintainer: CIB software GmbH
 Architecture: all
+Replaces: libreofficepoweredbycib6.4-debian-menus
+Conflicts: libreofficepoweredbycib6.4-debian-menus
