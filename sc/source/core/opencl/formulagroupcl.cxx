@@ -1786,10 +1786,23 @@ public:
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
-        ss << "(" << lhs << " == " << rhs << ")";
+        ss << "approx_equal(" << lhs << "," << rhs << ")";
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "eq"; }
+};
+
+class OpNotEqual : public Binary
+{
+public:
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        std::stringstream ss;
+        ss << "!approx_equal(" << lhs << "," << rhs << ")";
+        return ss.str();
+    }
+    virtual std::string BinFuncName() const override { return "neq"; }
 };
 
 class OpLessEqual : public Binary
@@ -1799,10 +1812,10 @@ public:
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
-        ss << "(" << lhs << "<=" << rhs << ")";
+        ss << "(approx_equal(" << lhs << "," << rhs << ") || " << lhs << "<=" << rhs << ")";
         return ss.str();
     }
-    virtual std::string BinFuncName() const override { return "leq"; }
+    virtual std::string BinFuncName() const override { return "le"; }
 };
 
 class OpLess : public Binary
@@ -1815,7 +1828,7 @@ public:
         ss << "(" << lhs << "<" << rhs << ")";
         return ss.str();
     }
-    virtual std::string BinFuncName() const override { return "less"; }
+    virtual std::string BinFuncName() const override { return "lt"; }
 };
 
 class OpGreater : public Binary
@@ -1829,6 +1842,19 @@ public:
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "gt"; }
+};
+
+class OpGreaterEqual : public Binary
+{
+public:
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        std::stringstream ss;
+        ss << "(approx_equal(" << lhs << "," << rhs << ") || " << lhs << ">=" << rhs << ")";
+        return ss.str();
+    }
+    virtual std::string BinFuncName() const override { return "ge"; }
 };
 
 class OpSum : public Reduction
@@ -3004,8 +3030,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocEqual:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpEqual>(), nResultSize));
                 break;
+            case ocNotEqual:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpNotEqual>(), nResultSize));
+                break;
             case ocGreater:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGreater>(), nResultSize));
+                break;
+            case ocGreaterEqual:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGreaterEqual>(), nResultSize));
                 break;
             case ocSYD:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSYD>(), nResultSize));
