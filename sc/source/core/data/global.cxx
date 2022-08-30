@@ -655,7 +655,7 @@ const InputHandlerFunctionNames& ScGlobal::GetInputHandlerFunctionNames()
         const OUString aParenthesesReplacement( cParenthesesReplacement);
         const ScFunctionList* pFuncList = GetStarCalcFunctionList();
         const sal_uInt32 nListCount = pFuncList->GetCount();
-        const CharClass* pCharClass = (SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()
+        const CharClass* pCharClass = (pFuncList->IsEnglishFunctionNames()
                 ? ScCompiler::GetCharClassEnglish()
                 : ScCompiler::GetCharClassLocalized());
         for (sal_uInt32 i=0; i < nListCount; ++i)
