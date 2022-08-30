@@ -100,6 +100,12 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
 
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+    rDevice.SetBackground(aBgColor);
+
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
 
     EnableRTL(false);
@@ -112,6 +118,8 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pEditEngine->InsertView(m_xEditView.get());
 
     m_xEditView->SetOutputArea(mrEditWindow.AdjustScrollBars());
+
+    m_xEditView->SetBackgroundColor(aBgColor);
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 
