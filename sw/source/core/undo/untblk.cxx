@@ -374,9 +374,8 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     SwCursor& rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc& rDoc = rPam.GetDoc();
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = m_nSttNode - m_nNodeDiff;
+    rPam.GetPoint()->Assign( m_nSttNode - m_nNodeDiff, m_nSttContent );
     SwContentNode* pCNd = rPam.GetPointContentNode();
-    rPam.GetPoint()->nContent.Assign( pCNd, m_nSttContent );
 
     SwTextFormatColl* pSavTextFormatColl = m_pTextFormatColl;
     if( m_pTextFormatColl && pCNd && pCNd->IsTextNode() )
