@@ -69,14 +69,6 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
 
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // Only test import of .odt document
-        return o3tl::ends_with(filename, ".odt");
-    }
-
     bool mustValidate(const char* /*filename*/) const override
     {
         return true;
@@ -210,8 +202,9 @@ static void testTdf43569_CheckIfFieldParse()
 // Input document contains only one IF-field,
 // and it should be imported as com.sun.star.text.TextField.ConditionalText in any case,
 // instead of insertion of the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
-DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf43569)
 {
+    loadAndReload("tdf43569_conditionalfield.doc");
     // check if our parser is valid
     testTdf43569_CheckIfFieldParse();
 
@@ -224,8 +217,9 @@ DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
     CPPUNIT_ASSERT(xFields->hasMoreElements());
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130314)
 {
+    loadAndReload("tdf130314.docx");
     // Without the fix in place, this test would have hung
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -279,8 +273,9 @@ DECLARE_ODFEXPORT_TEST(testTdf139126, "tdf139126.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), xE2->getString());
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf125877, "tdf95806.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125877)
 {
+    loadAndReload("tdf95806.docx");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(), uno::UNO_QUERY);
@@ -496,8 +491,9 @@ DECLARE_SW_ROUNDTRIP_TEST(testSHA1Wrong, "sha1_wrong.odt", "10123456789012345678
     getParagraph(1, "012");
 }
 
-DECLARE_ODFEXPORT_TEST(testOOoxmlEmbedded, "oooxml_embedded.sxw")
+CPPUNIT_TEST_FIXTURE(Test, testOOoxmlEmbedded)
 {
+    loadAndReload("oooxml_embedded.sxw");
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
     uno::Sequence<OUString> aSeq(xAccess->getElementNames());
@@ -563,15 +559,17 @@ DECLARE_ODFEXPORT_TEST(testTdf140437, "tdf140437.odt")
     CPPUNIT_ASSERT(xFields->hasMoreElements());
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
+CPPUNIT_TEST_FIXTURE(Test, testTdf131621)
 {
+    loadAndReload("tdf131621.ott");
     CPPUNIT_ASSERT_EQUAL(12, getShapes());
     //Crash test, Check number of pages
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf135144, "tdf135144.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135144)
 {
+    loadAndReload("tdf135144.docx");
     //Crashes at import time after roundtrip
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
@@ -611,8 +609,9 @@ DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
-DECLARE_ODFEXPORT_TEST(testSenderInitials, "sender-initials.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testSenderInitials)
 {
+    loadAndReload("sender-initials.fodt");
     // Test sender-initial properties (both annotation metadata and text field)
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -643,8 +642,9 @@ DECLARE_ODFEXPORT_TEST(testResolvedComment, "resolved-comment.odt")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropertySet, "Resolved"));
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
 {
+    loadAndReload("tdf92379.fodt");
     // frame style fo:background-color was not imported
     uno::Reference<container::XNameAccess> xStyles(getStyles("FrameStyles"));
     uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("encarts"),
@@ -786,8 +786,9 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
-DECLARE_ODFEXPORT_TEST(testDuplicateCrossRefHeadingBookmark, "CrossRefHeadingBookmark.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testDuplicateCrossRefHeadingBookmark)
 {
+    loadAndReload("CrossRefHeadingBookmark.fodt");
     // the file contains invalid duplicate heading cross reference bookmarks
     // but we have to round trip them, tdf#94804
 
@@ -926,8 +927,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
     CPPUNIT_ASSERT_EQUAL(3, nMatches);
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf134987, "tdf134987.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
 {
+    loadAndReload("tdf134987.docx");
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
     uno::Sequence<OUString> aSeq(xAccess->getElementNames());
@@ -1166,8 +1168,9 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
     }
 }
 
-DECLARE_ODFEXPORT_TEST(testProtectionKey, "protection-key.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
 {
+    loadAndReload("protection-key.fodt");
     OUString const password("1012345678901234567890123456789012345678901234567890");
 
     // check 1 invalid OOo legacy password and 3 valid ODF 1.2 passwords
@@ -1197,8 +1200,9 @@ DECLARE_ODFEXPORT_TEST(testProtectionKey, "protection-key.fodt")
     }
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf128188, "footnote-collect-at-end-of-section.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128188)
 {
+    loadAndReload("footnote-collect-at-end-of-section.fodt");
     SwDoc *const pDoc = dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
     SwFootnoteIdxs const& rFootnotes(pDoc->GetFootnoteIdxs());
@@ -1230,8 +1234,9 @@ DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf103091)
 {
+    loadAndReload("tdf103091.fodt");
     // check that all conditional paragraph style conditions are imported
     uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
@@ -1820,8 +1825,9 @@ DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf129520, "tdf129520.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129520)
 {
+    loadAndReload("tdf129520.docx");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getParagraph(1)->getString());
 
@@ -2699,16 +2705,18 @@ DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(10104), getProperty<sal_uInt32>(xStyle, "NumberFormat"));
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf129568, "tdf129568.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129568)
 {
+    loadAndReload("tdf129568.fodt");
     // Test that export doesn't fail, and that style is imported and in use.
     uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStyle->isInUse());
     CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getProperty<Color>(xStyle, "BackColor"));
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
 {
+    loadAndReload("tdf129568-ui.fodt");
     // Same as above, but styles referenced by UI name.
     uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStyle->isInUse());
@@ -2852,8 +2860,9 @@ DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
     CPPUNIT_ASSERT(!getProperty<bool>(xShape, "AllowOverlap"));
 }
 
-DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testSignatureLineProperties)
 {
+    loadAndReload("signatureline-properties.fodt");
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
 
@@ -3031,8 +3040,9 @@ CPPUNIT_TEST_FIXTURE(Test, tdf99631)
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1355");
 }
 
-DECLARE_ODFEXPORT_TEST(tdf128504, "tdf128504.docx")
+CPPUNIT_TEST_FIXTURE(Test, tdf128504)
 {
+    loadAndReload("tdf128504.docx");
     uno::Reference<text::XTextRange> xPara = getParagraph(6);
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
     OUString unVisitedStyleName = getProperty<OUString>(xRun, "UnvisitedCharStyleName");
