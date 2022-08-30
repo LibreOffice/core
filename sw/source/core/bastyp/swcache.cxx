@@ -44,20 +44,19 @@ void SwCache::Check()
     SwCacheObj *const pOldRealFirst = m_pRealFirst;
     while ( pObj )
     {
-        // the object must be found also when moving backwards
-        SwCacheObj *pTmp = m_pLast;
-        while ( pTmp && pTmp != pObj )
-            pTmp = pTmp->GetPrev();
-        assert(pTmp && "Object not found.");
-
         ++nCnt;
         if ( pObj == m_pFirst )
             bFirstFound = true;
-        if ( !pObj->GetNext() )
+        SwCacheObj* pNext = pObj->GetNext();
+        if ( !pNext )
         {
             assert(pObj == m_pLast);
         }
-        pObj = pObj->GetNext();
+        else
+        {
+            assert(pObj == pNext->GetPrev());
+        }
+        pObj = pNext;
         assert(pObj != pOldRealFirst); (void) pOldRealFirst;
     }
     assert(bFirstFound);
