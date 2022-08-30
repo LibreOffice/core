@@ -165,9 +165,10 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 }
                 else
                 {
-                    ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
+                    ss << "            if(tmp0 == tmp1)\n";
                     ss << "            {\n";
                     ss << "                rowNum = doubleIndex;\n";
+                    ss << "                break;\n";
                     ss << "            }\n";
                     ss << "            i++;\n";
                     ss << "            doubleIndex++;\n";
@@ -244,9 +245,10 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             }
             else
             {
-                ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
+                ss << "            if(tmp0 == tmp1)\n";
                 ss << "            {\n";
                 ss << "                rowNum = doubleIndex;\n";
+                ss << "                break;\n";
                 ss << "            }\n";
             }
             ss << "        }\n\n";
