@@ -212,7 +212,9 @@ namespace
         sal_Int32 nContentPos = rOrigPos.GetContentIndex();
 
         // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
-        rChgPos.nNode = nNdOff + rCpyStt.GetNodeIndex();
+        rChgPos.Assign( nNdOff + rCpyStt.GetNodeIndex() );
+        if (!rChgPos.GetNode().GetContentNode())
+            return;
         if( !nNdOff )
         {
             // just adapt the content index
@@ -222,7 +224,7 @@ namespace
                 nContentPos = 0;
             nContentPos += rCpyStt.GetContentIndex();
         }
-        rChgPos.nContent.Assign( rChgPos.GetNode().GetContentNode(), nContentPos );
+        rChgPos.SetContent( nContentPos );
     }
 
 }
