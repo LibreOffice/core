@@ -587,7 +587,7 @@ Check:
 Try:
 	Set oShell = SF_Utils._GetUNOService(&quot;SystemShellExecute&quot;)
 	sCommand = SF_FileSystem._ConvertToUrl(Command)
-	oShell.execute(sCommand, Parameters, com.sun.star.system.SystemShellExecuteFlags.DEFAULTS)
+	oShell.execute(sCommand, Parameters, com.sun.star.system.SystemShellExecuteFlags.URIS_ONLY)
 	bReturn = True
 
 Finally:
