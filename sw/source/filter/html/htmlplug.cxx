@@ -1105,7 +1105,12 @@ void SwHTMLParser::InsertFloatingFrame()
                 bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
 
-                xSet->setPropertyValue("FrameURL", uno::Any( aFrameDesc.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
+                OUString sHRef = aFrameDesc.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+
+                if (INetURLObject(sHRef).GetProtocol() == INetProtocol::Macro)
+                    NotifyMacroEventRead();
+
+                xSet->setPropertyValue("FrameURL", uno::Any( sHRef ) );
                 xSet->setPropertyValue("FrameName", uno::Any( aName ) );
 
                 if ( eScroll == ScrollingMode::Auto )

@@ -823,9 +823,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
+                OUString sHRef = URIHelper::SmartRel2Abs(
+                            INetURLObject( GetXMLImport().GetBaseURL() ), rHRef );
+
+                if (INetURLObject(sHRef).GetProtocol() == INetProtocol::Macro)
+                    GetXMLImport().NotifyMacroEventRead();
+
                 xSet->setPropertyValue("FrameURL",
-                    Any( URIHelper::SmartRel2Abs(
-                            INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) );
+                    Any( sHRef ) );
 
                 xSet->setPropertyValue("FrameName",
                     Any( rName ) );
