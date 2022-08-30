@@ -49,17 +49,17 @@ bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 
 bool Line::Intersection( const tools::Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
 {
-    const double    fAx = maEnd.X() - maStart.X();
-    const double    fAy = maEnd.Y() - maStart.Y();
-    const double    fBx = rLine.maStart.X() - rLine.maEnd.X();
-    const double    fBy = rLine.maStart.Y() - rLine.maEnd.Y();
+    const double    fAx = static_cast<double>(maEnd.X()) - maStart.X();
+    const double    fAy = static_cast<double>(maEnd.Y()) - maStart.Y();
+    const double    fBx = static_cast<double>(rLine.maStart.X()) - rLine.maEnd.X();
+    const double    fBy = static_cast<double>(rLine.maStart.Y()) - rLine.maEnd.Y();
     const double    fDen = fAy * fBx - fAx * fBy;
     bool            bOk = false;
 
     if( fDen != 0. )
     {
-        const double    fCx = maStart.X() - rLine.maStart.X();
-        const double    fCy = maStart.Y() - rLine.maStart.Y();
+        const double    fCx = static_cast<double>(maStart.X()) - rLine.maStart.X();
+        const double    fCy = static_cast<double>(maStart.Y()) - rLine.maStart.Y();
         const double    fA = fBy * fCx - fBx * fCy;
         const bool      bGreater = ( fDen > 0. );
 
