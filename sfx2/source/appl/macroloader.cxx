@@ -75,10 +75,10 @@ css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
     return aSeq;
 }
 
-SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
+SfxObjectShell* SfxMacroLoader::GetObjectShell(const Reference <XFrame>& xFrame)
 {
     SfxObjectShell* pDocShell = nullptr;
-    Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
+
     if ( xFrame.is() )
     {
         SfxFrame* pFrame=nullptr;
@@ -95,6 +95,11 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
     return pDocShell;
 }
 
+SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
+{
+    Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
+    return SfxMacroLoader::GetObjectShell(xFrame);
+}
 
 uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
     const util::URL&   aURL            ,
