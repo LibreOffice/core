@@ -2105,7 +2105,7 @@ void DocumentContentOperationsManager::DeleteDummyChar(
         SwPosition const& rPos, sal_Unicode const cDummy)
 {
     SwPaM aPam(rPos, rPos);
-    ++aPam.GetPoint()->nContent;
+    aPam.GetPoint()->AdjustContent(+1);
     assert(aPam.GetText().getLength() == 1 && aPam.GetText()[0] == cDummy);
     (void) cDummy;
 
@@ -2205,10 +2205,8 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         rPam.GetPoint()->nNode++;
 
         SwContentNode *pTmpNode = rPam.GetPoint()->GetNode().GetContentNode();
-        rPam.GetPoint()->nContent.Assign( pTmpNode, 0 );
         bool bGoNext = (nullptr == pTmpNode);
-        pTmpNode = rPam.GetMark()->GetNode().GetContentNode();
-        rPam.GetMark()->nContent.Assign( pTmpNode, 0 );
+        rPam.GetMark()->SetContent( 0 );
 
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
 
@@ -2436,7 +2434,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(aSavePam.GetPoint()->GetContentNode() == pOrigNode);
         assert(aSavePam.GetPoint()->GetNode() == rPos.GetNode());
         assert(rPos.GetNodeIndex() == pOrigNode->GetIndex());
-        aSavePam.GetPoint()->nContent.Assign(pOrigNode, 0);
+        aSavePam.GetPoint()->SetContent(0);
         rPos = *aSavePam.GetMark() = *aSavePam.GetPoint();
 
         // correct the PaM!
@@ -3474,7 +3472,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
             && (aPam.GetMark()->GetContentIndex() == Breaks.begin()->second))
     {
         // skip!
-        ++aPam.GetMark()->nContent; // always in bounds if Breaks valid
+        aPam.GetMark()->AdjustContent(+1); // always in bounds if Breaks valid
         Breaks.erase(Breaks.begin());
     }
     *rPam.Start() = *aPam.GetMark(); // update start of original pam w/ prefix
@@ -3608,9 +3606,9 @@ void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(const SwPosition 
     if ( nIdx > 0 )
     {
         SwPaM aPam(rPos);
-        aPam.GetPoint()->nContent = 0;
+        aPam.GetPoint()->SetContent(0);
         aPam.SetMark();
-        aPam.GetMark()->nContent = nIdx;
+        aPam.GetMark()->SetContent(nIdx);
         DeleteRange( aPam );
     }
 }
@@ -3969,7 +3967,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             sal_Int32 const nContent = pCopiedPaM && pCopiedPaM->Start()->GetNode() == aAnchor.GetContentAnchor()->GetNode()
                 ? newPos.GetContentIndex() - pCopiedPaM->Start()->GetContentIndex()
                 : newPos.GetContentIndex();
-            newPos.nContent.Assign(newPos.GetNode().GetTextNode(), nContent);
+            newPos.SetContent(nContent);
         }
         else
         {
