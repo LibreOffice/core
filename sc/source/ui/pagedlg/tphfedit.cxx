@@ -87,26 +87,25 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     if (mbRTL)
         m_xEditEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
-    auto tmpAcc = mxAcc.get();
-    if (!tmpAcc)
-        return;
-
-    OUString sName;
-    switch (eLocation)
+    if (auto tmpAcc = mxAcc.get())
     {
-        case Left:
-            sName = ScResId(STR_ACC_LEFTAREA_NAME);
-            break;
-        case Center:
-            sName = ScResId(STR_ACC_CENTERAREA_NAME);
-            break;
-        case Right:
-            sName = ScResId(STR_ACC_RIGHTAREA_NAME);
-            break;
-    }
+        OUString sName;
+        switch (eLocation)
+        {
+            case Left:
+                sName = ScResId(STR_ACC_LEFTAREA_NAME);
+                break;
+            case Center:
+                sName = ScResId(STR_ACC_CENTERAREA_NAME);
+                break;
+            case Right:
+                sName = ScResId(STR_ACC_RIGHTAREA_NAME);
+                break;
+        }
 
-    tmpAcc->InitAcc(nullptr, m_xEditView.get(),
-                  sName, pDrawingArea->get_tooltip_text());
+        tmpAcc->InitAcc(nullptr, m_xEditView.get(),
+                      sName, pDrawingArea->get_tooltip_text());
+    }
 
     SetCursor(m_xEditView->GetCursor());
 }
