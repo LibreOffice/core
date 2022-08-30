@@ -1559,6 +1559,10 @@ void ScTextWnd::InitEditEngine()
     m_xEditView->setEditViewCallbacks(this);
     m_xEditView->SetInsertMode(bIsInsertMode);
 
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+    m_xEditView->SetBackgroundColor(aBgColor);
+
     if (pAcc)
     {
         pAcc->InitAcc(nullptr, m_xEditView.get(),
@@ -2093,6 +2097,10 @@ void ScTextWnd::MakeDialogEditView()
 
     m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);
     m_xEditView->setEditViewCallbacks(this);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+    m_xEditView->SetBackgroundColor(aBgColor);
 
     if (pAcc)
     {

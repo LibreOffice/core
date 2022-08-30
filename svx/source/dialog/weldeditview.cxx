@@ -161,13 +161,6 @@ void WeldEditView::Resize()
 
 void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    rRenderContext.SetBackground(aBgColor);
-    if (EditView* pEditView = GetEditView())
-        pEditView->SetBackgroundColor(aBgColor);
-
     DoPaint(rRenderContext, rRect);
 }
 
