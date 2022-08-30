@@ -491,6 +491,29 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
+{
+    load(mpTestDocumentPath, "tdf127806.rtf");
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(1)->getShapeType());
+    auto xImage = getShape(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xImage->getShapeType());
+    awt::Size aSize(xImage->getSize());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(600), aSize.Height);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
+
+    reload(mpFilter, "tdf127806.rtf");
+    CPPUNIT_ASSERT_EQUAL(1, getShapes()); // FIXME: We lost one shape on export, that's sucks
+
+    xImage = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xImage->getShapeType());
+
+    aSize = xImage->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(600), aSize.Height);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

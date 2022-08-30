@@ -911,25 +911,6 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         xPropertySet->setPropertyValue("GraphicColorMode", uno::Any(drawing::ColorMode_WATERMARK));
     }
 
-    if (bPib)
-    {
-        m_rImport.resolvePict(false, xShape);
-    }
-
-    if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
-    {
-        assert(!m_bTextFrame);
-        if (!bPib) // ??? not sure if the early return should be removed on else?
-        {
-            m_xShape = xShape; // store it for later resolvePict call
-        }
-
-        // Handle horizontal flip.
-        if (obFlipH && xPropertySet.is())
-            xPropertySet->setPropertyValue("IsMirrored", uno::Any(true));
-        return;
-    }
-
     if (bCustom && xShape.is() && !bPib)
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
@@ -1130,6 +1111,25 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xPropertySet->setPropertyValue("RelativeHeightRelation",
                                            uno::Any(nRelativeHeightRelation));
         }
+    }
+
+    if (bPib)
+    {
+        m_rImport.resolvePict(false, xShape);
+    }
+
+    if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
+    {
+        assert(!m_bTextFrame);
+        if (!bPib) // ??? not sure if the early return should be removed on else?
+        {
+            m_xShape = xShape; // store it for later resolvePict call
+        }
+
+        // Handle horizontal flip.
+        if (obFlipH && xPropertySet.is())
+            xPropertySet->setPropertyValue("IsMirrored", uno::Any(true));
+        return;
     }
 
     if (m_rImport.isInBackground())

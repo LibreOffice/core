@@ -960,8 +960,23 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         m_aStates.top().getPicture().nHeight = aSize.Height();
     }
 
-    // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape(rShape);
+    if (m_aStates.top().getInShape() && xShape.is())
+    {
+        awt::Size aSize = xShape->getSize();
+        if (aSize.Width || aSize.Height)
+        {
+            // resolvePict() is processing pib structure inside shape
+            // So if shape has dimensions we should use them instead of
+            // \picwN, \pichN, \picscalexN, \picscaleyN given with picture
+            m_aStates.top().getPicture().nGoalWidth = aSize.Width;
+            m_aStates.top().getPicture().nGoalHeight = aSize.Height;
+            m_aStates.top().getPicture().nScaleX = 100;
+            m_aStates.top().getPicture().nScaleY = 100;
+        }
+    }
+
+    // Wrap it in an XShape.
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
@@ -1061,12 +1076,6 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
                  * (nYExt
                     - (m_aStates.top().getPicture().nCropT + m_aStates.top().getPicture().nCropB)))
                 / 100L;
-    if (m_aStates.top().getInShape())
-    {
-        // Picture in shape: it looks like pib picture, so we will stretch the picture to shape size (tdf#49893)
-        nXExt = m_aStates.top().getShape().getRight() - m_aStates.top().getShape().getLeft();
-        nYExt = m_aStates.top().getShape().getBottom() - m_aStates.top().getShape().getTop();
-    }
     auto pXExtValue = new RTFValue(oox::drawingml::convertHmmToEmu(nXExt));
     auto pYExtValue = new RTFValue(oox::drawingml::convertHmmToEmu(nYExt));
     aExtentAttributes.set(NS_ooxml::LN_CT_PositiveSize2D_cx, pXExtValue);
