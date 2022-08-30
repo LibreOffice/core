@@ -3771,11 +3771,6 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             std::make_shared<OpSqrtPi>(), nResultSize));
                 }
-                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getConvert")
-                {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            std::make_shared<OpConvert>(), nResultSize));
-                }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIseven")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],

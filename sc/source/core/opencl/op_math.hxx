@@ -356,15 +356,6 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Log10"; }
 };
-class OpConvert: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Convert"; }
-    virtual bool takeString() const override { return true; }
-
-};
 class OpEven: public Normal
 {
 public:
