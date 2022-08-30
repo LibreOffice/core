@@ -199,17 +199,14 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild(sal_Int32 
 
 void AccessibleTableShapeImpl::getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow )
 {
-    rnRow = 0;
-    rnColumn = nChildIndex;
-
     if( mxTable.is() )
     {
         const sal_Int32 nColumnCount = mxTable->getColumnCount();
-        while( rnColumn >= nColumnCount )
-        {
-            rnRow++;
-            rnColumn -= nColumnCount;
-        }
+        if (nColumnCount == 0)
+            throw IndexOutOfBoundsException();
+
+        rnColumn = nChildIndex % nColumnCount;
+        rnRow = nChildIndex / nColumnCount;
 
         if( rnRow < mxTable->getRowCount() )
             return;
