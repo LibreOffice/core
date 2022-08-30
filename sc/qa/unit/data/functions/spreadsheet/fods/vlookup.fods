@@ -991,6 +991,15 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>False</text:p>
      </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce33" office:value-type="string" calcext:value-type="string">
+      <text:p>Sorted num</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce33" office:value-type="string" calcext:value-type="string">
+      <text:p>Unsorted num</text:p>
+     </table:table-cell>
+     <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=VLOOKUP(111;[.I1:.J5];2;FALSE())" office:value-type="string" office:string-value="Bananas" calcext:value-type="string">
@@ -1068,6 +1077,20 @@
      <table:table-cell table:formula="of:=VLOOKUP(column1;table;2;0)" office:value-type="string" office:string-value="cherry" calcext:value-type="string">
       <text:p>cherry</text:p>
      </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=VLOOKUP([.P2];[.$L$2:.$M$8];2;0)" office:value-type="float" office:value="2" calcext:value-type="float">
@@ -1129,6 +1152,20 @@
      <table:table-cell table:formula="of:=VLOOKUP(column1;table;2;0)" office:value-type="string" office:string-value="banana" calcext:value-type="string">
       <text:p>banana</text:p>
      </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="24" calcext:value-type="float">
+      <text:p>24</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:formula="of:=VLOOKUP([.P3];[.$L$2:.$M$8];2;0)" office:value-type="float" office:value="2" calcext:value-type="float">
@@ -1187,6 +1224,20 @@
      <table:table-cell/>
      <table:table-cell table:formula="of:=VLOOKUP(column1;table;2;0)" office:value-type="string" office:string-value="blackberry" calcext:value-type="string">
       <text:p>blackberry</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="22" calcext:value-type="float">
+      <text:p>22</text:p>
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
@@ -2343,14 +2394,179 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="30"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048513">
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(1;[.$AJ$2:.$AK$4];2;1)" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A63]=[.B63]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A63])" office:value-type="string" office:string-value="=VLOOKUP(1;$AJ$2:$AK$4;2;1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(1;$AJ$2:$AK$4;2;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(4;[.$AJ$2:.$AK$4];2;1)" office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A64]=[.B64]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A64])" office:value-type="string" office:string-value="=VLOOKUP(4;$AJ$2:$AK$4;2;1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(4;$AJ$2:$AK$4;2;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(3.5;[.$AJ$2:.$AK$4];2;1)" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A65]=[.B65]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A65])" office:value-type="string" office:string-value="=VLOOKUP(3,5;$AJ$2:$AK$4;2;1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(3,5;$AJ$2:$AK$4;2;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(5;[.$AJ$2:.$AK$4];2;1)" office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A66]=[.B66]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A66])" office:value-type="string" office:string-value="=VLOOKUP(5;$AJ$2:$AK$4;2;1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(5;$AJ$2:$AK$4;2;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(-0.5;[.$AJ$2:.$AK$4];2;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A67])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A67])" office:value-type="string" office:string-value="=VLOOKUP(-0,5;$AJ$2:$AK$4;2;1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(-0,5;$AJ$2:$AK$4;2;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(11;[.$AJ$2:.$AK$4];2;1)" office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A68]=[.B68]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A68])" office:value-type="string" office:string-value="=VLOOKUP(11;$AJ$2:$AK$4;2;1)" calcext:value-type="string">
+      <text:p>=VLOOKUP(11;$AJ$2:$AK$4;2;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(5;[.$AM$2:.$AN$4];2;0)" office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A69]=[.B69]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A69])" office:value-type="string" office:string-value="=VLOOKUP(5;$AM$2:$AN$4;2;0)" calcext:value-type="string">
+      <text:p>=VLOOKUP(5;$AM$2:$AN$4;2;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(6;[.$AM$2:.$AN$4];2;0)" office:value-type="float" office:value="22" calcext:value-type="float">
+      <text:p>22</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="22" calcext:value-type="float">
+      <text:p>22</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A70]=[.B70]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A70])" office:value-type="string" office:string-value="=VLOOKUP(6;$AM$2:$AN$4;2;0)" calcext:value-type="string">
+      <text:p>=VLOOKUP(6;$AM$2:$AN$4;2;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(8;[.$AM$2:.$AN$4];2;0)" office:value-type="float" office:value="24" calcext:value-type="float">
+      <text:p>24</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="24" calcext:value-type="float">
+      <text:p>24</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=[.A71]=[.B71]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A71])" office:value-type="string" office:string-value="=VLOOKUP(8;$AM$2:$AN$4;2;0)" calcext:value-type="string">
+      <text:p>=VLOOKUP(8;$AM$2:$AN$4;2;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(7;[.$AM$2:.$AN$4];2;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A72])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A72])" office:value-type="string" office:string-value="=VLOOKUP(7;$AM$2:$AN$4;2;0)" calcext:value-type="string">
+      <text:p>=VLOOKUP(7;$AM$2:$AN$4;2;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VLOOKUP(21;[.$AM$2:.$AN$4];2;0)" office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A73])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>NEPRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A73])" office:value-type="string" office:string-value="=VLOOKUP(21;$AM$2:$AN$4;2;0)" calcext:value-type="string">
+      <text:p>=VLOOKUP(21;$AM$2:$AN$4;2;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="36"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048502">
      <table:table-cell table:number-columns-repeated="34"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="34"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C62">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C100">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>

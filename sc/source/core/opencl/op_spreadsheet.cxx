@@ -115,155 +115,135 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    loop = "<<nCurWindowSize<<"/"<< unrollSize<<";\n";
         }
 
-        for (int i = 0; i < secondParaWidth; i++)
+        ss << "    for ( int j = 0;j< loop; j++)\n";
+        ss << "    {\n";
+        ss << "        int i = ";
+        if (!pCurDVR->IsStartFixed()&& pCurDVR->IsEndFixed())
         {
-            ss << "    for ( int j = 0;j< loop; j++)\n";
-            ss << "    {\n";
-            ss << "        int i = ";
-            if (!pCurDVR->IsStartFixed()&& pCurDVR->IsEndFixed())
-            {
-                ss << "gid0 + j * "<< unrollSize <<";\n";
-            }
-            else
-            {
-                ss << "j * "<< unrollSize <<";\n";
-            }
-            if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-                ss << "        int doubleIndex = i+gid0;\n";
-            }
-            else
-            {
-                ss << "        int doubleIndex = i;\n";
-            }
-            ss << "        if(tmp";
-            ss << 3+(secondParaWidth-1);
-            ss << " == 1)\n";
-            ss << "        {\n";
-
-            for (int j = 0;j < unrollSize; j++)
-            {
-                CheckSubArgumentIsNan(ss,vSubArguments,1+i);
-
-                ss << "            if((tmp0 - tmp";
-                ss << 1+i;
-                ss << ")>=0 && intermediate > ( tmp0 -tmp";
-                ss << 1+i;
-                ss << "))\n";
-                ss << "            {\n";
-                ss << "                rowNum = doubleIndex;\n";
-                ss << "                intermediate = tmp0 - tmp";
-                ss << 1+i;
-                ss << ";\n";
-                ss << "            }\n";
-                ss << "            i++;\n";
-                ss << "            doubleIndex++;\n";
-            }
-
-            ss << "        }else\n";
-            ss << "        {\n";
-            for (int j = 0; j < unrollSize; j++)
-            {
-                CheckSubArgumentIsNan(ss,vSubArguments,1+i);
-
-                ss << "            if(tmp0 == tmp";
-                ss << 1+i;
-                ss << " && rowNum == -1)\n";
-                ss << "            {\n";
-                ss << "                rowNum = doubleIndex;\n";
-                ss << "            }\n";
-                ss << "            i++;\n";
-                ss << "            doubleIndex++;\n";
-            }
-            ss << "        }\n\n";
-
-            ss << "    }\n";
-            ss << "    if(rowNum!=-1)\n";
-            ss << "    {\n";
-            for (int j = 0; j < secondParaWidth; j++)
-            {
-                ss << "        if(tmp";
-                ss << 2+(secondParaWidth-1);
-                ss << " == ";
-                ss << j+1;
-                ss << ")\n";
-                ss << "            tmp = ";
-                vSubArguments[1+j]->GenDeclRef(ss);
-                ss << "[rowNum];\n";
-            }
-            ss << "        return tmp;\n";
-            ss << "    }\n";
-            ss << "    for (int i = ";
-            if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
-            {
-                ss << "gid0 + loop *"<<unrollSize<<"; i < ";
-                ss << nCurWindowSize <<"; i++)\n";
-            }
-            else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-                ss << "0 + loop *"<<unrollSize<<"; i < gid0+";
-                ss << nCurWindowSize <<"; i++)\n";
-            }
-            else
-            {
-                ss << "0 + loop *"<<unrollSize<<"; i < ";
-                ss << nCurWindowSize <<"; i++)\n";
-            }
-            ss << "    {\n";
-            if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-               ss << "        int doubleIndex = i+gid0;\n";
-            }
-            else
-            {
-               ss << "        int doubleIndex = i;\n";
-            }
-            CheckSubArgumentIsNan(ss,vSubArguments,1+i);
-            ss << "        if(tmp";
-            ss << 3+(secondParaWidth-1);
-            ss << " == 1)\n";
-            ss << "        {\n";
-            ss << "            if((tmp0 - tmp";
-            ss << 1+i;
-            ss << ")>=0 && intermediate > ( tmp0 -tmp";
-            ss << 1+i;
-            ss << "))\n";
-            ss << "            {\n";
-            ss << "                rowNum = doubleIndex;\n";
-            ss << "                intermediate = tmp0 - tmp";
-            ss << 1+i;
-            ss << ";\n";
-            ss << "            }\n";
-            ss << "        }\n";
-            ss << "        else\n";
-            ss << "        {\n";
-            ss << "            if(tmp0 == tmp";
-            ss << 1+i;
-            ss << " && rowNum == -1)\n";
-            ss << "            {\n";
-            ss << "                rowNum = doubleIndex;\n";
-            ss << "            }\n";
-            ss << "        }\n";
-
-            ss << "    }\n\n";
-            ss << "    if(rowNum!=-1)\n";
-            ss << "    {\n";
-
-            for (int j = 0; j < secondParaWidth; j++)
-            {
-                ss << "        if(tmp";
-                ss << 2+(secondParaWidth-1);
-                ss << " == ";
-                ss << j+1;
-                ss << ")\n";
-                ss << "            tmp = ";
-                vSubArguments[1+j]->GenDeclRef(ss);
-                ss << "[rowNum];\n";
-            }
-            ss << "        return tmp;\n";
-            ss << "    }\n";
-
+            ss << "gid0 + j * "<< unrollSize <<";\n";
         }
+        else
+        {
+            ss << "j * "<< unrollSize <<";\n";
+        }
+        if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
+            ss << "        int doubleIndex = i+gid0;\n";
+        }
+        else
+        {
+            ss << "        int doubleIndex = i;\n";
+        }
+        ss << "        if(tmp";
+        ss << 3+(secondParaWidth-1);
+        ss << " == 1)\n";
+        ss << "        {\n";
+
+        for (int j = 0;j < unrollSize; j++)
+        {
+            CheckSubArgumentIsNan(ss,vSubArguments,1);
+
+            ss << "            if((tmp0 - tmp1)>=0 && intermediate > (tmp0 -tmp1))\n";
+            ss << "            {\n";
+            ss << "                rowNum = doubleIndex;\n";
+            ss << "                intermediate = tmp0 - tmp1;\n";
+            ss << "            }\n";
+            ss << "            i++;\n";
+            ss << "            doubleIndex++;\n";
+        }
+
+        ss << "        }else\n";
+        ss << "        {\n";
+        for (int j = 0; j < unrollSize; j++)
+        {
+            CheckSubArgumentIsNan(ss,vSubArguments,1);
+
+            ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
+            ss << "            {\n";
+            ss << "                rowNum = doubleIndex;\n";
+            ss << "            }\n";
+            ss << "            i++;\n";
+            ss << "            doubleIndex++;\n";
+        }
+        ss << "        }\n\n";
+
+        ss << "    }\n";
+        ss << "    if(rowNum!=-1)\n";
+        ss << "    {\n";
+        for (int j = 0; j < secondParaWidth; j++)
+        {
+            ss << "        if(tmp";
+            ss << 2+(secondParaWidth-1);
+            ss << " == ";
+            ss << j+1;
+            ss << ")\n";
+            ss << "            tmp = ";
+            vSubArguments[1+j]->GenDeclRef(ss);
+            ss << "[rowNum];\n";
+        }
+        ss << "        return tmp;\n";
+        ss << "    }\n";
+        ss << "    for (int i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
+        {
+            ss << "gid0 + loop *"<<unrollSize<<"; i < ";
+            ss << nCurWindowSize <<"; i++)\n";
+        }
+        else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
+            ss << "0 + loop *"<<unrollSize<<"; i < gid0+";
+            ss << nCurWindowSize <<"; i++)\n";
+        }
+        else
+        {
+            ss << "0 + loop *"<<unrollSize<<"; i < ";
+            ss << nCurWindowSize <<"; i++)\n";
+        }
+        ss << "    {\n";
+        if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
+           ss << "        int doubleIndex = i+gid0;\n";
+        }
+        else
+        {
+           ss << "        int doubleIndex = i;\n";
+        }
+        CheckSubArgumentIsNan(ss,vSubArguments,1);
+        ss << "        if(tmp";
+        ss << 3+(secondParaWidth-1);
+        ss << " == 1)\n";
+        ss << "        {\n";
+        ss << "            if((tmp0 - tmp1)>=0 && intermediate > (tmp0 -tmp1))\n";
+        ss << "            {\n";
+        ss << "                rowNum = doubleIndex;\n";
+        ss << "                intermediate = tmp0 - tmp1;\n";
+        ss << "            }\n";
+        ss << "        }\n";
+        ss << "        else\n";
+        ss << "        {\n";
+        ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
+        ss << "            {\n";
+        ss << "                rowNum = doubleIndex;\n";
+        ss << "            }\n";
+        ss << "        }\n";
+
+        ss << "    }\n\n";
+        ss << "    if(rowNum!=-1)\n";
+        ss << "    {\n";
+
+        for (int j = 0; j < secondParaWidth; j++)
+        {
+            ss << "        if(tmp";
+            ss << 2+(secondParaWidth-1);
+            ss << " == ";
+            ss << j+1;
+            ss << ")\n";
+            ss << "            tmp = ";
+            vSubArguments[1+j]->GenDeclRef(ss);
+            ss << "[rowNum];\n";
+        }
+        ss << "        return tmp;\n";
+        ss << "    }\n";
     }
     else
     {
