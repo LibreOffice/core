@@ -4444,8 +4444,8 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
 
         // If the Node that contained the Cursor has been deleted,
         // the Content has to be assigned to the current Content.
-        pStt->nContent.Assign( pStt->GetNode().GetContentNode(),
-                                pStt->GetContentIndex() );
+        if (pStt->GetNode().GetContentNode())
+            pStt->SetContent( pStt->GetContentIndex() );
 
         // If we deleted across Node boundaries we have to correct the PaM,
         // because they are in different Nodes now.
@@ -5291,7 +5291,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         // If the next node is a start node, then step back: the start node
         // has been copied and needs to be in the selection for the undo
         if (pCopyPam->GetPoint()->GetNode().IsStartNode())
-            pCopyPam->GetPoint()->nNode--;
+            pCopyPam->GetPoint()->Adjust(SwNodeOffset(-1));
 
     }
     pCopyPam->Exchange();
