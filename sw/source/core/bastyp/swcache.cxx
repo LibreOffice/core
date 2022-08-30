@@ -151,17 +151,14 @@ void SwCache::Flush()
     INCREMENT( m_nFlushCnt );
     SwCacheObj *pObj = m_pRealFirst;
     m_pRealFirst = m_pFirst = m_pLast = nullptr;
-    SwCacheObj *pTmp;
     while ( pObj )
     {
         assert(!pObj->IsLocked());
-        {
-            pTmp = pObj;
-            pObj = pTmp->GetNext();
-            m_aFreePositions.push_back( pTmp->GetCachePos() );
-            m_aCacheObjects[pTmp->GetCachePos()].reset(); // deletes pTmp
-            INCREMENT( m_nFlushedObjects );
-        }
+        SwCacheObj *pTmp = pObj;
+        pObj = pTmp->GetNext();
+        m_aFreePositions.push_back( pTmp->GetCachePos() );
+        m_aCacheObjects[pTmp->GetCachePos()].reset(); // deletes pTmp
+        INCREMENT( m_nFlushedObjects );
     }
 }
 

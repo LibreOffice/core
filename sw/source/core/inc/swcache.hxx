@@ -55,9 +55,9 @@ class SwCache
 {
     std::vector<std::unique_ptr<SwCacheObj>> m_aCacheObjects;
     std::vector<sal_uInt16> m_aFreePositions; /// Free positions for the Insert if the maximum has not been reached
-                                            /// Every time an object is deregistered, its position is added here
+                                              /// Every time an object is deregistered, its position is added here
     SwCacheObj *m_pRealFirst;                 /// _ALWAYS_ the real first LRU
-    SwCacheObj *m_pFirst;                     /// The virtual first
+    SwCacheObj *m_pFirst;                     /// The virtual first, only different to m_pRealFirst when SetLRUOfst has been called
     SwCacheObj *m_pLast;
 
     sal_uInt16 m_nCurMax;                     // Maximum of accepted objects
@@ -106,7 +106,9 @@ public:
     void Delete(const void * pOwner, sal_uInt16 nIndex);
     void Delete( const void *pOwner );
 
-    void SetLRUOfst( const sal_uInt16 nOfst );  /// nOfst determines how many are not to be touched
+    /// Mark some entries as "do not delete"
+    /// @param nOfst determines how many are not to be touched
+    void SetLRUOfst( const sal_uInt16 nOfst );
     void ResetLRUOfst() { m_pFirst = m_pRealFirst; }
 
     void IncreaseMax( const sal_uInt16 nAdd );
