@@ -814,7 +814,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testCheckboxFormFieldInsertion)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->StartOfSection(false);
     pWrtShell->SplitNode();
-    CPPUNIT_ASSERT_EQUAL(pFieldmark->GetMarkPos().nNode, pFieldmark->GetOtherMarkPos().nNode);
+    CPPUNIT_ASSERT_EQUAL(pFieldmark->GetMarkPos().GetNodeIndex(),
+                         pFieldmark->GetOtherMarkPos().GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pFieldmark->GetMarkPos().GetContentIndex() + 1),
                          pFieldmark->GetOtherMarkPos().GetContentIndex());
 }

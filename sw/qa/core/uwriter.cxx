@@ -971,13 +971,13 @@ void SwDocTest::testGraphicAnchorDeletion()
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "graphic anchor>><<graphic anchor");
-    SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
+    SwNodeIndex nPara2(aPaM.GetPoint()->GetNode());
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
 
-    aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
+    aPaM.GetPoint()->Assign(nPara2);
+    aPaM.GetPoint()->SetContent(RTL_CONSTASCII_LENGTH("graphic anchor>>"));
 
     //Insert a graphic at X of >>X<< in paragraph 2
     SfxItemSet aFlySet(m_pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>);
@@ -990,12 +990,12 @@ void SwDocTest::testGraphicAnchorDeletion()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be 1 graphic", static_cast<size_t>(1), m_pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
     //Delete >X<
-    aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(),
+    aPaM.GetPoint()->Assign(nPara2);
+    aPaM.GetPoint()->SetContent(
         RTL_CONSTASCII_LENGTH("graphic anchor>><")+1);
     aPaM.SetMark();
-    aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
+    aPaM.GetPoint()->Assign(nPara2);
+    aPaM.GetPoint()->SetContent(RTL_CONSTASCII_LENGTH("graphic anchor>"));
     m_pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
 
 #ifdef DEBUG_AS_HTML

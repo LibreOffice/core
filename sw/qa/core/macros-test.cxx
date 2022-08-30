@@ -534,7 +534,7 @@ void SwMacrosTest::testFindReplace()
             opts, false, SwDocPositions::Curr, SwDocPositions::End, bCancel, FindRanges::InBody);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
-    CPPUNIT_ASSERT(pPaM->GetPoint()->nNode != pPaM->GetMark()->nNode);
+    CPPUNIT_ASSERT(pPaM->GetPoint()->GetNode() != pPaM->GetMark()->GetNode());
     CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_NEWLINE)), pPaM->GetText());
 
     // now do another Find, inside the selection from the first Find
@@ -543,7 +543,7 @@ void SwMacrosTest::testFindReplace()
             opts, false, SwDocPositions::Curr, SwDocPositions::End, bCancel, FindRanges::InSel);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
-    CPPUNIT_ASSERT(pPaM->GetPoint()->nNode != pPaM->GetMark()->nNode);
+    CPPUNIT_ASSERT(pPaM->GetPoint()->GetNode() != pPaM->GetMark()->GetNode());
     CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_NEWLINE)), pPaM->GetText());
 
     rIDCO.ReplaceRange(*pPaM, " ", true);

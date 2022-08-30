@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
     // - Actual  : SwNodeIndex (node 12)
     // i.e. the cursor position was the text node hosting the as-char image, not the graphic node of
     // the image.
-    CPPUNIT_ASSERT_EQUAL(aGraphicNode, pShellCursor->GetMark()->nNode);
+    CPPUNIT_ASSERT_EQUAL(aGraphicNode.GetIndex(), pShellCursor->GetMark()->GetNodeIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)

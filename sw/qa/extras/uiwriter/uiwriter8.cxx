@@ -990,7 +990,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130805)
     CPPUNIT_ASSERT(pTxAnch);
     CPPUNIT_ASSERT(pShpAnch);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->nNode, pShpAnch->nNode);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->GetNodeIndex(),
+                                 pShpAnch->GetNodeIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107893)

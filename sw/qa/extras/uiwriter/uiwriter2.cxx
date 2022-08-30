@@ -1673,8 +1673,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
     pWrtShell->StartOfSection(false);
     SwPaM pam(*pWrtShell->GetCursor()->GetPoint());
     pam.SetMark();
-    pam.GetPoint()->nNode = *rTable.GetTableNode();
-    pam.GetPoint()->nContent.Assign(nullptr, 0);
+    pam.GetPoint()->Assign(*rTable.GetTableNode());
     pam.Exchange(); // same selection direction as in doc compare...
 
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
@@ -1724,8 +1723,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     pWrtShell->StartOfSection(false);
     SwPaM pam(*pWrtShell->GetCursor()->GetPoint());
     pam.SetMark();
-    pam.GetPoint()->nNode = *rTable.GetTableNode();
-    pam.GetPoint()->nContent.Assign(nullptr, 0);
+    pam.GetPoint()->Assign(*rTable.GetTableNode());
     pam.Exchange(); // same selection direction as in doc compare...
 
     // this used to assert/crash with m_pAnchoredFlys mismatch because the

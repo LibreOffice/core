@@ -764,7 +764,7 @@ DECLARE_WW8EXPORT_TEST( testTdf105570, "tdf105570.doc" )
     SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
     SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
     SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
-    SwNodeIndex      aIdx         = pShellCursor->Start()->nNode;
+    SwNodeIndex      aIdx( pShellCursor->Start()->GetNode() );
 
     // Find first table
     SwTableNode*     pTableNd     = aIdx.GetNode().FindTableNode();

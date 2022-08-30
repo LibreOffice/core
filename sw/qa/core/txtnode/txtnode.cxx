@@ -79,11 +79,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
 
     SwPosition aDrawAnchor1 = *rFormats[0]->GetAnchor().GetContentAnchor();
     SwPosition aFlyAnchor1 = *rFormats[1]->GetAnchor().GetContentAnchor();
-    CPPUNIT_ASSERT_EQUAL(aFlyAnchor1.nNode, aDrawAnchor1.nNode);
+    CPPUNIT_ASSERT_EQUAL(aFlyAnchor1.GetNodeIndex(), aDrawAnchor1.GetNodeIndex());
     SwPosition aDrawAnchor2 = *rFormats[2]->GetAnchor().GetContentAnchor();
     SwPosition aFlyAnchor2 = *rFormats[3]->GetAnchor().GetContentAnchor();
     // This also failed, aFlyAnchor2 was wrong, as it got out of sync with aDrawAnchor2.
-    CPPUNIT_ASSERT_EQUAL(aFlyAnchor2.nNode, aDrawAnchor2.nNode);
+    CPPUNIT_ASSERT_EQUAL(aFlyAnchor2.GetNodeIndex(), aDrawAnchor2.GetNodeIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
