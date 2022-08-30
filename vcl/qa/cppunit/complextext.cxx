@@ -65,12 +65,10 @@ void VclComplexTextTest::testArabic()
 {
 #if HAVE_MORE_FONTS
     OUString aOneTwoThree(u"واحِدْ إثٍنين ثلاثةٌ");
-    ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
-    CPPUNIT_ASSERT( pWin );
 
     vcl::Font aFont("DejaVu Sans", "Book", Size(0, 12));
 
-    OutputDevice *pOutDev = pWin->GetOutDev();
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
@@ -120,10 +118,7 @@ void VclComplexTextTest::testTdf95650()
         "\u0D11\u1312\u0105\u020A\u0512\u1403\u030C\u1528"
         "\u2931\u632E\u7074\u0D20\u0E0A\u100A\uF00D\u0D20"
         "\u030A\u0C0B\u20E0\u0A0D";
-    ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
-    CPPUNIT_ASSERT(pWin);
-
-    OutputDevice *pOutDev = pWin->GetOutDev();
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
     // Check that the following executes without failing assertion
     pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, {}, {}, SalLayoutFlags::BiDiRtl);
 }
