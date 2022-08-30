@@ -115,11 +115,11 @@ OUString get_absolute_path(
     return abs_sys_path;
 }
 
-OString get_absolute_file_path(const std::string& file_name)
+std::string make_absolute(const std::string& file_name)
 {
     OUString fp = get_absolute_path(
         get_module_path(), OStringToOUString(file_name.c_str()));
-    return OUStringToOString(fp);
+    return std::string(OUStringToOString(fp));
 }
 
 /** A helper class, enables stream exceptions
@@ -487,12 +487,6 @@ void inflate_rc_template_to_file(
       for every language using the substitutor
    5. append the footer
 */
-#define MAKE_ABSOLUTE(s) (get_absolute_file_path((s)).getStr())
-#define ULF_FILE(c)    MAKE_ABSOLUTE((c).get_arg("-ulf"))
-#define RC_TEMPLATE(c) MAKE_ABSOLUTE((c).get_arg("-rct"))
-#define RC_FILE(c)     MAKE_ABSOLUTE((c).get_arg("-rc"))
-#define RC_HEADER(c)   MAKE_ABSOLUTE((c).get_arg("-rch"))
-#define RC_FOOTER(c)   MAKE_ABSOLUTE((c).get_arg("-rcf"))
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
@@ -501,18 +495,18 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         CommandLine cmdline(argc, argv);
 
         Substitutor substitutor;
-        read_ulf_file(ULF_FILE(cmdline), substitutor);
+        read_ulf_file(make_absolute(cmdline.get_arg("-ulf")), substitutor);
 
         std::vector<std::string> rc_tmpl;
-        read_file(RC_TEMPLATE(cmdline), rc_tmpl);
+        read_file(make_absolute(cmdline.get_arg("-rct")), rc_tmpl);
 
-        std::ofstream rc_file(RC_FILE(cmdline));
-        std::ifstream in_header(RC_HEADER(cmdline));
+        std::ofstream rc_file(make_absolute(cmdline.get_arg("-rc")));
+        std::ifstream in_header(make_absolute(cmdline.get_arg("-rch")));
         concatenate_files(rc_file, in_header);
 
         inflate_rc_template_to_file(rc_file, rc_tmpl, substitutor);
 
-        std::ifstream in_footer(RC_FOOTER(cmdline));
+        std::ifstream in_footer(make_absolute(cmdline.get_arg("-rcf")));
         concatenate_files(rc_file, in_footer);
     }
     catch(const std::ios::failure& ex)
