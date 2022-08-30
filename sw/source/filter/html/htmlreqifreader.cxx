@@ -550,6 +550,12 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
     BitmapEx aBitmapEx = rGraphic.GetBitmapEx();
     Bitmap aBitmap = aBitmapEx.GetBitmap(/*aTransparentReplaceColor=*/COL_WHITE);
 
+    if (aBitmap.getPixelFormat() != vcl::PixelFormat::N24_BPP)
+    {
+        // More exotic pixel formats cause trouble for ms paint.
+        aBitmap.Convert(BmpConversion::N24Bit);
+    }
+
     if (GraphicConverter::Export(aNativeData, BitmapEx(aBitmap), ConvertDataFormat::BMP)
         != ERRCODE_NONE)
     {
