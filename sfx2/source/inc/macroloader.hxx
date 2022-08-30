@@ -79,6 +79,8 @@ public:
     virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+
+    static SfxObjectShell* GetObjectShell(const css::uno::Reference<css::frame::XFrame>& xFrame);
 };
 
 #endif
