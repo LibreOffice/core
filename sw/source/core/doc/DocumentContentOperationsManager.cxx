@@ -701,7 +701,7 @@ namespace
     {
         // If we try to merge two paragraphs we have to test if afterwards
         // the string doesn't exceed the allowed string length
-        if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
+        if( rPam.GetPoint()->GetNode() != rPam.GetMark()->GetNode() )
         {
             auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
             const SwTextNode* pEndNd = pEnd->GetNode().GetTextNode();
@@ -737,10 +737,8 @@ namespace
                 nEndCnt = pEnd->GetContentIndex();
             }
 
-            pRedl->GetPoint()->nNode = SwNodeOffset(0);
-            pRedl->GetPoint()->nContent.Assign( nullptr, 0 );
-            pRedl->GetMark()->nNode = SwNodeOffset(0);
-            pRedl->GetMark()->nContent.Assign( nullptr, 0 );
+            pRedl->GetPoint()->Assign( SwNodeOffset(0) );
+            pRedl->GetMark()->Assign( SwNodeOffset(0) );
         }
 
         SaveRedline( SwRangeRedline* pR, const SwPosition& rPos )
@@ -762,10 +760,8 @@ namespace
                     nEndCnt = nEndCnt - rPos.GetContentIndex();
             }
 
-            pRedl->GetPoint()->nNode = SwNodeOffset(0);
-            pRedl->GetPoint()->nContent.Assign( nullptr, 0 );
-            pRedl->GetMark()->nNode = SwNodeOffset(0);
-            pRedl->GetMark()->nContent.Assign( nullptr, 0 );
+            pRedl->GetPoint()->Assign( SwNodeOffset(0) );
+            pRedl->GetMark()->Assign( SwNodeOffset(0) );
         }
 
         void SetPos( SwNodeOffset nInsPos )
@@ -1312,7 +1308,7 @@ namespace //local functions originally from docfmt.cxx
             SwTextNode *pNode = aIdx.GetNode().GetTextNode();
             if( pNode )
             {
-                const sal_Int32 nStart = aIdx == rRg.Start()->nNode
+                const sal_Int32 nStart = aIdx == rRg.Start()->GetNode()
                         ? rRg.Start()->GetContentIndex()
                         : 0;
                 const sal_Int32 nEnd = aIdx < aEndNd
@@ -1535,8 +1531,8 @@ namespace //local functions originally from docfmt.cxx
                     if (bRet && (rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
                                     && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())))
                     {
-                        SwPaM aPam( pStt->nNode, pStt->GetContentIndex()-1,
-                                    pStt->nNode, pStt->GetContentIndex() );
+                        SwPaM aPam( pStt->GetNode(), pStt->GetContentIndex()-1,
+                                    pStt->GetNode(), pStt->GetContentIndex() );
 
                         if( pUndo )
                             pUndo->SaveRedlineData( aPam, true );
@@ -1577,8 +1573,8 @@ namespace //local functions originally from docfmt.cxx
                         // Was text content inserted? (RefMark/TOXMarks without an end)
                         bool bTextIns = nInsCnt != rSt.GetIndex();
                         // Was content inserted or set over the selection?
-                        SwPaM aPam( pStt->nNode, bTextIns ? nInsCnt + 1 : nEnd,
-                                    pStt->nNode, nInsCnt );
+                        SwPaM aPam( pStt->GetNode(), bTextIns ? nInsCnt + 1 : nEnd,
+                                    pStt->GetNode(), nInsCnt );
                         if( pUndo )
                             pUndo->SaveRedlineData( aPam, bTextIns );
 
@@ -1814,7 +1810,7 @@ namespace //local functions originally from docfmt.cxx
         if( pNode )
         {
             const sal_Int32 nLen = pNode->Len();
-            if( pStt->nNode != pEnd->nNode )
+            if( pStt->GetNode() != pEnd->GetNode() )
                 aCntEnd.Assign( pNode, nLen );
 
             if( pStt->GetContentIndex() != 0 || aCntEnd.GetIndex() != nLen )
@@ -1843,7 +1839,7 @@ namespace //local functions originally from docfmt.cxx
                 aSt.Assign( pStt->GetNode(), +1 );
             }
             else
-                aSt = pStt->nNode;
+                aSt = pStt->GetNode();
             aCntEnd = pEnd->nContent; // aEnd was changed!
         }
         else
@@ -1875,13 +1871,13 @@ namespace //local functions originally from docfmt.cxx
                     }
 
                     ++nNodes;
-                    aEnd = pEnd->nNode;
+                    aEnd = pEnd->GetNode();
                 }
                 else
                     aEnd.Assign( pEnd->GetNode(), +1 );
             }
             else
-                aEnd = pEnd->nNode;
+                aEnd = pEnd->GetNode();
         }
         else
             aEnd.Assign( pEnd->GetNode(), +1 );
@@ -2051,7 +2047,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos,
         bRet = CopyImpl(rPam, rPos, flags & ~SwCopyFlags::CheckPosInFly, pRedlineRange);
     }
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
-            ( pStt->nNode != pEnd->nNode ||
+            ( pStt->GetNode() != pEnd->GetNode() ||
               !pStt->GetNode().IsTextNode() )) )
     {
         // Copy to a position outside of the area, or copy a single TextNode
@@ -2202,7 +2198,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             rPam.SetMark();
         else if( rPam.GetPoint() == &rStt )
             rPam.Exchange();
-        rPam.GetPoint()->nNode++;
+        rPam.GetPoint()->Adjust(SwNodeOffset(1));
 
         SwContentNode *pTmpNode = rPam.GetPoint()->GetNode().GetContentNode();
         bool bGoNext = (nullptr == pTmpNode);
@@ -2229,7 +2225,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
     }
     else
     {
-        SwNodeRange aRg( rStt.nNode, rEnd.nNode );
+        SwNodeRange aRg( rStt.GetNode(), rEnd.GetNode() );
         rPam.Normalize(false);
 
         // Try to move past the End
@@ -2387,13 +2383,13 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 
     // If there is a TextNode before and after the Move, create a JoinNext in the EditShell.
     SwTextNode* pSrcNd = rPaM.GetPoint()->GetNode().GetTextNode();
-    bool bCorrSavePam = pSrcNd && pStt->nNode != pEnd->nNode;
+    bool bCorrSavePam = pSrcNd && pStt->GetNode() != pEnd->GetNode();
 
     // If one or more TextNodes are moved, SwNodes::Move will do a SplitNode.
     // However, this does not update the cursor. So we create a TextNode to keep
     // updating the indices. After the Move the Node is optionally deleted.
     SwTextNode * pTNd = rPos.GetNode().GetTextNode();
-    if( pTNd && rPaM.GetPoint()->nNode != rPaM.GetMark()->nNode &&
+    if( pTNd && rPaM.GetPoint()->GetNode() != rPaM.GetMark()->GetNode() &&
         ( rPos.GetContentIndex() || ( pTNd->Len() && bCorrSavePam  )) )
     {
         bSplit = true;
@@ -2440,8 +2436,8 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         // correct the PaM!
         if( rPos.GetNode() == rPaM.GetMark()->GetNode() )
         {
-            rPaM.GetMark()->nNode = rPos.GetNodeIndex()-SwNodeOffset(1);
-            rPaM.GetMark()->nContent.Assign( pTNd, nMkContent );
+            rPaM.GetMark()->Assign( rPos.GetNodeIndex() - SwNodeOffset(1) );
+            rPaM.GetMark()->SetContent( nMkContent );
         }
     }
 
@@ -2647,14 +2643,12 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     if( !aSavRedlInsPosArr.empty() )
     {
-        SwNode* pNewNd = &aIdx.GetNode();
         for(SwRangeRedline* pTmp : aSavRedlInsPosArr)
         {
             if( m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().Contains( pTmp ) )
             {
                 SwPosition* pEnd = pTmp->End();
-                pEnd->nNode = aIdx;
-                pEnd->nContent.Assign( pNewNd->GetContentNode(), 0 );
+                pEnd->Assign(aIdx);
             }
         }
     }
@@ -2802,14 +2796,14 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     if (!m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&
         !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
-        SwPaM aPam(rPt.nNode, nActualStart, rPt.nNode, rPt.GetContentIndex());
+        SwPaM aPam(rPt.GetNode(), nActualStart, rPt.GetNode(), rPt.GetContentIndex());
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, true, RedlineType::Any );
     }
     else if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // FIXME: this redline is WRONG: there is no DELETE, and the skipped
         // characters are also included in aPam
-        SwPaM aPam(rPt.nNode, nActualStart, rPt.nNode, rPt.GetContentIndex());
+        SwPaM aPam(rPt.GetNode(), nActualStart, rPt.GetNode(), rPt.GetContentIndex());
         m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, aPam ), true);
     }
 
@@ -2905,8 +2899,8 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ))
     {
-        SwPaM aPam( rPos.nNode, aTmp.GetContent(),
-                    rPos.nNode, rPos.GetContentIndex());
+        SwPaM aPam( rPos.GetNode(), aTmp.GetContent(),
+                    rPos.GetNode(), rPos.GetContentIndex());
         if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
             m_rDoc.getIDocumentRedlineAccess().AppendRedline(
@@ -3343,8 +3337,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
                                         m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
                 if( pTextNd )
                 {
-                    const_cast<SwPosition&>(rPos).nNode = pTableNd->GetIndex()-SwNodeOffset(1);
-                    const_cast<SwPosition&>(rPos).nContent.Assign( pTextNd, 0 );
+                    const_cast<SwPosition&>(rPos).Assign( pTableNd->GetIndex() - SwNodeOffset(1) );
 
                     // only add page breaks/styles to the body area
                     if( nPrevPos > m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
