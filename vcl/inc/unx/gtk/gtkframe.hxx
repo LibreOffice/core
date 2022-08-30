@@ -443,9 +443,6 @@ public:
     guint                           m_nHudAwarenessId;
     std::vector<gulong>             m_aMouseSignalIds;
 
-    GtkGesture                     *m_pZoomGesture;
-    GtkGesture                     *m_pRotateGesture;
-
     void grabPointer(bool bGrab, bool bKeyboardAlso, bool bOwnerEvents);
 
     static GtkSalDisplay*  getDisplay();

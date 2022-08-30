@@ -713,9 +713,6 @@ GtkSalFrame::~GtkSalFrame()
     for (auto handler_id : m_aMouseSignalIds)
         g_signal_handler_disconnect(G_OBJECT(pEventWidget), handler_id);
 
-    g_clear_object(&m_pZoomGesture);
-    g_clear_object(&m_pRotateGesture);
-
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
@@ -1023,30 +1020,32 @@ void GtkSalFrame::InitCommon()
 #endif
 
 #if GTK_CHECK_VERSION(4,0,0)
-    m_pZoomGesture = gtk_gesture_zoom_new();
-    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(m_pZoomGesture));
+    GtkGesture* pZoomGesture = gtk_gesture_zoom_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pZoomGesture));
 #else
-    m_pZoomGesture = gtk_gesture_zoom_new(GTK_WIDGET(pEventWidget));
+    GtkGesture* pZoomGesture = gtk_gesture_zoom_new(GTK_WIDGET(pEventWidget));
+    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pZoomGesture);
 #endif
-    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pZoomGesture),
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(pZoomGesture),
                                                GTK_PHASE_TARGET);
     // Note that the default zoom gesture signal handler needs to run first to setup correct
     // scale delta. Otherwise the first "begin" event will always contain scale delta of infinity.
-    g_signal_connect_after(m_pZoomGesture, "begin", G_CALLBACK(signalZoomBegin), this);
-    g_signal_connect_after(m_pZoomGesture, "update", G_CALLBACK(signalZoomUpdate), this);
-    g_signal_connect_after(m_pZoomGesture, "end", G_CALLBACK(signalZoomEnd), this);
+    g_signal_connect_after(pZoomGesture, "begin", G_CALLBACK(signalZoomBegin), this);
+    g_signal_connect_after(pZoomGesture, "update", G_CALLBACK(signalZoomUpdate), this);
+    g_signal_connect_after(pZoomGesture, "end", G_CALLBACK(signalZoomEnd), this);
 
 #if GTK_CHECK_VERSION(4,0,0)
-    m_pRotateGesture = gtk_gesture_rotate_new();
-    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(m_pRotateGesture));
+    GtkGesture* pRotateGesture = gtk_gesture_rotate_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pRotateGesture));
 #else
-    m_pRotateGesture = gtk_gesture_rotate_new(GTK_WIDGET(pEventWidget));
+    GtkGesture* pRotateGesture = gtk_gesture_rotate_new(GTK_WIDGET(pEventWidget));
+    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pRotateGesture);
 #endif
-    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pRotateGesture),
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(pRotateGesture),
                                                GTK_PHASE_TARGET);
-    g_signal_connect(m_pRotateGesture, "begin", G_CALLBACK(signalRotateBegin), this);
-    g_signal_connect(m_pRotateGesture, "update", G_CALLBACK(signalRotateUpdate), this);
-    g_signal_connect(m_pRotateGesture, "end", G_CALLBACK(signalRotateEnd), this);
+    g_signal_connect(pRotateGesture, "begin", G_CALLBACK(signalRotateBegin), this);
+    g_signal_connect(pRotateGesture, "update", G_CALLBACK(signalRotateUpdate), this);
+    g_signal_connect(pRotateGesture, "end", G_CALLBACK(signalRotateEnd), this);
 
     //Drop Target Stuff
 #if GTK_CHECK_VERSION(4,0,0)
