@@ -1024,6 +1024,7 @@ void GtkSalFrame::InitCommon()
 
 #if GTK_CHECK_VERSION(4,0,0)
     m_pZoomGesture = gtk_gesture_zoom_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(m_pZoomGesture));
 #else
     m_pZoomGesture = gtk_gesture_zoom_new(GTK_WIDGET(pEventWidget));
 #endif
@@ -1037,6 +1038,7 @@ void GtkSalFrame::InitCommon()
 
 #if GTK_CHECK_VERSION(4,0,0)
     m_pRotateGesture = gtk_gesture_rotate_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(m_pRotateGesture));
 #else
     m_pRotateGesture = gtk_gesture_rotate_new(GTK_WIDGET(pEventWidget));
 #endif
