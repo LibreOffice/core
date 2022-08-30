@@ -167,7 +167,6 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nI
     SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
 
-    // todo: does GetChild throw IndexOutOfBoundsException?
     return mpText->GetChild (nIndex);
 }
 
