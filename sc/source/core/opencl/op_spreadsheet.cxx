@@ -96,76 +96,85 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
         tmpCur = vSubArguments[1]->GetFormulaToken();
         pCurDVR = static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
         size_t nCurWindowSize = std::min(pCurDVR->GetArrayLength(), pCurDVR->GetRefRowSize());
-        int unrollSize = 8;
-        ss << "    int loop;\n";
+        const int unrollSize = 8;
+
+        ss << "\n";
+        ss << "    int loop = ";
         if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
         {
-            ss << "    loop = ("<<nCurWindowSize<<" - gid0)/";
+            ss << "("<<nCurWindowSize<<" - gid0)/";
             ss << unrollSize<<";\n";
-
         }
         else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
         {
-            ss << "    loop = ("<<nCurWindowSize<<" + gid0)/";
+            ss << "("<<nCurWindowSize<<" + gid0)/";
             ss << unrollSize<<";\n";
+        }
+        else
+        {
+            ss << nCurWindowSize<<"/"<< unrollSize<<";\n";
+        }
 
-        }
-        else
-        {
-            ss << "    loop = "<<nCurWindowSize<<"/"<< unrollSize<<";\n";
-        }
-
-        ss << "    for ( int j = 0;j< loop; j++)\n";
-        ss << "    {\n";
-        ss << "        int i = ";
-        if (!pCurDVR->IsStartFixed()&& pCurDVR->IsEndFixed())
-        {
-            ss << "gid0 + j * "<< unrollSize <<";\n";
-        }
-        else
-        {
-            ss << "j * "<< unrollSize <<";\n";
-        }
-        if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-        {
-            ss << "        int doubleIndex = i+gid0;\n";
-        }
-        else
-        {
-            ss << "        int doubleIndex = i;\n";
-        }
-        ss << "        if(tmp";
+        ss << "    if(tmp";
         ss << 3+(secondParaWidth-1);
-        ss << " == 1)\n";
-        ss << "        {\n";
+        ss << " == 0) /* unsorted vlookup */\n";
+        ss << "    {\n";
 
-        for (int j = 0;j < unrollSize; j++)
+        for( int sorted = 0; sorted < 2; ++sorted ) // sorted vs unsorted vlookup cases
         {
-            CheckSubArgumentIsNan(ss,vSubArguments,1);
+            if( sorted == 1 )
+            {
+                ss << "    }\n";
+                ss << "    else\n";
+                ss << "    { /* sorted vlookup */ \n";
+            }
 
-            ss << "            if((tmp0 - tmp1)>=0 && intermediate > (tmp0 -tmp1))\n";
-            ss << "            {\n";
-            ss << "                rowNum = doubleIndex;\n";
-            ss << "                intermediate = tmp0 - tmp1;\n";
-            ss << "            }\n";
-            ss << "            i++;\n";
-            ss << "            doubleIndex++;\n";
+            ss << "        for ( int j = 0;j< loop; j++)\n";
+            ss << "        {\n";
+            ss << "            int i = ";
+            if (!pCurDVR->IsStartFixed()&& pCurDVR->IsEndFixed())
+            {
+                ss << "gid0 + j * "<< unrollSize <<";\n";
+            }
+            else
+            {
+                ss << "j * "<< unrollSize <<";\n";
+            }
+            if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+            {
+                ss << "            int doubleIndex = i+gid0;\n";
+            }
+            else
+            {
+                ss << "            int doubleIndex = i;\n";
+            }
+
+            for (int j = 0;j < unrollSize; j++)
+            {
+                CheckSubArgumentIsNan(ss,vSubArguments,1);
+
+                if( sorted == 1 )
+                {
+                    ss << "            if((tmp0 - tmp1)>=0 && intermediate > (tmp0 -tmp1))\n";
+                    ss << "            {\n";
+                    ss << "                rowNum = doubleIndex;\n";
+                    ss << "                intermediate = tmp0 - tmp1;\n";
+                    ss << "            }\n";
+                    ss << "            i++;\n";
+                    ss << "            doubleIndex++;\n";
+                }
+                else
+                {
+                    ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
+                    ss << "            {\n";
+                    ss << "                rowNum = doubleIndex;\n";
+                    ss << "            }\n";
+                    ss << "            i++;\n";
+                    ss << "            doubleIndex++;\n";
+                }
+            }
+            ss << "        }\n\n";
         }
-
-        ss << "        }else\n";
-        ss << "        {\n";
-        for (int j = 0; j < unrollSize; j++)
-        {
-            CheckSubArgumentIsNan(ss,vSubArguments,1);
-
-            ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
-            ss << "            {\n";
-            ss << "                rowNum = doubleIndex;\n";
-            ss << "            }\n";
-            ss << "            i++;\n";
-            ss << "            doubleIndex++;\n";
-        }
-        ss << "        }\n\n";
 
         ss << "    }\n";
         ss << "    if(rowNum!=-1)\n";
@@ -183,51 +192,67 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
         }
         ss << "        return tmp;\n";
         ss << "    }\n";
-        ss << "    for (int i = ";
-        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
-        {
-            ss << "gid0 + loop *"<<unrollSize<<"; i < ";
-            ss << nCurWindowSize <<"; i++)\n";
-        }
-        else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-        {
-            ss << "0 + loop *"<<unrollSize<<"; i < gid0+";
-            ss << nCurWindowSize <<"; i++)\n";
-        }
-        else
-        {
-            ss << "0 + loop *"<<unrollSize<<"; i < ";
-            ss << nCurWindowSize <<"; i++)\n";
-        }
-        ss << "    {\n";
-        if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-        {
-           ss << "        int doubleIndex = i+gid0;\n";
-        }
-        else
-        {
-           ss << "        int doubleIndex = i;\n";
-        }
-        CheckSubArgumentIsNan(ss,vSubArguments,1);
-        ss << "        if(tmp";
-        ss << 3+(secondParaWidth-1);
-        ss << " == 1)\n";
-        ss << "        {\n";
-        ss << "            if((tmp0 - tmp1)>=0 && intermediate > (tmp0 -tmp1))\n";
-        ss << "            {\n";
-        ss << "                rowNum = doubleIndex;\n";
-        ss << "                intermediate = tmp0 - tmp1;\n";
-        ss << "            }\n";
-        ss << "        }\n";
-        ss << "        else\n";
-        ss << "        {\n";
-        ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
-        ss << "            {\n";
-        ss << "                rowNum = doubleIndex;\n";
-        ss << "            }\n";
-        ss << "        }\n";
 
-        ss << "    }\n\n";
+        ss << "    if(tmp";
+        ss << 3+(secondParaWidth-1);
+        ss << " == 0) /* unsorted vlookup */\n";
+        ss << "    {\n";
+
+        for( int sorted = 0; sorted < 2; ++sorted ) // sorted vs unsorted vlookup cases
+        {
+            if( sorted == 1 )
+            {
+                ss << "    }\n";
+                ss << "    else\n";
+                ss << "    { /* sorted vlookup */ \n";
+            }
+
+            ss << "        for (int i = ";
+            if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
+            {
+                ss << "gid0 + loop *"<<unrollSize<<"; i < ";
+                ss << nCurWindowSize <<"; i++)\n";
+            }
+            else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+            {
+                ss << "0 + loop *"<<unrollSize<<"; i < gid0+";
+                ss << nCurWindowSize <<"; i++)\n";
+            }
+            else
+            {
+                ss << "0 + loop *"<<unrollSize<<"; i < ";
+                ss << nCurWindowSize <<"; i++)\n";
+            }
+            ss << "        {\n";
+            if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+            {
+               ss << "            int doubleIndex = i+gid0;\n";
+            }
+            else
+            {
+               ss << "            int doubleIndex = i;\n";
+            }
+            CheckSubArgumentIsNan(ss,vSubArguments,1);
+
+            if( sorted == 1 )
+            {
+                ss << "            if((tmp0 - tmp1)>=0 && intermediate > (tmp0 -tmp1))\n";
+                ss << "            {\n";
+                ss << "                rowNum = doubleIndex;\n";
+                ss << "                intermediate = tmp0 - tmp1;\n";
+                ss << "            }\n";
+            }
+            else
+            {
+                ss << "            if(tmp0 == tmp1 && rowNum == -1)\n";
+                ss << "            {\n";
+                ss << "                rowNum = doubleIndex;\n";
+                ss << "            }\n";
+            }
+            ss << "        }\n\n";
+        }
+
+        ss << "    }\n";
         ss << "    if(rowNum!=-1)\n";
         ss << "    {\n";
 
