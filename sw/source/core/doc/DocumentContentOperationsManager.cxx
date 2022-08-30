@@ -139,18 +139,18 @@ namespace
 
     SwNodeIndex InitDelCount(SwPaM const& rSourcePaM, SwNodeOffset & rDelCount)
     {
-        SwNodeIndex const& rStart(rSourcePaM.Start()->nNode);
+        SwPosition const& rStart(*rSourcePaM.Start());
         // Special handling for SwDoc::AppendDoc
         if (rSourcePaM.GetDoc().GetNodes().GetEndOfExtras().GetIndex() + 1
-                == rStart.GetIndex())
+                == rStart.GetNodeIndex())
         {
             rDelCount = SwNodeOffset(1);
-            return SwNodeIndex(rStart, +1);
+            return SwNodeIndex(rStart.GetNode(), +1);
         }
         else
         {
             rDelCount = SwNodeOffset(0);
-            return rStart;
+            return SwNodeIndex(rStart.GetNode());
         }
     }
 
