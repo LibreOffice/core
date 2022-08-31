@@ -1351,7 +1351,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                          aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
             if( bBullet )
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray, aKashidaArray,
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray, {},
                                              rInf.GetIdx() ? 1 : 0, 1 );
         }
         else
@@ -1513,7 +1513,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         }
                     }
                     rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, aKernArray,
-                                                 aKashidaArray, nTmpIdx , nLen );
+                                                 {}, nTmpIdx , nLen );
                     pTmpFont->SetColor( aPreviousColor );
 
                     pTmpFont->SetUnderline(aPreviousUnderline);
