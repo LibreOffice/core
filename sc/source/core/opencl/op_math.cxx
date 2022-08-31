@@ -1558,6 +1558,7 @@ void OpArcTanH::GenSlidingWindowFunction(outputstream &ss,
 void OpBitAnd::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1587,6 +1588,8 @@ void OpBitAnd::GenSlidingWindowFunction(outputstream &ss,
     ss << "        num2 = 0.0;\n";
     ss << "    else \n    ";
     ss << "    num2 = " << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    ss << "    if( num1 < 0 || num2 < 0 || num1 >= 281474976710656.0 || num2 >= 281474976710656.0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return (long)num1 & (long)num2;\n";
     ss << "}";
 }
@@ -2204,6 +2207,7 @@ void OpFloor::GenSlidingWindowFunction(
 void OpBitOr::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2235,12 +2239,15 @@ void OpBitOr::GenSlidingWindowFunction(outputstream &ss,
     ss << "    else\n    ";
     ss << "    num2 = floor(" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ");\n";
+    ss << "    if( num1 < 0 || num2 < 0 || num1 >= 281474976710656.0 || num2 >= 281474976710656.0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return (long)num1 | (long)num2;\n";
     ss << "}";
 }
 void OpBitXor::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2273,12 +2280,15 @@ void OpBitXor::GenSlidingWindowFunction(outputstream &ss,
     ss << "    else\n    ";
     ss << "    num2 = floor(" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ");\n";
+    ss << "    if( num1 < 0 || num2 < 0 || num1 >= 281474976710656.0 || num2 >= 281474976710656.0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return (long)num1 ^ (long)num2;\n";
     ss << "}";
 }
 void OpBitLshift::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2311,6 +2321,8 @@ void OpBitLshift::GenSlidingWindowFunction(outputstream &ss,
     ss << "    else\n    ";
     ss << "    shift_amount = floor(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+    ss << "    if( num < 0 || num >= 281474976710656.0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return floor(shift_amount >= 0 ? ";
     ss << "num * pow(2.0, shift_amount) : ";
     ss << "num / pow(2.0, fabs(shift_amount)));\n";
@@ -2319,6 +2331,7 @@ void OpBitLshift::GenSlidingWindowFunction(outputstream &ss,
 void OpBitRshift::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2353,6 +2366,8 @@ void OpBitRshift::GenSlidingWindowFunction(outputstream &ss,
     ss << "    else\n    ";
     ss << "    shift_amount = floor(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+    ss << "    if( num < 0 || num >= 281474976710656.0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return floor(";
     ss << "shift_amount >= 0 ? num / pow(2.0, shift_amount) : ";
     ss << "num * pow(2.0, fabs(shift_amount)));\n";
