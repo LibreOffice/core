@@ -113,7 +113,7 @@ void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::it
         maCells.insert( maCells.begin() + nIndex, *pIter, (*pIter) + nCount );
     else
     {
-        maCells.reserve( maCells.size() + nCount );
+        maCells.reserve( std::max<size_t>(maCells.size() + nCount, maCells.size() * 2) );
         for ( sal_Int32 i = 0; i < nCount; i++ )
             maCells.insert( maCells.begin() + nIndex + i, mxTableModel->createCell() );
     }
