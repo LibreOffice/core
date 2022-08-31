@@ -515,6 +515,13 @@ public:
      */
     static LanguageType convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale );
 
+    /** Enums to be used with isValidBcp47(). */
+    enum PrivateUse
+    {
+        ALLOW = 0,
+        DISALLOW
+    };
+
     /** If rString represents a valid BCP 47 language tag.
 
         Never resolves an empty tag to the system locale, in fact an empty
@@ -527,13 +534,13 @@ public:
                 original string even if that was a valid tag. If rString is not
                 a valid tag, nothing is assigned.
 
-        @param  bDisallowPrivate
-                If TRUE, valid tags according to BCP 47 but reserved for
-                private use, like 'x-...', are not allowed and FALSE is
-                returned in this case.
+        @param  ePrivateUse
+                If PrivateUse::DISALLOW, valid tags according to BCP 47 but
+                reserved for private use, like 'x-...', are not allowed and
+                FALSE is returned in this case.
      */
     static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized,
-                                      bool bDisallowPrivate = false );
+                                      PrivateUse ePrivateUse = PrivateUse::ALLOW );
 
     /** If nLang is a generated on-the-fly LangID */
     static bool         isOnTheFlyID( LanguageType nLang );

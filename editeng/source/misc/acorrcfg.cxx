@@ -83,7 +83,8 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
                         // private-use tag (which should not fallback, but
                         // avoid).
                         if (aLanguageTag.getCountry().isEmpty()
-                                && LanguageTag::isValidBcp47( aCanonicalized, nullptr, true))
+                                && LanguageTag::isValidBcp47( aCanonicalized, nullptr,
+                                    LanguageTag::PrivateUse::DISALLOW))
                         {
                             LanguageTag aFallback( aLanguageTag);
                             aFallback.makeFallback();

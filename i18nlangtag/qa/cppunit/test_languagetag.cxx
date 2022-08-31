@@ -668,11 +668,11 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized) );
         CPPUNIT_ASSERT_EQUAL( OUString("qaa"), aCanonicalized );
         CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "unreg-and-bad", &aCanonicalized) );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized, true) );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized, LanguageTag::PrivateUse::DISALLOW) );
         CPPUNIT_ASSERT_EQUAL( OUString("en-US"), aCanonicalized );
-        CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized, true) );
+        CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized, LanguageTag::PrivateUse::DISALLOW) );
         CPPUNIT_ASSERT_EQUAL( OUString("x-foobar"), aCanonicalized );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized, true) );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized, LanguageTag::PrivateUse::DISALLOW) );
         CPPUNIT_ASSERT_EQUAL( OUString("qaa"), aCanonicalized );
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) );
         CPPUNIT_ASSERT_EQUAL( OUString("de-DE"), aCanonicalized );

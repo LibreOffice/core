@@ -2838,7 +2838,8 @@ LanguageType LanguageTag::convertToLanguageTypeWithFallback( const css::lang::Lo
 
 
 // static
-bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicalized, bool bDisallowPrivate )
+bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicalized,
+        LanguageTag::PrivateUse ePrivateUse )
 {
     bool bValid = false;
 
@@ -2865,7 +2866,7 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
         if (pTag)
         {
             bValid = true;
-            if (bDisallowPrivate)
+            if (ePrivateUse != PrivateUse::ALLOW)
             {
                 const lt_string_t* pPrivate = lt_tag_get_privateuse( aVar.mpLangtag);
                 if (pPrivate && lt_string_length( pPrivate) > 0)
