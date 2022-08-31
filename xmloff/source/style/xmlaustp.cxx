@@ -353,7 +353,7 @@ bool SvXMLAutoStylePoolP::Add(OUString& rName, XmlStyleFamily nFamily, const OUS
 }
 
 bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, XmlStyleFamily nFamily, const OUString& rParent,
-                                    std::vector< XMLPropertyState >&& rProperties )
+                                    std::vector< XMLPropertyState > rProperties )
 
 {
     return pImpl->AddNamed(rName, nFamily, rParent, std::move(rProperties));

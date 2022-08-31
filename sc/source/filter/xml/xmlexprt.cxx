@@ -2090,7 +2090,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                 if (itr != pFormatData->maIDToName.end())
                 {
                     sName = itr->second;
-                    bAdded = GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TABLE_CELL, sStyleName, std::move(aPropStates));
+                    bAdded = GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TABLE_CELL, sStyleName, aPropStates);
                     if (bAdded)
                         GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_CELL, sName);
                 }

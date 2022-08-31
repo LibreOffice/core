@@ -117,7 +117,7 @@ public:
 
     /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
     bool        AddNamed( const OUString& rName, XmlStyleFamily nFamily, const OUString& rParent,
-                              std::vector< XMLPropertyState >&& rProperties );
+                              std::vector< XMLPropertyState > aProperties );
 
     /// Find an item set's name.
     OUString Find( XmlStyleFamily nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
