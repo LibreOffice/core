@@ -308,7 +308,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
         m_pFontSet = FcFontSetCreate();
         bool bRestrictFontSetToApplicationFonts = false;
 #if HAVE_MORE_FONTS
-        bRestrictFontSetToApplicationFonts = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+        bRestrictFontSetToApplicationFonts = getenv("SAL_NON_APPLICATION_FONT_USE") != nullptr;
 #endif
         if (!bRestrictFontSetToApplicationFonts)
             addFontSet( FcSetSystem );
@@ -1172,7 +1172,10 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
                               << rPattern.maTargetName << "' with '" << rPattern.maSearchName
                               << "'");
 
-    static bool bAbortOnFontSubstitute = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+    static const bool bAbortOnFontSubstitute = [] {
+        const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
+        return pEnv && strcmp(pEnv, "abort") == 0;
+    }();
     if (bAbortOnFontSubstitute && rPattern.maTargetName != rPattern.maSearchName)
     {
         if (bMissingJustBullet)

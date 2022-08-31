@@ -85,7 +85,7 @@ $(call gb_CppunitTest_get_target,sw_layoutwriter$(1)): \
 # assert if font/glyph fallback occurs
 $(call gb_CppunitTest_get_target,sw_layoutwriter$(1)): \
     EXTRA_ENV_VARS := \
-        SAL_ABORT_ON_NON_APPLICATION_FONT_USE=1
+        SAL_NON_APPLICATION_FONT_USE=abort
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_layoutwriter$(1)))
 

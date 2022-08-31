@@ -363,14 +363,16 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             // part being underlined. Doing this for any two segments allows this optimization
             // even when the prefix of the string would use a different font.
             // TODO: Can those font differences be ignored?
-            // Writer layouts tests enable SAL_ABORT_ON_NON_APPLICATION_FONT_USE in order
+            // Writer layouts tests enable SAL_NON_APPLICATION_FONT_USE=abort in order
             // to make PrintFontManager::Substitute() abort if font fallback happens. When
             // laying out the entire string the chance this happens increases (e.g. testAbi11870
             // normally calls this function only for a part of a string, but this optimization
             // lays out the entire string and causes a fallback). Since this optimization
             // does not change result of this function, simply disable it for those tests.
-            static bool bAbortOnFontSubstitute
-                = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+            static const bool bAbortOnFontSubstitute = [] {
+                const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
+                return pEnv && strcmp(pEnv, "abort") == 0;
+            }();
             if (mLastSubstringKey.has_value() && !bAbortOnFontSubstitute)
             {
                 sal_Int32 pos = nIndex;

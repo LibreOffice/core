@@ -61,6 +61,11 @@ $(eval $(call gb_CppunitTest_use_components,vcl_text,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_text))
 
+# only allow bundled fonts, but don't abort if font/glyph fallback occurs
+$(call gb_CppunitTest_get_target,vcl_text): \
+    EXTRA_ENV_VARS := \
+        SAL_NON_APPLICATION_FONT_USE=deny
+
 $(eval $(call gb_CppunitTest_use_more_fonts,vcl_text))
 
 # vim: set noet sw=4 ts=4:

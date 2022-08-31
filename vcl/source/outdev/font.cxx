@@ -588,7 +588,10 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                                         GetDefaultFontFlags nFlags, const OutputDevice* pOutDev )
 {
     static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    static bool bAbortOnFontSubstitute = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+    static bool bAbortOnFontSubstitute = [] {
+        const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
+        return pEnv && strcmp(pEnv, "abort") == 0;
+    }();
 
     if (!pOutDev && !bFuzzing) // default is NULL
         pOutDev = Application::GetDefaultDevice();
@@ -609,9 +612,10 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
         else
             aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // use the UI font as a fallback
 
-        // during SAL_ABORT_ON_NON_APPLICATION_FONT_USE cppunit tests we don't have any bundled fonts
+        // during cppunit tests with SAL_NON_APPLICATION_FONT_USE set we don't have any bundled fonts
         // that support the default CTL and CJK languages of Hindi and Chinese, so just pick something
-        // (unsuitable) that does exist, if they get used, then glyph fallback will trigger std::abort
+        // (unsuitable) that does exist, if they get used with SAL_NON_APPLICATION_FONT_USE=abort then
+        // glyph fallback will trigger std::abort
         if (bAbortOnFontSubstitute)
         {
             if (eLang == LANGUAGE_HINDI || eLang == LANGUAGE_CHINESE_SIMPLIFIED)
