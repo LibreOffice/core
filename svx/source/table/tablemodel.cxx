@@ -44,14 +44,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
-
+using namespace css;
 
 namespace sdr::table {
 
@@ -199,7 +192,7 @@ sal_Int32 TableModel::getBottom()
 }
 
 
-Reference< XTable > TableModel::getTable()
+uno::Reference<css::table::XTable> TableModel::getTable()
 {
     return this;
 }
@@ -278,20 +271,20 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 // XTable
 
 
-Reference< XCellCursor > SAL_CALL TableModel::createCursor()
+uno::Reference<css::table::XCellCursor> SAL_CALL TableModel::createCursor()
 {
     ::SolarMutexGuard aGuard;
-    return createCursorByRange( Reference< XCellRange >( this ) );
+    return createCursorByRange( uno::Reference< XCellRange >( this ) );
 }
 
 
-Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& rRange )
+uno::Reference<css::table::XCellCursor> SAL_CALL TableModel::createCursorByRange( const uno::Reference< XCellRange >& rRange )
 {
     ::SolarMutexGuard aGuard;
 
     ICellRange* pRange = dynamic_cast< ICellRange* >( rRange.get() );
     if( (pRange == nullptr) || (pRange->getTable().get() != this) )
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
 
     TableModelRef xModel( this );
     return new CellCursor( xModel, pRange->getLeft(), pRange->getTop(), pRange->getRight(), pRange->getBottom() );
@@ -352,22 +345,22 @@ void SAL_CALL TableModel::setModified( sal_Bool bModified )
 // XModifyBroadcaster
 
 
-void SAL_CALL TableModel::addModifyListener( const Reference< XModifyListener >& xListener )
+void SAL_CALL TableModel::addModifyListener( const uno::Reference<util::XModifyListener>& xListener )
 {
-    rBHelper.addListener( cppu::UnoType<XModifyListener>::get() , xListener );
+    rBHelper.addListener( cppu::UnoType<util::XModifyListener>::get() , xListener );
 }
 
 
-void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener >& xListener )
+void SAL_CALL TableModel::removeModifyListener( const uno::Reference<util::XModifyListener>& xListener )
 {
-    rBHelper.removeListener( cppu::UnoType<XModifyListener>::get() , xListener );
+    rBHelper.removeListener( cppu::UnoType<util::XModifyListener>::get() , xListener );
 }
 
 
 // XColumnRowRange
 
 
-Reference< XTableColumns > SAL_CALL TableModel::getColumns()
+uno::Reference<css::table::XTableColumns> SAL_CALL TableModel::getColumns()
 {
     ::SolarMutexGuard aGuard;
 
@@ -377,7 +370,7 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns()
 }
 
 
-Reference< XTableRows > SAL_CALL TableModel::getRows()
+uno::Reference<css::table::XTableRows> SAL_CALL TableModel::getRows()
 {
     ::SolarMutexGuard aGuard;
 
@@ -390,7 +383,7 @@ Reference< XTableRows > SAL_CALL TableModel::getRows()
 // XCellRange
 
 
-Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
+uno::Reference<css::table::XCell> SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
 {
     ::SolarMutexGuard aGuard;
 
@@ -398,11 +391,11 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
     if( xCell.is() )
         return xCell;
 
-    throw IndexOutOfBoundsException();
+    throw lang::IndexOutOfBoundsException();
 }
 
 
-Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+uno::Reference<css::table::XCellRange> SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
     ::SolarMutexGuard aGuard;
 
@@ -412,53 +405,53 @@ Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 n
         return new CellRange( xModel, nLeft, nTop, nRight, nBottom );
     }
 
-    throw IndexOutOfBoundsException();
+    throw lang::IndexOutOfBoundsException();
 }
 
 
-Reference< XCellRange > SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ )
+uno::Reference<css::table::XCellRange> SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ )
 {
-    return Reference< XCellRange >();
+    return uno::Reference< XCellRange >();
 }
 
 
 // XPropertySet
 
 
-Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  )
+uno::Reference<beans::XPropertySetInfo> SAL_CALL TableModel::getPropertySetInfo(  )
 {
-    Reference< XPropertySetInfo > xInfo;
+    uno::Reference<beans::XPropertySetInfo> xInfo;
     return xInfo;
 }
 
 
-void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const Any& /*aValue*/ )
+void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ )
 {
 }
 
 
-Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ )
+uno::Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ )
 {
-    return Any();
+    return uno::Any();
 }
 
 
-void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
-{
-}
-
-
-void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/ )
 {
 }
 
 
-void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/ )
 {
 }
 
 
-void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/ )
+{
+}
+
+
+void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/ )
 {
 }
 
@@ -466,14 +459,14 @@ void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPrope
 // XFastPropertySet
 
 
-void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const Any& /*aValue*/ )
+void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const uno::Any& /*aValue*/ )
 {
 }
 
 
-Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ )
+uno::Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ )
 {
-    Any aAny;
+    uno::Any aAny;
     return aAny;
 }
 
@@ -555,12 +548,12 @@ void TableModel::notifyModification()
     {
         mbNotifyPending = false;
 
-        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
+        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( cppu::UnoType<util::XModifyListener>::get() );
         if( pModifyListeners )
         {
-            EventObject aSource;
+            lang::EventObject aSource;
             aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
-            pModifyListeners->notifyEach( &XModifyListener::modified, aSource);
+            pModifyListeners->notifyEach(&util::XModifyListener::modified, aSource);
         }
     }
     else
@@ -662,7 +655,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
         rModel.SetChanged();
     }
-    catch( Exception& )
+    catch( uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -773,7 +766,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
         rModel.SetChanged();
     }
-    catch( Exception& )
+    catch( uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -831,7 +824,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
             }
         }
     }
-    catch( Exception& )
+    catch( uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -933,7 +926,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
         rModel.SetChanged();
     }
-    catch( Exception& )
+    catch( uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("svx", "");
     }
@@ -948,7 +941,7 @@ TableRowRef const & TableModel::getRow( sal_Int32 nRow ) const
     if( (nRow >= 0) && (nRow < getRowCountImpl()) )
         return maRows[nRow];
 
-    throw IndexOutOfBoundsException();
+    throw lang::IndexOutOfBoundsException();
 }
 
 
@@ -957,7 +950,7 @@ TableColumnRef const & TableModel::getColumn( sal_Int32 nColumn ) const
     if( (nColumn >= 0) && (nColumn < getColumnCountImpl()) )
         return maColumns[nColumn];
 
-    throw IndexOutOfBoundsException();
+    throw lang::IndexOutOfBoundsException();
 }
 
 
@@ -977,7 +970,7 @@ void TableModel::optimize()
             bool bEmpty = true;
             for( sal_Int32 nRow = 0; (nRow < nRows) && bEmpty; nRow++ )
             {
-                Reference< XMergeableCell > xCell( getCellByPosition( nCol, nRow ), UNO_QUERY );
+                uno::Reference<css::table::XMergeableCell> xCell( getCellByPosition( nCol, nRow ), uno::UNO_QUERY );
                 if( xCell.is() && !xCell->isMerged() )
                     bEmpty = false;
             }
@@ -988,14 +981,14 @@ void TableModel::optimize()
                 {
                     static const OUStringLiteral sWidth(u"Width");
                     sal_Int32 nWidth1 = 0, nWidth2 = 0;
-                    Reference< XPropertySet > xSet1( static_cast< XCellRange* >( maColumns[nCol].get() ), UNO_QUERY_THROW );
-                    Reference< XPropertySet > xSet2( static_cast< XCellRange* >( maColumns[nCol-1].get() ), UNO_QUERY_THROW );
+                    uno::Reference<beans::XPropertySet> xSet1( static_cast< XCellRange* >( maColumns[nCol].get() ), uno::UNO_QUERY_THROW );
+                    uno::Reference<beans::XPropertySet> xSet2( static_cast< XCellRange* >( maColumns[nCol-1].get() ), uno::UNO_QUERY_THROW );
                     xSet1->getPropertyValue( sWidth ) >>= nWidth1;
                     xSet2->getPropertyValue( sWidth ) >>= nWidth2;
                     nWidth1 = o3tl::saturating_add(nWidth1, nWidth2);
-                    xSet2->setPropertyValue( sWidth, Any( nWidth1 ) );
+                    xSet2->setPropertyValue( sWidth, uno::Any( nWidth1 ) );
                 }
-                catch( Exception& )
+                catch( uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("svx", "");
                 }
@@ -1014,7 +1007,7 @@ void TableModel::optimize()
             bool bEmpty = true;
             for( nCol = 0; (nCol < nCols) && bEmpty; nCol++ )
             {
-                Reference< XMergeableCell > xCell( getCellByPosition( nCol, nRow ), UNO_QUERY );
+                uno::Reference<css::table::XMergeableCell> xCell( getCellByPosition( nCol, nRow ), uno::UNO_QUERY );
                 if( xCell.is() && !xCell->isMerged() )
                     bEmpty = false;
             }
@@ -1025,14 +1018,14 @@ void TableModel::optimize()
                 {
                     static const OUStringLiteral sHeight(u"Height");
                     sal_Int32 nHeight1 = 0, nHeight2 = 0;
-                    Reference< XPropertySet > xSet1( static_cast< XCellRange* >( maRows[nRow].get() ), UNO_QUERY_THROW );
-                    Reference< XPropertySet > xSet2( static_cast< XCellRange* >( maRows[nRow-1].get() ), UNO_QUERY_THROW );
+                    uno::Reference<beans::XPropertySet> xSet1( static_cast< XCellRange* >( maRows[nRow].get() ), uno::UNO_QUERY_THROW );
+                    uno::Reference<beans::XPropertySet> xSet2( static_cast< XCellRange* >( maRows[nRow-1].get() ), uno::UNO_QUERY_THROW );
                     xSet1->getPropertyValue( sHeight ) >>= nHeight1;
                     xSet2->getPropertyValue( sHeight ) >>= nHeight2;
                     nHeight1 = o3tl::saturating_add(nHeight1, nHeight2);
-                    xSet2->setPropertyValue( sHeight, Any( nHeight1 ) );
+                    xSet2->setPropertyValue( sHeight, uno::Any( nHeight1 ) );
                 }
-                catch( Exception& )
+                catch( uno::Exception& )
                 {
                     TOOLS_WARN_EXCEPTION("svx", "");
                 }
