@@ -160,8 +160,8 @@ class SwControlCharPortion : public SwLinePortion
 
 private:
     mutable sal_uInt16 mnViewWidth;            // used to cache a calculated value
-    mutable sal_uInt16 mnHalfCharWidth;        // used to cache a calculated value
 protected:
+    mutable sal_uInt16 mnHalfCharWidth;        // used to cache a calculated value
     sal_Unicode mcChar;
 
 public:
@@ -183,9 +183,12 @@ public:
 /// SwControlCharPortion these do not have a character in the text.
 class SwBookmarkPortion : public SwControlCharPortion
 {
+    // custom colors defined by metadata
+    std::optional<std::vector<Color>> m_oColors;
+
 public:
-    explicit SwBookmarkPortion(sal_Unicode const cChar)
-        : SwControlCharPortion(cChar)
+    explicit SwBookmarkPortion(sal_Unicode const cChar, std::optional<std::vector<Color>>rColors)
+        : SwControlCharPortion(cChar), m_oColors(rColors)
     {
         SetWhichPor(PortionType::Bookmark);
         SetLen(TextFrameIndex(0));
@@ -193,6 +196,7 @@ public:
 
     virtual bool DoPaint(SwTextPaintInfo const& rInf,
         OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const override;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual SwLinePortion * Compress() override { return this; }
 };
 

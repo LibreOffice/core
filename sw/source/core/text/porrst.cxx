@@ -650,7 +650,8 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
 bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
         OUString & rOutString, SwFont & rFont, int & rDeltaY) const
 {
-    if (!rTextPaintInfo.GetOpt().IsShowBookmarks())
+    // custom color is visible without field shading, too
+    if (!rTextPaintInfo.GetOpt().IsShowBookmarks(m_oColors.has_value()))
     {
         return false;
     }
@@ -735,6 +736,73 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
     rInf.DrawText( aOutString, *this );
+
+    const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
+}
+
+void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
+{
+    if ( !Width() )  // is only set during prepaint mode
+        return;
+
+    rInf.DrawViewOpt(*this, GetWhichPor());
+
+    int deltaY(0);
+    SwFont aTmpFont( *rInf.GetFont() );
+    OUString aOutString;
+
+    if (!(rInf.OnWin()
+        && !rInf.GetOpt().IsPagePreview()
+        && !rInf.GetOpt().IsReadonly()
+        && DoPaint(rInf, aOutString, aTmpFont, deltaY)))
+        return;
+
+    SwFontSave aFontSave( rInf, &aTmpFont );
+
+    if ( !mnHalfCharWidth )
+        mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
+
+    Point aOldPos = rInf.GetPos();
+    Point aNewPos( aOldPos );
+    auto const deltaX((Width() / 2) - mnHalfCharWidth);
+    switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()).get())
+    {
+        case 0:
+            aNewPos.AdjustX(deltaX);
+            aNewPos.AdjustY(deltaY);
+            break;
+        case 900:
+            aNewPos.AdjustY(-deltaX);
+            aNewPos.AdjustX(deltaY);
+            break;
+        case 2700:
+            aNewPos.AdjustY(deltaX);
+            aNewPos.AdjustX(-deltaY);
+            break;
+        default:
+            assert(false);
+            break;
+    }
+    const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+
+    if ( m_oColors.has_value() )
+    {
+        // set bold for custom colored bookmark symbol
+        // and draw multiple symbols showing all custom colors
+        aTmpFont.SetWeight( WEIGHT_BOLD, aTmpFont.GetActual() );
+        for ( const Color& rColor : *m_oColors )
+        {
+            aTmpFont.SetColor( rColor );
+            rInf.DrawText( aOutString, *this );
+
+            // place the next symbol after the previous one
+            // TODO: fix orientation and start/end
+            aNewPos.AdjustX(mnHalfCharWidth * 2.5);
+            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+        }
+    }
+    else
+        rInf.DrawText( aOutString, *this );
 
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
 }

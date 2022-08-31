@@ -1321,7 +1321,11 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
                 assert(bookmark & SwScriptInfo::MarkKind::Point);
                 mark = '|';
             }
-            pPor = new SwBookmarkPortion(mark);
+
+            // collect custom bookmark colors
+            auto rColors = m_pScriptInfo->GetBookmarkColors(rInf.GetIdx());
+
+            pPor = new SwBookmarkPortion(mark, rColors);
         }
     }
 

@@ -58,6 +58,19 @@
 #include <IDocumentContentOperations.hxx>
 #include <IMark.hxx>
 #include <sortedobjs.hxx>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <officecfg/Office/Common.hxx>
+#include <comphelper/processfactory.hxx>
+#include <docsh.hxx>
+#include <unobookmark.hxx>
+#include <unocrsrhelper.hxx>
+#include <com/sun/star/rdf/Statement.hpp>
+#include <com/sun/star/rdf/URI.hpp>
+#include <com/sun/star/rdf/URIs.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/rdf/XLiteral.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
@@ -887,19 +900,64 @@ SwFontScript SwScriptInfo::WhichFont(sal_Int32 nIdx, OUString const& rText)
     return lcl_ScriptToFont(nScript);
 }
 
+static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::IBookmark* pBookmark)
+{
+    // search custom color in metadata, otherwise use COL_TRANSPARENT;
+    Color c = COL_TRANSPARENT;
+
+    try
+    {
+        SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
+        const uno::Reference< text::XTextContent > xRef = SwXBookmark::CreateXBookmark(rDoc,
+                const_cast<sw::mark::IMark*>(static_cast<const sw::mark::IMark*>(pBookmark)));
+        const css::uno::Reference<css::rdf::XResource> xSubject(xRef, uno::UNO_QUERY);
+        uno::Reference<frame::XModel> xModel = rDoc.GetDocShell()->GetBaseModel();
+
+        static uno::Reference< uno::XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext());
+
+        static uno::Reference< rdf::XURI > xODF_SHADING(
+            rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
+
+        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
+            rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+        const uno::Reference<rdf::XRepository>& xRepository =
+            xDocumentMetadataAccess->getRDFRepository();
+        const uno::Reference<container::XEnumeration> xEnum(
+            xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
+
+        rdf::Statement stmt;
+        if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )
+        {
+            const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
+            if ( xObject.is() )
+                c = Color::STRtoRGB(xObject->getValue());
+        }
+    }
+    catch (const lang::IllegalArgumentException&)
+    {
+    }
+
+    return c;
+}
+
 static void InitBookmarks(
     std::optional<std::vector<sw::Extent>::const_iterator> oPrevIter,
     std::vector<sw::Extent>::const_iterator iter,
     std::vector<sw::Extent>::const_iterator const end,
     TextFrameIndex nOffset,
     std::vector<std::pair<sw::mark::IBookmark const*, SwScriptInfo::MarkKind>> & rBookmarks,
-    std::vector<std::pair<TextFrameIndex, SwScriptInfo::MarkKind>> & o_rBookmarks)
+    std::vector<std::tuple<TextFrameIndex, SwScriptInfo::MarkKind, Color>> & o_rBookmarks)
 {
     SwTextNode const*const pNode(iter->pNode);
     for (auto const& it : rBookmarks)
     {
         assert(iter->pNode == pNode || pNode->GetIndex() < iter->pNode->GetIndex());
         assert(!oPrevIter || (*oPrevIter)->pNode->GetIndex() <= pNode->GetIndex());
+
+        // search for custom bookmark boundary mark color
+        Color c = getBookmarkColor(*pNode, it.first);
+
         switch (it.second)
         {
             case SwScriptInfo::MarkKind::Start:
@@ -928,7 +986,7 @@ static void InitBookmarks(
                         }
                         else
                         {
-                            o_rBookmarks.emplace_back(nOffset, it.second);
+                            o_rBookmarks.emplace_back(nOffset, it.second, c);
                             break;
                         }
                     }
@@ -947,7 +1005,7 @@ static void InitBookmarks(
                         {
                             o_rBookmarks.emplace_back(
                                 nOffset + TextFrameIndex(rStart.GetContentIndex() - iter->nStart),
-                                it.second);
+                                it.second, c);
                             break;
                         }
                     }
@@ -966,7 +1024,7 @@ static void InitBookmarks(
                     }
                     else
                     {
-                        o_rBookmarks.emplace_back(nOffset, it.second);
+                        o_rBookmarks.emplace_back(nOffset, it.second, c);
                     }
                 }
                 break;
@@ -995,7 +1053,7 @@ static void InitBookmarks(
                         }
                         else
                         {
-                            o_rBookmarks.emplace_back(nOffset, it.second);
+                            o_rBookmarks.emplace_back(nOffset, it.second, c);
                             break;
                         }
                     }
@@ -1003,7 +1061,7 @@ static void InitBookmarks(
                     {
                         o_rBookmarks.emplace_back(
                             nOffset + TextFrameIndex(rEnd.GetContentIndex() - iter->nStart),
-                            it.second);
+                            it.second, c);
                         break;
                     }
                     else
@@ -1037,7 +1095,7 @@ static void InitBookmarks(
                         {
                             o_rBookmarks.emplace_back(
                                 nOffset + TextFrameIndex(rPos.GetContentIndex() - iter->nStart),
-                                it.second);
+                                it.second, c);
                         }
                         break;
                     }
@@ -1174,16 +1232,19 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
         for (auto const& it : bookmarks)
         {
+            // search for custom bookmark boundary mark color
+            Color c = getBookmarkColor(rNode, it.first);
+
             switch (it.second)
             {
                 case MarkKind::Start:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().GetContentIndex()), it.second);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().GetContentIndex()), it.second, c);
                     break;
                 case MarkKind::End:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().GetContentIndex()), it.second);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().GetContentIndex()), it.second, c);
                     break;
                 case MarkKind::Point:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().GetContentIndex()), it.second);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().GetContentIndex()), it.second, c);
                     break;
             }
         }
@@ -1872,9 +1933,9 @@ TextFrameIndex SwScriptInfo::NextBookmark(TextFrameIndex const nPos) const
 {
     for (auto const& it : m_Bookmarks)
     {
-        if (nPos < it.first)
+        if (nPos < std::get<0>(it))
         {
-            return it.first;
+            return std::get<0>(it);
         }
     }
     return TextFrameIndex(COMPLETE_STRING);
@@ -1885,16 +1946,34 @@ auto SwScriptInfo::GetBookmark(TextFrameIndex const nPos) const -> MarkKind
     MarkKind ret{0};
     for (auto const& it : m_Bookmarks)
     {
-        if (nPos == it.first)
+        if (nPos == std::get<0>(it))
         {
-            ret |= it.second;
+            ret |= std::get<1>(it);
         }
-        else if (nPos < it.first)
+        else if (nPos < std::get<0>(it))
         {
             break;
         }
     }
     return ret;
+}
+
+std::optional<std::vector<Color>> SwScriptInfo::GetBookmarkColors(TextFrameIndex const nPos) const
+{
+    std::optional<std::vector<Color>> ret;
+    std::vector<Color> aColors;
+    for (auto const& it : m_Bookmarks)
+    {
+        if (nPos == std::get<0>(it) && COL_TRANSPARENT != std::get<2>(it))
+        {
+            aColors.push_back(std::get<2>(it));
+        }
+        else if (nPos < std::get<0>(it))
+        {
+            break;
+        }
+    }
+    return aColors.empty() ? ret : ret.emplace(aColors);
 }
 
 // Takes a string and replaced the hidden ranges with cChar.

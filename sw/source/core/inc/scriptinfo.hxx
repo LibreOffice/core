@@ -28,6 +28,7 @@
 #include <i18nlangtag/lang.h>
 #include <tools/long.hxx>
 #include "TextFrameIndex.hxx"
+#include <doc.hxx>
 
 class SwTextNode;
 class SwTextFrame;
@@ -71,7 +72,7 @@ private:
     std::deque<TextFrameIndex> m_NoKashidaLine;
     std::deque<TextFrameIndex> m_NoKashidaLineEnd;
     std::vector<TextFrameIndex> m_HiddenChg;
-    std::vector<std::pair<TextFrameIndex, MarkKind>> m_Bookmarks;
+    std::vector<std::tuple<TextFrameIndex, MarkKind, Color>> m_Bookmarks;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
@@ -185,6 +186,7 @@ public:
     TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
     TextFrameIndex NextBookmark(TextFrameIndex nPos) const;
     MarkKind GetBookmark(TextFrameIndex nPos) const;
+    std::optional<std::vector<Color>> GetBookmarkColors(TextFrameIndex nPos) const;
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,
             std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
