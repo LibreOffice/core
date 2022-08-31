@@ -6529,13 +6529,9 @@ void OpFTest::GenSlidingWindowFunction(outputstream &ss,
             ss << "    }\n";
         }
         else if (pCurSub->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "return HUGE_VAL";
-        }
+            throw Unhandled(__FILE__, __LINE__);
         else if (pCurSub->GetType() == formula::svDouble)
-        {
-            ss << "return HUGE_VAL";
-        }
+            throw Unhandled(__FILE__, __LINE__);
     }
     ss << "    double fS1 = (fSumSqr1-fSum1*fSum1/length0)/(length0-1.0);\n"
         "    double fS2 = (fSumSqr2-fSum2*fSum2/length1)/(length1-1.0);\n"
