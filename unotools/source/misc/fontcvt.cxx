@@ -35,9 +35,6 @@
 //various holes in OpenSymbol which were filled by StarSymbol, i.e.
 //destination mapping points which are empty in OpenSymbol
 
-// note: the character mappings that are only approximations
-//       are marked (with an empty comment)
-
 const sal_Unicode aStarBatsTab[224] =
 {
     // F020
