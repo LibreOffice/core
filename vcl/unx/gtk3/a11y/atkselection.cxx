@@ -76,7 +76,7 @@ selection_clear_selection( AtkSelection *selection )
         }
     }
     catch(const uno::Exception&) {
-        g_warning( "Exception in selectAccessibleChild()" );
+        g_warning( "Exception in clearAccessibleSelection()" );
     }
 
     return FALSE;
@@ -126,7 +126,7 @@ selection_is_child_selected( AtkSelection   *selection,
             return pSelection->isAccessibleChildSelected( i );
     }
     catch(const uno::Exception&) {
-        g_warning( "Exception in getSelectedAccessibleChildCount()" );
+        g_warning( "Exception in isAccessibleChildSelected()" );
     }
 
     return FALSE;
@@ -152,7 +152,7 @@ selection_remove_selection( AtkSelection *selection,
         }
     }
     catch(const uno::Exception&) {
-        g_warning( "Exception in getSelectedAccessibleChildCount()" );
+        g_warning( "Exception in getSelectedAccessibleChild(), getAccessibleIndexInParent() or deselectAccessibleChild()" );
     }
 
     return FALSE;
@@ -171,7 +171,7 @@ selection_select_all_selection( AtkSelection   *selection)
         }
     }
     catch(const uno::Exception&) {
-        g_warning( "Exception in getSelectedAccessibleChildCount()" );
+        g_warning( "Exception in selectAllAccessibleChildren()" );
     }
 
     return FALSE;
