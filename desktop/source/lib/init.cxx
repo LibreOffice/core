@@ -2685,7 +2685,11 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                         (aFontMappingUseData[i].mOriginalFont == "Calibri" &&
                          j.startsWith("Carlito/")) ||
                         (aFontMappingUseData[i].mOriginalFont == "Palatino Linotype" &&
-                         j.startsWith("P052/")))
+                         j.startsWith("P052/")) ||
+                        // Perhaps a risky heuristic? If some glyphs from Symbol have been mapped to
+                        // ones in OpenSymbol, don't warn that Symbol is missing.
+                        (aFontMappingUseData[i].mOriginalFont == "Symbol" &&
+                         j.startsWith("OpenSymbol/")))
                     {
                         bSubstitutedByMetricCompatible = true;
                         break;
