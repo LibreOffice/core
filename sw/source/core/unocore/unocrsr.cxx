@@ -48,6 +48,7 @@ SwUnoCursor::~SwUnoCursor()
         pNxt->MoveTo(nullptr); // remove from chain
         delete pNxt;       // and delete
     }
+    // coverity[deref_arg] - GetNext() is not a use after free at this point
 }
 
 bool SwUnoCursor::IsReadOnlyAvailable() const
