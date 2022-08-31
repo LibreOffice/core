@@ -21,6 +21,7 @@ namespace sc::opencl {
 void RRI::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 3 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -148,6 +149,7 @@ vSubArguments)
 void OpDollarde::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -512,6 +514,7 @@ void OpIPMT::GenSlidingWindowFunction(outputstream& ss,
 void OpISPMT::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 4, 4 );
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -796,6 +799,7 @@ void Cumipmt::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 6 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -910,6 +914,7 @@ vSubArguments)
 void IRR::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1181,6 +1186,7 @@ void XNPV::GenSlidingWindowFunction(
 void PriceMat::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 6 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1375,6 +1381,7 @@ void OpSYD::GenSlidingWindowFunction(outputstream &ss,
 void MIRR::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 3 );
     FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
     assert(pCur);
     const formula::DoubleVectorRefToken* pCurDVR =
@@ -1591,6 +1598,7 @@ void OpCumprinc::BinInlineFun(std::set<std::string>& decls,
 void OpCumprinc::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 6 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1717,6 +1725,7 @@ void OpAccrint::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 7, 7 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1831,6 +1840,7 @@ void OpAccrintm::BinInlineFun(std::set<std::string>& decls,
 void OpAccrintm::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 5, 5 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1958,6 +1968,7 @@ void OpAccrintm::GenSlidingWindowFunction(
 void OpYield::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 7, 7 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2174,6 +2185,7 @@ void OpSLN::GenSlidingWindowFunction(outputstream &ss,
 void OpYieldmat::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 6 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -3525,6 +3537,7 @@ void OpAmordegrc::BinInlineFun(std::set<std::string>& decls,
 void OpAmordegrc::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 7 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -3680,6 +3693,7 @@ void OpAmorlinc::BinInlineFun(std::set<std::string>& decls,
 void OpAmorlinc::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 7 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -3818,6 +3832,7 @@ void OpReceived::BinInlineFun(std::set<std::string>& decls,
 void OpReceived::GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 5, 5 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -4071,6 +4086,7 @@ void OpTbillprice::GenSlidingWindowFunction(
 void RATE::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 6, 6 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -4285,6 +4301,7 @@ void OpTbillyield::GenSlidingWindowFunction(
 void OpDDB::GenSlidingWindowFunction(outputstream& ss,
             const std::string &sSymName, SubArguments& vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 5, 5 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -4682,6 +4699,7 @@ void OpXirr::GenSlidingWindowFunction(outputstream &ss,
 void OpDB::GenSlidingWindowFunction(outputstream& ss,
             const std::string &sSymName, SubArguments& vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 5, 5 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)

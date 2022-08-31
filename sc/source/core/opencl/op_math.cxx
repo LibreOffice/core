@@ -300,6 +300,7 @@ void OpCombinA::BinInlineFun(std::set<std::string>& decls,
 void OpCombinA::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1654,6 +1655,7 @@ void OpRound::GenSlidingWindowFunction(outputstream &ss,
 void OpRoundUp::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1670,6 +1672,8 @@ void OpRoundUp::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double tmp;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
+    if( vSubArguments.size() == 1 )
+        ss << "    double tmp1 = 0;\n";
     ss << "    if(tmp1 >20 || tmp1 < -20)";
     ss << "    {\n";
     ss << "        tmp = NAN;\n";
@@ -1692,6 +1696,7 @@ void OpRoundUp::GenSlidingWindowFunction(outputstream &ss,
 void OpRoundDown::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1707,6 +1712,8 @@ void OpRoundDown::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double tmp;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
+    if( vSubArguments.size() == 1 )
+        ss << "    double tmp1 = 0;\n";
     ss << "    if(tmp1 >20 || tmp1 < -20)";
     ss << "    {\n";
     ss << "        tmp = NAN;\n";
@@ -2172,6 +2179,7 @@ void OpFloor::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 3 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2516,6 +2524,7 @@ void OpSqrtPi::GenSlidingWindowFunction(outputstream &ss,
 void OpCeil::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 3 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2575,6 +2584,7 @@ void OpCeil::GenSlidingWindowFunction(outputstream &ss,
 void OpCombin::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
