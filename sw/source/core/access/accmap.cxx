@@ -2093,6 +2093,13 @@ void SwAccessibleMap::RemoveContext( const SwFrame *pFrame )
 
     mpFrameMap->erase( aIter );
 
+    if (mpSelectedFrameMap)
+    {
+        SwAccessibleContextMap_Impl::iterator aSelectedIter = mpSelectedFrameMap->find(pFrame);
+        if (aSelectedIter != mpSelectedFrameMap->end())
+            mpSelectedFrameMap->erase(aSelectedIter);
+    }
+
     // Remove reference to old caret object. Though mxCursorContext
     // is a weak reference and cleared automatically, clearing it
     // directly makes sure to not keep a non-functional object.

@@ -439,9 +439,11 @@ void SwAccessibleContext::InvalidateFocus_()
 
 void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 {
-    OSL_ENSURE( GetFrame(), "fire event for disposed frame?" );
     if( !GetFrame() )
+    {
+        SAL_WARN("sw.a11y", "SwAccessibleContext::FireAccessibleEvent called for already disposed frame?");
         return;
+    }
 
     if( !rEvent.Source.is() )
     {
