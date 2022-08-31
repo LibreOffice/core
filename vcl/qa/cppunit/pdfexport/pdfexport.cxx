@@ -3580,7 +3580,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
     CPPUNIT_ASSERT_EQUAL(4, nTextObjectCount);
 
     // Text: جِـرم (which means "mass" in Persian)
-    // Rendered as (left to right): "reh + mim" - "tahtweel" - "kasreh" - "jeh"
+    // Rendered as (left to right): "reh + mim" - "tatweel" - "kasreh" - "jeh"
     int rehmim = 0, kasreh = 1, tatweel = 2, jeh = 3;
 
     // Bad rendering can cause tatweel enumerated before kasreh
