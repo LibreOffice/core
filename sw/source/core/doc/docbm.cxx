@@ -1849,25 +1849,25 @@ void SaveBookmark::SetInDoc(
 {
     SwPaM aPam(rNewPos);
     if(oContentIdx)
-        aPam.GetPoint()->nContent = *oContentIdx;
+        aPam.GetPoint()->SetContent( *oContentIdx );
 
     if(NODE_OFFSET_MAX != m_nNode2)
     {
         aPam.SetMark();
 
-        aPam.GetMark()->nNode += m_nNode2;
+        aPam.GetMark()->Adjust(m_nNode2);
         if(oContentIdx && !m_nNode2)
-            aPam.GetMark()->nContent += m_nContent2;
+            aPam.GetMark()->SetContent(*oContentIdx + m_nContent2);
         else
-            aPam.GetMark()->nContent.Assign(aPam.GetMarkContentNode(), m_nContent2);
+            aPam.GetMark()->SetContent(m_nContent2);
     }
 
-    aPam.GetPoint()->nNode += m_nNode1;
+    aPam.GetPoint()->Adjust(m_nNode1);
 
     if(oContentIdx && !m_nNode1)
-        aPam.GetPoint()->nContent += m_nContent1;
+        aPam.GetPoint()->SetContent(*oContentIdx + m_nContent1);
     else
-        aPam.GetPoint()->nContent.Assign(aPam.GetPointContentNode(), m_nContent1);
+        aPam.GetPoint()->SetContent(m_nContent1);
 
     if(aPam.HasMark()
         && !CheckNodesRange(aPam.GetPoint()->GetNode(), aPam.GetMark()->GetNode(), true))
