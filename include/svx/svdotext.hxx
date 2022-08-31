@@ -131,7 +131,7 @@ private:
     friend class TextChainFlow;
     friend class EditingTextChainFlow;
 
-    // CustomShapeproperties need to access the "bTextFrame" member:
+    // CustomShapeproperties need to access the "mbTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
 
 protected:
@@ -163,8 +163,8 @@ private:
 
 protected:
     // The "aRect" is also the rect of RectObj and CircObj.
-    // When bTextFrame=sal_True the text will be formatted into this rect
-    // When bTextFrame=sal_False the text will be centered around its middle
+    // When mbTextFrame=true the text will be formatted into this rect
+    // When mbTextFrame=false the text will be centered around its middle
     tools::Rectangle maRect;
 
     // The GeoStat contains the rotation and shear angles
@@ -185,7 +185,7 @@ protected:
     //     SdrObjKind::Text         regular text frame
     //     SdrObjKind::TitleText    TitleText for presentations
     //     SdrObjKind::OutlineText  OutlineText for presentations
-    // eTextKind only has meaning when bTextFrame=sal_True, since otherwise
+    // eTextKind only has meaning when mbTextFrame=true, since otherwise
     // we're dealing with a labeled graphical object
     SdrObjKind meTextKind;
 
@@ -211,9 +211,9 @@ protected:
 
     // For labeled graphical objects bTextFrame is FALSE. The block of text
     // will then be centered horizontally and vertically on aRect.
-    // For bTextFalse=sal_True the text will be formatted into aRect.
+    // For mbTextFrame=true the text will be formatted into aRect.
     // The actual text frame is realized by an SdrRectObj with
-    // bTextFrame=sal_True.
+    // mbTextFrame=true.
     bool mbTextFrame : 1;
     bool mbNoShear : 1; // disable shearing (->graphic+Ole+TextFrame)
     bool mbTextSizeDirty : 1;
