@@ -994,7 +994,8 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
 
         // Limit the bitmap size to the visible area.
         basegfx::B2DRange bitmapRange(aRange);
-        bitmapRange.intersect(aExpandedViewInfo.getDiscreteViewport());
+        if (!aExpandedViewInfo.getDiscreteViewport().isEmpty())
+            bitmapRange.intersect(aExpandedViewInfo.getDiscreteViewport());
         if (!bitmapRange.isEmpty())
         {
             const tools::Rectangle aRect(
