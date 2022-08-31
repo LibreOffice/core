@@ -5447,6 +5447,7 @@ void OpForecast::GenSlidingWindowFunction(outputstream &ss,
 void OpLogNormDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT(4,4);
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const
         formula::SingleVectorRefToken *>(tmpCur0);
