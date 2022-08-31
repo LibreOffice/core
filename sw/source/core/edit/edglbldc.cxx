@@ -80,7 +80,8 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 pNew.reset(new SwGlblDocContent( pSect ));
                 break;
             }
-            rArr.insert( std::move(pNew) );
+            if (pNew)
+                rArr.insert( std::move(pNew) );
         }
     }
 
