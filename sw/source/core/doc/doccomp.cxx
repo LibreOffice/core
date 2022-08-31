@@ -1769,6 +1769,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     }
 
     do {
+        // coverity[deref_arg] - pTmp is valid here
         if (IDocumentRedlineAccess::AppendResult::APPENDED ==
                 m_rDoc.getIDocumentRedlineAccess().AppendRedline(
                     new SwRangeRedline(aRedlnData, *pTmp), true) &&
