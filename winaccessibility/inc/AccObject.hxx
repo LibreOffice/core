@@ -48,7 +48,6 @@ class AccEventListener;
 class AccObjectManagerAgent;
 class AccObject;
 
-typedef std::map<const long, AccObject*> IAccSelectionList;
 typedef std::vector<AccObject *> IAccChildList;
 
 
@@ -63,7 +62,6 @@ private:
     AccObject*          m_pParentObj;
     IAccChildList       m_childrenList;
     ::rtl::Reference<AccEventListener>  m_pListener;
-    IAccSelectionList   m_selectionList;
 
     css::uno::Reference < css::accessibility::XAccessible > m_xAccRef;
     css::uno::Reference < css::accessibility::XAccessibleAction > m_xAccActionRef;
@@ -126,8 +124,6 @@ public:
     void  setFocus();
     void  unsetFocus();
 
-    void  AddSelect(long index, AccObject* accObj);
-    IAccSelectionList& GetSelection();
     void  setLocalizedResourceString();
 };
 

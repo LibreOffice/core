@@ -953,21 +953,6 @@ bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
     return true;
 }
 
-/*
-   * Add a child selected element.
-   * @param pAccObj Child object pointer.
-   * @return
-   */
-void AccObject::AddSelect( long index, AccObject* accObj)
-{
-    m_selectionList.emplace(index,accObj);
-}
-
-IAccSelectionList& AccObject::GetSelection()
-{
-    return m_selectionList;
-}
-
 
 /**
    * Set self to focus object in parent child list
