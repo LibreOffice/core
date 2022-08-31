@@ -6117,8 +6117,9 @@ class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Wind
 private:
     GtkWindow* m_pWindow;
     rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
-    std::optional<Point> m_aPosWhileInvis; //tdf#146648 store last known position when visible to return as pos if hidden
     gulong m_nToplevelFocusChangedSignalId;
+protected:
+    std::optional<Point> m_aPosWhileInvis; //tdf#146648 store last known position when visible to return as pos if hidden
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void implResetDefault(GtkWidget *pWidget, gpointer user_data)
@@ -9881,6 +9882,9 @@ void GtkInstanceDialog::asyncresponse(gint ret)
 
 int GtkInstanceDialog::run()
 {
+    // tdf#150723 "run" will make the dialog visible so drop m_aPosWhileInvis like show
+    m_aPosWhileInvis.reset();
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if (GTK_IS_DIALOG(m_pDialog))
         sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog))));
