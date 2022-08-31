@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 # https://salsa.debian.org/mckinstry/libtool/-/commit/26c23f951d049241128e5e04a7bbc263e5b145f1
 # isn't applied, so add that in to avoid: /usr/bin/ld: unrecognized option '--gdb-index'
 
+# ofz50805.patch https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/350
+# ofz46165.patch upstreamed as https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/351
+# san.patch upstreamed as https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/352
+
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo.buildfix.patch \
 	external/cairo/cairo/cairo.RGB24_888.patch \
