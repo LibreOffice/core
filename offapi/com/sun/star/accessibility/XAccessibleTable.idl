@@ -38,13 +38,13 @@ module com { module sun { module star { module accessibility {
    XAccessibleTable::getAccessibleColumn().</p>
 
    <p>The range of valid coordinates for this interface are implementation
-   dependent.  However, that range includes at least the intervals from the
+   dependent. However, that range includes at least the intervals
    from the first row or column with the index 0 up to the last (but not
    including) used row or column as returned by
    XAccessibleTable::getAccessibleRowCount() and
    XAccessibleTable::getAccessibleColumnCount().  In case of
-   the Calc the current range of valid indices for retrieving data include
-   the maximal table size--256 columns and 32000 rows--minus one.</p>
+   Calc the current range of valid indices for retrieving data include
+   the maximum table size minus one.</p>
 
     @since OOo 1.1.2
 */
