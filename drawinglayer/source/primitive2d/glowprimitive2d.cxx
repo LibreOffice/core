@@ -93,7 +93,7 @@ bool GlowPrimitive2D::prepareValuesAndcheckValidity(
     // ViewInformation2D definition in viewinformation2d.hxx)
     if (!rViewInformation.getViewport().isEmpty())
     {
-        // if used, extend by GlowRadus to ensure needed parts are included
+        // if used, extend by GlowRadius to ensure needed parts are included
         basegfx::B2DRange aVisibleArea(rViewInformation.getViewport());
         aVisibleArea.grow(getGlowRadius());
 
