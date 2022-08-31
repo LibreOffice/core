@@ -121,6 +121,7 @@ public:
     /// data access
     const basegfx::B2DHomMatrix& getObjectTransformation() const;
     const basegfx::B2DHomMatrix& getViewTransformation() const;
+    /// Empty viewport means everything is visible.
     const basegfx::B2DRange& getViewport() const;
     double getViewTime() const;
     const css::uno::Reference<css::drawing::XDrawPage>& getVisualizedPage() const;
@@ -130,6 +131,7 @@ public:
     const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const;
 
     /// On-demand prepared Viewport in discrete units for convenience
+    /// Empty viewport means everything is visible.
     const basegfx::B2DRange& getDiscreteViewport() const;
 
     /** support reduced DisplayQuality, PropertyName is 'ReducedDisplayQuality'. This
