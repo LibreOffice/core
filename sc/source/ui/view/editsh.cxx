@@ -817,7 +817,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     LanguageType    nLang = LANGUAGE_NONE;
                     bool bIsLookUpWord = pActiveView &&
                         GetStatusValueForThesaurusFromContext(aStatusVal, nLang, *pActiveView);
-                    rSet.Put( SfxStringItem( FN_PARAM_THES_WORD_REPLACE, aStatusVal ) );
+                    rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                     // disable thesaurus context menu entry if there is nothing to look up
                     bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
