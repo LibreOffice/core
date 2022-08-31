@@ -835,7 +835,7 @@ Reference< XShape > const & Shape::createAndInsert(
         maSize.Height = 0;
         for (auto const& elem : mpTablePropertiesPtr->getTableRows())
         {
-            // WARN: When less then minimum sized rows exist, calculated height here
+            // WARN: When less than minimum sized rows exist, calculated height here
             // is corrected before layouting takes place
             maSize.Height = o3tl::saturating_add(maSize.Height, elem.getHeight());
         }
