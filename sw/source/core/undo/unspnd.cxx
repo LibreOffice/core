@@ -79,8 +79,8 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_bTableFlag )
     {
         // than a TextNode was added directly before the current table
-        SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
-        rIdx = m_nNode;
+        SwPosition& rPos = *rPam.GetPoint();
+        rPos.Assign(m_nNode);
         SwTextNode* pTNd;
         SwNode* pCurrNd = pDoc->GetNodes()[ m_nNode + 1 ];
         SwTableNode* pTableNd = pCurrNd->FindTableNode();
@@ -101,7 +101,6 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 
             // than delete it again
             SwNodeIndex aDelNd( *pTableNd, -1 );
-            rPam.GetPoint()->nContent.Assign( static_cast<SwContentNode*>(pCurrNd), 0 );
             RemoveIdxRel( aDelNd.GetIndex(), *rPam.GetPoint() );
             pDoc->GetNodes().Delete( aDelNd );
         }
@@ -126,9 +125,9 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             pTNd->JoinNext();
             if (m_pHistory)
             {
-                rPam.GetPoint()->nContent = 0;
+                rPam.GetPoint()->SetContent(0);
                 rPam.SetMark();
-                rPam.GetPoint()->nContent = pTNd->GetText().getLength();
+                rPam.GetPoint()->SetContent(pTNd->GetText().getLength());
 
                 pDoc->RstTextAttrs( rPam, true );
                 m_pHistory->TmpRollback( pDoc, 0, false );
@@ -146,13 +145,13 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwCursor & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
-    rPam.GetPoint()->nNode = m_nNode;
+    rPam.GetPoint()->Assign(m_nNode);
     SwTextNode * pTNd = rPam.GetPointNode().GetTextNode();
     OSL_ENSURE(pTNd, "SwUndoSplitNode::RedoImpl(): SwTextNode expected");
     if (!pTNd)
         return;
 
-    rPam.GetPoint()->nContent.Assign( pTNd, m_nContent );
+    rPam.GetPoint()->SetContent( m_nContent );
 
     SwDoc& rDoc = rPam.GetDoc();
     rDoc.getIDocumentContentOperations().SplitNode( *rPam.GetPoint(), m_bCheckTableStart );
