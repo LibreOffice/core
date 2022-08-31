@@ -286,12 +286,9 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     for (auto const& aGlyphItem : m_GlyphItems)
     {
         // update the text extent with the glyph extent
-        DeviceCoordinate nXPos = aGlyphItem.linearPos().getX();
-        if( nMinPos > nXPos )
-            nMinPos = nXPos;
-        nXPos += aGlyphItem.newWidth() - aGlyphItem.xOffset();
-        if( nMaxPos < nXPos )
-            nMaxPos = nXPos;
+        DeviceCoordinate nXPos = aGlyphItem.linearPos().getX() - aGlyphItem.xOffset();
+        nMinPos = std::min(nMinPos, nXPos);
+        nMaxPos = std::max(nMaxPos, nXPos + aGlyphItem.newWidth());
     }
 
     DeviceCoordinate nWidth = nMaxPos - nMinPos;

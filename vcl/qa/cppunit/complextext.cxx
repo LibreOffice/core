@@ -287,9 +287,8 @@ void VclComplexTextTest::testCaret()
     CPPUNIT_ASSERT_EQUAL(aCharWidths[6], aCharWidths[7]);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[8], aCharWidths[9]);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
-    // FIXME: this should be 353, and the next assert should be true as well.
-    CPPUNIT_ASSERT_EQUAL(tools::Long(388), nTextWidth2);
-    //CPPUNIT_ASSERT_EQUAL(nTextWidth, nTextWidth2);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(353), nTextWidth2);
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, nTextWidth2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
 
     // B. LTR text
