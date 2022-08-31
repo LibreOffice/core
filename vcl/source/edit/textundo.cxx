@@ -174,6 +174,7 @@ void TextUndoDelPara::Redo()
     auto it = ::std::find_if( rDocNodes.begin(), rDocNodes.end(),
                               [&] (std::unique_ptr<TextNode> const & p) { return p.get() == mpNode; } );
     assert(it != rDocNodes.end());
+    // coverity[leaked_storage : FALSE] - ownership transferred to this with mbDelObject
     it->release();
     GetDoc()->GetNodes().erase( it );
 
