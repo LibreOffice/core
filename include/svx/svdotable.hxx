@@ -258,7 +258,7 @@ public:
     /// Next time layouting would be done, skip it (to layout at the end of multiple actions).
     void SetSkipChangeLayout(bool bSkipChangeLayout);
 
-    /** Tries to get table height if rows with sizes less then the minimum size were expanded
+    /** Tries to get table height if rows with sizes less than the minimum size were expanded
 
         (i.e. Table height layouted without fitting to an area)
         Helper for OOXML import

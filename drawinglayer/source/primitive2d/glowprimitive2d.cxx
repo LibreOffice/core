@@ -265,7 +265,7 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
         // Check if last created area is sufficient and can be re-used
         if (!maLastClippedRange.isEmpty() && !maLastClippedRange.isInside(aClippedRange))
         {
-            // To avoid unnecessssary invalidations due to being *very* correct
+            // To avoid unnecessary invalidations due to being *very* correct
             // with HairLines (which are view-dependent and thus change the
             // result(s) here slightly when changing zoom), add a slight unsharp
             // component if we have a ViewTransform. The derivation is inside
