@@ -33,7 +33,7 @@ class TestXNameContainer(CollectionsTestBase):
         # Given
         spr = self.createBlankSpreadsheet()
         ranges = getSheetCellRangesInstance(spr)
-        new_range = spr.Sheets[0].getCellRangeByPosition(1, 2, 1, 2)
+        new_range = spr.Sheets[0][2:3,1:2]
 
         # When
         ranges['foo'] = new_range
@@ -51,7 +51,7 @@ class TestXNameContainer(CollectionsTestBase):
         # Given
         spr = self.createBlankSpreadsheet()
         ranges = getSheetCellRangesInstance(spr)
-        new_range = spr.Sheets[0].getCellRangeByPosition(1, 2, 1, 2)
+        new_range = spr.Sheets[0][2:3,1:2]
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -65,8 +65,8 @@ class TestXNameContainer(CollectionsTestBase):
         # Given
         spr = self.createBlankSpreadsheet()
         ranges = getSheetCellRangesInstance(spr)
-        new_range1 = spr.Sheets[0].getCellRangeByPosition(1, 2, 1, 2)
-        new_range2 = spr.Sheets[0].getCellRangeByPosition(6, 6, 6, 6)
+        new_range1 = spr.Sheets[0][2:3,1:2]
+        new_range2 = spr.Sheets[0][6:7,6:7]
 
         # When
         ranges['foo'] = new_range1
