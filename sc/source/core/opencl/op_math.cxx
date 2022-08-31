@@ -1014,7 +1014,7 @@ void OpAbs::GenSlidingWindowFunction(outputstream &ss,
     ss << "    if((gid0)>=buffer_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n    else \n";
+    ss << "        tmp = 0.0;\n    else \n";
     ss << "        tmp = ";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
@@ -1046,7 +1046,7 @@ void OpArcCos::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_len = "<< tmpCurDVR0->GetArrayLength()<< ";\n";
     ss << "    if((gid0)>=buffer_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef()<< "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n";
+    ss << "        tmp = 0.0;\n";
     ss << "    else \n    ";
     ss << "    tmp = ";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef()<< ";\n";
@@ -1077,7 +1077,7 @@ void OpArcCosHyp::GenSlidingWindowFunction(outputstream &ss,
             ss << "    int buffer_len = "<<tmpCurDVR0->GetArrayLength()<<";\n";
             ss << "    if((gid0)>=buffer_len || isnan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        tmp = " << GetBottom() << ";\n";
+            ss << "        tmp = 0.0;\n";
             ss << "    else \n    ";
             ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
@@ -1313,7 +1313,7 @@ void OpArcCot::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_len = " << tmpCurDVR0->GetArrayLength()<< ";\n";
     ss << "    if((gid0)>=buffer_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n";
+    ss << "        tmp = 0.0;\n";
     ss << "    else \n    ";
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() <<";\n";
     ss << "    return M_PI_2 - atan(tmp);\n";
@@ -1392,7 +1392,7 @@ void OpArcSin::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_len = " << tmpCurDVR0->GetArrayLength() << ";\n";
     ss << "    if((gid0)>=buffer_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n";
+    ss << "        tmp = 0.0;\n";
     ss << "    else \n    ";
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return arctan2(tmp, sqrt(1.0 - pow(tmp, 2)));\n";
@@ -1422,7 +1422,7 @@ void OpArcSinHyp::GenSlidingWindowFunction(outputstream &ss,
             ss << "    int buffer_len = "<<tmpCurDVR0->GetArrayLength()<<";\n";
             ss << "    if((gid0)>=buffer_len || isnan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        tmp = " << GetBottom() << ";\n";
+            ss << "        tmp = 0.0;\n";
             ss << "    else \n    ";
             ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
@@ -1470,12 +1470,12 @@ void OpArcTan2::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_y_len = " << tmpCurDVRY->GetArrayLength() << ";\n";
     ss << "    if((gid0)>=buffer_x_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        x_num = " << GetBottom() << ";\n";
+    ss << "        x_num = 0.0;\n";
     ss << "    else \n    ";
     ss << "    x_num = "<< vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    if((gid0)>=buffer_y_len || isnan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        y_num = " << GetBottom() << ";\n";
+    ss << "        y_num = 0.0;\n";
     ss << "    else \n    ";
     ss << "    y_num = "<< vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return arctan2(y_num, x_num);\n";
@@ -1547,7 +1547,7 @@ void OpArcTanH::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_len = " << tmpCurDVR0->GetArrayLength() << ";\n";
     ss << "    if((gid0)>=buffer_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n";
+    ss << "        tmp = 0.0;\n";
     ss << "    else \n    ";
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    double a = 1.0 + tmp;\n";
@@ -1579,12 +1579,12 @@ void OpBitAnd::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_num2_len = "<<tmpCurDVRNum2->GetArrayLength()<<";\n";
     ss << "    if((gid0)>=buffer_num1_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num1 = " << GetBottom() << ";\n";
+    ss << "        num1 = 0.0;\n";
     ss << "    else \n    ";
     ss << "    num1 = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    if((gid0)>=buffer_num2_len || isnan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num2 = " << GetBottom() << ";\n";
+    ss << "        num2 = 0.0;\n";
     ss << "    else \n    ";
     ss << "    num2 = " << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return (long)num1 & (long)num2;\n";
@@ -2225,13 +2225,13 @@ void OpBitOr::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int buffer_num2_len = "<<tmpCurDVRNum2->GetArrayLength()<<";\n";
     ss << "    if((gid0)>=buffer_num1_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num1 = " << GetBottom() << ";\n";
+    ss << "        num1 = 0.0;\n";
     ss << "    else \n    ";
     ss << "    num1 = floor(" << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ");\n";
     ss << "    if((gid0)>=buffer_num2_len || isnan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num2 = " << GetBottom() << ";\n";
+    ss << "        num2 = 0.0;\n";
     ss << "    else\n    ";
     ss << "    num2 = floor(" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ");\n";
@@ -2263,13 +2263,13 @@ void OpBitXor::GenSlidingWindowFunction(outputstream &ss,
 
     ss << "    if((gid0)>=buffer_num1_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num1 = " << GetBottom() << ";\n";
+    ss << "        num1 = 0.0;\n";
     ss << "    else\n    ";
     ss << "    num1 = floor(" << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ");\n";
     ss << "    if((gid0)>=buffer_num2_len || isnan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num2 = " << GetBottom() << ";\n";
+    ss << "        num2 = 0.0;\n";
     ss << "    else\n    ";
     ss << "    num2 = floor(" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ");\n";
@@ -2301,13 +2301,13 @@ void OpBitLshift::GenSlidingWindowFunction(outputstream &ss,
     ss << tmpCurDVRShiftAmount->GetArrayLength() << ";\n";
     ss << "    if((gid0)>=buffer_num_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num = " << GetBottom() << ";\n";
+    ss << "        num = 0.0;\n";
     ss << "    else\n    ";
     ss << "    num = floor(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
     ss << "    if((gid0)>=buffer_shift_amount_len || isnan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        shift_amount = " << GetBottom() << ";\n";
+    ss << "        shift_amount = 0.0;\n";
     ss << "    else\n    ";
     ss << "    shift_amount = floor(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
@@ -2343,7 +2343,7 @@ void OpBitRshift::GenSlidingWindowFunction(outputstream &ss,
 
     ss << "    if((gid0)>=buffer_num_len || isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num = " << GetBottom() << ";\n";
+    ss << "        num = 0.0;\n";
     ss << "    else\n    ";
     ss << "    num = floor(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
@@ -2515,7 +2515,7 @@ void OpCeil::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double bAbs = 0;\n";
     ss << "    if(isnan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num = " << GetBottom() << ";\n";
+    ss << "        num = 0.0;\n";
     ss << "    else\n    ";
     ss << "    num = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    if(isnan(";
@@ -2583,13 +2583,13 @@ void OpCombin::GenSlidingWindowFunction(outputstream &ss,
         {
             ss << "    if(isnan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        num = " << GetBottom() << ";\n";
+            ss << "        num = 0.0;\n";
             ss << "    else\n    ";
             ss << "    num = floor(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
             ss << "    if(isnan(";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        num_chosen = " << GetBottom() << ";\n";
+            ss << "        num_chosen = 0.0;\n";
             ss << "    else\n    ";
             ss << "    num_chosen = floor(";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";

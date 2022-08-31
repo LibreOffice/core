@@ -192,6 +192,9 @@ protected:
 class OpBase
 {
 public:
+    // FIXME: What exactly is this? It seems to be a starting value for some calculations
+    // (1 for OpMul, MAXFLOAT for OpMin), but it's often used pointlessly and sometimes
+    // even incorrectly (default value for when the cell is empty).
     virtual std::string GetBottom() { return "";};
     virtual std::string Gen2( const std::string&/*lhs*/,
         const std::string&/*rhs*/ ) const { return "";}
