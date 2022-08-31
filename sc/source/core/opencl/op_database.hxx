@@ -10,13 +10,14 @@
 #pragma once
 
 #include "opbase.hxx"
+#include "utils.hxx"
 
 namespace sc::opencl {
 
 class OpDmax: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dmax"; }
 };
@@ -24,7 +25,7 @@ public:
 class OpDmin: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dmin"; }
 };
@@ -32,7 +33,7 @@ public:
 class OpDproduct: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dproduct"; }
 };
@@ -40,7 +41,7 @@ public:
 class OpDaverage: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Daverage"; }
 };
@@ -48,7 +49,7 @@ public:
 class OpDstdev: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dstdev"; }
 };
@@ -56,7 +57,7 @@ public:
 class OpDstdevp: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dstdevp"; }
 };
@@ -64,7 +65,7 @@ public:
 class OpDsum: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dsum"; }
 };
@@ -72,7 +73,7 @@ public:
 class OpDvar: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dvar"; }
 };
@@ -80,7 +81,7 @@ public:
 class OpDvarp: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dvarp"; }
 };
@@ -88,7 +89,7 @@ public:
 class OpDcount: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dcount"; }
 };
@@ -96,7 +97,7 @@ public:
 class OpDcount2: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Dcount2"; }
 };

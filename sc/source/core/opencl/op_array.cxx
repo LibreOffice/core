@@ -16,7 +16,7 @@ using namespace formula;
 
 namespace sc::opencl {
 
-void OpSumX2MY2::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSumX2MY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -73,7 +73,7 @@ void OpSumX2MY2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-void OpSumX2PY2::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSumX2PY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -129,7 +129,7 @@ void OpSumX2PY2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
-void OpSumXMY2::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSumXMY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;

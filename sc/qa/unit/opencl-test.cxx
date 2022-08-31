@@ -33,6 +33,7 @@ public:
      * loaded and before performing formula calculation.
      */
     void enableOpenCL();
+    void disableOpenCL();
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -67,6 +68,7 @@ public:
     void testFinacialDollardeFormula();
     void testCompilerString();
     void testCompilerInEq();
+    void testCompilerPrecision();
     void testFinacialDollarfrFormula();
     void testFinacialSYDFormula();
     void testStatisticalFormulaCorrel();
@@ -295,6 +297,7 @@ public:
     CPPUNIT_TEST(testFinacialDollardeFormula);
     CPPUNIT_TEST(testCompilerString);
     CPPUNIT_TEST(testCompilerInEq);
+    CPPUNIT_TEST(testCompilerPrecision);
     CPPUNIT_TEST(testFinacialDollarfrFormula);
     CPPUNIT_TEST(testFinacialSYDFormula);
     CPPUNIT_TEST(testStatisticalFormulaCorrel);
@@ -535,6 +538,11 @@ void ScOpenCLTest::enableOpenCL()
     sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly();
 }
 
+void ScOpenCLTest::disableOpenCL()
+{
+    sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
+}
+
 void ScOpenCLTest::testCompilerHorizontal()
 {
     if(!initTestEnv(u"opencl/compiler/horizontal.", FORMAT_ODS, false))
@@ -610,6 +618,27 @@ void ScOpenCLTest::testCompilerInEq()
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+}
+
+void ScOpenCLTest::testCompilerPrecision()
+{
+    if(!initTestEnv(u"opencl/compiler/precision.", FORMAT_ODS, false))
+        return;
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
+    // Check that values with and without opencl are the same/similar enough.
+    enableOpenCL();
+    rDoc.CalcAll();
+    disableOpenCL();
+    rDoc.CalcAll();
+
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i < 3; ++i)
+    {
+        double fOpenCL = rDoc.GetValue(ScAddress(0, i, 0));
+        double fNormal = rDocRes.GetValue(ScAddress(0, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fNormal, fOpenCL, fabs(1e-14*fOpenCL));
     }
 }
 

@@ -16,7 +16,7 @@ using namespace formula;
 
 namespace sc::opencl {
 
-void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
+void OpBesselj::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
@@ -177,7 +177,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 void OpGestep::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;

@@ -151,7 +151,7 @@ namespace {
 
 std::string linenumberify(const std::string& s)
 {
-    std::stringstream ss;
+    outputstream ss;
     int linenumber = 1;
     size_t start = 0;
     size_t newline;
@@ -186,53 +186,57 @@ OUString LimitedString( const OUString& str )
 }
 
 // Returns formatted contents of the data (possibly shortened), to be used in debug output.
-OUString DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
+std::string DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
 {
     if (ref->GetType() == formula::svSingleVectorRef)
     {
         const formula::SingleVectorRefToken* pSVR =
             static_cast<const formula::SingleVectorRefToken*>(ref);
-        OUStringBuffer buf = "SingleRef {";
+        outputstream buf;
+        buf << "SingleRef {";
         for( size_t i = 0; i < std::min< size_t >( 4, pSVR->GetArrayLength()); ++i )
         {
             if( i != 0 )
-                buf.append( "," );
+                buf << ",";
             if( pSVR->GetArray().mpNumericArray != nullptr )
-                buf.append( pSVR->GetArray().mpNumericArray[ i ] );
+                buf << pSVR->GetArray().mpNumericArray[ i ];
             else if( pSVR->GetArray().mpStringArray != nullptr )
-                buf.append( LimitedString( OUString( pSVR->GetArray().mpStringArray[ i ] )));
+                buf << LimitedString( OUString( pSVR->GetArray().mpStringArray[ i ] ));
         }
         if( pSVR->GetArrayLength() > 4 )
-            buf.append( ",..." );
-        buf.append( "}" );
-        return buf.makeStringAndClear();
+            buf << ",...";
+        buf << "}";
+        return buf.str();
     }
     else if (ref->GetType() == formula::svDoubleVectorRef)
     {
         const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken*>(ref);
-        OUStringBuffer buf = "DoubleRef {";
+        outputstream buf;
+        buf << "DoubleRef {";
         for( size_t i = 0; i < std::min< size_t >( 4, pDVR->GetArrayLength()); ++i )
         {
             if( i != 0 )
-                buf.append( "," );
+                buf << ",";
             if( pDVR->GetArrays()[doubleRefIndex].mpNumericArray != nullptr )
-                buf.append( pDVR->GetArrays()[doubleRefIndex].mpNumericArray[ i ] );
+                buf << pDVR->GetArrays()[doubleRefIndex].mpNumericArray[ i ];
             else if( pDVR->GetArrays()[doubleRefIndex].mpStringArray != nullptr )
-                buf.append( LimitedString( OUString( pDVR->GetArrays()[doubleRefIndex].mpStringArray[ i ] )));
+                buf << LimitedString( OUString( pDVR->GetArrays()[doubleRefIndex].mpStringArray[ i ] ));
         }
         if( pDVR->GetArrayLength() > 4 )
-            buf.append( ",..." );
-        buf.append( "}" );
-        return buf.makeStringAndClear();
+            buf << ",...";
+        buf << "}";
+        return buf.str();
     }
     else if (ref->GetType() == formula::svString)
     {
-        return "String " + LimitedString( ref->GetString().getString());
+        outputstream buf;
+        buf << "String " << LimitedString( ref->GetString().getString());
+        return buf.str();
     }
     else if (ref->GetType() == formula::svDouble)
     {
-        return OUString::number(ref->GetDouble());
+        return preciseFloat(ref->GetDouble());
     }
     else
     {
@@ -241,19 +245,20 @@ OUString DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
 }
 
 // Returns formatted contents of a doubles buffer, to be used in debug output.
-OUString DebugPeekDoubles(const double* data, int size)
+std::string DebugPeekDoubles(const double* data, int size)
 {
-    OUStringBuffer buf = "{";
+    outputstream buf;
+    buf << "{";
     for( int i = 0; i < std::min( 4, size ); ++i )
     {
         if( i != 0 )
-            buf.append( "," );
-        buf.append( data[ i ] );
+            buf << ",";
+        buf << data[ i ];
     }
     if( size > 4 )
-        buf.append( ",..." );
-    buf.append( "}" );
-    return buf.makeStringAndClear();
+        buf << ",...";
+    buf << "}";
+    return buf.str();
 }
 
 } // anonymous namespace
@@ -357,21 +362,21 @@ public:
         const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         ss << "unsigned " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         ss << GenSlidingWindowDeclRef();
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         GenDecl(ss);
     }
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         if (GetFormulaToken()->GetType() != formula::svString)
             throw Unhandled(__FILE__, __LINE__);
         FormulaToken* Tok = GetFormulaToken();
@@ -413,15 +418,15 @@ public:
         const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         ss << "double " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         ss << mSymName;
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         GenDecl(ss);
     }
@@ -448,7 +453,7 @@ public:
         OpenCLZone zone;
         double tmp = GetDouble();
         // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << preciseFloat( tmp ));
         cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -463,15 +468,15 @@ public:
         const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         ss << "double " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         ss << "3.14159265358979";
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         GenDecl(ss);
     }
@@ -489,7 +494,7 @@ public:
         OpenCLZone zone;
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp << " (PI)");
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << preciseFloat( tmp ) << " (PI)");
         cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -504,15 +509,15 @@ public:
         const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         ss << "double " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         ss << mSymName;
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         ss << "int " << mSymName;
     }
@@ -520,7 +525,7 @@ public:
     {
         return mSymName + "_Random(" + mSymName + ")";
     }
-    virtual void GenSlidingWindowFunction( std::stringstream& ss ) override
+    virtual void GenSlidingWindowFunction( outputstream& ss ) override
     {
         // This string is from the pi_opencl_kernel.i file as
         // generated when building the Random123 examples. Unused
@@ -871,13 +876,13 @@ public:
         const FormulaTreeNodeRef& ft, int index = 0 ) :
         VectorRef(config, s, ft, index) { }
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
+    virtual void GenSlidingWindowFunction( outputstream& ) override { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         ss << "__global unsigned int *" << mSymName;
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         DynamicKernelStringArgument::GenDecl(ss);
     }
@@ -985,21 +990,21 @@ public:
     DynamicKernelMixedArgument( const ScCalcConfig& config, const std::string& s,
         const FormulaTreeNodeRef& ft ) :
         VectorRef(config, s, ft), mStringArgument(config, s + "s", ft) { }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         VectorRef::GenSlidingWindowDecl(ss);
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
-    virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
+    virtual void GenSlidingWindowFunction( outputstream& ) override { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         VectorRef::GenDecl(ss);
         ss << ", ";
         mStringArgument.GenDecl(ss);
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         VectorRef::GenDeclRef(ss);
         ss << ",";
@@ -1007,7 +1012,7 @@ public:
     }
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(!isnan(" << VectorRef::GenSlidingWindowDeclRef();
         ss << ")?" << VectorRef::GenSlidingWindowDeclRef();
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
@@ -1016,13 +1021,13 @@ public:
     }
     virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << VectorRef::GenSlidingWindowDeclRef();
         return ss.str();
     }
     virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << mStringArgument.GenSlidingWindowDeclRef();
         return ss.str();
     }
@@ -1067,12 +1072,12 @@ public:
             (!GetStartFixed() && !GetEndFixed()));
     }
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ) { }
+    virtual void GenSlidingWindowFunction( outputstream& ) { }
 
     std::string GenSlidingWindowDeclRef( bool nested = false ) const
     {
         size_t nArrayLength = mpDVR->GetArrayLength();
-        std::stringstream ss;
+        outputstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
         {
             if (nested)
@@ -1093,7 +1098,7 @@ public:
     }
     /// Controls how the elements in the DoubleVectorRef are traversed
     size_t GenReductionLoopHeader(
-        std::stringstream& ss, bool& needBody )
+        outputstream& ss, bool& needBody )
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
@@ -1119,7 +1124,7 @@ public:
             {
                 ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
                 ss << "{int i;\n\t";
-                std::stringstream temp1, temp2;
+                outputstream temp1, temp2;
                 int outLoopSize = UNROLLING_FACTOR;
                 if (nCurWindowSize / outLoopSize != 0)
                 {
@@ -1165,7 +1170,7 @@ public:
                 ss << "\n\t";
                 ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
                 ss << "{int i;\n\t";
-                std::stringstream temp1, temp2;
+                outputstream temp1, temp2;
                 int outLoopSize = UNROLLING_FACTOR;
                 if (nCurWindowSize / outLoopSize != 0)
                 {
@@ -1233,21 +1238,21 @@ public:
         VectorRef(config, s, ft),
         mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),
         mStringArgument(mCalcConfig, s + "s", ft, CodeGen, index) { }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         mDoubleArgument.GenSlidingWindowDecl(ss);
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
-    virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
+    virtual void GenSlidingWindowFunction( outputstream& ) override { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         mDoubleArgument.GenDecl(ss);
         ss << ", ";
         mStringArgument.GenDecl(ss);
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         mDoubleArgument.GenDeclRef(ss);
         ss << ",";
@@ -1255,7 +1260,7 @@ public:
     }
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(!isnan(" << mDoubleArgument.GenSlidingWindowDeclRef();
         ss << ")?" << mDoubleArgument.GenSlidingWindowDeclRef();
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
@@ -1264,13 +1269,13 @@ public:
     }
     virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << mDoubleArgument.GenSlidingWindowDeclRef();
         return ss.str();
     }
     virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << mStringArgument.GenSlidingWindowDeclRef();
         return ss.str();
     }
@@ -1297,7 +1302,7 @@ public:
     const DynamicKernelArgument* DeclRefArg(const ScCalcConfig& config, const FormulaTreeNodeRef&,
                                             std::shared_ptr<SlidingFunctionBase> pCodeGen, int nResultSize);
     /// Used to generate sliding window helpers
-    void DumpSlidingWindowFunctions( std::stringstream& ss )
+    void DumpSlidingWindowFunctions( outputstream& ss )
     {
         for (auto const& argument : mParams)
         {
@@ -1350,11 +1355,11 @@ public:
     }
 
     /// Emit the definition for the auxiliary reduction kernel
-    virtual void GenSlidingWindowFunction( std::stringstream& ss );
+    virtual void GenSlidingWindowFunction( outputstream& ss );
 
     virtual std::string GenSlidingWindowDeclRef( bool ) const
     {
-        std::stringstream ss;
+        outputstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
             ss << Base::GetName() << "[i + gid0]";
         else
@@ -1364,7 +1369,7 @@ public:
 
     /// Controls how the elements in the DoubleVectorRef are traversed
     size_t GenReductionLoopHeader(
-        std::stringstream& ss, int nResultSize, bool& needBody );
+        outputstream& ss, int nResultSize, bool& needBody );
 
     virtual size_t Marshal( cl_kernel k, int argno, int w, cl_program mpProgram );
 
@@ -1406,12 +1411,12 @@ public:
     typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
     typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
 
-    virtual bool HandleNaNArgument( std::stringstream&, unsigned, SubArguments& ) const
+    virtual bool HandleNaNArgument( outputstream&, unsigned, SubArguments& ) const
     {
         return false;
     }
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ss,
+    virtual void GenSlidingWindowFunction( outputstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         ss << "\ndouble " << sSymName;
@@ -1526,7 +1531,7 @@ public:
 class Binary : public SlidingFunctionBase
 {
 public:
-    virtual void GenSlidingWindowFunction( std::stringstream& ss,
+    virtual void GenSlidingWindowFunction( outputstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         ss << "\ndouble " << sSymName;
@@ -1552,7 +1557,7 @@ public:
 class SumOfProduct : public SlidingFunctionBase
 {
 public:
-    virtual void GenSlidingWindowFunction( std::stringstream& ss,
+    virtual void GenSlidingWindowFunction( outputstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         size_t nCurWindowSize = 0;
@@ -1585,7 +1590,7 @@ public:
         ss << "int currentCount0;\n";
         for (size_t i = 0; i < vSubArguments.size() - 1; i++)
             ss << "int currentCount" << i + 1 << ";\n";
-        std::stringstream temp3, temp4;
+        outputstream temp3, temp4;
         int outLoopSize = UNROLLING_FACTOR;
         if (nCurWindowSize / outLoopSize != 0)
         {
@@ -1771,7 +1776,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(isnan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
         return ss.str();
     }
@@ -1785,7 +1790,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "approx_equal(" << lhs << "," << rhs << ")";
         return ss.str();
     }
@@ -1798,7 +1803,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "!approx_equal(" << lhs << "," << rhs << ")";
         return ss.str();
     }
@@ -1811,7 +1816,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(approx_equal(" << lhs << "," << rhs << ") || " << lhs << "<=" << rhs << ")";
         return ss.str();
     }
@@ -1824,7 +1829,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(" << lhs << "<" << rhs << ")";
         return ss.str();
     }
@@ -1837,7 +1842,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(" << lhs << ">" << rhs << ")";
         return ss.str();
     }
@@ -1850,7 +1855,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "(approx_equal(" << lhs << "," << rhs << ") || " << lhs << ">=" << rhs << ")";
         return ss.str();
     }
@@ -1865,7 +1870,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "fsum_approx((" << lhs << "),(" << rhs << "))";
         return ss.str();
     }
@@ -1882,7 +1887,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
         return ss.str();
     }
@@ -1931,7 +1936,7 @@ public:
     }
     virtual std::string BinFuncName() const override { return "fdiv"; }
 
-    virtual bool HandleNaNArgument( std::stringstream& ss, unsigned argno, SubArguments& vSubArguments ) const override
+    virtual bool HandleNaNArgument( outputstream& ss, unsigned argno, SubArguments& vSubArguments ) const override
     {
         if (argno == 1)
         {
@@ -1996,7 +2001,7 @@ public:
 };
 
 template<class Base>
-void ParallelReductionVectorRef<Base>::GenSlidingWindowFunction( std::stringstream& ss )
+void ParallelReductionVectorRef<Base>::GenSlidingWindowFunction( outputstream& ss )
 {
     if (!dynamic_cast<OpAverage*>(mpCodeGen.get()))
     {
@@ -2178,7 +2183,7 @@ void ParallelReductionVectorRef<Base>::GenSlidingWindowFunction( std::stringstre
 
 template<class Base>
 size_t ParallelReductionVectorRef<Base>::GenReductionLoopHeader(
-    std::stringstream& ss, int nResultSize, bool& needBody )
+    outputstream& ss, int nResultSize, bool& needBody )
 {
     assert(mpDVR);
     size_t nCurWindowSize = mpDVR->GetRefRowSize();
@@ -2499,7 +2504,7 @@ public:
                     if (vclmem[j].mCLMem)
                         SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": cl_mem: " << vclmem[j].mCLMem);
                     else
-                        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": double: " << vclmem[j].mConst);
+                        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": double: " << preciseFloat( vclmem[j].mConst ));
                     err = clSetKernelArg(redKernel, j,
                         vclmem[j].mCLMem ? sizeof(cl_mem) : sizeof(double),
                         vclmem[j].mCLMem ? static_cast<void*>(&vclmem[j].mCLMem) :
@@ -2548,13 +2553,13 @@ public:
         return i;
     }
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ss ) override
+    virtual void GenSlidingWindowFunction( outputstream& ss ) override
     {
         for (DynamicKernelArgumentRef & rArg : mvSubArguments)
             rArg->GenSlidingWindowFunction(ss);
         mpCodeGen->GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const override
+    virtual void GenDeclRef( outputstream& ss ) const override
     {
         for (size_t i = 0; i < mvSubArguments.size(); i++)
         {
@@ -2563,7 +2568,7 @@ public:
             mvSubArguments[i]->GenDeclRef(ss);
         }
     }
-    virtual void GenDecl( std::stringstream& ss ) const override
+    virtual void GenDecl( outputstream& ss ) const override
     {
         for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e = mvSubArguments.end(); it != e;
             ++it)
@@ -2587,7 +2592,7 @@ public:
     }
 
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e = mvSubArguments.end(); it != e;
             ++it)
@@ -2601,7 +2606,7 @@ public:
     /// or directly inline it if we are already inside a loop
     virtual std::string GenSlidingWindowDeclRef( bool nested = false ) const override
     {
-        std::stringstream ss;
+        outputstream ss;
         if (!nested)
         {
             ss << mSymName << "_" << mpCodeGen->BinFuncName() << "(";
@@ -2744,7 +2749,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
         if (!pChild)
             throw Unhandled(__FILE__, __LINE__);
         OpCode opc = pChild->GetOpCode();
-        std::stringstream tmpname;
+        outputstream tmpname;
         tmpname << s << "_" << i;
         std::string ts = tmpname.str();
         switch (opc)
@@ -3922,7 +3927,7 @@ void DynamicKernel::CodeGen()
     // Traverse the tree of expression and declare symbols used
     const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mCalcConfig, mpRoot, std::make_shared<OpNop>(mnResultSize), mnResultSize);
 
-    std::stringstream decl;
+    outputstream decl;
     if (openclwrapper::gpuEnv.mnKhrFp64Flag)
     {
         decl << "#if __OPENCL_VERSION__ < 120\n";
@@ -3968,7 +3973,7 @@ std::string const & DynamicKernel::GetMD5()
 {
     if (mKernelHash.empty())
     {
-        std::stringstream md5s;
+        outputstream md5s;
         // Compute MD5SUM of kernel body to obtain the name
         sal_uInt8 result[RTL_DIGEST_LENGTH_MD5];
         rtl_digest_MD5(
@@ -4152,7 +4157,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(const ScCalcConfig& config,
     if (it == mSymbols.end())
     {
         // Allocate new symbols
-        std::stringstream ss;
+        outputstream ss;
         ss << "tmp" << mCurId++;
         DynamicKernelArgumentRef new_arg = std::make_shared<T>(config, ss.str(), t, std::move(pCodeGen), nResultSize);
         mSymbols[ref] = new_arg;

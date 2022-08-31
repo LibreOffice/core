@@ -10,13 +10,14 @@
 #pragma once
 
 #include "opbase.hxx"
+#include "utils.hxx"
 
 namespace sc::opencl {
 
 class OpVLookup: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "VLookup"; }
     virtual bool canHandleMultiVector() const override { return true; }

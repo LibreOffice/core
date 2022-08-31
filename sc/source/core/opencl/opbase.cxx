@@ -54,12 +54,12 @@ std::string DynamicKernelArgument::GenStringSlidingWindowDeclRef( bool ) const
 }
 
 /// Generate use/references to the argument
-void DynamicKernelArgument::GenDeclRef( std::stringstream& ss ) const
+void DynamicKernelArgument::GenDeclRef( outputstream& ss ) const
 {
     ss << mSymName;
 }
 
-void DynamicKernelArgument::GenSlidingWindowFunction( std::stringstream& ) {}
+void DynamicKernelArgument::GenSlidingWindowFunction( outputstream& ) {}
 
 FormulaToken* DynamicKernelArgument::GetFormulaToken() const
 {
@@ -88,7 +88,7 @@ VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, const Fo
 {
     if (mnIndex)
     {
-        std::stringstream ss;
+        outputstream ss;
         ss << mSymName << "s" << mnIndex;
         mSymName = ss.str();
     }
@@ -105,13 +105,13 @@ VectorRef::~VectorRef()
 }
 
 /// Generate declaration
-void VectorRef::GenDecl( std::stringstream& ss ) const
+void VectorRef::GenDecl( outputstream& ss ) const
 {
     ss << "__global double *" << mSymName;
 }
 
 /// When declared as input to a sliding window function
-void VectorRef::GenSlidingWindowDecl( std::stringstream& ss ) const
+void VectorRef::GenSlidingWindowDecl( outputstream& ss ) const
 {
     VectorRef::GenDecl(ss);
 }
@@ -119,7 +119,7 @@ void VectorRef::GenSlidingWindowDecl( std::stringstream& ss ) const
 /// When referenced in a sliding window function
 std::string VectorRef::GenSlidingWindowDeclRef( bool nested ) const
 {
-    std::stringstream ss;
+    outputstream ss;
     formula::SingleVectorRefToken* pSVR =
         dynamic_cast<formula::SingleVectorRefToken*>(DynamicKernelArgument::GetFormulaToken());
     if (pSVR && !nested)
@@ -130,7 +130,7 @@ std::string VectorRef::GenSlidingWindowDeclRef( bool nested ) const
     return ss.str();
 }
 
-void VectorRef::GenSlidingWindowFunction( std::stringstream& ) {}
+void VectorRef::GenSlidingWindowFunction( outputstream& ) {}
 
 size_t VectorRef::GetWindowSize() const
 {
@@ -175,7 +175,7 @@ bool VectorRef::NeedParallelReduction() const
 }
 
 void Normal::GenSlidingWindowFunction(
-    std::stringstream& ss, const std::string& sSymName, SubArguments& vSubArguments )
+    outputstream& ss, const std::string& sSymName, SubArguments& vSubArguments )
 {
     std::vector<std::string> argVector;
     ss << "\ndouble " << sSymName;
@@ -198,7 +198,7 @@ void Normal::GenSlidingWindowFunction(
 }
 
 void CheckVariables::GenTmpVariables(
-    std::stringstream& ss, const SubArguments& vSubArguments )
+    outputstream& ss, const SubArguments& vSubArguments )
 {
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
@@ -208,7 +208,7 @@ void CheckVariables::GenTmpVariables(
     }
 }
 
-void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
+void CheckVariables::CheckSubArgumentIsNan( outputstream& ss,
     SubArguments& vSubArguments,  int argumentNum )
 {
     int i = argumentNum;
@@ -272,7 +272,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
 
 }
 
-void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
+void CheckVariables::CheckSubArgumentIsNan2( outputstream& ss,
     SubArguments& vSubArguments,  int argumentNum, const std::string& p )
 {
     int i = argumentNum;
@@ -300,7 +300,7 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
 }
 
 void CheckVariables::CheckAllSubArgumentIsNan(
-    std::stringstream& ss, SubArguments& vSubArguments )
+    outputstream& ss, SubArguments& vSubArguments )
 {
     ss << "    int k = gid0;\n";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -309,8 +309,8 @@ void CheckVariables::CheckAllSubArgumentIsNan(
     }
 }
 
-void CheckVariables::UnrollDoubleVector( std::stringstream& ss,
-    const std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
+void CheckVariables::UnrollDoubleVector( outputstream& ss,
+    const outputstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
     int nCurWindowSize )
 {
     int unrollSize = 16;

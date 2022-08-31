@@ -19,7 +19,7 @@ using namespace formula;
 
 namespace sc::opencl {
 
-void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
+void OpVLookup::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;

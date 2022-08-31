@@ -15,6 +15,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include "utils.hxx"
 
 namespace formula { class DoubleVectorRefToken; }
 namespace formula { class FormulaToken; }
@@ -111,10 +112,10 @@ public:
     virtual ~DynamicKernelArgument() {}
 
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const = 0;
+    virtual void GenDecl( outputstream& ss ) const = 0;
 
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const = 0;
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const = 0;
 
     /// When referenced in a sliding window function
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const = 0;
@@ -131,9 +132,9 @@ public:
     virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const;
 
     /// Generate use/references to the argument
-    virtual void GenDeclRef( std::stringstream& ss ) const;
+    virtual void GenDeclRef( outputstream& ss ) const;
 
-    virtual void GenSlidingWindowFunction( std::stringstream& );
+    virtual void GenSlidingWindowFunction( outputstream& );
     formula::FormulaToken* GetFormulaToken() const;
     virtual std::string DumpOpName() const;
     virtual void DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const;
@@ -162,9 +163,9 @@ public:
     virtual ~VectorRef() override;
 
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const override;
+    virtual void GenDecl( outputstream& ss ) const override;
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override;
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override;
 
     /// When referenced in a sliding window function
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const override;
@@ -172,7 +173,7 @@ public:
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ) override;
+    virtual void GenSlidingWindowFunction( outputstream& ) override;
     virtual size_t GetWindowSize() const override;
     virtual std::string DumpOpName() const override;
     virtual void DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const override;
@@ -212,14 +213,14 @@ class SlidingFunctionBase : public OpBase
 {
 public:
     typedef std::vector<DynamicKernelArgumentRef> SubArguments;
-    virtual void GenSlidingWindowFunction( std::stringstream&,
+    virtual void GenSlidingWindowFunction( outputstream&,
         const std::string&, SubArguments& ) = 0;
 };
 
 class Normal : public SlidingFunctionBase
 {
 public:
-    virtual void GenSlidingWindowFunction( std::stringstream& ss,
+    virtual void GenSlidingWindowFunction( outputstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) override;
     virtual bool takeString() const override { return false; }
     virtual bool takeNumeric() const override { return true; }
@@ -228,16 +229,16 @@ public:
 class CheckVariables : public Normal
 {
 public:
-    static void GenTmpVariables( std::stringstream& ss, const SubArguments& vSubArguments );
-    static void CheckSubArgumentIsNan( std::stringstream& ss,
+    static void GenTmpVariables( outputstream& ss, const SubArguments& vSubArguments );
+    static void CheckSubArgumentIsNan( outputstream& ss,
         SubArguments& vSubArguments, int argumentNum );
-    static void CheckAllSubArgumentIsNan( std::stringstream& ss,
+    static void CheckAllSubArgumentIsNan( outputstream& ss,
         SubArguments& vSubArguments );
     // only check isnan
-    static void CheckSubArgumentIsNan2( std::stringstream& ss,
+    static void CheckSubArgumentIsNan2( outputstream& ss,
         SubArguments& vSubArguments, int argumentNum, const std::string& p );
-    static void UnrollDoubleVector( std::stringstream& ss,
-        const std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
+    static void UnrollDoubleVector( outputstream& ss,
+        const outputstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
         int nCurWindowSize );
 };
 

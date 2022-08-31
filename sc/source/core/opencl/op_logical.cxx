@@ -15,7 +15,7 @@
 using namespace formula;
 
 namespace sc::opencl {
-void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
+void OpAnd::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -100,7 +100,7 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
+void OpOr::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -179,7 +179,7 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return t;\n";
     ss << "}\n";
 }
-void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
+void OpNot::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -216,7 +216,7 @@ void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
+void OpXor::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -295,7 +295,7 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return t;\n";
     ss << "}\n";
 }
-void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
+void OpIf::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;

@@ -9,13 +9,14 @@
 #pragma once
 
 #include "opbase.hxx"
+#include "utils.hxx"
 
 namespace sc::opencl {
 
 class OpSumX2MY2: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "SumX2MY2"; }
 };
@@ -23,7 +24,7 @@ public:
 class OpSumX2PY2: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "SumX2PY2"; }
 };
@@ -31,7 +32,7 @@ public:
 class OpSumXMY2: public CheckVariables
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "SumXMY2"; }
 };

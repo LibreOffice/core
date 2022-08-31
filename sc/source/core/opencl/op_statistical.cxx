@@ -16,7 +16,7 @@
 using namespace formula;
 
 namespace sc::opencl {
-void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
+void OpVar::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -203,7 +203,7 @@ void OpZTest::BinInlineFun(std::set<std::string>& decls,
     decls.insert(gaussDecl);
     funs.insert(gauss);
 }
-void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
+void OpZTest::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -462,7 +462,7 @@ void OpTTest::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetTDist);
 }
 
-void OpTTest::GenSlidingWindowFunction(std::stringstream &ss,
+void OpTTest::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -787,7 +787,7 @@ void OpTTest::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "}\n";
     }
 }
-void OpVarP::GenSlidingWindowFunction(std::stringstream &ss,
+void OpVarP::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -985,7 +985,7 @@ void OpTDist::BinInlineFun(std::set<std::string>& decls,
     decls.insert(GetTDistDecl);
     funs.insert(GetTDist);
 }
-void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpTDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1119,7 +1119,7 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return 2.0 * R;\n";
     ss << "}\n";
 }
-void OpExponDist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpExponDist::GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1206,7 +1206,7 @@ void OpFdist::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetLogBeta);
     funs.insert(lcl_getLanczosSum);
 }
-void OpFdist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpFdist::GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1267,7 +1267,7 @@ void OpFdist::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"}";
 }
 
-void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
+void OpStandard::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1392,7 +1392,7 @@ void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
+void OpWeibull::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1554,7 +1554,7 @@ void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSkew::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1811,7 +1811,7 @@ void OpSkew::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSkewp::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2096,7 +2096,7 @@ void OpTInv::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_IterateInverse);
 }
 
-void OpTInv::GenSlidingWindowFunction(std::stringstream &ss,
+void OpTInv::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2194,7 +2194,7 @@ void OpTInv::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpStDev::GenSlidingWindowFunction(std::stringstream &ss,
+void OpStDev::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2368,7 +2368,7 @@ void OpStDev::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpStDevP::GenSlidingWindowFunction(std::stringstream &ss,
+void OpStDevP::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2544,7 +2544,7 @@ void OpStDevP::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSlope::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT(2,2);
@@ -2688,7 +2688,7 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         throw Unhandled(__FILE__, __LINE__);
     }
 }
-void OpSTEYX::GenSlidingWindowFunction(std::stringstream &ss,
+void OpSTEYX::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2846,7 +2846,7 @@ void OpSTEYX::GenSlidingWindowFunction(std::stringstream &ss,
     }
 }
 void OpFisher::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2898,7 +2898,7 @@ vSubArguments)
 }
 
 void OpFisherInv::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR = static_cast<const
@@ -2925,7 +2925,7 @@ void OpFisherInv::GenSlidingWindowFunction(
 }
 
 void OpGamma::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2945,7 +2945,7 @@ void OpGamma::GenSlidingWindowFunction(
 }
 
 void OpCorrel::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     if( vSubArguments.size() !=2 ||vSubArguments[0]->GetFormulaToken()
         ->GetType() != formula::svDoubleVectorRef||vSubArguments[1]
@@ -3142,7 +3142,7 @@ void OpCorrel::GenSlidingWindowFunction(
 }
 
 void OpNegbinomdist::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3204,7 +3204,7 @@ void OpNegbinomdist::GenSlidingWindowFunction(
 }
 
 void OpPearson::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     if( vSubArguments.size() !=2 ||vSubArguments[0]->GetFormulaToken()
         ->GetType() != formula::svDoubleVectorRef||vSubArguments[1]
@@ -3301,7 +3301,7 @@ void OpPearson::GenSlidingWindowFunction(
 }
 
 void OpGammaLn::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
@@ -3336,7 +3336,7 @@ void OpGauss::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpGauss::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3386,7 +3386,7 @@ vSubArguments)
 }
 
 void OpGeoMean::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "__kernel void ";
     ss << "GeoMean_reduction(  ";
@@ -3551,7 +3551,7 @@ void OpGeoMean::GenSlidingWindowFunction(
 }
 
 void OpHarMean::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
 
@@ -3635,7 +3635,7 @@ void OpConfidence::BinInlineFun(std::set<std::string>& decls,
     funs.insert(gaussinv);
 }
 
-void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
+void OpConfidence::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3706,7 +3706,7 @@ void OpCritBinom::BinInlineFun(std::set<std::string>& decls,
     funs.insert("");
 }
 
-void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
+void OpCritBinom::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3803,7 +3803,7 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
 }
 
 void OpRsq::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     if( vSubArguments.size() !=2 ||vSubArguments[0]->GetFormulaToken()
         ->GetType() != formula::svDoubleVectorRef||vSubArguments[1]
@@ -3914,7 +3914,7 @@ void OpChiInv::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetGammaSeries);
 }
 void OpChiInv::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3994,7 +3994,7 @@ void OpChiInv::GenSlidingWindowFunction(
     ss << "}\n";
 }
 void OpNormdist::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName,
+    outputstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT(3,4);
@@ -4060,7 +4060,7 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "}\n";
 }
 void OpNormsdist::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4115,7 +4115,7 @@ void OpNormsdist::GenSlidingWindowFunction(
 }
 
 void OpPermut::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4177,7 +4177,7 @@ void OpPermut::GenSlidingWindowFunction(
     ss << "}\n";
 }
 void OpPermutationA::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4226,7 +4226,7 @@ void OpPermutationA::GenSlidingWindowFunction(
 }
 
 void OpPhi::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4281,7 +4281,7 @@ void OpPhi::GenSlidingWindowFunction(
 }
 
 void OpNorminv::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4493,7 +4493,7 @@ void OpNorminv::GenSlidingWindowFunction(
     ss<<"}\n";
 }
 void OpNormsinv:: GenSlidingWindowFunction
-    (std::stringstream &ss,const std::string &sSymName,
+    (outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4702,7 +4702,7 @@ void OpNormsinv:: GenSlidingWindowFunction
     ss <<"}\n";
 }
 void OpMedian::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName,
+    outputstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4766,7 +4766,7 @@ void OpMedian::GenSlidingWindowFunction(
     ss <<"     return tmp;\n";
     ss << "}\n";
 }
-void OpKurt:: GenSlidingWindowFunction(std::stringstream &ss,
+void OpKurt:: GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -4938,7 +4938,7 @@ void OpKurt:: GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
+void OpIntercept::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -5099,7 +5099,7 @@ void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "}\n";
     }
 }
-void OpLogInv:: GenSlidingWindowFunction(std::stringstream &ss,
+void OpLogInv:: GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -5332,7 +5332,7 @@ void OpLogInv:: GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpForecast::GenSlidingWindowFunction(std::stringstream &ss,
+void OpForecast::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *pCur0 = vSubArguments[0]->GetFormulaToken();
@@ -5444,7 +5444,7 @@ void OpForecast::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "}";
     }
 }
-void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpLogNormDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -5569,7 +5569,7 @@ void OpGammaDist::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetGammaDistPDF);
 }
 
-void OpGammaDist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpGammaDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -5663,7 +5663,7 @@ void OpChiDist::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetChiDist);
 }
 void OpChiDist::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -5770,7 +5770,7 @@ void OpBinomdist::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_getLanczosSum);
 }
 void OpBinomdist::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -5921,7 +5921,7 @@ void OpChiSqDist::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpChiSqDist::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -6012,7 +6012,7 @@ vSubArguments)
 }
 
 void OpChiSqInv::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -6095,7 +6095,7 @@ void OpGammaInv::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetGammaInvValue);
 }
 
-void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
+void OpGammaInv::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -6286,7 +6286,7 @@ void OpFInv::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_GetBetaHelperContFrac);funs.insert(GetFInvValue);
 }
 
-void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
+void OpFInv::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -6470,7 +6470,7 @@ void OpFTest::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_GetBetaHelperContFrac);funs.insert(GetBetaDist);
     funs.insert(GetFDist);
 }
-void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
+void OpFTest::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
@@ -6570,7 +6570,7 @@ void OpB::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_getLanczosSum);funs.insert(GetBeta);
 }
 
-void OpB::GenSlidingWindowFunction(std::stringstream &ss,
+void OpB::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -6725,7 +6725,7 @@ void OpPoisson::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetGammaSeries);
 }
 void OpPoisson::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -6837,7 +6837,7 @@ void OpPoisson::GenSlidingWindowFunction(
     ss << "     }\n";
     ss << "}\n";
 }
-void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
+void OpCovar::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
         CHECK_PARAMETER_COUNT(2,2);
@@ -7121,7 +7121,7 @@ void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
         ss << "}";
         }
 }
-void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpBetaDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -7253,7 +7253,7 @@ void OpBetainv::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_getLanczosSum);
 }
 void OpBetainv::GenSlidingWindowFunction(
-    std::stringstream &ss,const std::string &sSymName,
+    outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -7340,7 +7340,7 @@ void OpBetainv::GenSlidingWindowFunction(
     ss << "    }";
     ss << "}\n";
 }
-void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
+void OpDevSq::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
         ss << "\ndouble " << sSymName;
@@ -7530,7 +7530,7 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
         ss << "    return vSum;\n";
         ss << "}";
 }
-void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
+void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -7658,7 +7658,7 @@ enum MixDoubleString
 }
 
 void OpMinA::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     int isMixed = 0;
     ss << "\ndouble " << sSymName;
@@ -7803,7 +7803,7 @@ void OpMinA::GenSlidingWindowFunction(
     ss << "}\n";
 }
 void OpCountA::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     int isMixed = 0;
@@ -7939,7 +7939,7 @@ vSubArguments)
     ss << "}\n";
 }
 void OpMaxA::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     int isMixed = 0;
@@ -8086,7 +8086,7 @@ vSubArguments)
     ss << "}\n";
 }
 void OpAverageA::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string &sSymName, SubArguments &
+    outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     int isMixed = 0;
@@ -8233,7 +8233,7 @@ vSubArguments)
     ss << "    return tmp0/nCount;\n";
     ss << "}\n";
 }
-void OpVarA::GenSlidingWindowFunction(std::stringstream &ss,
+void OpVarA::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     int isMixedDV = 0;
@@ -8603,7 +8603,7 @@ void OpVarA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpVarPA::GenSlidingWindowFunction(std::stringstream &ss,
+void OpVarPA::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     int isMixedDV = 0;
@@ -8970,7 +8970,7 @@ void OpVarPA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return vSum / fCount;\n";
     ss << "}\n";
 }
-void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
+void OpStDevA::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     int isMixedDV = 0;
@@ -9338,7 +9338,7 @@ void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
+void OpStDevPA::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     int isMixedDV = 0;
@@ -9706,7 +9706,7 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 
-void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
+void OpAveDev:: GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;

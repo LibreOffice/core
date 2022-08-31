@@ -10,20 +10,21 @@
 #pragma once
 
 #include "opbase.hxx"
+#include "utils.hxx"
 
 namespace sc::opencl {
 
 class OpBesselj: public Normal
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Besselj"; }
 };
 class OpGestep: public Normal
 {
 public:
-    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Gestep"; }
 };

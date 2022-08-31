@@ -725,6 +725,7 @@ $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/op_array \
     sc/source/core/opencl/op_logical \
     sc/source/core/opencl/op_spreadsheet \
+    sc/source/core/opencl/utils \
 )))
 
 ifeq ($(OS),LINUX)
