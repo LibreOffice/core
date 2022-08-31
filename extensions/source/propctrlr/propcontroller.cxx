@@ -956,7 +956,7 @@ namespace pcr
                 }
 
                 // append these properties to our "all properties" array
-                aProperties.reserve( aProperties.size() + aThisHandlersProperties.size() );
+                aProperties.reserve( std::max<size_t>(aProperties.size() + aThisHandlersProperties.size(), aProperties.size() * 2) );
                 for (const auto & aThisHandlersProperty : aThisHandlersProperties)
                 {
                     auto noPrevious = std::none_of(
