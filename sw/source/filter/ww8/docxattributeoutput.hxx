@@ -1102,6 +1102,7 @@ struct DocxTableExportContext
     ww8::WW8TableInfo::Pointer_t m_pTableInfo;
     bool m_bTableCellOpen;
     bool m_bStartedParaSdt;
+    bool m_bStartedRunSdt;
     sal_uInt32 m_nTableDepth;
     DocxTableExportContext(DocxAttributeOutput& rOutput) : m_rOutput(rOutput) { m_rOutput.pushToTableExportContext(*this); }
     ~DocxTableExportContext() { m_rOutput.popFromTableExportContext(*this); }
