@@ -67,4 +67,8 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_firebird_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_firebird_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_firebird_test, \
+    dbaccess \
+))
+
 # vim: set noet sw=4 ts=4:
