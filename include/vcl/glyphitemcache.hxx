@@ -76,6 +76,8 @@ private:
         MapMode mapMode;
         bool rtl;
         bool disabledLigatures; // because of fixed pitch
+        bool artificialItalic;
+        bool artificialBold;
         vcl::text::ComplexTextLayoutFlags layoutMode;
         LanguageType digitLanguage;
         size_t hashValue;
