@@ -505,6 +505,10 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     const LogicalFontInstance* fi = outputDevice->GetFontInstance();
     fi->GetScale(&fontScaleX, &fontScaleY);
 
+    const vcl::font::FontSelectPattern& rFSD = fi->GetFontSelectPattern();
+    artificialItalic = rFSD.GetItalic() != ITALIC_NONE && fontMetric.GetItalic() == ITALIC_NONE;
+    artificialBold = rFSD.GetWeight() > WEIGHT_MEDIUM && fontMetric.GetWeight() <= WEIGHT_MEDIUM;
+
     hashValue = 0;
     o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));
     o3tl::hash_combine(hashValue, index);
@@ -520,6 +524,8 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     o3tl::hash_combine(hashValue, fontScaleY);
     o3tl::hash_combine(hashValue, mapMode.GetHashValue());
     o3tl::hash_combine(hashValue, rtl);
+    o3tl::hash_combine(hashValue, artificialItalic);
+    o3tl::hash_combine(hashValue, artificialBold);
     o3tl::hash_combine(hashValue, layoutMode);
     o3tl::hash_combine(hashValue, digitLanguage.get());
 }
@@ -528,6 +534,7 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
 {
     return hashValue == other.hashValue && index == other.index && len == other.len
            && logicWidth == other.logicWidth && mapMode == other.mapMode && rtl == other.rtl
+           && artificialItalic == other.artificialItalic && artificialBold == other.artificialBold
            && layoutMode == other.layoutMode && digitLanguage == other.digitLanguage
            && fontScaleX == other.fontScaleX && fontScaleY == other.fontScaleY
            && fontMetric.EqualIgnoreColor(other.fontMetric)

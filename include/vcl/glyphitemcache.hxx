@@ -75,6 +75,8 @@ private:
         double fontScaleY;
         MapMode mapMode;
         bool rtl;
+        bool artificialItalic;
+        bool artificialBold;
         vcl::text::ComplexTextLayoutFlags layoutMode;
         LanguageType digitLanguage;
         size_t hashValue;
