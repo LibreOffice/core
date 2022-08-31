@@ -1399,7 +1399,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 OUString        aStatusVal;
                 LanguageType    nLang = LANGUAGE_NONE;
                 bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
-                rSet.Put( SfxStringItem( FN_PARAM_THES_WORD_REPLACE, aStatusVal ) );
+                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                 // disable "Thesaurus" context menu entry if there is nothing to look up
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
