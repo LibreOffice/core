@@ -96,7 +96,6 @@ private:
     static void InsertAccChildNode(AccObject* pCurObj,AccObject* pParentObj,HWND pWnd);
     static void DeleteAccChildNode(AccObject* pChild);
     void       DeleteFromHwndXAcc(css::accessibility::XAccessible const * pXAcc );
-    int  UpdateAccSelection(css::accessibility::XAccessible* pXAcc);
 
     ::rtl::Reference<AccEventListener> CreateAccEventListener(
             css::accessibility::XAccessible* pXAcc);
