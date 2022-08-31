@@ -2868,28 +2868,35 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
             bValid = true;
             if (ePrivateUse != PrivateUse::ALLOW)
             {
-                const lt_string_t* pPrivate = lt_tag_get_privateuse( aVar.mpLangtag);
-                if (pPrivate && lt_string_length( pPrivate) > 0)
-                    bValid = false;
-                else
+                do
                 {
+                    const char* pLang = nullptr;
                     const lt_lang_t* pLangT = lt_tag_get_language( aVar.mpLangtag);
                     if (pLangT)
                     {
-                        const char* pLang = lt_lang_get_tag( pLangT);
+                        pLang = lt_lang_get_tag( pLangT);
                         if (pLang && strcmp( pLang, I18NLANGTAG_QLT_ASCII) == 0)
                         {
-                            // Disallow 'qlt' privateuse code to prevent
+                            // Disallow 'qlt' localuse code to prevent
                             // confusion with our internal usage.
                             bValid = false;
+                            break;
                         }
                     }
+                    if (ePrivateUse == PrivateUse::ALLOW_ART_X && pLang && strcmp( pLang, "art") == 0)
+                    {
+                        // Allow anything 'art' which includes 'art-x-...' and 'art-Latn-x-...'.
+                        break;
+                    }
+                    const lt_string_t* pPrivate = lt_tag_get_privateuse( aVar.mpLangtag);
+                    if (pPrivate && lt_string_length( pPrivate) > 0)
+                        bValid = false;
                 }
+                while (false);
             }
             if (o_pCanonicalized)
                 *o_pCanonicalized = OUString::createFromAscii( pTag);
             free( pTag);
-            return bValid;
         }
     }
     else

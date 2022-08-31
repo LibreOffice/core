@@ -430,7 +430,7 @@ IMPL_LINK(SvxLanguageBox, ChangeHdl, weld::ComboBox&, rControl, void)
             else
             {
                 OUString aCanonicalized;
-                bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized, LanguageTag::PrivateUse::DISALLOW);
+                bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized, LanguageTag::PrivateUse::ALLOW_ART_X);
                 m_eEditedAndValid = (bValid ? EditedAndValid::Valid : EditedAndValid::Invalid);
                 if (bValid && aCanonicalized != aStr)
                 {

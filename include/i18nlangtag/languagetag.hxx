@@ -518,8 +518,10 @@ public:
     /** Enums to be used with isValidBcp47(). */
     enum PrivateUse
     {
-        ALLOW = 0,
-        DISALLOW
+        ALLOW = 0,      ///< Allow all private-use and local-use including (!) 'qlt' local-use.
+        DISALLOW,       ///< Disallow all private-use and 'qlt' local-use, other 'qaa' to 'qtz' local-use are allowed.
+        ALLOW_ART_X     ///< Disallow all private-use and 'qlt' local-use, but allow 'art-x-...' private-use
+                        ///  for artificial constructed languages (and 'art-Latn-x-...' and other scripts).
     };
 
     /** If rString represents a valid BCP 47 language tag.
