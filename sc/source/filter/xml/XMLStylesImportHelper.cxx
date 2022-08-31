@@ -299,7 +299,7 @@ void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sa
 {
     OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesMap::iterator aItr(GetIterator(sStyleName));
-    aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
+    aColDefaultStyles.reserve(std::max<size_t>(aColDefaultStyles.size() + nRepeat, aColDefaultStyles.size() * 2));
     for (sal_Int32 i = 0; i < nRepeat; ++i)
         aColDefaultStyles.push_back(aItr);
 }
