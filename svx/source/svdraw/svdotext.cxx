@@ -69,46 +69,43 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewC
 }
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
-:   SdrAttrObj(rSdrModel),
-    mpEditingOutliner(nullptr),
-    meTextKind(SdrObjKind::Text)
+    : SdrAttrObj(rSdrModel)
+    , mpEditingOutliner(nullptr)
+    , meTextKind(SdrObjKind::Text)
+    , maTextEditOffset(Point(0, 0))
+    , mbTextFrame(false)
+    , mbNoShear(false)
+    , mbTextSizeDirty(false)
+    , mbInEditMode(false)
+    , mbDisableAutoWidthOnDragging(false)
+    , mbTextAnimationAllowed(true)
+    , mbInDownScale(false)
 {
-    mbTextSizeDirty = false;
-    mbTextFrame = false;
-    mbNoShear = false;
-    mbDisableAutoWidthOnDragging = false;
-
-    mbInEditMode = false;
-    mbTextAnimationAllowed = true;
-    maTextEditOffset = Point(0, 0);
-
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
-    mbInDownScale = false;
 }
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
-:   SdrAttrObj(rSdrModel, rSource),
-    mpEditingOutliner(nullptr)
+    : SdrAttrObj(rSdrModel, rSource)
+    , mpEditingOutliner(nullptr)
+    , meTextKind(rSource.meTextKind)
+    , maTextEditOffset(Point(0, 0))
+    , mbTextFrame(rSource.mbTextFrame)
+    , mbNoShear(rSource.mbNoShear)
+    , mbTextSizeDirty(rSource.mbTextSizeDirty)
+    , mbInEditMode(false)
+    , mbDisableAutoWidthOnDragging(rSource.mbDisableAutoWidthOnDragging)
+    , mbTextAnimationAllowed(true)
+    , mbInDownScale(false)
 {
-    mbInEditMode = false;
-    mbTextAnimationAllowed = true;
-    maTextEditOffset = Point(0, 0);
-
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
-    mbInDownScale = false;
 
     maRect = rSource.maRect;
     maGeo = rSource.maGeo;
-    meTextKind = rSource.meTextKind;
-    mbTextFrame = rSource.mbTextFrame;
     maTextSize = rSource.maTextSize;
-    mbTextSizeDirty = rSource.mbTextSizeDirty;
 
     // Not all of the necessary parameters were copied yet.
-    mbNoShear = rSource.mbNoShear;
-    mbDisableAutoWidthOnDragging = rSource.mbDisableAutoWidthOnDragging;
     SdrText* pText = getActiveText();
 
     if( pText && rSource.HasText() )
@@ -136,69 +133,59 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
     ImpSetTextStyleSheetListeners();
 }
 
-SdrTextObj::SdrTextObj(
-    SdrModel& rSdrModel,
-    const tools::Rectangle& rNewRect)
-:   SdrAttrObj(rSdrModel),
-    maRect(rNewRect),
-    mpEditingOutliner(nullptr),
-    meTextKind(SdrObjKind::Text)
+SdrTextObj::SdrTextObj(SdrModel& rSdrModel, const tools::Rectangle& rNewRect)
+    : SdrAttrObj(rSdrModel)
+    , maRect(rNewRect)
+    , mpEditingOutliner(nullptr)
+    , meTextKind(SdrObjKind::Text)
+    , maTextEditOffset(Point(0, 0))
+    , mbTextFrame(false)
+    , mbNoShear(false)
+    , mbTextSizeDirty(false)
+    , mbInEditMode(false)
+    , mbDisableAutoWidthOnDragging(false)
+    , mbTextAnimationAllowed(true)
+    , mbInDownScale(false)
 {
-    mbTextSizeDirty = false;
-    mbTextFrame = false;
-    mbNoShear = false;
-    mbDisableAutoWidthOnDragging = false;
     ImpJustifyRect(maRect);
-
-    mbInEditMode = false;
-    mbTextAnimationAllowed = true;
-    mbInDownScale = false;
-    maTextEditOffset = Point(0, 0);
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewTextKind)
-:   SdrAttrObj(rSdrModel),
-    mpEditingOutliner(nullptr),
-    meTextKind(eNewTextKind)
+SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind)
+    : SdrAttrObj(rSdrModel)
+    , mpEditingOutliner(nullptr)
+    , meTextKind(eNewTextKind)
+    , maTextEditOffset(Point(0, 0))
+    , mbTextFrame(true)
+    , mbNoShear(true)
+    , mbTextSizeDirty(false)
+    , mbInEditMode(false)
+    , mbDisableAutoWidthOnDragging(false)
+    , mbTextAnimationAllowed(true)
+    , mbInDownScale(false)
 {
-    mbTextSizeDirty = false;
-    mbTextFrame = true;
-    mbNoShear = true;
-    mbDisableAutoWidthOnDragging = false;
-
-    mbInEditMode = false;
-    mbTextAnimationAllowed = true;
-    mbInDownScale = false;
-    maTextEditOffset = Point(0, 0);
-
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewTextKind,
-    const tools::Rectangle& rNewRect)
-:   SdrAttrObj(rSdrModel),
-    maRect(rNewRect),
-    mpEditingOutliner(nullptr),
-    meTextKind(eNewTextKind)
+SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind,
+                       const tools::Rectangle& rNewRect)
+    : SdrAttrObj(rSdrModel)
+    , maRect(rNewRect)
+    , mpEditingOutliner(nullptr)
+    , meTextKind(eNewTextKind)
+    , maTextEditOffset(Point(0, 0))
+    , mbTextFrame(true)
+    , mbNoShear(true)
+    , mbTextSizeDirty(false)
+    , mbInEditMode(false)
+    , mbDisableAutoWidthOnDragging(false)
+    , mbTextAnimationAllowed(true)
+    , mbInDownScale(false)
 {
-    mbTextSizeDirty = false;
-    mbTextFrame = true;
-    mbNoShear = true;
-    mbDisableAutoWidthOnDragging = false;
     ImpJustifyRect(maRect);
-
-    mbInEditMode = false;
-    mbTextAnimationAllowed = true;
-    mbInDownScale = false;
-    maTextEditOffset = Point(0, 0);
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
