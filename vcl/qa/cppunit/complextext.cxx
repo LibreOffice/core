@@ -240,12 +240,9 @@ void VclComplexTextTest::testCaret()
 #if HAVE_MORE_FONTS
     // Test caret placement in fonts *without* ligature carets in GDEF table.
 
-    ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
-    CPPUNIT_ASSERT( pWin );
-
     vcl::Font aFont("DejaVu Sans", "Book", Size(0, 200));
 
-    OutputDevice *pOutDev = pWin->GetOutDev();
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont( aFont );
 
     OUString aText;
@@ -321,10 +318,7 @@ void VclComplexTextTest::testGdefCaret()
 #if HAVE_MORE_FONTS
     // Test caret placement in fonts *with* ligature carets in GDEF table.
 
-    ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
-    CPPUNIT_ASSERT( pWin );
-
-    OutputDevice *pOutDev = pWin->GetOutDev();
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
 
     vcl::Font aFont;
     OUString aText;
