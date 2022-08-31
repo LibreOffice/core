@@ -205,9 +205,9 @@ namespace
     bool lcl_MarkOrderingByStart(const ::sw::mark::MarkBase *const pFirst,
                                  const ::sw::mark::MarkBase *const pSecond)
     {
-        auto const& rFirstStart(pFirst->GetMarkStart());
-        auto const& rSecondStart(pSecond->GetMarkStart());
-        if (rFirstStart.nNode != rSecondStart.nNode)
+        SwPosition const& rFirstStart(pFirst->GetMarkStart());
+        SwPosition const& rSecondStart(pSecond->GetMarkStart());
+        if (rFirstStart.GetNode() != rSecondStart.GetNode())
         {
             return rFirstStart.GetNode() < rSecondStart.GetNode();
         }
@@ -249,8 +249,7 @@ namespace
         const SwContentNode * const pContentNode,
         const bool bAtEnd)
     {
-        rFoundPos.emplace(*pContentNode);
-        rFoundPos->nContent.Assign(pContentNode, bAtEnd ? pContentNode->Len() : 0);
+        rFoundPos.emplace(*pContentNode, bAtEnd ? pContentNode->Len() : 0);
     }
 
     // return a position at the begin of rEnd, if it is a ContentNode
@@ -528,7 +527,7 @@ void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& r
         return; // TODO FORMDATE has no command?
     }
     SwPaM pam(sw::mark::FindFieldSep(rMark), rMark.GetMarkStart());
-    ++pam.GetPoint()->nContent; // skip CH_TXT_ATR_FIELDSTART
+    pam.GetPoint()->AdjustContent(+1); // skip CH_TXT_ATR_FIELDSTART
     pam.GetDoc().getIDocumentContentOperations().DeleteAndJoin(pam);
 }
 
@@ -584,7 +583,7 @@ namespace sw::mark
             && (eMode == InsertMode::New
                 ? *rPaM.GetPoint() != *rPaM.GetMark()
                 // CopyText: pam covers CH_TXT_ATR_FORMELEMENT
-                : (rPaM.GetPoint()->nNode != rPaM.GetMark()->nNode
+                : (rPaM.GetPoint()->GetNode() != rPaM.GetMark()->GetNode()
                     || rPaM.Start()->GetContentIndex() + 1 != rPaM.End()->GetContentIndex())))
         {
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
@@ -883,7 +882,7 @@ namespace sw::mark
     {
         const SwNode* const pOldNode = &rOldNode;
         SwPosition aNewPos(rNewPos);
-        aNewPos.nContent += nOffset;
+        aNewPos.AdjustContent(nOffset);
         bool isSortingNeeded = false;
 
         for (auto ppMark = m_vAllMarks.begin();
@@ -926,7 +925,7 @@ namespace sw::mark
     {
         const SwNode* const pOldNode = &rOldNode;
         SwPosition aNewPos(rNewPos);
-        aNewPos.nContent += nOffset;
+        aNewPos.AdjustContent(nOffset);
         bool isSortingNeeded = false;
 
         for (auto ppMark = m_vAllMarks.begin();
@@ -944,10 +943,10 @@ namespace sw::mark
                 if (dynamic_cast< ::sw::mark::CrossRefBookmark *>(pMark))
                 {
                     // ensure that cross ref bookmark always starts at 0
-                    aNewPosRel.nContent = 0; // HACK for WW8 import
+                    aNewPosRel.SetContent(0); // HACK for WW8 import
                     isSortingNeeded = true; // and sort them to be safe...
                 }
-                aNewPosRel.nContent += pMark->GetMarkPos().GetContentIndex();
+                aNewPosRel.AdjustContent(pMark->GetMarkPos().GetContentIndex());
                 pMark->SetMarkPos(aNewPosRel);
                 bChangedPos = true;
             }
@@ -955,7 +954,7 @@ namespace sw::mark
                 &pMark->GetOtherMarkPos().GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
-                aNewPosRel.nContent += pMark->GetOtherMarkPos().GetContentIndex();
+                aNewPosRel.AdjustContent(pMark->GetOtherMarkPos().GetContentIndex());
                 pMark->SetOtherMarkPos(aNewPosRel);
                 bChangedOPos = true;
             }
@@ -1031,7 +1030,7 @@ namespace sw::mark
                     bDeleteMark = rbIsOtherPosInRange
                                   || pMark->IsExpanded()
                                   || !oStartContentIdx.has_value()
-                                  || pMark->GetMarkPos().nNode != rStt
+                                  || pMark->GetMarkPos().GetNode() != rStt
                                   || pMark->GetMarkPos().GetContentIndex() != *oStartContentIdx;
                     break;
                 default:
@@ -1131,7 +1130,7 @@ namespace sw::mark
                     case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
                     case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                         // no move of cross-reference bookmarks, if move occurs inside a certain node
-                        bMoveMark = pMark->GetMarkPos().nNode != oNewPos->nNode;
+                        bMoveMark = pMark->GetMarkPos().GetNode() != oNewPos->GetNode();
                         break;
                     case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                         // no move of annotation marks, if method is called to collect deleted marks
@@ -1491,7 +1490,7 @@ namespace sw::mark
         if ((!pFieldBM || (pFieldBM->GetFieldname() != ODF_FORMDROPDOWN && pFieldBM->GetFieldname() != ODF_FORMDATE))
             && aPos.GetContentIndex() > 0 )
         {
-            --aPos.nContent;
+            aPos.AdjustContent(-1);
             pFieldBM = getFieldmarkFor(aPos);
         }
 
