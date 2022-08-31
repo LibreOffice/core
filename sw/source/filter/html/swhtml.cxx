@@ -4628,7 +4628,14 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     sal_uInt16 nLeftMargin = 0, nRightMargin = 0;   // the margins and
     short nFirstLineIndent = 0;                     // indentations
 
-    for( auto i = m_nContextStAttrMin; i < m_aContexts.size(); ++i )
+    auto nDepth = m_aContexts.size();
+    if (m_bFuzzing && nDepth > 512)
+    {
+        SAL_WARN("sw.html", "Not applying any more text collection attributes to a deeply nested node for fuzzing performance");
+        nDepth = 0;
+    }
+
+    for (auto i = m_nContextStAttrMin; i < nDepth; ++i)
     {
         const HTMLAttrContext *pCntxt = m_aContexts[i].get();
 
