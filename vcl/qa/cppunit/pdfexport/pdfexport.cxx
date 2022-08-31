@@ -3605,7 +3605,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
     CPPUNIT_ASSERT_GREATER(aRect[jeh].getMinX(), aRect[tatweel].getMaxX());
     // Checking left gap
     // Kashida fails to reach to rehmim before the series of patches starting
-    // with 3901e029bd39575f700e69a73818565d62226a23. The visible sypotom is
+    // with 3901e029bd39575f700e69a73818565d62226a23. The visible symptom is
     // a gap in the left of Kashida.
     // CPPUNIT_ASSERT_LESS(aRect[rehmim].getMaxX(), aRect[tatweel].getMinX());
 
