@@ -56,6 +56,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
     CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
+{
+    // Without the accompanying fix in place, this test would have failed with an assertion failure,
+    // we produced not-well-formed XML on save.
+    loadAndSave("inline-sdt-header.docx");
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

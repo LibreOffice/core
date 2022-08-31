@@ -6822,6 +6822,8 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
 
     rContext.m_bStartedParaSdt = m_aParagraphSdt.m_bStartedSdt;
     m_aParagraphSdt.m_bStartedSdt = false;
+    rContext.m_bStartedRunSdt = m_aRunSdt.m_bStartedSdt;
+    m_aRunSdt.m_bStartedSdt = false;
 }
 
 void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
@@ -6830,6 +6832,7 @@ void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const
     m_tableReference->m_bTableCellOpen = rContext.m_bTableCellOpen;
     m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
     m_aParagraphSdt.m_bStartedSdt = rContext.m_bStartedParaSdt;
+    m_aRunSdt.m_bStartedSdt = rContext.m_bStartedRunSdt;
 }
 
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
