@@ -1063,7 +1063,7 @@ public:
     inline void setDepthData(SvXMLElementExport* aSvXMLElementExportList)
     {
         if (m_nDepth == m_aSvXMLElementExportList.size())
-            m_aSvXMLElementExportList.reserve(m_aSvXMLElementExportList.size() + 1024);
+            m_aSvXMLElementExportList.resize(m_aSvXMLElementExportList.size() + 1024);
         m_aSvXMLElementExportList[m_nDepth] = aSvXMLElementExportList;
     }
 
