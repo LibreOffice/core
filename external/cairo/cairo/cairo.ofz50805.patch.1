@@ -1,0 +1,16 @@
+--- a/src/cairo-ft-font.c	2022-08-31 09:46:52.595160200 +0100
++++ b/src/cairo-ft-font.c	2022-08-31 09:47:41.623945654 +0100
+@@ -2568,9 +2568,11 @@
+ 	    if (unlikely (status))
+ 		cairo_surface_destroy (&surface->base);
+ 	}
+-	if (unlikely (status))
+-	    return status;
+     }
++
++    if (unlikely (status))
++	return status;
++
+     if (pixman_image_get_format (surface->pixman_image) == PIXMAN_a8r8g8b8 &&
+ 	!pixman_image_get_component_alpha (surface->pixman_image)) {
+ 	_cairo_scaled_glyph_set_color_surface (scaled_glyph,
