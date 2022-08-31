@@ -49,7 +49,6 @@ template <typename T> void SbiBuffer::append(T n)
         m_aBuf.clear();
         return;
     }
-    m_aBuf.reserve(m_aBuf.size() + sizeof(n));
     write(std::back_inserter(m_aBuf), n);
 }
 
