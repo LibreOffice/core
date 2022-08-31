@@ -3163,8 +3163,11 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
 
     size_t nBlockLen = it->size - aPos.second;
     if (nBlockLen < nLen)
+    {
         // Result array is longer than the length of formula cells. Not good.
+        assert( false );
         return;
+    }
 
     sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
     std::advance(itCell, aPos.second);
@@ -3199,8 +3202,11 @@ void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, si
 
     size_t nBlockLen = it->size - aPos.second;
     if (nBlockLen < nLen)
+    {
         // Length is longer than the length of formula cells. Not good.
+        assert( false );
         return;
+    }
 
     sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
     std::advance(itCell, aPos.second);
@@ -3232,8 +3238,11 @@ void ScColumn::HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen, ScI
 
     size_t nBlockLen = it->size - aPos.second;
     if (nBlockLen < nLen)
+    {
         // Length is longer than the length of formula cells. Not good.
+        assert( false );
         return;
+    }
 
     sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
     std::advance(itCell, aPos.second);
