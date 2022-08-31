@@ -842,7 +842,7 @@ void ImpGraphic::setValuesForPrefSize(const Size& rPrefSize)
 
             // #108077# Push through pref size to animation object,
             // will be lost on copy otherwise
-            if (isAnimated())
+            if (mpAnimation)
             {
                 const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize(rPrefSize);
             }
@@ -932,7 +932,7 @@ void ImpGraphic::setValuesForPrefMapMod(const MapMode& rPrefMapMode)
             {
                 // #108077# Push through pref mapmode to animation object,
                 // will be lost on copy otherwise
-                if (isAnimated())
+                if (mpAnimation)
                 {
                     const_cast<BitmapEx&>(mpAnimation->GetBitmapEx()).SetPrefMapMode(rPrefMapMode);
                 }
@@ -1235,7 +1235,7 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
                     maVectorGraphicData->getBinaryDataContainer().getData(),
                     maVectorGraphicData->getBinaryDataContainer().getSize());
             }
-            else if (isAnimated())
+            else if (mpAnimation)
             {
                 rStream.WriteInt32(sal_Int32(GraphicContentType::Animation));
                 WriteAnimation(rStream, *mpAnimation);
