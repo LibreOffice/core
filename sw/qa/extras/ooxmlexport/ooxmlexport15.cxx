@@ -227,6 +227,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), xTextField2->getPresentation(false));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
+{
+    // Without the accompanying fix in place, this test would have failed with an assertion failure,
+    // we produced not-well-formed XML on save.
+    load(mpTestDocumentPath, "inline-sdt-header.docx");
+    save(OUString::createFromAscii(mpFilter), maTempFile);
+    mbExported = true;
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
