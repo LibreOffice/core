@@ -1228,6 +1228,7 @@ void SwTextNode::Update(
     const sal_Int32 nChangeLen,
     UpdateMode const eMode)
 {
+    assert(rPos.GetContentNode() == this);
     SetAutoCompleteWordDirty( true );
 
     std::unique_ptr<SwpHts> pCollector;
@@ -2041,6 +2042,8 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 {
     CHECK_SWPHINTS_IF_FRM(this);
     CHECK_SWPHINTS(pDest);
+    assert(rDestStart.GetContentNode() == pDest);
+    assert(rStart.GetContentNode() == this);
     sal_Int32 nTextStartIdx = rStart.GetIndex();
     sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
 
@@ -2313,6 +2316,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & rIdx,
         const SwInsertFlags nMode )
 {
+    assert(rIdx.GetContentNode() == this);
     assert(rIdx <= m_Text.getLength()); // invalid index
 
     const sal_Int32 aPos = rIdx.GetIndex();
@@ -2446,6 +2450,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     assert(&GetDoc() == &pDest->GetDoc()); // must be same document
 
     assert(pDest != this); // destination must be different node
+
+    assert(rDestStart.GetContentNode() == pDest);
+    assert(rStart.GetContentNode() == this);
 
     if( !nLen )
     {
@@ -2705,6 +2712,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
 void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
         const SwInsertFlags nMode )
 {
+    assert(rIdx.GetContentNode() == this);
     assert(rIdx <= m_Text.getLength()); // invalid index
 
     const sal_Int32 nStartIdx = rIdx.GetIndex();
@@ -3486,6 +3494,7 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwContentIndex* pDest
 {
     if( &rDestNd == this )
         return false;
+    assert(!pDestIdx || pDestIdx->GetContentNode() == &rDestNd);
 
     SwContentIndex aDestIdx(&rDestNd, rDestNd.GetText().getLength());
     if( pDestIdx )
@@ -3731,6 +3740,7 @@ OUString SwTextNode::GetRedlineText() const
 void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDelLen,
                              const OUString & rStr)
 {
+    assert(rStart.GetContentNode() == this);
     assert( rStart.GetIndex() < m_Text.getLength()     // index out of bounds
          && rStart.GetIndex() + nDelLen <= m_Text.getLength());
 

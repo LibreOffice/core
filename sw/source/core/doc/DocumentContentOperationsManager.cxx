@@ -5124,7 +5124,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         pDestTextNd = aInsPos.GetNode().GetTextNode();
         if (pEndTextNd)
         {
-            SwContentIndex aDestIdx( rPos.nContent );
+            SwContentIndex aDestIdx( aInsPos.GetNode().GetContentNode(), rPos.GetContentIndex() );
             if( !pDestTextNd )
             {
                 pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),

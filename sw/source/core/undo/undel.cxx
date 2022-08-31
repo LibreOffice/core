@@ -920,7 +920,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             assert(pTextNd); // else where does m_aEndStr come from?
             if( pTextNd )
             {
-                OUString const ins( pTextNd->InsertText(*m_aEndStr, aPos.nContent,
+                SwContentIndex aTmpIdx(pTextNd, aPos.GetContentIndex());
+                OUString const ins( pTextNd->InsertText(*m_aEndStr, aTmpIdx,
                         SwInsertFlags::NOHINTEXPAND) );
                 assert(ins.getLength() == m_aEndStr->getLength()); // must succeed
                 (void) ins;

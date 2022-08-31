@@ -372,6 +372,7 @@ void SwTextNode::RstTextAttr(
     const bool bInclRefToxMark,
     const bool bExactRange )
 {
+    assert(rIdx.GetContentNode() == this);
     if ( !GetpSwpHints() )
         return;
 
