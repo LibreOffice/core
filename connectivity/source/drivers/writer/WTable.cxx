@@ -171,9 +171,6 @@ OWriterTable::OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pCo
     : OWriterTable_BASE(_pTables, _pConnection, Name, Type, OUString() /*Description*/,
                         OUString() /*SchemaName*/, OUString() /*CatalogName*/)
     , m_pWriterConnection(_pConnection)
-    , m_nStartCol(0)
-    , m_nDataCols(0)
-    , m_bHasHeaders(false)
 {
 }
 
