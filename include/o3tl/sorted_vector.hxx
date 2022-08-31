@@ -328,6 +328,7 @@ public:
     {
         Value tmp(const_cast<typename Value::element_type*>(x));
         auto ret = super_sorted_vector::find(tmp);
+        // coverity[ resource_leak : FALSE] - this is only a pretend unique_ptr, to avoid allocating a temporary
         tmp.release();
         return ret;
     }
@@ -338,6 +339,7 @@ public:
     {
         Value tmp(const_cast<typename Value::element_type*>(x));
         auto ret = super_sorted_vector::upper_bound(tmp);
+        // coverity[ resource_leak : FALSE] - this is only a pretend unique_ptr, to avoid allocating a temporary
         tmp.release();
         return ret;
     }
@@ -348,6 +350,7 @@ public:
     {
         Value tmp(const_cast<typename Value::element_type*>(x));
         auto ret = super_sorted_vector::lower_bound(tmp);
+        // coverity[ resource_leak : FALSE] - this is only a pretend unique_ptr, to avoid allocating a temporary
         tmp.release();
         return ret;
     }
