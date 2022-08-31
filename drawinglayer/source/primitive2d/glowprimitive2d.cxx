@@ -37,8 +37,7 @@ namespace drawinglayer::primitive2d
 {
 GlowPrimitive2D::GlowPrimitive2D(const Color& rGlowColor, double fRadius,
                                  Primitive2DContainer&& rChildren)
-    : GroupPrimitive2D(std::move(rChildren))
-    , maBuffered2DDecomposition()
+    : BufferedDecompositionGroupPrimitive2D(std::move(rChildren))
     , maGlowColor(rGlowColor)
     , mfGlowRadius(fRadius)
     , mfLastDiscreteGlowRadius(0.0)
@@ -48,7 +47,7 @@ GlowPrimitive2D::GlowPrimitive2D(const Color& rGlowColor, double fRadius,
 
 bool GlowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 {
-    if (BasePrimitive2D::operator==(rPrimitive))
+    if (BufferedDecompositionGroupPrimitive2D::operator==(rPrimitive))
     {
         const GlowPrimitive2D& rCompare = static_cast<const GlowPrimitive2D&>(rPrimitive);
 
@@ -239,10 +238,9 @@ void GlowPrimitive2D::create2DDecomposition(
     }
 }
 
-// Same as in BufferedDecompositionPrimitive2D, maybe we need a tooling class
-// like BufferedDecompositionGropupPrimitive2D if this is used more often
-// (AFAIR it's similar for ScenePrimitive2D which also does quite some re-use/
-// buffering checks to avoid too much re-creation)
+// Using tooling class BufferedDecompositionGroupPrimitive2D now, so
+// no more need to locally do the buffered get2DDecomposition here,
+// see BufferedDecompositionGroupPrimitive2D::get2DDecomposition
 void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                                          const geometry::ViewInformation2D& rViewInformation) const
 {
@@ -319,20 +317,9 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
         }
     }
 
-    if (getBuffered2DDecomposition().empty())
-    {
-        // refresh last used DiscreteGlowRadius and ClippedRange to new remembered values
-        const_cast<GlowPrimitive2D*>(this)->mfLastDiscreteGlowRadius = fDiscreteGlowRadius;
-        const_cast<GlowPrimitive2D*>(this)->maLastClippedRange = aClippedRange;
-
-        // create decomposition
-        Primitive2DContainer aNewSequence;
-
-        create2DDecomposition(aNewSequence, rViewInformation);
-        const_cast<GlowPrimitive2D*>(this)->setBuffered2DDecomposition(std::move(aNewSequence));
-    }
-
-    rVisitor.visit(getBuffered2DDecomposition());
+    // call parent, that will check for empty, call create2DDecomposition and
+    // set as decomposition
+    BufferedDecompositionGroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
 }
 
 basegfx::B2DRange

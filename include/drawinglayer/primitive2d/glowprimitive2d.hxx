@@ -22,16 +22,14 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 #include <tools/color.hxx>
 
 namespace drawinglayer::primitive2d
 {
-class DRAWINGLAYER_DLLPUBLIC GlowPrimitive2D final : public GroupPrimitive2D
+class DRAWINGLAYER_DLLPUBLIC GlowPrimitive2D final : public BufferedDecompositionGroupPrimitive2D
 {
 private:
-    /// a sequence used for buffering the last create2DDecomposition() result
-    Primitive2DContainer maBuffered2DDecomposition;
-
     /// the Glow color to which all geometry is to be forced; includes alpha
     Color maGlowColor;
 
@@ -49,21 +47,10 @@ private:
                                        const geometry::ViewInformation2D& rViewInformation) const;
 
 protected:
-    /** access methods to maBuffered2DDecomposition, same as in
-     *  BufferedDecompositionPrimitive2D
-     */
-    const Primitive2DContainer& getBuffered2DDecomposition() const
-    {
-        return maBuffered2DDecomposition;
-    }
-    void setBuffered2DDecomposition(Primitive2DContainer&& rNew)
-    {
-        maBuffered2DDecomposition = std::move(rNew);
-    }
-
     /** method which is to be used to implement the local decomposition of a 2D primitive. */
-    virtual void create2DDecomposition(Primitive2DContainer& rContainer,
-                                       const geometry::ViewInformation2D& rViewInformation) const;
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
     /// constructor
