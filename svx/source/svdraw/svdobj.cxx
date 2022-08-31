@@ -451,7 +451,10 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
 
 SdrObject::~SdrObject()
 {
+#ifdef DBG_UTIL
+    // see logic in SdrObject::release
     assert(m_refCount == -1);
+#endif
     // Tell all the registered ObjectUsers that the page is in destruction.
     // And clear the vector. This means that user do not need to call RemoveObjectUser()
     // when they get called from ObjectInDestruction().
