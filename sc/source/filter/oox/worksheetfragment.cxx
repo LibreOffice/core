@@ -462,22 +462,20 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         // Only process an oleObject or control if outside a mc:AlternateContent
         // element OR if within a mc:Fallback. I suppose ideally we
         // should process the stuff within 'mc:Choice'
-    case XLS_TOKEN( controls ):
+        case XLS_TOKEN( controls ):
         case XLS_TOKEN( oleObjects ):
-            if ( getCurrentElement() == XLS_TOKEN( controls ) )
+            if( isMCEStateEmpty() || getMCEState() == MCE_STATE::Started )
             {
-                if( isMCEStateEmpty() || getMCEState() == MCE_STATE::Started )
-                {
-                    if ( getCurrentElement() == XLS_TOKEN( oleObjects ) ) importOleObject( rAttribs );
-                    else
-                        importControl( rAttribs );
-                }
-                else if ( !isMCEStateEmpty() && getMCEState() == MCE_STATE::FoundChoice )
-                {
-                    // reset the handling within 'Choice'
-                    // this will force attempted handling in Fallback
-                    setMCEState( MCE_STATE::Started );
-                }
+                if ( getCurrentElement() == XLS_TOKEN( oleObjects ) )
+                    importOleObject( rAttribs );
+                else
+                    importControl( rAttribs );
+            }
+            else if ( !isMCEStateEmpty() && getMCEState() == MCE_STATE::FoundChoice )
+            {
+                // reset the handling within 'Choice'
+                // this will force attempted handling in Fallback
+                setMCEState( MCE_STATE::Started );
             }
         break;
     }
