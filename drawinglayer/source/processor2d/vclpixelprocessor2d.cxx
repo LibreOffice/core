@@ -1050,7 +1050,8 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         // Limit the bitmap size to the visible area.
         basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
         basegfx::B2DRange bitmapRange(aRange);
-        bitmapRange.intersect(viewRange);
+        if (!viewRange.isEmpty())
+            bitmapRange.intersect(viewRange);
         if (!bitmapRange.isEmpty())
         {
             const tools::Rectangle aRect(
@@ -1112,7 +1113,8 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         // Limit the bitmap size to the visible area.
         basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
         basegfx::B2DRange bitmapRange(aRange);
-        bitmapRange.intersect(viewRange);
+        if (!viewRange.isEmpty())
+            bitmapRange.intersect(viewRange);
         if (!bitmapRange.isEmpty())
         {
             const tools::Rectangle aRect(
