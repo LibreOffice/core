@@ -50,8 +50,8 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
         aSize.setWidth(aSize.Width() / 2);
     }
 
-    // BmpScaleFlag::Fast is important for following color replacement
-    mask.Scale(fScale, fScale, BmpScaleFlag::Fast);
+    // BmpScaleFlag::NearestNeighbor is important for following color replacement
+    mask.Scale(fScale, fScale, BmpScaleFlag::NearestNeighbor);
 
     if (fErodeDilateRadius > 0)
         BitmapFilter::Filter(mask, BitmapDilateFilter(fErodeDilateRadius));
