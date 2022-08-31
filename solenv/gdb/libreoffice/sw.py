@@ -46,8 +46,14 @@ class SwContentIndexPrinter(object):
         self.value = value
 
     def to_string(self):
+        pNode = self.value['m_pContentNode']
+        nodeindex = 'none'
+        if pNode:
+            node = pNode.dereference()
+            block = node['m_pBlock'].dereference();
+            nodeindex = block['nStart'] + node['m_nOffset']
         offset = self.value['m_nIndex']
-        return "%s (offset %d)" % (self.typename, offset)
+        return "%s (node %d offset %d)" % (self.typename, nodeindex, offset)
 
 class SwPaMPrinter(object):
     '''Prints SwPaM.'''
