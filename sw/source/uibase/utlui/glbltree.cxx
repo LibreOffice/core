@@ -459,8 +459,6 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         }
         m_xTreeView->freeze();
         m_xTreeView->clear();
-        if (!m_pSwGlblDocContents)
-            Update( false );
 
         int nSelEntry = -1;
         for (size_t i = 0; i < nCount; ++i)
