@@ -34,6 +34,7 @@
 #include "formulalogger.hxx"
 #include "formularesult.hxx"
 #include "tokenarray.hxx"
+#include "grouparealistener.hxx"
 
 namespace sc {
 
@@ -44,7 +45,6 @@ struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 class CompileFormulaContext;
-class FormulaGroupAreaListener;
 class UpdatedRangeNames;
 
 }
@@ -65,7 +65,7 @@ struct AreaListenerKey
     bool operator < ( const AreaListenerKey& r ) const;
 };
 
-typedef std::map<AreaListenerKey, std::unique_ptr<sc::FormulaGroupAreaListener>> AreaListenersType;
+typedef std::map<AreaListenerKey, sc::FormulaGroupAreaListener> AreaListenersType;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup
 {

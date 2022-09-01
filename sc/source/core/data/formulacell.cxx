@@ -553,23 +553,25 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
     if (it == m_AreaListeners.end() || m_AreaListeners.key_comp()(aKey, it->first))
     {
         // Insert a new one.
-        it = m_AreaListeners.insert(
-            it, std::make_pair(aKey, std::make_unique<sc::FormulaGroupAreaListener>(
-                rRange, (*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed)));
+        it = m_AreaListeners.emplace_hint(
+             it, std::piecewise_construct,
+             std::forward_as_tuple(aKey),
+             std::forward_as_tuple(
+                rRange, (*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed));
     }
 
-    return it->second.get();
+    return &it->second;
 }
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 {
-    for (const auto& rEntry : m_AreaListeners)
+    for (auto& rEntry : m_AreaListeners)
     {
-        sc::FormulaGroupAreaListener *const pListener = rEntry.second.get();
-        ScRange aListenRange = pListener->getListeningRange();
+        sc::FormulaGroupAreaListener& rListener = rEntry.second;
+        ScRange aListenRange = rListener.getListeningRange();
         // This "always listen" special range is never grouped.
         bool bGroupListening = (aListenRange != BCA_LISTEN_ALWAYS);
-        rDoc.EndListeningArea(aListenRange, bGroupListening, pListener);
+        rDoc.EndListeningArea(aListenRange, bGroupListening, &rListener);
     }
 
     m_AreaListeners.clear();
