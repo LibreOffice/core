@@ -57,19 +57,19 @@ class InsertRemoveCells(unittest.TestCase):
           (3, 3, '6', 6.0),
           (5, 1, '1', 1.0),
         )
-        for pos in empty_cells:
-            cell = sheet.getCellByPosition(*pos)
+        for col, row in empty_cells:
+            cell = sheet[row,col]
             self.assertEqual('EMPTY', cell.Type.value)
 
-        for x, y, f, s, val in formula_cells:
-            cell = sheet.getCellByPosition(x, y)
+        for col, row, f, s, val in formula_cells:
+            cell = sheet[row,col]
             self.assertEqual('FORMULA', cell.Type.value)
             self.assertEqual(f, cell.getFormula())
             self.assertEqual(s, cell.String)
             self.assertEqual(val, cell.Value)
 
-        for x, y, s, val in value_cells:
-            cell = sheet.getCellByPosition(x, y)
+        for col, row, s, val in value_cells:
+            cell = sheet[row,col]
             self.assertEqual(s, cell.String)
             self.assertEqual(val, cell.Value)
 

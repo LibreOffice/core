@@ -24,7 +24,7 @@ def get_cell_by_position(document, tab, column, row):
     row -- The 0-based row number
     """
     sheet = get_sheet_from_doc(document, tab)
-    return sheet.getCellByPosition(column, row)
+    return sheet[row,column]
 
 def get_column(document, column, tab = 0):
     """ Get the column object through the column index
