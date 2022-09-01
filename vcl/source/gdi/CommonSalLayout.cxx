@@ -672,7 +672,6 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
                     css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 nGraphemeCount++;
             }
-            assert(nGraphemeCount > 0); // keep coverity happy
 
             if (!nGraphemeCount)
                 continue;
