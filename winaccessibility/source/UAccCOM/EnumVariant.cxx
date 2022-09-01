@@ -105,9 +105,9 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
     SolarMutexGuard g;
 
     m_lCurrent += cElements;
-    if (m_lCurrent > static_cast<long>(m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount()))
+    if (m_lCurrent > m_pXAccessibleSelection->getSelectedAccessibleChildCount())
     {
-        m_lCurrent =  m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount();
+        m_lCurrent =  m_pXAccessibleSelection->getSelectedAccessibleChildCount();
         return E_FAIL;
     }
     else
@@ -124,7 +124,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Reset()
 {
     SolarMutexGuard g;
 
-    m_lCurrent = m_lLBound;
+    m_lCurrent = 0;
     return NOERROR;
 }
 
@@ -193,7 +193,7 @@ long CEnumVariant::GetCountOfElements()
 }
 
 /**
-   * Set member m_pXAccessibleSelection to NULL and m_lCurrent to m_lLBound.
+   * Set member m_pXAccessibleSelection to NULL and m_lCurrent to 0.
    * @param.
    * @return Result
    */
@@ -203,7 +203,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CEnumVariant::ClearEnumeration()
 
     pUNOInterface = nullptr;
     m_pXAccessibleSelection = nullptr;
-    m_lCurrent = m_lLBound;
+    m_lCurrent = 0;
     return S_OK;
 }
 
