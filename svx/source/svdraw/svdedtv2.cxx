@@ -1824,7 +1824,7 @@ void SdrEditView::GroupMarked()
                 {
                     pGrp = new SdrObjGroup(pObj->getSdrModelFromSdrObject());
                     pDstLst=pGrp->GetSubList();
-                    DBG_ASSERT(pDstLst!=nullptr,"Alleged group object doesn't return object list.");
+                    assert(pDstLst && "Alleged group object doesn't return object list.");
                 }
                 pSrcLst=pObj->getParentSdrObjListFromSdrObject();
                 if (pSrcLst!=pSrcLst0)
