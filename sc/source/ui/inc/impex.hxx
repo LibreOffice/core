@@ -108,7 +108,7 @@ public:
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
             bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell, bool bRemoveSpace );
-    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero = false );
+    static  void    WriteUnicodeOrByteString( SvStream& rStrm, std::u16string_view rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
 
     /** ScImportExport::CountVisualWidth

@@ -471,7 +471,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );
             WriteUnicodeOrByteString( rStrm, aRefName, true );
-            WriteUnicodeOrByteString( rStrm, "calc:extref", true );
+            WriteUnicodeOrByteString( rStrm, u"calc:extref", true );
             if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
                 rStrm.WriteUInt16( 0 );
             else
@@ -493,17 +493,17 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
     return false;
 }
 
-void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero )
+void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, std::u16string_view rString, bool bZero )
 {
     rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
     {
         if ( !lcl_IsEndianSwap( rStrm ) )
-            rStrm.WriteBytes(rString.getStr(), rString.getLength() * sizeof(sal_Unicode));
+            rStrm.WriteBytes(rString.data(), rString.size() * sizeof(sal_Unicode));
         else
         {
-            const sal_Unicode* p = rString.getStr();
-            const sal_Unicode* const pStop = p + rString.getLength();
+            const sal_Unicode* p = rString.data();
+            const sal_Unicode* const pStop = p + rString.size();
             while ( p < pStop )
             {
                 rStrm.WriteUInt16( *p );
@@ -910,7 +910,7 @@ static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQu
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
 
-static void lcl_WriteSimpleString( SvStream& rStrm, const OUString& rString )
+static void lcl_WriteSimpleString( SvStream& rStrm, std::u16string_view rString )
 {
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
@@ -2011,7 +2011,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     }
                 }
                 if( nCol < nEndCol )
-                    lcl_WriteSimpleString( rStrm, OUString(cSep) );
+                    lcl_WriteSimpleString( rStrm, rtl::OUStringChar(cSep) );
             }
             // Do not append a line feed for one single cell.
             // NOTE: this Doc2Text() is only called for clipboard via
@@ -2369,7 +2369,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     OUString aCellStr;
     OUString aValStr;
-    lcl_WriteSimpleString( rStrm, "ID;PCALCOOO32" );
+    lcl_WriteSimpleString( rStrm, u"ID;PCALCOOO32" );
     WriteUnicodeOrByteEndl( rStrm );
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
@@ -2493,7 +2493,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             }
         }
     }
-    lcl_WriteSimpleString( rStrm, OUString( 'E' ) );
+    lcl_WriteSimpleString( rStrm, rtl::OUStringChar( 'E' ) );
     WriteUnicodeOrByteEndl( rStrm );
     return rStrm.GetError() == ERRCODE_NONE;
 }
