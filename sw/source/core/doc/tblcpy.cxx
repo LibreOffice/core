@@ -534,6 +534,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
         {
             SwPosition aMvPos( aInsIdx );
             SwContentNode* pCNd = SwNodes::GoPrevious( &aMvPos.nNode );
+            assert(pCNd); // keep coverity happy
             aMvPos.nContent.Assign( pCNd, pCNd->Len() );
             SwDoc::CorrAbs( aInsIdx, aEndNdIdx, aMvPos );
         }
