@@ -10,7 +10,6 @@
 #ifndef SC_OPENCL_OPINLINFUN_statistical
 #define SC_OPENCL_OPINLINFUN_statistical
 std::string MinDecl = "#define Min 2.22507e-308\n";
-std::string F_PIDecl="#define M_PI 3.1415926535897932384626433832795\n";
 std::string fBigInvDecl ="#define fBigInv  2.22045e-016\n";
 std::string fMachEpsDecl ="#define fMachEps  2.22045e-016\n";
 std::string fLogDblMaxDecl ="#define fLogDblMax  log(1.79769e+308)\n";

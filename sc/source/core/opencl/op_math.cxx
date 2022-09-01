@@ -1791,7 +1791,7 @@ void OpRadians::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double tmp;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
-    ss << "    tmp = tmp0 * 3.14159265358979 / 180.0;\n";
+    ss << "    tmp = tmp0 * M_PI / 180.0;\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -2519,8 +2519,7 @@ void OpSqrtPi::GenSlidingWindowFunction(outputstream &ss,
         ss << vSubArguments[0]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
-    ss << "    return (double)sqrt(arg0 *";
-    ss << " 3.1415926535897932);\n";
+    ss << "    return (double)sqrt(arg0 * M_PI);\n";
     ss << "}";
 }
 void OpCeil::GenSlidingWindowFunction(outputstream &ss,

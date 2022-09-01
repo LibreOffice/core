@@ -5915,7 +5915,7 @@ void OpChiSqDist::BinInlineFun(std::set<std::string>& decls,
     decls.insert(fMaxGammaArgumentDecl);decls.insert(GetChiSqDistCDFDecl);
     decls.insert(GetChiSqDistPDFDecl);decls.insert(GetLowRegIGammaDecl);
     decls.insert(GetGammaContFractionDecl);decls.insert(GetGammaSeriesDecl);
-    decls.insert(fHalfMachEpsDecl);decls.insert(F_PIDecl);
+    decls.insert(fHalfMachEpsDecl);
     decls.insert(fBigInvDecl);
 
     funs.insert(GetGammaContFraction);funs.insert(GetChiSqDistCDF);
@@ -6005,7 +6005,7 @@ vSubArguments)
     decls.insert(fMaxGammaArgumentDecl);decls.insert(GetChiSqDistCDFDecl);
     decls.insert(GetLowRegIGammaDecl);decls.insert(lcl_IterateInverseChiSQInvDecl);
     decls.insert(GetGammaContFractionDecl);decls.insert(GetGammaSeriesDecl);
-    decls.insert(fHalfMachEpsDecl);decls.insert(F_PIDecl);
+    decls.insert(fHalfMachEpsDecl);
     decls.insert(fBigInvDecl);decls.insert(lcl_HasChangeOfSignDecl);
     decls.insert(fMachEpsDecl);
 
@@ -7603,7 +7603,6 @@ void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
     "    double n1=floor(arg1);\n"
     "    double x1=floor(arg0);\n"
     "    double num[9];\n"
-    "    double PI = 3.1415926535897932384626433832795;\n"
     "    double tmp;\n"
     "    if( (x1 < 0.0) || (n1 < x1) || (M1 < x1) || (N1 < n1) ||"
     "(N1 < M1) || (x1 < n1 - N1 + M1) )\n"
@@ -7630,7 +7629,7 @@ void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
     "                num[i]=log(tgamma(num[i])*num[i]);\n"
     "        }\n"
     "        else\n"
-    "            num[i]=0.5*log(2.0*PI)+(num[i]+0.5)*log(num[i])-num[i]+"
+    "            num[i]=0.5*log(2.0*M_PI)+(num[i]+0.5)*log(num[i])-num[i]+"
     "(1.0/(12.0*num[i])-1.0/(360*pow(num[i],3)));\n"
     "    }\n";
     ss << "    tmp=pow(M_E,(num[0]+num[3]+num[7]+num[8]";

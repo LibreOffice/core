@@ -93,10 +93,7 @@ void OpBesselj::GenSlidingWindowFunction(outputstream &ss,
         ss << "    N = ";
         ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     }
-    ss << "    double f_PI       = 3.1415926535897932385;\n";
-    ss << "    double f_2_DIV_PI = 2.0 / f_PI;\n";
-    ss << "    double f_PI_DIV_2 = f_PI / 2.0;\n";
-    ss << "    double f_PI_DIV_4 = f_PI / 4.0;\n";
+    ss << "    double f_2_DIV_PI = 2.0 / M_PI;\n";
     ss << "    if( N < 0.0 )\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    if (x == 0.0)\n";
@@ -110,7 +107,7 @@ void OpBesselj::GenSlidingWindowFunction(outputstream &ss,
     ss << "    {\n";
     ss << "        if (bAsymptoticPossible)\n";
     ss << "            return fSign * sqrt(f_2_DIV_PI/fX)";
-    ss << "* cos(fX-N*f_PI_DIV_2-f_PI_DIV_4);\n";
+    ss << "* cos(fX-N*M_PI_2-M_PI_4);\n";
     ss << "        else\n";
     ss << "            return CreateDoubleError(NoConvergence);\n";
     ss << "    }\n";

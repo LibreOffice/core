@@ -474,7 +474,7 @@ public:
     }
     virtual void GenDeclRef( outputstream& ss ) const override
     {
-        ss << "3.14159265358979";
+        ss << "M_PI";
     }
     virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
