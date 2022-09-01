@@ -2627,85 +2627,68 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // Serif" -> "Liberation Serif/Regular". If even one of the "substitutions" of a font is to
         // the same font, don't count that as a missing font.
 
-        for (std::size_t i = 0; i < aFontMappingUseData.size();)
-        {
-            // If the original font had an empty style and one of its replacement fonts has the same
-            // family name, we assume the font is present. The root problem here is that the code
-            // that collects font substitutions tends to get just empty styles for the font that is
-            // being substituted, as vcl::Font::GetStyleName() tends to return an empty string.
-            // (Italicness is instead indicated by what vcl::Font::GetItalic() returns and boldness
-            // by what vcl::Font::GetWeight() returns.)
-            if (aFontMappingUseData[i].mOriginalFont.indexOf('/') == -1)
-            {
-                bool bSubstitutedByTheSame = false;
-                for (const auto &j : aFontMappingUseData[i].mUsedFonts)
-                {
-                    if (j.startsWith(OUStringConcatenation(aFontMappingUseData[i].mOriginalFont + "/")))
-                    {
-                        bSubstitutedByTheSame = true;
-                        break;
-                    }
-                }
+        aFontMappingUseData.erase
+            (std::remove_if(aFontMappingUseData.begin(), aFontMappingUseData.end(),
+                            [](OutputDevice::FontMappingUseItem x)
+                            {
+                                // If the original font had an empty style and one of its
+                                // replacement fonts has the same family name, we assume the font is
+                                // present. The root problem here is that the code that collects
+                                // font substitutions tends to get just empty styles for the font
+                                // that is being substituted, as vcl::Font::GetStyleName() tends to
+                                // return an empty string. (Italicness is instead indicated by what
+                                // vcl::Font::GetItalic() returns and boldness by what
+                                // vcl::Font::GetWeight() returns.)
 
-                if (bSubstitutedByTheSame)
-                    aFontMappingUseData.erase(aFontMappingUseData.begin() + i);
-                else
-                    i++;
-            }
-            else
-            {
-                i++;
-            }
-        }
+                                if (x.mOriginalFont.indexOf('/') == -1)
+                                    for (const auto &j : x.mUsedFonts)
+                                        if (j.startsWith(OUStringConcatenation(x.mOriginalFont + "/")))
+                                            return true;
+
+                                return false;
+                            }),
+             aFontMappingUseData.end());
 
         // Filter out substitutions where a proprietary font has been substituted by a
         // metric-compatible one. Obviously this is just a heuristic and implemented only for some
         // well-known cases.
 
-        for (std::size_t i = 0; i < aFontMappingUseData.size();)
-        {
-            // Again, handle only cases where the original font does not include a style. Unclear
-            // whether there ever will be a style part included in the mOriginalFont.
+        aFontMappingUseData.erase
+            (std::remove_if(aFontMappingUseData.begin(), aFontMappingUseData.end(),
+                            [](OutputDevice::FontMappingUseItem x)
+                            {
+                                // Again, handle only cases where the original font does not include
+                                // a style. Unclear whether there ever will be a style part included
+                                // in the mOriginalFont.
 
-            if (aFontMappingUseData[i].mOriginalFont.indexOf('/') == -1)
-            {
-                bool bSubstitutedByMetricCompatible = false;
-                for (const auto &j : aFontMappingUseData[i].mUsedFonts)
-                {
-                    if ((aFontMappingUseData[i].mOriginalFont == "Arial" &&
-                         j.startsWith("Liberation Sans/")) ||
-                        (aFontMappingUseData[i].mOriginalFont == "Times New Roman" &&
-                         j.startsWith("Liberation Serif/")) ||
-                        (aFontMappingUseData[i].mOriginalFont == "Courier New" &&
-                         j.startsWith("Liberation Mono/")) ||
-                        (aFontMappingUseData[i].mOriginalFont == "Arial Narrow" &&
-                         j.startsWith("Liberation Sans Narrow/")) ||
-                        (aFontMappingUseData[i].mOriginalFont == "Cambria" &&
-                         j.startsWith("Caladea/")) ||
-                        (aFontMappingUseData[i].mOriginalFont == "Calibri" &&
-                         j.startsWith("Carlito/")) ||
-                        (aFontMappingUseData[i].mOriginalFont == "Palatino Linotype" &&
-                         j.startsWith("P052/")) ||
-                        // Perhaps a risky heuristic? If some glyphs from Symbol have been mapped to
-                        // ones in OpenSymbol, don't warn that Symbol is missing.
-                        (aFontMappingUseData[i].mOriginalFont == "Symbol" &&
-                         j.startsWith("OpenSymbol/")))
-                    {
-                        bSubstitutedByMetricCompatible = true;
-                        break;
-                    }
-                }
+                                if (x.mOriginalFont.indexOf('/') == -1)
+                                    for (const auto &j : x.mUsedFonts)
+                                        if ((x.mOriginalFont == "Arial" &&
+                                             j.startsWith("Liberation Sans/")) ||
+                                            (x.mOriginalFont == "Times New Roman" &&
+                                             j.startsWith("Liberation Serif/")) ||
+                                            (x.mOriginalFont == "Courier New" &&
+                                             j.startsWith("Liberation Mono/")) ||
+                                            (x.mOriginalFont == "Arial Narrow" &&
+                                             j.startsWith("Liberation Sans Narrow/")) ||
+                                            (x.mOriginalFont == "Cambria" &&
+                                             j.startsWith("Caladea/")) ||
+                                            (x.mOriginalFont == "Calibri" &&
+                                             j.startsWith("Carlito/")) ||
+                                            (x.mOriginalFont == "Palatino Linotype" &&
+                                             j.startsWith("P052/")) ||
+                                            // Perhaps a risky heuristic? If some glyphs from Symbol
+                                            // have been mapped to ones in OpenSymbol, don't warn
+                                            // that Symbol is missing.
+                                            (x.mOriginalFont == "Symbol" &&
+                                             j.startsWith("OpenSymbol/")))
+                                        {
+                                            return true;
+                                        }
 
-                if (bSubstitutedByMetricCompatible)
-                    aFontMappingUseData.erase(aFontMappingUseData.begin() + i);
-                else
-                    i++;
-            }
-            else
-            {
-                i++;
-            }
-        }
+                                return false;
+                            }),
+             aFontMappingUseData.end());
 
         if (aFontMappingUseData.size() > 0)
         {
