@@ -817,6 +817,11 @@ FormulaCompiler::~FormulaCompiler()
 
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLanguage ) const
 {
+    return GetFinalOpCodeMap(nLanguage);
+}
+
+FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetFinalOpCodeMap( const sal_Int32 nLanguage ) const
+{
     FormulaCompiler::OpCodeMapPtr xMap;
     using namespace sheet;
     switch (nLanguage)

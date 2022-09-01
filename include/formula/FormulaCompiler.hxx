@@ -196,7 +196,30 @@ public:
     typedef std::shared_ptr< const OpCodeMap >  OpCodeMapPtr;
     typedef std::shared_ptr< OpCodeMap >        NonConstOpCodeMapPtr;
 
+protected:
+    /** Get finalized OpCodeMap for formula language.
+
+        Creates/returns a singleton instance of an OpCodeMap that contains
+        external AddIn mappings if the derived class supports them. Do not call
+        at this base class as it results in a permanent mapping without AddIns
+        even for derived classes (unless it is for the implementation of the
+        temporary GetOpCodeMap()).
+
+        @param nLanguage
+            One of css::sheet::FormulaLanguage constants.
+        @return Map for nLanguage. If nLanguage is unknown, a NULL map is returned.
+     */
+    OpCodeMapPtr GetFinalOpCodeMap( const sal_Int32 nLanguage ) const;
+
+public:
     /** Get OpCodeMap for formula language.
+
+        Returns either the finalized OpCodeMap (created by GetFinalOpCodeMap()
+        of a derived class) for nLanguage if there is such, or if not then a
+        temporary map of which its singleton is reset immediately and the
+        temporary will get destroyed by the caller's scope. A temporary map
+        created at this base class does *not* contain AddIn mappings.
+
         @param nLanguage
             One of css::sheet::FormulaLanguage constants.
         @return Map for nLanguage. If nLanguage is unknown, a NULL map is returned.
