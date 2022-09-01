@@ -261,17 +261,17 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
     if( eGrammar == FormulaGrammar::GRAM_EXTERNAL )
     {
         meGrammar = eGrammar;
-        mxSymbols = GetOpCodeMap( css::sheet::FormulaLanguage::NATIVE);
+        mxSymbols = GetFinalOpCodeMap( css::sheet::FormulaLanguage::NATIVE);
     }
     else
     {
         FormulaGrammar::Grammar eMyGrammar = eGrammar;
         const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( eMyGrammar);
-        OpCodeMapPtr xMap = GetOpCodeMap( nFormulaLanguage);
+        OpCodeMapPtr xMap = GetFinalOpCodeMap( nFormulaLanguage);
         OSL_ENSURE( xMap, "ScCompiler::SetGrammar: unknown formula language");
         if (!xMap)
         {
-            xMap = GetOpCodeMap( css::sheet::FormulaLanguage::NATIVE);
+            xMap = GetFinalOpCodeMap( css::sheet::FormulaLanguage::NATIVE);
             eMyGrammar = xMap->getGrammar();
         }
 
