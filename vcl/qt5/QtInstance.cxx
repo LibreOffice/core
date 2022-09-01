@@ -39,6 +39,7 @@
 #include <headless/svpvd.hxx>
 
 #include <QtCore/QAbstractEventDispatcher>
+#include <QtCore/QLibraryInfo>
 #include <QtCore/QThread>
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
