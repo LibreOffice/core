@@ -3204,19 +3204,22 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
     if (pIsText)
         HandleNodes(pIsText,nLevel+1);
 
-    switch (pTemp->GetToken().eType)
+    if (pTemp)
     {
-        case TWIDEVEC:
-        case TUNDERLINE:
-            EndTemplate(nOldPending);
-            break;
-        case TOVERLINE:
-            if ((pIsText->GetToken().eType != TTEXT) ||
-                (pIsText->GetText().getLength() > 1))
+        switch (pTemp->GetToken().eType)
+        {
+            case TWIDEVEC:
+            case TUNDERLINE:
                 EndTemplate(nOldPending);
-            break;
-        default:
-            break;
+                break;
+            case TOVERLINE:
+                if ((pIsText->GetToken().eType != TTEXT) ||
+                    (pIsText->GetText().getLength() > 1))
+                    EndTemplate(nOldPending);
+                break;
+            default:
+                break;
+        }
     }
 
     //if there was no suitable place to put the attribute,
