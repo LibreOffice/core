@@ -70,12 +70,18 @@ public:
     int const mLineNumber;
 };
 
-// Helper macro to be used in code emitting OpenCL code for Calc functions.
-// Requires the vSubArguments parameter.
+// Helper macros to be used in code emitting OpenCL code for Calc functions.
+// Require the vSubArguments parameter.
 #define CHECK_PARAMETER_COUNT(min, max) \
     do { \
         const int count = vSubArguments.size(); \
         if( count < ( min ) || count > ( max )) \
+            throw InvalidParameterCount( count, __FILE__, __LINE__ ); \
+    } while( false )
+#define CHECK_PARAMETER_COUNT_MIN(min) \
+    do { \
+        const int count = vSubArguments.size(); \
+        if( count < ( min )) \
             throw InvalidParameterCount( count, __FILE__, __LINE__ ); \
     } while( false )
 
