@@ -4664,7 +4664,7 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
         nEndOffset = nMaxOffset;
     }
 
-    if (nEndOffset == nStartOffset)
+    if (nEndOffset == nStartOffset && forceType == ForceCalculationNone)
         return false; // Do not use threads for a single row.
 
     // Guard against endless recursion of Interpret() calls, for this to work
