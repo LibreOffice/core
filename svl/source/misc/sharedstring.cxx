@@ -14,6 +14,7 @@ namespace svl {
 /** ref-counting traffic associated with SharedString temporaries can be significant, so use a singleton here, so we can return a const& from getEmptyString */
 static OUString EMPTY(u"");
 const SharedString EMPTY_SHARED_STRING(EMPTY.pData, EMPTY.pData);
+const OUString SharedString::EMPTY_STRING {};
 
 const SharedString & SharedString::getEmptyString()
 {

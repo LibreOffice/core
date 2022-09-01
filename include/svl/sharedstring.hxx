@@ -22,6 +22,7 @@ class SVL_DLLPUBLIC SharedString
 public:
 
     static const SharedString & getEmptyString();
+    static const OUString EMPTY_STRING;
 
     SharedString();
     SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
@@ -36,7 +37,7 @@ public:
     bool operator== ( const SharedString& r ) const;
     bool operator!= ( const SharedString& r ) const;
 
-    OUString getString() const;
+    const OUString & getString() const;
 
     rtl_uString* getData();
     const rtl_uString* getData() const;
@@ -111,9 +112,9 @@ inline bool SharedString::operator!= ( const SharedString& r ) const
     return !operator== (r);
 }
 
-inline OUString SharedString::getString() const
+inline const OUString & SharedString::getString() const
 {
-    return mpData ? OUString(mpData) : OUString();
+    return mpData ? OUString::unacquired(&mpData) : EMPTY_STRING;
 }
 
 inline rtl_uString* SharedString::getData()

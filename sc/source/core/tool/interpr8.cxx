@@ -1395,9 +1395,9 @@ void ScInterpreter::ScConcat_MS()
             case svString:
             case svDouble:
                 {
-                    const OUString& rStr = GetString().getString();
-                    if (CheckStringResultLen(aResBuf, rStr.getLength()))
-                        aResBuf.append( rStr);
+                    OUString aStr = GetString().getString();
+                    if (CheckStringResultLen(aResBuf, aStr.getLength()))
+                        aResBuf.append(aStr);
                 }
                 break;
             case svSingleRef :
@@ -1476,17 +1476,17 @@ void ScInterpreter::ScConcat_MS()
                             {
                                 if ( pMat->IsStringOrEmpty( j, k ) )
                                 {
-                                    const OUString& rStr = pMat->GetString( j, k ).getString();
-                                    if (CheckStringResultLen(aResBuf, rStr.getLength()))
-                                        aResBuf.append( rStr);
+                                    OUString aStr = pMat->GetString( j, k ).getString();
+                                    if (CheckStringResultLen(aResBuf, aStr.getLength()))
+                                        aResBuf.append(aStr);
                                 }
                                 else
                                 {
                                     if ( pMat->IsValue( j, k ) )
                                     {
-                                        const OUString& rStr = pMat->GetString( *pFormatter, j, k ).getString();
-                                        if (CheckStringResultLen(aResBuf, rStr.getLength()))
-                                            aResBuf.append( rStr);
+                                        OUString aStr = pMat->GetString( *pFormatter, j, k ).getString();
+                                        if (CheckStringResultLen(aResBuf, aStr.getLength()))
+                                            aResBuf.append(aStr);
                                     }
                                 }
                             }
