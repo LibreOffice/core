@@ -174,6 +174,36 @@ bool VectorRef::NeedParallelReduction() const
     return false;
 }
 
+void SlidingFunctionBase::GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss )
+{
+    CHECK_PARAMETER_COUNT_MIN( num );
+    FormulaToken *token = vSubArguments[num]->GetFormulaToken();
+    if( token == nullptr )
+        throw Unhandled( __FILE__, __LINE__ );
+    ss << "    double arg" << num << ";\n";
+    if(token->GetOpCode() == ocPush)
+    {
+        if(token->GetType() == formula::svSingleVectorRef)
+        {
+            ss << "    if(isnan(";
+            ss << vSubArguments[num]->GenSlidingWindowDeclRef() << "))\n";
+            ss << "        arg" << num << " = 0.0;\n";
+            ss << "    else\n";
+            ss << "        arg" << num << " = ";
+            ss << vSubArguments[num]->GenSlidingWindowDeclRef() << ";\n";
+        }
+        else if(token->GetType() == formula::svDouble)
+            ss << "    arg" << num << " = " << token->GetDouble() << ";\n";
+        else
+            throw Unhandled( __FILE__, __LINE__ );
+    }
+    else
+    {
+        ss << "    arg" << num << " = ";
+        ss << vSubArguments[num]->GenSlidingWindowDeclRef() << ";\n";
+    }
+}
+
 void Normal::GenSlidingWindowFunction(
     outputstream& ss, const std::string& sSymName, SubArguments& vSubArguments )
 {

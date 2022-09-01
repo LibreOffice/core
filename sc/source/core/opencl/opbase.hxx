@@ -224,6 +224,9 @@ public:
     typedef std::vector<DynamicKernelArgumentRef> SubArguments;
     virtual void GenSlidingWindowFunction( outputstream&,
         const std::string&, SubArguments& ) = 0;
+protected:
+    // generate code for "double arg<num> = <value>;" from vSubArguments
+    static void GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss );
 };
 
 class Normal : public SlidingFunctionBase

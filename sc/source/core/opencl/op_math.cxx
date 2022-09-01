@@ -2615,45 +2615,13 @@ void OpCombin::GenSlidingWindowFunction(outputstream &ss,
     }
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double num = " << GetBottom() << ";\n";
-    ss << "    double num_chosen = " << GetBottom() << ";\n";
     ss << "    double result = -1.0;\n";
-    FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
-    FormulaToken *iNumChosen = vSubArguments[1]->GetFormulaToken();
-
-    assert(iNum);
-    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
-    {
-        if(iNum->GetType() == formula::svSingleVectorRef &&
-            iNumChosen->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    if(isnan(";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        num = 0.0;\n";
-            ss << "    else\n    ";
-            ss << "    num = floor(";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
-            ss << "    if(isnan(";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        num_chosen = 0.0;\n";
-            ss << "    else\n    ";
-            ss << "    num_chosen = floor(";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
-        }
-        else if(iNum->GetType() == formula::svDouble &&
-            iNumChosen->GetType() == formula::svDouble)
-        {
-            ss << "    num = floor(" << iNum->GetDouble() << ");\n";
-            ss << "    num_chosen = floor("<< iNumChosen->GetDouble()<< ");\n";
-        }
-    }
-    else
-    {
-        ss << "    num = floor(";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
-        ss << "    num_chosen = floor(";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArg( 1, vSubArguments, ss );
+    ss << "    double num = floor( arg0 );\n";
+    ss << "    double num_chosen = floor( arg1 );\n";
+    ss << "    if(num < 0 || num_chosen < 0 || num < num_chosen )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    result = select(result, 0.0, (ulong)(num < num_chosen));\n";
     ss << "    result = select(result, 1.0, (ulong)(num_chosen == 0.0));\n";
     ss << "    if(result == 0 || result ==1)\n";
