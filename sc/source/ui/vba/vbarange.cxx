@@ -5536,6 +5536,27 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
     return pRangeToUse->SpecialCellsImpl( nType, _oValue );
 }
 
+static sal_Int32 getContentResultFlags(const uno::Any& aValue)
+{
+    if (sal_Int32 aType; aValue >>= aType)
+    {
+        switch (aType)
+        {
+            case excel::XlSpecialCellsValue::xlNumbers:
+                return sheet::CellFlags::VALUE | sheet::CellFlags::DATETIME;
+            case excel::XlSpecialCellsValue::xlTextValues:
+                return sheet::CellFlags::STRING;
+            case excel::XlSpecialCellsValue::xlLogical:
+                return sheet::CellFlags::VALUE | sheet::CellFlags::DATETIME;
+            case excel::XlSpecialCellsValue::xlErrors:
+                return 0;
+            default:
+                DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {});
+        }
+    }
+    return sheet::CellFlags::VALUE | sheet::CellFlags::STRING | sheet::CellFlags::DATETIME;
+}
+
 /// @throws script::BasicErrorException
 static sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType)
 {
@@ -5589,7 +5610,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
                 xLocSheetCellRanges = xQuery->queryContentCells(sheet::CellFlags::ANNOTATION);
                 break;
             case excel::XlCellType::xlCellTypeConstants:
-                xLocSheetCellRanges = xQuery->queryContentCells(23);
+                xLocSheetCellRanges = xQuery->queryContentCells(getContentResultFlags(_oValue));
                 break;
             case excel::XlCellType::xlCellTypeFormulas:
             {

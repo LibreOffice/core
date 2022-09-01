@@ -29,7 +29,10 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
+#include <ooo/vba/excel/XlSpecialCellsValue.hpp>
+
 using namespace css;
+using namespace ooo::vba;
 
 class VBAMacroTest : public UnoApiTest
 {
@@ -71,6 +74,7 @@ public:
     void testTdf107902();
     void testTdf90278();
     void testTdf149531();
+    void testTdf118247();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -92,6 +96,7 @@ public:
     CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf90278);
     CPPUNIT_TEST(testTdf149531);
+    CPPUNIT_TEST(testTdf118247);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -927,6 +932,48 @@ void VBAMacroTest::testTdf149531()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(25749), nWidth);
 
     pDocSh->DoClose();
+}
+
+void VBAMacroTest::testTdf118247()
+{
+    OUString aFileName;
+    createFileURL(u"tdf118247.xlsm", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<uno::Any> aParams;
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"
+        "language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    OUString aReturnValue;
+    aRet >>= aReturnValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$A$3"), aReturnValue);
+
+    const std::vector<std::pair<sal_Int32, OUString>> aTestParams(
+        { { excel::XlSpecialCellsValue::xlNumbers, "$A$1:$A$2" },
+          { excel::XlSpecialCellsValue::xlTextValues, "$A$3" },
+          { excel::XlSpecialCellsValue::xlLogical, "$A$1:$A$2" },
+          { excel::XlSpecialCellsValue::xlErrors, "$A$1:$A$4" } });
+
+    for (auto & [ nXlSpecialCellsValue, sRange ] : aTestParams)
+    {
+        aParams = { uno::Any(nXlSpecialCellsValue) };
+        SfxObjectShell::CallXScript(
+            xComponent,
+            "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstants?"
+            "language=Basic&location=document",
+            aParams, aRet, aOutParamIndex, aOutParam);
+        aRet >>= aReturnValue;
+        CPPUNIT_ASSERT_EQUAL(sRange, aReturnValue);
+    }
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 
