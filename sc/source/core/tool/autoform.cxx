@@ -378,7 +378,7 @@ const ScNumFormatAbbrev& ScAutoFormatData::GetNumFormat( sal_uInt16 nIndex ) con
     return GetField( nIndex ).GetNumFormat();
 }
 
-bool ScAutoFormatData::IsEqualData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) const
+bool ScAutoFormatData::HasSameData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) const
 {
     bool bEqual = true;
     const ScAutoFormatDataField& rField1 = GetField( nIndex1 );
