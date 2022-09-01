@@ -439,6 +439,11 @@ public:
 
     static const Convention* GetRefConvention( formula::FormulaGrammar::AddressConvention eConv );
 
+    /** Overwrite FormulaCompiler::GetOpCodeMap() forwarding to
+        GetFinalOpCodeMap().
+     */
+    OpCodeMapPtr    GetOpCodeMap( const sal_Int32 nLanguage ) const { return GetFinalOpCodeMap(nLanguage); }
+
     /// Set symbol map if not empty.
     void            SetFormulaLanguage( const OpCodeMapPtr & xMap );
 
