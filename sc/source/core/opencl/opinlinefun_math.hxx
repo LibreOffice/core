@@ -62,7 +62,7 @@ std::string atan2Content =
 "double arctan2(double y, double x)\n"
 "{\n"
 "    if(y==0.0)\n"
-"        return 0.0;\n"
+"        return x >= 0 ? 0.0 : M_PI;\n"
 "    double a,num,den,tmpPi;\n"
 "    int flag;\n"
 "    tmpPi = 0;\n"

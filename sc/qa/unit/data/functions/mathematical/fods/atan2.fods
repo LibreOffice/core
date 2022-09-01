@@ -1925,10 +1925,18 @@
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce21"/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=ATAN2(0;0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=ATAN2(0;0)" calcext:value-type="string">
+      <text:p>=ATAN2(0;0)</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:formula="of:=PI()" office:value-type="float" office:value="3.14159265358979" calcext:value-type="float">

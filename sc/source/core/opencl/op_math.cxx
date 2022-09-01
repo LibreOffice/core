@@ -1094,6 +1094,8 @@ void OpArcCosHyp::GenSlidingWindowFunction(outputstream &ss,
         ss << ";\n";
     }
 
+    ss << "    if( tmp < 1 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return  log( tmp + pow( (pown(tmp, 2) - 1.0), 0.5));\n";
     ss << "}";
 }
