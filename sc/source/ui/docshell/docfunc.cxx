@@ -5184,7 +5184,7 @@ void ScDocFunc::SetNewRangeNames( std::unique_ptr<ScRangeName> pNewRanges, bool 
     }
 }
 
-void ScDocFunc::ModifyAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
+void ScDocFunc::ModifyAllRangeNames(const std::map<OUString, ScRangeName>& rRangeMap)
 {
     ScDocShellModificator aModificator(rDocShell);
     ScDocument& rDoc = rDocShell.GetDocument();

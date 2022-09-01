@@ -46,7 +46,7 @@ private:
     //ugly hack to call DefineNames from ManageNames
     bool mbCloseWithoutUndo;
 
-    typedef std::map<OUString, std::unique_ptr<ScRangeName>> RangeNameContainer;
+    typedef std::map<OUString, ScRangeName> RangeNameContainer;
 
     RangeNameContainer m_RangeMap;
 
@@ -107,8 +107,7 @@ protected:
 
 public:
     ScNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, ScViewData& rViewData,
-              const ScAddress& aCursorPos,
-              std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
+              const ScAddress& aCursorPos, std::map<OUString, ScRangeName>* pRangeMap = nullptr);
     virtual ~ScNameDlg() override;
 
     virtual void SetReference(const ScRange& rRef, ScDocument& rDoc) override;
@@ -117,7 +116,7 @@ public:
     virtual void SetActive() override;
     virtual void Close() override;
 
-    void GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
+    void GetRangeNames(std::map<OUString, ScRangeName>& rRangeMap);
     void SetEntry(const OUString& rName, const OUString& rScope);
 };
 

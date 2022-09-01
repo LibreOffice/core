@@ -43,7 +43,7 @@
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
         ScViewData&  rViewData,
         const ScAddress&  aCursorPos,
-        std::map<OUString, std::unique_ptr<ScRangeName>> *const pRangeMap)
+        std::map<OUString, ScRangeName> *const pRangeMap)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/managenamesdialog.ui",
                             "ManageNamesDialog")
 
@@ -84,7 +84,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
         mrDoc.GetRangeNameMap(aRangeMap);
         for (const auto& [aTemp, pRangeName] : aRangeMap)
         {
-            m_RangeMap.insert(std::make_pair(aTemp, std::make_unique<ScRangeName>(*pRangeName)));
+            m_RangeMap.insert(std::make_pair(aTemp, *pRangeName));
         }
     }
     else
@@ -281,9 +281,9 @@ bool ScNameDlg::IsFormulaValid()
 ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
 {
     if (rScope == maGlobalNameStr)
-        return m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second.get();
+        return &m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
     else
-        return m_RangeMap.find(rScope)->second.get();
+        return &m_RangeMap.find(rScope)->second;
 }
 
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
@@ -446,7 +446,7 @@ void ScNameDlg::ScopeChanged()
     NameModified();
 }
 
-void ScNameDlg::GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
+void ScNameDlg::GetRangeNames(std::map<OUString, ScRangeName>& rRangeMap)
 {
     m_RangeMap.swap(rRangeMap);
 }

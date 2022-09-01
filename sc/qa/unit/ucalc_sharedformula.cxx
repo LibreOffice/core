@@ -1685,10 +1685,10 @@ void TestSharedFormula::testSharedFormulaUpdateOnNamedRangeChange()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pNames->size());
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
 
-    typedef std::map<OUString, std::unique_ptr<ScRangeName>> NameMapType;
+    typedef std::map<OUString, ScRangeName> NameMapType;
     NameMapType aNewNames;
     OUString aScope(STR_GLOBAL_RANGE_NAME);
-    aNewNames.insert(std::make_pair(aScope, std::move(pNames)));
+    aNewNames.insert(std::make_pair(aScope, std::move(*pNames)));
     rFunc.ModifyAllRangeNames(aNewNames);
 
     // Check to make sure all displayed formulas are still good.

@@ -40,7 +40,7 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell)
     rDoc.GetRangeNameMap(aCopyMap);
     for (const auto & [ aTemp, pName ] : aCopyMap)
     {
-        m_RangeMap.insert(std::make_pair(aTemp, std::make_unique<ScRangeName>(*pName)));
+        m_RangeMap.insert(std::make_pair(aTemp, *pName));
     }
 
     ScViewData* pViewData = ScDocShell::GetViewData();

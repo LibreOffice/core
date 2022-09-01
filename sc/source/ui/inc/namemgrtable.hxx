@@ -35,7 +35,7 @@ private:
     OUString maGlobalString;
 
     // should be const because we should not modify it here
-    const std::map<OUString, std::unique_ptr<ScRangeName>>& m_RangeMap;
+    const std::map<OUString, ScRangeName>& m_RangeMap;
     // for performance, save which entries already have the formula entry
     // otherwise opening the dialog with a lot of range names is extremely slow because
     // we would calculate all formula strings during opening
@@ -55,7 +55,7 @@ private:
 
 public:
     ScRangeManagerTable(std::unique_ptr<weld::TreeView>,
-        const std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
+        const std::map<OUString, ScRangeName>& rTabRangeNames,
         const ScAddress& rPos);
 
     void CheckForFormulaString();

@@ -53,9 +53,9 @@ void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
     }
 }
 
-ScRangeManagerTable::ScRangeManagerTable(
-    std::unique_ptr<weld::TreeView> xTreeView,
-    const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap, const ScAddress& rPos)
+ScRangeManagerTable::ScRangeManagerTable(std::unique_ptr<weld::TreeView> xTreeView,
+                                         const std::map<OUString, ScRangeName>& rRangeMap,
+                                         const ScAddress& rPos)
     : m_xTreeView(std::move(xTreeView))
     , maGlobalString(ScResId(STR_GLOBAL_SCOPE))
     , m_RangeMap(rRangeMap)
@@ -83,9 +83,9 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
-        pRangeName = m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second.get();
+        pRangeName = &m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
     else
-        pRangeName = m_RangeMap.find(rLine.aScope)->second.get();
+        pRangeName = &m_RangeMap.find(rLine.aScope)->second;
 
     return pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(rLine.aName));
 }
@@ -144,13 +144,13 @@ void ScRangeManagerTable::Init()
     m_xTreeView->clear();
     for (auto const& itr : m_RangeMap)
     {
-        const ScRangeName* const pLocalRangeName = itr.second.get();
+        const ScRangeName& rLocalRangeName = itr.second;
         ScRangeNameLine aLine;
         if (itr.first == STR_GLOBAL_RANGE_NAME)
             aLine.aScope = maGlobalString;
         else
             aLine.aScope = itr.first;
-        for (const auto& rEntry : *pLocalRangeName)
+        for (const auto& rEntry : rLocalRangeName)
         {
             if (!rEntry.second->HasType(ScRangeData::Type::Database))
             {

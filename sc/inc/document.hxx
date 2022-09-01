@@ -662,7 +662,7 @@ public:
      * non-empty range name set.
      */
     SC_DLLPUBLIC void          GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
-    SC_DLLPUBLIC void          SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
+    SC_DLLPUBLIC void          SetAllRangeNames(const std::map<OUString, ScRangeName>& rRangeMap);
     SC_DLLPUBLIC void          GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC ScRangeName*  GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
@@ -774,7 +774,7 @@ public:
     /**
      * Call this immediately before updating all named ranges.
      */
-    SC_DLLPUBLIC void PreprocessAllRangeNamesUpdate( const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap );
+    SC_DLLPUBLIC void PreprocessAllRangeNamesUpdate( const std::map<OUString, ScRangeName>& rRangeMap );
     SC_DLLPUBLIC void PreprocessRangeNameUpdate();
     SC_DLLPUBLIC void PreprocessDBDataUpdate();
     /**

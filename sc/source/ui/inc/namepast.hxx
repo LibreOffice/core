@@ -39,7 +39,7 @@ private:
     std::unique_ptr<ScRangeManagerTable> m_xTable;
 
     std::vector<OUString> maSelectedNames;
-    std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
+    std::map<OUString, ScRangeName> m_RangeMap;
     OUString m_aSheetSep;
 
 public:

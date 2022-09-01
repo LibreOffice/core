@@ -21,17 +21,17 @@ using ::std::unique_ptr;
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,
     const std::map<OUString, ScRangeName*>& rOldNames,
-    const std::map<OUString, std::unique_ptr<ScRangeName>>& rNewNames)
+    const std::map<OUString, ScRangeName>& rNewNames)
         : ScSimpleUndo(pDocSh)
 {
     for (const auto& [rName, pRangeName] : rOldNames)
     {
-        m_OldNames.insert(std::make_pair(rName, std::make_unique<ScRangeName>(*pRangeName)));
+        m_OldNames.insert(std::make_pair(rName, *pRangeName));
     }
 
     for (auto const& it : rNewNames)
     {
-        m_NewNames.insert(std::make_pair(it.first, std::make_unique<ScRangeName>(*it.second)));
+        m_NewNames.insert(std::make_pair(it.first, it.second));
     }
 }
 
@@ -63,7 +63,7 @@ OUString ScUndoAllRangeNames::GetComment() const
     return ScResId(STR_UNDO_RANGENAMES);
 }
 
-void ScUndoAllRangeNames::DoChange(const std::map<OUString, std::unique_ptr<ScRangeName>>& rNames)
+void ScUndoAllRangeNames::DoChange(const std::map<OUString, ScRangeName>& rNames)
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 

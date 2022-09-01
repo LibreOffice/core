@@ -126,27 +126,25 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
     rNames.swap(aNames);
 }
 
-void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
+void ScDocument::SetAllRangeNames(const std::map<OUString, ScRangeName>& rRangeMap)
 {
-    for (const auto& [rName, rxRangeName] : rRangeMap)
+    for (const auto& [rName, rRangeName] : rRangeMap)
     {
         if (rName == STR_GLOBAL_RANGE_NAME)
         {
             pRangeName.reset();
-            const ScRangeName *const pName = rxRangeName.get();
-            if (!pName->empty())
-                pRangeName.reset( new ScRangeName( *pName ) );
+            if (!rRangeName.empty())
+                pRangeName.reset( new ScRangeName( rRangeName ) );
         }
         else
         {
-            const ScRangeName *const pName = rxRangeName.get();
             SCTAB nTab;
             bool bFound = GetTable(rName, nTab);
             assert(bFound); (void)bFound;   // fouled up?
-            if (pName->empty())
+            if (rRangeName.empty())
                 SetRangeName( nTab, nullptr );
             else
-                SetRangeName( nTab, std::unique_ptr<ScRangeName>(new ScRangeName( *pName )) );
+                SetRangeName( nTab, std::unique_ptr<ScRangeName>(new ScRangeName( rRangeName )) );
         }
     }
 }

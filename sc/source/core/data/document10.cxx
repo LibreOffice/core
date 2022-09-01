@@ -246,7 +246,7 @@ void ScDocument::SwapNonEmpty( sc::TableValues& rValues )
     aEndCxt.purgeEmptyBroadcasters();
 }
 
-void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap )
+void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, ScRangeName>& rRangeMap )
 {
     // Update all existing names with new names.
     // The prerequisites are that the name dialog preserves ScRangeData index
@@ -266,9 +266,7 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
         if (itNewTab == rRangeMap.end())
             continue;
 
-        const ScRangeName* pNewRangeNames = itNewTab->second.get();
-        if (!pNewRangeNames)
-            continue;
+        const ScRangeName& rNewRangeNames = itNewTab->second;
 
         for (const auto& rEntry : *pOldRangeNames)
         {
@@ -276,7 +274,7 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
             if (!pOldData)
                 continue;
 
-            const ScRangeData* pNewData = pNewRangeNames->findByIndex( pOldData->GetIndex());
+            const ScRangeData* pNewData = rNewRangeNames.findByIndex( pOldData->GetIndex());
             if (pNewData)
                 pOldData->SetNewName( pNewData->GetName());
         }

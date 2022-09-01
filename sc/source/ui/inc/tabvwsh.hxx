@@ -162,7 +162,7 @@ private:
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
 
     // ugly hack for Add button in ScNameDlg
-    std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
+    std::map<OUString, ScRangeName> m_RangeMap;
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;

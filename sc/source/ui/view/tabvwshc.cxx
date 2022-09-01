@@ -224,9 +224,9 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             else
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
-                for (auto const& itr : m_RangeMap)
+                for (auto& itr : m_RangeMap)
                 {
-                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
+                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, &itr.second));
                 }
                 xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), std::move(aRangeMap),
                                 ScAddress(GetViewData().GetCurX(),
