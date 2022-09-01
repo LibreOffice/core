@@ -122,18 +122,11 @@ void setFont(const SvxFont& rNewFont, SvxFont& rImplFont)
  * removes line feeds and carriage returns from string
  * returns if param is empty
  */
-bool CleanAndCheckEmpty(OUString& rText)
+OUString removeCRLF(const OUString& rText)
 {
-    bool bEmpty = true;
-    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
-    {
-        if (0xa == rText[i] || 0xd == rText[i])
-            rText = rText.replaceAt(i, 1, u" ");
-        else
-            bEmpty = false;
-    }
-    return bEmpty;
+    return rText.replace(0xa, ' ').replace(0xd, ' ').trim();
 }
+
 } // end anonymous namespace
 
 class FontPrevWin_Impl
@@ -635,9 +628,9 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
             if (pSh && !pImpl->mbGetSelection && !pImpl->mbUseFontNameAsText)
             {
-                pImpl->maText = pSh->GetSelectionText();
+                pImpl->maText = removeCRLF(pSh->GetSelectionText());
                 pImpl->mbGetSelection = true;
-                pImpl->mbSelection = !CleanAndCheckEmpty(pImpl->maText);
+                pImpl->mbSelection = !(pImpl->maText.isEmpty());
             }
 
             if (!pImpl->mbSelection || pImpl->mbUseFontNameAsText)
@@ -670,9 +663,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
                 pImpl->maText = makeRepresentativeTextForFont(LATIN, rFont);
             }
 
-            bool bEmpty = CleanAndCheckEmpty(pImpl->maText);
-            if (bEmpty)
-                pImpl->maText = OUString();
+            pImpl->maText = removeCRLF(pImpl->maText);
 
             if (pImpl->maText.getLength() > (TEXT_WIDTH - 1))
             {
