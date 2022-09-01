@@ -14,6 +14,8 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
 #include <vcl/graph.hxx>
 
@@ -72,6 +74,32 @@ CPPUNIT_TEST_FIXTURE(Test, testPicwPich)
     // - Actual  : 132
     // i.e. the graphic width didn't match 2.62 cm from the Word UI.
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(2619), aPrefSize.Width());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCharHiddenInTable)
+{
+    // Given a document with a table, and a hidden \line in it:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "char-hidden-intbl.rtf";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that line is indeed hidden:
+    uno::Reference<text::XTextTablesSupplier> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xCell(xTable->getCellByName("B1"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xCell->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    bool bCharHidden{};
+    xPortion->getPropertyValue("CharHidden") >>= bCharHidden;
+    // Without the accompanying fix in place, this test would have failed, the newline was not
+    // hidden.
+    CPPUNIT_ASSERT(bCharHidden);
 }
 }
 
