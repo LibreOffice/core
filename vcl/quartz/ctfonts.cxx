@@ -251,11 +251,55 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     return pBlob;
 }
 
+void CoreTextStyle::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
+{
+
+    CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
+
+    CFArrayRef pAxes = CTFontCopyVariationAxes(aCTFontRef);
+    if (!pAxes)
+        return;
+
+    CFDictionaryRef pVariations = CTFontCopyVariation(aCTFontRef);
+    std::vector<hb_variation_t> aHBVariations;
+    if (pVariations)
+    {
+        CFIndex nAxes = CFArrayGetCount(pAxes);
+        for (CFIndex i = 0; i < nAxes; ++i)
+        {
+            auto pAxis = static_cast<CFDictionaryRef>(CFArrayGetValueAtIndex(pAxes, i));
+            if (pAxis)
+            {
+                hb_tag_t nTag;
+                auto pTag = static_cast<CFNumberRef>(CFDictionaryGetValue(pAxis, kCTFontVariationAxisIdentifierKey));
+                if (!pTag)
+                    continue;
+                CFNumberGetValue(pTag, kCFNumberIntType, &nTag);
+
+                float fValue;
+                auto pValue = static_cast<CFNumberRef>(CFDictionaryGetValue(pVariations, pTag));
+                if (!pValue)
+                    continue;
+                CFNumberGetValue(pValue, kCFNumberFloatType, &fValue);
+
+                aHBVariations.push_back({ nTag, fValue });
+            }
+        }
+        CFRelease(pVariations);
+    }
+    CFRelease(pAxes);
+
+    if (!aHBVariations.empty())
+        hb_font_set_variations(pHbFont, aHBVariations.data(), aHBVariations.size());
+}
+
 hb_font_t* CoreTextStyle::ImplInitHbFont()
 {
     hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, GetFontFace(), nullptr);
+    hb_font_t* pHBFont = InitHbFont(pHbFace);
+    SetFontVariationsOnHBFont(pHBFont);
 
-    return InitHbFont(pHbFace);
+    return pHBFont;
 }
 
 rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const

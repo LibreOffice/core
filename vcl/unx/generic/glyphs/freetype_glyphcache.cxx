@@ -212,7 +212,7 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
     return maFaceFT;
 }
 
-void FreetypeFont::SetFontVariationsOnHBFont(hb_font_t* pHbFace) const
+void FreetypeFont::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
 {
     sal_uInt32 nFaceVariation = mxFontInfo->GetFontFaceVariation();
     if (!(maFaceFT && nFaceVariation))
@@ -231,7 +231,7 @@ void FreetypeFont::SetFontVariationsOnHBFont(hb_font_t* pHbFace) const
             aVariations[i].tag = pFtMMVar->axis[i].tag;
             aVariations[i].value = instance->coords[i] / 65536.0;
         }
-        hb_font_set_variations(pHbFace, aVariations.data(), aVariations.size());
+        hb_font_set_variations(pHbFont, aVariations.data(), aVariations.size());
     }
     dlFT_Done_MM_Var(aLibFT, pFtMMVar);
 }

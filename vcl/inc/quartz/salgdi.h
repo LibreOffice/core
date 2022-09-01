@@ -107,6 +107,8 @@ private:
     hb_font_t* ImplInitHbFont() override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
+    void SetFontVariationsOnHBFont(hb_font_t*) const;
+
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
 };
