@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 #include <config_oox.h>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -84,6 +86,7 @@ private:
     void testLoadWEBP();
 
     void testAvailableThreaded();
+    void testColorChangeToTransparent();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
@@ -122,6 +125,7 @@ private:
     CPPUNIT_TEST(testLoadWEBP);
 
     CPPUNIT_TEST(testAvailableThreaded);
+    CPPUNIT_TEST(testColorChangeToTransparent);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1343,6 +1347,35 @@ void GraphicTest::testAvailableThreaded()
         CPPUNIT_ASSERT_EQUAL(sizes[i], graphic->GetSizePixel());
         ++i;
     }
+}
+
+void GraphicTest::testColorChangeToTransparent()
+{
+    Graphic aGraphic = importUnloadedGraphic(u"testColorChange-red-linear-gradient.png");
+
+    auto xGraphic = aGraphic.GetXGraphic();
+    uno::Reference<graphic::XGraphicTransformer> xGraphicTransformer{ xGraphic, uno::UNO_QUERY };
+    ::Color nColorFrom{ ColorTransparency, 0x00, 0xFF, 0x00, 0x00 };
+    ::Color nColorTo{ ColorTransparency, 0xFF, 0xFF, 0x00, 0x00 };
+    sal_uInt8 nTolerance{ 15 };
+
+    auto xGraphicAfter = xGraphicTransformer->colorChange(
+        xGraphic, static_cast<sal_Int32>(nColorFrom), nTolerance, static_cast<sal_Int32>(nColorTo),
+        static_cast<sal_Int8>(nColorTo.GetAlpha()));
+
+    Graphic aGraphicAfter{ xGraphicAfter };
+    const BitmapEx& rBitmapAfter = aGraphicAfter.GetBitmapExRef();
+    const BitmapEx& rBitmapBefore = aGraphic.GetBitmapExRef();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[ff000000]
+    // - Actual  : rgba[f00000ff]
+    // i.e. the color change to transparent didn't apply correctly
+    CPPUNIT_ASSERT_EQUAL(nColorTo, rBitmapAfter.GetPixelColor(386, 140));
+
+    // Test if color stayed same on 410,140
+    // colorChange with nTolerance 15 shouldn't change this pixel.
+    CPPUNIT_ASSERT_EQUAL(rBitmapBefore.GetPixelColor(410, 140),
+                         rBitmapAfter.GetPixelColor(410, 140));
 }
 
 } // namespace
