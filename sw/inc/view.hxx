@@ -397,7 +397,7 @@ public:
     OUString                GetSelectionTextParam( bool bCompleteWords,
                                                    bool bEraseTrail );
     virtual bool            HasSelection( bool bText = true ) const override;
-    virtual OUString        GetSelectionText( bool bCompleteWords = false ) override;
+    virtual OUString        GetSelectionText( bool bCompleteWords = false, bool bOnlyASample = false ) override;
     virtual bool            PrepareClose( bool bUI = true ) override;
     virtual void            MarginChanged() override;
 

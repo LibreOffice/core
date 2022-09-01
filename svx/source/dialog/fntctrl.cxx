@@ -628,7 +628,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
             if (pSh && !pImpl->mbGetSelection && !pImpl->mbUseFontNameAsText)
             {
-                pImpl->maText = removeCRLF(pSh->GetSelectionText());
+                pImpl->maText = removeCRLF(pSh->GetSelectionText(/*bCompleteWords*/false, /*bOnlyASample*/true));
                 pImpl->mbGetSelection = true;
                 pImpl->mbSelection = !(pImpl->maText.isEmpty());
             }
