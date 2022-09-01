@@ -626,7 +626,7 @@ bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
     if (nCommand == CommandEventId::Wheel ||
         nCommand == CommandEventId::StartAutoScroll ||
         nCommand == CommandEventId::AutoScroll ||
-        nCommand == CommandEventId::Gesture)
+        nCommand == CommandEventId::GesturePan)
     {
         ScrollBar* pHScrollBar = mpHScrollBar->IsVisible() ? mpHScrollBar.get() : nullptr;
         ScrollBar* pVScrollBar = mpVScrollBar->IsVisible() ? mpVScrollBar.get() : nullptr;

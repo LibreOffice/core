@@ -13,11 +13,11 @@
 
 #include <vcl/dllapi.h>
 
-enum class GestureEventType
+enum class GestureEventPanType
 {
-    PanningBegin,
-    PanningUpdate,
-    PanningEnd
+    Begin,
+    Update,
+    End
 };
 
 enum class PanningOrientation
@@ -26,27 +26,27 @@ enum class PanningOrientation
     Vertical
 };
 
-class VCL_DLLPUBLIC GestureEvent
+class VCL_DLLPUBLIC GestureEventPan
 {
 public:
     sal_Int32 mnX;
     sal_Int32 mnY;
-    GestureEventType meEventType;
+    GestureEventPanType meEventType;
 
     sal_Int32 mnOffset;
     PanningOrientation meOrientation;
 
-    GestureEvent()
+    GestureEventPan()
         : mnX(0)
         , mnY(0)
-        , meEventType(GestureEventType::PanningBegin)
+        , meEventType(GestureEventPanType::Begin)
         , mnOffset(0)
         , meOrientation(PanningOrientation::Horizontal)
     {
     }
 
-    GestureEvent(sal_Int32 nX, sal_Int32 nY, GestureEventType eEventType, sal_Int32 nOffset,
-                 PanningOrientation eOrientation)
+    GestureEventPan(sal_Int32 nX, sal_Int32 nY, GestureEventPanType eEventType, sal_Int32 nOffset,
+                    PanningOrientation eOrientation)
         : mnX(nX)
         , mnY(nY)
         , meEventType(eEventType)

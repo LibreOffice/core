@@ -127,7 +127,7 @@ struct ImplPostEventData
     MouseEvent      maMouseEvent;
     VclEventId      mnEvent;
     KeyEvent        maKeyEvent;
-    GestureEvent    maGestureEvent;
+    GestureEventPan maGestureEvent;
 
     ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent)
         : mpWin(pWin)
@@ -141,7 +141,7 @@ struct ImplPostEventData
         , maMouseEvent(rMouseEvent)
         , mnEvent(nEvent)
     {}
-    ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const GestureEvent& rGestureEvent)
+    ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const GestureEventPan& rGestureEvent)
         : mpWin(pWin)
         , mnEventId(nullptr)
         , mnEvent(nEvent)
@@ -890,7 +890,8 @@ ImplSVEvent * Application::PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, K
     return nEventId;
 }
 
-ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin, GestureEvent const * pGestureEvent)
+ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
+                                           GestureEventPan const * pGestureEvent)
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = nullptr;
@@ -902,7 +903,7 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
         aTransformedPosition.AdjustX(pWin->GetOutOffXPixel());
         aTransformedPosition.AdjustY(pWin->GetOutOffYPixel());
 
-        const GestureEvent aGestureEvent(
+        const GestureEventPan aGestureEvent(
             sal_Int32(aTransformedPosition.X()),
             sal_Int32(aTransformedPosition.Y()),
             pGestureEvent->meEventType,

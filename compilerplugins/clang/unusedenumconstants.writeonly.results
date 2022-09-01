@@ -2900,9 +2900,9 @@ include/vcl/formatter.hxx:120
     enum Formatter::valueState valueDirty
 include/vcl/gdimtf.hxx:48
     enum MtfConversion N8BitGreys
-include/vcl/GestureEvent.hxx:25
+include/vcl/GestureEventPan.hxx:25
     enum PanningOrientation Horizontal
-include/vcl/GestureEvent.hxx:26
+include/vcl/GestureEventPan.hxx:26
     enum PanningOrientation Vertical
 include/vcl/GraphicObject.hxx:40
     enum GraphicAdjustmentFlags ALL

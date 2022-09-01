@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/long.hxx>
-#include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventPan.hxx>
 #include <vcl/GestureEventZoom.hxx>
 #include <vcl/GestureEventRotate.hxx>
 
@@ -92,7 +92,7 @@ enum class SalEvent {
     Swipe,
     LongPress,
     ExternalGesture,
-    Gesture,
+    GesturePan,
     GestureZoom,
     GestureRotate,
 };
@@ -260,7 +260,7 @@ struct SalLongPressEvent
 
 struct SalGestureEvent
 {
-    GestureEventType meEventType;
+    GestureEventPanType meEventType;
     PanningOrientation meOrientation;
     double mfOffset;
     tools::Long mnX;

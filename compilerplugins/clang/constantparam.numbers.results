@@ -1487,7 +1487,7 @@ include/vcl/print.hxx:667
     int i_nMaxValue
     1000
 include/vcl/svapp.hxx:752
-    struct ImplSVEvent * Application::PostGestureEvent(enum VclEventId,class vcl::Window *,const class GestureEvent *)
+    struct ImplSVEvent * Application::PostGestureEvent(enum VclEventId,class vcl::Window *,const class GestureEventPan *)
     enum VclEventId nEvent
     130
 include/vcl/texteng.hxx:132

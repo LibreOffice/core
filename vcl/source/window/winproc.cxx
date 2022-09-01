@@ -31,7 +31,7 @@
 #include <vcl/QueueInfo.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
-#include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventPan.hxx>
 #include <vcl/GestureEventZoom.hxx>
 #include <vcl/GestureEventRotate.hxx>
 #include <vcl/settings.hxx>
@@ -1795,13 +1795,13 @@ static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& r
 
 namespace {
 
-class HandleGeneralGestureEvent : public HandleGestureEvent
+class HandleGesturePanEvent : public HandleGestureEvent
 {
 private:
-    CommandGestureData m_aGestureData;
+    CommandGesturePanData m_aGestureData;
 
 public:
-    HandleGeneralGestureEvent(vcl::Window* pWindow, const SalGestureEvent& rEvent)
+    HandleGesturePanEvent(vcl::Window* pWindow, const SalGestureEvent& rEvent)
         : HandleGestureEvent(pWindow, Point(rEvent.mnX, rEvent.mnY))
         , m_aGestureData(rEvent.mnX, rEvent.mnY, rEvent.meEventType, rEvent.mfOffset, rEvent.meOrientation)
     {
@@ -1809,7 +1809,7 @@ public:
 
     virtual bool CallCommand(vcl::Window* pWindow, const Point& /*rMousePos*/) override
     {
-        return ImplCallCommand(pWindow, CommandEventId::Gesture, &m_aGestureData);
+        return ImplCallCommand(pWindow, CommandEventId::GesturePan, &m_aGestureData);
     }
 };
 
@@ -1817,7 +1817,7 @@ public:
 
 static bool ImplHandleGestureEvent(vcl::Window* pWindow, const SalGestureEvent& rEvent)
 {
-    HandleGeneralGestureEvent aHandler(pWindow, rEvent);
+    HandleGesturePanEvent aHandler(pWindow, rEvent);
     return aHandler.HandleEvent();
 }
 
@@ -2913,7 +2913,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
         case SalEvent::ExternalGesture:
         {
-            auto const * pGestureEvent = static_cast<GestureEvent const *>(pEvent);
+            auto const * pGestureEvent = static_cast<GestureEventPan const *>(pEvent);
 
             SalGestureEvent aSalGestureEvent;
             aSalGestureEvent.mfOffset = pGestureEvent->mnOffset;
@@ -2925,7 +2925,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             bRet = ImplHandleGestureEvent(pWindow, aSalGestureEvent);
         }
         break;
-        case SalEvent::Gesture:
+        case SalEvent::GesturePan:
         {
             auto const * aSalGestureEvent = static_cast<SalGestureEvent const *>(pEvent);
             bRet = ImplHandleGestureEvent(pWindow, *aSalGestureEvent);

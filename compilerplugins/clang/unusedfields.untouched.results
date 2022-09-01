@@ -223,11 +223,11 @@ include/svx/imapdlg.hxx:91
 include/unotest/macros_test.hxx:111
     unotest::MacrosTest mpDll std::unique_ptr<BasicDLL>
 include/vcl/commandevent.hxx:310
-    CommandGestureData mfX const double
+    CommandGesturePanData mfX const double
 include/vcl/commandevent.hxx:311
-    CommandGestureData mfY const double
+    CommandGesturePanData mfY const double
 include/vcl/commandevent.hxx:314
-    CommandGestureData meOrientation const PanningOrientation
+    CommandGesturePanData meOrientation const PanningOrientation
 include/vcl/filter/PngImageReader.hxx:35
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 include/vcl/filter/PngImageWriter.hxx:32

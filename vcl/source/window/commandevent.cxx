@@ -187,10 +187,10 @@ const CommandLongPressData* CommandEvent::GetLongPressData() const
         return nullptr;
 }
 
-const CommandGestureData* CommandEvent::GetGestureData() const
+const CommandGesturePanData* CommandEvent::GetGesturePanData() const
 {
-    if (mnCommand == CommandEventId::Gesture)
-        return static_cast<const CommandGestureData*>(mpData);
+    if (mnCommand == CommandEventId::GesturePan)
+        return static_cast<const CommandGesturePanData*>(mpData);
     else
         return nullptr;
 }

@@ -763,21 +763,21 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
             }
             break;
 
-            case CommandEventId::Gesture:
+            case CommandEventId::GesturePan:
             {
                 if (pVScrl)
                 {
-                    const CommandGestureData* pData = rCmd.GetGestureData();
-                    if (pData->meEventType == GestureEventType::PanningBegin)
+                    const CommandGesturePanData* pData = rCmd.GetGesturePanData();
+                    if (pData->meEventType == GestureEventPanType::Begin)
                     {
                         mpWindowImpl->mpFrameData->mnTouchPanPosition = pVScrl->GetThumbPos();
                     }
-                    else if(pData->meEventType == GestureEventType::PanningUpdate)
+                    else if(pData->meEventType == GestureEventPanType::Update)
                     {
                         tools::Long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
                         pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset / pVScrl->GetVisibleSize()));
                     }
-                    if (pData->meEventType == GestureEventType::PanningEnd)
+                    if (pData->meEventType == GestureEventPanType::End)
                     {
                         mpWindowImpl->mpFrameData->mnTouchPanPosition = -1;
                     }

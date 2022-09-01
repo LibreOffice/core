@@ -27,7 +27,7 @@
 #include <vcl/keycodes.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventPan.hxx>
 #include <vcl/GestureEventZoom.hxx>
 #include <vcl/GestureEventRotate.hxx>
 
@@ -40,7 +40,7 @@ class CommandMediaData;
 class CommandSelectionChangeData;
 class CommandSwipeData;
 class CommandLongPressData;
-class CommandGestureData;
+class CommandGesturePanData;
 class CommandGestureZoomData;
 class CommandGestureRotateData;
 
@@ -93,7 +93,7 @@ public:
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
     const CommandSwipeData*             GetSwipeData() const;
     const CommandLongPressData*         GetLongPressData() const;
-    const CommandGestureData*           GetGestureData() const;
+    const CommandGesturePanData*        GetGesturePanData() const;
     const CommandGestureZoomData*       GetGestureZoomData() const;
     const CommandGestureRotateData*     GetGestureRotateData() const;
 };
@@ -310,16 +310,17 @@ public:
     double getY() const { return mnY; }
 };
 
-class VCL_DLLPUBLIC CommandGestureData
+class VCL_DLLPUBLIC CommandGesturePanData
 {
 public:
     double const mfX;
     double const mfY;
     double const mfOffset;
-    GestureEventType const meEventType;
+    GestureEventPanType const meEventType;
     PanningOrientation const meOrientation;
 
-    CommandGestureData(double fX, double fY, GestureEventType eEventType, double fOffset, PanningOrientation eOrientation)
+    CommandGesturePanData(double fX, double fY, GestureEventPanType eEventType, double fOffset,
+                          PanningOrientation eOrientation)
         : mfX(fX)
         , mfY(fY)
         , mfOffset(fOffset)
@@ -384,7 +385,7 @@ enum class CommandEventId
     QueryCharPosition       = 20,
     Swipe                   = 21,
     LongPress               = 22,
-    Gesture                 = 23,
+    GesturePan              = 23,
     GestureZoom             = 24,
     GestureRotate           = 25,
 };

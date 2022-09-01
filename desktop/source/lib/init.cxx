@@ -121,7 +121,7 @@
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventPan.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
@@ -4633,14 +4633,14 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsign
     }
 
     OString aType(pType);
-    GestureEventType eEventType = GestureEventType::PanningUpdate;
+    GestureEventPanType eEventType = GestureEventPanType::Update;
 
     if (aType == "panBegin")
-        eEventType = GestureEventType::PanningBegin;
+        eEventType = GestureEventPanType::Begin;
     else if (aType == "panEnd")
-        eEventType = GestureEventType::PanningEnd;
+        eEventType = GestureEventPanType::End;
 
-    GestureEvent aEvent {
+    GestureEventPan aEvent {
         sal_Int32(nX),
         sal_Int32(nY),
         eEventType,

@@ -373,11 +373,11 @@ include/svx/ClassificationDialog.hxx:37
 include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem SvxIMapDlgItem
 include/vcl/commandevent.hxx:310
-    CommandGestureData mfX const double
+    CommandGesturePanData mfX const double
 include/vcl/commandevent.hxx:311
-    CommandGestureData mfY const double
+    CommandGesturePanData mfY const double
 include/vcl/commandevent.hxx:314
-    CommandGestureData meOrientation const PanningOrientation
+    CommandGesturePanData meOrientation const PanningOrientation
 include/vcl/pdf/PDFAnnotationMarker.hxx:67
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType PDFTextMarkerType
 include/xmloff/shapeimport.hxx:57

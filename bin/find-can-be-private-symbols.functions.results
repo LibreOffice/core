@@ -267,7 +267,7 @@ ComboBox::SetWidthInChars(int)
 ComboBox::setMaxWidthChars(int)
 CommandEvent::CommandEvent()
 CommandEvent::GetAutoScrollData() const
-CommandEvent::GetGestureData() const
+CommandEvent::GetGesturePanData() const
 CommandExtTextInputData::CommandExtTextInputData(CommandExtTextInputData const&)
 CommandWheelData::CommandWheelData()
 CompressGraphicsDialog::Compress(SvStream&)
