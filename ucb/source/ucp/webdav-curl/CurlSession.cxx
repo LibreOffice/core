@@ -1386,12 +1386,6 @@ auto CurlProcessor::ProcessRequest(
                         }
                         break;
                     }
-                    case SC_FORBIDDEN: // treat as 401, just for testing!
-                        if (rSession.m_isAuthenticated)
-                        {
-                            break;
-                        }
-                        [[fallthrough]];
                     case SC_UNAUTHORIZED:
                     case SC_PROXY_AUTHENTICATION_REQUIRED:
                     {
