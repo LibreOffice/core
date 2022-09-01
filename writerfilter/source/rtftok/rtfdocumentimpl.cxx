@@ -1330,15 +1330,23 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     if (!pCurrentBuffer)
     {
         Mapper().startCharacterGroup();
-        // Should we send run properties?
-        if (bRunProps)
-            runProps();
+    }
+    else
+    {
+        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, nullptr, nullptr));
+    }
+
+    // Should we send run properties?
+    if (bRunProps)
+        runProps();
+
+    if (!pCurrentBuffer)
+    {
         Mapper().text(sValue, 1);
         Mapper().endCharacterGroup();
     }
     else
     {
-        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, nullptr, nullptr));
         auto pValue = new RTFValue(*sValue);
         pCurrentBuffer->push_back(Buf_t(BUFFER_TEXT, pValue, nullptr));
         pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN, nullptr, nullptr));
