@@ -5156,7 +5156,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                         pNd = pTableStNd->EndOfSectionNode();
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
-                    m_xDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
+                    m_xDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx.GetNode(),
                         SwMoveFlags::DEFAULT );
 
                     // If the caption was added before the table, a page style on that table

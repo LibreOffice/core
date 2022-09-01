@@ -2000,7 +2000,7 @@ void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)
     rDoc.MergeTable(rPam);
 }
 
-void SwUndoTableMerge::MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNodeIndex& rPos )
+void SwUndoTableMerge::MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNode& rPos )
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
     std::unique_ptr<SwUndoMove> pUndo(new SwUndoMove( rDoc, rRg, rPos ));
@@ -2010,7 +2010,7 @@ void SwUndoTableMerge::MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNodeInde
         SwMoveFlags::DEFAULT );
     ++aTmp;
     ++aTmp2;
-    pUndo->SetDestRange( aTmp2, rPos, aTmp );
+    pUndo->SetDestRange( aTmp2.GetNode(), rPos, aTmp );
 
     m_vMoves.push_back(std::move(pUndo));
 }

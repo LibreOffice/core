@@ -234,7 +234,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
-    void MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNodeIndex& rPos );
+    void MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNode& rPos );
 
     void SetSelBoxes( const SwSelBoxes& rBoxes );
 

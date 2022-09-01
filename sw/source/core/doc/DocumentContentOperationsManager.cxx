@@ -960,7 +960,7 @@ namespace
     }
 
     bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
-                     const SwNodeIndex& rInsPos,
+                     const SwNode& rInsPos,
                      SwFootnoteIdxs& rFootnoteArr, SwFootnoteIdxs& rSaveArr,
                      const SwContentIndex* pSttCnt = nullptr, const SwContentIndex* pEndCnt = nullptr )
     {
@@ -2371,7 +2371,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     }
     else
     {
-        bUpdateFootnote = lcl_SaveFootnote( pStt->nNode, pEnd->nNode, rPos.nNode,
+        bUpdateFootnote = lcl_SaveFootnote( pStt->nNode, pEnd->nNode, rPos.GetNode(),
                                     m_rDoc.GetFootnoteIdxs(), aTmpFntIdx,
                                     &pStt->nContent, &pEnd->nContent );
     }
@@ -2551,7 +2551,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     return true;
 }
 
-bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
+bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNode& rDestNd,
         SwMoveFlags eMvFlags )
 {
     // Moves all Nodes to the new position.
@@ -2568,11 +2568,11 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     std::unique_ptr<SwUndoMove> pUndo;
     if ((SwMoveFlags::CREATEUNDOOBJ & eMvFlags ) && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo.reset(new SwUndoMove( m_rDoc, rRange, rPos ));
+        pUndo.reset(new SwUndoMove( m_rDoc, rRange, rDestNd ));
     }
     else
     {
-        bUpdateFootnote = lcl_SaveFootnote( rRange.aStart, rRange.aEnd, rPos,
+        bUpdateFootnote = lcl_SaveFootnote( rRange.aStart, rRange.aEnd, rDestNd,
                                     m_rDoc.GetFootnoteIdxs(), aTmpFntIdx );
     }
 
@@ -2584,7 +2584,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
         // Find all RedLines that end at the InsPos.
         // These have to be moved back to the "old" position after the Move.
-        SwRedlineTable::size_type nRedlPos = m_rDoc.getIDocumentRedlineAccess().GetRedlinePos( rPos.GetNode(), RedlineType::Any );
+        SwRedlineTable::size_type nRedlPos = m_rDoc.getIDocumentRedlineAccess().GetRedlinePos( rDestNd, RedlineType::Any );
         if( SwRedlineTable::npos != nRedlPos )
         {
             const SwPosition *pRStt, *pREnd;
@@ -2592,11 +2592,11 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
                 SwRangeRedline* pTmp = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
                 pRStt = pTmp->Start();
                 pREnd = pTmp->End();
-                if( pREnd->GetNode() == rPos.GetNode() && pRStt->GetNode() < rPos.GetNode() )
+                if( pREnd->GetNode() == rDestNd && pRStt->GetNode() < rDestNd )
                 {
                     aSavRedlInsPosArr.push_back( pTmp );
                 }
-            } while( pRStt->GetNode() < rPos.GetNode() && ++nRedlPos < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
+            } while( pRStt->GetNode() < rDestNd && ++nRedlPos < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
         }
     }
 
@@ -2612,7 +2612,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
         SaveFlyInRange( rRange, aSaveFlyArr );
 
     // Set it to before the Position, so that it cannot be moved further.
-    SwNodeIndex aIdx( rPos, -1 );
+    SwNodeIndex aIdx( rDestNd, -1 );
 
     std::optional<SwNodeIndex> oSaveInsPos;
     if( pUndo )
@@ -2620,7 +2620,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     // move the Nodes
     bool bNoDelFrames = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
-    if( m_rDoc.GetNodes().MoveNodes( rRange, m_rDoc.GetNodes(), rPos.GetNode(), !bNoDelFrames ) )
+    if( m_rDoc.GetNodes().MoveNodes( rRange, m_rDoc.GetNodes(), rDestNd, !bNoDelFrames ) )
     {
         ++aIdx;     // again back to old position
         if( oSaveInsPos )
@@ -2660,7 +2660,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     if( pUndo )
     {
-        pUndo->SetDestRange( aIdx, rPos, *oSaveInsPos );
+        pUndo->SetDestRange( aIdx.GetNode(), rDestNd, *oSaveInsPos );
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 

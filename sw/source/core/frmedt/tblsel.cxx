@@ -1376,10 +1376,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             SwNodeRange aRg( aSttNdIdx.GetNode(), aPam.GetPoint()->GetNode() );
             ++rInsPosNd;
             if( pUndo )
-                pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd );
+                pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd.GetNode() );
             else
             {
-                pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
+                pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd.GetNode(),
                     SwMoveFlags::DEFAULT );
             }
             // where is now aInsPos ??

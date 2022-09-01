@@ -173,7 +173,8 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     // Move the table outside of the text frame
     SwNodeRange aRange(*pTableNode, SwNodeOffset(0), *pTableNode->EndOfSectionNode(),
                        SwNodeOffset(1));
-    rDoc.getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos, SwMoveFlags::DEFAULT);
+    rDoc.getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos.GetNode(),
+                                                       SwMoveFlags::DEFAULT);
 
     // Remove the floating table's frame
     SwFlyFrameFormat* pFrameFormat = pFlyFrame->GetFormat();

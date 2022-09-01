@@ -389,7 +389,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                         GetNodes().MakeTextNode( aRg.aStart.GetNode(),
                                     GetDfltTextFormatColl() );
 
-                    getIDocumentContentOperations().MoveNodeRange( aRg, aPos.nNode, SwMoveFlags::DEFAULT );
+                    getIDocumentContentOperations().MoveNodeRange( aRg, aPos.GetNode(), SwMoveFlags::DEFAULT );
                 }
                 else
                 {

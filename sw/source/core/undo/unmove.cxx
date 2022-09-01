@@ -92,7 +92,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 }
 
 SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
-                        const SwNodeIndex& rMvPos )
+                        const SwNode& rMvPos )
     : SwUndo(SwUndoId::MOVE, &rDoc)
     , m_nDestStartNode(0)
     , m_nDestEndNode(0)
@@ -134,8 +134,8 @@ SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
     m_nFootnoteStart = 0;
 }
 
-void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
-                                const SwNodeIndex& rEnd,
+void SwUndoMove::SetDestRange( const SwNode& rStt,
+                                const SwNode& rEnd,
                                 const SwNodeIndex& rInsPos )
 {
     m_nDestStartNode = rStt.GetIndex();
@@ -165,7 +165,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             SwNodeRange aRg( aIdx, aIdx );
             aRg.aEnd = m_nDestEndNode;
             aIdx = m_nInsPosNode;
-            bool bSuccess = pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aIdx,
+            bool bSuccess = pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aIdx.GetNode(),
                     SwMoveFlags::DEFAULT );
             if (!bSuccess)
                 break;
@@ -244,7 +244,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         // only a move with SwRange
         SwNodeRange aRg( rNds, m_nSttNode, m_nEndNode );
-        rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx, m_bMoveRedlines
+        rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx.GetNode(), m_bMoveRedlines
                 ? SwMoveFlags::REDLINES
                 : SwMoveFlags::DEFAULT );
     }

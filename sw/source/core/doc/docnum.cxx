@@ -2354,7 +2354,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     assert(!pLayout // check not moving *into* delete redline (caller's fault)
         || aIdx.GetNode().GetRedlineMergeFlag() == SwNode::Merge::None
         || aIdx.GetNode().GetRedlineMergeFlag() == SwNode::Merge::First);
-    getIDocumentContentOperations().MoveNodeRange( aMvRg, aIdx, SwMoveFlags::REDLINES );
+    getIDocumentContentOperations().MoveNodeRange( aMvRg, aIdx.GetNode(), SwMoveFlags::REDLINES );
 
     if( pUndo )
     {

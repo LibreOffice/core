@@ -63,13 +63,13 @@ class SwUndoMove final : public SwUndo, private SwUndRng, private SwUndoSaveCont
 
 public:
     SwUndoMove( const SwPaM&, const SwPosition& );
-    SwUndoMove( SwDoc& rDoc, const SwNodeRange&, const SwNodeIndex& );
+    SwUndoMove( SwDoc& rDoc, const SwNodeRange&, const SwNode& );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     /// set the destination range after the move
-    void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
+    void SetDestRange( const SwNode& rStt, const SwNode& rEnd,
                         const SwNodeIndex& rInsPos );
 
     bool IsMoveRange() const        { return m_bMoveRange; }

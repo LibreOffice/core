@@ -48,7 +48,7 @@ public:
 
     bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) override;
 
-    bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags) override;
+    bool MoveNodeRange(SwNodeRange&, SwNode&, SwMoveFlags) override;
 
     void MoveAndJoin(SwPaM&, SwPosition&) override;
 

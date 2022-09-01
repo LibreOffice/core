@@ -902,10 +902,10 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     }
                     SwNodeRange aRg( aSttNdIdx.GetNode(), aPam.GetPoint()->GetNode() );
                     if( pUndo )
-                        pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd );
+                        pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd.GetNode() );
                     else
                     {
-                        pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
+                        pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd.GetNode(),
                             SwMoveFlags::NO_DELFRMS );
                     }
                 }
@@ -2208,7 +2208,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
 #if 0
                     pDoc->GetNodes().MoveNodes(content, pDoc->GetNodes(), insPos, false);
 #else
-                    pDoc->getIDocumentContentOperations().MoveNodeRange(content, insPos, SwMoveFlags::NO_DELFRMS|SwMoveFlags::REDLINES);
+                    pDoc->getIDocumentContentOperations().MoveNodeRange(content, insPos.GetNode(), SwMoveFlags::NO_DELFRMS|SwMoveFlags::REDLINES);
 #endif
                     // delete the empty node that was bundled in the new box
                     pDoc->GetNodes().Delete(insPos);

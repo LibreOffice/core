@@ -153,7 +153,7 @@ public:
 
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
-    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags) = 0;
+    virtual bool MoveNodeRange(SwNodeRange&, SwNode&, SwMoveFlags) = 0;
 
     /** Move a range.
     */
