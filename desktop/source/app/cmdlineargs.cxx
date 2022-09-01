@@ -28,6 +28,7 @@
 #include "cmdlineargs.hxx"
 #include <osl/thread.hxx>
 #include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/process.h>
 #include <comphelper/lok.hxx>
@@ -166,7 +167,14 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
     }
     if (nURIlen < 0)
         nURIlen = rest2.getLength();
-    arg = rest2.copy(0, nURIlen);
+    auto const uri = rest2.subView(0, nURIlen);
+    if (INetURLObject(uri).GetProtocol() == INetProtocol::Macro) {
+        // Let the "Open" machinery process the full command URI (leading to failure, by intention,
+        // as the "Open" machinery does not know about those command URI schemes):
+        curEvt = CommandLineEvent::Open;
+    } else {
+        arg = uri;
+    }
     return curEvt;
 }
 
