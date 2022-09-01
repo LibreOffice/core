@@ -197,9 +197,31 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillPropert
             sal_Int16 nToTransparence = aBlipProps.maColorChangeTo.getTransparency();
             sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) * 2.55 );
 
+            sal_uInt8 nTolerance = 9;
+            Graphic aGraphic{ xGraphic };
+            if( aGraphic.IsGfxLink() )
+            {
+                // tdf#149670: Try to guess tolerance depending on image format
+                switch (aGraphic.GetGfxLink().GetType())
+                {
+                    case GfxLinkType::NativeJpg:
+                        nTolerance = 15;
+                        break;
+                    case GfxLinkType::NativePng:
+                    case GfxLinkType::NativeTif:
+                        nTolerance = 1;
+                        break;
+                    case GfxLinkType::NativeBmp:
+                        nTolerance = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             uno::Reference<graphic::XGraphicTransformer> xTransformer(aBlipProps.mxFillGraphic, uno::UNO_QUERY);
             if (xTransformer.is())
-                return xTransformer->colorChange(xGraphic, sal_Int32(nFromColor), 9, sal_Int32(nToColor), nToAlpha);
+                return xTransformer->colorChange(xGraphic, sal_Int32(nFromColor), nTolerance, sal_Int32(nToColor), nToAlpha);
         }
     }
     return xGraphic;

@@ -195,8 +195,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
     ::Graphic aGraphic(rxGraphic);
     ::Graphic aReturnGraphic;
 
-    BitmapColor aBmpColorFrom(static_cast< sal_uInt8 >(nColorFrom), static_cast< sal_uInt8 >(nColorFrom >> 8), static_cast< sal_uInt8 >(nColorFrom >> 16));
-    BitmapColor aBmpColorTo( static_cast< sal_uInt8 >(nColorTo), static_cast< sal_uInt8 >(nColorTo >> 8), static_cast< sal_uInt8 >(nColorTo  >> 16));
+    BitmapColor aBmpColorFrom(Color(ColorTransparency, static_cast<sal_uInt32>(nColorFrom)));
+    BitmapColor aBmpColorTo(Color(ColorTransparency, static_cast<sal_uInt32>(nColorTo)));
 
     Color aColorFrom(aBmpColorFrom);
     Color aColorTo(aBmpColorTo);
