@@ -344,14 +344,10 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 return;
             }
 
-            // use the QAccessibleEvent ctor taking a QObject* instead of the one that takes QAccessibleInterface*
-            // to work around QTBUG-105988
-            QAccessibleEvent* pSelectionAddEvent
-                = new QAccessibleEvent(pQAccessibleInterface->object(), eEventType);
-            // Qt expects the index of the (un)selected child to be set in the event
-            sal_Int32 nChildIndex = xContext->getAccessibleIndexInParent();
-            pSelectionAddEvent->setChild(nChildIndex);
-            QAccessible::updateAccessibility(pSelectionAddEvent);
+            // Qt expects the event to be sent for the (un)selected child
+            QObject* pChildObject = QtAccessibleRegistry::getQObject(xChildAcc);
+            assert(pChildObject);
+            QAccessible::updateAccessibility(new QAccessibleEvent(pChildObject, eEventType));
             return;
         }
         case AccessibleEventId::SELECTION_CHANGED_WITHIN:
