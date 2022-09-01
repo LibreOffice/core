@@ -163,8 +163,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
             pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
         }
 
-        if (pDescriptor != nullptr)
-            xView = pDescriptor->mxView;
+        xView = pDescriptor->mxView;
 
         mpViewShellContainer->push_back(pDescriptor);
 
