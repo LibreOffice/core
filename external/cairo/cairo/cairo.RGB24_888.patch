@@ -31,13 +31,12 @@ diff -ru cairo-1.17.4.orig/src/cairo.h cairo-1.17.4/src/cairo.h
 diff -ru cairo-1.17.4.orig/src/cairo-image-source.c cairo-1.17.4/src/cairo-image-source.c
 --- misc/cairo-1.17.4.orig/src/cairo-image-source.c	2021-08-29 19:43:26.979435585 +0100
 +++ misc/build/cairo-1.17.4/src/cairo-image-source.c	2021-08-29 19:43:47.501506559 +0100
-@@ -509,6 +509,20 @@
+@@ -509,6 +509,19 @@
  	color.blue = expand_channel(pixel & 0x3fff, 10);
  	return pixman_image_create_solid_fill (&color);
  
 +    case CAIRO_FORMAT_RGB24_888:
 +	pixel = (uint32_t)(image->data + y * image->stride + 3 * x)[0] | ((uint32_t)(image->data + y * image->stride + 3 * x)[1] << 8) | ((uint32_t)(image->data + y * image->stride + 3 * x)[2] << 16);
-+	pixel &= 0x00ffffff; /* ignore next pixel bits */
 +	if (pixel == 0)
 +	    return _pixman_black_image ();
 +	if (pixel == 0x00ffffff)
