@@ -386,13 +386,13 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
      * to the numbering. This is easier to test using a layout dump.
      */
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[1]", "nHeight", "220");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "font-height", "220");
 
     // check the bookmark portions are of the expected height
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "nType", "PortionType::Bookmark");
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "nHeight", "253");
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "nType", "PortionType::Bookmark");
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "nHeight", "253");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type", "PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "height", "253");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[3]", "type", "PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[3]", "height", "253");
 
     /*
      * Next problem was that the page margin contained the width of the page border as well.
@@ -1789,7 +1789,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136952_pgBreak3)
     //Do not lose the page::breakAfter. This SHOULD be on page 4, but sadly it is not.
     //The key part of this test is that the page starts with "Lorem ipsum"
     //Prior to this, there was no page break, and so it was in the middle of a page.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
 }
 
 
