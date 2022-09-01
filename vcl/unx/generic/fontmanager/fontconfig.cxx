@@ -308,7 +308,10 @@ FcFontSet* FontCfgWrapper::getFontSet()
         m_pFontSet = FcFontSetCreate();
         bool bRestrictFontSetToApplicationFonts = false;
 #if HAVE_MORE_FONTS
-        bRestrictFontSetToApplicationFonts = getenv("SAL_NON_APPLICATION_FONT_USE") != nullptr;
+        bRestrictFontSetToApplicationFonts = [] {
+            const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
+            return pEnv && strcmp(pEnv, "allow") != 0;
+        }();
 #endif
         if (!bRestrictFontSetToApplicationFonts)
             addFontSet( FcSetSystem );
