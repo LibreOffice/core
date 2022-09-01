@@ -1257,13 +1257,16 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     nWidth  = aWinRect.right - aWinRect.left + 1;
     nHeight = aWinRect.bottom - aWinRect.top + 1;
 
+    HWND hWndParent = ImplGetParentHwnd(mhWnd);
     // For dialogs (WS_POPUP && WS_DLGFRAME), we need to find the "real" parent,
     // in case multiple dialogs are stacked on each other
-    // (wo don't want to position the second dialog relative to the first one, but relative to the main window)
-    HWND hWndParent = ImplGetParentHwnd(mhWnd);
-    while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_POPUP) &&  (GetWindowStyle( hWndParent ) & WS_DLGFRAME) )
+    // (we don't want to position the second dialog relative to the first one, but relative to the main window)
+    if ( (GetWindowStyle( mhWnd ) & WS_POPUP) &&  (GetWindowStyle( mhWnd ) & WS_DLGFRAME) ) // mhWnd is a dialog
     {
-        hWndParent = ::ImplGetParentHwnd( hWndParent );
+        while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_POPUP) &&  (GetWindowStyle( hWndParent ) & WS_DLGFRAME) )
+        {
+            hWndParent = ::ImplGetParentHwnd( hWndParent );
+        }
     }
 
     if ( !(nPosSize & SWP_NOMOVE) && hWndParent )
