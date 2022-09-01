@@ -1190,7 +1190,7 @@ SdrView* SfxViewShell::GetDrawView() const
 
 OUString SfxViewShell::GetSelectionText
 (
-    bool /*bCompleteWords*/ /*  FALSE (default)
+    bool /*bCompleteWords*/, /*  FALSE (default)
                                 Only the actual selected text is returned.
 
                                 TRUE
@@ -1199,6 +1199,7 @@ OUString SfxViewShell::GetSelectionText
                                 these are used: white spaces and punctuation
                                 ".,;" and single and double quotes.
                             */
+    bool /*bOnlyASample*/ /* used by some dialogs to avoid constructing monster strings e.g. in calc */
 )
 
 /*  [Description]

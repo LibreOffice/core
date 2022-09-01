@@ -39,7 +39,7 @@
 #include <inputhdl.hxx>
 #include <document.hxx>
 
-OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
+OUString ScTabViewShell::GetSelectionText( bool bWholeWord, bool bOnlyASample )
 {
     OUString aStrSelection;
 
@@ -54,7 +54,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
         if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
         {
             ScDocument& rDoc = GetViewData().GetDocument();
-            if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
+            if ( (bOnlyASample || bInFormatDialog) && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
                 // limit range to one data row
                 // (only when  the call comes from a format dialog)

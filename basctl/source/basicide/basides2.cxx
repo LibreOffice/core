@@ -56,7 +56,7 @@ bool Shell::HasSelection( bool /* bText */ ) const
     return false;
 }
 
-OUString Shell::GetSelectionText( bool bWholeWord )
+OUString Shell::GetSelectionText( bool bWholeWord, bool /*bOnlyASample*/ )
 {
     OUString aText;
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin.get()))

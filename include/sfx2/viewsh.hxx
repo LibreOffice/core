@@ -226,9 +226,10 @@ public:
      * Initialize is called after the frame has been loaded and the controller
      * has been set.  By the time this is called the document has been fully
      * imported.
+     * @param bOnlyASample used by some dialogs to avoid constructing monster strings e.g. in calc
      */
     virtual bool                PrepareClose( bool bUI = true );
-    virtual OUString            GetSelectionText( bool bCompleteWords = false );
+    virtual OUString            GetSelectionText( bool bCompleteWords = false, bool bOnlyASample = false );
     virtual bool                HasSelection( bool bText = true ) const;
     virtual SdrView*            GetDrawView() const;
 

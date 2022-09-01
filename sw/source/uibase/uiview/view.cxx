@@ -1653,7 +1653,7 @@ bool SwView::HasSelection( bool  bText ) const
                  : GetWrtShell().HasSelection();
 }
 
-OUString SwView::GetSelectionText( bool bCompleteWrds )
+OUString SwView::GetSelectionText( bool bCompleteWrds, bool /*bOnlyASample*/ )
 {
     return GetSelectionTextParam( bCompleteWrds, true );
 }

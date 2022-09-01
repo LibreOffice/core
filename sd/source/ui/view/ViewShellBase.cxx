@@ -441,7 +441,7 @@ void ViewShellBase::InitializeFramework()
 {
 }
 
-OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
+OUString ViewShellBase::GetSelectionText(bool bCompleteWords, bool /*bOnlyASample*/)
 {
     std::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
