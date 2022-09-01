@@ -124,15 +124,9 @@ void setFont(const SvxFont& rNewFont, SvxFont& rImplFont)
  */
 bool CleanAndCheckEmpty(OUString& rText)
 {
-    bool bEmpty = true;
-    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
-    {
-        if (0xa == rText[i] || 0xd == rText[i])
-            rText = rText.replaceAt(i, 1, u" ");
-        else
-            bEmpty = false;
-    }
-    return bEmpty;
+    rText = rText.replaceAll("\xa", u" ");
+    rText = rText.replaceAll("\xd", u" ");
+    return rText.isEmpty();
 }
 } // end anonymous namespace
 
