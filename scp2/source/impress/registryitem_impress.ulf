@@ -55,3 +55,5 @@ en-US = "Uniform Office Format Presentation"
 [STR_REG_VAL_COMPUTER_GRAPHICS_METAFILE]
 en-US = "Computer Graphics Metafile"
 
+[STR_REG_VAL_KEYNOTE_PRESENTATION]
+en-US = "Apple Keynote"

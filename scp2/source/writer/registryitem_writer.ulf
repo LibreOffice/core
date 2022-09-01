@@ -64,3 +64,5 @@ en-US = "Lotus Word Pro Document"
 [STR_REG_VAL_T602_TEXT_FILE]
 en-US = "T602 Text File"
 
+[STR_REG_VAL_PAGES_DOCUMENT]
+en-US = "Apple Pages"

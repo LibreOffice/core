@@ -1763,6 +1763,7 @@ End
 CONDITIONAL_REGISTER_DOC_EXTENSION( Uot,  gid_Module_Prg_Wrt_Other_Reg, uot,  UOT,  UNIFORM_OFFICE_FORMAT_TEXT, 1, swriter.exe, open, Writer )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Lwp,  gid_Module_Prg_Wrt_Other_Reg, lwp,  LWP,  WORDPRO_DOCUMENT, 1, swriter.exe, open, Writer )
 CONDITIONAL_REGISTER_DOC_EXTENSION( 602,  gid_Module_Prg_Wrt_Other_Reg, 602,  602,  T602_TEXT_FILE, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pages, gid_Module_Prg_Wrt_Other_Reg, pages, PAGES, PAGES_DOCUMENT, 1, swriter.exe, open, Writer )
 
 // registering ms-word URI scheme handler
 CONDITIONAL_REGISTER_URI_HANDLER( ms-word, ms_word, gid_Module_Prg_Wrt_MSO_Reg, SELECT_WORD )

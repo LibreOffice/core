@@ -52,3 +52,5 @@ en-US = "Uniform Office Format Spreadsheet"
 [STR_REG_VAL_QUATTROPRO_SPREADSHEET]
 en-US = "Lotus Quattro Pro Spreadsheet"
 
+[STR_REG_VAL_NUMBERS_SPREADSHEET]
+en-US = "Apple Numbers"
