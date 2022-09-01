@@ -38,7 +38,7 @@ class CommandModKeyData;
 class CommandDialogData;
 class CommandMediaData;
 class CommandSelectionChangeData;
-class CommandSwipeData;
+class CommandGestureSwipeData;
 class CommandLongPressData;
 class CommandGesturePanData;
 class CommandGestureZoomData;
@@ -91,7 +91,7 @@ public:
     const CommandDialogData*            GetDialogData() const;
           CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
-    const CommandSwipeData*             GetSwipeData() const;
+    const CommandGestureSwipeData*      GetGestureSwipeData() const;
     const CommandLongPressData*         GetLongPressData() const;
     const CommandGesturePanData*        GetGesturePanData() const;
     const CommandGestureZoomData*       GetGestureZoomData() const;
@@ -275,15 +275,15 @@ public:
     sal_uLong          GetEnd() const { return mnEnd; }
 };
 
-class VCL_DLLPUBLIC CommandSwipeData
+class VCL_DLLPUBLIC CommandGestureSwipeData
 {
     double mnVelocityX;
 public:
-    CommandSwipeData()
+    CommandGestureSwipeData()
         : mnVelocityX(0)
     {
     }
-    CommandSwipeData(double nVelocityX)
+    CommandGestureSwipeData(double nVelocityX)
         : mnVelocityX(nVelocityX)
     {
     }
@@ -383,7 +383,7 @@ enum class CommandEventId
     SelectionChange         = 18,
     PrepareReconversion     = 19,
     QueryCharPosition       = 20,
-    Swipe                   = 21,
+    GestureSwipe            = 21,
     LongPress               = 22,
     GesturePan              = 23,
     GestureZoom             = 24,

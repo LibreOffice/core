@@ -1743,27 +1743,27 @@ static bool ImplHandleWheelEvent(vcl::Window* pWindow, const SalWheelMouseEvent&
 
 namespace {
 
-class HandleSwipeEvent : public HandleGestureEvent
+class HandleGestureSwipeEvent : public HandleGestureEvent
 {
 private:
-    CommandSwipeData m_aSwipeData;
+    CommandGestureSwipeData m_aSwipeData;
 public:
-    HandleSwipeEvent(vcl::Window *pWindow, const SalSwipeEvent& rEvt)
+    HandleGestureSwipeEvent(vcl::Window *pWindow, const SalGestureSwipeEvent& rEvt)
         : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY)),
           m_aSwipeData(rEvt.mnVelocityX)
     {
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) override
     {
-        return ImplCallCommand(pWindow, CommandEventId::Swipe, &m_aSwipeData);
+        return ImplCallCommand(pWindow, CommandEventId::GestureSwipe, &m_aSwipeData);
     }
 };
 
 }
 
-static bool ImplHandleSwipe(vcl::Window *pWindow, const SalSwipeEvent& rEvt)
+static bool ImplHandleSwipe(vcl::Window *pWindow, const SalGestureSwipeEvent& rEvt)
 {
-    HandleSwipeEvent aHandler(pWindow, rEvt);
+    HandleGestureSwipeEvent aHandler(pWindow, rEvt);
     return aHandler.HandleEvent();
 }
 
@@ -2903,8 +2903,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             ImplHandleSalQueryCharPosition( pWindow, const_cast<SalQueryCharPositionEvent *>(static_cast<SalQueryCharPositionEvent const *>(pEvent)) );
             break;
 
-        case SalEvent::Swipe:
-            bRet = ImplHandleSwipe(pWindow, *static_cast<const SalSwipeEvent*>(pEvent));
+        case SalEvent::GestureSwipe:
+            bRet = ImplHandleSwipe(pWindow, *static_cast<const SalGestureSwipeEvent*>(pEvent));
             break;
 
         case SalEvent::LongPress:

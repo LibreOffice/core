@@ -5611,7 +5611,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             break;
 
     case CommandEventId::LongPress:
-    case CommandEventId::Swipe: //nothing yet
+    case CommandEventId::GestureSwipe: //nothing yet
             break;
 
     case CommandEventId::StartExtTextInput:

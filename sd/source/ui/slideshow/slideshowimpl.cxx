@@ -1153,7 +1153,7 @@ void SlideshowImpl::slideEnded(const bool bReverse)
         gotoNextSlide();
 }
 
-bool SlideshowImpl::swipe(const CommandSwipeData &rSwipeData)
+bool SlideshowImpl::swipe(const CommandGestureSwipeData &rSwipeData)
 {
     if (mbUsePen || mnContextMenuEvent)
         return false;

@@ -3427,14 +3427,14 @@ void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdo
     //within the same vcl window
     if (gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y))
     {
-        SalSwipeEvent aEvent;
+        SalGestureSwipeEvent aEvent;
         aEvent.mnVelocityX = velocity_x;
         aEvent.mnVelocityY = velocity_y;
         aEvent.mnX = x;
         aEvent.mnY = y;
 
         GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-        pThis->CallCallbackExc(SalEvent::Swipe, &aEvent);
+        pThis->CallCallbackExc(SalEvent::GestureSwipe, &aEvent);
     }
 }
 

@@ -185,7 +185,7 @@ public:
     /// @throws css::uno::RuntimeException
     void hyperLinkClicked(const OUString & hyperLink);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape);
-    bool swipe(const CommandSwipeData &rSwipeData);
+    bool swipe(const CommandGestureSwipeData &rSwipeData);
     bool longpress(const CommandLongPressData& rLongPressData);
 
     /// ends the presentation async

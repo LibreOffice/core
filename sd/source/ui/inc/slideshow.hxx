@@ -48,7 +48,7 @@ class Size;
 namespace vcl { class Window; }
 class SfxRequest;
 class WorkWindow;
-class CommandSwipeData;
+class CommandGestureSwipeData;
 class CommandLongPressData;
 struct ImplSVEvent;
 
@@ -145,7 +145,7 @@ public:
     /** sets or clears the pause state of the running slideshow.
         !!!! This should only be called by the SdShowWindow !!!!*/
     void pause( bool bPause );
-    bool swipe(const CommandSwipeData &rSwipeData);
+    bool swipe(const CommandGestureSwipeData &rSwipeData);
     bool longpress(const CommandLongPressData& rLongPressData);
 
     // settings

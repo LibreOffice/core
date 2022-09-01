@@ -1077,7 +1077,7 @@ vcl/inc/salwtype.hxx:226
 vcl/inc/salwtype.hxx:239
     SalInputContext mpFont rtl::Reference<LogicalFontInstance>
 vcl/inc/salwtype.hxx:246
-    SalSwipeEvent mnVelocityY double
+    SalGestureSwipeEvent mnVelocityY double
 vcl/inc/scanlinewriter.hxx:35
     vcl::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/inc/svdata.hxx:464

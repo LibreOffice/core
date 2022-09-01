@@ -1760,9 +1760,9 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             //don't call InputChanged for CommandEventId::Wheel
         }
-        else if ( nCommand == CommandEventId::Swipe )
+        else if ( nCommand == CommandEventId::GestureSwipe )
         {
-            //don't call InputChanged for CommandEventId::Swipe
+            //don't call InputChanged for CommandEventId::GestureSwipe
         }
         else if ( nCommand == CommandEventId::LongPress )
         {

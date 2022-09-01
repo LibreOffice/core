@@ -661,12 +661,12 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
     switch( rCEvt.GetCommand() )
     {
-        case CommandEventId::Swipe:
+        case CommandEventId::GestureSwipe:
             {
                 rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                 if (xSlideShow.is())
                 {
-                    const CommandSwipeData* pSwipeData = rCEvt.GetSwipeData();
+                    const CommandGestureSwipeData* pSwipeData = rCEvt.GetGestureSwipeData();
                     bDone = xSlideShow->swipe(*pSwipeData);
                 }
             }

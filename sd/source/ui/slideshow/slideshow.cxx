@@ -1015,7 +1015,7 @@ void SlideShow::pause( bool bPause )
     }
 }
 
-bool SlideShow::swipe(const CommandSwipeData& rSwipeData)
+bool SlideShow::swipe(const CommandGestureSwipeData& rSwipeData)
 {
     return mxController.is() && mxController->swipe(rSwipeData);
 }

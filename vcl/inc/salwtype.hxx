@@ -89,7 +89,7 @@ enum class SalEvent {
     SurroundingTextSelectionChange,
     StartReconversion,
     QueryCharPosition,
-    Swipe,
+    GestureSwipe,
     LongPress,
     ExternalGesture,
     GesturePan,
@@ -244,7 +244,7 @@ struct SalInputContext
     InputContextFlags      mnOptions;
 };
 
-struct SalSwipeEvent
+struct SalGestureSwipeEvent
 {
     double mnVelocityX;
     double mnVelocityY;

@@ -171,10 +171,10 @@ const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const
         return nullptr;
 }
 
-const CommandSwipeData* CommandEvent::GetSwipeData() const
+const CommandGestureSwipeData* CommandEvent::GetGestureSwipeData() const
 {
-    if( mnCommand == CommandEventId::Swipe )
-        return static_cast<const CommandSwipeData*>(mpData);
+    if( mnCommand == CommandEventId::GestureSwipe )
+        return static_cast<const CommandGestureSwipeData*>(mpData);
     else
         return nullptr;
 }

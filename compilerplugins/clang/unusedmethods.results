@@ -2045,7 +2045,7 @@ include/vcl/commandevent.hxx:249
 include/vcl/commandevent.hxx:256
     _Bool CommandMediaData::GetPassThroughToOS() const
 include/vcl/commandevent.hxx:276
-     CommandSwipeData::CommandSwipeData()
+     CommandGestureSwipeData::CommandGestureSwipeData()
 include/vcl/commandevent.hxx:293
      CommandLongPressData::CommandLongPressData()
 include/vcl/cursor.hxx:96
