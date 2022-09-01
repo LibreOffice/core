@@ -588,7 +588,7 @@ RegistryItem gid_Regitem_sxc_KindMap
     Value = "document";
 End
 
-// new ods file extension 
+// new ods file extension
 
 RegistryItem gid_Regitem_Ods_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -854,7 +854,7 @@ RegistryItem gid_Regitem_fods_KindMap
     Value = "document";
 End
 
-// new ots file extension 
+// new ots file extension
 
 RegistryItem gid_Regitem_Ots_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

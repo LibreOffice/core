@@ -735,7 +735,7 @@ RegistryItem gid_Regitem_sxw_KindMap
     Value = "document";
 End
 
-// new odt file extension 
+// new odt file extension
 
 RegistryItem gid_Regitem_Odt_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1024,7 +1024,7 @@ RegistryItem gid_Regitem_fodt_KindMap
     Value = "document";
 End
 
-// new ott file extension 
+// new ott file extension
 
 RegistryItem gid_Regitem_Ott_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1167,7 +1167,7 @@ RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell_Printto_Command
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
-// new odm file extension 
+// new odm file extension
 
 RegistryItem gid_Regitem_Odm_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1317,7 +1317,7 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_Printto_Command
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
-// new oth file extension 
+// new oth file extension
 
 RegistryItem gid_Regitem_Oth_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
