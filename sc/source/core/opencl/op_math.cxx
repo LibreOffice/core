@@ -2982,6 +2982,7 @@ void OpDeg::GenSlidingWindowFunction(outputstream &ss,
 void OpFact::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 1 );
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2996,48 +2997,51 @@ void OpFact::GenSlidingWindowFunction(outputstream& ss,
     ss << "    double arg0 = " << GetBottom() << ";\n";
     FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
     assert(pCur);
-    if (pCur->GetType() == formula::svSingleVectorRef)
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        const formula::SingleVectorRefToken* pSVR =
-            static_cast< const formula::SingleVectorRefToken* >(pCur);
-        ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-    }
-    else if (pCur->GetType() == formula::svDouble)
-    {
-        ss << "    {\n";
-    }
-    if(ocPush==vSubArguments[0]->GetFormulaToken()->GetOpCode())
-    {
-        ss << "        if (isnan(";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << "))\n";
-        ss << "            arg0 = 0;\n";
-        ss << "        else\n";
-        ss << "            arg0 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "    arg0 = floor(arg0);\n";
-        ss << "    if (arg0 < 0.0)\n";
-        ss << "        return 0.0;\n";
-        ss << "    else if (arg0 == 0.0)\n";
-        ss << "        return 1.0;\n";
-        ss << "    else if (arg0 <= 170.0)\n";
-        ss << "    {\n";
-        ss << "        double fTemp = arg0;\n";
-        ss << "        while (fTemp > 2.0)\n";
-        ss << "        {\n";
-        ss << "            fTemp = fTemp - 1;\n";
-        ss << "            arg0 = arg0 * fTemp;\n";
-        ss << "        }\n";
-        ss << "    }\n";
-        ss << "    else\n";
-        ss << "        return -DBL_MAX;\n";
-        ss << "    }\n";
+        if(pCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*pCurDVR=
+                static_cast
+                <const formula::SingleVectorRefToken *>(pCur);
+            ss << "    arg0 = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "    if(isnan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||(gid0>=";
+            ss << pCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "    { arg0 = 0.0f; }\n";
+        }
+        else if(pCur->GetType() == formula::svDouble)
+        {
+            ss << "    arg0=";
+            ss << pCur->GetDouble() << ";\n";
+        }
     }
     else
     {
-        ss << "    arg0 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+        ss << "        arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
     }
+    ss << "    arg0 = floor(arg0);\n";
+    ss << "    if (arg0 < 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    else if (arg0 == 0.0)\n";
+    ss << "        return 1.0;\n";
+    ss << "    else if (arg0 <= 170.0)\n";
+    ss << "    {\n";
+    ss << "        double fTemp = arg0;\n";
+    ss << "        while (fTemp > 2.0)\n";
+    ss << "        {\n";
+    ss << "            fTemp = fTemp - 1;\n";
+    ss << "            arg0 = arg0 * fTemp;\n";
+    ss << "        }\n";
+    ss << "    }\n";
+    ss << "    else\n";
+    ss << "        return CreateDoubleError(NoValue);\n";
     ss << "    return arg0;\n";
     ss << "}";
 }
