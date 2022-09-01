@@ -550,6 +550,12 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 // copy the stored automatic text attributes in a temporary SfxItemSet
                 pTemplateItemSet->Put( *m_pItemSet_TextAttr );
 
+                // reset all direct formatting
+                o3tl::sorted_vector<sal_uInt16> aAttrs;
+                for( sal_uInt16 nWhich = RES_CHRATR_BEGIN; nWhich < RES_CHRATR_END; nWhich++ )
+                    aAttrs.insert( nWhich );
+                rWrtShell.ResetAttr( { aAttrs } );
+
                 // only attributes that were not apply by named style attributes and automatic
                 // paragraph attributes should be applied
                 lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
@@ -559,15 +565,6 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     rWrtShell.SetFlyFrameAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )
                 {
-                    const SfxPoolItem* pItem;
-                    SfxItemSet aSet(rWrtShell.GetAttrPool(),
-                        { { RES_CHRATR_CROSSEDOUT, RES_CHRATR_CROSSEDOUT } });
-                    rWrtShell.GetCurAttr(aSet);
-                    if (!pTemplateItemSet->HasItem(RES_CHRATR_CROSSEDOUT, &pItem))
-                    {
-                        rWrtShell.ResetAttr({ RES_CHRATR_CROSSEDOUT });
-                    }
-
                     rWrtShell.SetAttrSet(*pTemplateItemSet);
                 }
             }
