@@ -110,17 +110,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc& rDoc )
         if( !pCNd )
             pCNd = rDoc.GetNodes().GoNext( &aIdx );
 
-        SwPosition pos = *aAnchor.GetContentAnchor();
-        pos.nNode = aIdx;
-        if (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId())
-        {
-            pos.nContent.Assign( pCNd, 0 );
-        }
-        else
-        {
-            pos.nContent.Assign( nullptr, 0 );
-            assert(false);
-        }
+        SwPosition pos(aIdx.GetNode());
         aAnchor.SetAnchor( &pos );
     }
 
@@ -139,26 +129,25 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
 
     SwDoc& rDoc = const_cast<SwDoc&>(pNode->GetDoc());
 
-    SwContentIndex aIdx( pNode, GetStart() );
-    SwPosition aPos( *pNode->StartOfSectionNode(), aIdx );
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
     SwNode *const pOldNode(aAnchor.GetContentAnchor()
             ? &aAnchor.GetContentAnchor()->GetNode()
             : nullptr);
 
+    std::optional<SwPosition> oPos;
     if (!pOldNode || !pOldNode->GetNodes().IsDocNodes() ||
         pOldNode != static_cast<SwNode const *>(pNode))
     {
-        aPos.nNode = *pNode;
+        oPos.emplace( *pNode, GetStart() );
     }
     else
     {
-        aPos.nNode = *pOldNode;
+        oPos.emplace( *pOldNode, pOldNode->GetContentNode(), GetStart() );
     }
 
     aAnchor.SetType( RndStdIds::FLY_AS_CHAR );        // default!
-    aAnchor.SetAnchor( &aPos );
+    aAnchor.SetAnchor( &*oPos );
 
     // in case of anchor change, delete all FlyFrames
     // JP 25.04.95: if the Frames can be moved within SplitNode, they don't
@@ -188,7 +177,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         // tdf#91228 must notify the anchor nodes despite LockModify
         assert(pOldNode);
         pOldNode->RemoveAnchoredFly(pFormat);
-        aPos.GetNode().AddAnchoredFly(pFormat);
+        oPos->GetNode().AddAnchoredFly(pFormat);
         pFormat->UnlockModify();
     }
     else
@@ -229,7 +218,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
             if (bIsInSplitNode)
             {
                 pOldNode->RemoveAnchoredFly(pTextBox);
-                aPos.GetNode().AddAnchoredFly(pTextBox);
+                oPos->GetNode().AddAnchoredFly(pTextBox);
                 pTextBox->UnlockModify();
             }
             else
