@@ -673,6 +673,9 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
                 nGraphemeCount++;
             }
 
+            if (!nGraphemeCount)
+                continue;
+
             std::vector<DeviceCoordinate> aWidths(nGraphemeCount);
 
             // Check if the glyph has ligature caret positions.
