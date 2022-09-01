@@ -2415,7 +2415,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
                     pContentStore->Restore(m_rDoc, pOrigNode->GetIndex()-SwNodeOffset(1), 0, true, false, eMode);
                 }
             });
-        pTNd = pTNd->SplitContentNode(rPos, &restoreFunc)->GetTextNode();
+        pTNd->SplitContentNode(rPos, &restoreFunc)->GetTextNode();
 
         //A new node was inserted before the orig pTNd and the content up to
         //rPos moved into it. The old node is returned with the remainder
