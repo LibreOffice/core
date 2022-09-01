@@ -555,10 +555,17 @@ ScBroadcastAreaSlotMachine::TableSlots::TableSlots(SCSIZE nBcaSlots)
     memset( ppSlots.get(), 0 , sizeof( ScBroadcastAreaSlot* ) * nBcaSlots );
 }
 
+ScBroadcastAreaSlotMachine::TableSlots::TableSlots(TableSlots&& rOther) noexcept
+    : mnBcaSlots(rOther.mnBcaSlots)
+    , ppSlots( std::move(rOther.ppSlots) )
+{
+}
+
 ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 {
-    for ( ScBroadcastAreaSlot** pp = ppSlots.get() + mnBcaSlots; --pp >= ppSlots.get(); /* nothing */ )
-        delete *pp;
+    if (ppSlots)
+        for ( ScBroadcastAreaSlot** pp = ppSlots.get() + mnBcaSlots; --pp >= ppSlots.get(); /* nothing */ )
+            delete *pp;
 }
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
@@ -789,8 +796,9 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.emplace(nTab, std::make_unique<TableSlots>(mnBcaSlots)).first;
-            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+                iTab = aTableSlotsMap.emplace( std::piecewise_construct,
+                        std::forward_as_tuple(nTab), std::forward_as_tuple(mnBcaSlots) ).first;
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
             SCSIZE nOff = nStart;
@@ -837,7 +845,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
         for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
                 iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
         {
-            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
             SCSIZE nOff = nStart;
@@ -875,7 +883,7 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, SfxHintId
     for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
             iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
     {
-        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
         SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
         SCSIZE nOff = nStart;
@@ -913,7 +921,7 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
         ScRange broadcastRange( rAddress,
             ScAddress( rAddress.Col(), rAddress.Row() + rHint.GetRowCount() - 1, rAddress.Tab()));
         bool bBroadcasted = false;
-        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
         SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( broadcastRange, nStart, nEnd, nRowBreak );
         SCSIZE nOff = nStart;
@@ -936,7 +944,7 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
     for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
             iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
     {
-        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
         SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
         SCSIZE nOff = nStart;
@@ -975,7 +983,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
     for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
             iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
     {
-        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
         SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
         SCSIZE nOff = nStart;
@@ -1020,7 +1028,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 OSL_FAIL( "UpdateBroadcastAreas: Where's the TableSlot?!?");
                 continue;   // for
             }
-            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
             SCSIZE nOff = nStart;
@@ -1052,7 +1060,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             while (iTab != aTableSlotsMap.end())
             {
                 SCTAB nTab = (*iTab).first + nDz;
-                aTableSlotsMap[nTab] = std::move((*iTab).second);
+                aTableSlotsMap.emplace(nTab, std::move((*iTab).second));
                 iTab = aTableSlotsMap.erase(iTab);
             }
         }
@@ -1069,14 +1077,14 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 while (iTab != iStop)
                 {
                     SCTAB nTab = (*iTab).first + nDz;
-                    aTableSlotsMap[nTab] = std::move((*iTab).second);
+                    aTableSlotsMap.emplace(nTab, std::move((*iTab).second));
                     aTableSlotsMap.erase( iTab--);
                 }
                 // Shift the very first, iTab==iStop in this case.
                 if (bStopIsBegin)
                 {
                     SCTAB nTab = (*iTab).first + nDz;
-                    aTableSlotsMap[nTab] = std::move((*iTab).second);
+                    aTableSlotsMap.emplace(nTab, std::move((*iTab).second));
                     aTableSlotsMap.erase( iStop);
                 }
             }
@@ -1111,8 +1119,9 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.emplace(nTab, std::make_unique<TableSlots>(mnBcaSlots)).first;
-            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+                iTab = aTableSlotsMap.emplace( std::piecewise_construct,
+                        std::forward_as_tuple(nTab), std::forward_as_tuple(mnBcaSlots) ).first;
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
             SCSIZE nOff = nStart;
@@ -1256,7 +1265,7 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
     for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
             iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
     {
-        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second.getSlots();
         SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
         SCSIZE nOff = nStart;

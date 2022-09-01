@@ -263,8 +263,9 @@ private:
     {
     public:
                                         TableSlots(SCSIZE nBcaSlots);
+                                        TableSlots(TableSlots&&) noexcept;
                                         ~TableSlots();
-        ScBroadcastAreaSlot**    getSlots() { return ppSlots.get(); }
+        ScBroadcastAreaSlot**    getSlots() const { return ppSlots.get(); }
 
     private:
         SCSIZE                                    mnBcaSlots;
@@ -274,7 +275,7 @@ private:
         TableSlots& operator=( const TableSlots& ) = delete;
     };
 
-    typedef ::std::map< SCTAB, std::unique_ptr<TableSlots> > TableSlotsMap;
+    typedef ::std::map< SCTAB, TableSlots > TableSlotsMap;
 
     typedef ::std::vector< ::std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
 
