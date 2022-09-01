@@ -1764,9 +1764,9 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             //don't call InputChanged for CommandEventId::GestureSwipe
         }
-        else if ( nCommand == CommandEventId::LongPress )
+        else if ( nCommand == CommandEventId::GestureLongPress )
         {
-            //don't call InputChanged for CommandEventId::LongPress
+            //don't call InputChanged for CommandEventId::GestureLongPress
         }
         else if ( nCommand == CommandEventId::ModKeyChange )
         {

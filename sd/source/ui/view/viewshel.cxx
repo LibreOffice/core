@@ -671,12 +671,12 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 }
             }
             break;
-        case CommandEventId::LongPress:
+        case CommandEventId::GestureLongPress:
             {
                 rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                 if (xSlideShow.is())
                 {
-                    const CommandLongPressData* pLongPressData = rCEvt.GetLongPressData();
+                    const CommandGestureLongPressData* pLongPressData = rCEvt.GetLongPressData();
                     bDone = xSlideShow->longpress(*pLongPressData);
                 }
             }

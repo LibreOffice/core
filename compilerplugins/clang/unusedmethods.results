@@ -2047,7 +2047,7 @@ include/vcl/commandevent.hxx:256
 include/vcl/commandevent.hxx:276
      CommandGestureSwipeData::CommandGestureSwipeData()
 include/vcl/commandevent.hxx:293
-     CommandLongPressData::CommandLongPressData()
+     CommandGestureLongPressData::CommandGestureLongPressData()
 include/vcl/cursor.hxx:96
     _Bool vcl::Cursor::operator!=(const vcl::Cursor &) const
 include/vcl/customweld.hxx:45

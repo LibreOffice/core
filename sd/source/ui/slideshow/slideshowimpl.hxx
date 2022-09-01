@@ -186,7 +186,7 @@ public:
     void hyperLinkClicked(const OUString & hyperLink);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape);
     bool swipe(const CommandGestureSwipeData &rSwipeData);
-    bool longpress(const CommandLongPressData& rLongPressData);
+    bool longpress(const CommandGestureLongPressData& rLongPressData);
 
     /// ends the presentation async
     void endPresentation();

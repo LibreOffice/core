@@ -39,7 +39,7 @@ class CommandDialogData;
 class CommandMediaData;
 class CommandSelectionChangeData;
 class CommandGestureSwipeData;
-class CommandLongPressData;
+class CommandGestureLongPressData;
 class CommandGesturePanData;
 class CommandGestureZoomData;
 class CommandGestureRotateData;
@@ -92,7 +92,7 @@ public:
           CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
     const CommandGestureSwipeData*      GetGestureSwipeData() const;
-    const CommandLongPressData*         GetLongPressData() const;
+    const CommandGestureLongPressData*  GetLongPressData() const;
     const CommandGesturePanData*        GetGesturePanData() const;
     const CommandGestureZoomData*       GetGestureZoomData() const;
     const CommandGestureRotateData*     GetGestureRotateData() const;
@@ -291,17 +291,17 @@ public:
 };
 
 
-class VCL_DLLPUBLIC CommandLongPressData
+class VCL_DLLPUBLIC CommandGestureLongPressData
 {
     double mnX;
     double mnY;
 public:
-    CommandLongPressData()
+    CommandGestureLongPressData()
         : mnX(0)
         , mnY(0)
     {
     }
-    CommandLongPressData(double nX, double nY)
+    CommandGestureLongPressData(double nX, double nY)
         : mnX(nX)
         , mnY(nY)
     {
@@ -384,7 +384,7 @@ enum class CommandEventId
     PrepareReconversion     = 19,
     QueryCharPosition       = 20,
     GestureSwipe            = 21,
-    LongPress               = 22,
+    GestureLongPress        = 22,
     GesturePan              = 23,
     GestureZoom             = 24,
     GestureRotate           = 25,

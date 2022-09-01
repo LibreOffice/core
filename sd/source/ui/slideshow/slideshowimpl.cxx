@@ -1175,7 +1175,7 @@ bool SlideshowImpl::swipe(const CommandGestureSwipeData &rSwipeData)
     return true;
 }
 
-bool SlideshowImpl::longpress(const CommandLongPressData &rLongPressData)
+bool SlideshowImpl::longpress(const CommandGestureLongPressData &rLongPressData)
 {
     if (mnContextMenuEvent)
         return false;

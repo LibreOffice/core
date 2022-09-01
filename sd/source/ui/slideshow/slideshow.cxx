@@ -1020,7 +1020,7 @@ bool SlideShow::swipe(const CommandGestureSwipeData& rSwipeData)
     return mxController.is() && mxController->swipe(rSwipeData);
 }
 
-bool SlideShow::longpress(const CommandLongPressData& rLongPressData)
+bool SlideShow::longpress(const CommandGestureLongPressData& rLongPressData)
 {
     return mxController.is() && mxController->longpress(rLongPressData);
 }

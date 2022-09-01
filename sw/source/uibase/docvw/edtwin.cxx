@@ -5610,7 +5610,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
 
-    case CommandEventId::LongPress:
+    case CommandEventId::GestureLongPress:
     case CommandEventId::GestureSwipe: //nothing yet
             break;
 

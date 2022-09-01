@@ -90,7 +90,7 @@ enum class SalEvent {
     StartReconversion,
     QueryCharPosition,
     GestureSwipe,
-    LongPress,
+    GestureLongPress,
     ExternalGesture,
     GesturePan,
     GestureZoom,
@@ -252,7 +252,7 @@ struct SalGestureSwipeEvent
     tools::Long mnY;
 };
 
-struct SalLongPressEvent
+struct SalGestureLongPressEvent
 {
     tools::Long mnX;
     tools::Long mnY;

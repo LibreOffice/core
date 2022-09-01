@@ -49,7 +49,7 @@ namespace vcl { class Window; }
 class SfxRequest;
 class WorkWindow;
 class CommandGestureSwipeData;
-class CommandLongPressData;
+class CommandGestureLongPressData;
 struct ImplSVEvent;
 
 // TODO: Remove
@@ -146,7 +146,7 @@ public:
         !!!! This should only be called by the SdShowWindow !!!!*/
     void pause( bool bPause );
     bool swipe(const CommandGestureSwipeData &rSwipeData);
-    bool longpress(const CommandLongPressData& rLongPressData);
+    bool longpress(const CommandGestureLongPressData& rLongPressData);
 
     // settings
     bool isFullScreen() const;                          // a.k.a. FuSlideShow::IsFullScreen()

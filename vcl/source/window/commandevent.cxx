@@ -179,10 +179,10 @@ const CommandGestureSwipeData* CommandEvent::GetGestureSwipeData() const
         return nullptr;
 }
 
-const CommandLongPressData* CommandEvent::GetLongPressData() const
+const CommandGestureLongPressData* CommandEvent::GetLongPressData() const
 {
-    if( mnCommand == CommandEventId::LongPress )
-        return static_cast<const CommandLongPressData*>(mpData);
+    if( mnCommand == CommandEventId::GestureLongPress )
+        return static_cast<const CommandGestureLongPressData*>(mpData);
     else
         return nullptr;
 }

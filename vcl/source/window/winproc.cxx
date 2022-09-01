@@ -1769,27 +1769,27 @@ static bool ImplHandleSwipe(vcl::Window *pWindow, const SalGestureSwipeEvent& rE
 
 namespace {
 
-class HandleLongPressEvent : public HandleGestureEvent
+class HandleGestureLongPressEvent : public HandleGestureEvent
 {
 private:
-    CommandLongPressData m_aLongPressData;
+    CommandGestureLongPressData m_aLongPressData;
 public:
-    HandleLongPressEvent(vcl::Window *pWindow, const SalLongPressEvent& rEvt)
+    HandleGestureLongPressEvent(vcl::Window *pWindow, const SalGestureLongPressEvent& rEvt)
         : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY)),
           m_aLongPressData(rEvt.mnX, rEvt.mnY)
     {
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) override
     {
-        return ImplCallCommand(pWindow, CommandEventId::LongPress, &m_aLongPressData);
+        return ImplCallCommand(pWindow, CommandEventId::GestureLongPress, &m_aLongPressData);
     }
 };
 
 }
 
-static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& rEvt)
+static bool ImplHandleLongPress(vcl::Window *pWindow, const SalGestureLongPressEvent& rEvt)
 {
-    HandleLongPressEvent aHandler(pWindow, rEvt);
+    HandleGestureLongPressEvent aHandler(pWindow, rEvt);
     return aHandler.HandleEvent();
 }
 
@@ -2907,8 +2907,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             bRet = ImplHandleSwipe(pWindow, *static_cast<const SalGestureSwipeEvent*>(pEvent));
             break;
 
-        case SalEvent::LongPress:
-            bRet = ImplHandleLongPress(pWindow, *static_cast<const SalLongPressEvent*>(pEvent));
+        case SalEvent::GestureLongPress:
+            bRet = ImplHandleLongPress(pWindow, *static_cast<const SalGestureLongPressEvent*>(pEvent));
             break;
 
         case SalEvent::ExternalGesture:

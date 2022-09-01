@@ -3443,12 +3443,12 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdou
     GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
     if (gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y))
     {
-        SalLongPressEvent aEvent;
+        SalGestureLongPressEvent aEvent;
         aEvent.mnX = x;
         aEvent.mnY = y;
 
         GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-        pThis->CallCallbackExc(SalEvent::LongPress, &aEvent);
+        pThis->CallCallbackExc(SalEvent::GestureLongPress, &aEvent);
     }
 }
 
