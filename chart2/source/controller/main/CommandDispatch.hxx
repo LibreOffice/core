@@ -121,7 +121,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
-    typedef std::map< OUString, std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>> >
+    typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener> >
         tListenerMap;
 
     tListenerMap m_aListeners;
