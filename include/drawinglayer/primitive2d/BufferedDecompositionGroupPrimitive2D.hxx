@@ -26,7 +26,7 @@ namespace drawinglayer::primitive2d
 {
 /** BufferedDecompositionGroupPrimitive2D class
 
-    Baseclass for all C++ implementations whiich are derived from GroupPrimitive2D
+    Baseclass for all C++ implementations which are derived from GroupPrimitive2D
     which want to buffer the decomposition result
 
     For discussion please refer to BufferedDecompositionPrimitive2D, this is the same
