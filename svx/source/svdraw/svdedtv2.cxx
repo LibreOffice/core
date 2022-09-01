@@ -1849,6 +1849,7 @@ void SdrEditView::GroupMarked()
         }
         if (pGrp!=nullptr)
         {
+            assert(pDstLst); // keep coverity happy
             aNewMark.InsertEntry(SdrMark(pGrp.get(),pPV));
             const size_t nCount=pDstLst->GetObjCount();
             pCurrentLst->InsertObject(pGrp.get(),nInsPos);
