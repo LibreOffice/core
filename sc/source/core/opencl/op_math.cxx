@@ -389,6 +389,7 @@ void OpEven::GenSlidingWindowFunction(outputstream &ss,
 void OpMod::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -406,7 +407,7 @@ void OpMod::GenSlidingWindowFunction(outputstream &ss,
     ss << "    if(isnan(arg0)||arg0 == 0)\n";
     ss << "        return 0;\n";
     ss << "    if(isnan(arg1) || arg1 ==0)\n";
-    ss << "        return NAN;\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    double tem;\n";
     ss << "        if(arg0 < 0 && arg1 > 0)\n";
     ss << "            while(arg0 < 0)\n";
