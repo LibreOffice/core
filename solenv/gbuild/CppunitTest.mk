@@ -387,6 +387,7 @@ define gb_CppunitTest_use_more_fonts
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(foreach font,$(gb_Package_MODULE_ooo_fonts),$(call gb_Package_get_target,$(font)))
+$(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS := SAL_NON_APPLICATION_FONT_USE=deny
 endif
 
 endef
