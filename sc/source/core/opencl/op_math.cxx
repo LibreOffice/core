@@ -1670,27 +1670,28 @@ void OpRoundUp::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    int intTmp;\n";
-    ss << "    double doubleTmp;\n";
     ss << "    double tmp;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
     if( vSubArguments.size() == 1 )
         ss << "    double tmp1 = 0;\n";
-    ss << "    if(tmp1 >20 || tmp1 < -20)";
+    ss << "    int shift = (int)tmp1;\n";
+    ss << "    if(shift >20 || shift < -20)";
     ss << "    {\n";
     ss << "        tmp = NAN;\n";
     ss << "    }else\n";
     ss << "    {\n";
-    ss << "        for(int i=0;i<tmp1;i++)\n";
-    ss << "            tmp0 = tmp0 * 10;\n";
-    ss << "        intTmp = (int)tmp0;\n";
-    ss << "        doubleTmp = intTmp;\n";
-    ss << "        if(isequal(doubleTmp,tmp0))\n";
-    ss << "            tmp = doubleTmp;\n";
+    ss << "        double multiply = 1.0;\n";
+    ss << "        for(int i=0;i<shift;i++)\n";
+    ss << "            multiply *= 10;\n";
+    ss << "        for(int i=0;i>shift;i--)\n";
+    ss << "            multiply /= 10;\n";
+    ss << "        intTmp = (int)(tmp0*multiply);\n";
+    ss << "        if(tmp0 >= 0)\n";
+    ss << "            tmp = intTmp + 1;\n";
     ss << "        else\n";
-    ss << "            tmp = doubleTmp + 1;\n";
-    ss << "        for(int i=0;i<tmp1;i++)\n";
-    ss << "            tmp = tmp / 10;\n";
+    ss << "            tmp = intTmp - 1;\n";
+    ss << "        tmp /= multiply;\n";
     ss << "    }\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -1716,17 +1717,20 @@ void OpRoundDown::GenSlidingWindowFunction(outputstream &ss,
     CheckAllSubArgumentIsNan(ss,vSubArguments);
     if( vSubArguments.size() == 1 )
         ss << "    double tmp1 = 0;\n";
-    ss << "    if(tmp1 >20 || tmp1 < -20)";
+    ss << "    int shift = (int)tmp1;\n";
+    ss << "    if(shift >20 || shift < -20)";
     ss << "    {\n";
     ss << "        tmp = NAN;\n";
     ss << "    }else\n";
     ss << "    {\n";
-    ss << "        for(int i=0;i<tmp1;i++)\n";
-    ss << "            tmp0 = tmp0 * 10;\n";
-    ss << "        intTmp = (int)tmp0;\n";
+    ss << "        double multiply = 1.0;\n";
+    ss << "        for(int i=0;i<shift;i++)\n";
+    ss << "            multiply *= 10;\n";
+    ss << "        for(int i=0;i>shift;i--)\n";
+    ss << "            multiply /= 10;\n";
+    ss << "        intTmp = (int)(tmp0*multiply);\n";
     ss << "        tmp = intTmp;\n";
-    ss << "        for(int i=0;i<tmp1;i++)\n";
-    ss << "            tmp = tmp / 10;\n";
+    ss << "        tmp /= multiply;\n";
     ss << "    }\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -1750,6 +1754,12 @@ void OpInt::GenSlidingWindowFunction(outputstream &ss,
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
     ss << "    intTmp = (int)tmp0;\n";
+    // check whether rounding error caused the float to be just less than the int value
+    ss << "    if( tmp0 >=0 && approx_equal( intTmp + 1, tmp0 ))\n";
+    ss << "        ++intTmp;\n";
+    // negative values are rounded down
+    ss << "    if( tmp0 < 0 && !approx_equal( intTmp, tmp0 ))\n";
+    ss << "        --intTmp;\n";
     ss << "    tmp = intTmp;\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -2173,6 +2183,11 @@ void OpTrunc::GenSlidingWindowFunction(outputstream &ss,
     ss << "        argm = argm * 10;\n";
     ss << "        nn = nn * 10;\n";
     ss << "    }\n";
+    ss << "    for(int i = 0; i > n; --i)\n";
+    ss << "    {\n";
+    ss << "        argm = argm / 10;\n";
+    ss << "        nn = nn / 10;\n";
+    ss << "    }\n";
     ss << "    modf(argm, &argm);\n";
     ss << "    return argm / nn;\n";
     ss << "}";
@@ -2207,7 +2222,9 @@ void OpFloor::GenSlidingWindowFunction(
     ss << "    if(isnan(arg2))\n";
     ss << "        arg2 = 0.0;\n";
     ss << "    if(arg0*arg1<0)\n";
-    ss << "        return NAN;\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    if(arg1 == 0.0)\n";
+    ss << "        return 0.0;\n";
     ss << "    else if(arg2==0.0&&arg0<0.0)\n";
     ss << "        return (trunc(arg0/arg1)+1)*arg1;\n";
     ss << "    else\n";
@@ -2574,6 +2591,8 @@ void OpCeil::GenSlidingWindowFunction(outputstream &ss,
         ss << "    else\n    ";
         ss << "    bAbs = "<<vSubArguments[2]->GenSlidingWindowDeclRef()<<";\n";
     }
+    ss << "    if(num*significance < 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    if(significance == 0.0)\n";
     ss << "        return 0.0;\n";
     ss << "    return ";
