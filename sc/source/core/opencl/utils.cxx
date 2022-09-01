@@ -24,7 +24,7 @@ namespace
 #ifdef SAL_LOG_INFO
 class outputstream_num_put : public std::num_put<char>
 {
-public:
+protected:
     virtual iter_type do_put(iter_type s, std::ios_base&, char_type, double v) const override
     {
         std::string str = preciseFloat(v);
@@ -34,6 +34,7 @@ public:
     {
         abort(); // we do not use these
     }
+    using std::num_put<char>::do_put;
 };
 #endif
 } // namespace
