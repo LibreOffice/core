@@ -144,6 +144,14 @@ namespace slideshow::internal
                 mxPlayer->setMediaTime(fTime);
         }
 
+        void ViewMediaShape::setLooping(bool bLooping)
+        {
+            if (mxPlayer.is())
+            {
+                mxPlayer->setPlaybackLoop(bLooping);
+            }
+        }
+
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
 #if !HAVE_FEATURE_AVMEDIA
