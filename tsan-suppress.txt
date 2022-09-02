@@ -61,3 +61,4 @@ race:g_source_unref_internal
 race:g_task_finalize
 race:g_socket_send_message_with_timeout
 race:g_idle_source_new
+race:g_slice_alloc0
