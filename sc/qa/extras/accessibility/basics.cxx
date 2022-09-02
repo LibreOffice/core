@@ -85,6 +85,28 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestCalcMenu)
     CPPUNIT_ASSERT_LESSEQUAL(afterTime, value);
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+// test that converting cell row/col number <-> child index works
+// for the case where 32-bit a11y child indices don't suffice (tdf#150683)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, Test64BitChildIndices)
+{
+    load(u"private:factory/scalc");
 
+    const sal_Int32 nRow = 1048575;
+    const sal_Int32 nCol = 16383;
+
+    uno::Reference<accessibility::XAccessibleTable> xTable(
+        getDocumentAccessibleContext()->getAccessibleChild(0)->getAccessibleContext(), // sheet 1
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference<accessibility::XAccessible> xCell = xTable->getAccessibleCellAt(nRow, nCol);
+    const sal_Int64 nChildIndex = xCell->getAccessibleContext()->getAccessibleIndexInParent();
+    // child index should be positive for all cells except the first one (A1)
+    CPPUNIT_ASSERT_GREATER(sal_Int64(0), nChildIndex);
+
+    // test that retrieving the row and column number via the child index again works
+    CPPUNIT_ASSERT_EQUAL(nRow, xTable->getAccessibleRow(nChildIndex));
+    CPPUNIT_ASSERT_EQUAL(nCol, xTable->getAccessibleColumn(nChildIndex));
+}
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
