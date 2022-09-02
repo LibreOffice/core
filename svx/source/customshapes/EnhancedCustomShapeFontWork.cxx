@@ -48,6 +48,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -905,6 +906,10 @@ rtl::Reference<SdrObject> EnhancedCustomShapeFontWork::CreateFontWork(
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
     rtl::Reference<SdrObject> pRet;
+
+    // calculating scaling factor is too slow
+    if (utl::ConfigManager::IsFuzzing())
+        return pRet;
 
     tools::PolyPolygon aOutlines2d( GetOutlinesFromShape2d( pShape2d ) );
     sal_uInt16 nOutlinesCount2d = aOutlines2d.Count();
