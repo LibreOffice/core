@@ -208,6 +208,12 @@ public:
         mpDoc->pClass->getDocumentSize(mpDoc, pWidth, pHeight);
     }
 
+    /// Get the data area (in Calc last row and column).
+    void getDataArea(long nPart, long* pCol, long* pRow)
+    {
+        mpDoc->pClass->getDataArea(mpDoc, nPart, pCol, pRow);
+    }
+
     /**
      * Initialize document for rendering.
      *
