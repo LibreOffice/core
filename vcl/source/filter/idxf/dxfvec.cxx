@@ -196,8 +196,8 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
 {
     double fex,fey,scale;
 
-    fex=sqrt(aMX.fx*aMX.fx + aMX.fy*aMX.fy);
-    fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
+    fex=std::hypot(aMX.fx, aMX.fy);
+    fey=std::hypot(aMY.fx, aMY.fy);
     scale = (fex+fey)/2.0;
 
     LineInfo aLineInfo;

@@ -245,7 +245,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
         if( GetStyle() == GradientStyle::Radial )
         {
             // Calculation of radii for circle
-            aSize.setWidth( static_cast<tools::Long>(0.5 + sqrt(static_cast<double>(aSize.Width())*static_cast<double>(aSize.Width()) + static_cast<double>(aSize.Height())*static_cast<double>(aSize.Height()))) );
+            aSize.setWidth( static_cast<tools::Long>(0.5 + std::hypot(aSize.Width(), aSize.Height())) );
             aSize.setHeight( aSize.Width() );
         }
         else if( GetStyle() == GradientStyle::Elliptical )
