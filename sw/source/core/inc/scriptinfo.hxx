@@ -72,7 +72,7 @@ private:
     std::deque<TextFrameIndex> m_NoKashidaLine;
     std::deque<TextFrameIndex> m_NoKashidaLineEnd;
     std::vector<TextFrameIndex> m_HiddenChg;
-    std::vector<std::tuple<TextFrameIndex, MarkKind, Color>> m_Bookmarks;
+    std::vector<std::tuple<TextFrameIndex, MarkKind, Color, OUString>> m_Bookmarks;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
@@ -185,8 +185,8 @@ public:
     }
     TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
     TextFrameIndex NextBookmark(TextFrameIndex nPos) const;
-    MarkKind GetBookmark(TextFrameIndex nPos) const;
-    std::optional<std::vector<Color>> GetBookmarkColors(TextFrameIndex nPos) const;
+    std::vector<std::tuple<MarkKind, Color, OUString>>
+            GetBookmarks(TextFrameIndex const nPos);
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,
             std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);

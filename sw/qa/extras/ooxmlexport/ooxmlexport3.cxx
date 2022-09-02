@@ -1100,6 +1100,9 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingLevels)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Note: _Toc and _Ref hidden bookmarks are imported from OOXML as normal bookmarks.
+    // Without hiding them from visible bookmarks (SwBookmarkPortion), this line would be
+    // shown as "A.2.1 [[[[[.DESCRIPTION]]]] with XML layout dump "A.2.1 #_Ref... Bookmark Start..."
     assertXPath(pXmlDoc, "//body/txt[5]/LineBreak", "Line", "A.2.1 .DESCRIPTION");
 }
 

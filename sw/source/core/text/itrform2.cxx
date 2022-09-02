@@ -1417,36 +1417,13 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     // check this *last* so that BuildMultiPortion() can find it!
     if (!pPor && rInf.CheckCurrentPosBookmark())
     {
-        auto const bookmark(m_pScriptInfo->GetBookmark(rInf.GetIdx()));
-        if (static_cast<bool>(bookmark))
+        const auto& bookmark = m_pScriptInfo->GetBookmarks(rInf.GetIdx());
+        if (!bookmark.empty())
         {
-            sal_Unicode mark;
-            if ((bookmark & (SwScriptInfo::MarkKind::Start|SwScriptInfo::MarkKind::End))
-                        == (SwScriptInfo::MarkKind::Start|SwScriptInfo::MarkKind::End))
-            {
-                //mark = u'\u2336'; // not in OpenSymbol :(
-                mark = '|';
-                // hmm ... paint U+2345 over U+2346 should be same width?
-                // and U+237F // or U+2E20/U+2E21
-            }
-            else if (bookmark & SwScriptInfo::MarkKind::Start)
-            {
-                mark = '[';
-            }
-            else if (bookmark & SwScriptInfo::MarkKind::End)
-            {
-                mark = ']';
-            }
-            else
-            {
-                assert(bookmark & SwScriptInfo::MarkKind::Point);
-                mark = '|';
-            }
+            // only for character width, maybe replaced with ] later
+            sal_Unicode mark = '[';
 
-            // collect custom bookmark colors
-            auto rColors = m_pScriptInfo->GetBookmarkColors(rInf.GetIdx());
-
-            pPor = new SwBookmarkPortion(mark, rColors);
+            pPor = new SwBookmarkPortion(mark, bookmark);
         }
     }
 

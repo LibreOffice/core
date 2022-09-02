@@ -948,7 +948,7 @@ static void InitBookmarks(
     std::vector<sw::Extent>::const_iterator const end,
     TextFrameIndex nOffset,
     std::vector<std::pair<sw::mark::IBookmark const*, SwScriptInfo::MarkKind>> & rBookmarks,
-    std::vector<std::tuple<TextFrameIndex, SwScriptInfo::MarkKind, Color>> & o_rBookmarks)
+    std::vector<std::tuple<TextFrameIndex, SwScriptInfo::MarkKind, Color, OUString>> & o_rBookmarks)
 {
     SwTextNode const*const pNode(iter->pNode);
     for (auto const& it : rBookmarks)
@@ -987,7 +987,7 @@ static void InitBookmarks(
                         }
                         else
                         {
-                            o_rBookmarks.emplace_back(nOffset, it.second, c);
+                            o_rBookmarks.emplace_back(nOffset, it.second, c, it.first->GetName());
                             break;
                         }
                     }
@@ -1006,7 +1006,7 @@ static void InitBookmarks(
                         {
                             o_rBookmarks.emplace_back(
                                 nOffset + TextFrameIndex(rStart.GetContentIndex() - iter->nStart),
-                                it.second, c);
+                                it.second, c, it.first->GetName());
                             break;
                         }
                     }
@@ -1025,7 +1025,7 @@ static void InitBookmarks(
                     }
                     else
                     {
-                        o_rBookmarks.emplace_back(nOffset, it.second, c);
+                        o_rBookmarks.emplace_back(nOffset, it.second, c, it.first->GetName());
                     }
                 }
                 break;
@@ -1054,7 +1054,7 @@ static void InitBookmarks(
                         }
                         else
                         {
-                            o_rBookmarks.emplace_back(nOffset, it.second, c);
+                            o_rBookmarks.emplace_back(nOffset, it.second, c, it.first->GetName());
                             break;
                         }
                     }
@@ -1062,7 +1062,7 @@ static void InitBookmarks(
                     {
                         o_rBookmarks.emplace_back(
                             nOffset + TextFrameIndex(rEnd.GetContentIndex() - iter->nStart),
-                            it.second, c);
+                            it.second, c, it.first->GetName());
                         break;
                     }
                     else
@@ -1096,7 +1096,7 @@ static void InitBookmarks(
                         {
                             o_rBookmarks.emplace_back(
                                 nOffset + TextFrameIndex(rPos.GetContentIndex() - iter->nStart),
-                                it.second, c);
+                                it.second, c, it.first->GetName());
                         }
                         break;
                     }
@@ -1239,13 +1239,13 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             switch (it.second)
             {
                 case MarkKind::Start:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().GetContentIndex()), it.second, c);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().GetContentIndex()), it.second, c, it.first->GetName());
                     break;
                 case MarkKind::End:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().GetContentIndex()), it.second, c);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().GetContentIndex()), it.second, c, it.first->GetName());
                     break;
                 case MarkKind::Point:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().GetContentIndex()), it.second, c);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().GetContentIndex()), it.second, c, it.first->GetName());
                     break;
             }
         }
@@ -1942,39 +1942,39 @@ TextFrameIndex SwScriptInfo::NextBookmark(TextFrameIndex const nPos) const
     return TextFrameIndex(COMPLETE_STRING);
 }
 
-auto SwScriptInfo::GetBookmark(TextFrameIndex const nPos) const -> MarkKind
+std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString>>
+                                    SwScriptInfo::GetBookmarks(TextFrameIndex const nPos)
 {
-    MarkKind ret{0};
+    std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString>> aColors;
     for (auto const& it : m_Bookmarks)
     {
         if (nPos == std::get<0>(it))
         {
-            ret |= std::get<1>(it);
+            const OUString& sName = std::get<3>(it);
+            // filter hidden bookmarks imported from OOXML
+            // TODO import them as hidden bookmarks
+            if ( !( sName.startsWith("_Toc") || sName.startsWith("_Ref") ) )
+                aColors.push_back(std::tuple<MarkKind, Color,
+                                    OUString>(std::get<1>(it), std::get<2>(it), std::get<3>(it)));
         }
         else if (nPos < std::get<0>(it))
         {
             break;
         }
     }
-    return ret;
-}
 
-std::optional<std::vector<Color>> SwScriptInfo::GetBookmarkColors(TextFrameIndex const nPos) const
-{
-    std::optional<std::vector<Color>> ret;
-    std::vector<Color> aColors;
-    for (auto const& it : m_Bookmarks)
-    {
-        if (nPos == std::get<0>(it) && COL_TRANSPARENT != std::get<2>(it))
-        {
-            aColors.push_back(std::get<2>(it));
-        }
-        else if (nPos < std::get<0>(it))
-        {
-            break;
-        }
-    }
-    return aColors.empty() ? ret : ret.emplace(aColors);
+    // sort bookmark boundary marks at the same position
+    // mark order: ] | [
+    // color order: [c1 [c2 [c3 ... c3] c2] c1]
+    sort(aColors.begin(), aColors.end(),
+                 [](std::tuple<MarkKind, Color, OUString>(a), std::tuple<MarkKind, Color, OUString>(b)) {
+         return (MarkKind::End == std::get<0>(a) && MarkKind::End != std::get<0>(b)) ||
+             (MarkKind::Point == std::get<0>(a) && MarkKind::Start == std::get<0>(b)) ||
+             // if both are end or start, order by color
+             (MarkKind::End == std::get<0>(a) && MarkKind::End == std::get<0>(b) && std::get<1>(a) < std::get<1>(b)) ||
+             (MarkKind::Start == std::get<0>(a) && MarkKind::Start == std::get<0>(b) && std::get<1>(b) < std::get<1>(a));});
+
+    return aColors;
 }
 
 // Takes a string and replaced the hidden ranges with cChar.

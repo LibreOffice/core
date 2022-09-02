@@ -24,6 +24,7 @@
 #include <txttypes.hxx>
 #include <txtfrm.hxx>
 #include <svx/ctredlin.hxx>
+#include <scriptinfo.hxx>
 
 #include "porlin.hxx"
 #include "portxt.hxx"
@@ -184,20 +185,36 @@ public:
 class SwBookmarkPortion : public SwControlCharPortion
 {
     // custom colors defined by metadata
-    std::optional<std::vector<Color>> m_oColors;
+    std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString>> m_oColors;
+    // number of MarkKind marks
+    sal_Int16 m_nStart, m_nEnd, m_nPoint;
+    bool m_bHasCustomColor;
 
 public:
-    explicit SwBookmarkPortion(sal_Unicode const cChar, std::optional<std::vector<Color>>rColors)
-        : SwControlCharPortion(cChar), m_oColors(rColors)
+    explicit SwBookmarkPortion(sal_Unicode const cChar, std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString>>rColors)
+        : SwControlCharPortion(cChar), m_oColors(rColors), m_nStart(0), m_nEnd(0), m_nPoint(0), m_bHasCustomColor(false)
     {
         SetWhichPor(PortionType::Bookmark);
         SetLen(TextFrameIndex(0));
+        for (const auto& it : m_oColors)
+        {
+            if (std::get<0>(it) == SwScriptInfo::MarkKind::Start)
+                m_nStart++;
+            else if (std::get<0>(it) == SwScriptInfo::MarkKind::End)
+                m_nEnd++;
+            else
+                m_nPoint++;
+
+            if (!m_bHasCustomColor && COL_TRANSPARENT != std::get<1>(it))
+                m_bHasCustomColor = true;
+        }
     }
 
     virtual bool DoPaint(SwTextPaintInfo const& rInf,
         OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual SwLinePortion * Compress() override { return this; }
+    virtual void HandlePortion(SwPortionHandler& rPH) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

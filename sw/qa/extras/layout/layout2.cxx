@@ -403,6 +403,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
     // Without the fix the anchor differs, and the frame outside of the shape
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150717)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf150717.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // check bookmark colors defined in metadata
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[1]", "rText", "#Bookmark1 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "rText", "#Bookmark2 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "rText",
+                "#Bookmark2 Bookmark End#Bookmark1 Bookmark End");
+    // full text, if bookmarks are visible
+    assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", "Line",
+                "Lorem #Bookmark1 Bookmark Startipsum dolor et #Bookmark2 Bookmark Start"
+                "ames#Bookmark2 Bookmark End#Bookmark1 Bookmark End.");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf150790.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // point bookmark is shown as I-beam (only its text dump is |, as before on the screen)
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/Special", "rText", "#Bookmark 1 Bookmark");
+    // single start bookmark
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special[1]", "rText",
+                "#Bookmark 2 Bookmark Start");
+    // single end bookmark
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special[3]", "rText", "#Bookmark 3 Bookmark End");
+    // This was |, as before the point bookmark (neighboring end and start bookmarks)
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special[2]", "rText",
+                "#Bookmark 2 Bookmark End#Bookmark 3 Bookmark Start");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");

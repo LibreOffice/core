@@ -235,9 +235,9 @@
                   <object class="GtkLabel" id="bookmarks_label">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes" context="optformataidspage|bookmarks_label|tooltip_text">| indicates a point bookmark
-[ ] indicate the start and end of a bookmark on a text range</property>
-                    <property name="label">| [ ]</property>
+                    <property name="tooltip-text" translatable="yes" context="optformataidspage|bookmarks_label|tooltip_text">⌶ indicates a point bookmark,
+[ and ] indicate the start and end of a bookmark on a text range</property>
+                    <property name="label">⌶ […]</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>

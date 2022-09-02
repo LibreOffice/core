@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p><text:bookmark text:name="Bookmark 1"/><text:span text:style-name="T1">point b</text:span>ookmark</text:p>
+   <text:p><text:bookmark-start text:name="Bookmark 2"/>neigh<text:bookmark-start text:name="Bookmark 3"/><text:bookmark-end text:name="Bookmark 2"/>boring range bookmarks<text:bookmark-end text:name="Bookmark 3"/></text:p>
+  </office:text>
+ </office:body>
+</office:document>

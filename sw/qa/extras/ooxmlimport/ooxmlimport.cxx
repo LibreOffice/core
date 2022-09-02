@@ -37,6 +37,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
@@ -388,11 +389,38 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "font-height", "220");
 
+    // hidden _Toc and _Ref bookmarks are not visible in Visible bookmarks mode
+    // This was PortionType::Bookmark
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type", "PortionType::Text");
+
+    // insert a not hidden bookmark
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xTextDocument->getText();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XParagraphCursor> xCursor(xText->createTextCursor(), uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    // creating bookmark "BookmarkTest"
+    uno::Reference<text::XTextContent> xBookmark(
+        xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xBookmarkName(xBookmark, uno::UNO_QUERY);
+    xBookmarkName->setName("BookmarkTest");
+    // moving cursor to the end of paragraph
+    xCursor->gotoEndOfParagraph(true);
+    // inserting the bookmark in paragraph
+    xText->insertTextContent(xCursor, xBookmark, true);
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
     // check the bookmark portions are of the expected height
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type", "PortionType::Bookmark");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "height", "253");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[3]", "type", "PortionType::Bookmark");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[3]", "height", "253");
+
+    // tdf#150947 check a11y of the newly inserted bookmark portions
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "rText", "#BookmarkTest Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "rText", "#BookmarkTest Bookmark End");
 
     /*
      * Next problem was that the page margin contained the width of the page border as well.

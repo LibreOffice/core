@@ -49,6 +49,8 @@
 #include <IDocumentDeviceAccess.hxx>
 
 #include <crsrsh.hxx>
+#include <swtypes.hxx>
+#include <strings.hrc>
 
 SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
                 const FontLineStyle eUL,
@@ -651,7 +653,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
         OUString & rOutString, SwFont & rFont, int & rDeltaY) const
 {
     // custom color is visible without field shading, too
-    if (!rTextPaintInfo.GetOpt().IsShowBookmarks(m_oColors.has_value()))
+    if (!rTextPaintInfo.GetOpt().IsShowBookmarks())
     {
         return false;
     }
@@ -783,28 +785,75 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
             assert(false);
             break;
     }
+
+    // draw end marks before the character position
+    if ( m_nStart == 0 || m_nEnd == 0 )
+    {
+        // single type boundary marks are there outside of the bookmark text
+        // some |text| here
+        //     [[    ]]
+        if (m_nStart > 1)
+            aNewPos.AdjustX(mnHalfCharWidth * -2 * (m_oColors.size() - 1));
+    }
+    else if ( m_nStart != 0 && m_nEnd != 0 )
+        // both end and start boundary marks: adjust them around the bookmark position
+        // |te|xt|
+        //  ]] [[
+        aNewPos.AdjustX(mnHalfCharWidth * -(2 * m_nEnd - 1 + m_nPoint) );
+
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
-    if ( m_oColors.has_value() )
+    for ( const auto& it : m_oColors )
     {
         // set bold for custom colored bookmark symbol
         // and draw multiple symbols showing all custom colors
-        aTmpFont.SetWeight( WEIGHT_BOLD, aTmpFont.GetActual() );
-        for ( const Color& rColor : *m_oColors )
+        aTmpFont.SetWeight( COL_TRANSPARENT == std::get<1>(it) ? WEIGHT_THIN : WEIGHT_BOLD, aTmpFont.GetActual() );
+        aTmpFont.SetColor( COL_TRANSPARENT == std::get<1>(it) ? SwViewOption::GetFieldShadingsColor() : std::get<1>(it) );
+        aOutString = OUString(std::get<0>(it) == SwScriptInfo::MarkKind::Start ? '[' : ']');
+
+        // MarkKind::Point: drawn I-beam (e.g. U+2336) as overlapping ][
+        if ( std::get<0>(it) == SwScriptInfo::MarkKind::Point )
         {
-            aTmpFont.SetColor( rColor );
+            aNewPos.AdjustX(-mnHalfCharWidth * 5/16);
+            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
             rInf.DrawText( aOutString, *this );
 
-            // place the next symbol after the previous one
-            // TODO: fix orientation and start/end
-            aNewPos.AdjustX(mnHalfCharWidth * 2.5);
+            // when the overlapping vertical lines are 50 pixel width on the screen,
+            // this distance (half width * 5/8) still results precise overlapping
+            aNewPos.AdjustX(mnHalfCharWidth * 5/8);
             const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+            aOutString = OUString('[');
         }
-    }
-    else
         rInf.DrawText( aOutString, *this );
+        // place the next symbol after the previous one
+        // TODO: fix orientation and start/end
+        aNewPos.AdjustX(mnHalfCharWidth * 2);
+        const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+    }
 
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
+}
+
+void SwBookmarkPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    OUStringBuffer aStr;
+    for ( const auto& it : m_oColors )
+    {
+        aStr.append("#" + std::get<2>(it) + " " + SwResId(STR_BOOKMARK_DEF_NAME));
+        switch (std::get<0>(it))
+        {
+            case SwScriptInfo::MarkKind::Point:
+                break;
+            case SwScriptInfo::MarkKind::Start:
+                aStr.append(" " + SwResId(STR_CAPTION_BEGINNING));
+                break;
+            case SwScriptInfo::MarkKind::End:
+                aStr.append(" " + SwResId(STR_CAPTION_END));
+                break;
+        }
+    }
+
+    rPH.Special( GetLen(), aStr.makeStringAndClear(), GetWhichPor(), Height(), Width() );
 }
 
 bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )
