@@ -153,41 +153,6 @@ static double GetLength( const tools::Polygon& rPolygon )
     return fLength;
 }
 
-static void UpdateScalingMode(FWData& rFWData, const tools::PolyPolygon& rOutline2d,
-                bool bSingleLineMode,
-                VirtualDevice* pVirDev, double& rScalingFactor)
-{
-    sal_uInt16 i = 0;
-    bool bScalingFactorDefined = false; // New calculation for each font size
-    for( const auto& rTextArea : rFWData.vTextAreas )
-    {
-        // calculating the width of the corresponding 2d text area
-        double fWidth = GetLength( rOutline2d.GetObject( i++ ) );
-        if ( !bSingleLineMode )
-        {
-            fWidth += GetLength( rOutline2d.GetObject( i++ ) );
-            fWidth /= 2.0;
-        }
-
-        for( const auto& rParagraph : rTextArea.vParagraphs )
-        {
-            double fTextWidth = pVirDev->GetTextWidth( rParagraph.aString );
-            if ( fTextWidth > 0.0 )
-            {
-                double fScale = fWidth / fTextWidth;
-                if ( !bScalingFactorDefined )
-                {
-                    rScalingFactor = fScale;
-                    bScalingFactorDefined = true;
-                }
-                else if (fScale < rScalingFactor)
-                {
-                    rScalingFactor = fScale;
-                }
-            }
-        }
-    }
-}
 
 /* CalculateHorizontalScalingFactor returns the horizontal scaling factor for
 the whole text object, so that each text will match its corresponding 2d Outline */
@@ -199,6 +164,7 @@ static void CalculateHorizontalScalingFactor(
     double fScalingFactor = 1.0;
     rFWData.fVerticalTextScaling = 1.0;
 
+    sal_uInt16 i = 0;
     bool bSingleLineMode = false;
     sal_uInt16 nOutlinesCount2d = rOutline2d.Count();
 
@@ -206,8 +172,6 @@ static void CalculateHorizontalScalingFactor(
     const SvxFontItem& rFontItem( rSdrObjCustomShape.GetMergedItem( EE_CHAR_FONTINFO ) );
     const SvxFontHeightItem& rFontHeight( rSdrObjCustomShape.GetMergedItem( EE_CHAR_FONTHEIGHT ) );
     sal_Int32 nFontSize = rFontHeight.GetHeight();
-
-    SAL_WARN_IF(nFontSize > SAL_MAX_INT16, "svx", "CalculateHorizontalScalingFactor suspiciously large font height: " << nFontSize);
 
     if (rFWData.bScaleX)
         aFont.SetFontHeight( nFontSize );
@@ -239,47 +203,39 @@ static void CalculateHorizontalScalingFactor(
     // FitTextOutlinesToShapeOutlines()
     do
     {
-        UpdateScalingMode(rFWData, rOutline2d, bSingleLineMode, pVirDev, fScalingFactor);
-
-        if (fScalingFactor < 1.0)
+        i = 0;
+        bool bScalingFactorDefined = false; // New calculation for each font size
+        for( const auto& rTextArea : rFWData.vTextAreas )
         {
-            // we have a very large font that will require scaling down to a very small value.
-            if (nFontSize > 128)
+            // calculating the width of the corresponding 2d text area
+            double fWidth = GetLength( rOutline2d.GetObject( i++ ) );
+            if ( !bSingleLineMode )
             {
-                // see if it will even be possible at the min size
-                sal_Int32 nOrigFontSize = nFontSize;
-                double fOrigScalingFactor = fScalingFactor;
+                fWidth += GetLength( rOutline2d.GetObject( i++ ) );
+                fWidth /= 2.0;
+            }
 
-                nFontSize = 2;
-                pVirDev->Push(vcl::PushFlags::FONT);
-                aFont.SetFontHeight(nFontSize);
-                pVirDev->SetFont(aFont);
-                UpdateScalingMode(rFWData, rOutline2d, bSingleLineMode, pVirDev, fScalingFactor);
-                pVirDev->Pop();
-
-                const bool bHopeLess = fScalingFactor < 1.0;
-                // if it's hopeless then just continue on with this FontSize of 2, otherwise
-                // continue to try smaller sizes
-                if (!bHopeLess)
+            for( const auto& rParagraph : rTextArea.vParagraphs )
+            {
+                double fTextWidth = pVirDev->GetTextWidth( rParagraph.aString );
+                if ( fTextWidth > 0.0 )
                 {
-                    nFontSize = nOrigFontSize;
-                    fScalingFactor = fOrigScalingFactor;
-
-                    // skip directly to a small font size
-                    double nEstimatedFinalFontSize = nFontSize * fScalingFactor;
-                    double nOnePercentFontSize = nFontSize / 100.0;
-                    if (nEstimatedFinalFontSize < nOnePercentFontSize)
+                    double fScale = fWidth / fTextWidth;
+                    if ( !bScalingFactorDefined )
                     {
-                        nFontSize = std::max<int>(16, std::ceil(5 * nEstimatedFinalFontSize));
-                        SAL_WARN("svx", "CalculateHorizontalScalingFactor skipping direct to: " << nFontSize << " from " << rFontHeight.GetHeight());
+                        fScalingFactor = fScale;
+                        bScalingFactorDefined = true;
                     }
-                    else if (nEstimatedFinalFontSize < nOnePercentFontSize * 10)
+                    else if (fScale < fScalingFactor)
                     {
-                        nFontSize = std::max<int>(16, std::ceil(2 * nEstimatedFinalFontSize));
-                        SAL_WARN("svx", "CalculateHorizontalScalingFactor skipping direct to: " << nFontSize << " from " << rFontHeight.GetHeight());
+                        fScalingFactor = fScale;
                     }
                 }
             }
+        }
+
+        if (fScalingFactor < 1.0)
+        {
             nFontSize--;
             aFont.SetFontHeight( nFontSize );
             pVirDev->SetFont( aFont );
