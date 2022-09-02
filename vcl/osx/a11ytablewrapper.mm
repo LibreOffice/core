@@ -71,8 +71,8 @@ using namespace ::com::sun::star::uno;
                 Reference < XAccessible > rAccessibleBottomRight = accessibleComponent -> getAccessibleAtPoint ( point );
                 if ( rAccessibleTopLeft.is() && rAccessibleBottomRight.is() )
                 {
-                    sal_Int32 idxTopLeft = rAccessibleTopLeft -> getAccessibleContext() -> getAccessibleIndexInParent();
-                    sal_Int32 idxBottomRight = rAccessibleBottomRight -> getAccessibleContext() -> getAccessibleIndexInParent();
+                    sal_Int64 idxTopLeft = rAccessibleTopLeft -> getAccessibleContext() -> getAccessibleIndexInParent();
+                    sal_Int64 idxBottomRight = rAccessibleBottomRight -> getAccessibleContext() -> getAccessibleIndexInParent();
                     sal_Int32 rowTopLeft = accessibleTable -> getAccessibleRow ( idxTopLeft );
                     sal_Int32 columnTopLeft = accessibleTable -> getAccessibleColumn ( idxTopLeft );
                     sal_Int32 rowBottomRight = accessibleTable -> getAccessibleRow ( idxBottomRight );

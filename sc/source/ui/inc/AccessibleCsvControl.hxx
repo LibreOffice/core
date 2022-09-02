@@ -111,10 +111,10 @@ public:
     // XAccessibleContext -----------------------------------------------------
 
     /** Returns the child count (the ruler does not have children). */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     /** Throws an exception (the ruler does not have children). */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 nIndex ) override;
 
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override { return css::accessibility::AccessibleRole::TEXT; }
 
@@ -232,7 +232,7 @@ typedef ::cppu::ImplHelper3<
 class ScAccessibleCsvGrid : public ScAccessibleCsvControl, public ScAccessibleCsvGridImpl
 {
 protected:
-    typedef std::map< sal_Int32, rtl::Reference<ScAccessibleCsvCell> > XAccessibleSet;
+    typedef std::map< sal_Int64, rtl::Reference<ScAccessibleCsvCell> > XAccessibleSet;
 
 private:
     XAccessibleSet maAccessibleChildren;
@@ -262,10 +262,10 @@ public:
     // XAccessibleContext -----------------------------------------------------
 
     /** Returns the child count (count of cells in the table). */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     /** Returns the specified child cell. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 nIndex ) override;
 
     /** Returns the relation to the ruler control. */
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
@@ -326,21 +326,21 @@ public:
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** Returns the child index of the cell at the specified position. */
-    virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** Returns the row index of the specified child. */
-    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int64 nChildIndex ) override;
 
     /** Returns the column index of the specified child. */
-    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int64 nChildIndex ) override;
 
     // XAccessibleSelection ---------------------------------------------------
 
     /** Selects the specified child (selects the entire column or the entire table). */
-    virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
+    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** Returns true, if the specified child is selected. */
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
     /** Deselects all cells. */
     virtual void SAL_CALL clearAccessibleSelection() override;
@@ -349,13 +349,13 @@ public:
     virtual void SAL_CALL selectAllAccessibleChildren() override;
 
     /** Returns the count of selected children. */
-    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount() override;
 
     /** Returns the child with the specified index in all selected children. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     /** Deselects the child with the specified index in all selected children. */
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // XInterface -------------------------------------------------------------
 
@@ -388,7 +388,7 @@ public:
 private:
 
     /** @throws css::lang::IndexOutOfBoundsException if nIndex is not a valid child index. */
-    void ensureValidIndex( sal_Int32 nIndex ) const;
+    void ensureValidIndex( sal_Int64 nIndex ) const;
     /** @Throws css::lang::IndexOutOfBoundsException if the specified position is invalid. */
     void ensureValidPosition( sal_Int32 nRow, sal_Int32 nColumn ) const;
 
@@ -407,16 +407,16 @@ private:
     /** Returns the count of selected columns in the table. */
     sal_Int32 implGetSelColumnCount() const;
     /** Returns the total cell count in the table (including header). */
-    sal_Int32 implGetCellCount() const { return implGetRowCount() * implGetColumnCount(); }
+    sal_Int64 implGetCellCount() const { return static_cast<sal_Int64>(implGetRowCount()) * static_cast<sal_Int64>(implGetColumnCount()); }
 
     /** Returns the row index from cell index (including header). */
-    sal_Int32 implGetRow( sal_Int32 nIndex ) const { return nIndex / implGetColumnCount(); }
+    sal_Int32 implGetRow( sal_Int64 nIndex ) const { return nIndex / implGetColumnCount(); }
     /** Returns the column index from cell index (including header). */
-    sal_Int32 implGetColumn( sal_Int32 nIndex ) const { return nIndex % implGetColumnCount(); }
+    sal_Int32 implGetColumn( sal_Int64 nIndex ) const { return nIndex % implGetColumnCount(); }
     /** Returns the absolute column index of the nSelColumn-th selected column. */
     sal_Int32 implGetSelColumn( sal_Int32 nSelColumn ) const;
     /** Returns the child index from cell position (including header). */
-    sal_Int32 implGetIndex( sal_Int32 nRow, sal_Int32 nColumn ) const { return nRow * implGetColumnCount() + nColumn; }
+    sal_Int64 implGetIndex( sal_Int32 nRow, sal_Int32 nColumn ) const { return static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(implGetColumnCount()) + nColumn; }
 
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
     OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
@@ -469,13 +469,13 @@ public:
     // XAccessibleContext -----------------------------------------------------
 
     /** Returns the child count. */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     /** Returns the specified child. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 nIndex ) override;
 
     /** Returns the index of this cell in the table. */
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
     /** Returns the relation to the ruler control. */
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;

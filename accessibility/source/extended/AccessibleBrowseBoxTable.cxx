@@ -49,7 +49,7 @@ AccessibleBrowseBoxTable::~AccessibleBrowseBoxTable()
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL
-AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
+AccessibleBrowseBoxTable::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -59,7 +59,7 @@ AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
         implGetRow( nChildIndex ), static_cast<sal_Int16>(implGetColumn( nChildIndex )) );
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
 {
     osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();

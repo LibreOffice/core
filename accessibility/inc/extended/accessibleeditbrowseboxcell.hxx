@@ -66,8 +66,8 @@ namespace accessibility
 
         sal_Int16 SAL_CALL getAccessibleRole() override;
 
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+        virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 

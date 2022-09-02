@@ -153,7 +153,7 @@ void DocumentFocusListener::attachRecursive(
 
         if( ! (nStateSet & AccessibleStateType::MANAGES_DESCENDANTS) )
         {
-            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+            sal_Int64 n, nmax = xContext->getAccessibleChildCount();
             for( n = 0; n < nmax; n++ )
             {
                 Reference< XAccessible > xChild( xContext->getAccessibleChild( n ) );
@@ -197,7 +197,7 @@ void DocumentFocusListener::detachRecursive(
 
         if( ! (nStateSet & AccessibleStateType::MANAGES_DESCENDANTS) )
         {
-            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+            sal_Int64 n, nmax = xContext->getAccessibleChildCount();
             for( n = 0; n < nmax; n++ )
             {
                 Reference< XAccessible > xChild( xContext->getAccessibleChild( n ) );

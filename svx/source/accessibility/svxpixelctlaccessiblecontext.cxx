@@ -57,12 +57,12 @@ uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext
     return this;
 }
 
-sal_Int32 SvxPixelCtlAccessible::getAccessibleChildCount(  )
+sal_Int64 SvxPixelCtlAccessible::getAccessibleChildCount(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return SvxPixelCtl::GetSquares();
 }
-uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int32 i )
+uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int64 i )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     if ( i < 0 || i >= getAccessibleChildCount())
@@ -190,7 +190,7 @@ sal_Int32 SvxPixelCtlAccessible::getBackground(  )
     return sal_Int32(rStyles.GetDialogColor());
 }
 
-void SvxPixelCtlAccessible::implSelect(sal_Int32 nChildIndex, bool bSelect)
+void SvxPixelCtlAccessible::implSelect(sal_Int64 nChildIndex, bool bSelect)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -204,7 +204,7 @@ void SvxPixelCtlAccessible::implSelect(sal_Int32 nChildIndex, bool bSelect)
     NotifyChild(nIndex, bSelect, false);
 }
 
-bool SvxPixelCtlAccessible::implIsSelected(sal_Int32 nChildIndex)
+bool SvxPixelCtlAccessible::implIsSelected(sal_Int64 nChildIndex)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -359,12 +359,12 @@ sal_Int32 SvxPixelCtlAccessibleChild::getBackground()
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChildCount()
+sal_Int64 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChildCount()
 {
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChild( sal_Int32 )
+uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException();
 }

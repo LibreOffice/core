@@ -192,12 +192,12 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleListItem::getAccessibleCo
 
 // XAccessibleContext
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getAccessibleChildCount(  )
+sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleChildCount(  )
 {
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleChild( sal_Int32 )
+Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleChild( sal_Int64 )
 {
     return Reference< XAccessible >();
 }
@@ -209,7 +209,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleParent(  
     return m_xParent;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  )
+sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_nIndexInParent;

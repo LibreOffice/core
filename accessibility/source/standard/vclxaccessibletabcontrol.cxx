@@ -199,7 +199,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
             if ( m_pTabControl )
             {
                 sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
-                for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                 {
                     Reference< XAccessible > xChild( getAccessibleChild( i ) );
                     if ( xChild.is() )
@@ -343,7 +343,7 @@ Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames()
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleTabControl::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleTabControl::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -351,7 +351,7 @@ sal_Int32 VCLXAccessibleTabControl::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -361,7 +361,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
     return implGetAccessibleChild( i );
 }
 
-Reference< XAccessible > VCLXAccessibleTabControl::implGetAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleTabControl::implGetAccessibleChild( sal_Int64 i )
 {
     Reference< XAccessible > xChild = m_aAccessibleChildren[i];
     if ( !xChild.is() )
@@ -399,7 +399,7 @@ OUString VCLXAccessibleTabControl::getAccessibleName(  )
 // XAccessibleSelection
 
 
-void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex )
+void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -411,7 +411,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex )
 }
 
 
-sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -443,7 +443,7 @@ void VCLXAccessibleTabControl::selectAllAccessibleChildren(  )
 }
 
 
-sal_Int32 VCLXAccessibleTabControl::getSelectedAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleTabControl::getSelectedAccessibleChildCount(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -451,7 +451,7 @@ sal_Int32 VCLXAccessibleTabControl::getSelectedAccessibleChildCount(  )
 }
 
 
-Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -473,7 +473,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( s
 }
 
 
-void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex )
+void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

@@ -242,13 +242,13 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
     return static_cast<sal_Int32>(nCol);
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
+sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
 {
     return 0;
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
-        sal_Int32 /*i*/ )
+        sal_Int64 /*i*/ )
 {
     throw IndexOutOfBoundsException();  // there is no child...
 }
@@ -262,12 +262,12 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     return pWin->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
 
     // -1 for child not found/no parent (according to specification)
-    sal_Int32 nRet = -1;
+    sal_Int64 nRet = -1;
 
     css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
     if (!xParent)
@@ -281,8 +281,8 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
         //  iterate over parent's children and search for this object
         if (xParentContext.is())
         {
-            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for (sal_Int32 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
+            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+            for (sal_Int64 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
             {
                 css::uno::Reference<css::accessibility::XAccessible> xChild(
                     xParentContext->getAccessibleChild(nChild));

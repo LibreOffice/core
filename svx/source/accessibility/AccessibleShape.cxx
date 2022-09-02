@@ -297,7 +297,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription()
 /** The children of this shape come from two sources: The children from
     group or scene shapes and the paragraphs of text.
 */
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
        AccessibleShape::getAccessibleChildCount ()
 {
     if (IsDisposed())
@@ -305,7 +305,7 @@ sal_Int32 SAL_CALL
         return 0;
     }
 
-    sal_Int32 nChildCount = 0;
+    sal_Int64 nChildCount = 0;
 
     // Add the number of shapes that are children of this shape.
     if (mpChildrenManager != nullptr)
@@ -322,7 +322,7 @@ sal_Int32 SAL_CALL
     an exception for a wrong index.
 */
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleShape::getAccessibleChild (sal_Int32 nIndex)
+    AccessibleShape::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed ();
 
@@ -337,7 +337,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else if (mpText != nullptr)
     {
-        sal_Int32 nI = nIndex;
+        sal_Int64 nI = nIndex;
         if (mpChildrenManager != nullptr)
             nI -= mpChildrenManager->GetChildCount();
         xChild = mpText->GetChild (nI);
@@ -437,8 +437,8 @@ uno::Reference<XAccessible > SAL_CALL
 {
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    sal_Int32 nChildCount = getAccessibleChildCount ();
-    for (sal_Int32 i=0; i<nChildCount; ++i)
+    sal_Int64 nChildCount = getAccessibleChildCount ();
+    for (sal_Int64 i = 0; i < nChildCount; ++i)
     {
         Reference<XAccessible> xChild (getAccessibleChild (i));
         if (xChild.is())
@@ -735,12 +735,12 @@ void SAL_CALL
 }
 
 // XAccessibleSelection
-void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int32 )
+void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int64 )
 {
 }
 
 
-sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     uno::Reference<XAccessible> xAcc = getAccessibleChild( nChildIndex );
     uno::Reference<XAccessibleContext> xContext;
@@ -782,23 +782,22 @@ void SAL_CALL AccessibleShape::selectAllAccessibleChildren(  )
 }
 
 
-sal_Int32 SAL_CALL AccessibleShape::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleShape::getSelectedAccessibleChildCount()
 {
-    sal_Int32 nCount = 0;
-    sal_Int32 TotalCount = getAccessibleChildCount();
-    for( sal_Int32 i = 0; i < TotalCount; i++ )
+    sal_Int64 nCount = 0;
+    sal_Int64 TotalCount = getAccessibleChildCount();
+    for( sal_Int64 i = 0; i < TotalCount; i++ )
         if( isAccessibleChildSelected(i) ) nCount++;
 
     return nCount;
 }
 
 
-Reference<XAccessible> SAL_CALL AccessibleShape::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+Reference<XAccessible> SAL_CALL AccessibleShape::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     if ( nSelectedChildIndex > getSelectedAccessibleChildCount() )
         throw IndexOutOfBoundsException();
-    sal_Int32 i1, i2;
-    for( i1 = 0, i2 = 0; i1 < getAccessibleChildCount(); i1++ )
+    for (sal_Int64 i1 = 0, i2 = 0; i1 < getAccessibleChildCount(); i1++)
         if( isAccessibleChildSelected(i1) )
         {
             if( i2 == nSelectedChildIndex )
@@ -809,7 +808,7 @@ Reference<XAccessible> SAL_CALL AccessibleShape::getSelectedAccessibleChild( sal
 }
 
 
-void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int32 )
+void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int64 )
 {
 
 }
@@ -1018,13 +1017,13 @@ void AccessibleShape::disposing()
     AccessibleContextBase::dispose ();
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
        AccessibleShape::getAccessibleIndexInParent()
 {
     ThrowIfDisposed ();
     //  Use a simple but slow solution for now.  Optimize later.
 
-    sal_Int32 nIndex = m_nIndexInParent;
+    sal_Int64 nIndex = m_nIndexInParent;
     if ( -1 == nIndex )
         nIndex = AccessibleContextBase::getAccessibleIndexInParent();
     return nIndex;

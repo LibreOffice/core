@@ -1342,12 +1342,12 @@ void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
 
-    tools::Long nRet = 0;
+    sal_Int64 nRet = 0;
     if ( mpViewShell )
     {
         ScPagePreviewCountData aCount( mpViewShell->GetLocationData(), mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
@@ -1357,7 +1357,7 @@ sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
     return nRet;
 }
 
-uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int32 nIndex)
+uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1404,7 +1404,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         }
         else
         {
-            sal_Int32 nIdx(nIndex - (aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters));
+            sal_Int64 nIdx(nIndex - (aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters));
             if (nIdx < aCount.nForeShapes)
                 xAccessible = GetShapeChildren()->GetForeShape(nIdx);
             else

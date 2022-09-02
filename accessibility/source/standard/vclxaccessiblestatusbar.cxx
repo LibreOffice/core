@@ -160,7 +160,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             if ( m_pStatusBar )
             {
                 sal_uInt16 nItemId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
-                for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                 {
                     Reference< XAccessible > xChild( getAccessibleChild( i ) );
                     if ( xChild.is() )
@@ -279,7 +279,7 @@ Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames()
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleStatusBar::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -287,7 +287,7 @@ sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 

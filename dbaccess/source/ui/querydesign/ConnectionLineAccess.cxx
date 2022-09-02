@@ -59,18 +59,18 @@ namespace dbaui
         return "org.openoffice.comp.dbu.ConnectionLineAccessibility";
     }
     // XAccessibleContext
-    sal_Int32 SAL_CALL OConnectionLineAccess::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL OConnectionLineAccess::getAccessibleChildCount(  )
     {
         return 0;
     }
-    Reference< XAccessible > SAL_CALL OConnectionLineAccess::getAccessibleChild( sal_Int32 /*i*/ )
+    Reference< XAccessible > SAL_CALL OConnectionLineAccess::getAccessibleChild( sal_Int64 /*i*/ )
     {
         return Reference< XAccessible >();
     }
-    sal_Int32 SAL_CALL OConnectionLineAccess::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL OConnectionLineAccess::getAccessibleIndexInParent(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        sal_Int32 nIndex = -1;
+        sal_Int64 nIndex = -1;
         if( m_pLine )
         {
             // search the position of our table window in the table window map

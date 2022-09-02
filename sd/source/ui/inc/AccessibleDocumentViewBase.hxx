@@ -139,14 +139,14 @@ public:
     /** This implementation returns either 1 or 0 depending on whether there
         is an active accessible OLE object or not.
     */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
     /** This implementation either returns the active accessible OLE object
         if it exists and the given index is 0 or throws an exception.
     */
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex) override;
+        getAccessibleChild (sal_Int64 nIndex) override;
 
     //=====  XAccessibleComponent  ============================================
 
@@ -232,11 +232,11 @@ private:
 
     // return sal_False in default case
     virtual bool
-        implIsSelected( sal_Int32 nAccessibleChildIndex ) override;
+        implIsSelected( sal_Int64 nAccessibleChildIndex ) override;
 
     // return nothing in default case
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) override;
+        implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect ) override;
 
 protected:
     /// The API window that is made accessible.

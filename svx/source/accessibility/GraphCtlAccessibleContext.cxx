@@ -269,7 +269,7 @@ awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize()
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount()
+sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount()
 {
     ::SolarMutexGuard aGuard;
 
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount()
 
 
 /** returns the SdrObject at index nIndex from the model of this graph */
-SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int32 nIndex )
+SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -311,7 +311,7 @@ void SvxGraphCtrlAccessibleContext::CommitChange (
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
 }
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
+Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -328,7 +328,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessiblePa
     return mpControl->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent()
 {
     ::SolarMutexGuard aGuard;
     //  Use a simple but slow solution for now.  Optimize later.
@@ -340,8 +340,8 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent()
         Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
-            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int32 i = 0 ; i < nChildCount ; ++i )
+            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+            for( sal_Int64 i = 0 ; i < nChildCount ; ++i )
             {
                 Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
                 if( xChild.is() )
@@ -515,12 +515,15 @@ OUString SvxGraphCtrlAccessibleContext::getServiceName()
 }
 
 // XAccessibleSelection
-void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex )
+void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpView )
         throw DisposedException();
+
+    if (nIndex < 0 || nIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
 
     SdrObject* pObj = getSdrObject( nIndex );
 
@@ -529,12 +532,15 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nI
 }
 
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int32 nIndex )
+sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpView )
         throw DisposedException();
+
+    if (nIndex < 0 || nIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
 
     return mpView->IsObjMarked( getSdrObject( nIndex ) );
 }
@@ -562,7 +568,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren()
 }
 
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount()
 {
     ::SolarMutexGuard aGuard;
 
@@ -570,11 +576,11 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
         throw DisposedException();
 
     const SdrMarkList& rList = mpView->GetMarkedObjectList();
-    return static_cast<sal_Int32>(rList.GetMarkCount());
+    return static_cast<sal_Int64>(rList.GetMarkCount());
 }
 
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChild( sal_Int32 nIndex )
+Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -591,7 +597,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
 }
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex )
+void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -620,7 +626,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
 }
 
 // internals
-void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection( tools::Long nIndex )
+void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection(sal_Int64 nIndex )
 {
     if( nIndex < 0 || nIndex >= getSelectedAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();

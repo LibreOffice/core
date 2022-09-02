@@ -47,7 +47,7 @@ AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
 
 // XAccessibleContext ---------------------------------------------------------
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleChildCount()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -107,16 +107,16 @@ Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleSum
     return nullptr;    // not supported
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleIndex(
+sal_Int64 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleIndex(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return nRow * implGetColumnCount() + nColumn;
+    return static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(implGetColumnCount()) + nColumn;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRow( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -124,7 +124,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRow( sal_Int32 nCh
     return implGetRow( nChildIndex );
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -201,18 +201,18 @@ sal_uInt16 AccessibleBrowseBoxTableBase::implToVCLColumnPos( sal_Int32 nColumn )
     return nVCLPos;
 }
 
-sal_Int32 AccessibleBrowseBoxTableBase::implGetChildCount() const
+sal_Int64 AccessibleBrowseBoxTableBase::implGetChildCount() const
 {
-    return implGetRowCount() * implGetColumnCount();
+    return static_cast<sal_Int64>(implGetRowCount()) * static_cast<sal_Int64>(implGetColumnCount());
 }
 
-sal_Int32 AccessibleBrowseBoxTableBase::implGetRow( sal_Int32 nChildIndex ) const
+sal_Int32 AccessibleBrowseBoxTableBase::implGetRow( sal_Int64 nChildIndex ) const
 {
     sal_Int32 nColumns = implGetColumnCount();
     return nColumns ? (nChildIndex / nColumns) : 0;
 }
 
-sal_Int32 AccessibleBrowseBoxTableBase::implGetColumn( sal_Int32 nChildIndex ) const
+sal_Int32 AccessibleBrowseBoxTableBase::implGetColumn( sal_Int64 nChildIndex ) const
 {
     sal_Int32 nColumns = implGetColumnCount();
     return nColumns ? (nChildIndex % nColumns) : 0;
@@ -279,7 +279,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidAddress(
     ensureIsValidColumn( nColumn );
 }
 
-void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
+void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int64 nChildIndex )
 {
     if( nChildIndex >= implGetChildCount() )
         throw lang::IndexOutOfBoundsException( "child index is invalid", *this );

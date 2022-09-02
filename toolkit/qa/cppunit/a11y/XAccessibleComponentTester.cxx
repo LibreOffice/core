@@ -138,9 +138,9 @@ void XAccessibleComponentTester::testContainsPoint()
  */
 void XAccessibleComponentTester::testAccessibleAtPoint()
 {
-    int count = mxContext->getAccessibleChildCount();
+    sal_Int64 count = mxContext->getAccessibleChildCount();
     std::cout << "Found " << count << " children" << std::endl;
-    for (int i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
+    for (sal_Int64 i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
     {
         auto child = mxContext->getAccessibleChild(i);
         uno::Reference<accessibility::XAccessibleContext> childContext(

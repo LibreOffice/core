@@ -79,7 +79,7 @@ public:
     getAccessibleParent() override;
 
     /** @return  The index of this object among the parent's children. */
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
     /** @return
             The description of this object.

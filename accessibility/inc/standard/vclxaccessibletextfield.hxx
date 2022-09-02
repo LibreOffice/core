@@ -51,9 +51,9 @@ public:
         getAccessibleContext() override;
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    sal_Int64 SAL_CALL getAccessibleChildCount() override;
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 i) override;
+        getAccessibleChild (sal_Int64 i) override;
     sal_Int16 SAL_CALL getAccessibleRole() override;
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleParent(  ) override;

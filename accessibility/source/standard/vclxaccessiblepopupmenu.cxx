@@ -54,7 +54,7 @@ Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames()
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 

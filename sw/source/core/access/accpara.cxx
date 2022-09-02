@@ -2694,7 +2694,7 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
 // XAccessibleSelection
 
 void SwAccessibleParagraph::selectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
 
@@ -2702,7 +2702,7 @@ void SwAccessibleParagraph::selectAccessibleChild(
 }
 
 sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
 
@@ -2721,7 +2721,7 @@ void SwAccessibleParagraph::selectAllAccessibleChildren(  )
     m_aSelectionHelper.selectAllAccessibleChildren();
 }
 
-sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
+sal_Int64 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
 {
     ThrowIfDisposed();
 
@@ -2729,7 +2729,7 @@ sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
 }
 
 uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int64 nSelectedChildIndex )
 {
     ThrowIfDisposed();
 
@@ -2738,7 +2738,7 @@ uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
 
 // index has to be treated as global child index.
 void SwAccessibleParagraph::deselectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
 

@@ -219,8 +219,8 @@ public class _XAccessibleComponent {
                         + (chBnd.X ) + "," + chBnd.Y + ") - OK");
                     boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
                     if (!res) {
-                        int expIndex = xAccCh.getAccessibleContext().getAccessibleIndexInParent();
-                        int gotIndex = xAcc.getAccessibleContext().getAccessibleIndexInParent();
+                        long expIndex = xAccCh.getAccessibleContext().getAccessibleIndexInParent();
+                        long gotIndex = xAcc.getAccessibleContext().getAccessibleIndexInParent();
                         if (expIndex < gotIndex) {
                             System.out.println("The children found is not the same");
                             System.out.println("The expected child " +
@@ -387,7 +387,7 @@ public class _XAccessibleComponent {
             return new XAccessibleComponent[0];
         }
         XAccessibleContext xAccCon = xAcc.getAccessibleContext();
-        int cnt = xAccCon.getAccessibleChildCount();
+        long cnt = xAccCon.getAccessibleChildCount();
 
         // for cases when too many children exist checking only first 50
         if (cnt > 50)
@@ -396,7 +396,7 @@ public class _XAccessibleComponent {
         }
 
         ArrayList<XAccessibleComponent> childComp = new ArrayList<XAccessibleComponent>();
-        for (int i = 0; i < cnt; i++) {
+        for (long i = 0; i < cnt; i++) {
             try {
                 XAccessible child = xAccCon.getAccessibleChild(i);
                 XAccessibleContext xAccConCh = child.getAccessibleContext();

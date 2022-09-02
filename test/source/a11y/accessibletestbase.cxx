@@ -134,7 +134,7 @@ test::AccessibleTestBase::getAllChildren(
     std::deque<uno::Reference<accessibility::XAccessibleContext>> children;
     auto childCount = xContext->getAccessibleChildCount();
 
-    for (sal_Int32 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
+    for (sal_Int64 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
     {
         auto child = xContext->getAccessibleChild(i);
         children.push_back(child->getAccessibleContext());
@@ -227,7 +227,7 @@ uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getI
 
     std::cout << "looking up item " << OUString(name) << " in "
               << AccessibilityTools::debugString(xMenuCtx) << std::endl;
-    for (sal_Int32 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
+    for (sal_Int64 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
     {
         auto item = xMenuCtx->getAccessibleChild(i)->getAccessibleContext();
         if (accessibleNameMatches(item, name))

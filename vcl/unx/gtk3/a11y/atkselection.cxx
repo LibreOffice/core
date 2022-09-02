@@ -20,6 +20,7 @@
 #include "atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -106,7 +107,16 @@ selection_get_selection_count( AtkSelection   *selection)
         css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
             = getSelection( selection );
         if( pSelection.is() )
-            return pSelection->getSelectedAccessibleChildCount();
+        {
+            sal_Int64 nSelected = pSelection->getSelectedAccessibleChildCount();
+            if (nSelected > std::numeric_limits<gint>::max())
+            {
+                SAL_WARN("vcl.gtk", "selection_get_selection_count: Count exceeds maximum gint value, "
+                                    "using max gint.");
+                nSelected = std::numeric_limits<gint>::max();
+            }
+            return nSelected;
+        }
     }
     catch(const uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
@@ -146,7 +156,7 @@ selection_remove_selection( AtkSelection *selection,
                 return false;
 
             css::uno::Reference<css::accessibility::XAccessibleContext> xAccContext = xAcc->getAccessibleContext();
-            const sal_Int32 nChildIndex = xAccContext->getAccessibleIndexInParent();
+            const sal_Int64 nChildIndex = xAccContext->getAccessibleIndexInParent();
             pSelection->deselectAccessibleChild(nChildIndex);
             return true;
         }

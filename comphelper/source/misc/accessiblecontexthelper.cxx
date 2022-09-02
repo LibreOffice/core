@@ -171,12 +171,12 @@ namespace comphelper
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  )
     {
         OExternalLockGuard aGuard( this );
 
         // -1 for child not found/no parent (according to specification)
-        sal_Int32 nRet = -1;
+        sal_Int64 nRet = -1;
 
         try
         {
@@ -198,8 +198,8 @@ namespace comphelper
 
                 if ( xCreator.is() )
                 {
-                    sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-                    for ( sal_Int32 nChild = 0; ( nChild < nChildCount ) && ( -1 == nRet ); ++nChild )
+                    sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+                    for ( sal_Int64 nChild = 0; ( nChild < nChildCount ) && ( -1 == nRet ); ++nChild )
                     {
                         Reference< XAccessible > xChild( xParentContext->getAccessibleChild( nChild ) );
                         if ( xChild.get() == xCreator.get() )

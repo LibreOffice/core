@@ -112,7 +112,7 @@ Reference< XAccessible > SAL_CALL AccessibleChartView::getAccessibleParent()
     return Reference< XAccessible >( m_xParent );
 }
 
-sal_Int32 SAL_CALL AccessibleChartView::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleChartView::getAccessibleIndexInParent()
 {
     // the document is always the only child of the window
     return 0;

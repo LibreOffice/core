@@ -58,7 +58,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Returns always 0 because there can be no children.
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
     /** Return the specified child.
@@ -71,7 +71,7 @@ public:
             Throws always an exception because there are no children.
     */
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex) override;
+        getAccessibleChild (sal_Int64 nIndex) override;
 
     //=====  XAccessibleComponent  ============================================
 

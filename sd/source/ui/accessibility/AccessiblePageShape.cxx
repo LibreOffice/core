@@ -55,7 +55,7 @@ AccessiblePageShape::~AccessiblePageShape()
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
        AccessiblePageShape::getAccessibleChildCount()
 {
     return 0;
@@ -65,7 +65,7 @@ sal_Int32 SAL_CALL
     an exception for a wrong index.
 */
 uno::Reference<XAccessible> SAL_CALL
-    AccessiblePageShape::getAccessibleChild( sal_Int32 )
+    AccessiblePageShape::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException ("page shape has no children",
         static_cast<uno::XWeak*>(this));

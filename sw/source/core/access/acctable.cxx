@@ -531,7 +531,7 @@ void SwAccessibleTable::FireTableChangeEvent(
     FireAccessibleEvent( aEvent );
 }
 
-const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
+const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int64 nChildIndex ) const
 {
     OSL_ENSURE( nChildIndex >= 0, "Illegal child index." );
     OSL_ENSURE( nChildIndex < const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(), "Illegal child index." ); // #i77106#
@@ -555,7 +555,7 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
     return pBox;
 }
 
-bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
+bool SwAccessibleTable::IsChildSelected( sal_Int64 nChildIndex ) const
 {
     bool bRet = false;
     const SwSelBoxes* pSelBoxes = GetSelBoxes();
@@ -569,15 +569,15 @@ bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
     return bRet;
 }
 
-sal_Int32 SwAccessibleTable::GetIndexOfSelectedChild(
-                sal_Int32 nSelectedChildIndex ) const
+sal_Int64 SwAccessibleTable::GetIndexOfSelectedChild(
+                sal_Int64 nSelectedChildIndex ) const
 {
     // iterate over all children to n-th isAccessibleChildSelected()
-    sal_Int32 nChildren = const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(); // #i77106#
+    sal_Int64 nChildren = const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(); // #i77106#
     if( nSelectedChildIndex >= nChildren )
         return -1;
 
-    sal_Int32 n = 0;
+    sal_Int64 n = 0;
     while( n < nChildren )
     {
         if( IsChildSelected( n ) )
@@ -778,8 +778,8 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
                 "<SwAccessibleTable::getAccessibleRowDescription(..)> - missing row header cell -> serious issue." );
         uno::Reference< XAccessibleContext > xRowHeaderCellContext =
                                     xRowHeaderCell->getAccessibleContext();
-        const sal_Int32 nCellChildCount( xRowHeaderCellContext->getAccessibleChildCount() );
-        for ( sal_Int32 nChildIndex = 0; nChildIndex < nCellChildCount; ++nChildIndex )
+        const sal_Int64 nCellChildCount( xRowHeaderCellContext->getAccessibleChildCount() );
+        for ( sal_Int64 nChildIndex = 0; nChildIndex < nCellChildCount; ++nChildIndex )
         {
             uno::Reference< XAccessible > xChild = xRowHeaderCellContext->getAccessibleChild( nChildIndex );
             uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
@@ -811,8 +811,8 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
                 "<SwAccessibleTable::getAccessibleColumnDescription(..)> - missing column header cell -> serious issue." );
         uno::Reference< XAccessibleContext > xColumnHeaderCellContext =
                                     xColumnHeaderCell->getAccessibleContext();
-        const sal_Int32 nCellChildCount( xColumnHeaderCellContext->getAccessibleChildCount() );
-        for ( sal_Int32 nChildIndex = 0; nChildIndex < nCellChildCount; ++nChildIndex )
+        const sal_Int64 nCellChildCount( xColumnHeaderCellContext->getAccessibleChildCount() );
+        for ( sal_Int64 nChildIndex = 0; nChildIndex < nCellChildCount; ++nChildIndex )
         {
             uno::Reference< XAccessible > xChild = xColumnHeaderCellContext->getAccessibleChild( nChildIndex );
             uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
@@ -1063,7 +1063,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
     return bRet;
 }
 
-sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
+sal_Int64 SAL_CALL SwAccessibleTable::getAccessibleIndex(
             sal_Int32 nRow, sal_Int32 nColumn )
 {
     sal_Int32 nRet = -1;
@@ -1081,7 +1081,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
     return nRet;
 }
 
-sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int64 nChildIndex )
 {
     sal_Int32 nRet = -1;
 
@@ -1118,7 +1118,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
-        sal_Int32 nChildIndex )
+        sal_Int64 nChildIndex )
 {
     sal_Int32 nRet = -1;
 
@@ -1273,7 +1273,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
 // XAccessibleSelection
 
 void SAL_CALL SwAccessibleTable::selectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1352,7 +1352,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1387,17 +1387,17 @@ void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
     selectAccessibleChild( getAccessibleChildCount()-1 ); // #i77106#
 }
 
-sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
+sal_Int64 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
 
     ThrowIfDisposed();
 
     // iterate over all children and count isAccessibleChildSelected()
-    sal_Int32 nCount = 0;
+    sal_Int64 nCount = 0;
 
-    sal_Int32 nChildren = getAccessibleChildCount(); // #i71106#
-    for( sal_Int32 n = 0; n < nChildren; n++ )
+    sal_Int64 nChildren = getAccessibleChildCount(); // #i71106#
+    for( sal_Int64 n = 0; n < nChildren; n++ )
         if( IsChildSelected( n ) )
             nCount++;
 
@@ -1405,7 +1405,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
 }
 
 uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1415,7 +1415,7 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChi
     if( nSelectedChildIndex < 0 )
         throw lang::IndexOutOfBoundsException();
 
-    sal_Int32 nChildIndex = GetIndexOfSelectedChild( nSelectedChildIndex );
+    sal_Int64 nChildIndex = GetIndexOfSelectedChild( nSelectedChildIndex );
 
     // parameter checking (part 2): index higher than selected children?
     if( nChildIndex < 0 )
@@ -1432,7 +1432,7 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChi
 
 // index has to be treated as global child index.
 void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1567,8 +1567,8 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
     tools::Long lColumnCount = getAccessibleColumnCount();
     for(tools::Long lCol = 0; lCol < lColumnCount; lCol ++)
     {
-        tools::Long lChildIndex = getAccessibleIndex(row, lCol);
-        selectAccessibleChild(lChildIndex);
+        sal_Int64 nChildIndex = getAccessibleIndex(row, lCol);
+        selectAccessibleChild(nChildIndex);
     }
 
     return true;
@@ -1584,8 +1584,8 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
 
     for(sal_Int32 lRow = 0; lRow < lRowCount; lRow ++)
     {
-        sal_Int32 lChildIndex = getAccessibleIndex(lRow, column);
-        selectAccessibleChild(lChildIndex);
+        sal_Int64 nChildIndex = getAccessibleIndex(lRow, column);
+        selectAccessibleChild(nChildIndex);
     }
     return true;
 }
@@ -1665,7 +1665,7 @@ uno::Any SAL_CALL SwAccessibleTableColHeaders::queryInterface( const uno::Type& 
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
+sal_Int64 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
 
@@ -1702,7 +1702,7 @@ sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
 }
 
 uno::Reference< XAccessible> SAL_CALL
-        SwAccessibleTableColHeaders::getAccessibleChild (sal_Int32 nIndex)
+        SwAccessibleTableColHeaders::getAccessibleChild (sal_Int64 nIndex)
 {
     if ( nIndex < 0 || nIndex >= getAccessibleChildCount() )
     {

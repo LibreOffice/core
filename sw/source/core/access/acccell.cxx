@@ -431,13 +431,13 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
 
 // XAccessibleSelection
 void SwAccessibleCell::selectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     m_aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleCell::isAccessibleChildSelected(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     return m_aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
@@ -451,19 +451,19 @@ void SwAccessibleCell::selectAllAccessibleChildren(  )
     m_aSelectionHelper.selectAllAccessibleChildren();
 }
 
-sal_Int32 SwAccessibleCell::getSelectedAccessibleChildCount(  )
+sal_Int64 SwAccessibleCell::getSelectedAccessibleChildCount(  )
 {
     return m_aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 uno::Reference<XAccessible> SwAccessibleCell::getSelectedAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int64 nSelectedChildIndex )
 {
     return m_aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 void SwAccessibleCell::deselectAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int64 nSelectedChildIndex )
 {
     m_aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
 }

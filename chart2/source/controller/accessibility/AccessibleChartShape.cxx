@@ -78,9 +78,9 @@ OUString AccessibleChartShape::getImplementationName()
 }
 
 // ________ XAccessibleContext ________
-sal_Int32 AccessibleChartShape::getAccessibleChildCount()
+sal_Int64 AccessibleChartShape::getAccessibleChildCount()
 {
-    sal_Int32 nCount(0);
+    sal_Int64 nCount(0);
     if ( m_pAccShape.is() )
     {
         nCount = m_pAccShape->getAccessibleChildCount();
@@ -88,7 +88,7 @@ sal_Int32 AccessibleChartShape::getAccessibleChildCount()
     return nCount;
 }
 
-Reference< XAccessible > AccessibleChartShape::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > AccessibleChartShape::getAccessibleChild( sal_Int64 i )
 {
     Reference< XAccessible > xChild;
     if ( m_pAccShape.is() )

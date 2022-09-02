@@ -87,16 +87,16 @@ public:
         getAccessibleContext() override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override final;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override final;
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 i) override;
+        getAccessibleChild (sal_Int64 i) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleParent(  ) override;
 
     /** The index returned as index in parent is always the one set with the
         SetIndexInParent() method.
     */
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // XServiceInfo
@@ -106,13 +106,13 @@ public:
         getSupportedServiceNames() override;
 
     // XAccessibleSelection
-    virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
+    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
     virtual void SAL_CALL clearAccessibleSelection(  ) override;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
     bool    IsInDropDown() const;
@@ -139,7 +139,7 @@ private:
 
     virtual ~VCLXAccessibleList() override = default;
 
-    sal_Int32 implGetAccessibleChildCount();
+    sal_Int64 implGetAccessibleChildCount();
 
     /** This function is called from the implementation helper during a
         XComponent::dispose call.  Free the list of items and the items themselves.

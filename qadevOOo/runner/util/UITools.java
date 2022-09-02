@@ -157,7 +157,7 @@ public class UITools {
                                               xListBoxAccess, AccessibleRole.LIST, true);
             }
 
-            for (int i=0;i<xList.getAccessibleChildCount();i++) {
+            for (long i=0;i<xList.getAccessibleChildCount();i++) {
                 try {
                     XAccessible xChild = xList.getAccessibleChild(i);
                     XAccessibleContext xChildCont =

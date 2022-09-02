@@ -1063,7 +1063,7 @@ sal_Int64 SAL_CALL ScAccessibleSpreadsheet::getAccessibleStateSet()
 
     ///=====  XAccessibleSelection  ===========================================
 
-void SAL_CALL ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1108,17 +1108,17 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
         mpViewShell->SelectAll();
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
         ScAccessibleSpreadsheet::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Int32 nResult(0);
+    sal_Int64 nResult(0);
     if (mpViewShell)
     {
         if (IsFormulaMode())
         {
-            nResult =  GetRowAll() * GetColAll() ;
+            nResult =  static_cast<sal_Int64>(GetRowAll()) * static_cast<sal_Int64>(GetColAll());
         }
         else
         {
@@ -1137,7 +1137,7 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference<XAccessible > SAL_CALL
-        ScAccessibleSpreadsheet::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        ScAccessibleSpreadsheet::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1175,7 +1175,7 @@ uno::Reference<XAccessible > SAL_CALL
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1598,13 +1598,13 @@ bool ScAccessibleSpreadsheet::IsScAddrFormulaSel(const ScAddress &addr) const
         addr.Tab() == mpViewShell->GetViewData().GetTabNo();
 }
 
-bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int32 nIndex) const
+bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int64 nIndex) const
 {
-    sal_Int32 nMaxIndex = (m_nMaxX - m_nMinX +1)*(m_nMaxY - m_nMinY +1) -1 ;
+    sal_Int64 nMaxIndex = static_cast<sal_Int64>(m_nMaxX - m_nMinX +1) * static_cast<sal_Int64>(m_nMaxY - m_nMinY +1) -1 ;
     return nIndex <= nMaxIndex && nIndex >= 0 ;
 }
 
-ScAddress ScAccessibleSpreadsheet::GetChildIndexAddress(sal_Int32 nIndex) const
+ScAddress ScAccessibleSpreadsheet::GetChildIndexAddress(sal_Int64 nIndex) const
 {
     sal_Int32 nRowAll = GetRowAll();
     sal_uInt16  nColAll = GetColAll();
@@ -1619,7 +1619,7 @@ ScAddress ScAccessibleSpreadsheet::GetChildIndexAddress(sal_Int32 nIndex) const
         );
 }
 
-sal_Int32 ScAccessibleSpreadsheet::GetAccessibleIndexFormula( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 ScAccessibleSpreadsheet::GetAccessibleIndexFormula( sal_Int32 nRow, sal_Int32 nColumn )
 {
     sal_uInt16 nColRelative = sal_uInt16(nColumn) - GetColAll();
     sal_Int32 nRowRelative = nRow - GetRowAll();
@@ -1627,7 +1627,7 @@ sal_Int32 ScAccessibleSpreadsheet::GetAccessibleIndexFormula( sal_Int32 nRow, sa
     {
         return -1;
     }
-    return GetRowAll() * nRowRelative + nColRelative;
+    return static_cast<sal_Int64>(GetRowAll()) * static_cast<sal_Int64>(nRowRelative) + nColRelative;
 }
 
 bool ScAccessibleSpreadsheet::IsFormulaMode()

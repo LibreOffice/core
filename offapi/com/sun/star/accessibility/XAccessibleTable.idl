@@ -325,7 +325,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
             Child index of the specified accessible object or -1 if one or
             both of the given indices is/are invalid.
     */
-    long getAccessibleIndex ([in] long nRow, [in] long nColumn)
+    hyper getAccessibleIndex ([in] long nRow, [in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /** Translate the given child index into the corresponding row
@@ -342,7 +342,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if nChildIndex addresses an invalid row.
     */
-    long getAccessibleRow ([in] long nChildIndex)
+    long getAccessibleRow ([in] hyper nChildIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /** Translate the given child index into the corresponding column
@@ -360,7 +360,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if nChildIndex addresses an invalid column.
     */
-    long getAccessibleColumn ([in] long nChildIndex)
+    long getAccessibleColumn ([in] hyper nChildIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 };
 

@@ -58,12 +58,12 @@ namespace comphelper
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         /// @throws css::uno::RuntimeException
         virtual bool
-            implIsSelected( sal_Int32 nAccessibleChildIndex ) = 0;
+            implIsSelected( sal_Int64 nAccessibleChildIndex ) = 0;
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         /// @throws css::uno::RuntimeException
         virtual void
-            implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) = 0;
+            implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect ) = 0;
 
     protected:
 
@@ -72,22 +72,22 @@ namespace comphelper
             @throws css::lang::IndexOutOfBoundsException
             @throws css::uno::RuntimeException
         */
-        void selectAccessibleChild( sal_Int32 nChildIndex );
+        void selectAccessibleChild( sal_Int64 nChildIndex );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        bool isAccessibleChildSelected( sal_Int32 nChildIndex );
+        bool isAccessibleChildSelected( sal_Int64 nChildIndex );
         /// @throws css::uno::RuntimeException
         void clearAccessibleSelection(  );
         /// @throws css::uno::RuntimeException
         void selectAllAccessibleChildren(  );
         /// @throws css::uno::RuntimeException
-        sal_Int32 getSelectedAccessibleChildCount(  );
+        sal_Int64 getSelectedAccessibleChildCount(  );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex );
+        css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        void deselectAccessibleChild( sal_Int32 nSelectedChildIndex );
+        void deselectAccessibleChild( sal_Int64 nSelectedChildIndex );
     };
 
 
@@ -117,13 +117,13 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleSelection - default implementations
-        virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
-        virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
+        virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+        virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
         virtual void SAL_CALL clearAccessibleSelection(  ) override;
         virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-        virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
-        virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+        virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     };
 
 

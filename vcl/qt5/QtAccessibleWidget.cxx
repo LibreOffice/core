@@ -149,7 +149,15 @@ int QtAccessibleWidget::childCount() const
     if (!xAc.is())
         return 0;
 
-    return xAc->getAccessibleChildCount();
+    sal_Int64 nChildCount = xAc->getAccessibleChildCount();
+    if (nChildCount > std::numeric_limits<int>::max())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::childCount: Child count exceeds maximum int value, "
+                           "returning max int.");
+        nChildCount = std::numeric_limits<int>::max();
+    }
+
+    return nChildCount;
 }
 
 int QtAccessibleWidget::indexOfChild(const QAccessibleInterface* pChild) const
@@ -167,7 +175,18 @@ int QtAccessibleWidget::indexOfChild(const QAccessibleInterface* pChild) const
     if (!xContext.is())
         return -1;
 
-    return xContext->getAccessibleIndexInParent();
+    sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
+    if (nChildIndex > std::numeric_limits<int>::max())
+    {
+        // use -2 when the child index is too large to fit into 32 bit to neither use the
+        // valid index of another child nor -1, which would e.g. make the Orca screen reader
+        // interpret the object as being a zombie
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::indexOfChild: Child index exceeds maximum int value, "
+                 "returning -2.");
+        nChildIndex = -2;
+    }
+    return nChildIndex;
 }
 
 namespace
@@ -1634,7 +1653,15 @@ int QtAccessibleWidget::selectedCellCount() const
     if (!xSelection.is())
         return 0;
 
-    return xSelection->getSelectedAccessibleChildCount();
+    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+    if (nSelected > std::numeric_limits<int>::max())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectedCellCount: Cell count exceeds maximum int value, "
+                 "using max int.");
+        nSelected = std::numeric_limits<int>::max();
+    }
+    return nSelected;
 }
 
 QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const
@@ -1648,8 +1675,15 @@ QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const
         return QList<QAccessibleInterface*>();
 
     QList<QAccessibleInterface*> aSelectedCells;
-    const sal_Int32 nSelected = xSelection->getSelectedAccessibleChildCount();
-    for (int i = 0; i < nSelected; i++)
+    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+    if (nSelected > std::numeric_limits<int>::max())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectedCells: Cell count exceeds maximum int value, "
+                 "using max int.");
+        nSelected = std::numeric_limits<int>::max();
+    }
+    for (sal_Int64 i = 0; i < nSelected; i++)
     {
         Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(i);
         QAccessibleInterface* pInterface
@@ -1777,7 +1811,7 @@ int QtAccessibleWidget::columnIndex() const
     if (!xTable.is())
         return -1;
 
-    const sal_Int32 nIndexInParent = xAcc->getAccessibleIndexInParent();
+    const sal_Int64 nIndexInParent = xAcc->getAccessibleIndexInParent();
     return xTable->getAccessibleColumn(nIndexInParent);
 }
 
@@ -1858,7 +1892,7 @@ int QtAccessibleWidget::rowIndex() const
     if (!xTable.is())
         return -1;
 
-    const sal_Int32 nIndexInParent = xAcc->getAccessibleIndexInParent();
+    const sal_Int64 nIndexInParent = xAcc->getAccessibleIndexInParent();
     return xTable->getAccessibleRow(nIndexInParent);
 }
 

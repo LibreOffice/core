@@ -286,7 +286,7 @@ namespace accessibility
 
     // XAccessibleContext
 
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -300,7 +300,7 @@ namespace accessibility
         return nCount;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int64 i )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -365,7 +365,7 @@ namespace accessibility
         return implGetParentAccessible( );
     }
 
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -818,12 +818,15 @@ namespace accessibility
 
     // XAccessibleSelection
 
-    void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int32 nChildIndex )
+    void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
+
+        if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+            throw IndexOutOfBoundsException();
 
         SvTreeListEntry* pEntry = GetRealChild(nChildIndex);
         if ( !pEntry )
@@ -832,12 +835,15 @@ namespace accessibility
         m_pTreeListBox->Select( pEntry );
     }
 
-    sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
+
+        if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+            throw IndexOutOfBoundsException();
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nChildIndex );
@@ -885,20 +891,20 @@ namespace accessibility
         }
     }
 
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
+    sal_Int64 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
 
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int64 nSelCount = 0;
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException("AccessibleListBoxEntry::getSelectedAccessibleChildCount - pParent cannot be empty!");
-        nCount = m_pTreeListBox->GetLevelChildCount( pParent );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
+        for (sal_Int32 i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
             if ( m_pTreeListBox->IsSelected( pEntry ) )
@@ -908,7 +914,7 @@ namespace accessibility
         return nSelCount;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -919,13 +925,13 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild;
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int64 nSelCount = 0;
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException("AccessibleListBoxEntry::getSelectedAccessibleChild - pParent cannot be empty!");
-        nCount = m_pTreeListBox->GetLevelChildCount( pParent );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
+        for (sal_Int32 i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
             if ( m_pTreeListBox->IsSelected( pEntry ) )
@@ -943,12 +949,15 @@ namespace accessibility
         return xChild;
     }
 
-    void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+    void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
+
+        if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getAccessibleChildCount())
+            throw IndexOutOfBoundsException();
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nSelectedChildIndex );

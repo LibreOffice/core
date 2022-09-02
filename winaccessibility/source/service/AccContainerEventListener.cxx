@@ -487,8 +487,8 @@ void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible
         return;
     }
 
-    int count = pAccessibleContext->getAccessibleChildCount();
-    for (int i=0;i<count;i++)
+    const sal_Int64 nCount = pAccessibleContext->getAccessibleChildCount();
+    for (sal_Int64 i = 0; i < nCount; i++)
     {
         Reference<css::accessibility::XAccessible> mxAccessible
         = pAccessibleContext->getAccessibleChild(i);

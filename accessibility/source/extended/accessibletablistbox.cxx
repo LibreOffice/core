@@ -71,7 +71,7 @@ namespace accessibility
 
     // XAccessibleContext ---------------------------------------------------------
 
-    sal_Int32 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
+    sal_Int64 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
     {
         return 2; // header and table
     }
@@ -82,7 +82,7 @@ namespace accessibility
     }
 
     Reference< XAccessible > SAL_CALL
-    AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
+    AccessibleTabListBox::getAccessibleChild( sal_Int64 nChildIndex )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();

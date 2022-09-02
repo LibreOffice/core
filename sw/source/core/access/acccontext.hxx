@@ -214,11 +214,11 @@ public:
     // XAccessibleContext
 
     // Return the number of currently visible children.
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     // Return the specified child or NULL if index is invalid.
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex) override;
+        getAccessibleChild (sal_Int64 nIndex) override;
 
     virtual css::uno::Sequence<css::uno::Reference< css::accessibility::XAccessible>> SAL_CALL
         getAccessibleChildren() override;
@@ -228,7 +228,7 @@ public:
         getAccessibleParent() override;
 
     // Return this objects index among the parents children.
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleIndexInParent() override;
 
     // Return this object's role.

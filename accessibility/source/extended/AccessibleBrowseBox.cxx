@@ -90,7 +90,7 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 
 // css::accessibility::XAccessibleContext
 
-sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -100,10 +100,13 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
 
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
+AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
 
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     if( nChildIndex >= 0 )
@@ -223,7 +226,7 @@ AccessibleBrowseBox::implGetHeaderBar(AccessibleBrowseBoxObjType eObjType)
 }
 
 css::uno::Reference< css::accessibility::XAccessible >
-AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
+AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
 {
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     switch( nChildIndex )

@@ -50,7 +50,7 @@ ScAccessibleCellBase::ScAccessibleCellBase(
         const uno::Reference<XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScAddress& rCellAddress,
-        sal_Int32 nIndex)
+        sal_Int64 nIndex)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TABLE_CELL),
     maCellAddress(rCellAddress),
@@ -186,7 +186,7 @@ void SAL_CALL ScAccessibleCellBase::release()
 
     //=====  XAccessibleContext  ==============================================
 
-sal_Int32
+sal_Int64
     ScAccessibleCellBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;

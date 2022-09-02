@@ -97,13 +97,13 @@ namespace accessibility
         return uno::Reference< XAccessibleContext > ( this );
     }
 
-    sal_Int32 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount()
+    sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount()
     {
 
         return 0;
     }
 
-    uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int32 )
+    uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int64 )
     {
         throw lang::IndexOutOfBoundsException("No children available",
                                               uno::Reference< uno::XInterface >
@@ -116,7 +116,7 @@ namespace accessibility
         return mxParent;
     }
 
-    sal_Int32 SAL_CALL  AccessibleImageBullet::getAccessibleIndexInParent()
+    sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleIndexInParent()
     {
 
         return mnIndexInParent;

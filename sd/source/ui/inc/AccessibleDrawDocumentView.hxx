@@ -60,11 +60,11 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex) override;
+        getAccessibleChild (sal_Int64 nIndex) override;
 
     virtual OUString SAL_CALL
         getAccessibleName() override;
@@ -107,7 +107,7 @@ private:
         getSupportedServiceNames() override;
 
     virtual bool
-        implIsSelected( sal_Int32 nAccessibleChildIndex ) override;
+        implIsSelected( sal_Int64 nAccessibleChildIndex ) override;
 
     /** Select or deselect the specified child or all children if the given
         index has the special value ACCESSIBLE_SELECTION_CHILD_ALL.
@@ -123,7 +123,7 @@ private:
             reps. children.
     */
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) override;
+        implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect ) override;
 
     ::sd::ViewShell* mpSdViewSh;
 

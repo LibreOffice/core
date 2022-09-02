@@ -36,13 +36,13 @@ namespace comphelper
     OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
 
 
-    void OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex )
+    void OCommonAccessibleSelection::selectAccessibleChild( sal_Int64 nChildIndex )
     {
         implSelect( nChildIndex, true );
     }
 
 
-    bool OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    bool OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int64 nChildIndex )
     {
         return implIsSelected( nChildIndex );
     }
@@ -60,16 +60,16 @@ namespace comphelper
     }
 
 
-    sal_Int32 OCommonAccessibleSelection::getSelectedAccessibleChildCount(  )
+    sal_Int64 OCommonAccessibleSelection::getSelectedAccessibleChildCount(  )
     {
-        sal_Int32                       nRet = 0;
+        sal_Int64 nRet = 0;
         Reference< XAccessibleContext > xParentContext( implGetAccessibleContext() );
 
         OSL_ENSURE( xParentContext.is(), "OCommonAccessibleSelection::getSelectedAccessibleChildCount: no parent context!" );
 
         if( xParentContext.is() )
         {
-            for( sal_Int32 i = 0, nChildCount = xParentContext->getAccessibleChildCount(); i < nChildCount; i++ )
+            for( sal_Int64 i = 0, nChildCount = xParentContext->getAccessibleChildCount(); i < nChildCount; i++ )
                 if( implIsSelected( i ) )
                     ++nRet;
         }
@@ -78,7 +78,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessible > OCommonAccessibleSelection::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    Reference< XAccessible > OCommonAccessibleSelection::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         Reference< XAccessible >        xRet;
         Reference< XAccessibleContext > xParentContext( implGetAccessibleContext() );
@@ -87,7 +87,7 @@ namespace comphelper
 
         if( xParentContext.is() )
         {
-            for( sal_Int32 i = 0, nChildCount = xParentContext->getAccessibleChildCount(), nPos = 0; ( i < nChildCount ) && !xRet.is(); i++ )
+            for( sal_Int64 i = 0, nChildCount = xParentContext->getAccessibleChildCount(), nPos = 0; ( i < nChildCount ) && !xRet.is(); i++ )
                 if( implIsSelected( i ) && ( nPos++ == nSelectedChildIndex ) )
                     xRet = xParentContext->getAccessibleChild( i );
         }
@@ -96,7 +96,7 @@ namespace comphelper
     }
 
 
-    void OCommonAccessibleSelection::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+    void OCommonAccessibleSelection::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         implSelect( nSelectedChildIndex, false );
     }
@@ -117,14 +117,14 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild( sal_Int32 nChildIndex )
+    void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild( sal_Int64 nChildIndex )
     {
         OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
     }
 
 
-    sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected( sal_Int64 nChildIndex )
     {
         OExternalLockGuard aGuard( this );
         return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
@@ -145,21 +145,21 @@ namespace comphelper
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
+    sal_Int64 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     {
         OExternalLockGuard aGuard( this );
         return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    Reference< XAccessible > SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         OExternalLockGuard aGuard( this );
         return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
     }
 
 
-    void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+    void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );

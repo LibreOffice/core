@@ -87,8 +87,8 @@ namespace accessibility
         virtual ~AccessibleTextHelper_Impl() override;
 
         // XAccessibleContext child handling methods
-        sal_Int32 getAccessibleChildCount() const;
-        uno::Reference< XAccessible > getAccessibleChild( sal_Int32 i );
+        sal_Int64 getAccessibleChildCount() const;
+        uno::Reference< XAccessible > getAccessibleChild( sal_Int64 i );
 
         // XAccessibleEventBroadcaster child related methods
         void addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
@@ -1429,12 +1429,12 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 AccessibleTextHelper_Impl::getAccessibleChildCount() const
+    sal_Int64 AccessibleTextHelper_Impl::getAccessibleChildCount() const
     {
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     }
 
-    uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i )
+    uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal_Int64 i )
     {
         i -= GetStartIndex();
 
@@ -1500,7 +1500,7 @@ namespace accessibility
         Point aLogPoint( GetViewForwarder().PixelToLogic( aPoint, rCacheTF.GetMapMode() ) );
 
         // iterate over all visible children (including those not yet created)
-        sal_Int32 nChild;
+        sal_Int64 nChild;
         for( nChild=mnFirstVisibleChild; nChild <= mnLastVisibleChild; ++nChild )
         {
             DBG_ASSERT(nChild >= 0,
@@ -1696,14 +1696,14 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 AccessibleTextHelper::GetChildCount() const
+    sal_Int64 AccessibleTextHelper::GetChildCount() const
     {
         SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        sal_Int32 nRet = mpImpl->getAccessibleChildCount();
+        sal_Int64 nRet = mpImpl->getAccessibleChildCount();
 
         mpImpl->CheckInvariants();
 
@@ -1713,7 +1713,7 @@ namespace accessibility
 #endif
     }
 
-    uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int32 i )
+    uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int64 i )
     {
         SolarMutexGuard aGuard;
 

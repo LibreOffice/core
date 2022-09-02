@@ -312,14 +312,14 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibl
 
 // XAccessibleContext
 
-sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChildCount(  )
+sal_Int64 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChildCount(  )
 {
     OContextEntryGuard aGuard( this );
 
     return m_xChild.is() ? 1 : 0;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChild( sal_Int64 i )
 {
     OContextEntryGuard aGuard( this );
 
@@ -337,7 +337,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleParent
     return m_pToolBox->GetAccessible();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleIndexInParent(  )
+sal_Int64 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleIndexInParent(  )
 {
     OContextEntryGuard aGuard( this );
 

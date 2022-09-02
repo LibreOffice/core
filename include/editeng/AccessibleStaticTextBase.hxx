@@ -207,10 +207,10 @@ namespace accessibility
 
         // child-related methods from XAccessibleContext
         /// @throws css::uno::RuntimeException
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount();
+        virtual sal_Int64 SAL_CALL getAccessibleChildCount();
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i );
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i );
 
         // child-related methods from XAccessibleComponent
         /// @throws css::uno::RuntimeException

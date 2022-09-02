@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultLayout)
      *      shape (subtitle)
      *          paragraph
      */
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDocumentContext->getAccessibleChildCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), xDocumentContext->getAccessibleChildCount());
     CPPUNIT_ASSERT_EQUAL(
         OUString("PresentationTitle "),
         xDocumentContext->getAccessibleChild(1)->getAccessibleContext()->getAccessibleName());

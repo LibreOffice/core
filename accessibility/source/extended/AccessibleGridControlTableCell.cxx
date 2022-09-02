@@ -165,13 +165,13 @@ namespace accessibility
     }
 
     /** @return  The count of visible children. */
-    sal_Int32 SAL_CALL AccessibleGridControlTableCell::getAccessibleChildCount()
+    sal_Int64 SAL_CALL AccessibleGridControlTableCell::getAccessibleChildCount()
     {
         return 0;
     }
 
     /** @return  The css::accessibility::XAccessible interface of the specified child. */
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridControlTableCell::getAccessibleChild( sal_Int32 )
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridControlTableCell::getAccessibleChild( sal_Int64 )
     {
         throw css::lang::IndexOutOfBoundsException();
     }
@@ -210,13 +210,13 @@ namespace accessibility
 
     // css::accessibility::XAccessibleContext
 
-    sal_Int32 SAL_CALL AccessibleGridControlTableCell::getAccessibleIndexInParent()
+    sal_Int64 SAL_CALL AccessibleGridControlTableCell::getAccessibleIndexInParent()
     {
         SolarMutexGuard aSolarGuard;
 
         ensureIsAlive();
 
-        return ( getRowPos() * m_aTable.GetColumnCount() ) + getColumnPos();
+        return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(m_aTable.GetColumnCount())) + getColumnPos();
     }
 
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getCaretPosition(  )
@@ -328,7 +328,7 @@ namespace accessibility
         vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
         DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
         tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( pParent );
-        sal_Int32 nIndex = getAccessibleIndexInParent();
+        sal_Int64 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();
         tools::Long nY = aGridRect.Top() + aCellRect.Top();
@@ -339,7 +339,7 @@ namespace accessibility
     tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
         tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( nullptr );
-        sal_Int32 nIndex = getAccessibleIndexInParent();
+        sal_Int64 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();
         tools::Long nY = aGridRect.Top() + aCellRect.Top();

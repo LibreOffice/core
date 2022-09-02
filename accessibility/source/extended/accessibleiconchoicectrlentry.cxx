@@ -245,12 +245,12 @@ namespace accessibility
 
     // XAccessibleContext
 
-    sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleChildCount(  )
     {
         return 0; // no children
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleChild( sal_Int32 )
+    Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleChild( sal_Int64 )
     {
         throw IndexOutOfBoundsException();
     }
@@ -263,7 +263,7 @@ namespace accessibility
         return m_xParent;
     }
 
-    sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleIndexInParent(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

@@ -216,7 +216,7 @@ namespace accessibility
     // XAccessibleContext
 
 
-    sal_Int32 AccessibleTabBar::getAccessibleChildCount()
+    sal_Int64 AccessibleTabBar::getAccessibleChildCount()
     {
         OExternalLockGuard aGuard( this );
 
@@ -224,7 +224,7 @@ namespace accessibility
     }
 
 
-    Reference< XAccessible > AccessibleTabBar::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > AccessibleTabBar::getAccessibleChild( sal_Int64 i )
     {
         OExternalLockGuard aGuard( this );
 
@@ -274,11 +274,11 @@ namespace accessibility
     }
 
 
-    sal_Int32 AccessibleTabBar::getAccessibleIndexInParent(  )
+    sal_Int64 AccessibleTabBar::getAccessibleIndexInParent(  )
     {
         OExternalLockGuard aGuard( this );
 
-        sal_Int32 nIndexInParent = -1;
+        sal_Int64 nIndexInParent = -1;
         if ( m_pTabBar )
         {
             vcl::Window* pParent = m_pTabBar->GetAccessibleParentWindow();

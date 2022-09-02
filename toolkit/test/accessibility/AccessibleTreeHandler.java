@@ -101,7 +101,7 @@ class AccessibleTreeHandler
             XAccessibleContext xContext = xChild.getAccessibleContext();
             if (xContext != null)
             {
-                int nIndex = xContext.getAccessibleIndexInParent() + 1;
+                long nIndex = xContext.getAccessibleIndexInParent() + 1;
                 synchronized (maChildList)
                 {
                     if ((nIndex >= 0) || (nIndex <= maChildList.size()))

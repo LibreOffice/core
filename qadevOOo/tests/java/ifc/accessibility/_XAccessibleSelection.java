@@ -56,7 +56,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
     private static final String className = "com.sun.star.accessibility.XAccessibleSelection";
     public XAccessibleSelection oObj = null;
     XAccessibleContext xAC = null;
-    int childCount;
+    long childCount;
     protected boolean multiSelection = true;
     protected boolean OneAlwaysSelected = false;
 
@@ -131,7 +131,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         log.println("ChildCount: " + childCount);
 
-        int usedChildren = childCount;
+        long usedChildren = childCount;
 
         if (childCount > 500) {
             log.println("Restricting to 500");
@@ -140,7 +140,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         if (usedChildren > 0) {
             try {
-                for (int i = 0; i < usedChildren; i++) {
+                for (long i = 0; i < usedChildren; i++) {
                     log.print("Trying to select child with index " + i + ": ");
 
                     if (isSelectable(tEnv.getTestObject(), i)) {
@@ -195,7 +195,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
 
-        int SelectableChildCount = chkSelectable(tEnv.getTestObject());
+        long SelectableChildCount = chkSelectable(tEnv.getTestObject());
 
         if (SelectableChildCount > 500) {
             SelectableChildCount = 500;
@@ -207,7 +207,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
             try {
                 oObj.selectAllAccessibleChildren();
 
-                for (int k = 0; k < SelectableChildCount; k++) {
+                for (long k = 0; k < SelectableChildCount; k++) {
                     log.println("Trying to select child with index " + k);
 
                     if (isSelectable(tEnv.getTestObject(), k)) {
@@ -289,7 +289,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
         boolean res = true;
         boolean isSelected = true;
 
-        int SelectableChildCount = chkSelectable(tEnv.getTestObject());
+        long SelectableChildCount = chkSelectable(tEnv.getTestObject());
 
         if ((SelectableChildCount > 0) && multiSelection) {
             try {
@@ -327,7 +327,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
         if (multiSelection) {
             oObj.selectAllAccessibleChildren();
         } else {
-            int usedChildren = childCount;
+            long usedChildren = childCount;
 
             if (childCount > 500) {
                 log.println("Restricting to 500");
@@ -336,7 +336,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
             if (usedChildren > 0) {
                 try {
-                    for (int i = 0; i < usedChildren; i++) {
+                    for (long i = 0; i < usedChildren; i++) {
 
                         if (isSelectable(tEnv.getTestObject(), i)) {
                             log.print("Trying to select child with index "+i+": ");
@@ -358,10 +358,10 @@ public class _XAccessibleSelection extends MultiMethodTest {
             }
         }
 
-        int sCount = chkSelectable(tEnv.getTestObject());
+        long sCount = chkSelectable(tEnv.getTestObject());
         log.println("Found " + sCount + " selectable Children");
 
-        int selectedCount = oObj.getSelectedAccessibleChildCount();
+        long selectedCount = oObj.getSelectedAccessibleChildCount();
         log.println("After selecting all accessible " + selectedCount +
                     " are selected");
 
@@ -398,7 +398,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
         executeMethod("getSelectedAccessibleChildCount()");
 
         boolean res = true;
-        int selectedCount = oObj.getSelectedAccessibleChildCount();
+        long selectedCount = oObj.getSelectedAccessibleChildCount();
         log.println("getSelectedAccessibleChildCount: " + selectedCount);
 
         try {
@@ -421,14 +421,14 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
 
-        int SelectableChildCount = chkSelectable(tEnv.getTestObject());
+        long SelectableChildCount = chkSelectable(tEnv.getTestObject());
 
         if (SelectableChildCount > 500) {
             SelectableChildCount = 500;
         }
 
         if (SelectableChildCount > 0) {
-            int k = 0;
+            long k = 0;
             try {
                 for (k = 0; k < SelectableChildCount; k++) {
                     log.println("Trying to select child with index " + k);
@@ -468,7 +468,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
         executeMethod("getSelectedAccessibleChild()");
 
         boolean res = true;
-        int selCount = oObj.getSelectedAccessibleChildCount();
+        long selCount = oObj.getSelectedAccessibleChildCount();
         log.println("getSelectedAccessibleChildCount():" + selCount);
 
         try {
@@ -499,13 +499,13 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         if ((childCount > 0) && (selCount > 0)) {
             try {
-                int maxCount = chkSelectable(tEnv.getTestObject());
+                long maxCount = chkSelectable(tEnv.getTestObject());
 
                 if (childCount > 100) {
                     maxCount = 100;
                 }
 
-                for (int k = 0; k < maxCount; k++) {
+                for (long k = 0; k < maxCount; k++) {
                     log.println("deselectAccessibleChild(" + k + ")");
 
                     if (oObj.isAccessibleChildSelected(k)) {
@@ -513,7 +513,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
                     }
                 }
 
-                int newSelCount = oObj.getSelectedAccessibleChildCount();
+                long newSelCount = oObj.getSelectedAccessibleChildCount();
                 log.println("getSelectedAccessibleChildCount():" +
                             newSelCount);
 
@@ -533,17 +533,17 @@ public class _XAccessibleSelection extends MultiMethodTest {
         tRes.tested("deselectAccessibleChild()", res);
     }
 
-    protected static int chkSelectable(Object Testcase) {
-        int ret = 0;
+    protected static long chkSelectable(Object Testcase) {
+        long ret = 0;
         XAccessibleContext accCon = UnoRuntime.queryInterface(
                                             XAccessibleContext.class, Testcase);
-        int cc = accCon.getAccessibleChildCount();
+        long cc = accCon.getAccessibleChildCount();
 
         if (cc > 500) {
             return cc;
         }
 
-        for (int i = 0; i < cc; i++) {
+        for (long i = 0; i < cc; i++) {
             try {
                 if ((accCon.getAccessibleChild(i).getAccessibleContext()
                           .getAccessibleStateSet()
@@ -558,7 +558,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
         return ret;
     }
 
-    protected static boolean isSelectable(Object Testcase, int index) {
+    protected static boolean isSelectable(Object Testcase, long index) {
         XAccessibleContext accCon = UnoRuntime.queryInterface(
                                             XAccessibleContext.class, Testcase);
         boolean res = false;

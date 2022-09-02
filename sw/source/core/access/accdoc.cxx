@@ -126,13 +126,13 @@ void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
     }
 }
 
-sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount()
+sal_Int64 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
 
     // ThrowIfDisposed is called by parent
 
-    sal_Int32 nChildren = SwAccessibleContext::getAccessibleChildCount();
+    sal_Int64 nChildren = SwAccessibleContext::getAccessibleChildCount();
     if( !IsDisposing() && mpChildWin )
         nChildren++;
 
@@ -140,7 +140,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount()
 }
 
 uno::Reference< XAccessible> SAL_CALL
-    SwAccessibleDocumentBase::getAccessibleChild( sal_Int32 nIndex )
+    SwAccessibleDocumentBase::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -162,15 +162,15 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessiblePar
     return mxParent;
 }
 
-sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
 
     uno::Reference < XAccessibleContext > xAcc( mxParent->getAccessibleContext() );
     uno::Reference < XAccessible > xThis( this );
-    sal_Int32 nCount = xAcc->getAccessibleChildCount();
+    sal_Int64 nCount = xAcc->getAccessibleChildCount();
 
-    for( sal_Int32 i=0; i < nCount; i++ )
+    for( sal_Int64 i=0; i < nCount; i++ )
     {
         try
         {
@@ -469,13 +469,13 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
 // XAccessibleSelection
 
 void SwAccessibleDocument::selectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     maSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     return maSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
@@ -489,20 +489,20 @@ void SwAccessibleDocument::selectAllAccessibleChildren(  )
     maSelectionHelper.selectAllAccessibleChildren();
 }
 
-sal_Int32 SwAccessibleDocument::getSelectedAccessibleChildCount(  )
+sal_Int64 SwAccessibleDocument::getSelectedAccessibleChildCount(  )
 {
     return maSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int64 nSelectedChildIndex )
 {
     return maSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 // index has to be treated as global child index.
 void SwAccessibleDocument::deselectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }

@@ -93,7 +93,7 @@ void AccessibleOutlineView::ViewForwarderChanged()
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     AccessibleOutlineView::getAccessibleChildCount()
 {
     ThrowIfDisposed ();
@@ -103,7 +103,7 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleOutlineView::getAccessibleChild (sal_Int32 nIndex)
+    AccessibleOutlineView::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed ();
     // Forward request to children manager.

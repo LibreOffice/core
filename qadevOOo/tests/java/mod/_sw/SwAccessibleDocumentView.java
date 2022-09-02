@@ -126,8 +126,8 @@ public class SwAccessibleDocumentView extends TestCase {
             if (first) SearchedContext = ac;
                 else first=true;
         } else {
-            int k = ac.getAccessibleChildCount();
-            for (int i=0;i<k;i++) {
+            long k = ac.getAccessibleChildCount();
+            for (long i = 0; i < k; i++) {
                 try {
                     getAccessibleObjectForRole(ac.getAccessibleChild(i),role);
                     if (SearchedContext != null) return ;

@@ -330,13 +330,13 @@ public:
         @attention Don't call with locked mutexes. You may hold
         the solar mutex, but this method acquires it anyway.
     */
-    sal_Int32 GetChildCount() const;
+    sal_Int64 GetChildCount() const;
     /** Implements getAccessibleChild
 
         @attention Don't call with locked mutexes. You may hold
         the solar mutex, but this method acquires it anyway.
     */
-    css::uno::Reference<css::accessibility::XAccessible> GetChild(sal_Int32 i);
+    css::uno::Reference<css::accessibility::XAccessible> GetChild(sal_Int64 i);
 
     // XAccessibleEventBroadcaster child related methods
 

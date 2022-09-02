@@ -263,7 +263,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
 
 // =====  XAccessibleExtendedTable  ========================================
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -276,10 +276,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 
     nRow -= maRange.aStart.Row();
     nColumn -= maRange.aStart.Col();
-    return (nRow * (maRange.aEnd.Col() + 1)) + nColumn;
+    return (static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(maRange.aEnd.Col() + 1)) + nColumn;
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -290,7 +290,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
     return nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -303,7 +303,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 
 // =====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -312,15 +312,13 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
     // this needs a radical re-think.
     sal_Int64 nMax = static_cast<sal_Int64>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
                      static_cast<sal_Int64>(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-    if (nMax > SAL_MAX_INT32)
-        nMax = SAL_MAX_INT32;
     if (nMax < 0)
         return 0;
-    return static_cast<sal_Int32>(nMax);
+    return nMax;
 }
 
 uno::Reference< XAccessible > SAL_CALL
-    ScAccessibleTableBase::getAccessibleChild(sal_Int32 nIndex)
+    ScAccessibleTableBase::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -369,12 +367,12 @@ sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleStateSet()
 
     ///=====  XAccessibleSelection  ===========================================
 
-void SAL_CALL ScAccessibleTableBase::selectAccessibleChild( sal_Int32 /* nChildIndex */ )
+void SAL_CALL ScAccessibleTableBase::selectAccessibleChild( sal_Int64 /* nChildIndex */ )
 {
 }
 
 sal_Bool SAL_CALL
-        ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
+        ScAccessibleTableBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     // I don't need to guard, because the called functions have a guard
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
@@ -391,20 +389,20 @@ void SAL_CALL ScAccessibleTableBase::selectAllAccessibleChildren()
 {
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
         ScAccessibleTableBase::getSelectedAccessibleChildCount(  )
 {
     return 0;
 }
 
 uno::Reference<XAccessible > SAL_CALL
-        ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
+        ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int64 /* nSelectedChildIndex */ )
 {
     uno::Reference < XAccessible > xAccessible;
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
+void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int64 /* nSelectedChildIndex */ )
 {
 }
 

@@ -287,7 +287,7 @@ void SAL_CALL OAccessibleMenuItemComponent::disposing()
 // XAccessibleContext
 
 
-sal_Int32 OAccessibleMenuItemComponent::getAccessibleChildCount()
+sal_Int64 OAccessibleMenuItemComponent::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -295,7 +295,7 @@ sal_Int32 OAccessibleMenuItemComponent::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -314,7 +314,7 @@ Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleParent(  )
 }
 
 
-sal_Int32 OAccessibleMenuItemComponent::getAccessibleIndexInParent(  )
+sal_Int64 OAccessibleMenuItemComponent::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 

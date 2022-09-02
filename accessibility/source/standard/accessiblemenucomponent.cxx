@@ -135,7 +135,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuComponent, OAccessibleMenuBaseC
 // XAccessibleContext
 
 
-sal_Int32 OAccessibleMenuComponent::getAccessibleChildCount()
+sal_Int64 OAccessibleMenuComponent::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -143,7 +143,7 @@ sal_Int32 OAccessibleMenuComponent::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > OAccessibleMenuComponent::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > OAccessibleMenuComponent::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -334,7 +334,7 @@ OUString OAccessibleMenuComponent::getToolTipText(  )
 // XAccessibleSelection
 
 
-void OAccessibleMenuComponent::selectAccessibleChild( sal_Int32 nChildIndex )
+void OAccessibleMenuComponent::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -345,7 +345,7 @@ void OAccessibleMenuComponent::selectAccessibleChild( sal_Int32 nChildIndex )
 }
 
 
-sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -370,13 +370,13 @@ void OAccessibleMenuComponent::selectAllAccessibleChildren(  )
 }
 
 
-sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  )
+sal_Int64 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nRet = 0;
+    sal_Int64 nRet = 0;
 
-    for ( sal_Int32 i = 0, nCount = GetChildCount(); i < nCount; i++ )
+    for ( sal_Int64 i = 0, nCount = GetChildCount(); i < nCount; i++ )
     {
         if ( IsChildSelected( i ) )
             ++nRet;
@@ -386,7 +386,7 @@ sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  )
 }
 
 
-Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -395,7 +395,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( s
 
     Reference< XAccessible > xChild;
 
-    for ( sal_Int32 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
+    for ( sal_Int64 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
     {
         if ( IsChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
@@ -408,7 +408,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( s
 }
 
 
-void OAccessibleMenuComponent::deselectAccessibleChild( sal_Int32 nChildIndex )
+void OAccessibleMenuComponent::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

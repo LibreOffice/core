@@ -72,12 +72,12 @@ class AccessibleSelectionHandler
             {
                 VectorNode aVNode =
                     new VectorNode( "Selected Children", aParent);
-                int nSelected = 0;
-                int nCount = ((AccTreeNode)aParent).getContext().
+                long nSelected = 0;
+                long nCount = ((AccTreeNode)aParent).getContext().
                     getAccessibleChildCount();
                 try
                 {
-                    for( int i = 0; i < nCount; i++ )
+                    for( long i = 0; i < nCount; i++ )
                     {
                         try
                         {

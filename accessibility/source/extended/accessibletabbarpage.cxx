@@ -242,13 +242,13 @@ namespace accessibility
     // XAccessibleContext
 
 
-    sal_Int32 AccessibleTabBarPage::getAccessibleChildCount()
+    sal_Int64 AccessibleTabBarPage::getAccessibleChildCount()
     {
         return 0;
     }
 
 
-    Reference< XAccessible > AccessibleTabBarPage::getAccessibleChild( sal_Int32 )
+    Reference< XAccessible > AccessibleTabBarPage::getAccessibleChild( sal_Int64 )
     {
         OExternalLockGuard aGuard( this );
 
@@ -264,11 +264,11 @@ namespace accessibility
     }
 
 
-    sal_Int32 AccessibleTabBarPage::getAccessibleIndexInParent(  )
+    sal_Int64 AccessibleTabBarPage::getAccessibleIndexInParent(  )
     {
         OExternalLockGuard aGuard( this );
 
-        sal_Int32 nIndexInParent = -1;
+        sal_Int64 nIndexInParent = -1;
         if ( m_pTabBar )
             nIndexInParent = m_pTabBar->GetPagePos( m_nPageId );
 

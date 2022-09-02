@@ -134,11 +134,11 @@ Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames()
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nIndexInParent = -1;
+    sal_Int64 nIndexInParent = -1;
 
     if ( m_pMenu )
     {

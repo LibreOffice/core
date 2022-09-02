@@ -1048,8 +1048,8 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                         static_cast< ::accessibility::AccessibleShape* >(xAccGroupShape.get());
                     if( pAccGroupShape )
                     {
-                        sal_Int32 nCount =  pAccGroupShape->getAccessibleChildCount();
-                        for( sal_Int32 i = 0; i < nCount; i++ )
+                        sal_Int64 nCount =  pAccGroupShape->getAccessibleChildCount();
+                        for( sal_Int64 i = 0; i < nCount; i++ )
                         {
                             uno::Reference<XAccessible> xAccShape = pAccGroupShape->getAccessibleChild(i);
                             if (xAccShape.is())
@@ -1677,12 +1677,12 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Int32 nCount(1);
+    sal_Int64 nCount(1);
     if (mpChildrenShapes)
         nCount = mpChildrenShapes->GetCount(); // returns the count of the shapes inclusive the table
 
@@ -1694,14 +1694,14 @@ sal_Int32 SAL_CALL
 
     /// Return the specified child or NULL if index is invalid.
 uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleDocument::getAccessibleChild(sal_Int32 nIndex)
+    ScAccessibleDocument::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
     if (nIndex >= 0)
     {
-        sal_Int32 nCount(1);
+        sal_Int64 nCount(1);
         if (mpChildrenShapes)
         {
             xAccessible = mpChildrenShapes->Get(nIndex); // returns NULL if it is the table or out of range
@@ -1785,7 +1785,7 @@ OUString SAL_CALL
 ///=====  XAccessibleSelection  ===========================================
 
 void SAL_CALL
-    ScAccessibleDocument::selectAccessibleChild( sal_Int32 nChildIndex )
+    ScAccessibleDocument::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1814,7 +1814,7 @@ void SAL_CALL
 }
 
 sal_Bool SAL_CALL
-    ScAccessibleDocument::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    ScAccessibleDocument::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1871,12 +1871,12 @@ void SAL_CALL
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Int32 nCount(0);
+    sal_Int64 nCount(0);
 
     if (mpChildrenShapes)
         nCount = mpChildrenShapes->GetSelectedCount();
@@ -1891,14 +1891,14 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference<XAccessible > SAL_CALL
-    ScAccessibleDocument::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    ScAccessibleDocument::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
     if (mpChildrenShapes)
     {
-        sal_Int32 nCount(getSelectedAccessibleChildCount()); //all shapes and the table
+        sal_Int64 nCount(getSelectedAccessibleChildCount()); //all shapes and the table
         if (nSelectedChildIndex < 0 || nSelectedChildIndex >= nCount)
             throw lang::IndexOutOfBoundsException();
 
@@ -1918,7 +1918,7 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 void SAL_CALL
-    ScAccessibleDocument::deselectAccessibleChild( sal_Int32 nChildIndex )
+    ScAccessibleDocument::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

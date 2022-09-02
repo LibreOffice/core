@@ -58,9 +58,9 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     // override to calculate this on demand
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-                            getAccessibleChild( sal_Int32 i ) override;
+                            getAccessibleChild( sal_Int64 i ) override;
 
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 

@@ -145,9 +145,10 @@ void AtkListener::updateChildList(
     }
     else
     {
-        sal_Int32 nChildren = pContext->getAccessibleChildCount();
+        sal_Int64 nChildren = pContext->getAccessibleChildCount();
+        assert(o3tl::make_unsigned(nChildren) < m_aChildList.max_size());
         m_aChildList.resize(nChildren);
-        for(sal_Int32 n = 0; n < nChildren; n++)
+        for(sal_Int64 n = 0; n < nChildren; n++)
         {
             try
             {
@@ -155,7 +156,7 @@ void AtkListener::updateChildList(
             }
             catch (lang::IndexOutOfBoundsException const&)
             {
-                sal_Int32 nChildren2 = pContext->getAccessibleChildCount();
+                sal_Int64 nChildren2 = pContext->getAccessibleChildCount();
                 assert(nChildren2 <= n && "consistency?");
                 m_aChildList.resize(std::min(nChildren2, n));
                 break;

@@ -345,7 +345,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
     return false;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -356,11 +356,11 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow,
         throw lang::IndexOutOfBoundsException();
 
     //  index iterates horizontally
-    sal_Int32 nRet = nRow * mpTableInfo->GetCols() + nColumn;
+    sal_Int64 nRet = static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(mpTableInfo->GetCols()) + nColumn;
     return nRet;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -374,7 +374,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int32 nChildI
     return nRow;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -452,7 +452,7 @@ void SAL_CALL ScAccessiblePreviewTable::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -461,11 +461,11 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount()
 
     tools::Long nRet = 0;
     if ( mpTableInfo )
-        nRet = static_cast<sal_Int32>(mpTableInfo->GetCols()) * mpTableInfo->GetRows();
+        nRet = static_cast<sal_Int64>(mpTableInfo->GetCols()) * mpTableInfo->GetRows();
     return nRet;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleChild( sal_Int32 nIndex )
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -480,8 +480,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCh
         {
             // nCol, nRow are within the visible table, not the document
             sal_Int32 nCol = nIndex % nColumns;
-            sal_Int32 nRow = nIndex / nColumns;
-
+            sal_Int64 nRow = nIndex / nColumns;
+            assert(nRow <= std::numeric_limits<sal_Int32>::max());
             xRet = getAccessibleCellAt( nRow, nCol );
         }
     }
@@ -492,7 +492,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCh
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndexInParent()
 {
     return mnIndex;
 }

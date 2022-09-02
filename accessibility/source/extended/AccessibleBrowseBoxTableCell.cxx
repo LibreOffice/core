@@ -142,14 +142,14 @@ namespace accessibility
     }
 
     /** @return  The count of visible children. */
-    sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleChildCount()
+    sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleChildCount()
     {
         return 0;
     }
 
     /** @return  The XAccessible interface of the specified child. */
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        AccessibleBrowseBoxTableCell::getAccessibleChild( sal_Int32 )
+        AccessibleBrowseBoxTableCell::getAccessibleChild( sal_Int64 )
     {
         throw css::lang::IndexOutOfBoundsException();
     }
@@ -189,12 +189,12 @@ namespace accessibility
 
     // XAccessibleContext -----------------------------------------------------
 
-    sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
+    sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
 
-        return /*vcl::BBINDEX_FIRSTCONTROL*/ m_nOffset + ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
+        return /*vcl::BBINDEX_FIRSTCONTROL*/ m_nOffset + (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(mpBrowseBox->GetColumnCount())) + getColumnPos();
     }
 
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCaretPosition(  )

@@ -82,10 +82,10 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-                            getAccessibleChild( sal_Int32 i ) override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+                            getAccessibleChild( sal_Int64 i ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     //=====  XServiceInfo  ====================================================

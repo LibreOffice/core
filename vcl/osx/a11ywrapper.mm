@@ -342,8 +342,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
             Reference< XAccessibleContext > xContext( [ self accessibleContext ] );
 
-            sal_Int32 cnt = xContext -> getAccessibleChildCount();
-            for ( sal_Int32 i = 0; i < cnt; i++ ) {
+            sal_Int64 cnt = xContext -> getAccessibleChildCount();
+            for ( sal_Int64 i = 0; i < cnt; i++ ) {
                 Reference< XAccessible > xChild( xContext -> getAccessibleChild( i ) );
                 if( xChild.is() ) {
                     Reference< XAccessibleContext > xChildContext( xChild -> getAccessibleContext() );
@@ -744,7 +744,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     NSString * nativeSubrole = nil;
     NSString * title = nil;
     NSMutableArray * attributeNames = nil;
-    sal_Int32 nAccessibleChildren = 0;
+    sal_Int64 nAccessibleChildren = 0;
     try {
         // Default Attributes
         attributeNames = [ NSMutableArray arrayWithObjects:
@@ -1000,7 +1000,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
         // apparently necessary as a special treatment for e.g. comboboxes
         if ( !hitChild.is() ) {
             bool bSafeToIterate = true;
-            sal_Int32 nCount = rxAccessibleContext -> getAccessibleChildCount();
+            sal_Int64 nCount = rxAccessibleContext -> getAccessibleChildCount();
 
             if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
                 bSafeToIterate = false;
@@ -1011,7 +1011,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             }
 
             if( bSafeToIterate ) {
-                for ( int i = 0; i < rxAccessibleContext -> getAccessibleChildCount(); i++ ) {
+                for ( sal_Int64 i = 0; i < rxAccessibleContext -> getAccessibleChildCount(); i++ ) {
                     Reference < XAccessible > rxAccessibleChild = rxAccessibleContext -> getAccessibleChild ( i );
                     if ( rxAccessibleChild.is() && rxAccessibleChild -> getAccessibleContext().is() && rxAccessibleChild -> getAccessibleContext() -> getAccessibleRole() != AccessibleRole::LIST ) {
                         Reference < XAccessibleContext > myHitChild = hitTestRunner ( point, rxAccessibleChild -> getAccessibleContext() );

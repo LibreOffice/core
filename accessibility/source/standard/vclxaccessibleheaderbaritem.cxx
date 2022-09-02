@@ -118,13 +118,13 @@ Reference< XAccessibleContext > VCLXAccessibleHeaderBarItem::getAccessibleContex
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleHeaderBarItem::getAccessibleChildCount()
 {
     return 0;
 }
 
 
-Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -149,7 +149,7 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleParent()
 }
 
 
-sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleIndexInParent()
+sal_Int64 VCLXAccessibleHeaderBarItem::getAccessibleIndexInParent()
 {
     OExternalLockGuard aGuard( this );
     return m_nIndexInParent - 1;

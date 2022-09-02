@@ -31,14 +31,14 @@ namespace accessibility
                         ::vcl::table::IAccessibleTable& _rTable,
                         ::vcl::table::AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+        virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
         /** @return  The XAccessible interface of the specified child. */
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-            getAccessibleChild( sal_Int32 nChildIndex ) override;
+            getAccessibleChild( sal_Int64 nChildIndex ) override;
 
         /** @return  The index of this object among the parent's children. */
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
         /** Grabs the focus to the GridControl. */
         virtual void SAL_CALL grabFocus() override;

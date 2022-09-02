@@ -257,7 +257,7 @@ void DocumentFocusListener::attachRecursive(
 
     if( ! (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
     {
-        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+        sal_Int64 n, nmax = xContext->getAccessibleChildCount();
         for( n = 0; n < nmax; n++ )
         {
             uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
@@ -308,7 +308,7 @@ void DocumentFocusListener::detachRecursive(
 
     if( ! (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
     {
-        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+        sal_Int64 n, nmax = xContext->getAccessibleChildCount();
         for( n = 0; n < nmax; n++ )
         {
             uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
@@ -363,7 +363,6 @@ static void notify_toolbox_item_focus(ToolBox *pToolBox)
     ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
     if( nPos != ToolBox::ITEM_NOTFOUND )
         atk_wrapper_focus_tracker_notify_when_idle( xContext->getAccessibleChild( nPos ) );
-            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32
 }
 
 static void handle_toolbox_highlight(vcl::Window *pWindow)

@@ -640,14 +640,14 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL AccessibleEditableTextPara::getAccessibleChildCount()
+    sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleChildCount()
     {
         SolarMutexGuard aGuard;
 
         return HaveChildren() ? 1 : 0;
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleChild( sal_Int32 i )
+    uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleChild( sal_Int64 i )
     {
         SolarMutexGuard aGuard;
 
@@ -685,7 +685,7 @@ namespace accessibility
         return mxParent;
     }
 
-    sal_Int32 SAL_CALL AccessibleEditableTextPara::getAccessibleIndexInParent()
+    sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleIndexInParent()
     {
         return mnIndexInParent;
     }

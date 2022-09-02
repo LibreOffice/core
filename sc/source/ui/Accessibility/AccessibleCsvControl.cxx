@@ -274,13 +274,13 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
 
 // XAccessibleContext ---------------------------------------------------------
 
-sal_Int32 SAL_CALL ScAccessibleCsvRuler::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleCsvRuler::getAccessibleChildCount()
 {
     ensureAlive();
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvRuler::getAccessibleChild( sal_Int32 /* nIndex */ )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvRuler::getAccessibleChild( sal_Int64 /* nIndex */ )
 {
     ensureAlive();
     throw IndexOutOfBoundsException();
@@ -813,7 +813,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
 
 // XAccessibleContext ---------------------------------------------------------
 
-sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -822,7 +822,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount()
 
 Reference<XAccessible> ScAccessibleCsvGrid::getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn)
 {
-    sal_Int32 nIndex = implGetIndex(nRow, nColumn);
+    sal_Int64 nIndex = implGetIndex(nRow, nColumn);
 
     XAccessibleSet::iterator aI = maAccessibleChildren.lower_bound(nIndex);
     if (aI != maAccessibleChildren.end() && !(maAccessibleChildren.key_comp()(nIndex, aI->first)))
@@ -836,7 +836,7 @@ Reference<XAccessible> ScAccessibleCsvGrid::getAccessibleCell(sal_Int32 nRow, sa
     return xNew;
 }
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_Int32 nIndex )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1006,7 +1006,7 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 /* nRow *
     return isAccessibleColumnSelected( nColumn );
 }
 
-sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 SAL_CALL ScAccessibleCsvGrid::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1014,7 +1014,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleIndex( sal_Int32 nRow, sal_
     return implGetIndex( nRow, nColumn );
 }
 
-sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRow( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1022,7 +1022,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRow( sal_Int32 nChildIndex 
     return implGetRow( nChildIndex );
 }
 
-sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildIndex )
+sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1032,7 +1032,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildInd
 
 // XAccessibleSelection -------------------------------------------------------
 
-void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1044,7 +1044,7 @@ void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int32 nChildIndex 
         implSelectColumn( nColumn, true );
 }
 
-sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1065,14 +1065,14 @@ void SAL_CALL ScAccessibleCsvGrid::selectAllAccessibleChildren()
     selectAccessibleChild( 0 );
 }
 
-sal_Int32 SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetRowCount() * implGetSelColumnCount();
+    return static_cast<sal_Int64>(implGetRowCount()) * static_cast<sal_Int64>(implGetSelColumnCount());
 }
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1085,10 +1085,11 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChil
     return getAccessibleCellAt( nRow, nColumn );
 }
 
-void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
+    ensureValidIndex(nSelectedChildIndex);
     sal_Int32 nColumns = implGetSelColumnCount();
     if( nColumns == 0 )
         throw IndexOutOfBoundsException();
@@ -1194,7 +1195,7 @@ OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleDescription()
     return ScResId( STR_ACC_CSVGRID_DESCR );
 }
 
-void ScAccessibleCsvGrid::ensureValidIndex( sal_Int32 nIndex ) const
+void ScAccessibleCsvGrid::ensureValidIndex( sal_Int64 nIndex ) const
 {
     if( (nIndex < 0) || (nIndex >= implGetCellCount()) )
         throw IndexOutOfBoundsException();
@@ -1329,17 +1330,17 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
 
 // XAccessibleContext -----------------------------------------------------
 
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleCsvCell::getAccessibleChildCount()
 {
     return AccessibleStaticTextBase::getAccessibleChildCount();
 }
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvCell::getAccessibleChild( sal_Int32 nIndex )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvCell::getAccessibleChild( sal_Int64 nIndex )
 {
     return AccessibleStaticTextBase::getAccessibleChild( nIndex );
 }
 
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
     ensureAlive();

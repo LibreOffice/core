@@ -68,11 +68,11 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             return xAccParent;
         }
 
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override
+        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override
         {
             std::scoped_lock aGuard(maMutex);
 
-            sal_Int32 nIndex( -1 );
+            sal_Int64 nIndex( -1 );
 
             if ( mpAnchorFrame && GetWindow() &&
                  mrViewShell.GetAccessibleMap() )

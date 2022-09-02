@@ -388,13 +388,13 @@ namespace comphelper
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapperHelper, OComponentProxyAggregationHelper, OAccessibleContextWrapperHelper_Base )
 
 
-    sal_Int32 OAccessibleContextWrapperHelper::baseGetAccessibleChildCount(  )
+    sal_Int64 OAccessibleContextWrapperHelper::baseGetAccessibleChildCount(  )
     {
         return m_xInnerContext->getAccessibleChildCount();
     }
 
 
-    Reference< XAccessible > OAccessibleContextWrapperHelper::baseGetAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > OAccessibleContextWrapperHelper::baseGetAccessibleChild( sal_Int64 i )
     {
         // get the child of the wrapped component
         Reference< XAccessible > xInnerChild = m_xInnerContext->getAccessibleChild( i );
@@ -494,13 +494,13 @@ namespace comphelper
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  )
     {
         return baseGetAccessibleChildCount();
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild( sal_Int64 i )
     {
         return baseGetAccessibleChild( i );
     }
@@ -512,7 +512,7 @@ namespace comphelper
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleContextWrapper::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleIndexInParent(  )
     {
         return m_xInnerContext->getAccessibleIndexInParent();
     }

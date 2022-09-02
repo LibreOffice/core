@@ -32,6 +32,7 @@
 #pragma clang diagnostic pop
 #endif
 
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -684,8 +685,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectRow(long row)
         lColumnCount = pRXTable->getAccessibleColumnCount();
         for(lCol = 0; lCol < lColumnCount; lCol ++)
         {
-            long lChildIndex = pRXTable->getAccessibleIndex(row, lCol);
-            pRSelection->selectAccessibleChild(lChildIndex);
+            sal_Int64 nChildIndex = pRXTable->getAccessibleIndex(row, lCol);
+            pRSelection->selectAccessibleChild(nChildIndex);
         }
 
         return S_OK;
@@ -728,8 +729,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
         lRowCount = pRXTable->getAccessibleRowCount();
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
-            long lChildIndex = pRXTable->getAccessibleIndex(lRow, column);
-            pRSelection->selectAccessibleChild(lChildIndex);
+            sal_Int64 nChildIndex = pRXTable->getAccessibleIndex(lRow, column);
+            pRSelection->selectAccessibleChild(nChildIndex);
         }
 
         return S_OK;
@@ -775,8 +776,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
         lColumnCount = pRXTable->getAccessibleColumnCount();
         for(lColumn = 0; lColumn < lColumnCount; lColumn ++)
         {
-            long lChildIndex = pRXTable->getAccessibleIndex(row, lColumn);
-            pRSelection->deselectAccessibleChild(lChildIndex);
+            sal_Int64 nChildIndex = pRXTable->getAccessibleIndex(row, lColumn);
+            pRSelection->deselectAccessibleChild(nChildIndex);
         }
 
         return S_OK;
@@ -823,8 +824,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
 
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
-            long lChildIndex = pRXTable->getAccessibleIndex(lRow, column);
-            pRSelection->deselectAccessibleChild(lChildIndex);
+            sal_Int64 nChildIndex = pRXTable->getAccessibleIndex(lRow, column);
+            pRSelection->deselectAccessibleChild(nChildIndex);
         }
         return S_OK;
     }
@@ -931,7 +932,17 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_childIndex(long RowIndex , long
     if(!pRXTable.is())
         return E_FAIL;
 
-    *childIndex = pRXTable->getAccessibleIndex(RowIndex, columnIndex);
+    sal_Int64 nIndex = pRXTable->getAccessibleIndex(RowIndex, columnIndex);
+    if (nIndex > std::numeric_limits<long>::max())
+    {
+        // use -2 when the child index is too large to fit into 32 bit to neither use the
+        // valid index of another child nor -1, which is more commonly used to indicate that
+        // a child is no more inside of a parent or invalid otherwise
+        SAL_WARN("vcl.qt", "CAccTable::get_childIndex: Child index exceeds maximum long value, "
+                           "returning -2.");
+        nIndex = -2;
+    }
+    *childIndex = nIndex;
     return S_OK;
 
     } catch(...) { return E_FAIL; }
@@ -973,7 +984,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCo
     if(!pRSelection.is())
         return E_FAIL;
 
-    *childCount = pRSelection->getSelectedAccessibleChildCount();
+    sal_Int64 nSelected = pRSelection->getSelectedAccessibleChildCount();
+    if (nSelected > std::numeric_limits<long>::max())
+    {
+        SAL_WARN("iacc2", "CAccTable::get_nSelectedChildren: Selected item count exceeds maximum long value, "
+                          "using max long.");
+        nSelected = std::numeric_limits<long>::max();
+    }
+    *childCount = nSelected;
     return S_OK;
 
     } catch(...) { return E_FAIL; }
@@ -1011,13 +1029,18 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
     if(!pRSelection.is())
         return E_FAIL;
 
-    long childCount = pRSelection->getSelectedAccessibleChildCount() ;
+    sal_Int64 nChildCount = pRSelection->getSelectedAccessibleChildCount();
+    if (nChildCount > std::numeric_limits<long>::max())
+    {
+        SAL_WARN("iacc2", "CAccTable::get_selectedChildren: Selected child count exceeds maximum long value, "
+                          "using max long.");
+        nChildCount = std::numeric_limits<long>::max();
+    }
 
-    *nChildren = childCount;
+    *nChildren = nChildCount;
+    *children = static_cast<long*>(CoTaskMemAlloc(nChildCount * sizeof(long)));
 
-    *children = static_cast<long*>(CoTaskMemAlloc(childCount * sizeof(long)));
-
-    for( long i = 0; i< childCount; i++)
+    for( long i = 0; i< nChildCount; i++)
     {
         Reference<XAccessible> pRAcc = pRSelection->getSelectedAccessibleChild(i);
         if(pRAcc.is())
@@ -1026,8 +1049,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
             if( !pRContext.is() )
                 return E_FAIL;
 
-            long childIndex = pRContext->getAccessibleIndexInParent();
-            (*children)[i] = childIndex;
+
+            sal_Int64 nChildIndex =  pRContext->getAccessibleIndexInParent();
+            if (nChildIndex > std::numeric_limits<long>::max())
+            {
+                SAL_WARN("iacc2", "CAccTable::get_selectedChildren: Child index exceeds maximum long value, "
+                                  "using max long.");
+                nChildIndex = std::numeric_limits<long>::max();
+            }
+            (*children)[i] = nChildIndex;
         }
     }
 
@@ -1061,7 +1091,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedCells(IUnknown * * * ce
     if (!xSelection.is())
         return E_FAIL;
 
-    const long nSelected = xSelection->getSelectedAccessibleChildCount();
+    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+    if (nSelected > std::numeric_limits<long>::max())
+    {
+        SAL_WARN("iacc2", "CAccTable::get_selectedCells: Selected cell count exceeds maximum long value, "
+                          "using max long.");
+        nSelected = std::numeric_limits<long>::max();
+    }
     *nSelectedCells = nSelected;
 
     *cells = static_cast<IUnknown**>(CoTaskMemAlloc(nSelected * sizeof(IUnknown*)));

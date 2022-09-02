@@ -130,7 +130,7 @@ Paragraph::getAccessibleContext()
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getAccessibleChildCount()
+sal_Int64 SAL_CALL Paragraph::getAccessibleChildCount()
 {
     checkDisposed();
     return 0;
@@ -138,7 +138,7 @@ Paragraph::getAccessibleContext()
 
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-Paragraph::getAccessibleChild(::sal_Int32)
+Paragraph::getAccessibleChild(sal_Int64)
 {
     checkDisposed();
     throw css::lang::IndexOutOfBoundsException(
@@ -156,7 +156,7 @@ Paragraph::getAccessibleParent()
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL Paragraph::getAccessibleIndexInParent()
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphIndex(this);
@@ -1308,7 +1308,7 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 }
 
 // virtual
-::sal_Int32 SAL_CALL Document::getAccessibleChildCount()
+sal_Int64 SAL_CALL Document::getAccessibleChildCount()
 {
     ::comphelper::OExternalLockGuard aGuard(this);
     init();
@@ -1317,7 +1317,7 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-Document::getAccessibleChild(::sal_Int32 i)
+Document::getAccessibleChild(sal_Int64 i)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
     init();
@@ -1522,7 +1522,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             if (!isAlive())
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
-            ::sal_Int32 count = getAccessibleChildCount();
+            sal_Int64 count = getAccessibleChildCount();
             bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
@@ -1547,7 +1547,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             if (!isAlive())
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
-            ::sal_Int32 count = getAccessibleChildCount();
+            sal_Int64 count = getAccessibleChildCount();
             bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
@@ -2072,7 +2072,7 @@ void Document::handleSelectionChangeNotification()
         if (xParagraph.is())
         {
             //disable the first event when user types in empty field.
-            ::sal_Int32 count = getAccessibleChildCount();
+            sal_Int64 count = getAccessibleChildCount();
             bool bEmpty = count > 1;
             //if (aIt != m_aFocused)
             if (aIt != m_aFocused && bEmpty)

@@ -120,7 +120,7 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount()
     return mpTextHelper->GetChildCount();
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChild(sal_Int32 nIndex)
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

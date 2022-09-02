@@ -103,14 +103,14 @@ public:
 
     //-----  XAccessibleContext  ----------------------------------------------
 
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex) override;
+        getAccessibleChild (sal_Int64 nIndex) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleParent() override;
 
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
@@ -750,17 +750,15 @@ Reference<XAccessibleContext> SAL_CALL
 
 //-----  XAccessibleContext  ----------------------------------------------
 
-sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getAccessibleChildCount()
+sal_Int64 SAL_CALL PresenterAccessible::AccessibleObject::getAccessibleChildCount()
 {
     ThrowIfDisposed();
 
-    const sal_Int32 nChildCount (maChildren.size());
-
-    return nChildCount;
+    return maChildren.size();
 }
 
 Reference<XAccessible> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleChild (sal_Int32 nIndex)
+    PresenterAccessible::AccessibleObject::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed();
 
@@ -778,7 +776,7 @@ Reference<XAccessible> SAL_CALL
     return mxParentAccessible;
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
@@ -787,7 +785,7 @@ sal_Int32 SAL_CALL
     if (mxParentAccessible.is())
     {
         const Reference<XAccessibleContext> xContext (mxParentAccessible->getAccessibleContext());
-        for (sal_Int32 nIndex=0,nCount=xContext->getAccessibleChildCount();
+        for (sal_Int64 nIndex = 0, nCount=xContext->getAccessibleChildCount();
              nIndex<nCount;
              ++nIndex)
         {

@@ -77,7 +77,7 @@ class AccessibleCellHandler extends NodeHandler
                 {
                     case 0:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nRow = xTable.getAccessibleRow( nChild );
 
                             aChild = new StringNode ("# table row: " + nRow, aParent);
@@ -85,7 +85,7 @@ class AccessibleCellHandler extends NodeHandler
                         break;
                     case 1:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nCol = xTable.getAccessibleColumn( nChild );
 
                             aChild = new StringNode ("# table column: " + nCol, aParent);
@@ -93,7 +93,7 @@ class AccessibleCellHandler extends NodeHandler
                         break;
                     case 2:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nRow = xTable.getAccessibleRow( nChild );
                             int nCol = xTable.getAccessibleColumn( nChild );
                             int nExt = xTable.getAccessibleRowExtentAt( nRow, nCol );
@@ -103,7 +103,7 @@ class AccessibleCellHandler extends NodeHandler
                         break;
                      case 3:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nRow = xTable.getAccessibleRow( nChild );
                             int nCol = xTable.getAccessibleColumn( nChild );
                             int nExt = xTable.getAccessibleColumnExtentAt( nRow, nCol );
@@ -113,7 +113,7 @@ class AccessibleCellHandler extends NodeHandler
                         break;
                      case 4:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nRow = xTable.getAccessibleRow( nChild );
                             int nCol = xTable.getAccessibleColumn( nChild );
                             XAccessible xChild =
@@ -135,7 +135,7 @@ class AccessibleCellHandler extends NodeHandler
                         break;
                      case 6:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nRow = xTable.getAccessibleRow( nChild );
                             boolean bSelected =
                                 xTable.isAccessibleRowSelected( nRow );
@@ -145,7 +145,7 @@ class AccessibleCellHandler extends NodeHandler
                         break;
                      case 7:
                         {
-                            int nChild = xContext.getAccessibleIndexInParent();
+                            long nChild = xContext.getAccessibleIndexInParent();
                             int nCol = xTable.getAccessibleColumn( nChild );
                             boolean bSelected =
                                 xTable.isAccessibleColumnSelected( nCol );

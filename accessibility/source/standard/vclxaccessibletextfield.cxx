@@ -63,13 +63,13 @@ Reference<XAccessibleContext> SAL_CALL
 
 // XAccessibleContext
 
-sal_Int32 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount()
+sal_Int64 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount()
 {
     return 0;
 }
 
 
-Reference<XAccessible> SAL_CALL VCLXAccessibleTextField::getAccessibleChild (sal_Int32)
+Reference<XAccessible> SAL_CALL VCLXAccessibleTextField::getAccessibleChild (sal_Int64)
 {
     throw IndexOutOfBoundsException();
 }

@@ -69,13 +69,13 @@ public:
         actual list.  The text field is not provided for non drop down list
         boxes.
     */
-    sal_Int32 SAL_CALL getAccessibleChildCount() final override;
+    sal_Int64 SAL_CALL getAccessibleChildCount() final override;
     /** For drop down list boxes the text field is a not editable
         VCLXAccessibleTextField, for combo boxes it is an
         editable VCLXAccessibleEdit.
     */
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 i) override;
+        getAccessibleChild (sal_Int64 i) override;
     /** The role is always AccessibleRole::COMBO_BOX.
     */
     sal_Int16 SAL_CALL getAccessibleRole() override;
@@ -152,7 +152,7 @@ protected:
 
     virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
-    sal_Int32 implGetAccessibleChildCount();
+    sal_Int64 implGetAccessibleChildCount();
 };
 
 

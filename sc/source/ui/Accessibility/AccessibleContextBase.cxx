@@ -222,14 +222,14 @@ sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL ScAccessibleContextBase::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessibleContextBase::getAccessibleChildCount()
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return 0;
 }
 
 uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleContextBase::getAccessibleChild(sal_Int32 /* nIndex */)
+    ScAccessibleContextBase::getAccessibleChild(sal_Int64 /* nIndex */)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
@@ -241,7 +241,7 @@ uno::Reference<XAccessible> SAL_CALL
     return mxParent;
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
@@ -249,7 +249,7 @@ sal_Int32 SAL_CALL
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
    //   object.
-    sal_Int32 nIndex(-1);
+    sal_Int64 nIndex(-1);
 
     //  Iterate over all the parent's children and search for this object.
     if (mxParent.is())
@@ -258,8 +258,8 @@ sal_Int32 SAL_CALL
             mxParent->getAccessibleContext());
         if (xParentContext.is())
         {
-            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for (sal_Int32 i=0; i<nChildCount; ++i)
+            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+            for (sal_Int64 i=0; i<nChildCount; ++i)
             {
                 uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
                 if (xChild.is() && xChild.get() == this)

@@ -147,16 +147,19 @@ namespace accessibility
 
     // XAccessibleContext
 
-    sal_Int32 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChildCount(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
         return getCtrl()->GetEntryCount();
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChild( sal_Int64 i )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
+
+        if (i < 0 || i >= getAccessibleChildCount())
+            throw IndexOutOfBoundsException();
 
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry(i);
@@ -202,9 +205,12 @@ namespace accessibility
 
     // XAccessibleSelection
 
-    void SAL_CALL AccessibleIconChoiceCtrl::selectAccessibleChild( sal_Int32 nChildIndex )
+    void SAL_CALL AccessibleIconChoiceCtrl::selectAccessibleChild( sal_Int64 nChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
+
+        if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+            throw IndexOutOfBoundsException();
 
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( nChildIndex );
@@ -214,9 +220,12 @@ namespace accessibility
         pCtrl->SetCursor( pEntry );
     }
 
-    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int64 nChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
+
+        if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+            throw IndexOutOfBoundsException();
 
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( nChildIndex );
@@ -246,11 +255,11 @@ namespace accessibility
         }
     }
 
-    sal_Int32 SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChildCount(  )
+    sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChildCount(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        sal_Int32 nSelCount = 0;
+        sal_Int64 nSelCount = 0;
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();
         for ( sal_Int32 i = 0; i < nCount; ++i )
@@ -263,7 +272,7 @@ namespace accessibility
         return nSelCount;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -290,7 +299,7 @@ namespace accessibility
         return xChild;
     }
 
-    void SAL_CALL AccessibleIconChoiceCtrl::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+    void SAL_CALL AccessibleIconChoiceCtrl::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 

@@ -46,7 +46,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
         @return
             The returned value is non-negative.
     */
-    long getAccessibleChildCount();
+    hyper getAccessibleChildCount();
 
     /** Returns the i-th child of this object.
 
@@ -67,7 +67,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
             ::com::sun::star::lang::IndexOutOfBoundsException
             exception is thrown.
     */
-    XAccessible getAccessibleChild ([in] long i)
+    XAccessible getAccessibleChild ([in] hyper i)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /** Returns the parent of this object.
@@ -91,7 +91,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
         @return
            The returned index is zero based.
     */
-    long getAccessibleIndexInParent ();
+    hyper getAccessibleIndexInParent ();
 
     /** Returns the role of this object.
 

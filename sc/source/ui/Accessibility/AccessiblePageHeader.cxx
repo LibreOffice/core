@@ -149,7 +149,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
         SolarMutexGuard aGuard;
         IsObjectValid();
 
-        sal_Int32 nCount(getAccessibleChildCount()); // fill the areas
+        sal_Int64 nCount(getAccessibleChildCount()); // fill the areas
 
         if (nCount)
         {
@@ -182,7 +182,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -212,7 +212,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
     return mnChildCount;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChild( sal_Int32 nIndex )
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -243,7 +243,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent()
 {
     return mnIndex;
 }

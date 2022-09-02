@@ -61,13 +61,13 @@ public:
 
     /// Return the number of currently visible children.
     /// override to calculate this on demand
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild(sal_Int32 nIndex) override;
+        getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
     virtual sal_Int64 SAL_CALL

@@ -793,7 +793,7 @@ public class _XAccessibleTable extends MultiMethodTest {
 
         try {
             log.print("getAccessibleIndex(-1," + (colCount-1) + "):");
-            int indx = oObj.getAccessibleIndex(-1, colCount - 1);
+            long indx = oObj.getAccessibleIndex(-1, colCount - 1);
             log.println(indx);
             log.println("Exception was expected");
             res &= false;
@@ -804,7 +804,7 @@ public class _XAccessibleTable extends MultiMethodTest {
 
         try {
             log.print("getAccessibleIndex(" + (rowCount-1) + ",-1):");
-            int indx = oObj.getAccessibleIndex(rowCount - 1, -1);
+            long indx = oObj.getAccessibleIndex(rowCount - 1, -1);
             log.println(indx);
             log.println("Exception was expected");
             res &= false;
@@ -815,7 +815,7 @@ public class _XAccessibleTable extends MultiMethodTest {
 
         try {
             log.print("getAccessibleIndex(0," + colCount + "):");
-            int indx = oObj.getAccessibleIndex(0, colCount);
+            long indx = oObj.getAccessibleIndex(0, colCount);
             log.println(indx);
             log.println("Exception was expected");
             res &= false;
@@ -826,7 +826,7 @@ public class _XAccessibleTable extends MultiMethodTest {
 
         try {
             log.print("getAccessibleIndex(" + rowCount + ",0):");
-            int indx = oObj.getAccessibleIndex(rowCount, 0);
+            long indx = oObj.getAccessibleIndex(rowCount, 0);
             log.println(indx);
             log.println("Exception was expected");
             res &= false;
@@ -838,12 +838,11 @@ public class _XAccessibleTable extends MultiMethodTest {
         try {
             log.print("getAccessibleIndex(" + (rowCount-1) + "," +
                 (colCount-1) + "): ");
-            int indx = oObj.getAccessibleIndex(
-                rowCount - 1, colCount - 1);
+            long indx = oObj.getAccessibleIndex(rowCount - 1, colCount - 1);
             log.println(indx);
             if (xCellAc != null) {
                 XAccessibleContext xAC = xCellAc.getAccessibleContext();
-                int expIndx = xAC.getAccessibleIndexInParent();
+                long expIndx = xAC.getAccessibleIndexInParent();
                 log.println("Expected index: " + expIndx);
                 res &= expIndx == indx;
             } else {
@@ -877,7 +876,7 @@ public class _XAccessibleTable extends MultiMethodTest {
         boolean res = true;
 
         if (xACont != null) {
-            int childCount = xACont.getAccessibleChildCount();
+            long childCount = xACont.getAccessibleChildCount();
             log.println("accessible child count: " + childCount);
 
             try {
@@ -947,7 +946,7 @@ public class _XAccessibleTable extends MultiMethodTest {
         boolean res = true;
 
         if (xACont != null) {
-            int childCount = xACont.getAccessibleChildCount();
+            long childCount = xACont.getAccessibleChildCount();
             log.println("accessible child count: " + childCount);
 
             try {

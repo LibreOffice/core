@@ -20,6 +20,7 @@
 #include <AccessibleFrameSelector.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -31,6 +32,7 @@
 namespace svx::a11y {
 
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
@@ -55,17 +57,21 @@ Reference< XAccessibleContext > AccFrameSelector::getAccessibleContext(  )
     return this;
 }
 
-sal_Int32 AccFrameSelector::getAccessibleChildCount(  )
+sal_Int64 AccFrameSelector::getAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
     return mpFrameSel->GetEnabledBorderCount();
 }
 
-Reference< XAccessible > AccFrameSelector::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > AccFrameSelector::getAccessibleChild( sal_Int64 i )
 {
     SolarMutexGuard aGuard;
     IsValid();
+
+    if (i < 0 || i >= getAccessibleChildCount())
+        throw IndexOutOfBoundsException();
+
     Reference< XAccessible > xRet = mpFrameSel->GetChildAccessible( i );
     if( !xRet.is() )
         throw RuntimeException();
@@ -238,14 +244,14 @@ Reference< XAccessibleContext > AccFrameSelectorChild::getAccessibleContext(  )
     return this;
 }
 
-sal_Int32 AccFrameSelectorChild::getAccessibleChildCount(  )
+sal_Int64 AccFrameSelectorChild::getAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
     return 0;
 }
 
-Reference< XAccessible > AccFrameSelectorChild::getAccessibleChild( sal_Int32 )
+Reference< XAccessible > AccFrameSelectorChild::getAccessibleChild( sal_Int64 )
 {
     throw RuntimeException();
 }

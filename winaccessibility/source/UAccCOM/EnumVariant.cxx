@@ -30,6 +30,7 @@
 #pragma clang diagnostic pop
 #endif
 
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
@@ -50,7 +51,6 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
 {
     SolarMutexGuard g;
 
-    long l1;
     ULONG l2;
 
     if (pvar == nullptr)
@@ -59,9 +59,17 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     if (pcElementFetched != nullptr)
         *pcElementFetched = 0;
 
+    sal_Int64 nChildCount = m_pXAccessibleSelection->getSelectedAccessibleChildCount();
+    if (nChildCount > std::numeric_limits<long>::max())
+    {
+        SAL_WARN("iacc2", "CEnumVariant::Next: Child count exceeds maximum long value, "
+                          "using max long.");
+        nChildCount = std::numeric_limits<long>::max();
+    }
+
     // Retrieve the next cElements.
-    for (l1=m_lCurrent, l2=0; l1<m_pXAccessibleSelection->getSelectedAccessibleChildCount() &&
-            l2<cElements; l1++, l2++)
+    sal_Int64 l1;
+    for (l1 = m_nCurrent, l2 = 0; l1 < nChildCount && l2 < cElements; l1++, l2++)
     {
         Reference< XAccessible > pRXAcc = m_pXAccessibleSelection->getSelectedAccessibleChild(l1);
         IAccessible* pChild = nullptr;
@@ -90,7 +98,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     // Set count of elements retrieved.
     if (pcElementFetched != nullptr)
         *pcElementFetched = l2;
-    m_lCurrent = l1;
+    m_nCurrent = l1;
 
     return (l2 < cElements) ? S_FALSE : NOERROR;
 }
@@ -104,10 +112,17 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
 {
     SolarMutexGuard g;
 
-    m_lCurrent += cElements;
-    if (m_lCurrent > m_pXAccessibleSelection->getSelectedAccessibleChildCount())
+    m_nCurrent += cElements;
+    sal_Int64 nChildCount = m_pXAccessibleSelection->getSelectedAccessibleChildCount();
+    if (nChildCount > std::numeric_limits<long>::max())
     {
-        m_lCurrent =  m_pXAccessibleSelection->getSelectedAccessibleChildCount();
+        SAL_WARN("iacc2", "CEnumVariant::Skip: Child count exceeds maximum long value, "
+                          "using max long.");
+        nChildCount = std::numeric_limits<long>::max();
+    }
+    if (m_nCurrent > nChildCount)
+    {
+        m_nCurrent = nChildCount;
         return E_FAIL;
     }
     else
@@ -124,7 +139,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Reset()
 {
     SolarMutexGuard g;
 
-    m_lCurrent = 0;
+    m_nCurrent = 0;
     return NOERROR;
 }
 
@@ -188,12 +203,21 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Create(CEnumVariant __RPC_FAR *__RPC_FAR
 long CEnumVariant::GetCountOfElements()
 {
     if(m_pXAccessibleSelection.is())
-        return m_pXAccessibleSelection->getSelectedAccessibleChildCount();
+    {
+        sal_Int64 nCount = m_pXAccessibleSelection->getSelectedAccessibleChildCount();
+        if (nCount > std::numeric_limits<long>::max())
+        {
+            SAL_WARN("iacc2", "CEnumVariant::GetCountOfElements: Count exceeds maximum long value, "
+                              "using max long.");
+            nCount = std::numeric_limits<long>::max();
+        }
+        return nCount;
+    }
     return 0;
 }
 
 /**
-   * Set member m_pXAccessibleSelection to NULL and m_lCurrent to 0.
+   * Set member m_pXAccessibleSelection to NULL and m_nCurrent to 0.
    * @param.
    * @return Result
    */
@@ -203,7 +227,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CEnumVariant::ClearEnumeration()
 
     pUNOInterface = nullptr;
     m_pXAccessibleSelection = nullptr;
-    m_lCurrent = 0;
+    m_nCurrent = 0;
     return S_OK;
 }
 

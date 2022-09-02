@@ -277,15 +277,15 @@ Reference< XAccessibleContext > VCLXAccessibleTabPage::getAccessibleContext(  )
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleTabPage::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleTabPage::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
     return implGetAccessibleChildCount();
 }
 
-sal_Int32 VCLXAccessibleTabPage::implGetAccessibleChildCount()
+sal_Int64 VCLXAccessibleTabPage::implGetAccessibleChildCount()
 {
-    sal_Int32 nCount = 0;
+    sal_Int64 nCount = 0;
     if ( m_pTabControl )
     {
         TabPage* pTabPage = m_pTabControl->GetTabPage( m_nPageId );
@@ -297,7 +297,7 @@ sal_Int32 VCLXAccessibleTabPage::implGetAccessibleChildCount()
 }
 
 
-Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -328,11 +328,11 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleParent(  )
 }
 
 
-sal_Int32 VCLXAccessibleTabPage::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessibleTabPage::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nIndexInParent = -1;
+    sal_Int64 nIndexInParent = -1;
     if ( m_pTabControl )
         nIndexInParent = m_pTabControl->GetPagePos( m_nPageId );
 
@@ -411,7 +411,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
     OExternalLockGuard aGuard( this );
 
     Reference< XAccessible > xChild;
-    for ( sal_uInt32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+    for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )

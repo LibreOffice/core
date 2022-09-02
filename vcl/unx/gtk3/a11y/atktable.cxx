@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -122,7 +123,19 @@ table_wrapper_get_index_at (AtkTable      *table,
         css::uno::Reference<css::accessibility::XAccessibleTable> pTable
             = getTable( table );
         if( pTable.is() )
-            return pTable->getAccessibleIndex( row, column );
+        {
+            sal_Int64 nIndex = pTable->getAccessibleIndex( row, column );
+            if (nIndex > std::numeric_limits<gint>::max())
+            {
+                // use -2 when the child index is too large to fit into 32 bit to neither use the
+                // valid index of another cell nor -1, which might easily be interpreted as the cell
+                // not/no longer being valid
+                SAL_WARN("vcl.gtk", "table_wrapper_get_index_at: Child index exceeds maximum gint value, "
+                                    "returning -2.");
+                nIndex = -2;
+            }
+            return nIndex;
+        }
     }
     catch(const uno::Exception&) {
         g_warning( "Exception in getAccessibleIndex()" );

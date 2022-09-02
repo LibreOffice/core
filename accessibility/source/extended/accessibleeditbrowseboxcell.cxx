@@ -132,7 +132,7 @@ namespace accessibility
             // TODO: shouldn't we add an ACTIVE here? Isn't the EditBrowseBoxTableCell always ACTIVE?
     }
 
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -140,7 +140,7 @@ namespace accessibility
         return baseGetAccessibleChildCount();
     }
 
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i )
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int64 i )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();

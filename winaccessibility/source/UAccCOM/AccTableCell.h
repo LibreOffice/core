@@ -81,7 +81,7 @@ public:
 
 private:
     css::uno::Reference<css::accessibility::XAccessibleTable> m_xTable;
-    sal_Int32 m_nIndexInParent;
+    sal_Int64 m_nIndexInParent;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

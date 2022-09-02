@@ -449,7 +449,14 @@ wrapper_get_n_children( AtkObject *atk_obj )
     if( obj->mpContext.is() )
     {
         try {
-            n = obj->mpContext->getAccessibleChildCount();
+            sal_Int64 nChildCount = obj->mpContext->getAccessibleChildCount();
+            if (nChildCount > std::numeric_limits<gint>::max())
+            {
+                SAL_WARN("vcl.gtk", "wrapper_get_n_children: Child count exceeds maximum gint value, "
+                                    "returning max gint.");
+                nChildCount = std::numeric_limits<gint>::max();
+            }
+            n = nChildCount;
         }
         catch(const uno::Exception&) {
             TOOLS_WARN_EXCEPTION( "vcl", "Exception" );
@@ -514,7 +521,17 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
     if( obj->mpContext.is() )
     {
         try {
-            i = obj->mpContext->getAccessibleIndexInParent();
+            sal_Int64 nIndex = obj->mpContext->getAccessibleIndexInParent();
+            if (nIndex > std::numeric_limits<gint>::max())
+            {
+                // use -2 when the child index is too large to fit into 32 bit to neither use the
+                // valid index of another child nor -1, which would e.g. make Orca interpret the
+                // object as being a zombie
+                SAL_WARN("vcl.gtk", "wrapper_get_index_in_parent: Child index exceeds maximum gint value, "
+                                    "returning -2.");
+                nIndex = -2;
+            }
+            i = nIndex;
         }
         catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleIndexInParent()" );

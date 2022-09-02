@@ -161,7 +161,7 @@ private:
     ///=====  XAccessibleSelection  ===========================================
 
     virtual void SAL_CALL
-        selectAccessibleChild( sal_Int32 nChildIndex ) override;
+        selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     virtual void SAL_CALL
         clearAccessibleSelection(  ) override;
@@ -169,14 +169,14 @@ private:
     virtual void SAL_CALL
         selectAllAccessibleChildren(  ) override;
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getSelectedAccessibleChildCount(  ) override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL
-        getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+        getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     virtual void SAL_CALL
-        deselectAccessibleChild( sal_Int32 nChildIndex ) override;
+        deselectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     ///=====  XServiceInfo  ====================================================
 
@@ -235,9 +235,9 @@ private:
     sal_uInt16  GetColAll() const { return m_nMaxX - m_nMinX + 1; }
     void NotifyRefMode();
     void RemoveFormulaSelection(bool bRemoveAll = false);
-    bool CheckChildIndex(sal_Int32) const;
-    ScAddress GetChildIndexAddress(sal_Int32) const;
-    sal_Int32 GetAccessibleIndexFormula( sal_Int32 nRow, sal_Int32 nColumn );
+    bool CheckChildIndex(sal_Int64) const;
+    ScAddress GetChildIndexAddress(sal_Int64) const;
+    sal_Int64 GetAccessibleIndexFormula( sal_Int32 nRow, sal_Int32 nColumn );
     bool GetFormulaCurrentFocusCell(ScAddress &addr);
 
     ScTabViewShell* mpViewShell;

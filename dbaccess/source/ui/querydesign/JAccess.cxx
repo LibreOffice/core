@@ -47,17 +47,17 @@ namespace dbaui
         m_pTableView = nullptr;
     }
     // XAccessibleContext
-    sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  )
     {
         // TODO may be this will change to only visible windows
         // this is the same assumption mt implements
         ::osl::MutexGuard aGuard( m_aMutex  );
-        sal_Int32 nChildCount = 0;
+        sal_Int64 nChildCount = 0;
         if ( m_pTableView )
             nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections().size();
         return nChildCount;
     }
-    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int64 i )
     {
         Reference< XAccessible > aRet;
         ::osl::MutexGuard aGuard( m_aMutex  );

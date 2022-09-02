@@ -56,18 +56,18 @@ Sequence<OUString> VCLXAccessibleHeaderBar::getSupportedServiceNames()
 
 // =======XAccessibleContext=======
 
-sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount()
+sal_Int64 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount()
 {
     SolarMutexGuard g;
 
-    sal_Int32 nCount = 0;
+    sal_Int64 nCount = 0;
     if (m_pHeadBar)
         nCount = m_pHeadBar->GetItemCount();
 
     return nCount;
 }
 css::uno::Reference<css::accessibility::XAccessible>
-    SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChild(sal_Int32 i)
+    SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChild(sal_Int64 i)
 {
     SolarMutexGuard g;
 

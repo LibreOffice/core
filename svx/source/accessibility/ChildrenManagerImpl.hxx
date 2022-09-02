@@ -115,11 +115,11 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    tools::Long GetChildCount() const noexcept;
+    sal_Int64 GetChildCount() const noexcept;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    const css::uno::Reference<css::drawing::XShape>& GetChildShape(tools::Long nIndex);
+    const css::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
@@ -134,7 +134,7 @@ public:
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
     css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (tools::Long nIndex);
+        GetChild (sal_Int64 nIndex);
 
     /** Return the requested accessible child.
         @param aChildDescriptor

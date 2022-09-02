@@ -492,7 +492,7 @@ bool AccessibleControlShape::ensureListeningState(
     return _bNeedNewListening;
 }
 
-sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
+sal_Int64 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
 {
     if ( !m_xUnoControl.is() )
         return 0;
@@ -509,7 +509,7 @@ sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
     }
 }
 
-Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int64 i )
 {
     Reference< XAccessible > xChild;
     if ( !m_xUnoControl.is() )
@@ -527,7 +527,7 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
         // of the context of our UNO control
 
         Reference< XAccessibleContext > xControlContext( m_aControlContext );
-        OSL_ENSURE( xControlContext.is(), "AccessibleControlShape::getAccessibleChildCount: control context already dead! How this!" );
+        OSL_ENSURE( xControlContext.is(), "AccessibleControlShape::getAccessibleChild: control context already dead! How this!" );
         if ( xControlContext.is() )
         {
             Reference< XAccessible > xInnerChild( xControlContext->getAccessibleChild( i ) );
@@ -541,7 +541,7 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_Int32 nChildIndex = -1;
+    sal_Int64 nChildIndex = -1;
     Reference< XAccessibleContext > xContext;
     if ( xChild.is() )
         xContext = xChild->getAccessibleContext( );

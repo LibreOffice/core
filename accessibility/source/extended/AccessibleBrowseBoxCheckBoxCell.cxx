@@ -123,12 +123,12 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL AccessibleCheckBoxCell::getAccessibleChildCount(  )
     {
         return 0;
     }
 
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleCheckBoxCell::getAccessibleChild( sal_Int32 )
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleCheckBoxCell::getAccessibleChild( sal_Int64 )
     {
         throw css::lang::IndexOutOfBoundsException();
     }
@@ -138,12 +138,12 @@ namespace accessibility
         return "com.sun.star.comp.svtools.TableCheckBoxCell";
     }
 
-    sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
+    sal_Int64 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
     {
         ::osl::MutexGuard aGuard( getMutex() );
         ensureIsAlive();
 
-        return ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
+        return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(mpBrowseBox->GetColumnCount())) + getColumnPos();
     }
 
     void AccessibleCheckBoxCell::SetChecked( bool _bChecked )

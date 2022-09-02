@@ -404,7 +404,7 @@ public class ViewForwarder {
         accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        int cCount = 0;
+        long cCount = 0;
         try {
             cCount =
                parent.getAccessibleContext().getAccessibleChildCount();
@@ -416,7 +416,7 @@ public class ViewForwarder {
             return;
         }
 
-        for (int i=0; i<cCount; i++) {
+        for (long i=0; i<cCount; i++) {
             try {
                 XAccessible xA = parent.getAccessibleContext().getAccessibleChild(i);
                 System.out.println("NAME object " + i + ": " + xA.getAccessibleContext().getAccessibleName());
@@ -691,7 +691,7 @@ public class ViewForwarder {
             e.printStackTrace();
         }
 
-        int childCount = 0;
+        long childCount = 0;
         childCount =
                 parent.getAccessibleContext().getAccessibleChildCount();
         System.out.println("ChildCount: "+childCount);

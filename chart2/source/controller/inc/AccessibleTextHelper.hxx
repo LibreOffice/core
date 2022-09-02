@@ -66,11 +66,11 @@ public:
         const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // ____ XAccessibleContext ____
-    virtual ::sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild(
-        ::sal_Int32 i ) override;
+        sal_Int64 i ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
-    virtual ::sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual ::sal_Int16 SAL_CALL getAccessibleRole() override;
     virtual OUString SAL_CALL getAccessibleDescription() override;
     virtual OUString SAL_CALL getAccessibleName() override;

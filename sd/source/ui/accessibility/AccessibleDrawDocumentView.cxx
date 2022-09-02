@@ -182,12 +182,12 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChildCount()
 {
     ThrowIfDisposed ();
 
-    tools::Long nChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
+    sal_Int64 nChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
     // Forward request to children manager.
     if (mpChildrenManager != nullptr)
@@ -197,14 +197,14 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleDrawDocumentView::getAccessibleChild (sal_Int32 nIndex)
+    AccessibleDrawDocumentView::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed ();
 
     ::osl::ClearableMutexGuard aGuard (m_aMutex);
 
     // Take care of children of the base class.
-    sal_Int32 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();
+    sal_Int64 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();
     if (nCount > 0)
     {
         if (nIndex < nCount)
@@ -566,7 +566,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
 /** Return selection state of specified child
 */
 bool
-    AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex )
+    AccessibleDrawDocumentView::implIsSelected( sal_Int64 nAccessibleChildIndex )
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
@@ -607,7 +607,7 @@ bool
     the XSelectionSupplier of the controller.
 */
 void
-    AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
+    AccessibleDrawDocumentView::implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect )
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
@@ -628,7 +628,7 @@ void
             uno::Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
                     comphelper::getProcessComponentContext());
 
-            for(sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+            for(sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
             {
                 AccessibleShape* pAcc = comphelper::getFromUnoTunnel<AccessibleShape>( getAccessibleChild( i ) );
 

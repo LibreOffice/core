@@ -235,7 +235,7 @@ Reference< XAccessibleContext > VCLXAccessibleStatusBarItem::getAccessibleContex
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleStatusBarItem::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -243,7 +243,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleChild( sal_Int32 )
+Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleChild( sal_Int64 )
 {
     throw IndexOutOfBoundsException();
 }
@@ -261,11 +261,11 @@ Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleParent(  )
 }
 
 
-sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessibleStatusBarItem::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nIndexInParent = -1;
+    sal_Int64 nIndexInParent = -1;
     if ( m_pStatusBar )
         nIndexInParent = m_pStatusBar->GetItemPos( m_nItemId );
 

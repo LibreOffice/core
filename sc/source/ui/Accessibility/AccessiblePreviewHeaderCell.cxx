@@ -205,7 +205,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
+sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -214,7 +214,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
     return mxTextHelper->GetChildCount();
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int32 nIndex)
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -223,7 +223,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
     return mxTextHelper->GetChild(nIndex);
 }
 
-sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent()
 {
     return mnIndex;
 }

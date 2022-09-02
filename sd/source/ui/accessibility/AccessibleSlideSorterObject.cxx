@@ -105,13 +105,13 @@ Reference<XAccessibleContext> SAL_CALL
 
 //===== XAccessibleContext ====================================================
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount()
 {
     ThrowIfDisposed();
     return 0;
 }
 
-Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 )
+Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int64 )
 {
     ThrowIfDisposed();
     throw lang::IndexOutOfBoundsException();
@@ -123,19 +123,19 @@ Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent
     return mxParent;
 }
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    sal_Int32 nIndexInParent(-1);
+    sal_Int64 nIndexInParent(-1);
 
     if (mxParent.is())
     {
         Reference<XAccessibleContext> xParentContext (mxParent->getAccessibleContext());
         if (xParentContext.is())
         {
-            sal_Int32 nChildCount (xParentContext->getAccessibleChildCount());
-            for (sal_Int32 i=0; i<nChildCount; ++i)
+            sal_Int64 nChildCount (xParentContext->getAccessibleChildCount());
+            for (sal_Int64 i=0; i<nChildCount; ++i)
                 if (xParentContext->getAccessibleChild(i).get()
                     == static_cast<XAccessible*>(this))
                 {

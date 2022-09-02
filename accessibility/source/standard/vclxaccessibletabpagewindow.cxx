@@ -122,7 +122,7 @@ Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  )
 }
 
 
-sal_Int32 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 

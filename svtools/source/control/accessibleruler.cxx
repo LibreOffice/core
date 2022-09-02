@@ -122,7 +122,7 @@ bool SvtRulerAccessible::isVisible()
 }
 
 //=====  XAccessibleContext  ==================================================
-sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
+sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( sal_Int32 )
+uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( sal_Int64 )
 {
     uno::Reference< XAccessible >   xChild ;
 
@@ -143,7 +143,7 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
     return mxParent;
 }
 
-sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     //  Use a simple but slow solution for now.  Optimize later.
@@ -154,8 +154,8 @@ sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
         uno::Reference< XAccessibleContext >        xParentContext( mxParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
-            sal_Int32                       nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int32 i = 0 ; i < nChildCount ; ++i )
+            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+            for( sal_Int64 i = 0 ; i < nChildCount ; ++i )
             {
                 uno::Reference< XAccessible >   xChild( xParentContext->getAccessibleChild( i ) );
                 if( xChild.get() == static_cast<XAccessible*>(this) )

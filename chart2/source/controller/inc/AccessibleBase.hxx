@@ -204,14 +204,14 @@ protected:
         @throws css::uno::RuntimeException
      */
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        ImplGetAccessibleChildById( sal_Int32 i ) const;
+        ImplGetAccessibleChildById( sal_Int64 i ) const;
 
     /** Is called from getAccessibleChildCount(). Before this method is called,
         an update of children is done if necessary.
 
         @throws css::uno::RuntimeException
      */
-    virtual sal_Int32 ImplGetAccessibleChildCount() const;
+    virtual sal_Int64 ImplGetAccessibleChildCount() const;
 
     const AccessibleElementInfo& GetInfo() const { return m_aAccInfo;}
     void SetInfo( const AccessibleElementInfo & rNewInfo );
@@ -224,12 +224,12 @@ protected:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
 
     // ________ XAccessibleContext ________
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        getAccessibleChild( sal_Int32 i ) override;
+        getAccessibleChild( sal_Int64 i ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleParent() override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     /// @return AccessibleRole.SHAPE
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
     // has to be implemented by derived classes

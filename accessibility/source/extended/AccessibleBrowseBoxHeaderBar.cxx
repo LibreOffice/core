@@ -52,7 +52,7 @@ AccessibleBrowseBoxHeaderBar::~AccessibleBrowseBoxHeaderBar()
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL
-AccessibleBrowseBoxHeaderBar::getAccessibleChild( sal_Int32 nChildIndex )
+AccessibleBrowseBoxHeaderBar::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -61,7 +61,7 @@ AccessibleBrowseBoxHeaderBar::getAccessibleChild( sal_Int32 nChildIndex )
     return implGetChild( nChildIndex, implToVCLColumnPos( nChildIndex ) );
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleIndexInParent()
 {
     return isRowBar() ? vcl::BBINDEX_ROWHEADERBAR : vcl::BBINDEX_COLUMNHEADERBAR;
 }
@@ -192,7 +192,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleSelected(
 
 // XAccessibleSelection -------------------------------------------------------
 
-void SAL_CALL AccessibleBrowseBoxHeaderBar::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL AccessibleBrowseBoxHeaderBar::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -204,7 +204,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::selectAccessibleChild( sal_Int32 nCh
         implSelectColumn( implToVCLColumnPos( nChildIndex ), true );
 }
 
-sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     // using interface methods - no mutex
     return isRowBar() ?
@@ -232,7 +232,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::selectAllAccessibleChildren()
         implSelectColumn( implToVCLColumnPos( 0 ), true );
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderBar::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderBar::getSelectedAccessibleChildCount()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -241,18 +241,19 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderBar::getSelectedAccessibleChildCount
 }
 
 Reference< XAccessible > SAL_CALL
-AccessibleBrowseBoxHeaderBar::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+AccessibleBrowseBoxHeaderBar::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     // method may throw lang::IndexOutOfBoundsException
-    sal_Int32 nIndex = implGetChildIndexFromSelectedIndex( nSelectedChildIndex );
+    sal_Int64 nIndex = implGetChildIndexFromSelectedIndex( nSelectedChildIndex );
+    assert(nIndex < std::numeric_limits<sal_Int32>::max());
     return implGetChild( nIndex, implToVCLColumnPos( nIndex ) );
 }
 
 void SAL_CALL AccessibleBrowseBoxHeaderBar::deselectAccessibleChild(
-        sal_Int32 nSelectedChildIndex )
+        sal_Int64 nSelectedChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -332,8 +333,8 @@ Reference< XAccessible > AccessibleBrowseBoxHeaderBar::implGetChild(
         mpBrowseBox->CreateAccessibleColumnHeader( nColumnPos );
 }
 
-sal_Int32 AccessibleBrowseBoxHeaderBar::implGetChildIndexFromSelectedIndex(
-        sal_Int32 nSelectedChildIndex )
+sal_Int64 AccessibleBrowseBoxHeaderBar::implGetChildIndexFromSelectedIndex(
+        sal_Int64 nSelectedChildIndex )
 {
     Sequence< sal_Int32 > aSelSeq;
     if( isRowBar() )

@@ -151,7 +151,7 @@ void SAL_CALL AccessibleCell::release(  ) noexcept
 
 /** The children of this cell come from the paragraphs of text.
 */
-sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleCell::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount()
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
 */
-Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nIndex)
+Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int64 nIndex)
 {
     SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
@@ -249,8 +249,8 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const c
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    sal_Int32 nChildCount = getAccessibleChildCount ();
-    for (sal_Int32 i=0; i<nChildCount; ++i)
+    sal_Int64 nChildCount = getAccessibleChildCount ();
+    for (sal_Int64 i = 0; i < nChildCount; ++i)
     {
         Reference<XAccessible> xChild (getAccessibleChild (i));
         if (xChild.is())
@@ -496,7 +496,7 @@ void AccessibleCell::disposing()
     AccessibleContextBase::dispose ();
 }
 
-sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleCell::getAccessibleIndexInParent()
 {
     ThrowIfDisposed ();
     return mnIndexInParent;

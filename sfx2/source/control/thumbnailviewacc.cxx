@@ -69,19 +69,22 @@ uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewAcc::g
     return this;
 }
 
-sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
+sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
 {
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
-    sal_Int32 nCount = mpParent->ImplGetVisibleItemCount();
-    return nCount;
+    return mpParent->ImplGetVisibleItemCount();
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleChild( sal_Int32 i )
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleChild( sal_Int64 i )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
+
+    if (i < 0 || i >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
+
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(i));
 
     if( !pItem )
@@ -98,13 +101,13 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     return mpParent->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
 
     // -1 for child not found/no parent (according to specification)
-    sal_Int32 nRet = -1;
+    sal_Int64 nRet = -1;
 
     uno::Reference<accessibility::XAccessible> xParent(getAccessibleParent());
     if (!xParent)
@@ -117,8 +120,8 @@ sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
         //  iterate over parent's children and search for this object
         if ( xParentContext.is() )
         {
-            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for ( sal_Int32 nChild = 0; ( nChild < nChildCount ) && ( -1 == nRet ); ++nChild )
+            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+            for ( sal_Int64 nChild = 0; ( nChild < nChildCount ) && ( -1 == nRet ); ++nChild )
             {
                 uno::Reference<XAccessible> xChild(xParentContext->getAccessibleChild(nChild));
                 if ( xChild.get() == this )
@@ -356,10 +359,14 @@ sal_Int32 SAL_CALL ThumbnailViewAcc::getBackground(  )
     return static_cast<sal_Int32>(nColor);
 }
 
-void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
+
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
     if(pItem == nullptr)
@@ -368,10 +375,14 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     mpParent->SelectItem( pItem->mnId );
 }
 
-sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
+
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
     if (pItem == nullptr)
@@ -391,11 +402,11 @@ void SAL_CALL ThumbnailViewAcc::selectAllAccessibleChildren()
     // unsupported due to single selection only
 }
 
-sal_Int32 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    sal_Int32           nRet = 0;
+    sal_Int64 nRet = 0;
 
     for( sal_uInt16 i = 0, nCount = getItemCount(); i < nCount; i++ )
     {
@@ -408,7 +419,7 @@ sal_Int32 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
     return nRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -425,10 +436,14 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelec
     return xRet;
 }
 
-void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int32 )
+void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int64 nChildIndex)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
+
     // Because of the single selection we can reset the whole selection when
     // the specified child is currently selected.
 //FIXME TODO    if (isAccessibleChildSelected(nChildIndex))
@@ -586,12 +601,12 @@ uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewItemAc
     return this;
 }
 
-sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleChildCount()
+sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleChildCount()
 {
     return 0;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleChild( sal_Int32 )
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException();
 }
@@ -607,12 +622,12 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getA
     return xRet;
 }
 
-sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
 {
     const SolarMutexGuard aSolarGuard;
     // The index defaults to -1 to indicate the child does not belong to its
     // parent.
-    sal_Int32 nIndexInParent = -1;
+    sal_Int64 nIndexInParent = -1;
 
     if( mpParent )
     {

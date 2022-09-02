@@ -130,14 +130,14 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount()
+sal_Int64 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return SvxRectCtl::NO_CHILDREN;
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
+Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
 {
     checkChildIndex( nIndex );
 
@@ -262,7 +262,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 }
 
 // XAccessibleSelection
-void SvxRectCtlAccessibleContext::implSelect(sal_Int32 nIndex, bool bSelect)
+void SvxRectCtlAccessibleContext::implSelect(sal_Int64 nIndex, bool bSelect)
 {
     ::SolarMutexGuard aSolarGuard;
 
@@ -288,7 +288,7 @@ void SvxRectCtlAccessibleContext::implSelect(sal_Int32 nIndex, bool bSelect)
     }
 }
 
-bool SvxRectCtlAccessibleContext::implIsSelected( sal_Int32 nIndex )
+bool SvxRectCtlAccessibleContext::implIsSelected( sal_Int64 nIndex )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -298,7 +298,7 @@ bool SvxRectCtlAccessibleContext::implIsSelected( sal_Int32 nIndex )
 }
 
 // internals
-void SvxRectCtlAccessibleContext::checkChildIndex( tools::Long nIndex )
+void SvxRectCtlAccessibleContext::checkChildIndex( sal_Int64 nIndex )
 {
     if( nIndex < 0 || nIndex >= getAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();
@@ -449,12 +449,12 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChildCount()
+sal_Int64 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChildCount()
 {
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int32 /*nIndex*/ )
+Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int64 /*nIndex*/ )
 {
     throw lang::IndexOutOfBoundsException();
 }

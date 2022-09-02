@@ -98,10 +98,10 @@ public:
     virtual sal_Int32 SAL_CALL getBackground() override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild (sal_Int32 nIndex) override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild (sal_Int64 nIndex) override;
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleParent() override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
     virtual OUString SAL_CALL getAccessibleDescription() override;
     virtual OUString SAL_CALL getAccessibleName() override;
@@ -125,13 +125,13 @@ public:
     virtual OUString SAL_CALL getServiceName() override;
 
     // XAccessibleSelection
-    virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
+    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
     virtual void SAL_CALL clearAccessibleSelection() override;
     virtual void SAL_CALL selectAllAccessibleChildren() override;
-    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // IAccessibleViewforwarder
     virtual tools::Rectangle GetVisibleArea() const override;
@@ -146,13 +146,13 @@ public:
 private:
     virtual ~SvxGraphCtrlAccessibleContext() override;
     /// @throws css::lang::IndexOutOfBoundsException
-    void checkChildIndexOnSelection( tools::Long nIndexOfChild );
+    void checkChildIndexOnSelection(sal_Int64 nIndexOfChild );
 
     virtual void SAL_CALL disposing() final override;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    SdrObject* getSdrObject( sal_Int32 nIndex );
+    SdrObject* getSdrObject( sal_Int64 nIndex );
 
     void CommitChange (sal_Int16 aEventId, const css::uno::Any& rNewValue, const css::uno::Any& rOldValue);
 

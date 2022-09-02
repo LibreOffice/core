@@ -166,7 +166,7 @@ public class CopyTableWizard extends CRMBasedTestCase
             final UITools uiTools = new UITools(dialog);
             final XAccessible root = uiTools.getRoot();
             final XAccessibleContext accContext = root.getAccessibleContext();
-            final int count = accContext.getAccessibleChildCount();
+            final long count = accContext.getAccessibleChildCount();
             String buttonName = "Create";
             final XAccessibleContext childContext = accContext.getAccessibleChild(count - 3).getAccessibleContext();
             final String name = childContext.getAccessibleName();

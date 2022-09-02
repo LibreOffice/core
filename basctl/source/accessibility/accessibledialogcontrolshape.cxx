@@ -304,13 +304,13 @@ Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleConte
 }
 
 // XAccessibleContext
-sal_Int32 AccessibleDialogControlShape::getAccessibleChildCount()
+sal_Int64 AccessibleDialogControlShape::getAccessibleChildCount()
 {
     return 0;
 }
 
 
-Reference< XAccessible > AccessibleDialogControlShape::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > AccessibleDialogControlShape::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -333,18 +333,18 @@ Reference< XAccessible > AccessibleDialogControlShape::getAccessibleParent(  )
 }
 
 
-sal_Int32 AccessibleDialogControlShape::getAccessibleIndexInParent(  )
+sal_Int64 AccessibleDialogControlShape::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nIndexInParent = -1;
+    sal_Int64 nIndexInParent = -1;
     Reference< XAccessible > xParent( getAccessibleParent() );
     if ( xParent.is() )
     {
         Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
         if ( xParentContext.is() )
         {
-            for ( sal_Int32 i = 0, nCount = xParentContext->getAccessibleChildCount(); i < nCount; ++i )
+            for ( sal_Int64 i = 0, nCount = xParentContext->getAccessibleChildCount(); i < nCount; ++i )
             {
                 Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
                 if ( xChild.is() )

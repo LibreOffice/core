@@ -33,8 +33,8 @@
  */
 void XAccessibleContextTester::testGetAccessibleChild()
 {
-    int count = mxContext->getAccessibleChildCount();
-    for (int i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
+    sal_Int64 count = mxContext->getAccessibleChildCount();
+    for (sal_Int64 i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
     {
         auto child = mxContext->getAccessibleChild(i);
         auto childCtx = child->getAccessibleContext();
@@ -55,9 +55,9 @@ void XAccessibleContextTester::testGetAccessibleChild()
  */
 void XAccessibleContextTester::testGetAccessibleChildCount()
 {
-    auto childCount = mxContext->getAccessibleChildCount();
+    sal_Int64 childCount = mxContext->getAccessibleChildCount();
     std::cout << childCount << " children found." << std::endl;
-    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), childCount);
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int64>(0), childCount);
 }
 
 /**
@@ -80,7 +80,7 @@ void XAccessibleContextTester::testGetAccessibleDescription()
  */
 void XAccessibleContextTester::testGetAccessibleIndexInParent()
 {
-    int idx = mxContext->getAccessibleIndexInParent();
+    sal_Int64 idx = mxContext->getAccessibleIndexInParent();
     std::cout << "The index in parent is " << idx << std::endl;
 
     auto parent = mxContext->getAccessibleParent();

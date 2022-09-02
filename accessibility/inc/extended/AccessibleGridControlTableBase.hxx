@@ -55,7 +55,7 @@ public:
     // XAccessibleContext
 
     /** @return  The count of visible children. */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     /** @return  The role of this object (a table). */
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
@@ -95,13 +95,13 @@ public:
     getAccessibleSummary() override;
 
     /** @return  The child index of the specified cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The row index of the specified child cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int64 nChildIndex ) override;
 
     /** @return  The column index of the specified child cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int64 nChildIndex ) override;
 
     /*  Derived classes have to implement:
         -   getAccessibleRowDescription,
@@ -139,10 +139,10 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The row index of the specified cell index. */
-    sal_Int32 implGetRow( sal_Int32 nChildIndex ) const;
+    sal_Int32 implGetRow( sal_Int64 nChildIndex ) const;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The column index of the specified cell index. */
-    sal_Int32 implGetColumn( sal_Int32 nChildIndex ) const;
+    sal_Int32 implGetColumn( sal_Int64 nChildIndex ) const;
 
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.
@@ -164,7 +164,7 @@ protected:
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified child index is invalid. */
-    void ensureIsValidIndex( sal_Int32 nChildIndex );
+    void ensureIsValidIndex( sal_Int64 nChildIndex );
 };
 
 

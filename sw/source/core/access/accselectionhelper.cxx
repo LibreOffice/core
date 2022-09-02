@@ -74,9 +74,12 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
 
 // XAccessibleSelection
 void SwAccessibleSelectionHelper::selectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
+
+    if (nChildIndex < 0 || nChildIndex >= m_rContext.GetChildCount(*(m_rContext.GetMap())))
+        throwIndexOutOfBoundsException();
 
     // Get the respective child as SwFrame (also do index checking), ...
     const SwAccessibleChild aChild = m_rContext.GetChild( *(m_rContext.GetMap()),
@@ -124,9 +127,12 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
 }
 
 bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
+
+    if (nChildIndex < 0 || nChildIndex >= m_rContext.GetChildCount(*(m_rContext.GetMap())))
+        throwIndexOutOfBoundsException();
 
     // Get the respective child as SwFrame (also do index checking), ...
     const SwAccessibleChild aChild = m_rContext.GetChild( *(m_rContext.GetMap()),
@@ -185,11 +191,11 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     }
 }
 
-sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
+sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
 
-    sal_Int32 nCount = 0;
+    sal_Int64 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
     // for selectable children.
     const SwFEShell* pFEShell = GetFEShell();
@@ -236,7 +242,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
 }
 
 Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -327,7 +333,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 
 // index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
-    sal_Int32 nChildIndex )
+    sal_Int64 nChildIndex )
 {
     SolarMutexGuard g;
 

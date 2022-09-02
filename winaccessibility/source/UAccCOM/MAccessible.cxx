@@ -44,6 +44,7 @@
 #include "AccHyperLink.h"
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -293,7 +294,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountCh
             m_xAccessible->getAccessibleContext();
         if( pRContext.is() )
         {
-            *pcountChildren = pRContext->getAccessibleChildCount();
+            sal_Int64 nChildCount = pRContext->getAccessibleChildCount();
+            if (nChildCount > std::numeric_limits<long>::max())
+            {
+                SAL_WARN("iacc2", "CMAccessible::get_accChildCount: Child count exceeds maximum long value, "
+                                  "returning max long.");
+                nChildCount = std::numeric_limits<long>::max();
+            }
+
+            *pcountChildren = nChildCount;
         }
 
         return S_OK;
@@ -981,7 +990,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop
         accLocation(&x,&y,&w,&h,varSelf);
         if( (x < xLeft && (x + w) >xLeft) && (y < yTop && (y + h) >yTop) )
         {
-            int i, nCount;
+            sal_Int64 i, nCount;
             pvarChild->vt = VT_EMPTY;
             Reference< XAccessibleContext > pRContext = GetContextByXAcc(m_xAccessible.get());
             nCount = pRContext->getAccessibleChildCount();
@@ -1356,7 +1365,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         return nullptr;
     }
 
-    int count = pXContext->getAccessibleChildCount();
+    sal_Int64 count = pXContext->getAccessibleChildCount();
     if(count<1)
     {
         return nullptr;
@@ -1369,7 +1378,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
     };
     Reference<XAccessible> pRChildXAcc;
     XAccessibleContext* pChildContext = nullptr;
-    int index = 0,delta=0;
+    sal_Int64 index = 0, delta = 0;
     switch(flags)
     {
     case DM_FIRSTCHILD:
@@ -1870,7 +1879,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
                     Sequence< Reference< XInterface > > xTargets = accRelation.TargetSet;
 
                     Reference<XInterface> pRAcc = xTargets[0];
-                    for(int j=0; j<pRParentContext->getAccessibleChildCount(); j++)
+                    sal_Int64 nChildCount = pRParentContext->getAccessibleChildCount();
+                    assert(nChildCount < std::numeric_limits<long>::max());
+                    for (sal_Int64 j = 0; j< nChildCount; j++)
                     {
                         if( getTheParentOfMember(pRParentContext->getAccessibleChild(j).get())
                             == static_cast<XAccessible*>(pRAcc.get()) &&
@@ -1893,8 +1904,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             *similarItemsInGroup = 0;
             *positionInGroup = -1;
 
-            long nCount = pRContext->getAccessibleChildCount();
-            if( 2 != nCount)
+            if (pRContext->getAccessibleChildCount() != 2)
             {
                 return S_OK;
             }
@@ -1913,7 +1923,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             {
                 return S_OK;
             }
-            *similarItemsInGroup = xListContext->getAccessibleChildCount();
+            sal_Int64 nChildCount = xListContext->getAccessibleChildCount();
+            assert(nChildCount < std::numeric_limits<long>::max());
+            *similarItemsInGroup = nChildCount;
             if (*similarItemsInGroup > 0 )
             {
                 try
@@ -1937,8 +1949,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
         else if ( PAGE_TAB == Role )
         {
             *groupLevel = 1;
-            *similarItemsInGroup = pRParentContext->getAccessibleChildCount();
-
+            sal_Int64 nChildCount = pRParentContext->getAccessibleChildCount();
+            assert(nChildCount < std::numeric_limits<long>::max());
+            *similarItemsInGroup = nChildCount;
             if (*similarItemsInGroup > 0 )
             {
                 *positionInGroup=pRContext->getAccessibleIndexInParent() + 1 ;
@@ -1967,7 +1980,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             Reference< XAccessible> pTempAcc = pRContext->getAccessibleParent();
             pRParentContext = pTempAcc->getAccessibleContext();
             *groupLevel = level;
-            *similarItemsInGroup = pRParentContext->getAccessibleChildCount();
+            sal_Int64 nChildCount = pRParentContext->getAccessibleChildCount();
+            assert(nChildCount < std::numeric_limits<long>::max());
+            *similarItemsInGroup = nChildCount;
             *positionInGroup = pRContext->getAccessibleIndexInParent() + 1;
         }
         else
@@ -2091,8 +2106,7 @@ HRESULT CMAccessible::SelectChild(XAccessible* pItem)
         Reference< XAccessibleSelection > pRSelection = GetSelection();
         if( !pRSelection.is() )
             return E_FAIL;
-        long Index = pContext->getAccessibleIndexInParent();
-        pRSelection->selectAccessibleChild( Index );
+        pRSelection->selectAccessibleChild(pContext->getAccessibleIndexInParent());
         return S_OK;
 
     } catch(...) { return E_FAIL; }
@@ -2117,8 +2131,7 @@ HRESULT CMAccessible::DeSelectChild(XAccessible* pItem)
         Reference< XAccessibleSelection > pRSelection = GetSelection();
         if( !pRSelection.is() )
             return E_FAIL;
-        long Index = pContext->getAccessibleIndexInParent();
-        pRSelection->deselectAccessibleChild( Index );
+        pRSelection->deselectAccessibleChild(pContext->getAccessibleIndexInParent());
 
         return S_OK;
 
@@ -2278,7 +2291,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARI
 
             if( flagsSelect & SELFLAG_EXTENDSELECTION  )
             {
-                long indexInParrent = pRContext->getAccessibleIndexInParent();
+                sal_Int64 indexInParrent = pRContext->getAccessibleIndexInParent();
 
                 if( pRParentSelection->isAccessibleChildSelected( indexInParrent + 1 ) ||
                     pRParentSelection->isAccessibleChildSelected( indexInParrent - 1 ) )
@@ -2978,7 +2991,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_indexInParent(long __RPC_FAR
         if (!m_xContext.is())
             return E_FAIL;
 
-        *accParentIndex = m_xContext->getAccessibleIndexInParent();
+        sal_Int64 nIndex = m_xContext->getAccessibleIndexInParent();
+        if (nIndex > std::numeric_limits<long>::max())
+        {
+            SAL_WARN("iacc2", "CMAccessible::get_indexInParent: Child index exceeds maximum long value, "
+                              "returning max long.");
+            nIndex = std::numeric_limits<long>::max();
+        }
+        *accParentIndex = nIndex;
         return S_OK;
 
 

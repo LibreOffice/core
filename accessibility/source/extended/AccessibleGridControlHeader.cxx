@@ -51,7 +51,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL
-AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
+AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -72,7 +72,7 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     return xChild;
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
 {
     SolarMutexGuard aSolarGuard;
 

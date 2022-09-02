@@ -2040,8 +2040,8 @@ void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Referenc
     if (!xContext.is())
         return;
 
-    sal_Int32 nChildren = xContext->getAccessibleChildCount();
-    for(sal_Int32 i = 0; i<nChildren; i++)
+    sal_Int64 nChildren = xContext->getAccessibleChildCount();
+    for(sal_Int64 i = 0; i<nChildren; i++)
     {
         uno::Reference < XAccessible > xChild = xContext->getAccessibleChild(i);
         if (xChild.is())

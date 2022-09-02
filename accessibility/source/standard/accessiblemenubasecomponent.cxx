@@ -300,13 +300,13 @@ void OAccessibleMenuBaseComponent::UpdateItemText( sal_Int32 i )
 }
 
 
-sal_Int32 OAccessibleMenuBaseComponent::GetChildCount() const
+sal_Int64 OAccessibleMenuBaseComponent::GetChildCount() const
 {
     return m_aAccessibleChildren.size();
 }
 
 
-Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int32 i )
+Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int64 i )
 {
     Reference< XAccessible > xChild = m_aAccessibleChildren[i];
     if ( !xChild.is() )
@@ -351,7 +351,7 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int32 i )
 Reference< XAccessible > OAccessibleMenuBaseComponent::GetChildAt( const awt::Point& rPoint )
 {
     Reference< XAccessible > xChild;
-    for ( sal_uInt32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+    for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )

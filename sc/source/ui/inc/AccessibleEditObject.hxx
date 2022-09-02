@@ -104,13 +104,13 @@ public:
 
     /// Return the number of currently visible children.
     /// override to calculate this on demand
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild(sal_Int32 nIndex) override;
+        getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
@@ -118,16 +118,16 @@ public:
     //=====  XAccessibleSelection  ============================================
 
         virtual void SAL_CALL selectAccessibleChild(
-            sal_Int32 nChildIndex ) override;
+            sal_Int64 nChildIndex ) override;
         virtual sal_Bool SAL_CALL isAccessibleChildSelected(
-            sal_Int32 nChildIndex ) override;
+            sal_Int64 nChildIndex ) override;
         virtual void SAL_CALL clearAccessibleSelection(  ) override;
         virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-        virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
-            sal_Int32 nSelectedChildIndex ) override;
+            sal_Int64 nSelectedChildIndex ) override;
         virtual void SAL_CALL deselectAccessibleChild(
-            sal_Int32 nSelectedChildIndex ) override;
+            sal_Int64 nSelectedChildIndex ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
 protected:
     /// Return this object's description.

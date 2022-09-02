@@ -74,10 +74,10 @@ namespace dbaui
                  "com.sun.star.accessibility.AccessibleContext" };
     }
     // XAccessibleContext
-    sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        sal_Int32 nCount = 0;
+        sal_Int64 nCount = 0;
         if(m_pTable)
         {
             ++nCount;
@@ -86,7 +86,7 @@ namespace dbaui
         }
         return nCount;
     }
-    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int64 i )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Reference< XAccessible > aRet;
@@ -114,10 +114,10 @@ namespace dbaui
         }
         return aRet;
     }
-    sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL OTableWindowAccess::getAccessibleIndexInParent(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        sal_Int32 nIndex = -1;
+        sal_Int64 nIndex = -1;
         if( m_pTable )
         {
             // search the position of our table window in the table window map
@@ -160,7 +160,7 @@ namespace dbaui
         }
         return aRet;
     }
-    Reference< XAccessible > OTableWindowAccess::getParentChild(sal_Int32 _nIndex)
+    Reference< XAccessible > OTableWindowAccess::getParentChild(sal_Int64 _nIndex)
     {
         Reference< XAccessible > xReturn;
         Reference< XAccessible > xParent = getAccessibleParent();

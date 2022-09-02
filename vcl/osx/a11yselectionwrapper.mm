@@ -35,8 +35,8 @@ using namespace ::com::sun::star::uno;
     {
         NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
         try {
-            sal_Int32 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
-            for ( sal_Int32 i=0 ; i < n ; ++i ) {
+            sal_Int64 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
+            for ( sal_Int64 i=0 ; i < n ; ++i ) {
                 [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
             }
 

@@ -151,12 +151,12 @@ void SAL_CALL
 
 // XAccessibleSelection
 
-void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )
+void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int64 )
 {
-    SAL_WARN("sw.a11y", "<SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )> - missing implementation");
+    SAL_WARN("sw.a11y", "SwAccessibleTextFrame::selectAccessibleChild - missing implementation");
 }
 
-sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard g;
 
@@ -191,24 +191,24 @@ void SAL_CALL SwAccessibleTextFrame::selectAllAccessibleChildren(  )
     SAL_WARN("sw.a11y", "<SwAccessibleTextFrame::selectAllAccessibleChildren()> - missing implementation");
 }
 
-sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
 {
-    sal_Int32 nCount = 0;
-    sal_Int32 TotalCount = getAccessibleChildCount();
-    for( sal_Int32 i = 0; i < TotalCount; i++ )
+    sal_Int64 nCount = 0;
+    sal_Int64 TotalCount = getAccessibleChildCount();
+    for( sal_Int64 i = 0; i < TotalCount; i++ )
         if( isAccessibleChildSelected(i) ) nCount++;
 
     return nCount;
 }
 
-uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard g;
 
     if ( nSelectedChildIndex > getSelectedAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();
-    sal_Int32 i1, i2;
-    for( i1 = 0, i2 = 0; i1 < getAccessibleChildCount(); i1++ )
+
+    for(sal_Int64 i1 = 0, i2 = 0; i1 < getAccessibleChildCount(); i1++ )
         if( isAccessibleChildSelected(i1) )
         {
             if( i2 == nSelectedChildIndex )
@@ -218,9 +218,9 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibl
     return uno::Reference<XAccessible>();
 }
 
-void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int32 )
+void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int64 )
 {
-    SAL_WARN("sw.a11y", "<SwAccessibleTextFrame::selectAllAccessibleChildren( sal_Int32 )> - missing implementation");
+    SAL_WARN("sw.a11y", "SwAccessibleTextFrame::selectAllAccessibleChildren - missing implementation");
 }
 
 // #i73249#

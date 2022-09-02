@@ -115,7 +115,7 @@ void AccessibleChartElement::InitTextEdit()
 //             Interfaces
 
 // ________ AccessibleBase::XAccessibleContext ________
-Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal_Int32 i ) const
+Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal_Int64 i ) const
 {
     Reference< XAccessible > xResult;
 
@@ -127,7 +127,7 @@ Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal
     return xResult;
 }
 
-sal_Int32 AccessibleChartElement::ImplGetAccessibleChildCount() const
+sal_Int64 AccessibleChartElement::ImplGetAccessibleChildCount() const
 {
     if( m_bHasText )
     {

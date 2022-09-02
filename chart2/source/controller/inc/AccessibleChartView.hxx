@@ -79,7 +79,7 @@ public:
     // ________ XAccessibleContext ________
     virtual OUString SAL_CALL getAccessibleDescription() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual OUString SAL_CALL getAccessibleName() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 

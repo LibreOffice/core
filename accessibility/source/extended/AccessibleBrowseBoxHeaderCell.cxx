@@ -76,7 +76,7 @@ sal_Int64 AccessibleBrowseBoxHeaderCell::implCreateStateSet()
 /** @return
         The count of visible children.
 */
-sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
@@ -85,7 +85,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
 /** @return
         The XAccessible interface of the specified child.
 */
-Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChild( sal_Int32 )
+Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChild( sal_Int64 )
 {
     throw IndexOutOfBoundsException();
 }
@@ -139,11 +139,11 @@ tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
     return getRectangle(mpBrowseBox,m_nColumnRowId,true,isRowBarCell());
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
-    sal_Int32 nIndex = m_nColumnRowId;
+    sal_Int64 nIndex = m_nColumnRowId;
     if ( mpBrowseBox->HasRowHeader() )
         --nIndex;
     return nIndex;

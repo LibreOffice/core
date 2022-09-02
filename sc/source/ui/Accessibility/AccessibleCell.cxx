@@ -53,7 +53,7 @@ rtl::Reference<ScAccessibleCell> ScAccessibleCell::create(
         const uno::Reference<XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         const ScAddress& rCellAddress,
-        sal_Int32 nIndex,
+        sal_Int64 nIndex,
         ScSplitPos eSplitPos,
         ScAccessibleDocument* pAccDoc)
 {
@@ -67,7 +67,7 @@ ScAccessibleCell::ScAccessibleCell(
         const uno::Reference<XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         const ScAddress& rCellAddress,
-        sal_Int32 nIndex,
+        sal_Int64 nIndex,
         ScSplitPos eSplitPos,
         ScAccessibleDocument* pAccDoc)
     :
@@ -211,14 +211,14 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox() const
 
     //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     ScAccessibleCell::getAccessibleChildCount()
 {
     return AccessibleStaticTextBase::getAccessibleChildCount();
 }
 
 uno::Reference< XAccessible > SAL_CALL
-    ScAccessibleCell::getAccessibleChild(sal_Int32 nIndex)
+    ScAccessibleCell::getAccessibleChild(sal_Int64 nIndex)
 {
     return AccessibleStaticTextBase::getAccessibleChild(nIndex);
 }

@@ -126,14 +126,14 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleControlContext::getAccessibleChildCount(  )
+    sal_Int64 SAL_CALL OAccessibleControlContext::getAccessibleChildCount(  )
     {
         // we do not have children
         return 0;
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int32 )
+    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int64 )
     {
         // we do not have children
         throw IndexOutOfBoundsException();

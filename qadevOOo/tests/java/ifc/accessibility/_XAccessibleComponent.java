@@ -292,7 +292,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                             "," + (chBnd.Y + curY) + ") - OK");
 
                 boolean res = false;
-                int expIndex;
+                long expIndex;
                 String expName;
                 String expDesc;
 
@@ -314,7 +314,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                 }
 
                 if (!res) {
-                    int gotIndex = xAcc.getAccessibleContext()
+                    long gotIndex = xAcc.getAccessibleContext()
                                        .getAccessibleIndexInParent();
 
                     if (expIndex < gotIndex) {
@@ -485,7 +485,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
         }
 
         XAccessibleContext xAccCon = xAcc.getAccessibleContext();
-        int cnt = xAccCon.getAccessibleChildCount();
+        long cnt = xAccCon.getAccessibleChildCount();
 
         // for cases when too many children exist checking only first 50
         if (cnt > 50) {
@@ -494,7 +494,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
         ArrayList<XAccessibleComponent> childComp = new ArrayList<XAccessibleComponent>();
 
-        for (int i = 0; i < cnt; i++) {
+        for (long i = 0; i < cnt; i++) {
             try {
                 XAccessible child = xAccCon.getAccessibleChild(i);
                 XAccessibleContext xAccConCh = child.getAccessibleContext();

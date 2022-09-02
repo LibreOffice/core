@@ -554,7 +554,7 @@ Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  )
 }
 
 // XAccessibleContext
-sal_Int32 AccessibleDialogWindow::getAccessibleChildCount()
+sal_Int64 AccessibleDialogWindow::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -562,7 +562,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -605,11 +605,11 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  )
 }
 
 
-sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  )
+sal_Int64 AccessibleDialogWindow::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nIndexInParent = -1;
+    sal_Int64 nIndexInParent = -1;
     if ( m_pDialogWindow )
     {
         vcl::Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
@@ -830,7 +830,7 @@ OUString AccessibleDialogWindow::getToolTipText(  )
 // XAccessibleSelection
 
 
-void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex )
+void AccessibleDialogWindow::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -849,7 +849,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex )
 }
 
 
-sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -881,13 +881,13 @@ void AccessibleDialogWindow::selectAllAccessibleChildren(  )
 }
 
 
-sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  )
+sal_Int64 AccessibleDialogWindow::getSelectedAccessibleChildCount(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nRet = 0;
+    sal_Int64 nRet = 0;
 
-    for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+    for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         if ( isAccessibleChildSelected( i ) )
             ++nRet;
@@ -897,7 +897,7 @@ sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  )
 }
 
 
-Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -906,7 +906,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
 
     Reference< XAccessible > xChild;
 
-    for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+    for ( sal_Int64 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
@@ -919,7 +919,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
 }
 
 
-void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex )
+void AccessibleDialogWindow::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

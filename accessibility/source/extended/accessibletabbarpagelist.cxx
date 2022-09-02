@@ -254,7 +254,7 @@ namespace accessibility
                     }
                     else
                     {
-                        for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                        for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                         {
                             Reference< XAccessible > xChild( getAccessibleChild( i ) );
                             if ( xChild.is() )
@@ -390,7 +390,7 @@ namespace accessibility
     // XAccessibleContext
 
 
-    sal_Int32 AccessibleTabBarPageList::getAccessibleChildCount()
+    sal_Int64 AccessibleTabBarPageList::getAccessibleChildCount()
     {
         OExternalLockGuard aGuard( this );
 
@@ -398,7 +398,7 @@ namespace accessibility
     }
 
 
-    Reference< XAccessible > AccessibleTabBarPageList::getAccessibleChild( sal_Int32 i )
+    Reference< XAccessible > AccessibleTabBarPageList::getAccessibleChild( sal_Int64 i )
     {
         OExternalLockGuard aGuard( this );
 
@@ -435,7 +435,7 @@ namespace accessibility
     }
 
 
-    sal_Int32 AccessibleTabBarPageList::getAccessibleIndexInParent(  )
+    sal_Int64 AccessibleTabBarPageList::getAccessibleIndexInParent(  )
     {
         OExternalLockGuard aGuard( this );
 
@@ -602,7 +602,7 @@ namespace accessibility
     // XAccessibleSelection
 
 
-    void AccessibleTabBarPageList::selectAccessibleChild( sal_Int32 nChildIndex )
+    void AccessibleTabBarPageList::selectAccessibleChild( sal_Int64 nChildIndex )
     {
         OExternalLockGuard aGuard( this );
 
@@ -619,7 +619,7 @@ namespace accessibility
     }
 
 
-    sal_Bool AccessibleTabBarPageList::isAccessibleChildSelected( sal_Int32 nChildIndex )
+    sal_Bool AccessibleTabBarPageList::isAccessibleChildSelected( sal_Int64 nChildIndex )
     {
         OExternalLockGuard aGuard( this );
 
@@ -646,13 +646,13 @@ namespace accessibility
     }
 
 
-    sal_Int32 AccessibleTabBarPageList::getSelectedAccessibleChildCount(  )
+    sal_Int64 AccessibleTabBarPageList::getSelectedAccessibleChildCount(  )
     {
         return 1;
     }
 
 
-    Reference< XAccessible > AccessibleTabBarPageList::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    Reference< XAccessible > AccessibleTabBarPageList::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
     {
         OExternalLockGuard aGuard( this );
 
@@ -661,7 +661,7 @@ namespace accessibility
 
         Reference< XAccessible > xChild;
 
-        for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
+        for ( sal_Int64 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
         {
             if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
             {
@@ -674,7 +674,7 @@ namespace accessibility
     }
 
 
-    void AccessibleTabBarPageList::deselectAccessibleChild( sal_Int32 nChildIndex )
+    void AccessibleTabBarPageList::deselectAccessibleChild( sal_Int64 nChildIndex )
     {
         OExternalLockGuard aGuard( this );
 

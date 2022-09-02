@@ -85,8 +85,8 @@ namespace svx
 
         //OAccessibleContextHelper
         // XAccessibleContext - still waiting to be overwritten
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+        virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
         virtual OUString SAL_CALL getAccessibleDescription(  ) override;
@@ -115,9 +115,9 @@ namespace svx
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleCaption(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleSummary(  ) override;
         virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
-        virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
-        virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex ) override;
-        virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) override;
+        virtual sal_Int64 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
+        virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int64 nChildIndex ) override;
+        virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int64 nChildIndex ) override;
 
 
         void fireEvent(
@@ -137,11 +137,11 @@ namespace svx
         // OCommonAccessibleSelection
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         virtual bool
-            implIsSelected( sal_Int32 nAccessibleChildIndex ) override;
+            implIsSelected( sal_Int64 nAccessibleChildIndex ) override;
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         virtual void
-            implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) override;
+            implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect ) override;
 
         // OCommonAccessibleComponent
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
@@ -184,8 +184,8 @@ namespace svx
 
         //OAccessibleContextHelper
         // XAccessibleContext - still waiting to be overwritten
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+        virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
         virtual OUString SAL_CALL getAccessibleDescription(  ) override;

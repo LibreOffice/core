@@ -108,13 +108,13 @@ void ChildrenManagerImpl::Init()
 }
 
 
-tools::Long ChildrenManagerImpl::GetChildCount() const noexcept
+sal_Int64 ChildrenManagerImpl::GetChildCount() const noexcept
 {
     return maVisibleChildren.size();
 }
 
 
-const css::uno::Reference<css::drawing::XShape>& ChildrenManagerImpl::GetChildShape(tools::Long nIndex)
+const css::uno::Reference<css::drawing::XShape>& ChildrenManagerImpl::GetChildShape(sal_Int64 nIndex)
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
@@ -128,7 +128,7 @@ const css::uno::Reference<css::drawing::XShape>& ChildrenManagerImpl::GetChildSh
     yet in the cache.
 */
 uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (tools::Long nIndex)
+    ChildrenManagerImpl::GetChild (sal_Int64 nIndex)
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
@@ -800,8 +800,8 @@ bool ChildrenManagerImpl::ReplaceChild (
 // Add the impl method for IAccessibleParent interface
 AccessibleControlShape * ChildrenManagerImpl::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet)
 {
-    sal_Int32 count = GetChildCount();
-    for (sal_Int32 index=0;index<count;index++)
+    sal_Int64 count = GetChildCount();
+    for (sal_Int64 index=0;index<count;index++)
     {
         AccessibleShape* pAccShape = maVisibleChildren[index].GetAccessibleShape();
         if (pAccShape && ::accessibility::ShapeTypeHandler::Instance().GetTypeId(pAccShape->GetXShape()) == DRAWING_CONTROL)

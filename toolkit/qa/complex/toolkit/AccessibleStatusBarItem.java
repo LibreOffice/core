@@ -250,10 +250,10 @@ public class AccessibleStatusBarItem {
     }
 
     public void runAllInterfaceTests() {
-        int count = testObject.getAccessibleChildCount();
+        long count = testObject.getAccessibleChildCount();
         System.out.println("*****");
         System.out.println("**** Found items to test: " + count);
-        for (int i=0;i<count;i++){
+        for (long i = 0; i < count; i++) {
             System.out.println("**** Now testing StatusBarItem " + i + ".");
             XAccessible object = null;
             try {

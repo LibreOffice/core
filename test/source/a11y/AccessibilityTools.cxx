@@ -43,9 +43,9 @@ AccessibilityTools::getAccessibleObjectForPredicate(
     }
     else
     {
-        int count = xCtx->getAccessibleChildCount();
+        sal_Int64 count = xCtx->getAccessibleChildCount();
 
-        for (int i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
+        for (sal_Int64 i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
         {
             uno::Reference<accessibility::XAccessibleContext> xCtx2
                 = getAccessibleObjectForPredicate(xCtx->getAccessibleChild(i), cPredicate);

@@ -584,13 +584,13 @@ FindFocusedEditableText(uno::Reference<accessibility::XAccessibleContext> const&
     }
 
     bool bSafeToIterate = true;
-    sal_Int32 nCount = xContext->getAccessibleChildCount();
+    sal_Int64 nCount = xContext->getAccessibleChildCount();
     if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
         bSafeToIterate = false;
     if (!bSafeToIterate)
         return uno::Reference<accessibility::XAccessibleEditableText>();
 
-    for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
+    for (sal_Int64 i = 0; i < xContext->getAccessibleChildCount(); ++i)
     {
         uno::Reference<accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
         if (!xChild.is())

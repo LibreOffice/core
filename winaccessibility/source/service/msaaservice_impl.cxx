@@ -164,8 +164,8 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
                     {
                         // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
                         // Let's not rely on a specific child order, just search for the child with the role LIST
-                        sal_Int32 nCount = xParentAC->getAccessibleChildCount();
-                        for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
+                        sal_Int64 nCount = xParentAC->getAccessibleChildCount();
+                        for (sal_Int64 n = 0; (n < nCount) && !xAccessible.is(); n++)
                         {
                             css::uno::Reference< css::accessibility::XAccessible > xChild = xParentAC->getAccessibleChild(n);
                             if ( xChild.is() )

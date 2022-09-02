@@ -491,18 +491,18 @@ TRANSIENT
 
 
 // accessibility::XAccessibleContext
-sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleComponent::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nChildren = 0;
+    sal_Int64 nChildren = 0;
     if ( GetWindow() )
         nChildren = GetWindow()->GetAccessibleChildWindowCount();
 
     return nChildren;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i )
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -542,11 +542,11 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     return xAcc;
 }
 
-sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessibleComponent::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nIndex = -1;
+    sal_Int64 nIndex = -1;
 
     if ( GetWindow() )
     {
@@ -561,8 +561,8 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  )
                 uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
                 if ( xParentContext.is() )
                 {
-                    sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-                    for ( sal_Int32 i=0; i<nChildCount; i++ )
+                    sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+                    for ( sal_Int64 i = 0; i < nChildCount; i++ )
                     {
                         uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
                         if ( xChild.is() )
@@ -664,7 +664,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     OExternalLockGuard aGuard( this );
 
     uno::Reference< accessibility::XAccessible > xChild;
-    for ( sal_uInt32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+    for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         uno::Reference< accessibility::XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )

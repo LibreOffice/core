@@ -59,11 +59,10 @@ public:
         The XAccessible interface of the specified child.
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-    getAccessibleChild( sal_Int32 nChildIndex ) override;
+    getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  The index of this object among the parent's children. */
-    virtual sal_Int32 SAL_CALL
-    getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
     // XAccessibleComponent
 
@@ -116,10 +115,10 @@ public:
     // XAccessibleSelection
 
     /** Selects the specified child (row or column of the table). */
-    virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
+    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  TRUE, if the specified child (row/column) is selected. */
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
     /** Clears the complete selection. */
     virtual void SAL_CALL clearAccessibleSelection() override;
@@ -128,14 +127,14 @@ public:
     virtual void SAL_CALL selectAllAccessibleChildren() override;
 
     /** @return  The number of selected rows/columns. */
-    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount() override;
 
     /** @return  The specified selected row/column. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-    getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+    getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     /** Removes the specified row/column from the selection. */
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // XInterface
 
@@ -191,7 +190,7 @@ private:
         @return  The absolute child index from the index of selected children.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified index is invalid. */
-    sal_Int32 implGetChildIndexFromSelectedIndex( sal_Int32 nSelectedChildIndex );
+    sal_Int64 implGetChildIndexFromSelectedIndex( sal_Int64 nSelectedChildIndex );
 
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>

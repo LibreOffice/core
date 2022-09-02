@@ -90,7 +90,7 @@ Sequence< OUString > VCLXAccessibleMenu::getSupportedServiceNames()
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleMenu::getAccessibleChildCount(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -98,7 +98,7 @@ sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  )
 }
 
 
-Reference< XAccessible > VCLXAccessibleMenu::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleMenu::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -131,7 +131,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getAccessibleAtPoint( const awt::Po
 // XAccessibleSelection
 
 
-void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex )
+void VCLXAccessibleMenu::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -142,7 +142,7 @@ void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex )
 }
 
 
-sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -167,18 +167,18 @@ void VCLXAccessibleMenu::selectAllAccessibleChildren(  )
 }
 
 
-sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  )
 {
     OExternalLockGuard aGuard( this );
 
     return implGetSelectedAccessibleChildCount();
 }
 
-sal_Int32 VCLXAccessibleMenu::implGetSelectedAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleMenu::implGetSelectedAccessibleChildCount(  )
 {
-    sal_Int32 nRet = 0;
+    sal_Int64 nRet = 0;
 
-    for ( sal_Int32 i = 0, nCount = GetChildCount(); i < nCount; i++ )
+    for ( sal_Int64 i = 0, nCount = GetChildCount(); i < nCount; i++ )
     {
         if ( IsChildSelected( i ) )
             ++nRet;
@@ -187,7 +187,7 @@ sal_Int32 VCLXAccessibleMenu::implGetSelectedAccessibleChildCount(  )
     return nRet;
 }
 
-Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -196,7 +196,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int
 
     Reference< XAccessible > xChild;
 
-    for ( sal_Int32 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
+    for ( sal_Int64 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
     {
         if ( IsChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
@@ -209,7 +209,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int
 }
 
 
-void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int32 nChildIndex )
+void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

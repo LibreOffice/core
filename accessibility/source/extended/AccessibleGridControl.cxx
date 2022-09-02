@@ -71,7 +71,7 @@ void SAL_CALL AccessibleGridControl::disposing()
     AccessibleGridControlBase::disposing();
 }
 
-sal_Int32 AccessibleGridControl::implGetAccessibleChildCount()
+sal_Int64 AccessibleGridControl::implGetAccessibleChildCount()
 {
     return m_aTable.GetAccessibleControlCount();
 }
@@ -79,7 +79,7 @@ sal_Int32 AccessibleGridControl::implGetAccessibleChildCount()
 // css::accessibility::XAccessibleContext ---------------------------------------------------------
 
 
-sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
 
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
+AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -233,7 +233,7 @@ AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType 
 }
 
 css::uno::Reference< css::accessibility::XAccessible >
-AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
+AccessibleGridControl::implGetFixedChild( sal_Int64 nChildIndex )
 {
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     switch( nChildIndex )
@@ -263,10 +263,10 @@ rtl::Reference<AccessibleGridControlTable> AccessibleGridControl::createAccessib
 
 void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
-    sal_Int32 nChildCount = implGetAccessibleChildCount();
+    sal_Int64 nChildCount = implGetAccessibleChildCount();
     if(nChildCount != 0)
     {
-        for(sal_Int32 i=0;i<nChildCount;i++)
+        for(sal_Int64 i=0;i<nChildCount;i++)
         {
             css::uno::Reference< css::accessibility::XAccessible > xAccessible = getAccessibleChild(i);
             if(css::uno::Reference< css::accessibility::XAccessible >(m_xTable) == xAccessible)

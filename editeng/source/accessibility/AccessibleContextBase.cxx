@@ -163,7 +163,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 
 /** No children.
 */
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
        AccessibleContextBase::getAccessibleChildCount()
 {
     return 0;
@@ -174,7 +174,7 @@ sal_Int32 SAL_CALL
     an exception for a wrong index.
 */
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleContextBase::getAccessibleChild (sal_Int32 nIndex)
+    AccessibleContextBase::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
@@ -191,7 +191,7 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
        AccessibleContextBase::getAccessibleIndexInParent()
 {
     ThrowIfDisposed ();
@@ -207,8 +207,8 @@ sal_Int32 SAL_CALL
         mxParent->getAccessibleContext());
     if (xParentContext.is())
     {
-        sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-        for (sal_Int32 i=0; i<nChildCount; i++)
+        sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+        for (sal_Int64 i=0; i<nChildCount; i++)
         {
             uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
             if (xChild.is())

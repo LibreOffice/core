@@ -666,7 +666,7 @@ public:
     }
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override
     {
         if (m_xTextHelper)
             return m_xTextHelper->GetChildCount();
@@ -674,7 +674,7 @@ public:
     }
 
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int32 i) override
+        SAL_CALL getAccessibleChild(sal_Int64 i) override
     {
         if (m_xTextHelper)
             return m_xTextHelper->GetChild(i);
@@ -691,14 +691,14 @@ public:
         return m_pController->GetDrawingArea()->get_accessible_parent();
     }
 
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
             throw css::uno::RuntimeException();
 
         // -1 for child not found/no parent (according to specification)
-        sal_Int32 nRet = -1;
+        sal_Int64 nRet = -1;
 
         css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
         if (!xParent)
@@ -712,8 +712,8 @@ public:
             //  iterate over parent's children and search for this object
             if (xParentContext.is())
             {
-                sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-                for (sal_Int32 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
+                sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+                for (sal_Int64 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
                 {
                     css::uno::Reference<css::accessibility::XAccessible> xChild(
                         xParentContext->getAccessibleChild(nChild));

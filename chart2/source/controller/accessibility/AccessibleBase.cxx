@@ -434,7 +434,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
 }
 
 // ________ AccessibleBase::XAccessibleContext ________
-sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleBase::getAccessibleChildCount()
 {
     ClearableMutexGuard aGuard( m_aMutex );
     if( ! m_bMayHaveChildren ||
@@ -453,12 +453,12 @@ sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
     return ImplGetAccessibleChildCount();
 }
 
-sal_Int32 AccessibleBase::ImplGetAccessibleChildCount() const
+sal_Int64 AccessibleBase::ImplGetAccessibleChildCount() const
 {
     return m_aChildList.size();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 i )
 {
     CheckDisposeState();
     Reference< XAccessible > xResult;
@@ -477,7 +477,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 
     return xResult;
 }
 
-Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i ) const
+Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i ) const
 {
     Reference< XAccessible > xResult;
 
@@ -510,7 +510,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
     return aResult;
 }
 
-sal_Int32 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
 {
     CheckDisposeState();
 

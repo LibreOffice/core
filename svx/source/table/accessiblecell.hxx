@@ -63,10 +63,10 @@ public:
     virtual void SAL_CALL release(  ) noexcept override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild(sal_Int32 nIndex) override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild(sal_Int64 nIndex) override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual OUString SAL_CALL getAccessibleName() override;
     const sdr::table::CellRef& getCellRef() const { return mxCell;}
     void UpdateChildren();

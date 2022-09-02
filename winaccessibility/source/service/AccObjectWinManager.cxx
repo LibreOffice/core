@@ -516,8 +516,8 @@ bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible*
         }
     }
 
-    int count = pRContext->getAccessibleChildCount();
-    for (int i=0;i<count;i++)
+    const sal_Int64 nCount = pRContext->getAccessibleChildCount();
+    for (sal_Int64 i = 0; i < nCount; i++)
     {
         Reference<XAccessible> mxAccessible
         = pRContext->getAccessibleChild(i);
@@ -1023,8 +1023,8 @@ void AccObjectWinManager::UpdateChildState(css::accessibility::XAccessible* pAcc
     {
         return;
     }
-    sal_Int32 nCount = xContext->getAccessibleChildCount();
-    for (sal_Int32 i = 0 ; i < nCount ; ++i)
+    const sal_Int64 nCount = xContext->getAccessibleChildCount();
+    for (sal_Int64 i = 0 ; i < nCount; ++i)
     {
         Reference<css::accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
         if (xChild.is())

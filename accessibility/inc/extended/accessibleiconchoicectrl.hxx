@@ -75,21 +75,21 @@ namespace accessibility
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
         // XAccessibleContext
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+        virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
         virtual OUString SAL_CALL getAccessibleDescription(  ) override;
         virtual OUString SAL_CALL getAccessibleName(  ) override;
 
         // XAccessibleSelection
-        void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
-        sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
+        void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+        sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
         void SAL_CALL clearAccessibleSelection(  ) override;
         void SAL_CALL selectAllAccessibleChildren(  ) override;
-        sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
-        void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+        sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+        void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     };
 
 

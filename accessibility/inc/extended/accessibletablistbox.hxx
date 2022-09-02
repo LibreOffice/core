@@ -58,11 +58,11 @@ public:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  The count of visible children. */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-    getAccessibleChild( sal_Int32 nChildIndex ) override;
+    getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     // XAccessibleContext
     css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;

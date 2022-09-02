@@ -37,7 +37,7 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScAddress& rCellAddress,
-        sal_Int32 nIndex);
+        sal_Int64 nIndex);
 protected:
     virtual ~ScAccessibleCellBase() override;
 public:
@@ -62,7 +62,7 @@ public:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return this objects index among the parents children.
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleIndexInParent() override;
 
 protected:
@@ -115,7 +115,7 @@ protected:
 
     ScDocument* mpDoc;
 
-    sal_Int32 mnIndex;
+    sal_Int64 mnIndex;
 
 private:
     virtual bool IsEditable(sal_Int64 nParentStates);

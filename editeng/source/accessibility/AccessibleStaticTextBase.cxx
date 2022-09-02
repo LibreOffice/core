@@ -465,13 +465,13 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 AccessibleStaticTextBase::getAccessibleChildCount()
+    sal_Int64 AccessibleStaticTextBase::getAccessibleChildCount()
     {
         // no children at all
         return 0;
     }
 
-    uno::Reference< XAccessible > AccessibleStaticTextBase::getAccessibleChild( sal_Int32 /*i*/ )
+    uno::Reference< XAccessible > AccessibleStaticTextBase::getAccessibleChild( sal_Int64 /*i*/ )
     {
         // no children at all
         return uno::Reference< XAccessible >();

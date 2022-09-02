@@ -68,7 +68,7 @@ sal_Int64 AccessibleGridControlHeaderCell::implCreateStateSet()
 /** @return
         The count of visible children.
 */
-sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
@@ -77,7 +77,7 @@ sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChildCount()
 /** @return
         The XAccessible interface of the specified child.
 */
-Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChild( sal_Int32 )
+Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChild( sal_Int64 )
 {
     throw IndexOutOfBoundsException();
 }
@@ -148,13 +148,12 @@ tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
     return tools::Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
 {
     SolarMutexGuard g;
 
     ensureIsAlive();
-    sal_Int32 nIndex = m_nColumnRowId;
-    return nIndex;
+    return m_nColumnRowId;
 }
 
 } // namespace accessibility

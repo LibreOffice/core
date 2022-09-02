@@ -187,7 +187,7 @@ Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames()
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleEdit::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleEdit::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -195,7 +195,7 @@ sal_Int32 VCLXAccessibleEdit::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > VCLXAccessibleEdit::getAccessibleChild( sal_Int32 )
+Reference< XAccessible > VCLXAccessibleEdit::getAccessibleChild( sal_Int64 )
 {
     throw IndexOutOfBoundsException();
 }

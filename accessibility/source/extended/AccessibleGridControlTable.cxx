@@ -51,15 +51,16 @@ AccessibleGridControlTable::AccessibleGridControlTable(
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL
-AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
+AccessibleGridControlTable::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
-    sal_Int32 nCount = getAccessibleChildCount();
+    sal_Int64 nCount = getAccessibleChildCount();
     if(m_aCellVector.empty() || m_aCellVector.size() != static_cast<unsigned>(nCount))
     {
+        assert(o3tl::make_unsigned(nCount) < m_aCellVector.max_size());
         m_aCellVector.resize(nCount);
     }
     if(!m_aCellVector[nChildIndex].is())
@@ -70,7 +71,7 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
     return m_aCellVector[nChildIndex];
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -186,7 +187,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
 
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    sal_Int32 nChildIndex = nRow*m_aTable.GetColumnCount() + nColumn;
+    sal_Int64 nChildIndex = static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(m_aTable.GetColumnCount()) + nColumn;
     return getAccessibleChild(nChildIndex);
 }
 
@@ -200,7 +201,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(
     //selection of single cells not possible, so if row is selected, the cell will be selected too
     return isAccessibleRowSelected(nRow);
 }
-void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -210,7 +211,7 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChil
     sal_Int32 nRow = nChildIndex / nColumns;
     m_aTable.SelectRow( nRow, true );
 }
-sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -237,17 +238,17 @@ void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
     for(tools::Long i=0; i<m_aTable.GetRowCount(); i++)
         selectedRowsRange[i]=i;
 }
-sal_Int32 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
+sal_Int64 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
     sal_Int32 nColumns = m_aTable.GetColumnCount();
-    return selectedRows.getLength()*nColumns;
+    return static_cast<sal_Int64>(selectedRows.getLength()) * static_cast<sal_Int64>(nColumns);
 }
 Reference< XAccessible > SAL_CALL
-AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -259,7 +260,7 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
 }
 //not implemented yet, because only row selection possible
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
-        sal_Int32 )
+        sal_Int64 )
 {
     SolarMutexGuard aSolarGuard;
 

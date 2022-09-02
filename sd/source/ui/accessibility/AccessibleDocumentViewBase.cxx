@@ -224,7 +224,7 @@ Reference<XAccessible> SAL_CALL
     return AccessibleContextBase::getAccessibleParent();
 }
 
-sal_Int32 SAL_CALL
+sal_Int64 SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChildCount()
 {
     ThrowIfDisposed ();
@@ -236,7 +236,7 @@ sal_Int32 SAL_CALL
 }
 
 Reference<XAccessible> SAL_CALL
-    AccessibleDocumentViewBase::getAccessibleChild (sal_Int32 nIndex)
+    AccessibleDocumentViewBase::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed ();
 
@@ -263,8 +263,8 @@ uno::Reference<XAccessible > SAL_CALL
     ::osl::MutexGuard aGuard (m_aMutex);
     uno::Reference<XAccessible> xChildAtPosition;
 
-    sal_Int32 nChildCount = getAccessibleChildCount ();
-    for (sal_Int32 i=nChildCount-1; i>=0; --i)
+    sal_Int64 nChildCount = getAccessibleChildCount ();
+    for (sal_Int64 i=nChildCount-1; i>=0; --i)
     {
         Reference<XAccessible> xChild (getAccessibleChild (i));
         if (xChild.is())
@@ -632,16 +632,16 @@ uno::Reference< XAccessibleContext >
     return this;
 }
 
-// return sal_False in default case
+// return false in default case
 bool
-    AccessibleDocumentViewBase::implIsSelected( sal_Int32 )
+    AccessibleDocumentViewBase::implIsSelected( sal_Int64 )
 {
     return false;
 }
 
-// return nothing in default case
+// do nothing in default case
 void
-    AccessibleDocumentViewBase::implSelect( sal_Int32, bool )
+    AccessibleDocumentViewBase::implSelect( sal_Int64, bool )
 {
 }
 
