@@ -129,10 +129,10 @@ void XMLRedlineExport::ExportChangesList(
     if (aFind == aChangeMap.end())
         return;
 
-    ChangesVectorType* pChangesList = aFind->second.get();
+    ChangesVectorType& rChangesList = aFind->second;
 
     // export only if changes are found
-    if (pChangesList->empty())
+    if (rChangesList.empty())
         return;
 
     // changes container element
@@ -141,7 +141,7 @@ void XMLRedlineExport::ExportChangesList(
                                 true, true);
 
     // iterate over changes list
-    for (auto const& change : *pChangesList)
+    for (auto const& change : rChangesList)
     {
         ExportChangedRegion(change);
     }
@@ -158,12 +158,11 @@ void XMLRedlineExport::SetCurrentXText(
         ChangesMapType::iterator aIter = aChangeMap.find(rText);
         if (aIter == aChangeMap.end())
         {
-            ChangesVectorType* pList = new ChangesVectorType;
-            aChangeMap[rText].reset( pList );
-            pCurrentChangesList = pList;
+            auto rv = aChangeMap.emplace(std::piecewise_construct, std::forward_as_tuple(rText), std::forward_as_tuple());
+            pCurrentChangesList = &rv.first->second;
         }
         else
-            pCurrentChangesList = aIter->second.get();
+            pCurrentChangesList = &aIter->second;
     }
     else
     {

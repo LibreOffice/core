@@ -42,7 +42,7 @@ typedef ::std::vector<
 // store a list of redline properties for each XText
 typedef ::std::map<
             css::uno::Reference< css::text::XText>,
-            std::unique_ptr<ChangesVectorType> > ChangesMapType;
+            ChangesVectorType > ChangesMapType;
 
 
 /**
