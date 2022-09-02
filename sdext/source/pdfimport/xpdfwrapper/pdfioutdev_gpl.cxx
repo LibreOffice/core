@@ -678,8 +678,15 @@ void PDFOutDev::updateLineDash(GfxState *state)
         return;
     assert(state);
 
-    double* dashArray; int arrayLen; double startOffset;
+    int arrayLen; double startOffset;
+#if POPPLER_CHECK_VERSION(22, 9, 0)
+    const std::vector<double> &dash = state->getLineDash(&startOffset);
+    const double* dashArray = dash.data();
+    arrayLen = dash.size();
+#else
+    double* dashArray;
     state->getLineDash(&dashArray, &arrayLen, &startOffset);
+#endif
 
     printf( "updateLineDash" );
     if( arrayLen && dashArray )
