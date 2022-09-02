@@ -125,6 +125,32 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     // i.e. the RGB color was lost on export.
     xComponent->dispose();
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
+{
+    // Given a media shape that has an animation that specifies looping for the video:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "video-loop.pptx";
+    getComponent() = loadFromDesktop(aURL);
+
+    // When exporting that to PPTX:
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(aTempFile.GetFileName(), test::OOXML);
+
+    // Then make sure that the "infinite" repeat count is written:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '//p:cMediaNode/p:cTn' number of nodes is incorrect
+    // i.e. the media node was lost on export, the video no longer looped.
+    assertXPath(pXmlDoc, "//p:cMediaNode/p:cTn", "repeatCount", "indefinite");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

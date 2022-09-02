@@ -659,6 +659,9 @@ bool IsAudioURL(const OUString& rURL)
 {
     return rURL.endsWithIgnoreAsciiCase(".wav") || rURL.endsWithIgnoreAsciiCase(".m4a");
 }
+
+/// Returns if rURL has an extension which is a video format.
+bool IsVideoURL(const OUString& rURL) { return rURL.endsWithIgnoreAsciiCase(".mp4"); }
 }
 
 namespace oox::core
@@ -1235,6 +1238,7 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
         bValid = true;
     }
 
+    bool bVideo = false;
     if (!bValid)
     {
         if (xAudio->getSource() >>= xShape)
@@ -1243,7 +1247,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
             bool bHasMediaURL = xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL");
             if (bHasMediaURL && (xShapeProps->getPropertyValue("MediaURL") >>= sUrl))
             {
-                bValid = IsAudioURL(sUrl);
+                bVideo = IsVideoURL(sUrl);
+                bValid = IsAudioURL(sUrl) || bVideo;
             }
         }
     }
@@ -1256,12 +1261,31 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
         mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
     }
 
-    bool bNarration = xAudio->getNarration();
-    mpFS->startElementNS(XML_p, XML_audio, XML_isNarration, bNarration ? "1" : "0");
-    bool bHideDuringShow = xAudio->getHideDuringShow();
-    mpFS->startElementNS(XML_p, XML_cMediaNode, XML_showWhenStopped, bHideDuringShow ? "0" : "1");
+    if (bVideo)
+    {
+        mpFS->startElementNS(XML_p, XML_video);
+        mpFS->startElementNS(XML_p, XML_cMediaNode);
+    }
+    else
+    {
+        bool bNarration = xAudio->getNarration();
+        mpFS->startElementNS(XML_p, XML_audio, XML_isNarration, bNarration ? "1" : "0");
+        bool bHideDuringShow = xAudio->getHideDuringShow();
+        mpFS->startElementNS(XML_p, XML_cMediaNode, XML_showWhenStopped,
+                             bHideDuringShow ? "0" : "1");
+    }
 
-    mpFS->startElementNS(XML_p, XML_cTn);
+    animations::Timing eTiming{};
+    bool bLooping
+        = (xAudio->getRepeatCount() >>= eTiming) && eTiming == animations::Timing_INDEFINITE;
+    if (bVideo && bLooping)
+    {
+        mpFS->startElementNS(XML_p, XML_cTn, XML_repeatCount, "indefinite");
+    }
+    else
+    {
+        mpFS->startElementNS(XML_p, XML_cTn);
+    }
     WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
     WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
     mpFS->endElementNS(XML_p, XML_cTn);
@@ -1281,7 +1305,14 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
     mpFS->endElementNS(XML_p, XML_tgtEl);
 
     mpFS->endElementNS(XML_p, XML_cMediaNode);
-    mpFS->endElementNS(XML_p, XML_audio);
+    if (bVideo)
+    {
+        mpFS->endElementNS(XML_p, XML_video);
+    }
+    else
+    {
+        mpFS->endElementNS(XML_p, XML_audio);
+    }
 }
 
 void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
@@ -1456,7 +1487,7 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
                     = xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL");
                 if (bHasMediaURL && (xShapeProps->getPropertyValue("MediaURL") >>= sURL))
                 {
-                    mbValid = IsAudioURL(sURL);
+                    mbValid = IsAudioURL(sURL) || IsVideoURL(sURL);
                 }
             }
         }
