@@ -31,7 +31,6 @@
 #include <i18nutil/transliteration.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/fstathelper.hxx>
