@@ -1020,6 +1020,10 @@ static int doc_getTileMode(LibreOfficeKitDocument* pThis);
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight);
+static void doc_getDataArea(LibreOfficeKitDocument* pThis,
+                            long nTab,
+                            long* pCol,
+                            long* pRow);
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments);
 
@@ -1272,6 +1276,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->paintPartTile = doc_paintPartTile;
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
+        m_pDocumentClass->getDataArea = doc_getDataArea;
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
@@ -3912,6 +3917,29 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
         Size aDocumentSize = pDoc->getDocumentSize();
         *pWidth = aDocumentSize.Width();
         *pHeight = aDocumentSize.Height();
+    }
+    else
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+    }
+}
+
+static void doc_getDataArea(LibreOfficeKitDocument* pThis,
+                            long nTab,
+                            long* pCol,
+                            long* pRow)
+{
+    comphelper::ProfileZone aZone("doc_getDataArea");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (pDoc)
+    {
+        Size aDocumentSize = pDoc->getDataArea(nTab);
+        *pCol = aDocumentSize.Width();
+        *pRow = aDocumentSize.Height();
     }
     else
     {

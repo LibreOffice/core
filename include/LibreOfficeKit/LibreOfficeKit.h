@@ -483,6 +483,12 @@ struct _LibreOfficeKitDocumentClass
                                     char** pText,
                                     char** pUsedMimeType);
 
+    /// @see lok::Document::getDataArea().
+    void (*getDataArea) (LibreOfficeKitDocument* pThis,
+                         long nPart,
+                         long* pCol,
+                         long* pRow);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

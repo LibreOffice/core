@@ -694,6 +694,28 @@ Size ScModelObj::getDocumentSize()
     return aSize;
 }
 
+Size ScModelObj::getDataArea(long nPart)
+{
+    Size aSize(1, 1);
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData || !pDocShell)
+        return aSize;
+
+    SCTAB nTab = nPart;
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
+    const ScDocument& rDoc = pDocShell->GetDocument();
+
+    const ScTable* pTab = rDoc.FetchTable(nTab);
+    if (!pTab)
+        return aSize;
+
+    pTab->GetCellArea(nEndCol, nEndRow);
+    aSize = Size(nEndCol, nEndRow);
+
+    return aSize;
+}
 
 void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {

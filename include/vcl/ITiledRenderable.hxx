@@ -70,6 +70,14 @@ public:
     virtual Size getDocumentSize() = 0;
 
     /**
+     * Get the data area size (in Calc last column and row).
+     */
+    virtual Size getDataArea(long /*nPart*/)
+    {
+        return Size(1, 1);
+    }
+
+    /**
      * Set the document "part", i.e. slide for a slideshow, and
      * tab for a spreadsheet.
      * bool bAllowChangeFocus - used to not disturb other users while editing when
