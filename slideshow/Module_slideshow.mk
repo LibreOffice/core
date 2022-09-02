@@ -21,6 +21,7 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,slideshow,\
 	CppunitTest_slideshow \
+	CppunitTest_slideshow_engine \
 ))
 
 # vim: set noet sw=4 ts=4:

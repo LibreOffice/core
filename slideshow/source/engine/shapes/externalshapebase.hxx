@@ -65,6 +65,7 @@ namespace slideshow::internal
             virtual void pause() override;
             virtual bool isPlaying() const override;
             virtual void setMediaTime(double) override;
+            void setLooping(bool bLooping) override;
 
             // render methods
 
@@ -108,6 +109,7 @@ namespace slideshow::internal
             virtual bool implIsIntrinsicAnimationPlaying() const = 0;
             /// override in derived class to set media time
             virtual void implSetIntrinsicAnimationTime(double) = 0;
+            virtual void implSetLooping(bool /*bLooping*/) {}
 
 
             /// The associated XShape

@@ -72,6 +72,8 @@ namespace slideshow::internal
             presented
              */
             virtual void setMediaTime(double fTime) = 0;
+
+            virtual void setLooping(bool /*bLooping*/){};
         };
 
         typedef ::std::shared_ptr< IExternalMediaShapeBase > IExternalMediaShapeBaseSharedPtr;

@@ -81,6 +81,7 @@ namespace slideshow::internal
             virtual void implPauseIntrinsicAnimation() override;
             virtual bool implIsIntrinsicAnimationPlaying() const override;
             virtual void implSetIntrinsicAnimationTime(double) override;
+            void implSetLooping(bool bLooping) override;
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
@@ -234,6 +235,13 @@ namespace slideshow::internal
                 pViewMediaShape->setMediaTime( fTime );
         }
 
+        void MediaShape::implSetLooping(bool bLooping)
+        {
+            for (const auto& pViewMediaShape : maViewMediaShapes)
+            {
+                pViewMediaShape->setLooping(bLooping);
+            }
+        }
 
         ShapeSharedPtr createMediaShape(
             const uno::Reference< drawing::XShape >& xShape,
