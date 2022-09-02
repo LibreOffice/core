@@ -512,7 +512,7 @@
 #define STR_UNDO_CONDFORMAT                     NC_("STR_UNDO_CONDFORMAT", "Conditional Format")
 #define STR_UNDO_CONDFORMAT_LIST                NC_("STR_UNDO_CONDFORMAT_LIST", "Conditional Formats")
 #define STR_UNDO_FORMULA_TO_VALUE               NC_("STR_UNDO_FORMULA_TO_VALUE", "Convert Formula To Value")
-#define STR_UNQUOTED_STRING                     NC_("STR_UNQUOTED_STRING", "Strings without quotes are interpreted as column/row labels.")
+#define STR_UNQUOTED_STRING                     NC_("STR_UNQUOTED_STRING", "Strings without quotes are interpreted as defined names or references or column/row labels.")
 #define STR_ENTER_VALUE                         NC_("STR_ENTER_VALUE", "Enter a value!")
 #define STR_TABLE_COUNT                         NC_("STR_TABLE_COUNT", "Sheet %1 of %2")
 #define STR_FUNCTIONS_FOUND                     NC_("STR_FUNCTIONS_FOUND", "%1 and %2 more")
