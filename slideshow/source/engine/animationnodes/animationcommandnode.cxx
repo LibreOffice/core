@@ -19,7 +19,13 @@
 
 
 #include <com/sun/star/presentation/EffectCommands.hpp>
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
+#include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "animationcommandnode.hxx"
 #include <eventmultiplexer.hxx>
@@ -27,6 +33,52 @@
 
 
 using namespace com::sun::star;
+
+namespace
+{
+/// Determines if this is the root of the timing node tree.
+bool IsTimingRootNode(const uno::Reference<animations::XAnimationNode>& xNode)
+{
+    uno::Sequence<beans::NamedValue> aUserData = xNode->getUserData();
+    comphelper::SequenceAsHashMap aMap(aUserData);
+    auto it = aMap.find("node-type");
+    if (it == aMap.end())
+    {
+        return false;
+    }
+
+    sal_Int16 nNodeType{};
+    if (!(it->second >>= nNodeType))
+    {
+        return false;
+    }
+
+    return nNodeType == css::presentation::EffectNodeType::TIMING_ROOT;
+}
+
+/// Walks the parent chain of xNode and stops at the timing root.
+uno::Reference<animations::XAnimationNode>
+GetTimingRoot(const uno::Reference<animations::XAnimationNode>& xNode)
+{
+    uno::Reference<animations::XAnimationNode> xParent(xNode->getParent(), uno::UNO_QUERY);
+    while (true)
+    {
+        if (!xParent.is())
+        {
+            break;
+        }
+
+        if (IsTimingRootNode(xParent))
+        {
+            return xParent;
+        }
+
+        xParent.set(xParent->getParent(), uno::UNO_QUERY);
+    }
+
+    return {};
+}
+}
 
 namespace slideshow::internal {
 
@@ -43,6 +95,7 @@ AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimatio
                                               uno::UNO_QUERY );
     ShapeSharedPtr pShape( getContext().mpSubsettableShapeManager->lookupShape( xShape ) );
     mpShape = ::std::dynamic_pointer_cast< IExternalMediaShapeBase >( pShape );
+    mxShape = xShape;
 }
 
 void AnimationCommandNode::dispose()
@@ -50,6 +103,42 @@ void AnimationCommandNode::dispose()
     mxCommandNode.clear();
     mpShape.reset();
     BaseNode::dispose();
+}
+
+bool AnimationCommandNode::GetLoopingFromAnimation(
+    const uno::Reference<animations::XCommand>& xCommandNode,
+    const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<animations::XAnimationNode> xTimingRoot = GetTimingRoot(xCommandNode);
+    uno::Reference<container::XEnumerationAccess> xEnumAccess(xTimingRoot, uno::UNO_QUERY);
+    if (!xEnumAccess.is())
+    {
+        return false;
+    }
+
+    uno::Reference<container::XEnumeration> xNodes = xEnumAccess->createEnumeration();
+    while (xNodes->hasMoreElements())
+    {
+        uno::Reference<animations::XAnimationNode> xNode(xNodes->nextElement(), uno::UNO_QUERY);
+        if (xNode->getType() != animations::AnimationNodeType::AUDIO)
+        {
+            continue;
+        }
+
+        uno::Reference<animations::XAudio> xAudio(xNode, uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xSource(xAudio->getSource(), uno::UNO_QUERY);
+        if (xSource != xShape)
+        {
+            continue;
+        }
+
+        animations::Timing eTiming{};
+        if ((xAudio->getRepeatCount() >>= eTiming) && eTiming == animations::Timing_INDEFINITE)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void AnimationCommandNode::activate_st()
@@ -71,6 +160,14 @@ void AnimationCommandNode::activate_st()
         if( mpShape )
         {
             mpShape->setMediaTime(fMediaTime/1000.0);
+
+            if (AnimationCommandNode::GetLoopingFromAnimation(mxCommandNode, mxShape))
+            {
+                // If looping is requested from the animation, then that has priority over the
+                // looping from the shape itself.
+                mpShape->setLooping(true);
+            }
+
             mpShape->play();
         }
         break;

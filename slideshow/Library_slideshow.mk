@@ -28,6 +28,10 @@ $(eval $(call gb_Library_use_externals,slideshow,\
     epoxy \
 ))
 
+$(eval $(call gb_Library_add_defs,slideshow,\
+    -DSLIDESHOW_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 
 $(eval $(call gb_Library_use_libraries,slideshow,\

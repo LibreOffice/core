@@ -112,6 +112,8 @@ namespace slideshow::internal
              */
             void setMediaTime(double fTime);
 
+            void setLooping(bool bLooping);
+
             // render methods
 
 

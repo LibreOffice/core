@@ -143,6 +143,7 @@ namespace slideshow::internal
             implSetIntrinsicAnimationTime(fTime);
         }
 
+        void ExternalShapeBase::setLooping(bool bLooping) { implSetLooping(bLooping); }
 
         bool ExternalShapeBase::update() const
         {
