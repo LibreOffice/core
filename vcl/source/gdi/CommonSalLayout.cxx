@@ -653,29 +653,30 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
     {
         if (aGlyphItem.charPos() >= mnEndCharPos)
             continue;
+
+        unsigned int nGraphemeCount = 0;
         if (aGlyphItem.charCount() > 1 && aGlyphItem.newWidth() != 0 && !rStr.isEmpty())
         {
             // We are calculating DX array for cursor positions and this is a
-            // ligature, we want to distribute the glyph width over the
-            // ligature components.
+            // ligature, find out how many grapheme clusters are in it.
             if (!xBreak.is())
                 xBreak = mxBreak.is() ? mxBreak : vcl::unohelper::CreateBreakIterator();
 
+            // Count grapheme clusters in the ligature.
             sal_Int32 nDone;
             sal_Int32 nPos = aGlyphItem.charPos();
-            unsigned int nGraphemeCount = 0;
-
-            // Count grapheme clusters in the ligatures.
             while (nPos < aGlyphItem.charPos() + aGlyphItem.charCount())
             {
                 nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
                     css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 nGraphemeCount++;
             }
+        }
 
-            if (!nGraphemeCount)
-                continue;
-
+        if (nGraphemeCount > 1)
+        {
+            // More than one grapheme cluster, we want to distribute the glyph
+            // width over them.
             std::vector<DeviceCoordinate> aWidths(nGraphemeCount);
 
             // Check if the glyph has ligature caret positions.
@@ -722,7 +723,8 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
             }
 
             // Set the width of each grapheme cluster.
-            nPos = aGlyphItem.charPos();
+            sal_Int32 nDone;
+            sal_Int32 nPos = aGlyphItem.charPos();
             for (auto nWidth : aWidths)
             {
                 rCharWidths[nPos - mnMinCharPos] += nWidth;
