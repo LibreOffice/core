@@ -105,7 +105,7 @@ public:
 };
 
 /** map from style name to ScMyStyleRanges */
-typedef std::map<OUString, std::unique_ptr<ScMyStyleRanges>>  ScMyStylesMap;
+typedef std::map<OUString, ScMyStyleRanges>  ScMyStylesMap;
 
 class ScMyStylesImportHelper
 {
