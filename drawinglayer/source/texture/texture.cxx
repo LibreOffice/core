@@ -627,8 +627,34 @@ namespace drawinglayer::texture
 
         double GeoTexSvxHatch::getDistanceToHatch(const basegfx::B2DPoint& rUV) const
         {
-            const basegfx::B2DPoint aCoor(getBackTextureTransform() * rUV);
-            return fmod(aCoor.getY(), mfDistance);
+            // the below is an inlined and optimised version of
+            //     const basegfx::B2DPoint aCoor(getBackTextureTransform() * rUV);
+            //     return fmod(aCoor.getY(), mfDistance);
+
+            const basegfx::B2DHomMatrix& rMat = getBackTextureTransform();
+            double fX = rUV.getX();
+            double fY = rUV.getY();
+
+            double fTempY(
+                rMat.get(1, 0) * fX +
+                rMat.get(1, 1) * fY +
+                rMat.get(1, 2));
+
+            if(!rMat.isLastLineDefault())
+            {
+                const double fOne(1.0);
+                const double fTempM(
+                    rMat.get(2, 0) * fX +
+                    rMat.get(2, 1) * fY +
+                    rMat.get(2, 2));
+
+                if(!basegfx::fTools::equalZero(fTempM) && !basegfx::fTools::equal(fOne, fTempM))
+                {
+                    fTempY /= fTempM;
+                }
+            }
+
+            return fmod(fTempY, mfDistance);
         }
 
         const basegfx::B2DHomMatrix& GeoTexSvxHatch::getBackTextureTransform() const
