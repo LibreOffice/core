@@ -258,26 +258,34 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, formula::RefEdit&, rRefEdit, void)
     }
 
     ScCompiler aComp( *mpDoc, maPos, mpDoc->GetGrammar() );
+    aComp.SetExtendedErrorDetection( ScCompiler::ExtendedErrorDetection::EXTENDED_ERROR_DETECTION_NAME_BREAK);
     std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
 
-    // Error, warn the user
-    if( ta->GetCodeError() != FormulaError::NONE || ( ta->GetLen() == 0 ) )
+    // Error, warn the user if it is not an unknown name.
+    if (ta->GetCodeError() != FormulaError::NoName && (ta->GetCodeError() != FormulaError::NONE || ta->GetLen() == 0))
     {
         rEdit.set_message_type(weld::EntryMessageType::Error);
         mxFtVal->set_label(ScResId(STR_VALID_DEFERROR));
         return;
     }
 
-    // Recognized col/row name or string token, warn the user
-    formula::FormulaToken* token = ta->FirstToken();
-    formula::StackVar t = token->GetType();
-    OpCode op = token->GetOpCode();
-    if( ( op == ocColRowName ) ||
-        ( ( op == ocBad ) && ( t == formula::svString ) )
-      )
+    // Unrecognized name, warn the user; i.e. happens when starting to type and
+    // will go away once a valid name is completed.
+    if (ta->GetCodeError() == FormulaError::NoName)
     {
         rEdit.set_message_type(weld::EntryMessageType::Warning);
         mxFtVal->set_label(ScResId(STR_UNQUOTED_STRING));
+        return;
+    }
+
+    // Generate RPN to detect further errors.
+    if (ta->GetLen() > 0)
+        aComp.CompileTokenArray();
+    // Error, warn the user.
+    if (ta->GetCodeError() != FormulaError::NONE || (ta->GetCodeLen() == 0))
+    {
+        rEdit.set_message_type(weld::EntryMessageType::Error);
+        mxFtVal->set_label(ScResId(STR_VALID_DEFERROR));
         return;
     }
 
