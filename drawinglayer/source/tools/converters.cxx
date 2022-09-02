@@ -37,7 +37,6 @@
 
 namespace drawinglayer
 {
-
     BitmapEx convertToBitmapEx(
         drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
         const geometry::ViewInformation2D& rViewInformation2D,
@@ -47,132 +46,90 @@ namespace drawinglayer
     {
         BitmapEx aRetval;
 
-        if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
+        if(rSeq.empty())
+            return aRetval;
+
+        if(nDiscreteWidth <= 0 || nDiscreteHeight <= 0)
+            return aRetval;
+
+        // get destination size in pixels
+        const MapMode aMapModePixel(MapUnit::MapPixel);
+        const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
+        drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
+
+        if(nViewVisibleArea > nMaxSquarePixels)
         {
-            // get destination size in pixels
-            const MapMode aMapModePixel(MapUnit::MapPixel);
-            const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
-            drawinglayer::primitive2d::Primitive2DContainer aSequence;
+            // reduce render size
+            double fReduceFactor = sqrt(static_cast<double>(nMaxSquarePixels) / static_cast<double>(nViewVisibleArea));
+            nDiscreteWidth = basegfx::fround(static_cast<double>(nDiscreteWidth) * fReduceFactor);
+            nDiscreteHeight = basegfx::fround(static_cast<double>(nDiscreteHeight) * fReduceFactor);
 
-            if(nViewVisibleArea > nMaxSquarePixels)
-            {
-                // reduce render size
-                double fReduceFactor = sqrt(static_cast<double>(nMaxSquarePixels) / static_cast<double>(nViewVisibleArea));
-                nDiscreteWidth = basegfx::fround(static_cast<double>(nDiscreteWidth) * fReduceFactor);
-                nDiscreteHeight = basegfx::fround(static_cast<double>(nDiscreteHeight) * fReduceFactor);
+            const drawinglayer::primitive2d::Primitive2DReference aEmbed(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
+                    basegfx::utils::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
+                    std::move(aSequence)));
 
-                const drawinglayer::primitive2d::Primitive2DReference aEmbed(
-                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                        basegfx::utils::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
-                        std::move(rSeq)));
-
-                aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
-            }
-            else
-                aSequence = std::move(rSeq);
-
-            const Point aEmptyPoint;
-            const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
-            ScopedVclPtrInstance< VirtualDevice > pContent;
-
-            // prepare vdev
-            if (!pContent->SetOutputSizePixel(aSizePixel, false))
-            {
-                SAL_WARN("vcl", "Cannot set VirtualDevice to size : " << aSizePixel.Width() << "x" << aSizePixel.Height());
-                return aRetval;
-            }
-            pContent->SetMapMode(aMapModePixel);
-
-            // set to all white
-            pContent->SetBackground(Wallpaper(COL_WHITE));
-            pContent->Erase();
-
-            // create pixel processor, also already takes care of AAing and
-            // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
-            // not wanted, change after this call as needed
-            std::unique_ptr<processor2d::BaseProcessor2D> pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
-                *pContent,
-                rViewInformation2D);
-
-#ifdef DBG_UTIL
-            static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
-#endif
-            // render content
-            pContentProcessor->process(aSequence);
-
-            // get content
-            pContent->EnableMapMode(false);
-            const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-            if(bDoSaveForVisualControl)
-            {
-                SvFileStream aNew(
-#ifdef _WIN32
-                "c:\\test_content.png"
-#else
-                "~/test_content.png"
-#endif
-                , StreamMode::WRITE|StreamMode::TRUNC);
-                BitmapEx aContentEx(aContent);
-                vcl::PngImageWriter aPNGWriter(aNew);
-                aPNGWriter.write(aContentEx);
-            }
-#endif
-            // prepare for mask creation
-            pContent->SetMapMode(aMapModePixel);
-
-            // set alpha to all white (fully transparent)
-            pContent->Erase();
-
-            // embed primitives to paint them black
-            const primitive2d::Primitive2DReference xRef(
-                new primitive2d::ModifiedColorPrimitive2D(
-                    std::move(aSequence),
-                    std::make_shared<basegfx::BColorModifier_replace>(
-                            basegfx::BColor(0.0, 0.0, 0.0))));
-            const primitive2d::Primitive2DContainer xSeq { xRef };
-
-            // render
-            pContentProcessor->process(xSeq);
-            pContentProcessor.reset();
-
-            // get alpha channel from vdev
-            pContent->EnableMapMode(false);
-            const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
-#ifdef DBG_UTIL
-            if(bDoSaveForVisualControl)
-            {
-                SvFileStream aNew(
-#ifdef _WIN32
-                "c:\\test_alpha.png"
-#else
-                "~/test_alpha.png"
-#endif
-                , StreamMode::WRITE|StreamMode::TRUNC);
-                BitmapEx aAlphaEx(aAlpha);
-                vcl::PngImageWriter aPNGWriter(aNew);
-                aPNGWriter.write(aAlphaEx);
-            }
-#endif
-
-            // create BitmapEx result
-            aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
-#ifdef DBG_UTIL
-            if(bDoSaveForVisualControl)
-            {
-                SvFileStream aNew(
-#ifdef _WIN32
-                "c:\\test_combined.png"
-#else
-                "~/test_combined.png"
-#endif
-                , StreamMode::WRITE|StreamMode::TRUNC);
-                vcl::PngImageWriter aPNGWriter(aNew);
-                aPNGWriter.write(aRetval);
-            }
-#endif
+            aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
         }
+
+        const Point aEmptyPoint;
+        const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
+
+        // Create target VirtualDevice. Use a VirtualDevice in the Alpha-mode.
+        // This creates the needed alpha channel 'in parallel'. It is not
+        // cheaper though since the VDev in that mode internally uses two VDevs,
+        // so ressoure-wise it's more expensive, speed-wise pretty much the same
+        // (the former two-path rendering created content & alpha separately in
+        // two runs). The former method always created the correct Alpha, but
+        // when transparent geometry was involved, the created content was
+        // blended against white (COL_WHITE) due to the starting conditions of
+        // creation.
+        // There are more ways than this to do this correctly, but this is the
+        // most simple for now. Due to hoping to be able to render to RGBA in the
+        // future anyways there is no need to experiment trying to do the correct
+        // thing using an expanded version of the former method.
+        ScopedVclPtrInstance<VirtualDevice> pContent(
+            *Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+
+        // prepare vdev
+        if (!pContent->SetOutputSizePixel(aSizePixel, false))
+        {
+            SAL_WARN("vcl", "Cannot set VirtualDevice to size : " << aSizePixel.Width() << "x" << aSizePixel.Height());
+            return aRetval;
+        }
+
+        // We map to pixel, use that MapMode. Init by erasing.
+        pContent->SetMapMode(aMapModePixel);
+        pContent->Erase();
+
+        // create pixel processor, also already takes care of AAing and
+        // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
+        // not wanted, change after this call as needed
+        std::unique_ptr<processor2d::BaseProcessor2D> pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
+            *pContent,
+            rViewInformation2D);
+
+        // render content
+        pContentProcessor->process(aSequence);
+
+        // create final BitmapEx result
+        aRetval = pContent->GetBitmapEx(aEmptyPoint, aSizePixel);
+
+#ifdef DBG_UTIL
+        static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
+        if(bDoSaveForVisualControl)
+        {
+            SvFileStream aNew(
+#ifdef _WIN32
+            "c:\\test_combined.png"
+#else
+            "~/test_combined.png"
+#endif
+            , StreamMode::WRITE|StreamMode::TRUNC);
+            vcl::PngImageWriter aPNGWriter(aNew);
+            aPNGWriter.write(aRetval);
+        }
+#endif
 
         return aRetval;
     }
