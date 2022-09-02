@@ -132,6 +132,9 @@ else
 		$(if $(gb_CppunitTest__vcl_no_svp), \
 			$(filter-out SAL_USE_VCLPLUGIN=svp,$(gb_TEST_ENV_VARS)),$(gb_TEST_ENV_VARS)) \
 		$(EXTRA_ENV_VARS) \
+		$(if $(filter allow,$(NON_APPLICATION_FONT_USE)),, \
+			$(if $(filter abort,$(NON_APPLICATION_FONT_USE)),SAL_NON_APPLICATION_FONT_USE=abort, \
+			$(if $(filter deny,$(NON_APPLICATION_FONT_USE)),SAL_NON_APPLICATION_FONT_USE=deny))) \
 		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
@@ -198,6 +201,7 @@ $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
 $(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS :=
+$(call gb_CppunitTest_get_target,$(1)) : NON_APPLICATION_FONT_USE :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
 
@@ -383,11 +387,17 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 
 endef
 
+# One of allow, deny, abort:
+define gb_CppunitTest_set_non_application_font_use
+$(call gb_CppunitTest_get_target,$(1)) : NON_APPLICATION_FONT_USE += $(2)
+
+endef
+
 define gb_CppunitTest_use_more_fonts
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(foreach font,$(gb_Package_MODULE_ooo_fonts),$(call gb_Package_get_target,$(font)))
-$(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS := SAL_NON_APPLICATION_FONT_USE=deny
+$(call gb_CppunitTest_set_non_application_font_use,$(1),deny)
 endif
 
 endef

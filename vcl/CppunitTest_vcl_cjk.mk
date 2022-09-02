@@ -64,8 +64,6 @@ $(eval $(call gb_CppunitTest_use_more_fonts,vcl_cjk))
 # we don't have any bundled cjk fonts, so allow use of
 # system fonts for the cjk tests, tests have to survive
 # unavailable fonts
-$(call gb_CppunitTest_get_target,vcl_cjk): \
-    EXTRA_ENV_VARS := \
-        SAL_NON_APPLICATION_FONT_USE=allow
+$(eval $(call gb_CppunitTest_set_non_application_font_use,vcl_cjk,allow))
 
 # vim: set noet sw=4 ts=4:
