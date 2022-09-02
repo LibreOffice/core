@@ -1484,6 +1484,15 @@ QAccessibleInterface* QtAccessibleWidget::cellAt(int row, int column) const
     Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return nullptr;
+
+    if (row < 0 || row >= xTable->getAccessibleRowCount() || column < 0
+        || column >= xTable->getAccessibleColumnCount())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::cellAt called with invalid row/column index ("
+                               << row << ", " << column << ")");
+        return nullptr;
+    }
+
     return QAccessible::queryAccessibleInterface(
         QtAccessibleRegistry::getQObject(xTable->getAccessibleCellAt(row, column)));
 }
@@ -1522,6 +1531,13 @@ bool QtAccessibleWidget::isColumnSelected(int nColumn) const
     if (!xTable.is())
         return false;
 
+    if (nColumn < 0 || nColumn >= xTable->getAccessibleColumnCount())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::isColumnSelected called with invalid column index "
+                               << nColumn);
+        return false;
+    }
+
     return xTable->isAccessibleColumnSelected(nColumn);
 }
 
@@ -1534,6 +1550,13 @@ bool QtAccessibleWidget::isRowSelected(int nRow) const
     Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return false;
+
+    if (nRow < 0 || nRow >= xTable->getAccessibleRowCount())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::isRowSelected called with invalid row index " << nRow);
+        return false;
+    }
 
     return xTable->isAccessibleRowSelected(nRow);
 }
@@ -1570,6 +1593,13 @@ bool QtAccessibleWidget::selectColumn(int column)
     if (!xAc.is())
         return false;
 
+    if (column < 0 || column >= columnCount())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectColumn called with invalid column index " << column);
+        return false;
+    }
+
     Reference<XAccessibleTableSelection> xTableSelection(xAc, UNO_QUERY);
     if (!xTableSelection.is())
         return false;
@@ -1581,6 +1611,12 @@ bool QtAccessibleWidget::selectRow(int row)
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
     if (!xAc.is())
         return false;
+
+    if (row < 0 || row >= rowCount())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::selectRow called with invalid row index " << row);
+        return false;
+    }
 
     Reference<XAccessibleTableSelection> xTableSelection(xAc, UNO_QUERY);
     if (!xTableSelection.is())
