@@ -108,6 +108,7 @@ void                   hypertextIfaceInit(AtkHypertextIface *iface);
 void                   imageIfaceInit(AtkImageIface *iface);
 void                   selectionIfaceInit(AtkSelectionIface *iface);
 void                   tableIfaceInit(AtkTableIface *iface);
+void                   tablecellIfaceInit(AtkTableCellIface *iface);
 void                   textIfaceInit(AtkTextIface *iface);
 void                   valueIfaceInit(AtkValueIface *iface);
 
