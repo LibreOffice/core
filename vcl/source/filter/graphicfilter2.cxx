@@ -342,78 +342,11 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 
 bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 {
-    // ! Because 0x0a can be interpreted as LF too ...
-    // we can't be sure that this special sign represent a PCX file only.
-    // Every Ascii file is possible here :-(
-    // We must detect the whole header.
-
-    bool    bRet = false;
-    sal_uInt8   cByte = 0;
-
-    sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-    rStm.ReadUChar( cByte );
-
-    if ( cByte == 0x0a )
-    {
-        aMetadata.mnFormat = GraphicFileFormat::PCX;
-
-        rStm.SeekRel( 1 );
-
-        // compression
-        rStm.ReadUChar( cByte );
-
-        bRet = (cByte==0 || cByte ==1);
-        if (bRet)
-        {
-            sal_uInt16  nTemp16;
-            sal_uInt16  nXmin;
-            sal_uInt16  nXmax;
-            sal_uInt16  nYmin;
-            sal_uInt16  nYmax;
-            sal_uInt16  nDPIx;
-            sal_uInt16  nDPIy;
-
-            // Bits/Pixel
-            rStm.ReadUChar( cByte );
-            aMetadata.mnBitsPerPixel = cByte;
-
-            // image dimensions
-            rStm.ReadUInt16( nTemp16 );
-            nXmin = nTemp16;
-            rStm.ReadUInt16( nTemp16 );
-            nYmin = nTemp16;
-            rStm.ReadUInt16( nTemp16 );
-            nXmax = nTemp16;
-            rStm.ReadUInt16( nTemp16 );
-            nYmax = nTemp16;
-
-            aMetadata.maPixSize.setWidth( nXmax - nXmin + 1 );
-            aMetadata.maPixSize.setHeight( nYmax - nYmin + 1 );
-
-            // resolution
-            rStm.ReadUInt16( nTemp16 );
-            nDPIx = nTemp16;
-            rStm.ReadUInt16( nTemp16 );
-            nDPIy = nTemp16;
-
-            // set logical size
-            MapMode aMap( MapUnit::MapInch, Point(),
-                          Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
-            aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maPixSize, aMap,
-                                                   MapMode( MapUnit::Map100thMM ) );
-
-            // number of color planes
-            cByte = 5; // Illegal value in case of EOF.
-            rStm.SeekRel( 49 );
-            rStm.ReadUChar( cByte );
-            aMetadata.mnPlanes = cByte;
-
-            bRet = (aMetadata.mnPlanes<=4);
-        }
-    }
-
-    rStm.Seek( nStmPos );
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, true /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPCX();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     return bRet;
 }
 

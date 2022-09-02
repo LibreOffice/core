@@ -617,18 +617,71 @@ bool GraphicFormatDetector::checkEMF()
 
 bool GraphicFormatDetector::checkPCX()
 {
-    if (maFirstBytes[0] != 0x0a)
-        return false;
-
-    sal_uInt8 nVersion = maFirstBytes[1];
-    sal_uInt8 nEncoding = maFirstBytes[2];
-    if ((nVersion == 0 || nVersion == 2 || nVersion == 3 || nVersion == 5) && nEncoding <= 1)
+    // ! Because 0x0a can be interpreted as LF too ...
+    // we can't be sure that this special sign represent a PCX file only.
+    // Every Ascii file is possible here :-(
+    // We must detect the whole header.
+    bool bRet = false;
+    sal_uInt8 cByte = 0;
+    auto nStmPos = mrStream.Tell();
+    SeekGuard aGuard(mrStream, nStmPos);
+    mrStream.SetEndian(SvStreamEndian::LITTLE);
+    mrStream.ReadUChar(cByte);
+    if (cByte == 0x0a)
     {
         maMetadata.mnFormat = GraphicFileFormat::PCX;
-        return true;
-    }
+        mrStream.SeekRel(1);
+        // compression
+        mrStream.ReadUChar(cByte);
+        bRet = (cByte == 0 || cByte == 1);
+        if (bRet)
+        {
+            sal_uInt16 nTemp16;
+            sal_uInt16 nXmin;
+            sal_uInt16 nXmax;
+            sal_uInt16 nYmin;
+            sal_uInt16 nYmax;
+            sal_uInt16 nDPIx;
+            sal_uInt16 nDPIy;
 
-    return false;
+            // Bits/Pixel
+            mrStream.ReadUChar(cByte);
+            maMetadata.mnBitsPerPixel = cByte;
+
+            // image dimensions
+            mrStream.ReadUInt16(nTemp16);
+            nXmin = nTemp16;
+            mrStream.ReadUInt16(nTemp16);
+            nYmin = nTemp16;
+            mrStream.ReadUInt16(nTemp16);
+            nXmax = nTemp16;
+            mrStream.ReadUInt16(nTemp16);
+            nYmax = nTemp16;
+
+            maMetadata.maPixSize.setWidth(nXmax - nXmin + 1);
+            maMetadata.maPixSize.setHeight(nYmax - nYmin + 1);
+
+            // resolution
+            mrStream.ReadUInt16(nTemp16);
+            nDPIx = nTemp16;
+            mrStream.ReadUInt16(nTemp16);
+            nDPIy = nTemp16;
+
+            // set logical size
+            MapMode aMap(MapUnit::MapInch, Point(), Fraction(1, nDPIx), Fraction(1, nDPIy));
+            maMetadata.maLogSize = OutputDevice::LogicToLogic(maMetadata.maPixSize, aMap,
+                                                              MapMode(MapUnit::Map100thMM));
+
+            // number of color planes
+            cByte = 5; // Illegal value in case of EOF.
+            mrStream.SeekRel(49);
+            mrStream.ReadUChar(cByte);
+            maMetadata.mnPlanes = cByte;
+
+            bRet = (maMetadata.mnPlanes <= 4);
+        }
+    }
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkTIF()
