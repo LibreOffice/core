@@ -72,7 +72,7 @@ endif
 ifeq ($(OS),LINUX)
 # reset the LD_LIBRARY_PATH for spawned GPG processes
 $(call gb_CppunitTest_get_target,xmlsecurity_signing): \
-    EXTRA_ENV_VARS := \
+    EXTRA_ENV_VARS += \
         LIBO_LD_PATH=$$LD_LIBRARY_PATH
 endif
 
