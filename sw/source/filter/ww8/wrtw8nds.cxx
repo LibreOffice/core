@@ -2386,6 +2386,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         const OUString& aStr( rNode.GetText() );
 
         sal_Int32 const nEnd = bNeedParaSplit ? *aBreakIt : aStr.getLength();
+        bool bIsEndOfCell = false;
         bool bIncludeEndOfParaCRInRedlineProperties = false;
         sal_Int32 nOpenAttrWithRange = 0;
 
@@ -2393,6 +2394,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         if ( pTextNodeInfo )
         {
             pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
+            if (pTextNodeInfoInner && pTextNodeInfoInner->isEndOfCell())
+                bIsEndOfCell = true;
         }
 
         do {
@@ -2702,6 +2705,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         }
 
                         WriteCR( pTextNodeInfoInner );
+
+                        if (0 != nEnd && bIsEndOfCell)
+                            AttrOutput().OutputFKP(/*bforce=*/true);
                     }
                 }
             }
@@ -2729,12 +2735,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             "odd to see this happening, expected 0");
                 }
 
-                // !bIncludeEndOfParaCRInRedlineProperties implies we have just
-                // emitted a CR, in which case we want to pass force=true to
-                // OutputFKP to ensure that an FKP entry for direct character
-                // formatting is written even if empty, so that the next one will
-                // start after the CR.
-                AttrOutput().OutputFKP(!bIncludeEndOfParaCRInRedlineProperties);
+                AttrOutput().OutputFKP(/*bForce=*/false);
 
                 if (bTextAtr || bAttrWithRange || bIncludeEndOfParaCRInRedlineProperties)
                 {
