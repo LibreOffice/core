@@ -2238,8 +2238,6 @@ void ScViewFunc::SetWidthOrHeight(
                     aCxt.setForceAutoSize(bAll);
                     aCxt.setExtraHeight(nSizeTwips);
                     rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true);
-                    if (bAll)
-                        rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
 
                     //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=sal_True
                     //  (set for Extra-Height, else reset).
@@ -2268,7 +2266,8 @@ void ScViewFunc::SetWidthOrHeight(
             {
                 for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
                 {
-                    if ( eMode != SC_SIZE_VISOPT || !rDoc.ColHidden(nCol, nTab) )
+                    const bool bIsColHidden = rDoc.ColHidden(nCol, nTab);
+                    if ( eMode != SC_SIZE_VISOPT || !bIsColHidden )
                     {
                         sal_uInt16 nThisSize = nSizeTwips;
 
@@ -2277,7 +2276,11 @@ void ScViewFunc::SetWidthOrHeight(
                         if ( nThisSize )
                             rDoc.SetColWidth( nCol, nTab, nThisSize );
 
-                        rDoc.ShowCol( nCol, nTab, bShow );
+                        // tdf#131073 - Don't show hidden cols after setting optimal col width
+                        if (eMode == SC_SIZE_OPTIMAL)
+                            rDoc.ShowCol(nCol, nTab, !bIsColHidden);
+                        else
+                            rDoc.ShowCol( nCol, nTab, bShow );
 
                         if (!bShow && nCol == nCurX && nTab == nCurTab)
                         {

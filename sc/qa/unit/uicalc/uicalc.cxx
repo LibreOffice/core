@@ -2277,6 +2277,55 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
     CPPUNIT_ASSERT_EQUAL(OUString("Err:502"), pDoc->GetString(ScAddress(7, 219, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131073)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    for (SCCOLROW nColRow = 0; nColRow < 3; nColRow++)
+    {
+        pDoc->SetString(ScAddress(0, nColRow, 0), "Hello World");
+        pDoc->SetRowHeight(0, nColRow, 1000 * (nColRow + 1));
+        pDoc->SetString(ScAddress(nColRow, 0, 0), "Hello World");
+        pDoc->SetColWidth(nColRow, 0, 1000 * (nColRow + 1));
+    }
+
+    // Check rows
+    pDoc->SetRowHidden(1, 1, 0, true);
+    goToCell("A1:A3");
+    dispatchCommand(
+        mxComponent, ".uno:SetOptimalRowHeight",
+        comphelper::InitPropertySequence({ { "aExtraHeight", uno::Any(sal_uInt16(0)) } }));
+
+    CPPUNIT_ASSERT(!pDoc->RowHidden(0, 0));
+    // tdf#131073: Without the fix in place, the second row would not be hidden
+    CPPUNIT_ASSERT(pDoc->RowHidden(1, 0));
+    CPPUNIT_ASSERT(!pDoc->RowHidden(2, 0));
+    const sal_uInt16 nStdRowHeight = pDoc->GetRowHeight(4, 0);
+    CPPUNIT_ASSERT_EQUAL(nStdRowHeight, pDoc->GetRowHeight(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nStdRowHeight, pDoc->GetRowHeight(1, SCTAB(0), false));
+    CPPUNIT_ASSERT_EQUAL(nStdRowHeight, pDoc->GetRowHeight(2, 0));
+
+    // Check columns
+    pDoc->SetColHidden(1, 1, 0, true);
+    goToCell("A1:C1");
+    dispatchCommand(
+        mxComponent, ".uno:SetOptimalColumnWidth",
+        comphelper::InitPropertySequence({ { "aExtraWidth", uno::Any(sal_uInt16(0)) } }));
+
+    CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
+    // tdf#131073: Without the fix in place, the second column would not be hidden
+    CPPUNIT_ASSERT(pDoc->ColHidden(1, 0));
+    CPPUNIT_ASSERT(!pDoc->ColHidden(2, 0));
+    const sal_uInt16 nStdColWidth = pDoc->GetColWidth(0, 0);
+    CPPUNIT_ASSERT_EQUAL(nStdColWidth, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nStdColWidth, pDoc->GetColWidth(1, SCTAB(0), false));
+    CPPUNIT_ASSERT_EQUAL(nStdColWidth, pDoc->GetColWidth(2, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
