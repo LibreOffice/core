@@ -1362,10 +1362,10 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup const & rGroupObj, SdPage&
     while(aIter.IsMore())
     {
         // do move to page rough with old/current stuff, will be different in aw080 anyways
-        SdrObject* pCandidate = aIter.Next();
+        rtl::Reference<SdrObject> pCandidate = aIter.Next();
         rGroupObj.GetSubList()->NbcRemoveObject(pCandidate->GetOrdNum());
-        rPage.NbcInsertObject(pCandidate);
-        aObjects.push_back(pCandidate);
+        rPage.NbcInsertObject(pCandidate.get());
+        aObjects.push_back(pCandidate.get());
     }
 
     // create main node
