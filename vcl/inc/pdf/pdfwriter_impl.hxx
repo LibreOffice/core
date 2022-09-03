@@ -827,7 +827,7 @@ i12626
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
     void drawVerticalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, const Matrix3& rRotScale, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight );
     void drawHorizontalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, bool bFirst, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
-    void drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines );
+    void drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines, bool bCheckSubPixelToLogic );
     void drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines );
 
