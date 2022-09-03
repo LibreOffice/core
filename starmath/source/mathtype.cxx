@@ -3191,8 +3191,9 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             break;
         case TOVERLINE: //If the next node is not text
                         //or text with more than one char
-            if ((pIsText->GetToken().eType != TTEXT) ||
-                (pIsText->GetText().getLength() > 1))
+            if (!pIsText ||
+                pIsText->GetToken().eType != TTEXT ||
+                pIsText->GetText().getLength() > 1)
                 nOldPending = StartTemplate(0x11);
             break;
         default:
@@ -3213,8 +3214,9 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
                 EndTemplate(nOldPending);
                 break;
             case TOVERLINE:
-                if ((pIsText->GetToken().eType != TTEXT) ||
-                    (pIsText->GetText().getLength() > 1))
+                if (!pIsText ||
+                    pIsText->GetToken().eType != TTEXT ||
+                    pIsText->GetText().getLength() > 1)
                     EndTemplate(nOldPending);
                 break;
             default:
@@ -3261,8 +3263,9 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
                 pS->WriteUChar( 16 );
                 break;
             case TOVERLINE:
-                if ((pIsText->GetToken().eType == TTEXT) &&
-                    (pIsText->GetText().getLength() == 1))
+                if (pIsText &&
+                    (pIsText->GetToken().eType == TTEXT &&
+                     pIsText->GetText().getLength() == 1))
                     pS->WriteUChar( 17 );
                 break;
             case TBREVE:
