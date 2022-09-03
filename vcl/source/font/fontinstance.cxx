@@ -51,15 +51,15 @@ LogicalFontInstance::~LogicalFontInstance()
         hb_font_destroy(m_pHbFont);
 }
 
-hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace)
+hb_font_t* LogicalFontInstance::InitHbFont()
 {
+    hb_face_t* pHbFace = GetFontFace()->GetHbFace();
     assert(pHbFace);
     hb_font_t* pHbFont = hb_font_create(pHbFace);
     unsigned int nUPEM = hb_face_get_upem(pHbFace);
     hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
-    // hb_font_t keeps a reference to hb_face_t, so destroy this one.
-    hb_face_destroy(pHbFace);
+    ImplInitHbFont(pHbFont);
     return pHbFont;
 }
 

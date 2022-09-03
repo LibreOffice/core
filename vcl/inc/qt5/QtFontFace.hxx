@@ -51,7 +51,6 @@ public:
     sal_IntPtr GetFontId() const override;
 
     QFont CreateFont() const;
-    int GetFontTable(const char pTagName[5], unsigned char*) const;
 
     FontCharMapRef GetFontCharMap() const override;
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
@@ -59,6 +58,8 @@ public:
 
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
+
+    hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
 
 private:
     typedef enum { Font, FontDB } FontIdType;

@@ -103,16 +103,14 @@ public: // TODO: make data members private
     int GetKashidaWidth() const;
 
     void GetScale(double* nXScale, double* nYScale) const;
-    static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:
     explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
-    // Takes ownership of pHbFace.
-    static hb_font_t* InitHbFont(hb_face_t* pHbFace);
-    virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
+    hb_font_t* InitHbFont();
+    virtual void ImplInitHbFont(hb_font_t*) { }
 
 private:
     struct MapEntry
@@ -142,17 +140,8 @@ private:
 inline hb_font_t* LogicalFontInstance::GetHbFont()
 {
     if (!m_pHbFont)
-        m_pHbFont = ImplInitHbFont();
+        m_pHbFont = InitHbFont();
     return m_pHbFont;
-}
-
-inline void LogicalFontInstance::DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName)
-{
-    pTagName[0] = static_cast<char>(nTableTag >> 24);
-    pTagName[1] = static_cast<char>(nTableTag >> 16);
-    pTagName[2] = static_cast<char>(nTableTag >> 8);
-    pTagName[3] = static_cast<char>(nTableTag);
-    pTagName[4] = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

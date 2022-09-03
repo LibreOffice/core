@@ -374,6 +374,24 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const v
     return new FreetypeFontInstance(*this, rFSD);
 }
 
+hb_face_t* FreetypeFontFace::GetHbFace() const
+{
+    if (!mpHbFace)
+    {
+        auto* pFileName = mpFreetypeFontInfo->GetFontFileName().getStr();
+        auto nIndex = mpFreetypeFontInfo->GetFontFaceIndex();
+        hb_blob_t* pHbBlob = hb_blob_create_from_file(pFileName);
+        mpHbFace = hb_face_create(pHbBlob, nIndex);
+        hb_blob_destroy(pHbBlob);
+    }
+    return mpHbFace;
+}
+
+hb_blob_t* FreetypeFontFace::GetHbTable(hb_tag_t nTag) const
+{
+    return hb_face_reference_table(mpHbFace, nTag);
+}
+
 // FreetypeFont
 
 FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<FreetypeFontInfo> xFI)

@@ -634,7 +634,8 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
-    mbAliasSymbolsLow( false )
+    mbAliasSymbolsLow( false ),
+    mhDC( nullptr )
 {
     if( eWinCharSet == SYMBOL_CHARSET )
     {
@@ -677,16 +678,93 @@ rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::f
     return new WinFontInstance(*this, rFSD);
 }
 
+namespace
+{
+struct BlobReference
+{
+    hb_blob_t* mpBlob;
+    BlobReference(hb_blob_t* pBlob)
+        : mpBlob(pBlob)
+    {
+        hb_blob_reference(mpBlob);
+    }
+    BlobReference(BlobReference&& other) noexcept
+        : mpBlob(other.mpBlob)
+    {
+        other.mpBlob = nullptr;
+    }
+    BlobReference& operator=(BlobReference&& other)
+    {
+        std::swap(mpBlob, other.mpBlob);
+        return *this;
+    }
+    BlobReference(const BlobReference& other) = delete;
+    BlobReference& operator=(BlobReference& other) = delete;
+    ~BlobReference() { hb_blob_destroy(mpBlob); }
+};
+}
+
+using BlobCacheKey = std::pair<sal_IntPtr, hb_tag_t>;
+
+namespace
+{
+struct BlobCacheKeyHash
+{
+    std::size_t operator()(BlobCacheKey const& rKey) const
+    {
+        std::size_t seed = 0;
+        o3tl::hash_combine(seed, rKey.first);
+        o3tl::hash_combine(seed, rKey.second);
+        return seed;
+    }
+};
+}
+
+hb_blob_t* WinFontFace::GetHbTable(hb_tag_t nTag) const
+{
+    static o3tl::lru_map<BlobCacheKey, BlobReference, BlobCacheKeyHash> gCache(50);
+    BlobCacheKey aCacheKey{ GetFontId(), nTag };
+    auto it = gCache.find(aCacheKey);
+    if (it != gCache.end())
+    {
+        hb_blob_reference(it->second.mpBlob);
+        return it->second.mpBlob;
+    }
+
+    assert(mhDC);
+
+    sal_uLong nLength = 0;
+    unsigned char* pBuffer = nullptr;
+
+    nLength = ::GetFontData(mhDC, OSL_NETDWORD(nTag), 0, nullptr, 0);
+    if (nLength > 0 && nLength != GDI_ERROR)
+    {
+        pBuffer = new unsigned char[nLength];
+        ::GetFontData(mhDC, OSL_NETDWORD(nTag), 0, pBuffer, nLength);
+    }
+
+    hb_blob_t* pBlob = nullptr;
+
+    if (pBuffer)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+                               pBuffer, [](void* data) { delete[] static_cast<unsigned char*>(data); });
+
+    gCache.insert({ aCacheKey, BlobReference(pBlob) });
+    return pBlob;
+}
+
 static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 void WinFontFace::UpdateFromHDC( HDC hDC ) const
 {
+    mhDC = hDC;
+
     // short circuit if already initialized
     if( mxUnicodeMap.is() )
         return;
 
-    ReadCmapTable( hDC );
-    GetFontCapabilities( hDC );
+    ReadCmapTable();
+    GetFontCapabilities();
 }
 
 FontCharMapRef WinFontFace::GetFontCharMap() const
@@ -700,7 +778,7 @@ bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) 
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
-void WinFontFace::ReadCmapTable( HDC hDC ) const
+void WinFontFace::ReadCmapTable() const
 {
     if( mxUnicodeMap.is() )
         return;
@@ -708,7 +786,7 @@ void WinFontFace::ReadCmapTable( HDC hDC ) const
     bool bIsSymbolFont = (meWinCharSet == SYMBOL_CHARSET);
     // get the CMAP table from the font which is selected into the DC
     const DWORD nCmapTag = CalcTag( "cmap" );
-    const RawFontData aRawFontData( hDC, nCmapTag );
+    const RawFontData aRawFontData( mhDC, nCmapTag );
     // parse the CMAP table if available
     if( aRawFontData.get() ) {
         CmapResult aResult;
@@ -727,7 +805,7 @@ void WinFontFace::ReadCmapTable( HDC hDC ) const
     }
 }
 
-void WinFontFace::GetFontCapabilities( HDC hDC ) const
+void WinFontFace::GetFontCapabilities() const
 {
     // read this only once per font
     if( mbFontCapabilitiesRead )
@@ -737,12 +815,12 @@ void WinFontFace::GetFontCapabilities( HDC hDC ) const
 
     // OS/2 table
     const DWORD OS2Tag = CalcTag( "OS/2" );
-    DWORD nLength = ::GetFontData( hDC, OS2Tag, 0, nullptr, 0 );
+    DWORD nLength = ::GetFontData( mhDC, OS2Tag, 0, nullptr, 0 );
     if( (nLength != GDI_ERROR) && nLength )
     {
         std::vector<unsigned char> aTable( nLength );
         unsigned char* pTable = aTable.data();
-        ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
+        ::GetFontData( mhDC, OS2Tag, 0, pTable, nLength );
         vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength);
     }
 }

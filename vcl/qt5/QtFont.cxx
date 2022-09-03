@@ -131,27 +131,6 @@ QtFont::QtFont(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSel
     applyStyle(*this, rFSP.GetItalic());
 }
 
-static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
-{
-    char pTagName[5];
-    LogicalFontInstance::DecodeOpenTypeTag(nTableTag, pTagName);
-
-    QtFont* pFont = static_cast<QtFont*>(pUserData);
-    QRawFont aRawFont(QRawFont::fromFont(*pFont));
-    QByteArray aTable = aRawFont.fontTable(pTagName);
-    const sal_uInt32 nLength = aTable.size();
-
-    hb_blob_t* pBlob = nullptr;
-    if (nLength > 0)
-        pBlob = hb_blob_create(aTable.data(), nLength, HB_MEMORY_MODE_DUPLICATE, nullptr, nullptr);
-    return pBlob;
-}
-
-hb_font_t* QtFont::ImplInitHbFont()
-{
-    return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
-}
-
 bool QtFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool) const
 {
     rB2DPolyPoly.clear();

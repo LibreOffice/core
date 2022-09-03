@@ -29,6 +29,8 @@
 
 #include <fontattributes.hxx>
 
+#include <hb.h>
+
 class LogicalFontInstance;
 struct FontMatchStatus;
 namespace vcl::font
@@ -66,6 +68,8 @@ public:
 class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelper::SimpleReferenceObject
 {
 public:
+    ~PhysicalFontFace();
+
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const = 0;
 
     virtual sal_IntPtr      GetFontId() const = 0;
@@ -75,7 +79,12 @@ public:
     bool                    IsBetterMatch( const vcl::font::FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
+    virtual hb_face_t*      GetHbFace() const;
+    virtual hb_blob_t*      GetHbTable(hb_tag_t) const { assert(false); return nullptr; }
+
 protected:
+    mutable hb_face_t*      mpHbFace;
+
     explicit PhysicalFontFace(const FontAttributes&);
 };
 

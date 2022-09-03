@@ -36,11 +36,18 @@ namespace vcl::font
 
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
+    , mpHbFace(nullptr)
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )
         if ( IsStarSymbol( GetFamilyName() ) )
             SetSymbolFlag( true );
+}
+
+PhysicalFontFace::~PhysicalFontFace()
+{
+    if (mpHbFace)
+        hb_face_destroy(mpHbFace);
 }
 
 sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
@@ -200,6 +207,18 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSP, FontMatchSt
     }
 
     return true;
+}
+
+static hb_blob_t* getTable(hb_face_t*, hb_tag_t nTag, void* pUserData)
+{
+    return static_cast<const PhysicalFontFace*>(pUserData)->GetHbTable(nTag);
+}
+
+hb_face_t* PhysicalFontFace::GetHbFace() const
+{
+    if (mpHbFace == nullptr)
+        mpHbFace = hb_face_create_for_tables(getTable, const_cast<PhysicalFontFace*>(this), nullptr);
+    return mpHbFace;
 }
 }
 

@@ -46,7 +46,6 @@
 
 #include <rtl/character.hxx>
 
-#include <o3tl/hash_combine.hxx>
 #include <algorithm>
 
 #include <shlwapi.h>
@@ -167,98 +166,9 @@ float WinFontInstance::getHScale() const
     return nWidth / nHeight;
 }
 
-namespace
-{
-struct BlobReference
-{
-    hb_blob_t* mpBlob;
-    BlobReference(hb_blob_t* pBlob)
-        : mpBlob(pBlob)
-    {
-        hb_blob_reference(mpBlob);
-    }
-    BlobReference(BlobReference&& other) noexcept
-        : mpBlob(other.mpBlob)
-    {
-        other.mpBlob = nullptr;
-    }
-    BlobReference& operator=(BlobReference&& other)
-    {
-        std::swap(mpBlob, other.mpBlob);
-        return *this;
-    }
-    BlobReference(const BlobReference& other) = delete;
-    BlobReference& operator=(BlobReference& other) = delete;
-    ~BlobReference() { hb_blob_destroy(mpBlob); }
-};
-}
-
-using BlobCacheKey = std::pair<rtl::Reference<vcl::font::PhysicalFontFace>, hb_tag_t>;
-
-namespace
-{
-struct BlobCacheKeyHash
-{
-    std::size_t operator()(BlobCacheKey const& rKey) const
-    {
-        std::size_t seed = 0;
-        o3tl::hash_combine(seed, rKey.first.get());
-        o3tl::hash_combine(seed, rKey.second);
-        return seed;
-    }
-};
-}
-
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
-{
-    static o3tl::lru_map<BlobCacheKey, BlobReference, BlobCacheKeyHash> gCache(50);
-
-    WinFontInstance* pFont = static_cast<WinFontInstance*>(pUserData);
-
-    BlobCacheKey cacheKey{ rtl::Reference<vcl::font::PhysicalFontFace>(pFont->GetFontFace()),
-                           nTableTag };
-    auto it = gCache.find(cacheKey);
-    if (it != gCache.end())
-    {
-        hb_blob_reference(it->second.mpBlob);
-        return it->second.mpBlob;
-    }
-
-    HDC hDC = pFont->GetGraphics()->getHDC();
-    HFONT hFont = pFont->GetHFONT();
-    assert(hDC);
-    assert(hFont);
-
-    sal_uLong nLength = 0;
-    unsigned char* pBuffer = nullptr;
-
-    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
-    nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
-    if (nLength > 0 && nLength != GDI_ERROR)
-    {
-        pBuffer = new unsigned char[nLength];
-        ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, pBuffer, nLength);
-    }
-    SelectObject(hDC, hOrigFont);
-
-    if (!pBuffer)
-    { // Cache also failures.
-        gCache.insert({ cacheKey, BlobReference(nullptr) });
-        return nullptr;
-    }
-
-    hb_blob_t* pBlob
-        = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
-                         pBuffer, [](void* data) { delete[] static_cast<unsigned char*>(data); });
-    gCache.insert({ cacheKey, BlobReference(pBlob) });
-    return pBlob;
-}
-
-hb_font_t* WinFontInstance::ImplInitHbFont()
+void WinFontInstance::ImplInitHbFont(hb_font_t* pHbFont)
 {
     assert(m_pGraphics);
-    hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
-
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
     if (GetFontSelectPattern().mnWidth)
     {
@@ -282,8 +192,6 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
 
         SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
     }
-
-    return pHbFont;
 }
 
 void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)

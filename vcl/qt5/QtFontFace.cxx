@@ -253,4 +253,20 @@ bool QtFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) c
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
+hb_blob_t* QtFontFace::GetHbTable(hb_tag_t nTag) const
+{
+    char pTagName[5] = { '\0' };
+    hb_tag_to_string(nTag, pTagName);
+
+    QFont aFont = CreateFont();
+    QRawFont aRawFont(QRawFont::fromFont(aFont));
+    QByteArray aTable = aRawFont.fontTable(pTagName);
+    const sal_uInt32 nLength = aTable.size();
+
+    hb_blob_t* pBlob = nullptr;
+    if (nLength > 0)
+        pBlob = hb_blob_create(aTable.data(), nLength, HB_MEMORY_MODE_DUPLICATE, nullptr, nullptr);
+    return pBlob;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

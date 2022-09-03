@@ -57,7 +57,7 @@ public:
 private:
     explicit WinFontInstance(const WinFontFace&, const vcl::font::FontSelectPattern&);
 
-    hb_font_t* ImplInitHbFont() override;
+    virtual void ImplInitHbFont(hb_font_t*) override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     WinSalGraphics *m_pGraphics;

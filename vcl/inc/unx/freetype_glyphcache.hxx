@@ -106,6 +106,9 @@ public:
 
     FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
     inline bool GetFontCapabilities(vcl::FontCapabilities&) const override;
+
+    virtual hb_face_t* GetHbFace() const override;
+    virtual hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
 };
 
 bool FreetypeFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
@@ -119,7 +122,7 @@ class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
 
     std::unique_ptr<FreetypeFont> mxFreetypeFont;
 
-    virtual hb_font_t* ImplInitHbFont() override;
+    virtual void ImplInitHbFont(hb_font_t*) override;
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     explicit FreetypeFontInstance(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP);
