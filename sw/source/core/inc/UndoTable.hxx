@@ -348,12 +348,11 @@ class SwUndoMergeTable final : public SwUndo
     SwNodeOffset m_nTableNode;
     std::unique_ptr<SaveTable> m_pSaveTable, m_pSaveHdl;
     std::unique_ptr<SwHistory> m_pHistory;
-    sal_uInt16 m_nMode;
     bool m_bWithPrev;
 
 public:
     SwUndoMergeTable( const SwTableNode& rTableNd, const SwTableNode& rDelTableNd,
-                    bool bWithPrev, sal_uInt16 nMode );
+                    bool bWithPrev );
 
     virtual ~SwUndoMergeTable() override;
 

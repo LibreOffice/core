@@ -1287,8 +1287,7 @@ public:
 
     /** And vice versa: rPos must be in the table that remains. The flag indicates
      whether the current table is merged with the one before or behind it. */
-    bool MergeTable( const SwPosition& rPos, bool bWithPrev,
-                        sal_uInt16 nMode = 0 );
+    bool MergeTable( const SwPosition& rPos, bool bWithPrev );
 
     // Make charts of given table update.
     void UpdateCharts( const OUString& rName ) const;

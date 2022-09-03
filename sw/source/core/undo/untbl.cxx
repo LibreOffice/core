@@ -2934,9 +2934,9 @@ void SwUndoSplitTable::SaveFormula( SwHistory& rHistory )
 
 SwUndoMergeTable::SwUndoMergeTable( const SwTableNode& rTableNd,
                                 const SwTableNode& rDelTableNd,
-                                bool bWithPrv, sal_uInt16 nMd )
+                                bool bWithPrv )
     : SwUndo( SwUndoId::MERGE_TABLE, &rTableNd.GetDoc() ),
-    m_nMode( nMd ), m_bWithPrev( bWithPrv )
+    m_bWithPrev( bWithPrv )
 {
     // memorize end node of the last table cell that'll stay in position
     if( m_bWithPrev )
@@ -3032,7 +3032,7 @@ void SwUndoMergeTable::RedoImpl(::sw::UndoRedoContext & rContext)
     else
         pPam->GetPoint()->Assign( m_nTableNode );
 
-    pDoc->MergeTable( *pPam->GetPoint(), m_bWithPrev, m_nMode );
+    pDoc->MergeTable( *pPam->GetPoint(), m_bWithPrev );
 
     ClearFEShellTabCols(*pDoc, nullptr);
 }
@@ -3042,7 +3042,7 @@ void SwUndoMergeTable::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     SwPaM *const pPam = & rContext.GetRepeatPaM();
 
-    pDoc->MergeTable( *pPam->GetPoint(), m_bWithPrev, m_nMode );
+    pDoc->MergeTable( *pPam->GetPoint(), m_bWithPrev );
     ClearFEShellTabCols(*pDoc, nullptr);
 }
 

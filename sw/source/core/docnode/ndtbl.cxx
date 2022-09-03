@@ -3462,7 +3462,7 @@ SwTableNode* SwNodes::SplitTable( SwNode& rPos, bool bAfter,
  * @param bWithPrev  merge the current Table with the preceding
  *                   or succeeding one
  */
-bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode )
+bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev )
 {
     SwTableNode* pTableNd = rPos.GetNode().FindTableNode(), *pDelTableNd;
     if( !pTableNd )
@@ -3489,7 +3489,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     std::unique_ptr<SwHistory> pHistory;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoMergeTable( *pTableNd, *pDelTableNd, bWithPrev, nMode );
+        pUndo = new SwUndoMergeTable( *pTableNd, *pDelTableNd, bWithPrev );
         GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         pHistory.reset(new SwHistory);
     }
@@ -3502,7 +3502,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     // The actual merge
-    bool bRet = rNds.MergeTable( bWithPrev ? *pTableNd : *pDelTableNd, !bWithPrev, nMode );
+    bool bRet = rNds.MergeTable( bWithPrev ? *pTableNd : *pDelTableNd, !bWithPrev );
 
     if( pHistory )
     {
@@ -3520,7 +3520,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     return bRet;
 }
 
-bool SwNodes::MergeTable( SwNode& rPos, bool bWithPrev, sal_uInt16 nMode )
+bool SwNodes::MergeTable( SwNode& rPos, bool bWithPrev )
 {
     SwTableNode* pDelTableNd = rPos.GetTableNode();
     OSL_ENSURE( pDelTableNd, "Where did the TableNode go?" );
@@ -3601,11 +3601,6 @@ bool SwNodes::MergeTable( SwNode& rPos, bool bWithPrev, sal_uInt16 nMode )
 
     // tweak the conditional styles at the first inserted Line
     const SwTableLine* pFirstLn = rTable.GetTabLines()[ nOldSize ];
-    if( 1 == nMode )
-    {
-        // Set Header Template in the Line and save in the History
-        // if needed for Undo!
-    }
     sw_LineSetHeadCondColl( pFirstLn );
 
     // Clean up the Borders
