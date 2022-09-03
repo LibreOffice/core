@@ -264,7 +264,7 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
         return;
     }
 
-    SdrObject *pObj = pShape->GetSdrObject();
+    rtl::Reference<SdrObject> pObj = pShape->GetSdrObject();
 
     if(!pObj)
     {
@@ -273,15 +273,15 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
     }
     else if ( !pObj->IsInserted() )
     {
-        mpPage->InsertObject( pObj, 0 );
+        mpPage->InsertObject( pObj.get(), 0 );
     }
 
-    pShape->Create( pObj, this );
-    OSL_ENSURE( pShape->GetSdrObject() == pObj, "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
+    pShape->Create( pObj.get(), this );
+    OSL_ENSURE( pShape->GetSdrObject() == pObj.get(), "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
 
     if ( !pObj->IsInserted() )
     {
-        mpPage->InsertObject( pObj, 0 );
+        mpPage->InsertObject( pObj.get(), 0 );
     }
 
     mpModel->SetChanged();
@@ -832,7 +832,7 @@ Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
     return xShape;
 }
 
-SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) noexcept
+rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) noexcept
 {
     rtl::Reference<SdrObject> pObj = CreateSdrObject_( xShape );
     if( pObj)
@@ -846,7 +846,7 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
         }
     }
 
-    return pObj.get();
+    return pObj;
 }
 
 // css::lang::XServiceInfo

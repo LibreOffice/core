@@ -59,11 +59,13 @@ OReportModel::~OReportModel()
 
 void OReportModel::detachController()
 {
-    m_pReportDefinition = nullptr;
+    if (!m_pReportDefinition)
+        return;
     m_pController = nullptr;
     m_xUndoEnv->EndListening( *this );
     ClearUndoBuffer();
     m_xUndoEnv->Clear(OXUndoEnvironment::Accessor());
+    m_pReportDefinition = nullptr;
 }
 
 rtl::Reference<SdrPage> OReportModel::AllocPage(bool /*bMasterPage*/)

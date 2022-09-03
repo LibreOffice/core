@@ -77,7 +77,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     SdrPage* GetSdrPage() const { return mpPage; }
 
     // Creation of a SdrObject and insertion into the SdrPage
-    SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) noexcept;
+    rtl::Reference<SdrObject> CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) noexcept;
 
     // Determine Type and Inventor
     static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) noexcept;
