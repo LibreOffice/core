@@ -64,6 +64,13 @@ DECLARE_WW8EXPORT_TEST(testTdf150197_anlv2ListFormat, "tdf150197_anlv2ListFormat
                                  getProperty<OUString>(getParagraph(4), "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf117994_CRnumformatting, "tdf117994_CRnumformatting.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), parseDump("//body/txt[1]/Special[@nType='PortionType::Number']", "rText"));
+    //Without this fix in place, it would become 200 (and non-bold).
+    CPPUNIT_ASSERT_EQUAL(OUString("160"), parseDump("//body/txt[1]/Special[@nType='PortionType::Number']", "nHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

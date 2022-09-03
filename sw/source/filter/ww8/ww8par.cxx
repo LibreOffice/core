@@ -103,6 +103,7 @@
 #include <swtable.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
+#include <fmtautofmt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include "sprmids.hxx"
 
@@ -121,6 +122,7 @@
 
 #include <svl/lngmisc.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 
 #include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/processfactory.hxx>
@@ -2422,6 +2424,27 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
 
     if (pText != nullptr)
         pRule = sw::util::GetNumRuleFromTextNode(*pText);
+
+    // tdf#64222 / tdf#150613 filter out the "paragraph marker" formatting and
+    // set it as a separate paragraph property, just like we do for DOCX.
+    // This is only being used for numbering currently, so limiting to that context.
+    if (pRule)
+    {
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1, RES_TXTATR_CHARFMT,
+                        RES_TXTATR_CHARFMT, RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>
+            items(m_pPaM->GetDoc().GetAttrPool());
+
+        SfxWhichIter aIter(items);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            const SfxPoolItem* pItem = m_xCtrlStck->GetStackAttr(rPos, nWhich);
+            if (pItem)
+                items.Put(*pItem);
+        }
+        SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
+        item.SetStyleHandle(std::make_shared<SfxItemSet>(items));
+        pText->SetAttr(item);
+    }
 
     if (
          pRule && !m_xWDop->fDontUseHTMLAutoSpacing &&
