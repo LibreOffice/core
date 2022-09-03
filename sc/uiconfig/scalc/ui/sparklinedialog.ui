@@ -261,6 +261,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colSeries">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -297,6 +298,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colNegative">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -333,6 +335,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colHigh">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -369,6 +372,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colLow">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -405,6 +409,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colMarker">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -441,6 +446,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colFirst">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -477,6 +483,7 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="colLast">
+                        <property name="label" translatable="no"></property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
