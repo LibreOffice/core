@@ -79,10 +79,14 @@ SdrMediaObj::SdrMediaObj(
 :   SdrRectObj(rSdrModel, rRect)
     ,m_xImpl( new Impl )
 {
+    osl_atomic_increment(&m_refCount);
+
     const bool bUndo(rSdrModel.IsUndoEnabled());
     rSdrModel.EnableUndo(false);
     MakeNameUnique();
     rSdrModel.EnableUndo(bUndo);
+
+    osl_atomic_decrement(&m_refCount);
 }
 
 SdrMediaObj::~SdrMediaObj()
