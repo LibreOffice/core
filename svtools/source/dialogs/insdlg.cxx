@@ -127,12 +127,6 @@ void SvObjectServerList::FillInsertObjects()
         {
             const uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
 
-            OUString aStringProductName( "%PRODUCTNAME" );
-            sal_Int32 nStringProductNameLength = aStringProductName.getLength();
-
-            OUString aStringProductVersion( "%PRODUCTVERSION" );
-            sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
-
             for( const auto& rName : seqNames )
             {
                 uno::Reference< container::XNameAccess > xEntry ;
@@ -146,25 +140,8 @@ void SvObjectServerList::FillInsertObjects()
 
                     if ( !aUIName.isEmpty() )
                     {
-                        // replace %PRODUCTNAME
-                        sal_Int32 nIndex = aUIName.indexOf( aStringProductName );
-                        while( nIndex != -1 )
-                        {
-                            aUIName = aUIName.replaceAt(
-                                nIndex, nStringProductNameLength,
-                                utl::ConfigManager::getProductName() );
-                            nIndex = aUIName.indexOf( aStringProductName );
-                        }
-
-                        // replace %PRODUCTVERSION
-                        nIndex = aUIName.indexOf( aStringProductVersion );
-                        while( nIndex != -1 )
-                        {
-                            aUIName = aUIName.replaceAt(
-                                nIndex, nStringProductVersionLength,
-                                utl::ConfigManager::getProductVersion() );
-                            nIndex = aUIName.indexOf( aStringProductVersion );
-                        }
+                        aUIName = aUIName.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
+                        aUIName = aUIName.replaceAll("%PRODUCTVERSION", utl::ConfigManager::getProductVersion());
                     }
 
                     SvGlobalName aClassName;
