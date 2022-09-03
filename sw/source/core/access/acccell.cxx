@@ -368,28 +368,6 @@ uno::Any SwAccessibleCell::getMinimumIncrement(  )
     return uno::Any();
 }
 
-static OUString ReplaceOneChar(const OUString& oldOUString, std::u16string_view replacedChar, std::u16string_view replaceStr)
-{
-    int iReplace = oldOUString.lastIndexOf(replacedChar);
-    OUString aRet = oldOUString;
-    while(iReplace > -1)
-    {
-        aRet = aRet.replaceAt(iReplace,1, replaceStr);
-        iReplace = aRet.lastIndexOf(replacedChar,iReplace);
-    }
-    return aRet;
-}
-
-static OUString ReplaceFourChar(const OUString& oldOUString)
-{
-    OUString aRet = ReplaceOneChar(oldOUString, u"\\", u"\\\\");
-    aRet = ReplaceOneChar(aRet, u";", u"\\;");
-    aRet = ReplaceOneChar(aRet, u"=", u"\\=");
-    aRet = ReplaceOneChar(aRet, u",", u"\\,");
-    aRet = ReplaceOneChar(aRet, u":", u"\\:");
-    return aRet;
-}
-
 css::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
 {
     SolarMutexGuard g;
@@ -400,7 +378,12 @@ css::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
 
     const SwTableBoxFormula& tbl_formula = pFrameFormat->GetTableBoxFormula();
 
-    OUString strFormula = ReplaceFourChar(tbl_formula.GetFormula());
+    OUString strFormula = tbl_formula.GetFormula()
+                              .replaceAll(u"\\", u"\\\\")
+                              .replaceAll(u";", u"\\;")
+                              .replaceAll(u"=", u"\\=")
+                              .replaceAll(u",", u"\\,")
+                              .replaceAll(u":", u"\\:");
     OUString strFor = "Formula:" + strFormula + ";";
     strRet <<= strFor;
 
