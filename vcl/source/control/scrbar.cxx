@@ -1142,7 +1142,8 @@ void ScrollBar::GetFocus()
     }
     ImplInvert(); // react immediately
     mpData->maTimer.SetTimeout( GetSettings().GetStyleSettings().GetCursorBlinkTime() );
-    mpData->maTimer.Start();
+    if (mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME)
+        mpData->maTimer.Start();
     Control::GetFocus();
 }
 
