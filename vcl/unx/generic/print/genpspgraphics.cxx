@@ -90,25 +90,6 @@ void GenPspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
 
 namespace {
 
-class ImplPspFontData : public FreetypeFontFace
-{
-private:
-    sal_IntPtr              mnFontId;
-
-public:
-    explicit ImplPspFontData( const psp::FastPrintFontInfo& );
-    virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
-};
-
-}
-
-ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
-:   FreetypeFontFace(nullptr, GenPspGraphics::Info2FontAttributes(rInfo)),
-    mnFontId( rInfo.m_nID )
-{}
-
-namespace {
-
 class PspSalLayout : public GenericSalLayout
 {
 public:
@@ -233,11 +214,6 @@ void GenPspGraphics::SetTextColor( Color nColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-bool GenPspGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString&,const OUString& )
-{
-    return false;
-}
-
 bool GenPspGraphics::AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pFontCollection,
                                            std::u16string_view rFileURL,
                                            const OUString& rFontName)
@@ -258,7 +234,7 @@ bool GenPspGraphics::AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pF
             aInfo.m_aFamilyName = rFontName;
 
         // inform glyph cache of new font
-        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
+        FontAttributes aDFA = Info2FontAttributes( aInfo );
         aDFA.IncreaseQualityBy( 5800 );
 
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
@@ -273,19 +249,48 @@ bool GenPspGraphics::AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pF
     return true;
 }
 
-void GenPspGraphics::GetDevFontList( vcl::font::PhysicalFontCollection *pFontCollection )
+bool GenPspGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCollection,
+                                     const OUString& rFileURL,
+                                     const OUString& rFontName )
 {
-    ::std::vector< psp::fontID > aList;
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    rMgr.getFontList( aList );
+    return AddTempDevFontHelper(pFontCollection, rFileURL, rFontName);
+}
 
+void GenPspGraphics::GetDevFontListHelper( vcl::font::PhysicalFontCollection *pFontCollection )
+{
+    // prepare the FreetypeManager using psprint's font infos
+    FreetypeManager& rFreetypeManager = FreetypeManager::get();
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    ::std::vector< psp::fontID > aList;
     psp::FastPrintFontInfo aInfo;
+    rMgr.getFontList( aList );
     for (auto const& elem : aList)
-        if (rMgr.getFontFastInfo (elem, aInfo))
-            AnnounceFonts( pFontCollection, aInfo );
+    {
+        if( !rMgr.getFontFastInfo( elem, aInfo ) )
+            continue;
+
+        // normalize face number to the FreetypeManager
+        int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
+        int nVariantNum = rMgr.getFontFaceVariation( aInfo.m_nID );
+
+        // inform FreetypeManager about this font provided by the PsPrint subsystem
+        FontAttributes aDFA = Info2FontAttributes( aInfo );
+        aDFA.IncreaseQualityBy( 4096 );
+        const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
+        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
+    }
+
+    // announce glyphcache fonts
+    rFreetypeManager.AnnounceFonts(pFontCollection);
 
     // register platform specific font substitutions if available
     SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
+}
+
+void GenPspGraphics::GetDevFontList( vcl::font::PhysicalFontCollection *pFontCollection )
+{
+    GetDevFontListHelper(pFontCollection);
 }
 
 void GenPspGraphics::ClearDevFontCache()
@@ -343,20 +348,20 @@ void GenPspGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                   std::vector< sal_Int32 >& rWidths,
                                   Ucs2UIntMap& rUnicodeEnc )
 {
+    GenPspGraphics::GetGlyphWidthsHelper(pFont, bVertical, rWidths, rUnicodeEnc);
+}
+
+void GenPspGraphics::GetGlyphWidthsHelper(const vcl::font::PhysicalFontFace* pFont,
+                                          bool bVertical,
+                                          std::vector<sal_Int32>& rWidths,
+                                          Ucs2UIntMap& rUnicodeEnc)
+{
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the FreetypeManager search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
-    GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
-}
-
-void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
-                                    bool bVertical,
-                                    std::vector< sal_Int32 >& rWidths,
-                                    Ucs2UIntMap& rUnicodeEnc )
-{
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.getGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
@@ -408,35 +413,6 @@ namespace vcl
     }
 }
 
-void GenPspGraphics::AnnounceFonts( vcl::font::PhysicalFontCollection* pFontCollection, const psp::FastPrintFontInfo& aInfo )
-{
-    int nQuality = 0;
-
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    OString aFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
-    int nPos = aFileName.lastIndexOf( '_' );
-    if( nPos == -1 || aFileName[nPos+1] == '.' )
-        nQuality += 5;
-    else
-    {
-        static const char* pLangBoost = nullptr;
-        static bool bOnce = true;
-        if( bOnce )
-        {
-            bOnce = false;
-            pLangBoost = vcl::getLangBoost();
-        }
-
-        if( pLangBoost )
-            if( o3tl::equalsIgnoreAsciiCase(aFileName.subView( nPos+1, 3 ), pLangBoost ) )
-                nQuality += 10;
-    }
-
-    rtl::Reference<ImplPspFontData> pFD(new ImplPspFontData( aInfo ));
-    pFD->IncreaseQualityBy( nQuality );
-    pFontCollection->Add( pFD.get() );
-}
-
 SystemGraphicsData GenPspGraphics::GetGraphicsData() const
 {
     return SystemGraphicsData();
@@ -471,14 +447,20 @@ css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 
 #endif // ENABLE_CAIRO_CANVAS
 
-void GenPspGraphics::DoFreeEmbedFontData( const void* pData, tools::Long nLen )
+void GenPspGraphics::FreeEmbedFontDataHelper( const void* pData, tools::Long nLen )
 {
     if( pData )
         munmap( const_cast<void *>(pData), nLen );
 }
 
-const void* GenPspGraphics::DoGetEmbedFontData(psp::fontID aFont, tools::Long* pDataLen)
+const void* GenPspGraphics::GetEmbedFontDataHelper(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
+    // in this context the pFont->GetFontId() is a valid PSP
+    // font since they are the only ones left after the PDF
+    // export has filtered its list of subsettable fonts (for
+    // which this method was created). The correct way would
+    // be to have the FreetypeManager search for the PhysicalFontFace pFont
+    psp::fontID aFont = pFont->GetFontId();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
 
@@ -504,18 +486,12 @@ const void* GenPspGraphics::DoGetEmbedFontData(psp::fontID aFont, tools::Long* p
 
 void GenPspGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
 {
-    DoFreeEmbedFontData( pData, nLen );
+    FreeEmbedFontDataHelper(pData, nLen);
 }
 
 const void* GenPspGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the FreetypeManager search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-    return DoGetEmbedFontData(aFont, pDataLen);
+    return GetEmbedFontDataHelper(pFont, pDataLen);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

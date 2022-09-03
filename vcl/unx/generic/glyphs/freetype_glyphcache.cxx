@@ -366,6 +366,7 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 :   vcl::font::PhysicalFontFace( rDFA ),
     mpFreetypeFontInfo( pFI )
 {
+    assert(mpFreetypeFontInfo);
 }
 
 rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const

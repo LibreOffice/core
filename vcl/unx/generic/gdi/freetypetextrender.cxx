@@ -107,35 +107,7 @@ void FreeTypeTextRenderImpl::ClearDevFontCache()
 
 void FreeTypeTextRenderImpl::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCollection )
 {
-    // prepare the FreetypeManager using psprint's font infos
-    FreetypeManager& rFreetypeManager = FreetypeManager::get();
-
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    ::std::vector< psp::fontID > aList;
-    psp::FastPrintFontInfo aInfo;
-    rMgr.getFontList( aList );
-    for (auto const& elem : aList)
-    {
-        if( !rMgr.getFontFastInfo( elem, aInfo ) )
-            continue;
-
-        // normalize face number to the FreetypeManager
-        int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
-        int nVariantNum = rMgr.getFontFaceVariation( aInfo.m_nID );
-
-        // inform FreetypeManager about this font provided by the PsPrint subsystem
-        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
-        aDFA.IncreaseQualityBy( 4096 );
-        const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
-    }
-
-    // announce glyphcache fonts
-    rFreetypeManager.AnnounceFonts(pFontCollection);
-
-    // register platform specific font substitutions if available
-    if (!utl::ConfigManager::IsFuzzing())
-        SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
+    GenPspGraphics::GetDevFontListHelper(pFontCollection);
 }
 
 void FreeTypeTextRenderImpl::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
@@ -185,18 +157,12 @@ bool FreeTypeTextRenderImpl::CreateFontSubset(
 
 const void* FreeTypeTextRenderImpl::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the FreetypeManager search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-    return GenPspGraphics::DoGetEmbedFontData(aFont, pDataLen);
+    return GenPspGraphics::GetEmbedFontDataHelper(pFont, pDataLen);
 }
 
 void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, tools::Long nLen )
 {
-    GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
+    GenPspGraphics::FreeEmbedFontDataHelper(pData, nLen);
 }
 
 void FreeTypeTextRenderImpl::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
@@ -204,13 +170,7 @@ void FreeTypeTextRenderImpl::GetGlyphWidths( const vcl::font::PhysicalFontFace* 
                                    std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the FreetypeManager search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-    GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
+    GenPspGraphics::GetGlyphWidthsHelper(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
