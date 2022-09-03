@@ -387,8 +387,8 @@ rtl::Reference<SdrObject> SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool 
         }
         else if(1 == pObjectList->GetObjCount())
         {
-            pGroup.clear();
             pRetval = pObjectList->RemoveObject(0);
+            pGroup.clear();
         }
         else
         {
