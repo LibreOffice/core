@@ -61,15 +61,12 @@ class ImplFontMetricData;
 class WinFontFace : public vcl::font::PhysicalFontFace
 {
 public:
-    explicit                WinFontFace( const FontAttributes&,
-                                BYTE eWinCharSet,
-                                BYTE nPitchAndFamily  );
+    explicit                WinFontFace(const ENUMLOGFONTEXW&, const NEWTEXTMETRICW&);
     virtual                 ~WinFontFace() override;
 
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
-    void                    UpdateFromHDC( HDC ) const;
 
     bool                    HasChar( sal_uInt32 cChar ) const;
 
@@ -93,7 +90,7 @@ private:
     BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
-    mutable HDC             mhDC;
+    HFONT                   mhFont;
 
     void                    ReadCmapTable() const;
     void                    GetFontCapabilities() const;
