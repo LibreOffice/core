@@ -31,14 +31,14 @@ namespace dbaui
 {
 
     // HierarchicalNameCheck
-    struct HierarchicalNameCheck_Impl;
     /** class implementing the IObjectNameCheck interface, and checking given object names
         against a hierarchical name container
     */
     class HierarchicalNameCheck :public IObjectNameCheck
     {
     private:
-        std::unique_ptr< HierarchicalNameCheck_Impl > m_pImpl;
+        css::uno::Reference< css::container::XHierarchicalNameAccess >  mxHierarchicalNames;
+        OUString msRelativeRoot;
 
     public:
         /** constructs a HierarchicalNameCheck instance

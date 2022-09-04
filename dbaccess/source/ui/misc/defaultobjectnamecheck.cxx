@@ -67,21 +67,13 @@ namespace dbaui
 
     }
 
-    // HierarchicalNameCheck_Impl
-    struct HierarchicalNameCheck_Impl
-    {
-        Reference< XHierarchicalNameAccess >    xHierarchicalNames;
-        OUString                         sRelativeRoot;
-    };
-
     // HierarchicalNameCheck
     HierarchicalNameCheck::HierarchicalNameCheck( const Reference< XHierarchicalNameAccess >& _rxNames, const OUString& _rRelativeRoot )
-        :m_pImpl( new HierarchicalNameCheck_Impl )
     {
-        m_pImpl->xHierarchicalNames = _rxNames;
-        m_pImpl->sRelativeRoot = _rRelativeRoot;
+        mxHierarchicalNames = _rxNames;
+        msRelativeRoot = _rRelativeRoot;
 
-        if ( !m_pImpl->xHierarchicalNames.is() )
+        if ( !mxHierarchicalNames.is() )
             throw IllegalArgumentException();
     }
 
@@ -94,15 +86,15 @@ namespace dbaui
         try
         {
             OUStringBuffer aCompleteName;
-            if ( !m_pImpl->sRelativeRoot.isEmpty() )
+            if ( !msRelativeRoot.isEmpty() )
             {
-                aCompleteName.append( m_pImpl->sRelativeRoot );
+                aCompleteName.append( msRelativeRoot );
                 aCompleteName.append( "/" );
             }
             aCompleteName.append( _rObjectName );
 
             OUString sCompleteName( aCompleteName.makeStringAndClear() );
-            if ( !m_pImpl->xHierarchicalNames->hasByHierarchicalName( sCompleteName ) )
+            if ( !mxHierarchicalNames->hasByHierarchicalName( sCompleteName ) )
                 return true;
         }
         catch( const Exception& )
