@@ -64,7 +64,7 @@ namespace rptui
     }
 
 
-    bool ConditionalExpression::matchExpression( const OUString& _rExpression, const OUString& _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
+    bool ConditionalExpression::matchExpression( const OUString& _rExpression, const std::u16string_view _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
     {
         // if we had regular expression, the matching would be pretty easy ...
         // just replace $1 and $2 in the pattern with (.*), and then get them with \1 resp. \2.
@@ -72,13 +72,7 @@ namespace rptui
 
         // Okay, let's start with replacing all $$ in our pattern with the actual field data source
         OUString sMatchExpression( m_sPattern );
-        static const OUStringLiteral sFieldDataPattern( u"$$" );
-        sal_Int32 nIndex( sMatchExpression.indexOf( sFieldDataPattern ) );
-        while ( nIndex != -1 )
-        {
-            sMatchExpression = sMatchExpression.replaceAt( nIndex, sFieldDataPattern.getLength(), _rFieldDataSource );
-            nIndex = sMatchExpression.indexOf( sFieldDataPattern, nIndex + _rFieldDataSource.getLength() );
-        }
+        sMatchExpression = sMatchExpression.replaceAll(u"$$", _rFieldDataSource);
 
         static const OUStringLiteral sLHSPattern( u"$1" );
         static const OUStringLiteral sRHSPattern( u"$2" );

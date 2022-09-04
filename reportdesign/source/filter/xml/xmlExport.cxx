@@ -1039,12 +1039,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
             OUString sExpression  = sField;
             if ( !sExpression.isEmpty() )
             {
-                sal_Int32 nIndex = sExpression.indexOf('"');
-                while ( nIndex > -1 )
-                {
-                    sExpression = sExpression.replaceAt(nIndex, 1, u"\"\"");
-                    nIndex = sExpression.indexOf('"',nIndex+2);
-                }
+                sExpression = sExpression.replaceAll(u"\"", u"\"\"");
 
                 TGroupFunctionMap::const_iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
                 if ( aGroupFind != m_aGroupFunctionMap.end() )
