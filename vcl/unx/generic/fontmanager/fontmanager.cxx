@@ -1081,12 +1081,12 @@ bool PrintFontManager::createFontSubset(
     return bSuccess;
 }
 
-void PrintFontManager::getGlyphWidths( fontID nFont,
+void PrintFontManager::getGlyphWidths( const vcl::font::PhysicalFontFace* pFace,
                                        bool bVertical,
                                        std::vector< sal_Int32 >& rWidths,
                                        std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
 {
-    PrintFont* pFont = getFont( nFont );
+    PrintFont* pFont = getFont( pFace->GetFontId() );
     if (!pFont)
         return;
     TrueTypeFont* pTTFont = nullptr;
@@ -1113,32 +1113,22 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         }
 
         // fill the unicode map
-        // TODO: isn't this map already available elsewhere in the fontmanager?
-        sal_uInt32 nCmapSize = 0;
-        const sal_uInt8* pCmapData = pTTFont->table(O_cmap, nCmapSize);
-        if (pCmapData)
+        FontCharMapRef xFontCharMap = pFace->GetFontCharMap();
+        for (sal_uInt32 cOld = 0;;)
         {
-            CmapResult aCmapResult;
-            if (ParseCMAP(pCmapData, nCmapSize, aCmapResult))
-            {
-                FontCharMapRef xFontCharMap(new FontCharMap(aCmapResult));
-                for (sal_uInt32 cOld = 0;;)
-                {
-                    // get next unicode covered by font
-                    const sal_uInt32 c = xFontCharMap->GetNextChar(cOld);
-                    if (c == cOld)
-                        break;
-                    cOld = c;
+            // get next unicode covered by font
+            const sal_uInt32 c = xFontCharMap->GetNextChar(cOld);
+            if (c == cOld)
+                break;
+            cOld = c;
 #if 1 // TODO: remove when sal_Unicode covers all of unicode
-                    if (c > sal_Unicode(~0))
-                        break;
+            if (c > sal_Unicode(~0))
+                break;
 #endif
-                    // get the matching glyph index
-                    const sal_GlyphId aGlyphId = xFontCharMap->GetGlyphIndex(c);
-                    // update the requested map
-                    rUnicodeEnc[static_cast<sal_Unicode>(c)] = aGlyphId;
-                }
-            }
+            // get the matching glyph index
+            const sal_GlyphId aGlyphId = xFontCharMap->GetGlyphIndex(c);
+            // update the requested map
+            rUnicodeEnc[static_cast<sal_Unicode>(c)] = aGlyphId;
         }
     }
     CloseTTFont(pTTFont);

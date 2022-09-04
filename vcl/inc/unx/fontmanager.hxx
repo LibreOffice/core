@@ -28,6 +28,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <unx/fc_fontoptions.hxx>
 
+#include <font/PhysicalFontFace.hxx>
+
 #include <glyphid.hxx>
 
 #include <map>
@@ -283,7 +285,7 @@ public:
                            sal_Int32* pWidths,
                            int nGlyphs
                            );
-    void getGlyphWidths( fontID nFont,
+    void getGlyphWidths( const vcl::font::PhysicalFontFace* pFace,
                          bool bVertical,
                          std::vector< sal_Int32 >& rWidths,
                          std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );

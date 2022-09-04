@@ -356,14 +356,8 @@ void GenPspGraphics::GetGlyphWidthsHelper(const vcl::font::PhysicalFontFace* pFo
                                           std::vector<sal_Int32>& rWidths,
                                           Ucs2UIntMap& rUnicodeEnc)
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the FreetypeManager search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    rMgr.getGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
+    rMgr.getGlyphWidths( pFont, bVertical, rWidths, rUnicodeEnc );
 }
 
 FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )
