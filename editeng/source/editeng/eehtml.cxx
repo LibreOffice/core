@@ -192,14 +192,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
             {
                 // Only written until HTML with 319?
                 if ( IsReadPRE() )
-                {
-                    sal_Int32 nTabPos = aText.indexOf( '\t');
-                    while ( nTabPos != -1 )
-                    {
-                        aText = aText.replaceAt( nTabPos, 1, u"        " );
-                        nTabPos = aText.indexOf( '\t', nTabPos+8 );
-                    }
-                }
+                    aText = aText.replaceAll(u"\t", u"        ");
                 ImpInsertText( aText );
             }
         }
