@@ -34,15 +34,14 @@
 
 namespace vcl::font
 {
-
-PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
-    : FontAttributes( rDFA )
+PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
+    : FontAttributes(rDFA)
     , mpHbFace(nullptr)
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if( !IsSymbolFont() )
-        if ( IsStarSymbol( GetFamilyName() ) )
-            SetSymbolFlag( true );
+    if (!IsSymbolFont())
+        if (IsStarSymbol(GetFamilyName()))
+            SetSymbolFlag(true);
 }
 
 PhysicalFontFace::~PhysicalFontFace()
@@ -51,29 +50,29 @@ PhysicalFontFace::~PhysicalFontFace()
         hb_face_destroy(mpHbFace);
 }
 
-sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
+sal_Int32 PhysicalFontFace::CompareIgnoreSize(const PhysicalFontFace& rOther) const
 {
     // compare their width, weight, italic, style name and family name
-    if( GetWidthType() < rOther.GetWidthType() )
+    if (GetWidthType() < rOther.GetWidthType())
         return -1;
-    else if( GetWidthType() > rOther.GetWidthType() )
+    else if (GetWidthType() > rOther.GetWidthType())
         return 1;
 
-    if( GetWeight() < rOther.GetWeight() )
+    if (GetWeight() < rOther.GetWeight())
         return -1;
-    else if( GetWeight() > rOther.GetWeight() )
+    else if (GetWeight() > rOther.GetWeight())
         return 1;
 
-    if( GetItalic() < rOther.GetItalic() )
+    if (GetItalic() < rOther.GetItalic())
         return -1;
-    else if( GetItalic() > rOther.GetItalic() )
+    else if (GetItalic() > rOther.GetItalic())
         return 1;
 
-    sal_Int32 nRet = GetFamilyName().compareTo( rOther.GetFamilyName() );
+    sal_Int32 nRet = GetFamilyName().compareTo(rOther.GetFamilyName());
 
     if (nRet == 0)
     {
-        nRet = GetStyleName().compareTo( rOther.GetStyleName() );
+        nRet = GetStyleName().compareTo(rOther.GetStyleName());
     }
 
     return nRet;
@@ -91,7 +90,8 @@ static int FamilyNameMatchValue(FontSelectPattern const& rFSP, std::u16string_vi
 
 static int StyleNameMatchValue(FontMatchStatus const& rStatus, std::u16string_view rStyle)
 {
-    if (rStatus.mpTargetStyleName && o3tl::equalsIgnoreAsciiCase(rStyle, *rStatus.mpTargetStyleName))
+    if (rStatus.mpTargetStyleName
+        && o3tl::equalsIgnoreAsciiCase(rStyle, *rStatus.mpTargetStyleName))
         return 120000;
 
     return 0;
@@ -181,7 +181,7 @@ static int ItalicMatchValue(FontSelectPattern const& rFSP, FontItalic eItalic)
     return 0;
 }
 
-bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSP, FontMatchStatus& rStatus ) const
+bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchStatus& rStatus) const
 {
     int nMatch = FamilyNameMatchValue(rFSP, GetFamilyName());
     nMatch += StyleNameMatchValue(rStatus, GetStyleName());
@@ -197,13 +197,13 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSP, FontMatchSt
     else
         nMatch += 5;
 
-    if( rStatus.mnFaceMatch > nMatch )
+    if (rStatus.mnFaceMatch > nMatch)
     {
         return false;
     }
-    else if( rStatus.mnFaceMatch < nMatch )
+    else if (rStatus.mnFaceMatch < nMatch)
     {
-        rStatus.mnFaceMatch      = nMatch;
+        rStatus.mnFaceMatch = nMatch;
         return true;
     }
 
@@ -218,7 +218,8 @@ static hb_blob_t* getTable(hb_face_t*, hb_tag_t nTag, void* pUserData)
 hb_face_t* PhysicalFontFace::GetHbFace() const
 {
     if (mpHbFace == nullptr)
-        mpHbFace = hb_face_create_for_tables(getTable, const_cast<PhysicalFontFace*>(this), nullptr);
+        mpHbFace
+            = hb_face_create_for_tables(getTable, const_cast<PhysicalFontFace*>(this), nullptr);
     return mpHbFace;
 }
 

@@ -51,8 +51,8 @@ class FontSelectPattern;
 struct FontMatchStatus
 {
 public:
-    int                 mnFaceMatch;
-    const OUString*     mpTargetStyleName;
+    int mnFaceMatch;
+    const OUString* mpTargetStyleName;
 };
 
 // TODO: no more direct access to members
@@ -65,31 +65,35 @@ public:
  * It acts as a factory for its corresponding LogicalFontInstances and
  * can be extended to cache device and font instance specific data.
  */
-class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelper::SimpleReferenceObject
+class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes,
+                                           public salhelper::SimpleReferenceObject
 {
 public:
     ~PhysicalFontFace();
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const = 0;
+    virtual rtl::Reference<LogicalFontInstance>
+    CreateFontInstance(const vcl::font::FontSelectPattern&) const = 0;
 
-    virtual sal_IntPtr      GetFontId() const = 0;
-    virtual FontCharMapRef  GetFontCharMap() const;
+    virtual sal_IntPtr GetFontId() const = 0;
+    virtual FontCharMapRef GetFontCharMap() const;
     virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
 
-    bool                    IsBetterMatch( const vcl::font::FontSelectPattern&, FontMatchStatus& ) const;
-    sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
+    bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
+    sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
 
-    virtual hb_face_t*      GetHbFace() const;
-    virtual hb_blob_t*      GetHbTable(hb_tag_t) const { assert(false); return nullptr; }
+    virtual hb_face_t* GetHbFace() const;
+    virtual hb_blob_t* GetHbTable(hb_tag_t) const
+    {
+        assert(false);
+        return nullptr;
+    }
 
 protected:
-    mutable hb_face_t*      mpHbFace;
-    mutable FontCharMapRef  mxCharMap;
+    mutable hb_face_t* mpHbFace;
+    mutable FontCharMapRef mxCharMap;
 
     explicit PhysicalFontFace(const FontAttributes&);
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
