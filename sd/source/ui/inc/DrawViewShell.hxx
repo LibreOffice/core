@@ -414,7 +414,7 @@ protected:
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:
-    /** Prevents grabbing focus while loading - see tdf#83773 that intruduced
+    /** Prevents grabbing focus while loading - see tdf#83773 that introduced
         the grabbing, and tdf#150773 that needs grabbing disabled on loading
     */
     bool mbFirstTimeActivation = true;
