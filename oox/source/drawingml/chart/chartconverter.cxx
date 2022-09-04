@@ -44,7 +44,7 @@ const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
 const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
 const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
-// Code similar to oox/source/xls/formulabase.cxx
+// Code similar to sc/source/filter/oox/formulabase.cxx
 static OUString lclGenerateApiString( const OUString& rString )
 {
     OUString aRetString = rString;
