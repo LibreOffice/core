@@ -5502,7 +5502,8 @@ void ScCompiler::LocalizeString( OUString& rName ) const
     ScGlobal::GetAddInCollection()->LocalizeString( rName );
 }
 
-// Put quotes around string if non-alphanumeric characters are contained,
+// Put quotes around string if non-alphanumeric characters are contained
+// or if string contains only numeric characters,
 // quote characters contained within are escaped by '\\'.
 bool ScCompiler::EnQuote( OUString& rStr )
 {
