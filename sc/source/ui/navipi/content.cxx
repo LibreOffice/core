@@ -940,11 +940,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
 
 static OUString lcl_NoteString( const ScPostIt& rNote )
 {
-    OUString aText = rNote.GetText();
-    sal_Int32 nAt;
-    while ( (nAt = aText.indexOf( '\n' )) != -1 )
-        aText = aText.replaceAt( nAt, 1, u" " );
-    return aText;
+    return rNote.GetText().replace('\n', ' ');
 }
 
 void ScContentTree::GetNoteStrings()
