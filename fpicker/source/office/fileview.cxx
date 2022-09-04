@@ -1491,14 +1491,7 @@ void SvtFileView_Impl::implEnumerationSuccess()
 
 OUString SvtFileView_Impl::ReplaceTabWithString(const OUString& rValue)
 {
-    OUString const aTab( "\t" );
-    OUString const aTabString( "%09" );
-
-    sal_Int32 iPos;
-    OUString aValue(rValue);
-    while ( ( iPos = aValue.indexOf( aTab ) ) >= 0 )
-        aValue = aValue.replaceAt( iPos, 1, aTabString );
-    return aValue;
+    return rValue.replaceAll(u"\t", u"%09");
 }
 
 void SvtFileView_Impl::CreateDisplayText_Impl()
