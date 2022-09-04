@@ -1119,7 +1119,10 @@ bool LoadEnv::impl_loadContent()
             xHandler->initialize(aArguments);
             //show the frame as early as possible to make it the parent of any message dialogs
             if (!impl_filterHasInteractiveDialog())
-                impl_makeFrameWindowVisible(xWindow, false);
+            {
+                impl_makeFrameWindowVisible(xWindow, shouldFocusAndToFront());
+                m_bFocusedAndToFront = true; // no need to ask shouldFocusAndToFront second time
+            }
         }
     }
 
@@ -1408,9 +1411,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         // if an optional jumpmark is given too.
         if (!m_aURL.Mark.isEmpty())
             impl_jumpToMark(xResult, m_aURL);
-
-        // bring it to front and make sure it's visible...
-        impl_makeFrameWindowVisible(xResult->getContainerWindow(), true);
     }
 
     return xResult;
@@ -1448,8 +1448,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     {
         if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
         {
-            // bring it to front...
-            impl_makeFrameWindowVisible(aTasksAnalyzer.m_xBackingComponent->getContainerWindow(), true);
             m_bReactivateControllerOnError = true;
             return aTasksAnalyzer.m_xBackingComponent;
         }
@@ -1562,9 +1560,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     }
     // <- SAFE ..................................
 
-    // bring it to front ...
-    impl_makeFrameWindowVisible(xTask->getContainerWindow(), true);
-
     return xTask;
 }
 
@@ -1596,7 +1591,7 @@ void LoadEnv::impl_reactForLoadingState()
         {
             // show frame ... if it's not still visible ...
             // But do nothing if it's already visible!
-            impl_makeFrameWindowVisible(xWindow, false);
+            impl_makeFrameWindowVisible(xWindow, !m_bFocusedAndToFront && shouldFocusAndToFront());
         }
 
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
@@ -1683,6 +1678,14 @@ void LoadEnv::impl_reactForLoadingState()
     // <- SAFE ----------------------------------
 }
 
+bool LoadEnv::shouldFocusAndToFront() const
+{
+    bool const preview(
+        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false));
+    return !preview
+           && officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
+}
+
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 bool bForceToFront)
 {
@@ -1690,15 +1693,6 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( !pWindow )
         return;
-
-    if (!bForceToFront)
-    {
-        bool const preview(m_lMediaDescriptor.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_PREVIEW, false));
-        bForceToFront
-            = !preview
-              && officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
-    }
 
     if (pWindow->IsVisible() && bForceToFront)
         pWindow->ToTop( ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask );

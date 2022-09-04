@@ -414,6 +414,11 @@ protected:
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:
+    /** Prevents grabbing focus while loading - see tdf#83773 that intruduced
+        the grabbing, and tdf#150773 that needs grabbing disabled on loading
+    */
+    bool mbFirstTimeActivation = true;
+
     /** This flag controls whether the layer mode is active, i.e. the layer
         dialog is visible.
     */

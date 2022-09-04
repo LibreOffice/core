@@ -79,13 +79,20 @@ void DrawViewShell::Activate(bool bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);
 
-    // When the mode is switched to normal the main view shell grabs focus.
-    // This is done for getting cut/copy/paste commands on slides in the left
-    // pane (slide sorter view shell) to work properly.
-    SfxShell* pTopViewShell = this->GetViewShellBase().GetViewShellManager()->GetTopViewShell();
-    if (pTopViewShell && pTopViewShell == this)
+    // tdf#150773: do not grab focus on loading
+    if (mbFirstTimeActivation)
+        mbFirstTimeActivation = false;
+    else
     {
-        this->GetActiveWindow()->GrabFocus();
+
+        // When the mode is switched to normal the main view shell grabs focus.
+        // This is done for getting cut/copy/paste commands on slides in the left
+        // pane (slide sorter view shell) to work properly.
+        SfxShell* pTopViewShell = GetViewShellBase().GetViewShellManager()->GetTopViewShell();
+        if (pTopViewShell == this)
+        {
+            GetActiveWindow()->GrabFocus();
+        }
     }
 }
 
