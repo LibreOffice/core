@@ -83,18 +83,18 @@ enum class XmlStyleFamily
     SD_PRESENTATION_ID     = 301,
 // families for derived from SvXMLStyleContext
     SD_PAGEMASTERCONTEXT_ID        = 302,
-    SD_PAGEMASTERSTYLECONTEXT_ID   = 306,
-    SD_PRESENTATIONPAGELAYOUT_ID   = 303,
+    SD_PAGEMASTERSTYLECONTEXT_ID   = 303,
+    SD_PRESENTATIONPAGELAYOUT_ID   = 304,
 // family for draw pool
-    SD_POOL_ID             = 304,
+    SD_POOL_ID             = 305,
 // family for presentation drawpage properties
-    SD_DRAWINGPAGE_ID      = 305,
+    SD_DRAWINGPAGE_ID      = 306,
 
-    SD_GRADIENT_ID         = 306,
-    SD_HATCH_ID            = 307,
-    SD_FILL_IMAGE_ID       = 308,
-    SD_MARKER_ID           = 309,
-    SD_STROKE_DASH_ID      = 310,
+    SD_GRADIENT_ID         = 307,
+    SD_HATCH_ID            = 308,
+    SD_FILL_IMAGE_ID       = 309,
+    SD_MARKER_ID           = 310,
+    SD_STROKE_DASH_ID      = 311,
 
 // Chart
 // reserved: 400..499
