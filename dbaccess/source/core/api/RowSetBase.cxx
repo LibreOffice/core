@@ -1358,12 +1358,6 @@ sal_Int32 ORowSetBase::impl_getRowCount() const
     return nRowCount;
 }
 
-struct ORowSetNotifierImpl
-{
-    std::vector<sal_Int32>    aChangedColumns;
-    ORowSetValueVector::Vector  aRow;
-};
-
 
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     :m_pRowSet( _pRowSet )
@@ -1383,14 +1377,12 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
 }
 
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet, ORowSetValueVector::Vector&& i_aRow )
-    :m_pImpl(new ORowSetNotifierImpl)
-    ,m_pRowSet( _pRowSet )
+    :m_pRowSet( _pRowSet )
     ,m_bWasNew( false )
     ,m_bWasModified( false )
 {
-
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This will crash." );
-    m_pImpl->aRow = std::move(i_aRow); // yes, create a copy to store the old values
+    aRow = std::move(i_aRow); // yes, create a copy to store the old values
 }
 
 ORowSetNotifier::~ORowSetNotifier( )
@@ -1413,24 +1405,19 @@ void ORowSetNotifier::fire()
         m_pRowSet->fireProperty( PROPERTY_ID_ISNEW, false, true, ORowSetBase::GrantNotifierAccess() );
 }
 
-std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const
+std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns()
 {
-    OSL_ENSURE(m_pImpl, "Illegal CTor call, use the other one!");
-    return m_pImpl->aChangedColumns;
+    return aChangedColumns;
 }
 
 void ORowSetNotifier::firePropertyChange()
 {
-    OSL_ENSURE(m_pImpl, "Illegal CTor call, use the other one!");
-    if (m_pImpl)
+    for (auto const& changedColumn : aChangedColumns)
     {
-        for (auto const& changedColumn : m_pImpl->aChangedColumns)
-        {
-            m_pRowSet->firePropertyChange(changedColumn-1 ,m_pImpl->aRow[changedColumn-1], ORowSetBase::GrantNotifierAccess());
-        }
-        if ( !m_pImpl->aChangedColumns.empty() )
-            m_pRowSet->fireProperty(PROPERTY_ID_ISMODIFIED,true,false, ORowSetBase::GrantNotifierAccess());
+        m_pRowSet->firePropertyChange(changedColumn-1, aRow[changedColumn-1], ORowSetBase::GrantNotifierAccess());
     }
+    if ( !aChangedColumns.empty() )
+        m_pRowSet->fireProperty(PROPERTY_ID_ISMODIFIED,true,false, ORowSetBase::GrantNotifierAccess());
 }
 
 }   // namespace dbaccess
