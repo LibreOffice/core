@@ -165,6 +165,8 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
 
+    const bool bResolutionIndependentLayoutEnabled = rLayout.GetTextRenderModeForResolutionIndependentLayout();
+
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
@@ -178,12 +180,20 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         aGlyph.index = pGlyph->glyphId();
         aGlyph.x = aPos.getX();
         aGlyph.y = aPos.getY();
-        cairo_glyphs.push_back(aGlyph);
 
-        if (pGlyph->IsVertical())
-            glyph_extrarotation.push_back(1);
-        else
-            glyph_extrarotation.push_back(0);
+        const bool bVertical = pGlyph->IsVertical();
+        glyph_extrarotation.push_back(bVertical ? 1 : 0);
+
+        // tdf#150507 like skia even when subpixel rendering snap to a pixel Baseline
+        if (bResolutionIndependentLayoutEnabled)
+        {
+            if (!bVertical)
+                aGlyph.y = std::floor(aGlyph.y + 0.5);
+            else
+                aGlyph.x = std::floor(aGlyph.x + 0.5);
+        }
+
+        cairo_glyphs.push_back(aGlyph);
     }
 
     if (cairo_glyphs.empty())
@@ -226,7 +236,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
-    const bool bResolutionIndependentLayoutEnabled = rLayout.GetTextRenderModeForResolutionIndependentLayout();
 
     const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
     if (pFontOptions || bDisableAA || bResolutionIndependentLayoutEnabled)

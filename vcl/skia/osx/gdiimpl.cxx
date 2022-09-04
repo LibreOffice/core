@@ -313,7 +313,11 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
     SkFont::Edging ePreferredAliasing
         = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : SkFont::Edging::kAntiAlias;
     if (bSubpixelPositioning)
+    {
+        // note that SkFont defaults to a BaselineSnap of true, so I think really only
+        // subpixel in text direction
         font.setSubpixel(true);
+    }
     font.setEdging(mrShared.mbNonAntialiasedText ? SkFont::Edging::kAlias : ePreferredAliasing);
 
     // Vertical font, use width as "height".

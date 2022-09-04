@@ -60,6 +60,8 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
         = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : SkFont::Edging::kAntiAlias;
     if (bSubpixelPositioning)
     {
+        // note that SkFont defaults to a BaselineSnap of true, so I think really only
+        // subpixel in text direction
         font.setSubpixel(true);
 
         SkFontHinting eHinting = font.getHinting();
