@@ -147,17 +147,7 @@ namespace dbtools
                         )
                     )
                 {
-                    static const char sSingleQuote[] = "'";
-
-                    sal_Int32 nIndex = -1;
-                    sal_Int32 nTemp = 0;
-                    while ( -1 != ( nIndex = sQuoted.indexOf( '\'',nTemp ) ) )
-                    {
-                        sQuoted = sQuoted.replaceAt( nIndex, 1, u"''" );
-                        nTemp = nIndex+2;
-                    }
-
-                    sQuoted = sSingleQuote + sQuoted + sSingleQuote;
+                    sQuoted = u"'" + sQuoted.replaceAll(u"'", u"''") + u"'";
                 }
                 pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sQuoted, m_xFormatter, _rxField );
             }
