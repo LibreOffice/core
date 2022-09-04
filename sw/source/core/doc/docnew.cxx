@@ -1179,7 +1179,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         SwPosition& rInsPos = *aInsertPam.GetPoint();
 
         {
-            SwNodeIndex aIndexBefore(rInsPos.nNode);
+            SwNodeIndex aIndexBefore(rInsPos.GetNode());
 
             aIndexBefore--;
 #ifdef DBG_UTIL
@@ -1192,8 +1192,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 #endif
 
             ++aIndexBefore;
-            SwPaM aPaM(SwPosition(aIndexBefore),
-                       SwPosition(rInsPos.nNode));
+            SwPaM aPaM(aIndexBefore.GetNode(), rInsPos.GetNode());
 
             aPaM.GetDoc().MakeUniqueNumRules(aPaM);
 

@@ -322,7 +322,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         pRedlPam = new SwPaM( pStart->GetNode(), pEnd->GetNode(), SwNodeOffset(-1), SwNodeOffset(1) );
         SwContentNode* pCNd = pRedlPam->GetMarkContentNode();
         if( pCNd )
-            pRedlPam->GetMark()->nContent = pCNd->Len();
+            pRedlPam->GetMark()->SetContent( pCNd->Len() );
 
         if( getIDocumentRedlineAccess().IsRedlineOn() && !IDocumentRedlineAccess::IsShowOriginal( getIDocumentRedlineAccess().GetRedlineFlags() ) )
         {
@@ -339,7 +339,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             // range is new from pEnd->nNode+1 to aEndIdx
             getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, RedlineType::Any );
 
-            pRedlPam->GetMark()->nNode.Assign( pEnd->GetNode(), 1 );
+            pRedlPam->GetMark()->Assign( pEnd->GetNode(), SwNodeOffset(1) );
 
             pRedlPam->GetPoint()->Assign( aEndIdx.GetNode() );
             pCNd = pRedlPam->GetPointContentNode();
@@ -353,7 +353,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
                     pRedlPam->GetPoint()->Assign( *pCNd );
                 }
             }
-            pRedlPam->GetPoint()->nContent.Assign( pCNd, nCLen );
+            if (pCNd)
+                pRedlPam->GetPoint()->SetContent( nCLen );
 
             if( pRedlUndo )
                 pRedlUndo->SetValues( rPaM );
@@ -440,10 +441,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         if( pRedlUndo )
         {
             SwNodeIndex aInsEndIdx( pRedlPam->GetMark()->GetNode(), -1 );
-            pRedlPam->GetMark()->nNode = aInsEndIdx;
-            SwContentNode *const pPrevNode =
-                pRedlPam->GetMark()->GetNode().GetContentNode();
-            pRedlPam->GetMark()->nContent.Assign( pPrevNode, pPrevNode->Len() );
+            SwContentNode *const pContentNode = aInsEndIdx.GetNode().GetContentNode();
+            pRedlPam->GetMark()->Assign( *pContentNode, pContentNode->Len() );
 
             pRedlUndo->SetValues( *pRedlPam );
         }
