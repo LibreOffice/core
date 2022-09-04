@@ -42,7 +42,6 @@ namespace dbaui
 
     // DataSourceMetaData
     class FeatureSet;
-    class DataSourceMetaData_Impl;
     /** encapsulates meta data for a data source
 
         On the long run, this class should a) encapsulate *all* meta data which
@@ -65,7 +64,7 @@ namespace dbaui
         static  AuthenticationMode  getAuthentication( const OUString& _sURL );
 
     private:
-        std::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;
+        OUString m_sURL;
     };
 
     // FeatureSet

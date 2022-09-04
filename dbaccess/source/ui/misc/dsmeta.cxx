@@ -140,26 +140,9 @@ namespace dbaui
         return s_aSupport[ _sURL ].eAuthentication;
     }
 
-    // DataSourceMetaData_Impl
-    class DataSourceMetaData_Impl
-    {
-    public:
-        explicit DataSourceMetaData_Impl(OUString sURL);
-
-        const OUString& getType() const { return m_sURL; }
-
-    private:
-        const OUString m_sURL;
-    };
-
-    DataSourceMetaData_Impl::DataSourceMetaData_Impl( OUString _sURL )
-        :m_sURL(std::move( _sURL ))
-    {
-    }
-
     // DataSourceMetaData
     DataSourceMetaData::DataSourceMetaData( const OUString& _sURL )
-        :m_pImpl( std::make_shared<DataSourceMetaData_Impl>( _sURL ) )
+        :m_sURL(  _sURL )
     {
     }
 
@@ -169,7 +152,7 @@ namespace dbaui
 
     const FeatureSet& DataSourceMetaData::getFeatureSet() const
     {
-        return lcl_getFeatureSet( m_pImpl->getType() );
+        return lcl_getFeatureSet( m_sURL );
     }
 
     AuthenticationMode  DataSourceMetaData::getAuthentication( const OUString& _sURL )
