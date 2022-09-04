@@ -1691,19 +1691,19 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     if ( !pWindow )
         return;
 
-    bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_PREVIEW, false) );
-
-    bool bForceFrontAndFocus(false);
-    if ( !preview )
+    if (!bForceToFront)
     {
-        bForceFrontAndFocus = officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
+        bool const preview(m_lMediaDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_PREVIEW, false));
+        bForceToFront
+            = !preview
+              && officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
     }
 
-    if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
+    if (pWindow->IsVisible() && bForceToFront)
         pWindow->ToTop( ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask );
     else
-        pWindow->Show(true, (bForceFrontAndFocus || bForceToFront) ? ShowFlags::ForegroundTask : ShowFlags::NONE );
+        pWindow->Show(true, bForceToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE);
 }
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
