@@ -184,7 +184,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         const bool bVertical = pGlyph->IsVertical();
         glyph_extrarotation.push_back(bVertical ? 1 : 0);
 
-        // tdf#150507 like skia even when subpixel rendering snap to a pixel Baseline
+        // tdf#150507 like skia even when subpixel rendering pixel snap y
         if (bResolutionIndependentLayoutEnabled)
         {
             if (!bVertical)
