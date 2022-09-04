@@ -473,26 +473,13 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     pRelationSet->AddRelation(aRelation);
 }
 
-static OUString ReplaceOneChar(const OUString& oldOUString, std::u16string_view replacedChar, std::u16string_view replaceStr)
-{
-    int iReplace = oldOUString.lastIndexOf(replacedChar);
-    OUString aRet = oldOUString;
-    while(iReplace > -1)
-    {
-        aRet = aRet.replaceAt(iReplace, 1, replaceStr);
-        iReplace = aRet.lastIndexOf(replacedChar, iReplace);
-    }
-    return aRet;
-}
-
 static OUString ReplaceFourChar(const OUString& oldOUString)
 {
-    OUString aRet = ReplaceOneChar(oldOUString, u"\\", u"\\\\");
-    aRet = ReplaceOneChar(aRet, u";", u"\\;");
-    aRet = ReplaceOneChar(aRet, u"=", u"\\=");
-    aRet = ReplaceOneChar(aRet, u",", u"\\,");
-    aRet = ReplaceOneChar(aRet, u":", u"\\:");
-    return aRet;
+    return oldOUString.replaceAll(u"\\", u"\\\\")
+        .replaceAll(u";", u"\\;")
+        .replaceAll(u"=", u"\\=")
+        .replaceAll(u",", u"\\,")
+        .replaceAll(u":", u"\\:");
 }
 
 uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
