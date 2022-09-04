@@ -24,8 +24,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
-#include <SqlNameEdit.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <objectnamecheck.hxx>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
@@ -36,116 +34,16 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-namespace dbaui
-{
+using namespace ::com::sun::star::lang;
 
-class OSaveAsDlgImpl
-{
-public:
-    OUString                   m_aQryLabel;
-    OUString                   m_sTblLabel;
-    OUString                   m_aName;
-    const IObjectNameCheck&    m_rObjectNameCheck;
-    css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
-    sal_Int32                  m_nType;
-    SADFlags                   m_nFlags;
 
-    OSQLNameChecker            m_aChecker;
-
-    std::unique_ptr<weld::Label> m_xDescription;
-    std::unique_ptr<weld::Label> m_xCatalogLbl;
-    std::unique_ptr<weld::ComboBox> m_xCatalog;
-    std::unique_ptr<weld::Label> m_xSchemaLbl;
-    std::unique_ptr<weld::ComboBox> m_xSchema;
-    std::unique_ptr<weld::Label> m_xLabel;
-    std::unique_ptr<weld::Entry> m_xTitle;
-    std::unique_ptr<weld::Button> m_xPB_OK;
-
-    DECL_LINK(TextFilterHdl, OUString&, bool);
-
-    OSaveAsDlgImpl( weld::Builder* pParent, sal_Int32 _rType,
-                    const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                    OUString sDefault,
-                    const IObjectNameCheck& _rObjectNameCheck,
-                    SADFlags _nFlags);
-    OSaveAsDlgImpl( weld::Builder* pParent,
-                    OUString sDefault,
-                    const IObjectNameCheck& _rObjectNameCheck,
-                    SADFlags _nFlags);
-};
-
-} // dbaui
-
-IMPL_LINK(OSaveAsDlgImpl, TextFilterHdl, OUString&, rTest, bool)
+IMPL_LINK(OSaveAsDlg, TextFilterHdl, OUString&, rTest, bool)
 {
     OUString sCorrected;
     if (m_aChecker.checkString(rTest, sCorrected))
         rTest = sCorrected;
     return true;
 }
-
-OSaveAsDlgImpl::OSaveAsDlgImpl(weld::Builder* pBuilder,
-                               sal_Int32 _rType,
-                               const Reference< XConnection>& _xConnection,
-                               OUString sDefault,
-                               const IObjectNameCheck& _rObjectNameCheck,
-                               SADFlags _nFlags)
-    : m_aQryLabel(DBA_RES(STR_QRY_LABEL))
-    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
-    , m_aName(std::move(sDefault))
-    , m_rObjectNameCheck( _rObjectNameCheck )
-    , m_nType(_rType)
-    , m_nFlags(_nFlags)
-    , m_aChecker(OUString())
-    , m_xDescription(pBuilder->weld_label("descriptionft"))
-    , m_xCatalogLbl(pBuilder->weld_label("catalogft"))
-    , m_xCatalog(pBuilder->weld_combo_box("catalog"))
-    , m_xSchemaLbl(pBuilder->weld_label("schemaft"))
-    , m_xSchema(pBuilder->weld_combo_box("schema"))
-    , m_xLabel(pBuilder->weld_label("titleft"))
-    , m_xTitle(pBuilder->weld_entry("title"))
-    , m_xPB_OK(pBuilder->weld_button("ok"))
-{
-    if ( _xConnection.is() )
-        m_xMetaData = _xConnection->getMetaData();
-
-    if (m_xMetaData.is())
-    {
-        OUString sExtraNameChars(m_xMetaData->getExtraNameCharacters());
-        m_aChecker.setAllowedChars(sExtraNameChars);
-    }
-
-    m_xTitle->connect_insert_text(LINK(this, OSaveAsDlgImpl, TextFilterHdl));
-    m_xSchema->connect_entry_insert_text(LINK(this, OSaveAsDlgImpl, TextFilterHdl));
-    m_xCatalog->connect_entry_insert_text(LINK(this, OSaveAsDlgImpl, TextFilterHdl));
-}
-
-OSaveAsDlgImpl::OSaveAsDlgImpl(weld::Builder* pBuilder,
-                               OUString sDefault,
-                               const IObjectNameCheck& _rObjectNameCheck,
-                               SADFlags _nFlags)
-    : m_aQryLabel(DBA_RES(STR_QRY_LABEL))
-    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
-    , m_aName(std::move(sDefault))
-    , m_rObjectNameCheck( _rObjectNameCheck )
-    , m_nType(CommandType::COMMAND)
-    , m_nFlags(_nFlags)
-    , m_aChecker(OUString())
-    , m_xDescription(pBuilder->weld_label("descriptionft"))
-    , m_xCatalogLbl(pBuilder->weld_label("catalogft"))
-    , m_xCatalog(pBuilder->weld_combo_box("catalog"))
-    , m_xSchemaLbl(pBuilder->weld_label("schemaft"))
-    , m_xSchema(pBuilder->weld_combo_box("schema"))
-    , m_xLabel(pBuilder->weld_label("titleft"))
-    , m_xTitle(pBuilder->weld_entry("title"))
-    , m_xPB_OK(pBuilder->weld_button("ok"))
-{
-    m_xTitle->connect_insert_text(LINK(this, OSaveAsDlgImpl, TextFilterHdl));
-    m_xSchema->connect_entry_insert_text(LINK(this, OSaveAsDlgImpl, TextFilterHdl));
-    m_xCatalog->connect_entry_insert_text(LINK(this, OSaveAsDlgImpl, TextFilterHdl));
-}
-
-using namespace ::com::sun::star::lang;
 
 namespace
 {
@@ -186,69 +84,95 @@ OSaveAsDlg::OSaveAsDlg( weld::Window * pParent,
                         SADFlags _nFlags)
     : GenericDialogController(pParent, "dbaccess/ui/savedialog.ui", "SaveDialog")
     , m_xContext( _rxContext )
+    , m_aQryLabel(DBA_RES(STR_QRY_LABEL))
+    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
+    , m_aName(rDefault)
+    , m_rObjectNameCheck( _rObjectNameCheck )
+    , m_nType(_rType)
+    , m_nFlags(_nFlags)
+    , m_aChecker(OUString())
+    , m_xDescription(m_xBuilder->weld_label("descriptionft"))
+    , m_xCatalogLbl(m_xBuilder->weld_label("catalogft"))
+    , m_xCatalog(m_xBuilder->weld_combo_box("catalog"))
+    , m_xSchemaLbl(m_xBuilder->weld_label("schemaft"))
+    , m_xSchema(m_xBuilder->weld_combo_box("schema"))
+    , m_xLabel(m_xBuilder->weld_label("titleft"))
+    , m_xTitle(m_xBuilder->weld_entry("title"))
+    , m_xPB_OK(m_xBuilder->weld_button("ok"))
 {
-    m_pImpl.reset( new OSaveAsDlgImpl(m_xBuilder.get(),_rType,_xConnection,rDefault,_rObjectNameCheck,_nFlags) );
+    if ( _xConnection.is() )
+        m_xMetaData = _xConnection->getMetaData();
+
+    if (m_xMetaData.is())
+    {
+        OUString sExtraNameChars(m_xMetaData->getExtraNameCharacters());
+        m_aChecker.setAllowedChars(sExtraNameChars);
+    }
+
+    m_xTitle->connect_insert_text(LINK(this, OSaveAsDlg, TextFilterHdl));
+    m_xSchema->connect_entry_insert_text(LINK(this, OSaveAsDlg, TextFilterHdl));
+    m_xCatalog->connect_entry_insert_text(LINK(this, OSaveAsDlg, TextFilterHdl));
 
     switch (_rType) {
     case CommandType::QUERY:
-        implInitOnlyTitle(m_pImpl->m_aQryLabel);
+        implInitOnlyTitle(m_aQryLabel);
         break;
 
     case CommandType::TABLE:
-        OSL_ENSURE( m_pImpl->m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
+        OSL_ENSURE( m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
         {
-            m_pImpl->m_xLabel->set_label(m_pImpl->m_sTblLabel);
-            if(m_pImpl->m_xMetaData.is() && !m_pImpl->m_xMetaData->supportsCatalogsInTableDefinitions()) {
-                m_pImpl->m_xCatalogLbl->hide();
-                m_pImpl->m_xCatalog->hide();
+            m_xLabel->set_label(m_sTblLabel);
+            if(m_xMetaData.is() && !m_xMetaData->supportsCatalogsInTableDefinitions()) {
+                m_xCatalogLbl->hide();
+                m_xCatalog->hide();
             } else {
                 // now fill the catalogs
-                lcl_fillComboList( *m_pImpl->m_xCatalog, _xConnection,
+                lcl_fillComboList( *m_xCatalog, _xConnection,
                                    &XDatabaseMetaData::getCatalogs, _xConnection->getCatalog() );
             }
 
-            if ( !m_pImpl->m_xMetaData->supportsSchemasInTableDefinitions()) {
-                m_pImpl->m_xSchemaLbl->hide();
-                m_pImpl->m_xSchema->hide();
+            if ( !m_xMetaData->supportsSchemasInTableDefinitions()) {
+                m_xSchemaLbl->hide();
+                m_xSchema->hide();
             } else {
-                lcl_fillComboList( *m_pImpl->m_xSchema, _xConnection,
-                                   &XDatabaseMetaData::getSchemas, m_pImpl->m_xMetaData->getUserName() );
+                lcl_fillComboList( *m_xSchema, _xConnection,
+                                   &XDatabaseMetaData::getSchemas, m_xMetaData->getUserName() );
             }
 
-            OSL_ENSURE(m_pImpl->m_xMetaData.is(),"The metadata can not be null!");
-            if(m_pImpl->m_aName.indexOf('.') != -1) {
+            OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
+            if(m_aName.indexOf('.') != -1) {
                 OUString sCatalog,sSchema,sTable;
-                ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
-                                                   m_pImpl->m_aName,
+                ::dbtools::qualifiedNameComponents(m_xMetaData,
+                                                   m_aName,
                                                    sCatalog,
                                                    sSchema,
                                                    sTable,
                                                    ::dbtools::EComposeRule::InDataManipulation);
 
-                int nPos = m_pImpl->m_xCatalog->find_text(sCatalog);
+                int nPos = m_xCatalog->find_text(sCatalog);
                 if (nPos != -1)
-                    m_pImpl->m_xCatalog->set_active(nPos);
+                    m_xCatalog->set_active(nPos);
 
                 if ( !sSchema.isEmpty() ) {
-                    nPos = m_pImpl->m_xSchema->find_text(sSchema);
+                    nPos = m_xSchema->find_text(sSchema);
                     if (nPos != -1)
-                        m_pImpl->m_xSchema->set_active(nPos);
+                        m_xSchema->set_active(nPos);
                 }
-                m_pImpl->m_xTitle->set_text(sTable);
+                m_xTitle->set_text(sTable);
             } else
-                m_pImpl->m_xTitle->set_text(m_pImpl->m_aName);
-            m_pImpl->m_xTitle->select_region(0, -1);
+                m_xTitle->set_text(m_aName);
+            m_xTitle->select_region(0, -1);
 
-            sal_Int32 nLength =  m_pImpl->m_xMetaData.is() ? m_pImpl->m_xMetaData->getMaxTableNameLength() : 0;
+            sal_Int32 nLength =  m_xMetaData.is() ? m_xMetaData->getMaxTableNameLength() : 0;
             if (nLength)
             {
-                m_pImpl->m_xTitle->set_max_length(nLength);
-                m_pImpl->m_xSchema->set_entry_max_length(nLength);
-                m_pImpl->m_xCatalog->set_entry_max_length(nLength);
+                m_xTitle->set_max_length(nLength);
+                m_xSchema->set_entry_max_length(nLength);
+                m_xCatalog->set_entry_max_length(nLength);
             }
 
             bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
-            m_pImpl->m_aChecker.setCheck(bCheck); // enable non valid sql chars as well
+            m_aChecker.setCheck(bCheck); // enable non valid sql chars as well
         }
         break;
 
@@ -267,8 +191,25 @@ OSaveAsDlg::OSaveAsDlg(weld::Window * pParent,
                        SADFlags _nFlags)
     : GenericDialogController(pParent, "dbaccess/ui/savedialog.ui", "SaveDialog")
     , m_xContext( _rxContext )
+    , m_aQryLabel(DBA_RES(STR_QRY_LABEL))
+    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
+    , m_aName(rDefault)
+    , m_rObjectNameCheck( _rObjectNameCheck )
+    , m_nType(CommandType::COMMAND)
+    , m_nFlags(_nFlags)
+    , m_aChecker(OUString())
+    , m_xDescription(m_xBuilder->weld_label("descriptionft"))
+    , m_xCatalogLbl(m_xBuilder->weld_label("catalogft"))
+    , m_xCatalog(m_xBuilder->weld_combo_box("catalog"))
+    , m_xSchemaLbl(m_xBuilder->weld_label("schemaft"))
+    , m_xSchema(m_xBuilder->weld_combo_box("schema"))
+    , m_xLabel(m_xBuilder->weld_label("titleft"))
+    , m_xTitle(m_xBuilder->weld_entry("title"))
+    , m_xPB_OK(m_xBuilder->weld_button("ok"))
 {
-    m_pImpl.reset( new OSaveAsDlgImpl(m_xBuilder.get(),rDefault,_rObjectNameCheck,_nFlags) );
+    m_xTitle->connect_insert_text(LINK(this, OSaveAsDlg, TextFilterHdl));
+    m_xSchema->connect_entry_insert_text(LINK(this, OSaveAsDlg, TextFilterHdl));
+    m_xCatalog->connect_entry_insert_text(LINK(this, OSaveAsDlg, TextFilterHdl));
     implInitOnlyTitle(_sLabel);
     implInit();
 }
@@ -279,13 +220,13 @@ OSaveAsDlg::~OSaveAsDlg()
 
 IMPL_LINK_NOARG(OSaveAsDlg, ButtonClickHdl, weld::Button&, void)
 {
-    m_pImpl->m_aName = m_pImpl->m_xTitle->get_text();
+    m_aName = m_xTitle->get_text();
 
-    OUString sNameToCheck( m_pImpl->m_aName );
+    OUString sNameToCheck( m_aName );
 
-    if ( m_pImpl->m_nType == CommandType::TABLE ) {
+    if ( m_nType == CommandType::TABLE ) {
         sNameToCheck = ::dbtools::composeTableName(
-                           m_pImpl->m_xMetaData,
+                           m_xMetaData,
                            getCatalog(),
                            getSchema(),
                            sNameToCheck,
@@ -295,58 +236,58 @@ IMPL_LINK_NOARG(OSaveAsDlg, ButtonClickHdl, weld::Button&, void)
     }
 
     SQLExceptionInfo aNameError;
-    if ( m_pImpl->m_rObjectNameCheck.isNameValid( sNameToCheck, aNameError ) )
+    if ( m_rObjectNameCheck.isNameValid( sNameToCheck, aNameError ) )
         m_xDialog->response(RET_OK);
 
     showError(aNameError, m_xDialog->GetXWindow(), m_xContext);
-    m_pImpl->m_xTitle->grab_focus();
+    m_xTitle->grab_focus();
 }
 
 IMPL_LINK_NOARG(OSaveAsDlg, EditModifyHdl, weld::Entry&, void)
 {
-    m_pImpl->m_xPB_OK->set_sensitive(!m_pImpl->m_xTitle->get_text().isEmpty());
+    m_xPB_OK->set_sensitive(!m_xTitle->get_text().isEmpty());
 }
 
 void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
 {
-    m_pImpl->m_xLabel->set_label(_rLabel);
-    m_pImpl->m_xCatalogLbl->hide();
-    m_pImpl->m_xCatalog->hide();
-    m_pImpl->m_xSchemaLbl->hide();
-    m_pImpl->m_xSchema->hide();
+    m_xLabel->set_label(_rLabel);
+    m_xCatalogLbl->hide();
+    m_xCatalog->hide();
+    m_xSchemaLbl->hide();
+    m_xSchema->hide();
 
-    m_pImpl->m_xTitle->set_text(m_pImpl->m_aName);
-    m_pImpl->m_aChecker.setCheck(false); // enable non valid sql chars as well
+    m_xTitle->set_text(m_aName);
+    m_aChecker.setCheck(false); // enable non valid sql chars as well
 }
 
 void OSaveAsDlg::implInit()
 {
-    if ( !( m_pImpl->m_nFlags & SADFlags::AdditionalDescription ) ) {
+    if ( !( m_nFlags & SADFlags::AdditionalDescription ) ) {
         // hide the description window
-        m_pImpl->m_xDescription->hide();
+        m_xDescription->hide();
     }
 
-    if ( SADFlags::TitlePasteAs == ( m_pImpl->m_nFlags & SADFlags::TitlePasteAs ) )
+    if ( SADFlags::TitlePasteAs == ( m_nFlags & SADFlags::TitlePasteAs ) )
         m_xDialog->set_title( DBA_RES( STR_TITLE_PASTE_AS ) );
-    else if ( SADFlags::TitleRename == ( m_pImpl->m_nFlags & SADFlags::TitleRename ) )
+    else if ( SADFlags::TitleRename == ( m_nFlags & SADFlags::TitleRename ) )
         m_xDialog->set_title( DBA_RES( STR_TITLE_RENAME ) );
 
-    m_pImpl->m_xPB_OK->connect_clicked(LINK(this,OSaveAsDlg,ButtonClickHdl));
-    m_pImpl->m_xTitle->connect_changed(LINK(this,OSaveAsDlg,EditModifyHdl));
-    m_pImpl->m_xTitle->grab_focus();
+    m_xPB_OK->connect_clicked(LINK(this,OSaveAsDlg,ButtonClickHdl));
+    m_xTitle->connect_changed(LINK(this,OSaveAsDlg,EditModifyHdl));
+    m_xTitle->grab_focus();
 }
 
 const OUString& OSaveAsDlg::getName() const
 {
-    return m_pImpl->m_aName;
+    return m_aName;
 }
 OUString OSaveAsDlg::getCatalog() const
 {
-    return m_pImpl->m_xCatalog->get_visible() ? m_pImpl->m_xCatalog->get_active_text() : OUString();
+    return m_xCatalog->get_visible() ? m_xCatalog->get_active_text() : OUString();
 }
 OUString OSaveAsDlg::getSchema() const
 {
-    return m_pImpl->m_xSchema->get_visible() ? m_pImpl->m_xSchema->get_active_text() : OUString();
+    return m_xSchema->get_visible() ? m_xSchema->get_active_text() : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

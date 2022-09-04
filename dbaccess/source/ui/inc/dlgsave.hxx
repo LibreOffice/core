@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "SqlNameEdit.hxx"
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/weld.hxx>
@@ -42,13 +44,32 @@ namespace o3tl {
 
 namespace dbaui
 {
-    class OSaveAsDlgImpl;
     class IObjectNameCheck;
     class OSaveAsDlg : public weld::GenericDialogController
     {
     private:
-        std::unique_ptr<OSaveAsDlgImpl> m_pImpl;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        OUString                   m_aQryLabel;
+        OUString                   m_sTblLabel;
+        OUString                   m_aName;
+        const IObjectNameCheck&    m_rObjectNameCheck;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
+        sal_Int32                  m_nType;
+        SADFlags                   m_nFlags;
+
+        OSQLNameChecker            m_aChecker;
+
+        std::unique_ptr<weld::Label> m_xDescription;
+        std::unique_ptr<weld::Label> m_xCatalogLbl;
+        std::unique_ptr<weld::ComboBox> m_xCatalog;
+        std::unique_ptr<weld::Label> m_xSchemaLbl;
+        std::unique_ptr<weld::ComboBox> m_xSchema;
+        std::unique_ptr<weld::Label> m_xLabel;
+        std::unique_ptr<weld::Entry> m_xTitle;
+        std::unique_ptr<weld::Button> m_xPB_OK;
+
+        DECL_LINK(TextFilterHdl, OUString&, bool);
+
     public:
         OSaveAsDlg( weld::Window * pParent, sal_Int32 _rType,
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
