@@ -1562,15 +1562,6 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
     return aBuffer.makeStringAndClear();
 }
 
-OUString FormulaProcessorBase::generateApiString( const OUString& rString )
-{
-    OUString aRetString = rString;
-    sal_Int32 nQuotePos = aRetString.getLength();
-    while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
-        aRetString = aRetString.replaceAt( nQuotePos, 1, u"\"\"" );
-    return "\"" + aRetString + "\"";
-}
-
 OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
 {
     OSL_ENSURE( !rMatrix.empty(), "FormulaProcessorBase::generateApiArray - missing matrix values" );
@@ -1589,7 +1580,10 @@ OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
             if( *aIt >>= fValue )
                 aBuffer.append( fValue );
             else if( *aIt >>= aString )
-                aBuffer.append( generateApiString( aString ) );
+            {
+                // generate Api String
+                aBuffer.append( "\"" + aString.replaceAll(u"\"", u"\"\"") + "\"" );
+            }
             else
                 aBuffer.append( "\"\"" );
         }

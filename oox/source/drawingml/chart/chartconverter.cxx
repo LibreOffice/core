@@ -44,16 +44,6 @@ const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
 const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
 const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
-// Code similar to sc/source/filter/oox/formulabase.cxx
-static OUString lclGenerateApiString( const OUString& rString )
-{
-    OUString aRetString = rString;
-    sal_Int32 nQuotePos = aRetString.getLength();
-    while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
-        aRetString = aRetString.replaceAt( nQuotePos, 1, u"\"\"" );
-    return "\"" + aRetString + "\"";
-}
-
 static OUString lclGenerateApiArray(const std::vector<Any>& rRow, sal_Int32 nStart, sal_Int32 nCount)
 {
     OSL_ENSURE( !rRow.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
@@ -68,7 +58,10 @@ static OUString lclGenerateApiArray(const std::vector<Any>& rRow, sal_Int32 nSta
         if( *aIt >>= fValue )
             aBuffer.append( fValue );
         else if( *aIt >>= aString )
-            aBuffer.append( lclGenerateApiString( aString ) );
+        {
+            // Code similar to sc/source/filter/oox/formulabase.cxx
+            aBuffer.append( "\"" + aString.replaceAll(u"\"", u"\"\"") + "\"" );
+        }
         else
             aBuffer.append( "\"\"" );
     }
