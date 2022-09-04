@@ -73,7 +73,7 @@ FontCharMapRef FreeTypeTextRenderImpl::GetFontCharMap() const
 {
     if (!mpFreetypeFont[0])
         return nullptr;
-    return mpFreetypeFont[0]->GetFreetypeFont().GetFontCharMap();
+    return mpFreetypeFont[0]->GetFontFace()->GetFontCharMap();
 }
 
 bool FreeTypeTextRenderImpl::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const

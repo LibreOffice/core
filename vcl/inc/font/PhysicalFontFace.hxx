@@ -73,7 +73,7 @@ public:
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const = 0;
 
     virtual sal_IntPtr      GetFontId() const = 0;
-    virtual FontCharMapRef GetFontCharMap() const = 0;
+    virtual FontCharMapRef  GetFontCharMap() const;
     virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
 
     bool                    IsBetterMatch( const vcl::font::FontSelectPattern&, FontMatchStatus& ) const;
@@ -84,6 +84,7 @@ public:
 
 protected:
     mutable hb_face_t*      mpHbFace;
+    mutable FontCharMapRef  mxCharMap;
 
     explicit PhysicalFontFace(const FontAttributes&);
 };

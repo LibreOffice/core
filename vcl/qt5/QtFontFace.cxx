@@ -44,8 +44,6 @@ QtFontFace::QtFontFace(const QtFontFace& rSrc)
     , m_aFontId(rSrc.m_aFontId)
     , m_eFontIdType(rSrc.m_eFontIdType)
 {
-    if (rSrc.m_xCharMap.is())
-        m_xCharMap = rSrc.m_xCharMap;
 }
 
 FontWeight QtFontFace::toFontWeight(const int nWeight)
@@ -205,28 +203,6 @@ rtl::Reference<LogicalFontInstance>
 QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
     return new QtFont(*this, rFSD);
-}
-
-FontCharMapRef QtFontFace::GetFontCharMap() const
-{
-    if (m_xCharMap.is())
-        return m_xCharMap;
-
-    QFont aFont = CreateFont();
-    QRawFont aRawFont(QRawFont::fromFont(aFont));
-    QByteArray aCMapTable = aRawFont.fontTable("cmap");
-    if (aCMapTable.isEmpty())
-    {
-        m_xCharMap = new FontCharMap();
-        return m_xCharMap;
-    }
-
-    CmapResult aCmapResult;
-    if (ParseCMAP(reinterpret_cast<const unsigned char*>(aCMapTable.data()), aCMapTable.size(),
-                  aCmapResult))
-        m_xCharMap = new FontCharMap(aCmapResult);
-
-    return m_xCharMap;
 }
 
 bool QtFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const

@@ -68,12 +68,9 @@ public:
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
 
-    bool                    HasChar( sal_uInt32 cChar ) const;
-
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
-    FontCharMapRef GetFontCharMap() const override;
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
 
     virtual hb_blob_t*      GetHbTable(hb_tag_t nTag) const override;
@@ -83,7 +80,6 @@ private:
 
     // some members that are initialized lazily when the font gets selected into a HDC
     mutable bool                    mbFontCapabilitiesRead;
-    mutable FontCharMapRef          mxUnicodeMap;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
     BYTE                    meWinCharSet;
@@ -92,7 +88,6 @@ private:
     bool                    mbAliasSymbolsLow;
     HFONT                   mhFont;
 
-    void                    ReadCmapTable() const;
     void                    GetFontCapabilities() const;
 };
 
@@ -413,20 +408,5 @@ void    ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern&,
             const vcl::font::PhysicalFontFace*, LOGFONTW& );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
-
-// called extremely often from just one spot => inline
-inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
-{
-    if( mxUnicodeMap->HasChar( cChar ) )
-        return true;
-    // second chance to allow symbol aliasing
-    if( mbAliasSymbolsLow && ((cChar-0xF000) <= 0xFF) )
-        cChar -= 0xF000;
-    else if( mbAliasSymbolsHigh && (cChar <= 0xFF) )
-        cChar += 0xF000;
-    else
-        return false;
-    return mxUnicodeMap->HasChar( cChar );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

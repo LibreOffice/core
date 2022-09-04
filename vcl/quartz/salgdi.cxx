@@ -42,7 +42,6 @@
 #include <quartz/ctfonts.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
-#include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
 #include <font/fontsubstitution.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -142,44 +141,6 @@ CoreTextFontFace::~CoreTextFontFace()
 sal_IntPtr CoreTextFontFace::GetFontId() const
 {
     return mnFontId;
-}
-
-FontCharMapRef CoreTextFontFace::GetFontCharMap() const
-{
-    // return the cached charmap
-    if( mxCharMap.is() )
-        return mxCharMap;
-
-    // set the default charmap
-    FontCharMapRef pCharMap( new FontCharMap() );
-    mxCharMap = pCharMap;
-
-    // get the CMAP byte size
-    // allocate a buffer for the CMAP raw data
-    const int nBufSize = GetFontTable( "cmap", nullptr );
-    SAL_WARN_IF( (nBufSize <= 0), "vcl", "CoreTextFontFace::GetFontCharMap : GetFontTable1 failed!");
-    if( nBufSize <= 0 )
-        return mxCharMap;
-
-    // get the CMAP raw data
-    std::vector<unsigned char> aBuffer( nBufSize );
-    const int nRawLength = GetFontTable( "cmap", aBuffer.data() );
-    SAL_WARN_IF( (nRawLength <= 0), "vcl", "CoreTextFontFace::GetFontCharMap : GetFontTable2 failed!");
-    if( nRawLength <= 0 )
-        return mxCharMap;
-
-    SAL_WARN_IF( (nBufSize!=nRawLength), "vcl", "CoreTextFontFace::GetFontCharMap : ByteCount mismatch!");
-
-    // parse the CMAP
-    CmapResult aCmapResult;
-    if( ParseCMAP( aBuffer.data(), nRawLength, aCmapResult ) )
-    {
-        FontCharMapRef xDefFontCharMap( new FontCharMap(aCmapResult) );
-        // create the matching charmap
-        mxCharMap = xDefFontCharMap;
-    }
-
-    return mxCharMap;
 }
 
 bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
@@ -543,7 +504,7 @@ FontCharMapRef AquaSalGraphics::GetFontCharMap() const
         return FontCharMapRef( new FontCharMap() );
     }
 
-    return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCharMap();
+    return mpTextStyle[0]->GetFontFace()->GetFontCharMap();
 }
 
 bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const

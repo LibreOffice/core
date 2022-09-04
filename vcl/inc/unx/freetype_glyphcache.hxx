@@ -27,8 +27,6 @@
 
 #include <glyphid.hxx>
 
-class CmapResult;
-
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
 // in up to nTTC*nSizes*nOrientation*nSynthetic times
@@ -74,7 +72,6 @@ public:
 
     void                  AnnounceFont( vcl::font::PhysicalFontCollection* );
 
-    const FontCharMapRef & GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities&) const;
 
 private:
@@ -90,7 +87,6 @@ private:
     sal_IntPtr      mnFontId;
     FontAttributes  maDevFontAttributes;
 
-    mutable FontCharMapRef mxFontCharMap;
 };
 
 class FreetypeFontFace : public vcl::font::PhysicalFontFace
@@ -104,7 +100,6 @@ public:
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 
-    FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
     inline bool GetFontCapabilities(vcl::FontCapabilities&) const override;
 
     virtual hb_face_t* GetHbFace() const override;

@@ -663,42 +663,9 @@ bool FreetypeFont::GetAntialiasAdvice() const
     return !mrFontInstance.GetFontSelectPattern().mbNonAntialiased && (mnPrioAntiAlias > 0);
 }
 
-// determine unicode ranges in font
-
-const FontCharMapRef & FreetypeFont::GetFontCharMap() const
-{
-    return mxFontInfo->GetFontCharMap();
-}
-
 bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     return mxFontInfo->GetFontCapabilities(rFontCapabilities);
-}
-
-const FontCharMapRef & FreetypeFontInfo::GetFontCharMap() const
-{
-    // check if the charmap is already cached
-    if( mxFontCharMap.is() )
-        return mxFontCharMap;
-
-    // get the charmap and cache it
-    CmapResult aCmapResult;
-    aCmapResult.mbSymbolic = IsSymbolFont();
-
-    sal_uLong nLength = 0;
-    const unsigned char* pCmap = GetTable("cmap", &nLength);
-    if (pCmap && (nLength > 0) && ParseCMAP(pCmap, nLength, aCmapResult))
-    {
-        FontCharMapRef xFontCharMap( new FontCharMap ( aCmapResult ) );
-        mxFontCharMap = xFontCharMap;
-    }
-    else
-    {
-        FontCharMapRef xFontCharMap( new FontCharMap() );
-        mxFontCharMap = xFontCharMap;
-    }
-    // mxFontCharMap on either branch now has a refcount of 1
-    return mxFontCharMap;
 }
 
 bool FreetypeFontInfo::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const

@@ -24,6 +24,7 @@
 #include <unotools/fontdefs.hxx>
 
 #include <fontattributes.hxx>
+#include <impfontcharmap.hxx>
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -219,6 +220,29 @@ hb_face_t* PhysicalFontFace::GetHbFace() const
     if (mpHbFace == nullptr)
         mpHbFace = hb_face_create_for_tables(getTable, const_cast<PhysicalFontFace*>(this), nullptr);
     return mpHbFace;
+}
+
+FontCharMapRef PhysicalFontFace::GetFontCharMap() const
+{
+    if (mxCharMap.is())
+        return mxCharMap;
+
+    hb_blob_t* pBlob = GetHbTable(HB_TAG('c', 'm', 'a', 'p'));
+    if (pBlob)
+    {
+        unsigned int nSize = 0;
+        auto* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, &nSize));
+
+        CmapResult aCmapResult(IsSymbolFont());
+        if (ParseCMAP(pData, nSize, aCmapResult))
+            mxCharMap = new FontCharMap(aCmapResult);
+        hb_blob_destroy(pBlob);
+    }
+
+    if (!mxCharMap.is())
+        mxCharMap = FontCharMap::GetDefaultMap(IsSymbolFont());
+
+    return mxCharMap;
 }
 }
 

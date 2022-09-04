@@ -52,9 +52,7 @@ public:
 
     QFont CreateFont() const;
 
-    FontCharMapRef GetFontCharMap() const override;
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
-    bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
@@ -69,7 +67,6 @@ private:
 
     const QString m_aFontId;
     const FontIdType m_eFontIdType;
-    mutable FontCharMapRef m_xCharMap;
     mutable vcl::FontCapabilities m_aFontCapabilities;
     mutable bool m_bFontCapabilitiesRead;
 };

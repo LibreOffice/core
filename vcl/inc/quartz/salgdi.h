@@ -69,9 +69,7 @@ public:
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    FontCharMapRef GetFontCharMap() const override;
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
-    bool                            HasChar( sal_uInt32 cChar ) const;
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
@@ -79,7 +77,6 @@ public:
 
 private:
     const sal_IntPtr                mnFontId;
-    mutable FontCharMapRef          mxCharMap;
     mutable vcl::FontCapabilities   maFontCapabilities;
     mutable bool                    mbFontCapabilitiesRead;
 };

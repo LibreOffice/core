@@ -179,8 +179,7 @@ private:
 // does a font face hold the given missing characters?
 bool WinGlyphFallbackSubstititution::HasMissingChars(vcl::font::PhysicalFontFace* pFace, OUString& rMissingChars) const
 {
-    WinFontFace* pWinFont = static_cast< WinFontFace* >(pFace);
-    FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
+    FontCharMapRef xFontCharMap = pFace->GetFontCharMap();
 
     // avoid fonts with unknown CMAP subtables for glyph fallback
     if( !xFontCharMap.is() || xFontCharMap->IsDefaultMap() )
@@ -615,7 +614,6 @@ WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& 
 WinFontFace::~WinFontFace()
 {
     DeleteFont(mhFont);
-    mxUnicodeMap.clear();
 }
 
 sal_IntPtr WinFontFace::GetFontId() const
@@ -713,52 +711,12 @@ hb_blob_t* WinFontFace::GetHbTable(hb_tag_t nTag) const
 
 static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
-FontCharMapRef WinFontFace::GetFontCharMap() const
-{
-    if (!mxUnicodeMap.is())
-        ReadCmapTable();
-    return mxUnicodeMap;
-}
-
 bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!mbFontCapabilitiesRead)
         GetFontCapabilities();
     rFontCapabilities = maFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-}
-
-void WinFontFace::ReadCmapTable() const
-{
-    if( mxUnicodeMap.is() )
-        return;
-
-    HDC hDC(::GetDC(nullptr));
-    HFONT hOldFont = ::SelectFont(hDC, mhFont);
-
-    bool bIsSymbolFont = (meWinCharSet == SYMBOL_CHARSET);
-    // get the CMAP table from the font which is selected into the DC
-    const DWORD nCmapTag = CalcTag( "cmap" );
-    const RawFontData aRawFontData( hDC, nCmapTag );
-    // parse the CMAP table if available
-    if( aRawFontData.get() ) {
-        CmapResult aResult;
-        ParseCMAP( aRawFontData.get(), aRawFontData.size(), aResult );
-        aResult.mbSymbolic = bIsSymbolFont;
-        if( aResult.mnRangeCount > 0 )
-        {
-            FontCharMapRef pUnicodeMap(new FontCharMap(aResult));
-            mxUnicodeMap = pUnicodeMap;
-        }
-    }
-
-    ::SelectFont(hDC, hOldFont);
-    ::ReleaseDC(nullptr, hDC);
-
-    if( !mxUnicodeMap.is() )
-    {
-        mxUnicodeMap = FontCharMap::GetDefaultMap( bIsSymbolFont );
-    }
 }
 
 void WinFontFace::GetFontCapabilities() const
