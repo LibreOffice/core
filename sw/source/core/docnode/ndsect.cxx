@@ -222,7 +222,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
             --aEnd; // End is inclusive in the InsertSection
             pNewSectNode = GetNodes().InsertTextSection(
-                        aStt.GetNode(), *pFormat, rNewData, pTOXBase, & aEnd);
+                        aStt.GetNode(), *pFormat, rNewData, pTOXBase, & aEnd.GetNode());
         }
         else
         {
@@ -291,7 +291,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 }
             }
             pNewSectNode = GetNodes().InsertTextSection(
-                pSttPos->GetNode(), *pFormat, rNewData, pTOXBase, &pEndPos->nNode);
+                pSttPos->GetNode(), *pFormat, rNewData, pTOXBase, &pEndPos->GetNode());
         }
     }
     else
@@ -783,14 +783,14 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
                                 SwSectionFormat& rSectionFormat,
                                 SwSectionData const& rSectionData,
                                 SwTOXBase const*const pTOXBase,
-                                SwNodeIndex const*const pEnd,
+                                SwNode const*const pEndNd,
                                 bool const bInsAtStart, bool const bCreateFrames)
 {
     SwNodeIndex aInsPos( rNd );
-    if( !pEnd ) // No Area, thus create a new Section before/after it
+    if( !pEndNd ) // No Area, thus create a new Section before/after it
     {
         // #i26762#
-        OSL_ENSURE(!pEnd || rNd.GetIndex() <= pEnd->GetIndex(),
+        OSL_ENSURE(!pEndNd || rNd.GetIndex() <= pEndNd->GetIndex(),
                "Section start and end in wrong order!");
 
         if( bInsAtStart )
@@ -845,11 +845,11 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
         }
     }
 
-    if( pEnd )
+    if( pEndNd )
     {
         // Special case for the Reader/Writer
-        if( pEnd->GetNode() != GetEndOfContent() )
-            aInsPos = pEnd->GetIndex()+1;
+        if( *pEndNd != GetEndOfContent() )
+            aInsPos = pEndNd->GetIndex()+1;
         // #i58710: We created a RTF document with a section break inside a table cell
         // We are not able to handle a section start inside a table and the section end outside.
         const SwNode* pLastNode = pSectNd->StartOfSectionNode()->EndOfSectionNode();

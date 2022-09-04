@@ -397,7 +397,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
             --aIdx;
             SwSectionFormat* pSectFormat = MakeSectionFormat();
             GetNodes().InsertTextSection(
-                    *pHeadNd, *pSectFormat, headerData, nullptr, &aIdx, true, false);
+                    *pHeadNd, *pSectFormat, headerData, nullptr, &aIdx.GetNode(), true, false);
         }
     }
 
@@ -431,7 +431,7 @@ void SwDoc::InsertTableOf( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
         pFormat->SetFormatAttr(*pSet);
 
     SwSectionNode *const pNewSectionNode =
-        GetNodes().InsertTextSection(aStt.GetNode(), *pFormat, aSectionData, &rTOX, &aEnd);
+        GetNodes().InsertTextSection(aStt.GetNode(), *pFormat, aSectionData, &rTOX, &aEnd.GetNode());
     if (!pNewSectionNode)
     {
         DelSectionFormat( pFormat );
@@ -1052,7 +1052,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         --aIdx;
         SwSectionFormat* pSectFormat = rDoc.MakeSectionFormat();
         rDoc.GetNodes().InsertTextSection(
-                *pHeadNd, *pSectFormat, headerData, nullptr, &aIdx, true, false);
+                *pHeadNd, *pSectFormat, headerData, nullptr, &aIdx.GetNode(), true, false);
 
         if (pUndo)
         {

@@ -303,7 +303,7 @@ public:
                                 SwSectionFormat& rSectionFormat,
                                 SwSectionData const&,
                                 SwTOXBase const*const pTOXBase,
-                                SwNodeIndex const*const pEnd,
+                                SwNode const * pEndNd,
                                 bool const bInsAtStart = true,
                                 bool const bCreateFrames = true);
 
