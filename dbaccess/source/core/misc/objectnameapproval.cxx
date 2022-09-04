@@ -23,8 +23,6 @@
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#include <cppuhelper/weakref.hxx>
-
 namespace dbaccess
 {
 
@@ -39,19 +37,11 @@ namespace dbaccess
 
     namespace CommandType = com::sun::star::sdb::CommandType;
 
-    // ObjectNameApproval_Impl
-    struct ObjectNameApproval_Impl
-    {
-        WeakReference< XConnection >        aConnection;
-        sal_Int32                           nCommandType;
-    };
-
     // ObjectNameApproval
     ObjectNameApproval::ObjectNameApproval( const Reference< XConnection >& _rxConnection, ObjectType _eType )
-        :m_pImpl( new ObjectNameApproval_Impl )
     {
-        m_pImpl->aConnection = _rxConnection;
-        m_pImpl->nCommandType = _eType == TypeQuery ? CommandType::QUERY : CommandType::TABLE;
+        mxConnection = _rxConnection;
+        mnCommandType = _eType == TypeQuery ? CommandType::QUERY : CommandType::TABLE;
     }
 
     ObjectNameApproval::~ObjectNameApproval()
@@ -60,13 +50,13 @@ namespace dbaccess
 
     void ObjectNameApproval::approveElement( const OUString& _rName )
     {
-        Reference< XConnection > xConnection( m_pImpl->aConnection );
+        Reference< XConnection > xConnection( mxConnection );
         if ( !xConnection.is() )
             throw DisposedException();
 
         Reference< XConnectionTools > xConnectionTools( xConnection, UNO_QUERY_THROW );
         Reference< XObjectNames > xObjectNames( xConnectionTools->getObjectNames(), css::uno::UNO_SET_THROW );
-        xObjectNames->checkNameForCreate( m_pImpl->nCommandType, _rName );
+        xObjectNames->checkNameForCreate( mnCommandType, _rName );
     }
 
 } // namespace dbaccess

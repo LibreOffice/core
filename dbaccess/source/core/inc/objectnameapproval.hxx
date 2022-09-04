@@ -21,14 +21,13 @@
 
 #include <memory>
 #include "containerapprove.hxx"
-
+#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace dbaccess
 {
 
     // ObjectNameApproval
-    struct ObjectNameApproval_Impl;
     /** implementation of the IContainerApprove interface which approves
         elements for insertion into a query or tables container.
 
@@ -40,7 +39,8 @@ namespace dbaccess
     */
     class ObjectNameApproval : public IContainerApprove
     {
-        std::unique_ptr< ObjectNameApproval_Impl >   m_pImpl;
+        css::uno::WeakReference< css::sdbc::XConnection > mxConnection;
+        sal_Int32 mnCommandType;
 
     public:
         enum ObjectType
