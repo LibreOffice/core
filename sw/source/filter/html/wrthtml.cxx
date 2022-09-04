@@ -745,18 +745,8 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                 rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aSection.isEmpty() )
         {
-            sal_Int32 nPos = aSection.indexOf( '%' );
-            while( nPos != -1 )
-            {
-                aSection = aSection.replaceAt(nPos, 1, u"%25");
-                nPos = aSection.indexOf( '%', nPos+3 );
-            }
-            nPos = aSection.indexOf( cDelim );
-            while( nPos != -1 )
-            {
-                aSection = aSection.replaceAt(nPos, 1, u"%FF" );
-                nPos = aSection.indexOf( cDelim, nPos+3 );
-            }
+            aSection = aSection.replaceAll(u"%", u"%25");
+            aSection = aSection.replaceAll(OUStringChar(cDelim), u"%FF");
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection );
         }
         sOut.append('\"');
