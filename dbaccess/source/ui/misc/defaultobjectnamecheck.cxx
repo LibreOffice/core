@@ -24,7 +24,6 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <connectivity/dbexception.hxx>
@@ -115,26 +114,18 @@ namespace dbaui
         return false;
     }
 
-    // DynamicTableOrQueryNameCheck_Impl
-    struct DynamicTableOrQueryNameCheck_Impl
-    {
-        sal_Int32                   nCommandType;
-        Reference< XObjectNames >   xObjectNames;
-    };
-
     // DynamicTableOrQueryNameCheck
     DynamicTableOrQueryNameCheck::DynamicTableOrQueryNameCheck( const Reference< XConnection >& _rxSdbLevelConnection, sal_Int32 _nCommandType )
-        :m_pImpl( new DynamicTableOrQueryNameCheck_Impl )
     {
         Reference< XConnectionTools > xConnTools( _rxSdbLevelConnection, UNO_QUERY );
         if ( xConnTools.is() )
-            m_pImpl->xObjectNames.set( xConnTools->getObjectNames() );
-        if ( !m_pImpl->xObjectNames.is() )
+            mxObjectNames.set( xConnTools->getObjectNames() );
+        if ( !mxObjectNames.is() )
             throw IllegalArgumentException();
 
         if ( ( _nCommandType != CommandType::QUERY ) && ( _nCommandType != CommandType::TABLE ) )
             throw IllegalArgumentException();
-        m_pImpl->nCommandType = _nCommandType;
+        mnCommandType = _nCommandType;
     }
 
     DynamicTableOrQueryNameCheck::~DynamicTableOrQueryNameCheck()
@@ -145,7 +136,7 @@ namespace dbaui
     {
         try
         {
-            m_pImpl->xObjectNames->checkNameForCreate( m_pImpl->nCommandType, _rObjectName );
+            mxObjectNames->checkNameForCreate( mnCommandType, _rObjectName );
             return true;
         }
         catch( const SQLException& )

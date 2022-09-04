@@ -23,6 +23,7 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 
 #include <memory>
 
@@ -67,7 +68,6 @@ namespace dbaui
     };
 
     // DynamicTableOrQueryNameCheck
-    struct DynamicTableOrQueryNameCheck_Impl;
     /** class implementing the IObjectNameCheck interface, and checking a given name
         for being valid as either a query or a table name.
 
@@ -84,7 +84,8 @@ namespace dbaui
     class DynamicTableOrQueryNameCheck  :public IObjectNameCheck
     {
     private:
-        std::unique_ptr< DynamicTableOrQueryNameCheck_Impl > m_pImpl;
+        sal_Int32 mnCommandType;
+        css::uno::Reference< css::sdb::tools::XObjectNames >  mxObjectNames;
 
     public:
         /** constructs a DynamicTableOrQueryNameCheck instance
