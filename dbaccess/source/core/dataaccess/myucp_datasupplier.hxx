@@ -20,17 +20,33 @@
 #pragma once
 
 #include <rtl/ref.hxx>
+#include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/resultset.hxx>
 #include "documentcontainer.hxx"
 #include <memory>
 
 namespace dbaccess
 {
-struct DataSupplier_Impl;
+struct ResultListEntry
+{
+    OUString aId;
+    css::uno::Reference<css::ucb::XContentIdentifier> xId;
+    ::rtl::Reference<OContentHelper> xContent;
+    css::uno::Reference<css::sdbc::XRow> xRow;
+    const ContentProperties& rData;
+
+    explicit ResultListEntry(const ContentProperties& rEntry)
+        : rData(rEntry)
+    {
+    }
+};
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
-    std::unique_ptr<DataSupplier_Impl> m_pImpl;
+    osl::Mutex m_aMutex;
+    std::vector<std::unique_ptr<ResultListEntry>> m_aResults;
+    rtl::Reference<ODocumentContainer> m_xContent;
+    bool m_bCountFinal = false;
 
 public:
     explicit DataSupplier(const rtl::Reference<ODocumentContainer>& rxContent);
