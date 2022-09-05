@@ -332,8 +332,8 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     : SfxDialogController(pParent, "modules/swriter/ui/editsectiondialog.ui",
                           "EditSectionDialog")
     , m_bSubRegionsFilled(false)
-    , rSh(rWrtSh)
-    , bDontCheckPasswd(true)
+    , m_rSh(rWrtSh)
+    , m_bDontCheckPasswd(true)
     , m_xCurName(m_xBuilder->weld_entry("curname"))
     , m_xTree(m_xBuilder->weld_tree_view("tree"))
     , m_xFileCB(m_xBuilder->weld_check_button("link"))
@@ -365,7 +365,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     // edit in readonly sections
     m_xEditInReadonlyCB->set_state(TRISTATE_FALSE);
 
-    bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell() ) != nullptr;
+    bool bWeb = dynamic_cast<SwWebDocShell*>( m_rSh.GetView().GetDocShell() ) != nullptr;
 
     m_xTree->connect_changed(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
     m_xCurName->connect_changed(LINK(this, SwEditRegionDlg, NameEditHdl));
@@ -398,7 +398,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 
     m_xDDECB->connect_toggled(LINK(this, SwEditRegionDlg, DDEHdl));
 
-    pCurrSect = rSh.GetCurrSection();
+    m_pCurrSect = m_rSh.GetCurrSection();
     RecurseList( nullptr, nullptr );
 
     // if the cursor is not in a region the first one will always be selected
@@ -413,12 +413,12 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     }
 
     m_xTree->show();
-    bDontCheckPasswd = false;
+    m_bDontCheckPasswd = false;
 }
 
 bool SwEditRegionDlg::CheckPasswd(weld::Toggleable* pBox)
 {
-    if (bDontCheckPasswd)
+    if (m_bDontCheckPasswd)
         return true;
     bool bRet = true;
 
@@ -467,11 +467,11 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
     std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
     if (!pFormat)
     {
-        const size_t nCount=rSh.GetSectionFormatCount();
+        const size_t nCount=m_rSh.GetSectionFormatCount();
         for ( size_t n = 0; n < nCount; n++ )
         {
             SectionType eTmpType;
-            if( !( pFormat = &rSh.GetSectionFormat(n))->GetParent() &&
+            if( !( pFormat = &m_rSh.GetSectionFormat(n))->GetParent() &&
                 pFormat->IsInNodesArr() &&
                 (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
                 && SectionType::ToxHeader != eTmpType )
@@ -488,7 +488,7 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
                 RecurseList(pFormat, xIter.get());
                 if (m_xTree->iter_has_child(*xIter))
                     m_xTree->expand_row(*xIter);
-                if (pCurrSect==pSect)
+                if (m_pCurrSect==pSect)
                 {
                     m_xTree->select(*xIter);
                     m_xTree->scroll_to_row(*xIter);
@@ -521,7 +521,7 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
                 RecurseList(pSect->GetFormat(), xIter.get());
                 if (m_xTree->iter_has_child(*xIter))
                     m_xTree->expand_row(*xIter);
-                if (pCurrSect==pSect)
+                if (m_pCurrSect==pSect)
                 {
                     m_xTree->select(*xIter);
                     m_xTree->scroll_to_row(*xIter);
@@ -534,9 +534,9 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
 
 size_t SwEditRegionDlg::FindArrPos(const SwSectionFormat* pFormat )
 {
-    const size_t nCount=rSh.GetSectionFormatCount();
+    const size_t nCount=m_rSh.GetSectionFormatCount();
     for ( size_t i = 0; i < nCount; i++ )
-        if ( pFormat == &rSh.GetSectionFormat(i) )
+        if ( pFormat == &m_rSh.GetSectionFormat(i) )
             return i;
 
     OSL_FAIL("SectionFormat not on the list" );
@@ -579,7 +579,7 @@ void SwEditRegionDlg::SelectSection(std::u16string_view rSectionName)
 // multiselection some controls are disabled
 IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
 {
-    bDontCheckPasswd = true;
+    m_bDontCheckPasswd = true;
     std::unique_ptr<weld::TreeIter> xIter(rBox.make_iterator());
     bool bEntry = rBox.get_selected(xIter.get());
     m_xHideCB->set_sensitive(true);
@@ -734,7 +734,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         m_xPasswdCB->set_sensitive(bPasswdEnabled);
         m_xPasswdPB->set_sensitive(bPasswdEnabled);
     }
-    bDontCheckPasswd = false;
+    m_bDontCheckPasswd = false;
 }
 
 // in OkHdl the modified settings are being applied and reversed regions are deleted
@@ -747,12 +747,12 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
     // StartUndo must certainly also happen not before the formats
     // are copied (ClearRedo!)
 
-    const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
+    const SwSectionFormats& rDocFormats = m_rSh.GetDoc()->GetSections();
     SwSectionFormats aOrigArray(rDocFormats);
 
-    rSh.StartAllAction();
-    rSh.StartUndo();
-    rSh.ResetSelect( nullptr,false );
+    m_rSh.StartAllAction();
+    m_rSh.StartUndo();
+    m_rSh.ResetSelect( nullptr,false );
 
     std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
     if (m_xTree->get_iter_first(*xIter))
@@ -791,7 +791,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
                 if( pFormat->GetLRSpace() != *pRepr->GetLRSpace())
                     pSet->Put( *pRepr->GetLRSpace());
 
-                rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
+                m_rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
                                    pSet->Count() ? pSet.get() : nullptr );
             }
         } while (m_xTree->iter_next(*xIter));
@@ -803,7 +803,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
         SwSectionFormat* pFormat = aOrigArray[ it->second->GetArrPos() ];
         const size_t nNewPos = rDocFormats.GetPos( pFormat );
         if( SIZE_MAX != nNewPos )
-            rSh.DelSectionFormat( nNewPos );
+            m_rSh.DelSectionFormat( nNewPos );
     }
 
     aOrigArray.clear();
@@ -812,8 +812,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
     // otherwise ScrollError can occur.
     m_xDialog->response(RET_OK);
 
-    rSh.EndUndo();
-    rSh.EndAllAction();
+    m_rSh.EndUndo();
+    m_rSh.EndAllAction();
 }
 
 // Toggle protect
@@ -949,7 +949,7 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::Toggleable&, rButton, void)
         m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
             SectRepr* const pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
             bool bContent = pSectRepr->IsContent();
-            if( rButton.get_active() && bContent && rSh.HasSelection() )
+            if( rButton.get_active() && bContent && m_rSh.HasSelection() )
             {
                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                VclMessageType::Question, VclButtonsType::YesNo,
@@ -1016,7 +1016,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>  aSet( rSh.GetView().GetPool() );
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>  aSet( m_rSh.GetView().GetPool() );
 
     aSet.Put( pSectRepr->GetCol() );
     aSet.Put( *pSectRepr->GetBackground() );
@@ -1026,11 +1026,11 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     aSet.Put( *pSectRepr->GetFrameDir() );
     aSet.Put( *pSectRepr->GetLRSpace() );
 
-    const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
+    const SwSectionFormats& rDocFormats = m_rSh.GetDoc()->GetSections();
     SwSectionFormats aOrigArray(rDocFormats);
 
     SwSectionFormat* pFormat = aOrigArray[pSectRepr->GetArrPos()];
-    tools::Long nWidth = rSh.GetSectionWidth(*pFormat);
+    tools::Long nWidth = m_rSh.GetSectionWidth(*pFormat);
     aOrigArray.clear();
     if (!nWidth)
         nWidth = USHRT_MAX;
@@ -1038,7 +1038,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     aSet.Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-    SwSectionPropertyTabDialog aTabDlg(m_xDialog.get(), aSet, rSh);
+    SwSectionPropertyTabDialog aTabDlg(m_xDialog.get(), aSet, m_rSh);
     if (RET_OK != aTabDlg.run())
         return;
 
@@ -1132,7 +1132,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
         OUString sTmp(rEdit.get_text());
         if(!sTmp.isEmpty())
         {
-            SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+            SfxMedium* pMedium = m_rSh.GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;
             if( pMedium )
                 aAbs = pMedium->GetURLObject();
@@ -1323,7 +1323,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, SubRegionEventHdl, weld::ComboBox&, void)
     OUString sFileName = m_xFileNameED->get_text();
     if(!sFileName.isEmpty())
     {
-        SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+        SfxMedium* pMedium = m_rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
         if( pMedium )
             aAbs = pMedium->GetURLObject();
@@ -1336,7 +1336,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, SubRegionEventHdl, weld::ComboBox&, void)
         ::lcl_ReadSections(aMedium, *m_xSubRegionED);
     }
     else
-        lcl_FillSubRegionList(rSh, *m_xSubRegionED, nullptr);
+        lcl_FillSubRegionList(m_rSh, *m_xSubRegionED, nullptr);
     m_bSubRegionsFilled = true;
 }
 

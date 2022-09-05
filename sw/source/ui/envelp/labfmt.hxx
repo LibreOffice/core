@@ -65,9 +65,9 @@ public:
 
 class SwLabFormatPage : public SfxTabPage
 {
-    Idle aPreviewIdle;
-    SwLabItem aItem;
-    bool bModified;
+    Idle m_aPreviewIdle;
+    SwLabItem m_aItem;
+    bool m_bModified;
 
     SwLabPreview m_aPreview;
 

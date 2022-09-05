@@ -285,9 +285,9 @@ void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 
 SwLabFormatPage::SwLabFormatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/labelformatpage.ui", "LabelFormatPage", &rSet)
-    , aPreviewIdle("SwLabFormatPage Preview")
-    , aItem(static_cast<const SwLabItem&>( rSet.Get(FN_LABEL) ))
-    , bModified(false)
+    , m_aPreviewIdle("SwLabFormatPage Preview")
+    , m_aItem(static_cast<const SwLabItem&>( rSet.Get(FN_LABEL) ))
+    , m_bModified(false)
     , m_xMakeFI(m_xBuilder->weld_label("make"))
     , m_xTypeFI(m_xBuilder->weld_label("type"))
     , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
@@ -332,8 +332,8 @@ SwLabFormatPage::SwLabFormatPage(weld::Container* pPage, weld::DialogController*
 
     m_xSavePB->connect_clicked( LINK (this, SwLabFormatPage, SaveHdl));
     // Set timer
-    aPreviewIdle.SetPriority(TaskPriority::LOWEST);
-    aPreviewIdle.SetInvokeHandler(LINK(this, SwLabFormatPage, PreviewHdl));
+    m_aPreviewIdle.SetPriority(TaskPriority::LOWEST);
+    m_aPreviewIdle.SetInvokeHandler(LINK(this, SwLabFormatPage, PreviewHdl));
 }
 
 SwLabFormatPage::~SwLabFormatPage()
@@ -343,23 +343,23 @@ SwLabFormatPage::~SwLabFormatPage()
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_NOARG(SwLabFormatPage, MetricModifyHdl, weld::MetricSpinButton&, void)
 {
-    bModified = true;
-    aPreviewIdle.Start();
+    m_bModified = true;
+    m_aPreviewIdle.Start();
 }
 
 IMPL_LINK_NOARG(SwLabFormatPage, ModifyHdl, weld::SpinButton&, void)
 {
-    bModified = true;
-    aPreviewIdle.Start();
+    m_bModified = true;
+    m_aPreviewIdle.Start();
 }
 
 // Invalidate preview
 IMPL_LINK_NOARG(SwLabFormatPage, PreviewHdl, Timer *, void)
 {
-    aPreviewIdle.Stop();
+    m_aPreviewIdle.Stop();
     ChangeMinMax();
-    FillItem( aItem );
-    m_aPreview.UpdateItem(aItem);
+    FillItem( m_aItem );
+    m_aPreview.UpdateItem(m_aItem);
 }
 
 void SwLabFormatPage::ChangeMinMax()
@@ -423,7 +423,7 @@ DeactivateRC SwLabFormatPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabFormatPage::FillItem(SwLabItem& rItem)
 {
-    if (!bModified)
+    if (!m_bModified)
         return;
 
     rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
@@ -444,8 +444,8 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
 
 bool SwLabFormatPage::FillItemSet(SfxItemSet* rSet)
 {
-    FillItem(aItem);
-    rSet->Put(aItem);
+    FillItem(m_aItem);
+    rSet->Put(m_aItem);
 
     return true;
 }
@@ -453,33 +453,33 @@ bool SwLabFormatPage::FillItemSet(SfxItemSet* rSet)
 void SwLabFormatPage::Reset(const SfxItemSet* )
 {
     // Initialise fields
-    GetParentSwLabDlg()->GetLabItem(aItem);
+    GetParentSwLabDlg()->GetLabItem(m_aItem);
 
-    m_xHDistField->set_max(100 * aItem.m_lHDist , FieldUnit::TWIP);
-    m_xVDistField->set_max(100 * aItem.m_lVDist , FieldUnit::TWIP);
-    m_xWidthField->set_max(100 * aItem.m_lWidth , FieldUnit::TWIP);
-    m_xHeightField->set_max(100 * aItem.m_lHeight, FieldUnit::TWIP);
-    m_xLeftField->set_max(100 * aItem.m_lLeft  , FieldUnit::TWIP);
-    m_xUpperField->set_max(100 * aItem.m_lUpper , FieldUnit::TWIP);
-    m_xPWidthField->set_max(100 * aItem.m_lPWidth , FieldUnit::TWIP);
-    m_xPHeightField->set_max(100 * aItem.m_lPHeight, FieldUnit::TWIP);
+    m_xHDistField->set_max(100 * m_aItem.m_lHDist , FieldUnit::TWIP);
+    m_xVDistField->set_max(100 * m_aItem.m_lVDist , FieldUnit::TWIP);
+    m_xWidthField->set_max(100 * m_aItem.m_lWidth , FieldUnit::TWIP);
+    m_xHeightField->set_max(100 * m_aItem.m_lHeight, FieldUnit::TWIP);
+    m_xLeftField->set_max(100 * m_aItem.m_lLeft  , FieldUnit::TWIP);
+    m_xUpperField->set_max(100 * m_aItem.m_lUpper , FieldUnit::TWIP);
+    m_xPWidthField->set_max(100 * m_aItem.m_lPWidth , FieldUnit::TWIP);
+    m_xPHeightField->set_max(100 * m_aItem.m_lPHeight, FieldUnit::TWIP);
 
-    setfldval(*m_xHDistField, aItem.m_lHDist );
-    setfldval(*m_xVDistField , aItem.m_lVDist );
-    setfldval(*m_xWidthField , aItem.m_lWidth );
-    setfldval(*m_xHeightField, aItem.m_lHeight);
-    setfldval(*m_xLeftField  , aItem.m_lLeft  );
-    setfldval(*m_xUpperField , aItem.m_lUpper );
-    setfldval(*m_xPWidthField , aItem.m_lPWidth );
-    setfldval(*m_xPHeightField, aItem.m_lPHeight);
+    setfldval(*m_xHDistField, m_aItem.m_lHDist );
+    setfldval(*m_xVDistField , m_aItem.m_lVDist );
+    setfldval(*m_xWidthField , m_aItem.m_lWidth );
+    setfldval(*m_xHeightField, m_aItem.m_lHeight);
+    setfldval(*m_xLeftField  , m_aItem.m_lLeft  );
+    setfldval(*m_xUpperField , m_aItem.m_lUpper );
+    setfldval(*m_xPWidthField , m_aItem.m_lPWidth );
+    setfldval(*m_xPHeightField, m_aItem.m_lPHeight);
 
-    m_xColsField->set_max(aItem.m_nCols);
-    m_xRowsField->set_max(aItem.m_nRows);
+    m_xColsField->set_max(m_aItem.m_nCols);
+    m_xRowsField->set_max(m_aItem.m_nRows);
 
-    m_xColsField->set_value(aItem.m_nCols);
-    m_xRowsField->set_value(aItem.m_nRows);
-    m_xMakeFI->set_label(aItem.m_aMake);
-    m_xTypeFI->set_label(aItem.m_aType);
+    m_xColsField->set_value(m_aItem.m_nCols);
+    m_xRowsField->set_value(m_aItem.m_nRows);
+    m_xMakeFI->set_label(m_aItem.m_aMake);
+    m_xTypeFI->set_label(m_aItem.m_aType);
     PreviewHdl(nullptr);
 }
 
@@ -496,21 +496,21 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, weld::Button&, void)
     aRec.m_nRows   = static_cast< sal_Int32 >(m_xRowsField->get_value());
     aRec.m_nPWidth  = static_cast< tools::Long >(getfldval(*m_xPWidthField ));
     aRec.m_nPHeight = static_cast< tools::Long >(getfldval(*m_xPHeightField));
-    aRec.m_bCont = aItem.m_bCont;
+    aRec.m_bCont = m_aItem.m_bCont;
     SwSaveLabelDlg aSaveDlg(GetParentSwLabDlg(), aRec);
-    aSaveDlg.SetLabel(aItem.m_aLstMake, aItem.m_aLstType);
+    aSaveDlg.SetLabel(m_aItem.m_aLstMake, m_aItem.m_aLstType);
     aSaveDlg.run();
-    if (aSaveDlg.GetLabel(aItem))
+    if (aSaveDlg.GetLabel(m_aItem))
     {
-        bModified = false;
+        m_bModified = false;
         const std::vector<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
         std::vector<OUString>& rMakes(GetParentSwLabDlg()->Makes());
         if(rMakes.size() < rMan.size())
         {
             rMakes = rMan;
         }
-        m_xMakeFI->set_label(aItem.m_aMake);
-        m_xTypeFI->set_label(aItem.m_aType);
+        m_xMakeFI->set_label(m_aItem.m_aMake);
+        m_xTypeFI->set_label(m_aItem.m_aType);
     }
 }
 

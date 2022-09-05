@@ -26,9 +26,9 @@
 
 class SwLabPage : public SfxTabPage
 {
-    SwDBManager* pDBManager;
-    OUString sActDBName;
-    SwLabItem aItem;
+    SwDBManager* m_pDBManager;
+    OUString m_sActDBName;
+    SwLabItem m_aItem;
 
     std::unique_ptr<weld::Widget> m_xAddressFrame;
     std::unique_ptr<weld::CheckButton> m_xAddrBox;
@@ -73,8 +73,8 @@ public:
     void SetToBusinessCard();
 
     void InitDatabaseBox();
-    void SetDBManager(SwDBManager* pDBManager_) { pDBManager = pDBManager_; }
-    SwDBManager* GetDBManager() const { return pDBManager; }
+    void SetDBManager(SwDBManager* pDBManager_) { m_pDBManager = pDBManager_; }
+    SwDBManager* GetDBManager() const { return m_pDBManager; }
 };
 
 class SwPrivateDataPage : public SfxTabPage
