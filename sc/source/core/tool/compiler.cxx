@@ -5358,7 +5358,17 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         if (rDoc.HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
             OUString aStr = rDoc.GetString(aAbs, mpInterpreterContext);
-            EnQuote( aStr );
+
+            // If string contains only numeric characters or if it contains non-alphanumeric characters
+            // -> quote characters contained within are escaped by '\\'.
+            // -> put quotes around string
+            sal_Int32 nType = ScGlobal::getCharClass().getStringType( aStr, 0, aStr.getLength() );
+            if ( CharClass::isNumericType( nType )
+                || !CharClass::isAlphaNumericType( nType ) )
+            {
+                aStr = aStr.replaceAll(u"'", u"\\'");
+                aStr = "'" + aStr + "'";
+            }
             rBuffer.append(aStr);
         }
         else
@@ -5500,26 +5510,6 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
 void ScCompiler::LocalizeString( OUString& rName ) const
 {
     ScGlobal::GetAddInCollection()->LocalizeString( rName );
-}
-
-// Put quotes around string if non-alphanumeric characters are contained
-// or if string contains only numeric characters,
-// quote characters contained within are escaped by '\\'.
-bool ScCompiler::EnQuote( OUString& rStr )
-{
-    sal_Int32 nType = ScGlobal::getCharClass().getStringType( rStr, 0, rStr.getLength() );
-    if ( !CharClass::isNumericType( nType )
-            && CharClass::isAlphaNumericType( nType ) )
-        return false;
-
-    sal_Int32 nPos = 0;
-    while ( (nPos = rStr.indexOf( '\'', nPos)) != -1 )
-    {
-        rStr = rStr.replaceAt( nPos, 0, u"\\" );
-        nPos += 2;
-    }
-    rStr = "'" + rStr + "'";
-    return true;
 }
 
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 )

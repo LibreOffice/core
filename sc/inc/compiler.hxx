@@ -416,8 +416,6 @@ public:
                  -1 if none. */
     static sal_Int32 GetDocTabPos( const OUString& rString );
 
-    static bool EnQuote( OUString& rStr );
-
     // Check if it is a valid english function name
     static bool IsEnglishSymbol( const OUString& rName );
 

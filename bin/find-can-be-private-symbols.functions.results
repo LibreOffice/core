@@ -3296,7 +3296,6 @@ ScCompiler::CreateStringFromSingleRef(rtl::OUStringBuffer&, formula::FormulaToke
 ScCompiler::CreateStringFromXMLTokenArray(rtl::OUString&, rtl::OUString&)
 ScCompiler::DeInit()
 ScCompiler::DoubleRefToPosSingleRefScalarCase(ScRange const&, ScAddress&, ScAddress const&)
-ScCompiler::EnQuote(rtl::OUString&)
 ScCompiler::ExtendRangeReference(formula::FormulaToken&, formula::FormulaToken&)
 ScCompiler::FindAddInFunction(rtl::OUString const&, bool) const
 ScCompiler::GetAddInMapCount()
