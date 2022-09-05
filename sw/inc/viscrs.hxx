@@ -71,6 +71,11 @@ public:
 namespace sw::overlay { class OverlayRangesOutline; }
 class MapMode;
 
+/**
+ * SwSelPaintRects is a base class of SwShellCursor, which stores the overlay for the
+ * cursor/selection: a list of rectangles to be painted as an overlay. It is also capable of
+ * painting other overlays as needed (text input, content control).
+ */
 class SwSelPaintRects : public SwRects
 {
     friend void InitCore();
