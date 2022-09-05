@@ -14316,7 +14316,6 @@ vcl/inc/fltcall.hxx
 vcl/inc/font/FontSelectPattern.hxx
 vcl/inc/font/PhysicalFontCollection.hxx
 vcl/inc/fontattributes.hxx
-vcl/inc/fontinstance.hxx
 vcl/inc/fontsubset.hxx
 vcl/inc/graphic/UnoGraphic.hxx
 vcl/inc/graphic/UnoGraphicDescriptor.hxx
@@ -14816,7 +14815,6 @@ vcl/source/font/font.cxx
 vcl/source/font/fontattributes.cxx
 vcl/source/font/fontcache.cxx
 vcl/source/font/fontcharmap.cxx
-vcl/source/font/fontinstance.cxx
 vcl/source/font/fontmetric.cxx
 vcl/source/fontsubset/cff.cxx
 vcl/source/fontsubset/fontsubset.cxx

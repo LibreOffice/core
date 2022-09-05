@@ -26,7 +26,7 @@
 #include <vcl/outdev.hxx>
 #include <vector>
 
-#include "fontinstance.hxx"
+#include "font/LogicalFontInstance.hxx"
 #include "glyphid.hxx"
 
 enum class GlyphItemFlags : sal_uInt16

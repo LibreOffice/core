@@ -29,9 +29,9 @@
 #include <tools/fontenum.hxx>
 #include <tools/degree.hxx>
 
-#include "font/FontSelectPattern.hxx"
-#include "impfontmetricdata.hxx"
-#include "glyphid.hxx"
+#include <font/FontSelectPattern.hxx>
+#include <impfontmetricdata.hxx>
+#include <glyphid.hxx>
 
 #include <optional>
 #include <unordered_map>
@@ -46,16 +46,16 @@ class ImplFontCache;
 
 namespace std
 {
-    template <> struct hash< pair< sal_UCS4, FontWeight > >
+template <> struct hash<pair<sal_UCS4, FontWeight>>
+{
+    size_t operator()(const pair<sal_UCS4, FontWeight>& rData) const
     {
-        size_t operator()(const pair< sal_UCS4, FontWeight >& rData) const
-        {
-            std::size_t seed = 0;
-            o3tl::hash_combine(seed, rData.first);
-            o3tl::hash_combine(seed, rData.second);
-            return seed;
-        }
-    };
+        std::size_t seed = 0;
+        o3tl::hash_combine(seed, rData.first);
+        o3tl::hash_combine(seed, rData.second);
+        return seed;
+    }
+};
 }
 
 // TODO: allow sharing of metrics for related fonts
@@ -70,19 +70,19 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 public: // TODO: make data members private
     virtual ~LogicalFontInstance() override;
 
-    ImplFontMetricDataRef mxFontMetric;        // Font attributes
-    const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
+    ImplFontMetricDataRef mxFontMetric; // Font attributes
+    const ConvertChar* mpConversion; // used e.g. for StarBats->StarSymbol
 
-    tools::Long            mnLineHeight;
-    Degree10        mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
-    Degree10        mnOrientation;          // text angle in 3600 system
-    bool            mbInit;                 // true if maFontMetric member is valid
+    tools::Long mnLineHeight;
+    Degree10 mnOwnOrientation; // text angle if lower layers don't rotate text themselves
+    Degree10 mnOrientation; // text angle in 3600 system
+    bool mbInit; // true if maFontMetric member is valid
 
-    void            AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName,
-                                          bool bEmbolden, const ItalicMatrix& rMatrix);
-    bool            GetFallbackForUnicode(sal_UCS4 cInChar, FontWeight eInWeight,
-                                          OUString* pOutFontName, bool* pOutEmbolden, ItalicMatrix* pOutItalicMatrix) const;
-    void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, std::u16string_view rFontName );
+    void AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName,
+                               bool bEmbolden, const ItalicMatrix& rMatrix);
+    bool GetFallbackForUnicode(sal_UCS4 cInChar, FontWeight eInWeight, OUString* pOutFontName,
+                               bool* pOutEmbolden, ItalicMatrix* pOutItalicMatrix) const;
+    void IgnoreFallbackForUnicode(sal_UCS4, FontWeight eWeight, std::u16string_view rFontName);
 
     inline hb_font_t* GetHbFont();
     bool IsGraphiteFont();
@@ -105,12 +105,13 @@ public: // TODO: make data members private
     void GetScale(double* nXScale, double* nYScale) const;
 
 protected:
-    explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&,
+                                 const vcl::font::FontSelectPattern&);
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
     hb_font_t* InitHbFont();
-    virtual void ImplInitHbFont(hb_font_t*) { }
+    virtual void ImplInitHbFont(hb_font_t*) {}
 
 private:
     struct MapEntry
@@ -122,16 +123,20 @@ private:
     // cache of Unicode characters and replacement font names and attributes
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
-    typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, MapEntry > UnicodeFallbackList;
+    typedef ::std::unordered_map<::std::pair<sal_UCS4, FontWeight>, MapEntry> UnicodeFallbackList;
     UnicodeFallbackList maUnicodeFallbackList;
-    mutable ImplFontCache * mpFontCache;
+    mutable ImplFontCache* mpFontCache;
     const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
 
-    enum class FontFamilyEnum { Unclassified, DFKaiSB };
+    enum class FontFamilyEnum
+    {
+        Unclassified,
+        DFKaiSB
+    };
 
     // The value is initialized and used in NeedOffsetCorrection().
     std::optional<FontFamilyEnum> m_xeFontFamilyEnum;

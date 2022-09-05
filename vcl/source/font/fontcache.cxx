@@ -24,7 +24,7 @@
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFamily.hxx>
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <impfontcache.hxx>
 
 using namespace vcl::font;

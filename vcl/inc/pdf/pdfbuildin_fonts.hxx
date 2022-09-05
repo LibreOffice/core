@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <font/PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 
 namespace vcl::pdf
 {

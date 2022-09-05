@@ -25,7 +25,7 @@
 #include <QtFont.hxx>
 #include <QtTools.hxx>
 
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 

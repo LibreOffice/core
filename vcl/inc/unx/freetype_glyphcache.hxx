@@ -23,7 +23,7 @@
 
 #include <unx/glyphcache.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 
 #include <glyphid.hxx>
 

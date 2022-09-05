@@ -15,7 +15,7 @@
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <fontattributes.hxx>
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 
 class TestFontInstance : public LogicalFontInstance
 {

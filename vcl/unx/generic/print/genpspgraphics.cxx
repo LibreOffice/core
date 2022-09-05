@@ -43,7 +43,7 @@
 #include <unx/genpspgraphics.h>
 #include <unx/printergfx.hxx>
 #include <langboost.hxx>
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <fontattributes.hxx>
 #include <impfontmetricdata.hxx>
 #include <font/FontSelectPattern.hxx>
