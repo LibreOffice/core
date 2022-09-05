@@ -2341,8 +2341,7 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else
     {
         const SfxHintId nHintId = rHint.GetId();
-        if (nHintId == SfxHintId::ScAreasChanged || nHintId == SfxHintId::ScNavigatorUpdateAll
-                || nHintId == SfxHintId::ScTablesRenamed)
+        if (nHintId == SfxHintId::ScAreasChanged || nHintId == SfxHintId::ScNavigatorUpdateAll)
             FillRangeNames();
     }
 }
