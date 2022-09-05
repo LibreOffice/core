@@ -70,7 +70,6 @@ public:
 private:
     ScCellKeywordTranslator();
 
-    void init();
     void addToMap(const OUString& rKey, const char* pName, const css::lang::Locale& rLocale,
                   OpCode eOpCode);
     void addToMap(const TransItem* pItems, const css::lang::Locale& rLocale);
