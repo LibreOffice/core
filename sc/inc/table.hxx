@@ -703,7 +703,7 @@ public:
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
     bool        SearchAndReplace(
         const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
-        ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);
+        ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc, bool& bMatchedRangesWereClamped);
 
     void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
 
@@ -1196,7 +1196,7 @@ private:
                         const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        ReplaceAll(
         const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-        OUString& rUndoStr, ScDocument* pUndoDoc);
+        OUString& rUndoStr, ScDocument* pUndoDoc, bool& bMatchedRangesWereClamped);
 
     bool        SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                             const ScMarkData& rMark);

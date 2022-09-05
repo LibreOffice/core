@@ -425,30 +425,14 @@ void Test::testSharedStringPool()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
 
-    // Clear A1 and purge again.
+    // Clear A1
     clearRange(m_pDoc, ScAddress(0,0,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
-
-    // Clear A2 and purge again.
+    // Clear A2
     clearRange(m_pDoc, ScAddress(0,1,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
-
-    // Clear A3 and purge again.
+    // Clear A3
     clearRange(m_pDoc, ScAddress(0,2,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
-
-    // Clear A4 and purge again.
+    // Clear A4
     clearRange(m_pDoc, ScAddress(0,3,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPool.getCountIgnoreCase());
-
     // Clear A5 and the pool should be completely empty.
     clearRange(m_pDoc, ScAddress(0,4,0));
     rPool.purge();
@@ -4343,7 +4327,8 @@ void Test::testSearchCells()
     SCTAB nTab = 0;
     ScRangeList aMatchedRanges;
     OUString aUndoStr;
-    bool bSuccess = m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr);
+    bool bMatchedRangesWereClamped = false;
+    bool bSuccess = m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr, nullptr, bMatchedRangesWereClamped);
 
     CPPUNIT_ASSERT_MESSAGE("Search And Replace should succeed", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 3 matching cells.", size_t(3), aMatchedRanges.size());

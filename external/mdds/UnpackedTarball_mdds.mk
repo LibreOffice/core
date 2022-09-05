@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
     external/mdds/use-after-free.patch \
 	external/mdds/speedup-erase-begin.patch \
+	external/mdds/speedup-erase-2.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

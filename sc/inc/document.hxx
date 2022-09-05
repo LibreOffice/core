@@ -1934,7 +1934,7 @@ public:
     bool                 SearchAndReplace( const SvxSearchItem& rSearchItem,
                                            SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
                                            const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-                                           OUString& rUndoStr, ScDocument* pUndoDoc = nullptr );
+                                           OUString& rUndoStr, ScDocument* pUndoDoc, bool& bMatchedRangesWereClamped );
     static bool          IsEmptyCellSearch( const SvxSearchItem& rSearchItem );
 
                     // determine Col/Row of subsequent calls

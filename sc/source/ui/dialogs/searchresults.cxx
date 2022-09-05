@@ -96,7 +96,7 @@ namespace
 }
 
 void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatchedRanges, bool bCellNotes,
-        bool bEmptyCells )
+        bool bEmptyCells, bool bMatchedRangesWereClamped )
 {
     ListWrapper aList(*mxList);
     std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
@@ -161,11 +161,20 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
         }
     }
 
-    OUString aTotal(ScResId(SCSTR_TOTAL, aList.mnCount));
-    OUString aSearchResults = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
-    if (aList.mnCount > ListWrapper::mnMaximum)
-        aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, u"%1", OUString::number( ListWrapper::mnMaximum ) );
-    mxSearchResults->set_label(aSearchResults);
+    OUString aSearchResultsMsg;
+    if (bMatchedRangesWereClamped)
+    {
+        aSearchResultsMsg = ScResId(SCSTR_RESULTS_CLAMPED);
+        aSearchResultsMsg = aSearchResultsMsg.replaceFirst("%1", OUString::number(1000));
+    }
+    else
+    {
+        OUString aTotal(ScResId(SCSTR_TOTAL, aList.mnCount));
+        aSearchResultsMsg = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
+        if (aList.mnCount > ListWrapper::mnMaximum)
+            aSearchResultsMsg += " " + ScGlobal::ReplaceOrAppend( aSkipped, u"%1", OUString::number( ListWrapper::mnMaximum ) );
+    }
+    mxSearchResults->set_label(aSearchResultsMsg);
 
     mpDoc = &rDoc;
 }

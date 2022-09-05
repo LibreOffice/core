@@ -59,6 +59,7 @@
 #define STR_INSERTGRAPHIC                           NC_("STR_INSERTGRAPHIC", "Insert Image")
 #define SCSTR_TOTAL                                 NNC_("SCSTR_TOTAL", "One result found", "%1 results found")
 #define SCSTR_SKIPPED                               NC_("SCSTR_SKIPPED", "(only %1 are listed)")
+#define SCSTR_RESULTS_CLAMPED                       NC_("SCSTR_RESULTS_CLAMPED", "More than %1 results found (stopped counting)")
 // Attribute
 #define SCSTR_PROTECTDOC                            NC_("SCSTR_PROTECTDOC", "Protect Spreadsheet Structure")
 #define SCSTR_UNPROTECTDOC                          NC_("SCSTR_UNPROTECTDOC", "Unprotect Spreadsheet Structure")

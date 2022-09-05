@@ -585,7 +585,7 @@ bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow
 
 bool ScTable::ReplaceAll(
     const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-    OUString& rUndoStr, ScDocument* pUndoDoc)
+    OUString& rUndoStr, ScDocument* pUndoDoc, bool& bMatchedRangesWereClamped)
 {
     SCCOL nCol = 0;
     SCROW nRow = -1;
@@ -610,7 +610,12 @@ bool ScTable::ReplaceAll(
         if (bFound)
         {
             bEverFound = true;
-            rMatchedRanges.Join(ScRange(nCol, nRow, nTab));
+            // The combination of this loop and the Join() algorithm is O(n^2),
+            // so just give up if the list gets too big.
+            if (rMatchedRanges.size() < 1000)
+                rMatchedRanges.Join(ScRange(nCol, nRow, nTab));
+            else
+                bMatchedRangesWereClamped = true;
         }
         else
             break;
@@ -796,7 +801,7 @@ bool ScTable::ReplaceAllStyle(
 
 bool ScTable::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
-    ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
+    ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc, bool& bMatchedRangesWereClamped)
 {
     SvxSearchCmd nCommand = rSearchItem.GetCommand();
     bool bFound = false;
@@ -848,7 +853,7 @@ bool ScTable::SearchAndReplace(
             else if (nCommand == SvxSearchCmd::REPLACE)
                 bFound = Replace(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
             else if (nCommand == SvxSearchCmd::REPLACE_ALL)
-                bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc, bMatchedRangesWereClamped);
 
             pSearchText.reset();
         }

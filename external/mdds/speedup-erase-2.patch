@@ -1,0 +1,18 @@
+diff -ur include/mdds/multi_type_vector/types.hpp include/mdds/multi_type_vector/types.hpp
+--- include/mdds/multi_type_vector/types.hpp	2022-09-02 15:16:14.811400565 +0200
++++ include/mdds/multi_type_vector/types.hpp	2022-09-02 15:18:26.951249322 +0200
+@@ -253,7 +253,13 @@
+     
+     iterator erase( iterator first, iterator last )
+     {
+-        return m_vec.erase( first, last );
++        if (first == m_vec.begin() + m_removedFront)
++        {
++            m_removedFront = last - m_vec.begin();
++            return m_vec.begin() + m_removedFront;
++        }
++        else
++            return m_vec.erase( first, last );
+     }
+     
+     size_type capacity() const
