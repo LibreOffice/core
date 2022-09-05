@@ -367,7 +367,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int64 nChildI
 
     FillTableInfo();
 
-    if ( !mpTableInfo || nChildIndex < 0 || nChildIndex >= static_cast<sal_Int32>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
+    if ( !mpTableInfo || nChildIndex < 0 || nChildIndex >= static_cast<sal_Int64>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
         throw lang::IndexOutOfBoundsException();
 
     sal_Int32 nRow = nChildIndex / mpTableInfo->GetCols();
@@ -381,7 +381,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int64 nChi
 
     FillTableInfo();
 
-    if ( !mpTableInfo || nChildIndex < 0 || nChildIndex >= static_cast<sal_Int32>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
+    if ( !mpTableInfo || nChildIndex < 0 || nChildIndex >= static_cast<sal_Int64>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
         throw lang::IndexOutOfBoundsException();
 
     sal_Int32 nCol = nChildIndex % static_cast<sal_Int32>(mpTableInfo->GetCols());

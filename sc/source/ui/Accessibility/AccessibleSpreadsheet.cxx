@@ -1606,9 +1606,9 @@ bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int64 nIndex) const
 
 ScAddress ScAccessibleSpreadsheet::GetChildIndexAddress(sal_Int64 nIndex) const
 {
-    sal_Int32 nRowAll = GetRowAll();
-    sal_uInt16  nColAll = GetColAll();
-    if (nIndex < 0 || nIndex >=  nRowAll * nColAll )
+    sal_Int64 nRowAll = GetRowAll();
+    sal_Int64 nColAll = GetColAll();
+    if (nIndex < 0 || nIndex >= nRowAll * nColAll)
     {
         return ScAddress();
     }
