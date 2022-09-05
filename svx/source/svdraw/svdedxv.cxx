@@ -1500,12 +1500,11 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     mxWeakTextEditObj.clear();
     mpTextEditPV = nullptr;
     mpTextEditWin = nullptr;
-    SdrOutliner* pTEOutliner = mpTextEditOutliner.release();
     mpTextEditOutlinerView = nullptr;
     pTextEditCursorBuffer = nullptr;
     aTextEditArea = tools::Rectangle();
 
-    if (pTEOutliner != nullptr)
+    if (SdrOutliner* pTEOutliner = mpTextEditOutliner.release())
     {
         bool bModified = pTEOutliner->IsModified();
         if (pTEOutlinerView != nullptr)
@@ -1659,6 +1658,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();
         }
+        // coverity[leaked_storage] - if pTEOutliner wasn't deleted it didn't really belong to us
     }
 
     if (pTEObj && !pTEObj->getSdrModelFromSdrObject().isLocked() && pTEObj->GetBroadcaster())
