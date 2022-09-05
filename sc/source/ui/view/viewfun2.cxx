@@ -2635,6 +2635,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
         SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
+        pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
     }
