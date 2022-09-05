@@ -2857,7 +2857,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 #endif
 
             AttrOutput().TableInfoCell( pTextNodeInfoInner );
-            if (pTextNodeInfoInner->isFirstInTable())
+            if (pTextNodeInfoInner && pTextNodeInfoInner->isFirstInTable())
             {
                 const SwTable * pTable = pTextNodeInfoInner->getTable();
 
