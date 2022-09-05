@@ -264,20 +264,20 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     SwCursor& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
 
     rCurrentPam.DeleteMark();
-    rCurrentPam.GetPoint()->nNode = m_nStartNode;
+    rCurrentPam.GetPoint()->Assign(m_nStartNode);
     SwTextNode* pTextNd = rCurrentPam.GetPointNode().GetTextNode();
     assert(pTextNd);
-    SwContentIndex& rIdx = rCurrentPam.GetPoint()->nContent;
+    SwPosition& rPtPos = *rCurrentPam.GetPoint();
 
     if( m_pRedlSaveData )
     {
-        rIdx.Assign( pTextNd, m_nStartContent );
+        rPtPos.SetContent( m_nStartContent );
         rCurrentPam.SetMark();
-        rCurrentPam.GetMark()->nContent += m_aDelStr.getLength();
+        rCurrentPam.GetMark()->AdjustContent( m_aDelStr.getLength() );
         rDoc.getIDocumentRedlineAccess().DeleteRedline( rCurrentPam, false, RedlineType::Any );
         rCurrentPam.DeleteMark();
     }
-    rIdx.Assign( pTextNd, !m_aDelStr.isEmpty() ? m_nStartContent+1 : m_nStartContent );
+    rPtPos.SetContent( !m_aDelStr.isEmpty() ? m_nStartContent+1 : m_nStartContent );
 
     bool bOldExpFlg = pTextNd->IsIgnoreDontExpand();
     pTextNd->SetIgnoreDontExpand( true );
@@ -286,15 +286,15 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         // do it individually, to keep the attributes!
         OUString const ins(
-                pTextNd->InsertText( OUString(m_aInsStr[n]), rIdx,
+                pTextNd->InsertText( OUString(m_aInsStr[n]), rPtPos,
                 SwInsertFlags::EMPTYEXPAND) );
         assert(ins.getLength() == 1); // cannot fail
         (void) ins;
         if( n < m_aDelStr.getLength() )
         {
-            rIdx -= 2;
-            pTextNd->EraseText( rIdx, 1 );
-            rIdx += n+1 < m_aDelStr.getLength() ? 2 : 1;
+            rPtPos.AdjustContent(-2);
+            pTextNd->EraseText( rPtPos, 1 );
+            rPtPos.AdjustContent( n+1 < m_aDelStr.getLength() ? 2 : 1 );
         }
     }
     pTextNd->SetIgnoreDontExpand( bOldExpFlg );
