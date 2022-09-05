@@ -1399,6 +1399,8 @@ void SwPagePreview::ScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
     if(!GetViewShell())
         return;
 
+    EndScrollHdl(rScrollbar, bHori);
+
     if( !bHori &&
         rScrollbar.get_scroll_type() == ScrollType::Drag &&
         Help::IsQuickHelpEnabled() &&
@@ -1423,8 +1425,6 @@ void SwPagePreview::ScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
                 QuickHelpFlags::Right|QuickHelpFlags::VCenter);
 
     }
-    else
-        EndScrollHdl(rScrollbar, bHori);
 }
 
 void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)

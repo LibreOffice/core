@@ -677,14 +677,11 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
     if (rScrollbar.get_scroll_type() == ScrollType::Drag)
         m_pWrtShell->EnableSmooth( false );
 
+    EndScrollHdl(rScrollbar, false);
+
     if (!m_pWrtShell->GetViewOptions()->getBrowseMode() &&
         rScrollbar.get_scroll_type() == ScrollType::Drag)
     {
-        // Here comment out again if it is not desired to scroll together:
-        // The end scrollhandler invalidate the FN_STAT_PAGE,
-        // so we don't must do it again.
-        EndScrollHdl(rScrollbar, false);
-
         if ( !m_bWheelScrollInProgress && Help::IsQuickHelpEnabled() &&
              m_pWrtShell->GetViewOptions()->IsShowScrollBarTips())
         {
@@ -737,8 +734,6 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
             }
         }
     }
-    else
-        EndScrollHdl(rScrollbar, false);
 
     if (rScrollbar.get_scroll_type() == ScrollType::Drag)
         m_pWrtShell->EnableSmooth( true );
