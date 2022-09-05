@@ -40,6 +40,8 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
+#include <mutex>
+
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
 using namespace com::sun::star::uno;
@@ -198,8 +200,8 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
     if (!arg.endsWithIgnoreAsciiCase(".iqy"))
         return curEvt;
 
-    static osl::Mutex aMutex;
-    osl::MutexGuard aGuard(aMutex);
+    static std::mutex aMutex;
+    std::lock_guard aGuard(aMutex);
 
     try
     {
