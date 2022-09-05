@@ -134,12 +134,6 @@ public:
     virtual const void*             GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     virtual void                    FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
 
-    virtual void                    GetGlyphWidths(
-                                        const vcl::font::PhysicalFontFace*,
-                                        bool bVertical,
-                                        std::vector< sal_Int32 >& rWidths,
-                                        Ucs2UIntMap& rUnicodeEnc ) override;
-
     virtual std::unique_ptr<GenericSalLayout>
                                     GetTextLayout(int nFallbackLevel) override;
     virtual void                    DrawTextLayout( const GenericSalLayout& ) override;

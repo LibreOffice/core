@@ -343,23 +343,6 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-void GenPspGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
-                                  bool bVertical,
-                                  std::vector< sal_Int32 >& rWidths,
-                                  Ucs2UIntMap& rUnicodeEnc )
-{
-    GenPspGraphics::GetGlyphWidthsHelper(pFont, bVertical, rWidths, rUnicodeEnc);
-}
-
-void GenPspGraphics::GetGlyphWidthsHelper(const vcl::font::PhysicalFontFace* pFont,
-                                          bool bVertical,
-                                          std::vector<sal_Int32>& rWidths,
-                                          Ucs2UIntMap& rUnicodeEnc)
-{
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    rMgr.getGlyphWidths( pFont, bVertical, rWidths, rUnicodeEnc );
-}
-
 FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
     FontAttributes aDFA;

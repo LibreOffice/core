@@ -165,12 +165,4 @@ void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, tools::Long n
     GenPspGraphics::FreeEmbedFontDataHelper(pData, nLen);
 }
 
-void FreeTypeTextRenderImpl::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
-                                   bool bVertical,
-                                   std::vector< sal_Int32 >& rWidths,
-                                   Ucs2UIntMap& rUnicodeEnc )
-{
-    GenPspGraphics::GetGlyphWidthsHelper(pFont, bVertical, rWidths, rUnicodeEnc);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

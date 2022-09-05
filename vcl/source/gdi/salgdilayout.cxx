@@ -928,52 +928,6 @@ OUString SalGraphics::getRenderBackendName() const
     return OUString();
 }
 
-void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-                                 const vcl::font::PhysicalFontFace& rFontFace, const bool bVertical,
-                                 std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
-{
-    rWidths.clear();
-    rUnicodeEnc.clear();
-
-    const int nGlyphCount = rTTF.glyphCount();
-    if (nGlyphCount <= 0)
-        return;
-
-    FontCharMapRef xFCMap = rFontFace.GetFontCharMap();
-    if (!xFCMap.is() || !xFCMap->GetCharCount())
-    {
-        SAL_WARN("vcl.fonts", "no charmap");
-        return;
-    }
-
-    rWidths.resize(nGlyphCount);
-    std::vector<sal_uInt16> aGlyphIds(nGlyphCount);
-    for (int i = 0; i < nGlyphCount; i++)
-        aGlyphIds[i] = static_cast<sal_uInt16>(i);
-
-    std::unique_ptr<sal_uInt16[]> pGlyphMetrics
-        = GetTTSimpleGlyphMetrics(&rTTF, aGlyphIds.data(), nGlyphCount, bVertical);
-    if (pGlyphMetrics)
-    {
-        for (int i = 0; i < nGlyphCount; ++i)
-            rWidths[i] = pGlyphMetrics[i];
-        pGlyphMetrics.reset();
-    }
-
-    int nCharCount = xFCMap->GetCharCount();
-    sal_uInt32 nChar = xFCMap->GetFirstChar();
-    for (; --nCharCount >= 0; nChar = xFCMap->GetNextChar(nChar))
-    {
-        if (nChar > 0xFFFF)
-            continue;
-
-        sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
-        sal_uInt32 nGlyph = xFCMap->GetGlyphIndex(nUcsChar);
-        if (nGlyph > 0)
-            rUnicodeEnc[nUcsChar] = nGlyph;
-    }
-}
-
 bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OString& rSysPath,
                                    const bool bVertical, const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,

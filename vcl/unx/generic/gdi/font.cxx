@@ -105,12 +105,4 @@ void X11SalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
     mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
 }
 
-void X11SalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
-                                   bool bVertical,
-                                   std::vector< sal_Int32 >& rWidths,
-                                   Ucs2UIntMap& rUnicodeEnc )
-{
-    mxTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

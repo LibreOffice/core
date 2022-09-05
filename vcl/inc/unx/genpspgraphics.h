@@ -67,10 +67,6 @@ public:
     static bool             AddTempDevFontHelper(vcl::font::PhysicalFontCollection* pFontCollection,
                                                  std::u16string_view rFileURL,
                                                  const OUString& rFontName);
-    static void             GetGlyphWidthsHelper(const vcl::font::PhysicalFontFace*,
-                                                 bool bVertical,
-                                                 std::vector<sal_Int32>& rWidths,
-                                                 Ucs2UIntMap& rUnicodeEnc);
     static const void *     GetEmbedFontDataHelper(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen);
     static void             FreeEmbedFontDataHelper(const void* pData, tools::Long nLen);
 
@@ -103,10 +99,6 @@ public:
                                               FontSubsetInfo& rInfo ) override;
     virtual const void*     GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
-    virtual void            GetGlyphWidths( const vcl::font::PhysicalFontFace*,
-                                            bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            Ucs2UIntMap& rUnicodeEnc ) override;
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;

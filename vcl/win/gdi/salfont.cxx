@@ -1599,32 +1599,4 @@ void WinSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nLen*/ 
     delete[] static_cast<char const *>(pData);
 }
 
-void WinSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
-                                     bool bVertical,
-                                     std::vector< sal_Int32 >& rWidths,
-                                     Ucs2UIntMap& rUnicodeEnc )
-{
-    ScopedFontHDC aScopedFontHDC(*this, *pFont);
-    HDC hDC = aScopedFontHDC.hdc();
-    if (!hDC)
-        return;
-
-    // get raw font file data
-    const RawFontData xRawFontData(hDC);
-    if( !xRawFontData.get() )
-        return;
-
-    // open font file
-    sal_uInt32 nFaceNum = 0;
-    if( !*xRawFontData.get() )  // TTC candidate
-        nFaceNum = ~0U;  // indicate "TTC font extracts only"
-
-    ScopedTrueTypeFont aSftTTF;
-    SFErrCodes nRC = aSftTTF.open(xRawFontData.get(), xRawFontData.size(), nFaceNum, pFont->GetFontCharMap());
-    if( nRC != SFErrCodes::Ok )
-        return;
-
-    SalGraphics::GetGlyphWidths(*aSftTTF.get(), *pFont, bVertical, rWidths, rUnicodeEnc);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

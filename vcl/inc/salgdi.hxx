@@ -63,7 +63,6 @@ typedef struct TTGlobalFontInfo_ TTGlobalFontInfo;
 }
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
-typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
 
 // note: if you add any new methods to class SalGraphics using coordinates
 //       make sure they have a corresponding protected pure virtual method
@@ -191,16 +190,6 @@ public:
 
     // free the font data again
     virtual void                FreeEmbedFontData( const void* pData, tools::Long nDataLen ) = 0;
-
-    // get the same widths as in CreateFontSubset
-    // in case of an embeddable font also fill the mapping
-    // between unicode and glyph id
-    // leave widths vector and mapping untouched in case of failure
-    virtual void                GetGlyphWidths(
-                                    const vcl::font::PhysicalFontFace* pFont,
-                                    bool bVertical,
-                                    std::vector< sal_Int32 >& rWidths,
-                                    Ucs2UIntMap& rUnicodeEnc ) = 0;
 
     virtual std::unique_ptr<GenericSalLayout>
                                 GetTextLayout(int nFallbackLevel) = 0;
@@ -662,10 +651,6 @@ protected:
 
     std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
     vcl::WidgetDrawInterface* forWidget() { return m_pWidgetDraw ? m_pWidgetDraw.get() : this; }
-
-    static void GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-                               const vcl::font::PhysicalFontFace& rFontFace, bool bVertical,
-                               std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc);
 
     static bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
                                     const bool bVertical, const sal_GlyphId* pGlyphIds,

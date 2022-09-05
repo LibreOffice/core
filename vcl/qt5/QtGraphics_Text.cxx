@@ -270,15 +270,6 @@ const void* QtGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,
 
 void QtGraphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
 
-void QtGraphics::GetGlyphWidths(const vcl::font::PhysicalFontFace* pFontFace, bool bVertical,
-                                std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
-{
-    const QtFontFace* pQtFontFace = static_cast<const QtFontFace*>(pFontFace);
-    const QRawFont aRawFont(QRawFont::fromFont(pQtFontFace->CreateFont()));
-    QtTrueTypeFont aTTF(*pQtFontFace, aRawFont);
-    SalGraphics::GetGlyphWidths(aTTF, *pFontFace, bVertical, rWidths, rUnicodeEnc);
-}
-
 namespace
 {
 class QtCommonSalLayout : public GenericSalLayout

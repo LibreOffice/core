@@ -699,32 +699,6 @@ bool AquaSalGraphics::GetRawFontData( const vcl::font::PhysicalFontFace* pFontDa
     return true;
 }
 
-void AquaSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFontData, bool bVertical,
-    std::vector< sal_Int32 >& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
-{
-    rGlyphWidths.clear();
-    rUnicodeEnc.clear();
-
-    std::vector<unsigned char> aBuffer;
-    if( !GetRawFontData( pFontData, aBuffer, nullptr ) )
-        return;
-
-    // TODO: modernize psprint's horrible fontsubset C-API
-    // this probably only makes sense after the switch to another SCM
-    // that can preserve change history after file renames
-
-    // use the font subsetter to get the widths
-    TrueTypeFont* pSftFont = nullptr;
-    SFErrCodes nRC = ::OpenTTFontBuffer(static_cast<void*>(aBuffer.data()), aBuffer.size(), 0, &pSftFont,
-                                        pFontData->GetFontCharMap());
-    if( nRC != SFErrCodes::Ok )
-        return;
-
-    SalGraphics::GetGlyphWidths(*pSftFont, *pFontData, bVertical, rGlyphWidths, rUnicodeEnc);
-
-    ::CloseTTFont( pSftFont );
-}
-
 const void* AquaSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* /*pDataLen*/)
 {
     return nullptr;

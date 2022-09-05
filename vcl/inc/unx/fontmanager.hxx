@@ -285,10 +285,6 @@ public:
                            sal_Int32* pWidths,
                            int nGlyphs
                            );
-    void getGlyphWidths( const vcl::font::PhysicalFontFace* pFace,
-                         bool bVertical,
-                         std::vector< sal_Int32 >& rWidths,
-                         std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
 
     // font administration functions
 
