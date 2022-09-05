@@ -2849,7 +2849,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
 
     if (!bDoesUndo || !m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
     {
-        OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
+        OUString const ins(pNode->InsertText(rStr, rPos, nInsertMode));
         if (bDoesUndo)
         {
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(
@@ -2883,7 +2883,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
             m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         }
 
-        OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
+        OUString const ins(pNode->InsertText(rStr, rPos, nInsertMode));
 
         for (sal_Int32 i = 0; i < ins.getLength(); ++i)
         {
@@ -4371,7 +4371,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
                 // Don't call again, if already empty
                 if( nLen )
                 {
-                    pStartTextNode->EraseText( pStt->nContent, nLen );
+                    pStartTextNode->EraseText( *pStt, nLen );
 
                     if( !pStartTextNode->Len() )
                     {

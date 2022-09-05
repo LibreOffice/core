@@ -2313,6 +2313,12 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     CHECK_SWPHINTS(pDest);
 }
 
+OUString SwTextNode::InsertText( const OUString & rStr, const SwPosition & rIdx,
+        const SwInsertFlags nMode )
+{
+    return InsertText(rStr, rIdx.nContent, nMode);
+}
+
 OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & rIdx,
         const SwInsertFlags nMode )
 {
@@ -2707,6 +2713,12 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     CHECK_SWPHINTS(this);
 
     TryDeleteSwpHints();
+}
+
+void SwTextNode::EraseText(const SwPosition &rIdx, const sal_Int32 nCount,
+        const SwInsertFlags nMode )
+{
+    EraseText(rIdx.nContent, nCount, nMode);
 }
 
 void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,

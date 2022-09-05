@@ -254,7 +254,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 }
                 RemoveIdxFromRange( aPaM, false );
                 maText = pTextNode->GetText().copy(m_nContent-m_nLen, m_nLen);
-                pTextNode->EraseText( aPaM.GetPoint()->nContent, m_nLen );
+                pTextNode->EraseText( *aPaM.GetPoint(), m_nLen );
             }
             else                // otherwise Graphics/OLE/Text/...
             {
@@ -329,7 +329,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 SwTextNode *const pTextNode = pCNd->GetTextNode();
                 OSL_ENSURE( pTextNode, "where is my textnode ?" );
                 OUString const ins(
-                    pTextNode->InsertText( *maText, pPam->GetMark()->nContent,
+                    pTextNode->InsertText( *maText, *pPam->GetMark(),
                     m_nInsertFlags) );
                 assert(ins.getLength() == maText->getLength()); // must succeed
                 maText.reset();

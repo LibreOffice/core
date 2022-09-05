@@ -253,12 +253,17 @@ public:
     OUString InsertText( const OUString & rStr, const SwContentIndex & rIdx,
                      const SwInsertFlags nMode
                          = SwInsertFlags::DEFAULT );
+    OUString InsertText( const OUString & rStr, const SwPosition & rIdx,
+                     const SwInsertFlags nMode
+                         = SwInsertFlags::DEFAULT );
 
     /** delete text content
         ATTENTION: must not be called with a range that overlaps the start of
                    an attribute with both extent and dummy char
      */
     void EraseText ( const SwContentIndex &rIdx, const sal_Int32 nCount = SAL_MAX_INT32,
+                     const SwInsertFlags nMode = SwInsertFlags::DEFAULT );
+    void EraseText ( const SwPosition& rIdx, const sal_Int32 nCount = SAL_MAX_INT32,
                      const SwInsertFlags nMode = SwInsertFlags::DEFAULT );
 
     /** delete all attributes.

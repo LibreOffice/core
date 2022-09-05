@@ -83,8 +83,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
     bool bOldExpFlg = pTextNd->IsIgnoreDontExpand();
     pTextNd->SetIgnoreDontExpand( true );
 
-    pTextNd->InsertText( OUString(cIns), rPos.nContent,
-            SwInsertFlags::EMPTYEXPAND );
+    pTextNd->InsertText( OUString(cIns), rPos, SwInsertFlags::EMPTYEXPAND );
     m_aInsStr += OUStringChar( cIns );
 
     if( !m_bInsChar )
@@ -160,7 +159,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
     bool bOldExpFlg = pDelTextNd->IsIgnoreDontExpand();
     pDelTextNd->SetIgnoreDontExpand( true );
 
-    OUString const ins( pDelTextNd->InsertText(OUString(cIns), rPos.nContent,
+    OUString const ins( pDelTextNd->InsertText(OUString(cIns), rPos,
             SwInsertFlags::EMPTYEXPAND) );
     assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
     (void) ins;

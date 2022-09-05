@@ -465,7 +465,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
         // delete now also the text (all attribute changes are added to
         // UNDO history)
         m_aSttStr = pSttTextNd->GetText().copy(m_nSttContent, nLen);
-        pSttTextNd->EraseText( pStt->nContent, nLen );
+        pSttTextNd->EraseText( *pStt, nLen );
         if( pSttTextNd->GetpSwpHints() )
             pSttTextNd->GetpSwpHints()->DeRegister();
 
@@ -594,7 +594,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         nUChrPos++;
     }
     m_aSttStr = m_aSttStr->replaceAt( nUChrPos, 0, rtl::OUStringChar(cDelChar) );
-    pDelTextNd->EraseText( pStt->nContent, 1 );
+    pDelTextNd->EraseText( *pStt, 1 );
 
     m_bGroup = true;
     return true;
@@ -1018,7 +1018,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 //  -> in StartNode is still the rest of the Join => delete
                 aPos.nContent.Assign( pTextNd, m_nSttContent );
                 pTextNd->SetInSwUndo(true);
-                OUString const ins( pTextNd->InsertText(*m_aSttStr, aPos.nContent,
+                OUString const ins( pTextNd->InsertText(*m_aSttStr, aPos,
                         SwInsertFlags::NOHINTEXPAND) );
                 pTextNd->SetInSwUndo(false);
                 assert(ins.getLength() == m_aSttStr->getLength()); // must succeed

@@ -1078,7 +1078,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                         pTextNd->SplitContentNode(aCntPos, &restoreFunc);
 
                     // Delete separator and correct search string
-                    pTextNd->EraseText( aCntPos.nContent, 1 );
+                    pTextNd->EraseText( aCntPos, 1 );
                     nChPos = 0;
 
                     // Set the TableNode as StartNode for all TextNodes in the Table
