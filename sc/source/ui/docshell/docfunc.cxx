@@ -3523,7 +3523,7 @@ bool ScDocFunc::RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
         rDocShell.PostPaintExtras();
         aModificator.SetDocumentModified();
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
-        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesRenamed ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
 
         bSuccess = true;
     }
