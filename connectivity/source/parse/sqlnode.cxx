@@ -100,31 +100,19 @@ namespace
     /** quotes a string and search for quotes inside the string and replace them with the new quote
         @param  rValue
             The value to be quoted.
-        @param  rQuot
+        @param  rQuote
             The quote
-        @param  rQuotToReplace
+        @param  rQuoteToReplace
             The quote to replace with
         @return
             The quoted string.
     */
-    OUString SetQuotation(std::u16string_view rValue, const OUString& rQuot, std::u16string_view rQuotToReplace)
+    OUString SetQuotation(const OUString& rValue, std::u16string_view rQuote, std::u16string_view rQuoteToReplace)
     {
-        OUString rNewValue = rQuot + rValue;
-        sal_Int32 nIndex = sal_Int32(-1);   // Replace quotes with double quotes or the parser gets into problems
-
-        if (!rQuot.isEmpty())
-        {
-            do
-            {
-                nIndex += 2;
-                nIndex = rNewValue.indexOf(rQuot,nIndex);
-                if(nIndex != -1)
-                    rNewValue = rNewValue.replaceAt(nIndex,rQuot.getLength(),rQuotToReplace);
-            } while (nIndex != -1);
-        }
-
-        rNewValue += rQuot;
-        return rNewValue;
+        // Replace quotes with double quotes or the parser gets into problems
+        if (!rQuote.empty())
+            return rQuote + rValue.replaceAll(rQuote, rQuoteToReplace) + rQuote;
+        return rValue;
     }
 
     bool columnMatchP(const connectivity::OSQLParseNode* pSubTree, const connectivity::SQLParseNodeParameter& rParam)
@@ -758,7 +746,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     {
         OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
         rString.append(" ");
-        rString.append(SetQuotation(aStr, "\'", u"\'\'"));
+        rString.append(SetQuotation(aStr, u"\'", u"\'\'"));
     }
     else
         pParaNode->impl_parseNodeToString_throw( rString, aNewParam, false );
@@ -2432,7 +2420,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
         case SQLNodeType::String:
             if (!rString.isEmpty())
                 rString.append(" ");
-            rString.append(SetQuotation(m_aNodeValue, "\'", u"\'\'"));
+            rString.append(SetQuotation(m_aNodeValue, u"\'", u"\'\'"));
             break;
         case SQLNodeType::Name:
             if (!rString.isEmpty())
