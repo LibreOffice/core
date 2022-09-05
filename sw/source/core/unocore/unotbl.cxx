@@ -50,6 +50,7 @@
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
+#include <ndtxt.hxx>
 #include <frame.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtfsize.hxx>
@@ -976,6 +977,19 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         SwUnoCursorHelper::makeTableCellRedline(*m_pBox, sRedlineType, tableCellProperties);
 
 
+    }
+    else if (rPropertyName == "VerticalMerge")
+    {
+        //Hack to allow clearing of numbering from the paragraphs in the merged cells.
+        SwNodeIndex aIdx(*GetStartNode(), 1);
+        const SwNode* pEndNd = aIdx.GetNode().EndOfSectionNode();
+        while (&aIdx.GetNode() != pEndNd)
+        {
+            SwTextNode* pNd = aIdx.GetNode().GetTextNode();
+            if (pNd)
+                pNd->SetCountedInList(false);
+            ++aIdx;
+        }
     }
     else
     {
