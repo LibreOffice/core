@@ -353,8 +353,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     }
 
     {
-        SwPaM aTmp( *rPam.GetMark() );
-        aTmp.GetMark()->nContent = 0;
+        SwPaM aTmp( rPam.GetMark()->GetNode() );
         aTmp.SetMark();
         aTmp.GetPoint()->Assign( m_nSaveEndNode, m_nSaveEndContent );
         rDoc.getIDocumentRedlineAccess().DeleteRedline( aTmp, true, RedlineType::Any );
@@ -367,9 +366,9 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     pPam->GetPoint()->Assign( aPrevIdx.GetNode(), SwNodeOffset(+1) );
     pPam->SetMark();
 
-    pPam->GetPoint()->nNode += nOffsetTemp;
+    pPam->GetPoint()->Adjust(nOffsetTemp);
     SwContentNode* pCNd = pPam->GetPointContentNode();
-    pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+    pPam->GetPoint()->SetContent( pCNd->Len() );
 
     SetValues( *pPam );
 
@@ -393,12 +392,12 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     sal_Int32 nLen = pCNd->Len();
     if( nLen > nCntStt )
         nLen = nCntStt;
-    pPam->GetPoint()->nContent.Assign(pCNd, nLen );
+    pPam->GetPoint()->SetContent( nLen );
     pPam->SetMark();
 
-    pPam->GetPoint()->nNode += nOffsetTemp;
+    pPam->GetPoint()->Adjust(nOffsetTemp);
     pCNd = pPam->GetPointContentNode();
-    pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+    pPam->GetPoint()->SetContent( pCNd->Len() );
 
     SetValues( rPam );
 
@@ -531,9 +530,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
             if (&rTmp != pEnd)
             {
                 rPam.SetMark();
-                ++rPam.GetPoint()->nNode;
-                rPam.GetBound().nContent.Assign( nullptr, 0 );
-                rPam.GetBound( false ).nContent.Assign( nullptr, 0 );
+                rPam.GetPoint()->Adjust(SwNodeOffset(1));
                 m_pUndoDelete2.reset(new SwUndoDelete(rPam, SwDeleteFlags::Default, true));
             }
         }
