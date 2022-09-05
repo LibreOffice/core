@@ -1306,7 +1306,7 @@ bool ScDocument::IsEmptyCellSearch( const SvxSearchItem& rSearchItem )
 bool ScDocument::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
     const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-    OUString& rUndoStr, ScDocument* pUndoDoc)
+    OUString& rUndoStr, ScDocument* pUndoDoc, bool& bMatchedRangesWereClamped)
 {
     // FIXME: Manage separated marks per table!
     bool bFound = false;
@@ -1331,7 +1331,7 @@ bool ScDocument::SearchAndReplace(
                     nCol = 0;
                     nRow = 0;
                     bFound |= maTabs[rMarkedTab]->SearchAndReplace(
-                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc, bMatchedRangesWereClamped);
                 }
             }
 
@@ -1349,7 +1349,7 @@ bool ScDocument::SearchAndReplace(
                         if (rMark.GetTableSelect(nTab))
                         {
                             bFound = maTabs[nTab]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc, bMatchedRangesWereClamped);
                             if (bFound)
                             {
                                 rCol = nCol;
@@ -1380,7 +1380,7 @@ bool ScDocument::SearchAndReplace(
                         if (rMark.GetTableSelect(nTab))
                         {
                             bFound = maTabs[nTab]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc, bMatchedRangesWereClamped);
                             if (bFound)
                             {
                                 rCol = nCol;

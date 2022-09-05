@@ -3783,8 +3783,9 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 SCCOL nCol = 0;
                 SCROW nRow = 0;
                 SCTAB nTab = 0;
+                bool bMatchedRangesWereClamped = false;
                 bool bFound = rDoc.SearchAndReplace(
-                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo);
+                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, nullptr, bMatchedRangesWereClamped);
                 if (bFound)
                 {
                     //  on findAll always CellRanges no matter how much has been found
@@ -3829,8 +3830,9 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
 
                 OUString aDummyUndo;
                 ScRangeList aMatchedRanges;
+                bool bMatchedRangesWereClamped;
                 bool bFound = rDoc.SearchAndReplace(
-                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo);
+                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, nullptr, bMatchedRangesWereClamped);
                 if (bFound)
                 {
                     ScAddress aFoundPos( nCol, nRow, nTab );
@@ -3939,8 +3941,9 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     if (bUndo)
                     {
                         ScRangeList aMatchedRanges;
+                        bool bMatchedRangesWereClamped;
                         bFound = rDoc.SearchAndReplace(
-                            *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aUndoStr, pUndoDoc.get() );
+                            *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aUndoStr, pUndoDoc.get(), bMatchedRangesWereClamped );
                     }
                     if (bFound)
                     {

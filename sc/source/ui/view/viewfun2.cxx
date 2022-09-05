@@ -1998,7 +1998,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     {
         GetFrameWin()->EnterWait();
         ScRangeList aMatchedRanges;
-        if (rDoc.SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc.get()))
+        bool bMatchedRangesWereClamped;
+        if (rDoc.SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc.get(), bMatchedRangesWereClamped))
         {
             bFound = true;
             if (bAddUndo)
@@ -2031,7 +2032,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                             && ScDocument::IsEmptyCellSearch(*pSearchItem))
                                         || (nCommand == SvxSearchCmd::REPLACE_ALL
                                             && pSearchItem->GetReplaceString().isEmpty())));
-                            pDlg->FillResults(rDoc, aMatchedRanges, bCellNotes, bEmptyCells);
+                            pDlg->FillResults(rDoc, aMatchedRanges, bCellNotes, bEmptyCells, bMatchedRangesWereClamped);
                         }
                     }
                 }
@@ -2186,8 +2187,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
 
                     ScRangeList aMatchedRanges;
+                    bool bMatchedRangesWereClamped;
                     ScTable::UpdateSearchItemAddressForReplace( aSearchItem, nCol, nRow );
-                    if ( rDoc.SearchAndReplace( aSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr ) &&
+                    if ( rDoc.SearchAndReplace( aSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, nullptr, bMatchedRangesWereClamped ) &&
                             ( nTab == nOldTab ) &&
                             ( nCol != nOldCol || nRow != nOldRow ) )
                     {
