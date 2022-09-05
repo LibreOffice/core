@@ -81,6 +81,12 @@ service TextRangeContentProperties
      */
     [optional, readonly, property] com::sun::star::text::XTextContent LineBreak;
 
+    /** may contain a content control.
+
+        @since LibreOffice 7.4
+     */
+    [optional, readonly, property] com::sun::star::text::XTextContent ContentControl;
+
 };
 
 
