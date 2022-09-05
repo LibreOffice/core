@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module text {
+
+/** This service specifies a line break with properties in a TextDocument.
+
+    @since LibreOffice 7.4
+*/
+service LineBreak
+{
+
+    /** Provides a way to insert the line break using insertTextContent().
+    */
+    interface com::sun::star::text::XTextContent;
+
+    /** The type of the clearing break. Possible values:
+        0: None
+        1: Left
+        2: Right
+        3: All
+     */
+    [optional, property] short Clear;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
