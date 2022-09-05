@@ -7181,7 +7181,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, tools::Long nWidth, Fo
 
     // do not get broader than nWidth modulo 1 character
     while( GetTextWidth( aStrikeout ) >= nWidth )
-        aStrikeout = aStrikeout.replaceAt( 0, 1, u"" );
+        aStrikeout = aStrikeout.copy(1);
     aStrikeout += aStrikeoutChar;
     bool bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
     if ( bShadow )
