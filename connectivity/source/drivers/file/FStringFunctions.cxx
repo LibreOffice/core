@@ -167,14 +167,7 @@ ORowSetValue OOp_Replace::operate(const std::vector<ORowSetValue>& lhs) const
     OUString sStr = lhs[2].getString();
     OUString sFrom = lhs[1].getString();
     OUString sTo = lhs[0].getString();
-    sal_Int32 nIndexOf = sStr.indexOf(sFrom);
-    while (nIndexOf != -1)
-    {
-        sStr = sStr.replaceAt(nIndexOf, sFrom.getLength(), sTo);
-        nIndexOf = sStr.indexOf(sFrom, nIndexOf + sTo.getLength());
-    }
-
-    return sStr;
+    return sStr.replaceAll(sFrom, sTo);
 }
 
 ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs, const ORowSetValue& rhs) const
