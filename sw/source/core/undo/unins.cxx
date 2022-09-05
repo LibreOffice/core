@@ -208,11 +208,10 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( m_bIsAppend )
     {
-        pPam->GetPoint()->nNode = m_nNode;
+        pPam->GetPoint()->Assign(m_nNode);
 
         if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
-            pPam->GetPoint()->nContent.Assign( pPam->GetPointContentNode(), 0 );
             pPam->SetMark();
             pPam->Move( fnMoveBackward );
             pPam->Exchange();
@@ -220,7 +219,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         pPam->DeleteMark();
         pTmpDoc->getIDocumentContentOperations().DelFullPara( *pPam );
-        pPam->GetPoint()->nContent.Assign( pPam->GetPointContentNode(), 0 );
+        pPam->GetPoint()->SetContent( 0 );
     }
     else
     {
@@ -237,7 +236,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             SwTextNode * const pTextNode( pCNd->GetTextNode() );
             if ( pTextNode )
             {
-                aPaM.GetPoint()->nContent -= m_nLen;
+                aPaM.GetPoint()->AdjustContent( - m_nLen );
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
                     pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
                 if (m_bWithRsid)
@@ -293,7 +292,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( m_bIsAppend )
     {
-        pPam->GetPoint()->nNode = m_nNode - 1;
+        pPam->GetPoint()->Assign( m_nNode - 1 );
         pTmpDoc->getIDocumentContentOperations().AppendTextNode( *pPam->GetPoint() );
 
         pPam->SetMark();
@@ -315,10 +314,10 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        pPam->GetPoint()->nNode = m_nNode;
+        pPam->GetPoint()->Assign( m_nNode );
         SwContentNode *const pCNd =
             pPam->GetPoint()->GetNode().GetContentNode();
-        pPam->GetPoint()->nContent.Assign( pCNd, m_nContent );
+        pPam->GetPoint()->SetContent( m_nContent );
 
         if( m_nLen )
         {
@@ -652,7 +651,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         if ((1 == m_sIns.getLength()) && (1 == m_sOld.getLength()))
         {
-            SwPosition aPos( *pNd ); aPos.nContent.Assign( pNd, m_nSttCnt );
+            SwPosition aPos( *pNd, m_nSttCnt );
             pACEWord->CheckChar( aPos, m_sOld[ 0 ] );
         }
         pDoc->SetAutoCorrExceptWord( nullptr );
@@ -662,8 +661,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         rPam.GetPoint()->Assign(*pNd, m_nSttCnt );
         rPam.SetMark();
-        rPam.GetPoint()->nNode = m_nSttNd - m_nOffset;
-        rPam.GetPoint()->nContent.Assign(rPam.GetPointContentNode(), m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());
+        rPam.GetPoint()->Assign( m_nSttNd - m_nOffset, m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());
 
         // replace only in start node, without regex
         bool const ret = pDoc->getIDocumentContentOperations().ReplaceRange(rPam, m_sOld, false);
@@ -723,18 +721,16 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwCursor & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = m_nSttNd;
+    rPam.GetPoint()->Assign( m_nSttNd, m_nSttCnt );
 
-    SwTextNode* pNd = rPam.GetPoint()->GetNode().GetTextNode();
-    OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
-    rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
+    rPam.GetPoint()->GetNode().GetTextNode();
     rPam.SetMark();
     if( m_bSplitNext )
     {
-        rPam.GetPoint()->nNode = m_nSttNd + 1;
-        pNd = rPam.GetPoint()->GetNode().GetTextNode();
+        rPam.GetPoint()->Assign( m_nSttNd + 1 );
+        rPam.GetPoint()->GetNode().GetTextNode();
     }
-    rPam.GetPoint()->nContent.Assign( pNd, m_nSelEnd );
+    rPam.GetPoint()->SetContent( m_nSelEnd );
 
     if( m_pHistory )
     {
@@ -905,9 +901,9 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
                 pNd->GetTable().GetFrameFormat()->ResetFormatAttr( RES_KEEP );
         }
         SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
-        aPam.GetPoint()->nNode = NODE.nNode;
+        aPam.GetPoint()->Assign( NODE.nNode );
         aPam.SetMark();
-        aPam.GetPoint()->nNode = NODE.nNode + 1;
+        aPam.GetPoint()->Assign( NODE.nNode + 1 );
         NODE.pUndoInsNd = new SwUndoDelete(aPam, SwDeleteFlags::Default, true);
     }
 }

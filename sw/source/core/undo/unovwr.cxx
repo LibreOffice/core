@@ -54,8 +54,8 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
 
     if( !rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        SwPaM aPam( rPos.nNode, rPos.GetContentIndex(),
-                    rPos.nNode, rPos.GetContentIndex()+1 );
+        SwPaM aPam( rPos.GetNode(), rPos.GetContentIndex(),
+                    rPos.GetNode(), rPos.GetContentIndex()+1 );
         m_pRedlSaveData.reset( new SwRedlineSaveDatas );
         if( !FillSaveData( aPam, *m_pRedlSaveData, false ))
         {
@@ -76,7 +76,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
         SwRegHistory aRHst( *pTextNd, m_pHistory.get() );
         m_pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nStartNode, 0,
                             nTextNdLen, false );
-        ++rPos.nContent;
+        rPos.AdjustContent(+1);
         m_bInsChar = false;
     }
 
@@ -88,7 +88,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
 
     if( !m_bInsChar )
     {
-        const SwContentIndex aTmpIndex( rPos.nContent, -2 );
+        const SwContentIndex aTmpIndex( rPos.GetContentNode(), rPos.GetContentIndex() - 2 );
         pTextNd->EraseText( aTmpIndex, 1 );
     }
     pTextNd->SetIgnoreDontExpand( bOldExpFlg );
