@@ -115,12 +115,10 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     }
     else
     {
-        SwPosition aNewPos(pDoc->GetNodes().GetEndOfContent());
-        aNewPos.nNode = m_nNodePagePos;
+        SwPosition aNewPos(*pDoc->GetNodes()[m_nNodePagePos]);
         if ((RndStdIds::FLY_AS_CHAR == m_nRndId) || (RndStdIds::FLY_AT_CHAR == m_nRndId))
         {
-            aNewPos.nContent.Assign( aNewPos.GetNode().GetContentNode(),
-                                    m_nContentPos );
+            aNewPos.SetContent( m_nContentPos );
         }
         aAnchor.SetAnchor( &aNewPos );
     }
@@ -254,8 +252,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         {
             // Pointer to 0, do not delete
             const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-            SwContentIndex aIdx( pPos->nContent );
-            pTextNd->EraseText( aIdx, 1 );
+            pTextNd->EraseText( *pPos, 1 );
         }
     }
     else if (RndStdIds::FLY_AT_CHAR == m_nRndId)
@@ -339,10 +336,6 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
         (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
     {
         SwPosition aPos( *rContext.GetRepeatPaM().GetPoint() );
-        if (RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId())
-        {
-            aPos.nContent.Assign( nullptr, 0 );
-        }
         aAnchor.SetAnchor( &aPos );
     }
     else if( RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() )
@@ -540,7 +533,7 @@ void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
                 }
                 else
                 {
-                    aPos.nContent.Assign(pNd->GetTextNode(), nContent);
+                    aPos.SetContent(nContent);
                 }
             }
             if ( pNd )
