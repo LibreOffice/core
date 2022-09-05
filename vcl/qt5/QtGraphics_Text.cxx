@@ -226,7 +226,7 @@ const sal_uInt8* QtTrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 bool QtGraphics::CreateFontSubset(const OUString& rToFile,
                                   const vcl::font::PhysicalFontFace* pFontFace,
                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                  sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
+                                  int nGlyphCount, FontSubsetInfo& rInfo)
 {
     OUString aSysPath;
     if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
@@ -243,7 +243,7 @@ bool QtGraphics::CreateFontSubset(const OUString& rToFile,
     if (!aCFFtable.isEmpty())
         return SalGraphics::CreateCFFfontSubset(
             reinterpret_cast<const sal_uInt8*>(aCFFtable.data()), aCFFtable.size(), aToFile,
-            pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount, rInfo);
+            pGlyphIds, pEncoding, nGlyphCount, rInfo);
 
     // fill details about the subsetted font
     rInfo.m_nFontType = FontType::SFNT_TTF;
@@ -258,8 +258,7 @@ bool QtGraphics::CreateFontSubset(const OUString& rToFile,
     if (GetTTGlobalFontHeadInfo(&aTTF, nXmin, nYmin, nXmax, nYmax, nMacStyleFlags))
         rInfo.m_aFontBBox = tools::Rectangle(Point(nXmin, nYmin), Point(nXmax, nYmax));
 
-    return SalGraphics::CreateTTFfontSubset(aTTF, aToFile, false /* use FontSelectPattern? */,
-                                            pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
+    return SalGraphics::CreateTTFfontSubset(aTTF, aToFile, pGlyphIds, pEncoding, nGlyphCount);
 }
 
 const void* QtGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,

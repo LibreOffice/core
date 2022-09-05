@@ -68,8 +68,7 @@ void FontSubsetInfo::LoadFont( vcl::TrueTypeFont* pSftTTFont )
 bool FontSubsetInfo::CreateFontSubset(
     FontType nReqFontTypeMask,
     FILE* pOutFile, const char* pReqFontName,
-    const sal_GlyphId* pReqGlyphIds, const sal_uInt8* pReqEncodedIds, int nReqGlyphCount,
-    sal_Int32* pOutGlyphWidths)
+    const sal_GlyphId* pReqGlyphIds, const sal_uInt8* pReqEncodedIds, int nReqGlyphCount)
 {
     // prepare request details needed by all underlying subsetters
     mnReqFontTypeMask = nReqFontTypeMask;
@@ -89,15 +88,15 @@ bool FontSubsetInfo::CreateFontSubset(
     case FontType::SFNT_TTF:
     case FontType::SFNT_CFF:
     case FontType::ANY_SFNT:
-        bOK = CreateFontSubsetFromSfnt( pOutGlyphWidths);
+        bOK = CreateFontSubsetFromSfnt();
         break;
     case FontType::CFF_FONT:
-        bOK = CreateFontSubsetFromCff( pOutGlyphWidths);
+        bOK = CreateFontSubsetFromCff();
         break;
     case FontType::TYPE1_PFA:
     case FontType::TYPE1_PFB:
     case FontType::ANY_TYPE1:
-        bOK = CreateFontSubsetFromType1( pOutGlyphWidths);
+        bOK = CreateFontSubsetFromType1();
         break;
     case FontType::NO_FONT:
     default:
@@ -109,7 +108,7 @@ bool FontSubsetInfo::CreateFontSubset(
 }
 
 // TODO: move function to sft.cxx to replace dummy implementation
-bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
+bool FontSubsetInfo::CreateFontSubsetFromSfnt()
 {
     // handle SFNT_CFF fonts
     sal_uInt32 nCffLength = 0;
@@ -117,7 +116,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     if (pCffBytes)
     {
         LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength);
-        const bool bOK = CreateFontSubsetFromCff( pOutGlyphWidths);
+        const bool bOK = CreateFontSubsetFromCff();
         return bOK;
     }
 
@@ -153,7 +152,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
 }
 
 // TODO: replace dummy implementation
-bool FontSubsetInfo::CreateFontSubsetFromType1( const sal_Int32* /*pOutGlyphWidths*/)
+bool FontSubsetInfo::CreateFontSubsetFromType1()
 {
     SAL_WARN("vcl.fonts",
             "CreateFontSubsetFromType1: replace dummy implementation.");

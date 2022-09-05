@@ -274,7 +274,7 @@ public:
     bool    initialCffRead();
     void    emitAsType1( class Type1Emitter&,
                 const sal_GlyphId* pGlyphIds, const U8* pEncoding,
-                sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
+                int nGlyphCount, FontSubsetInfo& );
 
 private:
     int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
@@ -1745,7 +1745,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
 
 void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     const sal_GlyphId* pReqGlyphIds, const U8* pReqEncoding,
-    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rFSInfo)
+    int nGlyphCount, FontSubsetInfo& rFSInfo)
 {
     // prepare some fontdirectory details
     static const int nUniqueIdBase = 4100000; // using private-interchange UniqueIds
@@ -1982,12 +1982,6 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, " ND\n");
         rEmitter.emitAllCrypted();
         // provide individual glyphwidths if requested
-        if( pGlyphWidths ) {
-            ValType aCharWidth = maCharWidth;
-            if( maFontMatrix.size() >= 4)
-                aCharWidth *= 1000.0F * maFontMatrix[0];
-            pGlyphWidths[i] = static_cast<sal_Int32>(aCharWidth);
-        }
     }
     pOut += sprintf( pOut, "end end\nreadonly put\nput\n");
     pOut += sprintf( pOut, "dup/FontName get exch definefont pop\n");
@@ -2040,7 +2034,7 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rFSInfo.m_aPSName   = OUString( rEmitter.maSubsetName, strlen(rEmitter.maSubsetName), RTL_TEXTENCODING_UTF8 );
 }
 
-bool FontSubsetInfo::CreateFontSubsetFromCff( sal_Int32* pOutGlyphWidths )
+bool FontSubsetInfo::CreateFontSubsetFromCff()
 {
     CffSubsetterContext aCff( mpInFontBytes, mnInByteLength);
     bool bRC = aCff.initialCffRead();
@@ -2054,7 +2048,7 @@ bool FontSubsetInfo::CreateFontSubsetFromCff( sal_Int32* pOutGlyphWidths )
     aType1Emitter.setSubsetName( mpReqFontName);
     aCff.emitAsType1( aType1Emitter,
         mpReqGlyphIds, mpReqEncodedIds,
-        pOutGlyphWidths, mnReqGlyphCount, *this);
+        mnReqGlyphCount, *this);
     return true;
 }
 

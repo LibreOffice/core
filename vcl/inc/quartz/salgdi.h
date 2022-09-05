@@ -552,7 +552,6 @@ public:
                                                   const vcl::font::PhysicalFontFace* pFont,
                                                   const sal_GlyphId* pGlyphIds,
                                                   const sal_uInt8* pEncoding,
-                                                  sal_Int32* pWidths,
                                                   int nGlyphs,
                                                   FontSubsetInfo& rInfo // out parameter
                                                   ) override;

@@ -178,7 +178,6 @@ public:
                                     const vcl::font::PhysicalFontFace* pFont,
                                     const sal_GlyphId* pGlyphIDs,
                                     const sal_uInt8* pEncoding,
-                                    sal_Int32* pWidths,
                                     int nGlyphs,
                                     FontSubsetInfo& rInfo ) = 0;
 
@@ -653,13 +652,13 @@ protected:
     vcl::WidgetDrawInterface* forWidget() { return m_pWidgetDraw ? m_pWidgetDraw.get() : this; }
 
     static bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
-                                    const bool bVertical, const sal_GlyphId* pGlyphIds,
-                                    const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                    const sal_GlyphId* pGlyphIds,
+                                    const sal_uInt8* pEncoding,
                                     int nGlyphCount);
 
     static bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
                                     const OString& rSysPath, const sal_GlyphId* pGlyphIds,
-                                    const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                    const sal_uInt8* pEncoding,
                                     int nGlyphCount, FontSubsetInfo& rInfo);
 
     static void FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const OUString& pPSName,

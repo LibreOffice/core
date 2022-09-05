@@ -86,13 +86,12 @@ bool X11SalGraphics::CreateFontSubset(
                                    const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
-                                   sal_Int32* pWidths,
                                    int nGlyphCount,
                                    FontSubsetInfo& rInfo
                                    )
 {
     return mxTextRenderImpl->CreateFontSubset(rToFile, pFont,
-            pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
+            pGlyphIds, pEncoding, nGlyphCount, rInfo);
 }
 
 const void* X11SalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)

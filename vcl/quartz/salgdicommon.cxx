@@ -49,7 +49,7 @@ using namespace vcl;
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
                                         const vcl::font::PhysicalFontFace* pFontData,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                        sal_Int32* pGlyphWidths, const int nGlyphCount,
+                                        const int nGlyphCount,
                                         FontSubsetInfo& rInfo )
 {
     // TODO: move more of the functionality here into the generic subsetter code
@@ -71,7 +71,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     // NOTE: assuming that all glyphids requested on Aqua are fully translated
     if (bCffOnly)
         return SalGraphics::CreateCFFfontSubset(aBuffer.data(), aBuffer.size(), aToFile, pGlyphIds,
-                                                pEncoding, pGlyphWidths, nGlyphCount, rInfo);
+                                                pEncoding, nGlyphCount, rInfo);
 
     // TODO: modernize psprint's horrible fontsubset C-API
     // this probably only makes sense after the switch to another SCM
@@ -91,8 +91,8 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // write subset into destination file
     bool bRet
-        = SalGraphics::CreateTTFfontSubset(*pSftFont, aToFile, false /* use FontSelectPattern? */,
-                                           pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
+        = SalGraphics::CreateTTFfontSubset(*pSftFont, aToFile,
+                                           pGlyphIds, pEncoding, nGlyphCount);
     ::CloseTTFont(pSftFont);
     return bRet;
 }

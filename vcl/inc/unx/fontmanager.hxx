@@ -282,7 +282,6 @@ public:
                            const OUString& rOutFile,
                            const sal_GlyphId* pGlyphIDs,
                            const sal_uInt8* pNewEncoding,
-                           sal_Int32* pWidths,
                            int nGlyphs
                            );
 

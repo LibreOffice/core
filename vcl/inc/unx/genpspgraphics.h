@@ -94,7 +94,6 @@ public:
                                               const vcl::font::PhysicalFontFace*,
                                               const sal_GlyphId* pGlyphIDs,
                                               const sal_uInt8* pEncoding,
-                                              sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo ) override;
     virtual const void*     GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;

@@ -67,11 +67,10 @@ bool SvpSalGraphics::CreateFontSubset(
     const vcl::font::PhysicalFontFace* pFont,
     const sal_GlyphId* pGlyphIds,
     const sal_uInt8* pEncoding,
-    sal_Int32* pWidths,
     int nGlyphCount,
     FontSubsetInfo& rInfo)
 {
-    return m_aTextRenderImpl.CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
+    return m_aTextRenderImpl.CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, nGlyphCount, rInfo);
 }
 
 const void* SvpSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)

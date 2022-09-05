@@ -929,8 +929,8 @@ OUString SalGraphics::getRenderBackendName() const
 }
 
 bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OString& rSysPath,
-                                   const bool bVertical, const sal_GlyphId* pGlyphIds,
-                                   const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                   const sal_GlyphId* pGlyphIds,
+                                   const sal_uInt8* pEncoding,
                                    const int nOrigGlyphCount)
 {
     // Multiple questions:
@@ -982,21 +982,6 @@ bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OSt
         aTempEncs[0] = 0;
     }
 
-    if (pGlyphWidths)
-    {
-        std::unique_ptr<sal_uInt16[]> pMetrics
-            = GetTTSimpleGlyphMetrics(&rTTF, aShortIDs, nGlyphCount, bVertical);
-        if (!pMetrics)
-            return false;
-
-        sal_uInt16 nNotDefAdv = pMetrics[0];
-        pMetrics[0] = pMetrics[nNotDef];
-        pMetrics[nNotDef] = nNotDefAdv;
-        for (i = 0; i < nOrigGlyphCount; ++i)
-            pGlyphWidths[i] = pMetrics[i];
-        pMetrics.reset();
-    }
-
     // write subset into destination file
     return (CreateTTFromTTGlyphs(&rTTF, rSysPath.getStr(), aShortIDs, aTempEncs, nGlyphCount)
             == vcl::SFErrCodes::Ok);
@@ -1004,7 +989,7 @@ bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OSt
 
 bool SalGraphics::CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
                                       const OString& rSysPath, const sal_GlyphId* pGlyphIds,
-                                      const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                      const sal_uInt8* pEncoding,
                                       int nGlyphCount, FontSubsetInfo& rInfo)
 {
     FILE* pOutFile = fopen(rSysPath.getStr(), "wb");
@@ -1012,7 +997,7 @@ bool SalGraphics::CreateCFFfontSubset(const unsigned char* pFontBytes, int nByte
         return false;
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
     bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds, pEncoding,
-                                       nGlyphCount, pGlyphWidths);
+                                       nGlyphCount);
     fclose(pOutFile);
     return bRet;
 }

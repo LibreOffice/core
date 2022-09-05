@@ -132,7 +132,6 @@ bool FreeTypeTextRenderImpl::CreateFontSubset(
                                    const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
-                                   sal_Int32* pWidths,
                                    int nGlyphCount,
                                    FontSubsetInfo& rInfo
                                    )
@@ -150,7 +149,6 @@ bool FreeTypeTextRenderImpl::CreateFontSubset(
                                  rToFile,
                                  pGlyphIds,
                                  pEncoding,
-                                 pWidths,
                                  nGlyphCount );
     return bSuccess;
 }

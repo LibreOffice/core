@@ -2346,7 +2346,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     // We are interested only in filling aInfo
     sal_GlyphId aGlyphIds[256] = { 0 };
     sal_uInt8 pEncoding[256] = { 0 };
-    pGraphics->CreateFontSubset(aTmpName, pFont, aGlyphIds, pEncoding, nullptr, 256, aInfo);
+    pGraphics->CreateFontSubset(aTmpName, pFont, aGlyphIds, pEncoding, 256, aInfo);
     osl_removeFile( aTmpName.pData );
 
     // write font descriptor
@@ -2690,7 +2690,7 @@ bool PDFWriterImpl::emitFonts()
                 }
             }
             FontSubsetInfo aSubsetInfo;
-            if( pGraphics->CreateFontSubset( aTmpName, subset.first, aGlyphIds, pEncoding, nullptr, nGlyphs, aSubsetInfo ) )
+            if( pGraphics->CreateFontSubset( aTmpName, subset.first, aGlyphIds, pEncoding, nGlyphs, aSubsetInfo ) )
             {
                 // create font stream
                 osl::File aFontFile(aTmpName);

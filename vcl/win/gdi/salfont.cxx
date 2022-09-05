@@ -1525,7 +1525,7 @@ static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]
 
 bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const vcl::font::PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
+    int nGlyphCount, FontSubsetInfo& rInfo )
 {
     ScopedFontHDC aScopedFontHDC(*this, *pFont);
     HDC hDC = aScopedFontHDC.hdc();
@@ -1553,7 +1553,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const RawFontData aRawCffData(hDC, nCffTag);
     if (aRawCffData.get())
         return SalGraphics::CreateCFFfontSubset(aRawCffData.get(), aRawCffData.size(), aToFile,
-                                                pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount,
+                                                pGlyphIds, pEncoding, nGlyphCount,
                                                 rInfo);
 
     // get raw font file data
@@ -1577,8 +1577,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
     // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(*aSftTTF.get(), aToFile, aScopedFontHDC.fsp().mbVertical,
-                                            pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
+    return SalGraphics::CreateTTFfontSubset(*aSftTTF.get(), aToFile,
+                                            pGlyphIds, pEncoding, nGlyphCount);
 }
 
 const void* WinSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)

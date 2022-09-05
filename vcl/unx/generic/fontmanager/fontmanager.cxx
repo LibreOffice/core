@@ -945,7 +945,6 @@ bool PrintFontManager::createFontSubset(
                                         const OUString& rOutFile,
                                         const sal_GlyphId* pGlyphIds,
                                         const sal_uInt8* pNewEncoding,
-                                        sal_Int32* pWidths,
                                         int nGlyphs
                                         )
 {
@@ -1022,7 +1021,7 @@ bool PrintFontManager::createFontSubset(
         const bool bOK = rInfo.CreateFontSubset(
             FontType::TYPE1_PFB,
             pOutFile, pGlyphSetName,
-            aRequestedGlyphIds, pEnc, nGlyphs, pWidths );
+            aRequestedGlyphIds, pEnc, nGlyphs);
         fclose( pOutFile );
         // For OTC, values from hhea or OS2 are better
         psp::PrintFontInfo aFontInfo;
@@ -1050,26 +1049,6 @@ bool PrintFontManager::createFontSubset(
     getFontBoundingBox( nFont, xMin, yMin, xMax, yMax );
     rInfo.m_aFontBBox   = tools::Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
     rInfo.m_nCapHeight  = yMax; // Well ...
-
-    if (pWidths)
-    {
-        // fill in glyph advance widths
-        std::unique_ptr<sal_uInt16[]> pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
-                                                                  pGID,
-                                                                  nGlyphs,
-                                                                  false/*bVertical*/ );
-        if( pMetrics )
-        {
-            for( int i = 0; i < nGlyphs; i++ )
-                pWidths[pOldIndex[i]] = pMetrics[i];
-            pMetrics.reset();
-        }
-        else
-        {
-            CloseTTFont( pTTFont );
-            return false;
-        }
-    }
 
     bool bSuccess = ( SFErrCodes::Ok == CreateTTFromTTGlyphs( pTTFont,
                                                      aToFile.getStr(),
