@@ -596,6 +596,20 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
+void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart)
+{
+    if (DisableCallbacks::disabled())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (pViewShell->getPart() == nPart)
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, false);
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 OString SfxLokHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
     bool bMispelledWord, const OString& rHyperlink)
 {

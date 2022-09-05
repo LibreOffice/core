@@ -3218,6 +3218,24 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
         }
     }
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        size_t nRangeCount = rRanges.size();
+        for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
+        {
+            ScRange const & rRange = rRanges[ nIndex ];
+            ScAddress const & rEnd = rRange.aEnd;
+            const Size aCurrentDataArea = getDataArea(rEnd.Tab());
+
+            SCCOL nLastCol = aCurrentDataArea.Width();
+            SCROW nLastRow = aCurrentDataArea.Height();
+
+            // is equal -> probably we just edited last col/row
+            if (rEnd.Col() >= nLastCol || rEnd.Row() >= nLastRow)
+                SfxLokHelper::notifyPartSizeChangedAllViews(this, rEnd.Tab());
+        }
+    }
+
     // handle sheet events
     //! separate method with ScMarkData? Then change HasChangesListeners back.
     if ( !(rOperation == "cell-change" && pDocShell) )

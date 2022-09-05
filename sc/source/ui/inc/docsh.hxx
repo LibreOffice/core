@@ -24,6 +24,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/deleter.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <scdllapi.h>
@@ -472,7 +473,8 @@ namespace HelperNotifyChanges
     inline ScModelObj* getMustPropagateChangesModel(const ScDocShell &rDocShell)
     {
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(rDocShell.GetModel());
-        if (pModelObj && pModelObj->HasChangesListeners())
+        const bool isLOK = comphelper::LibreOfficeKit::isActive(); // for LOK_CALLBACK_DOCUMENT_SIZE_CHANGED
+        if (pModelObj && (pModelObj->HasChangesListeners() || isLOK))
             return pModelObj;
         return nullptr;
     }

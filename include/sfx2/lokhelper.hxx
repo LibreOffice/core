@@ -119,6 +119,8 @@ public:
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
+    /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
+    static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
     /// Notifies all views with the given type and payload.
