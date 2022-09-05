@@ -90,32 +90,33 @@ void SAL_CALL SvxShowCharSetAcc::disposing()
     m_pParent = nullptr;
 }
 
-
 IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
 
 bool SvxShowCharSetAcc::implIsSelected( sal_Int64 nAccessibleChildIndex )
 {
+    if (!m_pParent)
+        return false;
+
     if (nAccessibleChildIndex < 0 || nAccessibleChildIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
-    return m_pParent && m_pParent->IsSelected(
-        sal::static_int_cast<sal_uInt16>(nAccessibleChildIndex));
+    return m_pParent->IsSelected(sal::static_int_cast<sal_uInt16>(nAccessibleChildIndex));
 }
 
-        // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
+// select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
 void SvxShowCharSetAcc::implSelect(sal_Int64 nAccessibleChildIndex, bool bSelect)
 {
+    if (!m_pParent)
+        return;
+
     if (nAccessibleChildIndex < 0 || nAccessibleChildIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
-    if ( m_pParent )
-    {
-        if ( bSelect )
-            m_pParent->SelectIndex(nAccessibleChildIndex, true);
-        else
-            m_pParent->DeSelect();
-    }
+    if (bSelect)
+        m_pParent->SelectIndex(nAccessibleChildIndex, true);
+    else
+        m_pParent->DeSelect();
 }
 
 css::awt::Rectangle SvxShowCharSetAcc::implGetBounds()
