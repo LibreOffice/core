@@ -1163,6 +1163,7 @@ void Dialog::EndDialog( tools::Long nResult )
     if ( mpDialogImpl->mbStartedModal )
         ImplEndExecuteModal();
 
+    // coverity[check_after_deref] - ImplEndExecuteModal might trigger destruction of mpDialogImpl
     if ( mpDialogImpl && mpDialogImpl->maEndCtx.isSet() )
     {
         auto fn = std::move(mpDialogImpl->maEndCtx.maEndDialogFn);
