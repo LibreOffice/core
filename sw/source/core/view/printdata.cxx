@@ -301,8 +301,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     aWidgetIds[4] = "rbRangeSelection";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                         aHelpIds, aPrintRangeName,
-                                                        aChoices,
-                                                        bHasSelection ? 4 : 0,
+                                                        aChoices, 0 /* always default to 'All pages' */,
                                                         aChoicesDisabled);
 
     // show an Edit dependent on "Pages" selected
