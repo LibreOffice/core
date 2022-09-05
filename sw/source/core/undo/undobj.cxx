@@ -80,14 +80,10 @@ void SwUndRng::SetValues( const SwPaM& rPam )
 void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
 {
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = m_nSttNode;
+    rPam.GetPoint()->Assign( m_nSttNode, m_nSttContent );
     SwNode& rNd = rPam.GetPointNode();
-    if( rNd.IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( rNd.GetContentNode(), m_nSttContent );
-    else if( bCorrToContent )
+    if( !rNd.IsContentNode() && bCorrToContent )
         rPam.Move( fnMoveForward, GoInContent );
-    else
-        rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
     if( !m_nEndNode && COMPLETE_STRING == m_nEndContent )       // no selection
         return ;
@@ -96,13 +92,9 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
     if( m_nSttNode == m_nEndNode && m_nSttContent == m_nEndContent )
         return;                             // nothing left to do
 
-    rPam.GetPoint()->nNode = m_nEndNode;
-    if( rPam.GetPointNode().IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( rPam.GetPointNode().GetContentNode(), m_nEndContent );
-    else if( bCorrToContent )
+    rPam.GetPoint()->Assign( m_nEndNode, m_nEndContent );
+    if( !rPam.GetPointNode().IsContentNode() && bCorrToContent )
         rPam.Move( fnMoveBackward, GoInContent );
-    else
-        rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 }
 
 SwPaM & SwUndRng::AddUndoRedoPaM(
@@ -747,8 +739,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     {
         SwNodeRange aRg( pStt->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(1) );
         rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.GetNode(), true );
-        aPos.nContent = 0;
-        --aPos.nNode;
+        aPos.Adjust(SwNodeOffset(-1));
     }
     else
     {
@@ -794,15 +785,25 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         rNds.MoveRange( aPaM, rInsPos, rDoc.GetNodes() );
 
         // delete the last Node as well
-        if( !aPaM.GetPoint()->GetContentIndex() ||
-            ( aPaM.GetPoint()->nNode++ &&       // still empty Nodes at the end?
-            &rNds.GetEndOfExtras() != &aPaM.GetPoint()->GetNode() ))
+        bool bDeleteLastNode = false;
+        if( !aPaM.GetPoint()->GetContentIndex() )
+            bDeleteLastNode = true;
+        else
         {
-            aPaM.GetPoint()->nContent.Assign( nullptr, 0 );
+            // still empty Nodes at the end?
+            aPaM.GetPoint()->Adjust(SwNodeOffset(1));
+            if ( &rNds.GetEndOfExtras() != &aPaM.GetPoint()->GetNode() )
+                bDeleteLastNode = true;
+        }
+        if( bDeleteLastNode )
+        {
+            SwNode& rDelNode = aPaM.GetPoint()->GetNode();
+            SwNodeOffset nDelOffset = rNds.GetEndOfExtras().GetIndex() -
+                        aPaM.GetPoint()->GetNodeIndex();
+            //move it so we don't have SwContentIndex pointing at a node when it is deleted.
+            aPaM.GetPoint()->Adjust(SwNodeOffset(-1));
             aPaM.SetMark();
-            rNds.Delete( aPaM.GetPoint()->GetNode(),
-                        rNds.GetEndOfExtras().GetIndex() -
-                        aPaM.GetPoint()->GetNodeIndex() );
+            rNds.Delete( rDelNode, nDelOffset );
         }
 
         aRedlRest.Restore();
@@ -1258,16 +1259,16 @@ void SwUndoSaveSection::SaveSection(
 
     if (bExpandNodes)
     {
-        --aPam.GetPoint()->nNode;
-        ++aPam.GetMark()->nNode;
+        aPam.GetPoint()->Adjust(SwNodeOffset(-1));
+        aPam.GetMark()->Adjust(SwNodeOffset(+1));
     }
 
     SwContentNode* pCNd = aPam.GetMarkContentNode();
     if( pCNd )
-        aPam.GetMark()->nContent.Assign( pCNd, 0 );
+        aPam.GetMark()->SetContent( 0 );
     pCNd = aPam.GetPointContentNode();
     if( nullptr != pCNd )
-        aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+        aPam.GetPoint()->SetContent( pCNd->Len() );
 
     // Keep positions as SwContentIndex so that this section can be deleted in DTOR
     SwNodeOffset nEnd;
