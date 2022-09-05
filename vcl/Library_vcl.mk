@@ -286,7 +286,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/oldprintadaptor \
     vcl/source/gdi/pdfbuildin_fonts \
     vcl/source/gdi/pdfextoutdevdata \
-    vcl/source/gdi/pdffontcache \
     vcl/source/gdi/pdfwriter \
     vcl/source/gdi/pdfwriter_impl2 \
     vcl/source/gdi/pdfwriter_impl \

@@ -57,7 +57,7 @@
 #include <vcl/filter/pdfobjectcontainer.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
 #include <pdf/pdfbuildin_fonts.hxx>
-#include <pdf/pdffontcache.hxx>
+#include <salgdi.hxx>
 
 class StyleSettings;
 class FontSubsetInfo;
@@ -741,7 +741,6 @@ private:
     std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aSubsets;
     std::map<const vcl::font::PhysicalFontFace*, EmbedFont> m_aSystemFonts;
     sal_Int32                           m_nNextFID;
-    PDFFontCache                        m_aFontCache;
 
     /// Cache some most recent bitmaps we've exported, in case we encounter them again..
     o3tl::lru_map<BitmapChecksum,
