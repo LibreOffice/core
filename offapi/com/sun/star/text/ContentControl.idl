@@ -1,0 +1,101 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module text {
+
+/** This service specifies a content control with properties in a TextDocument.
+
+    A content control wraps one or more text portions and controls the behavior of that content.
+
+    @since LibreOffice 7.4
+*/
+service ContentControl
+{
+
+    /** Provides a way to insert the content control using insertTextContent().
+    */
+    interface com::sun::star::text::XTextContent;
+
+    /** Current content is placeholder text.
+    */
+    [optional, property] boolean ShowingPlaceHolder;
+
+    /** Display the content control as a checkbox.
+    */
+    [optional, property] boolean Checkbox;
+
+    /** If Checkbox is true, is the checkbox checked?
+    */
+    [optional, property] boolean Checked;
+
+    /** If Checkbox is true, the value of a checked checkbox.
+    */
+    [optional, property] string CheckedState;
+
+    /** If Checkbox is true, the value of an unchecked checkbox.
+    */
+    [optional, property] string UncheckedState;
+
+    /** List items of a dropdown: DisplayText + Value pairs with string values for each item.
+
+        If the list is non-empty, a dropdown control is provided on the UI.
+    */
+    [optional, property] sequence< sequence< com::sun::star::beans::PropertyValue > > ListItems;
+
+    /** Display the content control as a picture.
+    */
+    [optional, property] boolean Picture;
+
+    /** Display the content control as a date.
+
+        If true, a date picker is provided on the UI.
+    */
+    [optional, property] boolean Date;
+
+    /** If Date is true, the date format in a syntax accepted by the NumberFormatter.
+    */
+    [optional, property] string DateFormat;
+
+    /** If Date is true, the date's BCP 47 language tag.
+    */
+    [optional, property] string DateLanguage;
+
+    /** Date in YYYY-MM-DDT00:00:00Z format.
+    */
+    [optional, property] string CurrentDate;
+
+    /** Plain text, i.e. not rich text.
+    */
+    [optional, property] boolean PlainText;
+
+    /** The placeholder's doc part: just remembered.
+    */
+    [optional, property] string PlaceholderDocPart;
+
+    /** The data bindings's prefix mappings: just remembered.
+    */
+    [optional, property] string DataBindingPrefixMappings;
+
+    /** The data bindings's XPath: just remembered.
+    */
+    [optional, property] string DataBindingXpath;
+
+    /** The data bindings's store item ID: just remembered.
+    */
+    [optional, property] string DataBindingStoreItemID;
+
+    /** The color: just remembered.
+    */
+    [optional, property] string Color;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
