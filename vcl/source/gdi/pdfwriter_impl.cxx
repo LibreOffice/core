@@ -2325,35 +2325,28 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     aInfo.m_nCapHeight = 1000;
     aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->GetFamilyName();
-    sal_Int32 pWidths[256] = {};
 
     SalGraphics *pGraphics = GetGraphics();
-
     assert(pGraphics);
 
     aSubType = OString( "/TrueType" );
-    std::vector< sal_Int32 > aGlyphWidths;
-    Ucs2UIntMap aUnicodeMap;
-    pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
 
     OUString aTmpName;
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
-    sal_GlyphId aGlyphIds[ 256 ] = {};
-    sal_uInt8 pEncoding[ 256 ] = {};
-    sal_Int32 pDuWidths[ 256 ] = {};
 
+    sal_Int32 pWidths[256] = {};
+    FontCharMapRef xFontCharMap = pFont->GetFontCharMap();
+    const LogicalFontInstance* pFontInstance = rEmbed.m_pFontInstance;
     for( sal_Ucs c = 32; c < 256; c++ )
     {
-        pEncoding[c] = c;
-        aGlyphIds[c] = 0;
-        if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
-            pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
+        sal_GlyphId nGlyph = xFontCharMap->GetGlyphIndex(c);
+        pWidths[c] = pFontInstance->GetGlyphWidth(nGlyph, false, true);
     }
-    //TODO: surely this is utterly broken because aGlyphIds is just all zeros, if we
-    //had the right glyphids here then I imagine we could replace pDuWidths with
-    //pWidths and remove pWidths assignment above. i.e. start with the glyph ids
-    //and map those to unicode rather than try and reverse map them ?
-    pGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
+
+    // We are interested only in filling aInfo
+    sal_GlyphId aGlyphIds[256] = { 0 };
+    sal_uInt8 pEncoding[256] = { 0 };
+    pGraphics->CreateFontSubset(aTmpName, pFont, aGlyphIds, pEncoding, nullptr, 256, aInfo);
     osl_removeFile( aTmpName.pData );
 
     // write font descriptor
@@ -2876,6 +2869,8 @@ bool PDFWriterImpl::emitFonts()
     }
     osl_removeFile( aTmpName.pData );
 
+    if (g_bDebugDisableCompression)
+        emitComment( "PDFWriterImpl::emitSystemFonts" );
     // emit system fonts
     for (auto const& systemFont : m_aSystemFonts)
     {
@@ -5788,7 +5783,8 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 
     SetFont( i_rFont );
 
-    const vcl::font::PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
+    const LogicalFontInstance* pFontInstance = GetFontInstance();
+    const vcl::font::PhysicalFontFace* pDevFont = pFontInstance->GetFontFace();
     sal_Int32 nFontID = 0;
     auto it = m_aSystemFonts.find( pDevFont );
     if( it != m_aSystemFonts.end() )
@@ -5797,6 +5793,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     {
         nFontID = m_nNextFID++;
         m_aSystemFonts[ pDevFont ] = EmbedFont();
+        m_aSystemFonts[ pDevFont ].m_pFontInstance = const_cast<LogicalFontInstance*>(pFontInstance);
         m_aSystemFonts[ pDevFont ].m_nNormalFontID = nFontID;
     }
 

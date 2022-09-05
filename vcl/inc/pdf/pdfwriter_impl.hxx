@@ -338,8 +338,11 @@ struct FontSubset
 struct EmbedFont
 {
     sal_Int32                       m_nNormalFontID;
+    LogicalFontInstance*            m_pFontInstance;
 
-    EmbedFont() : m_nNormalFontID( 0 ) {}
+    EmbedFont()
+        : m_nNormalFontID(0)
+        , m_pFontInstance(nullptr) {}
 };
 
 struct PDFDest
