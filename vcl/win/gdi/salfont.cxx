@@ -586,7 +586,7 @@ WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& 
     mnPitchAndFamily(rMetric.tmPitchAndFamily),
     mbAliasSymbolsHigh( false ),
     mbAliasSymbolsLow( false ),
-    mhFont(CreateFontIndirectW(&rEnumFont.elfLogFont))
+    maLogFont(rEnumFont.elfLogFont)
 {
     if (meWinCharSet == SYMBOL_CHARSET)
     {
@@ -612,7 +612,6 @@ WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& 
 
 WinFontFace::~WinFontFace()
 {
-    DeleteFont(mhFont);
 }
 
 sal_IntPtr WinFontFace::GetFontId() const
@@ -686,7 +685,8 @@ hb_blob_t* WinFontFace::GetHbTable(hb_tag_t nTag) const
     unsigned char* pBuffer = nullptr;
 
     HDC hDC(::GetDC(nullptr));
-    HFONT hOldFont = ::SelectFont(hDC, mhFont);
+    HFONT hFont = ::CreateFontIndirectW(&maLogFont);
+    HFONT hOldFont = ::SelectFont(hDC, hFont);
 
     nLength = ::GetFontData(hDC, OSL_NETDWORD(nTag), 0, nullptr, 0);
     if (nLength > 0 && nLength != GDI_ERROR)
@@ -696,6 +696,7 @@ hb_blob_t* WinFontFace::GetHbTable(hb_tag_t nTag) const
     }
 
     ::SelectFont(hDC, hOldFont);
+    ::DeleteFont(hFont);
     ::ReleaseDC(nullptr, hDC);
 
     hb_blob_t* pBlob = nullptr;

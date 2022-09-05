@@ -80,7 +80,7 @@ private:
     BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
-    HFONT                   mhFont;
+    LOGFONTW                maLogFont;
 };
 
 /** Class that creates (and destroys) a compatible Device Context.
