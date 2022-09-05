@@ -71,11 +71,7 @@ int LogicalFontInstance::GetKashidaWidth() const
     hb_codepoint_t nIndex = 0;
 
     if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nIndex))
-    {
-        double nXScale = 0;
-        GetScale(&nXScale, nullptr);
-        nWidth = std::ceil(hb_font_get_glyph_h_advance(pHbFont, nIndex) * nXScale);
-    }
+        nWidth = std::ceil(GetGlyphWidth(nIndex));
 
     return nWidth;
 }
@@ -148,6 +144,28 @@ bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& r
     if (mpFontCache && res)
         mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
     return res;
+}
+
+double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bool bPDF) const
+{
+    auto* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
+    int nWidth;
+    if (bVertical)
+        nWidth = hb_font_get_glyph_v_advance(pHbFont, nGlyph);
+    else
+        nWidth = hb_font_get_glyph_h_advance(pHbFont, nGlyph);
+
+    if (bPDF)
+    {
+        unsigned int nUPEM = hb_face_get_upem(hb_font_get_face(pHbFont));
+        return (nWidth * 1000) / nUPEM;
+    }
+    else
+    {
+        double nScale = 0;
+        GetScale(&nScale, nullptr);
+        return double(nWidth * nScale);
+    }
 }
 
 bool LogicalFontInstance::IsGraphiteFont()

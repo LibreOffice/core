@@ -3905,13 +3905,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
                           DevicePoint(), GlyphItemFlags::NONE, 0, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
-    sal_Int32 nGlyphWidth = 0;
-    SalGraphics *pGraphics = GetGraphics();
-    if (pGraphics)
-        nGlyphWidth = m_aFontCache.getGlyphWidth(pDevFont,
-                                                 aItem.glyphId(),
-                                                 aItem.IsVertical(),
-                                                 pGraphics);
+    auto nGlyphWidth = pFontInstance->GetGlyphWidth(aItem.glyphId(), aItem.IsVertical(), true);
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
@@ -6240,13 +6234,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     const vcl::font::PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
     const GlyphItem* pGlyph = nullptr;
     const vcl::font::PhysicalFontFace* pFallbackFont = nullptr;
+    const LogicalFontInstance* pGlyphFont = nullptr;
 
     // collect the glyphs into a single array
     std::vector< PDFGlyph > aGlyphs;
     aGlyphs.reserve( nMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     DevicePoint aPos;
-    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, nullptr, &pFallbackFont))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pGlyphFont, &pFallbackFont))
     {
         const auto* pFont = pFallbackFont ? pFallbackFont : pDevFont;
 
@@ -6302,13 +6297,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
-        sal_Int32 nGlyphWidth = 0;
-        SalGraphics *pGraphics = GetGraphics();
-        if (pGraphics)
-            nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
-                                                     pGlyph->glyphId(),
-                                                     pGlyph->IsVertical(),
-                                                     pGraphics);
+        auto nGlyphWidth = pGlyphFont->GetGlyphWidth(pGlyph->glyphId(), pGlyph->IsVertical(), true);
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;

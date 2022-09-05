@@ -100,6 +100,8 @@ public: // TODO: make data members private
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
 
+    double GetGlyphWidth(sal_GlyphId, bool = false, bool = false) const;
+
     int GetKashidaWidth() const;
 
     void GetScale(double* nXScale, double* nYScale) const;
