@@ -4030,10 +4030,11 @@ void SwHTMLParser::EndPara( bool bReal )
 #endif
     }
 
-    // Netscape skips empty paragraphs, we do the same.
+    // Netscape skips empty paragraphs, we do the same; unless in XHTML mode, which prefers mapping
+    // the source document to the doc model 1:1 if possible.
     if( bReal )
     {
-        if( m_pPam->GetPoint()->GetContentIndex() )
+        if (m_pPam->GetPoint()->GetContentIndex() || m_bXHTML)
             AppendTextNode( AM_SPACE );
         else
             AddParSpace();
