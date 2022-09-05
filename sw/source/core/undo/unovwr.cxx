@@ -106,7 +106,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
 // What is with only inserted characters?
 
     // Only deletion of single chars can be combined.
-    if( rPos.nNode != m_nStartNode || m_aInsStr.isEmpty()  ||
+    if( rPos.GetNodeIndex() != m_nStartNode || m_aInsStr.isEmpty()  ||
         ( !m_bGroup && m_aInsStr.getLength() != 1 ))
         return false;
 
@@ -128,8 +128,8 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
     if (!m_bInsChar && rPos.GetContentIndex() < pDelTextNd->GetText().getLength())
     {
         SwRedlineSaveDatas aTmpSav;
-        SwPaM aPam( rPos.nNode, rPos.GetContentIndex(),
-                    rPos.nNode, rPos.GetContentIndex()+1 );
+        SwPaM aPam( rPos.GetNode(), rPos.GetContentIndex(),
+                    rPos.GetNode(), rPos.GetContentIndex()+1 );
 
         const bool bSaved = FillSaveData( aPam, aTmpSav, false );
 
@@ -182,11 +182,11 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     SwCursor& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
 
     rCurrentPam.DeleteMark();
-    rCurrentPam.GetPoint()->nNode = m_nStartNode;
+    rCurrentPam.GetPoint()->Assign( m_nStartNode );
     SwTextNode* pTextNd = rCurrentPam.GetPointNode().GetTextNode();
     assert(pTextNd);
-    SwContentIndex& rIdx = rCurrentPam.GetPoint()->nContent;
-    rIdx.Assign( pTextNd, m_nStartContent );
+    SwPosition& rPtPos = *rCurrentPam.GetPoint();
+    rPtPos.SetContent( m_nStartContent );
 
     SwAutoCorrExceptWord* pACEWord = rDoc.GetAutoCorrExceptWord();
     if( pACEWord )
@@ -199,9 +199,9 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     // If there was not only an overwrite but also an insert, delete the surplus
     if( m_aInsStr.getLength() > m_aDelStr.getLength() )
     {
-        rIdx += m_aDelStr.getLength();
-        pTextNd->EraseText( rIdx, m_aInsStr.getLength() - m_aDelStr.getLength() );
-        rIdx = m_nStartContent;
+        rPtPos.AdjustContent( m_aDelStr.getLength() );
+        pTextNd->EraseText( rPtPos, m_aInsStr.getLength() - m_aDelStr.getLength() );
+        rPtPos.SetContent( m_nStartContent );
     }
 
     if( !m_aDelStr.isEmpty() )
@@ -209,20 +209,20 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         bool bOldExpFlg = pTextNd->IsIgnoreDontExpand();
         pTextNd->SetIgnoreDontExpand( true );
 
-        ++rIdx;
+        rPtPos.AdjustContent(+1);
         for( sal_Int32 n = 0; n < m_aDelStr.getLength(); n++  )
         {
             // do it individually, to keep the attributes!
             OUString aTmpStr(m_aDelStr[n]);
-            OUString const ins( pTextNd->InsertText(aTmpStr, rIdx) );
+            OUString const ins( pTextNd->InsertText(aTmpStr, rPtPos) );
             assert(ins.getLength() == 1); // cannot fail
             (void) ins;
-            rIdx -= 2;
-            pTextNd->EraseText( rIdx, 1 );
-            rIdx += 2;
+            rPtPos.AdjustContent(-2);
+            pTextNd->EraseText( rPtPos, 1 );
+            rPtPos.AdjustContent(+2);
         }
         pTextNd->SetIgnoreDontExpand( bOldExpFlg );
-        --rIdx;
+        rPtPos.AdjustContent(-1);
     }
 
     if( m_pHistory )
