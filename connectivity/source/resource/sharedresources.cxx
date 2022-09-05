@@ -100,20 +100,13 @@ namespace connectivity
 
     namespace
     {
-        size_t lcl_substitute( OUString& _inout_rString,
+        bool lcl_substitute( OUString& _inout_rString,
             const char* _pAsciiPattern, std::u16string_view _rReplace )
         {
-            size_t nOccurrences = 0;
-
+            OUString oldString = _inout_rString;
             OUString sPattern( OUString::createFromAscii( _pAsciiPattern ) );
-            sal_Int32 nIndex = 0;
-            while ( ( nIndex = _inout_rString.indexOf( sPattern ) ) > -1 )
-            {
-                ++nOccurrences;
-                _inout_rString = _inout_rString.replaceAt( nIndex, sPattern.getLength(), _rReplace );
-            }
-
-            return nOccurrences;
+            _inout_rString = _inout_rString.replaceAll(sPattern, _rReplace);
+            return oldString != _inout_rString;
         }
     }
 
