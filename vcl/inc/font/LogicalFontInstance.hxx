@@ -100,6 +100,8 @@ public: // TODO: make data members private
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
 
+    sal_Int32 GetUnscaledGlyphWidth(sal_GlyphId, bool) const;
+
     int GetKashidaWidth() const;
 
     void GetScale(double* nXScale, double* nYScale) const;
@@ -128,6 +130,7 @@ private:
     mutable ImplFontCache* mpFontCache;
     const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
+    hb_font_t* m_pUnscaledHbFont;
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
@@ -140,6 +143,8 @@ private:
 
     // The value is initialized and used in NeedOffsetCorrection().
     std::optional<FontFamilyEnum> m_xeFontFamilyEnum;
+
+    inline hb_font_t* GetUnscaledHbFont();
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()
@@ -147,6 +152,18 @@ inline hb_font_t* LogicalFontInstance::GetHbFont()
     if (!m_pHbFont)
         m_pHbFont = InitHbFont();
     return m_pHbFont;
+}
+
+inline hb_font_t* LogicalFontInstance::GetUnscaledHbFont()
+{
+    if (!m_pUnscaledHbFont)
+    {
+        auto* pHbFont = GetHbFont();
+        auto nUPEM = hb_face_get_upem(hb_font_get_face(pHbFont));
+        m_pUnscaledHbFont = hb_font_create_sub_font(pHbFont);
+        hb_font_set_scale(m_pUnscaledHbFont, nUPEM, nUPEM);
+    }
+    return m_pUnscaledHbFont;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
