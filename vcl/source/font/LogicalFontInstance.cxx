@@ -37,7 +37,6 @@ LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFon
     , mpFontCache(nullptr)
     , m_aFontSelData(rFontSelData)
     , m_pHbFont(nullptr)
-    , m_pUnscaledHbFont(nullptr)
     , m_nAveWidthFactor(1.0f)
     , m_pFontFace(&const_cast<vcl::font::PhysicalFontFace&>(rFontFace))
 {
@@ -51,8 +50,6 @@ LogicalFontInstance::~LogicalFontInstance()
 
     if (m_pHbFont)
         hb_font_destroy(m_pHbFont);
-    if (m_pUnscaledHbFont)
-        hb_font_destroy(m_pUnscaledHbFont);
 }
 
 hb_font_t* LogicalFontInstance::InitHbFont()
@@ -151,14 +148,6 @@ bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& r
     if (mpFontCache && res)
         mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
     return res;
-}
-
-sal_Int32 LogicalFontInstance::GetUnscaledGlyphWidth(sal_GlyphId nGlyph, bool bVertical) const
-{
-    auto* pHbFont = const_cast<LogicalFontInstance*>(this)->GetUnscaledHbFont();
-    if (bVertical)
-        hb_font_get_glyph_v_advance(pHbFont, nGlyph);
-    return hb_font_get_glyph_h_advance(pHbFont, nGlyph);
 }
 
 bool LogicalFontInstance::IsGraphiteFont()

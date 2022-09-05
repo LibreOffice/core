@@ -3905,7 +3905,13 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
                           DevicePoint(), GlyphItemFlags::NONE, 0, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
-    sal_Int32 nGlyphWidth = GetFontInstance()->GetUnscaledGlyphWidth(aItem.glyphId(), aItem.IsVertical());
+    sal_Int32 nGlyphWidth = 0;
+    SalGraphics *pGraphics = GetGraphics();
+    if (pGraphics)
+        nGlyphWidth = m_aFontCache.getGlyphWidth(pDevFont,
+                                                 aItem.glyphId(),
+                                                 aItem.IsVertical(),
+                                                 pGraphics);
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
@@ -6296,7 +6302,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
-        sal_Int32 nGlyphWidth = GetFontInstance()->GetUnscaledGlyphWidth(pGlyph->glyphId(), pGlyph->IsVertical());
+        sal_Int32 nGlyphWidth = 0;
+        SalGraphics *pGraphics = GetGraphics();
+        if (pGraphics)
+            nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
+                                                     pGlyph->glyphId(),
+                                                     pGlyph->IsVertical(),
+                                                     pGraphics);
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
