@@ -25,6 +25,7 @@
 #include <rtl/ref.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
 
 #include <fontattributes.hxx>
@@ -40,7 +41,6 @@ class FontSelectPattern;
 
 namespace vcl
 {
-struct FontCapabilities;
 class PhysicalFontFamily;
 }
 
@@ -76,7 +76,7 @@ public:
 
     virtual sal_IntPtr GetFontId() const = 0;
     virtual FontCharMapRef GetFontCharMap() const;
-    virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
+    virtual bool GetFontCapabilities(vcl::FontCapabilities&) const;
 
     bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
     sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
@@ -91,6 +91,8 @@ public:
 protected:
     mutable hb_face_t* mpHbFace;
     mutable FontCharMapRef mxCharMap;
+    mutable vcl::FontCapabilities maFontCapabilities;
+    mutable bool mbFontCapabilitiesRead;
 
     explicit PhysicalFontFace(const FontAttributes&);
 };

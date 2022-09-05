@@ -72,8 +72,6 @@ public:
 
     void                  AnnounceFont( vcl::font::PhysicalFontCollection* );
 
-    bool GetFontCapabilities(vcl::FontCapabilities&) const;
-
 private:
     friend class FreetypeManager;
     explicit FreetypeFontInfo(FontAttributes , FreetypeFontFile* const pFontFile,
@@ -100,16 +98,9 @@ public:
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 
-    inline bool GetFontCapabilities(vcl::FontCapabilities&) const override;
-
     virtual hb_face_t* GetHbFace() const override;
     virtual hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
 };
-
-bool FreetypeFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
-{
-    return mpFreetypeFontInfo->GetFontCapabilities(rFontCapabilities);
-}
 
 class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
 {

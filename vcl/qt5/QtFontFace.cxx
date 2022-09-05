@@ -25,8 +25,6 @@
 #include <QtFont.hxx>
 #include <QtTools.hxx>
 
-#include <sft.hxx>
-#include <impfontcharmap.hxx>
 #include <fontinstance.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -163,7 +161,6 @@ QtFontFace::QtFontFace(const FontAttributes& rFA, QString aFontID, const FontIdT
     : PhysicalFontFace(rFA)
     , m_aFontId(std::move(aFontID))
     , m_eFontIdType(eFontIdType)
-    , m_bFontCapabilitiesRead(false)
 {
 }
 
@@ -203,30 +200,6 @@ rtl::Reference<LogicalFontInstance>
 QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
     return new QtFont(*this, rFSD);
-}
-
-bool QtFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
-{
-    // read this only once per font
-    if (m_bFontCapabilitiesRead)
-    {
-        rFontCapabilities = m_aFontCapabilities;
-        return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-    }
-    m_bFontCapabilitiesRead = true;
-
-    QFont aFont = CreateFont();
-    QRawFont aRawFont(QRawFont::fromFont(aFont));
-    QByteArray aOS2Table = aRawFont.fontTable("OS/2");
-    if (!aOS2Table.isEmpty())
-    {
-        vcl::getTTCoverage(m_aFontCapabilities.oUnicodeRange, m_aFontCapabilities.oCodePageRange,
-                           reinterpret_cast<const unsigned char*>(aOS2Table.data()),
-                           aOS2Table.size());
-    }
-
-    rFontCapabilities = m_aFontCapabilities;
-    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
 hb_blob_t* QtFontFace::GetHbTable(hb_tag_t nTag) const

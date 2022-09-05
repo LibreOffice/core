@@ -25,6 +25,7 @@
 
 #include <fontattributes.hxx>
 #include <impfontcharmap.hxx>
+#include <sft.hxx>
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -244,6 +245,26 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
         mxCharMap = FontCharMap::GetDefaultMap(IsSymbolFont());
 
     return mxCharMap;
+}
+
+bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
+{
+    if (!mbFontCapabilitiesRead)
+    {
+        mbFontCapabilitiesRead = true;
+
+        hb_blob_t* pBlob = GetHbTable(HB_TAG('O', 'S', '/', '2'));
+        if (pBlob)
+        {
+            unsigned int nSize = 0;
+            auto* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, &nSize));
+            vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange,
+                               pData, nSize);
+        }
+    }
+
+    rFontCapabilities = maFontCapabilities;
+    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 }
 

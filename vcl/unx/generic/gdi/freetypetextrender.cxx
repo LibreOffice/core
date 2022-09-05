@@ -80,7 +80,7 @@ bool FreeTypeTextRenderImpl::GetFontCapabilities(vcl::FontCapabilities &rGetImpl
 {
     if (!mpFreetypeFont[0])
         return false;
-    return mpFreetypeFont[0]->GetFreetypeFont().GetFontCapabilities(rGetImplFontCapabilities);
+    return mpFreetypeFont[0]->GetFontFace()->GetFontCapabilities(rGetImplFontCapabilities);
 }
 
 // SalGraphics

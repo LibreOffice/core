@@ -582,7 +582,6 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& rMetric)
 :   vcl::font::PhysicalFontFace(WinFont2DevFontAttributes(rEnumFont, rMetric)),
     mnId( 0 ),
-    mbFontCapabilitiesRead( false ),
     meWinCharSet(rEnumFont.elfLogFont.lfCharSet),
     mnPitchAndFamily(rMetric.tmPitchAndFamily),
     mbAliasSymbolsHigh( false ),
@@ -707,42 +706,6 @@ hb_blob_t* WinFontFace::GetHbTable(hb_tag_t nTag) const
 
     gCache.insert({ aCacheKey, BlobReference(pBlob) });
     return pBlob;
-}
-
-static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
-
-bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
-{
-    if (!mbFontCapabilitiesRead)
-        GetFontCapabilities();
-    rFontCapabilities = maFontCapabilities;
-    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-}
-
-void WinFontFace::GetFontCapabilities() const
-{
-    // read this only once per font
-    if( mbFontCapabilitiesRead )
-        return;
-
-    mbFontCapabilitiesRead = true;
-
-    HDC hDC(::GetDC(nullptr));
-    HFONT hOldFont = ::SelectFont(hDC, mhFont);
-
-    // OS/2 table
-    const DWORD OS2Tag = CalcTag( "OS/2" );
-    DWORD nLength = ::GetFontData( hDC, OS2Tag, 0, nullptr, 0 );
-    if( (nLength != GDI_ERROR) && nLength )
-    {
-        std::vector<unsigned char> aTable( nLength );
-        unsigned char* pTable = aTable.data();
-        ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
-        vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength);
-    }
-
-    ::SelectFont(hDC, hOldFont);
-    ::ReleaseDC(nullptr, hDC);
 }
 
 void WinSalGraphics::SetTextColor( Color nColor )
@@ -1556,6 +1519,8 @@ SFErrCodes ScopedTrueTypeFont::open(void const * pBuffer, sal_uInt32 nLen,
     OSL_ENSURE(m_pFont == nullptr, "already open");
     return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont, xCharMap);
 }
+
+static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const vcl::font::PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,

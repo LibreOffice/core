@@ -150,7 +150,7 @@ bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     if (!m_pFreetypeFont[0])
         return false;
 
-    return m_pFreetypeFont[0]->GetFreetypeFont().GetFontCapabilities(rFontCapabilities);
+    return m_pFreetypeFont[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
 void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLevel)

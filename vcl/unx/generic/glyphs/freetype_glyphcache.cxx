@@ -39,7 +39,6 @@
 
 #include <langboost.hxx>
 #include <font/PhysicalFontCollection.hxx>
-#include <sft.hxx>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -661,30 +660,6 @@ bool FreetypeFont::GetAntialiasAdvice() const
 {
     // TODO: also use GASP info
     return !mrFontInstance.GetFontSelectPattern().mbNonAntialiased && (mnPrioAntiAlias > 0);
-}
-
-bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
-{
-    return mxFontInfo->GetFontCapabilities(rFontCapabilities);
-}
-
-bool FreetypeFontInfo::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
-{
-    bool bRet = false;
-
-    sal_uLong nLength = 0;
-
-    // load OS/2 table
-    const FT_Byte* pOS2 = GetTable("OS/2", &nLength);
-    if (pOS2)
-    {
-        bRet = vcl::getTTCoverage(
-            rFontCapabilities.oUnicodeRange,
-            rFontCapabilities.oCodePageRange,
-            pOS2, nLength);
-    }
-
-    return bRet;
 }
 
 // outline stuff

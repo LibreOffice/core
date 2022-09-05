@@ -71,24 +71,16 @@ public:
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
-
     virtual hb_blob_t*      GetHbTable(hb_tag_t nTag) const override;
 
 private:
     sal_IntPtr              mnId;
-
-    // some members that are initialized lazily when the font gets selected into a HDC
-    mutable bool                    mbFontCapabilitiesRead;
-    mutable vcl::FontCapabilities   maFontCapabilities;
 
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
     HFONT                   mhFont;
-
-    void                    GetFontCapabilities() const;
 };
 
 /** Class that creates (and destroys) a compatible Device Context.

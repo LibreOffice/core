@@ -38,7 +38,6 @@
 #include <win/DWriteTextRenderer.hxx>
 #include <win/scoped_gdi.hxx>
 
-#include <sft.hxx>
 #include <sallayout.hxx>
 
 #include <cstdio>

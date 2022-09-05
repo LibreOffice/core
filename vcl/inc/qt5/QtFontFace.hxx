@@ -25,8 +25,6 @@
 #include <font/PhysicalFontFace.hxx>
 
 #include <tools/ref.hxx>
-#include <vcl/fontcapabilities.hxx>
-#include <vcl/fontcharmap.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QFont>
@@ -52,8 +50,6 @@ public:
 
     QFont CreateFont() const;
 
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
-
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
@@ -67,8 +63,6 @@ private:
 
     const QString m_aFontId;
     const FontIdType m_eFontIdType;
-    mutable vcl::FontCapabilities m_aFontCapabilities;
-    mutable bool m_bFontCapabilitiesRead;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

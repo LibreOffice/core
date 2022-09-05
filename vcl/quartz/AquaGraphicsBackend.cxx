@@ -43,7 +43,6 @@
 #ifdef IOS
 #include <svdata.hxx>
 #endif
-#include <sft.hxx>
 
 using namespace vcl;
 

@@ -69,16 +69,12 @@ public:
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
-
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
     virtual hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
 
 private:
     const sal_IntPtr                mnFontId;
-    mutable vcl::FontCapabilities   maFontCapabilities;
-    mutable bool                    mbFontCapabilitiesRead;
 };
 
 class CoreTextStyle final : public LogicalFontInstance
