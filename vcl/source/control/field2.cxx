@@ -158,7 +158,7 @@ static bool ImplIsPatternChar( sal_Unicode cChar, char cEditMask )
     try
     {
         OUString aCharStr(cChar);
-        nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.getLength(),
+        nType = ImplGetCharClass()->getCharacterType( aCharStr, 0,
                 Application::GetSettings().GetLanguageTag().getLocale() );
     }
     catch (const css::uno::Exception&)
