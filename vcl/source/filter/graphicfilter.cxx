@@ -1428,7 +1428,7 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
         {
             nStatus = readJPEG(rIStream, rGraphic, eLinkType, nImportFlags);
         }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVG))
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVG) || aFilterName.equalsIgnoreAsciiCase(IMP_SVGZ))
         {
             nStatus = readSVG(rIStream, rGraphic, eLinkType, pGraphicContent, nGraphicContentSize);
         }

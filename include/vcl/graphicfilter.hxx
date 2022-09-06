@@ -79,6 +79,7 @@ namespace o3tl
 #define IMP_XBM                 "SVIXBM"
 #define IMP_XPM                 "SVIXPM"
 #define IMP_SVG                 "SVISVG"
+#define IMP_SVGZ                "SVISVGZ"
 #define IMP_PDF                 "SVIPDF"
 #define IMP_TIFF                "SVTIFF"
 #define IMP_TGA                 "SVTGA"
