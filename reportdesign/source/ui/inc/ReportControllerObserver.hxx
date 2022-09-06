@@ -21,14 +21,15 @@
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <cppuhelper/implbase.hxx>
-
-#include <memory>
-
+#include <osl/mutex.hxx>
 #include <tools/link.hxx>
-
 #include "FormattedFieldBeautifier.hxx"
 #include "FixedTextColor.hxx"
+#include <memory>
+#include <vector>
+
 
 class VclSimpleEvent;
 
@@ -45,8 +46,9 @@ namespace rptui
                                         >
     {
 
-        const ::std::unique_ptr<OXReportControllerObserverImpl> m_pImpl;
-
+        ::std::vector< css::uno::Reference< css::container::XChild> > m_aSections;
+        ::osl::Mutex             m_aMutex;
+        oslInterlockedCount      m_nLocks;
         FormattedFieldBeautifier m_aFormattedFieldBeautifier;
         FixedTextColor           m_aFixedTextColor;
 

@@ -23,7 +23,6 @@
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -40,27 +39,10 @@ namespace rptui
 typedef std::map<OUString, bool> AllProperties;
 typedef std::map<uno::Reference< beans::XPropertySet >, AllProperties> PropertySetInfoCache;
 
-class OXReportControllerObserverImpl
-{
-public:
-    ::std::vector< uno::Reference< container::XChild> > m_aSections;
-    ::osl::Mutex                                        m_aMutex;
-    oslInterlockedCount                                 m_nLocks;
-
-    explicit OXReportControllerObserverImpl();
-    OXReportControllerObserverImpl(const OXReportControllerObserverImpl&) = delete;
-    OXReportControllerObserverImpl& operator=(const OXReportControllerObserverImpl&) = delete;
-};
-
-
-    OXReportControllerObserverImpl::OXReportControllerObserverImpl()
-            :m_nLocks(0)
-    {
-    }
 
 
     OXReportControllerObserver::OXReportControllerObserver(const OReportController& _rController)
-            :m_pImpl(new OXReportControllerObserverImpl )
+            :m_nLocks(0)
             ,m_aFormattedFieldBeautifier(_rController)
             ,m_aFixedTextColor(_rController)
     {
@@ -91,7 +73,7 @@ public:
 
             // send all Section Objects a 'tingle'
             // maybe they need a change in format, color, etc
-            for (const uno::Reference<container::XChild>& xChild : m_pImpl->m_aSections)
+            for (const uno::Reference<container::XChild>& xChild : m_aSections)
             {
                 if (xChild.is())
                 {
@@ -132,15 +114,15 @@ public:
     void OXReportControllerObserver::Clear()
     {
         OEnvLock aLock(*this);
-        m_pImpl->m_aSections.clear();
+        m_aSections.clear();
     }
 
     // XPropertyChangeListener
     void SAL_CALL OXReportControllerObserver::propertyChange(const beans::PropertyChangeEvent& _rEvent)
     {
-        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
 
-        if ( m_pImpl->m_nLocks != 0 )
+        if ( m_nLocks != 0 )
             return;
 
         m_aFormattedFieldBeautifier.notifyPropertyChange(_rEvent);
@@ -151,14 +133,14 @@ public:
 void OXReportControllerObserver::Lock()
 {
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
-    osl_atomic_increment( &m_pImpl->m_nLocks );
+    osl_atomic_increment( &m_nLocks );
 }
 
 void OXReportControllerObserver::UnLock()
 {
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
 
-    osl_atomic_decrement( &m_pImpl->m_nLocks );
+    osl_atomic_decrement( &m_nLocks );
 }
 
 void OXReportControllerObserver::AddSection(const uno::Reference< report::XSection > & _xSection)
@@ -167,7 +149,7 @@ void OXReportControllerObserver::AddSection(const uno::Reference< report::XSecti
     try
     {
         uno::Reference<container::XChild> xChild = _xSection;
-        m_pImpl->m_aSections.push_back(xChild);
+        m_aSections.push_back(xChild);
         uno::Reference< uno::XInterface >  xInt(_xSection);
         AddElement(xInt);
     }
@@ -184,8 +166,8 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     try
     {
         uno::Reference<container::XChild> xChild(_xSection);
-        m_pImpl->m_aSections.erase(::std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
-            xChild), m_pImpl->m_aSections.end());
+        m_aSections.erase(::std::remove(m_aSections.begin(), m_aSections.end(),
+            xChild), m_aSections.end());
         uno::Reference< uno::XInterface >  xInt(_xSection);
         RemoveElement(xInt);
     }
@@ -298,7 +280,7 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
 void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     // new listener object
     uno::Reference< uno::XInterface >  xIface( evt.Element, uno::UNO_QUERY );
@@ -312,7 +294,7 @@ void SAL_CALL OXReportControllerObserver::elementInserted(const container::Conta
 void SAL_CALL OXReportControllerObserver::elementReplaced(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference< uno::XInterface >  xIface(evt.ReplacedElement,uno::UNO_QUERY);
     OSL_ENSURE(xIface.is(), "OXReportControllerObserver::elementReplaced: invalid container notification!");
@@ -326,7 +308,7 @@ void SAL_CALL OXReportControllerObserver::elementReplaced(const container::Conta
 void SAL_CALL OXReportControllerObserver::elementRemoved(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference< uno::XInterface >  xIface( evt.Element, uno::UNO_QUERY );
     if ( xIface.is() )
