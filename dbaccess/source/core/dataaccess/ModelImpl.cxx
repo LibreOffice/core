@@ -354,7 +354,7 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 // ODatabaseModelImpl
 
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
-            :m_aContainer(4)
+            :m_aContainer()
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_rDBContext( _rDBContext )
@@ -384,7 +384,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
                     const Reference< XComponentContext >& _rxContext,
                     ODatabaseContext& _rDBContext
                     )
-            :m_aContainer(4)
+            :m_aContainer()
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_rDBContext( _rDBContext )
@@ -468,10 +468,10 @@ namespace
         const char* pAsciiName( nullptr );
         switch ( _eType )
         {
-        case ODatabaseModelImpl::E_FORM:   pAsciiName = "forms"; break;
-        case ODatabaseModelImpl::E_REPORT: pAsciiName = "reports"; break;
-        case ODatabaseModelImpl::E_QUERY:  pAsciiName = "queries"; break;
-        case ODatabaseModelImpl::E_TABLE:  pAsciiName = "tables"; break;
+        case ODatabaseModelImpl::ObjectType::Form:   pAsciiName = "forms"; break;
+        case ODatabaseModelImpl::ObjectType::Report: pAsciiName = "reports"; break;
+        case ODatabaseModelImpl::ObjectType::Query:  pAsciiName = "queries"; break;
+        case ODatabaseModelImpl::ObjectType::Table:  pAsciiName = "tables"; break;
         default:
             throw RuntimeException();
         }
@@ -561,7 +561,8 @@ bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContai
 void ODatabaseModelImpl::reset()
 {
     m_bReadOnly = false;
-    std::vector<TContentPtr>(4).swap(m_aContainer);
+    for (auto & i : m_aContainer)
+        i.reset();
 
     if ( m_pStorageAccess.is() )
     {
@@ -650,7 +651,8 @@ void ODatabaseModelImpl::dispose()
         if ( elem )
             elem->m_pDataSource = nullptr;
     }
-    m_aContainer.clear();
+    for (auto & i : m_aContainer)
+        i.reset();
 
     clearConnections();
 
@@ -1103,7 +1105,6 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
 
 TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
 {
-    OSL_PRECOND( _eType >= E_FORM && _eType <= E_TABLE, "ODatabaseModelImpl::getObjectContainer: illegal index!" );
     TContentPtr& rContentPtr = m_aContainer[ _eType ];
 
     if ( !rContentPtr )
@@ -1324,8 +1325,8 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
         {
             m_aEmbeddedMacros = eDocumentWideMacros;
         }
-        else if (   lcl_hasObjectsWithMacros_nothrow( *this, E_FORM )
-                ||  lcl_hasObjectsWithMacros_nothrow( *this, E_REPORT )
+        else if (   lcl_hasObjectsWithMacros_nothrow( *this, ObjectType::Form )
+                ||  lcl_hasObjectsWithMacros_nothrow( *this, ObjectType::Report )
                 )
         {
             m_aEmbeddedMacros = eSubDocumentMacros;

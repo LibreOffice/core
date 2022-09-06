@@ -1284,7 +1284,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( )
         }
         if ( !xContainer.is() )
         {
-            TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
+            TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::ObjectType::Query ) );
             xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, false );
         }
         m_pImpl->m_xCommandDefinitions = xContainer;
@@ -1300,7 +1300,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables()
     Reference< XNameAccess > xContainer = m_pImpl->m_xTableDefinitions;
     if ( !xContainer.is() )
     {
-        TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_TABLE ) );
+        TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::ObjectType::Table ) );
         xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, true );
         m_pImpl->m_xTableDefinitions = xContainer;
     }

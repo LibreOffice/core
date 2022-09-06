@@ -508,7 +508,7 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
         OUString sPersistentPath;
         if ( !m_pImpl->m_aProps.sPersistentName.isEmpty() )
         {
-            sPersistentPath = ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT )
+            sPersistentPath = ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::ObjectType::Form : ODatabaseModelImpl::ObjectType::Report )
                 + "/" + m_pImpl->m_aProps.sPersistentName;
         }
         o_rValue <<= sPersistentPath;
@@ -1927,7 +1927,7 @@ void SAL_CALL ODocumentDefinition::rename( const OUString& _rNewName )
 Reference< XStorage> ODocumentDefinition::getContainerStorage() const
 {
     return  m_pImpl->m_pDataSource
-        ?   m_pImpl->m_pDataSource->getStorage( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT )
+        ?   m_pImpl->m_pDataSource->getStorage( m_bForm ? ODatabaseModelImpl::ObjectType::Form : ODatabaseModelImpl::ObjectType::Report )
         :   Reference< XStorage>();
 }
 

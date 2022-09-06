@@ -1413,10 +1413,10 @@ void ODatabaseDocument::clearObjectContainer( WeakReference< XNameAccess >& _rxC
 
 Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType )
 {
-    if ( ( _eType != ODatabaseModelImpl::E_FORM ) && ( _eType != ODatabaseModelImpl::E_REPORT ) )
+    if ( ( _eType != ODatabaseModelImpl::ObjectType::Form ) && ( _eType != ODatabaseModelImpl::ObjectType::Report ) )
         throw IllegalArgumentException();
 
-    bool bFormsContainer = _eType == ODatabaseModelImpl::E_FORM;
+    bool bFormsContainer = _eType == ODatabaseModelImpl::ObjectType::Form;
 
     WeakReference< XNameAccess >& rContainerRef( bFormsContainer ? m_xForms : m_xReports );
     Reference< XNameAccess > xContainer = rContainerRef;
@@ -1549,13 +1549,13 @@ void SAL_CALL ODatabaseDocument::removeCloseListener( const Reference< css::util
 Reference< XNameAccess > SAL_CALL ODatabaseDocument::getFormDocuments(  )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
-    return impl_getDocumentContainer_throw( ODatabaseModelImpl::E_FORM );
+    return impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType::Form );
 }
 
 Reference< XNameAccess > SAL_CALL ODatabaseDocument::getReportDocuments(  )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
-    return impl_getDocumentContainer_throw( ODatabaseModelImpl::E_REPORT );
+    return impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType::Report );
 }
 
 void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xComponent, const char* pStreamName,
