@@ -44,6 +44,7 @@ import com.sun.star.uno.XInterface;
 */
 public class _XAutoFormattable extends MultiMethodTest {
     public XAutoFormattable oObj = null;
+    public Random rnd = new Random();
 
     /**
     * First 'Default' autoformat is set and a background of a cell
@@ -82,8 +83,6 @@ public class _XAutoFormattable extends MultiMethodTest {
             String[] names = formats.getElementNames();
 
             // getting one random not default style name
-            Random rnd = new Random();
-
             if (names.length > 1) {
                 while (name.equals("Default")) {
                     name = names[rnd.nextInt(names.length)];

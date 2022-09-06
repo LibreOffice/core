@@ -53,6 +53,8 @@ import com.sun.star.uno.UnoRuntime;
 * @see com.sun.star.beans.XFastPropertySet
 */
 public class _XFastPropertySet extends MultiMethodTest {
+    public Random rnd = new Random();
+
     private static final class Prop {
         public final int handle;
         public final String name;
@@ -184,7 +186,6 @@ public class _XFastPropertySet extends MultiMethodTest {
                 props.add(new Prop(handle, name));
         } // endfor
 
-        Random rnd = new Random();
         int nr = rnd.nextInt(props.size());
         prop = props.get(nr);
     }
