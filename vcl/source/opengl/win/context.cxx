@@ -144,12 +144,9 @@ void WinOpenGLContext::initWindow()
         m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
     }
 
-    if (m_pChildWindow)
-    {
-        InitChildWindow(m_pChildWindow.get());
-        const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
-        m_aGLWin.hWnd = sysData->hWnd;
-    }
+    InitChildWindow(m_pChildWindow.get());
+    const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
+    m_aGLWin.hWnd = sysData->hWnd;
 
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
 }
