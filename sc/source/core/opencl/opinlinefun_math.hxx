@@ -11,16 +11,17 @@
 
 #include <string>
 
-std::string Math_Intg_Str=
-"\ndouble Intg(double n)\n\
-{\n\
-    if(trunc(n)==n )\n\
-        return n;\n\
-    else if(n<0)\n\
-        return trunc(n)-1;\n\
-    else\n\
-        return trunc(n)+1;\n\
-}\n";
+std::string Math_IntgDecl="double Intg(double n);\n";
+std::string Math_Intg=
+"double Intg(double n)\n"
+"{\n"
+"    if(trunc(n)==n )\n"
+"        return n;\n"
+"    else if(n<0)\n"
+"        return trunc(n)-1;\n"
+"    else\n"
+"        return trunc(n)+1;\n"
+"}\n";
 
 std::string bikDecl = "double bik(double n,double k);\n";
 std::string bik =

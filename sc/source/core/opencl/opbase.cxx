@@ -213,6 +213,15 @@ void SlidingFunctionBase::GenerateArg( int num, SubArguments& vSubArguments, out
     GenerateArg( buf, num, vSubArguments, ss );
 }
 
+void SlidingFunctionBase::GenerateArgWithDefault( const char* name, int num, double def,
+    SubArguments& vSubArguments, outputstream& ss )
+{
+    if( int(vSubArguments.size()) > num )
+        GenerateArg( name, num, vSubArguments, ss );
+    else
+        ss << "    double " << name << " = " << def << ";\n";
+}
+
 void SlidingFunctionBase::GenerateFunctionDeclaration( const std::string& sSymName,
     SubArguments& vSubArguments, outputstream& ss )
 {

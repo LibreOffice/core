@@ -229,6 +229,10 @@ protected:
     static void GenerateArg( const char* name, int num, SubArguments& vSubArguments, outputstream& ss );
     // overload, variable will be named "arg<num>"
     static void GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss );
+    // generate code for "double <name> = <value>;" from vSubArguments, if it exists,
+    // otherwise set to <def>
+    static void GenerateArgWithDefault( const char* name, int num, double def, SubArguments& vSubArguments,
+        outputstream& ss );
     void GenerateFunctionDeclaration( const std::string& sSymName,
         SubArguments& vSubArguments, outputstream& ss );
 };
