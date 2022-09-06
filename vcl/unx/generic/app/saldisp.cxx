@@ -964,6 +964,9 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         case KEY_QUOTERIGHT:
             aCustomKeyName = "'";
             break;
+        case KEY_RIGHTCURLYBRACKET:
+            aCustomKeyName = "}";
+            break;
         default:
             nKeySym = 0;
             break;
@@ -1308,6 +1311,10 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             break;
         case XK_quoteright:
             nKey = KEY_QUOTERIGHT;
+            *pcPrintable = '\'';
+            break;
+        case XK_braceright:
+            nKey = KEY_RIGHTCURLYBRACKET;
             *pcPrintable = '\'';
             break;
         // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000

@@ -214,6 +214,7 @@ sal_uInt16 GtkSalFrame::GetKeyCode(guint keyval)
             case GDK_KEY_bracketright: nCode = KEY_BRACKETRIGHT; break;
             case GDK_KEY_semicolon:    nCode = KEY_SEMICOLON;    break;
             case GDK_KEY_quoteright:   nCode = KEY_QUOTERIGHT;   break;
+            case GDK_KEY_braceright:   nCode = KEY_RIGHTCURLYBRACKET;   break;
             // some special cases, also see saldisp.cxx
             // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
             // These can be found in ap_keysym.h
@@ -2655,6 +2656,7 @@ void GtkSalFrame::KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
             case KEY_BRACKETRIGHT:  nKeyCode = GDK_KEY_bracketright;    break;
             case KEY_SEMICOLON:     nKeyCode = GDK_KEY_semicolon;       break;
             case KEY_QUOTERIGHT:    nKeyCode = GDK_KEY_quoteright;      break;
+            case KEY_RIGHTCURLYBRACKET: nKeyCode = GDK_KEY_braceright;      break;
 
             // Special cases
             case KEY_COPY:          nKeyCode = GDK_KEY_Copy;            break;

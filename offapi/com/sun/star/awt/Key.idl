@@ -24,6 +24,8 @@
 
 /** These values are used to specify distinct physical keys, plus
     some special values used by the macOS implementation.
+
+    Noting that these numbers are simply allocated here, and not taken from any specification.
  */
 published constants Key
 {
@@ -363,6 +365,9 @@ published constants Key
 
     /** @since LibreOffice 4.3 **/
     const short QUOTERIGHT = 1318;
+
+    /** @since LibreOffice 7.5 **/
+    const short RIGHTCURLYBRACKET = 1319;
 
 
     /** The following values don't correspond to physical keys on any
