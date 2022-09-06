@@ -16,7 +16,7 @@ using namespace formula;
 
 namespace sc::opencl {
 // Definitions of inline functions
-#include "opinlinefun_finacial.cxx"
+#include "op_financial_helpers.hxx"
 
 void RRI::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)

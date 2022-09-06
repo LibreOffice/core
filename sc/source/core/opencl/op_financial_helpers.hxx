@@ -7,19 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCL_OPINLINFUN_finacial
-#define SC_OPENCL_OPINLINFUN_finacial
+#pragma once
 
-std::string nCorrValDecl ="double constant nCorrVal[]"
+const char nCorrValDecl[] ="double constant nCorrVal[]"
 "= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
 "9e-8,9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15};\n";
 
-std::string SCdEpsilonDecl =
+const char SCdEpsilonDecl[] =
 "constant double SCdEpsilon = 1.0E-7;\n";
 
-std::string RoundDecl = "double  Round(double fValue);\n";
+const char RoundDecl[] = "double  Round(double fValue);\n";
 
-std::string Round =
+const char Round[] =
 "double  Round(double fValue)\n"
 "{\n"
 "    if ( fValue == 0.0  )\n"
@@ -40,10 +39,10 @@ std::string Round =
 "    return fValue;\n"
 "}\n";
 
-std::string GetPMT_newDecl =
+const char GetPMT_newDecl[] =
 "double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
 "int nPayType );\n";
-std::string GetPMT_new=
+const char GetPMT_new[] =
 "double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
 "int nPayType)\n"
 "{\n"
@@ -57,11 +56,11 @@ std::string GetPMT_new=
 "1.0 - 1.0 / fTerm);\n"
 "    return -fPmt;\n"
 "}\n";
-std::string GetFVDecl =
+const char GetFVDecl[] =
 "double GetFV( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType );\n";
 
-std::string GetFV =
+const char GetFV[] =
 "double GetFV( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType )\n"
 "{\n"
@@ -80,11 +79,11 @@ std::string GetFV =
 "    return -fFv;\n"
 "}\n";
 
-std::string GetFV_newDecl =
+const char GetFV_newDecl[] =
 "double GetFV_new( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType );\n";
 
-std::string GetFV_new =
+const char GetFV_new[] =
 "double GetFV_new( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType )\n"
 "{\n"
@@ -98,20 +97,20 @@ std::string GetFV_new =
 "    return -fFv;\n"
 "}\n";
 
-std::string IsLeapYearDecl =
+const char IsLeapYearDecl[] =
 "bool IsLeapYear( int n );\n";
 
-std::string IsLeapYear =
+const char IsLeapYear[] =
 "bool IsLeapYear( int n )\n"
 "{\n"
 "    return ( (( ( n % 4 ) == 0 ) && ( ( n % 100 ) != 0)) || ( ( n % 400 ) == "
 "0 ) );\n"
 "}\n";
 
-std::string DaysInMonthDecl=
+const char DaysInMonthDecl[] =
 "int DaysInMonth( int nMonth, int nYear );\n";
 
-std::string DaysInMonth =
+const char DaysInMonth[] =
 "int DaysInMonth( int nMonth, int nYear )\n"
 "{\n"
 "    int aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,\n"
@@ -127,10 +126,10 @@ std::string DaysInMonth =
 "            return aDaysInMonth[nMonth-1];\n"
 "    }\n"
 "}\n";
-std::string DaysInMonth_newDecl=
+const char DaysInMonth_newDecl[] =
 "int DaysInMonth( int nMonth, int nYear );\n";
 
-std::string DaysInMonth_new =
+const char DaysInMonth_new[] =
 "int DaysInMonth( int nMonth, int nYear )\n"
 "{\n"
 "    int tmp = 0;\n"
@@ -161,10 +160,10 @@ std::string DaysInMonth_new =
 "    return tmp;\n"
 "}\n";
 
-std::string DaysToDateDecl =
+const char DaysToDateDecl[] =
 "void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear );\n";
 
-std::string DaysToDate =
+const char DaysToDate[] =
 "void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear )\n"
 "{\n"
 "\n"
@@ -208,10 +207,10 @@ std::string DaysToDate =
 "     }\n"
 "}\n";
 
-std::string DateToDaysDecl=
+const char DateToDaysDecl[] =
 "int  DateToDays( int nDay, int nMonth, int nYear );\n";
 
-std::string DateToDays=
+const char DateToDays[] =
 "int  DateToDays( int nDay, int nMonth, int nYear )\n"
 "{\n"
 "    int nDays = ((int)nYear-1) * 365;\n"
@@ -223,10 +222,10 @@ std::string DateToDays=
 "    return nDays;\n"
 "}\n";
 
-std::string DateToDays_newDecl=
+const char DateToDays_newDecl[] =
 "int  DateToDays_new( int nDay, int nMonth, int nYear );\n";
 
-std::string DateToDays_new=
+const char DateToDays_new[] =
 "int  DateToDays_new( int nDay, int nMonth, int nYear )\n"
 "{\n"
 "    int nDays = (nYear-1) * 365;\n"
@@ -239,29 +238,29 @@ std::string DateToDays_new=
 "    return nDays;\n"
 "}\n";
 
-std::string GetNullDateDecl=
+const char GetNullDateDecl[] =
 "int GetNullDate();\n";
 
-std::string GetNullDate=
+const char GetNullDate[] =
 "int GetNullDate()\n"
 "{\n"
 "    return DateToDays(30,12,1899 );\n"
 "}\n";
-std::string GetNullDate_newDecl=
+const char GetNullDate_newDecl[] =
 "int GetNullDate_new();\n";
 
-std::string GetNullDate_new=
+const char GetNullDate_new[] =
 "int GetNullDate_new()\n"
 "{\n"
 "    return DateToDays_new(30,12,1899 );\n"
 "}\n";
 
-std::string ScaDateDecl=
+const char ScaDateDecl[] =
 "void ScaDate( int nNullDate, int nDate, int nBase,int *nOrigDay, "
 "int *nMonth,int *nYear,int *bLastDayMode,int *bLastDay,"
 "int *b30Days,int *bUSMode,int *nDay);\n";
 
-std::string ScaDate=
+const char ScaDate[] =
 "void ScaDate( int nNullDate, int nDate, int nBase,int *nOrigDay, "
 "int *nMonth,int *nYear,int *bLastDayMode,int *bLastDay,"
 "int *b30Days,int *bUSMode,int *nDay)\n"
@@ -284,10 +283,10 @@ std::string ScaDate=
 "    }\n"
 "}\n";
 
-std::string lcl_GetCouppcdDecl=
+const char lcl_GetCouppcdDecl[] =
 "int lcl_GetCouppcd(int nNullDate,int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string lcl_GetCouppcd=
+const char lcl_GetCouppcd[] =
 "int lcl_GetCouppcd(int nNullDate,int nSettle, int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int aDate = nMat;\n"
@@ -319,10 +318,10 @@ std::string lcl_GetCouppcd=
 "    return DateToDays( nRealDay, rMonth, rYear ) - nNullDate;\n"
 "}\n";
 
-std::string lcl_GetCoupncdDecl=
+const char lcl_GetCoupncdDecl[] =
 "int lcl_GetCoupncd(int nNullDate,int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string lcl_GetCoupncd=
+const char lcl_GetCoupncd[] =
 "int lcl_GetCoupncd(int nNullDate,int nSettle, int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int aDate = nMat;\n"
@@ -353,11 +352,11 @@ std::string lcl_GetCoupncd=
 "    return DateToDays( nRealDay, rMonth, rYear ) - nNullDate;\n"
 "}\n";
 
-std::string addMonthsDecl=
+const char addMonthsDecl[] =
 "void addMonths(int b30Days,int bLastDay,int *nDay,int nOrigDay,"
 "int *nMonth,int nMonthCount,int *year);\n";
 
-std::string addMonths=
+const char addMonths[] =
 "void addMonths(int b30Days,int bLastDay,int *nDay,int nOrigDay,"
 "int *nMonth,int nMonthCount,int *year)\n"
 "{\n"
@@ -388,10 +387,10 @@ std::string addMonths=
 "    }\n"
 "}\n";
 
-std::string getDaysInMonthRangeDecl=
+const char getDaysInMonthRangeDecl[] =
 "int getDaysInMonthRange( int nFrom, int nTo,int b30Days,int year);\n";
 
-std::string getDaysInMonthRange=
+const char getDaysInMonthRange[] =
 "int getDaysInMonthRange( int nFrom, int nTo,int b30Days,int year)\n"
 "{\n"
 "    if( nFrom > nTo )\n"
@@ -407,10 +406,10 @@ std::string getDaysInMonthRange=
 "    return nRet;\n"
 "}\n";
 
-std::string GetDaysInYearsDecl=
+const char GetDaysInYearsDecl[] =
 "int GetDaysInYears( int nYear1, int nYear2 );\n";
 
-std::string GetDaysInYears=
+const char GetDaysInYears[] =
 "int GetDaysInYears( int nYear1, int nYear2 )\n"
 "{\n"
 "    int  nLeaps = 0;\n"
@@ -427,10 +426,10 @@ std::string GetDaysInYears=
 "    return nSum;\n"
 "}\n";
 
-std::string GetDaysInYearDecl=
+const char GetDaysInYearDecl[] =
 "int GetDaysInYear( int nNullDate, int nDate, int nMode );\n";
 
-std::string GetDaysInYear=
+const char GetDaysInYear[] =
 "int GetDaysInYear( int nNullDate, int nDate, int nMode )\n"
 "{\n"
 "    switch( nMode )\n"
@@ -451,10 +450,10 @@ std::string GetDaysInYear=
 "    }\n"
 "}\n";
 
-std::string getDaysInYearRangeDecl =
+const char getDaysInYearRangeDecl[] =
 "int getDaysInYearRange( int nFrom, int nTo,int b30Days );\n";
 
-std::string getDaysInYearRange=
+const char getDaysInYearRange[] =
 "int getDaysInYearRange( int nFrom, int nTo,int b30Days )\n"
 "{\n"
 "    if( nFrom > nTo )\n"
@@ -463,13 +462,13 @@ std::string getDaysInYearRange=
 ";\n"
 "}\n";
 
-std::string getDiffDecl=
+const char getDiffDecl[] =
 "int getDiff(int rFrom,int rTo,int fDay,int fMonth,int fYear,int fbLastDayMode,"
 "int fbLastDay,int fb30Days,int fbUSMode,int fnDay,int tDay,int tMonth,"
 "int tYear,int tbLastDayMode,int tbLastDay,int tb30Days,"
 "int tbUSMode,int tnDay);\n";
 
-std::string getDiff=
+const char getDiff[] =
 "int getDiff(int rFrom,int rTo,int fDay,int fMonth,int fYear,int fbLastDayMode,"
 "int fbLastDay,int fb30Days,int fbUSMode,int fnDay,int tDay,int tMonth,"
 "int tYear,int tbLastDayMode,int tbLastDay,int tb30Days,"
@@ -527,10 +526,10 @@ std::string getDiff=
 "    return nDiff > 0 ? nDiff : 0;\n"
 "}\n";
 
-std::string lcl_GetcoupdaybsDecl=
+const char lcl_GetcoupdaybsDecl[] =
 "int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase);\n";
 
-std::string lcl_Getcoupdaybs=
+const char lcl_Getcoupdaybs[] =
 "int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int aDate = nMat;\n"
@@ -561,11 +560,11 @@ std::string lcl_Getcoupdaybs=
 "sbLastDay, sb30Days, sbUSMode, snDay);\n"
 "}\n";
 
-std::string lcl_Getcoupdaybs_newDecl=
+const char lcl_Getcoupdaybs_newDecl[] =
 "int lcl_Getcoupdaybs_new(int nNullDate,int nSettle,int nMat,int nFreq,"
 "int nBase);\n";
 
-std::string lcl_Getcoupdaybs_new=
+const char lcl_Getcoupdaybs_new[] =
 "int lcl_Getcoupdaybs_new(int nNullDate,int nSettle,int nMat,int nFreq,"
 "int nBase)\n"
 "{\n"
@@ -600,11 +599,11 @@ std::string lcl_Getcoupdaybs_new=
 "sb30Days,sbUSMode, snDay);\n"
 "}\n";
 
-std::string lcl_GetcoupdaysDecl=
+const char lcl_GetcoupdaysDecl[] =
 "int lcl_Getcoupdays(int nNullDate,int nSettle, "
 "int nMat,int nFreq,int nBase);\n";
 
-std::string lcl_Getcoupdays=
+const char lcl_Getcoupdays[] =
 "int lcl_Getcoupdays(int nNullDate,int nSettle, "
 "int nMat,int nFreq,int nBase)\n"
 "{\n"
@@ -640,11 +639,11 @@ std::string lcl_Getcoupdays=
 "abLastDay, ab30Days, abUSMode, anDay);\n"
 "}\n";
 
-std::string lcl_Getcoupdays_newDecl=
+const char lcl_Getcoupdays_newDecl[] =
 "int lcl_Getcoupdays_new(int nNullDate,int nSettle, "
 "int nMat,int nFreq,int nBase);\n";
 
-std::string lcl_Getcoupdays_new=
+const char lcl_Getcoupdays_new[] =
 "int lcl_Getcoupdays_new(int nNullDate,int nSettle, "
 "int nMat,int nFreq,int nBase)\n"
 "{\n"
@@ -684,10 +683,10 @@ std::string lcl_Getcoupdays_new=
 "abLastDay, ab30Days, abUSMode, anDay);\n"
 "}\n";
 
-std::string lcl_GetcoupnumDecl=
+const char lcl_GetcoupnumDecl[] =
 "int lcl_Getcoupnum(int nNullDate,int nSettle, int nMat,int nFreq);\n";
 
-std::string lcl_Getcoupnum=
+const char lcl_Getcoupnum[] =
 "int lcl_Getcoupnum(int nNullDate,int nSettle, int nMat,int nFreq)\n"
 "{\n"
 "    int aDate = nMat;int rDay=0,rMonth=0, rYear=0;int mDay=0,mMonth=0, mYear="
@@ -725,10 +724,10 @@ std::string lcl_Getcoupnum=
 "    n=n*nFreq/12;\n"
 "    return n;\n"
 "}\n";
-std::string lcl_Getcoupnum_newDecl=
+const char lcl_Getcoupnum_newDecl[] =
 "double lcl_Getcoupnum_new(int nNullDate,int nSettle,int nMat,int nFreq,int"
 " nBase);\n";
-std::string lcl_Getcoupnum_new=
+const char lcl_Getcoupnum_new[] =
 "double lcl_Getcoupnum_new(int nNullDate,int nSettle, int nMat,int nFreq,int"
 " nBase)\n"
 "{\n"
@@ -765,10 +764,10 @@ std::string lcl_Getcoupnum_new=
 "    return tmp;\n"
 "}\n";
 
-std::string setDayDecl=
+const char setDayDecl[] =
 "void setDay(int nOrigDay, int nMonth,int nYear,int bLastDay,int b30Days,"
 "int *nDay);\n";
-std::string setDay=
+const char setDay[] =
 "void setDay(int nOrigDay, int nMonth,int nYear,int bLastDay,int b30Days,"
 "int *nDay)\n"
 "{\n"
@@ -785,10 +784,10 @@ std::string setDay=
 "    }\n"
 "}\n";
 
-std::string coupdaysDecl=
+const char coupdaysDecl[] =
 "double coupdays(int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupdays=
+const char coupdays[] =
 "double coupdays(int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=GetNullDate();\n"
@@ -797,10 +796,10 @@ std::string coupdays=
 "    else\n"
 "        return (double)GetDaysInYear(0,0,nBase)/nFreq;\n"
 "}\n";
-std::string coupdays_newDecl=
+const char coupdays_newDecl[] =
 "double coupdays_new(int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupdays_new=
+const char coupdays_new[] =
 "double coupdays_new(int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=693594;\n"
@@ -810,30 +809,30 @@ std::string coupdays_new=
 "        return (double)GetDaysInYear(0,0,nBase)/(double)nFreq;\n"
 "}\n";
 
-std::string coupdaybsDecl=
+const char coupdaybsDecl[] =
 "double coupdaybs( int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupdaybs=
+const char coupdaybs[] =
 "double coupdaybs( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=GetNullDate();\n"
 "    return lcl_Getcoupdaybs(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "}\n";
 
-std::string coupdaybs_newDecl=
+const char coupdaybs_newDecl[] =
 "double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupdaybs_new=
+const char coupdaybs_new[] =
 "double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=693594;\n"
 "    return lcl_Getcoupdaybs_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "}\n";
 
-std::string coupdaysncDecl=
+const char coupdaysncDecl[] =
 "double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupdaysnc=
+const char coupdaysnc[] =
     "double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=GetNullDate();\n"
@@ -870,10 +869,10 @@ std::string coupdaysnc=
 "        return coupdays(nSettle,nMat,nFreq,nBase)- coupdaybs( nSettle,nMat,"
 "nFreq,nBase);\n"
 "}\n";
-std::string coupdaysnc_newDecl=
+const char coupdaysnc_newDecl[] =
 "double coupdaysnc_new( int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupdaysnc_new=
+const char coupdaysnc_new[] =
 "double coupdaysnc_new( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=693594;\n"
@@ -913,10 +912,10 @@ std::string coupdaysnc_new=
 "nMat,nFreq,nBase);\n"
 "}\n";
 
-std::string checklessthanDecl=
+const char checklessthanDecl[] =
 "int checklessthan(int aYear,int bYear,int aMonth,int bMonth,int anDay,int "
 "bnDay,int abLastDay,int bbLastDay,int anOrigDay,int bnOrigDay);\n";
-std::string checklessthan=
+const char checklessthan[] =
 "int checklessthan(int aYear,int bYear,int aMonth,int bMonth,int anDay,int "
 "bnDay,int abLastDay,int bbLastDay,int anOrigDay,int bnOrigDay)\n"
 "{\n"
@@ -931,30 +930,30 @@ std::string checklessthan=
 "    return anOrigDay < bnOrigDay;\n"
 "}\n";
 
-std::string coupnumDecl=
+const char coupnumDecl[] =
 "double coupnum( int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupnum=
+const char coupnum[] =
 "double coupnum( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=GetNullDate();\n"
 "    return lcl_Getcoupnum(nNullDate,nSettle,nMat,nFreq);\n"
 "}\n";
-std::string coupnum_newDecl=
+const char coupnum_newDecl[] =
 "double coupnum_new( int nSettle,int nMat,int nFreq,int nBase);\n";
 
-std::string coupnum_new=
+const char coupnum_new[] =
 "double coupnum_new( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=693594;\n"
 "    return lcl_Getcoupnum_new(nNullDate,nSettle,nMat,nFreq,nBase);\n"
 "}\n";
 
-std::string getPrice_Decl=
+const char getPrice_Decl[] =
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase );\n";
 
-std::string getPrice_=
+const char getPrice_[] =
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase )\n"
 "{\n"
@@ -972,11 +971,11 @@ std::string getPrice_=
 "        fRet += fT1 / pow( fT2, fK + fDSC_E );\n"
 "    return fRet;\n"
 "}\n";
-std::string getPrice_new_Decl=
+const char getPrice_new_Decl[] =
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase );\n";
 
-std::string getPrice_new=
+const char getPrice_new[] =
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase )\n"
 "{\n"
@@ -995,11 +994,11 @@ std::string getPrice_new=
 "    return fRet;\n"
 "}\n";
 
-std::string getYield_Decl=
+const char getYield_Decl[] =
 "double getYield_( int nNullDate, int nSettle, int nMat, double fCoup,"
 "double fPrice,double fRedemp, int nFreq, int nBase);\n";
 
-std::string getYield_=
+const char getYield_[] =
 "double getYield_( int nNullDate, int nSettle, int nMat, double fCoup,"
 "double fPrice,double fRedemp, int nFreq, int nBase )\n"
 "{\n"
@@ -1049,11 +1048,11 @@ std::string getYield_=
 "    return fYieldN;\n"
 "}\n";
 
-std::string GetYearFracDecl=
+const char GetYearFracDecl[] =
 "double GetYearFrac( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode );\n";
 
-std::string GetYearFrac=
+const char GetYearFrac[] =
 "double GetYearFrac( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode ) \n"
 "{\n"
@@ -1187,11 +1186,11 @@ std::string GetYearFrac=
   "  return (double)( nDayDiff ) / (nDaysInYear);\n"
 "}\n";
 
-std::string GetYieldmatDecl=
+const char GetYieldmatDecl[] =
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
         "double fRate, double fPrice, int nBase );\n";
 
-std::string GetYieldmat=
+const char GetYieldmat[] =
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
         "double fRate, double fPrice, int nBase )\n"
 "{\n"
@@ -1205,11 +1204,11 @@ std::string GetYieldmat=
 "    return y;\n"
 "}\n";
 
-std::string GetDiffDateDecl=
+const char GetDiffDateDecl[] =
 "int GetDiffDate( int nNullDate, int nStartDate, int nEndDate, int nMode,"
 "    int* pOptDaysIn1stYear );\n";
 
-std::string GetDiffDate=
+const char GetDiffDate[] =
 "int GetDiffDate( int nNullDate, int nStartDate, int nEndDate, int nMode,"
 "    int* pOptDaysIn1stYear )\n"
 "{\n"
@@ -1266,11 +1265,11 @@ std::string GetDiffDate=
 "    return bNeg? -nRet : nRet;\n"
 "}\n";
 
-std::string GetYearDiffDecl=
+const char GetYearDiffDecl[] =
 "double GetYearDiff( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode);\n";
 
-std::string GetYearDiff=
+const char GetYearDiff[] =
 "double GetYearDiff( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode )\n"
 "{\n"
@@ -1281,13 +1280,13 @@ std::string GetYearDiff=
 "     return (double)(nTotalDays)/(double)nDays1stYear;\n"
 "}\n";
 
-std::string GetDiffDate360_Decl=
+const char GetDiffDate360_Decl[] =
 "int GetDiffDate360_(\n"
 "                int nDay1, int nMonth1, int nYear1, bool bLeapYear1,\n"
 "                int nDay2, int nMonth2, int nYear2,\n"
 "                bool bUSAMethod );\n";
 
-std::string GetDiffDate360_=
+const char GetDiffDate360_[] =
 "int GetDiffDate360_(\n"
 "                int nDay1, int nMonth1, int nYear1, bool bLeapYear1,\n"
 "                int nDay2, int nMonth2, int nYear2,\n"
@@ -1318,11 +1317,11 @@ std::string GetDiffDate360_=
 "nYear1 * 360;\n"
 "}\n";
 
-std::string GetDiffDate360Decl=
+const char GetDiffDate360Decl[] =
 "int GetDiffDate360( int nNullDate, int nDate1, int nDate2,"
 "bool bUSAMethod);\n";
 
-std::string GetDiffDate360=
+const char GetDiffDate360[] =
 "int GetDiffDate360( int nNullDate, int nDate1, int nDate2,"
 "bool bUSAMethod )\n"
 "{\n"
@@ -1335,12 +1334,12 @@ std::string GetDiffDate360=
 "nDay2, nMonth2, nYear2, bUSAMethod );\n"
 "}\n";
 
-std::string GetDurationDecl=
+const char GetDurationDecl[] =
 "double GetDuration( \n"
 "                int nNullDate, int nSettle, int nMat, double fCoup,\n"
 "                double fYield, int nFreq, int nBase );\n";
 
-std::string GetDuration=
+const char GetDuration[] =
 "double GetDuration( \n"
 "                int nNullDate, int nSettle, int nMat, double fCoup,\n"
 "                double fYield, int nFreq, int nBase )\n"
@@ -1366,12 +1365,12 @@ std::string GetDuration=
 "    fDur /= nFreq;\n"
 "    return fDur;\n""}\n";
 
-std::string GetDuration_newDecl=
+const char GetDuration_newDecl[] =
 "double GetDuration_new( \n"
 "                int nNullDate, int nSettle, int nMat, double fCoup,\n"
 "                double fYield, int nFreq, int nBase );\n";
 
-std::string GetDuration_new=
+const char GetDuration_new[] =
 "double GetDuration_new( \n"
 "                int nNullDate, int nSettle, int nMat, double fCoup,\n"
 "                double fYield, int nFreq, int nBase )\n"
@@ -1404,11 +1403,11 @@ std::string GetDuration_new=
 "        return fDur;\n"
 "    }\n";
 
-std::string ScGetDDBDecl=
+const char ScGetDDBDecl[] =
 "double ScGetDDB(double fCost, double fSalvage, double fLife, double fPeriod,"
 "double fFactor);\n";
 
-std::string ScGetDDB=
+const char ScGetDDB[] =
 "double ScGetDDB(double fCost, double fSalvage, double fLife, double fPeriod,"
 "double fFactor)\n"
 "{\n"
@@ -1435,20 +1434,20 @@ std::string ScGetDDB=
 "    return fDdb;\n"
 "}\n";
 
-std::string DblMinDecl=
+const char DblMinDecl[] =
 "inline double DblMin( double a, double b );\n";
 
-std::string DblMin=
+const char DblMin[] =
 "inline double DblMin( double a, double b )\n"
 "{\n"
 "    return (a < b) ? a : b;\n"
 "}\n";
 
-std::string ScInterVDBDecl=
+const char ScInterVDBDecl[] =
 "double ScInterVDB(double fCost, double fSalvage, double fLife, double fLife1,"
 "double fPeriod, double fFactor);\n";
 
-std::string ScInterVDB=
+const char ScInterVDB[] =
 "double ScInterVDB(double fCost, double fSalvage, double fLife, double fLife1,"
 "double fPeriod, double fFactor)\n"
 "{\n"
@@ -1492,11 +1491,11 @@ std::string ScInterVDB=
 "    return fVdb;\n"
 "}\n";
 
-std::string VDBImplementDecl=
+const char VDBImplementDecl[] =
 "double VDBImplement(double fCost, double fSalvage, double fLife, double fStart"
 ", double fEnd, double fFactor, bool bNoSwitch);\n";
 
-std::string VDBImplement=
+const char VDBImplement[] =
 "double VDBImplement(double fCost, double fSalvage, double fLife, double fStart"
 ", double fEnd, double fFactor, bool bNoSwitch)\n"
 "{\n"
@@ -1541,11 +1540,11 @@ std::string VDBImplement=
 "    return result;\n"
 "}\n";
 
-std::string GetOddlpriceDecl=
+const char GetOddlpriceDecl[] =
 "double GetOddlprice( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
 "    double fRate, double fYield, double fRedemp, int nFreq, int nBase );\n";
 
-std::string GetOddlprice=
+const char GetOddlprice[] =
 "double GetOddlprice( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
 "    double fRate, double fYield, double fRedemp, int nFreq, int nBase )\n"
 "{\n"
@@ -1562,11 +1561,11 @@ std::string GetOddlprice=
 "    return p;\n"
 "}\n";
 
-std::string GetOddlyieldDecl=
+const char GetOddlyieldDecl[] =
 "double GetOddlyield( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
 "    double fRate, double fPrice, double fRedemp, int nFreq, int nBase );\n";
 
-std::string GetOddlyield=
+const char GetOddlyield[] =
 "double GetOddlyield( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
 "    double fRate, double fPrice, double fRedemp, int nFreq, int nBase ) \n"
 "{\n"
@@ -1581,11 +1580,11 @@ std::string GetOddlyield=
 "    return y;\n"
 "}\n";
 
-std::string GetYearFrac_newDecl=
+const char GetYearFrac_newDecl[] =
 "double GetYearFrac_new( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode );\n";
 
-std::string GetYearFrac_new=
+const char GetYearFrac_new[] =
 "double GetYearFrac_new( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode ) \n"
 "{\n"
@@ -1710,10 +1709,10 @@ std::string GetYearFrac_new=
 "  return (double)( nDayDiff ) / (nDaysInYear);\n"
 "}\n";
 
-std::string DaysToDate_newDecl =
+const char DaysToDate_newDecl[] =
 "void DaysToDate_new( int nDays, int *rDay, int* rMonth, int* rYear );\n";
 
-std::string DaysToDate_new =
+const char DaysToDate_new[] =
 "void DaysToDate_new( int nDays, int *rDay, int* rMonth, int* rYear )\n"
 "{\n"
 "    int   nTempDays;\n"
@@ -1755,10 +1754,10 @@ std::string DaysToDate_new =
 "    }\n"
 "}\n";
 
-std::string DaysToDate_LocalBarrierDecl =
+const char DaysToDate_LocalBarrierDecl[] =
 "void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear );\n";
 
-std::string DaysToDate_LocalBarrier =
+const char DaysToDate_LocalBarrier[] =
 "void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear )\n"
 "{\n"
 "    int   nTempDays;\n"
@@ -1801,11 +1800,11 @@ std::string DaysToDate_LocalBarrier =
 "    }\n"
 "}\n";
 
-std::string GetYearDiff_newDecl=
+const char GetYearDiff_newDecl[] =
 "double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode);\n";
 
-std::string GetYearDiff_new=
+const char GetYearDiff_new[] =
 "double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode )\n"
 "{\n"
@@ -1816,11 +1815,11 @@ std::string GetYearDiff_new=
 "    return (double)(nTotalDays) / (double)nDays1stYear;\n"
 "}\n";
 
-std::string GetDiffDate_newDecl=
+const char GetDiffDate_newDecl[] =
 "int GetDiffDate_new( int nNullDate, int nStartDate, int nEndDate, int nMode,"
 "    int* pOptDaysIn1stYear );\n";
 
-std::string GetDiffDate_new=
+const char GetDiffDate_new[] =
 "int GetDiffDate_new( int nNullDate, int nStartDate, int nEndDate, int nMode,"
 "    int* pOptDaysIn1stYear )\n"
 "{\n"
@@ -1876,7 +1875,5 @@ std::string GetDiffDate_new=
 "    }\n"
 "    return bNeg? -nRet : nRet;\n"
 "}\n";
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

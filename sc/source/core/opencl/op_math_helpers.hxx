@@ -9,10 +9,8 @@
 
 #pragma once
 
-#include <string>
-
-std::string Math_IntgDecl="double Intg(double n);\n";
-std::string Math_Intg=
+const char Math_IntgDecl[] ="double Intg(double n);\n";
+const char Math_Intg[] =
 "double Intg(double n)\n"
 "{\n"
 "    if(trunc(n)==n )\n"
@@ -23,8 +21,8 @@ std::string Math_Intg=
 "        return trunc(n)+1;\n"
 "}\n";
 
-std::string bikDecl = "double bik(double n,double k);\n";
-std::string bik =
+const char bikDecl[] = "double bik(double n,double k);\n";
+const char bik[] =
 "double bik(double n,double k)\n"
 "{\n"
 "    double nVal1 = n;\n"
@@ -41,8 +39,8 @@ std::string bik =
 "    return (nVal1 / nVal2);\n"
 "}\n";
 
-std::string local_cothDecl = "double local_coth(double n);\n";
-std::string local_coth =
+const char local_cothDecl[] = "double local_coth(double n);\n";
+const char local_coth[] =
 "double local_coth(double n)\n"
 "{\n"
 "    double a = exp(n);\n"
@@ -51,15 +49,15 @@ std::string local_coth =
 "    return nVal;\n"
 "}\n";
 
-std::string local_coshDecl = "double local_cosh(double n);\n";
-std::string local_cosh =
+const char local_coshDecl[] = "double local_cosh(double n);\n";
+const char local_cosh[] =
 "double local_cosh(double n)\n"
 "{\n"
 "    double nVal = (exp(n) + exp(-n)) / 2;\n"
 "    return nVal;\n"
 "}\n";
-std::string atan2Decl = "double arctan2(double y, double x);\n";
-std::string atan2Content =
+const char atan2Decl[] = "double arctan2(double y, double x);\n";
+const char atan2Content[] =
 "double arctan2(double y, double x)\n"
 "{\n"
 "    if(y==0.0)\n"

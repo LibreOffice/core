@@ -10,7 +10,7 @@
 #include "op_math.hxx"
 
 #include <formula/vectortoken.hxx>
-#include "opinlinefun_math.hxx"
+#include "op_math_helpers.hxx"
 #include <sstream>
 
 using namespace formula;

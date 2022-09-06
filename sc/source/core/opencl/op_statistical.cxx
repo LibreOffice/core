@@ -11,7 +11,7 @@
 
 #include <formula/vectortoken.hxx>
 #include <sstream>
-#include "opinlinefun_statistical.cxx"
+#include "op_statistical_helpers.hxx"
 
 using namespace formula;
 

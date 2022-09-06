@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_UTILS_HXX
-#define INCLUDED_SC_SOURCE_CORE_OPENCL_UTILS_HXX
+#pragma once
 
 #include <sstream>
 
@@ -45,7 +44,5 @@ std::string preciseFloat(long double f) = delete; // we do not use these
 
 #define stringstream do_not_use_std_stringstream
 } // namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,25 +7,25 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCL_OPINLINFUN_statistical
-#define SC_OPENCL_OPINLINFUN_statistical
-std::string MinDecl = "#define Min 2.22507e-308\n";
-std::string fBigInvDecl ="#define fBigInv  2.22045e-016\n";
-std::string fMachEpsDecl ="#define fMachEps  2.22045e-016\n";
-std::string fLogDblMaxDecl ="#define fLogDblMax  log(1.79769e+308)\n";
-std::string fHalfMachEpsDecl ="#define fHalfMachEps  0.5*2.22045e-016\n";
-std::string fMaxGammaArgumentDecl=
+#pragma once
+
+const char MinDecl[] = "#define Min 2.22507e-308\n";
+const char fBigInvDecl[] ="#define fBigInv  2.22045e-016\n";
+const char fMachEpsDecl[] ="#define fMachEps  2.22045e-016\n";
+const char fLogDblMaxDecl[] ="#define fLogDblMax  log(1.79769e+308)\n";
+const char fHalfMachEpsDecl[] ="#define fHalfMachEps  0.5*2.22045e-016\n";
+const char fMaxGammaArgumentDecl[] =
 "#define fMaxGammaArgument 171.624376956302\n";
-std::string GetValueDecl=
+const char GetValueDecl[] =
 "double  GetValue( double x,double fp,double fDF );\n";
-std::string GetValue=
+const char GetValue[] =
 "double  GetValue( double x,double fp,double fDF )\n"
 "{\n"
 "    return fp - 2 * GetTDist(x, fDF);\n"
 "}\n";
-std::string GetGammaSeriesDecl=
+const char GetGammaSeriesDecl[] =
 "double GetGammaSeries( double fA, double fX );\n";
-std::string GetGammaSeries =
+const char GetGammaSeries[] =
 "double GetGammaSeries( double fA, double fX )\n"
 "{\n"
 "    double fDenomfactor = fA;\n"
@@ -44,9 +44,9 @@ std::string GetGammaSeries =
 "    }\n"
 "    return fSum;\n"
 "}\n";
-std::string GetGammaContFractionDecl =  "double GetGammaContFraction( double "
+const char GetGammaContFractionDecl[] =  "double GetGammaContFraction( double "
 "fA, double fX );\n";
-std::string GetGammaContFraction =
+const char GetGammaContFraction[] =
 "double GetGammaContFraction( double fA, double fX )\n"
 "{\n"
 "    double fBig = 1.0/fBigInv;\n"
@@ -94,9 +94,9 @@ std::string GetGammaContFraction =
 "    }\n"
 "    return fApprox;\n"
 "}\n";
-std::string GetLowRegIGammaDecl = "double GetLowRegIGamma( double "
+const char GetLowRegIGammaDecl[] = "double GetLowRegIGamma( double "
 "fA, double fX );\n";
-std::string GetLowRegIGamma =
+const char GetLowRegIGamma[] =
 "double GetLowRegIGamma( double fA, double fX )\n"
 "{\n"
 "    double fLnFactor = fA * log(fX) - fX - lgamma(fA);\n"
@@ -106,9 +106,9 @@ std::string GetLowRegIGamma =
 "    else\n"
 "        return fFactor * GetGammaSeries(fA,fX);\n"
 "}\n";
-std::string GetGammaDistDecl = "double GetGammaDist( double fX, double "
+const char GetGammaDistDecl[] = "double GetGammaDist( double fX, double "
 "fAlpha, double fLambda );\n";
-std::string GetGammaDist =
+const char GetGammaDist[] =
 "double GetGammaDist( double fX, double fAlpha, double fLambda )\n"
 "{\n"
 "    if (fX <= 0.0)\n"
@@ -116,9 +116,9 @@ std::string GetGammaDist =
 "    else\n"
 "        return GetLowRegIGamma( fAlpha, fX / fLambda);\n"
 "}\n";
-std::string GetGammaDistPDFDecl =  "double GetGammaDistPDF( double fX"
+const char GetGammaDistPDFDecl[] =  "double GetGammaDistPDF( double fX"
 ", double fAlpha, double fLambda );\n";
-std::string GetGammaDistPDF =
+const char GetGammaDistPDF[] =
 "double GetGammaDistPDF( double fX, double fAlpha, double fLambda )\n"
 "{\n"
 "    if (fX < 0.0)\n"
@@ -170,9 +170,9 @@ std::string GetGammaDistPDF =
 "        }\n"
 "    }\n"
 "}\n";
-std::string GetBetaDistDecl =
+const char GetBetaDistDecl[] =
 "double GetBetaDist(double fXin, double fAlpha, double fBeta);\n";
-std::string GetBetaDist =
+const char GetBetaDist[] =
 "double GetBetaDist(double fXin, double fAlpha, double fBeta)\n"
 "{\n"
 "    if (fXin <= 0.0)\n"
@@ -216,9 +216,9 @@ std::string GetBetaDist =
 "    return fResult;\n"
 "}\n";
 
-std::string GetFDistDecl =
+const char GetFDistDecl[] =
     "double GetFDist(double x, double fF1, double fF2);\n";
-std::string GetFDist =
+const char GetFDist[] =
 "double GetFDist(double x, double fF1, double fF2)\n"
 "{\n"
 "    double arg = fF2/(fF2+fF1*x);\n"
@@ -226,9 +226,9 @@ std::string GetFDist =
 "    double beta = fF1/2.0;\n"
 "    return (GetBetaDist(arg, alpha, beta));\n"
 "}\n";
-std::string GetGammaInvValueDecl = "double"
+const char GetGammaInvValueDecl[] = "double"
 " GetGammaInvValue(double fAlpha,double fBeta,double fX1 );\n";
-std::string GetGammaInvValue =
+const char GetGammaInvValue[] =
 "double GetGammaInvValue(double fAlpha,double fBeta,double fX1 )\n"
 "{\n"
 "    if (fX1 <= 0.0)\n"
@@ -244,9 +244,9 @@ std::string GetGammaInvValue =
 "            return fFactor * GetGammaSeries(fAlpha,fX);\n"
 "    }\n"
 "}\n";
-std::string GetFInvValueDecl = "double GetFInvValue(double fF1,double fF2"
+const char GetFInvValueDecl[] = "double GetFInvValue(double fF1,double fF2"
 ",double fX1 );";
-std::string GetFInvValue =
+const char GetFInvValue[] =
 "double GetFInvValue(double fF1,double fF2,double fX1 )\n"
 "{\n"
 "    double arg = fF2/(fF2+fF1*fX1);\n"
@@ -297,9 +297,9 @@ std::string GetFInvValue =
 "        fResult = 0.0;\n"
 "    return fResult;\n"
 "}\n";
-std::string GetBinomDistPMFDecl =
+const char GetBinomDistPMFDecl[] =
     "double GetBinomDistPMF(double x, double n, double p);";
-std::string GetBinomDistPMF =
+const char GetBinomDistPMF[] =
 "double GetBinomDistPMF(double x, double n, double p)\n"
 "{\n"
 "   double q = (0.5 - p) + 0.5;\n"
@@ -326,10 +326,10 @@ std::string GetBinomDistPMF =
 "   }\n"
 "}\n";
 
-std::string lcl_GetBinomDistRangeDecl =
+const char lcl_GetBinomDistRangeDecl[] =
     "double lcl_GetBinomDistRange(double n, \n"
 "double xs, double xe, double fFactor, double p, double q);";
-std::string lcl_GetBinomDistRange=
+const char lcl_GetBinomDistRange[] =
 "double lcl_GetBinomDistRange(double n, double xs, double xe,\n"
 "   double fFactor, double p, double q)\n"
 "{\n"
@@ -348,8 +348,8 @@ std::string lcl_GetBinomDistRange=
 "   return (fSum > 1.0) ? 1.0 : fSum;\n"
 "}\n";
 
-std::string GetLogGammaDecl = "double GetLogGamma(double fZ);\n";
-std::string GetLogGamma =
+const char GetLogGammaDecl[] = "double GetLogGamma(double fZ);\n";
+const char GetLogGamma[] =
 "double GetLogGamma(double fZ)\n"
 "{\n"
 "   if (fZ >= fMaxGammaArgument)\n"
@@ -361,8 +361,8 @@ std::string GetLogGamma =
 "   return lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log(fZ);\n"
 "}\n";
 
-std::string GetChiDistDecl = "double GetChiDist(double fX, double fDF);\n";
-std::string GetChiDist =
+const char GetChiDistDecl[] = "double GetChiDist(double fX, double fDF);\n";
+const char GetChiDist[] =
 "double GetChiDist(double fX, double fDF)\n"
 "{\n"
 "   if (fX <= 0.0)\n"
@@ -371,9 +371,9 @@ std::string GetChiDist =
 "       return GetUpRegIGamma( fDF/2.0, fX/2.0);\n"
 "}\n";
 
-std::string GetChiSqDistCDFDecl =
+const char GetChiSqDistCDFDecl[] =
 "double GetChiSqDistCDF(double fX, double fDF);\n";
-std::string GetChiSqDistCDF =
+const char GetChiSqDistCDF[] =
 "double GetChiSqDistCDF(double fX, double fDF)\n"
 "{\n"
 "   if (fX <= 0.0)\n"
@@ -382,9 +382,9 @@ std::string GetChiSqDistCDF =
 "       return GetLowRegIGamma( fDF/2.0, fX/2.0);\n"
 "}\n";
 
-std::string GetChiSqDistPDFDecl=
+const char GetChiSqDistPDFDecl[] =
 "double GetChiSqDistPDF(double fX, double fDF);\n";
-std::string GetChiSqDistPDF =
+const char GetChiSqDistPDF[] =
 "double GetChiSqDistPDF(double fX, double fDF)\n"
 "{\n"
 "   double fValue;\n"
@@ -421,10 +421,10 @@ std::string GetChiSqDistPDF =
 "    return fValue;\n"
 "}\n";
 
-std::string lcl_IterateInverseBetaInvDecl =
+const char lcl_IterateInverseBetaInvDecl[] =
 "static double lcl_IterateInverseBetaInv(double fp, double fAlpha, \n"
 "   double fBeta, double fAx, double fBx, bool *rConvError );\n";
-std::string lcl_IterateInverseBetaInv =
+const char lcl_IterateInverseBetaInv[] =
 "static double lcl_IterateInverseBetaInv(double fp, double fAlpha, \n"
 "   double fBeta, double fAx, double fBx, bool *rConvError )\n"
 "{\n"
@@ -518,10 +518,10 @@ std::string lcl_IterateInverseBetaInv =
 "   return fRx;\n"
 "}\n";
 
-std::string lcl_IterateInverseChiInvDecl =
+const char lcl_IterateInverseChiInvDecl[] =
 "static double lcl_IterateInverseChiInv"
 "(double fp, double fdf, double fAx, double fBx, bool *rConvError);\n";
-std::string lcl_IterateInverseChiInv =
+const char lcl_IterateInverseChiInv[] =
 "static double lcl_IterateInverseChiInv"
 "(double fp, double fdf, double fAx, double fBx, bool *rConvError)\n"
 "{\n"
@@ -615,10 +615,10 @@ std::string lcl_IterateInverseChiInv =
 "   return fRx;\n"
 "}\n";
 
-std::string lcl_IterateInverseChiSQInvDecl =
+const char lcl_IterateInverseChiSQInvDecl[] =
 "static double lcl_IterateInverseChiSQInv( double fp, double fdf, \n"
 "   double fAx, double fBx, bool *rConvError );\n";
-std::string lcl_IterateInverseChiSQInv =
+const char lcl_IterateInverseChiSQInv[] =
 "static double lcl_IterateInverseChiSQInv( double fp, double fdf, \n"
 "   double fAx, double fBx, bool *rConvError )\n"
 "{\n"
@@ -713,8 +713,8 @@ std::string lcl_IterateInverseChiSQInv =
 "   return fRx;\n"
 "}\n";
 
-std::string gaussinvDecl = "double gaussinv(double x);\n";
-std::string gaussinv =
+const char gaussinvDecl[] = "double gaussinv(double x);\n";
+const char gaussinv[] =
 "double gaussinv(double x)\n"
 "{\n"
 "    double q,t,z;\n"
@@ -874,18 +874,18 @@ std::string gaussinv =
 "    return z;\n"
 "}\n";
 
-std::string lcl_GetLogGammaHelperDecl=
+const char lcl_GetLogGammaHelperDecl[] =
 "static double lcl_GetLogGammaHelper(double fZ);\n";
-std::string lcl_GetLogGammaHelper =
+const char lcl_GetLogGammaHelper[] =
 "static double lcl_GetLogGammaHelper(double fZ)\n"
 "{\n"
 "    double fg = 6.024680040776729583740234375;\n"
 "   double fZgHelp = fZ + fg - 0.5;\n"
 "   return log( lcl_getLanczosSum(fZ)) + (fZ-0.5) * log(fZgHelp) - fZgHelp;\n"
 "}\n";
-std::string lcl_GetGammaHelperDecl=
+const char lcl_GetGammaHelperDecl[] =
 "static double lcl_GetGammaHelper(double fZ);\n";
-std::string lcl_GetGammaHelper =
+const char lcl_GetGammaHelper[] =
 "static double lcl_GetGammaHelper(double fZ)\n"
 "{\n"
 "   double fGamma = lcl_getLanczosSum(fZ);\n"
@@ -902,9 +902,9 @@ std::string lcl_GetGammaHelper =
 "   }\n"
 "   return fGamma;\n"
 "}\n";
-std::string lcl_getLanczosSumDecl=
+const char lcl_getLanczosSumDecl[] =
 "static double lcl_getLanczosSum(double fZ);\n";
-std::string lcl_getLanczosSum =
+const char lcl_getLanczosSum[] =
 "static double lcl_getLanczosSum(double fZ)          \n"
 "{                                                   \n"
 "    double fNum[13] ={                        \n"
@@ -1026,9 +1026,9 @@ std::string lcl_getLanczosSum =
 "     return fSumNum/fSumDenom;\n"
 "}\n";
 
-std::string GetUpRegIGammaDecl=
+const char GetUpRegIGammaDecl[] =
 " double GetUpRegIGamma( double fA, double fX ) ;\n";
-std::string GetUpRegIGamma =
+const char GetUpRegIGamma[] =
 "double GetUpRegIGamma( double fA, double fX )\n"
 "{\n"
 "    double fLnFactor= fA*log(fX)-fX-lgamma(fA);\n"
@@ -1039,23 +1039,23 @@ std::string GetUpRegIGamma =
 "            return 1.0 -fFactor * GetGammaSeries(fA,fX);\n"
 "}\n";
 
-std::string lcl_HasChangeOfSignDecl=
+const char lcl_HasChangeOfSignDecl[] =
 "static inline bool lcl_HasChangeOfSign( double u, double w );\n";
-std::string lcl_HasChangeOfSign =
+const char lcl_HasChangeOfSign[] =
 "static inline bool lcl_HasChangeOfSign( double u, double w )\n"
 "{\n"
 "    return (u < 0.0 && w > 0.0) || (u > 0.0 && w < 0.0);\n"
 "}\n";
 
-std::string GetTDistDecl=" double GetTDist(double T, double fDF);\n";
-std::string GetTDist =
+const char GetTDistDecl[] =" double GetTDist(double T, double fDF);\n";
+const char GetTDist[] =
 "double GetTDist(double T, double fDF)\n"
 "{\n"
 "    return 0.5 * GetBetaDist(fDF/(fDF+T*T),fDF/2.0, 0.5);\n"
 "}\n";
 
-std::string GetBetaDecl=" double GetBeta(double fAlpha, double fBeta);\n";
-std::string GetBeta =
+const char GetBetaDecl[] =" double GetBeta(double fAlpha, double fBeta);\n";
+const char GetBeta[] =
 "double GetBeta(double fAlpha, double fBeta)\n"
 "{\n"
 "    double fA;\n"
@@ -1073,9 +1073,9 @@ std::string GetBeta =
 "                    - fB*log1p(fA/(fB + fgm)) - fgm);\n"
 "}\n";
 
-std::string GetLogBetaDecl=
+const char GetLogBetaDecl[] =
 " double GetLogBeta(double fAlpha, double fBeta);\n";
-std::string GetLogBeta =
+const char GetLogBeta[] =
 "double GetLogBeta(double fAlpha, double fBeta)\n"
 "{\n"
 "    double fA;\n"
@@ -1092,9 +1092,9 @@ std::string GetLogBeta =
 "    return fResult;\n"
 "}\n";
 
-std::string GetBetaDistPDFDecl=
+const char GetBetaDistPDFDecl[] =
 "double GetBetaDistPDF(double fX, double fA, double fB);\n";
-std::string GetBetaDistPDF =
+const char GetBetaDistPDF[] =
 "double GetBetaDistPDF(double fX, double fA, double fB)\n"
 "{\n"
 "    if (fA == 1.0) \n"
@@ -1157,9 +1157,9 @@ std::string GetBetaDistPDF =
 "         return exp( fAm1LogX + fBm1LogY - fLogBeta);\n"
 "}\n";
 
-std::string lcl_GetBetaHelperContFracDecl=
+const char lcl_GetBetaHelperContFracDecl[] =
 "double lcl_GetBetaHelperContFrac(double fX, double fA, double fB);\n";
-std::string lcl_GetBetaHelperContFrac =
+const char lcl_GetBetaHelperContFrac[] =
 "double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)\n"
 "{   \n"
 
@@ -1194,10 +1194,10 @@ std::string lcl_GetBetaHelperContFrac =
 "    return cf;\n"
 "}\n";
 
-std::string lcl_IterateInverseDecl=
+const char lcl_IterateInverseDecl[] =
 "double lcl_IterateInverse("
 "double fAx, double fBx, bool* rConvError,double fp,double fDF );\n";
-std::string lcl_IterateInverse =
+const char lcl_IterateInverse[] =
 "double lcl_IterateInverse( "
 "double fAx, double fBx, bool* rConvError,double fp,double fDF )\n"
 "{\n"
@@ -1289,16 +1289,16 @@ std::string lcl_IterateInverse =
 "    }\n"
 "    return fRx;\n"
 "}\n";
-std::string phiDecl=
+const char phiDecl[] =
 "double phi(double x);\n";
-std::string phi =
+const char phi[] =
 "double phi(double x)\n"
 "{\n"
 "    return  0.39894228040143268 * exp(-(x * x) / 2.0);\n"
 "}\n";
-std::string taylorDecl =
+const char taylorDecl[] =
 "double taylor(double* pPolynom, uint nMax, double x);\n";
-std::string taylor =
+const char taylor[] =
 "double taylor(double* pPolynom, uint nMax, double x)\n"
 "{\n"
 "    double nVal = pPolynom[nMax];\n"
@@ -1308,8 +1308,8 @@ std::string taylor =
 "    }\n"
 "    return nVal;\n"
 "}";
-std::string gaussDecl = "double gauss(double x);\n";
-std::string gauss =
+const char gaussDecl[] = "double gauss(double x);\n";
+const char gauss[] =
 "double gauss(double x)\n"
 "{\n"
 "    double xAbs = fabs(x);\n"
@@ -1359,6 +1359,5 @@ std::string gauss =
 "    else\n"
 "        return nVal;\n"
 "}\n";
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
