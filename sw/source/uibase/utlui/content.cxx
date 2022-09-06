@@ -364,7 +364,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         break;
         case ContentTypeId::INDEX:
             m_bEdit = true;
-            m_bDelete = false;
+            m_bDelete = true;
         break;
         case ContentTypeId::REFERENCE:
             m_bEdit = false;
