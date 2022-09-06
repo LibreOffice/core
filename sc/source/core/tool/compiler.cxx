@@ -464,9 +464,6 @@ return;
 /* # */     t[35] &=  ~ScCharFlags::WordSep;
 /* # */     t[35] |=   ScCharFlags::Word;
 /* % */     t[37] |=   ScCharFlags::Word;
-/* ' */     t[39] |=   ScCharFlags::Word;
-
-/* % */     t[37] |=   ScCharFlags::Word;
 /* & */     t[38] |=   ScCharFlags::Word;
 /* ' */     t[39] |=   ScCharFlags::Word;
 /* ( */     t[40] |=   ScCharFlags::Word;
