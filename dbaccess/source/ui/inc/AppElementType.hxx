@@ -41,11 +41,11 @@ namespace dbaui
         E_DOCUMENTINFO  = 2
     };
 
-    enum ElementOpenMode
+    enum class ElementOpenMode
     {
-        E_OPEN_NORMAL,
-        E_OPEN_DESIGN,
-        E_OPEN_FOR_MAIL
+        Normal,
+        Design,
+        Mail
     };
 
 } // namespace dbaui

@@ -1211,7 +1211,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         const Reference< XComponent > xComponent = aDesigner.createNew( xDataSource, aCreationArgs );
-                        onDocumentOpened( OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, nullptr );
+                        onDocumentOpened( OUString(), E_QUERY, ElementOpenMode::Design, xComponent, nullptr );
                     }
                 }
                 break;
@@ -1235,17 +1235,17 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_DB_APP_QUERY_EDIT:
             case SID_DB_APP_FORM_EDIT:
             case SID_DB_APP_REPORT_EDIT:
-                doAction( _nId, E_OPEN_DESIGN );
+                doAction( _nId, ElementOpenMode::Design );
                 break;
             case SID_DB_APP_OPEN:
             case SID_DB_APP_TABLE_OPEN:
             case SID_DB_APP_QUERY_OPEN:
             case SID_DB_APP_FORM_OPEN:
             case SID_DB_APP_REPORT_OPEN:
-                doAction( _nId, E_OPEN_NORMAL );
+                doAction( _nId, ElementOpenMode::Normal );
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
-                doAction( _nId, E_OPEN_NORMAL );
+                doAction( _nId, ElementOpenMode::Normal );
                 break;
             case SID_SELECTALL:
                 getContainer()->selectAll();
@@ -1254,7 +1254,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_DB_APP_DSRELDESIGN:
             {
                 Reference< XComponent > xRelationDesigner;
-                if ( !m_pSubComponentManager->activateSubFrame( OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xRelationDesigner ) )
+                if ( !m_pSubComponentManager->activateSubFrame( OUString(), SID_DB_APP_DSRELDESIGN, ElementOpenMode::Design, xRelationDesigner ) )
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
@@ -1263,7 +1263,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         const Reference< XComponent > xComponent = aDesigner.createNew( xDataSource );
-                        onDocumentOpened( OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, nullptr );
+                        onDocumentOpened( OUString(), SID_DB_APP_DSRELDESIGN, ElementOpenMode::Design, xComponent, nullptr );
                     }
                 }
             }
@@ -1336,7 +1336,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 }
                 break;
             case SID_DB_APP_SENDREPORTASMAIL:
-                doAction( _nId, E_OPEN_FOR_MAIL );
+                doAction( _nId, ElementOpenMode::Mail );
                 break;
         }
     }
@@ -1701,7 +1701,7 @@ bool OApplicationController::onEntryDoubleClick(const weld::TreeView& rTreeView)
         openElementWithArguments(
             getContainer()->getQualifiedName(xHdlEntry.get()),
             getContainer()->getElementType(),
-            E_OPEN_NORMAL,
+            ElementOpenMode::Normal,
             0,
             ::comphelper::NamedValueCollection() );
         return true;    // handled
@@ -1747,7 +1747,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         return nullptr;
 
     Reference< XComponent > xRet;
-    if ( _eOpenMode == E_OPEN_DESIGN )
+    if ( _eOpenMode == ElementOpenMode::Design )
     {
         // https://bz.apache.org/ooo/show_bug.cgi?id=30382
         getContainer()->showPreview(nullptr);
@@ -1757,7 +1757,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     switch ( _eType )
     {
     case E_REPORT:
-        if ( _eOpenMode != E_OPEN_DESIGN )
+        if ( _eOpenMode != ElementOpenMode::Design )
         {
             // reports which are opened in a mode other than design are no sub components of our application
             // component, but standalone documents.
@@ -1794,7 +1794,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             ::comphelper::NamedValueCollection aArguments( _rAdditionalArguments );
 
             Any aDataSource;
-            if ( _eOpenMode == E_OPEN_DESIGN )
+            if ( _eOpenMode == ElementOpenMode::Design )
             {
                 bool bAddViewTypeArg = false;
 
@@ -1954,7 +1954,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
     }
 
     if ( xComponent.is() )
-        onDocumentOpened( OUString(), _eType, E_OPEN_DESIGN, xComponent, o_rDocumentDefinition );
+        onDocumentOpened( OUString(), _eType, ElementOpenMode::Design, xComponent, o_rDocumentDefinition );
 
     return xComponent;
 }

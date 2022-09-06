@@ -433,7 +433,7 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
     Reference< XComponent > xComponent( openElementWithArguments(
         ObjectName,
         lcl_objectType2ElementType( ObjectType ),
-        ForEditing ? E_OPEN_DESIGN : E_OPEN_NORMAL,
+        ForEditing ? ElementOpenMode::Design : ElementOpenMode::Normal,
         ForEditing ? SID_DB_APP_EDIT : SID_DB_APP_OPEN,
         ::comphelper::NamedValueCollection( Arguments )
     ) );
@@ -667,10 +667,10 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     ElementType eType = getContainer()->getElementType();
     ::comphelper::NamedValueCollection aArguments;
     ElementOpenMode eOpenMode = _eOpenMode;
-    if ( eType == E_REPORT && E_OPEN_FOR_MAIL == _eOpenMode )
+    if ( eType == E_REPORT && ElementOpenMode::Mail == _eOpenMode )
     {
         aArguments.put("Hidden",true);
-        eOpenMode = E_OPEN_NORMAL;
+        eOpenMode = ElementOpenMode::Normal;
     }
 
     std::vector< std::pair< OUString ,Reference< XModel > > > aComponents;
@@ -686,7 +686,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     }
 
     // special handling for mail, if more than one document is selected attach them all
-    if ( _eOpenMode != E_OPEN_FOR_MAIL )
+    if ( _eOpenMode != ElementOpenMode::Mail )
         return;
 
 

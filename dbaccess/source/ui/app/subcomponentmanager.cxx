@@ -90,7 +90,7 @@ namespace dbaui
 
             SubComponentDescriptor()
                 :nComponentType( -1 )
-                ,eOpenMode( E_OPEN_NORMAL )
+                ,eOpenMode( ElementOpenMode::Normal )
             {
             }
 

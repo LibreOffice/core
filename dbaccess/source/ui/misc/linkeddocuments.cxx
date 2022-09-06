@@ -118,15 +118,15 @@ namespace dbaui
         OUString sOpenMode;
         switch ( _eOpenMode )
         {
-            case E_OPEN_NORMAL:
+            case ElementOpenMode::Normal:
                 sOpenMode = "open";
                 break;
 
-            case E_OPEN_FOR_MAIL:
+            case ElementOpenMode::Mail:
                 aArguments.put( "Hidden", true );
                 [[fallthrough]];
 
-            case E_OPEN_DESIGN:
+            case ElementOpenMode::Design:
                 sOpenMode = "openDesign";
                 break;
 
