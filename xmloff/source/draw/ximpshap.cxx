@@ -87,6 +87,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <tools/urlobj.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 
@@ -3248,31 +3249,34 @@ void SdXMLFloatingFrameShapeContext::StartElement( const css::uno::Reference< cs
 {
     AddShape("com.sun.star.drawing.FrameShape");
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetLayer();
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
     {
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-        if( xProps.is() )
+        if( !maFrameName.isEmpty() )
         {
-            if( !maFrameName.isEmpty() )
-            {
-                xProps->setPropertyValue("FrameName", Any(maFrameName) );
-            }
-
-            if( !maHref.isEmpty() )
-            {
-                xProps->setPropertyValue("FrameURL", Any(maHref) );
-            }
+            xProps->setPropertyValue("FrameName", Any(maFrameName) );
         }
 
-        SetStyle();
+        if( !maHref.isEmpty() )
+        {
+            if (INetURLObject(maHref).GetProtocol() == INetProtocol::Macro)
+                GetImport().NotifyMacroEventRead();
 
-        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+            xProps->setPropertyValue("FrameURL", Any(maHref) );
+        }
     }
+
+    SetStyle();
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
