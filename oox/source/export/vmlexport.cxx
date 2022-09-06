@@ -89,8 +89,6 @@ void VMLExport::SetFS( const ::sax_fastparser::FSHelperPtr& pSerializer )
 
 VMLExport::~VMLExport()
 {
-    delete mpOutStrm;
-    mpOutStrm = nullptr;
 }
 
 void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )

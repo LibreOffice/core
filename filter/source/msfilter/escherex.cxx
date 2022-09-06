@@ -4867,7 +4867,6 @@ public:
 EscherEx::EscherEx(std::shared_ptr<EscherExGlobal> xGlobal, SvStream* pOutStrm, bool bOOXML)
     : mxGlobal(std::move(xGlobal))
     , mpOutStrm(pOutStrm)
-    , mbOwnsStrm(false)
     , mnCurrentDg(0)
     , mnCountOfs(0)
     , mnGroupLevel(0)
@@ -4878,8 +4877,8 @@ EscherEx::EscherEx(std::shared_ptr<EscherExGlobal> xGlobal, SvStream* pOutStrm, 
 {
     if (!mpOutStrm)
     {
-        mpOutStrm = new SvNullStream();
-        mbOwnsStrm = true;
+        mxOwnStrm = std::make_unique<SvNullStream>();
+        mpOutStrm = mxOwnStrm.get();
     }
     mnStrmStartOfs = mpOutStrm->Tell();
     mpImplEESdrWriter.reset( new ImplEESdrWriter( *this ) );
@@ -4887,8 +4886,6 @@ EscherEx::EscherEx(std::shared_ptr<EscherExGlobal> xGlobal, SvStream* pOutStrm, 
 
 EscherEx::~EscherEx()
 {
-    if (mbOwnsStrm)
-        delete mpOutStrm;
 }
 
 void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )

@@ -56,11 +56,7 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
     memset(m_pShapeTypeWritten.get(), 0, ESCHER_ShpInst_COUNT * sizeof(bool));
 }
 
-RtfSdrExport::~RtfSdrExport()
-{
-    delete mpOutStrm;
-    mpOutStrm = nullptr;
-}
+RtfSdrExport::~RtfSdrExport() {}
 
 void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)
 {

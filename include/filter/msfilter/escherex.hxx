@@ -1048,9 +1048,9 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 {
     protected:
         std::shared_ptr<EscherExGlobal>           mxGlobal;
-        ::std::unique_ptr< ImplEESdrWriter > mpImplEESdrWriter;
+        std::unique_ptr<ImplEESdrWriter> mpImplEESdrWriter;
+        std::unique_ptr<SvStream> mxOwnStrm;
         SvStream*                   mpOutStrm;
-        bool                        mbOwnsStrm;
         sal_uInt32                  mnStrmStartOfs;
         std::vector< sal_uInt32 >   mOffsets;
         std::vector< sal_uInt16 >   mRecTypes;
