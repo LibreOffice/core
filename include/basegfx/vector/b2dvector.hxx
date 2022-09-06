@@ -72,8 +72,8 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        B2DVector(const ::basegfx::B2DTuple& rTuple)
-        :   B2DTuple(rTuple)
+        B2DVector(Tuple2D<double> const& rTuple)
+            :   B2DTuple(rTuple)
         {}
 
         /** *=operator to allow usage from B2DVector, too
@@ -97,7 +97,12 @@ namespace basegfx
         /** assignment operator to allow assigning the results
             of B2DTuple calculations
         */
-        B2DVector& operator=( const ::basegfx::B2DTuple& rVec );
+        B2DVector& operator=(Tuple2D<double> const& rVector)
+        {
+            mfX = rVector.getX();
+            mfY = rVector.getY();
+            return *this;
+        }
 
         /** Calculate the length of this 2D Vector
 

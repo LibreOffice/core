@@ -51,13 +51,6 @@ namespace basegfx
         return *this;
     }
 
-    B2DVector& B2DVector::operator=( const B2DTuple& rVec )
-    {
-        mfX = rVec.getX();
-        mfY = rVec.getY();
-        return *this;
-    }
-
     double B2DVector::getLength() const
     {
         if(fTools::equalZero(mfX))

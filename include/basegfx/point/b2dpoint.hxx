@@ -73,7 +73,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        B2DPoint(const ::basegfx::B2DTuple& rTuple)
+        B2DPoint(Tuple2D<double> const& rTuple)
         :   B2DTuple(rTuple)
         {}
 
@@ -98,7 +98,12 @@ namespace basegfx
         /** assignment operator to allow assigning the results
             of B2DTuple calculations
         */
-        BASEGFX_DLLPUBLIC B2DPoint& operator=( const ::basegfx::B2DTuple& rPoint );
+        BASEGFX_DLLPUBLIC B2DPoint& operator=(Tuple2D<double>& rPoint)
+        {
+            mfX = rPoint.getX();
+            mfY = rPoint.getY();
+            return *this;
+        }
 
         /** Transform point by given transformation matrix.
 

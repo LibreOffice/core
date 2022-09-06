@@ -23,13 +23,6 @@
 
 namespace basegfx
 {
-    B2DPoint& B2DPoint::operator=( const ::basegfx::B2DTuple& rPoint )
-    {
-        mfX = rPoint.getX();
-        mfY = rPoint.getY();
-        return *this;
-    }
-
     B2DPoint& B2DPoint::operator*=( const ::basegfx::B2DHomMatrix& rMat )
     {
         double fTempX(
