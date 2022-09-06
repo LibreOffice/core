@@ -2031,7 +2031,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     {
         GetFrameWin()->EnterWait();
         ScRangeList aMatchedRanges;
-        bool bMatchedRangesWereClamped;
+        bool bMatchedRangesWereClamped = false;
         if (rDoc.SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc.get(), bMatchedRangesWereClamped))
         {
             bFound = true;
