@@ -5355,18 +5355,11 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         if (rDoc.HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
             OUString aStr = rDoc.GetString(aAbs, mpInterpreterContext);
-
-            // If string contains only numeric characters or if it contains non-alphanumeric characters
-            // -> quote characters contained within are escaped by ''.
-            // -> put quotes around string
-            sal_Int32 nType = ScGlobal::getCharClass().getStringType( aStr, 0, aStr.getLength() );
-            if ( CharClass::isNumericType( nType )
-                || !CharClass::isAlphaNumericType( nType ) )
-            {
-                aStr = aStr.replaceAll(u"'", u"''");
-                aStr = "'" + aStr + "'";
-            }
+            // Enquote to SingleQuoted.
+            aStr = aStr.replaceAll(u"'", u"''");
+            rBuffer.append('\'');
             rBuffer.append(aStr);
+            rBuffer.append('\'');
         }
         else
         {
