@@ -601,7 +601,9 @@ void ScUndoCopyTab::DoChange() const
     if (pViewShell)
         pViewShell->SetTabNo((*mpOldTabs)[0],true);
 
-    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
+    SfxApplication* pSfxApp = SfxGetpApp();                         // Navigator
+    pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
+    pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
