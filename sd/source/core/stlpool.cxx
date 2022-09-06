@@ -1079,7 +1079,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             // Standard template
             SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
             aNumberFormat.SetBulletFont(&rBulletFont);
-            aNumberFormat.SetBulletChar( 0x25CF ); // StarBats: 0xF000 + 34
+            aNumberFormat.SetBulletChar( 0x25CF ); // U+25CF: BLACK CIRCLE
             aNumberFormat.SetBulletRelSize(45);
             aNumberFormat.SetBulletColor(COL_AUTO);
             aNumberFormat.SetStart(1);
@@ -1165,7 +1165,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
 vcl::Font SdStyleSheetPool::GetBulletFont()
 {
-    vcl::Font aBulletFont( "StarSymbol", Size(0, 1000) );
+    vcl::Font aBulletFont( "OpenSymbol", Size(0, 1000) );
     aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(LINESTYLE_NONE);
