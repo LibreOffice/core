@@ -366,7 +366,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                         // push if the inserted entry is a child
                         if (nOutlineLevel > aHeadingsParentEntryStack.top().second)
                             aHeadingsParentEntryStack.push(
-                                        std::pair(std::move(xEntry), nOutlineLevel));
+                                        std::pair(mxLbTree->make_iterator(xEntry.get()), nOutlineLevel));
                     }
                     else
                     {
