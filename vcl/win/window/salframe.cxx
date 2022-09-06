@@ -756,27 +756,21 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
 
     try
     {
+        tools::Rectangle aRect;
         sal_Int32 nMonitors = Application::GetScreenCount();
         if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < nMonitors) )
         {
-            tools::Rectangle aRect = Application::GetScreenPosSizePixel( pFrame->mnDisplay );
-            nScreenX = aRect.Left();
-            nScreenY = aRect.Top();
-            nScreenDX = aRect.GetWidth();
-            nScreenDY = aRect.GetHeight();
+            aRect = Application::GetScreenPosSizePixel(pFrame->mnDisplay);
         }
         else
         {
-            tools::Rectangle aCombined = Application::GetScreenPosSizePixel( 0 );
-            for( sal_Int32 i = 1 ; i < nMonitors ; i++ )
-            {
-                aCombined.Union( Application::GetScreenPosSizePixel( i ) );
-            }
-            nScreenX  = aCombined.Left();
-            nScreenY  = aCombined.Top();
-            nScreenDX = aCombined.GetWidth();
-            nScreenDY = aCombined.GetHeight();
+            for (sal_Int32 i = 0; i < nMonitors; i++)
+                aRect.Union(Application::GetScreenPosSizePixel(i));
         }
+        nScreenX = aRect.Left();
+        nScreenY = aRect.Top();
+        nScreenDX = aRect.GetWidth();
+        nScreenDY = aRect.GetHeight();
     }
     catch( Exception& )
     {
