@@ -875,7 +875,7 @@ IMPL_LINK_NOARG( OAppDetailPageHelper, OnDeleteEntry, LinkParamNone*, void )
 
 bool OAppDetailPageHelper::isPreviewEnabled() const
 {
-    return m_ePreviewMode != E_PREVIEWNONE;
+    return m_ePreviewMode != PreviewMode::NONE;
 }
 
 namespace
@@ -898,18 +898,18 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
     OUString aCommand;
     switch ( m_ePreviewMode )
     {
-        case E_PREVIEWNONE:
+        case PreviewMode::NONE:
             aCommand = ".uno:DBDisablePreview";
             break;
-        case E_DOCUMENT:
+        case PreviewMode::Document:
             aCommand = ".uno:DBShowDocPreview";
             break;
-        case E_DOCUMENTINFO:
+        case PreviewMode::DocumentInfo:
             if ( getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) )
                 aCommand = ".uno:DBShowDocInfoPreview";
             else
             {
-                m_ePreviewMode = E_PREVIEWNONE;
+                m_ePreviewMode = PreviewMode::NONE;
                 aCommand = ".uno:DBDisablePreview";
             }
             break;
@@ -950,13 +950,13 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
         if ( xContent.is() )
         {
             css::ucb::Command aCommand;
-            if ( m_ePreviewMode == E_DOCUMENT )
+            if ( m_ePreviewMode == PreviewMode::Document )
                 aCommand.Name = "preview";
             else
                 aCommand.Name = "getDocumentInfo";
 
             Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
-            if ( m_ePreviewMode == E_DOCUMENT )
+            if ( m_ePreviewMode == PreviewMode::Document )
             {
                 m_xDocumentInfo->Hide();
                 m_xPreview->Show();

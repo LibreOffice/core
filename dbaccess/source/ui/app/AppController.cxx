@@ -252,7 +252,7 @@ OApplicationController::OApplicationController(const Reference< XComponentContex
     ,m_aTableCopyHelper(this)
     ,m_nAsyncDrop(nullptr)
     ,m_aSelectContainerEvent( LINK( this, OApplicationController, OnSelectContainer ) )
-    ,m_ePreviewMode(E_PREVIEWNONE)
+    ,m_ePreviewMode(PreviewMode::NONE)
     ,m_eCurrentType(E_NONE)
     ,m_bNeedToReconnect(false)
     ,m_bSuspended( false )
@@ -792,18 +792,18 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
                 aReturn.bEnabled = true;
-                aReturn.bChecked = getContainer()->getPreviewMode() == E_PREVIEWNONE;
+                aReturn.bChecked = getContainer()->getPreviewMode() == PreviewMode::NONE;
                 break;
             case SID_DB_APP_VIEW_DOCINFO_PREVIEW:
                 {
                     ElementType eType = getContainer()->getElementType();
                     aReturn.bEnabled = (E_REPORT == eType || E_FORM == eType);
-                    aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENTINFO;
+                    aReturn.bChecked = getContainer()->getPreviewMode() == PreviewMode::DocumentInfo;
                 }
                 break;
             case SID_DB_APP_VIEW_DOC_PREVIEW:
                 aReturn.bEnabled = true;
-                aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENT;
+                aReturn.bChecked = getContainer()->getPreviewMode() == PreviewMode::Document;
                 break;
             case ID_BROWSER_UNDO:
                 aReturn.bEnabled = false;
@@ -1317,15 +1317,15 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 m_aSelectContainerEvent.Call( reinterpret_cast< void* >( E_REPORT ) );
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
-                m_ePreviewMode = E_PREVIEWNONE;
+                m_ePreviewMode = PreviewMode::NONE;
                 getContainer()->switchPreview(m_ePreviewMode);
                 break;
             case SID_DB_APP_VIEW_DOCINFO_PREVIEW:
-                m_ePreviewMode = E_DOCUMENTINFO;
+                m_ePreviewMode = PreviewMode::DocumentInfo;
                 getContainer()->switchPreview(m_ePreviewMode);
                 break;
             case SID_DB_APP_VIEW_DOC_PREVIEW:
-                m_ePreviewMode = E_DOCUMENT;
+                m_ePreviewMode = PreviewMode::Document;
                 getContainer()->switchPreview(m_ePreviewMode);
                 break;
             case SID_MAIL_SENDDOC:
@@ -2153,7 +2153,7 @@ void OApplicationController::onSelectionChanged()
 
 void OApplicationController::showPreviewFor(const ElementType _eType,const OUString& _sName)
 {
-    if ( m_ePreviewMode == E_PREVIEWNONE )
+    if ( m_ePreviewMode == PreviewMode::NONE )
         return;
 
     OApplicationView* pView = getContainer();

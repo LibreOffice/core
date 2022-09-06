@@ -34,11 +34,11 @@ namespace dbaui
         E_ELEMENT_TYPE_COUNT = E_NONE
     };
 
-    enum PreviewMode
+    enum class PreviewMode
     {
-        E_PREVIEWNONE   = 0,
-        E_DOCUMENT      = 1,
-        E_DOCUMENTINFO  = 2
+        NONE   = 0,
+        Document = 1,
+        DocumentInfo  = 2
     };
 
     enum class ElementOpenMode
