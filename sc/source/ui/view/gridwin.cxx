@@ -1523,6 +1523,7 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
             break;
     }
 
+    // coverity[check_after_deref] - could be destroyed by ExecDataSelect
     if (mpFilterBox)
         mpFilterBox->popdown();
 
