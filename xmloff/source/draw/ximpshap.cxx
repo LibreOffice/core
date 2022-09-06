@@ -87,6 +87,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <tools/urlobj.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 
@@ -3238,6 +3239,9 @@ void SdXMLFloatingFrameShapeContext::StartElement( const css::uno::Reference< cs
 
         if( !maHref.isEmpty() )
         {
+            if (INetURLObject(maHref).GetProtocol() == INetProtocol::Macro)
+                GetImport().NotifyMacroEventRead();
+
             xProps->setPropertyValue("FrameURL", Any(maHref) );
         }
     }
