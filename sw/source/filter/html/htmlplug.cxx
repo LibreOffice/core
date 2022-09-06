@@ -192,7 +192,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     else if( bPercentWidth && rPixSize.Width() )
     {
         nPercentWidth = static_cast<sal_uInt8>(rPixSize.Width());
-        if( nPercentWidth > 100 )
+        if (nPercentWidth > 100 && nPercentWidth != SwFormatFrameSize::SYNCED)
             nPercentWidth = 100;
 
         aTwipSz.setWidth( rTwipDfltSize.Width() );
@@ -219,7 +219,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     else if( bPercentHeight && rPixSize.Height() )
     {
         nPercentHeight = static_cast<sal_uInt8>(rPixSize.Height());
-        if( nPercentHeight > 100 )
+        if (nPercentHeight > 100 && nPercentHeight != SwFormatFrameSize::SYNCED)
             nPercentHeight = 100;
 
         aTwipSz.setHeight( rTwipDfltSize.Height() );
@@ -524,6 +524,20 @@ bool SwHTMLParser::InsertEmbed()
         aAttrSet.ClearItem(RES_CNTNT);
         OutputDevice* pDevice = Application::GetDefaultDevice();
         Size aDefaultTwipSize(pDevice->PixelToLogic(aGraphic.GetSizePixel(pDevice), MapMode(MapUnit::MapTwip)));
+
+        if (aSize.Width() == USHRT_MAX && bPercentHeight)
+        {
+            // Height is relative, width is not set: keep aspect ratio.
+            aSize.setWidth(SwFormatFrameSize::SYNCED);
+            bPercentWidth = true;
+        }
+        if (aSize.Height() == USHRT_MAX && bPercentWidth)
+        {
+            // Width is relative, height is not set: keep aspect ratio.
+            aSize.setHeight(SwFormatFrameSize::SYNCED);
+            bPercentHeight = true;
+        }
+
         SetFixSize(aSize, aDefaultTwipSize, bPercentWidth, bPercentHeight, aPropInfo, aAttrSet);
         pOLENode->GetDoc().SetFlyFrameAttr(*pFormat, aAttrSet);
         return true;
