@@ -2408,7 +2408,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             else
                                 break;
                         }
-                        xCur->goRight(2, false);
+
+                        if (rAppendContext.xInsertPosition.is())
+                            xCur->gotoRange(rAppendContext.xInsertPosition, false);
+                        else
+                            xCur->gotoEnd(false);
                     }
 
                     xCur->goLeft( 1 , true );
