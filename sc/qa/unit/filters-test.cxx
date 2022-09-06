@@ -74,6 +74,7 @@ public:
     void testSharedFormulaRefUpdateXLSX();
     void testSheetNamesXLSX();
     void testTdf79998();
+    void testTdf150599();
     void testCommentSize();
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
     CPPUNIT_TEST(testTdf79998);
+    CPPUNIT_TEST(testTdf150599);
     CPPUNIT_TEST(testCommentSize);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
@@ -485,6 +487,20 @@ void ScFiltersTest::testTdf79998()
     ScDocument& rDoc2 = xDocSh->GetDocument();
     const std::vector<OUString> aTabNames2 = rDoc2.GetAllTableNames();
     CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkart"), aTabNames2[1]);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf150599()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf150599.", FORMAT_DIF);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : #IND:?
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("32"), rDoc.GetString(ScAddress(31, 0, 0)));
 
     xDocSh->DoClose();
 }
