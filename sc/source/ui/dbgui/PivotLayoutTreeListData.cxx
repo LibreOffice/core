@@ -94,13 +94,13 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
 
     mpFunctionDlg = pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData);
 
-    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue,
-                                rCurrentLabelData, nEntry](int nResult) mutable {
+    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue, nEntry](int nResult) mutable {
         if (nResult == RET_OK)
         {
             ScPivotFuncData& rFunctionData = pCurrentItemValue->maFunctionData;
             rFunctionData.mnFuncMask = mpFunctionDlg->GetFuncMask();
-            rCurrentLabelData.mnFuncMask = mpFunctionDlg->GetFuncMask();
+            ScDPLabelData& rLabelData = mpParent->GetLabelData(rFunctionData.mnCol);
+            rLabelData.mnFuncMask = mpFunctionDlg->GetFuncMask();
 
             rFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
 
