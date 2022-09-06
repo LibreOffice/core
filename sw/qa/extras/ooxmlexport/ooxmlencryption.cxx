@@ -17,12 +17,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
     {
     }
-
-protected:
-    bool mustTestImportOf(const char* filename) const override
-    {
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2007, "Encrypted_MSO2007_abc.docx", "abc", Test)
