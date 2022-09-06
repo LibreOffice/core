@@ -525,7 +525,7 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
                             bool bOther, sal_Int32 nToday )
 {
     Color const * pTextColor = nullptr;
-    const OUString& rDay = maDayTexts[nDay - 1];
+    const OUString& rDay = maDayTexts[(nDay - 1) % std::size(maDayTexts)];
     tools::Rectangle aDateRect(nX, nY, nX + mnDayWidth - 1, nY + mnDayHeight - 1);
 
     bool bSel = false;
