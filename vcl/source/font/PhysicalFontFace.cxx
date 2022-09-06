@@ -38,6 +38,7 @@ namespace vcl::font
 PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
     : FontAttributes(rDFA)
     , mpHbFace(nullptr)
+    , mbFontCapabilitiesRead(false)
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if (!IsSymbolFont())
