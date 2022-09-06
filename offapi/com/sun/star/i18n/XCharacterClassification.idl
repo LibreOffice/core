@@ -106,6 +106,16 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             A number with appropriate flags set to indicate what type of
             characters the string contains, each flag value being one of
             KCharacterType values.
+
+        @note The accumulated bits of several characters are meaningless
+            as soon as characters of different classifications are
+            involved, which even may have a common subset like
+            KCharacterType::LETTER or KCharacterType::PRINTABLE, unless
+            it is to be determined what overall character properties are
+            present in the string. Use getCharacterType() of single
+            characters instead and handle bits as needed if sets of
+            character properties are to be obtained.
+
     */
     long getStringType( [in] string aText, [in] long nPos, [in] long nCount,
                         [in] com::sun::star::lang::Locale aLocale );
