@@ -515,28 +515,8 @@ void SdrObject::SetBoundAndSnapRectsDirty(bool bNotMyself, bool bRecursive)
     }
 }
 
-void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
+void SdrObject::handlePageChange(SdrPage*, SdrPage* )
 {
-    // The creation of the UNO shape in SdrObject::getUnoShape is influenced
-    // by pPage, so when the page changes we need to discard the cached UNO
-    // shape so that a new one will be created.
-    // If the page is changing to another page with the same model, we
-    // assume they create compatible UNO shape objects so we shouldn't have
-    // to invalidate.
-    // TTTT: This causes quite some problems in SvxDrawPage::add when used
-    // e.g. from Writer - the SdrObject may be cloned to target model, and
-    // the xShape was added to it by purpose (see there). Thus it will be
-    // good to think about if this is really needed - it *seems* to be intended
-    // for a xShape being a on-demand-creatable resource - with the argument that
-    // the SdrPage/UnoPage used influences the SvxShape creation. This uses
-    // resources and would be nice to get rid of anyways.
-    if(nullptr == pOldPage || nullptr == pNewPage)
-    {
-        SvxShape* const pShape(getSvxShape());
-
-        if (pShape)
-            setUnoShape(nullptr);
-    }
 }
 
 
