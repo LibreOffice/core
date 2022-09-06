@@ -57,23 +57,22 @@ struct SvXMLItemMapEntry
     : nNameSpace(nameSpace), nWhichId(whichId), eLocalName(localName), nMemberId(memberId) {}
 };
 
-class SvXMLItemMapEntries_impl;
-
 /** this class manages an array of SvXMLItemMapEntry. It is
     used for optimizing the static array on startup of import
     or export */
 class SvXMLItemMapEntries final : public SvRefBase
 {
-    std::unique_ptr<SvXMLItemMapEntries_impl> mpImpl;
+    SvXMLItemMapEntry const * mpEntries;
+    sal_uInt16 mnCount;
 
 public:
     explicit SvXMLItemMapEntries(SvXMLItemMapEntry const * pEntrys);
     virtual ~SvXMLItemMapEntries() override;
 
     SvXMLItemMapEntry const * getByName( sal_Int32 nElement ) const;
-    SvXMLItemMapEntry const & getByIndex( sal_uInt16 nIndex ) const;
+    SvXMLItemMapEntry const & getByIndex( sal_uInt16 nIndex ) const { return mpEntries[nIndex]; }
 
-    sal_uInt16 getCount() const;
+    sal_uInt16 getCount() const { return mnCount; }
 };
 
 typedef tools::SvRef<SvXMLItemMapEntries> SvXMLItemMapEntriesRef;
