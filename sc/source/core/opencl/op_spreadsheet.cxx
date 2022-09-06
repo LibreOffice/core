@@ -22,15 +22,8 @@ namespace sc::opencl {
 void OpVLookup::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp = CreateDoubleError(NOTAVAILABLE);\n";
     ss << "    double intermediate = DBL_MAX;\n";

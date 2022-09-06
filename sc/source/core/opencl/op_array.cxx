@@ -19,15 +19,8 @@ namespace sc::opencl {
 void OpSumX2MY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"     int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     GenTmpVariables(ss,vSubArguments);
@@ -76,15 +69,8 @@ void OpSumX2MY2::GenSlidingWindowFunction(outputstream &ss,
 void OpSumX2PY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     GenTmpVariables(ss,vSubArguments);
@@ -132,15 +118,8 @@ void OpSumX2PY2::GenSlidingWindowFunction(outputstream &ss,
 void OpSumXMY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     GenTmpVariables(ss,vSubArguments);

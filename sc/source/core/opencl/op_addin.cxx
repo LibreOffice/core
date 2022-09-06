@@ -20,15 +20,8 @@ void OpBesselj::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_" << BinFuncName() << "(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double x = 0.0;\n";
     ss << "    double N = 0.0;\n";
@@ -177,15 +170,7 @@ void OpGestep::GenSlidingWindowFunction(
     outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    double tmp=0,tmp0 =0,tmp1 = 0;\n";
     ss << "    int gid0=get_global_id(0);\n";

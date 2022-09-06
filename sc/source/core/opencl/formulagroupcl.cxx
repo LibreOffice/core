@@ -1419,15 +1419,8 @@ public:
     virtual void GenSlidingWindowFunction( outputstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) override
     {
-        ss << "\ndouble " << sSymName;
-        ss << "_" << BinFuncName() << "(";
-        for (size_t i = 0; i < vSubArguments.size(); i++)
-        {
-            if (i)
-                ss << ", ";
-            vSubArguments[i]->GenSlidingWindowDecl(ss);
-        }
-        ss << ") {\n";
+        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+        ss << "{\n";
         ss << "double tmp = " << GetBottom() << ";\n";
         ss << "int gid0 = get_global_id(0);\n";
         if (isAverage() || isMinOrMax())
@@ -1534,16 +1527,9 @@ public:
     virtual void GenSlidingWindowFunction( outputstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) override
     {
-        ss << "\ndouble " << sSymName;
-        ss << "_" << BinFuncName() << "(";
-        assert(vSubArguments.size() == 2);
-        for (size_t i = 0; i < vSubArguments.size(); i++)
-        {
-            if (i)
-                ss << ", ";
-            vSubArguments[i]->GenSlidingWindowDecl(ss);
-        }
-        ss << ") {\n\t";
+        CHECK_PARAMETER_COUNT( 2, 2 );
+        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+        ss << "{\n\t";
         ss << "int gid0 = get_global_id(0), i = 0;\n\t";
         ss << "double tmp = ";
         ss << Gen2(vSubArguments[0]->GenSlidingWindowDeclRef(),
@@ -1563,13 +1549,10 @@ public:
         size_t nCurWindowSize = 0;
         FormulaToken* tmpCur = nullptr;
         const formula::DoubleVectorRefToken* pCurDVR = nullptr;
-        ss << "\ndouble " << sSymName;
-        ss << "_" << BinFuncName() << "(";
+        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+        ss << "{\n";
         for (size_t i = 0; i < vSubArguments.size(); i++)
         {
-            if (i)
-                ss << ",";
-            vSubArguments[i]->GenSlidingWindowDecl(ss);
             size_t nCurChildWindowSize = vSubArguments[i]->GetWindowSize();
             nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
                 nCurChildWindowSize : nCurWindowSize;
@@ -1582,7 +1565,6 @@ public:
                     throw Unhandled(__FILE__, __LINE__);
             }
         }
-        ss << ") {\n";
         ss << "    double tmp = 0.0;\n";
         ss << "    int gid0 = get_global_id(0);\n";
 

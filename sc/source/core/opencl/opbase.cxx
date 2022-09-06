@@ -204,23 +204,31 @@ void SlidingFunctionBase::GenerateArg( int num, SubArguments& vSubArguments, out
     }
 }
 
-void Normal::GenSlidingWindowFunction(
-    outputstream& ss, const std::string& sSymName, SubArguments& vSubArguments )
+void SlidingFunctionBase::GenerateFunctionDeclaration( const std::string& sSymName,
+    SubArguments& vSubArguments, outputstream& ss )
 {
-    std::vector<std::string> argVector;
     ss << "\ndouble " << sSymName;
-    ss << "_" << BinFuncName() << "(";
+    ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
-            ss << ",";
+            ss << ", ";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
-        argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
     }
-    ss << ") {\n\t";
+    ss << ")\n";
+}
+
+void Normal::GenSlidingWindowFunction(
+    outputstream& ss, const std::string& sSymName, SubArguments& vSubArguments )
+{
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n\t";
     ss << "double tmp = " << GetBottom() << ";\n\t";
     ss << "int gid0 = get_global_id(0);\n\t";
     ss << "tmp = ";
+    std::vector<std::string> argVector;
+    for (size_t i = 0; i < vSubArguments.size(); i++)
+        argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
     ss << Gen(argVector);
     ss << ";\n\t";
     ss << "return tmp;\n";

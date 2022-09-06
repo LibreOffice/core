@@ -227,6 +227,8 @@ public:
 protected:
     // generate code for "double arg<num> = <value>;" from vSubArguments
     static void GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss );
+    void GenerateFunctionDeclaration( const std::string& sSymName,
+        SubArguments& vSubArguments, outputstream& ss );
 };
 
 class Normal : public SlidingFunctionBase

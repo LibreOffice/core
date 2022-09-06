@@ -20,14 +20,7 @@ namespace sc::opencl {
 void OpCos::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-        ss << "\ndouble " << sSymName;
-        ss << "_"<< BinFuncName() <<"(";
-        for (size_t i = 0; i < vSubArguments.size(); i++)
-        {
-            if (i) ss << ",";
-            vSubArguments[i]->GenSlidingWindowDecl(ss);
-        }
-        ss << ")\n";
+        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
         ss << "{\n";
         ss << "    int gid0=get_global_id(0);\n";
         ss << "    double arg0 = 0.0f;\n";
@@ -71,15 +64,8 @@ void OpSec::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss <<"    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
@@ -102,15 +88,8 @@ void OpSecH::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss <<"    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
@@ -125,15 +104,8 @@ void OpMROUND::GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT(2, 2);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ", ";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss<<") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss<<"    double tmp = 0;\n";
     ss<<"    int gid0 = get_global_id(0);\n";
     ss<<"    double arg0=0;\n";
@@ -184,15 +156,8 @@ void OpCosh::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
@@ -208,15 +173,7 @@ void OpCosh::GenSlidingWindowFunction(outputstream &ss,
 void OpCot::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -269,15 +226,8 @@ void OpCoth::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
@@ -301,15 +251,8 @@ void OpCombinA::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tem;\n";
     ss << "    double arg0,arg1;\n";
@@ -358,15 +301,8 @@ void OpEven::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
@@ -390,15 +326,8 @@ void OpMod::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
@@ -424,15 +353,8 @@ void OpMod::GenSlidingWindowFunction(outputstream &ss,
 void OpLog::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tem;\n";
     ss << "    double arg0,arg1;\n";
@@ -475,15 +397,8 @@ void OpCsc::GenSlidingWindowFunction(
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n\t";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n\t";
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
@@ -504,15 +419,8 @@ void OpCountIfs::GenSlidingWindowFunction(outputstream &ss,
     size_t nCurWindowSize = pCurDVR->GetArrayLength() <
     pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
     pCurDVR->GetRefRowSize() ;
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    int tmp =0;\n";
     ss << "    int loop;\n";
@@ -696,15 +604,8 @@ void OpSumIfs::GenSlidingWindowFunction(outputstream &ss,
         ss << "}\n";
     }// finish generate reduction code
     // generate functions as usual
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     if (!mNeedReductionKernel)
@@ -767,15 +668,8 @@ void OpCscH::GenSlidingWindowFunction(
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n\t";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n\t";
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
@@ -790,14 +684,7 @@ void OpCscH::GenSlidingWindowFunction(
 void OpExp::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -844,15 +731,8 @@ void OpAverageIfs::GenSlidingWindowFunction(outputstream &ss,
     size_t nCurWindowSize = pCurDVR->GetArrayLength() <
     pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
     pCurDVR->GetRefRowSize() ;
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n    {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"     int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     ss << "    int count=0;\n";
@@ -901,15 +781,8 @@ void OpLog10::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n\t";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n\t";
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
@@ -925,15 +798,8 @@ void OpLog10::GenSlidingWindowFunction(outputstream &ss,
 void OpSinh::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss <<") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss <<"    double arg0 = " <<
         vSubArguments[0]->GenSlidingWindowDeclRef();
@@ -947,14 +813,7 @@ void OpSinh::GenSlidingWindowFunction(outputstream &ss,
 void OpSin::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -996,15 +855,8 @@ void OpSin::GenSlidingWindowFunction(outputstream &ss,
 void OpAbs::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1032,14 +884,8 @@ void OpArcCos::BinInlineFun(std::set<std::string>& decls,
 void OpArcCos::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1058,14 +904,8 @@ void OpArcCos::GenSlidingWindowFunction(outputstream &ss,
 void OpArcCosHyp::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1103,14 +943,7 @@ void OpArcCosHyp::GenSlidingWindowFunction(outputstream &ss,
 void OpTan::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -1154,15 +987,7 @@ void OpTanH::GenSlidingWindowFunction(outputstream &ss,
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
           formula::SingleVectorRefToken *>(tmpCur);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = "<< vSubArguments[0]->GenSlidingWindowDeclRef();
@@ -1178,15 +1003,7 @@ void OpTanH::GenSlidingWindowFunction(outputstream &ss,
 void OpPower::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg[2];\n";
@@ -1246,15 +1063,7 @@ void OpPower::GenSlidingWindowFunction(outputstream &ss,
 void OpSqrt::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -1301,14 +1110,8 @@ void OpSqrt::GenSlidingWindowFunction(outputstream &ss,
 void OpArcCot::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1326,14 +1129,7 @@ void OpArcCot::GenSlidingWindowFunction(outputstream &ss,
 void OpArcCotHyp::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -1380,14 +1176,8 @@ void OpArcSin::BinInlineFun(std::set<std::string>& decls,
 void OpArcSin::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1405,14 +1195,8 @@ void OpArcSin::GenSlidingWindowFunction(outputstream &ss,
 void OpArcSinHyp::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1453,14 +1237,8 @@ void OpArcTan2::BinInlineFun(std::set<std::string>& decls,
 void OpArcTan2::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double x_num = " << GetBottom() << ";\n";
     ss << "    double y_num = " << GetBottom() << ";\n";
@@ -1488,14 +1266,7 @@ void OpArcTan2::GenSlidingWindowFunction(outputstream &ss,
 void OpArcTan::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -1535,14 +1306,8 @@ void OpArcTan::GenSlidingWindowFunction(outputstream &ss,
 void OpArcTanH::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1563,14 +1328,8 @@ void OpBitAnd::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num1 = " << GetBottom() << ";\n";
     ss << "    double num2 = " << GetBottom() << ";\n";
@@ -1600,15 +1359,8 @@ void OpBitAnd::GenSlidingWindowFunction(outputstream &ss,
 void OpLn::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
 
@@ -1624,15 +1376,8 @@ void OpRound::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 1, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     GenTmpVariables(ss,vSubArguments);
@@ -1659,15 +1404,8 @@ void OpRoundUp::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 1, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    int intTmp;\n";
@@ -1701,15 +1439,8 @@ void OpRoundDown::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 1, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    int intTmp;\n";
@@ -1739,15 +1470,8 @@ void OpRoundDown::GenSlidingWindowFunction(outputstream &ss,
 void OpInt::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    int intTmp;\n";
@@ -1768,15 +1492,8 @@ void OpInt::GenSlidingWindowFunction(outputstream &ss,
 void OpNegSub::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     GenTmpVariables(ss,vSubArguments);
@@ -1788,15 +1505,8 @@ void OpNegSub::GenSlidingWindowFunction(outputstream &ss,
 void OpRadians::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    double tmp;\n";
@@ -1809,15 +1519,8 @@ void OpRadians::GenSlidingWindowFunction(outputstream &ss,
 void OpIsEven::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    double tmp;\n";
@@ -1830,15 +1533,8 @@ void OpIsEven::GenSlidingWindowFunction(outputstream &ss,
 void OpIsOdd::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    int singleIndex =  gid0;\n";
     ss << "    double tmp;\n";
@@ -1856,15 +1552,8 @@ void OpOdd::GenSlidingWindowFunction(
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
         formula::SingleVectorRefToken *>(tmpCur);
     ss << Math_Intg_Str;
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double tmp=0;\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
@@ -1889,15 +1578,7 @@ void OpOdd::GenSlidingWindowFunction(
 void OpCountIf::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (unsigned i = 0; i < 2; i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double vara, varb;\n";
@@ -1994,19 +1675,11 @@ void OpCountIf::GenSlidingWindowFunction(outputstream &ss,
 void OpSumIf::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    int flag = 3 == vSubArguments.size() ? 2 : 0;
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double vara, varb, varc, sum = 0.0f;\n";
+    int flag = 3 == vSubArguments.size() ? 2 : 0;
     FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
     assert(tmpCur);
     if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
@@ -2114,15 +1787,7 @@ void OpSumIf::GenSlidingWindowFunction(outputstream &ss,
 void OpTrunc::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg[2];\n";
@@ -2198,15 +1863,8 @@ void OpFloor::GenSlidingWindowFunction(
     SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 3 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0,arg1,arg2=0.0;\n";
     ss << "    arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
@@ -2236,14 +1894,8 @@ void OpBitOr::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double num1 = " << GetBottom() << ";\n";
     ss << "    double num2 = " << GetBottom() << ";\n";
@@ -2276,14 +1928,8 @@ void OpBitXor::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num1 = " << GetBottom() << ";\n";
     ss << "    double num2 = " << GetBottom() << ";\n";
@@ -2317,14 +1963,8 @@ void OpBitLshift::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double shift_amount = " << GetBottom() << ";\n";
@@ -2360,14 +2000,8 @@ void OpBitRshift::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double shift_amount = " << GetBottom() << ";\n";
@@ -2404,15 +2038,7 @@ void OpBitRshift::GenSlidingWindowFunction(outputstream &ss,
 void OpSumSQ::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); ++i)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double sum = 0.0f, arg;\n";
@@ -2494,15 +2120,7 @@ void OpSumSQ::GenSlidingWindowFunction(outputstream &ss,
 void OpSqrtPi::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -2544,14 +2162,8 @@ void OpCeil::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 3 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double significance = " << GetBottom() << ";\n";
@@ -2606,14 +2218,8 @@ void OpCombin::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double result = -1.0;\n";
     GenerateArg( 0, vSubArguments, ss );
@@ -2660,15 +2266,8 @@ void OpCombin::GenSlidingWindowFunction(outputstream &ss,
 void OpProduct::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"( ";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int i = 0;\n";
     ss << "    double product=1.0;\n";
@@ -2743,15 +2342,8 @@ void OpProduct::GenSlidingWindowFunction(outputstream &ss,
 void OpAverageIf::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n{\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     ss << "    double count=0;\n";
@@ -2901,15 +2493,7 @@ void OpAverageIf::GenSlidingWindowFunction(outputstream &ss,
 void OpDeg::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = 0.0f;\n";
@@ -2952,15 +2536,8 @@ void OpFact::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 1, 1 );
-    ss << "\ndouble " << sSymName;
-    ss << "_" << BinFuncName() << "(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double arg0 = " << GetBottom() << ";\n";
@@ -3017,14 +2594,8 @@ void OpFact::GenSlidingWindowFunction(outputstream& ss,
 void OpQuotient::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i) ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ") {\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num1 = 1.0;\n";
     ss << "    double num2 = 1.0;\n";
@@ -3045,15 +2616,7 @@ void OpSeriesSum::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT(4,4);
-    ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ")\n";
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double var[3], coeff, res = 0.0f;\n";
