@@ -429,6 +429,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
                 // Null portions are eliminated. They can form if two FlyFrames
                 // overlap.
+                // coverity[deref_arg] - "Cut" means next "GetNextPortion" returns a different Portion
                 if( !pPos->Compress() )
                 {
                     // Only take over Height and Ascent if the rest of the line
