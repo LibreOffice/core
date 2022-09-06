@@ -225,7 +225,9 @@ public:
     virtual void GenSlidingWindowFunction( outputstream&,
         const std::string&, SubArguments& ) = 0;
 protected:
-    // generate code for "double arg<num> = <value>;" from vSubArguments
+    // generate code for "double <name> = <value>;" from vSubArguments
+    static void GenerateArg( const char* name, int num, SubArguments& vSubArguments, outputstream& ss );
+    // overload, variable will be named "arg<num>"
     static void GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss );
     void GenerateFunctionDeclaration( const std::string& sSymName,
         SubArguments& vSubArguments, outputstream& ss );

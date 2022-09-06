@@ -174,34 +174,43 @@ bool VectorRef::NeedParallelReduction() const
     return false;
 }
 
-void SlidingFunctionBase::GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss )
+void SlidingFunctionBase::GenerateArg( const char* name, int num, SubArguments& vSubArguments, outputstream& ss )
 {
     CHECK_PARAMETER_COUNT_MIN( num );
     FormulaToken *token = vSubArguments[num]->GetFormulaToken();
     if( token == nullptr )
         throw Unhandled( __FILE__, __LINE__ );
-    ss << "    double arg" << num << ";\n";
+    ss << "    double " << name << ";\n";
     if(token->GetOpCode() == ocPush)
     {
         if(token->GetType() == formula::svSingleVectorRef)
         {
-            ss << "    if(isnan(";
+            const formula::SingleVectorRefToken* svr =
+                static_cast<const formula::SingleVectorRefToken *>(token);
+            ss << "    if (gid0 >= " << svr->GetArrayLength() << " || isnan(";
             ss << vSubArguments[num]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        arg" << num << " = 0.0;\n";
+            ss << "        " << name << " = 0.0;\n";
             ss << "    else\n";
-            ss << "        arg" << num << " = ";
+            ss << "        " << name << " = ";
             ss << vSubArguments[num]->GenSlidingWindowDeclRef() << ";\n";
         }
         else if(token->GetType() == formula::svDouble)
-            ss << "    arg" << num << " = " << token->GetDouble() << ";\n";
+            ss << "    " << name << " = " << token->GetDouble() << ";\n";
         else
             throw Unhandled( __FILE__, __LINE__ );
     }
     else
     {
-        ss << "    arg" << num << " = ";
+        ss << "    " << name << " = ";
         ss << vSubArguments[num]->GenSlidingWindowDeclRef() << ";\n";
     }
+}
+
+void SlidingFunctionBase::GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss )
+{
+    char buf[ 30 ];
+    sprintf( buf, "arg%d", num );
+    GenerateArg( buf, num, vSubArguments, ss );
 }
 
 void SlidingFunctionBase::GenerateFunctionDeclaration( const std::string& sSymName,

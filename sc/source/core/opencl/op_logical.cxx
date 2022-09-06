@@ -15,158 +15,24 @@
 using namespace formula;
 
 namespace sc::opencl {
-void OpAnd::GenSlidingWindowFunction(outputstream &ss,
+
+void OpLogicalBinaryOperator::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
-    CHECK_PARAMETER_COUNT_MIN( 1 );
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double t = 1,tmp=0;\n";
+    ss << "    bool t = " << defaultOpenclValue() << ";\n";
     for(size_t j = 0; j< vSubArguments.size(); j++)
     {
-        ss << "    double tmp"<<j<<" = 1;\n";
-        FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
-        if(tmpCur0->GetType() == formula::svSingleVectorRef)
-        {
-        const formula::SingleVectorRefToken*pCurDVR= static_cast<const
-            formula::SingleVectorRefToken *>(tmpCur0);
-        ss<< "    int buffer_len"<<j<<" = "<<pCurDVR->GetArrayLength();
-        ss<< ";\n";
-        ss <<"    if(gid0 >= buffer_len"<<j<<" || isnan(";
-        ss <<vSubArguments[j]->GenSlidingWindowDeclRef();
-        ss <<"))\n";
-        ss <<"        tmp = 1;\n    else\n";
-        ss <<"        tmp = ";
-        ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-        ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
-        }
-        else if(tmpCur0->GetType() == formula::svDouble)
-        {
-            ss <<"        tmp = ";
-            ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
-        }
-        else if(tmpCur0->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-            formula::DoubleVectorRefToken *>(tmpCur0);
-            size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-            pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-            pCurDVR->GetRefRowSize() ;
-            ss << "    for(int i = ";
-            if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < " << nCurWindowSize << "; i++) {\n";
-            }
-            else if(pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()){
-            ss << "0; i < gid0 + " << nCurWindowSize << "; i++) {\n";
-            }
-            else{
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            }
-            if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-            ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
-            ss <<")||i+gid0>="<<pCurDVR->GetArrayLength();
-            ss <<")\n";
-            ss <<"        tmp = 1;\n    else\n";
-            }
-            else
-            {
-            ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
-            ss <<")||i>="<<pCurDVR->GetArrayLength();
-            ss <<")\n";
-            ss <<"        tmp = 1;\n    else\n";
-            }
-            ss <<"        tmp = ";
-            ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
-            ss <<"    }\n";
-        }
-        else
-        {
-            ss <<"        tmp"<<j<<" = ";
-            ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-        }
-        ss <<"    t = t && tmp"<<j<<";\n";
+        GenerateArg( j, vSubArguments, ss );
+        ss << "    t = t " << openclOperator() << " (arg" << j << " != 0);\n";
     }
     ss << "    return t;\n";
     ss << "}\n";
 }
 
-void OpOr::GenSlidingWindowFunction(outputstream &ss,
-    const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT_MIN( 1 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double t = 0,tmp=0;\n";
-    for(size_t j = 0; j< vSubArguments.size(); j++)
-    {
-        ss << "    double tmp"<<j<<" = 0;\n";
-        FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
-        if(tmpCur0->GetType() == formula::svSingleVectorRef)
-        {
-        const formula::SingleVectorRefToken*pCurDVR= static_cast<const
-            formula::SingleVectorRefToken *>(tmpCur0);
-        ss<< "    int buffer_len"<<j<<" = "<<pCurDVR->GetArrayLength();
-        ss<< ";\n";
-        ss <<"    if(gid0 >= buffer_len"<<j<<" || isnan(";
-        ss <<vSubArguments[j]->GenSlidingWindowDeclRef();
-        ss <<"))\n";
-        ss <<"        tmp = 0;\n    else\n";
-        ss <<"        tmp = ";
-        ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-        ss <<"    tmp"<<j<<" = tmp"<<j<<" || tmp;\n";
-        }
-        else if(tmpCur0->GetType() == formula::svDouble)
-        {
-            ss <<"        tmp = ";
-            ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp"<<j<<" = tmp"<<j<<" || tmp;\n";
-        }
-        else if(tmpCur0->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-            formula::DoubleVectorRefToken *>(tmpCur0);
-            size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-            pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-            pCurDVR->GetRefRowSize() ;
-            ss << "    for(int i = ";
-            if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < " << nCurWindowSize << "; i++) {\n";
-            }
-            else if(pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()){
-            ss << "0; i < gid0 + " << nCurWindowSize << "; i++) {\n";
-            }
-            else{
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            }
-            if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-            ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
-            ss <<")||i+gid0>="<<pCurDVR->GetArrayLength();
-            ss <<")\n";
-            ss <<"        tmp = 0;\n    else\n";
-            }
-            else
-            {
-            ss <<"    if(isnan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
-            ss <<")||i>="<<pCurDVR->GetArrayLength();
-            ss <<")\n";
-            ss <<"        tmp = 0;\n    else\n";
-            }
-            ss <<"        tmp = ";
-            ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp"<<j<<" = tmp"<<j<<" || tmp;\n";
-            ss <<"    }\n";
-        }
-        ss <<"    t = t || tmp"<<j<<";\n";
-    }
-    ss << "    return t;\n";
-    ss << "}\n";
-}
 void OpNot::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
@@ -174,103 +40,11 @@ void OpNot::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double tmp=0;\n";
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    if(tmpCur0->GetType() == formula::svSingleVectorRef)
-    {
-        const formula::SingleVectorRefToken*pCurDVR= static_cast<const
-            formula::SingleVectorRefToken *>(tmpCur0);
-        ss <<"    if(gid0 >= "<<pCurDVR->GetArrayLength()<<" || isnan(";
-        ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss <<"))\n";
-        ss <<"        tmp = 0;\n    else\n";
-        ss <<"        tmp = ";
-        ss <<vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n";
-        ss <<"    tmp = (tmp == 0.0);\n";
-    }
-    else if(tmpCur0->GetType() == formula::svDouble)
-    {
-        ss <<"        tmp = ";
-        ss <<vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n";
-        ss <<"    tmp = (tmp == 0.0);\n";
-    }
-    ss << "    return tmp;\n";
+    GenerateArg( 0, vSubArguments, ss );
+    ss << "    return arg0 == 0;\n";
     ss << "}\n";
 }
 
-void OpXor::GenSlidingWindowFunction(outputstream &ss,
-    const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT_MIN( 1 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    int t = 0,tmp0 = 0;\n";
-    ss << "    double tmp = 0;\n";
-    for(DynamicKernelArgumentRef & rArg : vSubArguments)
-    {
-        FormulaToken *tmpCur0 = rArg->GetFormulaToken();
-        if(tmpCur0->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken*pCurDVR= static_cast<const
-                formula::SingleVectorRefToken *>(tmpCur0);
-            ss <<"    if(gid0 >= "<<pCurDVR->GetArrayLength()<<" || isnan(";
-            ss <<rArg->GenSlidingWindowDeclRef();
-            ss <<"))\n";
-            ss <<"        tmp = 0;\n    else\n";
-            ss <<"        tmp = ";
-            ss <<rArg->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp0 = (tmp != 0);\n";
-            ss <<"    t = t ^tmp0;\n";
-        }
-        else if(tmpCur0->GetType() == formula::svDouble)
-        {
-            ss <<"        tmp = ";
-            ss <<rArg->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp0 = (tmp != 0);\n";
-            ss <<"    t = t ^tmp0;\n";
-        }
-        else if(tmpCur0->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-            formula::DoubleVectorRefToken *>(tmpCur0);
-            size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-            pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-            pCurDVR->GetRefRowSize() ;
-            ss << "    for(int i = ";
-            if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < " << nCurWindowSize << "; i++) {\n";
-            }
-            else if(pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()){
-            ss << "0; i < gid0 + " << nCurWindowSize << "; i++) {\n";
-            }
-            else{
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            }
-            if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-            ss <<"    if(isnan("<<rArg->GenSlidingWindowDeclRef();
-            ss <<")||i+gid0>="<<pCurDVR->GetArrayLength();
-            ss <<")\n";
-            ss <<"        tmp = 0;\n    else\n";
-            }
-            else
-            {
-            ss <<"    if(isnan("<<rArg->GenSlidingWindowDeclRef();
-            ss <<")||i>="<<pCurDVR->GetArrayLength();
-            ss <<")\n";
-            ss <<"        tmp = 0;\n    else\n";
-            }
-            ss <<"        tmp = ";
-            ss <<rArg->GenSlidingWindowDeclRef()<<";\n";
-            ss <<"    tmp0 = (tmp != 0);\n";
-            ss <<"    t = t ^tmp0;\n";
-            ss <<"    }\n";
-        }
-    }
-    ss << "    return t;\n";
-    ss << "}\n";
-}
 void OpIf::GenSlidingWindowFunction(outputstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
@@ -278,51 +52,20 @@ void OpIf::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
+    GenerateArg( 0, vSubArguments, ss );
+    if(vSubArguments.size()>1)
+        GenerateArg( 1, vSubArguments, ss );
+    else
+        ss << "    double arg1 = 1;\n";
+    if(vSubArguments.size()>2)
+        GenerateArg( 2, vSubArguments, ss );
+    else
+        ss << "    double arg2 = 0;\n";
 
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    if(tmpCur0->GetType() == formula::svDoubleVectorRef)
-    {
-        throw UnhandledToken("unknown operand for ocPush", __FILE__, __LINE__);
-    }
-    if(vSubArguments.size()==3)
-    {
-        ss << "    if(isnan(";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << ")||  ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " == 0)\n";
-        ss << "         return ";
-        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss << ";\n";
-        ss << "     else";
-        ss <<"          return ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-        ss <<";\n";
-    }
-    if(vSubArguments.size()==2)
-    {
-        ss << "    if(isnan(";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << ")||  ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " == 0)\n";
-        ss << "         return 0;\n";
-        ss << "     else";
-        ss <<"          return ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-        ss <<";\n";
-    }
-    if(vSubArguments.size()==1)
-    {
-        ss << "    if(isnan(";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << ")||  ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " == 0)\n";
-        ss << "         return 0;\n";
-        ss << "     else";
-        ss <<"          return 1;\n";
-    }
+    ss << "    if(arg0 != 0)\n";
+    ss << "        return arg1;\n";
+    ss << "    else\n";
+    ss << "        return arg2;\n";
     ss << "}\n";
 }
 

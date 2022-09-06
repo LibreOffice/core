@@ -14,23 +14,34 @@
 
 namespace sc::opencl {
 
-class OpAnd: public Normal
+/// Implements OpAnd, OpOr, OpXor.
+class OpLogicalBinaryOperator : public Normal
 {
-public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "And"; }
     virtual bool canHandleMultiVector() const override { return true; }
+    /// The C operator implementing the function.
+    virtual const char* openclOperator() const = 0;
+    /// Default value when chaining the operator.
+    virtual const char* defaultOpenclValue() const = 0;
 };
 
-class OpOr: public Normal
+class OpAnd: public OpLogicalBinaryOperator
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Or"; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual std::string BinFuncName() const override { return "And"; }
+    virtual const char* openclOperator() const override { return "&&"; };
+    virtual const char* defaultOpenclValue() const override { return "true"; }
 };
+
+class OpOr: public OpLogicalBinaryOperator
+{
+public:
+    virtual std::string BinFuncName() const override { return "Or"; }
+    virtual const char* openclOperator() const override { return "||"; };
+    virtual const char* defaultOpenclValue() const override { return "false"; }
+};
+
 class OpNot: public Normal
 {
 public:
@@ -38,14 +49,15 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Not"; }
 };
-class OpXor: public Normal
+
+class OpXor: public OpLogicalBinaryOperator
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Xor"; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual const char* openclOperator() const override { return "^"; };
+    virtual const char* defaultOpenclValue() const override { return "false"; }
 };
+
 class OpIf:public Normal
 {
 public:
