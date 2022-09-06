@@ -19,15 +19,19 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 
+#include <com/sun/star/report/XReportDefinition.hpp>
 #include <vcl/weld.hxx>
 #include <memory>
+
 namespace rptui
 {
+    class NavigatorTree;
     class OReportController;
-    class ONavigatorImpl;
     class ONavigator : public weld::GenericDialogController
     {
-        ::std::unique_ptr<ONavigatorImpl> m_pImpl;
+        css::uno::Reference< css::report::XReportDefinition>  m_xReport;
+        std::unique_ptr<NavigatorTree>              m_xNavigatorTree;
+
         ONavigator(const ONavigator&) = delete;
         void operator =(const ONavigator&) = delete;
 

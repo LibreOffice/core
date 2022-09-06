@@ -24,7 +24,6 @@
 #include <ReportController.hxx>
 #include <UITools.hxx>
 #include <reportformula.hxx>
-#include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
@@ -97,8 +96,6 @@ static OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElemen
     }
     return sName.makeStringAndClear();
 }
-
-namespace {
 
 class NavigatorTree : public ::cppu::BaseMutex
                     , public reportdesign::ITraverseReport
@@ -206,8 +203,6 @@ public:
         return m_xTreeView->iter_n_children(rIter);
     }
 };
-
-}
 
 NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportController& rController)
     : OPropertyChangeListener(m_aMutex)
@@ -789,20 +784,10 @@ void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource)
     m_pTree->_disposing( _rSource );
 }
 
-class ONavigatorImpl
-{
-public:
-    ONavigatorImpl(OReportController& rController, weld::Builder& rBuilder);
-    ONavigatorImpl(const ONavigatorImpl&) = delete;
-    ONavigatorImpl& operator=(const ONavigatorImpl&) = delete;
-
-    uno::Reference< report::XReportDefinition>  m_xReport;
-    std::unique_ptr<NavigatorTree>              m_xNavigatorTree;
-};
-
-ONavigatorImpl::ONavigatorImpl(OReportController& rController, weld::Builder& rBuilder)
-    : m_xReport(rController.getReportDefinition())
-    , m_xNavigatorTree(std::make_unique<NavigatorTree>(rBuilder.weld_tree_view("treeview"), rController))
+ONavigator::ONavigator(weld::Window* pParent, OReportController& rController)
+    : GenericDialogController(pParent, "modules/dbreport/ui/floatingnavigator.ui", "FloatingNavigator")
+    , m_xReport(rController.getReportDefinition())
+    , m_xNavigatorTree(std::make_unique<NavigatorTree>(m_xBuilder->weld_tree_view("treeview"), rController))
 {
     reportdesign::OReportVisitor aVisitor(m_xNavigatorTree.get());
     aVisitor.start(m_xReport);
@@ -811,13 +796,7 @@ ONavigatorImpl::ONavigatorImpl(OReportController& rController, weld::Builder& rB
         m_xNavigatorTree->expand_row(*xScratch);
     lang::EventObject aEvent(rController);
     m_xNavigatorTree->_selectionChanged(aEvent);
-}
-
-ONavigator::ONavigator(weld::Window* pParent, OReportController& rController)
-    : GenericDialogController(pParent, "modules/dbreport/ui/floatingnavigator.ui", "FloatingNavigator")
-{
-    m_pImpl.reset(new ONavigatorImpl(rController, *m_xBuilder));
-    m_pImpl->m_xNavigatorTree->grab_focus();
+    m_xNavigatorTree->grab_focus();
 
     m_xDialog->connect_container_focus_changed(LINK(this, ONavigator, FocusChangeHdl));
 }
@@ -829,7 +808,7 @@ ONavigator::~ONavigator()
 IMPL_LINK_NOARG(ONavigator, FocusChangeHdl, weld::Container&, void)
 {
     if (m_xDialog->has_toplevel_focus())
-        m_pImpl->m_xNavigatorTree->grab_focus();
+        m_xNavigatorTree->grab_focus();
 }
 
 } // rptui
