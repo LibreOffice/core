@@ -147,6 +147,8 @@ public:
         return *this;
     }
 
+    Tuple2D<TYPE> operator-(void) const { return Tuple2D<TYPE>(-mfX, -mfY); }
+
     bool operator==(const Tuple2D<TYPE>& rTup) const { return mfX == rTup.mfX && mfY == rTup.mfY; }
 
     bool operator!=(const Tuple2D<TYPE>& rTup) const { return !(*this == rTup); }
