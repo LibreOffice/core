@@ -1203,7 +1203,7 @@ bool FormulaCompiler::DeQuote( OUString& rStr )
     if ( nLen > 1 && rStr[0] == '\'' && rStr[ nLen-1 ] == '\'' )
     {
         rStr = rStr.copy( 1, nLen-2 );
-        rStr = rStr.replaceAll( "\\\'", "\'" );
+        rStr = rStr.replaceAll( "''", "'" );
         return true;
     }
     return false;

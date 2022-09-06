@@ -5506,15 +5506,10 @@ void ScCompiler::LocalizeString( OUString& rName ) const
 // quote characters contained within are escaped by '\\'.
 bool ScCompiler::EnQuote( OUString& rStr )
 {
-    sal_Int32 nType = ScGlobal::getCharClass().getStringType( rStr, 0, rStr.getLength() );
-    if ( !CharClass::isNumericType( nType )
-            && CharClass::isAlphaNumericType( nType ) )
-        return false;
-
     sal_Int32 nPos = 0;
     while ( (nPos = rStr.indexOf( '\'', nPos)) != -1 )
     {
-        rStr = rStr.replaceAt( nPos, 0, u"\\" );
+        rStr = rStr.replaceAt( nPos, 0, u"'" );
         nPos += 2;
     }
     rStr = "'" + rStr + "'";
