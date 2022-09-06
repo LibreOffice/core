@@ -1241,10 +1241,10 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
     auto it(cacheMap.aCacheMap.find(rCache.getRange()));
     if (it != cacheMap.aCacheMap.end())
     {
-        ScLookupCache* pCache = (*it).second.release();
+        std::unique_ptr<ScLookupCache> xCache = std::move(it->second);
         cacheMap.aCacheMap.erase(it);
         assert(!IsThreadedGroupCalcInProgress()); // EndListeningArea() is not thread-safe
-        EndListeningArea(pCache->getRange(), false, &rCache);
+        EndListeningArea(xCache->getRange(), false, &rCache);
         return;
     }
     OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");

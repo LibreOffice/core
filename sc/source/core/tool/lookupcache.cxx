@@ -119,7 +119,7 @@ void ScLookupCache::Notify( const SfxHint& rHint )
         if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScAreaChanged)
         {
             mpDoc->RemoveLookupCache( *this);
-            delete this;
+            // this ScLookupCache is deleted by RemoveLookupCache
         }
     }
 }
