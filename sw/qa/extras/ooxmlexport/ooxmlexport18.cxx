@@ -63,6 +63,13 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
     loadAndSave("inline-sdt-header.docx");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
+{
+    // Without the accompanying fix in place, this test would have failed with an assertion failure,
+    // we produced not-well-formed XML on save.
+    loadAndSave("cell-sdt-redline.docx");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
