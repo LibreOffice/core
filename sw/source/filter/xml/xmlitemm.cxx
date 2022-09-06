@@ -38,9 +38,7 @@ using namespace ::xmloff::token;
 #define M_E_SIE( p, l, w, m ) \
     { XML_NAMESPACE_##p, XML_##l, o3tl::narrowing<sal_uInt16>(w), MID_SW_FLAG_SPECIAL_ITEM_EXPORT|MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
 
-#define M_END { 0, XML_TOKEN_INVALID, 0, 0 }
-
-SvXMLItemMapEntry const aXMLTableItemMap[] =
+const SvXMLItemMapEntry aTableItemMap[] =
 {
     // RES_FILL_ORDER
     // not required
@@ -115,19 +113,18 @@ SvXMLItemMapEntry const aXMLTableItemMap[] =
     MAP_ENTRY( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
 
     // RES_COLLAPSING_BORDERS
-    MAP_ENTRY( TABLE, BORDER_MODEL, RES_COLLAPSING_BORDERS, 0 ),
-
-    M_END
+    MAP_ENTRY( TABLE, BORDER_MODEL, RES_COLLAPSING_BORDERS, 0 )
 };
+const o3tl::span<SvXMLItemMapEntry const> aXMLTableItemMap(aTableItemMap);
 
-SvXMLItemMapEntry const aXMLTableColItemMap[] =
+const SvXMLItemMapEntry aTableColItemMap[] =
 {
     M_E_SI( STYLE,  COLUMN_WIDTH,     RES_FRM_SIZE, MID_FRMSIZE_COL_WIDTH ),
     MAP_ENTRY( STYLE,        REL_COLUMN_WIDTH, RES_FRM_SIZE, MID_FRMSIZE_REL_COL_WIDTH ),
-    M_END
 };
+const o3tl::span<SvXMLItemMapEntry const> aXMLTableColItemMap(aTableColItemMap);
 
-SvXMLItemMapEntry const aXMLTableRowItemMap[] =
+const SvXMLItemMapEntry aTableRowItemMap[] =
 {
     // RES_FILL_ORDER
     // not required
@@ -196,11 +193,11 @@ SvXMLItemMapEntry const aXMLTableRowItemMap[] =
     // RES_END_AT_TXTEND
     // not required
     // RES_UNKNOWNATR_CONTAINER
-    M_E_SE( TEXT, XMLNS, RES_UNKNOWNATR_CONTAINER, 0 ),
-    M_END
+    M_E_SE( TEXT, XMLNS, RES_UNKNOWNATR_CONTAINER, 0 )
 };
+const o3tl::span<SvXMLItemMapEntry const> aXMLTableRowItemMap(aTableRowItemMap);
 
-SvXMLItemMapEntry const aXMLTableCellItemMap[] =
+const SvXMLItemMapEntry aTableCellItemMap[] =
 {
     // RES_FILL_ORDER
     // not required
@@ -283,8 +280,7 @@ SvXMLItemMapEntry const aXMLTableCellItemMap[] =
     // RES_FRAMEDIR
     MAP_ENTRY( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
     MAP_ENTRY( LO_EXT, WRITING_MODE, RES_FRAMEDIR, 0 ),
-
-    M_END
 };
+const o3tl::span<SvXMLItemMapEntry const> aXMLTableCellItemMap(aTableCellItemMap);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

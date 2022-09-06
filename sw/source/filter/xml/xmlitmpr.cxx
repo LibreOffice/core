@@ -23,33 +23,20 @@
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
-SvXMLItemMapEntries::SvXMLItemMapEntries( SvXMLItemMapEntry const * pEntries )
-    : mpEntries(pEntries)
-{
-    mnCount = 0;
-    while( pEntries->eLocalName != XML_TOKEN_INVALID )
-    {
-        pEntries++;
-        mnCount++;
-    }
-}
-
 SvXMLItemMapEntries::~SvXMLItemMapEntries()
 {
 }
 
 SvXMLItemMapEntry const * SvXMLItemMapEntries::getByName(  sal_Int32 nElement  ) const
 {
-    SvXMLItemMapEntry const * pMap = mpEntries;
-    while( pMap && (pMap->eLocalName != XML_TOKEN_INVALID) )
+    for (const SvXMLItemMapEntry& rEntry : mpEntries)
     {
-        if( IsTokenInNamespace(nElement, pMap->nNameSpace) &&
-            (nElement & TOKEN_MASK) == pMap->eLocalName )
-            break;
-        pMap++;
+        if( IsTokenInNamespace(nElement, rEntry.nNameSpace) &&
+            (nElement & TOKEN_MASK) == rEntry.eLocalName )
+            return &rEntry;
     }
 
-    return (pMap && (pMap->eLocalName != XML_TOKEN_INVALID)) ? pMap : nullptr;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
