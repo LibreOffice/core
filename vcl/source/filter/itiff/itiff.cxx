@@ -75,21 +75,21 @@ static toff_t tiff_seek(thandle_t handle, toff_t offset, int whence)
     switch (whence)
     {
         case SEEK_SET:
-            pContext->rStream.Seek(offset);
             break;
         case SEEK_CUR:
-            pContext->rStream.SeekRel(offset);
+            offset = pContext->rStream.Tell() + offset;;
             break;
         case SEEK_END:
-            pContext->rStream.Seek(STREAM_SEEK_TO_END);
-            pContext->rStream.SeekRel(offset);
+            offset = pContext->rStream.TellEnd() + offset;
             break;
         default:
             assert(false && "unknown seek type");
             break;
     }
 
-    return pContext->rStream.Tell();
+    pContext->rStream.Seek(offset);
+
+    return offset;
 }
 
 static int tiff_close(thandle_t)
