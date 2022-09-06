@@ -258,62 +258,52 @@ void ImplSalPostDispatchMsg( const MSG* pMsg )
     pSalData->mnSalObjWantKeyEvt = 0;
 }
 
-static LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+static LRESULT CALLBACK SalSysObjWndProcW(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
-    WinSalObject*   pSysObj;
-    LRESULT         nRet = 0;
-
     switch( nMsg )
     {
         case WM_ERASEBKGND:
-            nRet = 1;
-            rDef = FALSE;
-            break;
+            return 1;
         case WM_PAINT:
             {
             PAINTSTRUCT aPs;
             BeginPaint( hWnd, &aPs );
             EndPaint( hWnd, &aPs );
-            rDef = FALSE;
             }
-            break;
+            return 0;
 
         case WM_PARENTNOTIFY:
-            {
-            UINT nNotifyMsg = LOWORD( wParam );
-            if ( (nNotifyMsg == WM_LBUTTONDOWN) ||
+            if (UINT nNotifyMsg = LOWORD(wParam);
+                 (nNotifyMsg == WM_LBUTTONDOWN) ||
                  (nNotifyMsg == WM_RBUTTONDOWN) ||
                  (nNotifyMsg == WM_MBUTTONDOWN) )
             {
                 ImplSalYieldMutexAcquireWithWait();
-                pSysObj = GetSalObjWindowPtr( hWnd );
+                WinSalObject* pSysObj = GetSalObjWindowPtr(hWnd);
                 if ( pSysObj && !pSysObj->IsMouseTransparent() )
                     pSysObj->CallCallback( SalObjEvent::ToTop );
                 ImplSalYieldMutexRelease();
             }
-            }
             break;
 
         case WM_MOUSEACTIVATE:
-            {
             ImplSalYieldMutexAcquireWithWait();
-            pSysObj = GetSalObjWindowPtr( hWnd );
-            if ( pSysObj && !pSysObj->IsMouseTransparent() )
+            if (WinSalObject* pSysObj = GetSalObjWindowPtr(hWnd);
+                pSysObj && !pSysObj->IsMouseTransparent())
             {
                 bool const ret = PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
                 SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
             }
             ImplSalYieldMutexRelease();
-            }
             break;
 
         case SALOBJ_MSG_TOTOP:
             if ( ImplSalYieldMutexTryToAcquire() )
             {
-                pSysObj = GetSalObjWindowPtr( hWnd );
-                pSysObj->CallCallback( SalObjEvent::ToTop );
+                if (WinSalObject* pSysObj = GetSalObjWindowPtr(hWnd))
+                    pSysObj->CallCallback(SalObjEvent::ToTop);
                 ImplSalYieldMutexRelease();
-                rDef = FALSE;
+                return 0;
             }
             else
             {
@@ -325,7 +315,7 @@ static LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, L
         case SALOBJ_MSG_POSTFOCUS:
             if ( ImplSalYieldMutexTryToAcquire() )
             {
-                pSysObj = GetSalObjWindowPtr( hWnd );
+                WinSalObject* pSysObj = GetSalObjWindowPtr(hWnd);
                 HWND    hFocusWnd = ::GetFocus();
                 SalObjEvent nEvent;
                 if ( hFocusWnd && ImplIsSysWindowOrChild( hWnd, hFocusWnd ) )
@@ -340,67 +330,44 @@ static LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, L
                 bool const ret = PostMessageW(hWnd, SALOBJ_MSG_POSTFOCUS, 0, 0);
                 SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
             }
-            rDef = FALSE;
-            break;
+            return 0;
 
         case WM_SIZE:
-            {
-            HWND hWndChild = GetWindow( hWnd, GW_CHILD );
-            if ( hWndChild )
+            if (HWND hWndChild = GetWindow(hWnd, GW_CHILD))
             {
                 SetWindowPos( hWndChild,
                               nullptr, 0,  0, static_cast<int>(LOWORD( lParam )), static_cast<int>(HIWORD( lParam )),
                               SWP_NOZORDER | SWP_NOACTIVATE );
             }
-            }
-            rDef = FALSE;
-            break;
+            return 0;
 
         case WM_CREATE:
             {
             // Save the window instance at the window handle.
-            // Can also be used for the A-Version, because the struct
-            // to access lpCreateParams is the same structure
             CREATESTRUCTW* pStruct = reinterpret_cast<CREATESTRUCTW*>(lParam);
-            pSysObj = static_cast<WinSalObject*>(pStruct->lpCreateParams);
+            WinSalObject* pSysObj = static_cast<WinSalObject*>(pStruct->lpCreateParams);
             SetSalObjWindowPtr( hWnd, pSysObj );
             // set HWND already here,
             // as instance data might be used during CreateWindow() events
             pSysObj->mhWnd = hWnd;
-            rDef = FALSE;
+            return 0;
             }
-            break;
     }
 
-    return nRet;
+    return DefWindowProcW(hWnd, nMsg, wParam, lParam);
 }
 
-static LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+static LRESULT CALLBACK SalSysObjChildWndProcW(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
-    int bDef = TRUE;
-    LRESULT nRet = SalSysObjWndProc( hWnd, nMsg, wParam, lParam, bDef );
-    if ( bDef )
-        nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
-    return nRet;
-}
-
-static LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
-{
-    LRESULT nRet = 0;
-
     switch( nMsg )
     {
         // clear background for plugins
         case WM_ERASEBKGND:
+            if (WinSalObject* pSysObj = GetSalObjWindowPtr(GetParent(hWnd));
+                pSysObj && !pSysObj->IsEraseBackgroundEnabled())
             {
-                WinSalObject* pSysObj = GetSalObjWindowPtr( ::GetParent( hWnd ) );
-
-                if( pSysObj && !pSysObj->IsEraseBackgroundEnabled() )
-                {
-                    // do not erase background
-                    nRet = 1;
-                    rDef = FALSE;
-                }
+                // do not erase background
+                return 1;
             }
             break;
 
@@ -409,9 +376,8 @@ static LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wPar
             PAINTSTRUCT aPs;
             BeginPaint( hWnd, &aPs );
             EndPaint( hWnd, &aPs );
-            rDef = FALSE;
             }
-            break;
+            return 0;
 
         case WM_MOUSEMOVE:
         case WM_LBUTTONDOWN:
@@ -420,39 +386,25 @@ static LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wPar
         case WM_LBUTTONUP:
         case WM_MBUTTONUP:
         case WM_RBUTTONUP:
+            if (WinSalObject* pSysObj = GetSalObjWindowPtr(GetParent(hWnd));
+                pSysObj && pSysObj->IsMouseTransparent())
             {
-                WinSalObject* pSysObj;
-                pSysObj = GetSalObjWindowPtr( ::GetParent( hWnd ) );
+                // forward mouse events to parent frame
+                HWND hWndParent = GetParent(pSysObj->mhWnd);
 
-                if( pSysObj && pSysObj->IsMouseTransparent() )
-                {
-                    // forward mouse events to parent frame
-                    HWND hWndParent = ::GetParent( pSysObj->mhWnd );
+                // transform coordinates
+                POINT pt;
+                pt.x = static_cast<tools::Long>(LOWORD(lParam));
+                pt.y = static_cast<tools::Long>(HIWORD(lParam));
+                MapWindowPoints(hWnd, hWndParent, &pt, 1);
+                lParam = MAKELPARAM(static_cast<WORD>(pt.x), static_cast<WORD>(pt.y));
 
-                    // transform coordinates
-                    POINT pt;
-                    pt.x = static_cast<tools::Long>(LOWORD( lParam ));
-                    pt.y = static_cast<tools::Long>(HIWORD( lParam ));
-                    MapWindowPoints( hWnd, hWndParent, &pt, 1 );
-                    lParam = MAKELPARAM( static_cast<WORD>(pt.x), static_cast<WORD>(pt.y) );
-
-                    nRet = SendMessageW( hWndParent, nMsg, wParam, lParam );
-                    rDef = FALSE;
-                }
+                return SendMessageW(hWndParent, nMsg, wParam, lParam);
             }
             break;
     }
 
-    return nRet;
-}
-
-static LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    int bDef = TRUE;
-    LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );
-    if ( bDef )
-        nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
-    return nRet;
+    return DefWindowProcW(hWnd, nMsg, wParam, lParam);
 }
 
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
