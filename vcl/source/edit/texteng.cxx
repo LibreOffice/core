@@ -2189,6 +2189,8 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         bool bFixedEnd = false;
         if ( nTmpWidth > nXWidth )
         {
+            assert(pPortion);
+
             nPortionEnd = nTmpPos;
             nTmpPos -= pPortion->GetLen();
             nPortionStart = nTmpPos;
