@@ -6935,6 +6935,8 @@ void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
         pLay = pLay->GetNext();
     }
 
+    assert(pPageBody && "presumably this is impossible");
+
     SwRect aArea( pPageBody->getFrameArea() );
     if ( pFootnoteCont )
         aArea.AddBottom( pFootnoteCont->getFrameArea().Bottom() - aArea.Bottom() );
@@ -6959,6 +6961,8 @@ void SwColumnFrame::PaintSubsidiaryLines( const SwPageFrame *,
             pColBody = pLay;
         pLay = pLay->GetNext();
     }
+
+    assert(pColBody && "presumably this is impossible");
 
     SwRect aArea( pColBody->getFrameArea() );
 
