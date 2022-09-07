@@ -199,6 +199,15 @@ public final class Loader {
         }
     }
 
+    private static void close(InputStream c) {
+        if (c == null) return;
+        try {
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void callUnoinfo(String path, ArrayList<URL> urls) {
         Process p;
         try {
@@ -214,9 +223,10 @@ public final class Loader {
         int code;
         byte[] buf = new byte[1000];
         int n = 0;
+        InputStream is = null;
         try {
-            InputStream s = p.getInputStream();
-            code = s.read();
+            is = p.getInputStream();
+            code = is.read();
             for (;;) {
                 if (n == buf.length) {
                     if (n > Integer.MAX_VALUE / 2) {
@@ -229,7 +239,7 @@ public final class Loader {
                     System.arraycopy(buf, 0, buf2, 0, n);
                     buf = buf2;
                 }
-                int k = s.read(buf, n, buf.length - n);
+                int k = is.read(buf, n, buf.length - n);
                 if (k == -1) {
                     break;
                 }
@@ -240,7 +250,10 @@ public final class Loader {
                 "com.sun.star.lib.loader.Loader::getCustomLoader: reading" +
                 " unoinfo output: " + e);
             return;
+        } finally {
+            close(is);
         }
+
         int ev;
         try {
             ev = p.waitFor();
