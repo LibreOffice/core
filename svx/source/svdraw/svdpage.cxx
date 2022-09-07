@@ -298,8 +298,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
     impChildInserted(*pObj);
 
     if (!mbRectsDirty) {
-        maSdrObjListOutRect.Union(pObj->GetCurrentBoundRect());
-        maSdrObjListSnapRect.Union(pObj->GetSnapRect());
+        mbRectsDirty = true;
     }
     pObj->InsertedStateChange(); // calls the UserCall (among others)
 }
