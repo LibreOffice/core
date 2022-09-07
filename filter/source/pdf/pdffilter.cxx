@@ -33,6 +33,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 
+#include <boost/property_tree/json_parser/error.hpp>
+
 using namespace ::com::sun::star::io;
 
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
@@ -78,11 +80,19 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[i].Value >>= bIsRedactMode;
     }
 
-    if (!aFilterData.hasElements() && !aFilterOptions.isEmpty())
+    if (!aFilterData.hasElements() && aFilterOptions.startsWith("{"))
     {
-        // Allow setting filter data keys from the cmdline.
-        std::vector<PropertyValue> aData = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
-        aFilterData = comphelper::containerToSequence(aData);
+        try
+        {
+            // Allow setting filter data keys from the cmdline.
+            std::vector<PropertyValue> aData
+                = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
+            aFilterData = comphelper::containerToSequence(aData);
+        }
+        catch (const boost::property_tree::json_parser::json_parser_error&)
+        {
+            // This wasn't a valid json; maybe came from import filter (tdf#150846)
+        }
     }
 
     /* we don't get FilterData if we are exporting directly
