@@ -353,7 +353,16 @@ int ListFonts::Main()
             std::cout.rdbuf(out.rdbuf());
         }
 
+        std::vector<int> aIndices;
         for (int i = 0; i < pOutDev->GetFontFaceCollectionCount(); i++)
+            aIndices.push_back(i);
+
+        std::sort(aIndices.begin(), aIndices.end(), [&](int a, int b) {
+            return pOutDev->GetFontMetricFromCollection(a).GetHashValueIgnoreColor()
+                   > pOutDev->GetFontMetricFromCollection(b).GetHashValueIgnoreColor();
+        });
+
+        for (const auto& i : aIndices)
         {
             // note: to get the correct font metrics, you actually have to get the font metric from the
             // system, and *then* you must set it as the current font of OutputDevice... then you need
