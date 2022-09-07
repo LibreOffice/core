@@ -75,6 +75,7 @@
                     <property name="receives-default">True</property>
                     <property name="halign">end</property>
                     <property name="popup">menu</property>
+                    <property name="draw-indicator">True</property>
                     <child>
                       <placeholder/>
                     </child>

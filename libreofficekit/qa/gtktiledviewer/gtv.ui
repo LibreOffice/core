@@ -455,6 +455,7 @@
             <property name="can_focus">False</property>
             <property name="tooltip_text">Content control date</property>
             <property name="popover">calendar</property>
+            <property name="draw-indicator">True</property>
             <child>
               <placeholder/>
             </child>
