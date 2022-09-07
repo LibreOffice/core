@@ -1493,7 +1493,9 @@ public:
     static bool GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushItem>& rToFill );
     /// rNotTracked = false means that the row was deleted or inserted with its tracked cell content
     /// bAll: delete all table rows without selection
-    void SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNotTracked, bool bAll = false );
+    /// bIns: insert table row
+    void SetRowNotTracked( const SwCursor& rCursor,
+                        const SvxPrintItem &rNotTracked, bool bAll = false, bool bIns = false );
     /// don't call SetRowNotTracked() for rows with tracked row change
     static bool HasRowNotTracked( const SwCursor& rCursor );
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );
