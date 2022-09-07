@@ -42,11 +42,5 @@
         <entry os="7" vendor="all">
             <device id="all"/>
         </entry>
-        <entry os="8" vendor="all">
-            <device id="all"/>
-        </entry>
-        <entry os="8_1" vendor="all">
-            <device id="all"/>
-        </entry>
     </denylist>
 </root>
