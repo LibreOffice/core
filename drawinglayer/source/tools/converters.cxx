@@ -78,7 +78,7 @@ namespace drawinglayer
         // Create target VirtualDevice. Use a VirtualDevice in the Alpha-mode.
         // This creates the needed alpha channel 'in parallel'. It is not
         // cheaper though since the VDev in that mode internally uses two VDevs,
-        // so ressoure-wise it's more expensive, speed-wise pretty much the same
+        // so resource-wise it's more expensive, speed-wise pretty much the same
         // (the former two-path rendering created content & alpha separately in
         // two runs). The former method always created the correct Alpha, but
         // when transparent geometry was involved, the created content was
