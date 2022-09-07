@@ -884,6 +884,7 @@
                 <it>/org.openoffice.Office.Common/Misc/LastTipOfTheDayID</it>
                 <it>/org.openoffice.Office.Common/Misc/LastTipOfTheDayShown</it>
                 <it>/org.openoffice.Office.Common/Misc/MacroRecorderMode</it>
+                <it>/org.openoffice.Office.Common/Misc/PersonaSettings</it>
                 <it>/org.openoffice.Office.Common/Misc/PluginsEnabled</it>
                 <it>/org.openoffice.Office.Common/Misc/ShowLinkWarningDialog</it>
                 <it>/org.openoffice.Office.Common/Misc/ShowTipOfTheDay</it>
