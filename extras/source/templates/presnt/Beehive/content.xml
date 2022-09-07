@@ -43,7 +43,8 @@
     </style:style>
   </office:automatic-styles>
   <office:body>
-    <office:presentation><draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Beehive" presentation:presentation-page-layout-name="AL1T0">
+    <office:presentation>
+        <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Beehive" presentation:presentation-page-layout-name="AL1T0">
               <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
               <draw:frame presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="25cm" svg:height="3.5cm" svg:x="1.5cm" svg:y="5.5cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
                   <draw:text-box/>
