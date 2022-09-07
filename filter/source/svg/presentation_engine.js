@@ -18899,11 +18899,6 @@ SlideShow.prototype.exitSlideShowInApp = function()
         window.webkit.messageHandlers !== undefined &&
         window.webkit.messageHandlers.lok !== undefined)
         window.webkit.messageHandlers.lok.postMessage('EXITSLIDESHOW', '*');
-    // FIXME remove this in a follow-up commit
-    if (window.webkit !== undefined &&
-        window.webkit.messageHandlers !== undefined &&
-        window.webkit.messageHandlers.cool !== undefined)
-        window.webkit.messageHandlers.cool.postMessage('EXITSLIDESHOW', '*');
 }
 
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
