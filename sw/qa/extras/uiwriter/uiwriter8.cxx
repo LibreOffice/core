@@ -376,7 +376,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     // 3-row, overwriting cells of the second row and inserting a new row
     // with the 2-row clipboard table content
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 3);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
 
     // Undo
 
@@ -398,10 +399,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt", 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/Text", "Portion",
-                "Some text...");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout",
+                "portion", "Some text...");
     // the empty paragraph in A2
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[2]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[2]/SwParaPortion", 0);
 
     // insert the table, as a nested one in cell "A2"
     dispatchCommand(mxComponent, ".uno:Paste", {});
@@ -420,8 +421,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/Text", "Portion",
-                "Some text...");
+    pDoc->GetDocShell()->GetWrtShell()->GetLayout()->dumpAsXml();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout",
+                "portion", "Some text...");
 
     // copy the 2-row table into the fist paragraph of cell "A2",
     // but not at paragraph start (changed behaviour)
@@ -440,7 +442,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     // This was 2 (nested table)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 3);
     // This was "Some text..." with a nested table
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
@@ -466,8 +469,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Paste as Rows Above results 4-row table with default table alignment
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 4);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/Text", "Portion", "hello");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
 
     // set table alignment to center, select and copy the table again
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -504,10 +509,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     // This was 5 (inserting only a single row for the 4-row clipboard content, and
     // overwriting 3 existing rows)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 8);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/Text", "Portion", "hello");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/Text", "Portion", "hello");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[5]/cell[1]/txt/Text", "Portion", "hello");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[7]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[5]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[7]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", "hello");
 
     // tdf#64902 add a test case for nested tables
 
@@ -2309,21 +2318,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
-    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/LineBreak[1]", "Line",
-                "Text before section");
+    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", "Text before section");
     // the inner section and its content was hidden
-    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt[1]/LineBreak[1]", "Line",
-                "Text inside section before ToC");
-    assertXPath(pLayout, "/root/page[1]/body/section[3]/txt[1]/LineBreak[1]", "Line",
-                "Table of Contents");
-    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[1]/LineBreak[1]", "Line",
-                "First header*1");
-    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[2]/LineBreak[1]", "Line",
-                "Second header*1");
-    assertXPath(pLayout, "/root/page[1]/body/section[5]/txt[2]/LineBreak[1]", "Line",
-                "Text inside section after ToC");
-    assertXPath(pLayout, "/root/page[1]/body/section[6]/txt[1]/LineBreak[1]", "Line",
-                "Text after section");
+    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", "Text inside section before ToC");
+    assertXPath(pLayout, "/root/page[1]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", "Table of Contents");
+    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", "First header*1");
+    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[2]/SwParaPortion/SwLineLayout[1]",
+                "portion", "Second header*1");
+    assertXPath(pLayout, "/root/page[1]/body/section[5]/txt[2]/SwParaPortion/SwLineLayout[1]",
+                "portion", "Text inside section after ToC");
+    assertXPath(pLayout, "/root/page[1]/body/section[6]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", "Text after section");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
