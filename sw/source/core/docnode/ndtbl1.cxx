@@ -52,6 +52,7 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <redline.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -540,6 +541,7 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushI
     return bRet;
 }
 
+// has a table row, which is not a tracked deletion
 bool SwDoc::HasRowNotTracked( const SwCursor& rCursor )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
@@ -552,12 +554,26 @@ bool SwDoc::HasRowNotTracked( const SwCursor& rCursor )
     if( aRowArr.empty() )
         return false;
 
+    SwRedlineTable::size_type nRedlinePos = 0;
+    SwDoc* pDoc = aRowArr[0]->GetFrameFormat()->GetDoc();
+    const IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+
     for( auto pLn : aRowArr )
     {
         auto pHasTextChangesOnlyProp = pLn->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
         if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
-            // there is a not deleted row in the table selection
+            // there is a not tracked row in the table selection
             return true;
+
+        // tdf#150666 examine tracked row: it's possible to delete a tracked insertion
+        SwRedlineTable::size_type nPos = pLn->UpdateTextChangesOnly(nRedlinePos);
+        if ( nPos != SwRedlineTable::npos )
+        {
+            const SwRedlineTable& aRedlineTable = rIDRA.GetRedlineTable();
+            SwRangeRedline* pTmp = aRedlineTable[ nPos ];
+            if ( RedlineType::Insert == pTmp->GetType() )
+                return true;
+        }
     }
     return false;
 }
@@ -588,8 +604,28 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew,
     std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
     aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
 
+    SwRedlineTable::size_type nRedlinePos = 0;
     for( auto pLn : aRowArr )
     {
+        // tdf#150666 row insertion from the same author needs special handling,
+        // because removing redlines of the author can result an empty line,
+        // which doesn't contain any redline for the tracked row
+        bool bDeletionOfOwnRowInsertion = false;
+        SwRedlineTable::size_type nPos = pLn->UpdateTextChangesOnly(nRedlinePos);
+        if ( nPos != SwRedlineTable::npos )
+        {
+            SwDoc* pDoc = pLn->GetFrameFormat()->GetDoc();
+            IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+            const SwRedlineTable& aRedlineTable = rIDRA.GetRedlineTable();
+            SwRangeRedline* pTmp = aRedlineTable[ nPos ];
+            if ( RedlineType::Insert == pTmp->GetType() &&
+                     rIDRA.GetRedlineAuthor() == pTmp->GetRedlineData().GetAuthor() &&
+                     pTmp->GetText()[0] == CH_TXT_TRACKED_DUMMY_CHAR )
+            {
+                bDeletionOfOwnRowInsertion = true;
+            }
+        }
+
         ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
         // as a workaround for the rows without text content,
         // add a redline with invisible text CH_TXT_TRACKED_DUMMY_CHAR
@@ -597,7 +633,7 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew,
         // new redline can cause a problem)
         if ( !bAll &&
             // HasTextChangesOnly == false, i.e. a tracked row insertion or deletion
-            !rNew.GetValue() && pLn->IsEmpty() )
+            !rNew.GetValue() && (pLn->IsEmpty() || bDeletionOfOwnRowInsertion ) )
         {
             SwNodeIndex aInsPos( *(pLn->GetTabBoxes()[0]->GetSttNd()), 1 );
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();

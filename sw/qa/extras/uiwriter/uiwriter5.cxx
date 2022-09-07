@@ -2047,6 +2047,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143215)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150666)
+{
+    // load a table with tracked insertion of an empty row
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-rowadd.docx");
+
+    // check table count
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // check table row count
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+
+    // select the second row (tracked table row insertion)
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+
+    // delete it, and accept all tracked changes
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    // This was 4 (it was not possible to delete only the tracked row insertions)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+
+    // insert a new table row with track changes
+    dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+
+    // select and delete it
+    pWrtShell->Down(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    // This was 4 (it was not possible to delete own tracked row insertions)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144748)
 {
     // load a table with an empty row, and an empty line before the table
