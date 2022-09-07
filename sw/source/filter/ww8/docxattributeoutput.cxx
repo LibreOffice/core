@@ -370,7 +370,7 @@ void DocxAttributeOutput::StartContentControl(const SwFormatContentControl& rFor
 
 void DocxAttributeOutput::EndContentControl(const SwTextNode& rNode, sal_Int32 nPos)
 {
-    if (rNode.GetTextAttrForCharAt(nPos, RES_TXTATR_FLYCNT) || rNode.GetTextAttrForCharAt(nPos, RES_TXTATR_CONTENTCONTROL))
+    if (rNode.GetTextAttrForCharAt(nPos, RES_TXTATR_CONTENTCONTROL))
     {
         ++m_nCloseContentControlInPreviousRun;
     }
