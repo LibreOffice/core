@@ -1567,7 +1567,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             SwDoc *const pLocalDoc = pDocShell ? pDocShell->GetDoc() : pDoc;
             if (sCharFormatName.isEmpty())
             {
-                rCharStyleName = aInvalidStyle;
+                rCharStyleName.clear();
                 aFormat.SetCharFormat(nullptr);
                 aFormat.SetCharFormatName("");
             }

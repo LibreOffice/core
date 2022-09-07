@@ -36,6 +36,9 @@ DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
     CPPUNIT_ASSERT(nTabStop < 4000);
     CPPUNIT_ASSERT(3000 < nTabStop);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Pečiatka zamestnávateľa"), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]", "portion"));
+
+    // tdf#149547: __XXX___invalid CharacterStyles should not be imported/exported
+    CPPUNIT_ASSERT(!getStyles("CharacterStyles")->hasByName("__XXX___invalid"));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrapping.odt")
