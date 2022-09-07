@@ -146,6 +146,15 @@ void WinOpenGLContext::initWindow()
 
     InitChildWindow(m_pChildWindow.get());
     const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
+
+    // Hack: the performance of OpenGL increases with non-child window.
+    // Also, this keeps the backing window opaque on GL context destruction,
+    // which doesn't prevent the flicker (tdf#122737) completely, but at
+    // least doesn't show user desktop during the flicker.
+    LONG_PTR style = GetWindowLongPtrW(sysData->hWnd, GWL_STYLE);
+    style &= ~WS_CHILD;
+    SetWindowLongPtrW(sysData->hWnd, GWL_STYLE, style);
+
     m_aGLWin.hWnd = sysData->hWnd;
 
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
