@@ -105,7 +105,9 @@ static oslSecurityImpl * growSecurityImpl(
             n = std::numeric_limits<std::size_t>::max();
         }
         p = static_cast<oslSecurityImpl *>(realloc(impl, n));
-        memset (p, 0, n);
+        if (p != nullptr) {
+            memset (p, 0, n);
+        }
     }
     if (p == nullptr) {
         free(impl);
