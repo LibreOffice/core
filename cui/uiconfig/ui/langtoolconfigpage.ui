@@ -96,6 +96,7 @@
                       <object class="GtkEntry" id="baseurl">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>
@@ -134,6 +135,7 @@
                     <child>
                       <object class="GtkEntry" id="username">
                         <property name="visible">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="can_focus">True</property>
                       </object>
                       <packing>
@@ -144,6 +146,7 @@
                     <child>
                       <object class="GtkEntry" id="apikey">
                         <property name="visible">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="can_focus">True</property>
                       </object>
                       <packing>
@@ -157,9 +160,9 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="langtoolconfigpage|urldesc">Please use the base URL, i.e., without “/check”, at the end.</property>
-                          <attributes>
-                            <attribute name="scale" value="0.9"/>
-                          </attributes>
+                        <attributes>
+                          <attribute name="scale" value="0.9"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

@@ -183,6 +183,7 @@
                 <child>
                   <object class="GtkEntry" id="checkboxcheckedentry">
                     <property name="visible">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="can_focus">True</property>
                   </object>
                   <packing>
@@ -193,6 +194,7 @@
                 <child>
                   <object class="GtkEntry" id="checkboxuncheckedentry">
                     <property name="visible">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="can_focus">True</property>
                   </object>
                   <packing>
