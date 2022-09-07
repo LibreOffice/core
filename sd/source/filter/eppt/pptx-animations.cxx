@@ -633,7 +633,8 @@ class PPTXAnimationExport
     void WriteAnimationNodeSeq();
     void WriteAnimationNodeEffect();
     void WriteAnimationNodeCommand();
-    void WriteAnimationNodeAudio();
+    /// Handles XAudio nodes, used for both video and audio.
+    void WriteAnimationNodeMedia();
     void WriteAnimationNodeCommonPropsStart();
     void WriteAnimationTarget(const Any& rTarget);
     void WriteAnimationCondList(const Any& rAny, sal_Int32 nToken);
@@ -1217,9 +1218,9 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
     mpFS->endElementNS(XML_p, XML_cmd);
 }
 
-void PPTXAnimationExport::WriteAnimationNodeAudio()
+void PPTXAnimationExport::WriteAnimationNodeMedia()
 {
-    SAL_INFO("sd.eppt", "write animation node audio");
+    SAL_INFO("sd.eppt", "write animation node media");
     Reference<XAudio> xAudio(getCurrentNode(), UNO_QUERY);
 
     OUString sUrl;
@@ -1350,7 +1351,7 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
             WriteAnimationNodeCommand();
             break;
         case XML_audio:
-            WriteAnimationNodeAudio();
+            WriteAnimationNodeMedia();
             break;
         default:
             SAL_WARN("sd.eppt", "export ooxml node type: " << xmlNodeType);
