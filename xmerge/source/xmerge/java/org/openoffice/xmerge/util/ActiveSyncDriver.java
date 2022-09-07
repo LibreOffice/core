@@ -125,13 +125,7 @@ public class ActiveSyncDriver {
                 if (fos != null)
                     fos.close();
             }
-        } catch (IOException e) {
-            bOK = false;
-        } catch (NullPointerException e) {
-            bOK = false;
-        } catch (ConvertException e) {
-            bOK = false;
-        } catch (NoSuchElementException e) {
+        } catch (RuntimeException e) {
             bOK = false;
         } finally {
             if (fis != null)
