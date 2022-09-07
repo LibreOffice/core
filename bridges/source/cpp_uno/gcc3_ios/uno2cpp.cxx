@@ -77,13 +77,13 @@ namespace arm
     }
 }
 
-void MapReturn(sal_uInt64 x0, sal_uInt64 x1, double d0, typelib_TypeDescriptionReference *pReturnType, sal_uInt64 *pRegisterReturn)
+void MapReturn(sal_uInt64 *pGPR, double *pFPR, typelib_TypeDescriptionReference *pReturnType, sal_uInt64 *pRegisterReturn)
 {
     switch( pReturnType->eTypeClass )
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        pRegisterReturn[1] = x1;
+        pRegisterReturn[1] = pGPR[1];
         [[fallthrough]];
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
@@ -93,20 +93,20 @@ void MapReturn(sal_uInt64 x0, sal_uInt64 x1, double d0, typelib_TypeDescriptionR
     case typelib_TypeClass_UNSIGNED_SHORT:
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
-        pRegisterReturn[0] = x0;
+        pRegisterReturn[0] = pGPR[0];
         break;
     case typelib_TypeClass_FLOAT:
-        *(float*)pRegisterReturn = *(float*)&d0;
+        *(float*)pRegisterReturn = *(float*)&pFPR[0];
         break;
     case typelib_TypeClass_DOUBLE:
-        *(double*)pRegisterReturn = d0;
+        *(double*)pRegisterReturn = pFPR[0];
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (!arm::return_in_x8(pReturnType))
         {
-            pRegisterReturn[0] = x0;
-            pRegisterReturn[1] = x1;
+            pRegisterReturn[0] = pGPR[0];
+            pRegisterReturn[1] = pGPR[1];
         }
         break;
     default:
@@ -142,11 +142,6 @@ void callVirtualMethod(
     pMethod += 8 * nVtableIndex;
     pMethod = *((sal_uInt64 *)pMethod);
 
-    // For value returned in registers
-    sal_uInt64 x0;
-    sal_uInt64 x1;
-    double d0;
-
     __asm__ __volatile__
     (
      // Assembly string
@@ -160,27 +155,25 @@ void callVirtualMethod(
      "  ldp d4, d5, %[pfpr_4]\n"
      "  ldp d6, d7, %[pfpr_6]\n"
      "  blr %[pmethod]\n"
-     "  str x0, %[x0]\n"
-     "  str x1, %[x1]\n"
-     "  str d0, %[d0]\n"
-     // Output operands
-     : [x0]"=m" (x0), [x1]"=m" (x1), [d0]"=m" (d0)
+     "  stp x0, x1, %[pgpr_0]\n"
+     "  str d0, %[pfpr_0]\n"
      // Input operands
-     : [pgpr_0]"m" (pGPR[0]),
-       [pgpr_2]"m" (pGPR[2]),
-       [pgpr_4]"m" (pGPR[4]),
-       [pgpr_6]"m" (pGPR[6]),
-       [pregisterreturn]"m" (pRegisterReturn),
-       [pfpr_0]"m" (pFPR[0]),
-       [pfpr_2]"m" (pFPR[2]),
-       [pfpr_4]"m" (pFPR[4]),
-       [pfpr_6]"m" (pFPR[6]),
-       [pmethod]"r" (pMethod)
+     :: [pgpr_0]"m" (pGPR[0]),
+        [pgpr_2]"m" (pGPR[2]),
+        [pgpr_4]"m" (pGPR[4]),
+        [pgpr_6]"m" (pGPR[6]),
+        [pregisterreturn]"m" (pRegisterReturn),
+        [pfpr_0]"m" (pFPR[0]),
+        [pfpr_2]"m" (pFPR[2]),
+        [pfpr_4]"m" (pFPR[4]),
+        [pfpr_6]"m" (pFPR[6]),
+        [pmethod]"r" (pMethod)
      // Clobbers
-     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7"
+     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17",
+       "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7"
      );
 
-    MapReturn(x0, x1, d0, pReturnType, (sal_uInt64 *) pRegisterReturn);
+    MapReturn(pGPR, pFPR, pReturnType, (sal_uInt64 *) pRegisterReturn);
 }
 }
 
