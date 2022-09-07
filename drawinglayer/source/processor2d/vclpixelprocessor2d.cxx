@@ -56,7 +56,6 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
-#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 #include <drawinglayer/primitive2d/GlowSoftEgdeShadowTools.hxx>
@@ -404,12 +403,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processBorderLinePrimitive2D(
                 static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate));
-            break;
-        }
-        case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
-        {
-            processSoftEdgePrimitive2D(
-                static_cast<const drawinglayer::primitive2d::SoftEdgePrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
@@ -964,67 +957,6 @@ void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrim
     {
         mpOutputDevice->SetAntialiasing(nOldAntiAliase);
     }
-}
-
-void VclPixelProcessor2D::processSoftEdgePrimitive2D(
-    const primitive2d::SoftEdgePrimitive2D& rCandidate)
-{
-    const double nRadius(rCandidate.getRadius());
-    // Avoid wrong effect on the cut-off side; so expand by diameter
-    const auto aExpandedViewInfo(::drawinglayer::primitive2d::expandB2DRangeAtViewInformation2D(
-        getViewInformation2D(), nRadius * 2));
-
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(aExpandedViewInfo));
-    aRange.transform(maCurrentTransformation);
-    basegfx::B2DVector aRadiusVector(nRadius, 0);
-    // Calculate the pixel size of soft edge radius in current transformation
-    aRadiusVector *= maCurrentTransformation;
-    // Blur radius is equal to soft edge radius
-    const double fBlurRadius = aRadiusVector.getLength();
-
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, false);
-    if (aBufferDevice.isVisible())
-    {
-        // remember last OutDev and set to content
-        OutputDevice* pLastOutputDevice = mpOutputDevice;
-        mpOutputDevice = &aBufferDevice.getContent();
-        // Since the effect converts all children to bitmap, we can't disable antialiasing here,
-        // because it would result in poor quality in areas not affected by the effect
-        process(rCandidate);
-
-        // Limit the bitmap size to the visible area.
-        basegfx::B2DRange bitmapRange(aRange);
-        if (!aExpandedViewInfo.getDiscreteViewport().isEmpty())
-            bitmapRange.intersect(aExpandedViewInfo.getDiscreteViewport());
-        if (!bitmapRange.isEmpty())
-        {
-            const tools::Rectangle aRect(
-                static_cast<tools::Long>(std::floor(bitmapRange.getMinX())),
-                static_cast<tools::Long>(std::floor(bitmapRange.getMinY())),
-                static_cast<tools::Long>(std::ceil(bitmapRange.getMaxX())),
-                static_cast<tools::Long>(std::ceil(bitmapRange.getMaxY())));
-            BitmapEx bitmap = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
-
-            AlphaMask aMask = bitmap.GetAlpha();
-            AlphaMask blurMask = drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
-                aMask, -fBlurRadius, fBlurRadius, 0);
-
-            aMask.BlendWith(blurMask);
-
-            // The end result is the original bitmap with blurred 8-bit alpha mask
-            BitmapEx result(bitmap.GetBitmap(), aMask);
-
-            // back to old OutDev
-            mpOutputDevice = pLastOutputDevice;
-            mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
-        }
-        else
-        {
-            mpOutputDevice = pLastOutputDevice;
-        }
-    }
-    else
-        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
 }
 
 void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate)

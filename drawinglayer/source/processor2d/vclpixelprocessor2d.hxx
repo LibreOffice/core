@@ -98,7 +98,6 @@ class VclPixelProcessor2D final : public VclProcessor2D
     processBorderLinePrimitive2D(const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder);
     void processInvertPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
     void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
-    void processSoftEdgePrimitive2D(const primitive2d::SoftEdgePrimitive2D& rCandidate);
     void processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate);
     void processFillGradientPrimitive2D(const primitive2d::FillGradientPrimitive2D& rPrimitive);
     void processPatternFillPrimitive2D(const primitive2d::PatternFillPrimitive2D& rPrimitive);

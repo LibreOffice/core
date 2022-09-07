@@ -929,7 +929,6 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
             break;
         }
         case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
-        case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
         {
             processPrimitive2DOnPixelProcessor(rCandidate);
             break;

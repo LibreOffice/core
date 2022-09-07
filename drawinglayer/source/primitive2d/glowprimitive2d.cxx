@@ -178,19 +178,19 @@ void GlowPrimitive2D::create2DDecomposition(
         {
             // We may have to take a corrective scaling into account when the
             // MaximumQuadraticPixel limit was used/triggered
-            double fScaleX(1.0);
-            double fScaleY(1.0);
+            double fScale(1.0);
 
-            if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth)
+            if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
+                || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
             {
-                fScaleX = static_cast<double>(rBitmapExSizePixel.Width())
-                          / static_cast<double>(nDiscreteClippedWidth);
-            }
+                // scale in X and Y should be the same (see fReduceFactor in convertToBitmapEx),
+                // so adapt numerically to a single scale value, they are integer rounded values
+                const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
+                                     / static_cast<double>(nDiscreteClippedWidth));
+                const double fScaleY(static_cast<double>(rBitmapExSizePixel.Height())
+                                     / static_cast<double>(nDiscreteClippedHeight));
 
-            if (static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
-            {
-                fScaleY = static_cast<double>(rBitmapExSizePixel.Height())
-                          / static_cast<double>(nDiscreteClippedHeight);
+                fScale = (fScaleX + fScaleY) * 0.5;
             }
 
             // fDiscreteGlowRadius is the size of the halo from each side of the object. The halo is the
@@ -199,8 +199,8 @@ void GlowPrimitive2D::create2DDecomposition(
             // fades to both sides by the blur radius; thus blur radius is half of glow radius.
             // Consider glow transparency (initial transparency near the object edge)
             const AlphaMask mask(ProcessAndBlurAlphaMask(
-                aBitmapEx.GetAlpha(), fDiscreteGlowRadius * fScaleX / 2.0,
-                fDiscreteGlowRadius * fScaleY / 2.0, 255 - getGlowColor().GetAlpha()));
+                aBitmapEx.GetAlpha(), fDiscreteGlowRadius * fScale / 2.0,
+                fDiscreteGlowRadius * fScale / 2.0, 255 - getGlowColor().GetAlpha()));
 
             // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
             Bitmap bmp = aBitmapEx.GetBitmap();
@@ -211,16 +211,16 @@ void GlowPrimitive2D::create2DDecomposition(
             static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
             if (bDoSaveForVisualControl)
             {
-                SvFileStream aNew(
-#ifdef _WIN32
-                    "c:\\test_glow.png"
-#else
-                    "~/test_glow.png"
-#endif
-                    ,
-                    StreamMode::WRITE | StreamMode::TRUNC);
-                vcl::PngImageWriter aPNGWriter(aNew);
-                aPNGWriter.write(result);
+                // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
+                static const OUString sDumpPath(
+                    OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+                if (!sDumpPath.isEmpty())
+                {
+                    SvFileStream aNew(sDumpPath + "test_glow.png",
+                                      StreamMode::WRITE | StreamMode::TRUNC);
+                    vcl::PngImageWriter aPNGWriter(aNew);
+                    aPNGWriter.write(result);
+                }
             }
 #endif
 
@@ -315,6 +315,13 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
             // Conditions of last local decomposition have changed, delete
             const_cast<GlowPrimitive2D*>(this)->setBuffered2DDecomposition(Primitive2DContainer());
         }
+    }
+
+    if (getBuffered2DDecomposition().empty())
+    {
+        // refresh last used DiscreteGlowRadius and ClippedRange to new remembered values
+        const_cast<GlowPrimitive2D*>(this)->mfLastDiscreteGlowRadius = fDiscreteGlowRadius;
+        const_cast<GlowPrimitive2D*>(this)->maLastClippedRange = aClippedRange;
     }
 
     // call parent, that will check for empty, call create2DDecomposition and

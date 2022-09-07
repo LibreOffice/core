@@ -1496,16 +1496,22 @@ namespace emfio
                                         }
                                     }
 
-    #ifdef DBG_UTIL
+#ifdef DBG_UTIL
                                     static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
 
                                     if(bDoSaveForVisualControl)
                                     {
-                                        SvFileStream aNew("c:\\metafile_content.png", StreamMode::WRITE|StreamMode::TRUNC);
-                                        vcl::PngImageWriter aPNGWriter(aNew);
-                                        aPNGWriter.write(aBitmapEx);
+                                        // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
+                                        static const OUString sDumpPath(OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+                                        if(!sDumpPath.isEmpty())
+                                        {
+                                            SvFileStream aNew(sDumpPath + "metafile_content.png",
+                                                            StreamMode::WRITE | StreamMode::TRUNC);
+                                            vcl::PngImageWriter aPNGWriter(aNew);
+                                            aPNGWriter.write(aBitmapEx);
+                                        }
                                     }
-    #endif
+#endif
                                     maBmpSaveList.emplace_back(aBitmapEx, aRect, SRCAND|SRCINVERT);
                                 }
                             }
