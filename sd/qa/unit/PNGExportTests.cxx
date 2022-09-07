@@ -159,7 +159,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
         for (tools::Long nX = 2; nX < aSize.Width() - 2; ++nX)
         {
             const Color aColorTop = pReadAccess->GetColor(0, nX);
-            const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 2, nX);
+            // tdf#150102 the exported graphic now has no longer an empty bottom
+            // row, so test with '-1' in height , same as alrteady in test
+            // testTdf105998 above
+            const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 1, nX);
 
             assertColorsAreSimilar("Incorrect top border", COL_LIGHTRED, aColorTop, 5);
 
@@ -172,7 +175,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
         for (tools::Long nY = 2; nY < aSize.Height() - 2; ++nY)
         {
             const Color aColorLeft = pReadAccess->GetColor(nY, 0);
-            const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - 2);
+            // tdf#150102 the exported graphic now has no longer an empty right
+            // column, so test with '-1' in width , same as alrteady in test
+            // testTdf105998 above
+            const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - 1);
 
             assertColorsAreSimilar("Incorrect left border", COL_LIGHTRED, aColorLeft, 5);
             assertColorsAreSimilar("Incorrect right border", COL_LIGHTRED, aColorRight, 5);

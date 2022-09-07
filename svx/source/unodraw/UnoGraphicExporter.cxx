@@ -962,10 +962,16 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             aMtf.WindStart();
 
             // tdf#126319 Immediately add needed size to target's PrefSize
+            // tdf#150102 Checked that in aBound is indeed the size - 1 (probably
+            // due to old integer stuff using Size()/Rectangle() and getWidth()/GetWidth()
+            // with the old one-less paradigm somewhere), so just correct to the
+            // correct size. Be aware that checking of tdf#126319 is needed, but
+            // looks good in my tests. Still: Changing the central UNO API Metafile
+            // export is always a risky thing, so it will have to show if this will
+            // not influence something else.
             const Size aBoundSize(
-                basegfx::fround(aBound.getWidth() + aHalfPixelInMtf.getWidth()),
-                basegfx::fround(aBound.getHeight() + aHalfPixelInMtf.getHeight()));
-
+                basegfx::fround(aBound.getWidth() + 1),
+                basegfx::fround(aBound.getHeight() + 1));
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );
 
