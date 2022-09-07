@@ -10,6 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,python3))
 
 $(eval $(call gb_ExternalProject_use_externals,python3,\
+	bzip2 \
 	expat \
 	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
@@ -36,6 +37,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
+			/p:bz2Dir=$(call gb_UnpackedTarball_get_dir,bzip2) \
 			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
 			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl) \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
@@ -106,6 +108,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			PKG_CONFIG_LIBDIR="$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
 		) \
 		CC="$(strip $(CC) \
+			$(if $(SYSTEM_BZIP2),,-I$(call gb_UnpackedTarball_get_dir,bzip2)) \
 			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
@@ -113,6 +116,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
 		LDFLAGS="$(strip $(LDFLAGS) \
 			$(if $(filter LINUX,$(OS)),-L$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs) \
+			$(if $(SYSTEM_BZIP2),,-L$(call gb_UnpackedTarball_get_dir,bzip2)) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \

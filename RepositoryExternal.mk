@@ -4136,7 +4136,6 @@ endef
 
 endif
 
-ifneq ($(ENABLE_ONLINE_UPDATE_MAR),)
 ifneq ($(SYSTEM_BZIP2),)
 
 define gb_LinkTarget__use_bzip2
@@ -4175,8 +4174,7 @@ define gb_ExternalProject__use_bzip2
 $(call gb_ExternalProject_use_external_project,$(1),bzip2)
 endef
 
-endif
-endif
+endif # SYSTEM_BZIP2
 
 define gb_LinkTarget__use_clew
 $(call gb_LinkTarget_set_include,$(1), \

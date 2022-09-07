@@ -2194,7 +2194,8 @@ AC_ARG_WITH(system-libs,
 
 AC_ARG_WITH(system-bzip2,
     AS_HELP_STRING([--with-system-bzip2],
-        [Use bzip2 already on system. Used only when --enable-online-update=mar]),,
+        [Use bzip2 already on system. Used when --enable-online-update=mar
+         or --enable-python=internal]),,
     [with_system_bzip2="$with_system_libs"])
 
 AC_ARG_WITH(system-headers,
@@ -13551,17 +13552,16 @@ AC_SUBST(PRIVACY_POLICY_URL)
 dnl ===================================================================
 dnl Test whether we need bzip2
 dnl ===================================================================
-SYSTEM_BZIP2=
-if test "$ENABLE_ONLINE_UPDATE_MAR" = "TRUE"; then
+if test "$ENABLE_ONLINE_UPDATE_MAR" = "TRUE" -o "$enable_python" = "internal"; then
     AC_MSG_CHECKING([whether to use system bzip2])
     if test "$with_system_bzip2" = yes; then
+        AC_MSG_RESULT([external])
         SYSTEM_BZIP2=TRUE
-        AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES(BZIP2, bzip2)
-        FilterLibs "${BZIP2_LIBS}"
-        BZIP2_LIBS="${filteredlibs}"
+        AC_CHECK_HEADER(bzlib.h, [], [AC_MSG_ERROR(bzlib.h not found. please install bzip2.)], [])
+        AC_CHECK_LIB([bz2], [BZ2_bzDecompressInit], [:], [AC_MSG_ERROR(libbz2 not found or functional.)], [])
     else
-        AC_MSG_RESULT([no])
+        AC_MSG_RESULT([internal])
+        SYSTEM_BZIP2=
         BUILD_TYPE="$BUILD_TYPE BZIP2"
     fi
 fi
