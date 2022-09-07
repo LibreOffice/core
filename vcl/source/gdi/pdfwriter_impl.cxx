@@ -2335,12 +2335,11 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     OUString aTmpName;
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
 
-    sal_Int32 pWidths[256] = {};
-    FontCharMapRef xFontCharMap = pFont->GetFontCharMap();
+    sal_Int32 pWidths[256] = { 0 };
     const LogicalFontInstance* pFontInstance = rEmbed.m_pFontInstance;
     for( sal_Ucs c = 32; c < 256; c++ )
     {
-        sal_GlyphId nGlyph = xFontCharMap->GetGlyphIndex(c);
+        sal_GlyphId nGlyph = pFontInstance->GetGlyphIndex(c);
         pWidths[c] = pFontInstance->GetGlyphWidth(nGlyph, false, true);
     }
 
@@ -3890,15 +3889,13 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // reasons require even the standard PS fonts to be embedded!
     Push();
     SetFont( Font( OUString( "OpenSymbol" ), aFont.GetFontSize() ) );
-    FontCharMapRef pMap;
-    GetFontCharMap(pMap);
     const LogicalFontInstance* pFontInstance = GetFontInstance();
     const vcl::font::PhysicalFontFace* pDevFont = pFontInstance->GetFontFace();
     Pop();
 
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
-    const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
+    const GlyphItem aItem(0, 0, pFontInstance->GetGlyphIndex(cMark),
                           DevicePoint(), GlyphItemFlags::NONE, 0, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
     auto nGlyphWidth = pFontInstance->GetGlyphWidth(aItem.glyphId(), aItem.IsVertical(), true);

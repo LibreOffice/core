@@ -66,14 +66,10 @@ hb_font_t* LogicalFontInstance::InitHbFont()
 
 int LogicalFontInstance::GetKashidaWidth() const
 {
-    hb_font_t* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
-    hb_position_t nWidth = 0;
-    hb_codepoint_t nIndex = 0;
-
-    if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nIndex))
-        nWidth = std::ceil(GetGlyphWidth(nIndex));
-
-    return nWidth;
+    sal_GlyphId nGlyph = GetGlyphIndex(0x0640);
+    if (nGlyph)
+        return std::ceil(GetGlyphWidth(nGlyph));
+    return 0;
 }
 
 void LogicalFontInstance::GetScale(double* nXScale, double* nYScale) const
@@ -144,6 +140,15 @@ bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& r
     if (mpFontCache && res)
         mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
     return res;
+}
+
+sal_GlyphId LogicalFontInstance::GetGlyphIndex(uint32_t nUnicode, uint32_t nVariationSelector) const
+{
+    auto* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
+    sal_GlyphId nGlyph = 0;
+    if (hb_font_get_glyph(pHbFont, nUnicode, nVariationSelector, &nGlyph))
+        return nGlyph;
+    return 0;
 }
 
 double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bool bPDF) const

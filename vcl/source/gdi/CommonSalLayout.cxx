@@ -221,14 +221,13 @@ void GenericSalLayout::DrawText(SalGraphics& rSalGraphics) const
 // script/language then we want to always treat it as upright glyph.
 bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSelector)
 {
-    hb_codepoint_t nGlyphIndex = 0;
-    hb_font_t *pHbFont = GetFont().GetHbFont();
-    if (!hb_font_get_glyph(pHbFont, aChar, aVariationSelector, &nGlyphIndex))
+    sal_GlyphId nGlyphIndex = GetFont().GetGlyphIndex(aChar, aVariationSelector);
+    if (!nGlyphIndex)
         return false;
 
     if (!mpVertGlyphs)
     {
-        hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+        hb_face_t* pHbFace = hb_font_get_face(GetFont().GetHbFont());
         mpVertGlyphs = hb_set_create();
 
         // Find all GSUB lookups for “vert” feature.
@@ -850,10 +849,8 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
         return;
 
     // Find Kashida glyph width and index.
-    double nKashidaWidth = 0;
-    hb_codepoint_t nKashidaIndex = 0;
-    if (hb_font_get_glyph(GetFont().GetHbFont(), 0x0640, 0, &nKashidaIndex))
-        nKashidaWidth = GetFont().GetKashidaWidth();
+    sal_GlyphId nKashidaIndex = GetFont().GetGlyphIndex(0x0640);
+    double nKashidaWidth = GetFont().GetKashidaWidth();
 
     if (nKashidaWidth <= 0)
     {
