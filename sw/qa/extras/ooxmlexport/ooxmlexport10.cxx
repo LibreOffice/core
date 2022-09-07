@@ -473,6 +473,9 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx"
     xRange = xTextContent->getAnchor();
     xText = xRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+
+    // tdf#149292 pre-emptive test - ensure "First Page" page style
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(getParagraph(1), "PageDescName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAnnotationFormatting, "annotation-formatting.docx")
