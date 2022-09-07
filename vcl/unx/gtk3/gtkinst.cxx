@@ -13331,16 +13331,161 @@ public:
 
 class GtkInstanceEntry : public GtkInstanceEditable
 {
+private:
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    GtkEntry* m_pEntry;
+    GtkOverlay* m_pPlaceHolderReplacement;
+    GtkLabel* m_pPlaceHolderLabel;
+    gulong m_nEntryFocusInSignalId;
+    gulong m_nEntryFocusOutSignalId;
+    gulong m_nEntryTextLengthSignalId;
+    gulong m_nEntryScrollOffsetSignalId;
+    guint m_nUpdatePlaceholderReplacementIdle;
+
+    static gboolean do_update_placeholder_replacement(gpointer widget)
+    {
+        GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        pThis->update_placeholder_replacement();
+        return false;
+    }
+
+    void update_placeholder_replacement()
+    {
+        m_nUpdatePlaceholderReplacementIdle = 0;
+
+        const char* placeholder_text = gtk_entry_get_placeholder_text(m_pEntry);
+        const bool bShow = placeholder_text && !gtk_entry_get_text_length(m_pEntry) &&
+                           gtk_widget_has_focus(GTK_WIDGET(m_pEntry));
+        if (bShow)
+        {
+            GdkRectangle text_area;
+            gtk_entry_get_text_area(m_pEntry, &text_area);
+            gint x;
+            gtk_entry_get_layout_offsets(m_pEntry, &x, nullptr);
+            gtk_widget_set_margin_start(GTK_WIDGET(m_pPlaceHolderLabel), x);
+            gtk_widget_set_margin_end(GTK_WIDGET(m_pPlaceHolderLabel), x);
+            gtk_label_set_text(m_pPlaceHolderLabel, placeholder_text);
+            gtk_widget_show(GTK_WIDGET(m_pPlaceHolderLabel));
+        }
+        else
+            gtk_widget_hide(GTK_WIDGET(m_pPlaceHolderLabel));
+    }
+
+    void launch_update_placeholder_replacement()
+    {
+        // do it in the next event cycle so the GtkEntry has done its layout
+        // and gtk_entry_get_layout_offsets returns the right results
+        if (m_nUpdatePlaceholderReplacementIdle)
+            return;
+        // G_PRIORITY_LOW so gtk's idles are run before this
+        m_nUpdatePlaceholderReplacementIdle = g_idle_add_full(G_PRIORITY_LOW, do_update_placeholder_replacement, this, nullptr);
+    }
+
+    static gboolean signalEntryFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        pThis->launch_update_placeholder_replacement();
+        return false;
+    }
+
+    static gboolean signalEntryFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        pThis->launch_update_placeholder_replacement();
+        return false;
+    }
+
+    static void signalEntryTextLength(void*, GParamSpec*, gpointer widget)
+    {
+        GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        pThis->launch_update_placeholder_replacement();
+    }
+
+    static void signalEntryScrollOffset(void*, GParamSpec*, gpointer widget)
+    {
+        // this property affects the x-position of the text area
+        GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        pThis->launch_update_placeholder_replacement();
+    }
+
+#endif
+
 public:
     GtkInstanceEntry(GtkEntry* pEntry, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceEditable(GTK_WIDGET(pEntry), pBuilder, bTakeOwnership)
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        , m_pEntry(pEntry)
+        , m_pPlaceHolderReplacement(nullptr)
+        , m_pPlaceHolderLabel(nullptr)
+        , m_nEntryFocusInSignalId(0)
+        , m_nEntryFocusOutSignalId(0)
+        , m_nEntryTextLengthSignalId(0)
+        , m_nEntryScrollOffsetSignalId(0)
+        , m_nUpdatePlaceholderReplacementIdle(0)
+#endif
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // tdf#150810 fake getting placeholders visible even when GtkEntry has focus in gtk3.
+        // In gtk4 this works out of the box, for gtk3 fake it by having a GtkLabel in an
+        // overlay and show that label if the placeholder would be shown if there was
+        // no focus
+        const char* pPlaceHolderText = gtk_entry_get_placeholder_text(m_pEntry);
+        if (pPlaceHolderText ? strlen(pPlaceHolderText) : 0)
+        {
+            m_pPlaceHolderReplacement = GTK_OVERLAY(gtk_overlay_new());
+            m_pPlaceHolderLabel = GTK_LABEL(gtk_label_new(nullptr));
+
+            GtkStyleContext *pStyleContext = gtk_widget_get_style_context(GTK_WIDGET(m_pEntry));
+            GdkRGBA fg = { 0.5, 0.5, 0.5, 0.0 };
+            gtk_style_context_lookup_color(pStyleContext, "placeholder_text_color", &fg);
+
+            auto red = std::clamp(fg.red * 65535 + 0.5, 0.0, 65535.0);
+            auto green = std::clamp(fg.green * 65535 + 0.5, 0.0, 65535.0);
+            auto blue = std::clamp(fg.blue * 65535 + 0.5, 0.0, 65535.0);
+
+            PangoAttribute *pAttr = pango_attr_foreground_new(red, green, blue);
+            pAttr->start_index = 0;
+            pAttr->end_index = G_MAXINT;
+            PangoAttrList* pAttrList = pango_attr_list_new();
+            pango_attr_list_insert(pAttrList, pAttr);
+            gtk_label_set_attributes(m_pPlaceHolderLabel, pAttrList);
+            pango_attr_list_unref(pAttrList);
+
+            // The GtkEntry will have the placeholder as the text to analyze here, assumes there is no initial text, just placeholder
+            const bool bRTL = PANGO_DIRECTION_RTL == pango_context_get_base_dir(pango_layout_get_context(gtk_entry_get_layout(m_pEntry)));
+            SAL_WARN_IF(gtk_entry_get_text_length(m_pEntry), "vcl.gtk", "don't have a placeholder set, but also initial text");
+            gtk_label_set_xalign(m_pPlaceHolderLabel, bRTL ? 1.0 : 0.0);
+
+            gtk_overlay_add_overlay(m_pPlaceHolderReplacement, GTK_WIDGET(m_pPlaceHolderLabel));
+            insertAsParent(GTK_WIDGET(m_pEntry), GTK_WIDGET(m_pPlaceHolderReplacement));
+            m_nEntryFocusInSignalId = g_signal_connect_after(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
+            m_nEntryFocusOutSignalId = g_signal_connect_after(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
+            m_nEntryTextLengthSignalId = g_signal_connect(m_pEntry, "notify::text-length", G_CALLBACK(signalEntryTextLength), this);
+            m_nEntryScrollOffsetSignalId = g_signal_connect(m_pEntry, "notify::scroll-offset", G_CALLBACK(signalEntryScrollOffset), this);
+        }
+#endif
     }
 
     virtual void set_font(const vcl::Font& rFont) override
     {
         m_aCustomFont.use_custom_font(&rFont, u"entry");
     }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    virtual ~GtkInstanceEntry() override
+    {
+        if (m_nUpdatePlaceholderReplacementIdle)
+            g_source_remove(m_nUpdatePlaceholderReplacementIdle);
+        if (m_nEntryFocusInSignalId)
+            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusInSignalId);
+        if (m_nEntryFocusOutSignalId)
+            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusOutSignalId);
+        if (m_nEntryTextLengthSignalId)
+            g_signal_handler_disconnect(m_pEntry, m_nEntryTextLengthSignalId);
+        if (m_nEntryScrollOffsetSignalId)
+            g_signal_handler_disconnect(m_pEntry, m_nEntryScrollOffsetSignalId);
+    }
+#endif
 };
 
 }
