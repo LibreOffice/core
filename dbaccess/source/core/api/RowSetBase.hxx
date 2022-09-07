@@ -143,16 +143,16 @@ namespace dbaccess
         virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
 
-        enum CursorMoveDirection
+        enum class CursorMoveDirection
         {
             /// denotes a cursor move forward
-            MOVE_FORWARD,
+            Forward,
             /// denotes a cursor  move backwards
-            MOVE_BACKWARD,
+            Backward,
             /// denotes no cursor move at all, but move cache to current row (if it is not there already)
-            MOVE_NONE,
+            Current,
             /// denotes no cursor move at all, but force the cache to move to current row (and refresh the row)
-            MOVE_NONE_REFRESH
+            CurrentRefresh
         };
         /** positions the cache in preparation of a cursor move
 
