@@ -723,13 +723,9 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     rPam.DeleteMark();
     rPam.GetPoint()->Assign( m_nSttNd, m_nSttCnt );
 
-    rPam.GetPoint()->GetNode().GetTextNode();
     rPam.SetMark();
     if( m_bSplitNext )
-    {
         rPam.GetPoint()->Assign( m_nSttNd + 1 );
-        rPam.GetPoint()->GetNode().GetTextNode();
-    }
     rPam.GetPoint()->SetContent( m_nSelEnd );
 
     if( m_pHistory )
