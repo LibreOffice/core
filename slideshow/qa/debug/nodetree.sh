@@ -34,7 +34,7 @@
 #
 ###################################################
 
-egrep "Node connection|Node state" $1 |                                         \
+grep -E "Node connection|Node state" $1 |                                         \
     sed -e '/Node state/ s/.*Node state.*: \(.*\)/\1/'                          \
         -e '/Node connection/ s/.*Node connection.*: \(n.*\)/\1/' |             \
                                                                                 \

@@ -2945,7 +2945,7 @@ AC_SUBST(GNUPARALLEL)
 
 AC_MSG_CHECKING([for GNU or BSD tar])
 for a in $GNUTAR gtar gnutar tar bsdtar /usr/sfw/bin/gtar; do
-    $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null
+    $a --version 2> /dev/null | grep -E "GNU|bsdtar"  2>&1 > /dev/null
     if test $? -eq 0;  then
         GNUTAR=$a
         break
@@ -2958,11 +2958,11 @@ fi
 AC_SUBST(GNUTAR)
 
 AC_MSG_CHECKING([for tar's option to strip components])
-$GNUTAR --help 2> /dev/null | egrep "bsdtar|strip-components" 2>&1 >/dev/null
+$GNUTAR --help 2> /dev/null | grep -E "bsdtar|strip-components" 2>&1 >/dev/null
 if test $? -eq 0; then
     STRIP_COMPONENTS="--strip-components"
 else
-    $GNUTAR --help 2> /dev/null | egrep "strip-path" 2>&1 >/dev/null
+    $GNUTAR --help 2> /dev/null | grep -E "strip-path" 2>&1 >/dev/null
     if test $? -eq 0; then
         STRIP_COMPONENTS="--strip-path"
     else

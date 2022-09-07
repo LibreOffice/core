@@ -235,7 +235,7 @@ class Parser:
         # Change into the given dir, so "git ls-tree" does work.
         os.chdir(directory)
 
-        sock = os.popen(r"git ls-tree -r HEAD --name-only |egrep '\.(c|cc|cpp|cxx|h|hxx|mm)$'")
+        sock = os.popen(r"git ls-tree -r HEAD --name-only | grep -E '\.(c|cc|cpp|cxx|h|hxx|mm)$'")
         lines = sock.readlines()
         sock.close()
 

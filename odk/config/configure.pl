@@ -242,7 +242,7 @@ while ( (!$main::correctVersion) &&
     } else
     {
         #check version
-        my $testVersion = `$OO_SDK_ZIP_HOME/zip -h 2>&1 | egrep Zip | head -n 1`;
+        my $testVersion = `$OO_SDK_ZIP_HOME/zip -h 2>&1 | grep -E Zip | head -n 1`;
         $testVersion =~ s#Zip ([\d.]+) .*#$1#go;
         if ( $testVersion eq "")
         {
@@ -414,7 +414,7 @@ while ( (!$main::correctVersion) &&
         } else
         {
             #check version
-            my $testVersion = `$main::OO_SDK_JAVA_HOME/bin/java -version 2>&1 | egrep "java version" | head -n 1 | sed -e 's#.*version "##' | sed -e 's#".*##'`;
+            my $testVersion = `$main::OO_SDK_JAVA_HOME/bin/java -version 2>&1 | grep -E "java version" | head -n 1 | sed -e 's#.*version "##' | sed -e 's#".*##'`;
             $testVersion =~ s#([^\n]+)\n#$1#go;
 
             $main::correctVersion = testVersion($main::javaVersion, $testVersion, "$main::OO_SDK_JAVA_HOME/bin/java", 1);
