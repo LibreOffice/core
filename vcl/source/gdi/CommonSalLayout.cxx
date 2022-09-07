@@ -42,24 +42,6 @@
 
 #include <memory>
 
-#if !HB_VERSION_ATLEAST(1, 1, 0)
-// Disabled Unicode compatibility decomposition, see fdo#66715
-static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/,
-                                                  hb_codepoint_t      /*u*/,
-                                                  hb_codepoint_t*     /*decomposed*/,
-                                                  void*               /*user_data*/)
-{
-    return 0;
-}
-
-static hb_unicode_funcs_t* getUnicodeFuncs()
-{
-    static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
-    hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, nullptr, nullptr);
-    return ufuncs;
-}
-#endif
-
 GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
     : m_GlyphItems(rFont)
     , mpVertGlyphs(nullptr)
@@ -309,10 +291,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
     hb_buffer_t* pHbBuffer = hb_buffer_create();
     hb_buffer_pre_allocate(pHbBuffer, nGlyphCapacity);
-#if !HB_VERSION_ATLEAST(1, 1, 0)
-    static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
-    hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
-#endif
 
     const vcl::font::FontSelectPattern& rFontSelData = GetFont().GetFontSelectPattern();
     if (rArgs.mnFlags & SalLayoutFlags::DisableKerning)
@@ -470,10 +448,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
 
             // The shapers that we want HarfBuzz to use, in the order of
-            // preference. The coretext_aat shaper is available only on macOS,
-            // but there is no harm in always including it, HarfBuzz will
-            // ignore unavailable shapers.
-            const char*const pHbShapers[] = { "graphite2", "coretext_aat", "ot", "fallback", nullptr };
+            // preference.
+            const char*const pHbShapers[] = { "graphite2", "ot", "fallback", nullptr };
             bool ok = hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
             assert(ok);
             (void) ok;
@@ -570,13 +546,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (u_isUWhiteSpace(aChar))
                     nGlyphFlags |= GlyphItemFlags::IS_SPACING;
 
-#if HB_VERSION_ATLEAST(1, 5, 0)
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
                     nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
-#else
-                // If support is not present, then always prevent breaking.
-                nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
-#endif
 
 #if HB_VERSION_ATLEAST(5, 1, 0)
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
