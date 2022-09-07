@@ -70,21 +70,11 @@ using namespace com::sun::star;
 
 namespace drawinglayer::processor2d
 {
-struct VclPixelProcessor2D::Impl
-{
-    AntialiasingFlags m_nOrigAntiAliasing;
-
-    explicit Impl(OutputDevice const& rOutDev)
-        : m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
-    {
-    }
-};
-
 VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                                          OutputDevice& rOutDev,
                                          const basegfx::BColorModifierStack& rInitStack)
     : VclProcessor2D(rViewInformation, rOutDev, rInitStack)
-    , m_pImpl(new Impl(rOutDev))
+    , m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
 {
     // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
     maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
@@ -96,11 +86,11 @@ VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rVie
     // react on AntiAliasing settings
     if (SvtOptionsDrawinglayer::IsAntiAliasing())
     {
-        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing | AntialiasingFlags::Enable);
+        mpOutputDevice->SetAntialiasing(m_nOrigAntiAliasing | AntialiasingFlags::Enable);
     }
     else
     {
-        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing & ~AntialiasingFlags::Enable);
+        mpOutputDevice->SetAntialiasing(m_nOrigAntiAliasing & ~AntialiasingFlags::Enable);
     }
 }
 
@@ -110,7 +100,7 @@ VclPixelProcessor2D::~VclPixelProcessor2D()
     mpOutputDevice->Pop();
 
     // restore AntiAliasing
-    mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
+    mpOutputDevice->SetAntialiasing(m_nOrigAntiAliasing);
 }
 
 void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(

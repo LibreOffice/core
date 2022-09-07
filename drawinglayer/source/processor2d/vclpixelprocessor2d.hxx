@@ -56,8 +56,7 @@ namespace drawinglayer::processor2d
  */
 class VclPixelProcessor2D final : public VclProcessor2D
 {
-    struct Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    AntialiasingFlags m_nOrigAntiAliasing;
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation
