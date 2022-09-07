@@ -180,7 +180,7 @@ void ScSortedRangeCache::Notify(const SfxHint& rHint)
         if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScAreaChanged)
         {
             mpDoc->RemoveSortedRangeCache(*this);
-            delete this;
+            // this ScSortedRangeCache is deleted by RemoveSortedRangeCache
         }
     }
 }

@@ -1259,10 +1259,10 @@ void ScDocument::RemoveSortedRangeCache( ScSortedRangeCache & rCache )
     auto it(mxScSortedRangeCache->aCacheMap.find(rCache.getHashKey()));
     if (it != mxScSortedRangeCache->aCacheMap.end())
     {
-        ScSortedRangeCache* pCache = (*it).second.release();
+        std::unique_ptr<ScSortedRangeCache> xCache = std::move(it->second);
         mxScSortedRangeCache->aCacheMap.erase(it);
         assert(!IsThreadedGroupCalcInProgress()); // EndListeningArea() is not thread-safe
-        EndListeningArea(pCache->getRange(), false, &rCache);
+        EndListeningArea(xCache->getRange(), false, &rCache);
         return;
     }
     OSL_FAIL( "ScDocument::RemoveSortedRangeCache: range not found in hash map");
