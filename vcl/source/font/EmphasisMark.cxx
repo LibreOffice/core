@@ -95,7 +95,7 @@ EmphasisMark::EmphasisMark(FontEmphasisMark eEmphasis, tools::Long nHeight, sal_
                 tools::Long nRad = nDotSize/2;
                 tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 maPolyPoly.Insert( aPoly );
-                // BordemnWidth is 15%
+                // Border mnWidth is 15%
                 tools::Long nBorder = (nDotSize*150)/1000;
                 if ( nBorder <= 1 )
                     mbIsPolyLine = true;
