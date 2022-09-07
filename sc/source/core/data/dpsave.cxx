@@ -1286,8 +1286,20 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
         for (size_t j = 0; j < nMemberCount; ++j)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById(nDimIndex, rMembers[j]);
-            OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData, false);
-            aMemNames.insert(aMemName);
+            // ScDPCache::GetItemDataById() (via
+            // ScDPTableData::GetMemberById(),
+            // ScDPGroupTableData::GetMemberById() through
+            // GetCacheTable().getCache()) may return nullptr.
+            if (pMemberData)
+            {
+                OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData, false);
+                aMemNames.insert(aMemName);
+            }
+            else
+            {
+                SAL_WARN("sc.core", "No pMemberData for nDimIndex " << nDimIndex << ", rMembers[j] " << rMembers[j]
+                        << ", j " << j);
+            }
         }
 
         it->RemoveObsoleteMembers(aMemNames);
