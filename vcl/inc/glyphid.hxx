@@ -21,6 +21,6 @@
 
 #include <sal/types.h>
 
-typedef sal_uInt16 sal_GlyphId;
+typedef uint32_t sal_GlyphId;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
