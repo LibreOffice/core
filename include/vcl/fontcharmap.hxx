@@ -162,8 +162,6 @@ public:
                             const sal_UCS4* pRangeCodes = nullptr, int nRangeCount = 0 );
 
     const sal_UCS4*     mpRangeCodes;
-    const int*          mpStartGlyphs;
-    const sal_uInt16*   mpGlyphIds;
     int                 mnRangeCount;
     bool                mbSymbolic;
     bool                mbRecoded;

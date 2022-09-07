@@ -29,8 +29,6 @@
 CmapResult::CmapResult( bool bSymbolic,
     const sal_UCS4* pRangeCodes, int nRangeCount )
 :   mpRangeCodes( pRangeCodes)
-,   mpStartGlyphs( nullptr)
-,   mpGlyphIds( nullptr)
 ,   mnRangeCount( nRangeCount)
 ,   mbSymbolic( bSymbolic)
 ,   mbRecoded( false)
@@ -45,15 +43,11 @@ ImplFontCharMap::~ImplFontCharMap()
     if( !isDefaultMap() )
     {
         delete[] mpRangeCodes;
-        delete[] mpStartGlyphs;
-        delete[] mpGlyphIds;
     }
 }
 
 ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 :   mpRangeCodes( rCR.mpRangeCodes )
-,   mpStartGlyphs( rCR.mpStartGlyphs )
-,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
     , m_bSymbolic(rCR.mbSymbolic)
@@ -91,14 +85,11 @@ bool ImplFontCharMap::isDefaultMap() const
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
-static int GetSShort( const unsigned char* p ){ return static_cast<sal_Int16>((p[0]<<8)|p[1]);}
 
 // TODO: move CMAP parsing directly into the ImplFontCharMap class
 bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 {
     rResult.mpRangeCodes = nullptr;
-    rResult.mpStartGlyphs= nullptr;
-    rResult.mpGlyphIds   = nullptr;
     rResult.mnRangeCount = 0;
     rResult.mbRecoded    = false;
     rResult.mbSymbolic   = false;
@@ -113,8 +104,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     int nSubTables = GetUShort( pCmap + 2 );
     if( (nSubTables <= 0) || (nSubTables > (nLength - 24) / 8) )
         return false;
-
-    const unsigned char* pEndValidArea = pCmap + nLength;
 
     // find the most interesting subtable in the CMAP
     rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
@@ -175,11 +164,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     // parse the best CMAP subtable
     int nRangeCount = 0;
     sal_UCS4* pCodePairs = nullptr;
-    int* pStartGlyphs = nullptr;
-
-    std::vector<sal_uInt16> aGlyphIdArray;
-    aGlyphIdArray.reserve( 0x1000 );
-    aGlyphIdArray.push_back( 0 );
 
     // format 4, the most common 16bit char mapping table
     if( (nFormat == 4) && ((nOffset+16) < nLength) )
@@ -207,15 +191,12 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         }
 
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
-        pStartGlyphs = new int[ nRangeCount ];
 
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
             const sal_UCS4 cMinChar = GetUShort( pBeginBase + 2*i );
             const sal_UCS4 cMaxChar = GetUShort( pLimitBase + 2*i );
-            const int nGlyphDelta  = GetSShort( pDeltaBase + 2*i );
-            const int nRangeOffset = GetUShort( pOffsetBase + 2*i );
             if( cMinChar > cMaxChar ) {  // no sane font should trigger this
                 SAL_WARN("vcl.gdi", "Min char should never be more than the max char!");
                 break;
@@ -223,29 +204,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             if( cMaxChar == 0xFFFF ) {
                 SAL_WARN("vcl.gdi", "Format 4 char should not be 0xFFFF");
                 break;
-            }
-            if( !nRangeOffset ) {
-                // glyphid can be calculated directly
-                pStartGlyphs[i] = (cMinChar + nGlyphDelta) & 0xFFFF;
-            } else {
-                // update the glyphid-array with the glyphs in this range
-                pStartGlyphs[i] = -static_cast<int>(aGlyphIdArray.size());
-                const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
-                const size_t nRemainingSize = pEndValidArea >= pGlyphIdPtr ? pEndValidArea - pGlyphIdPtr : 0;
-                const size_t nMaxPossibleRecords = nRemainingSize/2;
-                if (nMaxPossibleRecords == 0) {  // no sane font should trigger this
-                    SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
-                    break;
-                }
-                const size_t nMaxLegalChar = cMinChar + nMaxPossibleRecords-1;
-                if (cMaxChar > nMaxLegalChar) {  // no sane font should trigger this
-                    SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
-                    break;
-                }
-                for( sal_UCS4 c = cMinChar; c <= cMaxChar; ++c, pGlyphIdPtr+=2 ) {
-                    const int nGlyphIndex = GetUShort( pGlyphIdPtr ) + nGlyphDelta;
-                    aGlyphIdArray.push_back( static_cast<sal_uInt16>(nGlyphIndex) );
-                }
             }
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
@@ -272,7 +230,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         }
 
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
-        pStartGlyphs = new int[ nRangeCount ];
 
         const unsigned char* pGroup = pCmap + nGroupOffset;
         sal_UCS4* pCP = pCodePairs;
@@ -280,7 +237,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         {
             sal_UCS4 cMinChar = GetUInt( pGroup + 0 );
             sal_UCS4 cMaxChar = GetUInt( pGroup + 4 );
-            int nGlyphId = GetUInt( pGroup + 8 );
             pGroup += 12;
 
             if( cMinChar > cMaxChar ) {   // no sane font should trigger this
@@ -290,7 +246,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
-            pStartGlyphs[i] = nGlyphId;
         }
         nRangeCount = (pCP - pCodePairs) / 2;
     }
@@ -299,7 +254,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     if( nRangeCount <= 0 )
     {
         delete[] pCodePairs;
-        delete[] pStartGlyphs;
 
         // even when no CMAP is available we know it for symbol fonts
         if( rResult.mbSymbolic )
@@ -392,11 +346,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             aSupportedRanges.back() = supportedPoint + 1;
         }
 
-        // glyph mapping for non-unicode fonts not implemented
-        delete[] pStartGlyphs;
-        pStartGlyphs = nullptr;
-        aGlyphIdArray.clear();
-
         // make a pCodePairs array using the vector from above
         delete[] pCodePairs;
         nRangeCount = aSupportedRanges.size() / 2;
@@ -408,22 +357,9 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             *(pCP++) = supportedRange;
     }
 
-    // prepare the glyphid-array if needed
-    // TODO: merge ranges if they are close enough?
-    sal_uInt16* pGlyphIds = nullptr;
-    if( !aGlyphIdArray.empty())
-    {
-        pGlyphIds = new sal_uInt16[ aGlyphIdArray.size() ];
-        sal_uInt16* pOut = pGlyphIds;
-        for (auto const& glyphId : aGlyphIdArray)
-            *(pOut++) = glyphId;
-    }
-
     // update the result struct
     rResult.mpRangeCodes = pCodePairs;
-    rResult.mpStartGlyphs = pStartGlyphs;
     rResult.mnRangeCount = nRangeCount;
-    rResult.mpGlyphIds = pGlyphIds;
     return true;
 }
 
@@ -492,19 +428,10 @@ int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 
 bool FontCharMap::HasChar( sal_UCS4 cChar ) const
 {
-    bool bHasChar = false;
-
-    if( mpImplFontCharMap->mpStartGlyphs  == nullptr ) { // only the char-ranges are known
-        const int nRange = findRangeIndex( cChar );
-        if( nRange==0 && cChar < mpImplFontCharMap->mpRangeCodes[0] )
-            return false;
-        bHasChar = ((nRange & 1) == 0); // inside a range
-    } else { // glyph mapping is available
-        const int nGlyphIndex = GetGlyphIndex( cChar );
-        bHasChar = (nGlyphIndex != 0); // not the notdef-glyph
-    }
-
-    return bHasChar;
+    const int nRange = findRangeIndex( cChar );
+    if( nRange==0 && cChar < mpImplFontCharMap->mpRangeCodes[0] )
+        return false;
+    return ((nRange & 1) == 0); // inside a range
 }
 
 sal_UCS4 FontCharMap::GetFirstChar() const
@@ -595,46 +522,6 @@ int FontCharMap::findRangeIndex( sal_UCS4 cChar ) const
     }
 
     return nMid;
-}
-
-int FontCharMap::GetGlyphIndex( sal_UCS4 cChar ) const
-{
-    // return -1 if the object doesn't know the glyph ids
-    if( !mpImplFontCharMap->mpStartGlyphs )
-        return -1;
-
-    // return 0 if the unicode doesn't have a matching glyph
-    int nRange = findRangeIndex( cChar );
-    // check that we are inside any range
-    if( (nRange == 0) && (cChar < mpImplFontCharMap->mpRangeCodes[0]) ) {
-        // symbol aliasing gives symbol fonts a second chance
-        const bool bSymbolic = cChar <= 0xFF && (mpImplFontCharMap->mpRangeCodes[0]>=0xF000) &&
-                                                (mpImplFontCharMap->mpRangeCodes[1]<=0xF0FF);
-        if( !bSymbolic )
-            return 0;
-        // check for symbol aliasing (U+F0xx -> U+00xx)
-        cChar |= 0xF000;
-        nRange = findRangeIndex( cChar );
-        if( (nRange == 0) && (cChar < mpImplFontCharMap->mpRangeCodes[0]) ) {
-            return 0;
-        }
-    }
-    // check that we are inside a range
-    if( (nRange & 1) != 0 )
-        return 0;
-
-    // get glyph index directly or indirectly
-    int nGlyphIndex = cChar - mpImplFontCharMap->mpRangeCodes[ nRange ];
-    const int nStartIndex = mpImplFontCharMap->mpStartGlyphs[ nRange/2 ];
-    if( nStartIndex >= 0 ) {
-        // the glyph index can be calculated
-        nGlyphIndex += nStartIndex;
-    } else {
-        // the glyphid array has the glyph index
-        nGlyphIndex = mpImplFontCharMap->mpGlyphIds[ nGlyphIndex - nStartIndex];
-    }
-
-    return nGlyphIndex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
