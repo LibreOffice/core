@@ -599,7 +599,7 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 SwPaM aPaM(aInsPos);
                 pDoc->getIDocumentContentOperations().InsertString( aPaM,
                         OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
-                pDoc->SetRowNotTracked( aCursor, aSetTracking );
+                pDoc->SetRowNotTracked( aCursor, aSetTracking, /*bAll=*/false, /*bIns=*/true );
             }
         }
     }
