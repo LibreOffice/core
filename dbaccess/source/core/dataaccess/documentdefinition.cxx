@@ -852,7 +852,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         // So, in such a case, and with 2. above, we would silently execute those macros,
         // regardless of the global security settings - which would be a security issue, of
         // course.
-        if ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eNoMacros )
+        if ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::EmbeddedMacros::NONE )
         {
             // this is case 2. from above
             // So, pass a USE_CONFIG to the to-be-loaded document. This means that
@@ -1431,7 +1431,7 @@ namespace
 bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
     bool bAllowDocumentMacros = !m_pImpl->m_pDataSource
-                            ||  ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eSubDocumentMacros );
+                            ||  ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::EmbeddedMacros::SubDocument );
 
     // if *any* of the objects of the database document already has macros, we
     // continue to allow it to have them, until the user does a migration.

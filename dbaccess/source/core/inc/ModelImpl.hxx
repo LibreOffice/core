@@ -109,14 +109,14 @@ public:
         LAST = Table
     };
 
-    enum EmbeddedMacros
+    enum class EmbeddedMacros
     {
         // the database document (storage) itself contains macros
-        eDocumentWideMacros,
+        DocumentWide,
         // there are sub document( storage)s containing macros
-        eSubDocumentMacros,
+        SubDocument,
         // there are no known macro( storage)s
-        eNoMacros
+        NONE
     };
 
 private:

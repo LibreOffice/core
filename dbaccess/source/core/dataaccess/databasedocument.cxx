@@ -775,7 +775,7 @@ bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentU
         // determine whether the document as a whole, or sub documents, have macros. Especially the latter
         // controls the availability of our XEmbeddedScripts and XScriptInvocationContext interfaces, and we
         // should know this before anybody actually uses the object.
-        m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
+        m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::EmbeddedMacros::SubDocument );
 
         _rDocGuard.clear();
         // <- SYNCHRONIZED

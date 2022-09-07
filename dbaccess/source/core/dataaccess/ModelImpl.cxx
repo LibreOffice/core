@@ -1323,17 +1323,17 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
     {
         if ( ::sfx2::DocumentMacroMode::storageHasMacros( getOrCreateRootStorage() ) )
         {
-            m_aEmbeddedMacros = eDocumentWideMacros;
+            m_aEmbeddedMacros = EmbeddedMacros::DocumentWide;
         }
         else if (   lcl_hasObjectsWithMacros_nothrow( *this, ObjectType::Form )
                 ||  lcl_hasObjectsWithMacros_nothrow( *this, ObjectType::Report )
                 )
         {
-            m_aEmbeddedMacros = eSubDocumentMacros;
+            m_aEmbeddedMacros = EmbeddedMacros::SubDocument;
         }
         else
         {
-            m_aEmbeddedMacros = eNoMacros;
+            m_aEmbeddedMacros = EmbeddedMacros::NONE;
         }
     }
     return *m_aEmbeddedMacros;
@@ -1342,7 +1342,7 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
 bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     const_cast< ODatabaseModelImpl* >( this )->determineEmbeddedMacros();
-    return ( *m_aEmbeddedMacros != eNoMacros );
+    return ( *m_aEmbeddedMacros != EmbeddedMacros::NONE );
 }
 
 bool ODatabaseModelImpl::macroCallsSeenWhileLoading() const
