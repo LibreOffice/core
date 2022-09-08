@@ -482,6 +482,11 @@ void SalInstanceWidget::thaw() { m_xWidget->SetUpdateMode(true); }
 
 void SalInstanceWidget::set_busy_cursor(bool bBusy)
 {
+    if (!m_xWidget)
+    {
+        return;
+    }
+
     if (bBusy)
         m_xWidget->EnterWait();
     else
