@@ -1410,7 +1410,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             // TODO: investigate calling CopyWithFlyInFly?
             SwPaM const source(aRg.aStart, aRg.aEnd);
             SwPosition dest(aTmpIdx);
-            sw::CopyBookmarks(source, dest);
+            sw::CopyBookmarks(source, dest, SwCopyFlags::Default);
             pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
         }
         else

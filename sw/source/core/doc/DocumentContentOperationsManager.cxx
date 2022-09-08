@@ -230,7 +230,7 @@ namespace
 namespace sw
 {
     // TODO: use SaveBookmark (from DelBookmarks)
-    void CopyBookmarks(const SwPaM& rPam, const SwPosition& rCpyPam)
+    void CopyBookmarks(const SwPaM& rPam, const SwPosition& rCpyPam, SwCopyFlags eFlags)
     {
         const SwDoc& rSrcDoc = rPam.GetDoc();
         SwDoc& rDestDoc =  rCpyPam.GetDoc();
@@ -281,6 +281,7 @@ namespace sw
         // We have to count the "non-copied" nodes...
         SwNodeOffset nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
+        auto bSkipBookmarks = static_cast<bool>(eFlags & SwCopyFlags::SkipBookmarks);
         for(const sw::mark::IMark* const pMark : vMarksToCopy)
         {
             SwPaM aTmpPam(*pCpyStt);
@@ -293,10 +294,17 @@ namespace sw
                 lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
+            IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pMark);
+            if (bSkipBookmarks && eType == IDocumentMarkAccess::MarkType::BOOKMARK)
+            {
+                // It was requested to skip bookmarks while copying. Do that, but continue to copy
+                // other kind of marks, like fieldmarks.
+                continue;
+            }
             ::sw::mark::IMark* const pNewMark = rDestDoc.getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
                 pMark->GetName(),
-                IDocumentMarkAccess::GetType(*pMark),
+                eType,
                 ::sw::mark::InsertMode::CopyText);
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
@@ -3690,7 +3698,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             targetPos = pCopiedPaM->second;
         }
 
-        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, targetPos);
+        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, targetPos, flags);
     }
 
     if (rRg.aStart != rRg.aEnd)
@@ -5337,7 +5345,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // Also copy all bookmarks
     if( bCopyBookmarks && m_rDoc.getIDocumentMarkAccess()->getAllMarksCount() )
     {
-        sw::CopyBookmarks(rPam, *pCopyPam->Start());
+        sw::CopyBookmarks(rPam, *pCopyPam->Start(), SwCopyFlags::Default);
     }
 
     if( RedlineFlags::DeleteRedlines & eOld )
