@@ -255,6 +255,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
     CPPUNIT_ASSERT_EQUAL(OUString("\x0001test\x0001"), pTextNode->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyFlagSkipBookmarks)
+{
+    // Given a document with a bookmark in a header that is linked later:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "copy-flag-skip-bookmarks.docx");
+
+    // When checking the # of bookmarks in the resulting doc model:
+    sal_Int32 nActual = pDoc->getIDocumentMarkAccess()->getAllMarksCount();
+
+    // Then make sure we have a single bookmark, with no duplications:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the 2nd header had a duplicated bookmark.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

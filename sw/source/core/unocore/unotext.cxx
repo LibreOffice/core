@@ -86,6 +86,7 @@ public:
     const CursorType            m_eType;
     SwDoc *                     m_pDoc;
     bool                        m_bIsValid;
+    bool m_bCopySkipsBookmarks;
 
     Impl(   SwXText & rThis,
             SwDoc *const pDoc, const CursorType eType)
@@ -94,6 +95,7 @@ public:
         , m_eType(eType)
         , m_pDoc(pDoc)
         , m_bIsValid(nullptr != pDoc)
+        , m_bCopySkipsBookmarks(false)
     {
     }
 
@@ -1121,9 +1123,18 @@ SwXText::getPropertySetInfo()
 }
 
 void SAL_CALL
-SwXText::setPropertyValue(const OUString& /*aPropertyName*/,
-        const uno::Any& /*aValue*/)
+SwXText::setPropertyValue(const OUString& aPropertyName,
+        const uno::Any& aValue)
 {
+    if (aPropertyName == "CopySkipsBookmarks")
+    {
+        bool bValue{};
+        if (aValue >>= bValue)
+        {
+            m_pImpl->m_bCopySkipsBookmarks = bValue;
+        }
+        return;
+    }
     throw lang::IllegalArgumentException();
 }
 
@@ -2402,7 +2413,12 @@ SwXText::copyText(
             // Explicitly request copy text mode, so
             // sw::DocumentContentOperationsManager::CopyFlyInFlyImpl() will copy shapes anchored to
             // us, even if we have only a single paragraph.
-            m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, SwCopyFlags::CheckPosInFly);
+            SwCopyFlags eFlags = SwCopyFlags::CheckPosInFly;
+            if (m_pImpl->m_bCopySkipsBookmarks)
+            {
+                eFlags |= SwCopyFlags::SkipBookmarks;
+            }
+            m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, eFlags);
         }
         if (!pFirstNode)
         {   // the node at rPos was split; get rid of the first empty one so
