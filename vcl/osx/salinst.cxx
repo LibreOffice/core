@@ -190,6 +190,28 @@ void AquaSalInstance::AfterAppInit()
                                            name: @"AppleRemoteWillResignActive"
                                            object: nil ];
 #endif
+
+    // HACK: When the first call to [NSSpellChecker sharedSpellChecker] (in
+    // lingucomponent/source/spellcheck/macosxspell/macspellimp.mm) is done both on a thread other
+    // than the main thread and with the SolarMutex erroneously locked, then that can lead to
+    // deadlock as [NSSpellChecker sharedSpellChecker] internally calls
+    //   AppKit`-[NSSpellChecker init] ->
+    //   AppKit`-[NSSpellChecker _fillSpellCheckerPopupButton:] ->
+    //   AppKit`-[NSApplication(NSServicesMenuPrivate) _fillSpellCheckerPopupButton:] ->
+    //   AppKit`-[NSMenu insertItem:atIndex:] ->
+    //   Foundation`-[NSNotificationCenter postNotificationName:object:userInfo:] ->
+    //   CoreFoundation`_CFXNotificationPost ->
+    //   Foundation`-[NSOperation waitUntilFinished]
+    // waiting for work to be done on the main thread, but the main thread is typically already
+    // blocked (in some event handling loop) waiting to acquire the SolarMutex.  The real solution
+    // would be to fix all the cases where a call to [NSSpellChecker sharedSpellChecker] in
+    // lingucomponent/source/spellcheck/macosxspell/macspellimp.mm is done while the SolarMutex is
+    // locked (somewhere up the call chain), but that appears to be rather difficult (see e.g.
+    // <https://bugs.documentfoundation.org/show_bug.cgi?id=151894> "FILEOPEN a Base Document with
+    // customized event for open a startform by 'open document' LO stuck").  So, at least for now,
+    // chicken out and do that first call to [NSSpellChecker sharedSpellChecker] upfront in a
+    // controlled environment:
+    [NSSpellChecker sharedSpellChecker];
 }
 
 SalYieldMutex::SalYieldMutex()
