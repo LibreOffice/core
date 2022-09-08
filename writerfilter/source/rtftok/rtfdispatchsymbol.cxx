@@ -391,14 +391,21 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             else
             {
+                bool bFirstRun = m_bFirstRun;
                 checkFirstRun();
                 checkNeedPap();
                 sal_uInt8 const sBreak[] = { 0xc };
                 Mapper().text(sBreak, 1);
-                if (!m_bNeedPap)
+                if (bFirstRun || m_bNeedCr)
                 {
-                    parBreak();
-                    m_bNeedPap = true;
+                    // If we don't have content in the document yet (so the break-before can't move
+                    // to a second layout page) or we already have characters sent (so the paragraph
+                    // properties are already finalized), then continue inserting a fake paragraph.
+                    if (!m_bNeedPap)
+                    {
+                        parBreak();
+                        m_bNeedPap = true;
+                    }
                 }
                 m_bNeedCr = true;
             }

@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_use_externals,writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
+    writerfilter/qa/cppunittests/rtftok/rtfdispatchsymbol \
     writerfilter/qa/cppunittests/rtftok/rtfdispatchvalue \
     writerfilter/qa/cppunittests/rtftok/rtfdocumentimpl \
     writerfilter/qa/cppunittests/rtftok/rtfsdrimport \
