@@ -1258,10 +1258,11 @@ class RangeNameInserter
 {
     ScDocument&  mrDoc;
     ScRangeName& mrRangeName;
+    SCTAB        mnTab;
 
 public:
-    RangeNameInserter(ScDocument& rDoc, ScRangeName& rRangeName) :
-        mrDoc(rDoc), mrRangeName(rRangeName) {}
+    RangeNameInserter(ScDocument& rDoc, ScRangeName& rRangeName, SCTAB nTab) :
+        mrDoc(rDoc), mrRangeName(rRangeName), mnTab(nTab) {}
 
     void operator() (const ScMyNamedExpression& p) const
     {
@@ -1281,6 +1282,17 @@ public:
         sal_Int32 nOffset = 0;
         bool bSuccess = ScRangeStringConverter::GetAddressFromString(
             aPos, p.sBaseCellAddress, mrDoc, FormulaGrammar::CONV_OOO, nOffset);
+
+        if (!bSuccess)
+        {
+            SAL_WARN("sc.filter", "No conversion from table:base-cell-address '" << p.sBaseCellAddress
+                    << "' for name '" << p.sName << "' on sheet " << mnTab);
+            // Do not lose the defined name. Relative addressing in
+            // content/expression, if any, will be broken though.
+            // May had happened due to tdf#150312.
+            aPos.SetTab(mnTab < 0 ? 0 : mnTab);
+            bSuccess = true;
+        }
 
         if (bSuccess)
         {
@@ -1307,7 +1319,8 @@ void ScXMLImport::SetNamedRanges()
 
     // Insert the namedRanges
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    ::std::for_each(m_aMyNamedExpressions.begin(), m_aMyNamedExpressions.end(), RangeNameInserter(*pDoc, *pRangeNames));
+    ::std::for_each(m_aMyNamedExpressions.begin(), m_aMyNamedExpressions.end(),
+            RangeNameInserter(*pDoc, *pRangeNames, -1));
 }
 
 void ScXMLImport::SetSheetNamedRanges()
@@ -1323,7 +1336,7 @@ void ScXMLImport::SetSheetNamedRanges()
             continue;
 
         const ScMyNamedExpressions& rNames = itr.second;
-        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(*pDoc, *pRangeNames));
+        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(*pDoc, *pRangeNames, nTab));
     }
 }
 
