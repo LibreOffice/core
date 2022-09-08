@@ -2005,6 +2005,12 @@ void SdOOXMLExportTest3::testTdf147121()
 
 void SdOOXMLExportTest3::testTdf140912_PicturePlaceholder()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    // -8490 in the test below turns into -8014 on my Windows box with 150% scaling.
+    if (!IsDefaultDPI())
+        return;
+
     ::sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdfpictureplaceholder.pptx"), PPTX);
 
