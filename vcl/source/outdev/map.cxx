@@ -1484,14 +1484,15 @@ auto getCorrectedUnit(MapUnit eMapSrc, MapUnit eMapDst)
     }
     return std::make_pair(eSrc, eDst);
 }
-}
 
-#define ENTER4( rMapModeSource, rMapModeDest )                          \
-    ImplMapRes aMapResSource;                                           \
-    ImplMapRes aMapResDest;                                             \
-                                                                        \
-    ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \
-    ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
+std::pair<ImplMapRes, ImplMapRes> ENTER4(const MapMode& rMMSource, const MapMode& rMMDest)
+{
+    std::pair<ImplMapRes, ImplMapRes> result;
+    ImplCalcMapResolution(rMMSource, 72, 72, result.first);
+    ImplCalcMapResolution(rMMDest, 72, 72, result.second);
+    return result;
+}
+}
 
 // return (n1 * n2 * n3) / (n4 * n5)
 static tools::Long fn5( const tools::Long n1,
@@ -1707,7 +1708,7 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
     }
     else
     {
-        ENTER4( rMapModeSource, rMapModeDest );
+        const auto& [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
 
         return Point( fn5( rPtSource.X() + aMapResSource.mnMapOfsX,
                            aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
@@ -1738,7 +1739,7 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
     }
     else
     {
-        ENTER4( rMapModeSource, rMapModeDest );
+        const auto& [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
 
         return Size( fn5( rSzSource.Width(),
                           aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
@@ -1789,7 +1790,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
     }
     else
     {
-        ENTER4(rMapModeSource, rMapModeDest);
+        const auto& [aMapResSource, aMapResDest] = ENTER4(rMapModeSource, rMapModeDest);
 
         const double fScaleFactorX((double(aMapResSource.mnMapScNumX) * double(aMapResDest.mnMapScDenomX)) / (double(aMapResSource.mnMapScDenomX) * double(aMapResDest.mnMapScNumX)));
         const double fScaleFactorY((double(aMapResSource.mnMapScNumY) * double(aMapResDest.mnMapScDenomY)) / (double(aMapResSource.mnMapScDenomY) * double(aMapResDest.mnMapScNumY)));
@@ -1833,7 +1834,7 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     }
     else
     {
-        ENTER4( rMapModeSource, rMapModeDest );
+        const auto& [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
 
         auto left = fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
