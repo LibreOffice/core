@@ -745,6 +745,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoublePageBorder)
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
     // Given a document with a top margin and a negative border distance:
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -782,6 +787,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
     // Given a document with no top margin and a negative border distance:
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
