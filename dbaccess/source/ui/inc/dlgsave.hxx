@@ -49,8 +49,6 @@ namespace dbaui
     {
     private:
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        OUString                   m_aQryLabel;
-        OUString                   m_sTblLabel;
         OUString                   m_aName;
         const IObjectNameCheck&    m_rObjectNameCheck;
         css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;

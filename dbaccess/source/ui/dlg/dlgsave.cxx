@@ -84,8 +84,6 @@ OSaveAsDlg::OSaveAsDlg( weld::Window * pParent,
                         SADFlags _nFlags)
     : GenericDialogController(pParent, "dbaccess/ui/savedialog.ui", "SaveDialog")
     , m_xContext( _rxContext )
-    , m_aQryLabel(DBA_RES(STR_QRY_LABEL))
-    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
     , m_aName(rDefault)
     , m_rObjectNameCheck( _rObjectNameCheck )
     , m_nType(_rType)
@@ -115,13 +113,13 @@ OSaveAsDlg::OSaveAsDlg( weld::Window * pParent,
 
     switch (_rType) {
     case CommandType::QUERY:
-        implInitOnlyTitle(m_aQryLabel);
+        implInitOnlyTitle(DBA_RES(STR_QRY_LABEL));
         break;
 
     case CommandType::TABLE:
         OSL_ENSURE( m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
         {
-            m_xLabel->set_label(m_sTblLabel);
+            m_xLabel->set_label(DBA_RES(STR_TBL_LABEL));
             if(m_xMetaData.is() && !m_xMetaData->supportsCatalogsInTableDefinitions()) {
                 m_xCatalogLbl->hide();
                 m_xCatalog->hide();
@@ -191,8 +189,6 @@ OSaveAsDlg::OSaveAsDlg(weld::Window * pParent,
                        SADFlags _nFlags)
     : GenericDialogController(pParent, "dbaccess/ui/savedialog.ui", "SaveDialog")
     , m_xContext( _rxContext )
-    , m_aQryLabel(DBA_RES(STR_QRY_LABEL))
-    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
     , m_aName(rDefault)
     , m_rObjectNameCheck( _rObjectNameCheck )
     , m_nType(CommandType::COMMAND)
