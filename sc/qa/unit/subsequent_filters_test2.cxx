@@ -464,7 +464,8 @@ void ScFiltersTest2::testTdf118086()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(477), rDoc.GetRowHeight(2, static_cast<SCTAB>(0), false));
+    // Depending on DPI, this might be 477 or 480
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(477, rDoc.GetRowHeight(2, static_cast<SCTAB>(0), false), 5);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 256
