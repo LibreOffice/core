@@ -24,50 +24,36 @@
 #include <vector>
 
 static ImplFontCharMapRef g_pDefaultImplFontCharMap;
-const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
-const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
+const std::vector<sal_uInt32> aDefaultUnicodeRanges = { 0x0020, 0xD800, 0xE000, 0xFFF0 };
+const std::vector<sal_uInt32> aDefaultSymbolRanges = { 0x0020, 0x0100, 0xF020, 0xF100 };
 
 ImplFontCharMap::~ImplFontCharMap()
 {
-    if( !isDefaultMap() )
-    {
-        delete[] mpRangeCodes;
-    }
 }
 
-ImplFontCharMap::ImplFontCharMap(bool bSymbolic, const sal_UCS4* pRangeCodes, int nRangeCount)
-:   mpRangeCodes(pRangeCodes)
-,   mnRangeCount(nRangeCount)
+ImplFontCharMap::ImplFontCharMap(bool bSymbolic, std::vector<sal_uInt32> aRangeCodes)
+:   maRangeCodes(std::move(aRangeCodes))
 ,   mnCharCount( 0 )
 ,   m_bSymbolic(bSymbolic)
 {
-    const sal_UCS4* pRangePtr = mpRangeCodes;
-    for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
+    for (size_t i = 0; i < maRangeCodes.size(); i += 2)
     {
-        sal_UCS4 cFirst = pRangePtr[0];
-        sal_UCS4 cLast  = pRangePtr[1];
+        sal_UCS4 cFirst = maRangeCodes[i];
+        sal_UCS4 cLast = maRangeCodes[i + 1];
         mnCharCount += cLast - cFirst;
     }
 }
 
 ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap( bool bSymbols )
 {
-    const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
-    int nCodesCount = std::size(aDefaultUnicodeRanges);
-    if( bSymbols )
-    {
-        pRangeCodes = aDefaultSymbolRanges;
-        nCodesCount = std::size(aDefaultSymbolRanges);
-    }
-
-    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(bSymbols, pRangeCodes, nCodesCount/2));
-
+    const auto& rRanges = bSymbols ? aDefaultSymbolRanges : aDefaultUnicodeRanges;
+    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(bSymbols, rRanges));
     return g_pDefaultImplFontCharMap;
 }
 
 bool ImplFontCharMap::isDefaultMap() const
 {
-    const bool bIsDefault = (mpRangeCodes == aDefaultUnicodeRanges) || (mpRangeCodes == aDefaultSymbolRanges);
+    const bool bIsDefault = (maRangeCodes == aDefaultUnicodeRanges) || (maRangeCodes == aDefaultSymbolRanges);
     return bIsDefault;
 }
 
@@ -107,8 +93,8 @@ FontCharMap::FontCharMap( ImplFontCharMapRef pIFCMap )
 {
 }
 
-FontCharMap::FontCharMap(bool bSymbolic, const sal_UCS4* pRangeCodes, int nRangeCount)
-    : mpImplFontCharMap(new ImplFontCharMap(bSymbolic, pRangeCodes, nRangeCount))
+FontCharMap::FontCharMap(bool bSymbolic, std::vector<sal_uInt32> aRangeCodes)
+    : mpImplFontCharMap(new ImplFontCharMap(bSymbolic, std::move(aRangeCodes)))
 {
 }
 
@@ -137,25 +123,26 @@ int FontCharMap::GetCharCount() const
 
 int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 {
+    const auto& rRanges = mpImplFontCharMap->maRangeCodes;
     int nCount = 0;
 
     // find and adjust range and char count for cMin
     int nRangeMin = findRangeIndex( cMin );
     if( nRangeMin & 1 )
         ++nRangeMin;
-    else if( cMin > mpImplFontCharMap->mpRangeCodes[ nRangeMin ] )
-        nCount -= cMin - mpImplFontCharMap->mpRangeCodes[ nRangeMin ];
+    else if (cMin > rRanges[nRangeMin])
+        nCount -= cMin - rRanges[nRangeMin];
 
     // find and adjust range and char count for cMax
     int nRangeMax = findRangeIndex( cMax );
     if( nRangeMax & 1 )
         --nRangeMax;
     else
-        nCount -= mpImplFontCharMap->mpRangeCodes[ nRangeMax+1 ] - cMax - 1;
+        nCount -= rRanges[nRangeMax + 1] - cMax - 1;
 
     // count chars in complete ranges between cMin and cMax
     for( int i = nRangeMin; i <= nRangeMax; i+=2 )
-        nCount += mpImplFontCharMap->mpRangeCodes[i+1] - mpImplFontCharMap->mpRangeCodes[i];
+        nCount += rRanges[i + 1] - rRanges[i];
 
     return nCount;
 }
@@ -163,19 +150,19 @@ int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 bool FontCharMap::HasChar( sal_UCS4 cChar ) const
 {
     const int nRange = findRangeIndex( cChar );
-    if( nRange==0 && cChar < mpImplFontCharMap->mpRangeCodes[0] )
+    if (nRange==0 && cChar < mpImplFontCharMap->maRangeCodes[0])
         return false;
     return ((nRange & 1) == 0); // inside a range
 }
 
 sal_UCS4 FontCharMap::GetFirstChar() const
 {
-    return mpImplFontCharMap->mpRangeCodes[0];
+    return mpImplFontCharMap->maRangeCodes.front();
 }
 
 sal_UCS4 FontCharMap::GetLastChar() const
 {
-    return (mpImplFontCharMap->mpRangeCodes[ 2*mpImplFontCharMap->mnRangeCount-1 ] - 1);
+    return mpImplFontCharMap->maRangeCodes.back() - 1;
 }
 
 sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
@@ -187,7 +174,7 @@ sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
 
     int nRange = findRangeIndex( cChar + 1 );
     if( nRange & 1 )                       // outside of range?
-        return mpImplFontCharMap->mpRangeCodes[ nRange + 1 ]; // => first in next range
+        return mpImplFontCharMap->maRangeCodes[nRange + 1]; // => first in next range
     return (cChar + 1);
 }
 
@@ -200,7 +187,7 @@ sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
 
     int nRange = findRangeIndex( cChar - 1 );
     if( nRange & 1 )                            // outside a range?
-        return (mpImplFontCharMap->mpRangeCodes[ nRange ] - 1);    // => last in prev range
+        return mpImplFontCharMap->maRangeCodes[nRange] - 1;    // => last in prev range
     return (cChar - 1);
 }
 
@@ -208,11 +195,11 @@ int FontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
 {
     // TODO: improve linear walk?
     int nCharIndex = 0;
-    const sal_UCS4* pRange = &mpImplFontCharMap->mpRangeCodes[0];
-    for( int i = 0; i < mpImplFontCharMap->mnRangeCount; ++i )
+    const auto& rRanges = mpImplFontCharMap->maRangeCodes;
+    for (size_t i = 0; i < rRanges.size(); i += 2)
     {
-        sal_UCS4 cFirst = *(pRange++);
-        sal_UCS4 cLast  = *(pRange++);
+        sal_UCS4 cFirst = rRanges[i];
+        sal_UCS4 cLast = rRanges[i + 1];
         if( cChar >= cLast )
             nCharIndex += cLast - cFirst;
         else if( cChar >= cFirst )
@@ -227,28 +214,29 @@ int FontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
 sal_UCS4 FontCharMap::GetCharFromIndex( int nIndex ) const
 {
     // TODO: improve linear walk?
-    const sal_UCS4* pRange = &mpImplFontCharMap->mpRangeCodes[0];
-    for( int i = 0; i < mpImplFontCharMap->mnRangeCount; ++i )
+    const auto& rRanges = mpImplFontCharMap->maRangeCodes;
+    for (size_t i = 0; i < rRanges.size(); i += 2)
     {
-        sal_UCS4 cFirst = *(pRange++);
-        sal_UCS4 cLast  = *(pRange++);
+        sal_UCS4 cFirst = rRanges[i];
+        sal_UCS4 cLast = rRanges[i + 1];
         nIndex -= cLast - cFirst;
         if( nIndex < 0 )
             return (cLast + nIndex);
     }
 
     // we can only get here with an out-of-bounds charindex
-    return mpImplFontCharMap->mpRangeCodes[0];
+    return mpImplFontCharMap->maRangeCodes.front();
 }
 
 int FontCharMap::findRangeIndex( sal_UCS4 cChar ) const
 {
+    const auto& rRanges = mpImplFontCharMap->maRangeCodes;
     int nLower = 0;
-    int nMid   = mpImplFontCharMap->mnRangeCount;
-    int nUpper = 2 * mpImplFontCharMap->mnRangeCount - 1;
+    int nMid = rRanges.size() / 2;
+    int nUpper = rRanges.size() - 1;
     while( nLower < nUpper )
     {
-        if( cChar >= mpImplFontCharMap->mpRangeCodes[ nMid ] )
+        if (cChar >= rRanges[nMid])
             nLower = nMid;
         else
             nUpper = nMid - 1;

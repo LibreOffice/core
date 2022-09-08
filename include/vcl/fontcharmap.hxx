@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <tools/ref.hxx>
+#include <vector>
 
 class ImplFontCharMap;
 class FontCharMap;
@@ -41,7 +42,7 @@ public:
 
     /** A new FontCharMap is created based on passed arguments.
      */
-    FontCharMap(bool bSymbolic, const sal_UCS4* pRangeCodes, int nRangeCount);
+    FontCharMap(bool bSymbolic, std::vector<sal_UCS4> aRangeCodes);
 
     virtual ~FontCharMap() override;
 

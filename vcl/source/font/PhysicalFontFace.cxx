@@ -249,21 +249,15 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
     if (hb_set_get_population(pUnicodes))
     {
         // Convert HarfBuzz set to code ranges.
-        int nRangeCount = 0;
+        std::vector<sal_UCS4> aRangeCodes;
         hb_codepoint_t nFirst, nLast = HB_SET_VALUE_INVALID;
         while (hb_set_next_range(pUnicodes, &nFirst, &nLast))
-            nRangeCount++;
-
-        nLast = HB_SET_VALUE_INVALID;
-        auto* pRangeCodes(new sal_UCS4[nRangeCount * 2]);
-        auto* pCP = pRangeCodes;
-        while (hb_set_next_range(pUnicodes, &nFirst, &nLast))
         {
-            *(pCP++) = nFirst;
-            *(pCP++) = nLast + 1;
+            aRangeCodes.push_back(nFirst);
+            aRangeCodes.push_back(nLast + 1);
         }
 
-        mxCharMap = new FontCharMap(bSymbol, pRangeCodes, nRangeCount);
+        mxCharMap = new FontCharMap(bSymbol, std::move(aRangeCodes));
     }
 
     hb_set_destroy(pUnicodes);
