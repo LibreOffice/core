@@ -812,11 +812,11 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertObjectStarMath</value>
-              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
               <value xml:lang="fr"></value>
           </prop>
         </node>
-        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
         <node oor:name="RIGHTCURLYBRACKET_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1750,11 +1750,11 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertMath</value>
-              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
               <value xml:lang="fr"></value>
           </prop>
         </node>
-        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
         <node oor:name="RIGHTCURLYBRACKET_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2979,11 +2979,11 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertMath</value>
-              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
               <value xml:lang="fr"></value>
           </prop>
         </node>
-        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
         <node oor:name="RIGHTCURLYBRACKET_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -6252,11 +6252,11 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertObjectStarMath</value>
-              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+              <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
               <value xml:lang="fr"></value>
           </prop>
         </node>
-        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Ctrl-} for French keyboard layout -->
+        <!-- tdf#150862 Replace Ctrl-Alt-EQUAL with Ctrl-Alt-} for French keyboard layout -->
         <node oor:name="RIGHTCURLYBRACKET_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
