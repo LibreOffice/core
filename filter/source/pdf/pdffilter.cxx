@@ -89,9 +89,10 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
             aFilterData = comphelper::containerToSequence(aData);
         }
-        catch (const boost::property_tree::json_parser::json_parser_error&)
+        catch (const boost::property_tree::json_parser::json_parser_error& e)
         {
             // This wasn't a valid json; maybe came from import filter (tdf#150846)
+            SAL_WARN("filter.pdf", "error parsing FilterOptions: " << e.message());
         }
     }
 
