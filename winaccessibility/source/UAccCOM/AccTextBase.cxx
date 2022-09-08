@@ -74,8 +74,6 @@ sal_Int16 lcl_matchIA2TextBoundaryType(IA2TextBoundaryType boundaryType)
 // Construction/Destruction
 
 
-static OUString ReplaceFourChar(OUString const & oldOUString);
-
 CAccTextBase::CAccTextBase()
 {}
 
@@ -182,7 +180,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
         if (bHaveNumberingLevel && bHaveNumberingRules && bHaveNumberingPrefixAttr)
         {
             strAttrs.append(';');
-            numberingPrefix = ReplaceFourChar(numberingPrefix);
+            numberingPrefix = numberingPrefix.replaceAll(u"\\", u"\\\\")
+                                  .replaceAll(u";", u"\\;")
+                                  .replaceAll(u"=", u"\\=")
+                                  .replaceAll(u",", u"\\,")
+                                  .replaceAll(u":", u"\\:");
+
             strAttrs.append(CMAccessible::get_String4Numbering(anyNumRule,numberingLevel,numberingPrefix));
             bHaveNumberingLevel = false;
             bHaveNumberingRules = false;
@@ -880,32 +883,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface
     return S_OK;
 
     } catch(...) { return E_FAIL; }
-}
-
-static OUString ReplaceOneChar(OUString const & oldOUString, sal_Unicode replacedChar, std::u16string_view replaceStr)
-{
-    auto s = oldOUString;
-    int iReplace = s.lastIndexOf(replacedChar);
-    if (iReplace > -1)
-    {
-        for(;iReplace>-1;)
-        {
-            s = s.replaceAt(iReplace,1, replaceStr);
-            iReplace=s.lastIndexOf(replacedChar,iReplace);
-        }
-    }
-    return s;
-}
-
-static OUString ReplaceFourChar(OUString const & oldOUString)
-{
-    auto s = oldOUString;
-    s = ReplaceOneChar(s, '\\', u"\\\\");
-    s = ReplaceOneChar(s, ';', u"\\;");
-    s = ReplaceOneChar(s, '=', u"\\=");
-    s = ReplaceOneChar(s, ',', u"\\,");
-    s = ReplaceOneChar(s, ':', u"\\:");
-    return s;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
