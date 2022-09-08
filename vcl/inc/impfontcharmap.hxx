@@ -26,12 +26,12 @@
 class ImplFontCharMap;
 typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 
-class CmapResult;
-
 class ImplFontCharMap final : public SvRefBase
 {
 public:
-    explicit            ImplFontCharMap( const CmapResult& );
+    explicit            ImplFontCharMap( bool bSymbolic,
+                                         const sal_uInt32* pRangeCodes,
+                                         int nRangeCount);
     virtual             ~ImplFontCharMap() override;
 
 private:

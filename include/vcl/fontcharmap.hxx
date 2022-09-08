@@ -25,7 +25,6 @@
 #include <tools/ref.hxx>
 
 class ImplFontCharMap;
-class CmapResult;
 class FontCharMap;
 class OutputDevice;
 
@@ -40,9 +39,9 @@ public:
      **/
     FontCharMap();
 
-    /** A new FontCharMap is created based on the CmapResult
+    /** A new FontCharMap is created based on passed arguments.
      */
-    FontCharMap( const CmapResult& rCR );
+    FontCharMap(bool bSymbolic, const sal_UCS4* pRangeCodes, int nRangeCount);
 
     virtual ~FontCharMap() override;
 
@@ -152,18 +151,6 @@ private:
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& ) = delete;
     void                operator=( const FontCharMap& ) = delete;
-};
-
-// CmapResult is a normalized version of the many CMAP formats
-class VCL_PLUGIN_PUBLIC CmapResult
-{
-public:
-    explicit            CmapResult( bool bSymbolic = false,
-                            const sal_UCS4* pRangeCodes = nullptr, int nRangeCount = 0 );
-
-    const sal_UCS4*     mpRangeCodes;
-    int                 mnRangeCount;
-    bool                mbSymbolic;
 };
 
 #endif // INCLUDED_FONTCHARMAP_HXX

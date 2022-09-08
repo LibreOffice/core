@@ -248,7 +248,7 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
 
     if (hb_set_get_population(pUnicodes))
     {
-        // Convert HarfBuzz set to CmapResult ranges.
+        // Convert HarfBuzz set to code ranges.
         int nRangeCount = 0;
         hb_codepoint_t nFirst, nLast = HB_SET_VALUE_INVALID;
         while (hb_set_next_range(pUnicodes, &nFirst, &nLast))
@@ -263,8 +263,7 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
             *(pCP++) = nLast + 1;
         }
 
-        CmapResult aCmapResult(bSymbol, pRangeCodes, nRangeCount);
-        mxCharMap = new FontCharMap(aCmapResult);
+        mxCharMap = new FontCharMap(bSymbol, pRangeCodes, nRangeCount);
     }
 
     hb_set_destroy(pUnicodes);

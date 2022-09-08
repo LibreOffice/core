@@ -23,13 +23,6 @@
 #include <algorithm>
 #include <vector>
 
-CmapResult::CmapResult( bool bSymbolic,
-    const sal_UCS4* pRangeCodes, int nRangeCount )
-:   mpRangeCodes( pRangeCodes)
-,   mnRangeCount( nRangeCount)
-,   mbSymbolic( bSymbolic)
-{}
-
 static ImplFontCharMapRef g_pDefaultImplFontCharMap;
 const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
@@ -42,11 +35,11 @@ ImplFontCharMap::~ImplFontCharMap()
     }
 }
 
-ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
-:   mpRangeCodes( rCR.mpRangeCodes )
-,   mnRangeCount( rCR.mnRangeCount )
+ImplFontCharMap::ImplFontCharMap(bool bSymbolic, const sal_UCS4* pRangeCodes, int nRangeCount)
+:   mpRangeCodes(pRangeCodes)
+,   mnRangeCount(nRangeCount)
 ,   mnCharCount( 0 )
-    , m_bSymbolic(rCR.mbSymbolic)
+,   m_bSymbolic(bSymbolic)
 {
     const sal_UCS4* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -67,8 +60,7 @@ ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap( bool bSymbols )
         nCodesCount = std::size(aDefaultSymbolRanges);
     }
 
-    CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
-    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(aDefaultCR));
+    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(bSymbols, pRangeCodes, nCodesCount/2));
 
     return g_pDefaultImplFontCharMap;
 }
@@ -115,8 +107,8 @@ FontCharMap::FontCharMap( ImplFontCharMapRef pIFCMap )
 {
 }
 
-FontCharMap::FontCharMap( const CmapResult& rCR )
-    : mpImplFontCharMap(new ImplFontCharMap(rCR))
+FontCharMap::FontCharMap(bool bSymbolic, const sal_UCS4* pRangeCodes, int nRangeCount)
+    : mpImplFontCharMap(new ImplFontCharMap(bSymbolic, pRangeCodes, nRangeCount))
 {
 }
 
