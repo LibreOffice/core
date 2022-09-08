@@ -200,7 +200,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
             else
             {
                 // for an explanation why this complicated, see
-                // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
+                // sc/source/ui/docshell/docsh.cxx:ScDocShell::AsciiSave()
                 // In fact we should create a common method if this would be
                 // needed just one more time...
                 assert( aOS.isEmpty() && "aOS should be empty");
