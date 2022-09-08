@@ -13,14 +13,14 @@ $(eval $(call gb_ExternalPackage_use_external_project,openssl,openssl))
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,openssl,$(LIBO_LIB_FOLDER),\
-    libcrypto-1_1.dll \
-    libssl-1_1.dll \
+    libcrypto-3.dll \
+    libssl-3.dll \
 ))
 ifneq ($(DISABLE_PYTHON),TRUE)
 ifneq ($(SYSTEM_PYTHON),TRUE)
 $(eval $(call gb_ExternalPackage_add_files,openssl,$(LIBO_LIB_FOLDER)/python-core-$(PYTHON_VERSION)/lib, \
-    libcrypto-1_1.dll \
-    libssl-1_1.dll \
+    libcrypto-3.dll \
+    libssl-3.dll \
 ))
 endif
 endif

@@ -1,0 +1,65 @@
+--- util/perl/OpenSSL/config.pm	2022-09-08 11:45:57.408532119 +0100
++++ util/perl/OpenSSL/config.pm	2022-09-08 11:47:46.877590711 +0100
+@@ -15,7 +15,7 @@
+ use warnings;
+ use Getopt::Std;
+ use File::Basename;
+-use IPC::Cmd;
++# use IPC::Cmd;
+ use POSIX;
+ use Carp;
+ 
+@@ -193,7 +193,8 @@
+ 
+ # Look for ISC/SCO with its unique uname program
+ sub is_sco_uname {
+-    return undef unless IPC::Cmd::can_run('uname');
++    return undef;
++#    return undef unless IPC::Cmd::can_run('uname');
+ 
+     open UNAME, "uname -X 2>/dev/null|" or return '';
+     my $line = "";
+@@ -291,13 +292,13 @@
+     $CCVENDOR = '';             # Dunno, don't care (unless found later)
+ 
+     # Find a compiler if we don't already have one
+-    if ( ! $cc ) {
+-        foreach (@c_compilers) {
+-            next unless IPC::Cmd::can_run("$CROSS_COMPILE$_");
+-            $CC = $_;
+-            last;
+-        }
+-    }
++#    if ( ! $cc ) {
++#        foreach (@c_compilers) {
++#            next unless IPC::Cmd::can_run("$CROSS_COMPILE$_");
++#            $CC = $_;
++#            last;
++#        }
++#    }
+ 
+     if ( $CC ) {
+         # Find the compiler vendor and version number for certain compilers
+@@ -352,14 +353,14 @@
+             }
+         }
+ 
+-        if ( ${SYSTEM} eq 'AIX' ) {
+-            # favor vendor cc over gcc
+-            if (IPC::Cmd::can_run('cc')) {
+-                $CC = 'cc';
+-                $CCVENDOR = ''; # Determine later
+-                $CCVER = 0;
+-            }
+-        }
++#        if ( ${SYSTEM} eq 'AIX' ) {
++#            # favor vendor cc over gcc
++#            if (IPC::Cmd::can_run('cc')) {
++#                $CC = 'cc';
++#                $CCVENDOR = ''; # Determine later
++#                $CCVER = 0;
++#            }
++#        }
+ 
+         if ( $SYSTEM eq "SunOS" ) {
+             # check for Oracle Developer Studio, expected output is "cc: blah-blah C x.x blah-blah"
