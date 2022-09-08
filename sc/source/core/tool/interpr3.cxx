@@ -3967,6 +3967,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 FormulaError nErr = FormulaError::NONE;
                 double fCellVal;
                 ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+                aValIter.SetInterpreterContext( &mrContext );
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
                     if (bIgnoreErrVal)
