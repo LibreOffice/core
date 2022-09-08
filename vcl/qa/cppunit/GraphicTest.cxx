@@ -84,6 +84,7 @@ private:
     void testLoadPCX();
     void testLoadEPS();
     void testLoadWEBP();
+    void testLoadSVGZ();
 
     void testAvailableThreaded();
     void testColorChangeToTransparent();
@@ -123,6 +124,7 @@ private:
     CPPUNIT_TEST(testLoadPCX);
     CPPUNIT_TEST(testLoadEPS);
     CPPUNIT_TEST(testLoadWEBP);
+    CPPUNIT_TEST(testLoadSVGZ);
 
     CPPUNIT_TEST(testAvailableThreaded);
     CPPUNIT_TEST(testColorChangeToTransparent);
@@ -1323,6 +1325,14 @@ void GraphicTest::testLoadWEBP()
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadSVGZ()
+{
+    Graphic aGraphic = loadGraphic(u"TypeDetectionExample.svgz");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
 }
 
 void GraphicTest::testAvailableThreaded()
