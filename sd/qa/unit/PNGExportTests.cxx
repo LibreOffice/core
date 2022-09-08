@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
         {
             const Color aColorTop = pReadAccess->GetColor(0, nX);
             // tdf#150102 the exported graphic now has no longer an empty bottom
-            // row, so test with '-1' in height , same as alrteady in test
+            // row, so test with '-1' in height , same as already in test
             // testTdf105998 above
             const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 1, nX);
 
@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
         {
             const Color aColorLeft = pReadAccess->GetColor(nY, 0);
             // tdf#150102 the exported graphic now has no longer an empty right
-            // column, so test with '-1' in width , same as alrteady in test
+            // column, so test with '-1' in width , same as already in test
             // testTdf105998 above
             const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - 1);
 
