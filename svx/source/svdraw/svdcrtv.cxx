@@ -337,14 +337,14 @@ void SdrCreateView::SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent)
     {
         mnCurrentInvent=nInvent;
         mnCurrentIdent=nIdent;
+        rtl::Reference<SdrObject> pObj = (nIdent == SdrObjKind::NONE) ? nullptr :
+            SdrObjFactory::MakeNewObject(
+                *GetModel(),
+                nInvent,
+                nIdent);
 
-        if(nIdent != SdrObjKind::NONE)
+        if(pObj)
         {
-            rtl::Reference<SdrObject> pObj =
-                SdrObjFactory::MakeNewObject(
-                    *GetModel(),
-                    nInvent,
-                    nIdent);
             // Using text tool, mouse cursor is usually I-Beam,
             // crosshairs with tiny I-Beam appears only on MouseButtonDown.
             if(IsTextTool())
