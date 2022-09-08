@@ -10878,7 +10878,7 @@ dnl ===================================================================
 
 GRAPHITE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"
 GRAPHITE_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"
-libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 2.0.0])
+libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
 
 HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
 HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"
