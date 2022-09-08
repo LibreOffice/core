@@ -1564,7 +1564,17 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveCopyEntry = true;
     bool bRemoveEditEntry = true;
     bool bRemoveUnprotectEntry = true;
-    bool bRemoveDeleteEntry = true;
+    bool bRemoveDeleteChapterEntry = true,
+         bRemoveDeleteTableEntry = true,
+         bRemoveDeleteFrameEntry = true,
+         bRemoveDeleteImageEntry = true,
+         bRemoveDeleteOLEObjectEntry = true,
+         bRemoveDeleteBookmarkEntry = true,
+         bRemoveDeleteHyperlinkEntry = true,
+         bRemoveDeleteIndexEntry= true,
+         bRemoveDeleteCommentEntry = true,
+         bRemoveDeleteDrawingObjectEntry = true,
+         bRemoveDeleteFieldEntry = true;
     bool bRemoveRenameEntry = true;
     bool bRemoveSelectEntry = true;
     bool bRemoveToggleExpandEntry = true;
@@ -1692,7 +1702,47 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                      ContentTypeId::REGION == nContentType ||
                      ContentTypeId::INDEX == nContentType ||
                      ContentTypeId::DRAWOBJECT == nContentType);
-
+            // Choose which Delete entry to show.
+            if (bDeletable)
+            {
+                switch (nContentType)
+                {
+                    case ContentTypeId::OUTLINE:
+                        bRemoveDeleteChapterEntry = false;
+                    break;
+                    case ContentTypeId::TABLE:
+                        bRemoveDeleteTableEntry = false;
+                    break;
+                    case ContentTypeId::FRAME:
+                        bRemoveDeleteFrameEntry = false;
+                    break;
+                    case ContentTypeId::GRAPHIC:
+                        bRemoveDeleteImageEntry = false;
+                    break;
+                    case ContentTypeId::OLE:
+                        bRemoveDeleteOLEObjectEntry = false;
+                    break;
+                    case ContentTypeId::BOOKMARK:
+                        bRemoveDeleteBookmarkEntry = false;
+                    break;
+                    case ContentTypeId::URLFIELD:
+                        bRemoveDeleteHyperlinkEntry = false;
+                    break;
+                    case ContentTypeId::INDEX:
+                        bRemoveDeleteIndexEntry = false;
+                    break;
+                    case ContentTypeId::POSTIT:
+                        bRemoveDeleteCommentEntry = false;
+                    break;
+                    case ContentTypeId::DRAWOBJECT:
+                        bRemoveDeleteDrawingObjectEntry = false;
+                    break;
+                    case ContentTypeId::TEXTFIELD:
+                        bRemoveDeleteFieldEntry = false;
+                    break;
+                    default: break;
+                }
+            }
             if (ContentTypeId::FOOTNOTE == nContentType || ContentTypeId::ENDNOTE == nContentType)
             {
                 void* pUserData = weld::fromId<void*>(m_xTreeView->get_id(*xEntry));
@@ -1713,7 +1763,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 }
                 bRemoveCopyEntry = false;
             }
-            else if (!bReadonly && (bEditable || bDeletable))
+            else if (!bReadonly && bEditable)
             {
                 if(ContentTypeId::INDEX == nContentType)
                 {
@@ -1724,7 +1774,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         bRemoveEditEntry = false;
 
                     xPop->set_active(OString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
-                    bRemoveDeleteEntry = false;
                 }
                 else if(ContentTypeId::TABLE == nContentType)
                 {
@@ -1736,31 +1785,14 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                     xPop->set_sensitive(OString::number(403), !bFull);
                     xPop->set_sensitive(OString::number(404), bProt);
-                    bRemoveDeleteEntry = false;
-                }
-                else if(ContentTypeId::DRAWOBJECT == nContentType)
-                {
-                    bRemoveDeleteEntry = false;
                 }
                 else if(ContentTypeId::REGION == nContentType)
                 {
                     bRemoveSelectEntry = false;
                     bRemoveEditEntry = false;
                 }
-                else
-                {
-                    if (bEditable && bDeletable)
-                    {
-                        bRemoveEditEntry = false;
-                        bRemoveDeleteEntry = false;
-                    }
-                    else if (bEditable)
-                        bRemoveEditEntry = false;
-                    else if (bDeletable)
-                    {
-                        bRemoveDeleteEntry = false;
-                    }
-                }
+                else if (bEditable)
+                    bRemoveEditEntry = false;
                 //Rename object
                 if (bRenamable)
                     bRemoveRenameEntry = false;
@@ -1807,7 +1839,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemoveChapterEntries)
     {
-        xPop->remove(OString::number(806));
         xPop->remove(OString::number(801));
         xPop->remove(OString::number(802));
         xPop->remove(OString::number(803));
@@ -1824,8 +1855,41 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(OString::number(602));
     }
 
-    if (bRemoveDeleteEntry)
-        xPop->remove(OString::number(501));
+    if (bRemoveDeleteChapterEntry)
+        xPop->remove("deletechapter");
+    if (bRemoveDeleteTableEntry)
+        xPop->remove("deletetable");
+    if (bRemoveDeleteFrameEntry)
+        xPop->remove("deleteframe");
+    if (bRemoveDeleteImageEntry)
+        xPop->remove("deleteimage");
+    if (bRemoveDeleteOLEObjectEntry)
+        xPop->remove("deleteoleobject");
+    if (bRemoveDeleteBookmarkEntry)
+        xPop->remove("deletebookmark");
+    if (bRemoveDeleteHyperlinkEntry)
+        xPop->remove("deletehyperlink");
+    if (bRemoveDeleteIndexEntry)
+        xPop->remove("deleteindex");
+    if (bRemoveDeleteCommentEntry)
+        xPop->remove("deletecomment");
+    if (bRemoveDeleteDrawingObjectEntry)
+        xPop->remove("deletedrawingobject");
+    if (bRemoveDeleteFieldEntry)
+        xPop->remove("deletefield");
+
+    bool bRemoveDeleteEntry =
+            bRemoveDeleteChapterEntry ||
+            bRemoveDeleteTableEntry ||
+            bRemoveDeleteFrameEntry ||
+            bRemoveDeleteImageEntry ||
+            bRemoveDeleteOLEObjectEntry ||
+            bRemoveDeleteBookmarkEntry ||
+            bRemoveDeleteHyperlinkEntry ||
+            bRemoveDeleteIndexEntry ||
+            bRemoveDeleteCommentEntry ||
+            bRemoveDeleteDrawingObjectEntry ||
+            bRemoveDeleteFieldEntry;
 
     if (bRemoveRenameEntry)
         xPop->remove(OString::number(502));
@@ -4439,6 +4503,21 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         Display(true);
         return;
     }
+    else if (rSelectedPopupEntry == "deletechapter" ||
+             rSelectedPopupEntry == "deletetable" ||
+             rSelectedPopupEntry == "deleteframe" ||
+             rSelectedPopupEntry == "deleteimage" ||
+             rSelectedPopupEntry == "deleteoleobject" ||
+             rSelectedPopupEntry == "deletebookmark" ||
+             rSelectedPopupEntry == "deletehyperlink" ||
+             rSelectedPopupEntry == "deleteindex" ||
+             rSelectedPopupEntry == "deletecomment" ||
+             rSelectedPopupEntry == "deletedrawingobject" ||
+             rSelectedPopupEntry == "deletefield")
+    {
+        EditEntry(*xFirst, EditEntryMode::DELETE);
+        return;
+    }
 
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
@@ -4534,11 +4613,6 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             m_pActiveShell->SetTOXBaseReadonly(*pBase, !SwEditShell::IsTOXBaseReadonly(*pBase));
         }
         break;
-        case 4:
-        break;
-        case 501:
-            EditEntry(*xFirst, EditEntryMode::DELETE);
-        break;
         case 502 :
             EditEntry(*xFirst, EditEntryMode::RENAME);
         break;
@@ -4615,10 +4689,6 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             m_pActiveShell->LeaveAddMode();
         }
         break;
-        case 806:
-            // Delete outline selections
-            EditEntry(*xFirst, EditEntryMode::DELETE);
-            break;
         case 900:
         {
             SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xFirst));
