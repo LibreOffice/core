@@ -86,7 +86,6 @@ public:
 
     const OUString& GetParent() const { return msParent; }
 
-    PropertiesListType& GetPropertiesList() { return m_PropertiesList; }
     const PropertiesListType& GetPropertiesList() const { return m_PropertiesList; }
 
     bool operator< (const XMLAutoStylePoolParent& rOther) const;

@@ -60,7 +60,6 @@ namespace connectivity::evoab {
             /// @throws css::sdbc::SQLException
             void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
-            OString const & getPassword() const { return m_aPassword; }
             void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
             // own methods
             const OEvoabDriver& getDriver() const { return m_rDriver; }

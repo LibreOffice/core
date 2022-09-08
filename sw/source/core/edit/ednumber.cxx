@@ -34,11 +34,6 @@ SwPamRanges::SwPamRanges( const SwPaM& rRing )
         Insert( rTmp.GetMark()->GetNode(), rTmp.GetPoint()->GetNode() );
 }
 
-void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
-{
-    Insert(rIdx1.GetNode(), rIdx2.GetNode());
-}
-
 void SwPamRanges::Insert( const SwNode& rIdx1, const SwNode& rIdx2 )
 {
     SwPamRange aRg( rIdx1.GetIndex(), rIdx2.GetIndex() );

@@ -166,43 +166,6 @@ static OUString ImpGetExtension( std::u16string_view rPath )
     return aExt;
 }
 
-bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
-{
-    sal_uInt8 sBuf[3];
-    // store number format
-    SvStreamEndian oldNumberFormat = rStream.GetEndian();
-    sal_uInt32 nOffset; // in MS documents the pict format is used without the first 512 bytes
-    for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
-    {
-        short y1,x1,y2,x2;
-        bool bdBoxOk = true;
-
-        rStream.Seek( nStreamPos + nOffset);
-        // size of the pict in version 1 pict ( 2bytes) : ignored
-        rStream.SeekRel(2);
-        // bounding box (bytes 2 -> 9)
-        rStream.SetEndian(SvStreamEndian::BIG);
-        rStream.ReadInt16( y1 ).ReadInt16( x1 ).ReadInt16( y2 ).ReadInt16( x2 );
-        rStream.SetEndian(oldNumberFormat); // reset format
-
-        if (x1 > x2 || y1 > y2 || // bad bdbox
-            (x1 == x2 && y1 == y2) || // 1 pixel picture
-            x2-x1 > 2048 || y2-y1 > 2048 ) // picture abnormally big
-          bdBoxOk = false;
-
-        // read version op
-        rStream.ReadBytes(sBuf, 3);
-        // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
-        // normal version 2 - page A23 and A24
-        if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
-            return true;
-        // normal version 1 - page A25
-        else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk)
-            return true;
-    }
-    return false;
-}
-
 ErrCode GraphicFilter::ImpTestOrFindFormat( std::u16string_view rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
     // determine or check the filter/format by reading into it
