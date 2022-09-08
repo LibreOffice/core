@@ -53,7 +53,7 @@ class ScValueIterator            // walk through all values in an area
     typedef sc::CellStoreType::const_position_type PositionType;
 
     ScDocument&     mrDoc;
-    ScInterpreterContext* pContext;
+    ScInterpreterContext& mrContext;
     const ScAttrArray*  pAttrArray;
     sal_uInt32      nNumFormat;     // for CalcAsShown
     sal_uInt32      nNumFmtIndex;
@@ -83,7 +83,7 @@ class ScValueIterator            // walk through all values in an area
 
 public:
 
-    ScValueIterator(
+    ScValueIterator(ScInterpreterContext& rContext,
         ScDocument& rDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
@@ -94,8 +94,6 @@ public:
 
     /// Does NOT reset rValue if no value found!
     bool GetNext( double& rValue, FormulaError& rErr );
-
-    void SetInterpreterContext( ScInterpreterContext* context ) { pContext = context; }
 };
 
 class ScDBQueryDataIterator

@@ -1445,7 +1445,7 @@ void ScInterpreter::ScIRR()
         }
         else
         {
-            ScValueIterator aValIter(mrDoc, aRange, mnSubTotalFlags);
+            ScValueIterator aValIter(mrContext, mrDoc, aRange, mnSubTotalFlags);
             bool bLoop = aValIter.GetFirst(fValue, nIterError);
             while (bLoop && nIterError == FormulaError::NONE)
             {
@@ -1553,7 +1553,7 @@ void ScInterpreter::ScMIRR()
         }
         else
         {
-            ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+            ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
             double fCellValue;
             FormulaError nIterError = FormulaError::NONE;
 

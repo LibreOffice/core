@@ -82,10 +82,10 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
     nAttrEndRow = nRowEnd;
 }
 
-ScValueIterator::ScValueIterator( ScDocument& rDocument, const ScRange& rRange,
+ScValueIterator::ScValueIterator(ScInterpreterContext& rContext, ScDocument& rDocument, const ScRange& rRange,
             SubtotalFlags nSubTotalFlags, bool bTextZero )
     : mrDoc(rDocument)
-    , pContext(nullptr)
+    , mrContext(rContext)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
     , nNumFmtIndex(0)
@@ -194,8 +194,8 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                 if (bCalcAsShown)
                 {
                     ScAttrArray_IterGetNumberFormat(nNumFormat, pAttrArray,
-                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, mrDoc, pContext);
-                    rValue = mrDoc.RoundValueAsShown(rValue, nNumFormat, pContext);
+                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, mrDoc, &mrContext);
+                    rValue = mrDoc.RoundValueAsShown(rValue, nNumFormat, &mrContext);
                 }
                 return true; // Found it!
             }
