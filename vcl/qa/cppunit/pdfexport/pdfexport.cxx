@@ -2648,12 +2648,17 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String, pAnnot->getValueType("DA"));
     OUString aDA = pAnnot->getString("DA");
 
+    // Workaround tdf#150786: skip color. It may be either "0 0 0 rg /TiRo 12 Tf" on light mode,
+    //                                                  or "1 1 1 rg /TiRo 12 Tf" on dark mode.
+    sal_Int32 rgPos = aDA.indexOf(u"rg");
+    CPPUNIT_ASSERT(rgPos >= 0);
+
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 0 0 0 rg /TiRo 12 Tf
-    // - Actual  : 0 0 0 rg /F2 12 Tf
+    // - Expected: rg /TiRo 12 Tf
+    // - Actual  : rg /F2 12 Tf
     // i.e. Liberation Serif was exposed as a form font as-is, without picking the closest built-in
     // font.
-    CPPUNIT_ASSERT_EQUAL(OUString("0 0 0 rg /TiRo 12 Tf"), aDA);
+    CPPUNIT_ASSERT_EQUAL(OUString("rg /TiRo 12 Tf"), aDA.copy(rgPos));
 }
 
 // Check we don't have duplicated objects when we reexport the PDF multiple
