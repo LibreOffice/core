@@ -95,12 +95,22 @@ void Chart2XShapeTest::compareAgainstReference(std::u16string_view rReferenceFil
 
 void Chart2XShapeTest::testFdo75075()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
     load(u"chart2/qa/extras/xshape/data/ods/", u"fdo75075.ods");
     compareAgainstReference(u"fdo75075.xml");
 }
 
 void Chart2XShapeTest::testPropertyMappingBarChart()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
     load(u"chart2/qa/extras/xshape/data/ods/", u"property-mapping-bar.ods");
     compareAgainstReference(u"property-mapping-bar.xml");
 }
@@ -155,6 +165,11 @@ void Chart2XShapeTest::testPieChartLabels4()
 
 void Chart2XShapeTest::testChart()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
     load(u"chart2/qa/extras/xshape/data/ods/", u"testChart.ods");
     compareAgainstReference(u"testChart.xml");
 }
