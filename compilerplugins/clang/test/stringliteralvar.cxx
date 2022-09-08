@@ -9,10 +9,10 @@
 
 #include <sal/config.h>
 
+#include <iterator>
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <sal/macros.h>
 
 // expected-error-re@+1 {{change type of variable 'literal1' from constant character array ('const char{{ ?}}[4]') to OStringLiteral [loplugin:stringliteralvar]}}
 char const literal1[] = "foo";
