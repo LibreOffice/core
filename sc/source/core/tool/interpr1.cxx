@@ -1314,7 +1314,7 @@ void ScInterpreter::ScAnd()
                     {
                         double fVal;
                         FormulaError nErr = FormulaError::NONE;
-                        ScValueIterator aValIter( mrDoc, aRange );
+                        ScValueIterator aValIter( mrContext, mrDoc, aRange );
                         if ( aValIter.GetFirst( fVal, nErr ) && nErr == FormulaError::NONE )
                         {
                             bHaveValue = true;
@@ -1412,7 +1412,7 @@ void ScInterpreter::ScOr()
                     {
                         double fVal;
                         FormulaError nErr = FormulaError::NONE;
-                        ScValueIterator aValIter( mrDoc, aRange );
+                        ScValueIterator aValIter( mrContext, mrDoc, aRange );
                         if ( aValIter.GetFirst( fVal, nErr ) )
                         {
                             bHaveValue = true;
@@ -1514,7 +1514,7 @@ void ScInterpreter::ScXor()
                     {
                         double fVal;
                         FormulaError nErr = FormulaError::NONE;
-                        ScValueIterator aValIter( mrDoc, aRange );
+                        ScValueIterator aValIter( mrContext, mrDoc, aRange );
                         if ( aValIter.GetFirst( fVal, nErr ) )
                         {
                             bHaveValue = true;
@@ -3692,8 +3692,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
-                aValIter.SetInterpreterContext( &mrContext );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
                 if (aValIter.GetFirst(nVal, nErr))
                 {
                     if (nMin > nVal)
@@ -3850,8 +3849,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
-                aValIter.SetInterpreterContext( &mrContext );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
                 if (aValIter.GetFirst(nVal, nErr))
                 {
                     if (nMax < nVal)
@@ -4027,7 +4025,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                     ArrayRefListValue& rArrayValue = vArrayValues[nRefArrayPos];
                     FormulaError nErr = FormulaError::NONE;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
-                    ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
+                    ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
                     if (aValIter.GetFirst(fVal, nErr))
                     {
                         do
@@ -4052,7 +4050,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     do

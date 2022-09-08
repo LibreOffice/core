@@ -2505,7 +2505,7 @@ void ScInterpreter::ScZTest()
                 ScRange aRange;
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
@@ -2947,7 +2947,7 @@ void ScInterpreter::ScHarMean()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal > 0.0)
@@ -3085,7 +3085,7 @@ void ScInterpreter::ScGeoMean()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter(mrDoc, aRange, mnSubTotalFlags);
+                ScValueIterator aValIter(mrContext, mrDoc, aRange, mnSubTotalFlags);
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal > 0.0)
@@ -3250,7 +3250,7 @@ bool ScInterpreter::CalculateSkew(KahanSum& fSum, double& fCount, std::vector<do
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 FormulaError nErr = FormulaError::NONE;
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
@@ -3885,7 +3885,7 @@ std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow
 
             FormulaError nErr = FormulaError::NONE;
             double fCellVal;
-            ScValueIterator aValIter(mrDoc, aRange, mnSubTotalFlags);
+            ScValueIterator aValIter(mrContext, mrDoc, aRange, mnSubTotalFlags);
             if (aValIter.GetFirst(fCellVal, nErr))
             {
                 do
@@ -3966,8 +3966,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 
                 FormulaError nErr = FormulaError::NONE;
                 double fCellVal;
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
-                aValIter.SetInterpreterContext( &mrContext );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
                     if (bIgnoreErrVal)
@@ -4305,7 +4304,7 @@ void ScInterpreter::ScAveDev()
                 FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     rVal += nCellVal;
@@ -4384,7 +4383,7 @@ void ScInterpreter::ScAveDev()
                 FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     rVal += std::abs(nCellVal - nMiddle);

@@ -1336,6 +1336,8 @@ void Test::testValueIterator()
     aOpt.SetCalcAsShown(true);
     m_pDoc->SetDocOptions(aOpt);
 
+    ScInterpreterContext aContext(*m_pDoc, m_pDoc->GetFormatTable());
+
     // Purely horizontal data layout with numeric data.
     for (SCCOL i = 1; i <= 3; ++i)
         m_pDoc->SetValue(ScAddress(i,2,0), i);
@@ -1343,7 +1345,7 @@ void Test::testValueIterator()
     {
         const double aChecks[] = { 1.0, 2.0, 3.0 };
         size_t const nCheckLen = SAL_N_ELEMENTS(aChecks);
-        ScValueIterator aIter(*m_pDoc, ScRange(1,2,0,3,2,0));
+        ScValueIterator aIter(aContext, *m_pDoc, ScRange(1,2,0,3,2,0));
         bool bHas = false;
         size_t nCheckPos = 0;
         double fVal;
