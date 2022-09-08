@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
     basegfx/test/B2DPolygonToolsTest \
     basegfx/test/B2DPolyPolygonTest \
     basegfx/test/B2DPolyPolygonCutterTest \
+    basegfx/test/B2DSizeTest \
     basegfx/test/B1DRangeTest \
     basegfx/test/B2XRangeTest \
     basegfx/test/B2IBoxTest \

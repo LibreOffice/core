@@ -143,7 +143,7 @@ namespace cppcanvas::internal
                                                               const OutDevState&            rState ) :
                 mpGroupMtf( std::move(rGroupMtf) ),
                 mpAlphaGradient( std::move(rAlphaGradient) ),
-                maDstSize( rDstSize ),
+                maDstSize(rDstSize.getX(), rDstSize.getY()),
                 mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
@@ -216,12 +216,12 @@ namespace cppcanvas::internal
                     DBG_TESTSOLARMUTEX();
 
                     // output size of metafile
-                    ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getX() ),
-                                             ::basegfx::fround( aScale.getY() * maDstSize.getY() ) );
+                    ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getWidth() ),
+                                             ::basegfx::fround( aScale.getY() * maDstSize.getHeight() ) );
 
                     // pixel size of cache bitmap: round up to nearest int
-                    ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.getX() )+1,
-                                             static_cast<sal_Int32>( aScale.getY() * maDstSize.getY() )+1 );
+                    ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.getWidth() )+1,
+                                             static_cast<sal_Int32>( aScale.getY() * maDstSize.getHeight() )+1 );
 
                     ::Point aEmptyPoint;
 
@@ -423,8 +423,8 @@ namespace cppcanvas::internal
 
                 return tools::calcDevicePixelBounds(
                     ::basegfx::B2DRange( 0,0,
-                                         maDstSize.getX(),
-                                         maDstSize.getY() ),
+                                         maDstSize.getWidth(),
+                                         maDstSize.getHeight() ),
                     mpCanvas->getViewState(),
                     aLocalState );
             }

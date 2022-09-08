@@ -384,15 +384,15 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     jpeg_set_defaults( &cinfo );
     jpeg_set_quality( &cinfo, static_cast<int>(nQualityPercent), FALSE );
 
-    if (o3tl::convertsToAtMost(rPPI.getX(), 65535) && o3tl::convertsToAtMost(rPPI.getY(), 65535))
+    if (o3tl::convertsToAtMost(rPPI.getWidth(), 65535) && o3tl::convertsToAtMost(rPPI.getHeight(), 65535))
     {
         cinfo.density_unit = 1;
-        cinfo.X_density = rPPI.getX();
-        cinfo.Y_density = rPPI.getY();
+        cinfo.X_density = rPPI.getWidth();
+        cinfo.Y_density = rPPI.getHeight();
     }
     else
     {
-        SAL_WARN("vcl.filter", "ignoring too large PPI " << rPPI);
+        SAL_WARN("vcl.filter", "ignoring too large PPI (" << rPPI.getWidth() << ", " << rPPI.getHeight() << ")");
     }
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )

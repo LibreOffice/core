@@ -186,16 +186,16 @@ namespace slideshow::internal
             // scale polygon up to current shape size
             if( mbScaleIsotrophically )
             {
-                const double nScale( ::std::max( rTargetSize.getX(),
-                                                 rTargetSize.getY() ) );
+                const double nScale( ::std::max( rTargetSize.getWidth(),
+                                                 rTargetSize.getHeight() ) );
                 aMatrix.scale( nScale, nScale );
-                aMatrix.translate( -(nScale-rTargetSize.getX())/2.0,
-                                   -(nScale-rTargetSize.getY())/2.0 );
+                aMatrix.translate( -(nScale - rTargetSize.getWidth())/2.0,
+                                   -(nScale - rTargetSize.getHeight())/2.0 );
             }
             else
             {
-                aMatrix.scale( rTargetSize.getX(),
-                               rTargetSize.getY() );
+                aMatrix.scale( rTargetSize.getWidth(),
+                               rTargetSize.getHeight() );
             }
 
             // apply cumulative transformation to clip polygon

@@ -57,8 +57,8 @@ OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
 void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     Primitive2DContainer aPrimitive2DSequence;
-    const double fHalfWidth = maSize.getX() * getDiscreteUnit() / 2.0;
-    const double fHalfHeight = maSize.getY() * getDiscreteUnit() / 2.0;
+    const double fHalfWidth = maSize.getWidth() * getDiscreteUnit() / 2.0;
+    const double fHalfHeight = maSize.getHeight() * getDiscreteUnit() / 2.0;
 
     basegfx::B2DRange aRange(
         maPosition.getX() - fHalfWidth, maPosition.getY() - fHalfHeight,

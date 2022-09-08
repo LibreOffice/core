@@ -23,6 +23,7 @@
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/point/b2ipoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
@@ -75,6 +76,11 @@ namespace basegfx
         */
         B2DPoint(Tuple2D<double> const& rTuple)
         :   B2DTuple(rTuple)
+        {}
+
+        /** create a point from a size object */
+        explicit B2DPoint(Size2D<double> const& rSize)
+            : B2DTuple(rSize.getWidth(), rSize.getHeight())
         {}
 
         /** *=operator to allow usage from B2DPoint, too

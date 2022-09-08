@@ -22,7 +22,7 @@ public:
     {
     }
 
-    Size2D(Tuple2D<double> const& rTuple)
+    Size2D(Tuple2D<TYPE> const& rTuple)
         : Tuple2D<TYPE>(rTuple.getX(), rTuple.getY())
     {
     }

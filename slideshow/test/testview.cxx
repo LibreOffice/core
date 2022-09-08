@@ -159,7 +159,8 @@ public:
     virtual ::cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
                                                              double                    nPriority ) const override
     {
-        maCreatedSprites.push_back( std::make_pair(rSpriteSizePixel,nPriority) );
+        basegfx::B2DVector aSpriteSizeVector(rSpriteSizePixel.getWidth(), rSpriteSizePixel.getHeight());
+        maCreatedSprites.emplace_back(aSpriteSizeVector, nPriority);
 
         return ::cppcanvas::CustomSpriteSharedPtr();
     }

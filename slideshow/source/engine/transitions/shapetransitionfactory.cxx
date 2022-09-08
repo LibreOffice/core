@@ -159,8 +159,8 @@ bool ClippingAnimation::operator()( double nValue )
         "ClippingAnimation::operator(): Invalid ShapeAttributeLayer" );
 
     // set new clip
-    mpAttrLayer->setClip( maClippingFunctor( nValue,
-                                             mpShape->getDomBounds().getRange() ) );
+    auto aBounds = mpShape->getDomBounds().getRange();
+    mpAttrLayer->setClip( maClippingFunctor(nValue, basegfx::B2DSize(aBounds.getX(), aBounds.getY())) );
 
     if( mpShape->isContentChanged() )
         mpShapeManager->notifyShapeUpdate( mpShape );

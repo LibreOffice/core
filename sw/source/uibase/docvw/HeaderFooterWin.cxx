@@ -323,7 +323,7 @@ void SwHeaderFooterWin::PaintButton()
 
     // Create the 'plus' or 'arrow' primitive
     B2DRectangle aSignArea(B2DPoint(aRect.Right() - BUTTON_WIDTH, 0.0),
-                           B2DSize(aRect.Right(), aRect.getOpenHeight()));
+                           B2DVector(aRect.Right(), aRect.getOpenHeight()));
 
     B2DPolygon aSign;
     bool bIsEmptyHeaderFooter = IsEmptyHeaderFooter();

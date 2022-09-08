@@ -60,7 +60,7 @@ namespace vclcanvas
 
         double calcNumPixel( const ::canvas::Sprite::Reference& rSprite )
         {
-            const ::basegfx::B2DSize& rSize(
+            const ::basegfx::B2DVector& rSize(
                 ::boost::polymorphic_downcast< Sprite* >(rSprite.get())->getSizePixel() );
 
             return rSize.getX() * rSize.getY();

@@ -20,6 +20,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cmath>
 #include <sstream>
@@ -34,6 +35,7 @@ public:
     void testAssignment();
     void testGetEmptyPoint();
     void testOutputOperator();
+    void testOperators();
 
     CPPUNIT_TEST_SUITE(B2DPointTest);
     CPPUNIT_TEST(testCreation);
@@ -43,6 +45,7 @@ public:
     CPPUNIT_TEST(testAssignment);
     CPPUNIT_TEST(testGetEmptyPoint);
     CPPUNIT_TEST(testOutputOperator);
+    CPPUNIT_TEST(testOperators);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -173,6 +176,17 @@ void B2DPointTest::testOutputOperator()
     aOut << aPoint;
     std::string aResult = aOut.str();
     CPPUNIT_ASSERT_EQUAL(std::string("(2,3)"), aResult);
+}
+
+void B2DPointTest::testOperators()
+{
+    basegfx::B2DPoint aPoint(2.0, 3.0);
+    basegfx::B2DSize aSize(1.0, 1.0);
+
+    CPPUNIT_ASSERT_EQUAL(true, basegfx::B2DPoint(3.0, 4.0) == aPoint + basegfx::B2DPoint(aSize));
+    CPPUNIT_ASSERT_EQUAL(true, basegfx::B2DPoint(1.0, 2.0) == aPoint - basegfx::B2DPoint(aSize));
+    CPPUNIT_ASSERT_EQUAL(true, basegfx::B2DPoint(2.0, 3.0) == aPoint * basegfx::B2DPoint(aSize));
+    CPPUNIT_ASSERT_EQUAL(true, basegfx::B2DPoint(2.0, 3.0) == aPoint / basegfx::B2DPoint(aSize));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(B2DPointTest);

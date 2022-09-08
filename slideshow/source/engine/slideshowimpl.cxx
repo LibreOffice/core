@@ -874,7 +874,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 0.0,
                 0.0,
                 ShapeSharedPtr(),
-                basegfx::B2DSize( rEnteringSlide->getSlideSize() ) ),
+                basegfx::B2DVector( rEnteringSlide->getSlideSize() ) ),
             pTransition,
             true ));
 }

@@ -2422,7 +2422,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
     // - Expected: 8503.94
     // - Actual  : 17007.875
     // i.e. the value for 600 cm was larger than the 14 400 limit set in the spec.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, aSize.getX(), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, aSize.getWidth(), 0.01);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)

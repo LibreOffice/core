@@ -749,19 +749,19 @@ namespace slideshow::internal
                         {
                             const ::basegfx::B2DSize rShapeBorder( rViewShape->getAntialiasingBorder() );
 
-                            aAABorder.setX( ::std::max(
-                                    rShapeBorder.getX(),
-                                    aAABorder.getX() ) );
-                            aAABorder.setY( ::std::max(
-                                    rShapeBorder.getY(),
-                                    aAABorder.getY() ) );
+                            aAABorder.setWidth( ::std::max(
+                                    rShapeBorder.getWidth(),
+                                    aAABorder.getWidth() ) );
+                            aAABorder.setWidth( ::std::max(
+                                    rShapeBorder.getHeight(),
+                                    aAABorder.getHeight() ) );
                         }
 
                         // add calculated AA border to aBounds
-                        aBounds = ::basegfx::B2DRectangle( aBounds.getMinX() - aAABorder.getX(),
-                                                           aBounds.getMinY() - aAABorder.getY(),
-                                                           aBounds.getMaxX() + aAABorder.getX(),
-                                                           aBounds.getMaxY() + aAABorder.getY() );
+                        aBounds = ::basegfx::B2DRectangle( aBounds.getMinX() - aAABorder.getWidth(),
+                                                           aBounds.getMinY() - aAABorder.getHeight(),
+                                                           aBounds.getMaxX() + aAABorder.getWidth(),
+                                                           aBounds.getMaxY() + aAABorder.getHeight() );
                     }
                 }
             }

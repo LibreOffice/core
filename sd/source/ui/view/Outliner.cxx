@@ -713,8 +713,8 @@ basegfx::B2DRectangle getPDFSelection(const std::unique_ptr<VectorGraphicSearch>
     // coordinates to the page relative coordinates
     basegfx::B2DHomMatrix aB2DMatrix;
 
-    aB2DMatrix.scale(aObjectB2DRectHMM.getWidth() / aPdfPageSizeHMM.getX(),
-                     aObjectB2DRectHMM.getHeight() / aPdfPageSizeHMM.getY());
+    aB2DMatrix.scale(aObjectB2DRectHMM.getWidth() / aPdfPageSizeHMM.getWidth(),
+                     aObjectB2DRectHMM.getHeight() / aPdfPageSizeHMM.getHeight());
 
     aB2DMatrix.translate(aObjectB2DRectHMM.getMinX(), aObjectB2DRectHMM.getMinY());
 

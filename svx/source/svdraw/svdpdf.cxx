@@ -138,10 +138,7 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
 
     basegfx::B2DSize dPageSize = mpPdfDocument->getPageSize(nPageIndex);
 
-    const double dPageWidth = dPageSize.getX();
-    const double dPageHeight = dPageSize.getY();
-
-    SetupPageScale(dPageWidth, dPageHeight);
+    SetupPageScale(dPageSize.getWidth(), dPageSize.getHeight());
 
     // Load the page text to extract it when we get text elements.
     auto pTextPage = pPdfPage->getTextPage();

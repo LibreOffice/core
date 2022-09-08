@@ -77,7 +77,7 @@ namespace slideshow::internal
                                                                       const ShapeAttributeLayerSharedPtr&   pAttr )
             {
                 ::basegfx::B2DHomMatrix     aTransform;
-                const ::basegfx::B2DSize&   rSize( rShapeBounds.getRange() );
+                const basegfx::B2DSize rSize(rShapeBounds.getRange().getX(), rShapeBounds.getRange().getY());
 
                 const double nShearX( pAttr->isShearXAngleValid() ?
                                       pAttr->getShearXAngle() :
@@ -96,9 +96,9 @@ namespace slideshow::internal
                 // ensure valid size (zero size will inevitably lead
                 // to a singular transformation matrix)
                 aTransform.scale( ::basegfx::pruneScaleValue(
-                                      rSize.getX() ),
+                                      rSize.getWidth() ),
                                   ::basegfx::pruneScaleValue(
-                                      rSize.getY() ) );
+                                      rSize.getHeight() ) );
 
                 const bool bNeedShearX( !::basegfx::fTools::equalZero(nShearX) );
                 const bool bNeedShearY( !::basegfx::fTools::equalZero(nShearY) );
@@ -499,11 +499,11 @@ namespace slideshow::internal
                 // ensure valid size (zero size will inevitably lead
                 // to a singular transformation matrix).
                 aTransform.scale( ::basegfx::pruneScaleValue(
-                                      aSize.getX() /
+                                      aSize.getWidth() /
                                       ::basegfx::pruneScaleValue(
                                           rOrigSize.getX() ) ),
                                   ::basegfx::pruneScaleValue(
-                                      aSize.getY() /
+                                      aSize.getHeight() /
                                       ::basegfx::pruneScaleValue(
                                           rOrigSize.getY() ) ) );
 
@@ -606,10 +606,10 @@ namespace slideshow::internal
                 // (aka mirrored shapes) _still_ have the same bounds,
                 // only with mirrored content.
                 ::basegfx::B2DSize aSize;
-                aSize.setX( fabs( pAttr->isWidthValid() ?
+                aSize.setWidth( fabs( pAttr->isWidthValid() ?
                                   pAttr->getWidth() :
                                   rOrigBounds.getWidth() ) );
-                aSize.setY( fabs( pAttr->isHeightValid() ?
+                aSize.setHeight( fabs( pAttr->isHeightValid() ?
                                   pAttr->getHeight() :
                                   rOrigBounds.getHeight() ) );
 
@@ -624,8 +624,8 @@ namespace slideshow::internal
                 // the positional attribute retrieved from the
                 // ShapeAttributeLayer actually denotes the _middle_
                 // of the shape (do it as the PPTs do...)
-                return ::basegfx::B2DRectangle( aPos - 0.5*aSize,
-                                                aPos + 0.5*aSize );
+                return ::basegfx::B2DRectangle(aPos - 0.5 * basegfx::B2DPoint(aSize),
+                                               aPos + 0.5 * basegfx::B2DPoint(aSize));
             }
         }
 

@@ -825,7 +825,7 @@ namespace cppcanvas::internal
                 else
                     aFontMatrix.m11 *= nScaleY / nScaleX;
             }
-            aFontRequest.CellSize = (rState.mapModeTransform * vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getY();
+            aFontRequest.CellSize = (rState.mapModeTransform * vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getHeight();
 
             if (rFont.GetEmphasisMark() != FontEmphasisMark::NONE)
             {
@@ -2137,10 +2137,8 @@ namespace cppcanvas::internal
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
                                     BitmapEx(pAct->GetBitmap()),
-                                    rStates.getState().mapModeTransform *
-                                    vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
-                                    rStates.getState().mapModeTransform *
-                                    vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                    rStates.getState().mapModeTransform * vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                    rStates.getState().mapModeTransform * vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2172,7 +2170,7 @@ namespace cppcanvas::internal
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                     rStates.getState().mapModeTransform *
-                                    vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
+                                    vcl::unotools::b2DVectorFromSize( pAct->GetDestSize() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2220,7 +2218,7 @@ namespace cppcanvas::internal
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *
-                                    vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                    vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
                                     rCanvas,
                                     rStates.getState() ) );
 
@@ -2252,7 +2250,7 @@ namespace cppcanvas::internal
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                 rStates.getState().mapModeTransform *
-                                vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
+                                vcl::unotools::b2DVectorFromSize( pAct->GetDestSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2312,7 +2310,7 @@ namespace cppcanvas::internal
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *
-                                vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2349,7 +2347,7 @@ namespace cppcanvas::internal
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                 rStates.getState().mapModeTransform *
-                                vcl::unotools::b2DSizeFromSize( pAct->GetDestSize() ),
+                                vcl::unotools::b2DVectorFromSize( pAct->GetDestSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2422,7 +2420,7 @@ namespace cppcanvas::internal
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *
-                                vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
                                 rCanvas,
                                 rStates.getState() ) );
 
@@ -2496,8 +2494,8 @@ namespace cppcanvas::internal
                                     rState.mapModeTransform *
                                     ::basegfx::B2DPoint(
                                         vcl::unotools::b2DPointFromPoint(pAct->GetStartPoint()) +
-                                        vcl::unotools::b2DSizeFromSize(aBaselineOffset)),
-                                    aSize.getX(),
+                                        vcl::unotools::b2DVectorFromSize(aBaselineOffset)),
+                                    aSize.getWidth(),
                                     tools::createTextLineInfo( rVDev,
                                                                rState )),
                                 rCanvas,

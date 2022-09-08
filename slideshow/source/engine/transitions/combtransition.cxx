@@ -54,8 +54,7 @@ basegfx::B2DPolyPolygon createClipPolygon(
     basegfx::B2DHomMatrix aMatrix(basegfx::utils::createRotateAroundPoint(0.5, 0.5, aUpVec.angle( rDirection )));
 
     // blow up clip polygon to slide size
-    aMatrix.scale( rSlideSize.getX(),
-                   rSlideSize.getY() );
+    aMatrix.scale(rSlideSize.getWidth(), rSlideSize.getHeight());
 
     aClipPoly.transform( aMatrix );
 
@@ -111,18 +110,18 @@ void CombTransition::renderComb( double           t,
     // TODO(Q2): Use basegfx bitmaps here
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
-    const basegfx::B2DSize enteringSizePixel(
+    const basegfx::B2DVector enteringSizePixel(
         getEnteringSlideSizePixel( rViewEntry.mpView) );
 
     const basegfx::B2DVector aPushDirection(
         enteringSizePixel * maPushDirectionUnit );
     const basegfx::B2DPolyPolygon aClipPolygon1 =
         createClipPolygon( maPushDirectionUnit,
-                           enteringSizePixel,
+                           basegfx::B2DSize(enteringSizePixel.getX(), enteringSizePixel.getY()),
                            mnNumStripes, 0 );
     const basegfx::B2DPolyPolygon aClipPolygon2 =
         createClipPolygon( maPushDirectionUnit,
-                           enteringSizePixel,
+                           basegfx::B2DSize(enteringSizePixel.getX(), enteringSizePixel.getY()),
                            mnNumStripes, 1 );
 
     SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);

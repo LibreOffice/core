@@ -34,6 +34,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -373,10 +374,9 @@ namespace basegfx::unotools
             return output;
         }
 
-        geometry::RealSize2D size2DFromB2DSize( const ::basegfx::B2DVector& rVec )
+        geometry::RealSize2D size2DFromB2DSize(const ::basegfx::B2DSize& rSize)
         {
-            return geometry::RealSize2D( rVec.getX(),
-                                         rVec.getY() );
+            return geometry::RealSize2D(rSize.getWidth(), rSize.getHeight());
         }
 
         geometry::RealPoint2D point2DFromB2DPoint( const ::basegfx::B2DPoint& rPoint )

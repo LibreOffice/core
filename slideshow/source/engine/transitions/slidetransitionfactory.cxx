@@ -74,8 +74,8 @@ void fillPage( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
               ::basegfx::B2DRectangle(
                   aOutputPosPixel.getX(),
                   aOutputPosPixel.getY(),
-                  aOutputPosPixel.getX() + rPageSizePixel.getX(),
-                  aOutputPosPixel.getY() + rPageSizePixel.getY() ),
+                  aOutputPosPixel.getX() + rPageSizePixel.getWidth(),
+                  aOutputPosPixel.getY() + rPageSizePixel.getHeight() ),
               rFillColor.getIntegerColor() );
 }
 
@@ -619,7 +619,7 @@ void MovingSlideChange::performIn(
     rSprite->movePixel(
         aPageOrigin +
         ((t - 1.0) *
-         ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
+         basegfx::B2DVector( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
          maEnteringDirection) );
 }
 
@@ -650,7 +650,7 @@ void MovingSlideChange::performOut(
     // move sprite
     rSprite->movePixel(
         aPageOrigin + (t *
-                       ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
+                       basegfx::B2DVector( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
                        maLeavingDirection) );
 }
 

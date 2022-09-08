@@ -322,7 +322,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                         xDrawPage)),
     mpSubsettableShapeManager( mpShapeManager ),
     mpBox2DWorld( std::make_shared<box2d::utils::box2DWorld>(
-                        basegfx::B2DSize( getSlideSizeImpl() ) ) ),
+                        basegfx::B2DVector( getSlideSizeImpl() ) ) ),
     maContext( mpSubsettableShapeManager,
                rEventQueue,
                rEventMultiplexer,
@@ -336,7 +336,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                mpBox2DWorld ),
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
-                  basegfx::B2DSize( getSlideSizeImpl() ) ),
+                  basegfx::B2DVector( getSlideSizeImpl() ) ),
     maPolygons(std::move(rPolyPolygonVector)),
     maUserPaintColor(aUserPaintColor),
     mdUserPaintStrokeWidth(dUserPaintStrokeWidth),
@@ -570,7 +570,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 
     SlideBitmapSharedPtr&     rBitmap( aIter->second.at( meAnimationState ));
     const ::basegfx::B2ISize& rSlideSize(
-        getSlideSizePixel( ::basegfx::B2DSize( getSlideSize() ),
+        getSlideSizePixel( ::basegfx::B2DVector( getSlideSize() ),
                            rView ));
 
     // is the bitmap valid (actually existent, and of correct
@@ -920,7 +920,7 @@ void SlideImpl::applyShapeAttributes(
                     extractValue( bVisible,
                                   rShapeProp.Value,
                                   pShape,
-                                  ::basegfx::B2DSize( getSlideSize() ) ))
+                                  basegfx::B2DVector(getSlideSize()) ))
                 {
                     pAttrShape->setVisibility( bVisible );
                 }

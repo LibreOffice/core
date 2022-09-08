@@ -30,6 +30,7 @@
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -369,10 +370,14 @@ namespace vcl::unotools
                                   rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom() );
         }
 
-        basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )
+        basegfx::B2DSize b2DSizeFromSize(const Size& rSize)
         {
-            return basegfx::B2DVector( rSize.Width(),
-                                         rSize.Height() );
+            return basegfx::B2DSize(rSize.Width(), rSize.Height());
+        }
+
+        basegfx::B2DVector b2DVectorFromSize(const Size& rSize)
+        {
+            return basegfx::B2DVector(rSize.Width(), rSize.Height());
         }
 
         basegfx::B2DPoint b2DPointFromPoint( const ::Point& rPoint )

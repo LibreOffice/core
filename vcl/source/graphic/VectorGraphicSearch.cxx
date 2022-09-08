@@ -56,8 +56,8 @@ public:
             return aSize;
 
         basegfx::B2DSize aPDFSize = mpPdfDocument->getPageSize(mnPageIndex);
-        aSize = basegfx::B2DSize(convertPointToMm100(aPDFSize.getX()),
-                                 convertPointToMm100(aPDFSize.getY()));
+        aSize = basegfx::B2DSize(convertPointToMm100(aPDFSize.getWidth()),
+                                 convertPointToMm100(aPDFSize.getHeight()));
         return aSize;
     }
 
@@ -159,7 +159,7 @@ public:
         if (nSize <= 0)
             return aRectangles;
 
-        double fPageHeight = getPageSize().getY();
+        double fPageHeight = getPageSize().getHeight();
 
         for (int nCount = 0; nCount < nSize; nCount++)
         {

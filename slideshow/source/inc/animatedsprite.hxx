@@ -22,6 +22,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include "viewlayer.hxx"

@@ -58,8 +58,8 @@ void VectorGraphicSearchTest::test()
     CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
 
     basegfx::B2DSize aSize = aSearch.pageSize();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(21590.00, aSize.getX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(27940.00, aSize.getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(21590.00, aSize.getWidth(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(27940.00, aSize.getHeight(), 1E-2);
 
     auto aRectangles = aSearch.getTextRectangles();
     CPPUNIT_ASSERT_EQUAL(size_t(4), aRectangles.size());

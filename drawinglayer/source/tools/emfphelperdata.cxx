@@ -1523,11 +1523,11 @@ namespace emfplushelper
                             const basegfx::B2DHomMatrix aTransformMatrix
                                 = maMapTransform
                                 * basegfx::B2DHomMatrix(
-                                    /* Row 0, Column 0 */ aDstSize.getX(),
+                                    /* Row 0, Column 0 */ aDstSize.getWidth(),
                                     /* Row 0, Column 1 */ fShearX,
                                     /* Row 0, Column 2 */ aDstPoint.getX(),
                                     /* Row 1, Column 0 */ fShearY,
-                                    /* Row 1, Column 1 */ aDstSize.getY(),
+                                    /* Row 1, Column 1 */ aDstSize.getHeight(),
                                     /* Row 1, Column 2 */ aDstPoint.getY());
 
                             if (image->type == ImageDataTypeBitmap)
@@ -1643,7 +1643,7 @@ namespace emfplushelper
                         }
 
                         const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    ::basegfx::B2DSize(font->emSize, font->emSize),
+                                    ::basegfx::B2DVector(font->emSize, font->emSize),
                                     ::basegfx::B2DPoint(lx + stringAlignmentHorizontalOffset,
                                                         ly + stringAlignmentVerticalOffset));
 
@@ -2184,7 +2184,7 @@ namespace emfplushelper
                                 aDXArray.push_back(0);
 
                                 basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                            ::basegfx::B2DSize(font->emSize, font->emSize),
+                                            ::basegfx::B2DVector(font->emSize, font->emSize),
                                             ::basegfx::B2DPoint(charsPosX[pos], charsPosY[pos]));
                                 if (hasMatrix)
                                     transformMatrix *= transform;

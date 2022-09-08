@@ -31,7 +31,7 @@ namespace basegfx
     class B2DVector;
     class B2DHomMatrix;
     class B2DPolyPolygon;
-    typedef B2DVector B2DSize;
+    class B2DSize;
 }
 namespace cppcanvas
 {

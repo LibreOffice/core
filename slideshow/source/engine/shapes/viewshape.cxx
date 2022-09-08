@@ -349,7 +349,8 @@ namespace slideshow::internal
 
             // create (or resize) sprite with sprite's pixel size, if
             // not done already
-            const ::basegfx::B2DSize& rSpriteSizePixel(rSpriteBoundsPixel.getRange());
+            auto aRange = rSpriteBoundsPixel.getRange();
+            basegfx::B2DSize rSpriteSizePixel(aRange.getX(), aRange.getY());
             if( !mpSprite )
             {
                 mpSprite = std::make_shared<AnimatedSprite>( mpViewLayer,
@@ -387,8 +388,8 @@ namespace slideshow::internal
             // rSpriteBoundsPixel upper, left corner is: the offset we
             // have to move sprite output to the right, top (to make
             // the desired subset content visible at all)
-            const ::basegfx::B2DSize& rSpriteCorrectionOffset(
-                rSpriteBoundsPixel.getMinimum() - rNominalShapeBoundsPixel.getMinimum() );
+            auto aDifference = rSpriteBoundsPixel.getMinimum() - rNominalShapeBoundsPixel.getMinimum();
+            const basegfx::B2DSize rSpriteCorrectionOffset(aDifference.getX(), aDifference.getY());
 
             // offset added top, left for anti-aliasing (otherwise,
             // shapes fully filling the sprite will have anti-aliased
@@ -408,14 +409,14 @@ namespace slideshow::internal
             // nearest integer here, too
             mpSprite->setPixelOffset(
                 aAAOffset - ::basegfx::B2DSize(
-                    ::basegfx::fround( rSpriteCorrectionOffset.getX() ),
-                    ::basegfx::fround( rSpriteCorrectionOffset.getY() ) ) );
+                    ::basegfx::fround( rSpriteCorrectionOffset.getWidth() ),
+                    ::basegfx::fround( rSpriteCorrectionOffset.getHeight() ) ) );
 
             // always set sprite position and transformation, since
             // they do not relate directly to the update flags
             // (e.g. sprite position changes when sprite size changes)
             mpSprite->movePixel( aSpritePosPixel );
-            mpSprite->transform( getSpriteTransformation( rSpriteSizePixel,
+            mpSprite->transform( getSpriteTransformation( basegfx::B2DVector(rSpriteSizePixel.getWidth(), rSpriteSizePixel.getHeight()),
                                                           rOrigBounds.getRange(),
                                                           pAttr ) );
 
@@ -448,10 +449,10 @@ namespace slideshow::internal
 
                     // make the clip 2*ANTIALIASING_EXTRA_SIZE larger
                     // such that it's again centered over the sprite.
-                    aViewTransform.scale(rSpriteSizePixel.getX()/
-                                         (rSpriteSizePixel.getX()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE),
-                                         rSpriteSizePixel.getY()/
-                                         (rSpriteSizePixel.getY()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE));
+                    aViewTransform.scale(rSpriteSizePixel.getWidth()/
+                                         (rSpriteSizePixel.getWidth()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE),
+                                         rSpriteSizePixel.getHeight()/
+                                         (rSpriteSizePixel.getHeight()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE));
 
                     // transform clip polygon from view to device
                     // coordinate space

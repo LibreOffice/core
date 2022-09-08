@@ -112,7 +112,7 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rCl
     // =====================
 
     // AW: Simplified
-    const basegfx::B2DRange aClipRange(0, 0, rUserSize.getX(), rUserSize.getY());
+    const basegfx::B2DRange aClipRange(0, 0, rUserSize.getWidth(), rUserSize.getHeight());
 
     if(rClip.count())
     {
@@ -446,8 +446,8 @@ public:
         // limit layer bounds to visible screen
         maLayerBounds.intersect( basegfx::B2DRange(0.0,
                                                    0.0,
-                                                   maUserSize.getX(),
-                                                   maUserSize.getY()) );
+                                                   maUserSize.getWidth(),
+                                                   maUserSize.getHeight()) );
 
         basegfx::B2IRange const& rNewLayerPixel(
             getLayerBoundsPixel(maLayerBounds,
@@ -584,7 +584,7 @@ private:
 
                 const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
                 mpSprite = mpSpriteCanvas->createCustomSprite(
-                    basegfx::B2DVector(sal::static_int_cast<sal_Int32>(rSpriteSize.getX()),
+                    basegfx::B2DSize(sal::static_int_cast<sal_Int32>(rSpriteSize.getX()),
                                        sal::static_int_cast<sal_Int32>(rSpriteSize.getY())) );
 
                 mpSprite->setPriority(
@@ -861,8 +861,8 @@ void SlideView::clear() const
     clearRect(getCanvas()->clone(),
               getLayerBoundsPixel(
                   basegfx::B2DRange(0,0,
-                                    maUserSize.getX(),
-                                    maUserSize.getY()),
+                                    maUserSize.getWidth(),
+                                    maUserSize.getHeight()),
                   getTransformation()));
 }
 
@@ -945,7 +945,7 @@ basegfx::B2DHomMatrix SlideView::getTransformation() const
     osl::MutexGuard aGuard( m_aMutex );
 
     basegfx::B2DHomMatrix aMatrix;
-    aMatrix.scale( 1.0/maUserSize.getX(), 1.0/maUserSize.getY() );
+    aMatrix.scale( 1.0 / maUserSize.getWidth(), 1.0 / maUserSize.getHeight() );
 
     return maViewTransform * aMatrix;
 }

@@ -60,6 +60,7 @@ namespace basegfx
     class B2IRange;
     class B2DPolygon;
     class B2DPolyPolygon;
+    class B2DSize;
 }
 
 namespace basegfx::unotools
@@ -119,7 +120,7 @@ namespace basegfx::unotools
         // Geometry conversions
 
 
-        BASEGFX_DLLPUBLIC css::geometry::RealSize2D        size2DFromB2DSize( const ::basegfx::B2DVector& );
+        BASEGFX_DLLPUBLIC css::geometry::RealSize2D        size2DFromB2DSize( const ::basegfx::B2DSize& );
         BASEGFX_DLLPUBLIC css::geometry::RealPoint2D       point2DFromB2DPoint( const ::basegfx::B2DPoint& );
         BASEGFX_DLLPUBLIC css::geometry::RealRectangle2D   rectangle2DFromB2DRectangle( const ::basegfx::B2DRange& );
         BASEGFX_DLLPUBLIC css::geometry::RealRectangle3D   rectangle3DFromB3DRectangle( const ::basegfx::B3DRange& );

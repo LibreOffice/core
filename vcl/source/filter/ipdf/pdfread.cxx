@@ -246,11 +246,11 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 
 namespace
 {
-basegfx::B2DPoint convertFromPDFInternalToHMM(basegfx::B2DSize const& rInputPoint,
+basegfx::B2DPoint convertFromPDFInternalToHMM(basegfx::B2DPoint const& rInputPoint,
                                               basegfx::B2DSize const& rPageSize)
 {
     double x = convertPointToMm100(rInputPoint.getX());
-    double y = convertPointToMm100(rPageSize.getY() - rInputPoint.getY());
+    double y = convertPointToMm100(rPageSize.getHeight() - rInputPoint.getY());
     return { x, y };
 }
 
@@ -284,9 +284,9 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
                 basegfx::B2DRectangle rRectangleHMM(
                     convertPointToMm100(rRectangle.getMinX()),
-                    convertPointToMm100(aPageSize.getY() - rRectangle.getMinY()),
+                    convertPointToMm100(aPageSize.getHeight() - rRectangle.getMinY()),
                     convertPointToMm100(rRectangle.getMaxX()),
-                    convertPointToMm100(aPageSize.getY() - rRectangle.getMaxY()));
+                    convertPointToMm100(aPageSize.getHeight() - rRectangle.getMaxY()));
 
                 OUString sDateTimeString
                     = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
@@ -460,15 +460,17 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
     for (int nPageIndex = 0; nPageIndex < nPageCount; ++nPageIndex)
     {
         basegfx::B2DSize aPageSize = pPdfDocument->getPageSize(nPageIndex);
-        if (aPageSize.getX() <= 0.0 || aPageSize.getY() <= 0.0)
+        if (aPageSize.getWidth() <= 0.0 || aPageSize.getHeight() <= 0.0)
             continue;
 
         // Returned unit is points, convert that to twip
         // 1 pt = 20 twips
         constexpr double pointToTwipconversionRatio = 20;
 
-        tools::Long nPageWidth = convertTwipToMm100(aPageSize.getX() * pointToTwipconversionRatio);
-        tools::Long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
+        tools::Long nPageWidth
+            = convertTwipToMm100(aPageSize.getWidth() * pointToTwipconversionRatio);
+        tools::Long nPageHeight
+            = convertTwipToMm100(aPageSize.getHeight() * pointToTwipconversionRatio);
 
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in

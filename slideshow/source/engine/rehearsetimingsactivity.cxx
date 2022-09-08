@@ -319,8 +319,8 @@ basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr
     spriteSize *= transformation;
     return basegfx::B2DRange(
         spritePos.getX(), spritePos.getY(),
-        spritePos.getX() + spriteSize.getX(),
-        spritePos.getY() + spriteSize.getY() );
+        spritePos.getX() + spriteSize.getWidth(),
+        spritePos.getY() + spriteSize.getHeight() );
 }
 
 void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )

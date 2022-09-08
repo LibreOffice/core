@@ -40,6 +40,7 @@ namespace basegfx
     class B2DRange;
     class B2IPoint;
     class B2IRange;
+    class B2DSize;
 }
 
 namespace com::sun::star::geometry
@@ -150,7 +151,8 @@ namespace vcl::unotools
         Point                       VCL_DLLPUBLIC pointFromB2DPoint( const basegfx::B2DPoint& );
         tools::Rectangle                   VCL_DLLPUBLIC rectangleFromB2DRectangle( const basegfx::B2DRange& );
 
-        basegfx::B2DVector          VCL_DLLPUBLIC b2DSizeFromSize( const Size& );
+        VCL_DLLPUBLIC basegfx::B2DSize b2DSizeFromSize(const Size& rSize);
+        VCL_DLLPUBLIC basegfx::B2DVector b2DVectorFromSize(const Size& rSize);
         basegfx::B2DPoint           VCL_DLLPUBLIC b2DPointFromPoint( const Point& );
         basegfx::B2DRange           VCL_DLLPUBLIC b2DRectangleFromRectangle( const tools::Rectangle& );
 

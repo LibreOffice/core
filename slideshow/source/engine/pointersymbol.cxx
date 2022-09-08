@@ -107,7 +107,7 @@ void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
     try
     {
         const geometry::IntegerSize2D spriteSize( mxBitmap->getSize() );
-        sprite = rView->createSprite( basegfx::B2DVector( spriteSize.Width,
+        sprite = rView->createSprite( basegfx::B2DSize( spriteSize.Width,
                                                           spriteSize.Height ),
                                       1000.0 ); // sprite should be in front of all
                                                 // other sprites

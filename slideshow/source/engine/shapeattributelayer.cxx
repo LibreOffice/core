@@ -259,7 +259,7 @@ namespace slideshow::internal
         double ShapeAttributeLayer::getWidth() const
         {
             return calcValue< double >(
-                maSize.getX(),
+                maSize.getWidth(),
                 mbWidthValid,
                 &ShapeAttributeLayer::isWidthValid,
                 &ShapeAttributeLayer::getWidth );
@@ -270,7 +270,7 @@ namespace slideshow::internal
             ENSURE_OR_THROW( std::isfinite(rNewWidth),
                               "ShapeAttributeLayer::setWidth(): Invalid width" );
 
-            maSize.setX( rNewWidth );
+            maSize.setWidth( rNewWidth );
             mbWidthValid = true;
             ++mnTransformationState;
         }
@@ -283,7 +283,7 @@ namespace slideshow::internal
         double ShapeAttributeLayer::getHeight() const
         {
             return calcValue< double >(
-                maSize.getY(),
+                maSize.getHeight(),
                 mbHeightValid,
                 &ShapeAttributeLayer::isHeightValid,
                 &ShapeAttributeLayer::getHeight );
@@ -294,15 +294,15 @@ namespace slideshow::internal
             ENSURE_OR_THROW( std::isfinite(rNewHeight),
                               "ShapeAttributeLayer::setHeight(): Invalid height" );
 
-            maSize.setY( rNewHeight );
+            maSize.setHeight( rNewHeight );
             mbHeightValid = true;
             ++mnTransformationState;
         }
 
         void ShapeAttributeLayer::setSize( const ::basegfx::B2DSize& rNewSize )
         {
-            ENSURE_OR_THROW( std::isfinite(rNewSize.getX()) &&
-                              std::isfinite(rNewSize.getY()),
+            ENSURE_OR_THROW( std::isfinite(rNewSize.getWidth()) &&
+                              std::isfinite(rNewSize.getHeight()),
                               "ShapeAttributeLayer::setSize(): Invalid size" );
 
             maSize = rNewSize;

@@ -19,15 +19,74 @@
 
 #pragma once
 
-#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/tuple/Size2D.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/vector/b2isize.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
-// syntactic sugar: a B2DVector exactly models a Size object,
-// thus, for interface clarity, we provide an alias name
+class B2DSize : public Size2D<double>
+{
+public:
+    B2DSize()
+        : Size2D(0.0, 0.0)
+    {
+    }
 
-/// Alias name for interface clarity (not everybody is aware of the identity)
-typedef B2DVector B2DSize;
+    B2DSize(double fX, double fY)
+        : Size2D(fX, fY)
+    {
+    }
+
+    B2DSize(Size2D<double> const& rSize)
+        : Size2D(rSize)
+    {
+    }
+
+    explicit B2DSize(B2ISize const& rSize)
+        : Size2D(rSize.getX(), rSize.getY())
+    {
+    }
+
+    /** Transform size by given transformation matrix. */
+    B2DSize& operator*=(const B2DHomMatrix& rMatrix)
+    {
+        const double fTempX(rMatrix.get(0, 0) * getWidth() + rMatrix.get(0, 1) * getHeight());
+        const double fTempY(rMatrix.get(1, 0) * getWidth() + rMatrix.get(1, 1) * getHeight());
+        setWidth(fTempX);
+        setHeight(fTempY);
+        return *this;
+    }
+
+    using Size2D<double>::operator+=;
+    using Size2D<double>::operator-=;
+    using Size2D<double>::operator*=;
+    using Size2D<double>::operator/=;
+    using Size2D<double>::operator-;
+
+    double getLength() const
+    {
+        if (fTools::equalZero(getWidth()))
+        {
+            return fabs(getHeight());
+        }
+        else if (fTools::equalZero(getHeight()))
+        {
+            return fabs(getWidth());
+        }
+
+        return hypot(getWidth(), getHeight());
+    }
+};
+
+inline B2DSize operator*(B2DHomMatrix const& rMatrix, B2DSize const& rSize)
+{
+    B2DSize aRes(rSize);
+    aRes *= rMatrix;
+    return aRes;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
