@@ -4484,6 +4484,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         rxEntry.second->ValidateTabRefs();
         ScRangeStringConverter::GetStringFromAddress( sBaseCellAddress, rxEntry.second->GetPos(), pDoc,
                             FormulaGrammar::CONV_OOO, ' ', false, ScRefFlags::ADDR_ABS_3D);
+        assert(!sBaseCellAddress.isEmpty());
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
         OUString sSymbol = rxEntry.second->GetSymbol(pDoc->GetStorageGrammar());
