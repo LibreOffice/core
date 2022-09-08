@@ -1416,11 +1416,11 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
     OUString value = paragraph->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), value);
 
-    paragraph = getParagraph(4);
+    paragraph = getParagraph(3);
     value = paragraph->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("Second Page"), value);
 
-    paragraph = getParagraph(7);
+    paragraph = getParagraph(5);
     value = paragraph->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("Third Page"), value);
 

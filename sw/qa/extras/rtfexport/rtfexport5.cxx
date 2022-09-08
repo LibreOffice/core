@@ -1233,7 +1233,7 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
         xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
         sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
         xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(120), shapesOnPage);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(118), shapesOnPage);
     }
     // Third page
     {
@@ -1242,7 +1242,7 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
         xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
         sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
         xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(86), shapesOnPage);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(84), shapesOnPage);
     }
 }
 
