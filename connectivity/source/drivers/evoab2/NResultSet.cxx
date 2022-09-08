@@ -435,7 +435,7 @@ public:
         m_pContacts = nullptr;
     }
 
-    virtual void executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/) override
+    virtual void executeQuery (EBook* pBook, EBookQuery* pQuery) override
     {
         freeContacts();
         char *sexp = e_book_query_to_string( pQuery );
@@ -570,9 +570,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
     }
     if ( bExecuteQuery )
     {
-        OString aPassword = m_pConnection->getPassword();
-        m_pVersionHelper->executeQuery(pBook, _rData.getQuery(), aPassword);
-        m_pConnection->setPassword( aPassword );
+        m_pVersionHelper->executeQuery(pBook, _rData.getQuery());
 
         if ( m_pVersionHelper->hasContacts() && !_rData.aSortOrder.empty() )
         {

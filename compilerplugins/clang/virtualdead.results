@@ -13,25 +13,25 @@ canvas/inc/base/bitmapcanvasbase.hxx:79
 canvas/inc/base/bufferedgraphicdevicebase.hxx:105
     void canvas::BufferedGraphicDeviceBase::destroyBuffers()
     empty
-canvas/inc/base/graphicdevicebase.hxx:233
+canvas/inc/base/graphicdevicebase.hxx:234
     unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
     0
-canvas/inc/base/graphicdevicebase.hxx:238
+canvas/inc/base/graphicdevicebase.hxx:239
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
     0
-canvas/inc/base/graphicdevicebase.hxx:304
+canvas/inc/base/graphicdevicebase.hxx:305
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     empty
-canvas/inc/base/graphicdevicebase.hxx:317
+canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     empty
-include/basegfx/utils/unopolypolygon.hxx:94
+include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
     empty
 include/connectivity/sdbcx/IRefreshable.hxx:29
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
-include/filter/msfilter/msdffimp.hxx:544
+include/filter/msfilter/msdffimp.hxx:545
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     1
 include/svl/svdde.hxx:236
@@ -52,55 +52,55 @@ include/svl/svdde.hxx:243
 include/svtools/unoevent.hxx:198
     unsigned short SvEventDescriptor::getMacroItemWhich()const
     108
+include/svx/GenericCheckDialog.hxx:32
+    _Bool svx::CheckData::canMarkObject()
+    1
+include/svx/GenericCheckDialog.hxx:37
+    _Bool svx::CheckData::hasProperties()
+    1
 include/ucbhelper/resultset.hxx:410
     void ucbhelper::ResultSetDataSupplier::close()
     empty
 include/unotools/desktopterminationobserver.hxx:36
     _Bool utl::ITerminationListener::queryTermination()const
     1
-include/vbahelper/vbahelperinterface.hxx:74
+include/vbahelper/vbahelperinterface.hxx:75
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-sc/source/core/opencl/formulagroupcl.cxx:1070
-    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+sc/source/core/opencl/formulagroupcl.cxx:1075
+    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
     empty
-sc/source/core/opencl/opbase.hxx:202
+sc/source/core/opencl/opbase.hxx:212
     _Bool sc::opencl::OpBase::takeNumeric()const
     1
 sc/source/ui/vba/vbasheetobject.hxx:116
     class rtl::OUString ScVbaSheetObjectBase::implGetBaseName()const
     "Button"
-sc/source/ui/vba/vbasheetobjects.cxx:142
+sc/source/ui/vba/vbasheetobjects.cxx:145
     class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
     "com.sun.star.drawing.ControlShape"
-slideshow/source/engine/animationfactory.cxx:616
+slideshow/source/engine/animationfactory.cxx:617
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
     empty
-sw/inc/IDocumentRedlineAccess.hxx:132
-    _Bool IDocumentRedlineAccess::HasExtraRedlineTable()const
-    1
-vcl/inc/qt5/Qt5FilePicker.hxx:173
-    void Qt5FilePicker::updateAutomaticFileExtension()
+vcl/inc/qt5/QtFilePicker.hxx:182
+    void QtFilePicker::updateAutomaticFileExtension()
     empty
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
     empty
-vcl/inc/salframe.hxx:147
-    void SalFrame::DrawMenuBar()
-    empty
 vcl/inc/salframe.hxx:204
     _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
     0
-vcl/inc/salinst.hxx:94
+vcl/inc/salinst.hxx:95
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:201
+vcl/inc/salinst.hxx:204
     void SalInstance::releaseMainThread()
     empty
-vcl/inc/salinst.hxx:210
+vcl/inc/salinst.hxx:213
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     empty
-vcl/inc/salmenu.hxx:77
+vcl/inc/salmenu.hxx:85
     void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
     empty
 vcl/inc/salobj.hxx:49
@@ -112,15 +112,3 @@ vcl/inc/salprn.hxx:85
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
     0
-writerfilter/source/ooxml/OOXMLFactory.hxx:66
-    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-    empty
-writerfilter/source/ooxml/OOXMLFactory.hxx:67
-    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
-    empty
-writerfilter/source/ooxml/OOXMLFactory.hxx:68
-    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-    empty
-writerfilter/source/ooxml/OOXMLFactory.hxx:69
-    void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
-    empty

@@ -37,13 +37,13 @@ canvas/inc/base/bufferedgraphicdevicebase.hxx:227
 canvas/inc/base/bufferedgraphicdevicebase.hxx:234
     void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
     0
-canvas/inc/base/graphicdevicebase.hxx:238
+canvas/inc/base/graphicdevicebase.hxx:239
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
     0
-canvas/inc/base/graphicdevicebase.hxx:304
+canvas/inc/base/graphicdevicebase.hxx:305
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     00
-canvas/inc/base/graphicdevicebase.hxx:317
+canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     00
 canvas/inc/base/integerbitmapbase.hxx:57
@@ -52,7 +52,7 @@ canvas/inc/base/integerbitmapbase.hxx:57
 canvas/inc/base/integerbitmapbase.hxx:71
     void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
     011
-desktop/source/deployment/registry/inc/dp_backend.h:78
+desktop/source/deployment/registry/inc/dp_backend.h:80
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111
 extensions/source/bibliography/loadlisteneradapter.hxx:109
@@ -67,10 +67,10 @@ include/cppuhelper/propshlp.hxx:330
 include/drawinglayer/primitive2d/textbreakuphelper.hxx:58
     _Bool drawinglayer::primitive2d::TextBreakupHelper::allowChange(unsigned int,class basegfx::B2DHomMatrix &,unsigned int,unsigned int,)
     0111
-include/editeng/editeng.hxx:493
+include/editeng/editeng.hxx:494
     void EditEngine::ParagraphConnected(int,int,)
     01
-include/filter/msfilter/msdffimp.hxx:544
+include/filter/msfilter/msdffimp.hxx:545
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     00
 include/oox/dump/dumperbase.hxx:473
@@ -79,10 +79,10 @@ include/oox/dump/dumperbase.hxx:473
 include/oox/dump/dumperbase.hxx:564
     class rtl::OUString oox::dump::NameListBase::implGetNameDbl(const class oox::dump::Config &,double,)const
     01
-include/oox/dump/oledumper.hxx:165
+include/oox/dump/oledumper.hxx:166
     void oox::dump::ComCtlObjectBase::implDumpCommonExtra(long,)
     0
-include/oox/export/shapes.hxx:138
+include/oox/export/shapes.hxx:139
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
     0
 include/sfx2/stbitem.hxx:101
@@ -103,23 +103,23 @@ include/svl/svdde.hxx:238
 include/svl/svdde.hxx:240
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
     0
-include/svtools/editbrowsebox.hxx:101
+include/svtools/editbrowsebox.hxx:102
     void svt::CellController::ActivatingMouseEvent(const class BrowserMouseEvent &,_Bool,)
     10
 include/svx/IAccessibleParent.hxx:81
     _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
     1101
-include/svx/selectioncontroller.hxx:47
+include/svx/selectioncontroller.hxx:48
     _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
     10
-include/vcl/accessibletable.hxx:91
+include/vcl/accessibletable.hxx:90
     class tools::Rectangle vcl::table::IAccessibleTable::GetFieldCharacterBounds(int,int,int,)
     001
-include/vcl/accessibletable.hxx:92
+include/vcl/accessibletable.hxx:91
     int vcl::table::IAccessibleTable::GetFieldIndexAtPoint(int,int,const class Point &,)
     001
-include/vcl/accessibletable.hxx:93
-    void vcl::table::IAccessibleTable::FillAccessibleStateSetForCell(class utl::AccessibleStateSetHelper &,int,unsigned short,)const
+include/vcl/accessibletable.hxx:92
+    void vcl::table::IAccessibleTable::FillAccessibleStateSetForCell(long &,int,unsigned short,)const
     110
 include/vcl/dndhelp.hxx:62
     void vcl::unohelper::DragAndDropClient::dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &,)
@@ -139,8 +139,8 @@ sc/inc/filter.hxx:83
 sc/inc/formulagroup.hxx:144
     class boost::intrusive_ptr<class ScMatrix> sc::FormulaGroupInterpreter::inverseMatrix(const class ScMatrix &,)
     0
-sc/source/core/opencl/formulagroupcl.cxx:1070
-    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+sc/source/core/opencl/formulagroupcl.cxx:1075
+    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
     0
 sdext/source/pdfimport/inc/contentsink.hxx:151
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
@@ -152,22 +152,22 @@ sdext/source/pdfimport/inc/contentsink.hxx:165
     void pdfi::ContentSink::drawMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     110
 sdext/source/pdfimport/inc/treevisiting.hxx:46
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::HyperlinkElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::HyperlinkElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:47
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::TextElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::TextElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:49
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::FrameElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::FrameElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:51
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::ImageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::ImageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:52
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::PageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::PageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:53
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::DocumentElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::DocumentElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
     10
 sdext/source/presenter/PresenterScrollBar.hxx:177
     double sdext::presenter::PresenterScrollBar::GetDragDistance(const int,const int,)const
@@ -179,22 +179,22 @@ starmath/source/wordexportbase.hxx:28
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10
 sw/inc/swcrsr.hxx:163
-    _Bool SwCursor::LeftRight(_Bool,unsigned short,unsigned short,_Bool,_Bool,_Bool,const class SwRootFrame *,_Bool,)
+    _Bool SwCursor::LeftRight(_Bool,unsigned short,enum SwCursorSkipMode,_Bool,_Bool,_Bool,const class SwRootFrame *,_Bool,)
     11000000
-sw/source/core/access/acccontext.hxx:354
+sw/source/core/access/acccontext.hxx:349
     _Bool SwAccessibleContext::SetSelectedState(_Bool,)
     0
-sw/source/core/inc/txmsrt.hxx:145
-    void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwIndex &,unsigned short,const class SwRootFrame *const,)const
+sw/source/core/inc/txmsrt.hxx:147
+    void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwContentIndex &,unsigned short,const class SwRootFrame *const,)const
     1100
-sw/source/filter/ww8/wrtww8.hxx:797
+sw/source/filter/ww8/wrtww8.hxx:799
     void MSWordExportBase::WriteHyperlinkData(const class sw::mark::IFieldmark &,)
     0
-sw/source/filter/ww8/wrtww8.hxx:863
+sw/source/filter/ww8/wrtww8.hxx:869
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
-vcl/inc/outdev.h:122
-    _Bool ImplGlyphFallbackFontSubstitution::FindFontSubstitute(class FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
+vcl/inc/font/fontsubstitution.hxx:53
+    _Bool vcl::font::GlyphFallbackFontSubstitution::FindFontSubstitute(class vcl::font::FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
     101
 vcl/inc/salbmp.hxx:79
     _Bool SalBitmap::Replace(const class Color &,const class Color &,unsigned char,)
@@ -211,37 +211,31 @@ vcl/inc/salframe.hxx:204
 vcl/inc/salframe.hxx:251
     void SalFrame::BeginSetClipRegion(unsigned int,)
     0
-vcl/inc/salgdiimpl.hxx:96
-    void SalGraphicsImpl::SetXORMode(_Bool,_Bool,)
-    10
-vcl/inc/salgdiimpl.hxx:151
+vcl/inc/salgdiimpl.hxx:150
     void SalGraphicsImpl::copyArea(long,long,long,long,long,long,_Bool,)
     1111110
-vcl/inc/salinst.hxx:94
+vcl/inc/salinst.hxx:95
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:127
+vcl/inc/salinst.hxx:128
     void SalInstance::GetPrinterQueueState(struct SalPrinterQueueInfo *,)
     0
-vcl/inc/salinst.hxx:165
-    class weld::Builder * SalInstance::CreateInterimBuilder(class vcl::Window *,const class rtl::OUString &,const class rtl::OUString &,_Bool,unsigned long,)
-    11110
-vcl/inc/salinst.hxx:184
+vcl/inc/salinst.hxx:187
     void SalInstance::AddToRecentDocumentList(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
     100
-vcl/inc/salinst.hxx:210
+vcl/inc/salinst.hxx:213
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     00
-vcl/inc/salmenu.hxx:71
+vcl/inc/salmenu.hxx:79
     void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
     10
-vcl/inc/salmenu.hxx:75
+vcl/inc/salmenu.hxx:83
     void SalMenu::SetItemImage(unsigned int,class SalMenuItem *,const class Image &,)
     011
-vcl/inc/salmenu.hxx:76
+vcl/inc/salmenu.hxx:84
     void SalMenu::SetAccelerator(unsigned int,class SalMenuItem *,const class vcl::KeyCode &,const class rtl::OUString &,)
     0101
-vcl/inc/salmenu.hxx:77
+vcl/inc/salmenu.hxx:85
     void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
     0
 vcl/inc/salobj.hxx:49

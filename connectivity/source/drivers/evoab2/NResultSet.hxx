@@ -49,7 +49,7 @@ namespace connectivity::evoab
         {
         public:
             virtual EBook* openBook(const char *abname) = 0;
-            virtual void executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) = 0;
+            virtual void executeQuery (EBook* pBook, EBookQuery* pQuery) = 0;
             virtual void freeContacts() = 0;
             virtual bool isLDAP( EBook *pBook ) = 0;
             virtual bool isLocal( EBook *pBook ) = 0;
