@@ -164,7 +164,6 @@ public:
     const sal_UCS4*     mpRangeCodes;
     int                 mnRangeCount;
     bool                mbSymbolic;
-    bool                mbRecoded;
 };
 
 #endif // INCLUDED_FONTCHARMAP_HXX
