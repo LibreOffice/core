@@ -38,8 +38,6 @@ class VCL_DLLPUBLIC PngImageWriter
 public:
     PngImageWriter(SvStream& rStream);
 
-    virtual ~PngImageWriter() = default;
-
     void setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters);
     bool write(const BitmapEx& rBitmap);
 };

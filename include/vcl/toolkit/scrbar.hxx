@@ -99,8 +99,8 @@ public:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     using Window::Scroll;
-    void            Scroll();
-    virtual void    EndScroll();
+    void Scroll();
+    void EndScroll();
 
     tools::Long     DoScroll( tools::Long nNewPos ) override;
     tools::Long     DoScrollAction( ScrollType eScrollType );
