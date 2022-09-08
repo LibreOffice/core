@@ -324,16 +324,9 @@ bool GenPspGraphics::CreateFontSubset(
                                    FontSubsetInfo& rInfo
                                    )
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the FreetypeManager search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     bool bSuccess = rMgr.createFontSubset( rInfo,
-                                 aFont,
+                                 pFont,
                                  rToFile,
                                  pGlyphIds,
                                  pEncoding,

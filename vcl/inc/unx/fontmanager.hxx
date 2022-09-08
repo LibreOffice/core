@@ -267,18 +267,15 @@ public:
 
     // creates a new font subset of an existing SFNT font
     // returns true in case of success, else false
-    // nFont: the font to be subsetted
+    // pFace: the font face to be subsetted
     // rOutFile: the file to put the new subset into;
     //           must be a valid osl file URL
     // pGlyphIDs: input array of glyph ids for new font
     // pNewEncoding: the corresponding encoding in the new font
-    // pWidths: output array of widths of requested glyphs
     // nGlyphs: number of glyphs in arrays
-    // pCapHeight:: capital height of the produced font
-    // pXMin, pYMin, pXMax, pYMax: outgoing font bounding box
     // TODO: callers of this method should use its FontSubsetInfo counterpart directly
     bool createFontSubset( FontSubsetInfo&,
-                           fontID nFont,
+                           const vcl::font::PhysicalFontFace* pFace,
                            const OUString& rOutFile,
                            const sal_GlyphId* pGlyphIDs,
                            const sal_uInt8* pNewEncoding,

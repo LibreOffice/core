@@ -941,13 +941,14 @@ int PrintFontManager::getFontDescend( fontID nFontID )
 // TODO: move most of this stuff into the central font-subsetting code
 bool PrintFontManager::createFontSubset(
                                         FontSubsetInfo& rInfo,
-                                        fontID nFont,
+                                        const vcl::font::PhysicalFontFace* pFace,
                                         const OUString& rOutFile,
                                         const sal_GlyphId* pGlyphIds,
                                         const sal_uInt8* pNewEncoding,
                                         int nGlyphs
                                         )
 {
+    psp::fontID nFont = pFace->GetFontId();
     PrintFont* pFont = getFont( nFont );
     if( !pFont )
         return false;
@@ -988,7 +989,7 @@ bool PrintFontManager::createFontSubset(
     const OString aFromFile = getFontFile( *pFont );
 
     TrueTypeFont* pTTFont = nullptr; // TODO: rename to SfntFont
-    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SFErrCodes::Ok )
+    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont, pFace->GetFontCharMap() ) != SFErrCodes::Ok )
         return false;
 
     // prepare system name for write access for subset file target
