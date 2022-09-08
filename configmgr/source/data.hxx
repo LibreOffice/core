@@ -67,7 +67,7 @@ struct Data {
     Data();
 
     rtl::Reference< Node > resolvePathRepresentation(
-        OUString const & pathRepresentation,
+        OUString const & pathRepresentation, OUString const & oldProductName,
         OUString * canonicRepresentation, std::vector<OUString> * path, int * finalizedLayer)
         const;
 

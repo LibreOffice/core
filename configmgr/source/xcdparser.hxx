@@ -47,7 +47,7 @@ private:
     virtual xmlreader::XmlReader::Text getTextMode() override;
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        xmlreader::XmlReader & reader, OUString const & oldProductName, int nsId, xmlreader::Span const & name,
         std::set< OUString > const * existingDependencies) override;
 
     virtual void endElement(xmlreader::XmlReader const & reader) override;

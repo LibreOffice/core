@@ -50,14 +50,14 @@ xmlreader::XmlReader::Text XcdParser::getTextMode() {
 }
 
 bool XcdParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+    xmlreader::XmlReader & reader, OUString const & oldProductName, int nsId, xmlreader::Span const & name,
     std::set< OUString > const * existingDependencies)
 {
     if (nestedParser_.is()) {
         assert(nesting_ != LONG_MAX);
         ++nesting_;
         return nestedParser_->startElement(
-            reader, nsId, name, existingDependencies);
+            reader, oldProductName, nsId, name, existingDependencies);
     }
     switch (state_) {
     case STATE_START:
@@ -123,7 +123,7 @@ bool XcdParser::startElement(
             nestedParser_ = new XcsParser(layer_, data_);
             nesting_ = 1;
             return nestedParser_->startElement(
-                reader, nsId, name, existingDependencies);
+                reader, oldProductName, nsId, name, existingDependencies);
         }
         if (nsId == ParseManager::NAMESPACE_OOR &&
             (name == "component-data" || name == "items"))
@@ -131,7 +131,7 @@ bool XcdParser::startElement(
             nestedParser_ = new XcuParser(layer_ + 1, data_, nullptr, nullptr, nullptr);
             nesting_ = 1;
             return nestedParser_->startElement(
-                reader, nsId, name, existingDependencies);
+                reader, oldProductName, nsId, name, existingDependencies);
         }
         break;
     default: // STATE_DEPENDENCY

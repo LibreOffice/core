@@ -639,6 +639,10 @@ void MigrationImpl::copyConfig()
     // check if the shared registrymodifications.xcu file exists
     bool bRegistryModificationsXcuExists = false;
     OUString regFilePath = m_aInfo.userdata + "/user/registrymodifications.xcu";
+    OUString sMigratedProductName = m_aInfo.productname;
+    // remove version number from the end of pruduct name if exist
+    if (isdigit(sMigratedProductName[sMigratedProductName.getLength() - 1]))
+        sMigratedProductName = (sMigratedProductName.copy(0, m_aInfo.productname.getLength() - 1)).trim();
     File regFile(regFilePath);
     ::osl::FileBase::RC nError = regFile.open(osl_File_OpenFlag_Read);
     if ( nError == ::osl::FileBase::E_None ) {
@@ -676,13 +680,40 @@ void MigrationImpl::copyConfig()
                 comphelper::getProcessComponentContext())->
             insertModificationXcuFile(
                 regFilePath,
+                sMigratedProductName,
                 comphelper::containerToSequence(comp.second.includedPaths),
                 comphelper::containerToSequence(comp.second.excludedPaths));
+
         } else {
             SAL_INFO( "desktop.migration", "configuration migration component " << comp.first << " ignored (only excludes, no includes)" );
         }
 next:
         ;
+    }
+    // checking the migrated (product name related) color scheme name, and replace it to the current version scheme name
+    try
+    {
+        OUString sMigratedColorScheme;
+        uno::Reference<XPropertySet> aPropertySet(
+            getConfigAccess("org.openoffice.Office.UI/ColorScheme", true), uno::UNO_QUERY_THROW);
+        if (aPropertySet->getPropertyValue("CurrentColorScheme") >>= sMigratedColorScheme)
+        {
+            OUString aDarkTheme = " Dark";
+            if (sMigratedColorScheme.equals(sMigratedProductName))
+            {
+                aPropertySet->setPropertyValue("CurrentColorScheme",
+                                               uno::Any(utl::ConfigManager::getProductName()));
+                uno::Reference<XChangesBatch>(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
+            }
+            else if (sMigratedColorScheme.equals(sMigratedProductName + aDarkTheme))
+            {
+                aPropertySet->setPropertyValue("CurrentColorScheme",
+                                               uno::Any(utl::ConfigManager::getProductName() + aDarkTheme));
+                uno::Reference<XChangesBatch>(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
+            }
+        }
+    } catch (const Exception&) {
+        // fail silently...
     }
 }
 
