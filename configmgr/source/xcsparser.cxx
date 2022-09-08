@@ -119,7 +119,7 @@ xmlreader::XmlReader::Text XcsParser::getTextMode() {
 }
 
 bool XcsParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+    xmlreader::XmlReader & reader, OUString const & /*oldProductName*/, int nsId, xmlreader::Span const & name,
     std::set< OUString > const * /*existingDependencies*/)
 {
     if (valueParser_.startElement(reader, nsId, name)) {
