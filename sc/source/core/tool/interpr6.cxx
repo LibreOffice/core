@@ -788,7 +788,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if (aValIter.GetFirst(fVal, nErr))
                     {
                         // placed the loop on the inside for performance reasons:
-                        aValIter.GetCurNumFmtInfo( mrContext, nFuncFmtType, nFuncFmtIndex );
+                        aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
                         switch( eFunc )
                         {
                             case ifAVERAGE:

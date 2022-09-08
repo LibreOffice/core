@@ -3697,7 +3697,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 {
                     if (nMin > nVal)
                         nMin = nVal;
-                    aValIter.GetCurNumFmtInfo( mrContext, nFuncFmtType, nFuncFmtIndex );
+                    aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(nVal, nErr))
                     {
                         if (nMin > nVal)
@@ -3854,7 +3854,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 {
                     if (nMax < nVal)
                         nMax = nVal;
-                    aValIter.GetCurNumFmtInfo( mrContext, nFuncFmtType, nFuncFmtIndex );
+                    aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(nVal, nErr))
                     {
                         if (nMax < nVal)

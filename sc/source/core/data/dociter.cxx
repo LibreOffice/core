@@ -252,14 +252,14 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
     }
 }
 
-void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex )
+void ScValueIterator::GetCurNumFmtInfo( SvNumFormatType& nType, sal_uInt32& nIndex )
 {
     if (!bNumValid && mnTab < mrDoc.GetTableCount())
     {
         SCROW nCurRow = GetRow();
         const ScColumn* pCol = &(mrDoc.maTabs[mnTab])->aCol[mnCol];
-        nNumFmtIndex = pCol->GetNumberFormat(rContext, nCurRow);
-        nNumFmtType = rContext.GetNumberFormatType( nNumFmtIndex );
+        nNumFmtIndex = pCol->GetNumberFormat(mrContext, nCurRow);
+        nNumFmtType = mrContext.GetNumberFormatType( nNumFmtIndex );
         bNumValid = true;
     }
 

@@ -87,7 +87,7 @@ public:
         ScDocument& rDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
-    void GetCurNumFmtInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex );
+    void GetCurNumFmtInfo( SvNumFormatType& nType, sal_uInt32& nIndex );
 
     /// Does NOT reset rValue if no value found!
     bool GetFirst( double& rValue, FormulaError& rErr );
