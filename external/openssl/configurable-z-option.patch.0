@@ -18,7 +18,7 @@
                                 asflags   => "/Cp /coff /c /Cx",
                                 asoutflag => "/Fo",
                                 perlasm_scheme => "win32" };
-@@ -1231,10 +1231,10 @@
+@@ -1323,10 +1323,10 @@
                                  "UNICODE", "_UNICODE",
                                  "_CRT_SECURE_NO_DEPRECATE",
                                  "_WINSOCK_DEPRECATED_NO_WARNINGS"),
@@ -29,6 +29,6 @@
 -        bin_cflags       => "/Zi /Fdapp.pdb",
 +        dso_cflags       => "\$(DEBUG_FLAGS_VALUE)",
 +        bin_cflags       => "\$(DEBUG_FLAGS_VALUE)",
+         # def_flag made to empty string so a .def file gets generated
+         shared_defflag   => '',
          shared_ldflag    => "/dll",
-         shared_target    => "win-shared", # meaningless except it gives Configure a hint
-         thread_scheme    => "winthreads",

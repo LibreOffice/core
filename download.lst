@@ -439,8 +439,8 @@ OPENLDAP_TARBALL := openldap-2.4.59.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENSSL_SHA256SUM := 8dee9b24bdb1dcbf0c3d1e9b02fb8f6bf22165e807f45adeb7c9677536859d3b
-OPENSSL_TARBALL := openssl-1.1.1t.tar.gz
+export OPENSSL_SHA256SUM := aa7d8d9bef71ad6525c55ba11e5f4397889ce49c2c9349dcea6d3e4f0b024a7a
+export OPENSSL_TARBALL := openssl-3.0.5.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

@@ -1,0 +1,22 @@
+--- Configurations/windows-makefile.tmpl	2022-09-09 15:18:35.849924899 +0100
++++ Configurations/windows-makefile.tmpl	2022-09-09 15:20:28.895825331 +0100
+@@ -777,8 +777,8 @@
+ $target: "$gen0" $deps
+ 	cmd /C "set "ASM=\$(AS)" & $generator \$@.S"
+ 	\$(CPP) $incs $cppflags $defs \$@.S > \$@.i
+-	move /Y \$@.i \$@
+-        del /Q \$@.S
++	mv -f \$@.i \$@
++        rm -f \$@.S
+ EOF
+               }
+               # Otherwise....
+@@ -790,7 +790,7 @@
+           return <<"EOF";
+ $target: "$gen0" $deps
+ 	\$(CPP) $incs $cppflags $defs "$gen0" > \$@.i
+-	move /Y \$@.i \$@
++	mv -f \$@.i \$@
+ EOF
+       } elsif ($gen0 =~ m|^.*\.in$|) {
+           #
