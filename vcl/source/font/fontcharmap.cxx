@@ -83,6 +83,32 @@ bool ImplFontCharMap::isDefaultMap() const
     return bIsDefault;
 }
 
+static unsigned GetUShort(const char* p) { return((p[0]<<8) | p[1]);}
+
+bool HasSymbolCmap(const char* pCmap, int nLength)
+{
+    // parse the table header and check for validity
+    if( !pCmap || (nLength < 24) )
+        return false;
+
+    if( GetUShort( pCmap ) != 0x0000 ) // simple check for CMAP corruption
+        return false;
+
+    int nSubTables = GetUShort(pCmap + 2);
+    if( (nSubTables <= 0) || (nSubTables > (nLength - 24) / 8) )
+        return false;
+
+    for (const char* p = pCmap + 4; --nSubTables >= 0; p += 8)
+    {
+        int nPlatform = GetUShort(p);
+        int nEncoding = GetUShort(p + 2);
+        if (nPlatform == 3 && nEncoding == 0)
+            return true;
+    }
+
+    return false;
+}
+
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
 

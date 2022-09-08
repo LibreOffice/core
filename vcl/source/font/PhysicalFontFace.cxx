@@ -230,17 +230,44 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
     if (mxCharMap.is())
         return mxCharMap;
 
+    // Check if this font is using symbol cmap subtable, most likely redundant
+    // since HarfBuzz handles mapping symbol fonts for us.
+    bool bSymbol = false;
     hb_blob_t* pBlob = GetHbTable(HB_TAG('c', 'm', 'a', 'p'));
     if (pBlob)
     {
         unsigned int nSize = 0;
-        auto* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, &nSize));
-
-        CmapResult aCmapResult(IsSymbolFont());
-        if (ParseCMAP(pData, nSize, aCmapResult))
-            mxCharMap = new FontCharMap(aCmapResult);
+        auto* pData = hb_blob_get_data(pBlob, &nSize);
+        bSymbol = HasSymbolCmap(pData, nSize);
         hb_blob_destroy(pBlob);
     }
+
+    hb_face_t* pHbFace = GetHbFace();
+    hb_set_t* pUnicodes = hb_set_create();
+    hb_face_collect_unicodes(pHbFace, pUnicodes);
+
+    if (hb_set_get_population(pUnicodes))
+    {
+        // Convert HarfBuzz set to CmapResult ranges.
+        int nRangeCount = 0;
+        hb_codepoint_t nFirst, nLast = HB_SET_VALUE_INVALID;
+        while (hb_set_next_range(pUnicodes, &nFirst, &nLast))
+            nRangeCount++;
+
+        nLast = HB_SET_VALUE_INVALID;
+        auto* pRangeCodes(new sal_UCS4[nRangeCount * 2]);
+        auto* pCP = pRangeCodes;
+        while (hb_set_next_range(pUnicodes, &nFirst, &nLast))
+        {
+            *(pCP++) = nFirst;
+            *(pCP++) = nLast + 1;
+        }
+
+        CmapResult aCmapResult(bSymbol, pRangeCodes, nRangeCount);
+        mxCharMap = new FontCharMap(aCmapResult);
+    }
+
+    hb_set_destroy(pUnicodes);
 
     if (!mxCharMap.is())
         mxCharMap = FontCharMap::GetDefaultMap(IsSymbolFont());

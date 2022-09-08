@@ -50,6 +50,7 @@ private:
     const bool m_bSymbolic;
 };
 
+bool VCL_DLLPUBLIC HasSymbolCmap(const char* pRawData, int nRawLength);
 bool VCL_DLLPUBLIC ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
 #endif // INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX

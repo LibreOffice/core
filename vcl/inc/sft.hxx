@@ -727,6 +727,7 @@ class VCL_DLLPUBLIC AbstractTrueTypeFont
     sal_uInt32 m_nUnitsPerEm;
     std::vector<sal_uInt32> m_aGlyphOffsets;
     FontCharMapRef m_xCharMap;
+    bool m_bIsSymbolFont;
 
 protected:
     SFErrCodes indexGlyphData();
@@ -741,7 +742,7 @@ public:
     sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
     sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
     sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
-    const FontCharMapRef & GetCharMap() const { return m_xCharMap; }
+    bool IsSymbolFont() const { return m_bIsSymbolFont; }
 
     virtual bool hasTable(sal_uInt32 ord) const = 0;
     virtual const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const = 0;
