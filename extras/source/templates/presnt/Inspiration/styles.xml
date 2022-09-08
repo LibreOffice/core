@@ -384,8 +384,8 @@
     <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
       <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0.03cm" svg:stroke-color="#3f52d9" draw:marker-start-width="0.25cm" draw:marker-end-width="0.25cm" draw:fill-color="#81aca6" draw:opacity="39%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.4cm" fo:min-width="1.601cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="visible" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="100%"/>
     </style:style>
-    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="1.5cm" fo:min-width="24.31cm" draw:shadow-offset-x="0.035cm" draw:shadow-offset-y="0.035cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="43%" loext:shadow-blur="0.035cm" loext:glow-radius="0cm" loext:softedge-radius="0cm"/>
+    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="1.5cm" draw:shadow-offset-x="0.035cm" draw:shadow-offset-y="0.035cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="43%" loext:shadow-blur="0.035cm" loext:glow-radius="0cm" loext:softedge-radius="0cm" svg:stroke-color="#91d93f" draw:fill="solid" draw:fill-color="#b5e77d" draw:shadow="visible"/>
     </style:style>
     <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Accent_20_3">
       <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="3cm" fo:min-width="2cm"/>
@@ -396,8 +396,8 @@
     <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
       <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0.03cm" svg:stroke-color="#91d93f" draw:marker-start-width="0.25cm" draw:marker-end-width="0.25cm" draw:fill-color="#b5e77d" draw:opacity="49%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.01cm" fo:min-width="0.996cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow-offset-x="0.06cm" draw:shadow-offset-y="0.06cm" draw:shadow-color="#dcf1c1"/>
     </style:style>
-    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="1.5cm" fo:min-width="0.19cm" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#dddddd" draw:shadow-opacity="100%" loext:shadow-blur="0cm" loext:glow-radius="0cm" loext:softedge-radius="0cm"/>
+    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#b5e77d" draw:textarea-vertical-align="middle" fo:min-height="1.5cm" fo:min-width="0.19cm" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#dddddd" draw:shadow-opacity="100%" loext:shadow-blur="0cm" loext:glow-radius="0cm" loext:softedge-radius="0cm"/>
     </style:style>
     <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="Accent_20_3">
       <style:graphic-properties draw:stroke="none" draw:fill-color="#81aca6" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="2.013cm" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="100%" loext:shadow-blur="0cm"/>
@@ -406,7 +406,8 @@
       <style:graphic-properties draw:fill="solid" draw:fill-color="#666666" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="15.749cm" fo:min-width="28cm"/>
     </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Inspiration-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="13.5cm" fo:min-width="26.5cm" draw:shadow="visible" loext:shadow-blur="0.106cm"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="13.5cm" fo:min-width="26.5cm" draw:shadow="visible" loext:shadow-blur="0.106cm" draw:stroke="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:text-properties fo:color="#eeeeee" loext:opacity="100%" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Inspiration-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
