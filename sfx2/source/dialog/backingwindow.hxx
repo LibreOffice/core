@@ -48,12 +48,14 @@ class BackingWindow : public InterimItemWindow
     css::uno::Reference<css::datatransfer::dnd::XDropTargetListener> mxDropTargetListener;
 
     std::unique_ptr<weld::Button> mxOpenButton;
-    std::unique_ptr<weld::MenuToggleButton> mxRecentButton;
+    std::unique_ptr<weld::ToggleButton> mxRecentButton;
     std::unique_ptr<weld::Button> mxRemoteButton;
-    std::unique_ptr<weld::MenuToggleButton> mxTemplateButton;
+    std::unique_ptr<weld::ToggleButton> mxTemplateButton;
 
     std::unique_ptr<weld::Label> mxCreateLabel;
     std::unique_ptr<weld::Label> mxAltHelpLabel;
+    std::unique_ptr<weld::ComboBox> mxFilter;
+    std::unique_ptr<weld::MenuButton> mxActions;
 
     std::unique_ptr<weld::Button> mxWriterAllButton;
     std::unique_ptr<weld::Button> mxCalcAllButton;
@@ -88,6 +90,8 @@ class BackingWindow : public InterimItemWindow
                      const css::uno::Sequence<css::beans::PropertyValue>& = css::uno::Sequence<
                          css::beans::PropertyValue>());
 
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
+    DECL_LINK(FilterHdl, weld::ComboBox&, void);
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(ClickHelpHdl, weld::Button&, void);
     DECL_LINK(MenuSelectHdl, const OString&, void);
@@ -106,6 +110,9 @@ class BackingWindow : public InterimItemWindow
 
     template <typename WidgetClass> void setLargerFont(WidgetClass&, const vcl::Font&);
     void ApplyStyleSettings();
+
+private:
+    void applyFilter();
 
 public:
     explicit BackingWindow(vcl::Window* pParent);

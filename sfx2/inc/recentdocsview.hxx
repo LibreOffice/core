@@ -82,6 +82,8 @@ public:
 
     void clearUnavailableFiles();
 
+    void setFilter(ApplicationType aFilter);
+
 private:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="calc_all_image">
@@ -35,50 +35,11 @@
     <property name="can-focus">False</property>
     <property name="icon-name">res/odg_32_8.png</property>
   </object>
-  <object class="GtkMenu" id="filtermenu">
+  <object class="GtkImage" id="imActions">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="filter_writer">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="startcenter|filter_writer">Writer Templates</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="filter_calc">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="startcenter|filter_calc">Calc Templates</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="filter_impress">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="startcenter|filter_impress">Impress Templates</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="filter_draw">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="startcenter|filter_draw">Draw Templates</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="menuitem3">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="manage">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="startcenter|manage">Manage Templates</property>
-      </object>
-    </child>
+    <property name="icon-name">open-menu-symbolic</property>
+    <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="impress_all_image">
     <property name="visible">True</property>
@@ -208,9 +169,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkMenuButton" id="open_recent">
+                      <object class="GtkToggleButton" id="open_recent">
                         <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Documents</property>
-                        <property name="name">MenuToggleButton</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -221,9 +181,6 @@
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
                         <property name="always-show-image">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="popup">clearmenu</property>
-                        <property name="use-popover">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -232,9 +189,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkMenuButton" id="templates_all">
+                      <object class="GtkToggleButton" id="templates_all">
                         <property name="label" translatable="yes" context="startcenter|templates_all">T_emplates</property>
-                        <property name="name">MenuToggleButton</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -245,9 +201,6 @@
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
                         <property name="always-show-image">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="popup">filtermenu</property>
-                        <property name="use-popover">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -546,6 +499,78 @@
               </packing>
             </child>
             <child>
+              <!-- n-columns=3 n-rows=1 -->
+              <object class="GtkGrid" id="actions">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="column-spacing">3</property>
+                <child>
+                  <object class="GtkLabel" id="lbFilter">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="startcenter|filter_label">Filter:</property>
+                    <accessibility>
+                      <relation type="label-for" target="cbFilter"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="cbFilter">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item id="filter_none" translatable="yes" context="startcenter|filter_none">All Applications</item>
+                      <item id="filter_writer" translatable="yes" context="startcenter|filter_writer">Text Documents</item>
+                      <item id="filter_calc" translatable="yes" context="startcenter|filter_calc">Spreadsheets</item>
+                      <item id="filter_impress" translatable="yes" context="startcenter|filter_impress">Presentations</item>
+                      <item id="filter_draw" translatable="yes" context="startcenter|filter_draw">Drawings</item>
+                    </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbFilter"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="mbActions">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="startcenter|mbActions|tool_tip">Actions</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="image">imActions</property>
+                    <property name="always-show-image">True</property>
+                    <property name="popup">clearmenu</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkScrolledWindow" id="scrollrecent">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -573,7 +598,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -604,7 +629,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>

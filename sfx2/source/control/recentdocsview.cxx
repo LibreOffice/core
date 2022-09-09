@@ -161,7 +161,8 @@ void RecentDocsView::Reload()
         OUString aURL = rRecentEntry.sURL;
         const INetURLObject aURLObj(aURL);
 
-        if (!isAcceptedFile(aURLObj))
+        if ((mnFileTypes != ApplicationType::TYPE_NONE) &&
+            (!isAcceptedFile(aURLObj)))
             continue;
 
         //Remove extension from url's last segment and use it as title
@@ -172,6 +173,12 @@ void RecentDocsView::Reload()
 
     CalculateItemPositions();
     Invalidate();
+}
+
+void RecentDocsView::setFilter(ApplicationType aFilter)
+{
+    mnFileTypes = aFilter;
+    Reload();
 }
 
 void RecentDocsView::clearUnavailableFiles(){
