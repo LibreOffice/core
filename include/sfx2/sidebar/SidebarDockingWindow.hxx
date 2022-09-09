@@ -46,6 +46,7 @@ public:
     void SyncUpdate();
 
     auto& GetSidebarController() const { return mpSidebarController; }
+    rtl::Reference<sfx2::sidebar::SidebarController>& GetOrCreateSidebarController();
     using SfxDockingWindow::Close;
 
 private:
