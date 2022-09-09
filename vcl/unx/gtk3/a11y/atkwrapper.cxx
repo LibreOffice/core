@@ -343,6 +343,8 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
             return ATK_ROLE_DOCUMENT_TEXT;
         case accessibility::AccessibleRole::STATIC:
             return ATK_ROLE_STATIC;
+        case accessibility::AccessibleRole::NOTIFICATION:
+            return ATK_ROLE_NOTIFICATION;
         default:
             SAL_WARN("vcl.gtk", "Unmapped accessible role: " << nRole);
             return ATK_ROLE_UNKNOWN;

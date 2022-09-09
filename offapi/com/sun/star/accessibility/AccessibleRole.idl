@@ -737,6 +737,13 @@ constants AccessibleRole
     */
     const short STATIC = 86;
 
+    /** Notification text role.
+
+        <p>An object that presents information to the user when the SHOWING state change event is
+           fired for the object.</p>
+    */
+    const short NOTIFICATION = 87;
+
 };
 
 }; }; }; };

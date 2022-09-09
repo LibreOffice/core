@@ -332,7 +332,6 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
 
     m_xSearchTmplLB->make_sorted();
     m_xSearchAttrText->hide();
-    m_xSearchLabel->show();
 
     m_xReplaceTmplLB->make_sorted();
     m_xReplaceAttrText->hide();
@@ -574,6 +573,13 @@ void SvxSearchDialog::SetSaveToModule(bool b)
 void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
 {
     m_xSearchLabel->set_label(rStr);
+    if (!rStr.isEmpty())
+    {
+        // hide/show to fire SHOWING state change event so search label text
+        // is announced by screen reader
+        m_xSearchLabel->hide();
+        m_xSearchLabel->show();
+    }
 
     if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
         m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Error);
@@ -1360,9 +1366,6 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
         nModifyFlag = ModifyFlags::NONE;
         const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
         rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs );
-
-        // grabbing focus to the search combo box makes the search label read by the screen reader
-        m_xSearchLB->grab_focus();
     }
     else if ( &rBtn == m_xCloseBtn.get() )
     {
@@ -2208,7 +2211,8 @@ void SvxSearchDialog::SetModifyFlag_Impl( const weld::Widget* pCtrl )
     {
         nModifyFlag |= ModifyFlags::Search;
         m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Normal);
-        SvxSearchDialogWrapper::SetSearchLabel("");
+        if (!SvxSearchDialogWrapper::GetSearchLabel().isEmpty())
+            SvxSearchDialogWrapper::SetSearchLabel("");
     }
     else if ( m_xReplaceLB.get() == pCtrl )
         nModifyFlag |= ModifyFlags::Replace;

@@ -177,6 +177,7 @@ void AccComponentEventListener::SetComponentState(sal_Int64 state, bool enable)
             // 8. label should have no FOCUSABLE state, Firefox has READONLY state, we can also have.
             if (    GetRole() != AccessibleRole::LABEL
                 &&  GetRole() != AccessibleRole::STATIC
+                &&  GetRole() != AccessibleRole::NOTIFICATION
                 &&  GetRole() != AccessibleRole::SCROLL_BAR)
             {
                 pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSABLE);

@@ -463,6 +463,12 @@ QAccessible::Role QtAccessibleWidget::role() const
             return QAccessible::MenuBar;
         case AccessibleRole::MENU_ITEM:
             return QAccessible::MenuItem;
+        case AccessibleRole::NOTIFICATION:
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 5)
+            return QAccessible::Notification;
+#else
+            return QAccessible::StaticText;
+#endif
         case AccessibleRole::OPTION_PANE:
             return QAccessible::Pane;
         case AccessibleRole::PAGE_TAB:

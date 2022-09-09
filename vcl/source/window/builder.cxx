@@ -2407,7 +2407,7 @@ namespace BuilderUtils
             { "list box",              AccessibleRole::UNKNOWN },
             { "grouping",              AccessibleRole::GROUP_BOX },
             { "image map",             AccessibleRole::IMAGE_MAP },
-            { "notification",          AccessibleRole::UNKNOWN },
+            { "notification",          AccessibleRole::NOTIFICATION },
             { "info bar",              AccessibleRole::UNKNOWN },
             { "level bar",             AccessibleRole::UNKNOWN },
             { "title bar",             AccessibleRole::UNKNOWN },
