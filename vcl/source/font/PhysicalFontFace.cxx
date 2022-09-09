@@ -237,7 +237,7 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
     if (pBlob)
     {
         unsigned int nSize = 0;
-        auto* pData = hb_blob_get_data(pBlob, &nSize);
+        auto* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, &nSize));
         bSymbol = HasSymbolCmap(pData, nSize);
         hb_blob_destroy(pBlob);
     }

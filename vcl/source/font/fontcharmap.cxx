@@ -71,9 +71,9 @@ bool ImplFontCharMap::isDefaultMap() const
     return bIsDefault;
 }
 
-static unsigned GetUShort(const char* p) { return((p[0]<<8) | p[1]);}
+static unsigned GetUShort(const unsigned char* p) { return((p[0]<<8) | p[1]);}
 
-bool HasSymbolCmap(const char* pCmap, int nLength)
+bool HasSymbolCmap(const unsigned char* pCmap, int nLength)
 {
     // parse the table header and check for validity
     if( !pCmap || (nLength < 24) )
@@ -86,7 +86,7 @@ bool HasSymbolCmap(const char* pCmap, int nLength)
     if( (nSubTables <= 0) || (nSubTables > (nLength - 24) / 8) )
         return false;
 
-    for (const char* p = pCmap + 4; --nSubTables >= 0; p += 8)
+    for (const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8)
     {
         int nPlatform = GetUShort(p);
         int nEncoding = GetUShort(p + 2);
