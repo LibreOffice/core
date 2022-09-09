@@ -797,9 +797,6 @@ void DomainMapperTableManager::endOfRowAction()
         size_t nWidthsBound = pCellWidths->size() - 1;
         if (nWidthsBound)
         {
-            if (nFullWidthRelative == 0)
-                throw o3tl::divide_by_zero();
-
             // At incomplete table grids, last cell width can be smaller, than its final width.
             // Correct it based on the last but one column width and their span values.
             if ( bIsIncompleteGrid && rCurrentSpans.size()-1 == nWidthsBound )
@@ -809,6 +806,9 @@ void DomainMapperTableManager::endOfRowAction()
                 if (nFixLastCellWidth > (*pCellWidths)[nWidthsBound])
                     nFullWidthRelative += nFixLastCellWidth - (*pCellWidths)[nWidthsBound];
             }
+
+            if (nFullWidthRelative == 0)
+                throw o3tl::divide_by_zero();
 
             for (size_t i = 0; i < nWidthsBound; ++i)
             {
