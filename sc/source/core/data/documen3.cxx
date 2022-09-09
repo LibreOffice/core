@@ -89,7 +89,7 @@ void sortAndRemoveDuplicates(std::vector<ScTypedStrData>& rStrings, bool bCaseSe
         rStrings.erase(it, rStrings.end());
         if (std::find_if(rStrings.begin(), rStrings.end(),
             [](ScTypedStrData& rString) { return rString.IsHiddenByFilter(); }) != rStrings.end()) {
-            std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessHiddenRows());
+            std::stable_sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessHiddenRows());
         }
     }
     else
@@ -100,7 +100,7 @@ void sortAndRemoveDuplicates(std::vector<ScTypedStrData>& rStrings, bool bCaseSe
         rStrings.erase(it, rStrings.end());
         if (std::find_if(rStrings.begin(), rStrings.end(),
             [](ScTypedStrData& rString) { return rString.IsHiddenByFilter(); }) != rStrings.end()) {
-            std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessHiddenRows());
+            std::stable_sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessHiddenRows());
         }
     }
 }
