@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/graph.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclptr.hxx>
 #include <sfx2/objsh.hxx>
@@ -125,7 +126,7 @@ private:
     SdDrawDocument*                 mpSourceDoc;
     VclPtr<VirtualDevice>           mpVDev;
     std::unique_ptr<INetBookmark>   mpBookmark;
-    std::unique_ptr<Graphic>        mpGraphic;
+    std::optional<Graphic>          moGraphic;
     std::unique_ptr<ImageMap>       mpImageMap;
     ::tools::Rectangle                       maVisArea;
     Point                           maStartPos;

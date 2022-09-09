@@ -241,7 +241,7 @@ struct EmbeddedObjectRef_Impl
     OUString                                    aPersistName;
     OUString                                    aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
-    std::unique_ptr<Graphic>                    pGraphic;
+    std::optional<Graphic>                      oGraphic;
     sal_Int64                                   nViewAspect;
     bool                                        bIsLocked:1;
     bool                                        bNeedUpdate:1;
@@ -275,8 +275,8 @@ struct EmbeddedObjectRef_Impl
         mnGraphicVersion(0),
         aDefaultSizeForChart_In_100TH_MM(r.aDefaultSizeForChart_In_100TH_MM)
     {
-        if (r.pGraphic && !r.bNeedUpdate)
-            pGraphic.reset( new Graphic(*r.pGraphic) );
+        if (r.oGraphic && !r.bNeedUpdate)
+            oGraphic.emplace(*r.oGraphic);
     }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -295,12 +295,12 @@ struct EmbeddedObjectRef_Impl
         (void)xmlTextWriterEndElement(pWriter);
 
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("pGraphic"));
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pGraphic.get());
-        if (pGraphic)
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", oGraphic ? &*oGraphic : nullptr);
+        if (oGraphic)
         {
             (void)xmlTextWriterWriteAttribute(
                 pWriter, BAD_CAST("is-none"),
-                BAD_CAST(OString::boolean(pGraphic->IsNone()).getStr()));
+                BAD_CAST(OString::boolean(oGraphic->IsNone()).getStr()));
         }
         (void)xmlTextWriterEndElement(pWriter);
 
@@ -407,8 +407,8 @@ void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* 
     mpImpl->pContainer = pContainer;
     mpImpl->aPersistName = rPersistName;
 
-    if ( mpImpl->pGraphic && !mpImpl->bNeedUpdate && pContainer )
-        SetGraphicToContainer( *mpImpl->pGraphic, *pContainer, mpImpl->aPersistName, OUString() );
+    if ( mpImpl->oGraphic && !mpImpl->bNeedUpdate && pContainer )
+        SetGraphicToContainer( *mpImpl->oGraphic, *pContainer, mpImpl->aPersistName, OUString() );
 }
 
 comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
@@ -452,17 +452,17 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 
     if ( bUpdate )
     {
-        if (mpImpl->pGraphic)
-            aOldGraphic = *mpImpl->pGraphic;
+        if (mpImpl->oGraphic)
+            aOldGraphic = *mpImpl->oGraphic;
 
-        mpImpl->pGraphic.reset();
+        mpImpl->oGraphic.reset();
         mpImpl->aMediaType.clear();
-        mpImpl->pGraphic.reset( new Graphic );
+        mpImpl->oGraphic.emplace();
         mpImpl->mnGraphicVersion++;
     }
-    else if ( !mpImpl->pGraphic )
+    else if ( !mpImpl->oGraphic )
     {
-        mpImpl->pGraphic.reset( new Graphic );
+        mpImpl->oGraphic.emplace();
         mpImpl->mnGraphicVersion++;
     }
     else
@@ -484,19 +484,19 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        if( mpImpl->pGraphic )
-            rGF.ImportGraphic( *mpImpl->pGraphic, u"", *pGraphicStream );
+        if( mpImpl->oGraphic )
+            rGF.ImportGraphic( *mpImpl->oGraphic, u"", *pGraphicStream );
         mpImpl->mnGraphicVersion++;
     }
 
-    // note that UpdateReplacementOnDemand which resets mpImpl->pGraphic to null may have been called
+    // note that UpdateReplacementOnDemand which resets mpImpl->oGraphic to null may have been called
     // e.g. when exporting ooo58458-1.odt to doc
-    if (bUpdate && (!mpImpl->pGraphic || mpImpl->pGraphic->IsNone()) && !aOldGraphic.IsNone())
+    if (bUpdate && (!mpImpl->oGraphic || mpImpl->oGraphic->IsNone()) && !aOldGraphic.IsNone())
     {
         // We used to have an old graphic, tried to update and the update
         // failed. Go back to the old graphic instead of having no graphic at
         // all.
-        mpImpl->pGraphic.reset(new Graphic(aOldGraphic));
+        mpImpl->oGraphic.emplace(aOldGraphic);
         SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: failed to update graphic");
     }
 }
@@ -508,7 +508,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
         if ( mpImpl->bNeedUpdate )
             // bNeedUpdate will be set to false while retrieving new replacement
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(true);
-        else if ( !mpImpl->pGraphic )
+        else if ( !mpImpl->oGraphic )
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(false);
     }
     catch( const uno::Exception& )
@@ -516,7 +516,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
         DBG_UNHANDLED_EXCEPTION("svtools.misc", "Something went wrong on getting the graphic");
     }
 
-    return mpImpl->pGraphic.get();
+    return mpImpl->oGraphic ? &*mpImpl->oGraphic : nullptr;
 }
 
 Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
@@ -583,7 +583,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
                                             const OUString& rMediaType )
 {
-    mpImpl->pGraphic.reset( new Graphic );
+    mpImpl->oGraphic.emplace();
     mpImpl->aMediaType = rMediaType;
     mpImpl->mnGraphicVersion++;
 
@@ -592,7 +592,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( *mpImpl->pGraphic, u"", *pGraphicStream );
+        rGF.ImportGraphic( *mpImpl->oGraphic, u"", *pGraphicStream );
         mpImpl->mnGraphicVersion++;
 
         if ( mpImpl->pContainer )
@@ -610,7 +610,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
 
 void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const OUString& rMediaType )
 {
-    mpImpl->pGraphic.reset( new Graphic( rGraphic ) );
+    mpImpl->oGraphic.emplace( rGraphic );
     mpImpl->aMediaType = rMediaType;
     mpImpl->mnGraphicVersion++;
 
@@ -904,7 +904,7 @@ void EmbeddedObjectRef::UpdateOleObject( bool bUpdateOle )
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
-    mpImpl->pGraphic.reset();
+    mpImpl->oGraphic.reset();
     mpImpl->bNeedUpdate = true;
     mpImpl->mnGraphicVersion++;
 

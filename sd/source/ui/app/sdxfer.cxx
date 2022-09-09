@@ -129,7 +129,7 @@ SdTransferable::~SdTransferable()
     if( mbOwnDocument )
         delete mpSdDrawDocumentIntern;
 
-    mpGraphic.reset();
+    moGraphic.reset();
     mpBookmark.reset();
     mpImageMap.reset();
 
@@ -146,7 +146,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         return;
 
     mpOLEDataHelper.reset();
-    mpGraphic.reset();
+    moGraphic.reset();
     mpBookmark.reset();
     mpImageMap.reset();
 
@@ -164,7 +164,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 // The EmbedDataHelper should bring the graphic in future
                 const Graphic* pObjGr = pOleObj->GetGraphic();
                 if ( pObjGr )
-                    mpGraphic.reset( new Graphic( *pObjGr ) );
+                    moGraphic.emplace(*pObjGr);
             }
         }
         catch( uno::Exception& )
@@ -172,7 +172,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
     }
     else if( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && (mpSourceDoc && !SdDrawDocument::GetAnimationInfo( pObj )) )
     {
-        mpGraphic.reset( new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() ) );
+        moGraphic.emplace( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() );
     }
     else if( pObj->IsUnoObj() && SdrInventor::FmForm == pObj->GetObjInventor() && ( pObj->GetObjIdentifier() == SdrObjKind::FormButton ) )
     {
@@ -394,14 +394,14 @@ void SdTransferable::AddSupportedFormats()
         for( const auto& rItem : aVector )
             AddFormat( rItem );
     }
-    else if( mpGraphic )
+    else if( moGraphic )
     {
         // #i25616#
         AddFormat( SotClipboardFormatId::DRAWING );
 
         AddFormat( SotClipboardFormatId::SVXB );
 
-        if( mpGraphic->GetType() == GraphicType::Bitmap )
+        if( moGraphic->GetType() == GraphicType::Bitmap )
         {
             AddFormat( SotClipboardFormatId::PNG );
             AddFormat( SotClipboardFormatId::BITMAP );
@@ -457,8 +457,8 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     else if( mpOLEDataHelper && mpOLEDataHelper->HasFormat( rFlavor ) )
     {
         // TODO/LATER: support all the graphical formats, the embedded object scenario should not have separated handling
-        if( nFormat == SotClipboardFormatId::GDIMETAFILE && mpGraphic )
-            bOK = SetGDIMetaFile( mpGraphic->GetGDIMetaFile() );
+        if( nFormat == SotClipboardFormatId::GDIMETAFILE && moGraphic )
+            bOK = SetGDIMetaFile( moGraphic->GetGDIMetaFile() );
         else
             bOK = SetAny( mpOLEDataHelper->GetAny(rFlavor, rDestDoc) );
     }
@@ -523,9 +523,9 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             bOK = SetString( mpBookmark->GetURL() );
         }
-        else if( ( nFormat == SotClipboardFormatId::SVXB ) && mpGraphic )
+        else if( ( nFormat == SotClipboardFormatId::SVXB ) && moGraphic )
         {
-            bOK = SetGraphic( *mpGraphic );
+            bOK = SetGraphic( *moGraphic );
         }
         else if( ( nFormat == SotClipboardFormatId::SVIM ) && mpImageMap )
         {

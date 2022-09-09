@@ -21,17 +21,17 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/transfer.hxx>
-#include <memory>
+#include <vcl/graph.hxx>
+#include <optional>
 
 namespace com :: sun :: star :: embed { class XEmbeddedObject; }
 
-class Graphic;
 class SVT_DLLPUBLIC SvEmbedTransferHelper final : public TransferableHelper
 {
 private:
 
     css::uno::Reference< css::embed::XEmbeddedObject > m_xObj;
-    std::unique_ptr<Graphic> m_pGraphic;
+    std::optional<Graphic> m_oGraphic;
     sal_Int64 m_nAspect;
 
     OUString maParentShellID;

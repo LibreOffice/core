@@ -598,7 +598,7 @@ class SdrOle2ObjImpl
 public:
     svt::EmbeddedObjectRef mxObjRef;
 
-    std::unique_ptr<Graphic> mxGraphic;
+    std::optional<Graphic> moGraphic;
     OUString        maProgName;
     OUString        aPersistName;       // name of object in persist
     rtl::Reference<SdrLightEmbeddedClient_Impl> mxLightClient; // must be registered as client only using AddOwnLightClient() call
@@ -642,7 +642,7 @@ public:
 
     ~SdrOle2ObjImpl()
     {
-        mxGraphic.reset();
+        moGraphic.reset();
 
         if (mxModifyListener.is())
         {
@@ -723,9 +723,9 @@ SdrOle2Obj::SdrOle2Obj(SdrModel& rSdrModel, SdrOle2Obj const & rSource)
     mpImpl->maProgName = rSource.mpImpl->maProgName;
     mpImpl->mbFrame = rSource.mpImpl->mbFrame;
 
-    if (rSource.mpImpl->mxGraphic)
+    if (rSource.mpImpl->moGraphic)
     {
-        mpImpl->mxGraphic.reset(new Graphic(*rSource.mpImpl->mxGraphic));
+        mpImpl->moGraphic.emplace(*rSource.mpImpl->moGraphic);
     }
 
     if( IsEmptyPresObj() )
@@ -827,7 +827,7 @@ bool SdrOle2Obj::isUiActive() const
 void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
 {
     // only for setting a preview graphic
-    mpImpl->mxGraphic.reset(new Graphic(rGrf));
+    mpImpl->moGraphic.emplace(rGrf);
 
     SetChanged();
     BroadcastObjectChange();
@@ -835,7 +835,7 @@ void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
 
 void SdrOle2Obj::ClearGraphic()
 {
-    mpImpl->mxGraphic.reset();
+    mpImpl->moGraphic.reset();
 
     SetChanged();
     BroadcastObjectChange();
@@ -1318,7 +1318,7 @@ void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObj
 
     if ( mpImpl->mxObjRef.is() )
     {
-        mpImpl->mxGraphic.reset();
+        mpImpl->moGraphic.reset();
 
         if ( mpImpl->mxObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE )
             SetResizeProtect(true);
@@ -1636,7 +1636,7 @@ const Graphic* SdrOle2Obj::GetGraphic() const
 {
     if ( mpImpl->mxObjRef.is() )
         return mpImpl->mxObjRef.GetGraphic();
-    return mpImpl->mxGraphic.get();
+    return mpImpl->moGraphic ? &*mpImpl->moGraphic : nullptr;
 }
 
 void SdrOle2Obj::GetNewReplacement()
@@ -1823,7 +1823,7 @@ void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic )
     // if the object isn't valid, e.g. link to something that doesn't exist, set the fallback
     // graphic as mxGraphic so SdrOle2Obj::GetGraphic will show the fallback
     if (const Graphic* pObjGraphic = mpImpl->mxObjRef.is() ? nullptr : mpImpl->mxObjRef.GetGraphic())
-        mpImpl->mxGraphic.reset(new Graphic(*pObjGraphic));
+        mpImpl->moGraphic.emplace(*pObjGraphic);
 }
 
 void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrStream, const OUString& aMediaType )
@@ -1832,7 +1832,7 @@ void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrS
     // if the object isn't valid, e.g. link to something that doesn't exist, set the fallback
     // graphic as mxGraphic so SdrOle2Obj::GetGraphic will show the fallback
     if (const Graphic* pObjGraphic = mpImpl->mxObjRef.is() ? nullptr : mpImpl->mxObjRef.GetGraphic())
-        mpImpl->mxGraphic.reset(new Graphic(*pObjGraphic));
+        mpImpl->moGraphic.emplace(*pObjGraphic);
 }
 
 bool SdrOle2Obj::IsCalc() const

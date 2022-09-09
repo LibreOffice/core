@@ -45,9 +45,10 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
                                               const Graphic* pGraphic,
                                                 sal_Int64 nAspect )
 : m_xObj( xObj )
-, m_pGraphic( pGraphic ? new Graphic( *pGraphic ) : nullptr )
 , m_nAspect( nAspect )
 {
+    if (pGraphic)
+        m_oGraphic.emplace(*pGraphic);
     if( xObj.is() )
     {
         TransferableObjectDescriptor aObjDesc;
@@ -91,7 +92,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 if( nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
                 {
                     TransferableObjectDescriptor aDesc;
-                    FillTransferableObjectDescriptor( aDesc, m_xObj, m_pGraphic.get(), m_nAspect );
+                    FillTransferableObjectDescriptor( aDesc, m_xObj, m_oGraphic ? &*m_oGraphic : nullptr, m_nAspect );
                     bRet = SetTransferableObjectDescriptor( aDesc );
                 }
                 else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
@@ -151,12 +152,12 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     {
                     }
                 }
-                else if ( nFormat == SotClipboardFormatId::GDIMETAFILE && m_pGraphic )
+                else if ( nFormat == SotClipboardFormatId::GDIMETAFILE && m_oGraphic )
                 {
                     SvMemoryStream aMemStm( 65535, 65535 );
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-                    const GDIMetaFile& aMetaFile = m_pGraphic->GetGDIMetaFile();
+                    const GDIMetaFile& aMetaFile = m_oGraphic->GetGDIMetaFile();
                     SvmWriter aWriter( aMemStm );
                     aWriter.Write( aMetaFile );
                     uno::Any aAny;
@@ -165,9 +166,9 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     SetAny( aAny );
                     bRet = true;
                 }
-                else if ( ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG ) && m_pGraphic )
+                else if ( ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG ) && m_oGraphic )
                 {
-                    bRet = SetBitmapEx( m_pGraphic->GetBitmapEx(), rFlavor );
+                    bRet = SetBitmapEx( m_oGraphic->GetBitmapEx(), rFlavor );
                 }
                 else if ( m_xObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {
