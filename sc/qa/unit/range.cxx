@@ -202,10 +202,34 @@ void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
 void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
 {
     ScDocument aDoc;
-    ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateDeleteTabContext aContext(aDoc, 1, 1);
-    ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
-    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+
+    // Position within deleted range is moved to the front.
+    {
+        ScAddress aAddr(1, 1, 1);
+        sc::RefUpdateDeleteTabContext aContext(aDoc, 1, 1);
+        ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+        CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+    }
+    {
+        ScAddress aAddr(1, 1, 2);
+        sc::RefUpdateDeleteTabContext aContext(aDoc, 1, 2);
+        ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+        CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+    }
+
+    // Would-be negative results are clamped to 0.
+    {
+        ScAddress aAddr(1, 1, 0);
+        sc::RefUpdateDeleteTabContext aContext(aDoc, 0, 1);
+        ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+        CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+    }
+    {
+        ScAddress aAddr(1, 1, 1);
+        sc::RefUpdateDeleteTabContext aContext(aDoc, 0, 2);
+        ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+        CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+    }
 }
 
 void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
