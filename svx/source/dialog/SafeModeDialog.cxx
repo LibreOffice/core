@@ -91,7 +91,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     RadioBtnHdl(*mxRadioRestore);
 
     // Set URL for help button (module=safemode)
-    mxBugLink->set_uri("https://www.cib.de/ciboffice");
+    mxBugLink->set_uri("https://www.cib.de/office");
 
     mxUserProfileLink->set_uri(comphelper::BackupFileHelper::getUserProfileURL());
 }

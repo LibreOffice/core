@@ -549,7 +549,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            sfx2::openUriExternally("https://www.cib.de/ciboffice", false);
+            sfx2::openUriExternally("https://www.cib.de/office", false);
             break;
         }
         case SID_DOCUMENTATION:
