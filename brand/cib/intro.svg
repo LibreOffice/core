@@ -12,7 +12,7 @@
    sodipodi:docname="intro.svg"
    width="511"
    height="261"
-   inkscape:export-filename="C:\cygwin\home\Marina\lode\dev\FLOSS-194\brand\cib\intro.png"
+   inkscape:export-filename="intro.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -73,7 +73,7 @@
    id="namedview3470"
    showgrid="false"
    inkscape:zoom="2.02"
-   inkscape:cx="181.43564"
+   inkscape:cx="181.93069"
    inkscape:cy="108.91089"
    inkscape:window-x="0"
    inkscape:window-y="0"
@@ -290,19 +290,7 @@
 
 </g>
 
-<rect
-   style="fill:#e11e19;fill-opacity:1;stroke:none;stroke-width:0.73190653;stroke-opacity:1"
-   id="rect880"
-   width="510.974"
-   height="45"
-   x="0.013000467"
-   y="0" /><rect
-   style="fill:#e11e19;fill-opacity:1;stroke:none;stroke-width:0.73190647;stroke-opacity:1"
-   id="rect880-0"
-   width="510.974"
-   height="45"
-   x="0.013000488"
-   y="216" /><g
+<g
    clip-path="url(#b)"
    id="g43"
    transform="matrix(2.5725516,0,0,2.5725516,42.906241,80.798237)"><g
