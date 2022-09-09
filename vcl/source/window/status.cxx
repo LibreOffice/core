@@ -1123,6 +1123,22 @@ tools::Long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
     return 0;
 }
 
+void StatusBar::PaintSelfAndChildrenImmediately()
+{
+    WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    const bool bOrigOverlapWin = pWindowImpl->mbOverlapWin;
+    // Temporarily set mbOverlapWin so that any parent windows of StatusBar
+    // that happen to have accumulated Invalidates are not taken as the root
+    // paint candidate from which to paint the paint hierarchy. So we limit the
+    // paint here to this statusbar and its children, disabling the
+    // optimization to bundle pending paints together and suppressing any
+    // unexpected side effects of entering parent window paint handlers if this
+    // call is not from the primordial thread.
+    pWindowImpl->mbOverlapWin = true;
+    PaintImmediately();
+    pWindowImpl->mbOverlapWin = bOrigOverlapWin;
+}
+
 void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCharsWidth )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
@@ -1166,7 +1182,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     {
         tools::Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect);
-        PaintImmediately();
+        PaintSelfAndChildrenImmediately();
     }
 }
 
@@ -1220,7 +1236,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
     {
         tools::Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect, InvalidateFlags::NoErase);
-        PaintImmediately();
+        PaintSelfAndChildrenImmediately();
     }
 }
 
@@ -1249,7 +1265,7 @@ void StatusBar::RedrawItem(sal_uInt16 nItemId)
     {
         tools::Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect);
-        PaintImmediately();
+        PaintSelfAndChildrenImmediately();
     }
 }
 
@@ -1324,7 +1340,7 @@ void StatusBar::StartProgressMode( const OUString& rText )
     if ( IsReallyVisible() )
     {
         Invalidate();
-        PaintImmediately();
+        PaintSelfAndChildrenImmediately();
     }
 }
 
@@ -1345,7 +1361,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
         if ((nTime_ms - mnLastProgressPaint_ms) > 100)
         {
             Invalidate(maPrgsFrameRect);
-            PaintImmediately();
+            PaintSelfAndChildrenImmediately();
             mnLastProgressPaint_ms = nTime_ms;
         }
     }
@@ -1361,7 +1377,7 @@ void StatusBar::EndProgressMode()
     if ( IsReallyVisible() )
     {
         Invalidate();
-        PaintImmediately();
+        PaintSelfAndChildrenImmediately();
     }
 }
 
@@ -1378,7 +1394,7 @@ void StatusBar::SetText(const OUString& rText)
         {
             Invalidate();
             Window::SetText(rText);
-            PaintImmediately();
+            PaintSelfAndChildrenImmediately();
         }
     }
     else if (mbProgressMode)
@@ -1387,7 +1403,7 @@ void StatusBar::SetText(const OUString& rText)
         if (IsReallyVisible())
         {
             Invalidate();
-            PaintImmediately();
+            PaintSelfAndChildrenImmediately();
         }
     }
     else

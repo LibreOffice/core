@@ -101,6 +101,8 @@ private:
     SAL_DLLPRIVATE tools::Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
 
+    SAL_DLLPRIVATE void      PaintSelfAndChildrenImmediately();
+
 protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
