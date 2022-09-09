@@ -7481,8 +7481,8 @@ AC_LANG_POP([C++])
 AC_SUBST([HAVE_LIBSTDCPP])
 AC_SUBST([HAVE_LIBCPP])
 
-LIBCPP_DEBUG=
-if test -z "$CROSS_COMPILING" -a -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
+if test -z "${LIBCPP_DEBUG+x}" -a -z "$CROSS_COMPILING" -a -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"
+then
     # Libc++ has two levels of debug mode, assertions mode enabled with -D_LIBCPP_DEBUG=0,
     # and actual debug mode enabled with -D_LIBCPP_DEBUG=1 (and starting with LLVM15
     # assertions mode will be separate and controlled by -D_LIBCPP_ENABLE_ASSERTIONS=1,
