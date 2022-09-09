@@ -178,6 +178,13 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
     reportdesign::OSection* pSection = comphelper::getFromUnoTunnel<reportdesign::OSection>(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementAdded(xShape);
+
+    // now that the shape is inserted into its structures, we can allow the OObjectBase
+    // to release the reference to it
+    OObjectBase* pObjectBase = dynamic_cast< OObjectBase* >( pObj );
+    OSL_ENSURE( pObjectBase, "OReportPage::NbcInsertObject: what is being inserted here?" );
+    if ( pObjectBase )
+        pObjectBase->releaseUnoShape();
 }
 
 } // rptui

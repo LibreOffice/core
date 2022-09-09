@@ -66,6 +66,7 @@ protected:
     mutable rtl::Reference<OPropertyMediator>                         m_xMediator;
     mutable css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     mutable css::uno::Reference< css::report::XReportComponent>       m_xReportComponent;
+    css::uno::Reference< css::uno::XInterface >                       m_xKeepShapeAlive;
     OUString m_sComponentName;
     bool        m_bIsListening;
 
@@ -82,7 +83,7 @@ protected:
 
     /** called by instances of derived classes to implement their overriding of getUnoShape
     */
-    static css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
             getUnoShapeOf( SdrObject& _rSdrObject );
 
 public:
@@ -101,6 +102,10 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent();
     css::uno::Reference< css::report::XSection> getSection() const;
     const OUString& getServiceName() const { return m_sComponentName; }
+
+    /** releases the reference to our UNO shape (m_xKeepShapeAlive)
+    */
+    void    releaseUnoShape() { m_xKeepShapeAlive.clear(); }
 
     static rtl::Reference<SdrObject> createObject(
         SdrModel& rTargetModel,
@@ -263,6 +268,7 @@ public:
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
 private:
+    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
     void    impl_initializeModel_nothrow();
 };
 

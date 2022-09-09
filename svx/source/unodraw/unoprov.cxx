@@ -838,7 +838,7 @@ OUString UHashMap::getNameFromId(SdrObjKind nId)
         [nId](const UHashMapImpl::value_type& rEntry) { return rEntry.second == nId; });
     if (it != rMap.end())
         return it->first;
-    OSL_FAIL("[CL] unknown SdrObject identifier");
+    SAL_WARN("svx", "[CL] unknown SdrObjKind identifier " << static_cast<int>(nId));
     return OUString();
 }
 
