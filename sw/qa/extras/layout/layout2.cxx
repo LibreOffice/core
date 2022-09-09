@@ -2382,6 +2382,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135991)
     assertXPath(pDump, "//bounds[@top<0]", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150642)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf150642.odt");
+    auto pDump = parseLayoutDump();
+    // There used to be negative values that made the cell frame invisible.
+    assertXPath(pDump, "//bounds[@left<0]", 0);
+    assertXPath(pDump, "//bounds[@right<0]", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

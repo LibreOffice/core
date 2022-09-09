@@ -977,7 +977,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     setFramePrintAreaValid(false);
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
 
-                    if (IsNeighbourFrame())
+                    if (IsNeighbourFrame() && !bVert)
                     {
                         SwTwips nPrtHeight = (GetUpper()->getFramePrintArea().*fnRect->fnGetHeight)();
                         const tools::Long nDiff = nPrtHeight - (getFrameArea().*fnRect->fnGetHeight)();
