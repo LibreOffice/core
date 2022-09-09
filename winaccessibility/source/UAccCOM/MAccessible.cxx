@@ -45,6 +45,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -3033,7 +3034,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appName(BSTR __RPC_FAR *name
         if(name == nullptr)
             return E_INVALIDARG;
 
-        *name = SysAllocString(OLESTR("Hannover"));
+        static const OUString sAppName = utl::ConfigManager::getProductName();
+        *name = SysAllocString(o3tl::toW(sAppName.getStr()));
         return S_OK;
     } catch(...) { return E_FAIL; }
 }
@@ -3045,7 +3047,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appVersion(BSTR __RPC_FAR *v
         if (m_isDestroy) return S_FALSE;
         if(version == nullptr)
             return E_INVALIDARG;
-        *version=SysAllocString(OLESTR("3.0"));
+        static const OUString sVersion = utl::ConfigManager::getProductVersion();
+        *version=SysAllocString(o3tl::toW(sVersion.getStr()));
         return S_OK;
     } catch(...) { return E_FAIL; }
 }
@@ -3057,21 +3060,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_toolkitName(BSTR __RPC_FAR *
         if (m_isDestroy) return S_FALSE;
         if(name == nullptr)
             return E_INVALIDARG;
-        *name = SysAllocString(OLESTR(" "));
+        *name = SysAllocString(OLESTR("VCL"));
         return S_OK;
     } catch(...) { return E_FAIL; }
 }
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_toolkitVersion(BSTR __RPC_FAR *version)
 {
-    SolarMutexGuard g;
-
-    try {
-        if (m_isDestroy) return S_FALSE;
-        if(version == nullptr)
-            return E_INVALIDARG;
-        *version = SysAllocString(OLESTR(" "));
-        return S_OK;
-    } catch(...) { return E_FAIL; }
+    return get_appVersion(version);
 }
 
 

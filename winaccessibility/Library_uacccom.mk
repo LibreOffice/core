@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_libraries,UAccCOM,\
 	comphelper \
 	cppu \
 	sal \
+	utl \
 ))
 
 $(eval $(call gb_Library_use_externals,UAccCOM,\
