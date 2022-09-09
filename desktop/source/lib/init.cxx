@@ -882,22 +882,21 @@ void setupSidebar(const OUString& sidebarDeckId = "")
         if (!pDockingWin)
             return;
 
-        OUString currentDeckId = pDockingWin->GetSidebarController()->GetCurrentDeckId();
+        pViewFrame->ShowChildWindow( SID_SIDEBAR );
 
-        // check if it is the chart deck id, if it is, don't switch to default deck
-        bool switchToDefault = true;
+        const rtl::Reference<sfx2::sidebar::SidebarController>& xController
+            = pDockingWin->GetOrCreateSidebarController();
 
-        if (currentDeckId == "ChartDeck")
-            switchToDefault = false;
+        xController->FadeIn();
+        xController->RequestOpenDeck();
 
         if (!sidebarDeckId.isEmpty())
         {
-            pDockingWin->GetSidebarController()->SwitchToDeck(sidebarDeckId);
+            xController->SwitchToDeck(sidebarDeckId);
         }
         else
         {
-            if (switchToDefault)
-                pDockingWin->GetSidebarController()->SwitchToDefaultDeck();
+            xController->SwitchToDefaultDeck();
         }
 
         pDockingWin->SyncUpdate();
