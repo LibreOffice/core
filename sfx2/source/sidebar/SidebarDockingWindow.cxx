@@ -52,11 +52,21 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
         OSL_ASSERT(pSfxBindings!=nullptr);
         OSL_ASSERT(pSfxBindings->GetDispatcher()!=nullptr);
     }
-    else
+    else if (!comphelper::LibreOfficeKit::isActive())
     {
-        const SfxViewFrame* pViewFrame = pSfxBindings->GetDispatcher()->GetFrame();
+        GetOrCreateSidebarController();
+    }
+}
+
+rtl::Reference<sfx2::sidebar::SidebarController>& SidebarDockingWindow::GetOrCreateSidebarController()
+{
+    if (!mpSidebarController)
+    {
+        const SfxViewFrame* pViewFrame = GetBindings().GetDispatcher()->GetFrame();
         mpSidebarController = sfx2::sidebar::SidebarController::create(this, pViewFrame);
     }
+
+    return mpSidebarController;
 }
 
 SidebarDockingWindow::~SidebarDockingWindow()
