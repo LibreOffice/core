@@ -1662,7 +1662,8 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
             }
             fTotalWish += aWish[i];
         }
-        const sal_uInt16 nEqualWidth = nSelectedWidth / nCols;
+        assert(nCols);
+        const sal_uInt16 nEqualWidth = nCols ? nSelectedWidth / nCols : 0;
         // bBalance: Distribute the width evenly
         for (sal_uInt16 & rn : aWish)
             if ( rn && bBalance )
