@@ -1061,7 +1061,7 @@ void ScRangeUpdater::UpdateDeleteTab(ScAddress& rAddr, const sc::RefUpdateDelete
 {
     if (rCxt.mnDeletePos <= rAddr.Tab())
     {
-        rAddr.IncTab(-rCxt.mnSheets);
+        rAddr.SetTab( std::max<SCTAB>(0, rAddr.Tab() - rCxt.mnSheets));
     }
 }
 

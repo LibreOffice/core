@@ -34,6 +34,7 @@
 #include <formula/opcode.hxx>
 #include <jumpmatrix.hxx>
 #include <rangeseq.hxx>
+#include <rangeutl.hxx>
 #include <externalrefmgr.hxx>
 #include <document.hxx>
 #include <refupdatecontext.hxx>
@@ -4234,8 +4235,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
 {
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
-    if (rCxt.mnDeletePos < rOldPos.Tab())
-        aNewPos.IncTab(-1*rCxt.mnSheets);
+    ScRangeUpdater::UpdateDeleteTab( aNewPos, rCxt);
 
     TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN);
     for (size_t j=0; j<2; ++j)

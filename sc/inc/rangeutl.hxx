@@ -276,6 +276,15 @@ struct SC_DLLPUBLIC ScRangeUpdater
     ScRangeUpdater() = delete;
 
     static void UpdateInsertTab(ScAddress& rAddr, const sc::RefUpdateInsertTabContext& rCxt);
+
+    /** This is for the base-cell-address of a defined name or conditional
+        format, not for references. A sheet position on or after the start of
+        the deleted range is moved towards the beginning by the amount of
+        deleted sheets, within the deleted range to the front of that or set to
+        0 (as there is always at least one sheet in a document) if the position
+        would result in a negative value, e.g. if position was 0 and (only)
+        sheet 0 is deleted it would had become -1.
+     */
     static void UpdateDeleteTab(ScAddress& rAddr, const sc::RefUpdateDeleteTabContext& rCxt);
 };
 
