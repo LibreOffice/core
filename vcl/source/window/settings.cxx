@@ -53,7 +53,7 @@ void WindowOutputDevice::SetSettings( const AllSettings& rSettings, bool bChild 
             static_cast<vcl::WindowOutputDevice*>(static_cast<ImplBorderWindow*>(pBorderWindow)->mpMenuBarWindow->GetOutDev())->SetSettings( rSettings, true );
     }
 
-    AllSettings aOldSettings(*mxSettings);
+    AllSettings aOldSettings(*moSettings);
     OutputDevice::SetSettings( rSettings );
     AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
 
@@ -88,8 +88,8 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->UpdateSettings( rSettings, true );
     }
 
-    AllSettings aOldSettings(*mpWindowImpl->mxOutDev->mxSettings);
-    AllSettingsFlags nChangeFlags = mpWindowImpl->mxOutDev->mxSettings->Update( AllSettings::GetWindowUpdate(), rSettings );
+    AllSettings aOldSettings(*mpWindowImpl->mxOutDev->moSettings);
+    AllSettingsFlags nChangeFlags = mpWindowImpl->mxOutDev->moSettings->Update( AllSettings::GetWindowUpdate(), rSettings );
 
     // recalculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();
@@ -101,9 +101,9 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     *  so we can spare all our users the hassle of reacting on
     *  this in their respective DataChanged.
     */
-    MouseSettings aSet( mpWindowImpl->mxOutDev->mxSettings->GetMouseSettings() );
+    MouseSettings aSet( mpWindowImpl->mxOutDev->moSettings->GetMouseSettings() );
     aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
-    mpWindowImpl->mxOutDev->mxSettings->SetMouseSettings( aSet );
+    mpWindowImpl->mxOutDev->moSettings->SetMouseSettings( aSet );
 
     if( (nChangeFlags & AllSettingsFlags::STYLE) && IsBackground() )
     {

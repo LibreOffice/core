@@ -50,6 +50,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -64,6 +65,7 @@
 #include <com/sun/star/awt/DeviceInfo.hpp>
 
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -75,7 +77,6 @@ class ImplMultiTextLineInfo;
 class SalGraphics;
 class Gradient;
 class Hatch;
-class AllSettings;
 class BitmapReadAccess;
 class BitmapEx;
 class Image;
@@ -231,7 +232,7 @@ private:
     Color                           maOverlineColor;
     RasterOp                        meRasterOp;
     Wallpaper                       maBackground;
-    std::unique_ptr<AllSettings>    mxSettings;
+    std::optional<AllSettings>      moSettings;
     MapMode                         maMapMode;
     Point                           maRefPoint;
     AntialiasingFlags               mnAntialiasing;
@@ -285,7 +286,7 @@ public:
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
 
     virtual void                SetSettings( const AllSettings& rSettings );
-    const AllSettings&          GetSettings() const { return *mxSettings; }
+    const AllSettings&          GetSettings() const { return *moSettings; }
 
     SystemGraphicsData          GetSystemGfxData() const;
     OUString                    GetRenderBackendName() const;

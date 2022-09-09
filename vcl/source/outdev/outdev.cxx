@@ -61,7 +61,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
-    mxSettings( new AllSettings(Application::GetSettings()) )
+    moSettings( Application::GetSettings() )
 {
     mpGraphics                      = nullptr;
     mpUnoGraphicsList               = nullptr;
@@ -215,7 +215,7 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
 
 void OutputDevice::SetSettings( const AllSettings& rSettings )
 {
-    *mxSettings = rSettings;
+    *moSettings = rSettings;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetSettings( rSettings );

@@ -1152,7 +1152,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
 
     if (!utl::ConfigManager::IsFuzzing())
     {
-        const StyleSettings& rStyleSettings = mpWindowImpl->mxOutDev->mxSettings->GetStyleSettings();
+        const StyleSettings& rStyleSettings = mpWindowImpl->mxOutDev->moSettings->GetStyleSettings();
         mpWindowImpl->mxOutDev->maFont = rStyleSettings.GetAppFont();
 
         if ( nStyle & WB_3DLOOK )
@@ -1353,7 +1353,7 @@ void Window::ImplInitResolutionSettings()
 
         // setup the scale factor for HiDPI displays
         GetOutDev()->mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
-        const StyleSettings& rStyleSettings = GetOutDev()->mxSettings->GetStyleSettings();
+        const StyleSettings& rStyleSettings = GetOutDev()->moSettings->GetStyleSettings();
         SetPointFont(*GetOutDev(), rStyleSettings.GetAppFont());
     }
     else if ( mpWindowImpl->mpParent )
@@ -3689,7 +3689,7 @@ void Window::EnableNativeWidget( bool bEnable )
 
         // send datachanged event to allow for internal changes required for NWF
         // like clipmode, transparency, etc.
-        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, GetOutDev()->mxSettings.get(), AllSettingsFlags::STYLE );
+        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &*GetOutDev()->moSettings, AllSettingsFlags::STYLE );
         CompatDataChanged( aDCEvt );
 
         // sometimes the borderwindow is queried, so keep it in sync
