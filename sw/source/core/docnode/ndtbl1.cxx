@@ -1662,12 +1662,15 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
             }
             fTotalWish += aWish[i];
         }
-        assert(nCols);
-        const sal_uInt16 nEqualWidth = nCols ? nSelectedWidth / nCols : 0;
         // bBalance: Distribute the width evenly
-        for (sal_uInt16 & rn : aWish)
-            if ( rn && bBalance )
-                rn = nEqualWidth;
+        if (bBalance)
+        {
+            assert(nCols);
+            const sal_uInt16 nEqualWidth = nCols ? nSelectedWidth / nCols : 0;
+            for (sal_uInt16 & rn : aWish)
+                if (rn)
+                    rn = nEqualWidth;
+        }
     }
 
     const tools::Long nOldRight = aTabCols.GetRight();
