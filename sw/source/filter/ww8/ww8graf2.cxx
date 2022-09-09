@@ -235,7 +235,7 @@ bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
     return ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, u"", rSrc);
 }
 
-bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>& rpGraphic,
+bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::optional<Graphic>& roGraphic,
     const WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos, bool* pbInDoc)
 {                                                  // Write the graphic to the file
     *pbInDoc = true;                               // default
@@ -272,7 +272,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>
 
     if (m_xWwFib->m_envr != 1) // !MAC as creator
     {
-        rpGraphic.reset(new Graphic(aWMF));
+        roGraphic.emplace(aWMF);
         return true;
     }
 
@@ -284,10 +284,10 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>
     tools::Long nData = rPic.lcb - ( pSt->Tell() - nPosFc );
     if (nData > 0)
     {
-        rpGraphic.reset(new Graphic());
-        bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt);
+        roGraphic.emplace();
+        bOk = SwWW8ImplReader::GetPictGrafFromStream(*roGraphic, *pSt);
         if (!bOk)
-            rpGraphic.reset();
+            roGraphic.reset();
     }
     return bOk; // Contains graphic
 }
@@ -415,8 +415,8 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC const & rPic, SvStream* pSt,
 
     OUString aFileName;
     bool bInDoc;
-    std::unique_ptr<Graphic> pGraph;
-    bool bOk = ReadGrafFile(aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc);
+    std::optional<Graphic> oGraph;
+    bool bOk = ReadGrafFile(aFileName, oGraph, rPic, pSt, nFilePos, &bInDoc);
 
     if (!bOk)
     {
@@ -433,9 +433,9 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC const & rPic, SvStream* pSt,
     }
 
     if (m_xWFlyPara && m_xWFlyPara->bGrafApo)
-        pRet = MakeGrafNotInContent(aPD, pGraph.get(), aFileName, aGrfSet);
+        pRet = MakeGrafNotInContent(aPD, oGraph ? &*oGraph : nullptr, aFileName, aGrfSet);
     else
-        pRet = MakeGrafInContent(rPic, aPD, pGraph.get(), aFileName, aGrfSet);
+        pRet = MakeGrafInContent(rPic, aPD, oGraph ? &*oGraph : nullptr, aFileName, aGrfSet);
     return pRet;
 }
 

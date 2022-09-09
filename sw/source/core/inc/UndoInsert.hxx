@@ -25,12 +25,12 @@
 #include <undobj.hxx>
 #include <svx/svdtypes.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/graph.hxx>
 #include <swtypes.hxx>
 #include <ndindex.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <optional>
 
-class Graphic;
 class SwGrfNode;
 class SwUndoDelete;
 class SwUndoFormatAttr;
@@ -138,7 +138,7 @@ private:
 
 class SwUndoReRead final : public SwUndo
 {
-    std::unique_ptr<Graphic> mpGraphic;
+    std::optional<Graphic> moGraphic;
     std::optional<OUString> maNm;
     std::optional<OUString> maFltr;
     SwNodeOffset mnPosition;

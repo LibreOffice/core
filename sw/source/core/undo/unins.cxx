@@ -780,7 +780,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
         return ;
 
     // cache the old values
-    std::unique_ptr<Graphic> pOldGrf( mpGraphic ? new Graphic(*mpGraphic) : nullptr);
+    std::optional<Graphic> oOldGrf(moGraphic);
     std::optional<OUString> aOldNm = maNm;
     MirrorGraph nOldMirr = mnMirror;
     // since all of them are cleared/modified by SaveGraphicData:
@@ -792,7 +792,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        pGrfNd->ReRead( OUString(), OUString(), pOldGrf.get() );
+        pGrfNd->ReRead( OUString(), OUString(), oOldGrf ? &*oOldGrf : nullptr );
     }
 
     if( MirrorGraph::Dont != nOldMirr )
@@ -818,11 +818,11 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
         maNm = OUString();
         maFltr = OUString();
         rGrfNd.GetFileFilterNms(&*maNm, &*maFltr);
-        mpGraphic.reset();
+        moGraphic.reset();
     }
     else
     {
-        mpGraphic.reset( new Graphic( rGrfNd.GetGrf(true) ) );
+        moGraphic.emplace( rGrfNd.GetGrf(true) );
         maNm.reset();
         maFltr.reset();
     }

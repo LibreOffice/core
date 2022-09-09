@@ -494,12 +494,12 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         // SEL_GRF is from ContentType of editsh
         if(bPending || ((SelectionType::Graphic | SelectionType::DrawObject | SelectionType::DbForm) & nSelectionType))
         {
-            m_pClpGraphic.reset(new Graphic);
-            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-                m_pOrigGraphic = m_pClpGraphic.get();
-            m_pClpBitmap.reset(new Graphic);
-            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-                m_pOrigGraphic = m_pClpBitmap.get();
+            m_oClpGraphic.emplace();
+            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_oClpGraphic ))
+                m_pOrigGraphic = &*m_oClpGraphic;
+            m_oClpBitmap.emplace();
+            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_oClpBitmap ))
+                m_pOrigGraphic = &*m_oClpBitmap;
 
             // is it a URL-Button ?
             OUString sURL;
@@ -636,13 +636,13 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         case SotClipboardFormatId::GDIMETAFILE:
             if( m_eBufferType & TransferBufferType::Graphic )
-                bOK = SetGDIMetaFile( m_pClpGraphic->GetGDIMetaFile() );
+                bOK = SetGDIMetaFile( m_oClpGraphic->GetGDIMetaFile() );
             break;
         case SotClipboardFormatId::BITMAP:
         case SotClipboardFormatId::PNG:
             // Neither pClpBitmap nor pClpGraphic are necessarily set
-            if( (m_eBufferType & TransferBufferType::Graphic) && (m_pClpBitmap != nullptr || m_pClpGraphic != nullptr))
-                bOK = SetBitmapEx( (m_pClpBitmap ? m_pClpBitmap : m_pClpGraphic)->GetBitmapEx(), rFlavor );
+            if( (m_eBufferType & TransferBufferType::Graphic) && (m_oClpBitmap || m_oClpGraphic))
+                bOK = SetBitmapEx( (m_oClpBitmap ? m_oClpBitmap : m_oClpGraphic)->GetBitmapEx(), rFlavor );
             break;
 
         case SotClipboardFormatId::SVIM:
@@ -968,12 +968,12 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     const SelectionType nSelection = m_pWrtShell->GetSelectionType();
     if( nSelection == SelectionType::Graphic )
     {
-        m_pClpGraphic.reset(new Graphic);
-        if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-            m_pOrigGraphic = m_pClpGraphic.get();
-        m_pClpBitmap.reset(new Graphic);
-        if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-            m_pOrigGraphic = m_pClpBitmap.get();
+        m_oClpGraphic.emplace();
+        if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_oClpGraphic ))
+            m_pOrigGraphic = &*m_oClpGraphic;
+        m_oClpBitmap.emplace();
+        if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_oClpBitmap ))
+            m_pOrigGraphic = &*m_oClpBitmap;
 
         m_pClpDocFac.reset(new SwDocFac);
         SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
@@ -1119,12 +1119,12 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             }
             m_eBufferType = static_cast<TransferBufferType>( TransferBufferType::Graphic | m_eBufferType );
 
-            m_pClpGraphic.reset(new Graphic);
-            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-                m_pOrigGraphic = m_pClpGraphic.get();
-            m_pClpBitmap.reset(new Graphic);
-            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-                m_pOrigGraphic = m_pClpBitmap.get();
+            m_oClpGraphic.emplace();
+            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_oClpGraphic ))
+                m_pOrigGraphic = &*m_oClpGraphic;
+            m_oClpBitmap.emplace();
+            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_oClpBitmap ))
+                m_pOrigGraphic = &*m_oClpBitmap;
 
             // is it a URL-Button ?
             OUString sURL;
