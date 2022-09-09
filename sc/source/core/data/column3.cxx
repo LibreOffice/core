@@ -569,6 +569,40 @@ void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1,
     if (GetDoc().IsClipOrUndo())
         return;
 
+    // Need to process (start listening) entire shared formula groups, not just
+    // a slice thereof.
+    bool bEnlargedDown = false;
+    aPos = maCells.position(nRow1);
+    it = aPos.first;
+    if (it->type == sc::element_type_formula)
+    {
+        ScFormulaCell& rCell = *sc::formula_block::at(*it->data, aPos.second);
+        if (rCell.IsShared())
+        {
+            nRow1 = std::min( nRow1, rCell.GetSharedTopRow());
+            if (nRow2 < rCell.GetSharedTopRow() + rCell.GetSharedLength())
+            {
+                nRow2 = rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1;
+                bEnlargedDown = true;
+                // Same end row is also enlarged, i.e. doesn't need to be
+                // checked for another group.
+            }
+        }
+    }
+    if (!bEnlargedDown)
+    {
+        aPos = maCells.position(it, nRow2);
+        it = aPos.first;
+        if (it->type == sc::element_type_formula)
+        {
+            ScFormulaCell& rCell = *sc::formula_block::at(*it->data, aPos.second);
+            if (rCell.IsShared())
+            {
+                nRow2 = std::max( nRow2, rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1);
+            }
+        }
+    }
+
     AttachFormulaCellsHandler aFunc(rCxt);
     sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
