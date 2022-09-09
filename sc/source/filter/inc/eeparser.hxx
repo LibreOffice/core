@@ -41,8 +41,8 @@ struct ScHTMLImage
     Size                aSize;
     Point               aSpace;
     OUString            aFilterName;
-    std::unique_ptr<Graphic>
-                        pGraphic;       // is taken over by WriteToDocument
+    std::optional<Graphic>
+                        oGraphic;       // is taken over by WriteToDocument
     char                nDir;           // 1==hori, 2==verti, 3==both
 
     ScHTMLImage() :

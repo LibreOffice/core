@@ -20,9 +20,9 @@
 
 #include <ObjectIdentifier.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/graph.hxx>
 
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
-class Graphic;
 
 namespace chart
 {
@@ -115,7 +115,7 @@ private:
     SvNumberFormatter* m_pNumberFormatter;
 
     std::optional<SfxItemSet>     m_oSymbolShapeProperties;
-    std::unique_ptr<Graphic>        m_pAutoSymbolGraphic;
+    std::optional<Graphic>        m_oAutoSymbolGraphic;
 
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;
@@ -133,7 +133,7 @@ public:
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes
     //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected
-    void setSymbolInformation( SfxItemSet&& rSymbolShapeProperties, std::unique_ptr<Graphic> pAutoSymbolGraphic );
+    void setSymbolInformation( SfxItemSet&& rSymbolShapeProperties, std::optional<Graphic> oAutoSymbolGraphic );
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 

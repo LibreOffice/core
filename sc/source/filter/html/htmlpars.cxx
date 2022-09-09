@@ -1319,10 +1319,10 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     }
 
     sal_uInt16 nFormat;
-    std::unique_ptr<Graphic> pGraphic(new Graphic);
+    std::optional<Graphic> oGraphic(std::in_place);
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     if ( ERRCODE_NONE != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
-            *pGraphic, &rFilter, &nFormat ) )
+            *oGraphic, &rFilter, &nFormat ) )
     {
         return ; // Bad luck
     }
@@ -1332,12 +1332,12 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         mxActEntry->aAltText.clear();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
-    pImage->pGraphic = std::move( pGraphic );
+    pImage->oGraphic = std::move( oGraphic );
     if ( !(pImage->aSize.Width() && pImage->aSize.Height()) )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-        pImage->aSize = pDefaultDev->LogicToPixel( pImage->pGraphic->GetPrefSize(),
-            pImage->pGraphic->GetPrefMapMode() );
+        pImage->aSize = pDefaultDev->LogicToPixel( pImage->oGraphic->GetPrefSize(),
+            pImage->oGraphic->GetPrefMapMode() );
     }
     if (mxActEntry->maImageList.empty())
         return;

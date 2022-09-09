@@ -163,7 +163,7 @@ ImageProducer::ImageProducer()
     : mnTransIndex(0)
     , mbConsInit(false)
 {
-    mpGraphic.reset( new Graphic );
+    moGraphic.emplace();
 }
 
 ImageProducer::~ImageProducer()
@@ -201,7 +201,7 @@ void ImageProducer::removeConsumer( const css::uno::Reference< css::awt::XImageC
 void ImageProducer::SetImage( const OUString& rPath )
 {
     maURL = rPath;
-    mpGraphic->Clear();
+    moGraphic->Clear();
     mbConsInit = false;
     mpStm.reset();
 
@@ -221,7 +221,7 @@ void ImageProducer::SetImage( const OUString& rPath )
 void ImageProducer::SetImage( SvStream& rStm )
 {
     maURL.clear();
-    mpGraphic->Clear();
+    moGraphic->Clear();
     mbConsInit = false;
 
     mpStm.reset( new SvStream( new ImgProdLockBytes( &rStm, false ) ) );
@@ -231,7 +231,7 @@ void ImageProducer::SetImage( SvStream& rStm )
 void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const & rInputStmRef )
 {
     maURL.clear();
-    mpGraphic->Clear();
+    moGraphic->Clear();
     mbConsInit = false;
     mpStm.reset();
 
@@ -242,7 +242,7 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const
 
 void ImageProducer::NewDataAvailable()
 {
-    if( ( GraphicType::NONE == mpGraphic->GetType() ) || mpGraphic->GetReaderContext() )
+    if( ( GraphicType::NONE == moGraphic->GetType() ) || moGraphic->GetReaderContext() )
         startProduction();
 }
 
@@ -255,18 +255,18 @@ void ImageProducer::startProduction()
     bool bNotifyEmptyGraphics = false;
 
     // valid stream or filled graphic? => update consumers
-    if( mpStm || ( mpGraphic->GetType() != GraphicType::NONE ) )
+    if( mpStm || ( moGraphic->GetType() != GraphicType::NONE ) )
     {
         // if we already have a graphic, we don't have to import again;
         // graphic is cleared if a new Stream is set
-        if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetReaderContext() )
+        if( ( moGraphic->GetType() == GraphicType::NONE ) || moGraphic->GetReaderContext() )
         {
-            if ( ImplImportGraphic( *mpGraphic ) )
-                maDoneHdl.Call( mpGraphic.get() );
+            if ( ImplImportGraphic( *moGraphic ) )
+                maDoneHdl.Call( &*moGraphic );
         }
 
-        if( mpGraphic->GetType() != GraphicType::NONE )
-            ImplUpdateData( *mpGraphic );
+        if( moGraphic->GetType() != GraphicType::NONE )
+            ImplUpdateData( *moGraphic );
         else
             bNotifyEmptyGraphics = true;
     }

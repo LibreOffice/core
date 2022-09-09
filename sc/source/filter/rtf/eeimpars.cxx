@@ -492,7 +492,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
     for (const std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
     {
         ScHTMLImage* pI = pImage.get();
-        if ( pI->pGraphic )
+        if ( pI->oGraphic )
             bHasGraphics = true;
         Size aSizePix = pI->aSize;
         aSizePix.AdjustWidth(2 * pI->aSpace.X() );
@@ -590,12 +590,12 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         // Limit size
         ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
-        if ( pI->pGraphic )
+        if ( pI->oGraphic )
         {
             tools::Rectangle aRect ( aInsertPos, aLogicSize );
             rtl::Reference<SdrGrafObj> pObj = new SdrGrafObj(
                 *pModel,
-                *pI->pGraphic,
+                *pI->oGraphic,
                 aRect);
 
             // calling SetGraphicLink here doesn't work

@@ -24,12 +24,13 @@
 #include <com/sun/star/awt/XImageProducer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/weak.hxx>
+#include <vcl/graph.hxx>
 #include <memory>
+#include <optional>
 #include <vector>
 
 
 class SvStream;
-class Graphic;
 namespace com::sun::star::io { class XInputStream; }
 
 
@@ -43,8 +44,8 @@ private:
 
     OUString        maURL;
     ConsumerList_t  maConsList;
-    std::unique_ptr<Graphic>
-                    mpGraphic;
+    std::optional<Graphic>
+                    moGraphic;
     std::unique_ptr<SvStream>
                     mpStm;
     sal_uInt32      mnTransIndex;

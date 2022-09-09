@@ -778,9 +778,9 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
             aSymbolItemConverter.FillItemSet( aSymbolShapeProperties );
 
             sal_Int32 const nStandardSymbol=0;//@todo get from somewhere
-            std::unique_ptr<Graphic> pAutoSymbolGraphic(new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, &aSymbolShapeProperties ) ));
+            std::optional<Graphic> oAutoSymbolGraphic(std::in_place, aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, &aSymbolShapeProperties ) );
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
-            aDlg.setSymbolInformation( std::move(aSymbolShapeProperties), std::move(pAutoSymbolGraphic) );
+            aDlg.setSymbolInformation( std::move(aSymbolShapeProperties), std::move(oAutoSymbolGraphic) );
         }
         if( aDialogParameter.HasStatisticProperties() )
         {

@@ -316,10 +316,10 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
 void SchAttribTabDlg::setSymbolInformation( SfxItemSet&& rSymbolShapeProperties,
-                std::unique_ptr<Graphic> pAutoSymbolGraphic )
+                std::optional<Graphic> oAutoSymbolGraphic )
 {
     m_oSymbolShapeProperties.emplace(std::move(rSymbolShapeProperties));
-    m_pAutoSymbolGraphic = std::move(pAutoSymbolGraphic);
+    m_oAutoSymbolGraphic = std::move(oAutoSymbolGraphic);
 }
 
 void SchAttribTabDlg::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth )
@@ -511,8 +511,8 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
             aSet.Put(OfaPtrItem(SID_OBJECT_LIST,m_pViewElementListProvider->GetSymbolList()));
             if( m_oSymbolShapeProperties )
                 aSet.Put(SfxTabDialogItem(SID_ATTR_SET, *m_oSymbolShapeProperties));
-            if( m_pAutoSymbolGraphic )
-                aSet.Put(SvxGraphicItem(*m_pAutoSymbolGraphic));
+            if( m_oAutoSymbolGraphic )
+                aSet.Put(SvxGraphicItem(*m_oAutoSymbolGraphic));
         }
         rPage.PageCreated(aSet);
     }

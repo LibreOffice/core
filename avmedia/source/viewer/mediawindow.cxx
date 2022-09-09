@@ -369,7 +369,7 @@ MediaWindow::grabFrame(const uno::Reference<media::XPlayer>& xPlayer,
                        const uno::Reference<graphic::XGraphic>& rGraphic)
 {
     uno::Reference< graphic::XGraphic > xRet;
-    std::unique_ptr< Graphic > xGraphic;
+    std::optional< Graphic > oGraphic;
 
     if( xPlayer.is() )
     {
@@ -392,22 +392,22 @@ MediaWindow::grabFrame(const uno::Reference<media::XPlayer>& xPlayer,
             if( !aPrefSize.Width && !aPrefSize.Height )
             {
                 const BitmapEx aBmpEx(AVMEDIA_BMP_AUDIOLOGO);
-                xGraphic.reset( new Graphic( aBmpEx ) );
+                oGraphic.emplace( aBmpEx );
             }
         }
     }
 
-    if (!xRet.is() && !xGraphic)
+    if (!xRet.is() && !oGraphic)
     {
         const BitmapEx aBmpEx(AVMEDIA_BMP_EMPTYLOGO);
-        xGraphic.reset( new Graphic( aBmpEx ) );
+        oGraphic.emplace( aBmpEx );
     }
 
-    if (xGraphic)
+    if (oGraphic)
     {
         if (rGraphic)
-            xGraphic.reset(new Graphic(rGraphic));
-        xRet = xGraphic->GetXGraphic();
+            oGraphic.emplace(rGraphic);
+        xRet = oGraphic->GetXGraphic();
     }
 
     return xRet;
