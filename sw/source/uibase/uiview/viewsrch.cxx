@@ -251,7 +251,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
             {
                 // Disable LOK selection notifications during search.
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(true);
-                bool bRet = SearchAll();
+                const auto nFound = SearchAll();
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(false);
 
                 GetDocShell()->Broadcast(
@@ -259,7 +259,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 GetDocShell()->Broadcast(
                             SfxHint(SfxHintId::SwNavigatorSelectOutlinesWithSelections));
 
-                if( !bRet )
+                if (nFound == 0)
                 {
 #if HAVE_FEATURE_DESKTOP
                     if( !bQuiet )
@@ -270,9 +270,18 @@ void SwView::ExecSearch(SfxRequest& rReq)
 #endif
                     s_bFound = false;
                 }
-                else if (comphelper::LibreOfficeKit::isActive())
-                    lcl_emitSearchResultCallbacks(s_pSrchItem, m_pWrtShell.get(), /* bHighlightAll = */ true);
-                rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+                else
+                {
+                    if (comphelper::LibreOfficeKit::isActive())
+                        lcl_emitSearchResultCallbacks(s_pSrchItem, m_pWrtShell.get(), /* bHighlightAll = */ true);
+                    if (!bQuiet)
+                    {
+                        OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES));
+                        sText = sText.replaceFirst("%1", OUString::number(nFound));
+                        SvxSearchDialogWrapper::SetSearchLabel(sText);
+                    }
+                }
+                rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0));
             }
             break;
             case SvxSearchCmd::REPLACE:
@@ -594,7 +603,7 @@ bool SwView::SearchAndWrap(bool bApi)
     return s_bFound;
 }
 
-bool SwView::SearchAll()
+sal_uInt16 SwView::SearchAll()
 {
     SwWait aWait( *GetDocShell(), true );
     m_pWrtShell->StartAllAction();
@@ -616,7 +625,7 @@ bool SwView::SearchAll()
     s_bFound = 0 != nFound;
 
     m_pWrtShell->EndAllAction();
-    return s_bFound;
+    return nFound;
 }
 
 void SwView::Replace()
