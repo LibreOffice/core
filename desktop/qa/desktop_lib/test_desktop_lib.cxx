@@ -45,6 +45,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
@@ -3270,10 +3272,35 @@ void DesktopLOKTest::testMultiDocuments()
     }
 }
 
+namespace
+{
+    SfxChildWindow* lcl_initializeSidebar()
+    {
+        // in init.cxx we do setupSidebar which creaes the controller, do it here
+
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        CPPUNIT_ASSERT(pViewShell);
+
+        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+        CPPUNIT_ASSERT(pViewFrame);
+
+        SfxChildWindow* pSideBar = pViewFrame->GetChildWindow(SID_SIDEBAR);
+        CPPUNIT_ASSERT(pSideBar);
+
+        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pSideBar->GetWindow());
+        CPPUNIT_ASSERT(pDockingWin);
+
+        pDockingWin->GetOrCreateSidebarController(); // just to create the controller
+
+        return pSideBar;
+    }
+};
+
 void DesktopLOKTest::testControlState()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    lcl_initializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
     boost::property_tree::ptree aState;
@@ -3287,16 +3314,8 @@ void DesktopLOKTest::testMetricField()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    SfxChildWindow* pSideBar = lcl_initializeSidebar();
     Scheduler::ProcessEventsToIdle();
-
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    CPPUNIT_ASSERT(pViewShell);
-
-    SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-    CPPUNIT_ASSERT(pViewFrame);
-
-    SfxChildWindow* pSideBar = pViewFrame->GetChildWindow(SID_SIDEBAR);
-    CPPUNIT_ASSERT(pSideBar);
 
     vcl::Window* pWin = pSideBar->GetWindow();
     CPPUNIT_ASSERT(pWin);

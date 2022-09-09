@@ -874,13 +874,21 @@ void setupSidebar(std::u16string_view sidebarDeckId = u"")
         if (!pDockingWin)
             return;
 
+        pViewFrame->ShowChildWindow( SID_SIDEBAR );
+
+        const rtl::Reference<sfx2::sidebar::SidebarController>& xController
+            = pDockingWin->GetOrCreateSidebarController();
+
+        xController->FadeIn();
+        xController->RequestOpenDeck();
+
         if (!sidebarDeckId.empty())
         {
-            pDockingWin->GetSidebarController()->SwitchToDeck(sidebarDeckId);
+            xController->SwitchToDeck(sidebarDeckId);
         }
         else
         {
-            pDockingWin->GetSidebarController()->SwitchToDefaultDeck();
+            xController->SwitchToDefaultDeck();
         }
 
         pDockingWin->SyncUpdate();
