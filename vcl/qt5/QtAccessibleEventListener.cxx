@@ -132,6 +132,20 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
         case AccessibleStateType::SELECTED:
             aState.selected = true;
             break;
+        case AccessibleStateType::SHOWING:
+        {
+            // Qt does not have an equivalent for the SHOWING state,
+            // but has separate event types
+            QAccessible::Event eEventType;
+            sal_Int64 nNewState = 0;
+            if ((rEvent.NewValue >>= nNewState) && nNewState == AccessibleStateType::SHOWING)
+                eEventType = QAccessible::ObjectShow;
+            else
+                eEventType = QAccessible::ObjectHide;
+            QAccessible::updateAccessibility(
+                new QAccessibleEvent(pQAccessibleInterface, eEventType));
+            break;
+        }
         // These don't seem to have a matching Qt equivalent
         case AccessibleStateType::ARMED:
         case AccessibleStateType::DEFUNC:
@@ -141,7 +155,6 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
         case AccessibleStateType::MANAGES_DESCENDANTS:
         case AccessibleStateType::OPAQUE:
         case AccessibleStateType::SENSITIVE:
-        case AccessibleStateType::SHOWING:
         case AccessibleStateType::STALE:
         case AccessibleStateType::TRANSIENT:
         case AccessibleStateType::VERTICAL:
