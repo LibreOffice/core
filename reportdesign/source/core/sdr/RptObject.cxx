@@ -568,7 +568,7 @@ OUnoObject::OUnoObject(
     // tdf#119067
     ,m_bSetDefaultLabel(rSource.m_bSetDefaultLabel)
 {
-    osl_atomic_increment(&m_refCount); // getUnoShape will ref-count thiss
+    osl_atomic_increment(&m_refCount); // getUnoShape will ref-count this
     {
         if ( !rSource.getUnoControlModelTypeName().isEmpty() )
             impl_initializeModel_nothrow();
