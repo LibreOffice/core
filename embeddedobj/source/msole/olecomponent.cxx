@@ -589,11 +589,24 @@ namespace
     HRESULT OleLoadSeh(LPSTORAGE pIStorage, LPVOID* ppObj)
     {
         HRESULT hr = E_FAIL;
+        // tdf#119039: there is a nasty bug in OleLoad, that may call an unpaired
+        // IUnknown::Release on pIStorage on STG_E_FILENOTFOUND: see
+        // https://developercommunity.visualstudio.com/t/10144795
+        // Workaround it here to avoid crash in smart COM pointer destructor that
+        // would try to release already released object. Since we don't know if
+        // the bug appears each time STG_E_FILENOTFOUND is returned, this might
+        // potentially leak the storge object.
+        if (pIStorage)
+            pIStorage->AddRef();
+
         __try {
             hr = OleLoad(pIStorage, IID_IUnknown, nullptr, ppObj);
         } __except( EXCEPTION_EXECUTE_HANDLER ) {
-            return E_FAIL;
+            hr = E_FAIL;
         }
+        if (pIStorage && hr != STG_E_FILENOTFOUND)
+            pIStorage->Release();
+
         return hr;
     }
 }

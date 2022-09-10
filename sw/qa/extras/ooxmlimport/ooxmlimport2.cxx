@@ -934,6 +934,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xRun, "CharColor"));
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf119039)
+{
+    load(mpTestDocumentPath, "tdf119039_bad_embedded_compound.docx");
+    // Should not crash/hang because of problematic embedded compound
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
