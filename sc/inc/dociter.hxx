@@ -52,7 +52,7 @@ class ScValueIterator            // walk through all values in an area
 {
     typedef sc::CellStoreType::const_position_type PositionType;
 
-    ScDocument&     mrDoc;
+    const ScDocument& mrDoc;
     ScInterpreterContext& mrContext;
     const ScAttrArray*  pAttrArray;
     sal_uInt32      nNumFormat;     // for CalcAsShown
@@ -84,7 +84,7 @@ class ScValueIterator            // walk through all values in an area
 public:
 
     ScValueIterator(ScInterpreterContext& rContext,
-        ScDocument& rDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
+        const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
     void GetCurNumFmtInfo( SvNumFormatType& nType, sal_uInt32& nIndex );

@@ -82,9 +82,9 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
     nAttrEndRow = nRowEnd;
 }
 
-ScValueIterator::ScValueIterator(ScInterpreterContext& rContext, ScDocument& rDocument, const ScRange& rRange,
+ScValueIterator::ScValueIterator(ScInterpreterContext& rContext, const ScRange& rRange,
             SubtotalFlags nSubTotalFlags, bool bTextZero )
-    : mrDoc(rDocument)
+    : mrDoc(*rContext.mpDoc)
     , mrContext(rContext)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
@@ -97,16 +97,16 @@ ScValueIterator::ScValueIterator(ScInterpreterContext& rContext, ScDocument& rDo
     , mnSubTotalFlags(nSubTotalFlags)
     , nNumFmtType(SvNumFormatType::UNDEFINED)
     , bNumValid(false)
-    , bCalcAsShown(rDocument.GetDocOptions().IsCalcAsShown())
+    , bCalcAsShown((*rContext.mpDoc).GetDocOptions().IsCalcAsShown())
     , bTextAsZero(bTextZero)
     , mpCells(nullptr)
 {
-    SCTAB nDocMaxTab = rDocument.GetTableCount() - 1;
+    SCTAB nDocMaxTab = mrDoc.GetTableCount() - 1;
 
-    if (!rDocument.ValidCol(maStartPos.Col())) maStartPos.SetCol(mrDoc.MaxCol());
-    if (!rDocument.ValidCol(maEndPos.Col())) maEndPos.SetCol(mrDoc.MaxCol());
-    if (!rDocument.ValidRow(maStartPos.Row())) maStartPos.SetRow(mrDoc.MaxRow());
-    if (!rDocument.ValidRow(maEndPos.Row())) maEndPos.SetRow(mrDoc.MaxRow());
+    if (!mrDoc.ValidCol(maStartPos.Col())) maStartPos.SetCol(mrDoc.MaxCol());
+    if (!mrDoc.ValidCol(maEndPos.Col())) maEndPos.SetCol(mrDoc.MaxCol());
+    if (!mrDoc.ValidRow(maStartPos.Row())) maStartPos.SetRow(mrDoc.MaxRow());
+    if (!mrDoc.ValidRow(maEndPos.Row())) maEndPos.SetRow(mrDoc.MaxRow());
     if (!ValidTab(maStartPos.Tab()) || maStartPos.Tab() > nDocMaxTab) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab()) || maEndPos.Tab() > nDocMaxTab) maEndPos.SetTab(nDocMaxTab);
 }
@@ -272,7 +272,7 @@ bool ScValueIterator::GetFirst(double& rValue, FormulaError& rErr)
     mnCol = maStartPos.Col();
     mnTab = maStartPos.Tab();
 
-    ScTable* pTab = mrDoc.FetchTable(mnTab);
+    const ScTable* pTab = mrDoc.FetchTable(mnTab);
     if (!pTab)
         return false;
 

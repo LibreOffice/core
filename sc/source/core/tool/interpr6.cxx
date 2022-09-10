@@ -783,7 +783,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 else
                 {
-                    ScValueIterator aValIter( mrContext, mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
+                    ScValueIterator aValIter( mrContext, aRange, mnSubTotalFlags, bTextAsZero );
                     FormulaError nErr = FormulaError::NONE;
                     if (aValIter.GetFirst(fVal, nErr))
                     {
