@@ -115,7 +115,7 @@ private:
     Reference< XOutputStream >  m_output;
     bool m_bValidStream;
 
-    std::unique_ptr<MemRingBuffer> m_pBuffer;
+    MemRingBuffer m_aRingBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
@@ -127,7 +127,6 @@ private:
 
 OMarkableOutputStream::OMarkableOutputStream( )
     : m_bValidStream(false)
-    , m_pBuffer( new MemRingBuffer )
     , m_nCurrentPos(0)
     , m_nCurrentMark(0)
 {
@@ -139,14 +138,14 @@ void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
     if( !m_bValidStream ) {
         throw NotConnectedException();
     }
-    if( m_mapMarks.empty() && ( m_pBuffer->getSize() == 0 ) ) {
+    if( m_mapMarks.empty() && ( m_aRingBuffer.getSize() == 0 ) ) {
         // no mark and  buffer active, simple write through
         m_output->writeBytes( aData );
     }
     else {
         std::unique_lock guard( m_mutex );
         // new data must be buffered
-        m_pBuffer->writeAt( m_nCurrentPos , aData );
+        m_aRingBuffer.writeAt( m_nCurrentPos , aData );
         m_nCurrentPos += aData.getLength();
         checkMarksAndFlush();
     }
@@ -179,7 +178,7 @@ void OMarkableOutputStream::closeOutput()
     // all marks must be cleared and all
 
     m_mapMarks.clear();
-    m_nCurrentPos = m_pBuffer->getSize();
+    m_nCurrentPos = m_aRingBuffer.getSize();
     checkMarksAndFlush();
 
     m_output->closeOutput();
@@ -232,7 +231,7 @@ void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
 void OMarkableOutputStream::jumpToFurthest()
 {
     std::unique_lock guard( m_mutex );
-    m_nCurrentPos = m_pBuffer->getSize();
+    m_nCurrentPos = m_aRingBuffer.getSize();
     checkMarksAndFlush();
 }
 
@@ -328,8 +327,8 @@ void OMarkableOutputStream::checkMarksAndFlush()
         }
 
         Sequence<sal_Int8> seq(nNextFound);
-        m_pBuffer->readAt( 0 , seq , nNextFound );
-        m_pBuffer->forgetFromStart( nNextFound );
+        m_aRingBuffer.readAt( 0 , seq , nNextFound );
+        m_aRingBuffer.forgetFromStart( nNextFound );
 
         // now write data through to streams
         m_output->writeBytes( seq );
