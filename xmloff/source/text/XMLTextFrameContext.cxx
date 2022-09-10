@@ -1065,7 +1065,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             sTblName = aIter.toString();
             break;
         default:
-            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+            SAL_INFO("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
     };
 
