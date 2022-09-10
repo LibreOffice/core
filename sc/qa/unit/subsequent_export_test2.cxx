@@ -125,6 +125,7 @@ public:
     void testTdf91634XLSX();
     void testTdf115159();
     void testTdf112567();
+    void testTdf103829();
     void testTdf122191();
     void testTdf142881();
     void testTdf112567b();
@@ -248,6 +249,7 @@ public:
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
+    CPPUNIT_TEST(testTdf103829);
     CPPUNIT_TEST(testTdf122191);
     CPPUNIT_TEST(testTdf142881);
     CPPUNIT_TEST(testTdf112567b);
@@ -1435,6 +1437,26 @@ void ScExportTest2::testTdf112567()
     assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf103829()
+{
+    // The problem was that tabspaces were not imported or exported at all.
+    // These strings match the current implementations of CELLTYPE_EDIT and CELLTYPE_STRING.
+    const OUString sA1("\x001Leading tab\nTHREE tabs inside: [\x001\x001\x001]");
+    const OUString sA2("\tLeading tab. THREE tabs inside: [\t\t\t]");
+
+    ScDocShellRef xShell = loadDoc(u"tdf103829_textTab.", FORMAT_ODS);
+    ScDocument& rDoc = xShell->GetDocument();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("load a1", sA1, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("load a1", sA1, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("load a2", sA2, rDoc.GetString(0, 1, 0));
+
+    xShell = saveAndReload(*xShell, FORMAT_ODS);
+    ScDocument& rDoc2 = xShell->GetDocument();
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1.getLength(), rDoc2.GetString(0, 0, 0).getLength());
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1, rDoc2.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a2", sA2, rDoc2.GetString(0, 1, 0));
 }
 
 void ScExportTest2::testTdf122191()

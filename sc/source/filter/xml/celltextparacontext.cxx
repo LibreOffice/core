@@ -63,7 +63,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
             return new ScXMLCellFieldURLContext(GetScImport(), *this);
         case XML_ELEMENT( TEXT, XML_RUBY ):
             return new ScXMLCellTextRubyContext(GetScImport(), *this);
+        case XML_ELEMENT(TEXT, XML_TAB):
+            maContent += "\t";
+            break;
         default:
+            assert(false && "unknown cell text: element");
             ;
     }
 
