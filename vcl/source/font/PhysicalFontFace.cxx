@@ -212,6 +212,11 @@ bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchSta
     return true;
 }
 
+RawFontData PhysicalFontFace::GetRawFontData(uint32_t nTag) const
+{
+    return RawFontData(hb_face_reference_table(GetHbFace(), nTag));
+}
+
 static hb_blob_t* getTable(hb_face_t*, hb_tag_t nTag, void* pUserData)
 {
     return static_cast<const PhysicalFontFace*>(pUserData)->GetHbTable(nTag);
@@ -232,15 +237,8 @@ FontCharMapRef PhysicalFontFace::GetFontCharMap() const
 
     // Check if this font is using symbol cmap subtable, most likely redundant
     // since HarfBuzz handles mapping symbol fonts for us.
-    bool bSymbol = false;
-    hb_blob_t* pBlob = GetHbTable(HB_TAG('c', 'm', 'a', 'p'));
-    if (pBlob)
-    {
-        unsigned int nSize = 0;
-        auto* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, &nSize));
-        bSymbol = HasSymbolCmap(pData, nSize);
-        hb_blob_destroy(pBlob);
-    }
+    RawFontData aData(GetRawFontData(HB_TAG('c', 'm', 'a', 'p')));
+    bool bSymbol = HasSymbolCmap(aData.data(), aData.size());
 
     hb_face_t* pHbFace = GetHbFace();
     hb_set_t* pUnicodes = hb_set_create();
@@ -274,14 +272,9 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     {
         mbFontCapabilitiesRead = true;
 
-        hb_blob_t* pBlob = GetHbTable(HB_TAG('O', 'S', '/', '2'));
-        if (pBlob)
-        {
-            unsigned int nSize = 0;
-            auto* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, &nSize));
-            vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange,
-                               pData, nSize);
-        }
+        RawFontData aData(GetRawFontData(HB_TAG('O', 'S', '/', '2')));
+        getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange,
+                      aData.data(), aData.size());
     }
 
     rFontCapabilities = maFontCapabilities;

@@ -372,22 +372,15 @@ bool ImplFontMetricData::ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo)
 void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
 {
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
+    auto* pFace = pFontInstance->GetFontFace();
 
-    hb_font_t* pHbFont = pFontInstance->GetHbFont();
-    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
-
-    hb_blob_t* pHhea = hb_face_reference_table(pHbFace, HB_TAG('h', 'h', 'e', 'a'));
-    hb_blob_t* pOS2 = hb_face_reference_table(pHbFace, HB_TAG('O', 'S', '/', '2'));
+    auto aHhea(pFace->GetRawFontData(HB_TAG('h', 'h', 'e', 'a')));
+    auto aOS_2(pFace->GetRawFontData(HB_TAG('O', 'S', '/', '2')));
 
     vcl::TTGlobalFontInfo rInfo = {};
-    GetTTFontMetrics(reinterpret_cast<const uint8_t*>(hb_blob_get_data(pHhea, nullptr)), hb_blob_get_length(pHhea),
-                     reinterpret_cast<const uint8_t*>(hb_blob_get_data(pOS2, nullptr)), hb_blob_get_length(pOS2),
-                     &rInfo);
+    GetTTFontMetrics(aHhea.data(), aHhea.size(), aOS_2.data(), aOS_2.size(), &rInfo);
 
-    hb_blob_destroy(pHhea);
-    hb_blob_destroy(pOS2);
-
-    double nUPEM = hb_face_get_upem(pHbFace);
+    double nUPEM = hb_face_get_upem(pFace->GetHbFace());
     double fScale = mnHeight / nUPEM;
     double fAscent = 0, fDescent = 0, fExtLeading = 0;
 

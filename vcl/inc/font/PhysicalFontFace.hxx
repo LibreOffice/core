@@ -55,6 +55,34 @@ public:
     const OUString* mpTargetStyleName;
 };
 
+struct RawFontData
+{
+public:
+    RawFontData(hb_blob_t* pBlob = nullptr)
+        : mpBlob(pBlob ? pBlob : hb_blob_get_empty())
+    {
+    }
+
+    ~RawFontData() { hb_blob_destroy(mpBlob); }
+
+    RawFontData& operator=(const RawFontData& rOther)
+    {
+        hb_blob_destroy(mpBlob);
+        mpBlob = hb_blob_reference(rOther.mpBlob);
+        return *this;
+    }
+
+    size_t size() const { return hb_blob_get_length(mpBlob); }
+    bool empty() const { return size() == 0; }
+    const uint8_t* data() const
+    {
+        return reinterpret_cast<const uint8_t*>(hb_blob_get_data(mpBlob, nullptr));
+    }
+
+private:
+    hb_blob_t* mpBlob;
+};
+
 // TODO: no more direct access to members
 // TODO: get rid of height/width for scalable fonts
 // TODO: make cloning cheaper
@@ -77,6 +105,8 @@ public:
     virtual sal_IntPtr GetFontId() const = 0;
     virtual FontCharMapRef GetFontCharMap() const;
     virtual bool GetFontCapabilities(vcl::FontCapabilities&) const;
+
+    RawFontData GetRawFontData(uint32_t) const;
 
     bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
     sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
