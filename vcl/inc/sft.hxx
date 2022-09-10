@@ -50,6 +50,8 @@
 #include <vector>
 #include <cstdint>
 
+#include "font/PhysicalFontFace.hxx"
+
 namespace vcl
 {
 
@@ -450,6 +452,7 @@ constexpr sal_uInt32 T_CFF  = 0x43464620;
 
 class AbstractTrueTypeFont;
 class TrueTypeFont;
+class TrueTypeFace;
 
 /**
  * @defgroup sft Sun Font Tools Exported Functions
@@ -664,7 +667,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    VCL_DLLPUBLIC void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info);
+    VCL_DLLPUBLIC void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
 
 /**
  * Returns part of the head table info, normally collected by GetTTGlobalFontInfo.
@@ -736,6 +739,8 @@ public:
     AbstractTrueTypeFont(const char* fileName = nullptr, const FontCharMapRef xCharMap = nullptr);
     virtual ~AbstractTrueTypeFont();
 
+    SFErrCodes initialize();
+
     std::string const & fileName() const { return m_sFileName; }
     sal_uInt32 glyphCount() const { return m_nGlyphs; }
     sal_uInt32 glyphOffset(sal_uInt32 glyphID) const;
@@ -746,6 +751,12 @@ public:
 
     virtual bool hasTable(sal_uInt32 ord) const = 0;
     virtual const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const = 0;
+
+    char        *psname;
+    char        *family;
+    sal_Unicode *ufamily;
+    char        *subfamily;
+    sal_Unicode *usubfamily;
 };
 
 class TrueTypeFont final : public AbstractTrueTypeFont
@@ -761,13 +772,6 @@ class TrueTypeFont final : public AbstractTrueTypeFont
 public:
         sal_Int32   fsize;
         sal_uInt8   *ptr;
-
-        char        *psname;
-        char        *family;
-        sal_Unicode *ufamily;
-        char        *subfamily;
-        sal_Unicode *usubfamily;
-
         sal_uInt32  ntables;
 
     TrueTypeFont(const char* pFileName = nullptr, const FontCharMapRef xCharMap = nullptr);
@@ -791,6 +795,21 @@ const sal_uInt8* TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
     size = rTable.nSize;
     return rTable.pData;
 }
+
+class VCL_DLLPUBLIC TrueTypeFace final : public AbstractTrueTypeFont
+{
+    const font::PhysicalFontFace& m_rFace;
+    mutable std::array<font::RawFontData, NUM_TAGS> m_aTableList;
+
+    static sal_uInt32 TableTag(sal_uInt32);
+
+public:
+    TrueTypeFace(const font::PhysicalFontFace&);
+    ~TrueTypeFace() override;
+
+    bool hasTable(sal_uInt32) const override;
+    const sal_uInt8* table(sal_uInt32, sal_uInt32&) const override;
+};
 
 } // namespace vcl
 

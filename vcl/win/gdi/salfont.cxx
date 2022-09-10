@@ -1491,57 +1491,12 @@ private:
     HFONT m_hOrigFont;
 };
 
-class ScopedTrueTypeFont
-{
-public:
-    ScopedTrueTypeFont(): m_pFont(nullptr) {}
-
-    ~ScopedTrueTypeFont();
-
-    SFErrCodes open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum, const FontCharMapRef xCharMap = nullptr);
-
-    TrueTypeFont * get() const { return m_pFont; }
-
-private:
-    TrueTypeFont * m_pFont;
-};
-
 }
-
-ScopedTrueTypeFont::~ScopedTrueTypeFont()
-{
-    if (m_pFont != nullptr)
-        CloseTTFont(m_pFont);
-}
-
-SFErrCodes ScopedTrueTypeFont::open(void const * pBuffer, sal_uInt32 nLen,
-                             sal_uInt32 nFaceNum, const FontCharMapRef xCharMap)
-{
-    OSL_ENSURE(m_pFont == nullptr, "already open");
-    return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont, xCharMap);
-}
-
-static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
-    const vcl::font::PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
+    const vcl::font::PhysicalFontFace* pFace, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
     int nGlyphCount, FontSubsetInfo& rInfo )
 {
-    ScopedFontHDC aScopedFontHDC(*this, *pFont);
-    HDC hDC = aScopedFontHDC.hdc();
-    if (!hDC)
-        return false;
-
-#if OSL_DEBUG_LEVEL > 1
-    // get font metrics
-    TEXTMETRICW aWinMetric;
-    if (!::GetTextMetricsW(hDC, &aWinMetric))
-        return false;
-
-    SAL_WARN_IF( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "vcl", "cannot subset device font" );
-    SAL_WARN_IF( !(aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE), "vcl", "can only subset TT font" );
-#endif
-
     OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return false;
@@ -1549,35 +1504,24 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const OString aToFile(OUStringToOString(aSysPath, aThreadEncoding));
 
     // check if the font has a CFF-table
-    const DWORD nCffTag = CalcTag( "CFF " );
-    const RawFontData aRawCffData(hDC, nCffTag);
-    if (aRawCffData.get())
-        return SalGraphics::CreateCFFfontSubset(aRawCffData.get(), aRawCffData.size(), aToFile,
+    auto aData = pFace->GetRawFontData(T_CFF);
+    if (!aData.empty())
+        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile,
                                                 pGlyphIds, pEncoding, nGlyphCount,
                                                 rInfo);
 
-    // get raw font file data
-    const RawFontData xRawFontData(hDC, 0);
-    if( !xRawFontData.get() )
-        return false;
-
     // open font file
-    sal_uInt32 nFaceNum = 0;
-    if( !*xRawFontData.get() )  // TTC candidate
-        nFaceNum = ~0U;  // indicate "TTC font extracts only"
-
-    ScopedTrueTypeFont aSftTTF;
-    SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum, pFont->GetFontCharMap());
-    if( nRC != SFErrCodes::Ok )
+    TrueTypeFace aSftTTF(*pFace);
+    if (aSftTTF.initialize() != SFErrCodes::Ok)
         return false;
 
     TTGlobalFontInfo aTTInfo;
-    ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
+    ::GetTTGlobalFontInfo(&aSftTTF, &aTTInfo);
     OUString aPSName = ImplSalGetUniString(aTTInfo.psname);
     FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
     // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(*aSftTTF.get(), aToFile,
+    return SalGraphics::CreateTTFfontSubset(aSftTTF, aToFile,
                                             pGlyphIds, pEncoding, nGlyphCount);
 }
 

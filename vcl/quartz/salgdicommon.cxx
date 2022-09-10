@@ -47,7 +47,7 @@
 using namespace vcl;
 
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
-                                        const vcl::font::PhysicalFontFace* pFontData,
+                                        const vcl::font::PhysicalFontFace* pFace,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                         const int nGlyphCount,
                                         FontSubsetInfo& rInfo )
@@ -59,18 +59,14 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return false;
 
-    // get the raw-bytes from the font to be subset
-    std::vector<unsigned char> aBuffer;
-    bool bCffOnly = false;
-    if( !GetRawFontData( pFontData, aBuffer, &bCffOnly ) )
-        return false;
     const OString aToFile( OUStringToOString( aSysPath,
                                               osl_getThreadTextEncoding()));
 
     // handle CFF-subsetting
     // NOTE: assuming that all glyphids requested on Aqua are fully translated
-    if (bCffOnly)
-        return SalGraphics::CreateCFFfontSubset(aBuffer.data(), aBuffer.size(), aToFile, pGlyphIds,
+    auto aData = pFace->GetRawFontData(T_CFF);
+    if (!aData.empty())
+        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds,
                                                 pEncoding, nGlyphCount, rInfo);
 
     // TODO: modernize psprint's horrible fontsubset C-API
@@ -78,23 +74,18 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     // that can preserve change history after file renames
 
     // prepare data for psprint's font subsetter
-    TrueTypeFont* pSftFont = nullptr;
-    if (::OpenTTFontBuffer( static_cast<void*>(aBuffer.data()), aBuffer.size(), 0, &pSftFont, pFontData->GetFontCharMap())
-            != SFErrCodes::Ok)
+    TrueTypeFace aSftFont(*pFace);
+    if (aSftFont.initialize() != SFErrCodes::Ok)
         return false;
 
     // get details about the subsetted font
     TTGlobalFontInfo aTTInfo;
-    ::GetTTGlobalFontInfo( pSftFont, &aTTInfo );
+    ::GetTTGlobalFontInfo(&aSftFont, &aTTInfo);
     OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
     FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
     // write subset into destination file
-    bool bRet
-        = SalGraphics::CreateTTFfontSubset(*pSftFont, aToFile,
-                                           pGlyphIds, pEncoding, nGlyphCount);
-    ::CloseTTFont(pSftFont);
-    return bRet;
+    return SalGraphics::CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);
 }
 
 #ifndef IOS

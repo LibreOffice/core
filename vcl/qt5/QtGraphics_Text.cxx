@@ -137,94 +137,7 @@ bool QtGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUStri
     return false;
 }
 
-namespace
-{
-class QtTrueTypeFont : public vcl::AbstractTrueTypeFont
-{
-    const QRawFont& m_aRawFont;
-    mutable QByteArray m_aFontTable[vcl::NUM_TAGS];
-
-public:
-    QtTrueTypeFont(const QtFontFace& aFontFace, const QRawFont& aRawFont);
-
-    bool hasTable(sal_uInt32 ord) const override;
-    const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const override;
-};
-
-QtTrueTypeFont::QtTrueTypeFont(const QtFontFace& aFontFace, const QRawFont& aRawFont)
-    : vcl::AbstractTrueTypeFont(nullptr, aFontFace.GetFontCharMap())
-    , m_aRawFont(aRawFont)
-{
-    indexGlyphData();
-}
-
-const char* vclFontTableAsChar(sal_uInt32 ord)
-{
-    switch (ord)
-    {
-        case vcl::O_maxp:
-            return "maxp";
-        case vcl::O_glyf:
-            return "glyf";
-        case vcl::O_head:
-            return "head";
-        case vcl::O_loca:
-            return "loca";
-        case vcl::O_name:
-            return "name";
-        case vcl::O_hhea:
-            return "hhea";
-        case vcl::O_hmtx:
-            return "hmtx";
-        case vcl::O_cmap:
-            return "cmap";
-        case vcl::O_vhea:
-            return "vhea";
-        case vcl::O_vmtx:
-            return "vmtx";
-        case vcl::O_OS2:
-            return "OS/2";
-        case vcl::O_post:
-            return "post";
-        case vcl::O_cvt:
-            return "cvt ";
-        case vcl::O_prep:
-            return "prep";
-        case vcl::O_fpgm:
-            return "fpgm";
-        case vcl::O_gsub:
-            return "gsub";
-        case vcl::O_CFF:
-            return "CFF ";
-        default:
-            return nullptr;
-    }
-}
-
-bool QtTrueTypeFont::hasTable(sal_uInt32 ord) const
-{
-    const char* table_char = vclFontTableAsChar(ord);
-    if (!table_char)
-        return false;
-    if (m_aFontTable[ord].isEmpty())
-        m_aFontTable[ord] = m_aRawFont.fontTable(table_char);
-    return !m_aFontTable[ord].isEmpty();
-}
-
-const sal_uInt8* QtTrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
-{
-    const char* table_char = vclFontTableAsChar(ord);
-    if (!table_char)
-        return nullptr;
-    if (m_aFontTable[ord].isEmpty())
-        m_aFontTable[ord] = m_aRawFont.fontTable(table_char);
-    size = m_aFontTable[ord].size();
-    return reinterpret_cast<const sal_uInt8*>(m_aFontTable[ord].data());
-}
-}
-
-bool QtGraphics::CreateFontSubset(const OUString& rToFile,
-                                  const vcl::font::PhysicalFontFace* pFontFace,
+bool QtGraphics::CreateFontSubset(const OUString& rToFile, const vcl::font::PhysicalFontFace* pFace,
                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                   int nGlyphCount, FontSubsetInfo& rInfo)
 {
@@ -232,32 +145,26 @@ bool QtGraphics::CreateFontSubset(const OUString& rToFile,
     if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
         return false;
 
-    // get the raw-bytes from the font to be subset
-    const QtFontFace* pQtFontFace = static_cast<const QtFontFace*>(pFontFace);
-    const QFont aFont = pQtFontFace->CreateFont();
-    const QRawFont aRawFont(QRawFont::fromFont(aFont));
     const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
 
     // handle CFF-subsetting
-    QByteArray aCFFtable = aRawFont.fontTable("CFF ");
-    if (!aCFFtable.isEmpty())
-        return SalGraphics::CreateCFFfontSubset(
-            reinterpret_cast<const sal_uInt8*>(aCFFtable.data()), aCFFtable.size(), aToFile,
-            pGlyphIds, pEncoding, nGlyphCount, rInfo);
+    auto aData = pFace->GetRawFontData(vcl::T_CFF);
+    if (!aData.empty())
+        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds,
+                                                pEncoding, nGlyphCount, rInfo);
 
-    // fill details about the subsetted font
-    rInfo.m_nFontType = FontType::SFNT_TTF;
-    rInfo.m_aPSName = toOUString(aRawFont.familyName());
-    rInfo.m_nCapHeight = aRawFont.capHeight();
-    rInfo.m_nAscent = aRawFont.ascent();
-    rInfo.m_nDescent = aRawFont.descent();
+    // prepare data for psprint's font subsetter
+    vcl::TrueTypeFace aTTF(*pFace);
+    if (aTTF.initialize() != vcl::SFErrCodes::Ok)
+        return false;
 
-    QtTrueTypeFont aTTF(*pQtFontFace, aRawFont);
-    int nXmin, nYmin, nXmax, nYmax;
-    sal_uInt16 nMacStyleFlags;
-    if (GetTTGlobalFontHeadInfo(&aTTF, nXmin, nYmin, nXmax, nYmax, nMacStyleFlags))
-        rInfo.m_aFontBBox = tools::Rectangle(Point(nXmin, nYmin), Point(nXmax, nYmax));
+    // get details about the subsetted font
+    vcl::TTGlobalFontInfo aTTInfo;
+    vcl::GetTTGlobalFontInfo(&aTTF, &aTTInfo);
+    OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
+    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
+    // write subset into destination file
     return SalGraphics::CreateTTFfontSubset(aTTF, aToFile, pGlyphIds, pEncoding, nGlyphCount);
 }
 

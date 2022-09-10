@@ -963,7 +963,7 @@ static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
  * Fix: change algorithm, and use (1, 0, *) if both standard Mac and MS strings are not found
  */
 
-static void GetNames(TrueTypeFont *t)
+static void GetNames(AbstractTrueTypeFont *t)
 {
     sal_uInt32 nTableSize;
     const sal_uInt8* table = t->table(O_name, nTableSize);
@@ -1201,6 +1201,11 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
     , m_nUnitsPerEm(0)
     , m_xCharMap(xCharMap)
     , m_bIsSymbolFont(false)
+    , psname(nullptr)
+    , family(nullptr)
+    , ufamily(nullptr)
+    , subfamily(nullptr)
+    , usubfamily(nullptr)
 {
     if (pFileName)
         m_sFileName = pFileName;
@@ -1208,17 +1213,17 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
 
 AbstractTrueTypeFont::~AbstractTrueTypeFont()
 {
+    free(psname);
+    free(family);
+    free(ufamily);
+    free(subfamily);
+    free(usubfamily);
 }
 
 TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
     : AbstractTrueTypeFont(pFileName, xCharMap)
     , fsize(-1)
     , ptr(nullptr)
-    , psname(nullptr)
-    , family(nullptr)
-    , ufamily(nullptr)
-    , subfamily(nullptr)
-    , usubfamily(nullptr)
     , ntables(0)
 {
 }
@@ -1229,14 +1234,78 @@ TrueTypeFont::~TrueTypeFont()
     if (!fileName().empty())
         munmap(ptr, fsize);
 #endif
-    free(psname);
-    free(family);
-    free(ufamily);
-    free(subfamily);
-    free(usubfamily);
+}
+
+TrueTypeFace::TrueTypeFace(const font::PhysicalFontFace& rFace)
+    : AbstractTrueTypeFont(nullptr, rFace.GetFontCharMap())
+    , m_rFace(rFace)
+{
+}
+
+TrueTypeFace::~TrueTypeFace()
+{
+}
+
+sal_uInt32 TrueTypeFace::TableTag(sal_uInt32 nIdx)
+{
+    switch (nIdx)
+    {
+        case O_cmap: return T_cmap;
+        case O_cvt: return T_cvt;
+        case O_fpgm: return T_fpgm;
+        case O_glyf: return T_glyf;
+        case O_gsub: return T_gsub;
+        case O_head: return T_head;
+        case O_hhea: return T_hhea;
+        case O_hmtx: return T_hmtx;
+        case O_loca: return T_loca;
+        case O_maxp: return T_maxp;
+        case O_name: return T_name;
+        case O_post: return T_post;
+        case O_prep: return T_prep;
+        case O_vhea: return T_vhea;
+        case O_vmtx: return T_vmtx;
+        case O_OS2: return T_OS2;
+        case O_CFF: return T_CFF;
+        default:
+            assert(false);
+            return 0;
+    }
+}
+
+bool TrueTypeFace::hasTable(sal_uInt32 nIdx) const
+{
+    uint32_t nTag = TableTag(nIdx);
+    if (!nTag)
+        return false;
+    if (m_aTableList[nIdx].empty())
+        m_aTableList[nIdx] = std::move(m_rFace.GetRawFontData(nTag));
+    return !m_aTableList[nIdx].empty();
+}
+
+const sal_uInt8* TrueTypeFace::table(sal_uInt32 nIdx, sal_uInt32& nSize) const
+{
+    uint32_t nTag = TableTag(nIdx);
+    if (!nTag)
+        return nullptr;
+    if (m_aTableList[nIdx].empty())
+        m_aTableList[nIdx] = std::move(m_rFace.GetRawFontData(nTag));
+    nSize = m_aTableList[nIdx].size();
+    return reinterpret_cast<const sal_uInt8*>(m_aTableList[nIdx].data());
 }
 
 void CloseTTFont(TrueTypeFont* ttf) { delete ttf; }
+
+SFErrCodes AbstractTrueTypeFont::initialize()
+{
+    SFErrCodes ret = indexGlyphData();
+    if (ret != SFErrCodes::Ok)
+        return ret;
+
+    GetNames(this);
+
+    return SFErrCodes::Ok;
+}
 
 sal_uInt32 AbstractTrueTypeFont::glyphOffset(sal_uInt32 glyphID) const
 {
@@ -1445,13 +1514,7 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
     /* At this point TrueTypeFont is constructed, now need to verify the font format
        and read the basic font properties */
 
-    SFErrCodes ret = indexGlyphData();
-    if (ret != SFErrCodes::Ok)
-        return ret;
-
-    GetNames(this);
-
-    return SFErrCodes::Ok;
+    return AbstractTrueTypeFont::initialize();
 }
 
 int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray)
@@ -2159,7 +2222,7 @@ bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yM
     return true;
 }
 
-void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
+void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
 {
     int UPEm = ttf->unitsPerEm();
 

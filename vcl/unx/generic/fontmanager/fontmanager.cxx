@@ -984,12 +984,8 @@ bool PrintFontManager::createFontSubset(
     }
     nGlyphs = nChar; // either input value or increased by one
 
-    // prepare system name for read access for subset source file
-    // TODO: since this file is usually already mmapped there is no need to open it again
-    const OString aFromFile = getFontFile( *pFont );
-
-    TrueTypeFont* pTTFont = nullptr; // TODO: rename to SfntFont
-    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont, pFace->GetFontCharMap() ) != SFErrCodes::Ok )
+    TrueTypeFace aSftFont(*pFace);
+    if (aSftFont.initialize() != SFErrCodes::Ok)
         return false;
 
     // prepare system name for write access for subset file target
@@ -1001,7 +997,7 @@ bool PrintFontManager::createFontSubset(
 
     // do CFF subsetting if possible
     sal_uInt32 nCffLength = 0;
-    const sal_uInt8* pCffBytes = pTTFont->table(vcl::O_CFF, nCffLength);
+    const sal_uInt8* pCffBytes = aSftFont.table(vcl::O_CFF, nCffLength);
     if (pCffBytes)
     {
         rInfo.LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength );
@@ -1013,10 +1009,7 @@ bool PrintFontManager::createFontSubset(
         // create subset file at requested path
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
         if (!pOutFile)
-        {
-            CloseTTFont( pTTFont );
             return false;
-        }
         // create font subset
         const char* const pGlyphSetName = nullptr; // TODO: better name?
         const bool bOK = rInfo.CreateFontSubset(
@@ -1031,8 +1024,6 @@ bool PrintFontManager::createFontSubset(
             rInfo.m_nAscent     = aFontInfo.m_nAscend;
             rInfo.m_nDescent    = -aFontInfo.m_nDescend;
         }
-        // cleanup before early return
-        CloseTTFont( pTTFont );
         return bOK;
     }
 
@@ -1051,13 +1042,11 @@ bool PrintFontManager::createFontSubset(
     rInfo.m_aFontBBox   = tools::Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
     rInfo.m_nCapHeight  = yMax; // Well ...
 
-    bool bSuccess = ( SFErrCodes::Ok == CreateTTFromTTGlyphs( pTTFont,
+    bool bSuccess = ( SFErrCodes::Ok == CreateTTFromTTGlyphs(&aSftFont,
                                                      aToFile.getStr(),
                                                      pGID,
                                                      pEnc,
                                                      nGlyphs ) );
-    CloseTTFont( pTTFont );
-
     return bSuccess;
 }
 
