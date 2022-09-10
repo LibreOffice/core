@@ -887,20 +887,15 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
     return p;
 }
 
-static void lcl_DoubleEscapeChar( OUString& rString, sal_Unicode cStr )
-{
-    sal_Int32 n = 0;
-    while( ( n = rString.indexOf( cStr, n ) ) != -1 )
-    {
-        rString = rString.replaceAt( n, 0, rtl::OUStringChar(cStr) );
-        n += 2;
-    }
-}
-
 static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQuote, sal_Unicode cEsc )
 {
     if (cEsc)
-        lcl_DoubleEscapeChar( rString, cEsc );
+    {
+        // the goal is to replace cStr by cStr+cStr
+        OUString strFrom(cEsc);
+        OUString strTo = strFrom + strFrom;
+        rString = rString.replaceAll(strFrom, strTo);
+    }
 
     if (cQuote)
     {

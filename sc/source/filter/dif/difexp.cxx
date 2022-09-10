@@ -210,12 +210,10 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 aOS.setLength(0);
                 if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                 {
-                    sal_Int32 nPos = aTmpStr.indexOf( cStrDelim );
-                    while ( nPos != -1 )
-                    {
-                        aTmpStr = aTmpStr.replaceAt( nPos, 0, rtl::OUStringChar(cStrDelim) );
-                        nPos = aTmpStr.indexOf( cStrDelim, nPos+2 );
-                    }
+                    // the goal is to replace cStrDelim by cStrDelim+cStrDelim
+                    OUString strFrom(cStrDelim);
+                    OUString strTo = strFrom + strFrom;
+                    aTmpStr = aTmpStr.replaceAll(strFrom, strTo);
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                     write_uInt16s_FromOUString(rOut, aTmpStr);
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
