@@ -1299,8 +1299,10 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
     if (!m_xCharMap.is())
     {
         table = this->table(O_cmap, table_size);
-        m_bIsSymbolFont = HasSymbolCmap(reinterpret_cast<const unsigned char*>(table), table_size);
+        m_bIsSymbolFont = HasSymbolCmap(table, table_size);
     }
+    else
+        m_bIsSymbolFont = m_xCharMap->isSymbolic();
 
     return SFErrCodes::Ok;
 }
