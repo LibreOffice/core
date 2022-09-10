@@ -1849,25 +1849,38 @@ void SaveBookmark::SetInDoc(
 {
     SwPaM aPam(rNewPos);
     if(oContentIdx)
-        aPam.GetPoint()->SetContent( *oContentIdx );
+    {
+        if (aPam.GetPoint()->GetNode().IsContentNode())
+            aPam.GetPoint()->SetContent( *oContentIdx );
+        else
+            SAL_WARN("sw", "trying to sent content index, but point node is not a content node");
+    }
 
     if(NODE_OFFSET_MAX != m_nNode2)
     {
         aPam.SetMark();
 
         aPam.GetMark()->Adjust(m_nNode2);
-        if(oContentIdx && !m_nNode2)
-            aPam.GetMark()->SetContent(*oContentIdx + m_nContent2);
+        if (aPam.GetMark()->GetNode().IsContentNode())
+        {
+            if(oContentIdx && !m_nNode2)
+                aPam.GetMark()->SetContent(*oContentIdx + m_nContent2);
+            else
+                aPam.GetMark()->SetContent(m_nContent2);
+        }
         else
-            aPam.GetMark()->SetContent(m_nContent2);
+            SAL_WARN("sw", "trying to sent content index, but mark node is not a content node");
     }
 
     aPam.GetPoint()->Adjust(m_nNode1);
 
-    if(oContentIdx && !m_nNode1)
-        aPam.GetPoint()->SetContent(*oContentIdx + m_nContent1);
-    else
-        aPam.GetPoint()->SetContent(m_nContent1);
+    if (aPam.GetPoint()->GetNode().IsContentNode())
+    {
+        if(oContentIdx && !m_nNode1)
+            aPam.GetPoint()->SetContent(*oContentIdx + m_nContent1);
+        else
+            aPam.GetPoint()->SetContent(m_nContent1);
+    }
 
     if(aPam.HasMark()
         && !CheckNodesRange(aPam.GetPoint()->GetNode(), aPam.GetMark()->GetNode(), true))
