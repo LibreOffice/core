@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <sal/log.hxx>
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
@@ -64,10 +65,10 @@ osl::Mutex & GetLinguMutex()
 
 const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang )
 {
-    static std::unique_ptr<LocaleDataWrapper> xLclDtaWrp;
-    if (!xLclDtaWrp || xLclDtaWrp->getLoadedLanguageTag().getLanguageType() != nLang)
-        xLclDtaWrp.reset(new LocaleDataWrapper(LanguageTag( nLang )));
-    return *xLclDtaWrp;
+    static std::optional<LocaleDataWrapper> oLclDtaWrp;
+    if (!oLclDtaWrp || oLclDtaWrp->getLoadedLanguageTag().getLanguageType() != nLang)
+        oLclDtaWrp.emplace(LanguageTag( nLang ));
+    return *oLclDtaWrp;
 }
 
 LanguageType LinguLocaleToLanguage( const css::lang::Locale& rLocale )
