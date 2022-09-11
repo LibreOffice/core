@@ -916,32 +916,11 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.75cm" fo:min-width="28cm"/>
+    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#9ecf6c" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.75cm" fo:min-width="28cm"/>
     </style:style>
     <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0cm" draw:stroke-linejoin="none" svg:stroke-linecap="butt" draw:fill="solid" draw:fill-color="#74b531" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
-    </style:style>
-    <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:fill-color="#74b531" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.5cm" fo:min-width="0.5cm"/>
-    </style:style>
-    <style:style style:name="Mgr6" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:fill-color="#74b531" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.282cm" fo:min-width="1.782cm"/>
-    </style:style>
-    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:fill-color="#74b531" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.282cm" fo:min-width="1.282cm"/>
-    </style:style>
-    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:fill-color="#74b531" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.282cm" fo:min-width="0.782cm"/>
-    </style:style>
-    <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:fill-color="#74b531" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.282cm" fo:min-width="0.282cm"/>
-    </style:style>
-    <style:style style:name="Mgr10" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:fill-color="#74b531" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.25cm" fo:min-width="0cm"/>
-    </style:style>
-    <style:style style:name="Mgr11" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.5cm" fo:min-width="27.5cm"/>
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Forestbird-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
@@ -1403,11 +1382,11 @@
       <draw:path draw:style-name="Mgr4" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="0.503cm" svg:height="0.254cm" svg:x="17.6cm" svg:y="13.681cm" svg:viewBox="0 0 504 255" svg:d="M197 126c-64-12-171 12-193-37-32-69 163-111 213-78 120 73 282-69 287 145 2 53-125 208-307-30z">
         <text:p/>
       </draw:path>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="25.5cm" svg:y="11.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="25.5cm" svg:y="11.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr6" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="0.75cm" svg:x="24.5cm" svg:y="12.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="0.75cm" svg:x="24.5cm" svg:y="12.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1424,7 +1403,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="24.75cm" svg:y="12cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="24.75cm" svg:y="12cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1441,7 +1420,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="25.001cm" svg:y="11.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="25cm" svg:y="11.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1458,7 +1437,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr9" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="25.25cm" svg:y="11cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="25.25cm" svg:y="11cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1475,11 +1454,11 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr10" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="22.751cm" svg:y="11.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="22.75cm" svg:y="11.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="22cm" svg:y="12.25cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="22cm" svg:y="12.25cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1496,7 +1475,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="22.251cm" svg:y="11.75cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="22.25cm" svg:y="11.75cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1513,7 +1492,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr9" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="22.5cm" svg:y="11.25cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="22.5cm" svg:y="11.25cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1626,7 +1605,7 @@
       </presentation:notes>
     </style:master-page>
     <style:master-page style:name="Forestbird1" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <draw:custom-shape draw:style-name="Mgr11" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="1.75cm" svg:x="0cm" svg:y="14cm">
+      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="1.75cm" svg:x="0cm" svg:y="14cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
@@ -1660,11 +1639,11 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Mgr10" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="25.501cm" svg:y="11.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="25.5cm" svg:y="11.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr6" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="0.75cm" svg:x="24.501cm" svg:y="12.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="0.75cm" svg:x="24.501cm" svg:y="12.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1681,7 +1660,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="24.751cm" svg:y="12cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="24.751cm" svg:y="12cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1698,7 +1677,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="25.002cm" svg:y="11.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="25cm" svg:y="11.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1715,7 +1694,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr9" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="25.251cm" svg:y="11cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="25.251cm" svg:y="11cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1732,11 +1711,11 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr10" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="22.752cm" svg:y="11.5cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="2.5cm" svg:x="22.75cm" svg:y="11.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="22.001cm" svg:y="12.25cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="2cm" svg:height="0.75cm" svg:x="22.001cm" svg:y="12.25cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1753,7 +1732,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="22.252cm" svg:y="11.75cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1.5cm" svg:height="0.75cm" svg:x="22.25cm" svg:y="11.75cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1770,7 +1749,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr9" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="22.501cm" svg:y="11.25cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="1cm" svg:height="0.75cm" svg:x="22.5cm" svg:y="11.25cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1886,7 +1865,7 @@
       </presentation:notes>
     </style:master-page>
     <style:master-page style:name="Forestbird2" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <draw:custom-shape draw:style-name="Mgr11" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="1.75cm" svg:x="0cm" svg:y="14cm">
+      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="1.75cm" svg:x="0cm" svg:y="14cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
@@ -2085,7 +2064,7 @@
       </presentation:notes>
     </style:master-page>
     <style:master-page style:name="Forestbird3" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <draw:custom-shape draw:style-name="Mgr11" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="1.75cm" svg:x="0cm" svg:y="14cm">
+      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="1.75cm" svg:x="0cm" svg:y="14cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
