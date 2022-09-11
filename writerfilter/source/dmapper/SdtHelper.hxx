@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <optional>
+#include <unordered_map>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -94,7 +95,7 @@ class SdtHelper final : public virtual SvRefBase
     bool m_bOutsideAParagraph;
 
     /// Storage for all properties documents as xml::dom::XDocument for later querying xpath for data
-    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
+    std::unordered_map<OUString, css::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
 
     /// Check if m_xPropertiesXMLs is initialized and loaded (need extra flag to distinguish
     /// empty sequence from not yet initialized)

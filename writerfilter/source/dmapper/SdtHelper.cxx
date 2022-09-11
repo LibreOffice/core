@@ -104,13 +104,13 @@ void SdtHelper::loadPropertiesXMLs()
     if (!xDomBuilder.is())
         return;
 
-    std::vector<uno::Reference<xml::dom::XDocument>> aPropDocs;
-
     // Load core properties
     try
     {
         auto xCorePropsStream = xImporter->getCorePropertiesStream(m_rDM_Impl.m_xDocumentStorage);
-        aPropDocs.push_back(xDomBuilder->parse(xCorePropsStream));
+        m_xPropertiesXMLs.insert(
+            { OUString("{6C3C8BC8-F283-45AE-878A-BAB7291924A1}"), // hardcoded id for core props
+              xDomBuilder->parse(xCorePropsStream) });
     }
     catch (const uno::Exception&)
     {
@@ -123,7 +123,9 @@ void SdtHelper::loadPropertiesXMLs()
     {
         auto xExtPropsStream
             = xImporter->getExtendedPropertiesStream(m_rDM_Impl.m_xDocumentStorage);
-        aPropDocs.push_back(xDomBuilder->parse(xExtPropsStream));
+        m_xPropertiesXMLs.insert(
+            { OUString("{6668398D-A668-4E3E-A5EB-62B293D839F1}"), // hardcoded id for extended props
+              xDomBuilder->parse(xExtPropsStream) });
     }
     catch (const uno::Exception&)
     {
@@ -136,12 +138,40 @@ void SdtHelper::loadPropertiesXMLs()
     // Add custom XMLs
     uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
         = m_rDM_Impl.getDocumentReference()->getCustomXmlDomList();
-    for (const auto& xDoc : aCustomXmls)
+    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmlProps
+        = m_rDM_Impl.getDocumentReference()->getCustomXmlDomPropsList();
+    if (aCustomXmls.getLength())
     {
-        aPropDocs.push_back(xDoc);
+        uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
+        xXpathAPI->registerNS("ds",
+                              "http://schemas.openxmlformats.org/officeDocument/2006/customXml");
+        sal_Int32 nItem = 0;
+        // Hereby we assume that items from getCustomXmlDomList() and getCustomXmlDomPropsList()
+        // are matching each other:
+        // item1.xml -> itemProps1.xml, item2.xml -> itemProps2.xml
+        // This does works practically, but is it true in general?
+        for (const auto& xDoc : aCustomXmls)
+        {
+            // Retrieve storeid from properties xml
+            OUString aStoreId;
+            uno::Reference<XXPathObject> xResult
+                = xXpathAPI->eval(aCustomXmlProps[nItem], "string(/ds:datastoreItem/@ds:itemID)");
+
+            if (xResult.is() && xResult->getString().getLength())
+            {
+                aStoreId = xResult->getString();
+            }
+            else
+            {
+                SAL_WARN("writerfilter",
+                         "SdtHelper::loadPropertiesXMLs: can't fetch storeid for custom doc!");
+            }
+
+            m_xPropertiesXMLs.insert({ aStoreId, xDoc });
+            nItem++;
+        }
     }
 
-    m_xPropertiesXMLs = comphelper::containerToSequence(aPropDocs);
     m_bPropertiesXMLsLoaded = true;
 }
 
@@ -191,10 +221,24 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
 
     lcl_registerNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
 
-    // Iterate all properties xml documents and try to fetch data
-    for (const auto& xDocument : m_xPropertiesXMLs)
+    // Find storage by store id and eval xpath there
+    const auto& aSourceIt = m_xPropertiesXMLs.find(m_sDataBindingStoreItemID);
+    if (aSourceIt != m_xPropertiesXMLs.end())
     {
-        uno::Reference<XXPathObject> xResult = xXpathAPI->eval(xDocument, m_sDataBindingXPath);
+        uno::Reference<XXPathObject> xResult
+            = xXpathAPI->eval(aSourceIt->second, m_sDataBindingXPath);
+
+        if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
+            && xResult->getString().getLength())
+        {
+            return xResult->getString();
+        }
+    }
+
+    // Nothing found? Try to iterate storages and eval xpath
+    for (const auto& aSource : m_xPropertiesXMLs)
+    {
+        uno::Reference<XXPathObject> xResult = xXpathAPI->eval(aSource.second, m_sDataBindingXPath);
 
         if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
             && xResult->getString().getLength())

@@ -104,6 +104,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     assertXPath(pXmlDoc, "//wps:bodyPr", "vert", "mongolianVert");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
+{
+    const auto& pLayout = parseLayoutDump();
+
+    // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]", "Placeholder -> *ABC*");
+
+    // This SDT has no storage id, it is not an error, but content can be taken from any suitable XML
+    // There 2 variants possible, both are acceptable
+    OUString sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]");
+    CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
