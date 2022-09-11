@@ -1022,6 +1022,10 @@ class SFScriptForge:
             ext = ctx.getByName('/singletons/com.sun.star.deployment.PackageInformationProvider')
             apso = 'apso.python.script.organizer'
             if len(ext.getPackageLocation(apso)) > 0:
+                # APSO is available. However, PythonShell() is ignored in bridge mode
+                # because APSO library not in pythonpath
+                if ScriptForge.port > 0:
+                    return None
                 # Directly derived from apso.oxt|python|scripts|tools.py$console
                 # we need to load apso before import statement
                 ctx.ServiceManager.createInstance('apso.python.script.organizer.impl')
