@@ -29,6 +29,7 @@
 #include <vcl/fontcharmap.hxx>
 
 #include <fontattributes.hxx>
+#include <fontsubset.hxx>
 
 #include <hb.h>
 
@@ -110,6 +111,19 @@ public:
 
     bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
     sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
+
+    // CreateFontSubset: a method to get a subset of glyhps of a font inside a
+    // new valid font file
+    // returns true if creation of subset was successful
+    // parameters: rToFile: contains an osl file URL to write the subset to
+    //             pGlyphIDs: the glyph ids to be extracted
+    //             pEncoding: the character code corresponding to each glyph
+    //             nGlyphs: the number of glyphs
+    //             rInfo: additional outgoing information
+    // implementation note: encoding 0 with glyph id 0 should be added implicitly
+    // as "undefined character"
+    bool CreateFontSubset(const OUString&, const sal_GlyphId*, const sal_uInt8*, const int,
+                          FontSubsetInfo&) const;
 
     virtual hb_face_t* GetHbFace() const;
     virtual hb_blob_t* GetHbTable(hb_tag_t) const

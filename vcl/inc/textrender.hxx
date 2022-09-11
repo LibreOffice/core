@@ -42,13 +42,6 @@ public:
     virtual void                    GetDevFontList( vcl::font::PhysicalFontCollection* ) = 0;
     virtual void                    ClearDevFontCache() = 0;
     virtual bool                    AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) = 0;
-    virtual bool                    CreateFontSubset(
-                                        const OUString& rToFile,
-                                        const vcl::font::PhysicalFontFace*,
-                                        const sal_GlyphId* pGlyphIDs,
-                                        const sal_uInt8* pEncoding,
-                                        int nGlyphs,
-                                        FontSubsetInfo& rInfo) = 0;
 
     virtual const void*             GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) = 0;
     virtual void                    FreeEmbedFontData( const void* pData, tools::Long nDataLen ) = 0;

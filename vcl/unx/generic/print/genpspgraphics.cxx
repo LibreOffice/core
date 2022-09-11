@@ -315,25 +315,6 @@ std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLev
     return std::make_unique<PspSalLayout>(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
 }
 
-bool GenPspGraphics::CreateFontSubset(
-                                   const OUString& rToFile,
-                                   const vcl::font::PhysicalFontFace* pFont,
-                                   const sal_GlyphId* pGlyphIds,
-                                   const sal_uInt8* pEncoding,
-                                   int nGlyphCount,
-                                   FontSubsetInfo& rInfo
-                                   )
-{
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    bool bSuccess = rMgr.createFontSubset( rInfo,
-                                 pFont,
-                                 rToFile,
-                                 pGlyphIds,
-                                 pEncoding,
-                                 nGlyphCount );
-    return bSuccess;
-}
-
 FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
     FontAttributes aDFA;

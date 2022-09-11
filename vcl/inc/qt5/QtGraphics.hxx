@@ -231,11 +231,6 @@ public:
     virtual void ClearDevFontCache() override;
     virtual bool AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUString& rFileURL,
                                 const OUString& rFontName) override;
-    virtual bool CreateFontSubset(const OUString& rToFile, const vcl::font::PhysicalFontFace* pFont,
-                                  const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                  int nGlyphs,
-                                  FontSubsetInfo& rInfo // out parameter
-                                  ) override;
 
     virtual const void* GetEmbedFontData(const vcl::font::PhysicalFontFace*,
                                          tools::Long* pDataLen) override;

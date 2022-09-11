@@ -24,7 +24,6 @@
 #include <QtFont.hxx>
 #include <QtPainter.hxx>
 
-#include <fontsubset.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
@@ -135,37 +134,6 @@ bool QtGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUStri
                                 const OUString& /*rFontName*/)
 {
     return false;
-}
-
-bool QtGraphics::CreateFontSubset(const OUString& rToFile, const vcl::font::PhysicalFontFace* pFace,
-                                  const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                  int nGlyphCount, FontSubsetInfo& rInfo)
-{
-    OUString aSysPath;
-    if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
-        return false;
-
-    const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
-
-    // handle CFF-subsetting
-    auto aData = pFace->GetRawFontData(vcl::T_CFF);
-    if (!aData.empty())
-        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds,
-                                                pEncoding, nGlyphCount, rInfo);
-
-    // prepare data for psprint's font subsetter
-    vcl::TrueTypeFace aTTF(*pFace);
-    if (aTTF.initialize() != vcl::SFErrCodes::Ok)
-        return false;
-
-    // get details about the subsetted font
-    vcl::TTGlobalFontInfo aTTInfo;
-    vcl::GetTTGlobalFontInfo(&aTTF, &aTTInfo);
-    OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
-    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
-
-    // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(aTTF, aToFile, pGlyphIds, pEncoding, nGlyphCount);
 }
 
 const void* QtGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,

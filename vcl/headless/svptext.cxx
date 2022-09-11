@@ -62,17 +62,6 @@ bool SvpSalGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCol
     return m_aTextRenderImpl.AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
-bool SvpSalGraphics::CreateFontSubset(
-    const OUString& rToFile,
-    const vcl::font::PhysicalFontFace* pFont,
-    const sal_GlyphId* pGlyphIds,
-    const sal_uInt8* pEncoding,
-    int nGlyphCount,
-    FontSubsetInfo& rInfo)
-{
-    return m_aTextRenderImpl.CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, nGlyphCount, rInfo);
-}
-
 const void* SvpSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return m_aTextRenderImpl.GetEmbedFontData(pFont, pDataLen);

@@ -348,25 +348,6 @@ public:
     // graphics must drop any cached font info
     virtual void            ClearDevFontCache() override;
     virtual bool            AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
-    // CreateFontSubset: a method to get a subset of glyhps of a font
-    // inside a new valid font file
-    // returns TRUE if creation of subset was successful
-    // parameters: rToFile: contains an osl file URL to write the subset to
-    //             pFont: describes from which font to create a subset
-    //             pGlyphIDs: the glyph ids to be extracted
-    //             pEncoding: the character code corresponding to each glyph
-    //             pWidths: the advance widths of the corresponding glyphs (in PS font units)
-    //             nGlyphs: the number of glyphs
-    //             rInfo: additional outgoing information
-    // implementation note: encoding 0 with glyph id 0 should be added implicitly
-    // as "undefined character"
-    virtual bool            CreateFontSubset( const OUString& rToFile,
-                                              const vcl::font::PhysicalFontFace*,
-                                              const sal_GlyphId* pGlyphIDs,
-                                              const sal_uInt8* pEncoding,
-                                              int nGlyphs,
-                                              FontSubsetInfo& rInfo // out parameter
-                                              ) override;
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error

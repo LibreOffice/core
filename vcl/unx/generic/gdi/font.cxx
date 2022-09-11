@@ -81,19 +81,6 @@ std::unique_ptr<GenericSalLayout> X11SalGraphics::GetTextLayout(int nFallbackLev
     return mxTextRenderImpl->GetTextLayout(nFallbackLevel);
 }
 
-bool X11SalGraphics::CreateFontSubset(
-                                   const OUString& rToFile,
-                                   const vcl::font::PhysicalFontFace* pFont,
-                                   const sal_GlyphId* pGlyphIds,
-                                   const sal_uInt8* pEncoding,
-                                   int nGlyphCount,
-                                   FontSubsetInfo& rInfo
-                                   )
-{
-    return mxTextRenderImpl->CreateFontSubset(rToFile, pFont,
-            pGlyphIds, pEncoding, nGlyphCount, rInfo);
-}
-
 const void* X11SalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return mxTextRenderImpl->GetEmbedFontData(pFont, pDataLen);

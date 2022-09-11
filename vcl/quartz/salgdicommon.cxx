@@ -33,7 +33,6 @@
 #include <tools/long.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <fontsubset.hxx>
 #include <quartz/salbmp.h>
 #ifdef MACOSX
 #include <quartz/salgdi.h>
@@ -42,51 +41,8 @@
 #ifdef IOS
 #include <svdata.hxx>
 #endif
-#include <sft.hxx>
 
 using namespace vcl;
-
-bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
-                                        const vcl::font::PhysicalFontFace* pFace,
-                                        const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                        const int nGlyphCount,
-                                        FontSubsetInfo& rInfo )
-{
-    // TODO: move more of the functionality here into the generic subsetter code
-
-    // prepare the requested file name for writing the font-subset file
-    OUString aSysPath;
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return false;
-
-    const OString aToFile( OUStringToOString( aSysPath,
-                                              osl_getThreadTextEncoding()));
-
-    // handle CFF-subsetting
-    // NOTE: assuming that all glyphids requested on Aqua are fully translated
-    auto aData = pFace->GetRawFontData(T_CFF);
-    if (!aData.empty())
-        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds,
-                                                pEncoding, nGlyphCount, rInfo);
-
-    // TODO: modernize psprint's horrible fontsubset C-API
-    // this probably only makes sense after the switch to another SCM
-    // that can preserve change history after file renames
-
-    // prepare data for psprint's font subsetter
-    TrueTypeFace aSftFont(*pFace);
-    if (aSftFont.initialize() != SFErrCodes::Ok)
-        return false;
-
-    // get details about the subsetted font
-    TTGlobalFontInfo aTTInfo;
-    ::GetTTGlobalFontInfo(&aSftFont, &aTTInfo);
-    OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
-    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
-
-    // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);
-}
 
 #ifndef IOS
 

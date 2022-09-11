@@ -45,7 +45,6 @@
  */
 
 class FontAttributes;
-class FontSubsetInfo;
 class FontConfigFontOptions;
 namespace vcl::font
 {
@@ -264,23 +263,6 @@ public:
 
     // get a fonts glyph bounding box
     void getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
-
-    // creates a new font subset of an existing SFNT font
-    // returns true in case of success, else false
-    // pFace: the font face to be subsetted
-    // rOutFile: the file to put the new subset into;
-    //           must be a valid osl file URL
-    // pGlyphIDs: input array of glyph ids for new font
-    // pNewEncoding: the corresponding encoding in the new font
-    // nGlyphs: number of glyphs in arrays
-    // TODO: callers of this method should use its FontSubsetInfo counterpart directly
-    bool createFontSubset( FontSubsetInfo&,
-                           const vcl::font::PhysicalFontFace* pFace,
-                           const OUString& rOutFile,
-                           const sal_GlyphId* pGlyphIDs,
-                           const sal_uInt8* pNewEncoding,
-                           int nGlyphs
-                           );
 
     // font administration functions
 

@@ -53,7 +53,6 @@
 #include <comphelper/scopeguard.hxx>
 
 #include <font/FontSelectPattern.hxx>
-#include <fontsubset.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -1491,38 +1490,6 @@ private:
     HFONT m_hOrigFont;
 };
 
-}
-
-bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
-    const vcl::font::PhysicalFontFace* pFace, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-    int nGlyphCount, FontSubsetInfo& rInfo )
-{
-    OUString aSysPath;
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return false;
-    const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    const OString aToFile(OUStringToOString(aSysPath, aThreadEncoding));
-
-    // check if the font has a CFF-table
-    auto aData = pFace->GetRawFontData(T_CFF);
-    if (!aData.empty())
-        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile,
-                                                pGlyphIds, pEncoding, nGlyphCount,
-                                                rInfo);
-
-    // open font file
-    TrueTypeFace aSftTTF(*pFace);
-    if (aSftTTF.initialize() != SFErrCodes::Ok)
-        return false;
-
-    TTGlobalFontInfo aTTInfo;
-    ::GetTTGlobalFontInfo(&aSftTTF, &aTTInfo);
-    OUString aPSName = ImplSalGetUniString(aTTInfo.psname);
-    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
-
-    // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(aSftTTF, aToFile,
-                                            pGlyphIds, pEncoding, nGlyphCount);
 }
 
 const void* WinSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)

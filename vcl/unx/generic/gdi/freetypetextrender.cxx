@@ -127,25 +127,6 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
     return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]);
 }
 
-bool FreeTypeTextRenderImpl::CreateFontSubset(
-                                   const OUString& rToFile,
-                                   const vcl::font::PhysicalFontFace* pFont,
-                                   const sal_GlyphId* pGlyphIds,
-                                   const sal_uInt8* pEncoding,
-                                   int nGlyphCount,
-                                   FontSubsetInfo& rInfo
-                                   )
-{
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    bool bSuccess = rMgr.createFontSubset( rInfo,
-                                 pFont,
-                                 rToFile,
-                                 pGlyphIds,
-                                 pEncoding,
-                                 nGlyphCount );
-    return bSuccess;
-}
-
 const void* FreeTypeTextRenderImpl::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return GenPspGraphics::GetEmbedFontDataHelper(pFont, pDataLen);

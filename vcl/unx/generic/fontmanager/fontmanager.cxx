@@ -22,7 +22,6 @@
 #include <osl/thread.h>
 
 #include <unx/fontmanager.hxx>
-#include <fontsubset.hxx>
 #include <impfontcharmap.hxx>
 #include <unx/gendata.hxx>
 #include <unx/helper.hxx>
@@ -936,118 +935,6 @@ int PrintFontManager::getFontDescend( fontID nFontID )
         analyzeSfntFile(*pFont);
     }
     return pFont ? pFont->m_nDescend : 0;
-}
-
-// TODO: move most of this stuff into the central font-subsetting code
-bool PrintFontManager::createFontSubset(
-                                        FontSubsetInfo& rInfo,
-                                        const vcl::font::PhysicalFontFace* pFace,
-                                        const OUString& rOutFile,
-                                        const sal_GlyphId* pGlyphIds,
-                                        const sal_uInt8* pNewEncoding,
-                                        int nGlyphs
-                                        )
-{
-    psp::fontID nFont = pFace->GetFontId();
-    PrintFont* pFont = getFont( nFont );
-    if( !pFont )
-        return false;
-
-    rInfo.m_nFontType = FontType::SFNT_TTF;
-
-    // reshuffle array of requested glyphs to make sure glyph0==notdef
-    sal_uInt8  pEnc[256];
-    sal_uInt16 pGID[256];
-    sal_uInt8  pOldIndex[256];
-    memset( pEnc, 0, sizeof( pEnc ) );
-    memset( pGID, 0, sizeof( pGID ) );
-    memset( pOldIndex, 0, sizeof( pOldIndex ) );
-    if( nGlyphs > 256 )
-        return false;
-    int nChar = 1;
-    for( int i = 0; i < nGlyphs; i++ )
-    {
-        if( pNewEncoding[i] == 0 )
-        {
-            pOldIndex[ 0 ] = i;
-        }
-        else
-        {
-            SAL_WARN_IF( (pGlyphIds[i] & 0x007f0000), "vcl.fonts", "overlong glyph id" );
-            SAL_WARN_IF( static_cast<int>(pNewEncoding[i]) >= nGlyphs, "vcl.fonts", "encoding wrong" );
-            SAL_WARN_IF( pEnc[pNewEncoding[i]] != 0 || pGID[pNewEncoding[i]] != 0, "vcl.fonts", "duplicate encoded glyph" );
-            pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
-            pGID[ pNewEncoding[i] ] = static_cast<sal_uInt16>(pGlyphIds[ i ]);
-            pOldIndex[ pNewEncoding[i] ] = i;
-            nChar++;
-        }
-    }
-    nGlyphs = nChar; // either input value or increased by one
-
-    TrueTypeFace aSftFont(*pFace);
-    if (aSftFont.initialize() != SFErrCodes::Ok)
-        return false;
-
-    // prepare system name for write access for subset file target
-    OUString aSysPath;
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( rOutFile.pData, &aSysPath.pData ) )
-        return false;
-    const rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    const OString aToFile( OUStringToOString( aSysPath, aEncoding ) );
-
-    // do CFF subsetting if possible
-    sal_uInt32 nCffLength = 0;
-    const sal_uInt8* pCffBytes = aSftFont.table(vcl::O_CFF, nCffLength);
-    if (pCffBytes)
-    {
-        rInfo.LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength );
-#if 1 // TODO: remove 16bit->long conversion when related methods handle non-16bit glyphids
-        sal_GlyphId aRequestedGlyphIds[256];
-        for( int i = 0; i < nGlyphs; ++i )
-            aRequestedGlyphIds[i] = pGID[i];
-#endif
-        // create subset file at requested path
-        FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
-        if (!pOutFile)
-            return false;
-        // create font subset
-        const char* const pGlyphSetName = nullptr; // TODO: better name?
-        const bool bOK = rInfo.CreateFontSubset(
-            FontType::TYPE1_PFB,
-            pOutFile, pGlyphSetName,
-            aRequestedGlyphIds, pEnc, nGlyphs);
-        fclose( pOutFile );
-        // For OTC, values from hhea or OS2 are better
-        psp::PrintFontInfo aFontInfo;
-        if( getFontInfo( nFont, aFontInfo ) )
-        {
-            rInfo.m_nAscent     = aFontInfo.m_nAscend;
-            rInfo.m_nDescent    = -aFontInfo.m_nDescend;
-        }
-        return bOK;
-    }
-
-    // do TTF->Type42 or Type3 subsetting
-    // fill in font info
-    psp::PrintFontInfo aFontInfo;
-    if( ! getFontInfo( nFont, aFontInfo ) )
-        return false;
-
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = getPSName( nFont );
-
-    int xMin, yMin, xMax, yMax;
-    getFontBoundingBox( nFont, xMin, yMin, xMax, yMax );
-    rInfo.m_aFontBBox   = tools::Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
-
-    bool bSuccess = ( SFErrCodes::Ok == CreateTTFromTTGlyphs(&aSftFont,
-                                                     aToFile.getStr(),
-                                                     pGID,
-                                                     pEnc,
-                                                     nGlyphs ) );
-    return bSuccess;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

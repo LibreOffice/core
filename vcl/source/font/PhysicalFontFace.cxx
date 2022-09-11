@@ -22,10 +22,13 @@
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
 #include <unotools/fontdefs.hxx>
+#include <osl/file.hxx>
+#include <osl/thread.h>
 
 #include <fontattributes.hxx>
 #include <impfontcharmap.hxx>
 #include <sft.hxx>
+#include <salgdi.hxx>
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -279,6 +282,38 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
 
     rFontCapabilities = maFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
+}
+
+bool PhysicalFontFace::CreateFontSubset(const OUString& rToFile, const sal_GlyphId* pGlyphIds,
+                                        const sal_uInt8* pEncoding, const int nGlyphCount,
+                                        FontSubsetInfo& rInfo) const
+{
+    // Prepare the requested file name for writing the font-subset file
+    OUString aSysPath;
+    if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
+        return false;
+
+    const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
+
+    // Shortcut for CFF-subsetting.
+    auto aData = GetRawFontData(T_CFF);
+    if (!aData.empty())
+        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds,
+                                                pEncoding, nGlyphCount, rInfo);
+
+    // Prepare data for font subsetter.
+    TrueTypeFace aSftFont(*this);
+    if (aSftFont.initialize() != SFErrCodes::Ok)
+        return false;
+
+    // Get details about the subset font.
+    TTGlobalFontInfo aTTInfo;
+    GetTTGlobalFontInfo(&aSftFont, &aTTInfo);
+    OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
+    SalGraphics::FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
+
+    // write subset into destination file
+    return SalGraphics::CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);
 }
 }
 

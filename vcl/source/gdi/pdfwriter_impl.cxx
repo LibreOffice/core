@@ -2327,9 +2327,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->GetFamilyName();
 
-    SalGraphics *pGraphics = GetGraphics();
-    assert(pGraphics);
-
     aSubType = OString( "/TrueType" );
 
     OUString aTmpName;
@@ -2346,7 +2343,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     // We are interested only in filling aInfo
     sal_GlyphId aGlyphIds[256] = { 0 };
     sal_uInt8 pEncoding[256] = { 0 };
-    pGraphics->CreateFontSubset(aTmpName, pFont, aGlyphIds, pEncoding, 256, aInfo);
+    pFont->CreateFontSubset(aTmpName, aGlyphIds, pEncoding, 256, aInfo);
     osl_removeFile( aTmpName.pData );
 
     // write font descriptor
@@ -2638,11 +2635,6 @@ void PDFWriterImpl::appendBuildinFontsToDict( OStringBuffer& rDict ) const
 
 bool PDFWriterImpl::emitFonts()
 {
-    SalGraphics *pGraphics = GetGraphics();
-
-    if (!pGraphics)
-        return false;
-
     OStringBuffer aLine( 1024 );
 
     std::map< sal_Int32, sal_Int32 > aFontIDToObject;
@@ -2690,7 +2682,8 @@ bool PDFWriterImpl::emitFonts()
                 }
             }
             FontSubsetInfo aSubsetInfo;
-            if( pGraphics->CreateFontSubset( aTmpName, subset.first, aGlyphIds, pEncoding, nGlyphs, aSubsetInfo ) )
+            const auto* pFace = subset.first;
+            if (pFace->CreateFontSubset(aTmpName, aGlyphIds, pEncoding, nGlyphs, aSubsetInfo))
             {
                 // create font stream
                 osl::File aFontFile(aTmpName);

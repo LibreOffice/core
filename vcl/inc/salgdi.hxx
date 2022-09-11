@@ -161,26 +161,6 @@ public:
                                     const OUString& rFileURL,
                                     const OUString& rFontName ) = 0;
 
-    // CreateFontSubset: a method to get a subset of glyhps of a font
-    // inside a new valid font file
-    // returns true if creation of subset was successful
-    // parameters: rToFile: contains an osl file URL to write the subset to
-    //             pFont: describes from which font to create a subset
-    //             pGlyphIDs: the glyph ids to be extracted
-    //             pEncoding: the character code corresponding to each glyph
-    //             pWidths: the advance widths of the corresponding glyphs (in PS font units)
-    //             nGlyphs: the number of glyphs
-    //             rInfo: additional outgoing information
-    // implementation note: encoding 0 with glyph id 0 should be added implicitly
-    // as "undefined character"
-    virtual bool                CreateFontSubset(
-                                    const OUString& rToFile,
-                                    const vcl::font::PhysicalFontFace* pFont,
-                                    const sal_GlyphId* pGlyphIDs,
-                                    const sal_uInt8* pEncoding,
-                                    int nGlyphs,
-                                    FontSubsetInfo& rInfo ) = 0;
-
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
@@ -651,6 +631,7 @@ protected:
     std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
     vcl::WidgetDrawInterface* forWidget() { return m_pWidgetDraw ? m_pWidgetDraw.get() : this; }
 
+public:
     static bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
                                     const sal_GlyphId* pGlyphIds,
                                     const sal_uInt8* pEncoding,
