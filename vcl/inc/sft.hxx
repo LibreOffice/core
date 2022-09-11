@@ -614,20 +614,21 @@ class TrueTypeFace;
  *
  */
     VCL_DLLPUBLIC SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
-                              const char    *fname,
+                              std::vector<sal_uInt8>& rOutBuffer,
                               sal_uInt16 const *glyphArray,
                               sal_uInt8 const *encoding,
                               int            nGlyphs);
 
     VCL_DLLPUBLIC bool CreateTTFfontSubset(AbstractTrueTypeFont& aTTF,
-                              const OString& rSysPath,
+                              std::vector<sal_uInt8>& rOutBuffer,
                               const sal_GlyphId* pGlyphIds,
                               const sal_uInt8* pEncoding,
                               int nGlyphCount);
 
     VCL_DLLPUBLIC bool CreateCFFfontSubset(const unsigned char* pFontBytes,
                               int nByteLength,
-                              const OString& rSysPath, const sal_GlyphId* pGlyphIds,
+                              std::vector<sal_uInt8>& rOutBuffer,
+                              const sal_GlyphId* pGlyphIds,
                               const sal_uInt8* pEncoding,
                               int nGlyphCount, FontSubsetInfo& rInfo);
 

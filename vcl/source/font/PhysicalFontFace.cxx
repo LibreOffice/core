@@ -284,21 +284,14 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
-bool PhysicalFontFace::CreateFontSubset(const OUString& rToFile, const sal_GlyphId* pGlyphIds,
-                                        const sal_uInt8* pEncoding, const int nGlyphCount,
-                                        FontSubsetInfo& rInfo) const
+bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
+                                        const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
+                                        const int nGlyphCount, FontSubsetInfo& rInfo) const
 {
-    // Prepare the requested file name for writing the font-subset file
-    OUString aSysPath;
-    if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
-        return false;
-
-    const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
-
     // Shortcut for CFF-subsetting.
     auto aData = GetRawFontData(T_CFF);
     if (!aData.empty())
-        return CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds, pEncoding,
+        return CreateCFFfontSubset(aData.data(), aData.size(), rOutBuffer, pGlyphIds, pEncoding,
                                    nGlyphCount, rInfo);
 
     // Prepare data for font subsetter.
@@ -310,7 +303,7 @@ bool PhysicalFontFace::CreateFontSubset(const OUString& rToFile, const sal_Glyph
     FillFontSubsetInfo(&aSftFont, rInfo);
 
     // write subset into destination file
-    return CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);
+    return CreateTTFfontSubset(aSftFont, rOutBuffer, pGlyphIds, pEncoding, nGlyphCount);
 }
 }
 

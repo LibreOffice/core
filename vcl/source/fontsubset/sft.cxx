@@ -48,6 +48,8 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
+#include <osl/thread.h>
+#include <unotools/tempfile.hxx>
 #include <fontsubset.hxx>
 #include <algorithm>
 
@@ -1746,7 +1748,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 }
 
 SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
-                          const char    *fname,
+                          std::vector<sal_uInt8>& rOutBuffer,
                           sal_uInt16 const *glyphArray,
                           sal_uInt8 const *encoding,
                           int            nGlyphs)
@@ -1841,9 +1843,9 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
     AddTable(ttcr, cvt ); AddTable(ttcr, prep); AddTable(ttcr, fpgm);
     AddTable(ttcr, post); AddTable(ttcr, os2);
 
-    res = StreamToFile(ttcr, fname);
+    res = StreamToMemory(ttcr, rOutBuffer);
 #if OSL_DEBUG_LEVEL > 1
-    SAL_WARN_IF(res != SFErrCodes::Ok, "vcl.fonts", "StreamToFile: error code: "
+    SAL_WARN_IF(res != SFErrCodes::Ok, "vcl.fonts", "StreamToMemory: error code: "
             << (int) res << ".");
 #endif
 
@@ -1853,7 +1855,7 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
     return res;
 }
 
-bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OString& rSysPath,
+bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>& rOutBuffer,
                          const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                          const int nOrigGlyphCount)
 {
@@ -1907,22 +1909,39 @@ bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OString& rSysPat
     }
 
     // write subset into destination file
-    return (CreateTTFromTTGlyphs(&rTTF, rSysPath.getStr(), aShortIDs, aTempEncs, nGlyphCount)
+    return (CreateTTFromTTGlyphs(&rTTF, rOutBuffer, aShortIDs, aTempEncs, nGlyphCount)
             == vcl::SFErrCodes::Ok);
 }
 
 bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                         const OString& rSysPath, const sal_GlyphId* pGlyphIds,
+                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
                          const sal_uInt8* pEncoding, int nGlyphCount,
                          FontSubsetInfo& rInfo)
 {
-    FILE* pOutFile = fopen(rSysPath.getStr(), "wb");
+    utl::TempFile aTempFile;
+    const OString aToFile(OUStringToOString(aTempFile.GetFileName(), osl_getThreadTextEncoding()));
+
+    FILE* pOutFile = fopen(aToFile.getStr(), "wb");
     if (!pOutFile)
         return false;
+
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
     bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds, pEncoding,
                                        nGlyphCount);
     fclose(pOutFile);
+
+    if (bRet)
+    {
+        SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
+        rOutBuffer.resize(pStream->TellEnd());
+        auto nRead = pStream->ReadBytes(rOutBuffer.data(), rOutBuffer.size());
+        if (nRead != rOutBuffer.size())
+        {
+            rOutBuffer.clear();
+            return false;
+        }
+    }
+
     return bRet;
 }
 
@@ -2105,8 +2124,6 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     sal_uInt16 ver;
     sal_Int32 rev;
 
-    sal_uInt8 *sfntP;
-    sal_uInt32 sfntLen;
     int UPEm = ttf->unitsPerEm();
 
     if (nGlyphs >= 256) return SFErrCodes::GlyphNum;
@@ -2158,7 +2175,8 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     AddTable(ttcr, head); AddTable(ttcr, hhea); AddTable(ttcr, maxp); AddTable(ttcr, cvt);
     AddTable(ttcr, prep); AddTable(ttcr, glyf); AddTable(ttcr, fpgm);
 
-    if ((res = StreamToMemory(ttcr, &sfntP, &sfntLen)) != SFErrCodes::Ok) {
+    std::vector<sal_uInt8> aOutBuffer;
+    if ((res = StreamToMemory(ttcr, aOutBuffer)) != SFErrCodes::Ok) {
         TrueTypeCreatorDispose(ttcr);
         free(gID);
         return res;
@@ -2184,7 +2202,7 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     }
     fprintf(outf, "/XUID [103 0 1 16#%08X %u 16#%08X 16#%08X] def\n", static_cast<unsigned int>(rtl_crc32(0, ttf->ptr, ttf->fsize)), static_cast<unsigned int>(nGlyphs), static_cast<unsigned int>(rtl_crc32(0, glyphArray, nGlyphs * 2)), static_cast<unsigned int>(rtl_crc32(0, encoding, nGlyphs)));
 
-    DumpSfnts(outf, sfntP, sfntLen);
+    DumpSfnts(outf, aOutBuffer.data(), aOutBuffer.size());
 
     /* dump charstrings */
     fprintf(outf, "/CharStrings %d dict dup begin\n", nGlyphs);
@@ -2197,7 +2215,6 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "FontName currentdict end definefont pop\n");
     TrueTypeCreatorDispose(ttcr);
     free(gID);
-    free(sfntP);
     return SFErrCodes::Ok;
 }
 
@@ -2602,7 +2619,8 @@ int TestFontSubset(const void* data, sal_uInt32 size)
             aGlyphIds[c] = c - 31;
         }
 
-        CreateTTFromTTGlyphs(pTTF, nullptr, aGlyphIds, aEncoding, 256);
+        std::vector<sal_uInt8> aBuffer;
+        CreateTTFromTTGlyphs(pTTF, aBuffer, aGlyphIds, aEncoding, 256);
 
 
         // cleanup

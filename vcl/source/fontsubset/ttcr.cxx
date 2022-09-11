@@ -188,7 +188,7 @@ void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
 
 static void ProcessTables(TrueTypeCreator *);
 
-SFErrCodes StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
+SFErrCodes StreamToMemory(TrueTypeCreator *_this, std::vector<sal_uInt8>& rOutBuffer)
 {
     sal_uInt16 searchRange=1, entrySelector=0, rangeShift;
     sal_uInt32 s, offset, checkSumAdjustment = 0;
@@ -230,7 +230,8 @@ SFErrCodes StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *l
         /* if ((te[i].length & 3) != 0) s += (4 - (te[i].length & 3)) & 3; */
     }
 
-    sal_uInt8* ttf = static_cast<sal_uInt8*>(smalloc(s));
+    rOutBuffer.resize(s);
+    sal_uInt8* ttf = rOutBuffer.data();
 
     /* Offset Table */
     PutUInt32(_this->tag, ttf, 0);
@@ -261,26 +262,22 @@ SFErrCodes StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *l
     for (int i = 0; i < static_cast<int>(s) / 4; ++i) checkSumAdjustment += p[i];
     PutUInt32(0xB1B0AFBA - checkSumAdjustment, head, 8);
 
-    *ptr = ttf;
-    *length = s;
-
     return SFErrCodes::Ok;
 }
 
 SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
 {
-    sal_uInt8 *ptr;
-    sal_uInt32 length;
     SFErrCodes r;
+    std::vector<sal_uInt8> aOutBuffer;
 
-    if ((r = StreamToMemory(_this, &ptr, &length)) != SFErrCodes::Ok) return r;
+    if ((r = StreamToMemory(_this, aOutBuffer)) != SFErrCodes::Ok) return r;
     r = SFErrCodes::BadFile;
     if (fname)
     {
         FILE* fd = fopen(fname, "wb");
         if (fd)
         {
-            if (fwrite(ptr, 1, length, fd) != length) {
+            if (fwrite(aOutBuffer.data(), 1, aOutBuffer.size(), fd) != aOutBuffer.size()) {
                 r = SFErrCodes::FileIo;
             } else {
                 r = SFErrCodes::Ok;
@@ -288,7 +285,6 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
             fclose(fd);
         }
     }
-    free(ptr);
     return r;
 }
 

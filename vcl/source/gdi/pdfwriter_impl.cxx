@@ -2329,9 +2329,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
 
     aSubType = OString( "/TrueType" );
 
-    OUString aTmpName;
-    osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
-
     sal_Int32 pWidths[256] = { 0 };
     const LogicalFontInstance* pFontInstance = rEmbed.m_pFontInstance;
     for( sal_Ucs c = 32; c < 256; c++ )
@@ -2343,8 +2340,8 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     // We are interested only in filling aInfo
     sal_GlyphId aGlyphIds[256] = { 0 };
     sal_uInt8 pEncoding[256] = { 0 };
-    pFont->CreateFontSubset(aTmpName, aGlyphIds, pEncoding, 256, aInfo);
-    osl_removeFile( aTmpName.pData );
+    std::vector<sal_uInt8> aBuffer;
+    pFont->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, 256, aInfo);
 
     // write font descriptor
     nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, 0 );
@@ -2639,8 +2636,6 @@ bool PDFWriterImpl::emitFonts()
 
     std::map< sal_Int32, sal_Int32 > aFontIDToObject;
 
-    OUString aTmpName;
-    osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
     for (const auto & subset : m_aSubsets)
     {
         for (auto & s_subset :subset.second.m_aSubsets)
@@ -2681,19 +2676,12 @@ bool PDFWriterImpl::emitFonts()
                     OSL_FAIL( "too many glyphs for subset" );
                 }
             }
+            std::vector<sal_uInt8> aBuffer;
             FontSubsetInfo aSubsetInfo;
             const auto* pFace = subset.first;
-            if (pFace->CreateFontSubset(aTmpName, aGlyphIds, pEncoding, nGlyphs, aSubsetInfo))
+            if (pFace->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, nGlyphs, aSubsetInfo))
             {
                 // create font stream
-                osl::File aFontFile(aTmpName);
-                if (osl::File::E_None != aFontFile.open(osl_File_OpenFlag_Read)) return false;
-                // get file size
-                sal_uInt64 nLength1;
-                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_End, 0) ) return false;
-                if ( osl::File::E_None != aFontFile.getPos(nLength1) ) return false;
-                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
-
                 if (g_bDebugDisableCompression)
                 {
                     emitComment( "PDFWriterImpl::emitFonts" );
@@ -2717,7 +2705,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_uInt64 nStartPos = 0;
                 if( aSubsetInfo.m_nFontType == FontType::SFNT_TTF )
                 {
-                    aLine.append( static_cast<sal_Int32>(nLength1) );
+                    aLine.append( static_cast<sal_Int32>(aBuffer.size()) );
 
                     aLine.append( ">>\n"
                                  "stream\n" );
@@ -2727,15 +2715,8 @@ bool PDFWriterImpl::emitFonts()
                     // copy font file
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    sal_Bool bEOF = false;
-                    do
-                    {
-                        char buf[8192];
-                        sal_uInt64 nRead;
-                        if ( osl::File::E_None != aFontFile.read(buf, sizeof(buf), nRead) ) return false;
-                        if ( !writeBuffer( buf, nRead ) ) return false;
-                        if ( osl::File::E_None != aFontFile.isEndOfFile(&bEOF) ) return false;
-                    } while( ! bEOF );
+                    if (!writeBuffer(aBuffer.data(), aBuffer.size()))
+                        return false;
                 }
                 else if( aSubsetInfo.m_nFontType & FontType::CFF_FONT)
                 {
@@ -2744,15 +2725,9 @@ bool PDFWriterImpl::emitFonts()
                 }
                 else if( aSubsetInfo.m_nFontType & FontType::TYPE1_PFB) // TODO: also support PFA?
                 {
-                    std::unique_ptr<unsigned char[]> xBuffer(new unsigned char[nLength1]);
-
-                    sal_uInt64 nBytesRead = 0;
-                    if ( osl::File::E_None != aFontFile.read(xBuffer.get(), nLength1, nBytesRead) ) return false;
-                    SAL_WARN_IF( nBytesRead!=nLength1, "vcl.pdfwriter", "PDF-FontSubset read incomplete!" );
-                    if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
-                    getPfbSegmentLengths(xBuffer.get(), static_cast<int>(nBytesRead), aSegmentLengths);
+                    getPfbSegmentLengths(aBuffer.data(), static_cast<int>(aBuffer.size()), aSegmentLengths);
                     // the lengths below are mandatory for PDF-exported Type1 fonts
                     // because the PFB segment headers get stripped! WhyOhWhy.
                     aLine.append( static_cast<sal_Int32>(aSegmentLengths[0]) );
@@ -2769,9 +2744,9 @@ bool PDFWriterImpl::emitFonts()
                     // emit PFB-sections without section headers
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    if ( !writeBuffer( &xBuffer[6], aSegmentLengths[0] ) ) return false;
-                    if ( !writeBuffer( &xBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
-                    if ( !writeBuffer( &xBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
+                    if ( !writeBuffer( &aBuffer[6], aSegmentLengths[0] ) ) return false;
+                    if ( !writeBuffer( &aBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
+                    if ( !writeBuffer( &aBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
                 }
                 else
                 {
@@ -2781,8 +2756,6 @@ bool PDFWriterImpl::emitFonts()
 
                 endCompression();
                 disableStreamEncryption();
-                // close the file
-                aFontFile.close();
 
                 sal_uInt64 nEndPos = 0;
                 if ( osl::File::E_None != m_aFile.getPos(nEndPos) ) return false;
@@ -2860,7 +2833,6 @@ bool PDFWriterImpl::emitFonts()
             }
         }
     }
-    osl_removeFile( aTmpName.pData );
 
     if (g_bDebugDisableCompression)
         emitComment( "PDFWriterImpl::emitSystemFonts" );
