@@ -3114,7 +3114,19 @@ void flushParagraph(
         std::vector<XMLPropertyState> aPropStates;
         const SvxFieldData* pField = toXMLPropertyStates(rExport, aPropStates, rSec.maAttributes, xMapper, rAttrMap);
         OUString aStyleName = xStylePool->Find(XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
-        writeContent(rExport, aStyleName, aContent, pField);
+        if (aContent == "\x001" && !pField)
+        {
+            for (const SfxPoolItem* p : rSec.maAttributes)
+            {
+                if (p->Which() == EE_FEATURE_TAB)
+                {
+                    SvXMLElementExport Tab(rExport, XML_NAMESPACE_TEXT, XML_TAB, false, false);
+                    break;
+                }
+            }
+        }
+        else
+            writeContent(rExport, aStyleName, aContent, pField);
     }
 }
 
