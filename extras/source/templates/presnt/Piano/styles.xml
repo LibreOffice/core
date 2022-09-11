@@ -572,10 +572,7 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:color-mode="greyscale" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Piano-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="8.827cm" fo:min-width="28cm"/>
-    </style:style>
-    <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Piano-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" draw:marker-start-width="0.2cm" draw:marker-end-width="0.2cm" draw:opacity="81%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.63cm" fo:min-width="25.199cm" fo:padding-top="0cm" fo:padding-bottom="0cm" fo:padding-left="0cm" fo:padding-right="0cm"/>
+      <style:graphic-properties draw:fill-color="#000000" draw:stroke="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="8.827cm" fo:min-width="28cm"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Piano-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
@@ -816,10 +813,6 @@
       <draw:frame presentation:style-name="Piano-outline1" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="4.676cm" svg:x="1.4cm" svg:y="3.685cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:custom-shape presentation:style-name="Mpr2" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="2.63cm" svg:x="1.4cm" svg:y="0.609cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-      </draw:custom-shape>
       <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="24.468cm" svg:height="2.096cm" svg:x="1.694cm" svg:y="0.805cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
