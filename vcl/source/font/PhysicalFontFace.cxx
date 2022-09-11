@@ -307,10 +307,7 @@ bool PhysicalFontFace::CreateFontSubset(const OUString& rToFile, const sal_Glyph
         return false;
 
     // Get details about the subset font.
-    TTGlobalFontInfo aTTInfo;
-    GetTTGlobalFontInfo(&aSftFont, &aTTInfo);
-    OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
-    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
+    FillFontSubsetInfo(&aSftFont, rInfo);
 
     // write subset into destination file
     return CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);

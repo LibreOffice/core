@@ -2348,27 +2348,29 @@ void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 }
 
-void FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const OUString& pPSName,
-                        FontSubsetInfo& rInfo)
+void FillFontSubsetInfo(AbstractTrueTypeFont *ttf, FontSubsetInfo& rInfo)
 {
-    rInfo.m_aPSName = pPSName;
+    TTGlobalFontInfo aTTInfo;
+    GetTTGlobalFontInfo(ttf, &aTTInfo);
+
+    rInfo.m_aPSName = OUString::fromUtf8(aTTInfo.psname);
     rInfo.m_nFontType = FontType::SFNT_TTF;
     rInfo.m_aFontBBox
-        = tools::Rectangle(Point(rTTInfo.xMin, rTTInfo.yMin), Point(rTTInfo.xMax, rTTInfo.yMax));
-    rInfo.m_nCapHeight = rTTInfo.yMax; // Well ...
-    rInfo.m_nAscent = rTTInfo.winAscent;
-    rInfo.m_nDescent = rTTInfo.winDescent;
+        = tools::Rectangle(Point(aTTInfo.xMin, aTTInfo.yMin), Point(aTTInfo.xMax, aTTInfo.yMax));
+    rInfo.m_nCapHeight = aTTInfo.yMax; // Well ...
+    rInfo.m_nAscent = aTTInfo.winAscent;
+    rInfo.m_nDescent = aTTInfo.winDescent;
 
     // mac fonts usually do not have an OS2-table
     // => get valid ascent/descent values from other tables
     if (!rInfo.m_nAscent)
-        rInfo.m_nAscent = +rTTInfo.typoAscender;
+        rInfo.m_nAscent = +aTTInfo.typoAscender;
     if (!rInfo.m_nAscent)
-        rInfo.m_nAscent = +rTTInfo.ascender;
+        rInfo.m_nAscent = +aTTInfo.ascender;
     if (!rInfo.m_nDescent)
-        rInfo.m_nDescent = +rTTInfo.typoDescender;
+        rInfo.m_nDescent = +aTTInfo.typoDescender;
     if (!rInfo.m_nDescent)
-        rInfo.m_nDescent = -rTTInfo.descender;
+        rInfo.m_nDescent = -aTTInfo.descender;
 }
 
 GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)

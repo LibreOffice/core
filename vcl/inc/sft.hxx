@@ -631,8 +631,7 @@ class TrueTypeFace;
                               const sal_uInt8* pEncoding,
                               int nGlyphCount, FontSubsetInfo& rInfo);
 
-    VCL_DLLPUBLIC void FillFontSubsetInfo(const TTGlobalFontInfo& rTTInfo,
-                              const OUString& pPSName,
+    VCL_DLLPUBLIC void FillFontSubsetInfo(AbstractTrueTypeFont *ttf,
                               FontSubsetInfo& rInfo);
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
