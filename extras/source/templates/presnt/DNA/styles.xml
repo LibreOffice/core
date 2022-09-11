@@ -167,9 +167,6 @@
     <style:style style:name="Accent_20_1" style:display-name="Accent 1" style:family="graphic" style:parent-style-name="Accent">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#2a6099" draw:fill="solid" draw:fill-color="#dee6ef" draw:shadow="hidden" draw:shadow-offset-x="0.05cm" draw:shadow-offset-y="0.05cm" draw:shadow-color="#ffaa95"/>
     </style:style>
-    <style:style style:name="Accent_20_2" style:display-name="Accent 2" style:family="graphic" style:parent-style-name="Accent">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffaa95" draw:shadow-color="#ff5429"/>
-    </style:style>
     <style:style style:name="Accent_20_3" style:display-name="Accent 3" style:family="graphic" style:parent-style-name="Accent">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#ff4000" draw:fill="solid" draw:fill-color="#ffd8ce" draw:shadow="hidden" draw:shadow-offset-x="0.05cm" draw:shadow-offset-y="0.05cm" draw:shadow-color="#b4c7dc"/>
     </style:style>
@@ -385,13 +382,13 @@
       <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:textarea-vertical-align="middle" draw:start-line-spacing-horizontal="0.25cm" draw:start-line-spacing-vertical="0.25cm" draw:end-line-spacing-horizontal="0.25cm" draw:end-line-spacing-vertical="0.25cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#2a6099" svg:stroke-width="0.05cm" draw:textarea-vertical-align="middle" draw:start-line-spacing-horizontal="0.25cm" draw:start-line-spacing-vertical="0.25cm" draw:end-line-spacing-horizontal="0.25cm" draw:end-line-spacing-vertical="0.25cm"/>
     </style:style>
-    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Accent_20_3">
-      <style:graphic-properties draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.104cm" fo:min-width="0cm"/>
+    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#ff4000" svg:stroke-width="0.05cm" draw:fill="solid" draw:fill-color="#ffd8ce" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.104cm" fo:min-width="0cm"/>
     </style:style>
-    <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.104cm" fo:min-width="0cm"/>
+    <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#2a6099" svg:stroke-width="0.05cm" draw:fill="solid" draw:fill-color="#dee6ef" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.104cm" fo:min-width="0cm"/>
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="DNA-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.338cm"/>
