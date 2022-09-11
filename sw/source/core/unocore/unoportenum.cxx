@@ -337,7 +337,11 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 {
     SolarMutexGuard aGuard;
-    m_pUnoCursor.reset(nullptr);
+    if( m_pUnoCursor )
+    {
+        m_pUnoCursor->GetDoc().cleanupUnoCursorTable();
+        m_pUnoCursor.reset(nullptr);
+    }
 }
 
 sal_Bool SwXTextPortionEnumeration::hasMoreElements()
