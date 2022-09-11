@@ -27,13 +27,13 @@
     <style:style style:name="gr1" style:family="graphic">
       <style:graphic-properties style:protect="size"/>
     </style:style>
-    <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Progress_5f_2-title">
+    <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Progress-title">
       <style:graphic-properties draw:auto-grow-height="true" fo:min-height="4.466cm"/>
     </style:style>
-    <style:style style:name="pr2" style:family="presentation" style:parent-style-name="Progress_5f_2-subtitle">
+    <style:style style:name="pr2" style:family="presentation" style:parent-style-name="Progress-subtitle">
       <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="1.721cm"/>
     </style:style>
-    <style:style style:name="pr3" style:family="presentation" style:parent-style-name="Progress_5f_2-notes">
+    <style:style style:name="pr3" style:family="presentation" style:parent-style-name="Progress-notes">
       <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
     </style:style>
     <style:style style:name="pr4" style:family="presentation" style:parent-style-name="Standard_20_1-title">
@@ -122,7 +122,7 @@
   <office:body>
     <office:presentation>
       <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D3"/>
-      <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Progress_5f_2" presentation:presentation-page-layout-name="AL1T0" presentation:use-footer-name="ftr1" presentation:use-date-time-name="dtd1" xml:id="id1" draw:id="id1">
+      <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Progress" presentation:presentation-page-layout-name="AL1T0" presentation:use-footer-name="ftr1" presentation:use-date-time-name="dtd1" xml:id="id1" draw:id="id1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
         <draw:frame presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="25.007cm" svg:height="4.466cm" draw:transform="rotate (0.141371669411541) translate (1.05cm 8.049cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
