@@ -778,7 +778,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.374cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24t" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus3-outline2" style:family="presentation" style:parent-style-name="Focus3-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
@@ -934,22 +934,22 @@
       <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#f10d0c" draw:textarea-vertical-align="middle"/>
+     <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#f10d0c" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#ea7500" draw:textarea-vertical-align="middle"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#ea7500" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#e8a202" draw:textarea-vertical-align="middle"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#e8a202" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr4" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#168253" draw:textarea-vertical-align="middle"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#168253" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr5" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#3465a4" draw:textarea-vertical-align="middle"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#3465a4" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#780373" draw:textarea-vertical-align="middle"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#780373" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr7" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
