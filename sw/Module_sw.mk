@@ -188,6 +188,11 @@ $(eval $(call gb_Module_add_screenshot_targets,sw,\
     CppunitTest_sw_dialogs_test_2 \
 ))
 
+# feature coverage
+$(eval $(call gb_Module_add_coverage_targets,sw,\
+    CppunitTest_sw_odffeatures \
+))
+
 $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	$(call gb_Helper_optional,LIBRELOGO,UITest_librelogo) \
 	UITest_writer_tests \

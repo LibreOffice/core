@@ -49,6 +49,7 @@ $(call gb_Postprocess_Postprocess,AllUIConfigs,All UI configuration files,$(WORK
 $(call gb_Postprocess_Postprocess,AllModuleTests,All modules' tests,$(WORKDIR)/Module/check/)
 $(call gb_Postprocess_Postprocess,AllModuleSlowtests,All modules' slowtests,$(WORKDIR)/Module/slowcheck/)
 $(call gb_Postprocess_Postprocess,AllModuleScreenshots,All modules' screenshots,$(WORKDIR)/Module/screenshot/)
+$(call gb_Postprocess_Postprocess,AllModuleCoverage,All modules' coverage,$(WORKDIR)/Module/coverage/)
 $(call gb_Postprocess_Postprocess,AllModuleUITests,All modules' uitests,$(WORKDIR)/Module/uicheck/)
 
 endef

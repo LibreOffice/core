@@ -38,6 +38,7 @@ AVAILABLE TARGETS
        unitcheck            run unit tests
        slowcheck            run slow unit tests
        screenshot           create all screenshots
+       coverage             run coverage tests
        subsequentcheck      run system tests (requires full installation)
        perfcheck            run performance/callgrind unit tests
        uicheck              run UI tests

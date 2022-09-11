@@ -27,12 +27,14 @@
 #                                                          recursive Module/checks
 # Module/slowcheck            run all slow unit tests
 # Module/screenshot           create all screenshots
+# Module/coverage             run all feature coverage tests
 # Module/subsequentcheck      run system tests             all system tests
 # Module/uicheck	      run uitests	           all uitests
 #                                                          recursive Module/subsequentchecks
 # build (global)              build the product            top-level Module
 # unitcheck (global)          run unit tests               top-level Module/unitcheck
 # slowcheck (global)          run slow unit tests          top-level Module/slowcheck
+# coverage (global)           run feature coverage tests   top-level Module/coverage
 # screenshot (global)         create all screenshots       top-level Module/screenshot
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
 # perfcheck (global)          run performance unit tests   top-level Module/perfcheck
@@ -48,6 +50,7 @@ gb_Module_L10NTARGETSTACK :=
 gb_Module_CHECKTARGETSTACK :=
 gb_Module_SLOWCHECKTARGETSTACK :=
 gb_Module_SCREENSHOTTARGETSTACK :=
+gb_Module_COVERAGETARGETSTACK :=
 gb_Module_SUBSEQUENTCHECKTARGETSTACK :=
 gb_Module_PERFCHECKTARGETSTACK :=
 gb_Module_UICHECKTARGETSTACK :=
@@ -73,7 +76,7 @@ $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
 	$(call gb_Output_announce_title,module $* cleared.)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_screenshot_target,$*) $(call gb_Module_get_subsequentcheck_target,$*) $(call gb_Module_get_perfcheck_target,$*) $(call gb_Module_get_uicheck,$*))
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_screenshot_target,$*) $(call gb_Module_get_coverage_target,$*) $(call gb_Module_get_subsequentcheck_target,$*) $(call gb_Module_get_perfcheck_target,$*) $(call gb_Module_get_uicheck,$*))
 
 $(call gb_Module_get_l10n_target,%) :
 	$(call gb_Output_announce,$*,$(true),LOC,5)
@@ -103,6 +106,14 @@ $(call gb_Module_get_screenshot_target,%) :
 	$(call gb_Output_announce,$*,$(true),SCR,5)
 	$(call gb_Trace_MakeMark,$*,SCR)
 	$(call gb_Output_announce_title,module $* screenshots done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
+
+$(call gb_Module_get_coverage_target,%) :
+	$(call gb_Output_announce,$*,$(true),SCR,5)
+	$(call gb_Trace_MakeMark,$*,SCR)
+	$(call gb_Output_announce_title,module $* coverage done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		touch $@)
@@ -139,7 +150,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build build-l10n-only build-non-l10n-only unitcheck slowcheck screenshot subsequentcheck perfcheck uicheck clean check debugrun help showmodules translations
+.PHONY : build build-l10n-only build-non-l10n-only coverage unitcheck slowcheck screenshot subsequentcheck perfcheck uicheck clean check debugrun help showmodules translations
 .DEFAULT_GOAL := build
 
 ifeq ($(gb_Side),build)
@@ -184,6 +195,11 @@ slowcheck :
 screenshot :
 	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCR,6))
 	$(call gb_Output_announce_title,all screenshots checked.)
+	$(call gb_Output_announce_bell)
+
+coverage :
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),COV,6))
+	$(call gb_Output_announce_title,all coverage checked.)
 	$(call gb_Output_announce_bell)
 
 # removing the dependency on build for now until we can make a full build with gbuild
@@ -255,6 +271,7 @@ gb_Module_L10NTARGETSTACK := $(call gb_Module_get_l10n_target,$(1)) $(gb_Module_
 gb_Module_CHECKTARGETSTACK := $(call gb_Module_get_check_target,$(1)) $(gb_Module_CHECKTARGETSTACK)
 gb_Module_SLOWCHECKTARGETSTACK := $(call gb_Module_get_slowcheck_target,$(1)) $(gb_Module_SLOWCHECKTARGETSTACK)
 gb_Module_SCREENSHOTTARGETSTACK := $(call gb_Module_get_screenshot_target,$(1)) $(gb_Module_SCREENSHOTTARGETSTACK)
+gb_Module_COVERAGETARGETSTACK := $(call gb_Module_get_coverage_target,$(1)) $(gb_Module_COVERAGETARGETSTACK)
 gb_Module_UICHECKTARGETSTACK := $(call gb_Module_get_uicheck_target,$(1)) $(gb_Module_UICHECKTARGETSTACK)
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_target,$(1)) $(gb_Module_SUBSEQUENTCHECKTARGETSTACK)
 gb_Module_PERFCHECKTARGETSTACK := $(call gb_Module_get_perfcheck_target,$(1)) $(gb_Module_PERFCHECKTARGETSTACK)
@@ -269,6 +286,7 @@ $(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
 $(call gb_Postprocess_get_target,AllModuleTests) : $(call gb_Module_get_check_target,$(1))
 $(call gb_Postprocess_get_target,AllModuleSlowtests) : $(call gb_Module_get_slowcheck_target,$(1))
 $(call gb_Postprocess_get_target,AllModuleScreenshots) : $(call gb_Module_get_screenshot_target,$(1))
+$(call gb_Postprocess_get_target,AllModuleCoverage) : $(call gb_Module_get_coverage_target,$(1))
 $(call gb_Postprocess_get_target,AllModuleUITest) : $(call gb_Module_get_uicheck_target,$(1))
 
 endef
@@ -338,6 +356,14 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+define gb_Module_add_coverage_target
+$(call gb_Module__read_targetfile,$(1),$(2),coverage target)
+
+$(call gb_Module_get_coverage_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
+
+endef
+
 # has order dependency on AllModulesButInstsetNative to be able to run
 # subsequentcheck in the same make process on "make check"
 define gb_Module_add_subsequentcheck_target
@@ -385,6 +411,7 @@ $(call gb_Module_get_l10n_target,$(1)) : $$(firstword $$(gb_Module_L10NTARGETSTA
 $(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 $(call gb_Module_get_slowcheck_target,$(1)) : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 $(call gb_Module_get_screenshot_target,$(1)) : $$(firstword $$(gb_Module_SCREENSHOTTARGETSTACK))
+$(call gb_Module_get_coverage_target,$(1)) : $$(firstword $$(gb_Module_COVERAGETARGETSTACK))
 $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 $(call gb_Module_get_perfcheck_target,$(1)) : $$(firstword $$(gb_Module_PERFCHECKTARGETSTACK))
 $(call gb_Module_get_uicheck_target,$(1)) : $$(firstword $$(gb_Module_UICHECKTARGETSTACK))
@@ -394,6 +421,7 @@ gb_Module_L10NTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_L10NTARGETSTACK
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
 gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SCREENSHOTTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SCREENSHOTTARGETSTACK)),$$(gb_Module_SCREENSHOTTARGETSTACK))
+gb_Module_COVERAGETARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_COVERAGETARGETSTACK)),$$(gb_Module_COVERAGETARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_PERFCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_PERFCHECKTARGETSTACK)),$$(gb_Module_PERFCHECKTARGETSTACK))
 gb_Module_UICHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_UICHECKTARGETSTACK)),$$(gb_Module_UICHECKTARGETSTACK))
@@ -430,6 +458,11 @@ $(foreach target,$(2),$(call gb_Module_add_screenshot_target,$(1),$(target)))
 
 endef
 
+define gb_Module_add_coverage_targets
+$(foreach target,$(2),$(call gb_Module_add_coverage_target,$(1),$(target)))
+
+endef
+
 define gb_Module_add_subsequentcheck_targets
 $(foreach target,$(2),$(call gb_Module_add_subsequentcheck_target,$(1),$(target)))
 
@@ -460,6 +493,7 @@ include $(1)
 build : build-non-l10n-only build-l10n-only
 build-non-l10n-only : $$(firstword $$(gb_Module_TARGETSTACK))
 build-l10n-only : $$(firstword $$(gb_Module_L10NTARGETSTACK))
+coverage : $$(firstword $$(gb_Module_COVERAGETARGETSTACK))
 unitcheck : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 slowcheck : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 screenshot : $$(firstword $$(gb_Module_SCREENSHOTTARGETSTACK))
@@ -480,12 +514,13 @@ gb_Module_L10NTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_L10NTARGETSTACK
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
 gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SCREENSHOTTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SCREENSHOTTARGETSTACK)),$$(gb_Module_SCREENSHOTTARGETSTACK))
+gb_Module_COVERAGETARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_COVERAGETARGETSTACK)),$$(gb_Module_COVERAGETARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_UICHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_UICHECKTARGETSTACK)),$$(gb_Module_UICHECKTARGETSTACK))
 gb_Module_PERFCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_PERFCHECKTARGETSTACK)),$$(gb_Module_PERFCHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
-ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_SCREENSHOTTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK),$$(gb_Module_UICHECKTARGETSTACK),$$(gb_Module_PERFCHECKTARGETSTACK),$$(gb_Module_L10NTARGETSTACK)),)
+ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_COVERAGETARGETSTACK),$$(gb_Module_SCREENSHOTTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK),$$(gb_Module_UICHECKTARGETSTACK),$$(gb_Module_PERFCHECKTARGETSTACK),$$(gb_Module_L10NTARGETSTACK)),)
 $$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 
