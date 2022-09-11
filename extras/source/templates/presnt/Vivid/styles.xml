@@ -23,7 +23,7 @@
       <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Noto Sans Regular" fo:font-size="24pt" fo:language="de" fo:country="AT" style:font-name-asian="Segoe UI" style:font-size-asian="24pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Tahoma" style:font-size-complex="24pt" style:language-complex="hi" style:country-complex="IN"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Noto Sans Regular" fo:font-size="24pt" style:font-name-asian="Segoe UI" style:font-size-asian="24pt" style:font-name-complex="Tahoma" style:font-size-complex="24pt"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0.05cm" svg:stroke-color="#f49100" draw:marker-start-width="0.28cm" draw:marker-start-center="false" draw:marker-end-width="0.28cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#009eda" draw:fill-hatch-solid="true" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:padding-top="0.1cm" fo:padding-bottom="0.1cm" fo:padding-left="0.1cm" fo:padding-right="0.1cm" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0.03cm" draw:shadow-color="#f49100">
@@ -369,7 +369,7 @@
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#04617b" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro Light2" fo:font-family="&apos;Source Sans Pro Light&apos;" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" fo:letter-spacing="normal" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="250" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:font-size-asian="80pt" style:font-style-asian="normal" style:font-weight-asian="250" style:font-size-complex="80pt" style:font-style-complex="normal" style:font-weight-complex="250" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
+      <style:text-properties fo:color="#04617b" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro Light2" fo:font-family="&apos;Source Sans Pro Light&apos;" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" fo:letter-spacing="normal" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="250" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:font-size-asian="60pt" style:font-style-asian="normal" style:font-weight-asian="250" style:font-size-complex="60pt" style:font-style-complex="normal" style:font-weight-complex="250" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
     </style:style>
     <style:style style:name="Vivid1-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="bitmap" style:repeat="stretch"/>
@@ -797,8 +797,8 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties fo:min-height="5.05cm" fo:min-width="27.8cm" draw:shadow-offset-y="-0.05cm"/>
+    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="hatch" draw:fill-color="#009eda" draw:fill-hatch-name="Hatching_20_6" draw:fill-hatch-solid="true" draw:shadow="visible" fo:min-height="5.05cm" fo:min-width="27.8cm" draw:shadow-offset-x="0cm" draw:shadow-offset-y="-0.1cm" draw:shadow-color="#f49100"/>
     </style:style>
     <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Accent_20_1">
       <style:graphic-properties fo:min-height="3cm" fo:min-width="28cm"/>
