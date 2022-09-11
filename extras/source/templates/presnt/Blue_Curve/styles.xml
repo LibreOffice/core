@@ -569,8 +569,8 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:opacity="100%" draw:textarea-vertical-align="middle" fo:min-height="2.612cm" fo:min-width="28.001cm"/>
+    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#009bdd" draw:fill="gradient" draw:fill-gradient-name="Gradient_20_7" draw:gradient-step-count="64" draw:shadow="visible" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0.03cm" draw:shadow-color="#009bdd" draw:opacity="100%" draw:textarea-vertical-align="middle" fo:min-height="2.612cm" fo:min-width="28.001cm"/>
     </style:style>
     <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Accent_20_1">
       <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="2cm" fo:min-width="27.991cm"/>
