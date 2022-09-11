@@ -225,15 +225,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     // back to Unicode
                     OUString aStrDec = OStringToOUString(aStrEnc, eCharSet);
                     // search on re-decoded string
-                    sal_Int32 nPos = aStrDec.indexOf(aStrDelimDecoded);
-                    while (nPos >= 0)
-                    {
-                        OUStringBuffer aBuf(aStrDec);
-                        aBuf.insert(nPos, aStrDelimDecoded);
-                        aStrDec = aBuf.makeStringAndClear();
-                        nPos = aStrDec.indexOf(
-                            aStrDelimDecoded, nPos+1+aStrDelimDecoded.getLength());
-                    }
+                    OUString aStrTo = aStrDelimDecoded + aStrDelimDecoded;
+                    aStrDec = aStrDec.replaceAll(aStrDelimDecoded, aStrTo);
                     // write byte re-encoded
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                     rOut.WriteUnicodeOrByteText( aStrDec, eCharSet );
@@ -243,15 +236,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 {
                     OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
                     // search on encoded string
-                    sal_Int32 nPos = aStrEnc.indexOf(aStrDelimEncoded);
-                    while (nPos >= 0)
-                    {
-                        OStringBuffer aBuf(aStrEnc);
-                        aBuf.insert(nPos, aStrDelimEncoded);
-                        aStrEnc = aBuf.makeStringAndClear();
-                        nPos = aStrEnc.indexOf(
-                            aStrDelimEncoded, nPos+1+aStrDelimEncoded.getLength());
-                    }
+                    OString aStrTo = aStrDelimEncoded + aStrDelimEncoded;
+                    aStrEnc = aStrEnc.replaceAll(aStrDelimEncoded, aStrTo);
                     // write byte encoded
                     rOut.WriteBytes(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                     rOut.WriteBytes(aStrEnc.getStr(), aStrEnc.getLength());
