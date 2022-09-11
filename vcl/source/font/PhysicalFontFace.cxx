@@ -298,8 +298,8 @@ bool PhysicalFontFace::CreateFontSubset(const OUString& rToFile, const sal_Glyph
     // Shortcut for CFF-subsetting.
     auto aData = GetRawFontData(T_CFF);
     if (!aData.empty())
-        return SalGraphics::CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds,
-                                                pEncoding, nGlyphCount, rInfo);
+        return CreateCFFfontSubset(aData.data(), aData.size(), aToFile, pGlyphIds, pEncoding,
+                                   nGlyphCount, rInfo);
 
     // Prepare data for font subsetter.
     TrueTypeFace aSftFont(*this);
@@ -310,10 +310,10 @@ bool PhysicalFontFace::CreateFontSubset(const OUString& rToFile, const sal_Glyph
     TTGlobalFontInfo aTTInfo;
     GetTTGlobalFontInfo(&aSftFont, &aTTInfo);
     OUString aPSName(aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8);
-    SalGraphics::FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
+    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
     // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);
+    return CreateTTFfontSubset(aSftFont, aToFile, pGlyphIds, pEncoding, nGlyphCount);
 }
 }
 

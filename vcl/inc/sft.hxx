@@ -619,6 +619,21 @@ class TrueTypeFace;
                               sal_uInt8 const *encoding,
                               int            nGlyphs);
 
+    VCL_DLLPUBLIC bool CreateTTFfontSubset(AbstractTrueTypeFont& aTTF,
+                              const OString& rSysPath,
+                              const sal_GlyphId* pGlyphIds,
+                              const sal_uInt8* pEncoding,
+                              int nGlyphCount);
+
+    VCL_DLLPUBLIC bool CreateCFFfontSubset(const unsigned char* pFontBytes,
+                              int nByteLength,
+                              const OString& rSysPath, const sal_GlyphId* pGlyphIds,
+                              const sal_uInt8* pEncoding,
+                              int nGlyphCount, FontSubsetInfo& rInfo);
+
+    VCL_DLLPUBLIC void FillFontSubsetInfo(const TTGlobalFontInfo& rTTInfo,
+                              const OUString& pPSName,
+                              FontSubsetInfo& rInfo);
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
  * This function substitutes glyph 0 for all glyphIDs that are not found in the font.

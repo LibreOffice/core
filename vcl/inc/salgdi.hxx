@@ -44,7 +44,6 @@ namespace vcl::font {
 }
 class SalLayout;
 namespace tools { class Rectangle; }
-class FontSubsetInfo;
 class OutputDevice;
 class FreetypeFont;
 struct SystemGraphicsData;
@@ -630,20 +629,6 @@ protected:
 
     std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
     vcl::WidgetDrawInterface* forWidget() { return m_pWidgetDraw ? m_pWidgetDraw.get() : this; }
-
-public:
-    static bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
-                                    const sal_GlyphId* pGlyphIds,
-                                    const sal_uInt8* pEncoding,
-                                    int nGlyphCount);
-
-    static bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                                    const OString& rSysPath, const sal_GlyphId* pGlyphIds,
-                                    const sal_uInt8* pEncoding,
-                                    int nGlyphCount, FontSubsetInfo& rInfo);
-
-    static void FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const OUString& pPSName,
-                                   FontSubsetInfo& rInfo);
 };
 
 bool SalGraphics::IsNativeControlSupported(ControlType eType, ControlPart ePart)
