@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>

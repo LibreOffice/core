@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #include <vector>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>

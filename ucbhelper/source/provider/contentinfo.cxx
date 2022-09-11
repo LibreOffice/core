@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>

@@ -33,10 +33,6 @@ using namespace com::sun::star;
 
 namespace ucbhelper {
 
-
-//  registerAtUcb
-
-
 bool
 registerAtUcb(
     uno::Reference< ucb::XContentProviderManager > const & rManager,

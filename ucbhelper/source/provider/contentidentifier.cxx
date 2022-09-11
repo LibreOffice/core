@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
 #include <ucbhelper/contentidentifier.hxx>
 
 using namespace com::sun::star::uno;
@@ -32,10 +26,6 @@ using namespace com::sun::star::ucb;
 
 namespace ucbhelper
 {
-
-
-// struct ContentIdentifier_Impl.
-
 
 struct ContentIdentifier_Impl
 {

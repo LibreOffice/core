@@ -18,14 +18,11 @@
  */
 
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
+/* TODO
  - This implementation is far away from completion. It has no interface
    for changes notifications etc.
+ */
 
- *************************************************************************/
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
 #include <com/sun/star/ucb/ServiceNotFoundException.hpp>
