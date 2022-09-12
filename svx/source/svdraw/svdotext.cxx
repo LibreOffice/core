@@ -193,7 +193,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind,
 
 SdrTextObj::~SdrTextObj()
 {
-    mpText.reset();
+    mxText.clear();
     ImpDeregisterLink();
 }
 
@@ -2047,10 +2047,10 @@ rtl::Reference<SdrObject> SdrTextObj::getFullDragClone() const
 /** returns the currently active text. */
 SdrText* SdrTextObj::getActiveText() const
 {
-    if( !mpText )
+    if( !mxText )
         return getText( 0 );
     else
-        return mpText.get();
+        return mxText.get();
 }
 
 /** returns the nth available text. */
@@ -2058,9 +2058,9 @@ SdrText* SdrTextObj::getText( sal_Int32 nIndex ) const
 {
     if( nIndex == 0 )
     {
-        if( !mpText )
-            const_cast< SdrTextObj* >(this)->mpText.reset( new SdrText( *const_cast< SdrTextObj* >(this) ) );
-        return mpText.get();
+        if( !mxText )
+            const_cast< SdrTextObj* >(this)->mxText = new SdrText( *const_cast< SdrTextObj* >(this) );
+        return mxText.get();
     }
     else
     {

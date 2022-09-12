@@ -46,8 +46,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Cell final : public SdrText,
                 public SvxUnoTextBase,
                 public css::table::XMergeableCell,
                 public css::awt::XLayoutConstrains,
-                public css::lang::XEventListener,
-                public ::cppu::OWeakObject
+                public css::lang::XEventListener
 {
     friend class CellUndo;
 

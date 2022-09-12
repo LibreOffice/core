@@ -97,7 +97,7 @@ namespace drawinglayer::primitive2d
         SdrTextPrimitive2D::SdrTextPrimitive2D(
             const SdrText* pSdrText,
             OutlinerParaObject aOutlinerParaObject)
-        :   mrSdrText(const_cast< SdrText* >(pSdrText)),
+        :   mxSdrText(const_cast< SdrText* >(pSdrText)),
             maOutlinerParaObject(std::move(aOutlinerParaObject)),
             mnLastPageNumber(0),
             mnLastPageCount(0),
@@ -115,7 +115,7 @@ namespace drawinglayer::primitive2d
                 || rETO.HasField(SvxAuthorField::CLASS_ID);
         }
 
-        const SdrText* SdrTextPrimitive2D::getSdrText() const { return mrSdrText.get(); }
+        const SdrText* SdrTextPrimitive2D::getSdrText() const { return mxSdrText.get().get(); }
 
         bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {

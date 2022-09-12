@@ -22,7 +22,6 @@
 #include <editeng/outlobj.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/weakbase.hxx>
 
 class OutlinerParaObject;
 class SdrOutliner;
@@ -40,7 +39,7 @@ class TextProperties;
 */
 
 class SfxStyleSheet;
-class SVXCORE_DLLPUBLIC SdrText : public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrText : public ::cppu::OWeakObject
 {
 public:
     explicit SdrText(SdrTextObj& rObject);

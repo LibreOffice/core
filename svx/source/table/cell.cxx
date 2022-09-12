@@ -866,13 +866,13 @@ Any SAL_CALL Cell::queryInterface( const Type & rType )
 
 void SAL_CALL Cell::acquire() noexcept
 {
-    ::cppu::OWeakObject::acquire();
+    SdrText::acquire();
 }
 
 
 void SAL_CALL Cell::release() noexcept
 {
-    ::cppu::OWeakObject::release();
+    SdrText::release();
 }
 
 

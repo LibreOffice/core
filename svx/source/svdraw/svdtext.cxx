@@ -36,7 +36,6 @@ SdrText::SdrText( SdrTextObj& rObject )
 
 SdrText::~SdrText()
 {
-    clearWeak();
 }
 
 void SdrText::CheckPortionInfo( const SdrOutliner& rOutliner )

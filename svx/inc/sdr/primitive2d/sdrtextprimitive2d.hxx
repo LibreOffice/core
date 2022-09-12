@@ -30,6 +30,7 @@
 #include <tools/weakbase.h>
 #include <svx/sdtaitm.hxx>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 
 // predefines
@@ -43,7 +44,7 @@ namespace drawinglayer::primitive2d
         private:
             // The text model data; this should later just be the OutlinerParaObject or
             // something equal
-            ::tools::WeakReference< SdrText >       mrSdrText;
+            ::unotools::WeakReference< SdrText > mxSdrText;
 
             // #i97628#
             // The text content; now as local OutlinerParaObject copy (internally RefCounted and

@@ -171,7 +171,7 @@ protected:
     GeoStat maGeo;
 
     // this is the active text
-    std::unique_ptr<SdrText> mpText;
+    rtl::Reference<SdrText> mxText;
 
     // This contains the dimensions of the text
     Size maTextSize;
