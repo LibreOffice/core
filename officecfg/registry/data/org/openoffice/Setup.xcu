@@ -966,7 +966,10 @@
           </node>
           <node oor:name="Setup" oor:op="replace">
             <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Setup/Office/Factories</value>
+              <value>
+              <it>/org.openoffice.Setup/Office/Factories</it>
+              <it>/org.openoffice.Setup/L10N</it>
+              </value>
             </prop>
           </node>
           <node oor:name="UI" oor:op="replace">
