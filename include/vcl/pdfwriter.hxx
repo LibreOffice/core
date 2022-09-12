@@ -215,7 +215,7 @@ public:
         Error_Signature_Failed,
     };
 
-    struct UNLESS_MERGELIBS(VCL_DLLPUBLIC) AnyWidget
+    struct VCL_DLLPUBLIC AnyWidget
     {
         WidgetType          Type;       // primitive RTTI
     public:
@@ -286,7 +286,7 @@ public:
             ,TabOrder( rSource.TabOrder )
         {
         }
-        AnyWidget& operator=( const AnyWidget& );  // never implemented
+        AnyWidget& operator=( const AnyWidget& ) = delete;  // never implemented
     };
 
     struct PushButtonWidget final : public AnyWidget
@@ -373,7 +373,7 @@ public:
         // in the group
     };
 
-    struct EditWidget final : public AnyWidget
+    struct VCL_DLLPUBLIC EditWidget final : public AnyWidget
     {
         bool                MultiLine;  // whether multiple lines are allowed
         bool                Password;   // visible echo off
