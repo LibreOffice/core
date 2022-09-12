@@ -821,28 +821,30 @@ void SwXMLImport::endDocument()
 
     m_oSttNdIdx.reset();
 
+    // tdf#150753: pDoc may be null e.g. when the package lacks content.xml;
+    // we should not forget to tidy up here, including unlocking draw model
+    if (!pDoc)
+        pDoc = SwImport::GetDocFromXMLImport(*this);
+    assert(pDoc);
     // SJ: #i49801# -> now permitting repaints
-    if ( pDoc )
+    if (getImportFlags() == SvXMLImportFlags::ALL)
     {
-        if( getImportFlags() == SvXMLImportFlags::ALL )
-        {
-            // Notify math objects. If we are in the package filter this will
-            // be done by the filter object itself
-            if( IsInsertMode() )
-                pDoc->PrtOLENotify( false );
-            else if ( pDoc->IsOLEPrtNotifyPending() )
-                pDoc->PrtOLENotify( true );
+        // Notify math objects. If we are in the package filter this will
+        // be done by the filter object itself
+        if (IsInsertMode())
+            pDoc->PrtOLENotify(false);
+        else if (pDoc->IsOLEPrtNotifyPending())
+            pDoc->PrtOLENotify(true);
 
-            assert(pDoc->IsInReading());
-            assert(pDoc->IsInXMLImport());
-            pDoc->SetInReading(false);
-            pDoc->SetInXMLImport(false);
-        }
-
-        SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
-        if ( pDrawModel )
-            pDrawModel->setLock(false);
+        assert(pDoc->IsInReading());
+        assert(pDoc->IsInXMLImport());
+        pDoc->SetInReading(false);
+        pDoc->SetInXMLImport(false);
     }
+
+    SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    if (pDrawModel)
+        pDrawModel->setLock(false);
 
     // #i90243#
     if ( m_bInititedXForms )
@@ -871,8 +873,6 @@ void SwXMLImport::endDocument()
         }
     }
 
-#if 1
-    if (!pDoc) { pDoc = SwImport::GetDocFromXMLImport(*this); }
     for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
     {
         if (SwTableNode *const pTableNode = pDoc->GetNodes()[i]->GetTableNode())
@@ -885,7 +885,6 @@ void SwXMLImport::endDocument()
         }
         // don't skip to the end; nested tables could have subtables too...
     }
-#endif
 
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
