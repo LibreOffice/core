@@ -44,12 +44,12 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     if ( aIt == m_aMap.end() )
     {
-        std::unique_ptr< DAVSession > xElement(
+        rtl::Reference< CurlSession > xElement(
             new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider) );
 
         aIt = m_aMap.emplace(  inUri, xElement.get() ).first;
+
         aIt->second->m_aContainerIt = aIt;
-        xElement.release();
         return aIt->second;
     }
     else if ( osl_atomic_increment( &aIt->second->m_nRefCount ) > 1 )
@@ -63,9 +63,10 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         osl_atomic_decrement( &aIt->second->m_nRefCount );
         aIt->second->m_aContainerIt = m_aMap.end();
 
-        aIt->second = new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider);
+        rtl::Reference< CurlSession > xNewStorage = new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider);
+        aIt->second = xNewStorage.get();
         aIt->second->m_aContainerIt = aIt;
-        return aIt->second;
+        return xNewStorage;
     }
 }
 
