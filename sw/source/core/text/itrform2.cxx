@@ -55,8 +55,10 @@
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <docsh.hxx>
 #include <unocrsrhelper.hxx>
+#include <textcontentcontrol.hxx>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
@@ -872,9 +874,13 @@ public:
 /// A content control portion is a text portion that is inside RES_TXTATR_CONTENTCONTROL.
 class SwContentControlPortion : public SwTextPortion
 {
+    SwTextContentControl* m_pTextContentControl;
 public:
-    SwContentControlPortion() { SetWhichPor(PortionType::ContentControl); }
+    SwContentControlPortion(SwTextContentControl* pTextContentControl);
     virtual void Paint(const SwTextPaintInfo& rInf) const override;
+
+    /// Emits a PDF form widget for this portion on success, does nothing on failure.
+    bool DescribePDFControl(const SwTextPaintInfo& rInf) const;
 };
 }
 
@@ -892,11 +898,78 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
+SwContentControlPortion::SwContentControlPortion(SwTextContentControl* pTextContentControl)
+    : m_pTextContentControl(pTextContentControl)
+{
+    SetWhichPor(PortionType::ContentControl);
+}
+
+bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) const
+{
+    auto pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData*>(rInf.GetOut()->GetExtOutDevData());
+    if (!pPDFExtOutDevData)
+    {
+        return false;
+    }
+
+    if (!pPDFExtOutDevData->GetIsExportFormFields())
+    {
+        return false;
+    }
+
+    if (!m_pTextContentControl)
+    {
+        return false;
+    }
+
+    const SwFormatContentControl& rFormatContentControl = m_pTextContentControl->GetContentControl();
+    const std::shared_ptr<SwContentControl>& pContentControl = rFormatContentControl.GetContentControl();
+    if (!pContentControl)
+    {
+        return false;
+    }
+
+    std::unique_ptr<vcl::PDFWriter::AnyWidget> pDescriptor;
+    switch (pContentControl->GetType())
+    {
+        case SwContentControlType::RICH_TEXT:
+        case SwContentControlType::PLAIN_TEXT:
+            pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
+            break;
+        default:
+            break;
+    }
+
+    if (!pDescriptor)
+    {
+        return false;
+    }
+
+    pDescriptor->Border = true;
+    pDescriptor->BorderColor = COL_BLACK;
+
+    SwRect aLocation;
+    rInf.CalcRect(*this, &aLocation);
+    pDescriptor->Location = aLocation.SVRect();
+
+    pPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+    pPDFExtOutDevData->CreateControl(*pDescriptor);
+    pPDFExtOutDevData->EndStructureElement();
+
+    return true;
+}
+
 void SwContentControlPortion::Paint(const SwTextPaintInfo& rInf) const
 {
     if (Width())
     {
         rInf.DrawViewOpt(*this, PortionType::ContentControl);
+
+        if (DescribePDFControl(rInf))
+        {
+            return;
+        }
+
         SwTextPortion::Paint(rInf);
     }
 }
@@ -1019,7 +1092,19 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
         }
         else if (GetFnt()->IsContentControl())
         {
-            pPor = new SwContentControlPortion;
+            SwTextFrame const*const pFrame(rInf.GetTextFrame());
+            SwPosition aPosition(pFrame->MapViewToModelPos(rInf.GetIdx()));
+            SwTextNode* pTextNode = aPosition.GetNode().GetTextNode();
+            SwTextContentControl* pTextContentControl = nullptr;
+            if (pTextNode)
+            {
+                sal_Int32 nIndex = aPosition.GetContentIndex();
+                if (SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+                {
+                    pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+                }
+            }
+            pPor = new SwContentControlPortion(pTextContentControl);
         }
         else
         {

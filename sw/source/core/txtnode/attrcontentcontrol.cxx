@@ -334,6 +334,36 @@ bool SwContentControl::ShouldOpenPopup(const vcl::KeyCode& rKeyCode)
     return false;
 }
 
+SwContentControlType SwContentControl::GetType() const
+{
+    if (m_bCheckbox)
+    {
+        return SwContentControlType::CHECKBOX;
+    }
+
+    if (!m_aListItems.empty())
+    {
+        return SwContentControlType::DROP_DOWN_LIST;
+    }
+
+    if (m_bPicture)
+    {
+        return SwContentControlType::PICTURE;
+    }
+
+    if (m_bDate)
+    {
+        return SwContentControlType::DATE;
+    }
+
+    if (m_bPlainText)
+    {
+        return SwContentControlType::PLAIN_TEXT;
+    }
+
+    return SwContentControlType::RICH_TEXT;
+}
+
 void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControl"));

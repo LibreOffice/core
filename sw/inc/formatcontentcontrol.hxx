@@ -317,6 +317,8 @@ public:
     void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
 
     bool GetReadWrite() const { return m_bReadWrite; }
+
+    SwContentControlType GetType() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
