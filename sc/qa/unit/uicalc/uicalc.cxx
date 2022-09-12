@@ -3024,6 +3024,31 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107952)
     lcl_AssertCurrentCursorPosition(*pDoc, "B1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf150766)
+{
+    ScModelObj* pModelObj = createDoc("tdf150766.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A3:C6");
+
+    dispatchCommand(mxComponent, ".uno:SortDescending", {});
+
+    insertStringToCell(*pModelObj, "B3", "10");
+
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(13.0, pDoc->GetValue(ScAddress(2, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(14.0, pDoc->GetValue(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(15.0, pDoc->GetValue(ScAddress(2, 5, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 16
+    // - Actual  : 7
+    CPPUNIT_ASSERT_EQUAL(16.0, pDoc->GetValue(ScAddress(2, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(17.0, pDoc->GetValue(ScAddress(2, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(18.0, pDoc->GetValue(ScAddress(2, 8, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
 {
     ScModelObj* pModelObj = createDoc("tdf144022.ods");
