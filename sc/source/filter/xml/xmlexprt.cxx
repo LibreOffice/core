@@ -3170,8 +3170,9 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             {
                 OUString sFormattedString(lcl_GetFormattedString(pDoc, aCell.maBaseCell, aCell.maCellAddress));
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
+                bool bExportValue = sCellString.indexOf('\x001') == -1;
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                        sCellString, sFormattedString);
+                        sCellString, sFormattedString, bExportValue);
                 if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             sCellString, sFormattedString, false, XML_NAMESPACE_CALC_EXT);

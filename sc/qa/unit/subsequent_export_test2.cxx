@@ -1449,13 +1449,12 @@ void ScExportTest2::testTdf103829()
     ScDocShellRef xShell = loadDoc(u"tdf103829_textTab.", FORMAT_ODS);
     ScDocument& rDoc = xShell->GetDocument();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("load a1", sA1, rDoc.GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("load a1", sA1, rDoc.GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("load a2", sA2, rDoc.GetString(0, 1, 0));
 
     xShell = saveAndReload(*xShell, FORMAT_ODS);
     ScDocument& rDoc2 = xShell->GetDocument();
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1.getLength(), rDoc2.GetString(0, 0, 0).getLength());
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1, rDoc2.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1, rDoc2.GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a2", sA2, rDoc2.GetString(0, 1, 0));
 }
 
