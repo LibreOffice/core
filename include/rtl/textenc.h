@@ -133,8 +133,11 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_ADOBE_SYMBOL           (RTL_TEXTENC_CAST( 92 ))
 #define RTL_TEXTENCODING_PT154                  (RTL_TEXTENC_CAST( 93 ))
 #define RTL_TEXTENCODING_ADOBE_DINGBATS         (RTL_TEXTENC_CAST( 94 ))
+#define RTL_TEXTENCODING_KAMENICKY              (RTL_TEXTENC_CAST( 95 ))
+#define RTL_TEXTENCODING_MAZOVIA                (RTL_TEXTENC_CAST( 96 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
- * rtl_isOctetTextEncoding in tencinfo.c.
+ * rtl_isOctetTextEncoding in sal/textenc/tencinfo.cxx and sal_getFullTextEncodingData in
+ * sal/textenc/tables.cxx.
  */
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))

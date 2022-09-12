@@ -33,7 +33,7 @@ sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
     return
         nEncoding > RTL_TEXTENCODING_DONTKNOW
         && nEncoding != 9 // RTL_TEXTENCODING_SYSTEM
-        && nEncoding <= RTL_TEXTENCODING_ADOBE_DINGBATS; // always update this!
+        && nEncoding <= RTL_TEXTENCODING_MAZOVIA; // always update this!
 }
 
 /* ======================================================================= */

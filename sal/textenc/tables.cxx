@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 
 #include <rtl/textenc.h>
 #include <sal/types.h>
@@ -257,10 +258,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
             &aImplPT154TextEncodingData, /* PT154 */
-            &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
+            &adobeDingbatsEncodingData, /* ADOBE_DINGBATS */
+            &kamenickyEncodingData, /* KAMENICKY */
+            &mazoviaEncodingData }; /* MAZOVIA */
 
     static_assert(
-        SAL_N_ELEMENTS(aData) == RTL_TEXTENCODING_ADOBE_DINGBATS + 1,
+        SAL_N_ELEMENTS(aData) == RTL_TEXTENCODING_MAZOVIA + 1,
         "update table above if a new encoding is added");
 
     return

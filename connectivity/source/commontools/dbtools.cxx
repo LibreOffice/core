@@ -2016,8 +2016,8 @@ namespace dbase
                 case 0x65: eEncoding = RTL_TEXTENCODING_IBM_866; break;       // Russian MS-DOS   code page 866
                 case 0x66: eEncoding = RTL_TEXTENCODING_IBM_865; break;       // Nordic MS-DOS    code page 865
                 case 0x67: eEncoding = RTL_TEXTENCODING_IBM_861; break;       // Icelandic MS-DOS
-                //case 0x68: eEncoding = ; break;     // Kamenicky (Czech) MS-DOS
-                //case 0x69: eEncoding = ; break;     // Mazovia (Polish) MS-DOS
+                case 0x68: eEncoding = RTL_TEXTENCODING_KAMENICKY; break;     // Kamenicky (Czech) MS-DOS
+                case 0x69: eEncoding = RTL_TEXTENCODING_MAZOVIA; break;       // Mazovia (Polish) MS-DOS
                 case 0x6A: eEncoding = RTL_TEXTENCODING_IBM_737; break;       // Greek MS-DOS (437G)
                 case 0x6B: eEncoding = RTL_TEXTENCODING_IBM_857; break;       // Turkish MS-DOS
                 case 0x6C: eEncoding = RTL_TEXTENCODING_IBM_863; break;       // MS-DOS, Canada
