@@ -558,9 +558,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage )
 {
     CharClass aCC(( LanguageTag( nLanguage ) ));
-    sal_Int32 nFlags = aCC.getStringType( rText, nPos, nLen );
-    return      (nFlags & KCharacterType::UPPER)
-            && !(nFlags & KCharacterType::LOWER);
+    return aCC.isUpper( rText, nPos, nLen );
 }
 
 CapType capitalType(const OUString& aTerm, CharClass const * pCC)

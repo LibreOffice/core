@@ -134,7 +134,14 @@ bool CharClass::isLetter( const OUString& rStr ) const
 {
     try
     {
-        return isLetterType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
+        sal_Int32 nPos = 0;
+        while (nPos < rStr.getLength())
+        {
+            if (!isLetter( rStr, nPos))
+                return false;
+            rStr.iterateCodePoints( &nPos);
+        }
+        return true;
     }
     catch ( const Exception& )
     {
@@ -165,7 +172,14 @@ bool CharClass::isNumeric( const OUString& rStr ) const
 {
     try
     {
-        return isNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
+        sal_Int32 nPos = 0;
+        while (nPos < rStr.getLength())
+        {
+            if (!isDigit( rStr, nPos))
+                return false;
+            rStr.iterateCodePoints( &nPos);
+        }
+        return true;
     }
     catch ( const Exception& )
     {
@@ -183,7 +197,7 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
-                (nCharClassAlphaType | KCharacterType::DIGIT)) != 0;
+                (nCharClassAlphaType | nCharClassNumericType)) != 0;
     }
     catch ( const Exception& )
     {
@@ -201,7 +215,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
     try
     {
         return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
-                (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
+                (nCharClassLetterType | nCharClassNumericType)) != 0;
     }
     catch ( const Exception& )
     {
@@ -214,7 +228,53 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
 {
     try
     {
-        return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
+        sal_Int32 nPos = 0;
+        while (nPos < rStr.getLength())
+        {
+            if (!isLetterNumeric( rStr, nPos))
+                return false;
+            rStr.iterateCodePoints( &nPos);
+        }
+        return true;
+    }
+    catch ( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
+    }
+    return false;
+}
+
+bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos ) const
+{
+    sal_Unicode c = rStr[nPos];
+    if ( c < 128 )
+        return rtl::isAsciiUpperCase(c);
+
+    try
+    {
+        return (xCC->getCharacterType( rStr, nPos, getMyLocale()) &
+                KCharacterType::UPPER) != 0;
+    }
+    catch ( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
+    }
+    return false;
+}
+
+bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+{
+    try
+    {
+        assert(nPos >= 0 && nCount >= 0);
+        sal_Int32 nLen = std::min( nPos + nCount, rStr.getLength());
+        while (nPos < nLen)
+        {
+            if (!isUpper( rStr, nPos))
+                return false;
+            rStr.iterateCodePoints( &nPos);
+        }
+        return true;
     }
     catch ( const Exception& )
     {
@@ -306,19 +366,6 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     try
     {
         return xCC->getCharacterType( rStr, nPos, getMyLocale() );
-    }
-    catch ( const Exception& )
-    {
-        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
-    }
-    return 0;
-}
-
-sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
-{
-    try
-    {
-        return xCC->getStringType( rStr, nPos, nCount, getMyLocale() );
     }
     catch ( const Exception& )
     {
