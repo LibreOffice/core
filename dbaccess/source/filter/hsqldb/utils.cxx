@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
+#include <sal/log.hxx>
 
 #include "utils.hxx"
 
@@ -109,6 +110,11 @@ OUString utils::getTableNameFromStmt(std::u16string_view sSql)
         while (!bProperEndAposFound)
         {
             nAposEnd = sSql.find('"', nAposEnd + 1);
+            if (nAposEnd == std::u16string_view::npos)
+            {
+                SAL_WARN("dbaccess", "no matching \"");
+                return OUString();
+            }
             if (sSql[nAposEnd - 1] != u'\\')
                 bProperEndAposFound = true;
         }
