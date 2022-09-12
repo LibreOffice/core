@@ -49,8 +49,7 @@ ChartTransferable::ChartTransferable(
     SdrModel& rSdrModel,
     SdrObject* pSelectedObj,
     bool bDrawing)
-:   m_pMarkedObjModel( nullptr )
-    ,m_bDrawing( bDrawing )
+    : m_bDrawing(bDrawing)
 {
     std::unique_ptr<SdrExchangeView> pExchgView(std::make_unique<SdrView>( rSdrModel ));
     SdrPageView* pPv = pExchgView->ShowSdrPage( rSdrModel.GetPage( 0 ));
@@ -62,7 +61,7 @@ ChartTransferable::ChartTransferable(
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )
     {
-        m_pMarkedObjModel = pExchgView->CreateMarkedObjModel().release();
+        m_xMarkedObjModel = pExchgView->CreateMarkedObjModel();
     }
 }
 
@@ -89,7 +88,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     {
         if ( nFormat == SotClipboardFormatId::DRAWING )
         {
-            bResult = SetObject( m_pMarkedObjModel, CHARTTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
+            bResult = SetObject(m_xMarkedObjModel.get(), CHARTTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor);
         }
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {

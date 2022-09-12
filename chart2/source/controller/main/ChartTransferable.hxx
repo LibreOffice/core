@@ -51,7 +51,7 @@ protected:
 
 private:
     css::uno::Reference< css::graphic::XGraphic > m_xMetaFileGraphic;
-    SdrModel* m_pMarkedObjModel;
+    std::unique_ptr<SdrModel> m_xMarkedObjModel;
     bool m_bDrawing;
 };
 
