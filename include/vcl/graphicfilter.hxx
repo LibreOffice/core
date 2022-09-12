@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
 

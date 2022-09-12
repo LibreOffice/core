@@ -16,12 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_VCL_ERRCODE_HXX
-#define INCLUDED_VCL_ERRCODE_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
-#include <vcl/dllapi.h>
+#include <comphelper/comphelperdllapi.h>
 #include <ostream>
 
 /*
@@ -141,6 +139,9 @@ public:
         return "0x" + OUString::number(m_value, 16);
     }
 
+    /// Return a string suitable for debug output, the same as the operator<< function
+    COMPHELPER_DLLPUBLIC OUString toString() const;
+    
     template <typename... Args> bool anyOf(Args... args) const
     {
         static_assert(sizeof...(args) > 0);
@@ -151,7 +152,7 @@ private:
     sal_uInt32 m_value;
 };
 
-VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err);
+COMPHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err);
 
 enum class ErrCodeArea {
     Io                  = 0 ,
@@ -273,7 +274,5 @@ enum class ErrCodeClass {
 #define ERRCODE_INET_WRITE               ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 4)
 #define ERRCODE_INET_GENERAL             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 5)
 #define ERRCODE_INET_OFFLINE             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  6)
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

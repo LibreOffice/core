@@ -49,7 +49,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/uno/Reference.hxx>

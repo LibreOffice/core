@@ -23,7 +23,7 @@
 
 #include <basic/sbxvar.hxx>
 #include <i18nlangtag/lang.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <memory>
 #include <vector>

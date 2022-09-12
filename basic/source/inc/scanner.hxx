@@ -20,7 +20,7 @@
 #pragma once
 
 #include <basic/sbxdef.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 // The scanner is stand-alone, i. e. it can be used from everywhere.
 // A BASIC-instance is necessary for error messages. Without BASIC

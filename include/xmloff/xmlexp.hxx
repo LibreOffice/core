@@ -49,7 +49,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <vector>
 #include <memory>

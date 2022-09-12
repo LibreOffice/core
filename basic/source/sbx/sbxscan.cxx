@@ -23,7 +23,7 @@
 
 #include <config_features.h>
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <unotools/resmgr.hxx>
 #include "sbxconv.hxx"
 #include <rtlproto.hxx>

@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <unordered_map>

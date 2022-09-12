@@ -23,7 +23,7 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 namespace com
 {

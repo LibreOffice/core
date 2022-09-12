@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 //#include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"

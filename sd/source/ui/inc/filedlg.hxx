@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>

@@ -31,7 +31,7 @@
 #include <vcl/dllapi.h>
 #include <utility>
 #include <vcl/PrinterSupport.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/region.hxx>

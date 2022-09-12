@@ -23,7 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <svl/hint.hxx>
 
 #include <cppuhelper/implbase.hxx>

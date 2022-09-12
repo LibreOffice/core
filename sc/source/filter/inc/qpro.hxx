@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <types.hxx>
 
 class ScDocument;

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/idle.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
 #include "patattr.hxx"

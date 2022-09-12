@@ -22,7 +22,7 @@
 #include <memory>
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 namespace com::sun::star::ui::dialogs { class XFilePickerControlAccess; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }

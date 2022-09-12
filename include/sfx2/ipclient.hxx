@@ -26,7 +26,7 @@
 
 #include <tools/gen.hxx>
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }

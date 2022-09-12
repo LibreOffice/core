@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
 
 #include <tools/stream.hxx>
+#include <vcl/dllapi.h>
 
 class Graphic;
 

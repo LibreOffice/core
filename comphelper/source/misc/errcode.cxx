@@ -17,130 +17,144 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
+#include <rtl/ustrbuf.hxx>
 
-VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err)
+COMPHELPER_DLLPUBLIC OUString ErrCode::toString() const
 {
-    os << err.toHexString() << "(" << (err.IsWarning() ? "Warning" : "Error");
-    if (err.IsDynamic())
-        os << " Dynamic";
+    OUStringBuffer buf(128);
+    buf.append(toHexString() + "(");
+    if (IsWarning())
+        buf.append("Warning");
+    else
+        buf.append("Error");
+    if (IsDynamic())
+        buf.append(" Dynamic");
     else
     {
-        os << " Area:";
-        switch (err.GetArea())
+        std::u16string_view pArea;
+        switch (GetArea())
         {
             case ErrCodeArea::Io:
-                os << "Io";
+                pArea = u"Io";
                 break;
             case ErrCodeArea::Sfx:
-                os << "Sfx";
+                pArea = u"Sfx";
                 break;
             case ErrCodeArea::Inet:
-                os << "Inet";
+                pArea = u"Inet";
                 break;
             case ErrCodeArea::Vcl:
-                os << "Vcl";
+                pArea = u"Vcl";
                 break;
             case ErrCodeArea::Svx:
-                os << "Svx";
+                pArea = u"Svx";
                 break;
             case ErrCodeArea::So:
-                os << "So";
+                pArea = u"So";
                 break;
             case ErrCodeArea::Sbx:
-                os << "Sbx";
+                pArea = u"Sbx";
                 break;
             case ErrCodeArea::Uui:
-                os << "Uui";
+                pArea = u"Uui";
                 break;
             case ErrCodeArea::Sc:
-                os << "Sc";
+                pArea = u"Sc";
                 break;
             case ErrCodeArea::Sd:
-                os << "Sd";
+                pArea = u"Sd";
                 break;
             case ErrCodeArea::Sw:
-                os << "Sw";
+                pArea = u"Sw";
                 break;
-            default:
-                os << "Unknown";
         }
-        os << " Class:";
-        switch (err.GetClass())
+        buf.append(OUString::Concat(" Area:") + pArea);
+
+        std::u16string_view pClass;
+        switch (GetClass())
         {
             case ErrCodeClass::NONE:
-                os << "NONE";
+                pClass = u"NONE";
                 break;
             case ErrCodeClass::Abort:
-                os << "Abort";
+                pClass = u"Abort";
                 break;
             case ErrCodeClass::General:
-                os << "General";
+                pClass = u"General";
                 break;
             case ErrCodeClass::NotExists:
-                os << "NotExists";
+                pClass = u"NotExists";
                 break;
             case ErrCodeClass::AlreadyExists:
-                os << "AlreadyExists";
+                pClass = u"AlreadyExists";
                 break;
             case ErrCodeClass::Access:
-                os << "Access";
+                pClass = u"Access";
                 break;
             case ErrCodeClass::Path:
-                os << "Path";
+                pClass = u"Path";
                 break;
             case ErrCodeClass::Locking:
-                os << "Locking";
+                pClass = u"Locking";
                 break;
             case ErrCodeClass::Parameter:
-                os << "Parameter";
+                pClass = u"Parameter";
                 break;
             case ErrCodeClass::Space:
-                os << "Space";
+                pClass = u"Space";
                 break;
             case ErrCodeClass::NotSupported:
-                os << "NotSupported";
+                pClass = u"NotSupported";
                 break;
             case ErrCodeClass::Read:
-                os << "Read";
+                pClass = u"Read";
                 break;
             case ErrCodeClass::Write:
-                os << "Write";
+                pClass = u"Write";
                 break;
             case ErrCodeClass::Unknown:
-                os << "Unknown";
+                pClass = u"Unknown";
                 break;
             case ErrCodeClass::Version:
-                os << "Version";
+                pClass = u"Version";
                 break;
             case ErrCodeClass::Format:
-                os << "Format";
+                pClass = u"Format";
                 break;
             case ErrCodeClass::Create:
-                os << "Create";
+                pClass = u"Create";
                 break;
             case ErrCodeClass::Import:
-                os << "Import";
+                pClass = u"Import";
                 break;
             case ErrCodeClass::Export:
-                os << "Export";
+                pClass = u"Export";
                 break;
             case ErrCodeClass::So:
-                os << "So";
+                pClass = u"So";
                 break;
             case ErrCodeClass::Sbx:
-                os << "Sbx";
+                pClass = u"Sbx";
                 break;
             case ErrCodeClass::Runtime:
-                os << "Runtime";
+                pClass = u"Runtime";
                 break;
             case ErrCodeClass::Compiler:
-                os << "Compiler";
+                pClass = u"Compiler";
                 break;
         }
-        os << " Code:" << OUString::number(err.GetCode());
+        buf.append(OUString::Concat(" Class:") + pClass);
+
+        buf.append(" Code:" + OUString::number(GetCode()));
     }
-    os << ")";
+    buf.append(")");
+    return buf.makeStringAndClear();
+}
+
+COMPHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err)
+{
+    os << err.toString();
     return os;
 }
 

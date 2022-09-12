@@ -21,7 +21,7 @@
 
 #include <utility>
 #include <xmloff/xmlimp.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <deque>
 

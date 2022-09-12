@@ -20,7 +20,7 @@
 #pragma once
 
 #include <unotools/resmgr.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <utility>
 

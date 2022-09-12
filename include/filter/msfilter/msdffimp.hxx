@@ -40,7 +40,7 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <tools/degree.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>

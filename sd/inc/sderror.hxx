@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 // Import errors
 #define ERR_FORMAT_ROWCOL               ErrCode(ErrCodeArea::Sd, ErrCodeClass::Read, 1)

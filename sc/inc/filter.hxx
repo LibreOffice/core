@@ -21,7 +21,7 @@
 
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include "scdllapi.h"
 #include <memory>

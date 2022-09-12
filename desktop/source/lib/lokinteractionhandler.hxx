@@ -21,7 +21,7 @@
 
 #include <osl/conditn.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -23,7 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
 #include <sal/types.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel3.hpp>

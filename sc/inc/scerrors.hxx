@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 // ErrCodeClass::Read - file related, displays "Read-Error" in MsgBox
 #define SCERR_IMPORT_CONNECT        ErrCode( ErrCodeArea::Sc, ErrCodeClass::Read,  1 )

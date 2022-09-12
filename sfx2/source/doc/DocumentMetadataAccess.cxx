@@ -1370,7 +1370,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
             nError = ERRCODE_IO_GENERAL;
         }
         task::ErrorCodeIOException ex(
-            "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toHexString(),
+            "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toString(),
             uno::Reference< uno::XInterface >(), sal_uInt32(nError));
         throw lang::WrappedTargetException(OUString(), *this,
                 uno::Any(ex));

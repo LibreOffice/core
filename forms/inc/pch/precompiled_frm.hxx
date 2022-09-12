@@ -69,7 +69,7 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>

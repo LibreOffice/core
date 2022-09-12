@@ -85,7 +85,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/profilezone.hxx>

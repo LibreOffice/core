@@ -26,7 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/vclptr.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>

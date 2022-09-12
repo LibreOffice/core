@@ -52,7 +52,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/settings.hxx>

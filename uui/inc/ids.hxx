@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #define ERRCODE_UUI_IO_ABORT                                    ErrCode(ErrCodeArea::Uui, 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED                             ErrCode(ErrCodeArea::Uui, 1)

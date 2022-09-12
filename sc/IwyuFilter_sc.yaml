@@ -283,7 +283,7 @@ excludelist:
     - vcl/outdev.hxx
     sc/inc/scerrors.hxx:
     # needed for defines
-    - vcl/errcode.hxx
+    - comphelper/errcode.hxx
     sc/inc/scitems.hxx:
     # needed for defines
     - svl/typedwhich.hxx

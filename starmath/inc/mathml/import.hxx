@@ -14,7 +14,7 @@
 
 // XML tools
 #include <utility>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <xmloff/xmlimp.hxx>
 
 // Extras

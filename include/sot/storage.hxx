@@ -23,7 +23,7 @@
 #include <sot/object.hxx>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 

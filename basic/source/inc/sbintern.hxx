@@ -22,7 +22,7 @@
 #include <basic/sbstar.hxx>
 #include <sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <config_features.h>
 
 namespace utl

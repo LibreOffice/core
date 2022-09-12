@@ -31,7 +31,7 @@
 #include <tools/color.hxx>
 #include <vbahelper/vbadllapi.h>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 namespace com::sun::star {
     namespace awt { class XControl; }

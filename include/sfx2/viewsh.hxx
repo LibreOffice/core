@@ -29,7 +29,7 @@
 #include <sfx2/shell.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>
 #include <editeng/outliner.hxx>

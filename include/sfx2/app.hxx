@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/bitmapex.hxx>
 #include <tools/link.hxx>

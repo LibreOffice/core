@@ -22,7 +22,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <rtl/ref.hxx>
 
 class SwPaM;

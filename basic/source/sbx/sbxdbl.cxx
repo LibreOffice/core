@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include "sbxconv.hxx"
 #include <rtlproto.hxx>
 #include <runtime.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SBERRORS_HXX
 #define INCLUDED_BASIC_SBERRORS_HXX
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #define ERRCODE_BASIC_SYNTAX                ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 1)   // unspecified syntax error
 #define ERRCODE_BASIC_BAD_ARGUMENT          ErrCode( ErrCodeArea::Sbx, ErrCodeClass::NotSupported, 2) // Invalid procedure call

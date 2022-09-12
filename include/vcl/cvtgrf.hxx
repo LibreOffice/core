@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <vcl/salctype.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 
 class   Graphic;

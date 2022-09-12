@@ -23,7 +23,7 @@
 #include <tools/lineend.hxx>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <o3tl/typed_flags_set.hxx>

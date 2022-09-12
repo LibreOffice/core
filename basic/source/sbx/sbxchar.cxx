@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 #include <rtlproto.hxx>

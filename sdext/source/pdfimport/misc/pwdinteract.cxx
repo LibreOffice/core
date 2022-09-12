@@ -32,7 +32,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 using namespace com::sun::star;
 

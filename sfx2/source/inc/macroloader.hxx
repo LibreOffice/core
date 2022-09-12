@@ -35,7 +35,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 class SfxObjectShell;
 

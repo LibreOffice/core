@@ -2000,7 +2000,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
         }
 
         throw css::task::ErrorCodeIOException(
-            "SfxDocumentMetaData::storeToMedium <" + URL + "> Commit failed: " + nError.toHexString(),
+            "SfxDocumentMetaData::storeToMedium <" + URL + "> Commit failed: " + nError.toString(),
             css::uno::Reference< css::uno::XInterface >(), sal_uInt32(nError));
 
     }

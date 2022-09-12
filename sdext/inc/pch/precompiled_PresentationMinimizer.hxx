@@ -79,7 +79,7 @@
 #include <sal/typesizes.h>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/exceptiontypes.hxx>
 #include <vcl/fntstyle.hxx>

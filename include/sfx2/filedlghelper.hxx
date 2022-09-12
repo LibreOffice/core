@@ -28,7 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <tools/link.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>

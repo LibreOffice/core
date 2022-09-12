@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SVXERR_HXX
 #define INCLUDED_SVX_SVXERR_HXX
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/svxdllapi.h>
 

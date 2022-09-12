@@ -21,7 +21,7 @@
 
 #include <basic/sberrors.hxx>
 #include <unotools/resmgr.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <utility>
 

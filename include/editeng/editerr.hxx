@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_EDITERR_HXX
 #define INCLUDED_EDITENG_EDITERR_HXX
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS ErrCode(ErrCodeArea::Svx, 2)
 #define ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT ErrCode(ErrCodeArea::Svx, ErrCodeClass::Read, 8)

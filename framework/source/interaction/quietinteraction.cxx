@@ -28,7 +28,7 @@
 
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{

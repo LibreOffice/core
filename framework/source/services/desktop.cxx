@@ -56,7 +56,7 @@
 #include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>
 #include <sal/log.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/threadex.hxx>
 #include <unotools/configmgr.hxx>
 

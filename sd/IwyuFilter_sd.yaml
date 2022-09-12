@@ -35,7 +35,7 @@ excludelist:
     - svx/svdobj.hxx
     sd/inc/sderror.hxx:
     # needed for defines
-    - vcl/errcode.hxx
+    - comphelper/errcode.hxx
     sd/inc/sdfilter.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XModel.hpp

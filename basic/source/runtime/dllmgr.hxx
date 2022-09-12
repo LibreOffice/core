@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <memory>
 
 class SbxArray;

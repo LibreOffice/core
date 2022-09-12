@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <utility>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 

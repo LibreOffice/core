@@ -3,7 +3,7 @@ assumeFilename: uui/source/iahndl.cxx
 excludelist:
     uui/inc/ids.hxx:
     # Needed by macro defines
-    - vcl/errcode.hxx
+    - comphelper/errcode.hxx
     uui/source/iahndl.cxx:
     # Actually used
     - com/sun/star/awt/XWindow.hpp

@@ -4908,6 +4908,7 @@ include/comphelper/documentconstants.hxx
 include/comphelper/documentinfo.hxx
 include/comphelper/embeddedobjectcontainer.hxx
 include/comphelper/enumhelper.hxx
+include/comphelper/errcode.hxx
 include/comphelper/eventattachermgr.hxx
 include/comphelper/evtlistenerhlp.hxx
 include/comphelper/flagguard.hxx
@@ -6329,7 +6330,6 @@ include/vcl/dndhelp.hxx
 include/vcl/dockingarea.hxx
 include/vcl/dockwin.hxx
 include/vcl/embeddedfontshelper.hxx
-include/vcl/errcode.hxx
 include/vcl/errinf.hxx
 include/vcl/event.hxx
 include/vcl/evntpost.hxx

@@ -81,7 +81,7 @@
 #include <tools/svborder.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/gdimtf.hxx>
@@ -1695,7 +1695,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocFailed, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
 
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::storeSelf: " + nErrCode.toHexString(),
+            "SfxBaseModel::storeSelf: " + nErrCode.toString(),
             Reference< XInterface >(), sal_uInt32(nErrCode));
     }
 }
@@ -1860,7 +1860,7 @@ void SAL_CALL SfxBaseModel::initNew()
 
     if ( !bRes )
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::initNew: " + nErrCode.toHexString(),
+            "SfxBaseModel::initNew: " + nErrCode.toString(),
             Reference< XInterface >(), sal_uInt32(nErrCode));
 }
 
@@ -2799,7 +2799,7 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
     {
         nError = nError ? nError : ERRCODE_IO_CANTREAD;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::handleLoadError: 0x" + nError.toHexString(),
+            "SfxBaseModel::handleLoadError: 0x" + nError.toString(),
             Reference< XInterface >(), sal_uInt32(nError));
     }
 
@@ -3785,7 +3785,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
         ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
         nError = nError ? nError : ERRCODE_IO_CANTREAD;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::loadFromStorage: " + nError.toHexString(),
+            "SfxBaseModel::loadFromStorage: " + nError.toString(),
             Reference< XInterface >(), sal_uInt32(nError));
     }
     loadCmisProperties( );
@@ -3843,7 +3843,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     {
         nError = nError ? nError : ERRCODE_IO_GENERAL;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::storeToStorage: " + nError.toHexString(),
+            "SfxBaseModel::storeToStorage: " + nError.toString(),
             Reference< XInterface >(), sal_uInt32(nError));
     }
 }
@@ -3863,7 +3863,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
             ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
             nError = nError ? nError : ERRCODE_IO_GENERAL;
             throw task::ErrorCodeIOException(
-                "SfxBaseModel::switchToStorage: " + nError.toHexString(),
+                "SfxBaseModel::switchToStorage: " + nError.toString(),
                 Reference< XInterface >(), sal_uInt32(nError));
         }
         else

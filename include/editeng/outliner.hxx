@@ -31,7 +31,7 @@
 #include <tools/color.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
 

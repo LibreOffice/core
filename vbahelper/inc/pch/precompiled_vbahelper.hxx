@@ -46,7 +46,7 @@
 #include <sal/types.h>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/region.hxx>
 #include <vcl/svapp.hxx>
 #endif // PCH_LEVEL >= 2

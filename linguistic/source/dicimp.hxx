@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include "defs.hxx"
 

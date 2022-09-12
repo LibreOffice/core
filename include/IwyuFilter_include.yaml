@@ -529,7 +529,7 @@ excludelist:
     - com/sun/star/task/XInteractionRequest.hpp
     include/basic/sberrors.hxx:
     # Needed for macro defines
-    - vcl/errcode.hxx
+    - comphelper/errcode.hxx
     include/connectivity/BlobHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/sdbc/XBlob.hpp

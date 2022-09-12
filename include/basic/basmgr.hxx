@@ -20,7 +20,7 @@
 #define INCLUDED_BASIC_BASMGR_HXX
 
 #include <utility>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basicdllapi.h>

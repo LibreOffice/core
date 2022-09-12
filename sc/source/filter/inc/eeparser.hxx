@@ -21,7 +21,7 @@
 
 #include <tools/gen.hxx>
 #include <utility>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>

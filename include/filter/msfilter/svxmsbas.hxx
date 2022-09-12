@@ -23,7 +23,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <tools/ref.hxx>
 
 class SfxObjectShell;

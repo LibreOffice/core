@@ -20,7 +20,7 @@
 #pragma once
 
 #include <tools/link.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <memory>
 #include <vector>

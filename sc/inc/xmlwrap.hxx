@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "importfilterdata.hxx"
 
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }

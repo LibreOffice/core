@@ -14,7 +14,7 @@
 #include <tools/stream.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

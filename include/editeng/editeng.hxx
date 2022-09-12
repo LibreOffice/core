@@ -44,7 +44,7 @@
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/errcode.hxx>
+#include <comphelper/errcode.hxx>
 #include <functional>
 
 template <typename Arg, typename Ret> class Link;
