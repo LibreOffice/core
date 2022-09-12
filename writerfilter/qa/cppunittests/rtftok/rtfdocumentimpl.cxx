@@ -101,6 +101,24 @@ CPPUNIT_TEST_FIXTURE(Test, testCharHiddenInTable)
     // hidden.
     CPPUNIT_ASSERT(bCharHidden);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDuplicatedImage)
+{
+    // Given a document with 2 images:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "duplicated-image.rtf";
+
+    // When importing that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure no duplicated images are created:
+    uno::Reference<drawing::XDrawPageSupplier> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. there was a 3rd, duplicated image.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
