@@ -112,7 +112,7 @@ public:
     bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
     sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
 
-    // CreateFontSubset: a method to get a subset of glyhps of a font inside a
+    // CreateFontSubset: a method to get a subset of glyphs of a font inside a
     // new valid font file
     // returns true if creation of subset was successful
     // parameters: rToFile: contains an osl file URL to write the subset to
