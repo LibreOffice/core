@@ -40,6 +40,7 @@
 
 #include <optional>
 #include <memory>
+#include <vcl/abstdlg.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
@@ -198,6 +199,7 @@ private:
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
+    VclPtr<AbstractPasswordToOpenModifyDialog> m_xPasswordDialog;
 
 public:
     SfxDocumentPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);

@@ -71,6 +71,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/insertcaption.ui"
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
         || rUIFile == u"cui/ui/formatnumberdialog.ui"
+        || rUIFile == u"cui/ui/password.ui"
         || rUIFile == u"cui/ui/numberingformatpage.ui")
     {
         return true;
