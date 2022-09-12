@@ -115,3 +115,5 @@ en-US = "X Pixmap File"
 [STR_REG_VAL_KODAK_PHOTO_CD_IMAGE]
 en-US = "Kodak Photo CD Image File"
 
+[STR_REG_VAL_PDF]
+en-US = "PDF (Portable Document Format)"

@@ -1093,6 +1093,7 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Xbm,  gid_Module_Prg_Draw_Other_Reg, xbm,  X
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xpm,  gid_Module_Prg_Draw_Other_Reg, xpm,  XPM,  X_PIXMAP, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( PCD,  gid_Module_Prg_Draw_Other_Reg, pcd,  PCD,  KODAK_PHOTO_CD_IMAGE, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Webp, gid_Module_Prg_Draw_Other_Reg, webp, WEBP, WEBP, 5, sdraw.exe, open, Draw )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pdf,  gid_Module_Prg_Draw_Other_Reg, pdf, PDF, PDF, 5, sdraw.exe, open, Draw )
 
 // registering ms-visio URI scheme handler
 CONDITIONAL_REGISTER_URI_HANDLER( ms-visio, ms_visio, gid_Module_Prg_Draw_MSO_Reg, SELECT_VISIO )
