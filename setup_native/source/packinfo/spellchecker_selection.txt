@@ -27,7 +27,7 @@
 # be used as first entry.
 
 af = "af"
-ar = "ar"
+ar = "ar,fa"
 be = "be"
 bg = "bg"
 bn = "bn"
