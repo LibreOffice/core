@@ -17,6 +17,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -3489,12 +3490,15 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                 }
                 else
                 {
-                    uno::Reference<beans::XPropertySet> xMasterProperties(
+                    uno::Reference<beans::XPropertySet> xMaster(
                         m_xModelFactory->createInstance("com.sun.star.text.FieldMaster.User"),
                         uno::UNO_QUERY_THROW);
-                    xMasterProperties->setPropertyValue("Name",
-                                                        uno::Any(m_aStates.top().getDocVarName()));
-                    xMasterProperties->setPropertyValue("Value", uno::Any(docvar));
+                    xMaster->setPropertyValue("Name", uno::Any(m_aStates.top().getDocVarName()));
+                    uno::Reference<text::XDependentTextField> xField(
+                        m_xModelFactory->createInstance("com.sun.star.text.TextField.User"),
+                        uno::UNO_QUERY);
+                    xField->attachTextFieldMaster(xMaster);
+                    xField->getTextFieldMaster()->setPropertyValue("Content", uno::Any(docvar));
 
                     m_aStates.top().clearDocVarName();
                 }
