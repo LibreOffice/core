@@ -152,17 +152,11 @@ public class DBColumn
         XCell xCell;
         getTableColumns(TableName);
 
-        XTableRows xRows = null;
-        try
-        {
-            xRows = xTextTable.getRows();
-        }
-        catch (java.lang.NullPointerException e)
-        {
-            e.printStackTrace();
-// TODO: handle the nullpointer right
-//                return;
-        }
+        if (xTextTable == null)
+            return;
+
+        XTableRows xRows = xTextTable.getRows();
+
         for (int n = 0; n < xTableColumns.getCount(); n++)
         {
             for (int m = 0; m < xRows.getCount(); m++)
