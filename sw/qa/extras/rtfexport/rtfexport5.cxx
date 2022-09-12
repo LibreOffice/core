@@ -27,6 +27,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -840,18 +841,11 @@ DECLARE_RTFEXPORT_TEST(testTdf150267, "tdf150267.rtf")
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
-    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
-    bool bHasUnusedField = false;
-    for (const auto& rMasterName : std::as_const(aMasterNames))
-    {
-        if (rMasterName == "com.sun.star.text.fieldmaster.User.Unused")
-        {
-            bHasUnusedField = true;
-            break;
-        }
-    }
+    CPPUNIT_ASSERT_EQUAL(sal_True,
+                         xTextFieldMasters->hasByName("com.sun.star.text.fieldmaster.User.Unused"));
 
-    CPPUNIT_ASSERT_EQUAL(true, bHasUnusedField);
+    auto xFieldMaster = xTextFieldMasters->getByName("com.sun.star.text.fieldmaster.User.Unused");
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), getProperty<OUString>(xFieldMaster, "Content"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf108416, "tdf108416.rtf")
