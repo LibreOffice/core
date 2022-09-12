@@ -595,7 +595,7 @@ namespace
         // Workaround it here to avoid crash in smart COM pointer destructor that
         // would try to release already released object. Since we don't know if
         // the bug appears each time STG_E_FILENOTFOUND is returned, this might
-        // potentially leak the storge object.
+        // potentially leak the storage object.
         if (pIStorage)
             pIStorage->AddRef();
 
