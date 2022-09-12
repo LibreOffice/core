@@ -50,6 +50,7 @@
 #include <SpellDialog.hxx>
 #include <optlingu.hxx>
 #include <treeopt.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svtools/langtab.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -1128,6 +1129,12 @@ void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     WeldEditView::SetDrawingArea(pDrawingArea);
     // tdf#132288 don't merge equal adjacent attributes
     m_xEditEngine->DisableAttributeExpanding();
+
+    // tdf#142631 use document background color in this widget
+    Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+    rDevice.SetBackground(aBgColor);
+    m_xEditView->SetBackgroundColor(aBgColor);
 }
 
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
