@@ -70,6 +70,7 @@
 #include <helper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <vcl/abstdlg.hxx>
 
 #include <documentfontsdialog.hxx>
 #include <dinfdlg.hrc>
@@ -723,6 +724,11 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
 
 SfxDocumentPage::~SfxDocumentPage()
 {
+    if (m_xPasswordDialog)
+    {
+        m_xPasswordDialog->Response(RET_CANCEL);
+        m_xPasswordDialog.clear();
+    }
 }
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, weld::Button&, void)
@@ -772,9 +778,26 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
         std::shared_ptr<const SfxFilter> pFilter = pShell->GetMedium()->GetFilter();
         if (!pFilter)
             break;
-
-        sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetFrameWeld()->GetXWindow());
-        pShell->SetModified();
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // MS Types support max len of 15 characters while OOXML is "unlimited"
+            const sal_uInt16 maxPwdLen = sfx2::IsMSType(pFilter) && !sfx2::IsOOXML(pFilter) ? 15 : 0;
+            // handle the pwd dialog asynchronously
+            VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
+            m_xPasswordDialog = pFact->CreatePasswordToOpenModifyDialog(GetFrameWeld(), maxPwdLen, false);
+            m_xPasswordDialog->StartExecuteAsync([this, pFilter, pMedSet, pShell](sal_Int32 nResult)
+            {
+                if (nResult == RET_OK)
+                {
+                    sfx2::SetPassword(pFilter, pMedSet, m_xPasswordDialog->GetPasswordToOpen(), m_xPasswordDialog->GetPasswordToOpen());
+                    pShell->SetModified();
+                }
+                m_xPasswordDialog->disposeOnce();
+            });
+        } else {
+            sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetFrameWeld()->GetXWindow());
+            pShell->SetModified();
+        }
     }
     while (false);
 }
@@ -838,7 +861,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
         return;
     }
     while (false);
-    m_xChangePassBtn->set_sensitive(false);
+    m_xChangePassBtn->set_sensitive(comphelper::LibreOfficeKit::isActive());
 }
 
 std::unique_ptr<SfxTabPage> SfxDocumentPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)

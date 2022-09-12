@@ -2865,20 +2865,108 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     return nRet;
 }
 
+bool IsMSType(const std::shared_ptr<const SfxFilter>& pCurrentFilter)
+{
+    // TODO: need a save way to distinguish MS filters from other filters
+    // for now MS-filters are the only alien filters that support encryption
+    return !pCurrentFilter->IsOwnFormat();
+}
+
+bool IsOOXML(const std::shared_ptr<const SfxFilter>& pCurrentFilter)
+{
+    // For OOXML we can use the standard password ("unlimited" characters)
+    return IsMSType(pCurrentFilter) && lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName());
+}
+
+ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet, const OUString& rPasswordToOpen, std::u16string_view rPasswordToModify)
+{
+    const bool bMSType = IsMSType(pCurrentFilter);
+    const bool bOOXML = IsOOXML(pCurrentFilter);
+
+    if ( rPasswordToOpen.getLength() )
+    {
+        css::uno::Sequence< css::beans::NamedValue > aEncryptionData;
+
+        if ( bMSType )
+        {
+            if (bOOXML)
+            {
+                ::comphelper::SequenceAsHashMap aHashData;
+                aHashData[ OUString( "OOXPassword" ) ] <<= rPasswordToOpen;
+                aHashData[ OUString( "CryptoType" ) ] <<= OUString( "Standard" );
+                aEncryptionData = aHashData.getAsConstNamedValueList();
+            }
+            else
+            {
+                uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+                uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( rPasswordToOpen, aUniqueID );
+
+                if ( aEncryptionKey.hasElements() )
+                {
+                    ::comphelper::SequenceAsHashMap aHashData;
+                    aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
+                    aHashData[ OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
+
+                    aEncryptionData = aHashData.getAsConstNamedValueList();
+                }
+                else
+                {
+                    return ERRCODE_IO_NOTSUPPORTED;
+                }
+            }
+        }
+
+        // tdf#118639: We need ODF encryption data for autorecovery where password will already
+        // be unavailable, even for non-ODF documents, so append it here unconditionally
+        pSet->Put(SfxUnoAnyItem(
+            SID_ENCRYPTIONDATA,
+            uno::Any(comphelper::concatSequences(
+                aEncryptionData, comphelper::OStorageHelper::CreatePackageEncryptionData(
+                                    rPasswordToOpen)))));
+    }
+
+    if ( bMSType )
+    {
+        if (bOOXML)
+        {
+            uno::Sequence<beans::PropertyValue> aModifyPasswordInfo
+                = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(
+                    rPasswordToModify);
+            if (aModifyPasswordInfo.hasElements() && pSet)
+                pSet->Put(
+                    SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(aModifyPasswordInfo)));
+        }
+        else
+        {
+            // the empty password has 0 as Hash
+            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash(
+                rPasswordToModify,
+                pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument");
+            if (nHash && pSet)
+                pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(nHash)));
+        }
+    }
+    else
+    {
+        uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( rPasswordToModify );
+        if ( aModifyPasswordInfo.hasElements() && pSet)
+            pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::Any( aModifyPasswordInfo ) ) );
+    }
+    return ERRCODE_NONE;
+}
+
+
+
 ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     uno::Reference<task::XInteractionHandler2> xInteractionHandler = task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), rParent);
-    // TODO: need a save way to distinguish MS filters from other filters
-    // for now MS-filters are the only alien filters that support encryption
-    const bool bMSType = !pCurrentFilter->IsOwnFormat();
-    // For OOXML we can use the standard password ("unlimited" characters)
-    // request, otherwise the MS limited password request is needed.
-    const bool bOOXML = bMSType && lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName());
-    const ::comphelper::DocPasswordRequestType eType = bMSType && !bOOXML ?
+    const auto eType = IsMSType(pCurrentFilter) && !IsOOXML(pCurrentFilter) ?
         ::comphelper::DocPasswordRequestType::MS :
         ::comphelper::DocPasswordRequestType::Standard;
 
     ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, css::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
+
+    const bool bMSType = IsMSType(pCurrentFilter);
 
     uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest );
     do
@@ -2902,85 +2990,15 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
         xBox->run();
     }
     while (true);
-    if ( pPasswordRequest->isPassword() )
-    {
-        if ( pPasswordRequest->getPassword().getLength() )
-        {
-            css::uno::Sequence< css::beans::NamedValue > aEncryptionData;
-
-            // TODO/LATER: The filters should show the password dialog themself in future
-            if ( bMSType )
-            {
-                if (bOOXML)
-                {
-                    ::comphelper::SequenceAsHashMap aHashData;
-                    aHashData[ OUString( "OOXPassword" ) ] <<= pPasswordRequest->getPassword();
-                    aHashData[ OUString( "CryptoType" ) ] <<= OUString( "Standard" );
-                    aEncryptionData = aHashData.getAsConstNamedValueList();
-                }
-                else
-                {
-                    uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
-                    uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
-
-                    if ( aEncryptionKey.hasElements() )
-                    {
-                        ::comphelper::SequenceAsHashMap aHashData;
-                        aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
-                        aHashData[ OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
-
-                        aEncryptionData = aHashData.getAsConstNamedValueList();
-                    }
-                    else
-                    {
-                        return ERRCODE_IO_NOTSUPPORTED;
-                    }
-                }
-            }
-
-            // tdf#118639: We need ODF encryption data for autorecovery where password will already
-            // be unavailable, even for non-ODF documents, so append it here unconditionally
-            pSet->Put(SfxUnoAnyItem(
-                SID_ENCRYPTIONDATA,
-                uno::Any(comphelper::concatSequences(
-                    aEncryptionData, comphelper::OStorageHelper::CreatePackageEncryptionData(
-                                         pPasswordRequest->getPassword())))));
-        }
-
-        if ( pPasswordRequest->getRecommendReadOnly() )
-            pSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, true ) );
-
-        if ( bMSType )
-        {
-            if (bOOXML)
-            {
-                uno::Sequence<beans::PropertyValue> aModifyPasswordInfo
-                    = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(
-                        pPasswordRequest->getPasswordToModify());
-                if (aModifyPasswordInfo.hasElements())
-                    pSet->Put(
-                        SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(aModifyPasswordInfo)));
-            }
-            else
-            {
-                // the empty password has 0 as Hash
-                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash(
-                    pPasswordRequest->getPasswordToModify(),
-                    pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument");
-                if (nHash)
-                    pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(nHash)));
-            }
-        }
-        else
-        {
-            uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
-            if ( aModifyPasswordInfo.hasElements() )
-                pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::Any( aModifyPasswordInfo ) ) );
-        }
-    }
-    else
+    if ( !pPasswordRequest->isPassword() )
         return ERRCODE_ABORT;
-    return ERRCODE_NONE;
+
+    const auto result = SetPassword(pCurrentFilter, pSet, pPasswordRequest->getPassword(), pPasswordRequest->getPasswordToModify());
+
+    if ( result != ERRCODE_IO_NOTSUPPORTED && pPasswordRequest->getRecommendReadOnly() )
+        pSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, true ) );
+
+    return result;
 }
 
 OUString EncodeSpaces_Impl( const OUString& rSource )

@@ -114,7 +114,6 @@ IMPL_ABSTDLG_CLASS(AbstractGraphicFilterDialog)
 IMPL_ABSTDLG_CLASS(AbstractHangulHanjaConversionDialog)
 IMPL_ABSTDLG_CLASS(AbstractInsertObjectDialog)
 IMPL_ABSTDLG_CLASS(AbstractLinksDialog)
-IMPL_ABSTDLG_CLASS(AbstractPasswordToOpenModifyDialog)
 IMPL_ABSTDLG_CLASS(AbstractQrCodeGenDialog)
 IMPL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg)
 IMPL_ABSTDLG_CLASS(AbstractSignatureLineDialog)
@@ -133,6 +132,7 @@ IMPL_ABSTDLG_CLASS(AbstractSvxSearchSimilarityDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxZoomDialog)
 IMPL_ABSTDLG_CLASS(AbstractTitleDialog)
 IMPL_ABSTDLG_CLASS(AbstractURLDlg)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasswordToOpenModifyDialog,weld::DialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasteDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractScriptSelectorDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSpellDialog,SfxDialogController)
@@ -802,6 +802,11 @@ OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
 bool AbstractPasswordToOpenModifyDialog_Impl::IsRecommendToOpenReadonly() const
 {
     return m_xDlg->IsRecommendToOpenReadonly();
+}
+
+void AbstractPasswordToOpenModifyDialog_Impl::Response(sal_Int32 nResult)
+{
+     m_xDlg->response(nResult);
 }
 
 // Create dialogs with simplest interface

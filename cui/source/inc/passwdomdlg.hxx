@@ -36,6 +36,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     std::unique_ptr<weld::Label> m_xReenterPasswdToModifyFT;
     std::unique_ptr<weld::Entry> m_xReenterPasswdToModifyED;
     std::unique_ptr<weld::Label> m_xReenterPasswdToModifyInd;
+    std::shared_ptr<weld::MessageDialog> m_xErrorBox;
 
     OUString                    m_aOneMismatch;
     OUString                    m_aTwoMismatch;
@@ -57,6 +58,7 @@ public:
     PasswordToOpenModifyDialog(weld::Window* pParent,
             sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */,
             bool bIsPasswordToModify );
+    ~PasswordToOpenModifyDialog();
 
     // AbstractPasswordToOpenModifyDialog
     OUString  GetPasswordToOpen() const;

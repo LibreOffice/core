@@ -306,6 +306,10 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
 css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 
 ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent);
+ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter,
+    SfxItemSet* pSet, const OUString& rPasswordToOpen, std::u16string_view rPasswordToModify);
+bool IsOOXML(const std::shared_ptr<const SfxFilter>& pCurrentFilter);
+bool IsMSType(const std::shared_ptr<const SfxFilter>& pCurrentFilter);
 }
 
 #endif

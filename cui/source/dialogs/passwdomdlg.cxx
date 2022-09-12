@@ -29,10 +29,10 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
             m_xPasswdToModifyED->get_text().isEmpty();
     if (bInvalidState)
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
+        m_xErrorBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                        m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2));
-        xErrorBox->run();
+        m_xErrorBox->runAsync(m_xErrorBox, [](sal_Int32 /*nResult*/) {});
     }
     else // check for mismatched passwords...
     {
@@ -41,26 +41,27 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
+            m_xErrorBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
-            xErrorBox->run();
-
-            weld::Entry* pEdit = !bToOpenMatch ? m_xPasswdToOpenED.get() : m_xPasswdToModifyED.get();
-            weld::Entry* pRepeatEdit = !bToOpenMatch? m_xReenterPasswdToOpenED.get() : m_xReenterPasswdToModifyED.get();
-            if (nMismatch == 1)
+            m_xErrorBox->runAsync(m_xErrorBox, [this, bToOpenMatch, nMismatch](sal_Int32 /*nResult*/)
             {
-                pEdit->set_text( "" );
-                pRepeatEdit->set_text( "" );
-            }
-            else if (nMismatch == 2)
-            {
-                m_xPasswdToOpenED->set_text( "" );
-                m_xReenterPasswdToOpenED->set_text( "" );
-                m_xPasswdToModifyED->set_text( "" );
-                m_xReenterPasswdToModifyED->set_text( "" );
-            }
-            pEdit->grab_focus();
+                weld::Entry* pEdit = !bToOpenMatch ? m_xPasswdToOpenED.get() : m_xPasswdToModifyED.get();
+                weld::Entry* pRepeatEdit = !bToOpenMatch? m_xReenterPasswdToOpenED.get() : m_xReenterPasswdToModifyED.get();
+                if (nMismatch == 1)
+                {
+                    pEdit->set_text( "" );
+                    pRepeatEdit->set_text( "" );
+                }
+                else if (nMismatch == 2)
+                {
+                    m_xPasswdToOpenED->set_text( "" );
+                    m_xReenterPasswdToOpenED->set_text( "" );
+                    m_xPasswdToModifyED->set_text( "" );
+                    m_xReenterPasswdToModifyED->set_text( "" );
+                }
+                pEdit->grab_focus();
+            });
         }
         else
         {
@@ -134,6 +135,14 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
 
     m_xOpenReadonlyCB->connect_toggled(LINK(this, PasswordToOpenModifyDialog, ReadonlyOnOffHdl));
     ReadonlyOnOffHdl(*m_xOpenReadonlyCB);
+}
+
+PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
+{
+    if (m_xErrorBox)
+    {
+        m_xErrorBox->response(RET_CANCEL);
+    }
 }
 
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const
