@@ -47,13 +47,13 @@
 
 void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
 {
-    if (pSh->CursorInsideInputField())
+    if (m_pSh->CursorInsideInputField())
     {
         // move cursor to start of Input Field
         SwInputField* pInputField = dynamic_cast<SwInputField*>(pCurField);
         if (pInputField && pInputField->GetFormatField())
         {
-            pSh->GotoField( *(pInputField->GetFormatField()) );
+            m_pSh->GotoField( *(pInputField->GetFormatField()) );
         }
         else
         {
@@ -61,7 +61,7 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
             if (pSetField)
             {
                 assert(pSetField->GetFormatField());
-                pSh->GotoField( *(pSetField->GetFormatField()) );
+                m_pSh->GotoField( *(pSetField->GetFormatField()) );
             }
             else
             {
@@ -72,15 +72,15 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
 
     /* Only create selection if there is none already.
        Normalize PaM instead of swapping. */
-    if (!pSh->HasSelection())
+    if (!m_pSh->HasSelection())
     {
-        SwShellCursor* pCursor = pSh->getShellCursor(true);
+        SwShellCursor* pCursor = m_pSh->getShellCursor(true);
         SwPosition aOrigPos(*pCursor->GetPoint());
 
         //After this attempt it is possible that rMgr.GetCurField() != pCurField if
         //the field was in e.g. a zero height portion and so invisible in which
         //case it will be skipped over
-        pSh->Right(SwCursorSkipMode::Chars, true, 1, false );
+        m_pSh->Right(SwCursorSkipMode::Chars, true, 1, false );
         //So (fdo#50640) if it didn't work then reposition back to the original
         //location where the field was
         SwField *pRealCurField = rMgr.GetCurField();
@@ -92,7 +92,7 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
         }
     }
 
-    pSh->NormalizePam();
+    m_pSh->NormalizePam();
 
     assert(pCurField == rMgr.GetCurField());
 }
@@ -100,12 +100,12 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
 SwFieldEditDlg::SwFieldEditDlg(SwView const & rVw)
     : SfxSingleTabDialogController(rVw.GetViewFrame()->GetFrameWeld(), nullptr,
         "modules/swriter/ui/editfielddialog.ui", "EditFieldDialog")
-    , pSh(rVw.GetWrtShellPtr())
+    , m_pSh(rVw.GetWrtShellPtr())
     , m_xPrevBT(m_xBuilder->weld_button("prev"))
     , m_xNextBT(m_xBuilder->weld_button("next"))
     , m_xAddressBT(m_xBuilder->weld_button("edit"))
 {
-    SwFieldMgr aMgr(pSh);
+    SwFieldMgr aMgr(m_pSh);
 
     SwField *pCurField = aMgr.GetCurField();
     if (!pCurField)
@@ -143,9 +143,9 @@ void SwFieldEditDlg::Init()
             return;
 
         // Traveling only when more than one field
-        pSh->StartAction();
-        pSh->ClearMark();
-        pSh->CreateCursor();
+        m_pSh->StartAction();
+        m_pSh->ClearMark();
+        m_pSh->CreateCursor();
 
         bool bMove = rMgr.GoNext();
         if( bMove )
@@ -162,12 +162,12 @@ void SwFieldEditDlg::Init()
         else
             m_xAddressBT->set_sensitive(false);
 
-        pSh->DestroyCursor();
-        pSh->EndAction();
+        m_pSh->DestroyCursor();
+        m_pSh->EndAction();
     }
 
-    GetOKButton().set_sensitive(!pSh->IsReadOnlyAvailable() ||
-                                !pSh->HasReadonlySel());
+    GetOKButton().set_sensitive(!m_pSh->IsReadOnlyAvailable() ||
+                                !m_pSh->HasReadonlySel());
 }
 
 SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
@@ -205,7 +205,7 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case GRP_DB:
             xTabPage = SwFieldDBPage::Create(get_content_area(), this, nullptr);
-            static_cast<SwFieldDBPage*>(xTabPage.get())->SetWrtShell(*pSh);
+            static_cast<SwFieldDBPage*>(xTabPage.get())->SetWrtShell(*m_pSh);
             break;
 #endif
         case GRP_VAR:
@@ -216,7 +216,7 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
 
     assert(xTabPage);
 
-    static_cast<SwFieldPage*>(xTabPage.get())->SetWrtShell(pSh);
+    static_cast<SwFieldPage*>(xTabPage.get())->SetWrtShell(m_pSh);
     SetTabPage(std::move(xTabPage));
 
     return GetTabPage();
@@ -225,12 +225,12 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
 SwFieldEditDlg::~SwFieldEditDlg()
 {
     SwViewShell::SetCareDialog(nullptr);
-    pSh->EnterStdMode();
+    m_pSh->EnterStdMode();
 }
 
 void SwFieldEditDlg::EnableInsert(bool bEnable)
 {
-    if( bEnable && pSh->IsReadOnlyAvailable() && pSh->HasReadonlySel() )
+    if( bEnable && m_pSh->IsReadOnlyAvailable() && m_pSh->HasReadonlySel() )
         bEnable = false;
     GetOKButton().set_sensitive(bEnable);
 }
@@ -263,7 +263,7 @@ IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
 {
     bool bNext = &rButton == m_xNextBT.get();
 
-    pSh->EnterStdMode();
+    m_pSh->EnterStdMode();
 
     SwFieldType *pOldTyp = nullptr;
     SwFieldPage* pTabPage = static_cast<SwFieldPage*>(GetTabPage());
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
     SwField *pCurField = rMgr.GetCurField();
 
-    SfxItemSetFixed<SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS> aSet( pSh->GetAttrPool() );
+    SfxItemSetFixed<SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS> aSet( m_pSh->GetAttrPool() );
 
     EditPosition nEditPos = EditPosition::UNKNOWN;
 
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
     ScopedVclPtr<SfxAbstractDialog> pDlg(rFact.CreateSwAddressAbstractDlg(m_xDialog.get(), aSet));
     if (RET_OK == pDlg->Execute())
     {
-        pSh->UpdateOneField(*pCurField);
+        m_pSh->UpdateOneField(*pCurField);
     }
 }
 

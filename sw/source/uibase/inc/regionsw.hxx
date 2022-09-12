@@ -227,7 +227,7 @@ public:
 
 class SwInsertSectionTabDialog final : public SfxTabDialogController
 {
-    SwWrtShell&     rWrtSh;
+    SwWrtShell&     m_rWrtSh;
     std::unique_ptr<SwSectionData> m_pSectionData;
 
     virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;

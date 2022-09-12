@@ -79,17 +79,17 @@ class SwInsDBColumns : public o3tl::sorted_vector<std::unique_ptr<SwInsDBColumn>
 
 class SwInsertDBColAutoPilot final : public SfxDialogController, public utl::ConfigItem
 {
-    SwInsDBColumns  aDBColumns;
-    const SwDBData  aDBData;
+    SwInsDBColumns  m_aDBColumns;
+    const SwDBData  m_aDBData;
 
-    OUString        sNoTmpl;
+    OUString        m_sNoTmpl;
 
-    SwView*         pView;
+    SwView*         m_pView;
     std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
-    std::unique_ptr<SfxItemSet>  pTableSet;
-    std::unique_ptr<SwTableRep>  pRep;
-    sal_Int32       nGBFormatLen;
+    std::unique_ptr<SfxItemSet>  m_pTableSet;
+    std::unique_ptr<SwTableRep>  m_pRep;
+    sal_Int32       m_nGBFormatLen;
 
     std::unique_ptr<weld::RadioButton> m_xRbAsTable;
     std::unique_ptr<weld::RadioButton> m_xRbAsField;

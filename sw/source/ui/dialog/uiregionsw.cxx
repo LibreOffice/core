@@ -1364,7 +1364,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
             weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
     : SfxTabDialogController(pParent, "modules/swriter/ui/insertsectiondialog.ui",
                              "InsertSectionDialog",&rSet)
-    , rWrtSh(rSh)
+    , m_rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
@@ -1393,7 +1393,7 @@ SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
 void SwInsertSectionTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     if (rId == "section")
-        static_cast<SwInsertSectionTabPage&>(rPage).SetWrtShell(rWrtSh);
+        static_cast<SwInsertSectionTabPage&>(rPage).SetWrtShell(m_rWrtSh);
     else if (rId == "background")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -1408,7 +1408,7 @@ void SwInsertSectionTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
     }
     else if (rId == "indents")
-        static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
+        static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(m_rWrtSh);
 }
 
 void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
@@ -1421,8 +1421,8 @@ short SwInsertSectionTabDialog::Ok()
     short nRet = SfxTabDialogController::Ok();
     OSL_ENSURE(m_pSectionData, "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
-    rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
-    SfxViewFrame* pViewFrame = rWrtSh.GetView().GetViewFrame();
+    m_rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
+    SfxViewFrame* pViewFrame = m_rWrtSh.GetView().GetViewFrame();
     uno::Reference< frame::XDispatchRecorder > xRecorder =
             pViewFrame->GetBindings().GetRecorder();
     if ( xRecorder.is() )

@@ -33,10 +33,10 @@ class SwFieldInputDlg final : public weld::GenericDialogController
 {
     void Apply();
 
-    SwWrtShell&       rSh;
-    SwInputField*     pInpField;
-    SwSetExpField*    pSetField;
-    SwUserFieldType*  pUsrType;
+    SwWrtShell&       m_rSh;
+    SwInputField*     m_pInpField;
+    SwSetExpField*    m_pSetField;
+    SwUserFieldType*  m_pUsrType;
 
     weld::Button*   m_pPressedButton;
     std::unique_ptr<weld::Entry>    m_xLabelED;

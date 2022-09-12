@@ -176,9 +176,9 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         SwDBData aData )
     : SfxDialogController(rView.GetWindow()->GetFrameWeld(), "modules/swriter/ui/insertdbcolumnsdialog.ui", "InsertDbColumnsDialog")
     , ConfigItem("Office.Writer/InsertData/DataSet", ConfigItemMode::NONE)
-    , aDBData(std::move(aData))
-    , sNoTmpl(SwResId(SW_STR_NONE))
-    , pView(&rView)
+    , m_aDBData(std::move(aData))
+    , m_sNoTmpl(SwResId(SW_STR_NONE))
+    , m_pView(&rView)
     , m_xRbAsTable(m_xBuilder->weld_radio_button("astable"))
     , m_xRbAsField(m_xBuilder->weld_radio_button("asfields"))
     , m_xRbAsText(m_xBuilder->weld_radio_button("astext"))
@@ -208,11 +208,11 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     m_xEdDbText->set_size_request(m_xEdDbText->get_approximate_digit_width() * 40, -1);
     m_xLbDbParaColl->make_sorted();
 
-    nGBFormatLen = m_xFormatFrame->get_label().getLength();
+    m_nGBFormatLen = m_xFormatFrame->get_label().getLength();
 
     if (xColSupp.is())
     {
-        SwWrtShell& rSh = pView->GetWrtShell();
+        SwWrtShell& rSh = m_pView->GetWrtShell();
         SvNumberFormatter* pNumFormatr = rSh.GetNumberFormatter();
         rtl::Reference<SvNumberFormatsSupplierObj> pNumFormat = new SvNumberFormatsSupplierObj( pNumFormatr );
         Reference< util::XNumberFormats > xDocNumberFormats = pNumFormat->getNumberFormats();
@@ -300,7 +300,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                 }
                 break;
             }
-            if( !aDBColumns.insert( std::move(pNew) ).second )
+            if( !m_aDBColumns.insert( std::move(pNew) ).second )
             {
                 OSL_ENSURE( false, "Spaltenname mehrfach vergeben?" );
             }
@@ -309,8 +309,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
     // fill paragraph templates-ListBox
     {
-        SfxStyleSheetBasePool* pPool = pView->GetDocShell()->GetStyleSheetPool();
-        m_xLbDbParaColl->append_text( sNoTmpl );
+        SfxStyleSheetBasePool* pPool = m_pView->GetDocShell()->GetStyleSheetPool();
+        m_xLbDbParaColl->append_text( m_sNoTmpl );
 
         const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para);
         while( pBase )
@@ -322,7 +322,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     }
 
     // when the cursor is inside of a table, table must NEVER be selectable
-    if( pView->GetWrtShell().GetTableFormat() )
+    if( m_pView->GetWrtShell().GetTableFormat() )
     {
         m_xRbAsField->set_active(true);
         m_xRbAsTable->set_sensitive(false);
@@ -367,9 +367,9 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     m_xLbTableDbColumn->connect_row_activated( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
     m_xLbTableCol->connect_row_activated( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
 
-    for( size_t n = 0; n < aDBColumns.size(); ++n )
+    for( size_t n = 0; n < m_aDBColumns.size(); ++n )
     {
-        const OUString& rS = aDBColumns[ n ]->sColumn;
+        const OUString& rS = m_aDBColumns[ n ]->sColumn;
         m_xLbTableDbColumn->append_text(rS);
         m_xLbTextDbColumn->append_text(rS);
     }
@@ -436,7 +436,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, weld::Toggleable&, rButton, void
                         : *m_xLbTextDbColumn;
 
     SwInsDBColumn aSrch(rBox.get_selected_text());
-    SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
+    SwInsDBColumns::const_iterator it = m_aDBColumns.find( &aSrch );
 
     bool bFromDB = m_xRbDbFormatFromDb->get_active();
     (*it)->bIsDBFormat = bFromDB;
@@ -496,13 +496,13 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
 
             // look for the right InsertPos!!
             SwInsDBColumn aSrch(m_xLbTableCol->get_text(nDelPos));
-            SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
-            if( it == aDBColumns.begin() || (it+1) == aDBColumns.end() )
-                nInsPos = it - aDBColumns.begin();
+            SwInsDBColumns::const_iterator it = m_aDBColumns.find( &aSrch );
+            if( it == m_aDBColumns.begin() || (it+1) == m_aDBColumns.end() )
+                nInsPos = it - m_aDBColumns.begin();
             else
             {
                 nInsPos = -1;
-                while( ++it != aDBColumns.end() &&
+                while( ++it != m_aDBColumns.end() &&
                         -1 == (nInsPos = m_xLbTableDbColumn->
                         find_text( (*it)->sColumn )) )
                     ;
@@ -533,8 +533,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
 
         m_xLbTableDbColumn->clear();
         m_xLbTableCol->clear();
-        for (size_t n = 0; n < aDBColumns.size(); ++n)
-            m_xLbTableDbColumn->append_text(aDBColumns[n]->sColumn);
+        for (size_t n = 0; n < m_aDBColumns.size(); ++n)
+            m_xLbTableDbColumn->append_text(m_aDBColumns[n]->sColumn);
 
         m_xLbTableDbColumn->thaw();
         m_xLbTableCol->thaw();
@@ -614,26 +614,26 @@ IMPL_LINK(SwInsertDBColAutoPilot, DblClickHdl, weld::TreeView&, rBox, bool)
 
 IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
 {
-    SwWrtShell& rSh = pView->GetWrtShell();
+    SwWrtShell& rSh = m_pView->GetWrtShell();
     bool bNewSet = false;
-    if( !pTableSet )
+    if( !m_pTableSet )
     {
         bNewSet = true;
-        pTableSet.reset(new SfxItemSet( rSh.GetAttrPool(), SwuiGetUITableAttrRange() ));
+        m_pTableSet.reset(new SfxItemSet( rSh.GetAttrPool(), SwuiGetUITableAttrRange() ));
 
         // At first acquire the simple attributes
-        pTableSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTableName() ));
-        pTableSet->Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, 1 ) );
+        m_pTableSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTableName() ));
+        m_pTableSet->Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, 1 ) );
 
-        pTableSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
+        m_pTableSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                     rSh.GetViewOptions()->GetTableDest() ));
 
         SvxBrushItem aBrush( RES_BACKGROUND );
-        pTableSet->Put( aBrush );
+        m_pTableSet->Put( aBrush );
         aBrush.SetWhich(SID_ATTR_BRUSH_ROW);
-        pTableSet->Put( aBrush );
+        m_pTableSet->Put( aBrush );
         aBrush.SetWhich(SID_ATTR_BRUSH_TABLE);
-        pTableSet->Put( aBrush );
+        m_pTableSet->Put( aBrush );
 
         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
             // table variant, when multiple table cells are selected
@@ -646,7 +646,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
         aBoxInfo.SetDefDist( MIN_BORDER_DIST );
             // Single lines can have DontCare-status only in tables
         aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
-        pTableSet->Put( aBoxInfo );
+        m_pTableSet->Put( aBoxInfo );
 
         SwGetCurColNumPara aPara;
         const sal_uInt16 nNum = rSh.GetCurColNum( &aPara );
@@ -681,22 +681,22 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
         SwTabCols aTabCols;
         aTabCols.SetRight( nWidth );
         aTabCols.SetRightMax( nWidth );
-        pRep.reset(new SwTableRep( aTabCols ));
-        pRep->SetAlign( text::HoriOrientation::NONE );
-        pRep->SetSpace( nWidth );
-        pRep->SetWidth( nWidth );
-        pRep->SetWidthPercent( 100 );
-        pTableSet->Put( SwPtrItem( FN_TABLE_REP, pRep.get() ));
+        m_pRep.reset(new SwTableRep( aTabCols ));
+        m_pRep->SetAlign( text::HoriOrientation::NONE );
+        m_pRep->SetSpace( nWidth );
+        m_pRep->SetWidth( nWidth );
+        m_pRep->SetWidthPercent( 100 );
+        m_pTableSet->Put( SwPtrItem( FN_TABLE_REP, m_pRep.get() ));
 
-        pTableSet->Put( SfxUInt16Item( SID_HTML_MODE,
-                    ::GetHtmlMode( pView->GetDocShell() )));
+        m_pTableSet->Put( SfxUInt16Item( SID_HTML_MODE,
+                    ::GetHtmlMode( m_pView->GetDocShell() )));
     }
 
     sal_Int32 nCols = m_xLbTableCol->n_children();
-    if (nCols != pRep->GetAllColCount() && nCols > 0)
+    if (nCols != m_pRep->GetAllColCount() && nCols > 0)
     {
         // Number of columns has changed: then the TabCols have to be adjusted
-        tools::Long nWidth = pRep->GetWidth();
+        tools::Long nWidth = m_pRep->GetWidth();
         --nCols;
         SwTabCols aTabCols( nCols );
         aTabCols.SetRight( nWidth  );
@@ -709,23 +709,23 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
                 aTabCols.Insert( nStep*(n+1), false, n );
             }
         }
-        pRep.reset(new SwTableRep( aTabCols ));
-        pRep->SetAlign( text::HoriOrientation::NONE );
-        pRep->SetSpace( nWidth );
-        pRep->SetWidth( nWidth );
-        pRep->SetWidthPercent( 100 );
-        pTableSet->Put( SwPtrItem( FN_TABLE_REP, pRep.get() ));
+        m_pRep.reset(new SwTableRep( aTabCols ));
+        m_pRep->SetAlign( text::HoriOrientation::NONE );
+        m_pRep->SetSpace( nWidth );
+        m_pRep->SetWidth( nWidth );
+        m_pRep->SetWidthPercent( 100 );
+        m_pTableSet->Put( SwPtrItem( FN_TABLE_REP, m_pRep.get() ));
     }
 
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwTableTabDlg(m_xDialog.get(), pTableSet.get(), &rSh));
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwTableTabDlg(m_xDialog.get(), m_pTableSet.get(), &rSh));
     if( RET_OK == pDlg->Execute() )
-        pTableSet->Put( *pDlg->GetOutputItemSet() );
+        m_pTableSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
     {
-        pTableSet.reset();
-        pRep.reset();
+        m_pTableSet.reset();
+        m_pRep.reset();
     }
 }
 
@@ -733,7 +733,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, AutoFormatHdl, weld::Button&, void)
 {
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pView->GetWrtShellPtr(), false, m_xTAutoFormat.get()));
+    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), m_pView->GetWrtShellPtr(), false, m_xTAutoFormat.get()));
     if( RET_OK == pDlg->Execute())
         m_xTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }
@@ -743,11 +743,11 @@ IMPL_LINK(SwInsertDBColAutoPilot, TVSelectHdl, weld::TreeView&, rBox, void)
     weld::TreeView* pGetBox = &rBox;
 
     SwInsDBColumn aSrch(pGetBox->get_selected_text());
-    SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
+    SwInsDBColumns::const_iterator it = m_aDBColumns.find( &aSrch );
 
     // set the selected FieldName at the FormatGroupBox, so that
     // it's clear what field is configured by the format!
-    OUString sText( m_xFormatFrame->get_label().copy( 0, nGBFormatLen ));
+    OUString sText( m_xFormatFrame->get_label().copy( 0, m_nGBFormatLen ));
     if( aSrch.sColumn.isEmpty() )
     {
         m_xRbDbFormatFromDb->set_sensitive( false );
@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, CBSelectHdl, weld::ComboBox&, void)
                                     : m_xLbTextDbColumn.get();
 
     SwInsDBColumn aSrch(pGetBox->get_selected_text());
-    SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
+    SwInsDBColumns::const_iterator it = m_aDBColumns.find( &aSrch );
 
     if( !aSrch.sColumn.isEmpty() )
     {
@@ -847,8 +847,8 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
         {
             // Text in <> brackets found: what is it:
             SwInsDBColumn aSrch( sText.copy( nSttPos, nEndPos - nSttPos ));
-            SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
-            if( it != aDBColumns.end() )
+            SwInsDBColumns::const_iterator it = m_aDBColumns.find( &aSrch );
+            if( it != m_aDBColumns.end() )
             {
                 // that is a valid field
                 // so surely the text "before":
@@ -882,9 +882,9 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
 
                 if( bInsField )
                 {
-                    SwWrtShell& rSh = pView->GetWrtShell();
+                    SwWrtShell& rSh = m_pView->GetWrtShell();
                     SwDBFieldType aFieldType( rSh.GetDoc(), aSrch.sColumn,
-                                            aDBData );
+                                            m_aDBData );
                     pNew = new DB_Column( rFndCol, *new SwDBField(
                             static_cast<SwDBFieldType*>(rSh.InsertFieldType( aFieldType )),
                                                             nFormat ) );
@@ -914,14 +914,14 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     auto xResultSet = xResultSet_in;
 
     const Any* pSelection = rSelection.hasElements() ? rSelection.getConstArray() : nullptr;
-    SwWrtShell& rSh = pView->GetWrtShell();
+    SwWrtShell& rSh = m_pView->GetWrtShell();
 
     //with the drag and drop interface no result set is initially available
     bool bDisposeResultSet = false;
     // we don't have a cursor, so we have to create our own RowSet
     if ( !xResultSet.is() )
     {
-        xResultSet = SwDBManager::createCursor(aDBData.sDataSource,aDBData.sCommand,aDBData.nCommandType,xConnection,pView);
+        xResultSet = SwDBManager::createCursor(m_aDBData.sDataSource,m_aDBData.sCommand,m_aDBData.nCommandType,xConnection,m_pView);
         bDisposeResultSet = xResultSet.is();
     }
 
@@ -967,8 +967,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         for( sal_Int32 n = 0; n < nCols; ++n )
         {
             SwInsDBColumn aSrch(m_xLbTableCol->get_text(n));
-            SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
-            if (it != aDBColumns.end())
+            SwInsDBColumns::const_iterator it = m_aDBColumns.find( &aSrch );
+            if (it != m_aDBColumns.end())
                 aColFields.push_back(it->get());
             else {
                 OSL_ENSURE( false, "database column not found" );
@@ -989,13 +989,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-        bool bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
+        bool bHTML = 0 != (::GetHtmlMode( m_pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
             nRows, nCols, (pSelection ? m_xTAutoFormat.get(): nullptr) );
         rSh.MoveTable( GotoPrevTable, fnTableStart );
 
-        if( pSelection && pTableSet )
+        if( pSelection && m_pTableSet )
             SetTabSet();
 
         SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aTableSet( rSh.GetAttrPool() );
@@ -1123,13 +1123,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 break;
 
             if( 10 == i )
-                oWait.emplace( *pView->GetDocShell(), true );
+                oWait.emplace( *m_pView->GetDocShell(), true );
         }
 
         rSh.MoveTable( GotoCurrTable, fnTableStart );
-        if( !pSelection && ( pTableSet || m_xTAutoFormat ))
+        if( !pSelection && ( m_pTableSet || m_xTAutoFormat ))
         {
-            if( pTableSet )
+            if( m_pTableSet )
                 SetTabSet();
 
             if (m_xTAutoFormat)
@@ -1158,7 +1158,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             SwTextFormatColl* pColl = nullptr;
             {
                 const OUString sTmplNm(m_xLbDbParaColl->get_active_text());
-                if( sNoTmpl != sTmplNm )
+                if( m_sNoTmpl != sTmplNm )
                 {
                     pColl = rSh.FindTextFormatCollByName( sTmplNm );
                     if( !pColl )
@@ -1201,7 +1201,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBField( static_cast<SwDBNextSetFieldType*>(rSh.
                                             GetFieldType( 0, SwFieldIds::DbNextSet )),
-                                        "1", aDBData );
+                                        "1", m_aDBData );
 
             bool bSetCursor = true;
             const size_t nCols = aColArr.size();
@@ -1347,7 +1347,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.SwEditShell::SplitNode();
 
                 if( 10 == i )
-                    oWait.emplace( *pView->GetDocShell(), true );
+                    oWait.emplace( *m_pView->GetDocShell(), true );
             }
 
             if( !bSetCursor && pMark != nullptr)
@@ -1378,7 +1378,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
 void SwInsertDBColAutoPilot::SetTabSet()
 {
-    SwWrtShell& rSh = pView->GetWrtShell();
+    SwWrtShell& rSh = m_pView->GetWrtShell();
     const SfxPoolItem* pItem;
 
     if (m_xTAutoFormat)
@@ -1386,14 +1386,14 @@ void SwInsertDBColAutoPilot::SetTabSet()
         if (m_xTAutoFormat->IsFrame())
         {
             // border is from AutoFormat
-            pTableSet->ClearItem( RES_BOX );
-            pTableSet->ClearItem( SID_ATTR_BORDER_INNER );
+            m_pTableSet->ClearItem( RES_BOX );
+            m_pTableSet->ClearItem( SID_ATTR_BORDER_INNER );
         }
         if (m_xTAutoFormat->IsBackground())
         {
-            pTableSet->ClearItem( RES_BACKGROUND );
-            pTableSet->ClearItem( SID_ATTR_BRUSH_ROW );
-            pTableSet->ClearItem( SID_ATTR_BRUSH_TABLE );
+            m_pTableSet->ClearItem( RES_BACKGROUND );
+            m_pTableSet->ClearItem( SID_ATTR_BRUSH_ROW );
+            m_pTableSet->ClearItem( SID_ATTR_BRUSH_TABLE );
         }
     }
     else
@@ -1403,20 +1403,20 @@ void SwInsertDBColAutoPilot::SetTabSet()
         static const sal_uInt16 aIds[3] =
             { RES_BACKGROUND, SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE };
         for(sal_uInt16 i : aIds)
-            if( SfxItemState::SET == pTableSet->GetItemState( i,
+            if( SfxItemState::SET == m_pTableSet->GetItemState( i,
                 false, &pItem ) && *pItem == aBrush )
-                pTableSet->ClearItem( i );
+                m_pTableSet->ClearItem( i );
     }
 
-    const SfxStringItem* pTableNameItem = pTableSet->GetItemIfSet( FN_PARAM_TABLE_NAME, false);
+    const SfxStringItem* pTableNameItem = m_pTableSet->GetItemIfSet( FN_PARAM_TABLE_NAME, false);
     if( pTableNameItem && pTableNameItem->GetValue() == rSh.GetTableFormat()->GetName() )
-        pTableSet->ClearItem( FN_PARAM_TABLE_NAME );
+        m_pTableSet->ClearItem( FN_PARAM_TABLE_NAME );
 
     rSh.MoveTable( GotoCurrTable, fnTableStart );
     rSh.SetMark();
     rSh.MoveTable( GotoCurrTable, fnTableEnd );
 
-    ItemSetToTableParam( *pTableSet, rSh );
+    ItemSetToTableParam( *m_pTableSet, rSh );
 
     rSh.ClearMark();
     rSh.MoveTable( GotoCurrTable, fnTableStart );
@@ -1477,7 +1477,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         OUString sSource, sCommand;
         pSourceProps[0] >>= sSource;
         pSourceProps[1] >>= sCommand;
-        if(sSource==aDBData.sDataSource && sCommand==aDBData.sCommand)
+        if(sSource==m_aDBData.sDataSource && sCommand==m_aDBData.sCommand)
         {
             ClearNodeElements(OUString(), { nodeName });
         }
@@ -1494,9 +1494,9 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pValues[i].Name = "/" + pNodeNames[i];
     }
 
-    pValues[0].Value <<= aDBData.sDataSource;
-    pValues[1].Value <<= aDBData.sCommand;
-    pValues[2].Value <<= aDBData.nCommandType;
+    pValues[0].Value <<= m_aDBData.sDataSource;
+    pValues[1].Value <<= m_aDBData.sCommand;
+    pValues[2].Value <<= m_aDBData.nCommandType;
     pValues[3].Value <<= m_xEdDbText->get_text();
 
     OUString sTmp;
@@ -1507,7 +1507,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
     if (!sTmp.isEmpty())
         pValues[4].Value <<= sTmp;
 
-    if( sNoTmpl != (sTmp = m_xLbDbParaColl->get_active_text()) )
+    if( m_sNoTmpl != (sTmp = m_xLbDbParaColl->get_active_text()) )
         pValues[5].Value <<= sTmp;
 
     if (m_xTAutoFormat)
@@ -1524,10 +1524,10 @@ void SwInsertDBColAutoPilot::ImplCommit()
 
     LanguageType ePrevLang(0xffff);
 
-    SvNumberFormatter& rNFormatr = *pView->GetWrtShell().GetNumberFormatter();
-    for(size_t nCol = 0; nCol < aDBColumns.size(); nCol++)
+    SvNumberFormatter& rNFormatr = *m_pView->GetWrtShell().GetNumberFormatter();
+    for(size_t nCol = 0; nCol < m_aDBColumns.size(); nCol++)
     {
-        SwInsDBColumn* pColumn = aDBColumns[nCol].get();
+        SwInsDBColumn* pColumn = m_aDBColumns[nCol].get();
         OUString sColumnInsertNode(sNewNode + "/__");
         if( nCol < 10 )
             sColumnInsertNode += "00";
@@ -1576,7 +1576,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 void SwInsertDBColAutoPilot::Load()
 {
     const Sequence<OUString> aNames = GetNodeNames(OUString());
-    SvNumberFormatter& rNFormatr = *pView->GetWrtShell().GetNumberFormatter();
+    SvNumberFormatter& rNFormatr = *m_pView->GetWrtShell().GetNumberFormatter();
     for(OUString const & nodeName : aNames)
     {
         //search for entries with the appropriate data source and table
@@ -1589,7 +1589,7 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[0] >>= sSource;
         pDataSourceProps[1] >>= sCommand;
         pDataSourceProps[2] >>= nCommandType;
-        if(sSource == aDBData.sDataSource && sCommand == aDBData.sCommand)
+        if(sSource == m_aDBData.sDataSource && sCommand == m_aDBData.sCommand)
         {
             DB_ColumnConfigData aNewData;
 
@@ -1619,9 +1619,9 @@ void SwInsertDBColAutoPilot::Load()
                 pSubProps[0] >>= sColumn;
                 // check for existence of the loaded column name
                 bool bFound = false;
-                for(size_t nRealColumn = 0; nRealColumn < aDBColumns.size(); ++nRealColumn)
+                for(size_t nRealColumn = 0; nRealColumn < m_aDBColumns.size(); ++nRealColumn)
                 {
-                    if(aDBColumns[nRealColumn]->sColumn == sColumn)
+                    if(m_aDBColumns[nRealColumn]->sColumn == sColumn)
                     {
                         bFound = true;
                         break;
@@ -1712,9 +1712,9 @@ void SwInsertDBColAutoPilot::Load()
 
             // now copy the user defined Numberformat strings to the
             // Shell. Then only these are available as ID
-            for( size_t n = 0; n < aDBColumns.size() ; ++n )
+            for( size_t n = 0; n < m_aDBColumns.size() ; ++n )
             {
-                SwInsDBColumn& rSet = *aDBColumns[ n ];
+                SwInsDBColumn& rSet = *m_aDBColumns[ n ];
                 for( size_t m = 0; m < aNewData.aDBColumns.size() ; ++m )
                 {
                     SwInsDBColumn& rGet = *aNewData.aDBColumns[ m ];

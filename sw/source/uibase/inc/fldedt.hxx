@@ -29,7 +29,7 @@ class SwFieldMgr;
 
 class SwFieldEditDlg final : public SfxSingleTabDialogController
 {
-    SwWrtShell* pSh;
+    SwWrtShell* m_pSh;
     std::unique_ptr<weld::Button> m_xPrevBT;
     std::unique_ptr<weld::Button> m_xNextBT;
     std::unique_ptr<weld::Button> m_xAddressBT;

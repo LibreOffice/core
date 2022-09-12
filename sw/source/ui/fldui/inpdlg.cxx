@@ -29,10 +29,10 @@
 SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,
                                  SwField* pField, bool bPrevButton, bool bNextButton)
     : GenericDialogController(pParent, "modules/swriter/ui/inputfielddialog.ui", "InputFieldDialog")
-    , rSh( rS )
-    , pInpField(nullptr)
-    , pSetField(nullptr)
-    , pUsrType(nullptr)
+    , m_rSh( rS )
+    , m_pInpField(nullptr)
+    , m_pSetField(nullptr)
+    , m_pUsrType(nullptr)
     , m_pPressedButton(nullptr)
     , m_xLabelED(m_xBuilder->weld_entry("name"))
     , m_xEditED(m_xBuilder->weld_text_view("text"))
@@ -58,44 +58,44 @@ SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,
     if( SwFieldIds::Input == pField->GetTyp()->Which() )
     {   // it is an input field
 
-        pInpField = static_cast<SwInputField*>(pField);
-        m_xLabelED->set_text(pInpField->GetPar2());
-        sal_uInt16 nSubType = pInpField->GetSubType();
+        m_pInpField = static_cast<SwInputField*>(pField);
+        m_xLabelED->set_text(m_pInpField->GetPar2());
+        sal_uInt16 nSubType = m_pInpField->GetSubType();
 
         switch(nSubType & 0xff)
         {
             case INP_TXT:
-                aStr = pInpField->GetPar1();
+                aStr = m_pInpField->GetPar1();
                 break;
 
             case INP_USR:
                 // user field
-                pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
-                            SwFieldIds::User, pInpField->GetPar1() ));
-                if( nullptr != pUsrType )
-                    aStr = pUsrType->GetContent();
+                m_pUsrType = static_cast<SwUserFieldType*>(m_rSh.GetFieldType(
+                            SwFieldIds::User, m_pInpField->GetPar1() ));
+                if( nullptr != m_pUsrType )
+                    aStr = m_pUsrType->GetContent();
                 break;
         }
     }
     else
     {
         // it is a SetExpression
-        pSetField = static_cast<SwSetExpField*>(pField);
-        OUString sFormula(pSetField->GetFormula());
+        m_pSetField = static_cast<SwSetExpField*>(pField);
+        OUString sFormula(m_pSetField->GetFormula());
         //values are formatted - formulas are not
-        CharClass aCC( LanguageTag( pSetField->GetLanguage() ));
+        CharClass aCC( LanguageTag( m_pSetField->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
         {
-            aStr = pSetField->ExpandField(true, rS.GetLayout());
+            aStr = m_pSetField->ExpandField(true, rS.GetLayout());
         }
         else
             aStr = sFormula;
-        m_xLabelED->set_text(pSetField->GetPromptText());
+        m_xLabelED->set_text(m_pSetField->GetPromptText());
     }
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
     //              input any content. - 74639
-    bool bEnable = !rSh.IsCursorReadonly();
+    bool bEnable = !m_rSh.IsCursorReadonly();
 
     m_xOKBT->set_sensitive( bEnable );
     m_xEditED->set_editable( bEnable );
@@ -117,37 +117,37 @@ SwFieldInputDlg::~SwFieldInputDlg()
 void SwFieldInputDlg::Apply()
 {
     OUString aTmp = m_xEditED->get_text().replaceAll("\r", "");
-    rSh.StartAllAction();
+    m_rSh.StartAllAction();
     bool bModified = false;
-    if(pInpField)
+    if(m_pInpField)
     {
-        if(pUsrType)
+        if(m_pUsrType)
         {
-            if( aTmp != pUsrType->GetContent() )
+            if( aTmp != m_pUsrType->GetContent() )
             {
-                pUsrType->SetContent(aTmp);
-                pUsrType->UpdateFields();
+                m_pUsrType->SetContent(aTmp);
+                m_pUsrType->UpdateFields();
                 bModified = true;
             }
         }
-        else if( aTmp != pInpField->GetPar1() )
+        else if( aTmp != m_pInpField->GetPar1() )
         {
-            pInpField->SetPar1(aTmp);
-            rSh.SwEditShell::UpdateOneField(*pInpField);
+            m_pInpField->SetPar1(aTmp);
+            m_rSh.SwEditShell::UpdateOneField(*m_pInpField);
             bModified = true;
         }
     }
-    else if( aTmp != pSetField->GetPar2())
+    else if( aTmp != m_pSetField->GetPar2())
     {
-        pSetField->SetPar2(aTmp);
-        rSh.SwEditShell::UpdateOneField(*pSetField);
+        m_pSetField->SetPar2(aTmp);
+        m_rSh.SwEditShell::UpdateOneField(*m_pSetField);
         bModified = true;
     }
 
     if( bModified )
-        rSh.SetUndoNoResetModified();
+        m_rSh.SetUndoNoResetModified();
 
-    rSh.EndAllAction();
+    m_rSh.EndAllAction();
 }
 
 bool SwFieldInputDlg::PrevButtonPressed() const
