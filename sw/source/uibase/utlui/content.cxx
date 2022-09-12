@@ -3419,9 +3419,16 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         if (m_aActiveContentArr[ContentTypeId::OUTLINE])
             m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
 
+        // tdf#143547 LO Writer: navigator should stand still on promoting and demoting
+        // In addition to m_bIgnoreDocChange being true, selections are cleared before the Display
+        // call. Either of these conditions disable restore of scroll position happening in the
+        // Display function so it needs to be done here.
+        auto nOldScrollPos = m_xTreeView->vadjustment_get_value();
+
         // clear all selections to prevent the Display function from trying to reselect selected entries
         m_xTreeView->unselect_all();
         Display(true);
+        m_xTreeView->vadjustment_set_value(nOldScrollPos);
 
         // reselect entries
         const SwOutlineNodes::size_type nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
