@@ -14,8 +14,6 @@ pdfium_patches += build.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
-# __popcnt not available on arm64
-pdfium_patches += pdfium_arm64.patch.1
 # Use CoreGraphics.h instead of Carbon.h
 pdfium_patches += cg-instead-of-carbon.patch.1
 # Android NDK 19 - that is known to work well - does not have 2 defines
@@ -59,7 +57,8 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/memory/aligned_memory.cc third_party/base/memory/aligned_memory.cpp && \
     mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp && \
     mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
-    mv third_party/abseil-cpp/absl/types/bad_optional_access.cc third_party/abseil-cpp/absl/types/bad_optional_access.cpp \
+    mv third_party/abseil-cpp/absl/types/bad_optional_access.cc third_party/abseil-cpp/absl/types/bad_optional_access.cpp && \
+    mv third_party/abseil-cpp/absl/types/bad_variant_access.cc third_party/abseil-cpp/absl/types/bad_variant_access.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:
