@@ -58,6 +58,7 @@
 #include <funcdesc.hxx>
 #include <svl/sharedstring.hxx>
 #include <formulaopt.hxx>
+#include <document.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -1228,8 +1229,9 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
     return true;
 }
 
-ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
+ScUnoAddInCall::ScUnoAddInCall( ScDocument& rDoc, ScUnoAddInCollection& rColl, const OUString& rName,
                                 tools::Long nParamCount ) :
+    mrDoc( rDoc ),
     bValidCount( false ),
     nErrCode( FormulaError::NoCode ),      // before function was called
     bHasString( true ),
@@ -1582,13 +1584,13 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                             for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                             {
                                 xMatrix->PutString(
-                                    svl::SharedString(pColArr[nCol]),
+                                    mrDoc.GetSharedStringPool().intern(pColArr[nCol]),
                                     static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
                             }
                             for (sal_Int32 nCol=nColCount; nCol<nMaxColCount; nCol++)
                             {
                                 xMatrix->PutString(
-                                    svl::SharedString(OUString()),
+                                    svl::SharedString::getEmptyString(),
                                     static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
                             }
                         }
