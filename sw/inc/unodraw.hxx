@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -40,12 +39,18 @@ class SdrView;
 class SwDoc;
 class SwXShape;
 
-class SwFmDrawPage final : public SvxFmDrawPage
+typedef cppu::ImplInheritanceHelper
+<
+    SvxFmDrawPage,
+    css::container::XEnumerationAccess
+> SwFmDrawPage_Base;
+class SwFmDrawPage final : public SwFmDrawPage_Base
 {
+    SwDoc*          m_pDoc;
     SdrPageView*        m_pPageView;
     std::vector<rtl::Reference<SwXShape>> m_vShapes;
 public:
-    SwFmDrawPage( SdrPage* pPage );
+    SwFmDrawPage( SwDoc* pDoc, SdrPage* pPage );
     virtual ~SwFmDrawPage() noexcept override;
 
     const SdrMarkList&  PreGroup(const css::uno::Reference< css::drawing::XShapes >& rShapes);
@@ -67,23 +72,6 @@ public:
         if(ppShape != m_vShapes.end())
             m_vShapes.erase(ppShape);
     };
-};
-
-typedef cppu::WeakAggImplHelper4
-<
-    css::container::XEnumerationAccess,
-    css::drawing::XDrawPage,
-    css::lang::XServiceInfo,
-    css::drawing::XShapeGrouper
->
-SwXDrawPageBaseClass;
-class SwXDrawPage final : public SwXDrawPageBaseClass
-{
-    SwDoc*          m_pDoc;
-    rtl::Reference<SwFmDrawPage>  m_pDrawPage;
-public:
-    SwXDrawPage(SwDoc* pDoc);
-    virtual ~SwXDrawPage() override;
 
     //XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
@@ -112,7 +100,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    SwFmDrawPage*   GetSvxPage();
     // renamed and outlined to detect where it's called
     void    InvalidateSwDoc(); // {pDoc = 0;}
 };
@@ -132,7 +119,6 @@ SwXShapeBaseClass;
 class SwXShape : public SwXShapeBaseClass, public SvtListener
 {
     friend class SwXGroupShape;
-    friend class SwXDrawPage;
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
     SwFrameFormat* m_pFormat;

@@ -73,7 +73,7 @@ class SwDoc;
 class SwDocShell;
 class UnoActionContext;
 class SwXBodyText;
-class SwXDrawPage;
+class SwFmDrawPage;
 class SwUnoCursor;
 class SwXDocumentPropertyHelper;
 class SfxViewFrame;
@@ -146,7 +146,7 @@ private:
     SwDocShell*             m_pDocShell;
     bool                    m_bObjectValid;
 
-    rtl::Reference<SwXDrawPage>                                 m_xDrawPage;
+    rtl::Reference<SwFmDrawPage>                                m_xDrawPage;
 
     rtl::Reference<SwXBodyText>                                 m_xBodyText;
     css::uno::Reference< css::uno::XAggregation >               m_xNumFormatAgg;

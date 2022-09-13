@@ -252,8 +252,8 @@ public:
     }
 };
 
-SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
-    SvxFmDrawPage( pPage ), m_pPageView(nullptr)
+SwFmDrawPage::SwFmDrawPage( SwDoc* pDoc, SdrPage* pPage ) :
+    SwFmDrawPage_Base( pPage ), m_pDoc(pDoc), m_pPageView(nullptr)
 {
 }
 
@@ -389,7 +389,7 @@ namespace
         protected:
             virtual ~SwXShapesEnumeration() override {};
         public:
-            explicit SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
+            explicit SwXShapesEnumeration(SwFmDrawPage* const pDrawPage);
 
             //XEnumeration
             virtual sal_Bool SAL_CALL hasMoreElements() override;
@@ -402,7 +402,7 @@ namespace
     };
 }
 
-SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
+SwXShapesEnumeration::SwXShapesEnumeration(SwFmDrawPage* const pDrawPage)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = pDrawPage->getCount();
@@ -445,70 +445,45 @@ uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames()
     return { OUString("com.sun.star.container.XEnumeration") };
 }
 
-uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration()
+uno::Reference< container::XEnumeration > SwFmDrawPage::createEnumeration()
 {
     SolarMutexGuard aGuard;
     return uno::Reference< container::XEnumeration >(
         new SwXShapesEnumeration(this));
 }
 
-OUString SwXDrawPage::getImplementationName()
+OUString SwFmDrawPage::getImplementationName()
 {
-    return "SwXDrawPage";
+    return "SwFmDrawPage";
 }
 
-sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName)
+sal_Bool SwFmDrawPage::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames()
+uno::Sequence< OUString > SwFmDrawPage::getSupportedServiceNames()
 {
     return { "com.sun.star.drawing.GenericDrawPage" };
 }
 
-SwXDrawPage::SwXDrawPage(SwDoc* pDc) :
-    m_pDoc(pDc)
+uno::Any SwFmDrawPage::queryInterface( const uno::Type& aType )
 {
-}
-
-SwXDrawPage::~SwXDrawPage()
-{
-    if(m_pDrawPage.is())
-    {
-        uno::Reference< uno::XInterface >  xInt;
-        m_pDrawPage->setDelegator(xInt);
-    }
-}
-
-uno::Any SwXDrawPage::queryInterface( const uno::Type& aType )
-{
-    uno::Any aRet = SwXDrawPageBaseClass::queryInterface(aType);
+    uno::Any aRet = SvxFmDrawPage::queryInterface(aType);
     if(!aRet.hasValue())
-    {
-        // secure with checking if page exists. This may not be the case
-        // either for new SW docs with no yet graphics usage or when
-        // the doc is closed and someone else still holds a UNO reference
-        // to the XDrawPage (in that case, pDoc is set to 0)
-        SwFmDrawPage* pPage = GetSvxPage();
-
-        if(pPage)
-        {
-            aRet = pPage->queryAggregation(aType);
-        }
-    }
+        aRet = SwFmDrawPage_Base::queryInterface(aType);
     return aRet;
 }
 
-uno::Sequence< uno::Type > SwXDrawPage::getTypes()
+uno::Sequence< uno::Type > SwFmDrawPage::getTypes()
 {
     return comphelper::concatSequences(
-                SwXDrawPageBaseClass::getTypes(),
-                GetSvxPage()->getTypes(),
+                SvxFmDrawPage::getTypes(),
+                SwFmDrawPage_Base::getTypes(),
                 uno::Sequence { cppu::UnoType<form::XFormsSupplier2>::get() });
 }
 
-sal_Int32 SwXDrawPage::getCount()
+sal_Int32 SwFmDrawPage::getCount()
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -516,13 +491,10 @@ sal_Int32 SwXDrawPage::getCount()
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return 0;
     else
-    {
-        GetSvxPage();
-        return SwTextBoxHelper::getCount(m_pDrawPage->GetSdrPage());
-    }
+        return SwTextBoxHelper::getCount(GetSdrPage());
 }
 
-uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
+uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -530,27 +502,25 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         throw lang::IndexOutOfBoundsException();
 
-    GetSvxPage();
-    return SwTextBoxHelper::getByIndex(m_pDrawPage->GetSdrPage(), nIndex);
+    return SwTextBoxHelper::getByIndex(GetSdrPage(), nIndex);
 }
 
-uno::Type  SwXDrawPage::getElementType()
+uno::Type  SwFmDrawPage::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SwXDrawPage::hasElements()
+sal_Bool SwFmDrawPage::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
         throw uno::RuntimeException();
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return false;
-    else
-        return GetSvxPage()->hasElements();
+    return SvxFmDrawPage::hasElements();
 }
 
-void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
+void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -576,7 +546,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
             return;
         }
     }
-    GetSvxPage()->add(xShape);
+    SvxFmDrawPage::add(xShape);
 
     OSL_ENSURE(pSvxShape, "Why is here no SvxShape?");
     // this position is definitely in 1/100 mm
@@ -721,7 +691,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     pInternalPam.reset();
 }
 
-void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
+void SwFmDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -739,101 +709,67 @@ void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
     xComp->dispose();
 }
 
-uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference< drawing::XShapes > & xShapes)
+uno::Reference< drawing::XShapeGroup >  SwFmDrawPage::group(const uno::Reference< drawing::XShapes > & xShapes)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc || !xShapes.is())
         throw uno::RuntimeException();
     uno::Reference< drawing::XShapeGroup >  xRet;
-    if(m_pDrawPage.is())
+    // mark and return MarkList
+    const SdrMarkList& rMarkList = PreGroup(xShapes);
+    if ( rMarkList.GetMarkCount() > 0 )
     {
-
-        SwFmDrawPage* pPage = GetSvxPage();
-        if(pPage) //TODO: can this be Null?
+        for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
         {
-            // mark and return MarkList
-            const SdrMarkList& rMarkList = pPage->PreGroup(xShapes);
-            if ( rMarkList.GetMarkCount() > 0 )
+            const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
+            if (RndStdIds::FLY_AS_CHAR == ::FindFrameFormat(const_cast<SdrObject*>(
+                                    pObj))->GetAnchor().GetAnchorId())
             {
-                for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
-                {
-                    const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-                    if (RndStdIds::FLY_AS_CHAR == ::FindFrameFormat(const_cast<SdrObject*>(
-                                            pObj))->GetAnchor().GetAnchorId())
-                    {
-                        throw lang::IllegalArgumentException(
-                            "Shape must not have 'as character' anchor!", nullptr, 0);
-                    }
-                }
-
-                UnoActionContext aContext(m_pDoc);
-                m_pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
-
-                SwDrawContact* pContact = m_pDoc->GroupSelection( *pPage->GetDrawView() );
-                m_pDoc->ChgAnchor(
-                    pPage->GetDrawView()->GetMarkedObjectList(),
-                    RndStdIds::FLY_AT_PARA,
-                    true, false );
-
-                pPage->GetDrawView()->UnmarkAll();
-                if(pContact)
-                    xRet = SwFmDrawPage::GetShapeGroup( pContact->GetMaster() );
-                m_pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+                throw lang::IllegalArgumentException(
+                    "Shape must not have 'as character' anchor!", nullptr, 0);
             }
-            pPage->RemovePageView();
         }
+
+        UnoActionContext aContext(m_pDoc);
+        m_pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+
+        SwDrawContact* pContact = m_pDoc->GroupSelection( *GetDrawView() );
+        m_pDoc->ChgAnchor(
+            GetDrawView()->GetMarkedObjectList(),
+            RndStdIds::FLY_AT_PARA,
+            true, false );
+
+        GetDrawView()->UnmarkAll();
+        if(pContact)
+            xRet = SwFmDrawPage::GetShapeGroup( pContact->GetMaster() );
+        m_pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
+    RemovePageView();
     return xRet;
 }
 
-void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeGroup)
+void SwFmDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeGroup)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
         throw uno::RuntimeException();
-    if(!m_pDrawPage.is())
-        return;
 
-    SwFmDrawPage* pPage = GetSvxPage();
-    if(!pPage) //TODO: can this be Null?
-        return;
-
-    pPage->PreUnGroup(rShapeGroup);
+    PreUnGroup(rShapeGroup);
     UnoActionContext aContext(m_pDoc);
     m_pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
 
-    m_pDoc->UnGroupSelection( *pPage->GetDrawView() );
-    m_pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
+    m_pDoc->UnGroupSelection( *GetDrawView() );
+    m_pDoc->ChgAnchor( GetDrawView()->GetMarkedObjectList(),
                 RndStdIds::FLY_AT_PARA,
                 true, false );
     m_pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
-    pPage->RemovePageView();
-}
-
-SwFmDrawPage*   SwXDrawPage::GetSvxPage()
-{
-    if(!m_pDrawPage.is() && m_pDoc)
-    {
-        SolarMutexGuard aGuard;
-        // #i52858#
-        SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        SdrPage* pPage = pModel->GetPage( 0 );
-
-        {
-            // We need a Ref to the object during queryInterface or else
-            // it will be deleted
-            m_pDrawPage = new SwFmDrawPage(pPage);
-        }
-        if( m_pDrawPage.is() )
-            m_pDrawPage->setDelegator( static_cast<cppu::OWeakObject*>(this) );
-    }
-    return m_pDrawPage.get();
+    RemovePageView();
 }
 
 /**
  * Renamed and outlined to detect where it's called
  */
-void SwXDrawPage::InvalidateSwDoc()
+void SwFmDrawPage::InvalidateSwDoc()
 {
     m_pDoc = nullptr;
 }

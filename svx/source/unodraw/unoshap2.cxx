@@ -80,7 +80,7 @@ using namespace ::com::sun::star::container;
 
 SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
     : SvxShapeGroupAnyD(pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()))
-    , mxPage(pDrawPage)
+    , mxWeakPage(pDrawPage)
 {
 }
 
@@ -91,7 +91,7 @@ SvxShapeGroup::~SvxShapeGroup() noexcept
 void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
-    mxPage = pNewPage;
+    mxWeakPage = pNewPage;
 }
 
 
@@ -185,7 +185,13 @@ void SvxShapeGroup::addShape( SvxShape& rShape )
 
 void SvxShapeGroup::addShape( SvxShape& rShape, size_t nPos )
 {
-    if (!HasSdrObject() || !mxPage.is())
+    SdrObject* pSdrObject = GetSdrObject();
+    if (!pSdrObject)
+    {
+        return;
+    }
+    rtl::Reference<SvxDrawPage> xPage = mxWeakPage.get();
+    if (!xPage)
     {
         OSL_FAIL("could not add XShape to group shape!");
         return;
@@ -193,12 +199,12 @@ void SvxShapeGroup::addShape( SvxShape& rShape, size_t nPos )
 
     rtl::Reference<SdrObject> pSdrShape = rShape.GetSdrObject();
     if( pSdrShape == nullptr )
-        pSdrShape = mxPage->CreateSdrObject_( &rShape );
+        pSdrShape = xPage->CreateSdrObject_( &rShape );
 
     if( pSdrShape->IsInserted() )
         pSdrShape->getParentSdrObjListFromSdrObject()->RemoveObject( pSdrShape->GetOrdNum() );
 
-    GetSdrObject()->GetSubList()->InsertObject(pSdrShape.get(), nPos);
+    pSdrObject->GetSubList()->InsertObject(pSdrShape.get(), nPos);
     // TTTT Was created using mpModel in CreateSdrObject_ above
     // TTTT may be good to add an assertion here for the future
     // pSdrShape->SetModel(GetSdrObject()->GetModel());
@@ -214,9 +220,9 @@ void SvxShapeGroup::addShape( SvxShape& rShape, size_t nPos )
     // Establish connection between new SdrObject and its wrapper before
     // inserting the new shape into the group.  There a new wrapper
     // would be created when this connection would not already exist.
-    rShape.Create( pSdrShape.get(), mxPage.get() );
+    rShape.Create( pSdrShape.get(), xPage.get() );
 
-    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
+    pSdrObject->getSdrModelFromSdrObject().SetChanged();
 }
 
 // XShapes

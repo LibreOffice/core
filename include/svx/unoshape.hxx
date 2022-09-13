@@ -428,7 +428,8 @@ class SVXCORE_DLLPUBLIC SvxShapeGroup final : public SvxShapeGroupAnyD,
                       public css::drawing::XShapes2
 {
 private:
-    rtl::Reference< SvxDrawPage> mxPage;
+    /// using a weak reference to prevent leaks via ref-counting cycles
+    unotools::WeakReference< SvxDrawPage> mxWeakPage;
 
     void addUnoShape( const css::uno::Reference< css::drawing::XShape >& xShape, size_t nPos );
     void addShape(SvxShape& rShape, size_t nPos);

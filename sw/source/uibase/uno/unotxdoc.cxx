@@ -1280,12 +1280,11 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
         throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!m_xDrawPage.is())
     {
-        m_xDrawPage = new SwXDrawPage(m_pDocShell->GetDoc());
-        // Create a Reference to trigger the complete initialization of the
-        // object. Otherwise in some corner cases it would get initialized
-        // at ::InitNewDoc -> which would get called during
-        // close() or dispose() -> n#681746
-        uno::Reference<lang::XComponent> xTriggerInit( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY );
+        SwDoc* pDoc = m_pDocShell->GetDoc();
+        // #i52858#
+        SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        SdrPage* pPage = pModel->GetPage( 0 );
+        m_xDrawPage = new SwFmDrawPage(pDoc, pPage);
     }
     return m_xDrawPage;
 }
