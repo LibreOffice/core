@@ -155,9 +155,9 @@ void CheckFileExtRegistration(weld::Window* pDialogParent)
     }
 
     static const std::pair<LPCWSTR, LPCWSTR> formats[] = {
-        { L".odp", L"LibreOffice.ImpressDocument.1" },
-        { L".odt", L"LibreOffice.WriterDocument.1" },
-        { L".ods", L"LibreOffice.CalcDocument.1" },
+        { L".odp", L"CollaboraOffice.ImpressDocument.1" },
+        { L".odt", L"CollaboraOffice.WriterDocument.1" },
+        { L".ods", L"CollaboraOffice.CalcDocument.1" },
     };
     OUString aNonDefaults;
 
