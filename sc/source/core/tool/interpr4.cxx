@@ -2734,7 +2734,7 @@ void ScInterpreter::ScExternal()
         //  bLocalFirst=false in FindFunction, cFunc should be the stored
         //  internal name
 
-        ScUnoAddInCall aCall( *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );
+        ScUnoAddInCall aCall( mrDoc, *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );
 
         if ( !aCall.ValidParamCount() )
             SetError( FormulaError::IllegalParameter );
