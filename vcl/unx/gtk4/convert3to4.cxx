@@ -1509,6 +1509,13 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
             }
         }
+        else if (xChild->getNodeName() == "items")
+        {
+            // gtk4-4.6.7 won't set an active item if the active item
+            // property precedes the list of combobox items so if we
+            // have "items" move them to the start
+            insertAsFirstChild(xNode, xNode->removeChild(xChild));
+        }
 
         xChild = xNextChild;
     }
