@@ -2531,11 +2531,13 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType == gsSoftPageBreak)
             {
-                exportSoftPageBreak();
+                if (!bAutoStyles)
+                    exportSoftPageBreak();
             }
             else if (sType == "LineBreak")
             {
-                exportTextLineBreak(xPropSet);
+                if (!bAutoStyles)
+                    exportTextLineBreak(xPropSet);
             }
             else {
                 OSL_FAIL("unknown text portion type");
