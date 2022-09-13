@@ -33,6 +33,7 @@
 #include <vcl/pdf/PDFFillMode.hxx>
 #include <vcl/pdf/PDFFindFlags.hxx>
 #include <vcl/pdf/PDFErrorType.hxx>
+#include <vcl/pdf/PDFFormFieldType.hxx>
 
 class SvMemoryStream;
 
@@ -100,6 +101,7 @@ public:
     virtual size_t getAttachmentPointsCount() = 0;
     virtual std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex) = 0;
     virtual std::vector<basegfx::B2DPoint> getLineGeometry() = 0;
+    virtual PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) = 0;
 };
 
 class PDFiumTextPage;

@@ -928,8 +928,19 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     {
         case SwContentControlType::RICH_TEXT:
         case SwContentControlType::PLAIN_TEXT:
+        {
             pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
             break;
+        }
+        case SwContentControlType::CHECKBOX:
+        {
+            pDescriptor = std::make_unique<vcl::PDFWriter::CheckBoxWidget>();
+            auto pCheckBoxWidget = static_cast<vcl::PDFWriter::CheckBoxWidget*>(pDescriptor.get());
+            pCheckBoxWidget->Checked = pContentControl->GetChecked();
+            pCheckBoxWidget->OnValue = pContentControl->GetCheckedState();
+            pCheckBoxWidget->OffValue = pContentControl->GetUncheckedState();
+            break;
+        }
         default:
             break;
     }
@@ -938,9 +949,6 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     {
         return false;
     }
-
-    pDescriptor->Border = true;
-    pDescriptor->BorderColor = COL_BLACK;
 
     SwRect aLocation;
     rInf.CalcRect(*this, &aLocation);
