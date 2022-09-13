@@ -21,7 +21,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 #include <tools/color.hxx>
 

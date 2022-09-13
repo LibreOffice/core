@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/primitive2d/GlowSoftEgdeShadowTools.hxx>
+#include "GlowSoftEgdeShadowTools.hxx"
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>

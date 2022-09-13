@@ -24,7 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <drawinglayer/converters.hxx>
-#include <drawinglayer/primitive2d/GlowSoftEgdeShadowTools.hxx>
+#include "GlowSoftEgdeShadowTools.hxx"
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
@@ -196,7 +196,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         BitmapEx result(aBitmapEx.GetBitmap(), aMask);
 
 #ifdef DBG_UTIL
-        static bool bDoSaveForVisualControl(true); // loplugin:constvars:ignore
+        static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
         if (bDoSaveForVisualControl)
         {
             // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/

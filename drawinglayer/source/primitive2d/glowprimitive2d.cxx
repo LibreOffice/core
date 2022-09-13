@@ -24,7 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <drawinglayer/converters.hxx>
-#include <drawinglayer/primitive2d/GlowSoftEgdeShadowTools.hxx>
+#include "GlowSoftEgdeShadowTools.hxx"
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>

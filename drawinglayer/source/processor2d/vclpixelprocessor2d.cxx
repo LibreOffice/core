@@ -58,7 +58,6 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
-#include <drawinglayer/primitive2d/GlowSoftEgdeShadowTools.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -393,12 +392,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processBorderLinePrimitive2D(
                 static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate));
-            break;
-        }
-        case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
-        {
-            processShadowPrimitive2D(
-                static_cast<const drawinglayer::primitive2d::ShadowPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D:
@@ -947,52 +940,6 @@ void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrim
     {
         mpOutputDevice->SetAntialiasing(nOldAntiAliase);
     }
-}
-
-void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate)
-{
-    if (rCandidate.getShadowBlur() == 0)
-    {
-        process(rCandidate);
-        return;
-    }
-
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-    aRange.transform(maCurrentTransformation);
-    basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
-    aBlurRadiusVector *= maCurrentTransformation;
-    const double fBlurRadius = aBlurRadiusVector.getLength();
-
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
-    if (aBufferDevice.isVisible() && !aRange.isEmpty())
-    {
-        OutputDevice* pLastOutputDevice = mpOutputDevice;
-        mpOutputDevice = &aBufferDevice.getContent();
-
-        process(rCandidate);
-
-        const tools::Rectangle aRect(static_cast<tools::Long>(std::floor(aRange.getMinX())),
-                                     static_cast<tools::Long>(std::floor(aRange.getMinY())),
-                                     static_cast<tools::Long>(std::ceil(aRange.getMaxX())),
-                                     static_cast<tools::Long>(std::ceil(aRange.getMaxY())));
-
-        BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
-
-        AlphaMask mask = drawinglayer::primitive2d::ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0,
-                                                                            fBlurRadius, 0, false);
-
-        const basegfx::BColor aShadowColor(
-            maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
-
-        Bitmap bitmap = bitmapEx.GetBitmap();
-        bitmap.Erase(Color(aShadowColor));
-        BitmapEx result(bitmap, mask);
-
-        mpOutputDevice = pLastOutputDevice;
-        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
-    }
-    else
-        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
 }
 
 void VclPixelProcessor2D::processFillGradientPrimitive2D(
