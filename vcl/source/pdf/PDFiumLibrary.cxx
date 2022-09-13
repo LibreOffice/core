@@ -137,6 +137,24 @@ static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Security) == FPDF_ERR_SEC
 static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Page) == FPDF_ERR_PAGE,
               "PDFErrorType::Page value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::Unknown) == FPDF_FORMFIELD_UNKNOWN,
+              "PDFFormFieldType::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::PushButton) == FPDF_FORMFIELD_PUSHBUTTON,
+              "PDFFormFieldType::PushButton value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::CheckBox) == FPDF_FORMFIELD_CHECKBOX,
+              "PDFFormFieldType::CheckBox value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::RadioButton)
+                  == FPDF_FORMFIELD_RADIOBUTTON,
+              "PDFFormFieldType::RadioButton value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::ComboBox) == FPDF_FORMFIELD_COMBOBOX,
+              "PDFFormFieldType::ComboBox value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::ListBox) == FPDF_FORMFIELD_LISTBOX,
+              "PDFFormFieldType::ListBox value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::TextField) == FPDF_FORMFIELD_TEXTFIELD,
+              "PDFFormFieldType::TextField value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFormFieldType::Signature) == FPDF_FORMFIELD_SIGNATURE,
+              "PDFFormFieldType::Signature value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -231,6 +249,7 @@ public:
     size_t getAttachmentPointsCount() override;
     std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex) override;
     std::vector<basegfx::B2DPoint> getLineGeometry() override;
+    PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) override;
 };
 
 class PDFiumPageObjectImpl final : public PDFiumPageObject
@@ -1107,6 +1126,13 @@ std::vector<basegfx::B2DPoint> PDFiumAnnotationImpl::getLineGeometry()
         aLine.emplace_back(aEnd.x, aEnd.y);
     }
     return aLine;
+}
+
+PDFFormFieldType PDFiumAnnotationImpl::getFormFieldType(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    return PDFFormFieldType(
+        FPDFAnnot_GetFormFieldType(pDocImpl->getFormHandlePointer(), mpAnnotation));
 }
 
 namespace
