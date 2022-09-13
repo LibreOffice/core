@@ -256,7 +256,8 @@ void OleObjectGraphicDataContext::onEndElement()
 {
     if( getCurrentElement() == PPT_TOKEN( oleObj ) && !isMCEStateEmpty() )
     {
-        if( getMCEState() == MCE_STATE::FoundChoice && !mrOleObjectInfo.mbHasPicture )
+        if (getMCEState() == MCE_STATE::FoundChoice && !mrOleObjectInfo.mbHasPicture
+            && mrOleObjectInfo.maShapeId.isEmpty())
             setMCEState( MCE_STATE::Started );
     }
 }

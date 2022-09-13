@@ -192,18 +192,13 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
-    uno::Reference<beans::XPropertySet> xShape;
-    for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
-    {
-        uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(i), uno::UNO_QUERY);
-        if (!xInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
-        {
-            continue;
-        }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
+    uno::Reference<beans::XPropertySet> xShape;
+    uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    if (xInfo->supportsService("com.sun.star.drawing.OLE2Shape"))
         xShape.set(xInfo, uno::UNO_QUERY);
-        break;
-    }
+
     CPPUNIT_ASSERT(xShape.is());
 
     drawing::LineStyle eLineStyle{};

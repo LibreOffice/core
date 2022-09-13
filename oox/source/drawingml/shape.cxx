@@ -1868,6 +1868,23 @@ Reference< XShape > const & Shape::createAndInsert(
             propertySet->setPropertyValue(
                 "SoftEdgeRadius", Any(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.value())));
         }
+
+        // Set the stroke and fill-color properties of the OLE shape
+        if (aServiceName == "com.sun.star.drawing.OLE2Shape" && mxOleObjectInfo
+            && !mxOleObjectInfo->maShapeId.isEmpty())
+            if (::oox::vml::Drawing* pVmlDrawing = rFilterBase.getVmlDrawing())
+                if (const ::oox::vml::ShapeBase* pVmlShape
+                    = pVmlDrawing->getShapes().getShapeById(mxOleObjectInfo->maShapeId))
+                {
+                    // Apply stroke props from the type model of the related VML shape.
+                    ShapePropertyMap aPropMap(rFilterBase.getModelObjectHelper());
+                    pVmlShape->getTypeModel().maStrokeModel.pushToPropMap(
+                        aPropMap, rFilterBase.getGraphicHelper());
+                    // And, fill-color properties as well...
+                    pVmlShape->getTypeModel().maFillModel.pushToPropMap(
+                        aPropMap, rFilterBase.getGraphicHelper());
+                    PropertySet(xSet).setProperties(aPropMap);
+                }
     }
 
     if (mxShape.is())

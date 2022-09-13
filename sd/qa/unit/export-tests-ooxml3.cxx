@@ -122,6 +122,7 @@ public:
     void testTdf149551_tbrl90();
     void testTdf149551_btlr();
     void testTdf94122_autoColor();
+    void testTdf124333();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -209,6 +210,7 @@ public:
     CPPUNIT_TEST(testTdf149551_tbrl90);
     CPPUNIT_TEST(testTdf149551_btlr);
     CPPUNIT_TEST(testTdf94122_autoColor);
+    CPPUNIT_TEST(testTdf124333);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2258,6 +2260,25 @@ void SdOOXMLExportTest3::testTdf94122_autoColor()
     assertXPath(pXmlDocContent3,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
                 "val", "000000");
+}
+
+void SdOOXMLExportTest3::testTdf124333()
+{
+    // Document contains one rectangle and one embedded OLE object.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/ole.pptx"), PPTX);
+
+    // Without the fix in place, the number of shapes was 3.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("number of shapes is incorrect", sal_Int32(2),
+                                 getPage(0, xDocShRef)->getCount());
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    // Check number of shapes after export.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("number of shapes is incorrect after export", sal_Int32(2),
+                                 getPage(0, xDocShRef)->getCount());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
