@@ -10,4 +10,4 @@
 +  bool operator!=(const FxPartitionAllocAllocator& that) const { return false; }
  };
  
- // Used to put backing store for std::vector<> and such
+ // Used to put backing store for std::vector<> and such into the
