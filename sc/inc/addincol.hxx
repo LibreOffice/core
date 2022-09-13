@@ -42,6 +42,7 @@ namespace com::sun::star::uno { class XInterface; }
 class SfxObjectShell;
 class ScUnoAddInFuncData;
 class ScFuncDesc;
+class ScDocument;
 
 typedef std::unordered_map< OUString, const ScUnoAddInFuncData* > ScAddInHashMap;
 
@@ -188,6 +189,7 @@ private:
     css::uno::Sequence<css::uno::Any>         aArgs;
     css::uno::Sequence<css::uno::Any>         aVarArg;
     css::uno::Reference<css::uno::XInterface> xCaller;
+    ScDocument&                 mrDoc;
     bool                        bValidCount;
     // result:
     FormulaError                nErrCode;
@@ -201,7 +203,7 @@ private:
 
 public:
                     // exact name
-                    ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
+                    ScUnoAddInCall( ScDocument& rDoc, ScUnoAddInCollection& rColl, const OUString& rName,
                                     tools::Long nParamCount );
                     ~ScUnoAddInCall();
 
