@@ -2360,7 +2360,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType == gsSoftPageBreak)
             {
-                exportSoftPageBreak();
+                if (!bAutoStyles)
+                    exportSoftPageBreak();
             }
             else if (sType == "LineBreak")
             {
