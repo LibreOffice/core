@@ -68,7 +68,7 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 #endif
     mSize = mPixelsSize = Size(image->width(), image->height());
     ComputeScanlineSize();
-    mAnyAccessCount = 0;
+    mReadAccessCount = 0;
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
@@ -78,7 +78,7 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 bool SkiaSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat,
                            const BitmapPalette& rPal)
 {
-    assert(mAnyAccessCount == 0);
+    assert(mReadAccessCount == 0);
     ResetAllData();
     if (ePixelFormat == vcl::PixelFormat::INVALID)
         return false;
@@ -157,7 +157,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
-    assert(mAnyAccessCount == 0);
+    assert(mReadAccessCount == 0);
     assert(&rSalBmp != this);
     ResetAllData();
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
@@ -195,7 +195,7 @@ void SkiaSalBitmap::Destroy()
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    assert(mAnyAccessCount == 0);
+    assert(mReadAccessCount == 0);
     ResetAllData();
 }
 
@@ -274,7 +274,12 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             abort();
     }
     buffer->mnFormat |= ScanlineFormat::TopDown;
-    ++mAnyAccessCount;
+    // Refcount all read/write accesses, to catch problems with existing accesses while
+    // a bitmap changes, and also to detect when we can free mBuffer if wanted.
+    // Write mode implies also reading. It would be probably a good idea to count even
+    // Info accesses, but VclCanvasBitmap keeps one around pointlessly, causing tdf#150817.
+    if (nMode == BitmapAccessMode::Read || nMode == BitmapAccessMode::Write)
+        ++mReadAccessCount;
 #ifdef DBG_UTIL
     if (nMode == BitmapAccessMode::Write)
         ++mWriteAccessCount;
@@ -300,8 +305,11 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode,
         ResetToBuffer();
         DataChanged();
     }
-    assert(mAnyAccessCount > 0);
-    --mAnyAccessCount;
+    if (nMode == BitmapAccessMode::Read || nMode == BitmapAccessMode::Write)
+    {
+        assert(mReadAccessCount > 0);
+        --mReadAccessCount;
+    }
     // Are there any more ground movements underneath us ?
     assert(pBuffer->mnWidth == mSize.Width());
     assert(pBuffer->mnHeight == mSize.Height());
@@ -812,7 +820,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage(DirectImage direct) const
     thisPtr->mImage = image;
     // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
     // if conserving memory. It'll be converted back by EnsureBitmapData() if needed.
-    if (ConserveMemory() && mAnyAccessCount == 0)
+    if (ConserveMemory() && mReadAccessCount == 0)
     {
         SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): dropping buffer");
         thisPtr->ResetToSkImage(mImage);
@@ -968,7 +976,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage(DirectImage direct) const
     // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
     // if conserving memory and the conversion back would be simple (it'll be converted back
     // by EnsureBitmapData() if needed).
-    if (ConserveMemory() && mBitCount == 8 && mPalette.IsGreyPalette8Bit() && mAnyAccessCount == 0)
+    if (ConserveMemory() && mBitCount == 8 && mPalette.IsGreyPalette8Bit() && mReadAccessCount == 0)
     {
         SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << "): dropping buffer");
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
@@ -1308,7 +1316,7 @@ void SkiaSalBitmap::ResetToBuffer()
 
 void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
 {
-    assert(mAnyAccessCount == 0); // can't reset mBuffer if there's a read access pointing to it
+    assert(mReadAccessCount == 0); // can't reset mBuffer if there's a read access pointing to it
     SkiaZone zone;
     mBuffer.reset();
     mImage = image;
@@ -1318,7 +1326,7 @@ void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
 
 void SkiaSalBitmap::ResetAllData()
 {
-    assert(mAnyAccessCount == 0);
+    assert(mReadAccessCount == 0);
     SkiaZone zone;
     mBuffer.reset();
     mImage.reset();
