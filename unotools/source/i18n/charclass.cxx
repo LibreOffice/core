@@ -132,6 +132,9 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
 
 bool CharClass::isLetter( const OUString& rStr ) const
 {
+    if (rStr.isEmpty())
+        return false;
+
     try
     {
         sal_Int32 nPos = 0;
@@ -170,6 +173,9 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
 
 bool CharClass::isNumeric( const OUString& rStr ) const
 {
+    if (rStr.isEmpty())
+        return false;
+
     try
     {
         sal_Int32 nPos = 0;
@@ -226,6 +232,9 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
 
 bool CharClass::isLetterNumeric( const OUString& rStr ) const
 {
+    if (rStr.isEmpty())
+        return false;
+
     try
     {
         sal_Int32 nPos = 0;
@@ -264,10 +273,16 @@ bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos ) const
 
 bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
+    if (rStr.isEmpty())
+        return false;
+
+    assert(nPos >= 0 && nPos < rStr.getLength() && nCount > 0);
+    if (nPos < 0 || nPos >= rStr.getLength() || nCount == 0)
+        return false;
+
     try
     {
-        assert(nPos >= 0 && nCount >= 0);
-        sal_Int32 nLen = std::min( nPos + nCount, rStr.getLength());
+        const sal_Int32 nLen = std::min( nPos + nCount, rStr.getLength());
         while (nPos < nLen)
         {
             if (!isUpper( rStr, nPos))
