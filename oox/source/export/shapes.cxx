@@ -2010,21 +2010,30 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
     return *this;
 }
 
+static bool lcl_isTextBox(const Reference<XInterface>& xIface)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(xIface, uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return false;
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    if (!xPropertySetInfo->hasPropertyByName("TextBox"))
+       return false;
+    css::uno::Any aTextBox(xPropertySet->getPropertyValue("TextBox"));
+    if (!aTextBox.hasValue())
+       return false;
+    return aTextBox.get<bool>();
+}
+
 ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && GetTextExport())
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xIface, uno::UNO_QUERY);
-        if (xPropertySet.is())
+        if (lcl_isTextBox(xIface))
         {
-            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-            if (xPropertySetInfo->hasPropertyByName("TextBox") && xPropertySet->getPropertyValue("TextBox").get<bool>())
-            {
-                GetTextExport()->WriteTextBox(uno::Reference<drawing::XShape>(xIface, uno::UNO_QUERY_THROW));
-                WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
-                return *this;
-            }
+            GetTextExport()->WriteTextBox(uno::Reference<drawing::XShape>(xIface, uno::UNO_QUERY_THROW));
+            WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
+            return *this;
         }
     }
 
