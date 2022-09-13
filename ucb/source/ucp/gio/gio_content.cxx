@@ -422,6 +422,8 @@ static css::util::DateTime getDateFromUnix (time_t t)
 {
     TimeValue tv;
     tv.Nanosec = 0;
+    // coverity[store_truncates_time_t] - TODO: sal_uInt32 TimeValue::Seconds is only large enough
+    // for integer time_t values < 2^32 representing dates until year 2106:
     tv.Seconds = t;
     oslDateTime dt;
 

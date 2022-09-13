@@ -170,6 +170,8 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
         bias = aTime.tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
+        // coverity[store_truncates_time_t] - TODO: sal_uInt32 TimeValue::Seconds is only large
+        // enough for integer time_t values < 2^32 representing dates until year 2106:
         pTimeVal->Seconds = nSeconds;
         pTimeVal->Nanosec = pDateTime->NanoSeconds;
 

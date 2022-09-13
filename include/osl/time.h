@@ -39,7 +39,10 @@
 #   pragma pack(push, 8)
 #endif
 
-/* Time since Jan-01-1970 */
+/* Time since Jan-01-1970
+
+   TODO: sal_uInt32 TimeValue::Seconds is only large enough for representing dates until year 2106.
+*/
 
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
 
