@@ -633,6 +633,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 if (GetParentObjectType(xChild) == "GtkLinkButton"
                     || GetParentObjectType(xChild) == "GtkMenuButton"
+                    || GetParentObjectType(xChild) == "GtkToggleButton"
                     || GetParentObjectType(xChild) == "GtkButton")
                 {
                     // TODO expand into a GtkLabel child with alignment on that instead
