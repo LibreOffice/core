@@ -99,7 +99,6 @@ $(eval $(call gb_CppunitTest_use_components,chart2_geometry,\
     sw/util/swd \
     sw/util/msword \
     sd/util/sd \
-    sd/util/sdfilt \
     sd/util/sdd \
     $(call gb_Helper_optional,SCRIPTING, \
 	    sc/util/vbaobj) \

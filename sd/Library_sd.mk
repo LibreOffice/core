@@ -178,6 +178,22 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/undo/undoobjects \
 	sd/source/core/undoanim \
 	sd/source/filter/cgm/sdcgmfilter \
+    sd/source/filter/eppt/eppt \
+    sd/source/filter/eppt/epptso \
+    sd/source/filter/eppt/escherex \
+    sd/source/filter/eppt/pptexanimations \
+    sd/source/filter/eppt/pptexsoundcollection \
+    sd/source/filter/eppt/pptx-epptbase \
+    sd/source/filter/eppt/pptx-epptooxml \
+    sd/source/filter/eppt/pptx-animations \
+    sd/source/filter/eppt/pptx-grouptable \
+    sd/source/filter/eppt/pptx-stylesheet \
+    sd/source/filter/eppt/pptx-text \
+    sd/source/filter/ppt/ppt97animations \
+    sd/source/filter/ppt/pptatom \
+    sd/source/filter/ppt/pptin \
+    sd/source/filter/ppt/pptinanimations \
+    sd/source/filter/ppt/propread \
 	sd/source/filter/grf/sdgrffilter \
 	sd/source/filter/html/HtmlOptionsDialog \
 	sd/source/filter/html/buttonset \

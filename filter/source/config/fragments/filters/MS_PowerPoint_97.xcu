@@ -19,7 +19,7 @@
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
-        <prop oor:name="UserData"><value>sdfilt</value></prop>
+        <prop oor:name="UserData"><value>sd</value></prop>
         <prop oor:name="UIName">
             <value xml:lang="en-US">PowerPoint 97–2003</value>
         </prop>

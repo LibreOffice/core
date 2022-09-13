@@ -181,7 +181,6 @@ fuzzer_writer_libraries = \
     guesslang \
 
 fuzzer_draw_libraries = \
-    sdfilt \
     sd \
     sdd \
     icg \

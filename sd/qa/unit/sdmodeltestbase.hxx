@@ -77,7 +77,7 @@ nFormatType: <prop oor:name="Flags">...</prop>
 static FileFormat aFileFormats[] =
 {
     { "odp",  "impress8", "impress8", "", ODP_FORMAT_TYPE },
-    { "ppt",  "MS PowerPoint 97", "impress_MS_PowerPoint_97", "sdfilt", PPT_FORMAT_TYPE },
+    { "ppt",  "MS PowerPoint 97", "impress_MS_PowerPoint_97", "sd", PPT_FORMAT_TYPE },
     { "pptx", "Impress Office Open XML", "Office Open XML Presentation", "", PPTX_FORMAT_TYPE },
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },

@@ -445,7 +445,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	scn \
 	sd \
 	sdd \
-	sdfilt \
 	sfx \
 	slideshow \
 	sot \

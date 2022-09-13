@@ -99,7 +99,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_misc_tests,\
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sd/util/sd \
-    sd/util/sdfilt \
     sd/util/sdd \
     sfx2/util/sfx \
     sot/util/sot \

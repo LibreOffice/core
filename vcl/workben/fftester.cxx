@@ -427,7 +427,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libsdfiltlo.so", "TestImportPPT");
+                pfnImport = load(u"libsdlo.so", "TestImportPPT");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));

@@ -70,7 +70,7 @@ void SdFiltersTest::testCVEs()
 #ifndef DISABLE_CVE_TESTS
     testDir("MS PowerPoint 97",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/ppt/"),
-            "sdfilt");
+            "sd");
 
     testDir("Impress Office Open XML",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/"),
@@ -78,11 +78,11 @@ void SdFiltersTest::testCVEs()
 
     testDir("impress8",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/"),
-            "sdfilt");
+            "sd");
 
     testDir("draw8",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/"),
-            "sdfilt");
+            "sd");
 
     testDir("CGM - Computer Graphics Metafile",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/cgm/"),

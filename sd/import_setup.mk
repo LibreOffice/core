@@ -97,7 +97,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests$(1),\
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sd/util/sd \
-    sd/util/sdfilt \
     sd/util/sdd \
     $(if $(ENABLE_POPPLER),sdext/source/pdfimport/pdfimport) \
     sfx2/util/sfx \
