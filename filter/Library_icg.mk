@@ -25,6 +25,10 @@ $(eval $(call gb_Library_use_external,icg,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,icg))
 
+$(eval $(call gb_Library_add_defs,icg,\
+	-DFILTER_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_libraries,icg,\
     comphelper \
     cppuhelper \

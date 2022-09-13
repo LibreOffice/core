@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     editeng \
     i18nlangtag \
     i18nutil \
+    icg \
     msfilter \
     oox \
     sal \

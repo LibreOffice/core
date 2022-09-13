@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <filter/importcgm.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/docfile.hxx>
@@ -36,14 +37,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_uInt32 ( *ImportCGMPointer )(SvStream&, Reference< XModel > const &, Reference< XStatusIndicator > const &);
-
-#ifdef DISABLE_DYNLOADING
-
-extern "C" sal_uInt32 ImportCGM(SvStream&, Reference< XModel > const &, Reference< XStatusIndicator > const &);
-
-#endif
-
 SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell )
 {
@@ -53,32 +46,11 @@ SdCGMFilter::~SdCGMFilter()
 {
 }
 
-namespace
-{
-    class CGMPointer
-    {
-        ImportCGMPointer m_pPointer;
-    public:
-        CGMPointer()
-        {
-#ifdef DISABLE_DYNLOADING
-            m_pPointer = ImportCGM;
-#else
-            m_pPointer = reinterpret_cast<ImportCGMPointer>(
-                SdFilter::GetLibrarySymbol("icg", "ImportCGM"));
-#endif
-        }
-        ImportCGMPointer get() { return m_pPointer; }
-    };
-}
-
 bool SdCGMFilter::Import()
 {
     bool        bRet = false;
 
-    CGMPointer aPointer;
-    ImportCGMPointer FncImportCGM = aPointer.get();
-    if (FncImportCGM && mxModel.is())
+    if (mxModel.is())
     {
         OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         sal_uInt32          nRetValue;
@@ -88,7 +60,7 @@ bool SdCGMFilter::Import()
 
         CreateStatusIndicator();
         std::unique_ptr<SvStream> xIn(::utl::UcbStreamHelper::CreateStream(aFileURL, StreamMode::READ));
-        nRetValue = xIn ? FncImportCGM(*xIn, mxModel, mxStatusIndicator) : 0;
+        nRetValue = xIn ? ImportCGM(*xIn, mxModel, mxStatusIndicator) : 0;
 
         if( nRetValue )
         {
@@ -124,10 +96,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCGM(SvStream &rStream)
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
 
-    CGMPointer aPointer;
-
     xDocShRef->GetDoc()->EnableUndo(false);
-    bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), css::uno::Reference<css::task::XStatusIndicator>()) == 0;
+    bool bRet = ImportCGM(rStream, xDocShRef->GetModel(), css::uno::Reference<css::task::XStatusIndicator>()) == 0;
 
     xDocShRef->DoClose();
 
