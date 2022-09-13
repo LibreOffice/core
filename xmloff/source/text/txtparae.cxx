@@ -2367,7 +2367,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType == gsSoftPageBreak)
             {
-                exportSoftPageBreak();
+                if (!bAutoStyles)
+                    exportSoftPageBreak();
             }
             else {
                 OSL_FAIL("unknown text portion type");

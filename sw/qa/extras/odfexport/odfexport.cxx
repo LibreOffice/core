@@ -2403,5 +2403,21 @@ DECLARE_ODFEXPORT_TEST(tdf135942, "nestedTableInFooter.odt")
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf150927)
+{
+    // Similar to tdf135942
+
+    load(mpTestDocumentPath, "table-in-frame-in-table-in-header-base.odt");
+    reload(mpFilter, "table-in-frame-in-table-in-header-base.odt");
+
+    // All table autostyles should be collected, including nested, and must not crash.
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocPtr pXmlDoc = parseExport("styles.xml");
+
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

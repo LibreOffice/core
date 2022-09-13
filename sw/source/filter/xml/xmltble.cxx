@@ -1153,6 +1153,30 @@ void SwXMLTextParagraphExport::exportTableAutoStyles() {
     }
 }
 
+void SwXMLTextParagraphExport::CollectTableLinesAutoStyles(const SwTableLines& rLines,
+                                                           SwFrameFormat& rFormat, bool _bProgress)
+{
+    // Follow SwXMLExport::ExportTableLines/ExportTableLine/ExportTableBox
+    for (const SwTableLine* pLine : rLines)
+    {
+        for (SwTableBox* pBox : pLine->GetTabBoxes())
+        {
+            if (pBox->getRowSpan() <= 0)
+                continue;
+            if (pBox->GetSttNd())
+            {
+                if (uno::Reference<XText> xCell = SwXCell::CreateXCell(&rFormat, pBox))
+                    exportText(xCell, true /*bAutoStyles*/, _bProgress, true /*bExportParagraph*/);
+            }
+            else
+            {
+                // no start node -> merged cells: export subtable in cell
+                CollectTableLinesAutoStyles(pBox->GetTabLines(), rFormat, _bProgress);
+            }
+        }
+    }
+}
+
 void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool _bProgress )
@@ -1195,21 +1219,7 @@ void SwXMLTextParagraphExport::exportTable(
                     maTableNodes.push_back(pTableNd);
                     m_TableFormats.emplace(pTableNd, ::std::make_pair(SwXMLTextParagraphExport::FormatMap(), SwXMLTextParagraphExport::FormatMap()));
                     // Collect all tables inside cells of this table, too
-                    const auto aCellNames = pXTable->getCellNames();
-                    for (const OUString& rCellName : aCellNames)
-                    {
-                        css::uno::Reference<css::container::XEnumerationAccess> xCell(
-                            pXTable->getCellByName(rCellName), css::uno::UNO_QUERY);
-                        if (!xCell)
-                            continue;
-                        auto xEnumeration = xCell->createEnumeration();
-                        while (xEnumeration->hasMoreElements())
-                        {
-                            if (css::uno::Reference<css::text::XTextTable> xInnerTable{
-                                    xEnumeration->nextElement(), css::uno::UNO_QUERY })
-                                exportTable(xInnerTable, bAutoStyles, _bProgress);
-                        }
-                    }
+                    CollectTableLinesAutoStyles(pTable->GetTabLines(), *pFormat, _bProgress);
                 }
             }
             else

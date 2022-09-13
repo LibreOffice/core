@@ -33,6 +33,7 @@ class SvXMLAutoStylePoolP;
 class SwNoTextNode;
 class SwTableNode;
 
+class SwTableLines;
 namespace com { namespace sun { namespace star { namespace style {
                 class XStyle; } } } }
 
@@ -51,6 +52,9 @@ private:
 
     static SwNoTextNode *GetNoTextNode(
         const css::uno::Reference < css::beans::XPropertySet >& rPropSet );
+
+    void CollectTableLinesAutoStyles(const SwTableLines& rLines, SwFrameFormat& rFormat,
+                                     bool bProgress);
 
 protected:
     virtual void _collectTextEmbeddedAutoStyles(
