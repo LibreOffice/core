@@ -582,7 +582,30 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
 {
     U8* pOut = mpWritePtr;
 
-    int nInt = static_cast<int>(aVal);
+    // tdf#126242
+    // Type2 has 16.16 fixed numbers, but Type1 does not. To represent values
+    // with fractions we multiply it by a factor then use “div” operator to
+    // divide it back and keep the fractions.
+    // Code Adapted from:
+    // https://github.com/fontforge/fontforge/blob/f152f12e567ea5bd737a2907c318ae26cfaabd08/fontforge/splinesave.c#L378
+    int nDiv = 0;
+    aVal = rint(aVal * 1024) / 1024;
+    if (aVal != floor(aVal))
+    {
+        if (aVal == rint(aVal * 64) / 64)
+            nDiv = 64;
+        else
+            nDiv = 1024;
+        aVal *= nDiv;
+    }
+
+    int nInt = static_cast<int>(rint(aVal));
+    if (nDiv && floor(nInt) / nDiv == floor(nInt / nDiv))
+    {
+        nInt = rint(nInt / nDiv);
+        nDiv = 0;
+    }
+
     if( (nInt >= -107) && (nInt <= +107)) {
         *(pOut++) = static_cast<U8>(nInt + 139);    // -107..+107
     } else if( (nInt >= -1131) && (nInt <= +1131)) {
@@ -602,6 +625,12 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
     }
 
     mpWritePtr = pOut;
+
+    if (nDiv)
+    {
+        writeType1Val(nDiv);
+        writeTypeEsc(TYPE1OP::DIV);
+    }
 }
 
 inline void CffSubsetterContext::writeTypeOp( int nTypeOp)
