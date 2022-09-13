@@ -640,7 +640,7 @@ void MigrationImpl::copyConfig()
     bool bRegistryModificationsXcuExists = false;
     OUString regFilePath = m_aInfo.userdata + "/user/registrymodifications.xcu";
     OUString sMigratedProductName = m_aInfo.productname;
-    // remove version number from the end of pruduct name if exist
+    // remove version number from the end of product name if there’s one
     if (isdigit(sMigratedProductName[sMigratedProductName.getLength() - 1]))
         sMigratedProductName = (sMigratedProductName.copy(0, m_aInfo.productname.getLength() - 1)).trim();
     File regFile(regFilePath);
