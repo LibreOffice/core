@@ -303,7 +303,7 @@ static void ImplPostProcessDocumentsEvent( std::unique_ptr<ProcessDocumentsReque
 oslSignalAction SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
-        RequestHandler::SetDowning();
+        RequestHandler::Disable();
     return osl_Signal_ActCallNextHdl;
 }
 
