@@ -92,7 +92,6 @@ class ScTpLayoutOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xExpRefCB;
     std::unique_ptr<weld::CheckButton> m_xSortRefUpdateCB;
     std::unique_ptr<weld::CheckButton> m_xMarkHdrCB;
-    std::unique_ptr<weld::CheckButton> m_xTextFmtCB;
     std::unique_ptr<weld::CheckButton> m_xReplWarnCB;
     std::unique_ptr<weld::CheckButton> m_xLegacyCellSelectionCB;
     std::unique_ptr<weld::CheckButton> m_xEnterPasteModeCB;

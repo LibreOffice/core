@@ -59,10 +59,9 @@ constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
 #define SCINPUTOPT_SORT_REF_UPDATE         6
 #define SCINPUTOPT_MARKHEADER              7
 #define SCINPUTOPT_USETABCOL               8
-#define SCINPUTOPT_TEXTWYSIWYG             9
-#define SCINPUTOPT_REPLCELLSWARN          10
-#define SCINPUTOPT_LEGACY_CELL_SELECTION  11
-#define SCINPUTOPT_ENTER_PASTE_MODE       12
+#define SCINPUTOPT_REPLCELLSWARN           9
+#define SCINPUTOPT_LEGACY_CELL_SELECTION  10
+#define SCINPUTOPT_ENTER_PASTE_MODE       11
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
@@ -75,7 +74,6 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
             "UpdateReferenceOnSort",    // SCINPUTOPT_SORT_REF_UPDATE
             "HighlightSelection",       // SCINPUTOPT_MARKHEADER
             "UseTabCol",                // SCINPUTOPT_USETABCOL
-            "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
             "ReplaceCellsWarning",      // SCINPUTOPT_REPLCELLSWARN
             "LegacyCellSelection",      // SCINPUTOPT_LEGACY_CELL_SELECTION
             "EnterPasteMode"};          // SCINPUTOPT_ENTER_PASTE_MODE
@@ -115,8 +113,6 @@ void ScInputCfg::ReadCfg()
         SetMarkHeader(bVal);
     if (bool bVal; aValues[SCINPUTOPT_USETABCOL] >>= bVal)
         SetUseTabCol(bVal);
-    if (bool bVal; aValues[SCINPUTOPT_TEXTWYSIWYG] >>= bVal)
-        SetTextWysiwyg(bVal);
     if (bool bVal; aValues[SCINPUTOPT_REPLCELLSWARN] >>= bVal)
         SetReplaceCellsWarn(bVal);
     if (bool bVal; aValues[SCINPUTOPT_LEGACY_CELL_SELECTION] >>= bVal)
@@ -140,7 +136,6 @@ void ScInputCfg::ImplCommit()
     pValues[SCINPUTOPT_SORT_REF_UPDATE] <<= GetSortRefUpdate();
     pValues[SCINPUTOPT_MARKHEADER] <<= GetMarkHeader();
     pValues[SCINPUTOPT_USETABCOL] <<= GetUseTabCol();
-    pValues[SCINPUTOPT_TEXTWYSIWYG] <<= GetTextWysiwyg();
     pValues[SCINPUTOPT_REPLCELLSWARN] <<= GetReplaceCellsWarn();
     pValues[SCINPUTOPT_LEGACY_CELL_SELECTION] <<= GetLegacyCellSelection();
     pValues[SCINPUTOPT_ENTER_PASTE_MODE] <<= GetEnterPasteMode();

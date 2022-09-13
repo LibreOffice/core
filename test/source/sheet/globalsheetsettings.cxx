@@ -80,7 +80,6 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     DoCheck("ExpandReferences", false, true, node, "ExpandReference");
     DoCheck("MarkHeader", true, false, node, "HighlightSelection");
     DoCheck("UseTabCol", false, true, node, "UseTabCol");
-    DoCheck("UsePrinterMetrics", false, true, node, "UsePrinterMetrics");
     DoCheck("ReplaceCellsWarning", true, false, node, "ReplaceCellsWarning");
 
     node = "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit";

@@ -666,14 +666,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
-        <info>
-          <desc>Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
-          <label>Use printer metrics for text formatting</label>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
         <info>

@@ -88,7 +88,6 @@ private:
 
     std::unique_ptr<weld::CheckButton> m_xCbxEnableSdremote;
     std::unique_ptr<weld::CheckButton> m_xCbxEnablePresenterScreen;
-    std::unique_ptr<weld::CheckButton> m_xCbxUsePrinterMetrics;
     std::unique_ptr<weld::CheckButton> m_xCbxCompatibility;
 
     //Scale

@@ -109,7 +109,6 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 
 static sal_uInt32 convertBools2Ulong_Impl
 (
-    bool _bUsePrtMetrics,
     bool _bAddSpacing,
     bool _bAddSpacingAtPages,
     bool _bUseOurTabStops,
@@ -130,9 +129,6 @@ static sal_uInt32 convertBools2Ulong_Impl
     sal_uInt32 nRet = 0;
     sal_uInt32 nSetBit = 1;
 
-    if ( _bUsePrtMetrics )
-        nRet |= nSetBit;
-    nSetBit = nSetBit << 1;
     if ( _bAddSpacing )
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
@@ -231,7 +227,6 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             sNewEntry = sEntryName;
 
         sal_uInt32 nOptions = convertBools2Ulong_Impl(
-            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UsePrtMetrics ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacing ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacingAtPages ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTabStops ),
@@ -319,7 +314,6 @@ sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
     {
         const IDocumentSettingAccess& rIDocumentSettingAccess = m_pWrtShell->getIDocumentSettingAccess();
         nRet = convertBools2Ulong_Impl(
-            !rIDocumentSettingAccess.get( DocumentSettingId::USE_VIRTUAL_DEVICE ),
             rIDocumentSettingAccess.get( DocumentSettingId::PARA_SPACE_MAX ),
             rIDocumentSettingAccess.get( DocumentSettingId::PARA_SPACE_MAX_AT_PAGES ),
             !rIDocumentSettingAccess.get( DocumentSettingId::TAB_COMPAT ),
@@ -380,10 +374,6 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
                 int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
                 switch ( SvtCompatibilityEntry::Index(nCoptIdx) )
                 {
-                    case SvtCompatibilityEntry::Index::UsePrtMetrics:
-                        m_pWrtShell->SetUseVirDev( !bChecked );
-                        break;
-
                     case SvtCompatibilityEntry::Index::AddSpacing:
                         m_pWrtShell->SetParaSpaceMax( bChecked );
                         break;

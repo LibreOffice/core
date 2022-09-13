@@ -186,7 +186,6 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
     , m_xCbxEnableSdremote(m_xBuilder->weld_check_button("enremotcont"))
     , m_xCbxEnablePresenterScreen(m_xBuilder->weld_check_button("enprsntcons"))
-    , m_xCbxUsePrinterMetrics(m_xBuilder->weld_check_button("printermetrics"))
     , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
     , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
     , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
@@ -339,7 +338,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxEnableSdremote->get_state_changed_from_saved()        ||
         m_xCbxEnablePresenterScreen->get_state_changed_from_saved() ||
         m_xCbxCompatibility->get_state_changed_from_saved()         ||
-        m_xCbxUsePrinterMetrics->get_state_changed_from_saved()     ||
         m_xCbxDistort->get_state_changed_from_saved())
     {
         SdOptionsMiscItem aOptsItem;
@@ -353,10 +351,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         aOptsItem.GetOptionsMisc().SetEnableSdremote( m_xCbxEnableSdremote->get_active() );
         aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( m_xCbxEnablePresenterScreen->get_active() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_xCbxCompatibility->get_active() );
-        aOptsItem.GetOptionsMisc().SetPrinterIndependentLayout (
-            m_xCbxUsePrinterMetrics->get_active()
-            ? css::document::PrinterIndependentLayout::DISABLED
-            : css::document::PrinterIndependentLayout::ENABLED);
         aOptsItem.GetOptionsMisc().SetCrookNoContortion( m_xCbxDistort->get_active() );
         rAttrs->Put( aOptsItem );
 
@@ -406,7 +400,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxEnableSdremote->set_active( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
     m_xCbxEnablePresenterScreen->set_active( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
-    m_xCbxUsePrinterMetrics->set_active( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
     m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
     m_xCbxStartWithTemplate->save_state();
     m_xCbxMarkedHitMovesAlways->save_state();
@@ -418,7 +411,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxEnableSdremote->save_state();
     m_xCbxEnablePresenterScreen->save_state();
     m_xCbxCompatibility->save_state();
-    m_xCbxUsePrinterMetrics->save_state();
     m_xCbxDistort->save_state();
 
     // metric
@@ -599,7 +591,6 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
     }
 
     m_xCbxCompatibility->set_sensitive(bIsEnabled);
-    m_xCbxUsePrinterMetrics->set_sensitive(bIsEnabled);
 }
 
 void SdTpOptionsMisc::PageCreated(const SfxAllItemSet& aSet)

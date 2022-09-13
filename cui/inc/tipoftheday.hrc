@@ -221,7 +221,6 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at File ▸ Properties ▸ Font."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "To convert a formula into static values you do not need to copy/paste; use Data ▸ Calculate ▸ Formula to Value."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can reformat all comments in a document by clicking the down arrow in a comment and choose “Format all Comments”."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Want the same layout for the screen display and printing? Check Tools ▸ Options ▸ %PRODUCTNAME Calc ▸ General ▸ Use printer metrics for text formatting."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer helps you to make backups: with File ▸ Save a Copy you create a new document continuing to work on the original."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "When you have created a Style based on another, you can enter a percentage value or a point value (e.g. 110% or −2pt or +5pt)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To copy a comment without losing the content of the target cell you should use Paste Special and uncheck everything except “Comments” in dialog. Use Operations “Add” to not override existing content."), "", "tipoftheday_c.png"},

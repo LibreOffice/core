@@ -46,7 +46,6 @@ class SvtCompatibilityEntry
             Module,
 
             /* Editable list of compatibility options. */
-            UsePrtMetrics,
             AddSpacing,
             AddSpacingAtPages,
             UseOurTabStops,

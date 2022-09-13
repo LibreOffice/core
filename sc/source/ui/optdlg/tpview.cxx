@@ -325,7 +325,6 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
     , m_xExpRefCB(m_xBuilder->weld_check_button("exprefcb"))
     , m_xSortRefUpdateCB(m_xBuilder->weld_check_button("sortrefupdatecb"))
     , m_xMarkHdrCB(m_xBuilder->weld_check_button("markhdrcb"))
-    , m_xTextFmtCB(m_xBuilder->weld_check_button("textfmtcb"))
     , m_xReplWarnCB(m_xBuilder->weld_check_button("replwarncb"))
     , m_xLegacyCellSelectionCB(m_xBuilder->weld_check_button("legacy_cell_selection_cb"))
     , m_xEnterPasteModeCB(m_xBuilder->weld_check_button("enter_paste_mode_cb"))
@@ -456,12 +455,6 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
         bRet = true;
     }
 
-    if (m_xTextFmtCB->get_state_changed_from_saved())
-    {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_xTextFmtCB->get_active()));
-        bRet = true;
-    }
-
     if (m_xReplWarnCB->get_state_changed_from_saved())
     {
         rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_xReplWarnCB->get_active() ) );
@@ -554,9 +547,6 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     if(const SfxBoolItem* pHeaderItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_MARK_HEADER, false))
         m_xMarkHdrCB->set_active(pHeaderItem->GetValue());
 
-    if(const SfxBoolItem* pWysiItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_TEXTWYSIWYG, false))
-        m_xTextFmtCB->set_active(pWysiItem->GetValue());
-
     if( const SfxBoolItem* pWarnItem = rCoreSet->GetItemIfSet( SID_SC_INPUT_REPLCELLSWARN, false ) )
         m_xReplWarnCB->set_active( pWarnItem->GetValue() );
 
@@ -574,7 +564,6 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     m_xExpRefCB->save_state();
     m_xSortRefUpdateCB->save_state();
     m_xMarkHdrCB->save_state();
-    m_xTextFmtCB->save_state();
     m_xReplWarnCB->save_state();
 
     m_xLegacyCellSelectionCB->save_state();

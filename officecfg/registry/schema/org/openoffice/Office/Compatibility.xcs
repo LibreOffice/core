@@ -38,12 +38,6 @@
           </enumeration>
         </constraints>
       </prop>
-      <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Use printer metrics for document formatting</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="AddSpacing" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Add spacing between paragraphs and tables</desc>
