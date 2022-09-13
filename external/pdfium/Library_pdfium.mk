@@ -244,7 +244,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/render/charposlist \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_devicebuffer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_docrenderdata \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imagecacheentry \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imageloader \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imagerenderer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_pagerendercache \
@@ -413,10 +412,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssoutputtextbuf \
     UnpackedTarball/pdfium/core/fxcrt/cfx_datetime \
     UnpackedTarball/pdfium/core/fxcrt/bytestring \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_binarybuf \
     UnpackedTarball/pdfium/core/fxcrt/cfx_bitstream \
     UnpackedTarball/pdfium/core/fxcrt/cfx_utf8decoder \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_widetextbuf \
     UnpackedTarball/pdfium/core/fxcrt/fx_random \
     UnpackedTarball/pdfium/core/fxcrt/fx_string \
     UnpackedTarball/pdfium/core/fxcrt/widestring \
@@ -424,9 +421,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/fx_codepage \
     UnpackedTarball/pdfium/core/fxcrt/fx_number \
     UnpackedTarball/pdfium/core/fxcrt/cfx_utf8encoder \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_readonlymemorystream \
     UnpackedTarball/pdfium/core/fxcrt/observed_ptr \
     UnpackedTarball/pdfium/core/fxcrt/string_data_template \
+    UnpackedTarball/pdfium/core/fxcrt/binary_buffer \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_span_stream \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_string_stream \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_vector_stream \
+    UnpackedTarball/pdfium/core/fxcrt/fx_memory_malloc \
+    UnpackedTarball/pdfium/core/fxcrt/widetext_buffer \
 ))
 
 # fxge
@@ -527,6 +529,7 @@ ifneq ($(SYSTEM_ABSEIL),TRUE)
 # third_party/abseil-cpp
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/abseil-cpp/absl/types/bad_optional_access \
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/types/bad_variant_access \
 ))
 endif
 

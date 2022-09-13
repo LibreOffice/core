@@ -13,18 +13,18 @@ index 323de4ffc..f11a0b0ad 100644
    std::vector<UnsupportedFeature> unsupported;
    CheckForSharedFormInternal(doc->GetRoot(), &unsupported);
 diff --git a/third_party/base/span.h b/third_party/base/span.h
-index 0fb627ba8..f71c362e2 100644
+index ec9f9903f..1c17ad091 100644
 --- a/third_party/base/span.h
 +++ b/third_party/base/span.h
-@@ -214,7 +214,7 @@ class span {
+@@ -208,7 +208,7 @@ class span {
    // Conversions from spans of compatible types: this allows a span<T> to be
    // seamlessly used as a span<const T>, but not the other way around.
    template <typename U, typename = internal::EnableIfLegalSpanConversion<U, T>>
 -  constexpr span(const span<U>& other) : span(other.data(), other.size()) {}
 +  span(const span<U>& other) : span(other.data(), other.size()) {}
-   span& operator=(const span& other) noexcept = default;
-   ~span() noexcept {
-     if (!size_) {
+   span& operator=(const span& other) noexcept {
+     if (this != &other) {
+       ReleaseEmptySpan();
 diff --git a/third_party/base/span.h b/third_party/base/span.h
 index 0fb627ba8..dda1fc8bc 100644
 --- a/third_party/base/span.h
