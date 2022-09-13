@@ -376,6 +376,45 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 6))
             self.assertFalse(is_row_hidden(doc, 7))
 
+    def test_tdf36383_row_height(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            calcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = calcDoc.getChild("grid_window")
+
+            enter_text_to_cell(gridwin, "A1", "A")
+            enter_text_to_cell(gridwin, "A2", "1")
+            enter_text_to_cell(gridwin, "A3", "2")
+            enter_text_to_cell(gridwin, "A4", "3")
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
+
+            self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+            gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
+            xTreeList = xCheckListMenu.getChild("check_list_box")
+            xEntry = xTreeList.getChild("1")
+            xEntry.executeAction("CLICK", tuple())
+
+            xOkButton = xFloatWindow.getChild("ok")
+            xOkButton.executeAction("CLICK", tuple())
+
+            self.assertTrue(is_row_hidden(document, 2))
+
+            # row height
+            with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
+                xvalue = xDialog.getChild("value")
+                xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
+
+            self.assertTrue(is_row_hidden(document, 2))
+
+            # optimal row height
+            with self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight"):
+                pass
+
+            self.assertTrue(is_row_hidden(document, 2))
+
     def test_tdf142350(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()

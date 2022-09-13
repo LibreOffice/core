@@ -80,6 +80,19 @@
 
 #include <memory>
 
+static void ShowFilteredRows(ScDocument& rDoc, SCTAB nTab, SCCOLROW nStartNo, SCCOLROW nEndNo,
+                             bool bShow)
+{
+    SCROW nFirstRow = nStartNo;
+    SCROW nLastRow = nStartNo;
+    do
+    {
+        if (!rDoc.RowFiltered(nFirstRow, nTab, nullptr, &nLastRow))
+            rDoc.ShowRows(nFirstRow, nLastRow < nEndNo ? nLastRow : nEndNo, nTab, bShow);
+        nFirstRow = nLastRow + 1;
+    } while (nFirstRow <= nEndNo);
+}
+
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
     if( pCondFmt )
@@ -2202,6 +2215,7 @@ void ScViewFunc::SetWidthOrHeight(
                 if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
                 {
                     bool bAll = ( eMode==SC_SIZE_OPTIMAL );
+                    bool bFiltered = false;
                     if (!bAll)
                     {
                         //  delete CRFlags::ManualSize for all in range,
@@ -2220,6 +2234,14 @@ void ScViewFunc::SetWidthOrHeight(
                                 rDoc.SetRowFlags(nRow, nTab, nOld & ~CRFlags::ManualSize);
                         }
                     }
+                    else
+                    {
+                        SCROW nLastRow = nStartNo;
+                        if (rDoc.RowFiltered(nStartNo, nTab, nullptr, &nLastRow)
+                            || nLastRow < nEndNo)
+                            bFiltered = true;
+                    }
+
 
                     double nPPTX = GetViewData().GetPPTX();
                     double nPPTY = GetViewData().GetPPTY();
@@ -2239,6 +2261,9 @@ void ScViewFunc::SetWidthOrHeight(
                     aCxt.setExtraHeight(nSizeTwips);
                     rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true);
 
+                    if (bFiltered)
+                        ShowFilteredRows(rDoc, nTab, nStartNo, nEndNo, bShow);
+
                     //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=sal_True
                     //  (set for Extra-Height, else reset).
                 }
@@ -2250,7 +2275,8 @@ void ScViewFunc::SetWidthOrHeight(
                         rDoc.SetManualHeight( nStartNo, nEndNo, nTab, true );          // height was set manually
                     }
 
-                    rDoc.ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
+                    // tdf#36383 - Skip consecutive rows hidden by AutoFilter
+                    ShowFilteredRows(rDoc, nTab, nStartNo, nEndNo, nSizeTwips != 0);
 
                     if (!bShow && nStartNo <= nCurY && nCurY <= nEndNo && nTab == nCurTab)
                     {
