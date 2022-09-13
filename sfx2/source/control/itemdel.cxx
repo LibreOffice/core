@@ -22,56 +22,35 @@
 #include <itemdel.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
 
 #include <tools/debug.hxx>
 
 class SfxItemDisruptor_Impl
 {
-    std::unique_ptr<SfxPoolItem> pItem;
-    Idle m_Idle;
-
-private:
-    DECL_LINK(Delete, Timer*, void);
-
 public:
-    explicit SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemToDesrupt);
-    void LaunchDeleteOnIdle();
-    ~SfxItemDisruptor_Impl();
-    SfxItemDisruptor_Impl(const SfxItemDisruptor_Impl&) = delete;
-    SfxItemDisruptor_Impl& operator=(const SfxItemDisruptor_Impl&) = delete;
+    static void DeleteItemOnIdle(std::unique_ptr<SfxPoolItem> pItem)
+    {
+        pItem->SetKind(SfxItemKind::DeleteOnIdle);
+        Application::PostUserEvent(LINK(nullptr, SfxItemDisruptor_Impl, Delete), pItem.release());
+        // coverity[leaked_storage] - pDesruptor takes care of its own destruction at idle time
+    }
+
+    DECL_STATIC_LINK(SfxItemDisruptor_Impl, Delete, void*, void);
 };
 
-SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemToDisrupt)
-    : pItem(std::move(pItemToDisrupt))
-    , m_Idle("sfx::SfxItemDisruptor_Impl m_Idle")
+IMPL_STATIC_LINK(SfxItemDisruptor_Impl, Delete, void*, p, void)
 {
-    m_Idle.SetInvokeHandler(LINK(this, SfxItemDisruptor_Impl, Delete));
-    m_Idle.SetPriority(TaskPriority::DEFAULT_IDLE);
-
-    DBG_ASSERT(0 == pItem->GetRefCount(), "disrupting pooled item");
-    pItem->SetKind(SfxItemKind::DeleteOnIdle);
-}
-
-void SfxItemDisruptor_Impl::LaunchDeleteOnIdle() { m_Idle.Start(); }
-
-SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
-{
-    m_Idle.Stop();
-
+    SfxPoolItem* pItem = static_cast<SfxPoolItem*>(p);
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount(0);
-
-    pItem.reset();
+    delete pItem;
 }
-
-IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete, Timer*, void) { delete this; }
 
 void DeleteItemOnIdle(std::unique_ptr<SfxPoolItem> pItem)
 {
     DBG_ASSERT(0 == pItem->GetRefCount(), "deleting item in use");
-    SfxItemDisruptor_Impl* pDesruptor = new SfxItemDisruptor_Impl(std::move(pItem));
-    pDesruptor->LaunchDeleteOnIdle();
-    // coverity[leaked_storage] - pDesruptor takes care of its own destruction at idle time
+    SfxItemDisruptor_Impl::DeleteItemOnIdle(std::move(pItem));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
