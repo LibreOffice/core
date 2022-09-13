@@ -1151,12 +1151,15 @@ static std::vector<OString> lcl_getShapeTypes()
 static bool lcl_isTextBox(const SdrObject* pSdrObject)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY);
-    if (xPropertySet.is())
-    {
-        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-        return xPropertySetInfo->hasPropertyByName("TextBox") && xPropertySet->getPropertyValue("TextBox").get<bool>();
-    }
-    return false;
+    if (!xPropertySet.is())
+        return false;
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    if (!xPropertySetInfo->hasPropertyByName("TextBox"))
+       return false;
+    css::uno::Any aTextBox(xPropertySet->getPropertyValue("TextBox"));
+    if (!aTextBox.hasValue())
+       return false;
+    return aTextBox.get<bool>();
 }
 
 static OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
