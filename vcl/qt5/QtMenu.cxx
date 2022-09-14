@@ -847,7 +847,7 @@ bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& r
 
 int QtMenu::GetMenuBarHeight() const
 {
-    if (!validateQMenuBar() || !mpQMenuBar->isVisible())
+    if (!validateQMenuBar() || mpQMenuBar->isHidden())
         return 0;
     return mpQMenuBar->height() * mpFrame->devicePixelRatioF();
 }
