@@ -46,7 +46,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -120,7 +120,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -194,7 +194,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>presentation.icns</string>
+            <string>generic-presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -268,7 +268,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -366,7 +366,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>master-document.icns</string>
+            <string>generic-master-document.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -416,7 +416,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>formula.icns</string>
+            <string>generic-formula.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -466,7 +466,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text-template.icns</string>
+            <string>generic-text-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -542,7 +542,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet-template.icns</string>
+            <string>generic-spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -592,7 +592,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>presentation-template.icns</string>
+            <string>generic-presentation-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -642,7 +642,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing-template.icns</string>
+            <string>generic-drawing-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -718,7 +718,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>extension.icns</string>
+            <string>generic-extension.icns</string>
         </dict>
     </array>
 
@@ -746,7 +746,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text-template.icns</string>
+            <string>generic-text-template.icns</string>
         </dict>
         <!-- OOXML wordprocessing -->
         <dict>
@@ -771,7 +771,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -796,7 +796,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -820,7 +820,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text-template.icns</string>
+            <string>generic-text-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -845,7 +845,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text-template.icns</string>
+            <string>generic-text-template.icns</string>
         </dict>
 
         <!-- OOXML spreadsheet -->
@@ -871,7 +871,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet-template.icns</string>
+            <string>generic-spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -896,7 +896,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet-template.icns</string>
+            <string>generic-spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -920,7 +920,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -945,7 +945,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -970,7 +970,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
 
         <!-- OOXML presentation -->
@@ -996,7 +996,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>presentation.icns</string>
+            <string>generic-presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1021,7 +1021,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>presentation.icns</string>
+            <string>generic-presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1046,7 +1046,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>presentation-template.icns</string>
+            <string>generic-presentation-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1071,7 +1071,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>presentation-template.icns</string>
+            <string>generic-presentation-template.icns</string>
         </dict>
 
         <!-- Others -->
@@ -1097,7 +1097,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1121,7 +1121,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1145,7 +1145,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1169,7 +1169,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1193,7 +1193,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>text.icns</string>
+            <string>generic-text.icns</string>
         </dict>
 
         <dict>
@@ -1218,7 +1218,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1243,7 +1243,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1268,7 +1268,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1292,7 +1292,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>database.icns</string>
+            <string>generic-database.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1320,7 +1320,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>spreadsheet.icns</string>
+            <string>generic-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1345,7 +1345,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1370,7 +1370,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1395,7 +1395,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1420,7 +1420,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1451,7 +1451,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1487,7 +1487,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1511,7 +1511,7 @@
                 </array>
             </dict>
             <key>UTTypeIconFile</key>
-            <string>drawing.icns</string>
+            <string>generic-drawing.icns</string>
         </dict>
     </array>
 
