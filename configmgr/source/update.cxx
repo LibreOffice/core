@@ -78,7 +78,6 @@ private:
 
     virtual void SAL_CALL insertModificationXcuFile(
         OUString const & fileUri,
-        OUString const & oldProductName,
         css::uno::Sequence< OUString > const & includedPaths,
         css::uno::Sequence< OUString > const & excludedPaths) override;
 
@@ -124,7 +123,6 @@ void Service::removeExtensionXcuFile(OUString const & fileUri)
 
 void Service::insertModificationXcuFile(
     OUString const & fileUri,
-    OUString const & oldProductName,
     css::uno::Sequence< OUString > const & includedPaths,
     css::uno::Sequence< OUString > const & excludedPaths)
 {
@@ -134,7 +132,7 @@ void Service::insertModificationXcuFile(
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.insertModificationXcuFile(
-            fileUri, oldProductName, seqToSet(includedPaths), seqToSet(excludedPaths), &mods);
+            fileUri, seqToSet(includedPaths), seqToSet(excludedPaths), &mods);
         components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }

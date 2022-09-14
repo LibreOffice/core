@@ -38,6 +38,7 @@
 #include <i18nlangtag/lang.h>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <officecfg/Office/UI.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <unotools/configmgr.hxx>
@@ -45,6 +46,7 @@
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -666,6 +668,55 @@ bool getComponent(OUString const & path, OUString * component)
     return true;
 }
 
+void renameMigratedSetElementTo(
+    css::uno::Reference<css::container::XNameContainer> const & set, OUString const & currentName,
+    OUString const & migratedName)
+{
+    // To avoid unexpected data loss, the code is careful to only rename from currentName to
+    // migratedName in the expected case where the currentName element exists and the migratedName
+    // element doesn't exist:
+    auto const hasCurrent = set->hasByName(currentName);
+    auto const hasMigrated = set->hasByName(migratedName);
+    if (hasCurrent && !hasMigrated) {
+        auto const elem = set->getByName(currentName);
+        set->removeByName(currentName);
+        set->insertByName(migratedName, elem);
+    } else {
+        SAL_INFO_IF(!hasCurrent, "desktop.migration", "unexpectedly missing " << currentName);
+        SAL_INFO_IF(hasMigrated, "desktop.migration", "unexpectedly present " << migratedName);
+    }
+}
+
+void renameMigratedSetElementBack(
+    css::uno::Reference<css::container::XNameContainer> const & set, OUString const & currentName,
+    OUString const & migratedName)
+{
+    // To avoid unexpected data loss, the code is careful to ensure that in the end a currentName
+    // element exists, creating it from a template if the migratedName element had unexpectedly gone
+    // missing:
+    auto const hasMigrated = set->hasByName(migratedName);
+    css::uno::Any elem;
+    if (hasMigrated) {
+        elem = set->getByName(migratedName);
+        set->removeByName(migratedName);
+    } else {
+        SAL_INFO("desktop.migration", "unexpected loss of " << migratedName);
+        elem <<= css::uno::Reference<css::lang::XSingleServiceFactory>(
+            set, css::uno::UNO_QUERY_THROW)->createInstance();
+    }
+    if (set->hasByName(currentName)) {
+        SAL_INFO("desktop.migration", "unexpected reappearance of " << currentName);
+        if (hasMigrated) {
+            SAL_INFO(
+                "desktop.migration",
+                "reappeared " << currentName << " overwritten with " << migratedName);
+            set->replaceByName(currentName, elem);
+        }
+    } else {
+        set->insertByName(currentName, elem);
+    }
+}
+
 }
 
 void MigrationImpl::copyConfig()
@@ -689,15 +740,35 @@ void MigrationImpl::copyConfig()
     // check if the shared registrymodifications.xcu file exists
     bool bRegistryModificationsXcuExists = false;
     OUString regFilePath = m_aInfo.userdata + "/user/registrymodifications.xcu";
-    OUString sMigratedProductName = m_aInfo.productname;
-    // remove version number from the end of pruduct name if exist
-    if (isdigit(sMigratedProductName[sMigratedProductName.getLength() - 1]))
-        sMigratedProductName = (sMigratedProductName.copy(0, m_aInfo.productname.getLength() - 1)).trim();
     File regFile(regFilePath);
     ::osl::FileBase::RC nError = regFile.open(osl_File_OpenFlag_Read);
     if ( nError == ::osl::FileBase::E_None ) {
         bRegistryModificationsXcuExists = true;
         regFile.close();
+    }
+
+    // If the to-be-migrated data contains modifications of
+    // /org.openoffice.Office.UI/ColorScheme/ColorSchemes set elements named after the migrated
+    // product name, those modifications must instead be made to the corresponding set elements
+    // named after the current product name.  However, if the current configuration data does not
+    // contain those old-named set elements at all, their modification data would silently be
+    // ignored by css.configuration.XUpdate::insertModificationXcuFile.  So temporarily rename any
+    // new-named set elements to their old-named counterparts here, and rename them back again down
+    // below after importing the migrated data:
+    OUString sProductName = utl::ConfigManager::getProductName();
+    OUString sProductNameDark = sProductName + " Dark";
+    OUString sMigratedProductName = m_aInfo.productname;
+    // remove version number from the end of product name if there’s one
+    if (isdigit(sMigratedProductName[sMigratedProductName.getLength() - 1]))
+        sMigratedProductName = (sMigratedProductName.copy(0, m_aInfo.productname.getLength() - 1)).trim();
+    OUString sMigratedProductNameDark = sMigratedProductName + " Dark";
+    auto const tempRename = sMigratedProductName != sProductName;
+    if (tempRename) {
+        auto const batch = comphelper::ConfigurationChanges::create();
+        auto const schemes = officecfg::Office::UI::ColorScheme::ColorSchemes::get(batch);
+        renameMigratedSetElementTo(schemes, sProductName, sMigratedProductName);
+        renameMigratedSetElementTo(schemes, sProductNameDark, sMigratedProductNameDark);
+        batch->commit();
     }
 
     for (auto const& comp : comps)
@@ -730,7 +801,6 @@ void MigrationImpl::copyConfig()
                 comphelper::getProcessComponentContext())->
             insertModificationXcuFile(
                 regFilePath,
-                sMigratedProductName,
                 comphelper::containerToSequence(comp.second.includedPaths),
                 comphelper::containerToSequence(comp.second.excludedPaths));
 
@@ -740,6 +810,13 @@ void MigrationImpl::copyConfig()
 next:
         ;
     }
+    if (tempRename) {
+        auto const batch = comphelper::ConfigurationChanges::create();
+        auto const schemes = officecfg::Office::UI::ColorScheme::ColorSchemes::get(batch);
+        renameMigratedSetElementBack(schemes, sProductName, sMigratedProductName);
+        renameMigratedSetElementBack(schemes, sProductNameDark, sMigratedProductNameDark);
+        batch->commit();
+    }
     // checking the migrated (product name related) color scheme name, and replace it to the current version scheme name
     try
     {
@@ -748,17 +825,16 @@ next:
             getConfigAccess("org.openoffice.Office.UI/ColorScheme", true), uno::UNO_QUERY_THROW);
         if (aPropertySet->getPropertyValue("CurrentColorScheme") >>= sMigratedColorScheme)
         {
-            OUString aDarkTheme = " Dark";
             if (sMigratedColorScheme.equals(sMigratedProductName))
             {
                 aPropertySet->setPropertyValue("CurrentColorScheme",
-                                               uno::Any(utl::ConfigManager::getProductName()));
+                                               uno::Any(sProductName));
                 uno::Reference<XChangesBatch>(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
             }
-            else if (sMigratedColorScheme.equals(sMigratedProductName + aDarkTheme))
+            else if (sMigratedColorScheme.equals(sMigratedProductNameDark))
             {
                 aPropertySet->setPropertyValue("CurrentColorScheme",
-                                               uno::Any(utl::ConfigManager::getProductName() + aDarkTheme));
+                                               uno::Any(sProductNameDark));
                 uno::Reference<XChangesBatch>(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
             }
         }
