@@ -752,7 +752,7 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleTextAttributes.hpp
     include/editeng/editerr.hxx:
     # Needed for macro defines
-    - vcl/errcode.hxx
+    - comphelper/errcode.hxx
     include/editeng/eeitem.hxx:
     # Needed for macro defines
     - svl/typedwhich.hxx
@@ -871,7 +871,7 @@ excludelist:
     - svl/typedwhich.hxx
     include/svx/svxerr.hxx:
     # Used in macro definition
-    - vcl/errcode.hxx
+    - comphelper/errcode.hxx
     include/svx/svxids.hrc:
     # Used in macro definition
     - svl/typedwhich.hxx
