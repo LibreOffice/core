@@ -3047,7 +3047,7 @@ include/vcl/vclenum.hxx:134
 include/vcl/vclenum.hxx:143
     enum TimeFormat Hour24
 include/vcl/vclenum.hxx:314
-    enum vcl::WindowState SystemMask
+    enum WindowStateState SystemMask
 include/vcl/vclenum.hxx:331
     enum vcl::ImageType Small
 include/vcl/vclenum.hxx:353

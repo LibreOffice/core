@@ -93,7 +93,8 @@ void QtWidget::resizeEvent(QResizeEvent* pEvent)
     const int nWidth = ceil(pEvent->size().width() * fRatio);
     const int nHeight = ceil(pEvent->size().height() * fRatio);
 
-    m_rFrame.maGeometry.setSize({ nWidth, nHeight });
+    m_rFrame.maGeometry.nWidth = nWidth;
+    m_rFrame.maGeometry.nHeight = nHeight;
 
     if (m_rFrame.m_bUseCairo)
     {
@@ -299,7 +300,9 @@ void QtWidget::moveEvent(QMoveEvent* pEvent)
     if (m_rFrame.m_pTopLevel)
         return;
 
-    m_rFrame.maGeometry.setPos(toPoint(pEvent->pos() * m_rFrame.devicePixelRatioF()));
+    const Point aPos = toPoint(pEvent->pos() * m_rFrame.devicePixelRatioF());
+    m_rFrame.maGeometry.nX = aPos.X();
+    m_rFrame.maGeometry.nY = aPos.Y();
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }
 

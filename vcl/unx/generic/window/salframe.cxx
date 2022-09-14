@@ -391,10 +391,10 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 
     if( bUseGeometry )
     {
-        x = maGeometry.x();
-        y = maGeometry.y();
-        w = maGeometry.width();
-        h = maGeometry.height();
+        x = maGeometry.nX;
+        y = maGeometry.nY;
+        w = maGeometry.nWidth;
+        h = maGeometry.nHeight;
     }
 
     if( (nSalFrameStyle & SalFrameStyleFlags::FLOAT) &&
@@ -503,8 +503,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                     if( !pFrame->mpParent
                         && !pFrame->mbFullScreen
                         && ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )
-                        && pFrame->GetUnmirroredGeometry().width()
-                        && pFrame->GetUnmirroredGeometry().height() )
+                        && pFrame->GetUnmirroredGeometry().nWidth
+                        && pFrame->GetUnmirroredGeometry().nHeight )
                     {
                         bIsDocumentWindow = true;
                         break;
@@ -516,8 +516,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                     // set a document position and size
                     // the first frame gets positioned by the window manager
                     const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-                    x = rGeom.x();
-                    y = rGeom.y();
+                    x = rGeom.nX;
+                    y = rGeom.nY;
                     if( x+static_cast<int>(w)+40 <= static_cast<int>(aScreenSize.Width()) &&
                         y+static_cast<int>(h)+40 <= static_cast<int>(aScreenSize.Height())
                         )
@@ -647,7 +647,10 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             Hints.window_group = GetShellWindow();
     }
 
-    maGeometry.setPosSize({ x, y }, { w, h });
+    maGeometry.nX       = x;
+    maGeometry.nY       = y;
+    maGeometry.nWidth   = w;
+    maGeometry.nHeight  = h;
     updateScreenNumber();
 
     XSync( GetXDisplay(), False );
@@ -1252,13 +1255,13 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
         }
         XSelectInput( GetXDisplay(), GetWindow(), CLIENT_EVENTS );
 
-        if( maGeometry.width() > 0
-            && maGeometry.height() > 0
-            && (   nWidth_  != static_cast<int>(maGeometry.width())
-                || nHeight_ != static_cast<int>(maGeometry.height()) ) )
+        if( maGeometry.nWidth > 0
+            && maGeometry.nHeight > 0
+            && (   nWidth_  != static_cast<int>(maGeometry.nWidth)
+                || nHeight_ != static_cast<int>(maGeometry.nHeight) ) )
         {
-            nWidth_  = maGeometry.width();
-            nHeight_ = maGeometry.height();
+            nWidth_  = maGeometry.nWidth;
+            nHeight_ = maGeometry.nHeight;
         }
 
         XSync( GetXDisplay(), False );
@@ -1413,8 +1416,8 @@ void X11SalFrame::GetClientSize( tools::Long &rWidth, tools::Long &rHeight )
         return;
     }
 
-    rWidth  = maGeometry.width();
-    rHeight = maGeometry.height();
+    rWidth  = maGeometry.nWidth;
+    rHeight = maGeometry.nHeight;
 
     if( !rWidth || !rHeight )
     {
@@ -1422,17 +1425,22 @@ void X11SalFrame::GetClientSize( tools::Long &rWidth, tools::Long &rHeight )
 
         XGetWindowAttributes( GetXDisplay(), GetWindow(), &aAttrib );
 
-        rWidth = aAttrib.width;
-        rHeight = aAttrib.height;
-        maGeometry.setSize({ aAttrib.width, aAttrib.height });
+        maGeometry.nWidth = rWidth = aAttrib.width;
+        maGeometry.nHeight = rHeight = aAttrib.height;
     }
 }
 
 void X11SalFrame::Center( )
 {
-    int             nX, nY;
-    Size aRealScreenSize(GetDisplay()->getDataForScreen(m_nXScreen).m_aSize);
-    tools::Rectangle aScreen({ 0, 0 }, aRealScreenSize);
+    int             nX, nY, nScreenWidth, nScreenHeight;
+    int             nRealScreenWidth, nRealScreenHeight;
+    int             nScreenX = 0, nScreenY = 0;
+
+    const Size& aScreenSize = GetDisplay()->getDataForScreen( m_nXScreen ).m_aSize;
+    nScreenWidth        = aScreenSize.Width();
+    nScreenHeight       = aScreenSize.Height();
+    nRealScreenWidth    = nScreenWidth;
+    nRealScreenHeight   = nScreenHeight;
 
     if( GetDisplay()->IsXinerama() )
     {
@@ -1444,8 +1452,8 @@ void X11SalFrame::Center( )
         unsigned int mask;
         if( mpParent )
         {
-            root_x = mpParent->maGeometry.x() + mpParent->maGeometry.width() / 2;
-            root_y = mpParent->maGeometry.y() + mpParent->maGeometry.height() / 2;
+            root_x = mpParent->maGeometry.nX + mpParent->maGeometry.nWidth/2;
+            root_y = mpParent->maGeometry.nY + mpParent->maGeometry.nHeight/2;
         }
         else
             XQueryPointer( GetXDisplay(),
@@ -1458,8 +1466,10 @@ void X11SalFrame::Center( )
         for(const auto & rScreen : rScreens)
             if( rScreen.Contains( Point( root_x, root_y ) ) )
             {
-                aScreen.SetPos(rScreen.GetPos());
-                aRealScreenSize = rScreen.GetSize();
+                nScreenX            = rScreen.Left();
+                nScreenY            = rScreen.Top();
+                nRealScreenWidth    = rScreen.GetWidth();
+                nRealScreenHeight   = rScreen.GetHeight();
                 break;
             }
     }
@@ -1469,50 +1479,57 @@ void X11SalFrame::Center( )
         X11SalFrame* pFrame = mpParent;
         while( pFrame->mpParent )
             pFrame = pFrame->mpParent;
-        if( pFrame->maGeometry.width() < 1  || pFrame->maGeometry.height() < 1 )
+        if( pFrame->maGeometry.nWidth < 1  || pFrame->maGeometry.nHeight < 1 )
         {
             tools::Rectangle aRect;
             pFrame->GetPosSize( aRect );
-            pFrame->maGeometry.setPosSize(aRect);
+            pFrame->maGeometry.nX       = aRect.Left();
+            pFrame->maGeometry.nY       = aRect.Top();
+            pFrame->maGeometry.nWidth   = aRect.GetWidth();
+            pFrame->maGeometry.nHeight  = aRect.GetHeight();
         }
 
         if( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
         {
             ::Window aRoot;
-            unsigned int nScreenWidth, nScreenHeight, bw, depth;
-            int nScreenX, nScreenY;
+            unsigned int bw, depth;
             XGetGeometry( GetXDisplay(),
                           pFrame->GetShellWindow(),
                           &aRoot,
                           &nScreenX, &nScreenY,
-                          &nScreenWidth, &nScreenHeight,
+                          reinterpret_cast<unsigned int*>(&nScreenWidth),
+                          reinterpret_cast<unsigned int*>(&nScreenHeight),
                           &bw, &depth );
-            aScreen = {{ nScreenX, nScreenY }, Size(nScreenWidth, nScreenHeight)};
         }
         else
-            aScreen = pFrame->maGeometry.posSize();
+        {
+            nScreenX        = pFrame->maGeometry.nX;
+            nScreenY        = pFrame->maGeometry.nY;
+            nScreenWidth    = pFrame->maGeometry.nWidth;
+            nScreenHeight   = pFrame->maGeometry.nHeight;
+        }
     }
 
     if( mpParent && mpParent->nShowState_ == X11ShowState::Normal )
     {
-        if( maGeometry.width() >= mpParent->maGeometry.width() &&
-            maGeometry.height() >= mpParent->maGeometry.height() )
+        if( maGeometry.nWidth >= mpParent->maGeometry.nWidth &&
+            maGeometry.nHeight >= mpParent->maGeometry.nHeight )
         {
-            nX = aScreen.getX() + 40;
-            nY = aScreen.getY() + 40;
+            nX = nScreenX + 40;
+            nY = nScreenY + 40;
         }
         else
         {
             // center the window relative to the top level frame
-            nX = (aScreen.GetWidth()  - static_cast<int>(maGeometry.width()) ) / 2 + aScreen.getX();
-            nY = (aScreen.GetHeight() - static_cast<int>(maGeometry.height())) / 2 + aScreen.getY();
+            nX = (nScreenWidth  - static_cast<int>(maGeometry.nWidth) ) / 2 + nScreenX;
+            nY = (nScreenHeight - static_cast<int>(maGeometry.nHeight)) / 2 + nScreenY;
         }
     }
     else
     {
         // center the window relative to screen
-        nX = (aRealScreenSize.getWidth()  - static_cast<int>(maGeometry.width()) ) / 2 + aScreen.getX();
-        nY = (aRealScreenSize.getHeight() - static_cast<int>(maGeometry.height())) / 2 + aScreen.getY();
+        nX = (nRealScreenWidth  - static_cast<int>(maGeometry.nWidth) ) / 2 + nScreenX;
+        nY = (nRealScreenHeight - static_cast<int>(maGeometry.nHeight)) / 2 + nScreenY;
     }
     nX = nX < 0 ? 0 : nX;
     nY = nY < 0 ? 0 : nY;
@@ -1520,31 +1537,32 @@ void X11SalFrame::Center( )
     bDefaultPosition_ = False;
     if( mpParent )
     {
-        nX -= mpParent->maGeometry.x();
-        nY -= mpParent->maGeometry.y();
+        nX -= mpParent->maGeometry.nX;
+        nY -= mpParent->maGeometry.nY;
     }
 
-    SetPosSize({ { nX, nY }, maGeometry.size() });
+    Point aPoint(nX, nY);
+    SetPosSize( tools::Rectangle( aPoint, Size( maGeometry.nWidth, maGeometry.nHeight ) ) );
 }
 
 void X11SalFrame::updateScreenNumber()
 {
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
     {
-        Point aPoint( maGeometry.x(), maGeometry.y() );
+        Point aPoint( maGeometry.nX, maGeometry.nY );
         const std::vector<tools::Rectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
         size_t nScreens = rScreenRects.size();
         for( size_t i = 0; i < nScreens; i++ )
         {
             if( rScreenRects[i].Contains( aPoint ) )
             {
-                maGeometry.setScreen(static_cast<unsigned int>(i));
+                maGeometry.nDisplayScreenNumber = static_cast<unsigned int>(i);
                 break;
             }
         }
     }
     else
-        maGeometry.setScreen(m_nXScreen.getXScreen());
+        maGeometry.nDisplayScreenNumber = m_nXScreen.getXScreen();
 }
 
 void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags )
@@ -1553,20 +1571,20 @@ void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
         return;
 
     // relative positioning in X11SalFrame::SetPosSize
-    tools::Rectangle aPosSize( Point( maGeometry.x(), maGeometry.y() ), Size( maGeometry.width(), maGeometry.height() ) );
+    tools::Rectangle aPosSize( Point( maGeometry.nX, maGeometry.nY ), Size( maGeometry.nWidth, maGeometry.nHeight ) );
     aPosSize.Justify();
 
     if( ! ( nFlags & SAL_FRAME_POSSIZE_X ) )
     {
         nX = aPosSize.Left();
         if( mpParent )
-            nX -= mpParent->maGeometry.x();
+            nX -= mpParent->maGeometry.nX;
     }
     if( ! ( nFlags & SAL_FRAME_POSSIZE_Y ) )
     {
         nY = aPosSize.Top();
         if( mpParent )
-            nY -= mpParent->maGeometry.y();
+            nY -= mpParent->maGeometry.nY;
     }
     if( ! ( nFlags & SAL_FRAME_POSSIZE_WIDTH ) )
         nWidth = aPosSize.GetWidth();
@@ -1579,7 +1597,8 @@ void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     {
         if( bDefaultPosition_ )
         {
-            maGeometry.setSize(aPosSize.GetSize());
+            maGeometry.nWidth = aPosSize.GetWidth();
+            maGeometry.nHeight = aPosSize.GetHeight();
             Center();
         }
         else
@@ -1600,26 +1619,30 @@ void X11SalFrame::SetAlwaysOnTop( bool bOnTop )
     }
 }
 
+constexpr auto FRAMESTATE_MASK_GEOMETRY =
+     WindowStateMask::X     | WindowStateMask::Y |
+     WindowStateMask::Width | WindowStateMask::Height;
 constexpr auto FRAMESTATE_MASK_MAXIMIZED_GEOMETRY =
-     vcl::WindowDataMask::MaximizedX     | vcl::WindowDataMask::MaximizedY |
-     vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
+     WindowStateMask::MaximizedX     | WindowStateMask::MaximizedY |
+     WindowStateMask::MaximizedWidth | WindowStateMask::MaximizedHeight;
 
-void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
+void X11SalFrame::SetWindowState( const SalFrameState *pState )
 {
     if (pState == nullptr)
         return;
 
     // Request for position or size change
-    if (pState->mask() & vcl::WindowDataMask::PosSize)
+    if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
     {
         /* #i44325#
          * if maximized, set restore size and guess maximized size from last time
          * in state change below maximize window
          */
         if( ! IsChildWindow() &&
-            (pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState &&
-            (pState->state() & vcl::WindowState::Maximized) &&
-            (pState->mask() & FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
+            (pState->mnMask & WindowStateMask::State) &&
+            (pState->mnState & WindowStateState::Maximized) &&
+            (pState->mnMask & FRAMESTATE_MASK_GEOMETRY) == FRAMESTATE_MASK_GEOMETRY &&
+            (pState->mnMask & FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
             )
         {
             XSizeHints* pHints = XAllocSizeHints();
@@ -1629,17 +1652,22 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
                                pHints,
                                &nSupplied );
             pHints->flags |= PPosition | PWinGravity;
-            pHints->x = pState->x();
-            pHints->y = pState->y();
+            pHints->x           = pState->mnX;
+            pHints->y           = pState->mnY;
             pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
-            XSetWMNormalHints(GetXDisplay(), GetShellWindow(), pHints);
+            XSetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints );
             XFree( pHints );
 
-            XMoveResizeWindow(GetXDisplay(), GetShellWindow(), pState->x(), pState->y(),
-                              pState->width(), pState->height());
+            XMoveResizeWindow( GetXDisplay(), GetShellWindow(),
+                               pState->mnX, pState->mnY,
+                               pState->mnWidth, pState->mnHeight );
             // guess maximized geometry from last time
-            maGeometry.setPos({ pState->GetMaximizedX(), pState->GetMaximizedY() });
-            maGeometry.setSize({ pState->GetMaximizedWidth(), pState->GetMaximizedHeight() });
+            maGeometry.nX      = pState->mnMaximizedX;
+            maGeometry.nY      = pState->mnMaximizedY;
+            maGeometry.nWidth  = pState->mnMaximizedWidth;
+            maGeometry.nHeight = pState->mnMaximizedHeight;
             updateScreenNumber();
         }
         else
@@ -1647,31 +1675,31 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
             bool bDoAdjust = false;
             tools::Rectangle aPosSize;
             // initialize with current geometry
-            if ((pState->mask() & vcl::WindowDataMask::PosSize) != vcl::WindowDataMask::PosSize)
-                GetPosSize(aPosSize);
+            if ((pState->mnMask & FRAMESTATE_MASK_GEOMETRY) != FRAMESTATE_MASK_GEOMETRY)
+                GetPosSize (aPosSize);
 
             sal_uInt16 nPosFlags = 0;
 
             // change requested properties
-            if (pState->mask() & vcl::WindowDataMask::X)
+            if (pState->mnMask & WindowStateMask::X)
             {
-                aPosSize.SetPosX(pState->x() - (mpParent ? mpParent->maGeometry.x() : 0));
+                aPosSize.SetPosX(pState->mnX - (mpParent ? mpParent->maGeometry.nX : 0));
                 nPosFlags |= SAL_FRAME_POSSIZE_X;
             }
-            if (pState->mask() & vcl::WindowDataMask::Y)
+            if (pState->mnMask & WindowStateMask::Y)
             {
-                aPosSize.SetPosY(pState->y() - (mpParent ? mpParent->maGeometry.y() : 0));
+                aPosSize.SetPosY(pState->mnY - (mpParent ? mpParent->maGeometry.nY : 0));
                 nPosFlags |= SAL_FRAME_POSSIZE_Y;
             }
-            if (pState->mask() & vcl::WindowDataMask::Width)
+            if (pState->mnMask & WindowStateMask::Width)
             {
-                tools::Long nWidth = pState->width() > 0 ? pState->width()  - 1 : 0;
+                tools::Long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
                 aPosSize.setWidth (nWidth);
                 bDoAdjust = true;
             }
-            if (pState->mask() & vcl::WindowDataMask::Height)
+            if (pState->mnMask & WindowStateMask::Height)
             {
-                int nHeight = pState->height() > 0 ? pState->height() - 1 : 0;
+                int nHeight = pState->mnHeight > 0 ? pState->mnHeight - 1 : 0;
                 aPosSize.setHeight (nHeight);
                 bDoAdjust = true;
             }
@@ -1684,27 +1712,35 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
                 SalFrameGeometry aGeom = maGeometry;
 
                 if( ! (nStyle_ & ( SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::PLUG ) ) &&
-                    mpParent && aGeom.leftDecoration() == 0 && aGeom.topDecoration() == 0)
+                    mpParent &&
+                aGeom.nLeftDecoration == 0 &&
+                aGeom.nTopDecoration == 0 )
                 {
                     aGeom = mpParent->maGeometry;
-                    if (aGeom.leftDecoration() == 0 && aGeom.topDecoration() == 0)
-                        aGeom.setDecorations(5, 20, 5, 5);
+                    if( aGeom.nLeftDecoration == 0 &&
+                        aGeom.nTopDecoration == 0 )
+                    {
+                        aGeom.nLeftDecoration = 5;
+                        aGeom.nTopDecoration = 20;
+                        aGeom.nRightDecoration = 5;
+                        aGeom.nBottomDecoration = 5;
+                    }
                 }
 
-                auto nRight = aPosSize.Right() + (mpParent ? mpParent->maGeometry.x() : 0);
-                auto nBottom = aPosSize.Bottom() + (mpParent ? mpParent->maGeometry.y() : 0);
-                auto nLeft = aPosSize.Left() + (mpParent ? mpParent->maGeometry.x() : 0);
-                auto nTop = aPosSize.Top() + (mpParent ? mpParent->maGeometry.y() : 0);
+                auto nRight = aPosSize.Right() + (mpParent ? mpParent->maGeometry.nX : 0);
+                auto nBottom = aPosSize.Bottom() + (mpParent ? mpParent->maGeometry.nY : 0);
+                auto nLeft = aPosSize.Left() + (mpParent ? mpParent->maGeometry.nX : 0);
+                auto nTop = aPosSize.Top() + (mpParent ? mpParent->maGeometry.nY : 0);
 
                 // adjust position so that frame fits onto screen
-                if( nRight+static_cast<tools::Long>(aGeom.rightDecoration()) > aScreenSize.Width()-1 )
-                    aPosSize.Move( aScreenSize.Width() - nRight - static_cast<tools::Long>(aGeom.rightDecoration()), 0 );
-                if( nBottom+static_cast<tools::Long>(aGeom.bottomDecoration()) > aScreenSize.Height()-1 )
-                    aPosSize.Move( 0, aScreenSize.Height() - nBottom - static_cast<tools::Long>(aGeom.bottomDecoration()) );
-                if( nLeft < static_cast<tools::Long>(aGeom.leftDecoration()) )
-                    aPosSize.Move( static_cast<tools::Long>(aGeom.leftDecoration()) - nLeft, 0 );
-                if( nTop < static_cast<tools::Long>(aGeom.topDecoration()) )
-                    aPosSize.Move( 0, static_cast<tools::Long>(aGeom.topDecoration()) - nTop );
+                if( nRight+static_cast<tools::Long>(aGeom.nRightDecoration) > aScreenSize.Width()-1 )
+                    aPosSize.Move( aScreenSize.Width() - nRight - static_cast<tools::Long>(aGeom.nRightDecoration), 0 );
+                if( nBottom+static_cast<tools::Long>(aGeom.nBottomDecoration) > aScreenSize.Height()-1 )
+                    aPosSize.Move( 0, aScreenSize.Height() - nBottom - static_cast<tools::Long>(aGeom.nBottomDecoration) );
+                if( nLeft < static_cast<tools::Long>(aGeom.nLeftDecoration) )
+                    aPosSize.Move( static_cast<tools::Long>(aGeom.nLeftDecoration) - nLeft, 0 );
+                if( nTop < static_cast<tools::Long>(aGeom.nTopDecoration) )
+                    aPosSize.Move( 0, static_cast<tools::Long>(aGeom.nTopDecoration) - nTop );
             }
 
             SetPosSize(aPosSize.getX(), aPosSize.getY(),
@@ -1715,44 +1751,47 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
     }
 
     // request for status change
-    if (!(pState->mask() & vcl::WindowDataMask::State))
+    if (!(pState->mnMask & WindowStateMask::State))
         return;
 
-    if (pState->state() & vcl::WindowState::Maximized)
+    if (pState->mnState & WindowStateState::Maximized)
     {
         nShowState_ = X11ShowState::Normal;
-        if( ! (pState->state() & (vcl::WindowState::MaximizedHorz|vcl::WindowState::MaximizedVert) ) )
+        if( ! (pState->mnState & (WindowStateState::MaximizedHorz|WindowStateState::MaximizedVert) ) )
             Maximize();
         else
         {
-            bool bHorz(pState->state() & vcl::WindowState::MaximizedHorz);
-            bool bVert(pState->state() & vcl::WindowState::MaximizedVert);
+            bool bHorz(pState->mnState & WindowStateState::MaximizedHorz);
+            bool bVert(pState->mnState & WindowStateState::MaximizedVert);
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
         }
-        maRestorePosSize = pState->posSize();
+        maRestorePosSize.SetLeft( pState->mnX );
+        maRestorePosSize.SetTop( pState->mnY );
+        maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnWidth );
+        maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnHeight );
     }
     else if( mbMaximizedHorz || mbMaximizedVert )
         GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
 
-    if (pState->state() & vcl::WindowState::Minimized)
+    if (pState->mnState & WindowStateState::Minimized)
     {
         if (nShowState_ == X11ShowState::Unknown)
             nShowState_ = X11ShowState::Normal;
         Minimize();
     }
-    if (pState->state() & vcl::WindowState::Normal)
+    if (pState->mnState & WindowStateState::Normal)
     {
         if (nShowState_ != X11ShowState::Normal)
             Restore();
     }
 }
 
-bool X11SalFrame::GetWindowState( vcl::WindowData* pState )
+bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
     if( X11ShowState::Minimized == nShowState_ )
-        pState->setState(vcl::WindowState::Minimized);
+        pState->mnState = WindowStateState::Minimized;
     else
-        pState->setState(vcl::WindowState::Normal);
+        pState->mnState = WindowStateState::Normal;
 
     tools::Rectangle aPosSize;
     if( maRestorePosSize.IsEmpty() )
@@ -1761,22 +1800,26 @@ bool X11SalFrame::GetWindowState( vcl::WindowData* pState )
         aPosSize = maRestorePosSize;
 
     if( mbMaximizedHorz )
-        pState->rState() |= vcl::WindowState::MaximizedHorz;
+        pState->mnState |= WindowStateState::MaximizedHorz;
     if( mbMaximizedVert )
-        pState->rState() |= vcl::WindowState::MaximizedVert;
+        pState->mnState |= WindowStateState::MaximizedVert;
 
-    pState->setPosSize(aPosSize);
-    pState->setMask(vcl::WindowDataMask::PosSizeState);
+    pState->mnX      = aPosSize.Left();
+    pState->mnY      = aPosSize.Top();
+    pState->mnWidth  = aPosSize.GetWidth();
+    pState->mnHeight = aPosSize.GetHeight();
+
+    pState->mnMask   = FRAMESTATE_MASK_GEOMETRY | WindowStateMask::State;
 
     if (! maRestorePosSize.IsEmpty() )
     {
         GetPosSize( aPosSize );
-        pState->rState() |= vcl::WindowState::Maximized;
-        pState->SetMaximizedX(aPosSize.Left());
-        pState->SetMaximizedY(aPosSize.Top());
-        pState->SetMaximizedWidth(aPosSize.GetWidth());
-        pState->SetMaximizedHeight(aPosSize.GetHeight());
-        pState->rMask() |= FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
+        pState->mnState |= WindowStateState::Maximized;
+        pState->mnMaximizedX      = aPosSize.Left();
+        pState->mnMaximizedY      = aPosSize.Top();
+        pState->mnMaximizedWidth  = aPosSize.GetWidth();
+        pState->mnMaximizedHeight = aPosSize.GetHeight();
+        pState->mnMask |= FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
     }
 
     return true;
@@ -1793,17 +1836,17 @@ void X11SalFrame::SetMenu( SalMenu* )
 
 void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
 {
-    if( maGeometry.width() < 1 || maGeometry.height() < 1 )
+    if( maGeometry.nWidth < 1 || maGeometry.nHeight < 1 )
     {
         const Size& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
-        tools::Long w = aScreenSize.Width()  - maGeometry.leftDecoration() - maGeometry.rightDecoration();
-        tools::Long h = aScreenSize.Height() - maGeometry.topDecoration() - maGeometry.bottomDecoration();
+        tools::Long w = aScreenSize.Width()  - maGeometry.nLeftDecoration - maGeometry.nRightDecoration;
+        tools::Long h = aScreenSize.Height() - maGeometry.nTopDecoration - maGeometry.nBottomDecoration;
 
-        rPosSize = tools::Rectangle( Point( maGeometry.x(), maGeometry.y() ), Size( w, h ) );
+        rPosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ), Size( w, h ) );
     }
     else
-        rPosSize = tools::Rectangle( Point( maGeometry.x(), maGeometry.y() ),
-                              Size( maGeometry.width(), maGeometry.height() ) );
+        rPosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ),
+                              Size( maGeometry.nWidth, maGeometry.nHeight ) );
 }
 
 void X11SalFrame::SetSize( const Size &rSize )
@@ -1841,7 +1884,8 @@ void X11SalFrame::SetSize( const Size &rSize )
             XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
     }
 
-    maGeometry.setSize(rSize);
+    maGeometry.nWidth  = rSize.Width();
+    maGeometry.nHeight = rSize.Height();
 
     // allow the external status window to reposition
     if (mbInputFocus && mpInputContext != nullptr)
@@ -1862,7 +1906,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
     if( mpParent && ! IsSysChildWindow() )
     {
         if( AllSettings::GetLayoutRTL() )
-            values.x = mpParent->maGeometry.width()-values.width-1-values.x;
+            values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
 
         ::Window aChild;
         // coordinates are relative to parent, so translate to root coordinates
@@ -1876,9 +1920,9 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
 
     bool bMoved = false;
     bool bSized = false;
-    if( values.x != maGeometry.x() || values.y != maGeometry.y() )
+    if( values.x != maGeometry.nX || values.y != maGeometry.nY )
         bMoved = true;
-    if( values.width != static_cast<int>(maGeometry.width()) || values.height != static_cast<int>(maGeometry.height()) )
+    if( values.width != static_cast<int>(maGeometry.nWidth) || values.height != static_cast<int>(maGeometry.nHeight) )
         bSized = true;
 
     // do not set WMNormalHints for...
@@ -1937,10 +1981,16 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
             XMoveResizeWindow( GetXDisplay(), GetWindow(), values.x, values.y, values.width, values.height );
     }
 
-    maGeometry.setPosSize({ values.x, values.y }, { values.width, values.height });
+    maGeometry.nX       = values.x;
+    maGeometry.nY       = values.y;
+    maGeometry.nWidth   = values.width;
+    maGeometry.nHeight  = values.height;
     if( IsSysChildWindow() && mpParent )
+    {
         // translate back to root coordinates
-        maGeometry.move(mpParent->maGeometry.x(), mpParent->maGeometry.y());
+        maGeometry.nX += mpParent->maGeometry.nX;
+        maGeometry.nY += mpParent->maGeometry.nY;
+    }
 
     updateScreenNumber();
     if( bSized && ! bMoved )
@@ -2010,7 +2060,7 @@ void X11SalFrame::Restore()
 
 void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
-    if( nNewScreen == maGeometry.screen() )
+    if( nNewScreen == maGeometry.nDisplayScreenNumber )
         return;
 
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
@@ -2018,17 +2068,17 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
         if( nNewScreen >= GetDisplay()->GetXineramaScreens().size() )
             return;
 
-        tools::Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.screen()] );
+        tools::Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.nDisplayScreenNumber] );
         tools::Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
         bool bVisible = bMapped_;
         if( bVisible )
             Show( false );
-        maGeometry.setX(aNewScreenRect.Left() + (maGeometry.x() - aOldScreenRect.Left()));
-        maGeometry.setY(aNewScreenRect.Top() + (maGeometry.y() - aOldScreenRect.Top()));
+        maGeometry.nX = aNewScreenRect.Left() + (maGeometry.nX - aOldScreenRect.Left());
+        maGeometry.nY = aNewScreenRect.Top() + (maGeometry.nY - aOldScreenRect.Top());
         createNewWindow( None, m_nXScreen );
         if( bVisible )
             Show( true );
-        maGeometry.setScreen(nNewScreen);
+        maGeometry.nDisplayScreenNumber = nNewScreen;
     }
     else if( nNewScreen < GetDisplay()->GetXScreenCount() )
     {
@@ -2038,7 +2088,7 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
         createNewWindow( None, SalX11Screen( nNewScreen ) );
         if( bVisible )
             Show( true );
-        maGeometry.setScreen(nNewScreen);
+        maGeometry.nDisplayScreenNumber = nNewScreen;
     }
 }
 
@@ -2076,7 +2126,8 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             return;
         if( bFullScreen )
         {
-            maRestorePosSize = maGeometry.posSize();
+            maRestorePosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ),
+                                          Size( maGeometry.nWidth, maGeometry.nHeight ) );
             tools::Rectangle aRect;
             if( nScreen < 0 || o3tl::make_unsigned(nScreen) >= GetDisplay()->GetXineramaScreens().size() )
                 aRect = tools::Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
@@ -2086,7 +2137,10 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             bool bVisible = bMapped_;
             if( bVisible )
                 Show( false );
-            maGeometry.setPosSize(aRect);
+            maGeometry.nX = aRect.Left();
+            maGeometry.nY = aRect.Top();
+            maGeometry.nWidth = aRect.GetWidth();
+            maGeometry.nHeight = aRect.GetHeight();
             mbMaximizedHorz = mbMaximizedVert = false;
             mbFullScreen = true;
             createNewWindow( None, m_nXScreen );
@@ -2181,8 +2235,8 @@ void X11SalFrame::SetPointerPos(tools::Long nX, tools::Long nY)
     /* when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
      */
-    unsigned int nWindowLeft = maGeometry.x() + nX;
-    unsigned int nWindowTop  = maGeometry.y() + nY;
+    unsigned int nWindowLeft = maGeometry.nX + nX;
+    unsigned int nWindowTop  = maGeometry.nY + nY;
 
     XWarpPointer( GetXDisplay(), None, pDisplay_->GetRootWindow( pDisplay_->GetDefaultXScreen() ),
                   0, 0, 0, 0, nWindowLeft, nWindowTop);
@@ -2584,8 +2638,8 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         if( nVisibleFloats > 0 && mpParent )
         {
             Cursor aCursor = mpParent->GetCursor();
-            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < static_cast<int>(maGeometry.width()) &&
-                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < static_cast<int>(maGeometry.height()) )
+            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < static_cast<int>(maGeometry.nWidth) &&
+                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < static_cast<int>(maGeometry.nHeight) )
                 aCursor = None;
 
             XChangeActivePointerGrab( GetXDisplay(),
@@ -2612,10 +2666,10 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                 const X11SalFrame* pFrame = static_cast< const X11SalFrame* >( pSalFrame );
                 if( pFrame->IsFloatGrabWindow()                                     &&
                     pFrame->bMapped_                                                &&
-                    pEvent->xbutton.x_root >= pFrame->maGeometry.x()                             &&
-                    pEvent->xbutton.x_root < pFrame->maGeometry.x() + static_cast<int>(pFrame->maGeometry.width()) &&
-                    pEvent->xbutton.y_root >= pFrame->maGeometry.y()                             &&
-                    pEvent->xbutton.y_root < pFrame->maGeometry.y() + static_cast<int>(pFrame->maGeometry.height()) )
+                    pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
+                    pEvent->xbutton.x_root < pFrame->maGeometry.nX + static_cast<int>(pFrame->maGeometry.nWidth) &&
+                    pEvent->xbutton.y_root >= pFrame->maGeometry.nY                             &&
+                    pEvent->xbutton.y_root < pFrame->maGeometry.nY + static_cast<int>(pFrame->maGeometry.nHeight) )
                 {
                     bInside = true;
                     break;
@@ -2657,8 +2711,8 @@ bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                         {
                             // #i63638# check that pointer is inside window, not
                             // only inside stacking window
-                            if( root_x >= pFrame->maGeometry.x() && root_x < sal::static_int_cast< int >(pFrame->maGeometry.x()+pFrame->maGeometry.width()) &&
-                                root_y >= pFrame->maGeometry.y() && root_y < sal::static_int_cast< int >(pFrame->maGeometry.x()+pFrame->maGeometry.height()) )
+                            if( root_x >= pFrame->maGeometry.nX && root_x < sal::static_int_cast< int >(pFrame->maGeometry.nX+pFrame->maGeometry.nWidth) &&
+                                root_y >= pFrame->maGeometry.nY && root_y < sal::static_int_cast< int >(pFrame->maGeometry.nX+pFrame->maGeometry.nHeight) )
                             {
                                 bClosePopups = false;
                             }
@@ -3444,9 +3498,10 @@ bool X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
 
     if( pEvent->window == GetStackingWindow() )
     {
-        if( maGeometry.x() != pEvent->x || maGeometry.y() != pEvent->y )
+        if( maGeometry.nX != pEvent->x || maGeometry.nY != pEvent->y )
         {
-            maGeometry.setPos({ pEvent->x, pEvent->y });
+            maGeometry.nX = pEvent->x;
+            maGeometry.nY = pEvent->y;
             CallCallback( SalEvent::Move, nullptr );
         }
         return true;
@@ -3469,10 +3524,13 @@ bool X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     nWidth_     = pEvent->width;
     nHeight_    = pEvent->height;
 
-    bool bMoved = ( pEvent->x != maGeometry.x() || pEvent->y != maGeometry.y() );
-    bool bSized = ( pEvent->width != static_cast<int>(maGeometry.width()) || pEvent->height != static_cast<int>(maGeometry.height()) );
+    bool bMoved = ( pEvent->x != maGeometry.nX || pEvent->y != maGeometry.nY );
+    bool bSized = ( pEvent->width != static_cast<int>(maGeometry.nWidth) || pEvent->height != static_cast<int>(maGeometry.nHeight) );
 
-    maGeometry.setPosSize({ pEvent->x, pEvent->y }, { pEvent->width, pEvent->height });
+    maGeometry.nX       = pEvent->x;
+    maGeometry.nY       = pEvent->y;
+    maGeometry.nWidth   = pEvent->width;
+    maGeometry.nHeight  = pEvent->height;
     updateScreenNumber();
 
     // update children's position
@@ -3603,8 +3661,8 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                            &nLeft,
                            &nTop,
                            &hDummy );
-    maGeometry.setLeftDecoration(nLeft > 0 ? nLeft-1 : 0);
-    maGeometry.setTopDecoration(nTop  > 0 ? nTop-1  : 0);
+    maGeometry.nLeftDecoration  = nLeft > 0 ? nLeft-1 : 0;
+    maGeometry.nTopDecoration   = nTop  > 0 ? nTop-1  : 0;
 
     /*
      *  decorations are not symmetric,
@@ -3632,15 +3690,17 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 
     if( ! bError )
     {
-        maGeometry.setRightDecoration(wp - w - maGeometry.leftDecoration());
-        maGeometry.setBottomDecoration(hp - h - maGeometry.topDecoration());
-        bResized = w != o3tl::make_unsigned(maGeometry.width()) ||
-                   h != o3tl::make_unsigned(maGeometry.height());
+        maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
+        maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;
         /*
          *  note: this works because hWM_Parent is direct child of root,
          *  not necessarily parent of GetShellWindow()
          */
-        maGeometry.setPosSize({ xp + nLeft, yp + nTop }, { w, h });
+        maGeometry.nX       = xp + nLeft;
+        maGeometry.nY       = yp + nTop;
+        bResized = w != maGeometry.nWidth || h != maGeometry.nHeight;
+        maGeometry.nWidth   = w;
+        maGeometry.nHeight = h;
     }
 
     // limit width and height if we are too large: #47757
@@ -3652,17 +3712,17 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         Size aScreenSize = GetDisplay()->GetScreenSize( m_nXScreen );
         int nScreenWidth  = aScreenSize.Width();
         int nScreenHeight = aScreenSize.Height();
-        int nFrameWidth   = maGeometry.width() + maGeometry.leftDecoration() + maGeometry.rightDecoration();
-        int nFrameHeight  = maGeometry.height() + maGeometry.topDecoration()  + maGeometry.bottomDecoration();
+        int nFrameWidth   = maGeometry.nWidth + maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
+        int nFrameHeight  = maGeometry.nHeight + maGeometry.nTopDecoration  + maGeometry.nBottomDecoration;
 
         if ((nFrameWidth > nScreenWidth) || (nFrameHeight > nScreenHeight))
         {
-            Size aSize(maGeometry.width(), maGeometry.height());
+            Size aSize(maGeometry.nWidth, maGeometry.nHeight);
 
             if (nFrameWidth  > nScreenWidth)
-                aSize.setWidth( nScreenWidth  - maGeometry.rightDecoration() - maGeometry.leftDecoration() );
+                aSize.setWidth( nScreenWidth  - maGeometry.nRightDecoration - maGeometry.nLeftDecoration );
             if (nFrameHeight > nScreenHeight)
-                aSize.setHeight( nScreenHeight - maGeometry.bottomDecoration() - maGeometry.topDecoration() );
+                aSize.setHeight( nScreenHeight - maGeometry.nBottomDecoration - maGeometry.nTopDecoration );
 
             SetSize( aSize );
             bResized = false;

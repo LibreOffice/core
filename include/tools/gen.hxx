@@ -481,13 +481,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 /// etc. methods interpret the interval as closed, while the lowercase
 /// getWidth() / getHeight() etc. methods interpret the interval as half-open.
 /// Ok, now is the time for despair.
-///
-/// If you want to work with Size, you must use the closed interval functions!
-/// And don't add getSize / setSize; this will probably just introduce bugs,
-/// especially when used in combination with list-initialization.
-///
-/// (Eventually you might notice, that the same engineer was also working on
-/// Qt at some point; see documentation on QRect::bottom / QRect::right ;-).
 namespace tools
 {
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle final
@@ -500,7 +493,6 @@ public:
                          tools::Long nRight, tools::Long nBottom );
     /// Constructs an empty Rectangle, with top/left at the specified params
     constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
-    /// Constructs a closed interval rectangle
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
     constexpr inline static Rectangle Justify(const Point& rLT, const Point& rRB);

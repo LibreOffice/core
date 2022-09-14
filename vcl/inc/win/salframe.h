@@ -25,11 +25,11 @@
 #include <string_view>
 
 #include <vcl/sysdata.hxx>
-#include <vcl/windowstate.hxx>
 #include <salframe.hxx>
 #include <svsys.h>
 
 class WinSalGraphics;
+
 
 class WinSalFrame final: public SalFrame
 {
@@ -43,7 +43,7 @@ public:
     HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
     HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened
     SystemEnvData           maSysData;              // system data
-    vcl::WindowData maState; ///< frame state
+    SalFrameState           maState = {};           // frame state
     int                     mnShowState;            // show state
     LONG                    mnWidth;                // client width in pixeln
     LONG                    mnHeight;               // client height in pixeln
@@ -112,8 +112,8 @@ public:
     virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
-    virtual void SetWindowState(const vcl::WindowData*) override;
-    virtual bool GetWindowState(vcl::WindowData*) override;
+    virtual void                SetWindowState( const SalFrameState* pState ) override;
+    virtual bool                GetWindowState( SalFrameState* pState ) override;
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) override;
     virtual void                StartPresentation( bool bStart ) override;
     virtual void                SetAlwaysOnTop( bool bOnTop ) override;

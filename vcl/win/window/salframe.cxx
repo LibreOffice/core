@@ -131,12 +131,6 @@ bool WinSalFrame::mbInReparent = false;
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = nullptr );
 
-static void SetGeometrySize(vcl::WindowPosSize& rWinPosSize, const Size& rSize)
-{
-    rWinPosSize.setWidth(rSize.Width() < 0 ? 0 : rSize.Width());
-    rWinPosSize.setHeight(rSize.Height() < 0 ? 0 : rSize.Height());
-}
-
 static void UpdateGeometry(WinSalFrame* pFrame, RECT& aRect)
 {
     RECT aRect2 = aRect;
@@ -147,10 +141,10 @@ static void UpdateGeometry(WinSalFrame* pFrame, RECT& aRect)
     tools::Long nBottomDeco = abs(aRect.bottom - aRect2.bottom);
     tools::Long nRightDeco = abs(aRect.right - aRect2.right);
 
-    pFrame->maState.setPos({ aRect.left + nLeftDeco, aRect.top + nTopDeco });
-    tools::Long nWidth(aRect.right - aRect.left - nLeftDeco - nRightDeco);
-    tools::Long nHeight(aRect.bottom - aRect.top - nTopDeco - nBottomDeco);
-    SetGeometrySize(pFrame->maState, { nWidth, nHeight });
+    pFrame->maState.mnX = aRect.left + nLeftDeco;
+    pFrame->maState.mnY = aRect.top + nTopDeco;
+    pFrame->maState.mnWidth = aRect.right - aRect.left - nLeftDeco - nRightDeco;
+    pFrame->maState.mnHeight = aRect.bottom - aRect.top - nTopDeco - nBottomDeco;
 }
 
 static void ImplSaveFrameState( WinSalFrame* pFrame )
@@ -161,14 +155,14 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
         bool bVisible = (GetWindowStyle( pFrame->mhWnd ) & WS_VISIBLE) != 0;
         if ( IsIconic( pFrame->mhWnd ) )
         {
-            pFrame->maState.rState() |= vcl::WindowState::Minimized;
+            pFrame->maState.mnState |= WindowStateState::Minimized;
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWMAXIMIZED;
         }
         else if ( IsZoomed( pFrame->mhWnd ) )
         {
-            pFrame->maState.rState() &= ~vcl::WindowState::Minimized;
-            pFrame->maState.rState() |= vcl::WindowState::Maximized;
+            pFrame->maState.mnState &= ~WindowStateState::Minimized;
+            pFrame->maState.mnState |= WindowStateState::Maximized;
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWMAXIMIZED;
             pFrame->mbRestoreMaximize = true;
@@ -183,7 +177,8 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             RECT aRect;
             GetWindowRect( pFrame->mhWnd, &aRect );
             UpdateGeometry(pFrame, aRect);
-            pFrame->maState.rState() &= ~vcl::WindowState(vcl::WindowState::Minimized | vcl::WindowState::Maximized);
+
+            pFrame->maState.mnState &= ~WindowStateState(WindowStateState::Minimized | WindowStateState::Maximized);
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWNORMAL;
             pFrame->mbRestoreMaximize = false;
@@ -916,14 +911,14 @@ void WinSalFrame::updateScreenNumber()
     {
         const std::vector<WinSalSystem::DisplayMonitor>& rMonitors =
             pSys->getMonitors();
-        Point aPoint(maGeometry.pos());
+        Point aPoint( maGeometry.nX, maGeometry.nY );
         size_t nMon = rMonitors.size();
         for( size_t i = 0; i < nMon; i++ )
         {
             if( rMonitors[i].m_aArea.Contains( aPoint ) )
             {
                 mnDisplay = static_cast<sal_Int32>(i);
-                maGeometry.setScreen(static_cast<unsigned int>(i));
+                maGeometry.nDisplayScreenNumber = static_cast<unsigned int>(i);
             }
         }
     }
@@ -1316,8 +1311,8 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
                     // #i42485#: parent will be shown maximized in which case
                     // a ClientToScreen uses the wrong coordinates (i.e. those from the restore pos)
                     // so use the (already updated) frame geometry for the transformation
-                    aPt.x +=  pParentFrame->maGeometry.x();
-                    aPt.y +=  pParentFrame->maGeometry.y();
+                    aPt.x +=  pParentFrame->maGeometry.nX;
+                    aPt.y +=  pParentFrame->maGeometry.nY;
                 }
                 else
                     ClientToScreen( parentHwnd, &aPt );
@@ -1592,11 +1587,11 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
 
 void WinSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
-    rWidth  = maGeometry.width();
-    rHeight = maGeometry.height();
+    rWidth  = maGeometry.nWidth;
+    rHeight = maGeometry.nHeight;
 }
 
-void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
+void WinSalFrame::SetWindowState( const SalFrameState* pState )
 {
     // Check if the window fits into the screen, in case the screen
     // resolution changed
@@ -1632,24 +1627,24 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
     tools::Long nRightDeco = abs( aWinRect.right - aRect2.right );
 
     // adjust window position/size to fit the screen
-    if ( !(pState->mask() & vcl::WindowDataMask::Pos) )
+    if ( !(pState->mnMask & (WindowStateMask::X | WindowStateMask::Y)) )
         nPosSize |= SWP_NOMOVE;
-    if ( !(pState->mask() & vcl::WindowDataMask::Size) )
+    if ( !(pState->mnMask & (WindowStateMask::Width | WindowStateMask::Height)) )
         nPosSize |= SWP_NOSIZE;
-    if ( pState->mask() & vcl::WindowDataMask::X )
-        nX = static_cast<int>(pState->x()) - nLeftDeco;
+    if ( pState->mnMask & WindowStateMask::X )
+        nX = static_cast<int>(pState->mnX) - nLeftDeco;
     else
         nX = aWinRect.left;
-    if ( pState->mask() & vcl::WindowDataMask::Y )
-        nY = static_cast<int>(pState->y()) - nTopDeco;
+    if ( pState->mnMask & WindowStateMask::Y )
+        nY = static_cast<int>(pState->mnY) - nTopDeco;
     else
         nY = aWinRect.top;
-    if ( pState->mask() & vcl::WindowDataMask::Width )
-        nWidth = static_cast<int>(pState->width()) + nLeftDeco + nRightDeco;
+    if ( pState->mnMask & WindowStateMask::Width )
+        nWidth = static_cast<int>(pState->mnWidth) + nLeftDeco + nRightDeco;
     else
         nWidth = aWinRect.right-aWinRect.left;
-    if ( pState->mask() & vcl::WindowDataMask::Height )
-        nHeight = static_cast<int>(pState->height()) + nTopDeco + nBottomDeco;
+    if ( pState->mnMask & WindowStateMask::Height )
+        nHeight = static_cast<int>(pState->mnHeight) + nTopDeco + nBottomDeco;
     else
         nHeight = aWinRect.bottom-aWinRect.top;
 
@@ -1683,33 +1678,33 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
 
         if ( mbOverwriteState )
         {
-            if ( pState->mask() & vcl::WindowDataMask::State )
+            if ( pState->mnMask & WindowStateMask::State )
             {
-                if ( pState->state() & vcl::WindowState::Minimized )
+                if ( pState->mnState & WindowStateState::Minimized )
                     mnShowState = SW_SHOWMINIMIZED;
-                else if ( pState->state() & vcl::WindowState::Maximized )
+                else if ( pState->mnState & WindowStateState::Maximized )
                 {
                     mnShowState = SW_SHOWMAXIMIZED;
                     bUpdateHiddenFramePos = true;
                 }
-                else if ( pState->state() & vcl::WindowState::Normal )
+                else if ( pState->mnState & WindowStateState::Normal )
                     mnShowState = SW_SHOWNORMAL;
             }
         }
     }
     else
     {
-        if ( pState->mask() & vcl::WindowDataMask::State )
+        if ( pState->mnMask & WindowStateMask::State )
         {
-            if ( pState->state() & vcl::WindowState::Minimized )
+            if ( pState->mnState & WindowStateState::Minimized )
             {
-                if ( pState->state() & vcl::WindowState::Maximized )
+                if ( pState->mnState & WindowStateState::Maximized )
                     aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
                 aPlacement.showCmd = SW_SHOWMINIMIZED;
             }
-            else if ( pState->state() & vcl::WindowState::Maximized )
+            else if ( pState->mnState & WindowStateState::Maximized )
                 aPlacement.showCmd = SW_SHOWMAXIMIZED;
-            else if ( pState->state() & vcl::WindowState::Normal )
+            else if ( pState->mnState & WindowStateState::Normal )
                 aPlacement.showCmd = SW_RESTORE;
         }
     }
@@ -1731,7 +1726,7 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
             // the window will not be maximized (and the size updated) before show()
             SetMaximizedFrameGeometry( mhWnd, this, &aStateRect );
             SetWindowPos( mhWnd, nullptr,
-                          maGeometry.x(), maGeometry.y(), maGeometry.width(), maGeometry.height(),
+                          maGeometry.nX, maGeometry.nY, maGeometry.nWidth, maGeometry.nHeight,
                           SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
         }
         else
@@ -1755,15 +1750,16 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
         mbDefPos = false; // window was positioned
 }
 
-bool WinSalFrame::GetWindowState(vcl::WindowData* pState)
+bool WinSalFrame::GetWindowState( SalFrameState* pState )
 {
-    if (maState.width() && maState.height())
+    if ( maState.mnWidth && maState.mnHeight )
     {
         *pState = maState;
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - Don't save minimize
-        if ( !(pState->state() & (vcl::WindowState::Minimized | vcl::WindowState::Maximized)) )
-            pState->rState() |= vcl::WindowState::Normal;
+        //if ( !(pState->mnState & WindowStateState::Maximized) )
+        if ( !(pState->mnState & (WindowStateState::Minimized | WindowStateState::Maximized)) )
+            pState->mnState |= WindowStateState::Normal;
         return true;
     }
 
@@ -1781,7 +1777,7 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
         if( nNewScreen < nMon )
         {
             Point aOldMonPos, aNewMonPos( rMonitors[nNewScreen].m_aArea.TopLeft() );
-            Point aCurPos(maGeometry.pos());
+            Point aCurPos( maGeometry.nX, maGeometry.nY );
             for( size_t i = 0; i < nMon; i++ )
             {
                 if( rMonitors[i].m_aArea.Contains( aCurPos ) )
@@ -1791,9 +1787,9 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
                 }
             }
             mnDisplay = nNewScreen;
-            maGeometry.setScreen(nNewScreen);
-            SetPosSize( aNewMonPos.X() + (maGeometry.x() - aOldMonPos.X()),
-                        aNewMonPos.Y() + (maGeometry.y() - aOldMonPos.Y()),
+            maGeometry.nDisplayScreenNumber = nNewScreen;
+            SetPosSize( aNewMonPos.X() + (maGeometry.nX - aOldMonPos.X()),
+                        aNewMonPos.Y() + (maGeometry.nY - aOldMonPos.Y()),
                         0, 0,
                         SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
@@ -2924,7 +2920,7 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
     POINT pt;
     GetCursorPos( &pt );
 
-    aState.maPos = Point(pt.x - maGeometry.x(), pt.y - maGeometry.y());
+    aState.maPos = Point( pt.x - maGeometry.nX, pt.y - maGeometry.nY );
     return aState;
 }
 
@@ -3227,7 +3223,7 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             UpdateWindow( hWnd );
 
         if( AllSettings::GetLayoutRTL() )
-            aMouseEvt.mnX = pFrame->maGeometry.width() - 1 - aMouseEvt.mnX;
+            aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
 
         nRet = pFrame->CallCallback( nEvent, &aMouseEvt );
         if ( nMsg == WM_MOUSEMOVE )
@@ -3310,7 +3306,7 @@ static bool ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             aWheelEvt.mnCode |= KEY_MOD2;
 
         if( AllSettings::GetLayoutRTL() )
-            aWheelEvt.mnX = pFrame->maGeometry.width() - 1 - aWheelEvt.mnX;
+            aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
 
         nRet = pFrame->CallCallback( SalEvent::WheelMouse, &aWheelEvt );
     }
@@ -3940,11 +3936,14 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
     ImplSalGetWorkArea( hWnd, &aRect, pParentRect );
 
     // a maximized window has no other borders than the caption
-    pFrame->maGeometry.setDecorations(0, pFrame->mbCaption ? GetSystemMetrics(SM_CYCAPTION) : 0, 0, 0);
+    pFrame->maGeometry.nLeftDecoration = pFrame->maGeometry.nRightDecoration = pFrame->maGeometry.nBottomDecoration = 0;
+    pFrame->maGeometry.nTopDecoration = pFrame->mbCaption ? GetSystemMetrics( SM_CYCAPTION ) : 0;
 
-    aRect.top += pFrame->maGeometry.topDecoration();
-    pFrame->maGeometry.setPos({ aRect.left, aRect.top });
-    SetGeometrySize(pFrame->maGeometry, { aRect.right - aRect.left, aRect.bottom - aRect.top });
+    aRect.top += pFrame->maGeometry.nTopDecoration;
+    pFrame->maGeometry.nX = aRect.left;
+    pFrame->maGeometry.nY = aRect.top;
+    pFrame->maGeometry.nWidth = aRect.right - aRect.left;
+    pFrame->maGeometry.nHeight = aRect.bottom - aRect.top;
 }
 
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
@@ -3954,9 +3953,15 @@ static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
 
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
-    pFrame->maGeometry.setPosSize({ 0, 0 }, { 0, 0 });
-    pFrame->maGeometry.setDecorations(0, 0, 0, 0);
-    pFrame->maGeometry.setScreen(0);
+    pFrame->maGeometry.nX = 0;
+    pFrame->maGeometry.nY = 0;
+    pFrame->maGeometry.nWidth = 0;
+    pFrame->maGeometry.nHeight = 0;
+    pFrame->maGeometry.nLeftDecoration = 0;
+    pFrame->maGeometry.nTopDecoration = 0;
+    pFrame->maGeometry.nRightDecoration = 0;
+    pFrame->maGeometry.nBottomDecoration = 0;
+    pFrame->maGeometry.nDisplayScreenNumber = 0;
 
     if ( IsIconic( hWnd ) )
         return;
@@ -3966,9 +3971,13 @@ static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
     aPt.y=0;
     ClientToScreen(hWnd, &aPt);
     int cx = aPt.x - aRect.left;
+    pFrame->maGeometry.nTopDecoration = aPt.y - aRect.top;
 
-    pFrame->maGeometry.setDecorations(cx, aPt.y - aRect.top, cx, 0);
-    pFrame->maGeometry.setPos({ aPt.x, aPt.y });
+    pFrame->maGeometry.nLeftDecoration = cx;
+    pFrame->maGeometry.nRightDecoration = cx;
+
+    pFrame->maGeometry.nX = aPt.x;
+    pFrame->maGeometry.nY = aPt.y;
 
     RECT aInnerRect;
     GetClientRect( hWnd, &aInnerRect );
@@ -3978,19 +3987,21 @@ static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
         aPt.x=aInnerRect.right;
         aPt.y=aInnerRect.top;
         ClientToScreen(hWnd, &aPt);
-        pFrame->maGeometry.setRightDecoration(aRect.right - aPt.x);
+        pFrame->maGeometry.nRightDecoration = aRect.right - aPt.x;
     }
     if( aInnerRect.bottom ) // may be zero if window was not shown yet
-        pFrame->maGeometry.setBottomDecoration(aRect.bottom - aPt.y - aInnerRect.bottom);
+        pFrame->maGeometry.nBottomDecoration += aRect.bottom - aPt.y - aInnerRect.bottom;
     else
         // bottom border is typically the same as left/right
-        pFrame->maGeometry.setBottomDecoration(pFrame->maGeometry.leftDecoration());
+        pFrame->maGeometry.nBottomDecoration = pFrame->maGeometry.nLeftDecoration;
 
     int nWidth  = aRect.right - aRect.left
-        - pFrame->maGeometry.rightDecoration() - pFrame->maGeometry.leftDecoration();
+        - pFrame->maGeometry.nRightDecoration - pFrame->maGeometry.nLeftDecoration;
     int nHeight = aRect.bottom - aRect.top
-        - pFrame->maGeometry.bottomDecoration() - pFrame->maGeometry.topDecoration();
-    SetGeometrySize(pFrame->maGeometry, { nWidth, nHeight });
+        - pFrame->maGeometry.nBottomDecoration - pFrame->maGeometry.nTopDecoration;
+    // clamp to zero
+    pFrame->maGeometry.nHeight = nHeight < 0 ? 0 : nHeight;
+    pFrame->maGeometry.nWidth = nWidth < 0 ? 0 : nWidth;
     pFrame->updateScreenNumber();
 }
 

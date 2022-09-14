@@ -544,7 +544,7 @@ Size QtFrame::CalcDefaultSize()
     {
         if (!m_bFullScreenSpanAll)
         {
-            aSize = toSize(QGuiApplication::screens().at(maGeometry.screen())->size());
+            aSize = toSize(QGuiApplication::screens().at(maGeometry.nDisplayScreenNumber)->size());
         }
         else
         {
@@ -584,9 +584,9 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
             if (!(nFlags & SAL_FRAME_POSSIZE_WIDTH))
-                nWidth = maGeometry.width();
+                nWidth = maGeometry.nWidth;
             else if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
-                nHeight = maGeometry.height();
+                nHeight = maGeometry.nHeight;
 
             if (nWidth > 0 && nHeight > 0)
             {
@@ -602,9 +602,9 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
             // assume the resize happened
             // needed for calculations and will eventually be corrected by events
             if (nWidth > 0)
-                maGeometry.setWidth(nWidth);
+                maGeometry.nWidth = nWidth;
             if (nHeight > 0)
-                maGeometry.setHeight(nHeight);
+                maGeometry.nHeight = nHeight;
         }
     }
 
@@ -619,20 +619,21 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     {
         const SalFrameGeometry& aParentGeometry = m_pParent->maGeometry;
         if (QGuiApplication::isRightToLeft())
-            nX = aParentGeometry.x() + aParentGeometry.width() - nX - maGeometry.width() - 1;
+            nX = aParentGeometry.nX + aParentGeometry.nWidth - nX - maGeometry.nWidth - 1;
         else
-            nX += aParentGeometry.x();
-        nY += aParentGeometry.y() + menuBarOffset();
+            nX += aParentGeometry.nX;
+        nY += aParentGeometry.nY + menuBarOffset();
     }
 
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
-        nX = maGeometry.x();
+        nX = maGeometry.nX;
     else if (!(nFlags & SAL_FRAME_POSSIZE_Y))
-        nY = maGeometry.y();
+        nY = maGeometry.nY;
 
     // assume the reposition happened
     // needed for calculations and will eventually be corrected by events later
-    maGeometry.setPos({ nX, nY });
+    maGeometry.nX = nX;
+    maGeometry.nY = nY;
 
     m_bDefaultPos = false;
     asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
@@ -683,64 +684,71 @@ void QtFrame::SetModal(bool bModal)
 
 bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
 
-void QtFrame::SetWindowState(const vcl::WindowData* pState)
+void QtFrame::SetWindowState(const SalFrameState* pState)
 {
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
-    const vcl::WindowDataMask nMaxGeometryMask
-        = vcl::WindowDataMask::PosSize | vcl::WindowDataMask::MaximizedX
-          | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth
-          | vcl::WindowDataMask::MaximizedHeight;
+    const WindowStateMask nMaxGeometryMask
+        = WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width | WindowStateMask::Height
+          | WindowStateMask::MaximizedX | WindowStateMask::MaximizedY
+          | WindowStateMask::MaximizedWidth | WindowStateMask::MaximizedHeight;
 
-    if ((pState->mask() & vcl::WindowDataMask::State)
-        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized()
-        && (pState->mask() & nMaxGeometryMask) == nMaxGeometryMask)
+    if ((pState->mnMask & WindowStateMask::State) && (pState->mnState & WindowStateState::Maximized)
+        && !isMaximized() && (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask)
     {
         const qreal fRatio = devicePixelRatioF();
         QWidget* const pChild = asChild();
-        pChild->resize(ceil(pState->width() / fRatio), ceil(pState->height() / fRatio));
-        pChild->move(ceil(pState->x() / fRatio), ceil(pState->y() / fRatio));
+        pChild->resize(ceil(pState->mnWidth / fRatio), ceil(pState->mnHeight / fRatio));
+        pChild->move(ceil(pState->mnX / fRatio), ceil(pState->mnY / fRatio));
         SetWindowStateImpl(Qt::WindowMaximized);
     }
-    else if (pState->mask() & vcl::WindowDataMask::PosSize)
+    else if (pState->mnMask
+             & (WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
+                | WindowStateMask::Height))
     {
         sal_uInt16 nPosSizeFlags = 0;
-        if (pState->mask() & vcl::WindowDataMask::X)
+        if (pState->mnMask & WindowStateMask::X)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
-        if (pState->mask() & vcl::WindowDataMask::Y)
+        if (pState->mnMask & WindowStateMask::Y)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
-        if (pState->mask() & vcl::WindowDataMask::Width)
+        if (pState->mnMask & WindowStateMask::Width)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
-        if (pState->mask() & vcl::WindowDataMask::Height)
+        if (pState->mnMask & WindowStateMask::Height)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        SetPosSize(pState->x(), pState->y(), pState->width(), pState->height(), nPosSizeFlags);
+        SetPosSize(pState->mnX, pState->mnY, pState->mnWidth, pState->mnHeight, nPosSizeFlags);
     }
-    else if (pState->mask() & vcl::WindowDataMask::State && !isChild())
+    else if (pState->mnMask & WindowStateMask::State && !isChild())
     {
-        if (pState->state() & vcl::WindowState::Maximized)
+        if (pState->mnState & WindowStateState::Maximized)
             SetWindowStateImpl(Qt::WindowMaximized);
-        else if (pState->state() & vcl::WindowState::Minimized)
+        else if (pState->mnState & WindowStateState::Minimized)
             SetWindowStateImpl(Qt::WindowMinimized);
         else
             SetWindowStateImpl(Qt::WindowNoState);
     }
 }
 
-bool QtFrame::GetWindowState(vcl::WindowData* pState)
+bool QtFrame::GetWindowState(SalFrameState* pState)
 {
-    pState->setState(vcl::WindowState::Normal);
-    pState->setMask(vcl::WindowDataMask::State);
-    if (isMinimized())
-        pState->rState() |= vcl::WindowState::Minimized;
+    pState->mnState = WindowStateState::Normal;
+    pState->mnMask = WindowStateMask::State;
+    if (isMinimized() /*|| !windowHandle()*/)
+        pState->mnState |= WindowStateState::Minimized;
     else if (isMaximized())
-        pState->rState() |= vcl::WindowState::Maximized;
+    {
+        pState->mnState |= WindowStateState::Maximized;
+    }
     else
     {
         // we want the frame position and the client area size
         QRect rect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
-        pState->setPosSize(toRectangle(rect));
-        pState->rMask() |= vcl::WindowDataMask::PosSize;
+        pState->mnX = rect.x();
+        pState->mnY = rect.y();
+        pState->mnWidth = rect.width();
+        pState->mnHeight = rect.height();
+        pState->mnMask |= WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
+                          | WindowStateMask::Height;
     }
 
     return true;
@@ -764,7 +772,7 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     if (m_bFullScreen)
     {
         m_aRestoreGeometry = m_pTopLevel->geometry();
-        m_nRestoreScreen = maGeometry.screen();
+        m_nRestoreScreen = maGeometry.nDisplayScreenNumber;
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
         if (!m_bFullScreenSpanAll)
             windowHandle()->showFullScreen();
@@ -867,7 +875,7 @@ bool QtFrame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpAr
 {
     QRect aHelpArea(toQRect(rHelpArea));
     if (QGuiApplication::isRightToLeft())
-        aHelpArea.moveLeft(maGeometry.width() - aHelpArea.width() - aHelpArea.left() - 1);
+        aHelpArea.moveLeft(maGeometry.nWidth - aHelpArea.width() - aHelpArea.left() - 1);
     m_aTooltipText = rText;
     m_aTooltipArea = aHelpArea;
     return true;
@@ -1266,7 +1274,7 @@ SalFrame::SalPointerState QtFrame::GetPointerState()
 {
     SalPointerState aState;
     aState.maPos = toPoint(QCursor::pos() * devicePixelRatioF());
-    aState.maPos.Move(-maGeometry.x(), -maGeometry.y());
+    aState.maPos.Move(-maGeometry.nX, -maGeometry.nY);
     aState.mnState = GetMouseModCode(QGuiApplication::mouseButtons())
                      | GetKeyModCode(QGuiApplication::keyboardModifiers());
     return aState;
@@ -1352,7 +1360,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         nScreen = static_cast<sal_uInt32>(screenNumber(primaryScreen));
     }
 
-    maGeometry.setScreen(nScreen);
+    maGeometry.nDisplayScreenNumber = nScreen;
 }
 
 void QtFrame::SetApplicationID(const OUString& rWMClass)

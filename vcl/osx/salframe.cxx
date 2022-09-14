@@ -110,7 +110,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
 AquaSalFrame::~AquaSalFrame()
 {
     if (mbFullScreen)
-        doShowFullScreen(false, maGeometry.screen());
+        doShowFullScreen(false, maGeometry.nDisplayScreenNumber);
 
     assert( GetSalData()->mpInstance->IsMainThread() );
 
@@ -168,10 +168,10 @@ void AquaSalFrame::initWindowAndView()
     NSRect aVisibleRect = [pNSScreen visibleFrame];
     CocoaToVCL( aVisibleRect );
 
-    maGeometry.setX(static_cast<sal_Int32>(aVisibleRect.origin.x + aVisibleRect.size.width / 10));
-    maGeometry.setY(static_cast<sal_Int32>(aVisibleRect.origin.y + aVisibleRect.size.height / 10));
-    maGeometry.setWidth(static_cast<sal_uInt32>(aVisibleRect.size.width * 0.8));
-    maGeometry.setHeight(static_cast<sal_uInt32>(aVisibleRect.size.height * 0.8));
+    maGeometry.nX = static_cast<int>(aVisibleRect.origin.x + aVisibleRect.size.width / 10);
+    maGeometry.nY = static_cast<int>(aVisibleRect.origin.y + aVisibleRect.size.height / 10);
+    maGeometry.nWidth = static_cast<unsigned int>(aVisibleRect.size.width * 0.8);
+    maGeometry.nHeight = static_cast<unsigned int>(aVisibleRect.size.height * 0.8);
 
     // calculate style mask
     if( (mnStyle & SalFrameStyleFlags::FLOAT) ||
@@ -184,10 +184,10 @@ void AquaSalFrame::initWindowAndView()
                       NSWindowStyleMaskResizable      |
                       NSWindowStyleMaskClosable;
         // make default window "maximized"
-        maGeometry.setX(static_cast<sal_Int32>(aVisibleRect.origin.x));
-        maGeometry.setY(static_cast<sal_Int32>(aVisibleRect.origin.y));
-        maGeometry.setWidth(static_cast<sal_uInt32>(aVisibleRect.size.width));
-        maGeometry.setHeight(static_cast<sal_uInt32>(aVisibleRect.size.height));
+        maGeometry.nX = static_cast<int>(aVisibleRect.origin.x);
+        maGeometry.nY = static_cast<int>(aVisibleRect.origin.y);
+        maGeometry.nWidth = static_cast<int>(aVisibleRect.size.width);
+        maGeometry.nHeight = static_cast<int>(aVisibleRect.size.height);
         mbPositioned = mbSized = true;
     }
     else
@@ -231,7 +231,7 @@ void AquaSalFrame::initWindowAndView()
     [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
 
     [mpNSWindow setRestorable:NO];
-    const NSRect aRect = { NSZeroPoint, NSMakeSize(maGeometry.width(), maGeometry.height()) };
+    const NSRect aRect = { NSZeroPoint, NSMakeSize( maGeometry.nWidth, maGeometry.nHeight )};
     mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
 
     maSysData.mpNSView = mpNSView;
@@ -246,7 +246,7 @@ void AquaSalFrame::CocoaToVCL( NSRect& io_rRect, bool bRelativeToScreen )
     if( bRelativeToScreen )
         io_rRect.origin.y = maScreenRect.size.height - (io_rRect.origin.y+io_rRect.size.height);
     else
-        io_rRect.origin.y = maGeometry.height() - (io_rRect.origin.y+io_rRect.size.height);
+        io_rRect.origin.y = maGeometry.nHeight - (io_rRect.origin.y+io_rRect.size.height);
 }
 
 void AquaSalFrame::VCLToCocoa( NSRect& io_rRect, bool bRelativeToScreen )
@@ -254,7 +254,7 @@ void AquaSalFrame::VCLToCocoa( NSRect& io_rRect, bool bRelativeToScreen )
     if( bRelativeToScreen )
         io_rRect.origin.y = maScreenRect.size.height - (io_rRect.origin.y+io_rRect.size.height);
     else
-        io_rRect.origin.y = maGeometry.height() - (io_rRect.origin.y+io_rRect.size.height);
+        io_rRect.origin.y = maGeometry.nHeight - (io_rRect.origin.y+io_rRect.size.height);
 }
 
 void AquaSalFrame::CocoaToVCL( NSPoint& io_rPoint, bool bRelativeToScreen )
@@ -262,7 +262,7 @@ void AquaSalFrame::CocoaToVCL( NSPoint& io_rPoint, bool bRelativeToScreen )
     if( bRelativeToScreen )
         io_rPoint.y = maScreenRect.size.height - io_rPoint.y;
     else
-        io_rPoint.y = maGeometry.height() - io_rPoint.y;
+        io_rPoint.y = maGeometry.nHeight - io_rPoint.y;
 }
 
 void AquaSalFrame::VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen )
@@ -270,7 +270,7 @@ void AquaSalFrame::VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen )
     if( bRelativeToScreen )
         io_rPoint.y = maScreenRect.size.height - io_rPoint.y;
     else
-        io_rPoint.y = maGeometry.height() - io_rPoint.y;
+        io_rPoint.y = maGeometry.nHeight - io_rPoint.y;
 }
 
 void AquaSalFrame::screenParametersChanged()
@@ -393,25 +393,25 @@ void AquaSalFrame::initShow()
         if( mpParent ) // center relative to parent
         {
             // center on parent
-            tools::Long nNewX = mpParent->maGeometry.x() + (static_cast<tools::Long>(mpParent->maGeometry.width()) - static_cast<tools::Long>(maGeometry.width())) / 2;
+            tools::Long nNewX = mpParent->maGeometry.nX + (static_cast<tools::Long>(mpParent->maGeometry.nWidth) - static_cast<tools::Long>(maGeometry.nWidth))/2;
             if( nNewX < aScreenRect.Left() )
                 nNewX = aScreenRect.Left();
-            if (static_cast<tools::Long>(nNewX + maGeometry.width()) > aScreenRect.Right())
-                nNewX = aScreenRect.Right() - maGeometry.width() - 1;
-            tools::Long nNewY = mpParent->maGeometry.y() + (static_cast<tools::Long>(mpParent->maGeometry.height()) - static_cast<tools::Long>(maGeometry.height())) / 2;
+            if( tools::Long(nNewX + maGeometry.nWidth) > aScreenRect.Right() )
+                nNewX = aScreenRect.Right() - maGeometry.nWidth-1;
+            tools::Long nNewY = mpParent->maGeometry.nY + (static_cast<tools::Long>(mpParent->maGeometry.nHeight) - static_cast<tools::Long>(maGeometry.nHeight))/2;
             if( nNewY < aScreenRect.Top() )
                 nNewY = aScreenRect.Top();
             if( nNewY > aScreenRect.Bottom() )
-                nNewY = aScreenRect.Bottom() - maGeometry.height() - 1;
-            SetPosSize( nNewX - mpParent->maGeometry.x(),
-                        nNewY - mpParent->maGeometry.y(),
+                nNewY = aScreenRect.Bottom() - maGeometry.nHeight-1;
+            SetPosSize( nNewX - mpParent->maGeometry.nX,
+                        nNewY - mpParent->maGeometry.nY,
                         0, 0,  SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
         else if( ! (mnStyle & SalFrameStyleFlags::SIZEABLE) )
         {
             // center on screen
-            tools::Long nNewX = (aScreenRect.GetWidth() - maGeometry.width()) / 2;
-            tools::Long nNewY = (aScreenRect.GetHeight() - maGeometry.height()) / 2;
+            tools::Long nNewX = (aScreenRect.GetWidth() - maGeometry.nWidth)/2;
+            tools::Long nNewY = (aScreenRect.GetHeight() - maGeometry.nHeight)/2;
             SetPosSize( nNewX, nNewY, 0, 0,  SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
     }
@@ -424,7 +424,7 @@ void AquaSalFrame::SendPaintEvent( const tools::Rectangle* pRect )
 {
     OSX_SALDATA_RUNINMAIN( SendPaintEvent( pRect ) )
 
-    SalPaintEvent aPaintEvt(0, 0, maGeometry.width(), maGeometry.height(), true);
+    SalPaintEvent aPaintEvt( 0, 0, maGeometry.nWidth, maGeometry.nHeight, true );
     if( pRect )
     {
         aPaintEvt.mnBoundX      = pRect->Left();
@@ -507,8 +507,8 @@ void AquaSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
     {
         // Always add the decoration as the dimension concerns only
         // the content rectangle
-        nWidth += maGeometry.leftDecoration() + maGeometry.rightDecoration();
-        nHeight += maGeometry.topDecoration() + maGeometry.bottomDecoration();
+        nWidth += maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
+        nHeight += maGeometry.nTopDecoration + maGeometry.nBottomDecoration;
 
         NSSize aSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
 
@@ -529,8 +529,8 @@ void AquaSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
     {
         // Always add the decoration as the dimension concerns only
         // the content rectangle
-        nWidth += maGeometry.leftDecoration() + maGeometry.rightDecoration();
-        nHeight += maGeometry.topDecoration() + maGeometry.bottomDecoration();
+        nWidth += maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
+        nHeight += maGeometry.nTopDecoration + maGeometry.nBottomDecoration;
 
         // Carbon windows can't have a size greater than 32767x32767
         if (nWidth>32767) nWidth=32767;
@@ -548,8 +548,8 @@ void AquaSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
     if (mbShown || mbInitShow || Application::IsBitmapRendering())
     {
-        rWidth = maGeometry.width();
-        rHeight = maGeometry.height();
+        rWidth  = maGeometry.nWidth;
+        rHeight = maGeometry.nHeight;
     }
     else
     {
@@ -578,24 +578,24 @@ SalEvent AquaSalFrame::PreparePosSize(tools::Long nX, tools::Long nY, tools::Lon
     if (Application::IsBitmapRendering())
     {
         if (nFlags & SAL_FRAME_POSSIZE_X)
-            maGeometry.setX(nX);
+            maGeometry.nX = nX;
         if (nFlags & SAL_FRAME_POSSIZE_Y)
-            maGeometry.setY(nY);
+            maGeometry.nY = nY;
         if (nFlags & SAL_FRAME_POSSIZE_WIDTH)
         {
-            maGeometry.setWidth(nWidth);
-            if (mnMaxWidth > 0 && maGeometry.width() > mnMaxWidth)
-                maGeometry.setWidth(mnMaxWidth);
-            if (mnMinWidth > 0 && maGeometry.width() < mnMinWidth)
-                maGeometry.setWidth(mnMinWidth);
+            maGeometry.nWidth = nWidth;
+            if (mnMaxWidth > 0 && maGeometry.nWidth > o3tl::make_unsigned(mnMaxWidth))
+                maGeometry.nWidth = mnMaxWidth;
+            if (mnMinWidth > 0 && maGeometry.nWidth < o3tl::make_unsigned(mnMinWidth))
+                maGeometry.nWidth = mnMinWidth;
         }
         if (nFlags & SAL_FRAME_POSSIZE_HEIGHT)
         {
-            maGeometry.setHeight(nHeight);
-            if (mnMaxHeight > 0 && maGeometry.height() > mnMaxHeight)
-                maGeometry.setHeight(mnMaxHeight);
-            if (mnMinHeight > 0 && maGeometry.height() < mnMinHeight)
-                maGeometry.setHeight(mnMinHeight);
+            maGeometry.nHeight = nHeight;
+            if (mnMaxHeight > 0 && maGeometry.nHeight > o3tl::make_unsigned(mnMaxHeight))
+                maGeometry.nHeight = mnMaxHeight;
+            if (mnMinHeight > 0 && maGeometry.nHeight < o3tl::make_unsigned(mnMinHeight))
+                maGeometry.nHeight = mnMinHeight;
         }
         if (nEvent != SalEvent::NONE)
             CallCallback(nEvent, nullptr);
@@ -604,7 +604,7 @@ SalEvent AquaSalFrame::PreparePosSize(tools::Long nX, tools::Long nY, tools::Lon
     return nEvent;
 }
 
-void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
+void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 {
     if (!mpNSWindow && !Application::IsBitmapRendering())
         return;
@@ -612,12 +612,12 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
     OSX_SALDATA_RUNINMAIN( SetWindowState( pState ) )
 
     sal_uInt16 nFlags = 0;
-    nFlags |= ((pState->mask() & vcl::WindowDataMask::X) ? SAL_FRAME_POSSIZE_X : 0);
-    nFlags |= ((pState->mask() & vcl::WindowDataMask::Y) ? SAL_FRAME_POSSIZE_Y : 0);
-    nFlags |= ((pState->mask() & vcl::WindowDataMask::Width) ? SAL_FRAME_POSSIZE_WIDTH : 0);
-    nFlags |= ((pState->mask() & vcl::WindowDataMask::Height) ? SAL_FRAME_POSSIZE_HEIGHT : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::X) ? SAL_FRAME_POSSIZE_X : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::Y) ? SAL_FRAME_POSSIZE_Y : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::Width) ? SAL_FRAME_POSSIZE_WIDTH : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::Height) ? SAL_FRAME_POSSIZE_HEIGHT : 0);
 
-    SalEvent nEvent = PreparePosSize(pState->x(), pState->y(), pState->width(), pState->height(), nFlags);
+    SalEvent nEvent = PreparePosSize(pState->mnX, pState->mnY, pState->mnWidth, pState->mnHeight, nFlags);
     if (Application::IsBitmapRendering())
         return;
 
@@ -625,19 +625,19 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
     NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL(aStateRect);
-    if (pState->mask() & vcl::WindowDataMask::X)
-        aStateRect.origin.x = float(pState->x());
-    if (pState->mask() & vcl::WindowDataMask::Y)
-        aStateRect.origin.y = float(pState->y());
-    if (pState->mask() & vcl::WindowDataMask::Width)
-        aStateRect.size.width = float(pState->width());
-    if (pState->mask() & vcl::WindowDataMask::Height)
-        aStateRect.size.height = float(pState->height());
+    if (pState->mnMask & WindowStateMask::X)
+        aStateRect.origin.x = float(pState->mnX);
+    if (pState->mnMask & WindowStateMask::Y)
+        aStateRect.origin.y = float(pState->mnY);
+    if (pState->mnMask & WindowStateMask::Width)
+        aStateRect.size.width = float(pState->mnWidth);
+    if (pState->mnMask & WindowStateMask::Height)
+        aStateRect.size.height = float(pState->mnHeight);
     VCLToCocoa(aStateRect);
     aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
     [mpNSWindow setFrame: aStateRect display: NO];
 
-    if (pState->state() == vcl::WindowState::Minimized)
+    if (pState->mnState == WindowStateState::Minimized)
         [mpNSWindow miniaturize: NSApp];
     else if ([mpNSWindow isMiniaturized])
         [mpNSWindow deminiaturize: NSApp];
@@ -646,7 +646,7 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
        the program specified one), but comes closest since the default behavior is
        "maximized" if the user did not intervene
      */
-    if (pState->state() == vcl::WindowState::Maximized)
+    if (pState->mnState == WindowStateState::Maximized)
     {
         if (![mpNSWindow isZoomed])
             [mpNSWindow zoom: NSApp];
@@ -674,15 +674,20 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
     }
 }
 
-bool AquaSalFrame::GetWindowState(vcl::WindowData* pState)
+bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 {
     if (!mpNSWindow)
     {
         if (Application::IsBitmapRendering())
         {
-            pState->setMask(vcl::WindowDataMask::PosSizeState);
-            pState->setPosSize(maGeometry.posSize());
-            pState->setState(vcl::WindowState::Normal);
+            pState->mnMask = WindowStateMask::X | WindowStateMask::Y
+                             | WindowStateMask::Width | WindowStateMask::Height
+                             | WindowStateMask::State;
+            pState->mnX = maGeometry.nX;
+            pState->mnY = maGeometry.nY;
+            pState->mnWidth = maGeometry.nWidth;
+            pState->mnHeight = maGeometry.nHeight;
+            pState->mnState = WindowStateState::Normal;
             return true;
         }
         return false;
@@ -690,22 +695,26 @@ bool AquaSalFrame::GetWindowState(vcl::WindowData* pState)
 
     OSX_SALDATA_RUNINMAIN_UNION( GetWindowState( pState ), boolean )
 
-    pState->setMask(vcl::WindowDataMask::PosSizeState);
+    pState->mnMask = WindowStateMask::X                 |
+                     WindowStateMask::Y                 |
+                     WindowStateMask::Width             |
+                     WindowStateMask::Height            |
+                     WindowStateMask::State;
 
     NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
-    pState->setX(static_cast<sal_Int32>(aStateRect.origin.x));
-    pState->setY(static_cast<sal_Int32>(aStateRect.origin.y));
-    pState->setWidth(static_cast<sal_uInt32>(aStateRect.size.width));
-    pState->setHeight(static_cast<sal_uInt32>(aStateRect.size.height));
+    pState->mnX         = tools::Long(aStateRect.origin.x);
+    pState->mnY         = tools::Long(aStateRect.origin.y);
+    pState->mnWidth     = tools::Long(aStateRect.size.width);
+    pState->mnHeight    = tools::Long(aStateRect.size.height);
 
     if( [mpNSWindow isMiniaturized] )
-        pState->setState(vcl::WindowState::Minimized);
+        pState->mnState = WindowStateState::Minimized;
     else if( ! [mpNSWindow isZoomed] )
-        pState->setState(vcl::WindowState::Normal);
+        pState->mnState = WindowStateState::Normal;
     else
-        pState->setState(vcl::WindowState::Maximized);
+        pState->mnState = WindowStateState::Maximized;
 
     return true;
 }
@@ -952,7 +961,7 @@ void AquaSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 
     // FIXME: use Cocoa functions
     // FIXME: multiscreen support
-    CGPoint aPoint = { static_cast<CGFloat>(nX + maGeometry.x()), static_cast<CGFloat>(nY + maGeometry.y()) };
+    CGPoint aPoint = { static_cast<CGFloat>(nX + maGeometry.nX), static_cast<CGFloat>(nY + maGeometry.nY) };
     CGDirectDisplayID mainDisplayID = CGMainDisplayID();
     CGDisplayMoveCursorToPoint( mainDisplayID, aPoint );
 }
@@ -1383,9 +1392,9 @@ void AquaSalFrame::SetPosSize(
         if( AllSettings::GetLayoutRTL() )
         {
             if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
-                nX = static_cast<tools::Long>(mpParent->maGeometry.width()) - nWidth - 1 - nX;
+                nX = mpParent->maGeometry.nWidth - nWidth-1 - nX;
             else
-                nX = static_cast<tools::Long>(mpParent->maGeometry.width()) - aContentRect.size.width - 1 - nX;
+                nX = mpParent->maGeometry.nWidth - static_cast<tools::Long>( aContentRect.size.width-1) - nX;
         }
         NSRect aParentFrameRect = [mpParent->mpNSWindow frame];
         aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: mpParent->mnStyleMask];
@@ -1660,10 +1669,10 @@ void AquaSalFrame::UpdateFrameGeometry()
         if( pScreens )
         {
             unsigned int nNewDisplayScreenNumber = [pScreens indexOfObject: pScreen];
-            if (bFirstTime || maGeometry.screen() != nNewDisplayScreenNumber)
+            if (bFirstTime || maGeometry.nDisplayScreenNumber != nNewDisplayScreenNumber)
             {
                 mbGeometryDidChange = true;
-                maGeometry.setScreen(nNewDisplayScreenNumber);
+                maGeometry.nDisplayScreenNumber = nNewDisplayScreenNumber;
             }
         }
     }
@@ -1695,17 +1704,19 @@ void AquaSalFrame::UpdateFrameGeometry()
         maContentRect = aContentRect;
         maFrameRect = aFrameRect;
 
-        maGeometry.setX(static_cast<sal_Int32>(aContentRect.origin.x));
-        maGeometry.setY(static_cast<sal_Int32>(aContentRect.origin.y));
-        maGeometry.setWidth(static_cast<sal_uInt32>(aContentRect.size.width));
-        maGeometry.setHeight(static_cast<sal_uInt32>(aContentRect.size.height));
+        maGeometry.nX = static_cast<int>(aContentRect.origin.x);
+        maGeometry.nY = static_cast<int>(aContentRect.origin.y);
 
-        maGeometry.setLeftDecoration(static_cast<sal_uInt32>(aContentRect.origin.x - aFrameRect.origin.x));
-        maGeometry.setRightDecoration(static_cast<sal_uInt32>((aFrameRect.origin.x + aFrameRect.size.width) -
-                                      (aContentRect.origin.x + aContentRect.size.width)));
-        maGeometry.setTopDecoration(static_cast<sal_uInt32>(aContentRect.origin.y - aFrameRect.origin.y));
-        maGeometry.setBottomDecoration(static_cast<sal_uInt32>((aFrameRect.origin.y + aFrameRect.size.height) -
-                                       (aContentRect.origin.y + aContentRect.size.height)));
+        maGeometry.nLeftDecoration = static_cast<unsigned int>(aContentRect.origin.x - aFrameRect.origin.x);
+        maGeometry.nRightDecoration = static_cast<unsigned int>((aFrameRect.origin.x + aFrameRect.size.width) -
+                                      (aContentRect.origin.x + aContentRect.size.width));
+
+        maGeometry.nTopDecoration = static_cast<unsigned int>(aContentRect.origin.y - aFrameRect.origin.y);
+        maGeometry.nBottomDecoration = static_cast<unsigned int>((aFrameRect.origin.y + aFrameRect.size.height) -
+                                       (aContentRect.origin.y + aContentRect.size.height));
+
+        maGeometry.nWidth = static_cast<unsigned int>(aContentRect.size.width);
+        maGeometry.nHeight = static_cast<unsigned int>(aContentRect.size.height);
     }
 }
 

@@ -22,7 +22,6 @@
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/uitest/factory.hxx>
-#include <vcl/windowstate.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -544,7 +543,7 @@ public:
     virtual bool is_default_widget(const weld::Widget* pCandidate) const = 0;
 
     virtual void set_window_state(const OString& rStr) = 0;
-    virtual OString get_window_state(vcl::WindowDataMask nMask) const = 0;
+    virtual OString get_window_state(WindowStateMask nMask) const = 0;
 
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 

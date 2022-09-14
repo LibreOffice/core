@@ -112,7 +112,7 @@ ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
    // tdf#101285 - Remember position of dialog
     SvtViewOptions aDlgOpt(EViewType::Dialog, "CondFormatDialog");
     OString sWindowState
-        = m_xDialog->get_window_state(vcl::WindowDataMask::Pos);
+        = m_xDialog->get_window_state(WindowStateMask::Pos);
     aDlgOpt.SetWindowState(OUString::fromUtf8(sWindowState));
 }
 

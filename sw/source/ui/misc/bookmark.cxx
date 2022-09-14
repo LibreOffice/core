@@ -362,7 +362,8 @@ SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
     // tdf#146261 - Remember size of bookmark dialog
     SvtViewOptions aDlgOpt(EViewType::Dialog, "BookmarkDialog");
-    OString sWindowState = m_xDialog->get_window_state(vcl::WindowDataMask::PosSize);
+    OString sWindowState
+        = m_xDialog->get_window_state(WindowStateMask::Pos | WindowStateMask::Size);
     aDlgOpt.SetWindowState(OUString::fromUtf8(sWindowState));
 }
 

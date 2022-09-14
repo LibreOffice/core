@@ -302,8 +302,8 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectan
     // in mirrored UI case; best done by actually executing the same code
     sal_uInt16 nArrangeIndex;
     pWin->SetPosPixel( FloatingWindow::ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
-    displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.x() - pParentAquaSalFrame->maGeometry.x() + offset;
-    displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.y() - pParentAquaSalFrame->maGeometry.y() + offset;
+    displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.nX - pParentAquaSalFrame->maGeometry.nX + offset;
+    displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
     // #i111992# if this menu was opened due to a key event, prevent dispatching that yet again
@@ -819,8 +819,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // make coordinates relative to reference frame
     static_cast<AquaSalFrame*>(i_pReferenceFrame)->CocoaToVCL( aRect.origin );
-    aRect.origin.x -= i_pReferenceFrame->maGeometry.x();
-    aRect.origin.y -= i_pReferenceFrame->maGeometry.y() + aRect.size.height;
+    aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
+    aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
 
     return tools::Rectangle( Point(static_cast<tools::Long>(aRect.origin.x),
                 static_cast<tools::Long>(aRect.origin.y)

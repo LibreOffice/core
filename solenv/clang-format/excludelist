@@ -14424,6 +14424,7 @@ vcl/inc/salbmp.hxx
 vcl/inc/salframe.hxx
 vcl/inc/salgdi.hxx
 vcl/inc/salgdiimpl.hxx
+vcl/inc/salgeom.hxx
 vcl/inc/salinst.hxx
 vcl/inc/sallayout.hxx
 vcl/inc/salmenu.hxx

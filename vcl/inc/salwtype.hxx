@@ -31,13 +31,10 @@ class LogicalFontInstance;
 class SalGraphics;
 class SalFrame;
 class SalObject;
-namespace vcl
-{
-    class Window;
-    enum class WindowState;
-}
+namespace vcl { class Window; }
 enum class InputContextFlags;
 enum class WindowStateMask;
+enum class WindowStateState;
 enum class ExtTextInputAttr;
 enum class ModKeyFlags;
 
@@ -232,6 +229,20 @@ enum class SalObjEvent {
     GetFocus           = 1,
     LoseFocus          = 2,
     ToTop              = 3
+};
+
+struct SalFrameState
+{
+    tools::Long            mnX;
+    tools::Long            mnY;
+    tools::Long            mnWidth;
+    tools::Long            mnHeight;
+    tools::Long            mnMaximizedX;
+    tools::Long            mnMaximizedY;
+    tools::Long            mnMaximizedWidth;
+    tools::Long            mnMaximizedHeight;
+    WindowStateMask  mnMask;
+    WindowStateState mnState;
 };
 
 struct SalInputContext

@@ -20,78 +20,52 @@
 #ifndef INCLUDED_VCL_WINDOWSTATE_HXX
 #define INCLUDED_VCL_WINDOWSTATE_HXX
 
-#include <vcl/WindowPosSize.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx>
+#include <rtl/string.hxx>
 
-namespace vcl
+class VCL_PLUGIN_PUBLIC WindowStateData
 {
-enum class WindowState
-{
-    NONE = 0x0000,
-    Normal = 0x0001,
-    Minimized = 0x0002,
-    Maximized = 0x0004,
-    // Rollup is no longer used, but the bit is retained because WindowData is serialized
-    // from/to strings describing window state that are stored in a users config
-    // Rollup = 0x0008,
-    MaximizedHorz = 0x0010,
-    MaximizedVert = 0x0020,
-    FullScreen = 0x0040,
-    SystemMask = 0xffff
-};
-
-enum class WindowDataMask
-{
-    NONE = 0x0000,
-    X = 0x0001,
-    Y = 0x0002,
-    Width = 0x0004,
-    Height = 0x0008,
-    State = 0x0010,
-    Minimized = 0x0020,
-    MaximizedX = 0x0100,
-    MaximizedY = 0x0200,
-    MaximizedWidth = 0x0400,
-    MaximizedHeight = 0x0800,
-    Pos = X | Y,
-    Size = Width | Height,
-    PosSize = Pos | Size,
-    PosSizeState = Pos | Size | State,
-    All = X | Y | Width | Height | MaximizedX | MaximizedY | MaximizedWidth | MaximizedHeight
-          | State | Minimized
-};
-
-class VCL_PLUGIN_PUBLIC WindowData final : public WindowPosSize
-{
-    WindowState m_nState;
-    WindowDataMask m_nMask;
-
+private:
+    WindowStateMask mnValidMask;
+    int mnX;
+    int mnY;
+    unsigned int mnWidth;
+    unsigned int mnHeight;
     int mnMaximizedX;
     int mnMaximizedY;
     unsigned int mnMaximizedWidth;
     unsigned int mnMaximizedHeight;
+    WindowStateState mnState;
 
 public:
-    WindowData()
-        : m_nState(WindowState::NONE)
-        , m_nMask(WindowDataMask::NONE)
+    WindowStateData()
+        : mnValidMask(WindowStateMask::NONE)
+        , mnX(0)
+        , mnY(0)
+        , mnWidth(0)
+        , mnHeight(0)
         , mnMaximizedX(0)
         , mnMaximizedY(0)
         , mnMaximizedWidth(0)
         , mnMaximizedHeight(0)
+        , mnState(WindowStateState::NONE)
     {
     }
 
-    // serialize values to a string (the original WindowState representation)
-    OString toStr() const;
+    void SetMask(WindowStateMask nValidMask) { mnValidMask = nValidMask; }
+    WindowStateMask GetMask() const { return mnValidMask; }
 
-    void setState(WindowState nState) { m_nState = nState; }
-    WindowState state() const { return m_nState; }
-    WindowState& rState() { return m_nState; }
-
-    void setMask(WindowDataMask nMask) { m_nMask = nMask; }
-    WindowDataMask mask() const { return m_nMask; }
-    WindowDataMask& rMask() { return m_nMask; }
-
+    void SetX(int nX) { mnX = nX; }
+    int GetX() const { return mnX; }
+    void SetY(int nY) { mnY = nY; }
+    int GetY() const { return mnY; }
+    void SetWidth(unsigned int nWidth) { mnWidth = nWidth; }
+    unsigned int GetWidth() const { return mnWidth; }
+    void SetHeight(unsigned int nHeight) { mnHeight = nHeight; }
+    unsigned int GetHeight() const { return mnHeight; }
+    void SetState(WindowStateState nState) { mnState = nState; }
+    WindowStateState GetState() const { return mnState; }
     void SetMaximizedX(int nRX) { mnMaximizedX = nRX; }
     int GetMaximizedX() const { return mnMaximizedX; }
     void SetMaximizedY(int nRY) { mnMaximizedY = nRY; }
@@ -100,19 +74,9 @@ public:
     unsigned int GetMaximizedWidth() const { return mnMaximizedWidth; }
     void SetMaximizedHeight(unsigned int nRHeight) { mnMaximizedHeight = nRHeight; }
     unsigned int GetMaximizedHeight() const { return mnMaximizedHeight; }
-};
 
-} // namespace vcl
-
-namespace o3tl
-{
-template <> struct typed_flags<vcl::WindowState> : is_typed_flags<vcl::WindowState, 0xffff>
-{
+    OString ToStr() const;
 };
-template <> struct typed_flags<vcl::WindowDataMask> : is_typed_flags<vcl::WindowDataMask, 0x0f3f>
-{
-};
-}
 
 #endif // INCLUDED_VCL_WINDOWSTATE_HXX
 

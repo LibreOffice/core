@@ -835,10 +835,8 @@ void DockingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
         else if (comphelper::LibreOfficeKit::isActive())
         {
-            if ((nFlags & PosSizeFlags::Size) == PosSizeFlags::Size)
-                mpFloatWin->SetOutputSizePixel({ nWidth, nHeight });
-            if ((nFlags & PosSizeFlags::Pos) == PosSizeFlags::Pos)
-                mpFloatWin->SetPosPixel({ nX, nY });
+            mpFloatWin->SetOutputSizePixel(Size(nWidth, nHeight));
+            mpFloatWin->SetPosPixel(Point(nX, nY));
         }
     }
 
@@ -922,10 +920,10 @@ Point DockingWindow::GetFloatingPos() const
     {
         if ( pWrapper->mpFloatWin )
         {
-            vcl::WindowData aData;
-            aData.setMask(vcl::WindowDataMask::Pos);
-            pWrapper->mpFloatWin->GetWindowState( aData );
-            Point aPos(aData.x(), aData.y());
+            WindowStateData aData;
+            aData.SetMask( WindowStateMask::Pos );
+            pWrapper->mpFloatWin->GetWindowStateData( aData );
+            Point aPos( aData.GetX(), aData.GetY() );
             // LOK needs logic coordinates not absolute screen position for autofilter menu
             if (!comphelper::LibreOfficeKit::isActive() || get_id() != "check_list_menu")
                 aPos = pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
@@ -937,10 +935,10 @@ Point DockingWindow::GetFloatingPos() const
 
     if ( mpFloatWin )
     {
-        vcl::WindowData aData;
-        aData.setMask(vcl::WindowDataMask::Pos);
-        mpFloatWin->GetWindowState( aData );
-        Point aPos(aData.x(), aData.y());
+        WindowStateData aData;
+        aData.SetMask( WindowStateMask::Pos );
+        mpFloatWin->GetWindowStateData( aData );
+        Point aPos( aData.GetX(), aData.GetY() );
         aPos = mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
         return aPos;
     }

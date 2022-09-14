@@ -546,11 +546,11 @@ void Window::ImplCallMove()
         }
 
         SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
-        mpWindowImpl->maPos = Point(g.x(), g.y());
+        mpWindowImpl->maPos = Point( g.nX, g.nY );
         if( pParentFrame )
         {
             g = pParentFrame->GetGeometry();
-            mpWindowImpl->maPos -= Point(g.x(), g.y());
+            mpWindowImpl->maPos -= Point( g.nX, g.nY );
         }
         // the client window and all its subclients have the same position as the borderframe
         // this is important for floating toolbars where the borderwindow is a floating window
