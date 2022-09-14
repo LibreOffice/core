@@ -675,6 +675,12 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
 
         free(nextComponent);
 
+        if (myPoints.size() > SAL_MAX_UINT16) {
+            SAL_WARN("vcl.fonts", "number of points has to be limited to max value GlyphData::npoints can contain, abandon effort");
+            myPoints.clear();
+            break;
+        }
+
     } while (flags & MORE_COMPONENTS);
 
     // #i123417# some fonts like IFAOGrec have no outline points in some compound glyphs
