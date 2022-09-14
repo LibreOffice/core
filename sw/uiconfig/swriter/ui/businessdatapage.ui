@@ -83,11 +83,6 @@
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">fax</property>
             <property name="xalign">1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="phoneft-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="businessdatapage|phoneft-atkobject">Home telephone number</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -123,7 +118,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="company-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company-atkobject">First name</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company-atkobject">Company</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | company">Type the name of your company in this field.</property>
                   </object>
                 </child>
@@ -155,7 +150,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="position-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|position-atkobject">Title</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|position-atkobject">Position</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | position">Type your position in the company in this field.</property>
                   </object>
                 </child>
@@ -186,7 +181,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fax-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|fax-atkobject">Home telephone number</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|fax-atkobject">Fax number</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | fax">Type company fax number in this field.</property>
                   </object>
                 </child>
@@ -219,7 +214,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="url-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|url-atkobject">Fax number</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|url-atkobject">Homepage</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | url">Company homepage</property>
                   </object>
                 </child>
@@ -238,7 +233,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="email-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|email-atkobject">email address</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|email-atkobject">Email address</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | email">Type your company email address.</property>
                   </object>
                 </child>
@@ -283,7 +278,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="company2-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company2-atkobject">Last name</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company2-atkobject">Company second line</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | company2">Company second line</property>
                   </object>
                 </child>
@@ -378,6 +373,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="slogan-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|slogan-atkobject">Slogan</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | slogan">Company slogan</property>
                   </object>
                 </child>
@@ -409,6 +405,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="country-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|country-atkobject">Country</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | country">Company country</property>
                   </object>
                 </child>
@@ -427,6 +424,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="state-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|state-atkobject">State</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | state">Type company state.</property>
                   </object>
                 </child>
@@ -472,7 +470,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="phone-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|phone-atkobject">Title</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|phone-atkobject">Phone</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | phone">Type business phone</property>
                   </object>
                 </child>
@@ -491,7 +489,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="mobile-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|mobile-atkobject">Position</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|mobile-atkobject">Mobile</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | mobile">Type company mobile</property>
                   </object>
                 </child>
@@ -536,6 +534,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="street-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|street-atkobject">Street</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | street">Type the name of company street in this field.</property>
                   </object>
                 </child>
