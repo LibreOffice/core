@@ -191,6 +191,13 @@ public:
     const SwTableBox& m_rTableBox;
     TableBoxFormatChanged(const SwTableBoxFormat& rNewFormat, const SwTableBox& rTableBox) : m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
 };
+class NameChanged final : public SfxHint
+{
+public:
+    const OUString m_sOld;
+    const OUString m_sNew;
+    NameChanged(const OUString& rOld, const OUString& rNew) : SfxHint(SfxHintId::NameChanged), m_sOld(rOld), m_sNew(rNew) {};
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem

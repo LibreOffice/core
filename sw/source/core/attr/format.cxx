@@ -147,10 +147,8 @@ void SwFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
     {
-        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
-        SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
         m_aFormatName = rNewName;
-        const sw::LegacyModifyHint aHint(&aOld, &aNew);
+        const sw::NameChanged aHint(m_aFormatName, rNewName);
         SwClientNotify(*this, aHint);
     }
     else

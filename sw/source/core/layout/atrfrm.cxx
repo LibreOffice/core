@@ -2572,16 +2572,15 @@ void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
         assert( m_ffList->end() != it );
         SAL_INFO_IF(m_aFormatName == rNewName, "sw.core", "SwFrmFmt not really renamed, as both names are equal");
 
-        const SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
         // As it's a non-unique list, rename should never fail!
+        sw::NameChanged aHint(m_aFormatName, rNewName);
         bool const renamed =
             m_ffList->m_PosIndex.modify( it,
                 change_name( rNewName ), change_name( m_aFormatName ) );
         assert(renamed);
         (void)renamed; // unused in NDEBUG
         if (bBroadcast) {
-            const SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
-            GetNotifier().Broadcast(sw::LegacyModifyHint( &aOld, &aNew ));
+            GetNotifier().Broadcast(aHint);
         }
     }
     else

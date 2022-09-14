@@ -632,45 +632,39 @@ SwAccessibleTable::~SwAccessibleTable()
 
 void SwAccessibleTable::Notify(const SfxHint& rHint)
 {
+    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
     if(rHint.GetId() == SfxHintId::Dying)
     {
         EndListeningAll();
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwNameChanged && pTabFrame)
     {
-        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        const sal_uInt16 nWhich = pLegacyHint->GetWhich();
-        const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
-        if(nWhich == RES_NAME_CHANGED && pTabFrame)
+        const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
+        const OUString sOldName( GetName() );
+        const OUString sNewTabName = pFrameFormat->GetName();
+
+        SetName( sNewTabName + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
+
+        if( sOldName != GetName() )
         {
-            const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+            aEvent.OldValue <<= sOldName;
+            aEvent.NewValue <<= GetName();
+            FireAccessibleEvent( aEvent );
+        }
 
-            const OUString sOldName( GetName() );
-            const OUString sNewTabName = pFrameFormat->GetName();
+        const OUString sOldDesc( m_sDesc );
+        const OUString sArg2( GetFormattedPageNumber() );
 
-            SetName( sNewTabName + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
-
-            if( sOldName != GetName() )
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-                aEvent.OldValue <<= sOldName;
-                aEvent.NewValue <<= GetName();
-                FireAccessibleEvent( aEvent );
-            }
-
-            const OUString sOldDesc( m_sDesc );
-            const OUString sArg2( GetFormattedPageNumber() );
-
-            m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName, &sArg2 );
-            if( m_sDesc != sOldDesc )
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-                aEvent.OldValue <<= sOldDesc;
-                aEvent.NewValue <<= m_sDesc;
-                FireAccessibleEvent( aEvent );
-            }
+        m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName, &sArg2 );
+        if( m_sDesc != sOldDesc )
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
+            aEvent.OldValue <<= sOldDesc;
+            aEvent.NewValue <<= m_sDesc;
+            FireAccessibleEvent( aEvent );
         }
     }
 }

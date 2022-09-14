@@ -206,35 +206,29 @@ SwAccessibleFrameBase::~SwAccessibleFrameBase()
 
 void SwAccessibleFrameBase::Notify(const SfxHint& rHint)
 {
+    const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(GetFrame());
     if(rHint.GetId() == SfxHintId::Dying)
     {
         EndListeningAll();
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwNameChanged && pFlyFrame)
     {
-        auto pLegacyModifyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
-        const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(GetFrame());
-        if(nWhich == RES_NAME_CHANGED && pFlyFrame)
+        auto rNameChanged = static_cast<const sw::NameChanged&>(rHint);
+        const SwFrameFormat* pFrameFormat = pFlyFrame->GetFormat();
+
+        const OUString sOldName( GetName() );
+        assert( rNameChanged.m_sOld == sOldName);
+
+        SetName( pFrameFormat->GetName() );
+        assert( rNameChanged.m_sNew == GetName());
+
+        if( sOldName != GetName() )
         {
-            const SwFrameFormat* pFrameFormat = pFlyFrame->GetFormat();
-
-            const OUString sOldName( GetName() );
-            assert( !pLegacyModifyHint->m_pOld ||
-                    static_cast<const SwStringMsgPoolItem *>(pLegacyModifyHint->m_pOld)->GetString() == GetName());
-
-            SetName( pFrameFormat->GetName() );
-            assert( !pLegacyModifyHint->m_pNew ||
-                    static_cast<const SwStringMsgPoolItem *>(pLegacyModifyHint->m_pNew)->GetString() == GetName());
-
-            if( sOldName != GetName() )
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-                aEvent.OldValue <<= sOldName;
-                aEvent.NewValue <<= GetName();
-                FireAccessibleEvent( aEvent );
-            }
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+            aEvent.OldValue <<= sOldName;
+            aEvent.NewValue <<= GetName();
+            FireAccessibleEvent( aEvent );
         }
     }
 }
