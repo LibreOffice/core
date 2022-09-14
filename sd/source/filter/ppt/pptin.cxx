@@ -2766,7 +2766,7 @@ ImplSdPPTImport::ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Ref
 }
 
 // exported function
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool ImportPPT(
+SAL_DLLPUBLIC_EXPORT bool ImportPPT(
         SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
 {
     std::unique_ptr<SdPPTImport> pImport( new SdPPTImport( pDocument, rDocStream, rStorage, rMedium ));

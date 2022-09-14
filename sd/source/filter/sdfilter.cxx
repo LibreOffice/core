@@ -86,11 +86,6 @@ oslGenericFunction SdFilter::GetLibrarySymbol( const OUString& rLibraryName, con
         return pMod->getFunctionSymbol(rFnSymbol);
 }
 
-void SdFilter::Preload()
-{
-    (void)GetLibrarySymbol("sd", "ImportPPT");
-}
-
 #endif
 
 void SdFilter::CreateStatusIndicator()

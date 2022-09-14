@@ -45,7 +45,6 @@ public:
     virtual bool            Export() = 0;
 
 #ifndef DISABLE_DYNLOADING
-    static void Preload();
     /// Open library @rLibraryName and lookup symbol @rFnSymbol
     static oslGenericFunction GetLibrarySymbol( const OUString& rLibraryName, const OUString &rFnSymbol );
 #endif
@@ -73,5 +72,8 @@ SD_DLLPUBLIC bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMe
                     SvMemoryStream* pVBA,
                     sal_uInt32 nCnvrtFlags );
 
+// exported function
+SD_DLLPUBLIC bool ImportPPT(
+        SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

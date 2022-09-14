@@ -260,7 +260,6 @@ void SdDLL::Init()
 extern "C" SAL_DLLPUBLIC_EXPORT
 void lok_preload_hook()
 {
-    SdFilter::Preload();
     SdAbstractDialogFactory::Create();
 }
 

@@ -40,13 +40,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( *ImportPPTPointer )( SdDrawDocument*, SvStream&, SotStorage&, SfxMedium& );
-
 typedef sal_Bool ( *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*& );
 
 #ifdef DISABLE_DYNLOADING
-
-extern "C" sal_Bool ImportPPT( SdDrawDocument*, SvStream&, SotStorage&, SfxMedium& );
 
 extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 
@@ -186,15 +182,7 @@ bool SdPPTFilter::Import()
                 mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
             else
             {
-#ifdef DISABLE_DYNLOADING
-                ImportPPTPointer pPPTImport = ImportPPT;
-#else
-                ImportPPTPointer pPPTImport = reinterpret_cast< ImportPPTPointer >(
-                    SdFilter::GetLibrarySymbol(mrMedium.GetFilter()->GetUserData(), "ImportPPT"));
-#endif
-
-                if ( pPPTImport )
-                    bRet = pPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
+                bRet = ImportPPT( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
                 if ( !bRet )
                     mrMedium.SetError(SVSTREAM_WRONGVERSION);
