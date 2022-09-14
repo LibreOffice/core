@@ -25,7 +25,7 @@
 +CCDEBUG    = $(CC) $(NOLOGO) /Od /Zi /D_DEBUG /RTC1
  CFLAGS     = /I. /Isrc $(NOLOGO) /W3 /EHsc /c
  CFLAGS     = $(CFLAGS) /DWIN32 /D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN
- LDFLAGS    = /LARGEADDRESSAWARE /MANIFEST /NXCOMPAT /DYNAMICBASE
+ LDFLAGS    = /LARGEADDRESSAWARE /MANIFEST:EMBED /NXCOMPAT /DYNAMICBASE
 @@ -67,7 +67,7 @@
  RTLIB   = /MD
  RTLIBD  = /MDd
@@ -89,7 +89,7 @@
  
  {src}.rc{$(DIROBJ)}.res:
  	$(RC) /fo$@ $<
-@@ -461,39 +461,39 @@
+@@ -469,41 +469,41 @@
  # File-specific flag builds. Note batch rules take precedence over wildcards,
  # so for now name each file individually.
  $(DIROBJ)\examples\anim_diff.obj: examples\anim_diff.c
@@ -122,6 +122,9 @@
  {imageio}.c{$(DIROBJ)\imageio}.obj::
 -	$(CC) $(CFLAGS) /Fd$(DIROBJ)\imageio\ /Fo$(DIROBJ)\imageio\ $<
 +	$(CC_) $(CFLAGS) /Fd$(DIROBJ)\imageio\ /Fo$(DIROBJ)\imageio\ $<
+ {sharpyuv}.c{$(DIROBJ)\sharpyuv}.obj::
+-	$(CC) $(CFLAGS) /Fd$(DIROBJ)\sharpyuv\ /Fo$(DIROBJ)\sharpyuv\ $<
++	$(CC_) $(CFLAGS) /Fd$(DIROBJ)\sharpyuv\ /Fo$(DIROBJ)\sharpyuv\ $<
  {src\dec}.c{$(DIROBJ)\dec}.obj::
 -	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dec\ $<
 +	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dec\ $<
