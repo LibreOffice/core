@@ -926,4 +926,11 @@ OUString SalGraphics::getRenderBackendName() const
     return OUString();
 }
 
+bool SalGraphics::ShouldDownscaleIconsAtSurface(double* pScaleOut) const
+{
+    if (pScaleOut)
+        *pScaleOut = comphelper::LibreOfficeKit::getDPIScale();
+    return comphelper::LibreOfficeKit::isActive();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

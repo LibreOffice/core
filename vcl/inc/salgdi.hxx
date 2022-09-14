@@ -409,6 +409,14 @@ public:
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
+    // Backends like the svp/gtk ones use cairo and hidpi scale at the surface
+    // but bitmaps aren't hidpi, so if this returns true for the case that the
+    // surface is hidpi then pScaleOut contains the scaling factor. So we can
+    // create larger hires bitmaps which we know will be logically scaled down
+    // by this factor but physically just copied
+    virtual bool ShouldDownscaleIconsAtSurface(double* pScaleOut) const;
+
+
 #if ENABLE_CAIRO_CANVAS
 
     /// Check whether cairo will work

@@ -22,6 +22,8 @@
 
 #include <vcl/bitmapex.hxx>
 
+class SalGraphics;
+
 class ImplImage
 {
 private:
@@ -36,7 +38,7 @@ private:
     BitmapEx maBitmapEx;
     BitmapEx maDisabledBitmapEx;
 
-    bool loadStockAtScale(double fScale, BitmapEx &rBitmapEx);
+    bool loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx);
 
 public:
     ImplImage(const BitmapEx& rBitmapEx);
@@ -57,7 +59,7 @@ public:
     /// Legacy - the original bitmap
     BitmapEx const & getBitmapEx(bool bDisabled = false);
     /// Taking account of HiDPI scaling
-    BitmapEx const & getBitmapExForHiDPI(bool bDisabled = false);
+    BitmapEx const & getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGraphics);
 
     bool isEqual(const ImplImage &ref) const;
     bool isSizeEmpty() const

@@ -28,6 +28,7 @@
 #include <comphelper/lok.hxx>
 
 #include <image.h>
+#include <salgdi.hxx>
 
 ImplImage::ImplImage(const BitmapEx &rBitmapEx)
     : maBitmapChecksum(0)
@@ -42,14 +43,15 @@ ImplImage::ImplImage(OUString aStockName)
 {
 }
 
-bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
+bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
 {
     BitmapEx aBitmapEx;
 
     ImageLoadFlags eScalingFlags = ImageLoadFlags::NONE;
     sal_Int32 nScalePercentage = -1;
 
-    if (comphelper::LibreOfficeKit::isActive()) // scale at the surface
+    double fScale(1.0);
+    if (pGraphics && pGraphics->ShouldDownscaleIconsAtSurface(&fScale)) // scale at the surface
     {
         nScalePercentage = fScale * 100.0;
         eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
@@ -94,7 +96,7 @@ Size ImplImage::getSizePixel()
         aRet = maSizePixel;
     else if (isStock())
     {
-        if (loadStockAtScale(1.0, maBitmapEx))
+        if (loadStockAtScale(nullptr, maBitmapEx))
         {
             assert(maDisabledBitmapEx.IsEmpty());
             assert(maBitmapChecksum == 0);
@@ -138,16 +140,16 @@ bool ImplImage::isEqual(const ImplImage &ref) const
         return maBitmapEx == ref.maBitmapEx;
 }
 
-BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled)
+BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGraphics)
 {
-    if (isStock())
+    if (isStock() && pGraphics)
     {   // check we have the right bitmap cached.
-        // FIXME: DPI scaling should be tied to the outdev really ...
-        double fScale = comphelper::LibreOfficeKit::getDPIScale();
+        double fScale = 1.0;
+        pGraphics->ShouldDownscaleIconsAtSurface(&fScale);
         Size aTarget(maSizePixel.Width()*fScale,
                      maSizePixel.Height()*fScale);
         if (maBitmapEx.GetSizePixel() != aTarget)
-            loadStockAtScale(fScale, maBitmapEx);
+            loadStockAtScale(pGraphics, maBitmapEx);
     }
     return getBitmapEx(bDisabled);
 }
