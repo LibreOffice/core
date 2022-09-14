@@ -46,12 +46,14 @@ namespace XPath
                 return XPathObjectType_XPATH_NUMBER;
             case XPATH_STRING:
                 return XPathObjectType_XPATH_STRING;
+#if LIBXML_VERSION < 21000 || defined(LIBXML_XPTR_LOCS_ENABLED)
             case XPATH_POINT:
                 return XPathObjectType_XPATH_POINT;
             case XPATH_RANGE:
                 return XPathObjectType_XPATH_RANGE;
             case XPATH_LOCATIONSET:
                 return XPathObjectType_XPATH_LOCATIONSET;
+#endif
             case XPATH_USERS:
                 return XPathObjectType_XPATH_USERS;
             case XPATH_XSLT_TREE:
