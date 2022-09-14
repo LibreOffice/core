@@ -210,7 +210,7 @@ public:
     // empty styles have not to be exported
     if( !pFrameSize && !pBrush && !pRowSplit && !pHasTextChangesOnly )
     {
-        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>()); // empty just to enable assert
+        m_rFormatMap.try_emplace(&rFrameFormat); // empty just to enable assert
         return {};
     }
 
@@ -293,13 +293,13 @@ public:
         // found!
         auto const oName(m_rFormatMap.find(pTestFormat)->second);
         assert(oName);
-        m_rFormatMap.emplace(&rFrameFormat, oName);
+        m_rFormatMap.try_emplace(&rFrameFormat, oName);
         return {};
     }
 
     {
         OUString const name(OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1));
-        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>(name));
+        m_rFormatMap.try_emplace(&rFrameFormat, name);
         if ( i != m_aFormatList.end() ) ++i;
         m_aFormatList.insert( i, &rFrameFormat );
         return ::std::optional<OUString>(name);
@@ -338,7 +338,7 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
     // empty styles have not to be exported
     if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir && !pAttCnt )
     {
-        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>()); // empty just to enable assert
+        m_rFormatMap.try_emplace(&rFrameFormat); // empty just to enable assert
         return {};
     }
 
@@ -465,13 +465,13 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
         // found!
         auto const oName(m_rFormatMap.find(pTestFormat)->second);
         assert(oName);
-        m_rFormatMap.emplace(&rFrameFormat, oName);
+        m_rFormatMap.try_emplace(&rFrameFormat, oName);
         return {};
     }
 
     {
         OUString const name(lcl_xmltble_appendBoxPrefix(rNamePrefix, nCol, nRow, bTop));
-        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>(name));
+        m_rFormatMap.try_emplace(&rFrameFormat, name);
         if ( i != m_aFormatList.end() ) ++i;
         m_aFormatList.insert( i, &rFrameFormat );
         return ::std::optional<OUString>(name);
@@ -1230,7 +1230,7 @@ void SwXMLTextParagraphExport::exportTable(
                     && (bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter(*pTableNd)))
                 {
                     maTableNodes.push_back(pTableNd);
-                    m_TableFormats.emplace(pTableNd, ::std::make_pair(SwXMLTextParagraphExport::FormatMap(), SwXMLTextParagraphExport::FormatMap()));
+                    m_TableFormats.try_emplace(pTableNd);
                     // Collect all tables inside cells of this table, too
                     CollectTableLinesAutoStyles(pTable->GetTabLines(), *pFormat, _bProgress);
                 }
