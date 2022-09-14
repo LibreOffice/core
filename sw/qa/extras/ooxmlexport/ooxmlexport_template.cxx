@@ -17,12 +17,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "MS Word 2007 XML Template")
     {
     }
-
-protected:
-    bool mustTestImportOf(const char* filename) const override
-    {
-        return o3tl::ends_with(filename, ".dotx");
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
