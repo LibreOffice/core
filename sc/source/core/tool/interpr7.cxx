@@ -219,6 +219,7 @@ void ScInterpreter::ScFilterXML()
         case XPATH_STRING:
             PushString(OUString::createFromAscii(reinterpret_cast<char*>(pXPathObj->stringval)));
             break;
+#if LIBXML_VERSION < 21000 || defined(LIBXML_XPTR_LOCS_ENABLED)
         case XPATH_POINT:
             PushNoValue();
             break;
@@ -228,6 +229,7 @@ void ScInterpreter::ScFilterXML()
         case XPATH_LOCATIONSET:
             PushNoValue();
             break;
+#endif
         case XPATH_USERS:
             PushNoValue();
             break;

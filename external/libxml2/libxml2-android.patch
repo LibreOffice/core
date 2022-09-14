@@ -2,9 +2,9 @@
 +++ misc/build/libxml2-2.7.6/Makefile.in
 @@ -1635,7 +1635,7 @@
  	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
- check: $(BUILT_SOURCES)
- 	$(MAKE) $(AM_MAKEFLAGS) check-recursive
--all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(SCRIPTS) $(MANS) $(DATA) \
+ 	$(MAKE) $(AM_MAKEFLAGS) check-local
+ check: check-recursive
+-all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(SCRIPTS) $(DATA) \
 +all-am: Makefile $(LTLIBRARIES) \
  		config.h
  install-binPROGRAMS: install-libLTLIBRARIES

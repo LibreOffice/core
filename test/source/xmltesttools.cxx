@@ -148,9 +148,11 @@ OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OSt
                 xmlXPathFreeObject(pXmlObj);
                 return convertedVal;
             }
+#if LIBXML_VERSION < 21000 || defined(LIBXML_XPTR_LOCS_ENABLED)
         case XPATH_POINT:
         case XPATH_RANGE:
         case XPATH_LOCATIONSET:
+#endif
         case XPATH_USERS:
         case XPATH_XSLT_TREE:
             xmlXPathFreeObject(pXmlObj);
