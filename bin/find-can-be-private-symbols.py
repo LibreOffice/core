@@ -183,7 +183,6 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         elif sym == "CreateDialogFactory": continue
         elif sym == "CreateUnoWrapper": continue
         elif sym == "ExportDOC": continue
-        elif sym == "ExportPPT": continue
         elif sym == "ExportRTF": continue
         elif sym == "GetSaveWarningOfMSVBAStorage_ww8": continue
         elif sym == "GetSpecialCharsForEdit": continue

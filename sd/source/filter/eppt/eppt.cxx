@@ -50,6 +50,7 @@
 #include <sfx2/docinf.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/ole/olehelper.hxx>
+#include <sdfilter.hxx>
 #include <memory>
 #include <utility>
 
@@ -1417,7 +1418,7 @@ void PPTWriter::ImplWriteAtomEnding()
 
 // - exported function -
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
+SAL_DLLPUBLIC_EXPORT bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
                     tools::SvRef<SotStorage> const & rSvStorage,
                     css::uno::Reference< css::frame::XModel > const & rXModel,
                     css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
