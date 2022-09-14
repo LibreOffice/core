@@ -114,7 +114,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     {
                         xPropertySet->setPropertyValue("WritingMode",
                                                        uno::Any(text::WritingMode2::LR_TB));
-                        // ToDo: Rembember original vert value and remove hack on export.
+                        // ToDo: Remember original vert value and remove hack on export.
                     }
                     else if (nVert == XML_vert)
                         xPropertySet->setPropertyValue("WritingMode",
