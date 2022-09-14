@@ -40,15 +40,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*& );
-
-#ifdef DISABLE_DYNLOADING
-
-extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
-
-#endif
-
-
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell ),
     pBas    ( nullptr )
@@ -331,14 +322,7 @@ void SdPPTFilter::PreSaveBasic()
     const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
     if( rFilterOptions.IsLoadPPointBasicStorage() )
     {
-#ifdef DISABLE_DYNLOADING
-        SaveVBAPointer pSaveVBA= SaveVBA;
-#else
-        SaveVBAPointer pSaveVBA = reinterpret_cast< SaveVBAPointer >(
-            SdFilter::GetLibrarySymbol(mrMedium.GetFilter()->GetUserData(), "SaveVBA"));
-#endif
-        if( pSaveVBA )
-            pSaveVBA( static_cast<SfxObjectShell&>(mrDocShell), pBas );
+        SaveVBA( static_cast<SfxObjectShell&>(mrDocShell), pBas );
     }
 }
 

@@ -32,6 +32,7 @@ namespace osl { class Module; }
 namespace sd { class DrawDocShell; }
 class SdDrawDocument;
 class SfxMedium;
+class SfxObjectShell;
 class SotStorage;
 class SvMemoryStream;
 
@@ -44,11 +45,6 @@ public:
     bool                    IsDraw() const { return mbIsDraw; }
     virtual bool            Export() = 0;
 
-#ifndef DISABLE_DYNLOADING
-    /// Open library @rLibraryName and lookup symbol @rFnSymbol
-    static oslGenericFunction GetLibrarySymbol( const OUString& rLibraryName, const OUString &rFnSymbol );
-#endif
-
 protected:
     css::uno::Reference< css::frame::XModel >             mxModel;
     css::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
@@ -58,11 +54,6 @@ protected:
     SdDrawDocument&             mrDocument;
     bool                        mbIsDraw : 1;
     void                        CreateStatusIndicator();
-
-private:
-
-    static OUString             ImplGetFullLibraryName( std::u16string_view rLibraryName );
-
 };
 
 SD_DLLPUBLIC bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
@@ -75,5 +66,7 @@ SD_DLLPUBLIC bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMe
 // exported function
 SD_DLLPUBLIC bool ImportPPT(
         SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium );
+
+SD_DLLPUBLIC bool SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

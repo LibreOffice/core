@@ -50,44 +50,6 @@ SdFilter::~SdFilter()
 {
 }
 
-OUString SdFilter::ImplGetFullLibraryName( std::u16string_view rLibraryName )
-{
-    return OUString(SVLIBRARY("?")).replaceFirst( "?", rLibraryName );
-}
-
-#ifndef DISABLE_DYNLOADING
-
-static std::map<OUString, std::unique_ptr<osl::Module>> g_SdModuleMap;
-
-extern "C" { static void thisModule() {} }
-
-oslGenericFunction SdFilter::GetLibrarySymbol( const OUString& rLibraryName, const OUString &rFnSymbol )
-{
-    osl::Module *pMod = nullptr;
-    auto it = g_SdModuleMap.find(rLibraryName);
-    if (it != g_SdModuleMap.end())
-        pMod = it->second.get();
-
-    if (!pMod)
-    {
-        pMod = new osl::Module;
-        if (pMod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),
-                               SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
-            g_SdModuleMap[rLibraryName] = std::unique_ptr<osl::Module>(pMod);
-        else
-        {
-            delete pMod;
-            pMod = nullptr;
-        }
-    }
-    if (!pMod)
-        return nullptr;
-    else
-        return pMod->getFunctionSymbol(rFnSymbol);
-}
-
-#endif
-
 void SdFilter::CreateStatusIndicator()
 {
     // The status indicator must be retrieved from the provided medium arguments

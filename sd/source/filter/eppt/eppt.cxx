@@ -1431,7 +1431,7 @@ SAL_DLLPUBLIC_EXPORT bool ExportPPT( const std::vector< css::beans::PropertyValu
     return bStatus;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
+SAL_DLLPUBLIC_EXPORT bool SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
     tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
