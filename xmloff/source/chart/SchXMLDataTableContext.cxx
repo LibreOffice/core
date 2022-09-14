@@ -42,7 +42,6 @@ SchXMLDataTableContext::SchXMLDataTableContext(SchXMLImportHelper& rImpHelper, S
 void SchXMLDataTableContext::startFastElement(
     sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    printf("SchXMLDataTableContext::startFastElement\n");
     auto xChartDocument = mrImportHelper.GetChartDocument();
     if (!xChartDocument.is())
         return;
