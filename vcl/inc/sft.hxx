@@ -521,7 +521,7 @@ class TrueTypeFace;
  * @ingroup sft
  *
  */
-    int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray);
+    int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector<ControlPoint>& pointArray);
 
 /**
  * Extracts raw glyph data from the 'glyf' table and returns it in an allocated

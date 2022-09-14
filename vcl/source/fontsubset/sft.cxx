@@ -295,17 +295,18 @@ static void GetMetrics(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphID, TTGl
         metrics->ah = GetUInt16(table, 4 * (ttf->vertMetricCount() - 1));
 }
 
-static int GetTTGlyphOutline(AbstractTrueTypeFont *, sal_uInt32 , ControlPoint **, TTGlyphMetrics *, std::vector< sal_uInt32 >* );
+static int GetTTGlyphOutline(AbstractTrueTypeFont *, sal_uInt32 , std::vector<ControlPoint>&, TTGlyphMetrics *, std::vector< sal_uInt32 >* );
 
 /* returns the number of control points, allocates the pointArray */
-static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
+static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphID,
+                              std::vector<ControlPoint>& pointArray, TTGlyphMetrics *metrics)
 {
     sal_uInt32 nTableSize;
     const sal_uInt8* table = ttf->table(O_glyf, nTableSize);
     sal_uInt8 n;
     int i, j, z;
 
-    *pointArray = nullptr;
+    pointArray.clear();
 
     if (glyphID >= ttf->glyphCount())
         return 0;
@@ -367,7 +368,7 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
         return 0;
     }
 
-    ControlPoint* pa = static_cast<ControlPoint*>(calloc(palen, sizeof(ControlPoint)));
+    std::vector<ControlPoint> pa(palen);
 
     i = 0;
     while (i <= lastPoint) {
@@ -390,7 +391,6 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
             // coverity[tainted_data : FALSE] - i > lastPoint extra checks the n loop bound
             for (j=0; j<n; j++) {
                 if (i > lastPoint) {                        /*- if the font is really broken */
-                    free(pa);
                     return 0;
                 }
                 pa[i++].flags = flag;
@@ -464,7 +464,7 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
         pa[offset].flags |= 0x00008000;      /*- set the end contour flag */
     }
 
-    *pointArray = pa;
+    pointArray = std::move(pa);
     return lastPoint + 1;
 }
 
@@ -474,18 +474,19 @@ static F16Dot16 fromF2Dot14(sal_Int16 n)
     return sal_uInt32(n) << 2;
 }
 
-static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist)
+static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector<ControlPoint>& pointArray,
+                                TTGlyphMetrics *metrics, std::vector<sal_uInt32>& glyphlist)
 {
     sal_uInt16 flags, index;
     sal_Int16 e, f;
     sal_uInt32 nTableSize;
     const sal_uInt8* table = ttf->table(O_glyf, nTableSize);
     std::vector<ControlPoint> myPoints;
-    ControlPoint *nextComponent, *pa;
+    std::vector<ControlPoint> nextComponent;
     int i, np;
     F16Dot16 a = 0x10000, b = 0, c = 0, d = 0x10000, m, n, abs1, abs2, abs3;
 
-    *pointArray = nullptr;
+    pointArray.clear();
 
     if (glyphID >= ttf->glyphCount())
         return 0;
@@ -553,7 +554,7 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
 
         glyphlist.push_back( index );
 
-        np = GetTTGlyphOutline(ttf, index, &nextComponent, nullptr, &glyphlist);
+        np = GetTTGlyphOutline(ttf, index, nextComponent, nullptr, &glyphlist);
 
         if( ! glyphlist.empty() )
             glyphlist.pop_back();
@@ -573,7 +574,6 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             if (nAvailableBytes < 4)
             {
                 SAL_WARN("vcl.fonts", "short read");
-                free(nextComponent);
                 return 0;
             }
             e = GetInt16(ptr, 0);
@@ -585,7 +585,6 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             if (nAvailableBytes < 2)
             {
                 SAL_WARN("vcl.fonts", "short read");
-                free(nextComponent);
                 return 0;
             }
             if (flags & ARGS_ARE_XY_VALUES) {     /* args are signed */
@@ -607,7 +606,6 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             if (nAvailableBytes < 2)
             {
                 SAL_WARN("vcl.fonts", "short read");
-                free(nextComponent);
                 return 0;
             }
             a = fromF2Dot14(GetInt16(ptr, 0));
@@ -618,7 +616,6 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             if (nAvailableBytes < 4)
             {
                 SAL_WARN("vcl.fonts", "short read");
-                free(nextComponent);
                 return 0;
             }
             a = fromF2Dot14(GetInt16(ptr, 0));
@@ -629,7 +626,6 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             if (nAvailableBytes < 8)
             {
                 SAL_WARN("vcl.fonts", "short read");
-                free(nextComponent);
                 return 0;
             }
             a = fromF2Dot14(GetInt16(ptr, 0));
@@ -673,8 +669,6 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             }
         }
 
-        free(nextComponent);
-
         if (myPoints.size() > SAL_MAX_UINT16) {
             SAL_WARN("vcl.fonts", "number of points has to be limited to max value GlyphData::npoints can contain, abandon effort");
             myPoints.clear();
@@ -690,12 +684,7 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
 
     np = myPoints.size();
 
-    pa = static_cast<ControlPoint*>(calloc(np, sizeof(ControlPoint)));
-    assert(pa != nullptr);
-
-    memcpy(pa, myPoints.data(), np * sizeof(ControlPoint));
-
-    *pointArray = pa;
+    pointArray = std::move(myPoints);
 
     return np;
 }
@@ -707,13 +696,13 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
  * a composite glyph. This is a safeguard against endless recursion
  * in corrupted fonts.
  */
-static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >* glyphlist)
+static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector<ControlPoint>& pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >* glyphlist)
 {
     sal_uInt32 glyflength;
     const sal_uInt8 *table = ttf->table(O_glyf, glyflength);
     sal_Int16 numberOfContours;
     int res;
-    *pointArray = nullptr;
+    pointArray.clear();
 
     if (metrics)
         memset(metrics, 0, sizeof(TTGlyphMetrics));
@@ -745,7 +734,7 @@ static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, Cont
 
     if (numberOfContours >= 0)
     {
-        res=GetSimpleTTOutline(ttf, glyphID, pointArray, metrics);
+        res = GetSimpleTTOutline(ttf, glyphID, pointArray, metrics);
     }
     else
     {
@@ -1522,7 +1511,7 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
     return AbstractTrueTypeFont::initialize();
 }
 
-int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray)
+int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector<ControlPoint>& pointArray)
 {
     return GetTTGlyphOutline(ttf, glyphID, pointArray, nullptr, nullptr);
 }
@@ -1608,7 +1597,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
                           sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs,
                           int wmode)
 {
-    ControlPoint *pa;
+    std::vector<ControlPoint> pa;
     PSPathElement *path;
     int i, j, n;
     sal_uInt32 nSize;
@@ -1700,10 +1689,10 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 
     for (i = 0; i < nGlyphs; i++) {
         fprintf(outf, h33, i);
-        int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->glyphCount() ? glyphArray[i] : 0, &pa, &metrics, nullptr);
+        int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->glyphCount() ? glyphArray[i] : 0, pa, &metrics, nullptr);
 
         if (r > 0) {
-            n =  BSplineToPSPath(pa, r, &path);
+            n =  BSplineToPSPath(pa.data(), r, &path);
         } else {
             n = 0;                      /* glyph might have zero contours but valid metrics ??? */
             path = nullptr;
@@ -1746,7 +1735,6 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 
         fprintf(outf, "%s", h34);
 
-        free(pa);
         free(path);
     }
     fprintf(outf, "%s", h35);
@@ -2422,8 +2410,8 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
     d->nbytes = static_cast<sal_uInt16>((length + 1) & ~1);
 
     /* now calculate npoints and ncontours */
-    ControlPoint *cp;
-    n = GetTTGlyphPoints(ttf, glyphID, &cp);
+    std::vector<ControlPoint> cp;
+    n = GetTTGlyphPoints(ttf, glyphID, cp);
     if (n > 0)
     {
         int m = 0;
@@ -2434,7 +2422,6 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
         }
         d->npoints = static_cast<sal_uInt16>(n);
         d->ncontours = static_cast<sal_uInt16>(m);
-        free(cp);
     } else {
         d->npoints = 0;
         d->ncontours = 0;
