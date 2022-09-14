@@ -896,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignForShape)
 CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType)
 {
     loadAndSave("LineStyle_DashType.docx");
-    /* DOCX contatining Shape with LineStyle as Dash Type should get preserved inside
+    /* DOCX containing Shape with LineStyle as Dash Type should get preserved inside
      * an XML tag <a:prstDash> with value "dash", "sysDot", "lgDot", etc.
      */
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -951,7 +951,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGradientFillPreservation)
 CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType_VML)
 {
     loadAndSave("LineStyle_DashType_VML.docx");
-    /* DOCX contatining "Shape with text inside" having Line Style as "Dash Type" should get
+    /* DOCX containing "Shape with text inside" having Line Style as "Dash Type" should get
      * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
      */
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
