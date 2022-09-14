@@ -164,7 +164,7 @@ void ShadowPrimitive2D::create2DDecomposition(
         return;
     }
 
-    // from here on we process a blurrred shadow
+    // from here on we process a blurred shadow
     basegfx::B2DRange aBlurRange;
     basegfx::B2DRange aClippedRange;
     basegfx::B2DVector aDiscreteBlurSize;
@@ -192,7 +192,7 @@ void ShadowPrimitive2D::create2DDecomposition(
     // ModifiedColorPrimitive2D (what is not urgently needed) to create
     // the alpha channel, but a paint with all colors set to a single
     // one (like shadowColor here) is often less expensive due to possible
-    // simplifications painting the primitves (e.g. gradient)
+    // simplifications painting the primitives (e.g. gradient)
     Primitive2DContainer aEmbedded;
     getFullyEmbeddedShadowPrimitives(aEmbedded);
 
@@ -301,7 +301,7 @@ void ShadowPrimitive2D::get2DDecomposition(
         return;
     }
 
-    // here we have a blurrred shadow, check conditions of last
+    // here we have a blurred shadow, check conditions of last
     // buffered decompose and decide re-use or re-create by using
     // setBuffered2DDecomposition to reset local buffered version
     basegfx::B2DRange aBlurRange;
