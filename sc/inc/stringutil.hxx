@@ -84,7 +84,7 @@ struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
 
     /**
      * When true, treat input with a leading apostrophe as an escape character
-     * for a numeric value content, to treat the numeric value as a text. When
+     * for all content, to treat also numeric value as a text. When
      * false, the whole string input including the leading apostrophe will be
      * entered literally as string.
      */

@@ -722,19 +722,20 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                 aString = ScCellFormat::GetInputString( rCell, nNumFmt, *pFormatter, rDoc );
                 if (rCell.getType() == CELLTYPE_STRING)
                 {
-                    sal_Int32 i = 0;
-                    while (i < aString.getLength() && aString[i] == '\'')
-                        ++i;
-                    OUString aTest((i && i < aString.getLength()) ? aString.copy(i) : aString);
                     // Put a ' in front if necessary, so that the string is not
                     // unintentionally interpreted as a number, and to show the
                     // user that it is a string (#35060#).
+                    // If cell is not formatted as Text, a leading apostrophe
+                    // needs another prepended, also '=' or '+' or '-'
+                    // otherwise starting a formula.
                     // NOTE: this corresponds with
                     // sc/source/core/data/column3.cxx ScColumn::ParseString()
-                    // removing one apostrophe also for multiple consecutive
-                    // apostrophes.
-                    // For number format 'Text' this never results in numeric.
-                    if (pFormatter->IsNumberFormat(aTest, nNumFmt, o3tl::temporary(double())))
+                    // removing one apostrophe.
+                    // For number format Text IsNumberFormat() would never
+                    // result in numeric anyway.
+                    if (!pFormatter->IsTextFormat(nNumFmt) && (aString.startsWith("'")
+                                || aString.startsWith("=") || aString.startsWith("+") || aString.startsWith("-")
+                                || pFormatter->IsNumberFormat(aString, nNumFmt, o3tl::temporary(double()))))
                         aString = "'" + aString;
                 }
             }

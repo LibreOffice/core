@@ -626,8 +626,8 @@ void Test::testInput()
     CPPUNIT_ASSERT_MESSAGE("String number should have the first apostrophe stripped.", bTest);
     m_pDoc->SetString(0, 0, 0, "'apple'");
     test = m_pDoc->GetString(0, 0, 0);
-    bTest = test == "'apple'";
-    CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
+    bTest = test == "apple'";
+    CPPUNIT_ASSERT_MESSAGE("Text content should have the first apostrophe stripped.", bTest);
 
     // Customized string handling policy.
     ScSetStringParam aParam;
