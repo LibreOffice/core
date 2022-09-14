@@ -7,18 +7,32 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import argparse
 import uno
 from com.sun.star.connection import NoConnectException
-from os.path import isfile, abspath
-from sys import argv, exit
+from os.path import isfile, abspath, basename
+from sys import argv
+
+
+def is_file(value):
+    if not isfile(value):
+        raise argparse.ArgumentTypeError("{} could not be opened".format(value))
+    return value
+
+
+PROG = "$OFFICE_PROGRAM_PATH/python {}".format(basename(argv[0]))
+
 
 if __name__ == "__main__":
-    if len(argv) < 2:
-        print("usage: $OFFICE_PROGRAM_PATH/python DocumentLoader.py <path>")
-        exit(1)
-    if not isfile(argv[1]):
-        print("%s could not be opened" % argv[1])
-        exit(1)
+    parser = argparse.ArgumentParser(prog=PROG)
+    parser.add_argument("--writer", action="store_true", required=False, help="Open an empty Writer document")
+    parser.add_argument("--calc", action="store_true", required=False, help="Open an empty Calc document")
+    parser.add_argument("--draw", action="store_true", required=False, help="Open an empty Draw document")
+    parser.add_argument("path",
+                        type=is_file,
+                        nargs="?",
+                        help="Path to a document to load. If omitted, an empty document is opened accordingly.")
+    args = parser.parse_args()
 
     # UNO component context for initializing the Python runtime
     localContext = uno.getComponentContext()
@@ -36,7 +50,17 @@ if __name__ == "__main__":
 
     desktop = context.ServiceManager.createInstanceWithContext(
         "com.sun.star.frame.Desktop", context)
-    url = uno.systemPathToFileUrl(abspath(argv[1]))
+
+    if args.path:
+        url = uno.systemPathToFileUrl(abspath(args.path))
+    elif args.writer:
+        url = "private:factory/swriter"
+    elif args.calc:
+        url = "private:factory/scalc"
+    elif args.draw:
+        url = "private:factory/sdraw"
+    else:
+        url = "private:factory/swriter"
 
     # Load a LibreOffice document, and automatically display it on the screen
     xComp = desktop.loadComponentFromURL(url, "_blank", 0, tuple([]))
