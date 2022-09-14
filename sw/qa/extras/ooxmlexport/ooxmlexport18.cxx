@@ -14,6 +14,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -77,6 +78,30 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     //- Expected: 2.
     //- Actual  : 4.
     CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/Special[@nType='PortionType::Number']","rText"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
+{
+    // Given a docx document with a shape with vert="mongolianVert".
+    load(DATA_DIRECTORY, "tdf149551_mongolianVert.docx");
+
+    // The shape is imported as custom shape with attached frame.
+    // Without fix the shape itself had WritingMode = 0 = LR_TB,
+    // the frame in it had WritingMode = 2 = TB_RL.
+    // It should be WritingMode = 3 = TB_LR in both cases.
+    const sal_Int16 eExpected(text::WritingMode2::TB_LR);
+    CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(getShape(1), "WritingMode"));
+    uno::Reference<beans::XPropertySet> xShapeProps(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue("TextBoxContent"),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(xFrameProps, "WritingMode"));
+
+    // Such shape must have vert="mongolianVert" again after saving.
+    // Without fix the orientation was vert="vert".
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//wps:bodyPr", "vert", "mongolianVert");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
