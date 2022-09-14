@@ -431,6 +431,7 @@ bool GraphicFormatDetector::checkMET()
     mrStream.Seek(mnStreamPosition);
     sal_uInt16 nFieldSize;
     sal_uInt8 nMagic;
+
     mrStream.ReadUInt16(nFieldSize).ReadUChar(nMagic);
     for (int i = 0; i < 3; i++)
     {
@@ -444,8 +445,10 @@ bool GraphicFormatDetector::checkMET()
             return false;
     }
     mrStream.SetEndian(SvStreamEndian::LITTLE);
+
     if (mrStream.GetError())
         return false;
+
     maMetadata.mnFormat = GraphicFileFormat::MET;
     return true;
 }
@@ -481,8 +484,10 @@ bool GraphicFormatDetector::checkBMP()
                 sal_uInt32 nTemp32;
                 sal_uInt16 nTemp16;
                 sal_uInt32 nCompression;
+
                 mrStream.SetEndian(SvStreamEndian::LITTLE);
                 mrStream.Seek(mnStreamPosition + nOffset + 2);
+
                 // up to first info
                 mrStream.SeekRel(0x10);
 
@@ -623,8 +628,7 @@ bool GraphicFormatDetector::checkPCX()
     // We must detect the whole header.
     bool bRet = false;
     sal_uInt8 cByte = 0;
-    auto nStmPos = mrStream.Tell();
-    SeekGuard aGuard(mrStream, nStmPos);
+    SeekGuard aGuard(mrStream, mrStream.Tell());
     mrStream.SetEndian(SvStreamEndian::LITTLE);
     mrStream.ReadUChar(cByte);
     if (cByte == 0x0a)
@@ -686,8 +690,7 @@ bool GraphicFormatDetector::checkPCX()
 
 bool GraphicFormatDetector::checkTIF()
 {
-    auto nStmPos = mrStream.Tell();
-    SeekGuard aGuard(mrStream, nStmPos);
+    SeekGuard aGuard(mrStream, mrStream.Tell());
     mrStream.Seek(mnStreamPosition);
     bool bRet = false;
     sal_uInt8 cByte1 = 0;
@@ -955,8 +958,7 @@ bool GraphicFormatDetector::checkSVM()
 {
     sal_uInt32 n32 = 0;
     bool bRet = false;
-    auto nStmPos = mrStream.Tell();
-    SeekGuard aGuard(mrStream, nStmPos);
+    SeekGuard aGuard(mrStream, mrStream.Tell());
     mrStream.SetEndian(SvStreamEndian::LITTLE);
     mrStream.ReadUInt32(n32);
     if (n32 == 0x44475653)
@@ -1035,6 +1037,7 @@ bool GraphicFormatDetector::checkPCD()
     SeekGuard aGuard(mrStream, mnStreamPosition);
     mrStream.Seek(mnStreamPosition + 2048);
     sBuffer[mrStream.ReadBytes(sBuffer, 7)] = 0;
+
     if (strncmp(sBuffer, "PCD_IPI", 7) == 0)
     {
         maMetadata.mnFormat = GraphicFileFormat::PCD;
@@ -1158,8 +1161,7 @@ bool GraphicFormatDetector::checkPCT()
 
 bool GraphicFormatDetector::checkPBM()
 {
-    auto nStmPos = mrStream.Tell();
-    SeekGuard aGuard(mrStream, nStmPos);
+    SeekGuard aGuard(mrStream, mrStream.Tell());
     sal_uInt8 nFirst = 0, nSecond = 0, nThird = 0;
     mrStream.ReadUChar(nFirst).ReadUChar(nSecond).ReadUChar(nThird);
     if (nFirst == 'P' && ((nSecond == '1') || (nSecond == '4')) && isspace(nThird))
@@ -1173,8 +1175,7 @@ bool GraphicFormatDetector::checkPBM()
 bool GraphicFormatDetector::checkPGM()
 {
     sal_uInt8 nFirst = 0, nSecond = 0, nThird = 0;
-    auto nStmPos = mrStream.Tell();
-    SeekGuard aGuard(mrStream, nStmPos);
+    SeekGuard aGuard(mrStream, mrStream.Tell());
     mrStream.ReadUChar(nFirst).ReadUChar(nSecond).ReadUChar(nThird);
     if (nFirst == 'P' && ((nSecond == '2') || (nSecond == '5')) && isspace(nThird))
     {
@@ -1187,8 +1188,7 @@ bool GraphicFormatDetector::checkPGM()
 bool GraphicFormatDetector::checkPPM()
 {
     sal_uInt8 nFirst = 0, nSecond = 0, nThird = 0;
-    auto nStmPos = mrStream.Tell();
-    SeekGuard aGuard(mrStream, nStmPos);
+    SeekGuard aGuard(mrStream, mrStream.Tell());
     mrStream.ReadUChar(nFirst).ReadUChar(nSecond).ReadUChar(nThird);
     if (nFirst == 'P' && ((nSecond == '3') || (nSecond == '6')) && isspace(nThird))
     {
@@ -1223,10 +1223,13 @@ bool GraphicFormatDetector::checkXBM()
 {
     sal_uInt64 nSize = std::min<sal_uInt64>(mnStreamLength, 2048);
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize]);
+
     SeekGuard aGuard(mrStream, mnStreamPosition);
     mrStream.Seek(mnStreamPosition);
     nSize = mrStream.ReadBytes(pBuffer.get(), nSize);
+
     const char* pBufferAsCharArray = reinterpret_cast<char*>(pBuffer.get());
+
     if (checkArrayForMatchingStrings(pBufferAsCharArray, nSize, { "#define", "_width" }))
     {
         maMetadata.mnFormat = GraphicFileFormat::XBM;
@@ -1283,7 +1286,6 @@ bool GraphicFormatDetector::checkSVG()
             nCheckSize = std::min<sal_uInt64>(mnStreamLength, 2048);
             mrStream.Seek(mnStreamPosition);
             nCheckSize = mrStream.ReadBytes(sExtendedOrDecompressedFirstBytes, nCheckSize);
-            mrStream.Seek(mnStreamPosition);
         }
 
         // search for '<svg'
