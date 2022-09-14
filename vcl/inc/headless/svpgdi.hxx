@@ -95,6 +95,8 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
+    virtual bool            ShouldDownscaleIconsAtSurface(double* pScaleOut) const override;
+
     virtual SystemGraphicsData GetGraphicsData() const override;
 
 #if ENABLE_CAIRO_CANVAS

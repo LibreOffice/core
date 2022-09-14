@@ -51,6 +51,15 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
+bool SvpSalGraphics::ShouldDownscaleIconsAtSurface(double* pScaleOut) const
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return SalGraphics::ShouldDownscaleIconsAtSurface(pScaleOut);
+    if (pScaleOut)
+        *pScaleOut = m_aCairoCommon.m_fScale;
+    return true;
+}
+
 #if ENABLE_CAIRO_CANVAS
 bool SvpSalGraphics::SupportsCairo() const
 {

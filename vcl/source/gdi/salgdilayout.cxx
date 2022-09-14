@@ -1087,4 +1087,11 @@ void SalGraphics::FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const
         rInfo.m_nDescent = -rTTInfo.descender;
 }
 
+bool SalGraphics::ShouldDownscaleIconsAtSurface(double* pScaleOut) const
+{
+    if (pScaleOut)
+        *pScaleOut = comphelper::LibreOfficeKit::getDPIScale();
+    return comphelper::LibreOfficeKit::isActive();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
