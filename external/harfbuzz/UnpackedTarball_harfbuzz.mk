@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 #   be negative":
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/negativeadvance.patch \
+    external/harfbuzz/62e803b36173fd096d7ad460dd1d1db9be542593.patch.1 \
     $(if $(filter LINUX,$(OS)), \
         external/harfbuzz/harfbuzz-fd-hack.patch.0 \
     ) \
