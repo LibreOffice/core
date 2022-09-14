@@ -37,22 +37,9 @@ using namespace ooo::vba;
 class VBAMacroTest : public UnoApiTest
 {
 public:
-    uno::Reference<lang::XComponent> mxComponent;
-
     VBAMacroTest()
         : UnoApiTest("/sc/qa/extras/testdocuments")
     {
-    }
-
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-        {
-            mxComponent->dispose();
-            mxComponent.set(nullptr);
-        }
-
-        test::BootstrapFixture::tearDown();
     }
 
     void testSimpleCopyAndPaste();
@@ -110,14 +97,15 @@ void VBAMacroTest::testSimpleCopyAndPaste()
 
     OUString aFileName;
     createFileURL(u"SimpleCopyPaste.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
     uno::Sequence<uno::Any> aOutParam;
     uno::Sequence<uno::Any> aParams;
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -133,7 +121,7 @@ void VBAMacroTest::testSimpleCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 5, 0)));
 
     SfxObjectShell::CallXScript(
-        mxComponent, "vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document",
+        xComponent, "vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
     // Copy from C4-C6
@@ -145,6 +133,8 @@ void VBAMacroTest::testSimpleCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(1, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(ScAddress(1, 4, 0)));
     CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(1, 5, 0)));
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testMultiDocumentCopyAndPaste()
@@ -165,14 +155,15 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
 
     OUString aFileName;
     createFileURL(u"MultiDocumentCopyPaste.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
     uno::Sequence<uno::Any> aOutParam;
     uno::Sequence<uno::Any> aParams;
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -183,21 +174,24 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
 
     SfxObjectShell::CallXScript(
-        mxComponent, "vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document",
+        xComponent, "vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
     CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(ScAddress(1, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testSheetAndColumnSelectAndHide()
 {
     OUString aFileName;
     createFileURL(u"SheetAndColumnSelectAndHide.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -225,7 +219,7 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     uno::Sequence<uno::Any> aParams;
 
     SfxObjectShell::CallXScript(
-        mxComponent,
+        xComponent,
         "vnd.sun.Star.script:VBAProject.ThisWorkbook.testHide?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
@@ -244,7 +238,7 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
 
     SfxObjectShell::CallXScript(
-        mxComponent,
+        xComponent,
         "vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
@@ -261,6 +255,8 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testPrintArea()
@@ -270,12 +266,10 @@ void VBAMacroTest::testPrintArea()
 
     OUString aFileName;
     createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XPrintAreas> xPrintAreas(xSheet, uno::UNO_QUERY_THROW);
@@ -290,7 +284,7 @@ void VBAMacroTest::testPrintArea()
     uno::Sequence<uno::Any> aOutParam;
     uno::Sequence<uno::Any> aParams;
 
-    SfxObjectShell::CallXScript(mxComponent,
+    SfxObjectShell::CallXScript(xComponent,
                                 "vnd.sun.Star.script:VBAProject.ThisWorkbook.testPrintArea?"
                                 "language=Basic&location=document",
                                 aParams, aRet, aOutParamIndex, aOutParam);
@@ -299,6 +293,9 @@ void VBAMacroTest::testPrintArea()
         const uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
         CPPUNIT_ASSERT_EQUAL(true, aSequence.hasElements());
     }
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void VBAMacroTest::testSelectAllChaged()
@@ -308,9 +305,10 @@ void VBAMacroTest::testSelectAllChaged()
 
     OUString aFileName;
     createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -324,13 +322,15 @@ void VBAMacroTest::testSelectAllChaged()
     uno::Sequence<uno::Any> aOutParam;
     uno::Sequence<uno::Any> aParams;
 
-    SfxObjectShell::CallXScript(mxComponent,
+    SfxObjectShell::CallXScript(xComponent,
                                 "vnd.sun.Star.script:VBAProject.ThisWorkbook.testSelectAll?"
                                 "language=Basic&location=document",
                                 aParams, aRet, aOutParamIndex, aOutParam);
 
     // A1:E1048576
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, MAXROW, 0), pViewData.GetMarkData().GetMarkArea());
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testRangeSelect()
@@ -340,9 +340,10 @@ void VBAMacroTest::testRangeSelect()
 
     OUString aFileName;
     createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -356,13 +357,15 @@ void VBAMacroTest::testRangeSelect()
     uno::Sequence<uno::Any> aOutParam;
     uno::Sequence<uno::Any> aParams;
 
-    SfxObjectShell::CallXScript(mxComponent,
+    SfxObjectShell::CallXScript(xComponent,
                                 "vnd.sun.Star.script:VBAProject.ThisWorkbook.testRangeSelect?"
                                 "language=Basic&location=document",
                                 aParams, aRet, aOutParamIndex, aOutParam);
 
     // B2:E5
     CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 4, 1, 0), pViewData.GetMarkData().GetMarkArea());
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testWindowState()
@@ -373,17 +376,21 @@ void VBAMacroTest::testWindowState()
 
     OUString aFileName;
     createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
     uno::Sequence<uno::Any> aOutParam;
     uno::Sequence<uno::Any> aParams;
 
-    SfxObjectShell::CallXScript(mxComponent,
+    SfxObjectShell::CallXScript(xComponent,
                                 "vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?"
                                 "language=Basic&location=document",
                                 aParams, aRet, aOutParamIndex, aOutParam);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void VBAMacroTest::testScroll()
@@ -393,9 +400,10 @@ void VBAMacroTest::testScroll()
 
     OUString aFileName;
     createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -413,13 +421,15 @@ void VBAMacroTest::testScroll()
     uno::Sequence<uno::Any> aParams;
 
     SfxObjectShell::CallXScript(
-        mxComponent,
+        xComponent,
         "vnd.sun.Star.script:VBAProject.ThisWorkbook.testScroll?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
     CPPUNIT_ASSERT_EQUAL(ScSplitPos::SC_SPLIT_BOTTOMLEFT, rViewData.GetActivePart());
     CPPUNIT_ASSERT_EQUAL(SCCOL(29), rViewData.GetPosX(ScHSplitPos::SC_SPLIT_LEFT));
     CPPUNIT_ASSERT_EQUAL(SCROW(99), rViewData.GetPosY(ScVSplitPos::SC_SPLIT_BOTTOM));
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testMacroKeyBinding()
@@ -429,9 +439,10 @@ void VBAMacroTest::testMacroKeyBinding()
 
     OUString aFileName;
     createFileURL(u"KeyShortcut.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(xComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
 
     uno::Reference<ui::XUIConfigurationManagerSupplier> xConfigSupplier(xModel, uno::UNO_QUERY);
@@ -458,6 +469,9 @@ void VBAMacroTest::testMacroKeyBinding()
         OUString(
             "vnd.sun.star.script:VBAProject.ThisWorkbook.key_T?language=Basic&location=document"),
         xAccelerator->getCommandByKeyEvent(aCtrlT));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void VBAMacroTest::testVba()
@@ -576,9 +590,6 @@ void VBAMacroTest::testVba()
             aParams = { uno::Any(sTempDir), uno::Any(sTestFileName) };
         }
 
-        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-
-        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
         SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url "
                                                          << rTestInfo.sMacroUrl);
 
@@ -591,7 +602,11 @@ void VBAMacroTest::testVba()
                 .toUtf8()
                 .getStr(),
             OUString("OK"), aStringRes);
-        pFoundShell->DoClose();
+
+        css::uno::Reference<css::util::XCloseable> xCloseable(xComponent,
+                                                              css::uno::UNO_QUERY_THROW);
+        xCloseable->close(true);
+
         if (bWorkbooksHandling)
         {
             OUString sFileUrl;
@@ -605,7 +620,7 @@ void VBAMacroTest::testVba()
 
 void VBAMacroTest::testTdf149579()
 {
-    auto xComponent = loadFromDesktop("private:factory/scalc");
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -648,7 +663,7 @@ void VBAMacroTest::testTdf149579()
 
 void VBAMacroTest::testVbaRangeSort()
 {
-    auto xComponent = loadFromDesktop("private:factory/scalc");
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -871,13 +886,8 @@ void VBAMacroTest::testTdf90278()
 {
     OUString aFileName;
     createFileURL(u"tdf90278.xls", aFileName);
-    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT(pFoundShell);
-
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh);
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
@@ -896,17 +906,18 @@ void VBAMacroTest::testTdf90278()
     aRet >>= aReturnValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReturnValue);
 
-    xDocSh->DoClose();
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void VBAMacroTest::testTdf149531()
 {
     OUString aFileName;
     createFileURL(u"tdf149531.xls", aFileName);
-    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT(pFoundShell);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -938,7 +949,8 @@ void VBAMacroTest::testTdf118247()
 {
     OUString aFileName;
     createFileURL(u"tdf118247.xlsm", aFileName);
-    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
