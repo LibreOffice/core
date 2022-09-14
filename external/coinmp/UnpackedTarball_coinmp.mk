@@ -47,6 +47,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/register.patch \
 	external/coinmp/configure-exit.patch \
 	external/coinmp/pedantic-errors.patch \
+	external/coinmp/bind2nd.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

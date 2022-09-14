@@ -1,0 +1,87 @@
+--- a/Osi/src/OsiCommonTest/OsiSolverInterfaceTest.cpp
++++ b/Osi/src/OsiCommonTest/OsiSolverInterfaceTest.cpp
+@@ -1313,8 +1313,8 @@
+   int rows_to_delete_arr[] = { 0 } ;
+   si->deleteRows(1,rows_to_delete_arr) ;
+ 
+-  std::transform(objective,objective+4,objective,
+-		 std::bind2nd(std::plus<double>(),0.15)) ;
++  for (int i = 0; i != 4; ++i)
++    objective[i] += 0.15;
+   si->setObjective(objective) ;
+   si->resolve() ;
+   OSIUNITTEST_ASSERT_ERROR(si->isProvenOptimal(),          return false, *si, "test16SebastianNowozin second resolve");
+
+The below is an excerpt from
+<https://github.com/coin-or/CoinUtils/commit/4f0dab267fc3976d0542f56e2939f900857147a6> "make c++17
+compatible":
+
+diff --git a/CoinUtils/src/CoinPackedMatrix.cpp b/CoinUtils/src/CoinPackedMatrix.cpp
+index c7631289..0b103159 100644
+--- a/CoinUtils/src/CoinPackedMatrix.cpp
++++ b/CoinUtils/src/CoinPackedMatrix.cpp
+@@ -1490,11 +1490,11 @@ CoinPackedMatrix::minorAppendSameOrdered(const CoinPackedMatrix& matrix)
+ 
+    // now insert the entries of matrix
+    for (i = majorDim_ - 1; i >= 0; --i) {
+-      const int l = matrix.length_[i];
+-      std::transform(matrix.index_ + matrix.start_[i],
+-		matrix.index_ + (matrix.start_[i] + l),
+-		index_ + (start_[i] + length_[i]),
+-		std::bind2nd(std::plus<int>(), minorDim_));
++      int l = matrix.length_[i];
++      CoinBigIndex put = start_[i]+length_[i];
++      const CoinBigIndex get = matrix.start_[i];
++      for (int j=0;j<l;j++)
++	index_[put+j]=matrix.index_[get+j]+minorDim_;
+       CoinMemcpyN(matrix.element_ + matrix.start_[i], l,
+ 		       element_ + (start_[i] + length_[i]));
+       length_[i] += l;
+diff --git a/CoinUtils/src/CoinPackedVector.cpp b/CoinUtils/src/CoinPackedVector.cpp
+index 7d90b3de..158a8373 100644
+--- a/CoinUtils/src/CoinPackedVector.cpp
++++ b/CoinUtils/src/CoinPackedVector.cpp
+@@ -284,8 +284,8 @@ CoinPackedVector::truncate( int n )
+ void
+ CoinPackedVector::operator+=(double value) 
+ {
+-   std::transform(elements_, elements_ + nElements_, elements_,
+-		  std::bind2nd(std::plus<double>(), value) );
++  for (int i=0 ; i < nElements_; i++)
++    elements_[i] += value;
+ }
+ 
+ //-----------------------------------------------------------------------------
+@@ -293,8 +293,8 @@ CoinPackedVector::operator+=(double value)
+ void
+ CoinPackedVector::operator-=(double value) 
+ {
+-   std::transform(elements_, elements_ + nElements_, elements_,
+-		  std::bind2nd(std::minus<double>(), value) );
++  for (int i=0 ; i < nElements_; i++)
++    elements_[i] -= value;
+ }
+ 
+ //-----------------------------------------------------------------------------
+@@ -302,8 +302,8 @@ CoinPackedVector::operator-=(double value)
+ void
+ CoinPackedVector::operator*=(double value) 
+ {
+-   std::transform(elements_, elements_ + nElements_, elements_,
+-		  std::bind2nd(std::multiplies<double>(), value) );
++  for (int i=0 ; i < nElements_; i++)
++    elements_[i] *= value;
+ }
+ 
+ //-----------------------------------------------------------------------------
+@@ -311,8 +311,8 @@ CoinPackedVector::operator*=(double value)
+ void
+ CoinPackedVector::operator/=(double value) 
+ {
+-   std::transform(elements_, elements_ + nElements_, elements_,
+-		  std::bind2nd(std::divides<double>(), value) );
++  for (int i=0 ; i < nElements_; i++)
++    elements_[i] /= value;
+ }
+ 
+ //#############################################################################
