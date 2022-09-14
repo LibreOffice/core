@@ -151,12 +151,6 @@ void ScMacrosTest::testMSP()
     Sequence< Any > aOutParam;
     Sequence< uno::Any > aParams;
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh != nullptr);
-
     SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document",
@@ -166,7 +160,9 @@ void ScMacrosTest::testMSP()
 
     SAL_INFO("sc.qa", "Result is " << sResult );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TestMSP ( for fdo#67547) failed", OUString("OK"), sResult);
-    pDocSh->DoClose();
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void ScMacrosTest::testPasswordProtectedStarBasic()
@@ -185,7 +181,6 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
-
 
     // User defined types
 
@@ -216,7 +211,6 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
     aValue = rDoc.GetString(2,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1", OUString("success"), aValue);
-
 
     pDocSh->DoClose();
 }
@@ -306,8 +300,7 @@ void ScMacrosTest::testTdf146742()
     // - Actual  : TRUE
     CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), rDoc.GetString(ScAddress(1,1,0)));
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testMacroButtonFormControlXlsxExport()
@@ -375,8 +368,7 @@ void ScMacrosTest::testTdf104902()
     // - Actual  : string withnewlines
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(0, 1, 0)));
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf64639()
@@ -420,8 +412,7 @@ void ScMacrosTest::testTdf64639()
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
     }
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf142033()
@@ -460,8 +451,7 @@ void ScMacrosTest::testTdf142033()
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testPasswordProtectedUnicodeString()
@@ -727,8 +717,7 @@ void ScMacrosTest::testTdf46119()
     CPPUNIT_ASSERT_EQUAL(OUString("0.386"), rDoc.GetString(ScAddress(4, 26, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("0.366"), rDoc.GetString(ScAddress(4, 27, 0)));
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf128218()
@@ -1007,8 +996,7 @@ void ScMacrosTest::testTdf125800()
     const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Direct, pCondition->GetOperation());
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf130307()
@@ -1074,8 +1062,7 @@ void ScMacrosTest::testTdf144970()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf138646()
@@ -1235,10 +1222,6 @@ void ScMacrosTest::testShapeLayerId()
     Sequence<sal_Int16> aOutParamIndex;
     Sequence<Any> aOutParam;
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:TestLibrary.TestModule.TestLayerID?language=Basic&location=document",
@@ -1250,7 +1233,10 @@ void ScMacrosTest::testShapeLayerId()
     // The LayerID property of com.sun.star.drawing.Shape service has 'short' IDL type.
     // The expected run-time error is because there are only 5 layers there.
     CPPUNIT_ASSERT_EQUAL(Any(OUString("0 Expected runtime error happened")), aRet);
-    pDocSh->DoClose();
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+
 }
 
 void ScMacrosTest::testFunctionAccessIndirect()
