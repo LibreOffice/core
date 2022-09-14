@@ -16,6 +16,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-c++11.patch.1 \
 	external/poppler/0001-Partially-revert-814fbda28cc8a37fed3134c2db8da28f86f.patch.1 \
 	external/poppler/0001-Revert-Make-the-mul-tables-be-calculated-at-compile-.patch.1 \
+	external/poppler/disable-freetype.patch.1 \
+	external/poppler/gcc7-EntityInfo.patch.1 \
 ))
 
 # std::make_unique is only available in C++14
