@@ -235,6 +235,7 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
     }
 }
 
+/** Create and insert a data table to the chart */
 void ChartController::executeDispatch_InsertDataTable()
 {
     auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_DATA_TABLE));
@@ -254,16 +255,17 @@ void ChartController::executeDispatch_InsertDataTable()
     }
 }
 
+/** Delete a data table from the chart */
 void ChartController::executeDispatch_DeleteDataTable()
 {
     auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Delete, SchResId(STR_DATA_TABLE));
     UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
 
-
     rtl::Reference<Diagram> xDiagram = getFirstDiagram();
     auto xDataTable = xDiagram->getDataTable();
     if (xDataTable.is())
     {
+        // insert a empty data table reference
         xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
         aUndoGuard.commit();
     }

@@ -150,6 +150,7 @@ public:
     static OUString createParticleForLegend(
         const rtl::Reference<::chart::ChartModel>& xChartModel );
 
+    /** Creates an identifier for the data table */
     static OUString createParticleForDataTable(
         const rtl::Reference<::chart::ChartModel>& xChartModel );
 

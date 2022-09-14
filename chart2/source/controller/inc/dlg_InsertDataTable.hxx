@@ -14,6 +14,7 @@
 
 namespace chart
 {
+/** The data table properties (data) used by the dialog */
 struct DataTableDialogData
 {
     bool mbShow = true;
@@ -23,6 +24,7 @@ struct DataTableDialogData
     bool mbKeys = false;
 };
 
+/** The dialog to change the data table specific properties */
 class InsertDataTableDialog final : public weld::GenericDialogController
 {
 private:
@@ -38,7 +40,10 @@ private:
 public:
     InsertDataTableDialog(weld::Window* pParent);
 
+    /** Set the initial state of the data table properties */
     void init(DataTableDialogData const& rData);
+
+    /** Get the state of the data table properties from the dialog */
     DataTableDialogData& getDataTableDialogData();
 };
 

@@ -30,6 +30,7 @@ class SdrModel;
 
 namespace chart::wrapper
 {
+/** Convert data table properties to and from ItemSet and UNO PropertySet */
 class DataTableItemConverter final : public ItemConverter
 {
 public:

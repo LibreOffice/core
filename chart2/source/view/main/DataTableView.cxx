@@ -239,11 +239,13 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     if (!m_xTarget.is())
         return;
 
+    // Remove shapes first before we add the new ones
     ShapeFactory::removeSubShapes(m_xTarget);
     auto sParticle = ObjectIdentifier::createParticleForDataTable(m_xChartModel);
     auto sCID = ObjectIdentifier::createClassifiedIdentifierForParticle(sParticle);
     m_xTableShape = ShapeFactory::createTable(m_xTarget, sCID);
 
+    // calculate the table size
     auto rDelta = rEnd - rStart;
     sal_Int32 nTableSize = basegfx::fround(rDelta.getX());
     m_xTableShape->setSize({ nTableSize, 0 });
@@ -269,6 +271,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     auto* pTableObject = static_cast<sdr::table::SdrTableObj*>(m_xTableShape->GetSdrObject());
 
+    // get the data table properties from the model
     bool bHBorder = false;
     bool bVBorder = false;
     bool bOutline = false;
@@ -281,6 +284,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     m_xDataTableModel->getPropertyValue("Outline") >>= bOutline;
     m_xDataTableModel->getPropertyValue("Keys") >>= bKeys;
 
+    // set the data table row and column size
     sal_Int32 nColumnCount = m_aXValues.size();
     uno::Reference<table::XTableColumns> xTableColumns = m_xTable->getColumns();
     xTableColumns->insertByIndex(0, nColumnCount);
@@ -291,7 +295,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     sal_Int32 nColumnWidth = 0.0;
 
-    // If we don't align, we have to calculate the column width ourselves
+    // If we don't align, we have to calculate the column width ourselves,
+    // otherwise the column width is taken from the x-axis width
     if (m_bAlignAxisValuesWithColumns)
         nColumnWidth = nAxisStepWidth;
     else
@@ -452,11 +457,13 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     xBroadcaster->unlockBroadcasts();
 
+    // force recalculation of all cells in the table shape
     pTableObject->DistributeColumns(0, nColumnCount, true, true);
     pTableObject->DistributeRows(0, nRowCount, true, true);
 
     xBroadcaster->lockBroadcasts();
 
+    // reposition the data table
     changePosition(basegfx::fround(rStart.getX()), basegfx::fround(rStart.getY()));
 
     sal_Int32 nTableX = m_xTableShape->getPosition().X;

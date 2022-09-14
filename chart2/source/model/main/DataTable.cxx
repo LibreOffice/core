@@ -25,6 +25,7 @@ using namespace css;
 
 namespace
 {
+/** DataTable Properties */
 enum
 {
     DataTableProperty_HorizontalBorder,

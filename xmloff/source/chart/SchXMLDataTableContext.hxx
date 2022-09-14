@@ -23,6 +23,7 @@
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/xmlictxt.hxx>
 
+/** Import the content of the data-table (XML_DATA_TABLE) element */
 class SchXMLDataTableContext : public SvXMLImportContext
 {
 public:

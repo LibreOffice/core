@@ -1493,7 +1493,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         aPropertyStates.clear();
     }
 
-    // Data table
+    // Export data table element and properties
     if (xNewDiagram.is() && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
     {
         auto xDataTable = xNewDiagram->getDataTable();

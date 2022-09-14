@@ -14,6 +14,7 @@
 
 namespace chart
 {
+/** The shared UI elements for the data table properties */
 class DataTablePropertiesResources final
 {
 private:

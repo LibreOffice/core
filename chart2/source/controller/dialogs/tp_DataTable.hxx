@@ -14,6 +14,7 @@
 
 namespace chart
 {
+/** Tab page for the data table properties */
 class DataTableTabPage : public SfxTabPage
 {
 private:

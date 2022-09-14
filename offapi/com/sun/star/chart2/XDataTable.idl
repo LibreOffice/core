@@ -17,6 +17,10 @@ module chart2
 {
 
 /** Interface for the data table of a diagram
+
+    The data table of a chart is an chart element, that shows the
+    values used to visualize the chart in a table.
+
     @since LibreOffice 7.5
  */
 interface XDataTable : ::com::sun::star::uno::XInterface

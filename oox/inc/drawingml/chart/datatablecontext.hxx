@@ -25,8 +25,7 @@ namespace oox::drawingml::chart
 {
 struct DataTableModel;
 
-/** Handler for a data table context (c:dTable element).
- */
+/** Handler for a data table context (c:dTable element). */
 class DataTableContext final : public ContextBase<DataTableModel>
 {
 public:

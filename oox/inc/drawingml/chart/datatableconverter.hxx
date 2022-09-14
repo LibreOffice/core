@@ -30,6 +30,10 @@ namespace oox::drawingml::chart
 {
 struct DataTableModel;
 
+/**
+ * Converts the data table element and properties from OOXML model to
+ * the internal chart implementation.
+ */
 class DataTableConverter final : public ConverterBase<DataTableModel>
 {
 public:
