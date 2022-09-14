@@ -4960,7 +4960,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
             {
                 if (xPropSetInfo->hasPropertyByName(u"WritingMode"))
                 {
-                    sal_Int16 nDirection;
+                    sal_Int16 nDirection = -1;
                     xPropSet->getPropertyValue(u"WritingMode") >>= nDirection;
                     if (nDirection == text::WritingMode2::TB_RL90)
                         fTextRotateAngle -= 90;
