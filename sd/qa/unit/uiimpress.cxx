@@ -67,6 +67,8 @@ public:
     virtual void tearDown() override;
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
+    void typeString(SdXImpressDocument* rImpressDocument, const std::string& rStr);
+    void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey);
     void insertStringToObject(sal_uInt16 nObj, const std::string& rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
     FileFormat* getFormat(sal_Int32 nExportType);
@@ -100,6 +102,23 @@ void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
     CPPUNIT_ASSERT_EQUAL(nNum, nPageNumber);
 }
 
+void SdUiImpressTest::typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey)
+{
+    rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nKey);
+    rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nKey);
+    Scheduler::ProcessEventsToIdle();
+}
+
+void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument, const std::string& rStr)
+{
+    for (const char c : rStr)
+    {
+        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+
 void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& rStr,
                                            bool bUseEscape)
 {
@@ -110,24 +129,17 @@ void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& r
     CPPUNIT_ASSERT_MESSAGE("No Shape", pShape);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!pView->IsTextEdit());
 
-    for (const char c : rStr)
-    {
-        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
-        Scheduler::ProcessEventsToIdle();
-    }
+    typeString(pImpressDocument, rStr);
 
     CPPUNIT_ASSERT(pView->IsTextEdit());
 
     if (bUseEscape)
     {
-        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
-        Scheduler::ProcessEventsToIdle();
-
+        typeKey(pImpressDocument, KEY_ESCAPE);
         CPPUNIT_ASSERT(!pView->IsTextEdit());
     }
 }
@@ -586,6 +598,86 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(u""), xShape->getString());
+
+    insertStringToObject(1, "one", /*bUseEscape*/ false);
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, "two");
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, "three");
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, "four");
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, "five");
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, "six");
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nFive\nsix"), xShape->getString());
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(sal_Int32(0)) } }));
+    dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nsix\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nsix\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nsix\nThree\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nsix\nTwo\nThree\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"six\nOne\nTwo\nThree\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nsix\nTwo\nThree\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nsix\nThree\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nsix\nFour\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nsix\nFive"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nFive\nsix"), xShape->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
@@ -607,22 +699,14 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
         Scheduler::ProcessEventsToIdle();
     }
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'A', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'A', 0);
-    Scheduler::ProcessEventsToIdle();
+    typeString(pXImpressDocument, "A");
 
     // Move to A2 with Tab and write 'B'
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
-    Scheduler::ProcessEventsToIdle();
+    typeKey(pXImpressDocument, KEY_TAB);
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'B', 0);
-    Scheduler::ProcessEventsToIdle();
+    typeString(pXImpressDocument, "B");
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
-    Scheduler::ProcessEventsToIdle();
+    typeKey(pXImpressDocument, KEY_ESCAPE);
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
