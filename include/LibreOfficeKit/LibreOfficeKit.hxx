@@ -1027,7 +1027,7 @@ public:
     }
 
     /**
-     * Exports the document and signes its content.
+     * Exports the document and signs its content.
      */
     bool signDocument(const char* pURL,
                        const unsigned char* pCertificateBinary, const int nCertificateBinarySize,

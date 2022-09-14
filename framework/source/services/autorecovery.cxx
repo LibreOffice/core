@@ -3483,7 +3483,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
         sUniqueName.append("untitled");
     sUniqueName.append("_");
 
-    // TODO: Must we strip some illegal signes - if we use the title?
+    // TODO: Must we strip some illegal signs - if we use the title?
 
     OUString sName(sUniqueName.makeStringAndClear());
     OUString sExtension(rInfo.Extension);
