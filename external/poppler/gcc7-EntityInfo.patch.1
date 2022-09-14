@@ -1,0 +1,48 @@
+gcc 7.3.1 says:
+
+workdir/UnpackedTarball/poppler/poppler/CertificateInfo.cc:42:34: error: function ‘X509CertificateInfo::EntityInfo& X509CertificateInfo::EntityInfo::operator=(X509CertificateInfo::EntityInfo&&)’ defaulted on its redeclaration with an exception-specification that differs from the implicit exception-specification ‘’
+
+--- poppler/poppler/CertificateInfo.h.orig	2022-09-14 19:32:12.426351385 +0200
++++ poppler/poppler/CertificateInfo.h	2022-09-14 19:32:18.947347812 +0200
+@@ -70,7 +70,7 @@
+         ~EntityInfo();
+ 
+         EntityInfo(EntityInfo &&) noexcept;
+-        EntityInfo &operator=(EntityInfo &&) noexcept;
++        EntityInfo &operator=(EntityInfo &&) /*noexcept*/;
+ 
+         EntityInfo(const EntityInfo &) = delete;
+         EntityInfo &operator=(const EntityInfo &) = delete;
+--- poppler/poppler/CertificateInfo.cc.orig	2022-09-14 19:31:10.225385467 +0200
++++ poppler/poppler/CertificateInfo.cc	2022-09-14 19:31:12.572384182 +0200
+@@ -39,7 +39,7 @@
+ 
+ X509CertificateInfo::EntityInfo::EntityInfo(X509CertificateInfo::EntityInfo &&other) noexcept = default;
+ 
+-X509CertificateInfo::EntityInfo &X509CertificateInfo::EntityInfo::operator=(X509CertificateInfo::EntityInfo &&other) noexcept = default;
++X509CertificateInfo::EntityInfo &X509CertificateInfo::EntityInfo::operator=(X509CertificateInfo::EntityInfo &&other) /*noexcept*/ = default;
+ 
+ X509CertificateInfo::X509CertificateInfo() : ku_extensions(KU_NONE), cert_version(-1), is_self_signed(false) { }
+ 
+--- poppler/poppler/GfxFont.cc.orig	2022-09-14 20:24:32.569607333 +0200
++++ poppler/poppler/GfxFont.cc	2022-09-14 20:24:52.323596186 +0200
+@@ -180,7 +180,7 @@
+ 
+ GfxFontLoc::GfxFontLoc(GfxFontLoc &&other) noexcept = default;
+ 
+-GfxFontLoc &GfxFontLoc::operator=(GfxFontLoc &&other) noexcept = default;
++GfxFontLoc &GfxFontLoc::operator=(GfxFontLoc &&other) /*noexcept*/ = default;
+ 
+ void GfxFontLoc::setPath(GooString *pathA)
+ {
+--- poppler/poppler/GfxFont.h.orig	2022-09-14 20:24:30.784608340 +0200
++++ poppler/poppler/GfxFont.h	2022-09-14 20:25:08.850586861 +0200
+@@ -124,7 +124,7 @@
+     GfxFontLoc(const GfxFontLoc &) = delete;
+     GfxFontLoc(GfxFontLoc &&) noexcept;
+     GfxFontLoc &operator=(const GfxFontLoc &) = delete;
+-    GfxFontLoc &operator=(GfxFontLoc &&other) noexcept;
++    GfxFontLoc &operator=(GfxFontLoc &&other) /*noexcept*/;
+ 
+     // Set the 'path' string from a GooString on the heap.
+     // Ownership of the object is taken.
