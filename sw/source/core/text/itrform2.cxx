@@ -947,6 +947,17 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             pCheckBoxWidget->OffValue = pContentControl->GetUncheckedState();
             break;
         }
+        case SwContentControlType::DROP_DOWN_LIST:
+        {
+            pDescriptor = std::make_unique<vcl::PDFWriter::ListBoxWidget>();
+            auto pListWidget = static_cast<vcl::PDFWriter::ListBoxWidget*>(pDescriptor.get());
+            pListWidget->DropDown = true;
+            for (const auto& rItem : pContentControl->GetListItems())
+            {
+                pListWidget->Entries.push_back(rItem.m_aDisplayText);
+            }
+            break;
+        }
         default:
             break;
     }

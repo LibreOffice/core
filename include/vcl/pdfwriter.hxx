@@ -408,7 +408,7 @@ public:
         }
     };
 
-    struct ListBoxWidget final : public AnyWidget
+    struct VCL_DLLPUBLIC ListBoxWidget final : public AnyWidget
     {
         bool                            DropDown;
         bool                            MultiSelect;

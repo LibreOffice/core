@@ -395,6 +395,8 @@ protected:
      * Gets SwDoc from loaded component
      */
     SwDoc* getSwDoc();
+
+    void StoreToTempFile(const OUString& rFilterName);
 };
 
 /**

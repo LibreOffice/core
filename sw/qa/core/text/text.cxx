@@ -116,10 +116,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When exporting to PDF:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    StoreToTempFile("writer_pdf_Export");
 
     // Then make sure the field links the source.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
@@ -632,10 +629,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting to PDF:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    StoreToTempFile("writer_pdf_Export");
 
     // Then make sure that a fillable form widget is emitted:
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
@@ -664,10 +658,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // When exporting to PDF:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    StoreToTempFile("writer_pdf_Export");
 
     // Then make sure that a checkbox form widget is emitted:
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
@@ -690,6 +681,40 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
     // Also check the form widget type:
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::CheckBox,
+                         pAnnotation->getFormFieldType(pPdfDocument.get()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
+{
+    // Given a file with a dropdown content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When exporting to PDF:
+    StoreToTempFile("writer_pdf_Export");
+
+    // Then make sure that a dropdown form widget is emitted:
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the dropdown content control was just exported as normal text.
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+    // Also check the form widget type (our dropdown is called combo in PDF terms):
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::ComboBox,
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
 }
 
