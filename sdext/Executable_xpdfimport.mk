@@ -22,6 +22,10 @@ $(eval $(call gb_Executable_add_exception_objects,xpdfimport,\
     sdext/source/pdfimport/xpdfwrapper/wrapper_gpl \
 ))
 
+$(eval $(call gb_Executable_use_system_win32_libs,xpdfimport,\
+	shell32 \
+))
+
 $(eval $(call gb_Executable_add_default_nativeres,xpdfimport))
 
 ifneq ($(SYSTEM_POPPLER),)
