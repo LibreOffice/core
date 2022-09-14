@@ -140,7 +140,9 @@ class navigator(UITestCase):
             # Use return to update the current cell
             xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
+            self.ui_test.wait_until_property_is_updated(xColumn, "Value", "2")
             self.assertEqual(get_state_as_dict(xColumn)['Value'], '2')
+            self.ui_test.wait_until_property_is_updated(xRow, "Value", "2")
             self.assertEqual(get_state_as_dict(xRow)['Value'], '2')
 
             self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
