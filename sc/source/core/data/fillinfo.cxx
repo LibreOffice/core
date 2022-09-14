@@ -807,8 +807,8 @@ void ScDocument::FillInfo(
                             }
                             if (bBottomDiff && bRightDiff)
                             {
-                                pRowInfo[nArrRow+1].cellInfo(nCol).pHShadowOrigin = pThisAttr;
-                                pRowInfo[nArrRow+1].cellInfo(nCol).eHShadowPart = SC_SHADOW_CORNER;
+                                pRowInfo[nArrRow+1].cellInfo(nCol+1).pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow+1].cellInfo(nCol+1).eHShadowPart = SC_SHADOW_CORNER;
                             }
                             break;
 
