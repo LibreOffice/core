@@ -33,7 +33,7 @@ public:
     {
         pItem->SetKind(SfxItemKind::DeleteOnIdle);
         Application::PostUserEvent(LINK(nullptr, SfxItemDisruptor_Impl, Delete), pItem.release());
-        // coverity[leaked_storage] - pDesruptor takes care of its own destruction at idle time
+        // coverity[leaked_storage] - pDisruptor takes care of its own destruction at idle time
     }
 
     DECL_STATIC_LINK(SfxItemDisruptor_Impl, Delete, void*, void);
