@@ -133,6 +133,7 @@ bool WinSalSystem::initMonitors()
                 m_aMonitors[ i ].m_aName = rDev + " (" + OUString::number( nInstance ) + ")";
             }
         }
+        ReleaseDC(nullptr, aDesktopRC);
     }
 
     return m_aMonitors.size() > 0;
