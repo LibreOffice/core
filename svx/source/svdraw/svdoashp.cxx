@@ -514,7 +514,7 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
         if ( pAny )
             *pAny >>= fExtraTextRotateAngle;
 
-        // As long as the edit engine is not able to rendere these text directions we
+        // As long as the edit engine is not able to render these text directions we
         // emulate them by setting a suitable text pre-rotation.
         const SvxFrameDirectionItem& rDirectionItem = GetMergedItem(SDRATTR_WRITINGMODE2);
         if (rDirectionItem.GetValue() == SvxFrameDirection::Vertical_RL_TB90)
