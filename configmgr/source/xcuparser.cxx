@@ -67,7 +67,7 @@ xmlreader::XmlReader::Text XcuParser::getTextMode() {
 }
 
 bool XcuParser::startElement(
-    xmlreader::XmlReader & reader, OUString const & oldProductName, int nsId, xmlreader::Span const & name,
+    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
     std::set< OUString > const * /*existingDependencies*/)
 {
     if (valueParser_.startElement(reader, nsId, name)) {
@@ -95,7 +95,7 @@ bool XcuParser::startElement(
                 "bad items node member <" + name.convertFromUtf8() + "> in " +
                 reader.getUrl());
         }
-        handleItem(reader, oldProductName);
+        handleItem(reader);
     } else {
         switch (state_.top().node->kind()) {
         case Node::KIND_PROPERTY:
@@ -312,7 +312,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     state_.push(State::Modify(node));
 }
 
-void XcuParser::handleItem(xmlreader::XmlReader & reader, OUString const & oldProductName) {
+void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     xmlreader::Span attrPath;
     for (;;) {
         int attrNsId;
@@ -332,7 +332,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader, OUString const & oldPr
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_.resolvePathRepresentation(
-            path, oldProductName, nullptr, &path_, &finalizedLayer));
+            path, nullptr, &path_, &finalizedLayer));
     if (!node.is()) {
         SAL_WARN(
             "configmgr",

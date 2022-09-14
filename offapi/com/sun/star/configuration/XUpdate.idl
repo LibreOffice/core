@@ -35,8 +35,8 @@ interface XUpdate {
         // argument
 
     void insertModificationXcuFile(
-        [in] string fileUri, [in] string oldProductName,
-        [in] sequence< string > includedPaths, [in] sequence< string > excludedPaths);
+        [in] string fileUri, [in] sequence< string > includedPaths,
+        [in] sequence< string > excludedPaths);
 };
 
 }; }; }; };

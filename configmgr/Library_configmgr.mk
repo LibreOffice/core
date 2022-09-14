@@ -51,10 +51,6 @@ $(eval $(call gb_Library_use_externals,configmgr, \
     dconf \
 ))
 
-$(eval $(call gb_Library_use_custom_headers,configmgr, \
-    officecfg/registry \
-))
-
 $(eval $(call gb_Library_use_sdk_api,configmgr))
 
 $(eval $(call gb_Library_use_libraries,configmgr, \

@@ -24,7 +24,6 @@
 #include <cstddef>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <officecfg/Setup.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
@@ -180,7 +179,7 @@ bool Data::equalTemplateNames(
 Data::Data(): root_(new RootNode) {}
 
 rtl::Reference< Node > Data::resolvePathRepresentation(
-    OUString const & pathRepresentation, OUString const & oldProductName,
+    OUString const & pathRepresentation,
     OUString * canonicRepresentation, std::vector<OUString> * path, int * finalizedLayer)
     const
 {
@@ -250,21 +249,6 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             throw css::uno::RuntimeException(
                 "bad path " + pathRepresentation);
         }
-        // The name of the product name related color schemes need to be replaced
-        // with the new product name during migration.
-        if (path != nullptr && path->back() == "ColorSchemes")
-        {
-            OUString aDarkTheme = " Dark";
-            if (seg.equals(oldProductName))
-            {
-                seg = officecfg::Setup::Product::ooName::get();
-            }
-            else if (seg.equals(oldProductName + aDarkTheme))
-            {
-                seg = officecfg::Setup::Product::ooName::get() + aDarkTheme;
-            }
-        }
-
         // For backwards compatibility, allow set members to be accessed with
         // simple path segments, like group members:
         p = p->getMember(seg);

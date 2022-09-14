@@ -95,23 +95,23 @@ typedef std::vector< UnresolvedVectorItem > UnresolvedVector;
 
 void parseXcsFile(
     OUString const & url, int layer, Data & data, Partial const * partial,
-    Modifications * modifications, Additions * additions, OUString const & oldProductName)
+    Modifications * modifications, Additions * additions)
 {
     assert(partial == nullptr && modifications == nullptr && additions == nullptr);
     (void) partial; (void) modifications; (void) additions;
     bool ok = rtl::Reference< ParseManager >(
-        new ParseManager(url, oldProductName, new XcsParser(layer, data)))->parse(nullptr);
+        new ParseManager(url, new XcsParser(layer, data)))->parse(nullptr);
     assert(ok);
     (void) ok; // avoid warnings
 }
 
 void parseXcuFile(
     OUString const & url, int layer, Data & data, Partial const * partial,
-    Modifications * modifications, Additions * additions, OUString const & oldProductName)
+    Modifications * modifications, Additions * additions)
 {
     bool ok = rtl::Reference< ParseManager >(
         new ParseManager(
-            url, oldProductName,
+            url,
             new XcuParser(layer, data, partial, modifications, additions)))->
         parse(nullptr);
     assert(ok);
@@ -214,7 +214,7 @@ rtl::Reference< Node > Components::resolvePathRepresentation(
     const
 {
     return data_.resolvePathRepresentation(
-        pathRepresentation, OUString(), canonicRepresentation, path, finalizedLayer);
+        pathRepresentation, canonicRepresentation, path, finalizedLayer);
 }
 
 rtl::Reference< Node > Components::getTemplate(OUString const & fullName) const
@@ -311,7 +311,7 @@ void Components::insertExtensionXcsFile(
 {
     int layer = getExtensionLayer(shared);
     try {
-        parseXcsFile(fileUri, layer, data_, nullptr, nullptr, nullptr, OUString());
+        parseXcsFile(fileUri, layer, data_, nullptr, nullptr, nullptr);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             "insertExtensionXcsFile does not exist: " + e.Message);
@@ -325,7 +325,7 @@ void Components::insertExtensionXcuFile(
     int layer = getExtensionLayer(shared) + 1;
     Additions * adds = data_.addExtensionXcuAdditions(fileUri, layer);
     try {
-        parseXcuFile(fileUri, layer, data_, nullptr, modifications, adds, OUString());
+        parseXcuFile(fileUri, layer, data_, nullptr, modifications, adds);
     } catch (css::container::NoSuchElementException & e) {
         data_.removeExtensionXcuAdditions(fileUri);
         throw css::uno::RuntimeException(
@@ -388,7 +388,7 @@ void Components::removeExtensionXcuFile(
 }
 
 void Components::insertModificationXcuFile(
-    OUString const & fileUri, OUString const & oldProductName,
+    OUString const & fileUri,
     std::set< OUString > const & includedPaths,
     std::set< OUString > const & excludedPaths,
     Modifications * modifications)
@@ -397,7 +397,7 @@ void Components::insertModificationXcuFile(
     Partial part(includedPaths, excludedPaths);
     try {
         parseFileLeniently(
-            &parseXcuFile, fileUri, Data::NO_LAYER, &part, modifications, nullptr, oldProductName);
+            &parseXcuFile, fileUri, Data::NO_LAYER, &part, modifications, nullptr);
     } catch (const css::container::NoSuchElementException &) {
         TOOLS_WARN_EXCEPTION(
             "configmgr",
@@ -553,7 +553,7 @@ Components::Components(
             }
             OUString aTempFileURL;
             if (dumpWindowsRegistry(&aTempFileURL, eType)) {
-                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, nullptr, nullptr, nullptr, OUString());
+                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, nullptr, nullptr, nullptr);
                 if (!getenv("SAL_CONFIG_WINREG_RETAIN_TMP"))
                     osl::File::remove(aTempFileURL);
             }
@@ -645,11 +645,11 @@ Components::~Components()
 void Components::parseFileLeniently(
     FileParser * parseFile, OUString const & url, int layer,
     Partial const * partial, Modifications * modifications,
-    Additions * additions, OUString const & oldProductName)
+    Additions * additions)
 {
     assert(parseFile != nullptr);
     try {
-        (*parseFile)(url, layer, data_, partial, modifications, additions, oldProductName);
+        (*parseFile)(url, layer, data_, partial, modifications, additions);
     } catch (const css::container::NoSuchElementException &) {
         throw;
     } catch (const css::uno::Exception &) { //TODO: more specific exception catching
@@ -702,7 +702,7 @@ void Components::parseFiles(
             if (file.endsWith(extension)) {
                 try {
                     parseFileLeniently(
-                        parseFile, stat.getFileURL(), layer, nullptr, nullptr, nullptr, OUString());
+                        parseFile, stat.getFileURL(), layer, nullptr, nullptr, nullptr);
                 } catch (css::container::NoSuchElementException & e) {
                     if (stat.getFileType() == osl::FileStatus::Link) {
                         SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
@@ -728,7 +728,7 @@ void Components::parseFileList(
                 adds = data_.addExtensionXcuAdditions(url, layer);
             }
             try {
-                parseFileLeniently(parseFile, url, layer, nullptr, nullptr, adds, OUString());
+                parseFileLeniently(parseFile, url, layer, nullptr, nullptr, adds);
             } catch (const css::container::NoSuchElementException &) {
                 TOOLS_WARN_EXCEPTION("configmgr", "file does not exist");
                 if (adds != nullptr) {
@@ -781,7 +781,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
                 rtl::Reference< ParseManager > manager;
                 try {
                     manager = new ParseManager(
-                        stat.getFileURL(), OUString(),
+                        stat.getFileURL(),
                         new XcdParser(layer, processedDeps, data_));
                 } catch (css::container::NoSuchElementException & e) {
                     if (stat.getFileType() == osl::FileStatus::Link) {
@@ -865,7 +865,7 @@ void Components::parseResLayer(int layer, std::u16string_view url) {
 
 void Components::parseModificationLayer(int layer, OUString const & url) {
     try {
-        parseFileLeniently(&parseXcuFile, url, layer, nullptr, nullptr, nullptr, OUString());
+        parseFileLeniently(&parseXcuFile, url, layer, nullptr, nullptr, nullptr);
     } catch (css::container::NoSuchElementException &) {
         SAL_INFO(
             "configmgr", "user registrymodifications.xcu does not (yet) exist");

@@ -35,8 +35,8 @@ public:
     virtual xmlreader::XmlReader::Text getTextMode() = 0;
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, OUString const & oldProductName, int nsId,
-        xmlreader::Span const & name, std::set< OUString > const * existingDependencies) = 0;
+        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        std::set< OUString > const * existingDependencies) = 0;
 
     virtual void endElement(xmlreader::XmlReader const & reader) = 0;
 

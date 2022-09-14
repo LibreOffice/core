@@ -36,7 +36,7 @@ class Parser;
 class ParseManager: public salhelper::SimpleReferenceObject {
 public:
     ParseManager(
-        OUString const & url, OUString const & oldProductName, rtl::Reference< Parser > const & parser);
+        OUString const & url, rtl::Reference< Parser > const & parser);
 
     bool parse(std::set< OUString > const * existingDependencies);
 
@@ -46,7 +46,6 @@ private:
     virtual ~ParseManager() override;
 
     xmlreader::XmlReader reader_;
-    OUString oldProductName_;
     rtl::Reference< Parser > parser_;
     xmlreader::Span itemData_;
     int itemNamespaceId_;

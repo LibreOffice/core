@@ -91,7 +91,6 @@ public:
 
     void insertModificationXcuFile(
         OUString const & fileUri,
-        OUString const & oldProductName,
         std::set< OUString > const & includedPaths,
         std::set< OUString > const & excludedPaths,
         Modifications * modifications);
@@ -105,7 +104,7 @@ private:
 
     typedef void FileParser(
         OUString const &, int, Data &, Partial const *, Modifications *,
-        Additions *, OUString const &);
+        Additions *);
 public:
     explicit Components(
         css::uno::Reference< css::uno::XComponentContext > const & context);
@@ -116,7 +115,7 @@ private:
     void parseFileLeniently(
         FileParser * parseFile, OUString const & url, int layer,
         Partial const * partial, Modifications * modifications,
-        Additions * additions, OUString const & oldProductName);
+        Additions * additions);
 
     void parseFiles(
         int layer, OUString const & extension, FileParser * parseFile,
