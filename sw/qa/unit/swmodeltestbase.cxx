@@ -766,4 +766,12 @@ SwDoc* SwModelTestBase::createSwWebDoc(std::u16string_view rDataDirectory, const
     return pTextDoc->GetDocShell()->GetDoc();
 }
 
+void SwModelTestBase::StoreToTempFile(const OUString& rFilterName)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= rFilterName;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

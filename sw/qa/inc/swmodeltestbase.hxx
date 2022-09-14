@@ -401,6 +401,8 @@ protected:
      */
     SwDoc* createSwWebDoc(
         std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
+
+    void StoreToTempFile(const OUString& rFilterName);
 };
 
 /**
