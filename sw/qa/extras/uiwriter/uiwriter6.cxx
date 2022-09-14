@@ -1438,7 +1438,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "redline-autocorrect2.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "redline-autocorrect3.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument& rXTextDocument = getSwXTextDocument();
