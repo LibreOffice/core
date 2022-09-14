@@ -59,7 +59,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , aStrEmpty(ScResId(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(ScResId(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
-    , aStrTextColor(ScResId(SCSTR_FILTER_TEXT_COLOR_COND))
+    , aStrTextColor(ScResId(SCSTR_FILTER_FONT_COLOR_COND))
     , aStrBackgroundColor(ScResId(SCSTR_FILTER_BACKGROUND_COLOR_COND))
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())

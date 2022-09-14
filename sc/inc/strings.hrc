@@ -39,7 +39,7 @@
 #define SCSTR_FILTER_COLOR                          NC_("SCSTR_FILTER_COLOR", "Filter by Color")
 #define SCSTR_FILTER_CONDITION                      NC_("SCSTR_FILTER_CONDITION", "Filter by Condition")
 // This must match the translation of the same strings of standardfilterdialog|cond
-#define SCSTR_FILTER_TEXT_COLOR_COND                NC_("STANDARDFILTERDIALOG_COND", "Font color")
+#define SCSTR_FILTER_FONT_COLOR_COND                NC_("STANDARDFILTERDIALOG_COND", "Font color")
 #define SCSTR_FILTER_BACKGROUND_COLOR_COND          NC_("STANDARDFILTERDIALOG_COND", "Background color")
 #define SCSTR_FILTER_NO_FILL                        NC_("SCSTR_FILTER_NO_FILL", "No Fill")
 #define SCSTR_FILTER_AUTOMATIC_COLOR                NC_("SCSTR_FILTER_AUTOMATIC_COLOR", "Automatic")
