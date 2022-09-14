@@ -3524,7 +3524,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
-    // ToDo: Unsure about this. Need to investigate shapes from diagram import, especially digrams
+    // ToDo: Unsure about this. Need to investigate shapes from diagram import, especially diagrams
     // with vertical text directions.
     if (nTextPreRotateAngle != 0 && !sWritingMode)
     {
