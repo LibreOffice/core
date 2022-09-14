@@ -618,8 +618,6 @@ void Chart2ExportTest::testScatterXAxisCategories()
 
 void Chart2ExportTest::testChartDataTable()
 {
-/*  Disable test temporarily until OOXML filter is updated
-
     load(u"/chart2/qa/extras/data/docx/", u"testChartDataTable.docx");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -627,7 +625,6 @@ void Chart2ExportTest::testChartDataTable()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
-*/
 }
 
 void Chart2ExportTest::testChartExternalData()
