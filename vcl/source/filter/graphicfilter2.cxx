@@ -120,8 +120,7 @@ void GraphicDescriptor::ImpConstruct()
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkBMP();
+    bool bRet = aDetector.detect() && aDetector.checkBMP();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -130,8 +129,7 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkGIF();
+    bool bRet = aDetector.detect() && aDetector.checkGIF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -333,8 +331,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPCD();
+    bool bRet = aDetector.detect() && aDetector.checkPCD();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -343,8 +340,7 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, true /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPCX();
+    bool bRet = aDetector.detect() && aDetector.checkPCX();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -353,8 +349,7 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPNG();
+    bool bRet = aDetector.detect() && aDetector.checkPNG();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -363,8 +358,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkTIF();
+    bool bRet = aDetector.detect() && aDetector.checkTIF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -373,8 +367,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectXBM( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkXBM();
+    bool bRet = aDetector.detect() && aDetector.checkXBM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -383,8 +376,7 @@ bool GraphicDescriptor::ImpDetectXBM( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectXPM( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkXPM();
+    bool bRet = aDetector.detect() && aDetector.checkXPM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -393,8 +385,7 @@ bool GraphicDescriptor::ImpDetectXPM( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPBM();
+    bool bRet = aDetector.detect() && aDetector.checkPBM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -403,8 +394,7 @@ bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPGM();
+    bool bRet = aDetector.detect() && aDetector.checkPGM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -413,8 +403,7 @@ bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPPM();
+    bool bRet = aDetector.detect() && aDetector.checkPPM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -423,8 +412,7 @@ bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkRAS();
+    bool bRet = aDetector.detect() && aDetector.checkRAS();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -433,8 +421,7 @@ bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectTGA( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkTGA();
+    bool bRet = aDetector.detect() && aDetector.checkTGA();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -443,8 +430,7 @@ bool GraphicDescriptor::ImpDetectTGA( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPSD();
+    bool bRet = aDetector.detect() && aDetector.checkPSD();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -453,8 +439,7 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkEPS();
+    bool bRet = aDetector.detect() && aDetector.checkEPS();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -463,8 +448,7 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectDXF( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkDXF();
+    bool bRet = aDetector.detect() && aDetector.checkDXF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -473,8 +457,7 @@ bool GraphicDescriptor::ImpDetectDXF( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectMET( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkMET();
+    bool bRet = aDetector.detect() && aDetector.checkMET();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -483,8 +466,7 @@ bool GraphicDescriptor::ImpDetectMET( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkPCT();
+    bool bRet = aDetector.detect() && aDetector.checkPCT();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -493,8 +475,7 @@ bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkSVM();
+    bool bRet = aDetector.detect() && aDetector.checkSVM();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -503,8 +484,7 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool /*bExtendedInfo*/)
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkWMF();
+    bool bRet = aDetector.detect() && aDetector.checkWMF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -513,8 +493,7 @@ bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool /*bExtendedInfo*/)
 bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkEMF();
+    bool bRet = aDetector.detect() && aDetector.checkEMF();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -523,8 +502,7 @@ bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
 bool GraphicDescriptor::ImpDetectSVG( SvStream& rStm, bool /*bExtendedInfo*/ )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkSVG();
+    bool bRet = aDetector.detect() && aDetector.checkSVG();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
@@ -533,8 +511,7 @@ bool GraphicDescriptor::ImpDetectSVG( SvStream& rStm, bool /*bExtendedInfo*/ )
 bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
 {
     vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
-    bool bRet = aDetector.detect();
-    bRet &= aDetector.checkWEBP();
+    bool bRet = aDetector.detect() && aDetector.checkWEBP();
     if ( bRet )
         aMetadata = aDetector.getMetadata();
     return bRet;
