@@ -184,7 +184,7 @@ namespace
         {
             SwPaM aStartPaM(start);
             io_rDoc.getIDocumentContentOperations().InsertString(aStartPaM, startChar);
-            start.nContent -= startChar.getLength(); // restore, it was moved by InsertString
+            start.AdjustContent( -startChar.getLength() ); // restore, it was moved by InsertString
             // do not manipulate via reference directly but call SetMarkStartPos
             // which works even if start and end pos were the same
             rField.SetMarkStartPos( start );
@@ -197,7 +197,7 @@ namespace
                 io_rDoc.getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
                 if (!pSepPos || rEnd < *pSepPos)
                 {   // rEnd is not moved automatically if it's same as insert pos
-                    ++rEnd.nContent;
+                    rEnd.AdjustContent(1);
                 }
             }
             assert(pSepPos == nullptr || (start < *pSepPos && *pSepPos <= rEnd));
@@ -214,7 +214,7 @@ namespace
             io_rDoc.getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
             if (aEndMark != CH_TXT_ATR_FORMELEMENT)
             {
-                ++rEnd.nContent; // InsertString didn't move non-empty mark
+                rEnd.AdjustContent(1); // InsertString didn't move non-empty mark
             }
             else
             {   // InsertString moved the mark's end, not its start
@@ -853,13 +853,13 @@ namespace sw::mark
         if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength() &&
            nEnd > nStart + 2)
         {
-            SwPaM aFieldPam(GetMarkStart().nNode, nStart + 1,
-                            GetMarkStart().nNode, nEnd - 1);
+            SwPaM aFieldPam(GetMarkStart().GetNode(), nStart + 1,
+                            GetMarkStart().GetNode(), nEnd - 1);
             m_pDocumentContentOperationsManager->ReplaceRange(aFieldPam, sNewContent, false);
         }
         else
         {
-            SwPaM aFieldStartPam(GetMarkStart().nNode, nStart + 1);
+            SwPaM aFieldStartPam(GetMarkStart().GetNode(), nStart + 1);
             m_pDocumentContentOperationsManager->InsertString(aFieldStartPam, sNewContent);
         }
 
