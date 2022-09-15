@@ -309,8 +309,8 @@ bool SwCursorShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
     aCursorSt.SetCursorToMark(pMark);
-    ++aCursorSt.m_pCursor->GetPoint()->nContent;
-    --aCursorSt.m_pCursor->GetMark()->nContent;
+    aCursorSt.m_pCursor->GetPoint()->AdjustContent(+1);
+    aCursorSt.m_pCursor->GetMark()->AdjustContent(-1);
 
     if(aCursorSt.RollbackIfIllegal()) return false;
 
