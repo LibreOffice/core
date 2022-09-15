@@ -10479,7 +10479,14 @@ dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
 if test "$enable_fuzzers" != "yes" -a "$enable_nss" = "yes"; then
-    libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
+    case "$_os" in
+        Linux)
+            libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8],,,TRUE)
+        ;;
+        *)
+            libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
+        ;;
+    esac
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS=TRUE
 elif test $_os != iOS ; then
