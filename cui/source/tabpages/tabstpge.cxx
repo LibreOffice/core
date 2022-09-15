@@ -52,7 +52,11 @@ void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
     Size aSize(GetOutputSizePixel());
     aPoint.setX( aSize.Width() / 2 );
     aPoint.setY( aSize.Height() / 2 );
-    Ruler::DrawTab(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetFontColor(), aPoint, nTabStyle);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.SetFillColor(rStyleSettings.GetDialogColor());
+    rRenderContext.DrawRect(tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
+    Ruler::DrawTab(rRenderContext, rStyleSettings.GetDialogTextColor(), aPoint, nTabStyle);
 }
 
 SvxTabulatorTabPage::SvxTabulatorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
