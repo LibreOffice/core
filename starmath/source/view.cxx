@@ -105,6 +105,8 @@ using namespace css::uno;
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
     : InterimItemWindow(&rShell.GetViewFrame()->GetWindow(), "modules/smath/ui/mathwindow.ui", "MathWindow")
+    , nLinePixH(GetSettings().GetStyleSettings().GetScrollBarSize())
+    , nColumnPixW(nLinePixH)
     , nZoom(100)
     // continue to use user-scrolling to make this work equivalent to how it 'always' worked
     , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow", true))
@@ -112,8 +114,6 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
     , mxGraphicWin(new weld::CustomWeld(*m_xBuilder, "mathview", *mxGraphic))
 {
     InitControlBase(mxGraphic->GetDrawingArea());
-
-    nColumnPixW = nLinePixH = GetSettings().GetStyleSettings().GetScrollBarSize();
 
     mxScrolledWindow->connect_hadjustment_changed(LINK(this, SmGraphicWindow, ScrollHdl));
     mxScrolledWindow->connect_vadjustment_changed(LINK(this, SmGraphicWindow, ScrollHdl));
