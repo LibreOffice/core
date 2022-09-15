@@ -3254,7 +3254,6 @@ desktop/win32/source/applauncher/launcher.cxx
 desktop/win32/source/loader.cxx
 desktop/win32/source/loader.hxx
 desktop/win32/source/unoinfo.cxx
-drawinglayer/inc/converters.hxx
 drawinglayer/inc/emfplushelper.hxx
 drawinglayer/inc/primitive2d/cropprimitive2d.hxx
 drawinglayer/inc/primitive2d/graphicprimitivehelper2d.hxx
@@ -3328,7 +3327,6 @@ drawinglayer/source/primitive2d/pointarrayprimitive2d.cxx
 drawinglayer/source/primitive2d/primitivetools2d.cxx
 drawinglayer/source/primitive2d/sceneprimitive2d.cxx
 drawinglayer/source/primitive2d/sdrdecompositiontools2d.cxx
-drawinglayer/source/primitive2d/shadowprimitive2d.cxx
 drawinglayer/source/primitive2d/structuretagprimitive2d.cxx
 drawinglayer/source/primitive2d/svggradientprimitive2d.cxx
 drawinglayer/source/primitive2d/textbreakuphelper.cxx

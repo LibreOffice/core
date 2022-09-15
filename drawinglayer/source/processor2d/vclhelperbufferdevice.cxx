@@ -28,15 +28,23 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/stream.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <mutex>
 
-// buffered VDev usage
+#ifdef DBG_UTIL
+#include <tools/stream.hxx>
+#endif
 
+// #define SPEED_COMPARE
+#ifdef SPEED_COMPARE
+#include <tools/time.hxx>
+#endif
+
+// buffered VDev usage
 namespace
 {
 class VDevBuffer : public Timer
@@ -45,10 +53,8 @@ private:
     struct Entry
     {
         VclPtr<VirtualDevice> buf;
-        bool isTransparent = false;
-        Entry(const VclPtr<VirtualDevice>& vdev, bool bTransparent)
+        Entry(const VclPtr<VirtualDevice>& vdev)
             : buf(vdev)
-            , isTransparent(bTransparent)
         {
         }
     };
@@ -72,7 +78,7 @@ public:
     VDevBuffer();
     virtual ~VDevBuffer() override;
 
-    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bTransparent);
+    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel);
     void free(VirtualDevice& rDevice);
 
     // Timer virtuals
@@ -131,8 +137,7 @@ bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size&
     return false;
 }
 
-VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel,
-                                        bool bTransparent)
+VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel)
 {
     std::unique_lock aGuard(m_aMutex);
     VclPtr<VirtualDevice> pRetval;
@@ -148,7 +153,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
         {
             assert(a->buf && "Empty pointer in VDevBuffer (!)");
 
-            if (nBits == a->buf->GetBitCount() && bTransparent == a->isTransparent)
+            if (nBits == a->buf->GetBitCount())
             {
                 // candidate is valid due to bit depth
                 if (aFound != maFreeBuffers.end())
@@ -229,9 +234,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     // no success yet, create new buffer
     if (!pRetval)
     {
-        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, DeviceFormat::DEFAULT,
-                                                bTransparent ? DeviceFormat::DEFAULT
-                                                             : DeviceFormat::NONE);
+        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, DeviceFormat::DEFAULT);
         maDeviceTemplates[pRetval] = &rOutDev;
         pRetval->SetOutputSizePixel(rSizePixel, true);
     }
@@ -243,7 +246,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     }
 
     // remember allocated buffer
-    maUsedBuffers.emplace_back(pRetval, bTransparent);
+    maUsedBuffers.emplace_back(pRetval);
 
     return pRetval;
 }
@@ -278,13 +281,103 @@ void VDevBuffer::Invoke()
         maFreeBuffers.pop_back();
     }
 }
+
+#ifdef SPEED_COMPARE
+void doSpeedCompare(double fTrans, const Bitmap& rContent, const tools::Rectangle& rDestPixel,
+                    OutputDevice& rOutDev)
+{
+    const int nAvInd(500);
+    static double fFactors[nAvInd];
+    static int nIndex(nAvInd + 1);
+    static int nRepeat(5);
+    static int nWorseTotal(0);
+    static int nBetterTotal(0);
+    int a(0);
+
+    const Size aSizePixel(rDestPixel.GetSize());
+
+    // init statics
+    if (nIndex > nAvInd)
+    {
+        for (a = 0; a < nAvInd; a++)
+            fFactors[a] = 1.0;
+        nIndex = 0;
+    }
+
+    // get start time
+    const sal_uInt64 nTimeA(tools::Time::GetSystemTicks());
+
+    // loop nRepeat times to get somewhat better timings, else
+    // numbers are pretty small
+    for (a = 0; a < nRepeat; a++)
+    {
+        // "Former" method using a temporary AlphaMask & DrawBitmapEx
+        sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
+        const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
+        rOutDev.DrawBitmapEx(rDestPixel.TopLeft(), BitmapEx(rContent, aAlphaMask));
+    }
+
+    // get intermediate time
+    const sal_uInt64 nTimeB(tools::Time::GetSystemTicks());
+
+    // loop nRepeat times
+    for (a = 0; a < nRepeat; a++)
+    {
+        // New method using DrawTransformedBitmapEx & fTrans directly
+        rOutDev.DrawTransformedBitmapEx(basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                            aSizePixel.Width(), aSizePixel.Height(),
+                                            rDestPixel.TopLeft().X(), rDestPixel.TopLeft().Y()),
+                                        BitmapEx(rContent), 1 - fTrans);
+    }
+
+    // get end time
+    const sal_uInt64 nTimeC(tools::Time::GetSystemTicks());
+
+    // calculate deltas
+    const sal_uInt64 nTimeFormer(nTimeB - nTimeA);
+    const sal_uInt64 nTimeNew(nTimeC - nTimeB);
+
+    // compare & note down
+    if (nTimeFormer != nTimeNew && 0 != nTimeFormer && 0 != nTimeNew)
+    {
+        if ((nTimeFormer < 10 || nTimeNew < 10) && nRepeat < 500)
+        {
+            nRepeat += 1;
+            SAL_INFO("drawinglayer.processor2d", "Increment nRepeat to " << nRepeat);
+            return;
+        }
+
+        const double fNewFactor((double)nTimeFormer / nTimeNew);
+        fFactors[nIndex % nAvInd] = fNewFactor;
+        nIndex++;
+        double fAverage(0.0);
+        {
+            for (a = 0; a < nAvInd; a++)
+                fAverage += fFactors[a];
+            fAverage /= nAvInd;
+        }
+        if (fNewFactor < 1.0)
+            nWorseTotal++;
+        else
+            nBetterTotal++;
+
+        char buf[300];
+        sprintf(buf,
+                "Former: %ld New: %ld It got %s (factor %f) (av. last %d Former/New is %f, "
+                "WorseTotal: %d, BetterTotal: %d)",
+                nTimeFormer, nTimeNew, fNewFactor < 1.0 ? "WORSE" : "BETTER",
+                fNewFactor < 1.0 ? 1.0 / fNewFactor : fNewFactor, nAvInd, fAverage, nWorseTotal,
+                nBetterTotal);
+        SAL_INFO("drawinglayer.processor2d", buf);
+    }
+}
+#endif
 }
 
 // support for rendering Bitmap and BitmapEx contents
-
 namespace drawinglayer
 {
-// static global VDev buffer for the VclProcessor2D's (VclMetafileProcessor2D and VclPixelProcessor2D)
+// static global VDev buffer for VclProcessor2D/VclPixelProcessor2D
 VDevBuffer& getVDevBuffer()
 {
     // secure global instance with Vcl's safe destroyer of external (seen by
@@ -294,7 +387,7 @@ VDevBuffer& getVDevBuffer()
     return *aVDevBuffer.get();
 }
 
-impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange, bool bCrop)
+impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
     : mrOutDev(rOutDev)
     , mpContent(nullptr)
     , mpAlpha(nullptr)
@@ -303,18 +396,25 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
     aRangePixel.transform(mrOutDev.GetViewTransformation());
     maDestPixel = tools::Rectangle(floor(aRangePixel.getMinX()), floor(aRangePixel.getMinY()),
                                    ceil(aRangePixel.getMaxX()), ceil(aRangePixel.getMaxY()));
-    if (bCrop)
-        maDestPixel.Intersection({ {}, mrOutDev.GetOutputSizePixel() });
+    maDestPixel.Intersection({ {}, mrOutDev.GetOutputSizePixel() });
 
     if (!isVisible())
         return;
 
-    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true);
+    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize());
 
     // #i93485# assert when copying from window to VDev is used
     SAL_WARN_IF(
         mrOutDev.GetOutDevType() == OUTDEV_WINDOW, "drawinglayer",
         "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
+
+    // initialize buffer by blitting content of source to prepare for
+    // transparence/ copying back
+    const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
+    mrOutDev.EnableMapMode(false);
+    mpContent->DrawOutDev(Point(), maDestPixel.GetSize(), maDestPixel.TopLeft(),
+                          maDestPixel.GetSize(), mrOutDev);
+    mrOutDev.EnableMapMode(bWasEnabledSrc);
 
     MapMode aNewMapMode(mrOutDev.GetMapMode());
 
@@ -351,15 +451,13 @@ void impBufferDevice::paint(double fTrans)
     const Point aEmptyPoint;
     const Size aSizePixel(maDestPixel.GetSize());
     const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
-#ifdef DBG_UTIL
-    static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
-#endif
 
     mrOutDev.EnableMapMode(false);
     mpContent->EnableMapMode(false);
 
 #ifdef DBG_UTIL
     // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
+    static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
     static const OUString sDumpPath(OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
 
     if (!sDumpPath.isEmpty() && bDoSaveForVisualControl)
@@ -388,17 +486,75 @@ void impBufferDevice::paint(double fTrans)
         }
 #endif
 
-        BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        aAlphaMask.BlendWith(aContent.GetAlpha());
-        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
+        Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
     }
     else if (0.0 != fTrans)
     {
-        basegfx::B2DHomMatrix trans, scale;
-        trans.translate(maDestPixel.TopLeft().X(), maDestPixel.TopLeft().Y());
-        scale.scale(aSizePixel.Width(), aSizePixel.Height());
-        mrOutDev.DrawTransformedBitmapEx(
-            trans * scale, mpContent->GetBitmapEx(aEmptyPoint, aSizePixel), 1 - fTrans);
+        const Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+
+#ifdef SPEED_COMPARE
+        static bool bCompareFormerAndNewTimings(true);
+
+        if (bCompareFormerAndNewTimings)
+        {
+            doSpeedCompare(fTrans, aContent, maDestPixel, mrOutDev);
+        }
+        else
+#endif
+        // Note: this extra scope is needed due to 'clang plugin indentation'. It complains
+        //       that lines 494 and (now) 539 are 'statement mis-aligned compared to neighbours'.
+        //       That is true if SPEED_COMPARE is not defined. Not nice, but have to fix this.
+        {
+            // For the case we have a unified transparency value there is a former
+            // and new method to paint that which can be used. To decide on measurements,
+            // I added 'doSpeedCompare' above which can be activated by defining
+            // SPEED_COMPARE at the top of this file.
+            // I added the used Testdoc: blurplay3.odg as
+            //     https://bugs.documentfoundation.org/attachment.cgi?id=182463
+            // I did measure on
+            //
+            // Linux Dbg:
+            // Former: 21 New: 32 It got WORSE (factor 1.523810) (av. last 500 Former/New is 0.968533, WorseTotal: 515, BetterTotal: 934)
+            //
+            // Linux Pro:
+            // Former: 27 New: 44 It got WORSE (factor 1.629630) (av. last 500 Former/New is 0.923256, WorseTotal: 433, BetterTotal: 337)
+            //
+            // Win Dbg:
+            // Former: 21 New: 78 It got WORSE (factor 3.714286) (av. last 500 Former/New is 1.007176, WorseTotal: 85, BetterTotal: 1428)
+            //
+            // Win Pro:
+            // Former: 3 New: 4 It got WORSE (factor 1.333333) (av. last 500 Former/New is 1.054167, WorseTotal: 143, BetterTotal: 3909)
+            //
+            // Note: I am aware that the Dbg are of limited usefulness, but include them here
+            // for reference.
+            //
+            // The important part is "av. last 500 Former/New is %ld" which decribes the averaged factor from Former/New
+            // over the last 500 measurements. When < 1.0 Former is better (Linux), > 1.0 (Win) New is better. Since the
+            // factor on Win is still close to 1.0 what means we lose nearly nothing and Linux Former is better, I will
+            // use Former for now.
+            //
+            // To easily allow to change this (maybe system-dependent) I add a static switch here,
+            // also for evetually experimenting (hint: can be changed in the debugger).
+            static bool bUseNew(false);
+
+            if (bUseNew)
+            {
+                // New method using DrawTransformedBitmapEx & fTrans directly
+                mrOutDev.DrawTransformedBitmapEx(basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                                     aSizePixel.Width(), aSizePixel.Height(),
+                                                     maDestPixel.TopLeft().X(),
+                                                     maDestPixel.TopLeft().Y()),
+                                                 BitmapEx(aContent), 1 - fTrans);
+            }
+            else
+            {
+                // "Former" method using a temporary AlphaMask & DrawBitmapEx
+                sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
+                const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
+                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+            }
+        }
     }
     else
     {
@@ -422,7 +578,7 @@ VirtualDevice& impBufferDevice::getTransparence()
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpAlpha)
     {
-        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false);
+        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize());
         mpAlpha->SetMapMode(mpContent->GetMapMode());
 
         // copy AA flag for new target; masking needs to be smooth

@@ -35,40 +35,114 @@
 #include <vcl/filter/PngImageWriter.hxx>
 #endif
 
-namespace drawinglayer
+namespace
 {
-BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
-                           const geometry::ViewInformation2D& rViewInformation2D,
-                           sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
-                           sal_uInt32 nMaxSquarePixels)
+bool implPrepareConversion(drawinglayer::primitive2d::Primitive2DContainer& rSequence,
+                           sal_uInt32& rnDiscreteWidth, sal_uInt32& rnDiscreteHeight,
+                           const sal_uInt32 nMaxSquarePixels)
 {
-    BitmapEx aRetval;
+    if (rSequence.empty())
+        return false;
 
-    if (rSeq.empty())
-        return aRetval;
+    if (rnDiscreteWidth <= 0 || rnDiscreteHeight <= 0)
+        return false;
 
-    if (nDiscreteWidth <= 0 || nDiscreteHeight <= 0)
-        return aRetval;
-
-    // get destination size in pixels
-    const MapMode aMapModePixel(MapUnit::MapPixel);
-    const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
-    drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
+    const sal_uInt32 nViewVisibleArea(rnDiscreteWidth * rnDiscreteHeight);
 
     if (nViewVisibleArea > nMaxSquarePixels)
     {
         // reduce render size
         double fReduceFactor
             = sqrt(static_cast<double>(nMaxSquarePixels) / static_cast<double>(nViewVisibleArea));
-        nDiscreteWidth = basegfx::fround(static_cast<double>(nDiscreteWidth) * fReduceFactor);
-        nDiscreteHeight = basegfx::fround(static_cast<double>(nDiscreteHeight) * fReduceFactor);
+        rnDiscreteWidth = basegfx::fround(static_cast<double>(rnDiscreteWidth) * fReduceFactor);
+        rnDiscreteHeight = basegfx::fround(static_cast<double>(rnDiscreteHeight) * fReduceFactor);
 
         const drawinglayer::primitive2d::Primitive2DReference aEmbed(
             new drawinglayer::primitive2d::TransformPrimitive2D(
                 basegfx::utils::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
-                std::move(aSequence)));
+                std::move(rSequence)));
 
-        aSequence = drawinglayer::primitive2d::Primitive2DContainer{ aEmbed };
+        rSequence = drawinglayer::primitive2d::Primitive2DContainer{ aEmbed };
+    }
+
+    return true;
+}
+
+AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& rSequence,
+                              const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
+                              const Size& rSizePixel)
+{
+    ScopedVclPtrInstance<VirtualDevice> pContent;
+
+    // prepare vdev
+    if (!pContent->SetOutputSizePixel(rSizePixel, false))
+    {
+        SAL_WARN("vcl", "Cannot set VirtualDevice to size : " << rSizePixel.Width() << "x"
+                                                              << rSizePixel.Height());
+        return AlphaMask();
+    }
+
+    // create pixel processor, also already takes care of AAing and
+    // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
+    // not wanted, change after this call as needed
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pContentProcessor
+        = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(*pContent,
+                                                                            rViewInformation2D);
+
+    // prepare for mask creation
+    pContent->SetMapMode(MapMode(MapUnit::MapPixel));
+
+    // set alpha to all white (fully transparent)
+    pContent->Erase();
+
+    // embed primitives to paint them black
+    const drawinglayer::primitive2d::Primitive2DReference xRef(
+        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+            std::move(rSequence),
+            std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0.0, 0.0, 0.0))));
+    const drawinglayer::primitive2d::Primitive2DContainer xSeq{ xRef };
+
+    // render
+    pContentProcessor->process(xSeq);
+    pContentProcessor.reset();
+
+    // get alpha channel from vdev
+    pContent->EnableMapMode(false);
+    const Point aEmptyPoint;
+    return AlphaMask(pContent->GetBitmap(aEmptyPoint, rSizePixel));
+}
+}
+
+namespace drawinglayer
+{
+AlphaMask createAlphaMask(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
+                          const geometry::ViewInformation2D& rViewInformation2D,
+                          sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
+                          sal_uInt32 nMaxSquarePixels)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
+
+    if (!implPrepareConversion(aSequence, nDiscreteWidth, nDiscreteHeight, nMaxSquarePixels))
+    {
+        return AlphaMask();
+    }
+
+    const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
+
+    return implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel);
+}
+
+BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
+                           const geometry::ViewInformation2D& rViewInformation2D,
+                           sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
+                           sal_uInt32 nMaxSquarePixels)
+{
+    BitmapEx aRetval;
+    drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
+
+    if (!implPrepareConversion(aSequence, nDiscreteWidth, nDiscreteHeight, nMaxSquarePixels))
+    {
+        return aRetval;
     }
 
     const Point aEmptyPoint;
@@ -99,7 +173,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     }
 
     // We map to pixel, use that MapMode. Init by erasing.
-    pContent->SetMapMode(aMapModePixel);
+    pContent->SetMapMode(MapMode(MapUnit::MapPixel));
     pContent->Erase();
 
     // create pixel processor, also already takes care of AAing and
@@ -130,6 +204,19 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
         }
     }
 #endif
+
+    // Combined/mixed usage of VirtualDevice in Alpha-mode here and
+    // the faster method for divided content/alpha in the VclPixelProcessor2D
+    // *can* go wrong e.g. for objects filled with TransparenceGradients,
+    // so unfortunately for now we have to reliably re-create the
+    // AlphaMask using a method that does this always correct (also used
+    // now in GlowPrimitive2D and ShadowPrimitive2D which both only need the
+    // AlphaMask to do their job, so speeding that up, too).
+    // Note: This could be further approved by creating a small ::B2DProcessor
+    //       that checks if rSeq contains a TransparenceGradient fill and only then use
+    //       this correction.
+    const AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel));
+    aRetval = BitmapEx(aRetval.GetBitmap(), aAlpha);
 
     return aRetval;
 }

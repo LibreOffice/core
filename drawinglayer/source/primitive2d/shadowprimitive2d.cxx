@@ -205,26 +205,24 @@ void ShadowPrimitive2D::create2DDecomposition(
     // limitation to be safe and not go runtime/memory havoc. Use a pretty small
     // limit due to this is Blurred Shadow functionality and will look good with bitmap
     // scaling anyways. The value of 250.000 square pixels below maybe adapted as needed.
-    // NOTE: This may be further optimized. Only the alpha channel is needed, so
-    //       convertToBitmapEx may be split in tooling to have a version that only
-    //       creates the alpha channel. Potential win is >50% for the alpha pixel
-    //       creation step ('>' because alpha painting uses a ColorStack and thus
-    //       often can used simplified rendering)
     const basegfx::B2DVector aDiscreteClippedSize(rViewInformation.getObjectToViewTransformation()
                                                   * aClippedRange.getRange());
     const sal_uInt32 nDiscreteClippedWidth(ceil(aDiscreteClippedSize.getX()));
     const sal_uInt32 nDiscreteClippedHeight(ceil(aDiscreteClippedSize.getY()));
     const geometry::ViewInformation2D aViewInformation2D;
     const sal_uInt32 nMaximumQuadraticPixels(250000);
-    const BitmapEx aBitmapEx(::drawinglayer::convertToBitmapEx(
+
+    // I have now added a helper that just creates the mask without having
+    // to render the content, use it, it's faster
+    const AlphaMask aAlpha(::drawinglayer::createAlphaMask(
         std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
         nMaximumQuadraticPixels));
 
     // if we have no shadow, we are done
-    if (aBitmapEx.IsEmpty())
+    if (aAlpha.IsEmpty())
         return;
 
-    const Size& rBitmapExSizePixel(aBitmapEx.GetSizePixel());
+    const Size& rBitmapExSizePixel(aAlpha.GetSizePixel());
     if (!(rBitmapExSizePixel.Width() > 0 && rBitmapExSizePixel.Height() > 0))
         return;
 
@@ -235,7 +233,7 @@ void ShadowPrimitive2D::create2DDecomposition(
     if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
         || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
     {
-        // scale in X and Y should be the same (see fReduceFactor in convertToBitmapEx),
+        // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
         // so adapt numerically to a single scale value, they are integer rounded values
         const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
                              / static_cast<double>(nDiscreteClippedWidth));
@@ -245,12 +243,12 @@ void ShadowPrimitive2D::create2DDecomposition(
         fScale = (fScaleX + fScaleY) * 0.5;
     }
 
-    // Get the Alpha and use as base to blur and apply the effect
+    // Use the Alpha as base to blur and apply the effect
     const AlphaMask mask(drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
-        aBitmapEx.GetAlpha(), 0, fDiscreteBlurRadius * fScale, 0, false));
+        aAlpha, 0, fDiscreteBlurRadius * fScale, 0, false));
 
     // The end result is the bitmap filled with blur color and blurred 8-bit alpha mask
-    Bitmap bmp = aBitmapEx.GetBitmap();
+    Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
     bmp.Erase(Color(getShadowColor()));
     BitmapEx result(bmp, mask);
 

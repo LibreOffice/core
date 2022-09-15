@@ -155,24 +155,22 @@ void GlowPrimitive2D::create2DDecomposition(
     // limitation to be safe and not go runtime/memory havoc. Use a pretty small
     // limit due to this is glow functionality and will look good with bitmap scaling
     // anyways. The value of 250.000 square pixels below maybe adapted as needed.
-    // NOTE: This may be further optimized. Only the alpha channel is needed, so
-    //       convertToBitmapEx may be split in tooling to have a version that only
-    //       creates the alpha channel. Potential win is >50% for the alpha pixel
-    //       creation step ('>' because alpha painting uses a ColorStack and thus
-    //       often can used simplified rendering)
     const basegfx::B2DVector aDiscreteClippedSize(rViewInformation.getObjectToViewTransformation()
                                                   * aClippedRange.getRange());
     const sal_uInt32 nDiscreteClippedWidth(ceil(aDiscreteClippedSize.getX()));
     const sal_uInt32 nDiscreteClippedHeight(ceil(aDiscreteClippedSize.getY()));
     const geometry::ViewInformation2D aViewInformation2D;
     const sal_uInt32 nMaximumQuadraticPixels(250000);
-    const BitmapEx aBitmapEx(::drawinglayer::convertToBitmapEx(
+
+    // I have now added a helper that just creates the mask without having
+    // to render the content, use it, it's faster
+    const AlphaMask aAlpha(::drawinglayer::createAlphaMask(
         std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
         nMaximumQuadraticPixels));
 
-    if (!aBitmapEx.IsEmpty())
+    if (!aAlpha.IsEmpty())
     {
-        const Size& rBitmapExSizePixel(aBitmapEx.GetSizePixel());
+        const Size& rBitmapExSizePixel(aAlpha.GetSizePixel());
 
         if (rBitmapExSizePixel.Width() > 0 && rBitmapExSizePixel.Height() > 0)
         {
@@ -183,7 +181,7 @@ void GlowPrimitive2D::create2DDecomposition(
             if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
                 || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
             {
-                // scale in X and Y should be the same (see fReduceFactor in convertToBitmapEx),
+                // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
                 // so adapt numerically to a single scale value, they are integer rounded values
                 const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
                                      / static_cast<double>(nDiscreteClippedWidth));
@@ -198,12 +196,12 @@ void GlowPrimitive2D::create2DDecomposition(
             // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
             // fades to both sides by the blur radius; thus blur radius is half of glow radius.
             // Consider glow transparency (initial transparency near the object edge)
-            const AlphaMask mask(ProcessAndBlurAlphaMask(
-                aBitmapEx.GetAlpha(), fDiscreteGlowRadius * fScale / 2.0,
-                fDiscreteGlowRadius * fScale / 2.0, 255 - getGlowColor().GetAlpha()));
+            const AlphaMask mask(ProcessAndBlurAlphaMask(aAlpha, fDiscreteGlowRadius * fScale / 2.0,
+                                                         fDiscreteGlowRadius * fScale / 2.0,
+                                                         255 - getGlowColor().GetAlpha()));
 
             // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
-            Bitmap bmp = aBitmapEx.GetBitmap();
+            Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             bmp.Erase(getGlowColor());
             BitmapEx result(bmp, mask);
 
