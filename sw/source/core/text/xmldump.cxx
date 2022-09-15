@@ -196,11 +196,6 @@ class XmlPortionDumper:public SwPortionHandler
         if (nWidth > 0)
             (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
                                                     static_cast<int>(nWidth));
-        if (nLength > TextFrameIndex(0))
-            (void)xmlTextWriterWriteAttribute(
-                m_Writer, BAD_CAST("Portion"),
-                BAD_CAST(m_rText.copy(sal_Int32(m_Ofs), sal_Int32(nLength)).toUtf8().getStr()));
-
         (void)xmlTextWriterEndElement(m_Writer);
         m_aLine += m_rText.subView(sal_Int32(m_Ofs), sal_Int32(nLength));
         m_Ofs += nLength;

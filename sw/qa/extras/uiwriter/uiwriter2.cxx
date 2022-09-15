@@ -115,11 +115,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 
     // Check that we actually test the line we need
     assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nType",
-                "PortionType::Number");
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "type", "PortionType::Number");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", "2.");
     // The numbering height was 960 in DOC format.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "font-height", "220");
 
     // tdf#127606: now it's possible to change formatting of numbering
     // increase font size (220 -> 260)
@@ -128,7 +133,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     pViewShell->Reformat();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "260");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "font-height", "260");
 
     // save it to DOCX
     reload("Office Open XML Text", "tdf117923.docx");
@@ -139,7 +146,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // this was 220
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "260");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "font-height", "260");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
@@ -324,12 +333,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 0);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion", 0);
     // not sure why there's an empty text portion here, but it's not a problem
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "nType", "PortionType::Para");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1][@Portion]", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwParaPortion", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", "");
 
     pWrtShell->Undo();
 
@@ -337,19 +348,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 0);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "PortionType::Para");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1][@Portion]", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", "");
 
     pWrtShell->Undo();
 
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1][@Portion]", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", "");
 
     pWrtShell->Undo();
 
@@ -357,12 +372,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1][@Portion]", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nLength", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "type", "PortionType::Para");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[@portion]", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "length", "1");
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "A");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", "A");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
@@ -2379,7 +2398,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123102)
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was "3." - caused by the hidden numbered paragraph of the new merged cell
-    assertXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/txt/Special", "rText", "2.");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row[6]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", "2.");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
