@@ -47,8 +47,6 @@ bool eliminate(     Matrix&         matrix,
                     int             cols,
                     const BaseType& minPivot    )
 {
-    BaseType    temp;
-
     /* i, j, k *must* be signed, when looping like: j>=0 ! */
     /* eliminate below main diagonal */
     for(int i=0; i<cols-1; ++i)
@@ -66,9 +64,7 @@ bool eliminate(     Matrix&         matrix,
         /* interchange rows 'max' and 'i' */
         for(int k=0; k<cols; ++k)
         {
-            temp = matrix[ i*cols + k ];
-            matrix[ i*cols + k ] = matrix[ max*cols + k ];
-            matrix[ max*cols + k ] = temp;
+            std::swap(matrix[ i*cols + k ], matrix[ max*cols + k ]);
         }
 
         /* eliminate column */
