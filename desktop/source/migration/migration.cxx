@@ -625,8 +625,8 @@ void renameMigratedSetElementTo(
     // To avoid unexpected data loss, the code is careful to only rename from currentName to
     // migratedName in the expected case where the currentName element exists and the migratedName
     // element doesn't exist:
-    auto const hasCurrent = set->hasByName(currentName);
-    auto const hasMigrated = set->hasByName(migratedName);
+    bool const hasCurrent = set->hasByName(currentName);
+    bool const hasMigrated = set->hasByName(migratedName);
     if (hasCurrent && !hasMigrated) {
         auto const elem = set->getByName(currentName);
         set->removeByName(currentName);
@@ -644,7 +644,7 @@ void renameMigratedSetElementBack(
     // To avoid unexpected data loss, the code is careful to ensure that in the end a currentName
     // element exists, creating it from a template if the migratedName element had unexpectedly gone
     // missing:
-    auto const hasMigrated = set->hasByName(migratedName);
+    bool const hasMigrated = set->hasByName(migratedName);
     css::uno::Any elem;
     if (hasMigrated) {
         elem = set->getByName(migratedName);
