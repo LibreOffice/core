@@ -65,8 +65,8 @@ LIBCMIS_TARBALL := libcmis-0.5.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-COINMP_SHA256SUM := 86c798780b9e1f5921fe4efe651a93cb420623b45aa1fdff57af8c37f116113f
-COINMP_TARBALL := CoinMP-1.7.6.tgz
+COINMP_SHA256SUM := 3459fb0ccbdd39342744684338984ac4cc153fb0434f4cae8cf74bd67490a38d
+COINMP_TARBALL := CoinMP-1.8.4.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

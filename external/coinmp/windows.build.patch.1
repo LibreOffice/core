@@ -1,8 +1,8 @@
 diff -urN coinmp.org/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj coinmp/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj
 --- coinmp.org/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj	1970-01-01 01:00:00.000000000 +0100
-+++ coinmp/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj	2014-02-28 15:32:36.548600694 +0100
-@@ -0,0 +1,506 @@
-+﻿<?xml version="1.0" encoding="utf-8"?>
++++ coinmp/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj	2023-05-24 20:35:48.642884800 +0900
+@@ -0,0 +1,515 @@
++<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 +  <ItemGroup Label="ProjectConfigurations">
 +    <ProjectConfiguration Include="Debug|Win32">
@@ -318,6 +318,14 @@ diff -urN coinmp.org/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj coinmp/Cbc/MSVi
 +      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
 +      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
 +    </ClCompile>
++    <ClCompile Include="..\..\..\src\CbcHeuristicDW.cpp">
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
++      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
++      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EnableFastChecks</BasicRuntimeChecks>
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
++    </ClCompile>
 +    <ClCompile Include="..\..\..\src\CbcHeuristicFPump.cpp">
 +      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
 +      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -475,6 +483,7 @@ diff -urN coinmp.org/Cbc/MSVisualStudio/v9/libCbc/libCbc.vcxproj coinmp/Cbc/MSVi
 +    <ClInclude Include="..\..\..\src\CbcHeuristicDiveLineSearch.hpp" />
 +    <ClInclude Include="..\..\..\src\CbcHeuristicDivePseudoCost.hpp" />
 +    <ClInclude Include="..\..\..\src\CbcHeuristicDiveVectorLength.hpp" />
++    <ClInclude Include="..\..\..\src\CbcHeuristicDW.hpp" />
 +    <ClInclude Include="..\..\..\src\CbcHeuristicFPump.hpp" />
 +    <ClInclude Include="..\..\..\src\CbcHeuristicGreedy.hpp" />
 +    <ClInclude Include="..\..\..\src\CbcHeuristicLocal.hpp" />
@@ -2361,8 +2370,8 @@ diff -urN coinmp.org/CoinMP/MSVisualStudio/v9/unitTest/unitTest.vcxproj coinmp/C
 \ No newline at end of file
 diff -urN coinmp.org/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxproj coinmp/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxproj
 --- coinmp.org/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxproj	1970-01-01 01:00:00.000000000 +0100
-+++ coinmp/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxproj	2014-02-28 15:32:36.564600694 +0100
-@@ -0,0 +1,650 @@
++++ coinmp/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxproj	2023-06-09 07:25:34.205534300 +0900
+@@ -0,0 +1,659 @@
 +﻿<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 +  <ItemGroup Label="ProjectConfigurations">
@@ -2890,6 +2899,14 @@ diff -urN coinmp.org/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxpr
 +      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
 +      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
 +    </ClCompile>
++    <ClCompile Include="..\..\..\src\CoinRational.cpp">
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
++      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
++      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EnableFastChecks</BasicRuntimeChecks>
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
++      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
++    </ClCompile>
 +    <ClCompile Include="..\..\..\src\CoinSearchTree.cpp" />
 +    <ClCompile Include="..\..\..\src\CoinShallowPackedVector.cpp">
 +      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -2992,6 +3009,7 @@ diff -urN coinmp.org/CoinUtils/MSVisualStudio/v9/libCoinUtils/libCoinUtils.vcxpr
 +    <ClInclude Include="..\..\..\src\CoinPresolveTripleton.hpp" />
 +    <ClInclude Include="..\..\..\src\CoinPresolveUseless.hpp" />
 +    <ClInclude Include="..\..\..\src\CoinPresolveZeros.hpp" />
++    <ClInclude Include="..\..\..\src\CoinRational.hpp" />
 +    <ClInclude Include="..\..\..\src\CoinSearchTree.hpp" />
 +    <ClInclude Include="..\..\..\src\CoinShallowPackedVector.hpp" />
 +    <ClInclude Include="..\..\..\src\CoinSimpFactorization.hpp" />

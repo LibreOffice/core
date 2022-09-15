@@ -43,14 +43,15 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbc.3.8.8.dylib \
-			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbcSolver.3.8.8.dylib \
-			$(EXTERNAL_WORKDIR)/Cgl/src/.libs/libCgl.1.8.5.dylib \
-			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClp.1.12.6.dylib \
-			$(EXTERNAL_WORKDIR)/Clp/src/OsiClp/.libs/libOsiClp.1.12.6.dylib \
-			$(EXTERNAL_WORKDIR)/CoinMP/src/.libs/libCoinMP.1.7.6.dylib \
-			$(EXTERNAL_WORKDIR)/CoinUtils/src/.libs/libCoinUtils.3.9.11.dylib \
-			$(EXTERNAL_WORKDIR)/Osi/src/Osi/.libs/libOsi.1.11.5.dylib) \
+			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbc.3.9.10.dylib \
+			$(EXTERNAL_WORKDIR)/Cbc/src/.libs/libCbcSolver.3.9.10.dylib \
+			$(EXTERNAL_WORKDIR)/Cgl/src/.libs/libCgl.1.9.11.dylib \
+			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClp.1.13.12.dylib \
+			$(EXTERNAL_WORKDIR)/Clp/src/.libs/libClpSolver.1.13.12.dylib \
+			$(EXTERNAL_WORKDIR)/Clp/src/OsiClp/.libs/libOsiClp.1.13.12.dylib \
+			$(EXTERNAL_WORKDIR)/CoinMP/src/.libs/libCoinMP.1.8.4.dylib \
+			$(EXTERNAL_WORKDIR)/CoinUtils/src/.libs/libCoinUtils.3.10.15.dylib \
+			$(EXTERNAL_WORKDIR)/Osi/src/Osi/.libs/libOsi.1.12.10.dylib) \
 	)
 	$(call gb_Trace_EndRange,coinmp,EXTERNAL)
 

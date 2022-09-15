@@ -11,7 +11,7 @@
 +bin_PROGRAMS = 
  @COIN_HAS_CHOLMOD_TRUE@am__append_7 = -I`$(CYGPATH_W) $(CHOLMODINCDIR)`
  @COIN_HAS_AMD_TRUE@am__append_8 = -I`$(CYGPATH_W) $(AMDINCDIR)`
- @COIN_HAS_ABC_TRUE@am__append_9 = AbcSimplex.hpp CoinAbcCommon.hpp AbcCommon.hpp
+ @COIN_HAS_ABC_TRUE@am__append_9 = AbcSimplex.hpp CoinAbcCommon.hpp AbcCommon.hpp AbcNonLinearCost.hpp
 --- coinmp/Cbc/src/Makefile.in
 +++ coinmp/Cbc/src/Makefile.in
 @@ -44,7 +44,7 @@
@@ -20,6 +20,6 @@
  host_triplet = @host@
 -bin_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
 +bin_PROGRAMS =
+ @COIN_HAS_NTY_TRUE@am__append_1 = -I$(NTYINCDIR)
  
  ########################################################################
- #                            cbc program                               #

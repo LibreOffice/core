@@ -33,13 +33,10 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,coinmp,\
 #   <https://list.coin-or.org/pipermail/coin-discuss/2020-February/003972.html> "[Coin-discuss]
 #   Small patch to fix Clang -Wnon-c-typedef-for-linkage in Clp":
 $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
-	external/coinmp/osi_cuts_iterator.patch.0 \
 	external/coinmp/no-binaries.patch.1 \
-	external/coinmp/werror-format-security.patch.0 \
 	external/coinmp/werror-undef.patch.0 \
 	external/coinmp/coinmp-msvc-disable-sse2.patch.1 \
 	$(if $(filter MSC,$(COM)),external/coinmp/windows.build.patch.1) \
-	external/coinmp/werror-format-pedantic.patch.0 \
 	external/coinmp/ubsan.patch.0 \
 	external/coinmp/rpath.patch \
 	external/coinmp/libtool.patch \
@@ -48,6 +45,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/configure-exit.patch \
 	external/coinmp/pedantic-errors.patch \
 	external/coinmp/bind2nd.patch.1 \
+	external/coinmp/clang-with-path.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
