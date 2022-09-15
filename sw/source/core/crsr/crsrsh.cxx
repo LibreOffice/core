@@ -3588,7 +3588,7 @@ static const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 
    @param aPos the position to check.
 */
-bool sw_PosOk(const SwPosition & aPos)
+static bool sw_PosOk(const SwPosition & aPos)
 {
     return nullptr != aPos.GetNode().GetContentNode() &&
            aPos.GetContentNode();

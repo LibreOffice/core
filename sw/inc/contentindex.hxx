@@ -116,7 +116,6 @@ SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwContentIndex& in
 class SAL_WARN_UNUSED SwContentIndexReg
 {
     friend class SwContentIndex;
-    friend bool sw_PosOk(const SwPosition & aPos);
 
     const SwContentIndex * m_pFirst;
     const SwContentIndex * m_pLast;
