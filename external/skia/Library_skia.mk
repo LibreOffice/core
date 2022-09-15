@@ -83,6 +83,7 @@ endif
 
 else
 $(eval $(call gb_Library_use_externals,skia,\
+    expat \
     freetype \
     fontconfig \
 ))
