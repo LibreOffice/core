@@ -1280,8 +1280,6 @@ void SbiRuntime::DllCall
       SbxDataType eResType,     // return value
       bool bCDecl )         // true: according to C-conventions
 {
-    // NOT YET IMPLEMENTED
-
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
     ErrCode nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
