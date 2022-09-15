@@ -81,6 +81,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 
 $(eval $(call gb_Library_use_externals,vcl,\
     boost_headers \
+    expat \
     gio \
     glm_headers \
     graphite \
