@@ -5110,6 +5110,12 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 nSlot = SID_DELETE;
             else if(nMode == EditEntryMode::RENAME)
                 nSlot = FN_NAME_SHAPE;
+            else if (nMode == EditEntryMode::EDIT)
+            {
+                vcl::KeyCode aKeyCode(KEY_RETURN, false, false, false, false);
+                KeyEvent aKeyEvent(0, aKeyCode);
+                m_pActiveShell->GetWin()->KeyInput(aKeyEvent);
+            }
         break;
         case ContentTypeId::FOOTNOTE:
         case ContentTypeId::ENDNOTE:
