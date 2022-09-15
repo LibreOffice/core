@@ -18,6 +18,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <algorithm>
 
@@ -74,6 +75,9 @@ private:
 
         ::chart::PropertyHelper::setPropertyValue(
             aMap, ::chart::LinePropertiesHelper::PROP_LINE_WIDTH, uno::Any(sal_Int32(1)));
+
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE);
 
         float fDefaultCharHeight = 10.0;
         ::chart::PropertyHelper::setPropertyValue(
