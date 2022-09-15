@@ -3633,6 +3633,19 @@ void SwCursorShell::ClearUpCursors()
         pStartCursor->DeleteMark();
         bChanged = true;
     }
+    if (pStartCursor->GetPoint()->GetNode().IsTableNode())
+    {
+        // tdf#106959: When cursor points to start of a table, the proper content
+        // node is the first one inside the table, not the previous one
+        SwNodes& aNodes = GetDoc()->GetNodes();
+        SwNodeIndex aIdx(pStartCursor->GetPoint()->GetNode());
+        if (SwNode* pNode = aNodes.GoNext(&aIdx))
+        {
+            SwPaM aTmpPam(*pNode);
+            *pStartCursor = aTmpPam;
+            bChanged = true;
+        }
+    }
     if( !sw_PosOk( *pStartCursor->GetPoint() ) )
     {
         SwNodes & aNodes = GetDoc()->GetNodes();
