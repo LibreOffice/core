@@ -303,6 +303,7 @@ void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
 
     //Find top most of line that holds position
     SmNode* pLine = FindTopMostNodeInLine(pos.pSelectedNode);
+    const bool bSelectedIsTopMost = pLine == pos.pSelectedNode;
 
     //Find line parent and line index in parent
     SmStructureNode* pLineParent = pLine->GetParent();
@@ -311,10 +312,11 @@ void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
 
     //Convert line to list
     std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList);
+    NodeToList(pLine, *pLineList); // deletes pLine, potentially deleting pos.pSelectedNode
 
     //Find iterator for place to insert nodes
-    SmNodeList::iterator it = FindPositionInLineList(pLineList.get(), pos);
+    SmNodeList::iterator it = bSelectedIsTopMost ? pLineList->begin()
+                                                 : FindPositionInLineList(pLineList.get(), pos);
 
     //Insert all new nodes
     SmNodeList::iterator newIt,
