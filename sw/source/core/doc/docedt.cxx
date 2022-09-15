@@ -525,14 +525,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     std::unique_ptr<SwSpellArgs> pSpellArgs;
     if (pConvArgs)
     {
-        pConvArgs->SetStart(pSttPos->GetNode().GetTextNode(), pSttPos->nContent);
-        pConvArgs->SetEnd(  pEndPos->GetNode().GetTextNode(), pEndPos->nContent );
+        pConvArgs->SetStart(*pSttPos);
+        pConvArgs->SetEnd(*pEndPos);
     }
     else
-        pSpellArgs.reset(new SwSpellArgs( xSpeller,
-                            pSttPos->GetNode().GetTextNode(), pSttPos->nContent,
-                            pEndPos->GetNode().GetTextNode(), pEndPos->nContent,
-                            bGrammarCheck ));
+        pSpellArgs.reset(new SwSpellArgs( xSpeller, *pSttPos, *pEndPos, bGrammarCheck ));
 
     SwNodeOffset nCurrNd = pSttPos->GetNodeIndex();
     SwNodeOffset nEndNd = pEndPos->GetNodeIndex();
@@ -578,7 +575,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                         sal_Int32 nEndGrammarCheck = 0;
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck)
                         {
-                            nBeginGrammarCheck = pSpellArgs->pStartNode == pNd ?  pSpellArgs->pStartIdx->GetIndex() : 0;
+                            nBeginGrammarCheck = &pSpellArgs->pStartPos->GetNode() == pNd ?  pSpellArgs->pStartPos->GetContentIndex() : 0;
                             // if grammar checking starts inside of a sentence the start position has to be adjusted
                             if( nBeginGrammarCheck )
                             {
@@ -592,8 +589,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     nBeginGrammarCheck = aCursor.GetPoint()->GetContentIndex();
                                 }
                             }
-                            nEndGrammarCheck = (pSpellArgs->pEndNode == pNd)
-                                ? pSpellArgs->pEndIdx->GetIndex()
+                            nEndGrammarCheck = (&pSpellArgs->pEndPos->GetNode() == pNd)
+                                ? pSpellArgs->pEndPos->GetContentIndex()
                                 : pNd->GetTextNode()
                                     ->GetText().getLength();
                         }
@@ -607,9 +604,9 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pEndPos->nNode = nCurrNd;
                             nCurrNd = nEndNd;
                             if( pSpellArgs )
-                                nSpellErrorPosition = pSpellArgs->pStartIdx->GetIndex() > pSpellArgs->pEndIdx->GetIndex() ?
-                                            pSpellArgs->pEndIdx->GetIndex() :
-                                            pSpellArgs->pStartIdx->GetIndex();
+                                nSpellErrorPosition = pSpellArgs->pStartPos->GetContentIndex() > pSpellArgs->pEndPos->GetContentIndex() ?
+                                            pSpellArgs->pEndPos->GetContentIndex() :
+                                            pSpellArgs->pStartPos->GetContentIndex();
                         }
 
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck )
@@ -654,10 +651,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     nCurrNd = pNd->GetIndex();
                                     pSttPos->nNode = nCurrNd;
                                     pEndPos->nNode = nCurrNd;
-                                    pSpellArgs->pStartNode = pNd->GetTextNode();
-                                    pSpellArgs->pEndNode = pNd->GetTextNode();
-                                    pSpellArgs->pStartIdx->Assign(pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
-                                    pSpellArgs->pEndIdx->Assign(pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
+                                    pSpellArgs->pStartPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
+                                    pSpellArgs->pEndPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
                                 }
                             }

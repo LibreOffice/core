@@ -510,9 +510,7 @@ void SwHHCWrapper::Convert()
         if (pSttPos->GetNode().IsTextNode() &&
             pEndPos->GetNode().IsTextNode())
         {
-            m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(),
-                            pSttPos->GetNode().GetTextNode(), pSttPos->nContent,
-                            pEndPos->GetNode().GetTextNode(), pEndPos->nContent ) );
+            m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(), *pSttPos, *pEndPos ) );
         }
         else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
         {
@@ -526,13 +524,11 @@ void SwHHCWrapper::Convert()
             // just in case we check anyway...
             if (!pTextNode || !pTextNode->IsTextNode())
                 return;
-            m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(),
-                            pTextNode, pSttPos->nContent,
-                            pTextNode, pSttPos->nContent ) );
+            m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(), *pSttPos, *pSttPos ) );
         }
-        OSL_ENSURE( m_pConvArgs->pStartNode && m_pConvArgs->pStartNode->IsTextNode(),
+        OSL_ENSURE( m_pConvArgs->pStartPos && m_pConvArgs->pStartPos->GetNode().IsTextNode(),
                 "failed to get proper start text node" );
-        OSL_ENSURE( m_pConvArgs->pEndNode && m_pConvArgs->pEndNode->IsTextNode(),
+        OSL_ENSURE( m_pConvArgs->pEndPos && m_pConvArgs->pEndPos->GetNode().IsTextNode(),
                 "failed to get proper end text node" );
 
         // chinese conversion specific settings
@@ -564,8 +560,8 @@ void SwHHCWrapper::Convert()
                 nStartIdx = 0;
             else
             {
-                OUString aText( m_pConvArgs->pStartNode->GetText() );
-                const sal_Int32 nPos = m_pConvArgs->pStartIdx->GetIndex();
+                OUString aText( m_pConvArgs->pStartPos->GetNode().GetTextNode()->GetText() );
+                const sal_Int32 nPos = m_pConvArgs->pStartPos->GetContentIndex();
                 Boundary aBoundary( g_pBreakIt->GetBreakIter()->
                         getWordBoundary( aText, nPos, g_pBreakIt->GetLocale( m_pConvArgs->nConvSrcLang ),
                                 WordType::DICTIONARY_WORD, true ) );
@@ -579,7 +575,7 @@ void SwHHCWrapper::Convert()
             }
 
             if (nStartIdx != -1)
-                *m_pConvArgs->pStartIdx = nStartIdx;
+                m_pConvArgs->pStartPos->SetContent( nStartIdx );
         }
     }
 

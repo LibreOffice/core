@@ -962,13 +962,13 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
         m_Text = buf.makeStringAndClear();
     }
 
-    sal_Int32 nBegin = ( pArgs->pStartNode != this )
+    sal_Int32 nBegin = ( &pArgs->pStartPos->GetNode() != this )
         ? 0
-        : pArgs->pStartIdx->GetIndex();
+        : pArgs->pStartPos->GetContentIndex();
 
-    sal_Int32 nEnd = ( pArgs->pEndNode != this )
+    sal_Int32 nEnd = ( &pArgs->pEndPos->GetNode() != this )
             ? m_Text.getLength()
-            : pArgs->pEndIdx->GetIndex();
+            : pArgs->pEndPos->GetContentIndex();
 
     pArgs->xSpellAlt = nullptr;
 
@@ -1061,10 +1061,8 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                         while (pChar && *pChar-- == CH_TXTATR_INWORD)
                             ++nRight;
 
-                        pArgs->pStartNode = this;
-                        pArgs->pEndNode = this;
-                        pArgs->pStartIdx->Assign(this, aScanner.GetEnd() - nRight );
-                        pArgs->pEndIdx->Assign(this, aScanner.GetBegin() + nLeft );
+                        pArgs->pStartPos->Assign(*this, aScanner.GetEnd() - nRight );
+                        pArgs->pEndPos->Assign(*this, aScanner.GetBegin() + nLeft );
                     }
                 }
             }
@@ -1115,12 +1113,12 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
     // get range of text within node to be converted
     // (either all the text or the text within the selection
     // when the conversion was started)
-    const sal_Int32 nTextBegin = ( rArgs.pStartNode == this )
-        ? std::min(rArgs.pStartIdx->GetIndex(), m_Text.getLength())
+    const sal_Int32 nTextBegin = ( &rArgs.pStartPos->GetNode() == this )
+        ? std::min(rArgs.pStartPos->GetContentIndex(), m_Text.getLength())
         : 0;
 
-    const sal_Int32 nTextEnd = ( rArgs.pEndNode == this )
-        ?  std::min(rArgs.pEndIdx->GetIndex(), m_Text.getLength())
+    const sal_Int32 nTextEnd = ( &rArgs.pEndPos->GetNode() == this )
+        ?  std::min(rArgs.pEndPos->GetContentIndex(), m_Text.getLength())
         :  m_Text.getLength();
 
     rArgs.aConvText.clear();
@@ -1229,11 +1227,9 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
         rArgs.nConvTextLang = nLangFound;
 
         // position where to start looking in next iteration (after current ends)
-        rArgs.pStartNode = this;
-        rArgs.pStartIdx->Assign(this, nBegin + nLen );
+        rArgs.pStartPos->Assign(*this, nBegin + nLen );
         // end position (when we have travelled over the whole document)
-        rArgs.pEndNode = this;
-        rArgs.pEndIdx->Assign(this, nBegin );
+        rArgs.pEndPos->Assign(*this, nBegin );
     }
 
     // restore original text
