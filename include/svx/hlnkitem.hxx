@@ -26,6 +26,7 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include <rtl/ustrbuf.hxx>
 
 enum class HyperDialogEvent {
     NONE                = 0x0000,
@@ -51,6 +52,7 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
     OUString sURL;
     OUString sTarget;
     SvxLinkInsertMode eType;
+    OUString sReplacementText;
 
     OUString sIntName;
     std::unique_ptr<SvxMacroTableDtor>  pMacroTable;
@@ -67,7 +69,8 @@ public:
                                     const OUString& rTarget, const OUString& rIntName,
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents,
-                                    SvxMacroTableDtor const *pMacroTbl );
+                                    SvxMacroTableDtor const *pMacroTbl,
+                                    const OUString& rReplacementText = OUString());
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SvxHyperlinkItem* Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -96,6 +99,9 @@ public:
 
     void SetMacroEvents (const HyperDialogEvent nEvents) { nMacroEvents = nEvents; }
     HyperDialogEvent GetMacroEvents() const { return nMacroEvents; }
+
+    const OUString& GetReplacementText() const { return sReplacementText; }
+    void    SetReplacementText(const OUString& rReplacementText) { sReplacementText = rReplacementText; }
 
 };
 

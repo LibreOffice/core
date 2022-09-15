@@ -976,6 +976,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     const OUString& rName   = rHlnkItem.GetName();
     const OUString& rURL    = rHlnkItem.GetURL();
     const OUString& rTarget = rHlnkItem.GetTargetFrame();
+    const OUString& rReplacementText = rHlnkItem.GetReplacementText();
     sal_uInt16 nType =  o3tl::narrowing<sal_uInt16>(rHlnkItem.GetInsertMode());
     nType &= ~HLINK_HTMLMODE;
     const SvxMacroTableDtor* pMacroTable = rHlnkItem.GetMacroTable();
@@ -1015,7 +1016,19 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                     aINetFormat.SetMacro(SvMacroItemId::OnMouseOut, *pMacro);
             }
             rSh.SttSelect();
-            rSh.InsertURL( aINetFormat, rName, true );
+            // inserting mention
+            if (comphelper::LibreOfficeKit::isActive() && !rReplacementText.isEmpty())
+            {
+                SwPaM* pCursorPos = rSh.GetCursor();
+                // move cursor backwards to select @mention
+                for(int i=0; i < rReplacementText.getLength(); i++)
+                    pCursorPos->Move(fnMoveBackward);
+                rSh.InsertURL( aINetFormat, rName, false );
+            }
+            else
+            {
+                rSh.InsertURL( aINetFormat, rName, true );
+            }
             rSh.EndSelect();
         }
         break;

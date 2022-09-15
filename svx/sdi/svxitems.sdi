@@ -343,11 +343,12 @@ item SvxLongULSpace SvxLongULSpaceItem;
 
 struct SvxHyperlink
 {
-    String  Text    MID_HLINK_TEXT;
-    String  URL     MID_HLINK_URL;
-    String  Target  MID_HLINK_TARGET;
-    String  Name    MID_HLINK_NAME;
-    INT32   Type    MID_HLINK_TYPE;
+    String  Text               MID_HLINK_TEXT;
+    String  URL                MID_HLINK_URL;
+    String  Target             MID_HLINK_TARGET;
+    String  Name               MID_HLINK_NAME;
+    INT32   Type               MID_HLINK_TYPE;
+    String  ReplacementText    MID_HLINK_REPLACEMENTTEXT
 };
 item SvxHyperlink SvxHyperlinkItem;
 
