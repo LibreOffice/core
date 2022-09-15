@@ -3640,7 +3640,7 @@ void SwCursorShell::ClearUpCursors()
         SwNodeIndex aIdx( pStartCursor->GetPoint()->GetNode() );
         SwNode * pNode = SwNodes::GoPrevious(&aIdx);
         if( pNode == nullptr || lcl_NodeContext( *pNode ) != pStart )
-            aNodes.GoNext( &aIdx );
+            pNode = aNodes.GoNext( &aIdx );
         if( pNode == nullptr || lcl_NodeContext( *pNode ) != pStart )
         {
             // If the start entry of the ring is invalid replace it with a
