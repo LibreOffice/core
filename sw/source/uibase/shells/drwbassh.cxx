@@ -374,6 +374,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             {
                 bDone = true;
 
+                const Point aPt = pSh->GetObjRect().TopLeft(); // tdf#150589
+
                 if( GetView().IsDrawRotate() )
                 {
                     pSh->SetDragMode( SdrDragMode::Move );
@@ -399,8 +401,10 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 if (pSh->IsSelFrameMode())
                 {
                     pSh->LeaveSelFrameMode();
-                    // #105852# FME
+                    // #105852# FME <- perhaps fixed by tdf#150589
+                    static_cast<SwEditShell*>(pSh)->SetCursor(aPt);
                 }
+
             }
             break;
 
