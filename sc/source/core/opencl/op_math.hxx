@@ -34,6 +34,7 @@ class OpMathTwoArguments : public Normal
     virtual void GenerateCode( outputstream& ss ) const = 0;
 };
 
+
 class OpCos: public OpMathOneArgument
 {
 public:
@@ -275,6 +276,7 @@ class OpInt: public OpMathOneArgument
 public:
     virtual std::string BinFuncName() const override { return "Int"; }
     virtual void GenerateCode( outputstream& ss ) const override;
+    virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
 };
 
 class OpRadians: public OpMathOneArgument
@@ -500,6 +502,257 @@ public:
     virtual std::string BinFuncName() const override { return "NegSub"; }
     virtual void GenerateCode( outputstream& ss ) const override;
 };
+
+class OpEqual : public OpMathTwoArguments
+{
+public:
+    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual std::string BinFuncName() const override { return "eq"; }
+    virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
+};
+
+class OpNotEqual : public OpMathTwoArguments
+{
+public:
+    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual std::string BinFuncName() const override { return "neq"; }
+    virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
+};
+
+class OpLessEqual : public OpMathTwoArguments
+{
+public:
+    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual std::string BinFuncName() const override { return "le"; }
+    virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
+};
+
+class OpLess : public OpMathTwoArguments
+{
+public:
+    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual std::string BinFuncName() const override { return "lt"; }
+};
+
+class OpGreaterEqual : public OpMathTwoArguments
+{
+public:
+    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual std::string BinFuncName() const override { return "ge"; }
+    virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
+};
+
+class OpGreater : public OpMathTwoArguments
+{
+public:
+    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual std::string BinFuncName() const override { return "gt"; }
+};
+
+class SumOfProduct : public SlidingFunctionBase
+{
+public:
+    virtual void GenSlidingWindowFunction( outputstream& ss,
+        const std::string& sSymName, SubArguments& vSubArguments ) override;
+    virtual bool takeString() const override { return false; }
+    virtual bool takeNumeric() const override { return true; }
+};
+
+class OpSumProduct : public SumOfProduct
+{
+public:
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return lhs + "*" + rhs;
+    }
+    virtual std::string BinFuncName() const override { return "fsop"; }
+};
+
+class Reduction : public SlidingFunctionBase
+{
+    int const mnResultSize;
+public:
+    explicit Reduction(int nResultSize) : mnResultSize(nResultSize) {}
+
+    typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
+    typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
+    typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
+
+    virtual bool HandleNaNArgument( outputstream&, unsigned, SubArguments& ) const
+    {
+        return false;
+    }
+
+    virtual void GenSlidingWindowFunction( outputstream& ss,
+        const std::string& sSymName, SubArguments& vSubArguments ) override;
+    virtual bool isAverage() const { return false; }
+    virtual bool isMinOrMax() const { return false; }
+    virtual bool takeString() const override { return false; }
+    virtual bool takeNumeric() const override { return true; }
+};
+
+/// operator traits
+class OpNop : public Reduction
+{
+public:
+    explicit OpNop(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& ) const override
+    {
+        return lhs;
+    }
+    virtual std::string BinFuncName() const override { return "nop"; }
+};
+
+class OpCount : public Reduction
+{
+public:
+    explicit OpCount(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        outputstream ss;
+        ss << "(isnan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
+        return ss.str();
+    }
+    virtual std::string BinFuncName() const override { return "fcount"; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpSum : public Reduction
+{
+public:
+    explicit OpSum(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        outputstream ss;
+        ss << "fsum_approx((" << lhs << "),(" << rhs << "))";
+        return ss.str();
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "fsum"; }
+    // All arguments are simply summed, so it doesn't matter if SvDoubleVector is split.
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpAverage : public Reduction
+{
+public:
+    explicit OpAverage(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        outputstream ss;
+        ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
+        return ss.str();
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "average"; }
+    virtual bool isAverage() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpSub : public Reduction
+{
+public:
+    explicit OpSub(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return "fsub_approx(" + lhs + "," + rhs + ")";
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "fsub"; }
+};
+
+class OpMul : public Reduction
+{
+public:
+    explicit OpMul(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "1"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return lhs + "*" + rhs;
+    }
+    virtual std::string BinFuncName() const override { return "fmul"; }
+    virtual bool ZeroReturnZero() override { return true; }
+};
+
+/// Technically not a reduction, but fits the framework.
+class OpDiv : public Reduction
+{
+public:
+    explicit OpDiv(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "1.0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return "(" + rhs + "==0 ? CreateDoubleError(DivisionByZero) : (" + lhs + "/" + rhs + ") )";
+    }
+    virtual std::string BinFuncName() const override { return "fdiv"; }
+
+    virtual bool HandleNaNArgument( outputstream& ss, unsigned argno, SubArguments& vSubArguments ) const override
+    {
+        if (argno == 1)
+        {
+            ss <<
+                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
+                "    return CreateDoubleError(DivisionByZero);\n"
+                "}\n";
+            return true;
+        }
+        else if (argno == 0)
+        {
+            ss <<
+                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") &&\n"
+                "    !(isnan(" << vSubArguments[1]->GenSlidingWindowDeclRef() << ") || " << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)) {\n"
+                "    return 0;\n"
+                "}\n";
+        }
+        return false;
+    }
+
+};
+
+class OpMin : public Reduction
+{
+public:
+    explicit OpMin(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "NAN"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return "fmin_count(" + lhs + "," + rhs + ", &nCount)";
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "min"; }
+    virtual bool isMinOrMax() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpMax : public Reduction
+{
+public:
+    explicit OpMax(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "NAN"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return "fmax_count(" + lhs + "," + rhs + ", &nCount)";
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "max"; }
+    virtual bool isMinOrMax() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
 
 }
 

@@ -14,7 +14,6 @@
 #include <tokenarray.hxx>
 #include <compiler.hxx>
 #include <comphelper/random.hxx>
-#include <formula/vectortoken.hxx>
 #include <scmatrix.hxx>
 #include <sal/log.hxx>
 
@@ -33,14 +32,6 @@
 #include <limits>
 
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
-
-// FIXME: The idea that somebody would bother to (now and then? once a year? once a month?) manually
-// edit a source file and change the value of some #defined constant and run some ill-defined
-// "correctness test" is of course ludicrous. Either things are checked in normal unit tests, in
-// every 'make check', or not at all. The below comments are ridiculous.
-
-#define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
-#define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 
 const char* const publicFunc =
  "\n"
@@ -61,76 +52,8 @@ const char* const publicFunc =
 // "    return nan(nErr);\n"
  "}\n"
  "\n"
- "uint GetDoubleErrorValue(double fVal)\n"
- "{\n"
- "    if (isfinite(fVal))\n"
- "        return 0;\n"
- "    if (isinf(fVal))\n"
- "        return IllegalFPOperation; // normal INF\n"
- "    if (as_ulong(fVal) & 0XFFFF0000u)\n"
- "        return NoValue;            // just a normal NAN\n"
- "    return (as_ulong(fVal) & 0XFFFF); // any other error\n"
- "}\n"
- "\n"
- "double fsum_count(double a, double b, __private int *p) {\n"
- "    bool t = isnan(a);\n"
- "    (*p) += t?0:1;\n"
- "    return t?b:a+b;\n"
- "}\n"
- "double fmin_count(double a, double b, __private int *p) {\n"
- "    double result = fmin(a, b);\n"
- "    bool t = isnan(result);\n"
- "    (*p) += t?0:1;\n"
- "    return result;\n"
- "}\n"
- "double fmax_count(double a, double b, __private int *p) {\n"
- "    double result = fmax(a, b);\n"
- "    bool t = isnan(result);\n"
- "    (*p) += t?0:1;\n"
- "    return result;\n"
- "}\n"
  "double fsum(double a, double b) { return isnan(a)?b:a+b; }\n"
  "double legalize(double a, double b) { return isnan(a)?b:a;}\n"
- "double fsub(double a, double b) { return a-b; }\n"
- "double fdiv(double a, double b) { return a/b; }\n"
- "int is_representable_integer(double a) {\n"
- "    long kMaxInt = (1L << 53) - 1;\n"
- "    if (a <= as_double(kMaxInt))\n"
- "    {\n"
- "        long nInt = as_long(a);\n"
- "        double fInt;\n"
- "        return (nInt <= kMaxInt &&\n"
- "                (!((fInt = as_double(nInt)) < a) && !(fInt > a)));\n"
- "    }\n"
- "    return 0;\n"
- "}\n"
- "int approx_equal(double a, double b) {\n"
- "    double e48 = 1.0 / (16777216.0 * 16777216.0);\n"
- "    double e44 = e48 * 16.0;\n"
- "    if (a == b)\n"
- "        return 1;\n"
- "    if (a == 0.0 || b == 0.0)\n"
- "        return 0;\n"
- "    double d = fabs(a - b);\n"
- "    if (!isfinite(d))\n"
- "        return 0;   // Nan or Inf involved\n"
- "    if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))\n"
- "        return 0;\n"
- "    if (is_representable_integer(d) && is_representable_integer(a) && is_representable_integer(b))\n"
- "        return 0;   // special case for representable integers.\n"
- "    return (d < a * e48 && d < b * e48);\n"
- "}\n"
- "double fsum_approx(double a, double b) {\n"
- "    if ( ((a < 0.0 && b > 0.0) || (b < 0.0 && a > 0.0))\n"
- "         && approx_equal( a, -b ) )\n"
- "        return 0.0;\n"
- "    return a + b;\n"
- "}\n"
- "double fsub_approx(double a, double b) {\n"
- "    if ( ((a < 0.0 && b < 0.0) || (a > 0.0 && b > 0.0)) && approx_equal( a, b ) )\n"
- "        return 0.0;\n"
- "    return a - b;\n"
- "}\n"
  ;
 
 #include <utility>
@@ -868,27 +791,6 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
     }
 };
 
-/// A vector of strings
-class DynamicKernelStringArgument : public VectorRef
-{
-public:
-    DynamicKernelStringArgument( const ScCalcConfig& config, const std::string& s,
-        const FormulaTreeNodeRef& ft, int index = 0 ) :
-        VectorRef(config, s, ft, index) { }
-
-    virtual void GenSlidingWindowFunction( outputstream& ) override { }
-    /// Generate declaration
-    virtual void GenDecl( outputstream& ss ) const override
-    {
-        ss << "__global unsigned int *" << mSymName;
-    }
-    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
-    {
-        DynamicKernelStringArgument::GenDecl(ss);
-    }
-    virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
-};
-
 }
 
 /// Marshal a string vector reference
@@ -1042,191 +944,174 @@ protected:
     DynamicKernelStringArgument mStringArgument;
 };
 
-/// Handling a Double Vector that is used as a sliding window input
-/// to either a sliding window average or sum-of-products
-/// Generate a sequential loop for reductions
+}
+
 template<class Base>
-class DynamicKernelSlidingArgument : public Base
+DynamicKernelSlidingArgument<Base>::DynamicKernelSlidingArgument(
+    const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft,
+    std::shared_ptr<SlidingFunctionBase> CodeGen, int index)
+    : Base(config, s, ft, index)
+    , mpCodeGen(std::move(CodeGen))
 {
-public:
-    DynamicKernelSlidingArgument(const ScCalcConfig& config, const std::string& s,
-                                 const FormulaTreeNodeRef& ft,
-                                 std::shared_ptr<SlidingFunctionBase> CodeGen, int index)
-        : Base(config, s, ft, index)
-        , mpCodeGen(std::move(CodeGen))
+    FormulaToken* t = ft->GetFormulaToken();
+    if (t->GetType() != formula::svDoubleVectorRef)
+        throw Unhandled(__FILE__, __LINE__);
+    mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
+    bIsStartFixed = mpDVR->IsStartFixed();
+    bIsEndFixed = mpDVR->IsEndFixed();
+}
+
+template<class Base>
+bool DynamicKernelSlidingArgument<Base>::NeedParallelReduction() const
+{
+    assert(dynamic_cast<OpSumIfs*>(mpCodeGen.get()));
+    return GetWindowSize() > 100 &&
+           ((GetStartFixed() && GetEndFixed()) ||
+        (!GetStartFixed() && !GetEndFixed()));
+}
+
+template<class Base>
+std::string DynamicKernelSlidingArgument<Base>::GenSlidingWindowDeclRef( bool nested ) const
+{
+    size_t nArrayLength = mpDVR->GetArrayLength();
+    outputstream ss;
+    if (!bIsStartFixed && !bIsEndFixed)
     {
-        FormulaToken* t = ft->GetFormulaToken();
-        if (t->GetType() != formula::svDoubleVectorRef)
-            throw Unhandled(__FILE__, __LINE__);
-        mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
-        bIsStartFixed = mpDVR->IsStartFixed();
-        bIsEndFixed = mpDVR->IsEndFixed();
+        if (nested)
+            ss << "((i+gid0) <" << nArrayLength << "?";
+        ss << Base::GetName() << "[i + gid0]";
+        if (nested)
+            ss << ":NAN)";
     }
-
-    // Should only be called by SumIfs. Yikes!
-    virtual bool NeedParallelReduction() const
+    else
     {
-        assert(dynamic_cast<OpSumIfs*>(mpCodeGen.get()));
-        return GetWindowSize() > 100 &&
-               ((GetStartFixed() && GetEndFixed()) ||
-            (!GetStartFixed() && !GetEndFixed()));
+        if (nested)
+            ss << "(i <" << nArrayLength << "?";
+        ss << Base::GetName() << "[i]";
+        if (nested)
+            ss << ":NAN)";
     }
+    return ss.str();
+}
 
-    virtual void GenSlidingWindowFunction( outputstream& ) { }
+template<class Base>
+size_t DynamicKernelSlidingArgument<Base>::GenReductionLoopHeader( outputstream& ss, bool& needBody )
+{
+    assert(mpDVR);
+    size_t nCurWindowSize = mpDVR->GetRefRowSize();
 
-    std::string GenSlidingWindowDeclRef( bool nested = false ) const
+    if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
     {
-        size_t nArrayLength = mpDVR->GetArrayLength();
-        outputstream ss;
-        if (!bIsStartFixed && !bIsEndFixed)
+        ss << "for (int i = ";
+        ss << "gid0; i < " << mpDVR->GetArrayLength();
+        ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
+        needBody = true;
+        return nCurWindowSize;
+    }
+    else if (mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+    {
+        ss << "for (int i = ";
+        ss << "0; i < " << mpDVR->GetArrayLength();
+        ss << " && i < gid0+" << nCurWindowSize << "; i++){\n\t\t";
+        needBody = true;
+        return nCurWindowSize;
+    }
+    else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+    {
+        ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
+        ss << "{int i;\n\t";
+        outputstream temp1, temp2;
+        int outLoopSize = UNROLLING_FACTOR;
+        if (nCurWindowSize / outLoopSize != 0)
         {
-            if (nested)
-                ss << "((i+gid0) <" << nArrayLength << "?";
-            ss << Base::GetName() << "[i + gid0]";
-            if (nested)
-                ss << ":NAN)";
+            ss << "for(int outLoop=0; outLoop<" << nCurWindowSize / outLoopSize << "; outLoop++){\n\t";
+            for (int count = 0; count < outLoopSize; count++)
+            {
+                ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n\t";
+                if (count == 0)
+                {
+                    temp1 << "if(i + gid0 < " << mpDVR->GetArrayLength();
+                    temp1 << "){\n\t\t";
+                    temp1 << "tmp = legalize(";
+                    temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                    temp1 << ", tmp);\n\t\t\t";
+                    temp1 << "}\n\t";
+                }
+                ss << temp1.str();
+            }
+            ss << "}\n\t";
         }
-        else
+        // The residual of mod outLoopSize
+        for (size_t count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
         {
-            if (nested)
-                ss << "(i <" << nArrayLength << "?";
-            ss << Base::GetName() << "[i]";
-            if (nested)
-                ss << ":NAN)";
+            ss << "i = " << count << ";\n\t";
+            if (count == nCurWindowSize / outLoopSize * outLoopSize)
+            {
+                temp2 << "if(i + gid0 < " << mpDVR->GetArrayLength();
+                temp2 << "){\n\t\t";
+                temp2 << "tmp = legalize(";
+                temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                temp2 << ", tmp);\n\t\t\t";
+                temp2 << "}\n\t";
+            }
+            ss << temp2.str();
         }
-        return ss.str();
+        ss << "}\n";
+        needBody = false;
+        return nCurWindowSize;
     }
-    /// Controls how the elements in the DoubleVectorRef are traversed
-    size_t GenReductionLoopHeader(
-        outputstream& ss, bool& needBody )
+    // (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+    else
     {
-        assert(mpDVR);
-        size_t nCurWindowSize = mpDVR->GetRefRowSize();
-
+        ss << "\n\t";
+        ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
+        ss << "{int i;\n\t";
+        outputstream temp1, temp2;
+        int outLoopSize = UNROLLING_FACTOR;
+        if (nCurWindowSize / outLoopSize != 0)
         {
-            if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "for(int outLoop=0; outLoop<" << nCurWindowSize / outLoopSize << "; outLoop++){\n\t";
+            for (int count = 0; count < outLoopSize; count++)
             {
-                ss << "for (int i = ";
-                ss << "gid0; i < " << mpDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
-                needBody = true;
-                return nCurWindowSize;
-            }
-            else if (mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
-            {
-                ss << "for (int i = ";
-                ss << "0; i < " << mpDVR->GetArrayLength();
-                ss << " && i < gid0+" << nCurWindowSize << "; i++){\n\t\t";
-                needBody = true;
-                return nCurWindowSize;
-            }
-            else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
-            {
-                ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
-                ss << "{int i;\n\t";
-                outputstream temp1, temp2;
-                int outLoopSize = UNROLLING_FACTOR;
-                if (nCurWindowSize / outLoopSize != 0)
+                ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n\t";
+                if (count == 0)
                 {
-                    ss << "for(int outLoop=0; outLoop<" << nCurWindowSize / outLoopSize << "; outLoop++){\n\t";
-                    for (int count = 0; count < outLoopSize; count++)
-                    {
-                        ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n\t";
-                        if (count == 0)
-                        {
-                            temp1 << "if(i + gid0 < " << mpDVR->GetArrayLength();
-                            temp1 << "){\n\t\t";
-                            temp1 << "tmp = legalize(";
-                            temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                            temp1 << ", tmp);\n\t\t\t";
-                            temp1 << "}\n\t";
-                        }
-                        ss << temp1.str();
-                    }
-                    ss << "}\n\t";
+                    temp1 << "if(i < " << mpDVR->GetArrayLength();
+                    temp1 << "){\n\t\t";
+                    temp1 << "tmp = legalize(";
+                    temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                    temp1 << ", tmp);\n\t\t\t";
+                    temp1 << "}\n\t";
                 }
-                // The residual of mod outLoopSize
-                for (size_t count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
-                {
-                    ss << "i = " << count << ";\n\t";
-                    if (count == nCurWindowSize / outLoopSize * outLoopSize)
-                    {
-                        temp2 << "if(i + gid0 < " << mpDVR->GetArrayLength();
-                        temp2 << "){\n\t\t";
-                        temp2 << "tmp = legalize(";
-                        temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                        temp2 << ", tmp);\n\t\t\t";
-                        temp2 << "}\n\t";
-                    }
-                    ss << temp2.str();
-                }
-                ss << "}\n";
-                needBody = false;
-                return nCurWindowSize;
+                ss << temp1.str();
             }
-            // (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
-            else
-            {
-                ss << "\n\t";
-                ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
-                ss << "{int i;\n\t";
-                outputstream temp1, temp2;
-                int outLoopSize = UNROLLING_FACTOR;
-                if (nCurWindowSize / outLoopSize != 0)
-                {
-                    ss << "for(int outLoop=0; outLoop<" << nCurWindowSize / outLoopSize << "; outLoop++){\n\t";
-                    for (int count = 0; count < outLoopSize; count++)
-                    {
-                        ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n\t";
-                        if (count == 0)
-                        {
-                            temp1 << "if(i < " << mpDVR->GetArrayLength();
-                            temp1 << "){\n\t\t";
-                            temp1 << "tmp = legalize(";
-                            temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                            temp1 << ", tmp);\n\t\t\t";
-                            temp1 << "}\n\t";
-                        }
-                        ss << temp1.str();
-                    }
-                    ss << "}\n\t";
-                }
-                // The residual of mod outLoopSize
-                for (size_t count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
-                {
-                    ss << "i = " << count << ";\n\t";
-                    if (count == nCurWindowSize / outLoopSize * outLoopSize)
-                    {
-                        temp2 << "if(i < " << mpDVR->GetArrayLength();
-                        temp2 << "){\n\t\t";
-                        temp2 << "tmp = legalize(";
-                        temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                        temp2 << ", tmp);\n\t\t\t";
-                        temp2 << "}\n\t";
-                    }
-                    ss << temp2.str();
-                }
-                ss << "}\n";
-                needBody = false;
-                return nCurWindowSize;
-            }
+            ss << "}\n\t";
         }
+        // The residual of mod outLoopSize
+        for (size_t count = nCurWindowSize / outLoopSize * outLoopSize; count < nCurWindowSize; count++)
+        {
+            ss << "i = " << count << ";\n\t";
+            if (count == nCurWindowSize / outLoopSize * outLoopSize)
+            {
+                temp2 << "if(i < " << mpDVR->GetArrayLength();
+                temp2 << "){\n\t\t";
+                temp2 << "tmp = legalize(";
+                temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                temp2 << ", tmp);\n\t\t\t";
+                temp2 << "}\n\t";
+            }
+            ss << temp2.str();
+        }
+        ss << "}\n";
+        needBody = false;
+        return nCurWindowSize;
     }
+}
 
-    size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
+template class DynamicKernelSlidingArgument<VectorRef>;
+template class DynamicKernelSlidingArgument<DynamicKernelStringArgument>;
 
-    size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
-
-    bool GetStartFixed() const { return bIsStartFixed; }
-
-    bool GetEndFixed() const { return bIsEndFixed; }
-
-protected:
-    bool bIsStartFixed, bIsEndFixed;
-    const formula::DoubleVectorRefToken* mpDVR;
-    // from parent nodes
-    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
-};
+namespace {
 
 /// A mixed string/numeric vector
 class DynamicKernelMixedSlidingArgument : public VectorRef
@@ -1320,8 +1205,6 @@ private:
     std::vector<DynamicKernelArgumentRef> mParams;
 };
 
-}
-
 void SymbolTable::Marshal( cl_kernel k, int nVectorWidth, cl_program pProgram )
 {
     int i = 1; //The first argument is reserved for results
@@ -1331,656 +1214,23 @@ void SymbolTable::Marshal( cl_kernel k, int nVectorWidth, cl_program pProgram )
     }
 }
 
-namespace {
+}
 
-/// Handling a Double Vector that is used as a sliding window input
-/// Performs parallel reduction based on given operator
 template<class Base>
-class ParallelReductionVectorRef : public Base
+ParallelReductionVectorRef<Base>::ParallelReductionVectorRef(
+    const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft,
+    std::shared_ptr<SlidingFunctionBase> CodeGen, int index)
+    : Base(config, s, ft, index)
+    , mpCodeGen(std::move(CodeGen))
+    , mpClmem2(nullptr)
 {
-public:
-    ParallelReductionVectorRef(const ScCalcConfig& config, const std::string& s,
-                               const FormulaTreeNodeRef& ft,
-                               std::shared_ptr<SlidingFunctionBase> CodeGen, int index)
-        : Base(config, s, ft, index)
-        , mpCodeGen(std::move(CodeGen))
-        , mpClmem2(nullptr)
-    {
-        FormulaToken* t = ft->GetFormulaToken();
-        if (t->GetType() != formula::svDoubleVectorRef)
-            throw Unhandled(__FILE__, __LINE__);
-        mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
-        bIsStartFixed = mpDVR->IsStartFixed();
-        bIsEndFixed = mpDVR->IsEndFixed();
-    }
-
-    /// Emit the definition for the auxiliary reduction kernel
-    virtual void GenSlidingWindowFunction( outputstream& ss );
-
-    virtual std::string GenSlidingWindowDeclRef( bool ) const
-    {
-        outputstream ss;
-        if (!bIsStartFixed && !bIsEndFixed)
-            ss << Base::GetName() << "[i + gid0]";
-        else
-            ss << Base::GetName() << "[i]";
-        return ss.str();
-    }
-
-    /// Controls how the elements in the DoubleVectorRef are traversed
-    size_t GenReductionLoopHeader(
-        outputstream& ss, int nResultSize, bool& needBody );
-
-    virtual size_t Marshal( cl_kernel k, int argno, int w, cl_program mpProgram );
-
-    ~ParallelReductionVectorRef()
-    {
-        if (mpClmem2)
-        {
-            cl_int err;
-            err = clReleaseMemObject(mpClmem2);
-            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
-            mpClmem2 = nullptr;
-        }
-    }
-
-    size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
-
-    size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
-
-    bool GetStartFixed() const { return bIsStartFixed; }
-
-    bool GetEndFixed() const { return bIsEndFixed; }
-
-protected:
-    bool bIsStartFixed, bIsEndFixed;
-    const formula::DoubleVectorRefToken* mpDVR;
-    // from parent nodes
-    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
-    // controls whether to invoke the reduction kernel during marshaling or not
-    cl_mem mpClmem2;
-};
-
-class Reduction : public SlidingFunctionBase
-{
-    int mnResultSize;
-public:
-    explicit Reduction(int nResultSize) : mnResultSize(nResultSize) {}
-
-    typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
-    typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
-    typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
-
-    virtual bool HandleNaNArgument( outputstream&, unsigned, SubArguments& ) const
-    {
-        return false;
-    }
-
-    virtual void GenSlidingWindowFunction( outputstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) override
-    {
-        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-        ss << "{\n";
-        ss << "double tmp = " << GetBottom() << ";\n";
-        ss << "int gid0 = get_global_id(0);\n";
-        if (isAverage() || isMinOrMax())
-            ss << "int nCount = 0;\n";
-        ss << "double tmpBottom;\n";
-        unsigned i = vSubArguments.size();
-        while (i--)
-        {
-            if (NumericRange* NR =
-                dynamic_cast<NumericRange*>(vSubArguments[i].get()))
-            {
-                bool needBody;
-                NR->GenReductionLoopHeader(ss, needBody);
-                if (!needBody)
-                    continue;
-            }
-            else if (ParallelNumericRange* PNR =
-                dynamic_cast<ParallelNumericRange*>(vSubArguments[i].get()))
-            {
-                //did not handle yet
-                bool bNeedBody = false;
-                PNR->GenReductionLoopHeader(ss, mnResultSize, bNeedBody);
-                if (!bNeedBody)
-                    continue;
-            }
-            else if (StringRange* SR =
-                dynamic_cast<StringRange*>(vSubArguments[i].get()))
-            {
-                //did not handle yet
-                bool needBody;
-                SR->GenReductionLoopHeader(ss, needBody);
-                if (!needBody)
-                    continue;
-            }
-            else
-            {
-                FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
-                assert(pCur);
-                assert(pCur->GetType() != formula::svDoubleVectorRef);
-
-                if (pCur->GetType() == formula::svSingleVectorRef ||
-                    pCur->GetType() == formula::svDouble)
-                {
-                    ss << "{\n";
-                }
-            }
-            if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-            {
-                bool bNanHandled = HandleNaNArgument(ss, i, vSubArguments);
-
-                ss << "tmpBottom = " << GetBottom() << ";\n";
-
-                if (!bNanHandled)
-                {
-                    ss << "if (isnan(";
-                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                    ss << "))\n";
-                    if (ZeroReturnZero())
-                        ss << "    return 0;\n";
-                    else
-                    {
-                        ss << "    tmp = ";
-                        ss << Gen2("tmpBottom", "tmp") << ";\n";
-                    }
-                    ss << "else\n";
-                }
-                ss << "{";
-                ss << "        tmp = ";
-                ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-                ss << ";\n";
-                ss << "    }\n";
-                ss << "}\n";
-            }
-            else
-            {
-                ss << "tmp = ";
-                ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-                ss << ";\n";
-            }
-        }
-        if (isAverage())
-            ss <<
-                "if (nCount==0)\n"
-                "    return CreateDoubleError(DivisionByZero);\n";
-        else if (isMinOrMax())
-            ss <<
-                "if (nCount==0)\n"
-                "    return 0;\n";
-        ss << "return tmp";
-        if (isAverage())
-            ss << "/(double)nCount";
-        ss << ";\n}";
-    }
-    virtual bool isAverage() const { return false; }
-    virtual bool isMinOrMax() const { return false; }
-    virtual bool takeString() const override { return false; }
-    virtual bool takeNumeric() const override { return true; }
-};
-
-// Strictly binary operators
-class Binary : public SlidingFunctionBase
-{
-public:
-    virtual void GenSlidingWindowFunction( outputstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) override
-    {
-        CHECK_PARAMETER_COUNT( 2, 2 );
-        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-        ss << "{\n\t";
-        ss << "int gid0 = get_global_id(0), i = 0;\n\t";
-        ss << "double tmp = ";
-        ss << Gen2(vSubArguments[0]->GenSlidingWindowDeclRef(),
-            vSubArguments[1]->GenSlidingWindowDeclRef()) << ";\n\t";
-        ss << "return tmp;\n}";
-    }
-    virtual bool takeString() const override { return false; }
-    virtual bool takeNumeric() const override { return true; }
-};
-
-class SumOfProduct : public SlidingFunctionBase
-{
-public:
-    virtual void GenSlidingWindowFunction( outputstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) override
-    {
-        size_t nCurWindowSize = 0;
-        FormulaToken* tmpCur = nullptr;
-        const formula::DoubleVectorRefToken* pCurDVR = nullptr;
-        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-        ss << "{\n";
-        for (size_t i = 0; i < vSubArguments.size(); i++)
-        {
-            size_t nCurChildWindowSize = vSubArguments[i]->GetWindowSize();
-            nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
-                nCurChildWindowSize : nCurWindowSize;
-            tmpCur = vSubArguments[i]->GetFormulaToken();
-            if (ocPush == tmpCur->GetOpCode())
-            {
-
-                pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
-                if (pCurDVR->IsStartFixed() != pCurDVR->IsEndFixed())
-                    throw Unhandled(__FILE__, __LINE__);
-            }
-        }
-        ss << "    double tmp = 0.0;\n";
-        ss << "    int gid0 = get_global_id(0);\n";
-
-        ss << "\tint i;\n\t";
-        ss << "int currentCount0;\n";
-        for (size_t i = 0; i < vSubArguments.size() - 1; i++)
-            ss << "int currentCount" << i + 1 << ";\n";
-        outputstream temp3, temp4;
-        int outLoopSize = UNROLLING_FACTOR;
-        if (nCurWindowSize / outLoopSize != 0)
-        {
-            ss << "for(int outLoop=0; outLoop<" <<
-                nCurWindowSize / outLoopSize << "; outLoop++){\n\t";
-            for (int count = 0; count < outLoopSize; count++)
-            {
-                ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n";
-                if (count == 0)
-                {
-                    for (size_t i = 0; i < vSubArguments.size(); i++)
-                    {
-                        tmpCur = vSubArguments[i]->GetFormulaToken();
-                        if (ocPush == tmpCur->GetOpCode())
-                        {
-                            pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
-                            if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                            {
-                                temp3 << "        currentCount";
-                                temp3 << i;
-                                temp3 << " =i+gid0+1;\n";
-                            }
-                            else
-                            {
-                                temp3 << "        currentCount";
-                                temp3 << i;
-                                temp3 << " =i+1;\n";
-                            }
-                        }
-                    }
-
-                    temp3 << "tmp = fsum(";
-                    for (size_t i = 0; i < vSubArguments.size(); i++)
-                    {
-                        if (i)
-                            temp3 << "*";
-                        if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-                        {
-                            temp3 << "(";
-                            temp3 << "(currentCount";
-                            temp3 << i;
-                            temp3 << ">";
-                            if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                    formula::svSingleVectorRef)
-                            {
-                                const formula::SingleVectorRefToken* pSVR =
-                                    static_cast<const formula::SingleVectorRefToken*>
-                                    (vSubArguments[i]->GetFormulaToken());
-                                temp3 << pSVR->GetArrayLength();
-                                temp3 << ")||isnan(" << vSubArguments[i]
-                                    ->GenSlidingWindowDeclRef();
-                                temp3 << ")?0:";
-                                temp3 << vSubArguments[i]->GenSlidingWindowDeclRef();
-                                temp3  << ")";
-                            }
-                            else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                    formula::svDoubleVectorRef)
-                            {
-                                const formula::DoubleVectorRefToken* pSVR =
-                                    static_cast<const formula::DoubleVectorRefToken*>
-                                    (vSubArguments[i]->GetFormulaToken());
-                                temp3 << pSVR->GetArrayLength();
-                                temp3 << ")||isnan(" << vSubArguments[i]
-                                    ->GenSlidingWindowDeclRef(true);
-                                temp3 << ")?0:";
-                                temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-                                temp3  << ")";
-                            }
-
-                        }
-                        else
-                            temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-                    }
-                    temp3 << ", tmp);\n\t";
-                }
-                ss << temp3.str();
-            }
-            ss << "}\n\t";
-        }
-        //The residual of mod outLoopSize
-        for (size_t count = nCurWindowSize / outLoopSize * outLoopSize;
-            count < nCurWindowSize; count++)
-        {
-            ss << "i =" << count << ";\n";
-            if (count == nCurWindowSize / outLoopSize * outLoopSize)
-            {
-                for (size_t i = 0; i < vSubArguments.size(); i++)
-                {
-                    tmpCur = vSubArguments[i]->GetFormulaToken();
-                    if (ocPush == tmpCur->GetOpCode())
-                    {
-                        pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
-                        if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                        {
-                            temp4 << "        currentCount";
-                            temp4 << i;
-                            temp4 << " =i+gid0+1;\n";
-                        }
-                        else
-                        {
-                            temp4 << "        currentCount";
-                            temp4 << i;
-                            temp4 << " =i+1;\n";
-                        }
-                    }
-                }
-
-                temp4 << "tmp = fsum(";
-                for (size_t i = 0; i < vSubArguments.size(); i++)
-                {
-                    if (i)
-                        temp4 << "*";
-                    if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-                    {
-                        temp4 << "(";
-                        temp4 << "(currentCount";
-                        temp4 << i;
-                        temp4 << ">";
-                        if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                formula::svSingleVectorRef)
-                        {
-                            const formula::SingleVectorRefToken* pSVR =
-                                static_cast<const formula::SingleVectorRefToken*>
-                                (vSubArguments[i]->GetFormulaToken());
-                            temp4 << pSVR->GetArrayLength();
-                            temp4 << ")||isnan(" << vSubArguments[i]
-                                ->GenSlidingWindowDeclRef();
-                            temp4 << ")?0:";
-                            temp4 << vSubArguments[i]->GenSlidingWindowDeclRef();
-                            temp4  << ")";
-                        }
-                        else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                formula::svDoubleVectorRef)
-                        {
-                            const formula::DoubleVectorRefToken* pSVR =
-                                static_cast<const formula::DoubleVectorRefToken*>
-                                (vSubArguments[i]->GetFormulaToken());
-                            temp4 << pSVR->GetArrayLength();
-                            temp4 << ")||isnan(" << vSubArguments[i]
-                                ->GenSlidingWindowDeclRef(true);
-                            temp4 << ")?0:";
-                            temp4 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-                            temp4  << ")";
-                        }
-
-                    }
-                    else
-                    {
-                        temp4 << vSubArguments[i]
-                            ->GenSlidingWindowDeclRef(true);
-                    }
-                }
-                temp4 << ", tmp);\n\t";
-            }
-            ss << temp4.str();
-        }
-        ss << "return tmp;\n";
-        ss << "}";
-    }
-    virtual bool takeString() const override { return false; }
-    virtual bool takeNumeric() const override { return true; }
-};
-
-/// operator traits
-class OpNop : public Reduction
-{
-public:
-    explicit OpNop(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& ) const override
-    {
-        return lhs;
-    }
-    virtual std::string BinFuncName() const override { return "nop"; }
-};
-
-class OpCount : public Reduction
-{
-public:
-    explicit OpCount(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "(isnan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "fcount"; }
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpEqual : public Binary
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "approx_equal(" << lhs << "," << rhs << ")";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "eq"; }
-};
-
-class OpNotEqual : public Binary
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "!approx_equal(" << lhs << "," << rhs << ")";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "neq"; }
-};
-
-class OpLessEqual : public Binary
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "(approx_equal(" << lhs << "," << rhs << ") || " << lhs << "<=" << rhs << ")";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "le"; }
-};
-
-class OpLess : public Binary
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "(" << lhs << "<" << rhs << ")";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "lt"; }
-};
-
-class OpGreater : public Binary
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "(" << lhs << ">" << rhs << ")";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "gt"; }
-};
-
-class OpGreaterEqual : public Binary
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "(approx_equal(" << lhs << "," << rhs << ") || " << lhs << ">=" << rhs << ")";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "ge"; }
-};
-
-class OpSum : public Reduction
-{
-public:
-    explicit OpSum(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "fsum_approx((" << lhs << "),(" << rhs << "))";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "fsum"; }
-    // All arguments are simply summed, so it doesn't matter if SvDoubleVector is split.
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpAverage : public Reduction
-{
-public:
-    explicit OpAverage(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "average"; }
-    virtual bool isAverage() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpSub : public Reduction
-{
-public:
-    explicit OpSub(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return "fsub_approx(" + lhs + "," + rhs + ")";
-    }
-    virtual std::string BinFuncName() const override { return "fsub"; }
-};
-
-class OpMul : public Reduction
-{
-public:
-    explicit OpMul(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "1"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return lhs + "*" + rhs;
-    }
-    virtual std::string BinFuncName() const override { return "fmul"; }
-    virtual bool ZeroReturnZero() override { return true; }
-};
-
-/// Technically not a reduction, but fits the framework.
-class OpDiv : public Reduction
-{
-public:
-    explicit OpDiv(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "1.0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return "(" + rhs + "==0 ? CreateDoubleError(DivisionByZero) : (" + lhs + "/" + rhs + ") )";
-    }
-    virtual std::string BinFuncName() const override { return "fdiv"; }
-
-    virtual bool HandleNaNArgument( outputstream& ss, unsigned argno, SubArguments& vSubArguments ) const override
-    {
-        if (argno == 1)
-        {
-            ss <<
-                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
-                "    return CreateDoubleError(DivisionByZero);\n"
-                "}\n";
-            return true;
-        }
-        else if (argno == 0)
-        {
-            ss <<
-                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") &&\n"
-                "    !(isnan(" << vSubArguments[1]->GenSlidingWindowDeclRef() << ") || " << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)) {\n"
-                "    return 0;\n"
-                "}\n";
-        }
-        return false;
-    }
-
-};
-
-class OpMin : public Reduction
-{
-public:
-    explicit OpMin(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "NAN"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return "fmin_count(" + lhs + "," + rhs + ", &nCount)";
-    }
-    virtual std::string BinFuncName() const override { return "min"; }
-    virtual bool isMinOrMax() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpMax : public Reduction
-{
-public:
-    explicit OpMax(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "NAN"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return "fmax_count(" + lhs + "," + rhs + ", &nCount)";
-    }
-    virtual std::string BinFuncName() const override { return "max"; }
-    virtual bool isMinOrMax() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpSumProduct : public SumOfProduct
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return lhs + "*" + rhs;
-    }
-    virtual std::string BinFuncName() const override { return "fsop"; }
-};
+    FormulaToken* t = ft->GetFormulaToken();
+    if (t->GetType() != formula::svDoubleVectorRef)
+        throw Unhandled(__FILE__, __LINE__);
+    mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
+    bIsStartFixed = mpDVR->IsStartFixed();
+    bIsEndFixed = mpDVR->IsEndFixed();
+}
 
 template<class Base>
 void ParallelReductionVectorRef<Base>::GenSlidingWindowFunction( outputstream& ss )
@@ -2160,7 +1410,17 @@ void ParallelReductionVectorRef<Base>::GenSlidingWindowFunction( outputstream& s
         ss << "        result[writePos] = current_result;\n";
         ss << "}\n";
     }
+}
 
+template<class Base>
+std::string ParallelReductionVectorRef<Base>::GenSlidingWindowDeclRef( bool ) const
+{
+    outputstream ss;
+    if (!bIsStartFixed && !bIsEndFixed)
+        ss << Base::GetName() << "[i + gid0]";
+    else
+        ss << Base::GetName() << "[i]";
+    return ss.str();
 }
 
 template<class Base>
@@ -2355,6 +1615,22 @@ size_t ParallelReductionVectorRef<Base>::Marshal( cl_kernel k, int argno, int w,
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
     return 1;
 }
+
+template<class Base>
+ParallelReductionVectorRef<Base>::~ParallelReductionVectorRef()
+{
+    if (mpClmem2)
+    {
+        cl_int err;
+        err = clReleaseMemObject(mpClmem2);
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
+        mpClmem2 = nullptr;
+    }
+}
+
+template class ParallelReductionVectorRef<VectorRef>;
+
+namespace {
 
 struct SumIfsArgs
 {

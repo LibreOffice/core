@@ -86,4 +86,80 @@ const char atan2Content[] =
 "    return a;\n"
 "}\n";
 
+const char fsum_countDecl[] = "double fsum_count(double a, double b, __private int *p);\n";
+const char fsum_count[] =
+"double fsum_count(double a, double b, __private int *p) {\n"
+"    bool t = isnan(a);\n"
+"    (*p) += t?0:1;\n"
+"    return t?b:a+b;\n"
+"}\n";
+
+const char fmin_countDecl[] = "double fmin_count(double a, double b, __private int *p);\n";
+const char fmin_count[] =
+"double fmin_count(double a, double b, __private int *p) {\n"
+"    double result = fmin(a, b);\n"
+"    bool t = isnan(result);\n"
+"    (*p) += t?0:1;\n"
+"    return result;\n"
+"}\n";
+
+const char fmax_countDecl[] =  "double fmax_count(double a, double b, __private int *p);\n";
+const char fmax_count[] =
+"double fmax_count(double a, double b, __private int *p) {\n"
+"    double result = fmax(a, b);\n"
+"    bool t = isnan(result);\n"
+"    (*p) += t?0:1;\n"
+"    return result;\n"
+"}\n";
+
+const char is_representable_integerDecl[] =  "int is_representable_integer(double a);\n";
+const char is_representable_integer[] =
+"int is_representable_integer(double a) {\n"
+"    long kMaxInt = (1L << 53) - 1;\n"
+"    if (a <= as_double(kMaxInt))\n"
+"    {\n"
+"        long nInt = as_long(a);\n"
+"        double fInt;\n"
+"        return (nInt <= kMaxInt &&\n"
+"                (!((fInt = as_double(nInt)) < a) && !(fInt > a)));\n"
+"    }\n"
+"    return 0;\n"
+"}\n";
+
+const char approx_equalDecl[] = "int approx_equal(double a, double b);\n";
+const char approx_equal[] =
+"int approx_equal(double a, double b) {\n"
+"    double e48 = 1.0 / (16777216.0 * 16777216.0);\n"
+"    double e44 = e48 * 16.0;\n"
+"    if (a == b)\n"
+"        return 1;\n"
+"    if (a == 0.0 || b == 0.0)\n"
+"        return 0;\n"
+"    double d = fabs(a - b);\n"
+"    if (!isfinite(d))\n"
+"        return 0;   // Nan or Inf involved\n"
+"    if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))\n"
+"        return 0;\n"
+"    if (is_representable_integer(d) && is_representable_integer(a) && is_representable_integer(b))\n"
+"        return 0;   // special case for representable integers.\n"
+"    return (d < a * e48 && d < b * e48);\n"
+"}\n";
+
+const char fsum_approxDecl[] = "double fsum_approx(double a, double b);\n";
+const char fsum_approx[] =
+"double fsum_approx(double a, double b) {\n"
+"    if ( ((a < 0.0 && b > 0.0) || (b < 0.0 && a > 0.0))\n"
+"         && approx_equal( a, -b ) )\n"
+"        return 0.0;\n"
+"    return a + b;\n"
+"}\n";
+
+const char fsub_approxDecl[] = "double fsub_approx(double a, double b);\n";
+const char fsub_approx[] =
+"double fsub_approx(double a, double b) {\n"
+"    if ( ((a < 0.0 && b < 0.0) || (a > 0.0 && b > 0.0)) && approx_equal( a, b ) )\n"
+"        return 0.0;\n"
+"    return a - b;\n"
+"}\n";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

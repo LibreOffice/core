@@ -217,6 +217,15 @@ void OpLn::GenerateCode( outputstream& ss ) const
     ss << "    return log1p(arg0-1);\n";
 }
 
+void OpInt::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+}
+
 void OpInt::GenerateCode( outputstream& ss ) const
 {
     ss << "    int intTmp = (int)arg0;\n";
@@ -462,6 +471,72 @@ void OpBitRshift::GenerateCode( outputstream& ss ) const
 void OpQuotient::GenerateCode( outputstream& ss ) const
 {
     ss << "    return trunc(arg0/arg1);\n";
+}
+
+void OpEqual::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+}
+
+void OpEqual::GenerateCode( outputstream& ss ) const
+{
+    ss << "    return approx_equal( arg0, arg1 );\n";
+}
+
+void OpNotEqual::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+}
+
+void OpNotEqual::GenerateCode( outputstream& ss ) const
+{
+    ss << "    return !approx_equal( arg0, arg1 );\n";
+}
+
+void OpLessEqual::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+}
+
+void OpLessEqual::GenerateCode( outputstream& ss ) const
+{
+    ss << "    return approx_equal( arg0, arg1 ) || arg0 <= arg1;\n";
+}
+
+void OpLess::GenerateCode( outputstream& ss ) const
+{
+    ss << "    return arg0 < arg1;\n";
+}
+
+void OpGreaterEqual::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+}
+
+void OpGreaterEqual::GenerateCode( outputstream& ss ) const
+{
+    ss << "    return approx_equal( arg0, arg1 ) || arg0 >= arg1;\n";
+}
+
+void OpGreater::GenerateCode( outputstream& ss ) const
+{
+    ss << "    return arg0 > arg1;\n";
 }
 
 void OpLog::GenSlidingWindowFunction(outputstream &ss,
@@ -1584,6 +1659,330 @@ void OpSeriesSum::GenSlidingWindowFunction(outputstream &ss,
     ss << "    return res;\n";
     ss << "}";
 }
+
+void SumOfProduct::GenSlidingWindowFunction( outputstream& ss,
+    const std::string& sSymName, SubArguments& vSubArguments )
+{
+    size_t nCurWindowSize = 0;
+    FormulaToken* tmpCur = nullptr;
+    const formula::DoubleVectorRefToken* pCurDVR = nullptr;
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    for (size_t i = 0; i < vSubArguments.size(); i++)
+    {
+        size_t nCurChildWindowSize = vSubArguments[i]->GetWindowSize();
+        nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
+            nCurChildWindowSize : nCurWindowSize;
+        tmpCur = vSubArguments[i]->GetFormulaToken();
+        if (ocPush == tmpCur->GetOpCode())
+        {
+            pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
+            if (pCurDVR->IsStartFixed() != pCurDVR->IsEndFixed())
+                throw Unhandled(__FILE__, __LINE__);
+        }
+    }
+    ss << "    double tmp = 0.0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+
+    ss << "\tint i;\n\t";
+    ss << "int currentCount0;\n";
+    for (size_t i = 0; i < vSubArguments.size() - 1; i++)
+        ss << "int currentCount" << i + 1 << ";\n";
+    outputstream temp3, temp4;
+    int outLoopSize = UNROLLING_FACTOR;
+    if (nCurWindowSize / outLoopSize != 0)
+    {
+        ss << "for(int outLoop=0; outLoop<" <<
+            nCurWindowSize / outLoopSize << "; outLoop++){\n\t";
+        for (int count = 0; count < outLoopSize; count++)
+        {
+            ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n";
+            if (count == 0)
+            {
+                for (size_t i = 0; i < vSubArguments.size(); i++)
+                {
+                    tmpCur = vSubArguments[i]->GetFormulaToken();
+                    if (ocPush == tmpCur->GetOpCode())
+                    {
+                        pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
+                        if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+                        {
+                            temp3 << "        currentCount";
+                            temp3 << i;
+                            temp3 << " =i+gid0+1;\n";
+                        }
+                        else
+                        {
+                            temp3 << "        currentCount";
+                            temp3 << i;
+                            temp3 << " =i+1;\n";
+                        }
+                    }
+                }
+
+                temp3 << "tmp = fsum(";
+                for (size_t i = 0; i < vSubArguments.size(); i++)
+                {
+                    if (i)
+                        temp3 << "*";
+                    if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
+                    {
+                        temp3 << "(";
+                        temp3 << "(currentCount";
+                        temp3 << i;
+                        temp3 << ">";
+                        if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+                                formula::svSingleVectorRef)
+                        {
+                            const formula::SingleVectorRefToken* pSVR =
+                                static_cast<const formula::SingleVectorRefToken*>
+                                (vSubArguments[i]->GetFormulaToken());
+                            temp3 << pSVR->GetArrayLength();
+                            temp3 << ")||isnan(" << vSubArguments[i]
+                                ->GenSlidingWindowDeclRef();
+                            temp3 << ")?0:";
+                            temp3 << vSubArguments[i]->GenSlidingWindowDeclRef();
+                            temp3  << ")";
+                        }
+                        else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+                                formula::svDoubleVectorRef)
+                        {
+                            const formula::DoubleVectorRefToken* pSVR =
+                                static_cast<const formula::DoubleVectorRefToken*>
+                                (vSubArguments[i]->GetFormulaToken());
+                            temp3 << pSVR->GetArrayLength();
+                            temp3 << ")||isnan(" << vSubArguments[i]
+                                ->GenSlidingWindowDeclRef(true);
+                            temp3 << ")?0:";
+                            temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                            temp3  << ")";
+                        }
+
+                    }
+                    else
+                        temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                }
+                temp3 << ", tmp);\n\t";
+            }
+            ss << temp3.str();
+        }
+        ss << "}\n\t";
+    }
+    //The residual of mod outLoopSize
+    for (size_t count = nCurWindowSize / outLoopSize * outLoopSize;
+        count < nCurWindowSize; count++)
+    {
+        ss << "i =" << count << ";\n";
+        if (count == nCurWindowSize / outLoopSize * outLoopSize)
+        {
+            for (size_t i = 0; i < vSubArguments.size(); i++)
+            {
+                tmpCur = vSubArguments[i]->GetFormulaToken();
+                if (ocPush == tmpCur->GetOpCode())
+                {
+                    pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
+                    if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+                    {
+                        temp4 << "        currentCount";
+                        temp4 << i;
+                        temp4 << " =i+gid0+1;\n";
+                    }
+                    else
+                    {
+                        temp4 << "        currentCount";
+                        temp4 << i;
+                        temp4 << " =i+1;\n";
+                    }
+                }
+            }
+
+            temp4 << "tmp = fsum(";
+            for (size_t i = 0; i < vSubArguments.size(); i++)
+            {
+                if (i)
+                    temp4 << "*";
+                if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
+                {
+                    temp4 << "(";
+                    temp4 << "(currentCount";
+                    temp4 << i;
+                    temp4 << ">";
+                    if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+                            formula::svSingleVectorRef)
+                    {
+                        const formula::SingleVectorRefToken* pSVR =
+                            static_cast<const formula::SingleVectorRefToken*>
+                            (vSubArguments[i]->GetFormulaToken());
+                        temp4 << pSVR->GetArrayLength();
+                        temp4 << ")||isnan(" << vSubArguments[i]
+                            ->GenSlidingWindowDeclRef();
+                        temp4 << ")?0:";
+                        temp4 << vSubArguments[i]->GenSlidingWindowDeclRef();
+                        temp4  << ")";
+                    }
+                    else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+                            formula::svDoubleVectorRef)
+                    {
+                        const formula::DoubleVectorRefToken* pSVR =
+                            static_cast<const formula::DoubleVectorRefToken*>
+                            (vSubArguments[i]->GetFormulaToken());
+                        temp4 << pSVR->GetArrayLength();
+                        temp4 << ")||isnan(" << vSubArguments[i]
+                            ->GenSlidingWindowDeclRef(true);
+                        temp4 << ")?0:";
+                        temp4 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                        temp4  << ")";
+                    }
+
+                }
+                else
+                {
+                    temp4 << vSubArguments[i]
+                        ->GenSlidingWindowDeclRef(true);
+                }
+            }
+            temp4 << ", tmp);\n\t";
+        }
+        ss << temp4.str();
+    }
+    ss << "return tmp;\n";
+    ss << "}";
+}
+
+void Reduction::GenSlidingWindowFunction( outputstream& ss,
+    const std::string& sSymName, SubArguments& vSubArguments )
+{
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "double tmp = " << GetBottom() << ";\n";
+    ss << "int gid0 = get_global_id(0);\n";
+    if (isAverage() || isMinOrMax())
+        ss << "int nCount = 0;\n";
+    ss << "double tmpBottom;\n";
+    unsigned i = vSubArguments.size();
+    while (i--)
+    {
+        if (NumericRange* NR = dynamic_cast<NumericRange*>(vSubArguments[i].get()))
+        {
+            bool needBody;
+            NR->GenReductionLoopHeader(ss, needBody);
+            if (!needBody)
+                continue;
+        }
+        else if (ParallelNumericRange* PNR = dynamic_cast<ParallelNumericRange*>(vSubArguments[i].get()))
+        {
+            //did not handle yet
+            bool bNeedBody = false;
+            PNR->GenReductionLoopHeader(ss, mnResultSize, bNeedBody);
+            if (!bNeedBody)
+                continue;
+        }
+        else if (StringRange* SR = dynamic_cast<StringRange*>(vSubArguments[i].get()))
+        {
+            //did not handle yet
+            bool needBody;
+            SR->GenReductionLoopHeader(ss, needBody);
+            if (!needBody)
+                continue;
+        }
+        else
+        {
+            FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
+            assert(pCur);
+            assert(pCur->GetType() != formula::svDoubleVectorRef);
+
+            if (pCur->GetType() == formula::svSingleVectorRef ||
+                pCur->GetType() == formula::svDouble)
+            {
+                ss << "{\n";
+            }
+        }
+        if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            bool bNanHandled = HandleNaNArgument(ss, i, vSubArguments);
+
+            ss << "tmpBottom = " << GetBottom() << ";\n";
+
+            if (!bNanHandled)
+            {
+                ss << "if (isnan(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << "))\n";
+                if (ZeroReturnZero())
+                    ss << "    return 0;\n";
+                else
+                {
+                    ss << "    tmp = ";
+                    ss << Gen2("tmpBottom", "tmp") << ";\n";
+                }
+                ss << "else\n";
+            }
+            ss << "{";
+            ss << "        tmp = ";
+            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+            ss << ";\n";
+            ss << "    }\n";
+            ss << "}\n";
+        }
+        else
+        {
+            ss << "tmp = ";
+            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+            ss << ";\n";
+        }
+    }
+    if (isAverage())
+        ss <<
+            "if (nCount==0)\n"
+            "    return CreateDoubleError(DivisionByZero);\n";
+    else if (isMinOrMax())
+        ss <<
+            "if (nCount==0)\n"
+            "    return 0;\n";
+    ss << "return tmp";
+    if (isAverage())
+        ss << "/(double)nCount";
+    ss << ";\n}";
+}
+
+void OpSum::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+    decls.insert(fsum_approxDecl);
+    funs.insert(fsum_approx);
+}
+
+void OpAverage::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(fsum_countDecl);
+    funs.insert(fsum_count);
+}
+
+void OpSub::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+    decls.insert(fsub_approxDecl);
+    funs.insert(fsub_approx);
+}
+
+void OpMin::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(fmin_countDecl);
+    funs.insert(fmin_count);
+}
+
+void OpMax::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(fmax_countDecl);
+    funs.insert(fmax_count);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

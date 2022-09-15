@@ -12,16 +12,24 @@
 #include <clew/clew.h>
 #include <formula/token.hxx>
 #include <formula/types.hxx>
+#include <formula/vectortoken.hxx>
 #include <memory>
 #include <set>
 #include <vector>
 #include "utils.hxx"
 
-namespace formula { class DoubleVectorRefToken; }
-namespace formula { class FormulaToken; }
 struct ScCalcConfig;
 
 namespace sc::opencl {
+
+// FIXME: The idea that somebody would bother to (now and then? once a year? once a month?) manually
+// edit a source file and change the value of some #defined constant and run some ill-defined
+// "correctness test" is of course ludicrous. Either things are checked in normal unit tests, in
+// every 'make check', or not at all. The below comments are ridiculous.
+
+#define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
+#define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
+
 
 class FormulaTreeNode;
 
@@ -194,6 +202,27 @@ protected:
     const int mnIndex;
 };
 
+/// A vector of strings
+class DynamicKernelStringArgument : public VectorRef
+{
+public:
+    DynamicKernelStringArgument( const ScCalcConfig& config, const std::string& s,
+        const FormulaTreeNodeRef& ft, int index = 0 ) :
+        VectorRef(config, s, ft, index) { }
+
+    virtual void GenSlidingWindowFunction( outputstream& ) override { }
+    /// Generate declaration
+    virtual void GenDecl( outputstream& ss ) const override
+    {
+        ss << "__global unsigned int *" << mSymName;
+    }
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
+    {
+        DynamicKernelStringArgument::GenDecl(ss);
+    }
+    virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
+};
+
 /// Abstract class for code generation
 class OpBase
 {
@@ -260,6 +289,73 @@ public:
     static void UnrollDoubleVector( outputstream& ss,
         const outputstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
         int nCurWindowSize );
+};
+
+class OpAverage;
+class OpCount;
+
+/// Handling a Double Vector that is used as a sliding window input
+/// to either a sliding window average or sum-of-products
+/// Generate a sequential loop for reductions
+template<class Base>
+class DynamicKernelSlidingArgument : public Base
+{
+public:
+    DynamicKernelSlidingArgument(const ScCalcConfig& config, const std::string& s,
+                                 const FormulaTreeNodeRef& ft,
+                                 std::shared_ptr<SlidingFunctionBase> CodeGen, int index);
+    // Should only be called by SumIfs. Yikes!
+    virtual bool NeedParallelReduction() const;
+    virtual void GenSlidingWindowFunction( outputstream& ) { }
+
+    std::string GenSlidingWindowDeclRef( bool nested = false ) const;
+    /// Controls how the elements in the DoubleVectorRef are traversed
+    size_t GenReductionLoopHeader( outputstream& ss, bool& needBody );
+
+    size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
+
+    size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
+
+    bool GetStartFixed() const { return bIsStartFixed; }
+
+    bool GetEndFixed() const { return bIsEndFixed; }
+
+protected:
+    bool bIsStartFixed, bIsEndFixed;
+    const formula::DoubleVectorRefToken* mpDVR;
+    // from parent nodes
+    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
+};
+
+/// Handling a Double Vector that is used as a sliding window input
+/// Performs parallel reduction based on given operator
+template<class Base>
+class ParallelReductionVectorRef : public Base
+{
+public:
+    ParallelReductionVectorRef(const ScCalcConfig& config, const std::string& s,
+                               const FormulaTreeNodeRef& ft,
+                               std::shared_ptr<SlidingFunctionBase> CodeGen, int index);
+    ~ParallelReductionVectorRef();
+
+    /// Emit the definition for the auxiliary reduction kernel
+    virtual void GenSlidingWindowFunction( outputstream& ss );
+    virtual std::string GenSlidingWindowDeclRef( bool ) const;
+    /// Controls how the elements in the DoubleVectorRef are traversed
+    size_t GenReductionLoopHeader( outputstream& ss, int nResultSize, bool& needBody );
+    virtual size_t Marshal( cl_kernel k, int argno, int w, cl_program mpProgram );
+    size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
+    size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
+    bool GetStartFixed() const { return bIsStartFixed; }
+    bool GetEndFixed() const { return bIsEndFixed; }
+
+protected:
+    bool bIsStartFixed, bIsEndFixed;
+    const formula::DoubleVectorRefToken* mpDVR;
+    // from parent nodes
+    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    // controls whether to invoke the reduction kernel during marshaling or not
+    cl_mem mpClmem2;
 };
 
 }
