@@ -1101,14 +1101,14 @@ namespace
         }
     }
 
-    void lcl_SkipAttr( const SwTextNode *pNode, SwContentIndex &rIdx, sal_Int32 &rStart )
+    void lcl_SkipAttr( const SwTextNode *pNode, SwPosition &rIdx, sal_Int32 &rStart )
     {
         if( !lcl_MayOverwrite( pNode, rStart ) )
         {
             // skip all special attributes
             do {
-                ++rIdx;
-                rStart = rIdx.GetIndex();
+                rIdx.AdjustContent(+1);
+                rStart = rIdx.GetContentIndex();
             } while (rStart < pNode->GetText().getLength()
                    && !lcl_MayOverwrite(pNode, rStart) );
         }
@@ -1524,8 +1524,6 @@ namespace //local functions originally from docfmt.cxx
                 return true;
             }
 
-            const SwContentIndex& rSt = pStt->nContent;
-
             // Attributes without an end do not have a range
             if ( !bCharAttr && !bOtherAttr )
             {
@@ -1536,7 +1534,7 @@ namespace //local functions originally from docfmt.cxx
                 {
                     SwRegHistory history( pNode, *pNode, pHistory );
                     bRet = history.InsertItems(
-                        aTextSet, rSt.GetIndex(), rSt.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr ) || bRet;
+                        aTextSet, pStt->GetContentIndex(), pStt->GetContentIndex(), nFlags, /*ppNewTextAttr*/nullptr ) || bRet;
 
                     if (bRet && (rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
                                     && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())))
@@ -1569,7 +1567,7 @@ namespace //local functions originally from docfmt.cxx
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
                 {
-                    const sal_Int32 nInsCnt = rSt.GetIndex();
+                    const sal_Int32 nInsCnt = pStt->GetContentIndex();
                     const sal_Int32 nEnd = pStt->GetNode() == pEnd->GetNode()
                                     ? pEnd->GetContentIndex()
                                     : pNode->Len();
@@ -1581,7 +1579,7 @@ namespace //local functions originally from docfmt.cxx
                                     && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())))
                     {
                         // Was text content inserted? (RefMark/TOXMarks without an end)
-                        bool bTextIns = nInsCnt != rSt.GetIndex();
+                        bool bTextIns = nInsCnt != pStt->GetContentIndex();
                         // Was content inserted or set over the selection?
                         SwPaM aPam( pStt->GetNode(), bTextIns ? nInsCnt + 1 : nEnd,
                                     pStt->GetNode(), nInsCnt );
@@ -1719,13 +1717,12 @@ namespace //local functions originally from docfmt.cxx
             if( pNode->IsTextNode() && pCharSet && pCharSet->Count() )
             {
                 SwTextNode* pTextNd = pNode->GetTextNode();
-                const SwContentIndex& rSt = pStt->nContent;
-                sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
+                sal_Int32 nMkPos, nPtPos = pStt->GetContentIndex();
                 const OUString& rStr = pTextNd->GetText();
 
                 // Special case: if the Cursor is located within a URL attribute, we take over it's area
                 SwTextAttr const*const pURLAttr(
-                    pTextNd->GetTextAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
+                    pTextNd->GetTextAttrAt(pStt->GetContentIndex(), RES_TXTATR_INETFMT));
                 if (pURLAttr && !pURLAttr->GetINetFormat().GetValue().isEmpty())
                 {
                     nMkPos = pURLAttr->GetStart();
@@ -1746,7 +1743,7 @@ namespace //local functions originally from docfmt.cxx
                         nPtPos = aBndry.endPos;
                     }
                     else
-                        nPtPos = nMkPos = rSt.GetIndex();
+                        nPtPos = nMkPos = pStt->GetContentIndex();
                 }
 
                 // Remove the overriding attributes from the SwpHintsArray,
@@ -2743,8 +2740,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     const size_t nOldAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
     SwDataChanged aTmp( rRg );
-    SwContentIndex& rIdx = rPt.nContent;
-    sal_Int32 const nActualStart(rIdx.GetIndex());
+    sal_Int32 const nActualStart(rPt.GetContentIndex());
     sal_Int32 nStart = 0;
 
     bool bOldExpFlg = pNode->IsIgnoreDontExpand();
@@ -2753,10 +2749,10 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     for( sal_Int32 nCnt = 0; nCnt < rStr.getLength(); ++nCnt )
     {
         // start behind the characters (to fix the attributes!)
-        nStart = rIdx.GetIndex();
+        nStart = rPt.GetContentIndex();
         if  (nStart < pNode->GetText().getLength())
         {
-            lcl_SkipAttr( pNode, rIdx, nStart );
+            lcl_SkipAttr( pNode, rPt, nStart );
         }
         sal_Unicode c = rStr[ nCnt ];
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -2783,13 +2779,13 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
         {
             // start behind the characters (to fix the attributes!)
             if (nStart < pNode->GetText().getLength())
-                ++rIdx;
-            pNode->InsertText( OUString(c), rIdx, SwInsertFlags::EMPTYEXPAND );
-            if( nStart+1 < rIdx.GetIndex() )
+                rPt.AdjustContent(+1);
+            pNode->InsertText( OUString(c), rPt, SwInsertFlags::EMPTYEXPAND );
+            if( nStart+1 < rPt.GetContentIndex() )
             {
-                rIdx = nStart;
-                pNode->EraseText( rIdx, 1 );
-                ++rIdx;
+                rPt.SetContent(nStart);
+                pNode->EraseText( rPt, 1 );
+                rPt.AdjustContent(+1);
             }
         }
     }
@@ -5054,7 +5050,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     pSttTextNd->CopyText( pDestTextNd, aDestIdx,
                                             pStt->nContent, nCpyLen );
                     if( bEndEqualIns )
-                        pEnd->nContent -= nCpyLen;
+                        pEnd->AdjustContent( -nCpyLen );
                 }
 
                 aRg.aStart++;
@@ -5197,7 +5193,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
                 assert(pStt->GetNode() != pEnd->GetNode());
-                pEnd->nContent = 0; // TODO why this?
+                pEnd->SetContent(0); // TODO why this?
                 CopyWithFlyInFly(aRg, aInsPos.GetNode(), &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
                 ++aSaveIdx;
                 pEnd->Assign(aSaveIdx);
