@@ -848,6 +848,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     while ( ( nIndex < pNode->Len() ) || bForceOneRun )
     {
+        assert(pLine);
+
         bForceOneRun = false;
 
         bool bEOL = false;
