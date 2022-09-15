@@ -367,6 +367,7 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
                 pUpper = new SwSectionFrame(const_cast<SwSectionNode*>(static_cast<const SwSectionNode*>(pNode))->GetSection(), rpFrame);
                 pUpper->Paste( rpFrame->GetUpper(),
                                mbMaster ? rpFrame : rpFrame->GetNext() );
+                // coverity[freed_arg : FALSE] - pUpper->Lower() is not freed here
                 static_cast<SwSectionFrame*>(pUpper)->Init();
                 rpFrame = nullptr;
                 // 'Go down' the section frame as long as the layout frame
