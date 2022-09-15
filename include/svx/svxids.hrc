@@ -82,6 +82,7 @@ class XFillGradientItem;
 #define MID_HLINK_TARGET        0x71
 #define MID_HLINK_TYPE          0x72
 #define MID_HLINK_TEXT          0x73
+#define MID_HLINK_REPLACEMENTTEXT 0x74
 
 #define MID_VIEWLAYOUT_COLUMNS  0x77
 #define MID_VIEWLAYOUT_BOOKMODE 0x78

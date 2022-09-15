@@ -34,6 +34,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
     eType   = rHyperlinkItem.eType;
     sIntName = rHyperlinkItem.sIntName;
     nMacroEvents = rHyperlinkItem.nMacroEvents;
+    sReplacementText = rHyperlinkItem.sReplacementText;
 
     if( rHyperlinkItem.GetMacroTable() )
         pMacroTable.reset( new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() ) );
@@ -42,12 +43,13 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUString aName, OUString aURL,
                                     OUString aTarget, OUString aIntName, SvxLinkInsertMode eTyp,
-                                    HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl ):
+                                    HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl, OUString aReplacementText):
     SfxPoolItem (_nWhich),
     sName       (std::move(aName)),
     sURL        (std::move(aURL)),
     sTarget     (std::move(aTarget)),
     eType       (eTyp),
+    sReplacementText (std::move(aReplacementText)),
     sIntName (std::move(aIntName)),
     nMacroEvents (nEvents)
 {
@@ -71,7 +73,8 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
                   sTarget == rItem.sTarget &&
                   eType   == rItem.eType   &&
                   sIntName == rItem.sIntName &&
-                  nMacroEvents == rItem.nMacroEvents);
+                  nMacroEvents == rItem.nMacroEvents &&
+                  sReplacementText == rItem.sReplacementText);
     if (!bRet)
         return false;
 
@@ -136,6 +139,9 @@ bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) co
         case MID_HLINK_TYPE:
             rVal <<= static_cast<sal_Int32>(eType);
         break;
+        case MID_HLINK_REPLACEMENTTEXT:
+            rVal <<= sReplacementText;
+        break;
         default:
             return false;
     }
@@ -174,6 +180,11 @@ bool SvxHyperlinkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
             if(!(rVal >>= nVal))
                 return false;
             eType = static_cast<SvxLinkInsertMode>(static_cast<sal_uInt16>(nVal));
+        break;
+        case MID_HLINK_REPLACEMENTTEXT:
+            if(!(rVal >>= aStr))
+                return false;
+            sReplacementText = aStr;
         break;
         default:
             return false;
