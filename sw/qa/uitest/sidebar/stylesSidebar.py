@@ -66,6 +66,7 @@ class StylesSidebar(UITestCase):
                 self.assertEqual(1, len(xFlatView.getChildren()))
 
                 xFlatView.getChild('0').executeAction("SELECT", tuple())
+                self.ui_test.wait_until_property_is_updated(xFlatView, "SelectEntryText", expectedResults[i])
                 self.assertEqual(expectedResults[i], get_state_as_dict(xFlatView)['SelectEntryText'])
 
             self.xUITest.executeCommand(".uno:Sidebar")
