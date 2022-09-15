@@ -659,7 +659,7 @@ bool Dialog::EventNotify( NotifyEvent& rNEvt )
     bool bRet = SystemWindow::EventNotify( rNEvt );
     if ( !bRet )
     {
-        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        if ( rNEvt.GetType() == NotifyEventType::KEYINPUT )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();
@@ -676,7 +676,7 @@ bool Dialog::EventNotify( NotifyEvent& rNEvt )
                 return true;
             }
         }
-        else if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+        else if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         {
             // make sure the dialog is still modal
             // changing focus between application frames may

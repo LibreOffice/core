@@ -139,7 +139,7 @@ void InterimItemWindow::GetFocus()
        the toolbox
     */
     vcl::Window* pToolBox = GetParent();
-    NotifyEvent aNEvt(MouseNotifyEvent::GETFOCUS, this);
+    NotifyEvent aNEvt(NotifyEventType::GETFOCUS, this);
     pToolBox->EventNotify(aNEvt);
 }
 
@@ -172,7 +172,7 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
        to this toolitem in case tab means to move to another toolitem within
        the toolbox
     */
-    NotifyEvent aNEvt(MouseNotifyEvent::GETFOCUS, this);
+    NotifyEvent aNEvt(NotifyEventType::GETFOCUS, this);
     pToolBox->EventNotify(aNEvt);
 
     /* send parent the tab */

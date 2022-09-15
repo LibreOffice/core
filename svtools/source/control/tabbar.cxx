@@ -1303,7 +1303,7 @@ void TabBar::Resize()
 
 bool TabBar::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+    if (rNEvt.GetType() == NotifyEventType::COMMAND)
     {
         if (rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel)
         {

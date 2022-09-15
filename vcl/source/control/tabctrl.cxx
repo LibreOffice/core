@@ -1559,7 +1559,7 @@ ImplTabItem* TabControl::ImplGetItem(const Point& rPt) const
 
 bool TabControl::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
+    if( rNEvt.GetType() == NotifyEventType::MOUSEMOVE )
     {
         const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
         if( pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
@@ -1610,7 +1610,7 @@ bool TabControl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( rNEvt.GetType() == NotifyEventType::KEYINPUT )
         bRet = ImplHandleKeyEvent( *rNEvt.GetKeyEvent() );
 
     return bRet || Control::EventNotify( rNEvt );

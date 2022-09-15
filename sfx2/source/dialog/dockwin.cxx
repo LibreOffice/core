@@ -1442,7 +1442,7 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
     if ( !pImpl )
         return ResizableDockingWindow::EventNotify( rEvt );
 
-    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rEvt.GetType() == NotifyEventType::GETFOCUS )
     {
         if (pMgr != nullptr)
             pBindings->SetActiveFrame( pMgr->GetFrame() );
@@ -1458,7 +1458,7 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         ResizableDockingWindow::EventNotify( rEvt );
         return true;
     }
-    else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    else if( rEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions
         if (!DockingWindow::EventNotify(rEvt) && SfxViewShell::Current())
@@ -1468,7 +1468,7 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         }
         return true;
     }
-    else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
+    else if ( rEvt.GetType() == NotifyEventType::LOSEFOCUS && !HasChildPathFocus() )
     {
         pBindings->SetActiveFrame( nullptr );
     }

@@ -175,11 +175,11 @@ namespace
 
 bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+    if (rNEvt.GetType() == NotifyEventType::COMMAND)
         ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
 
     // capture KeyEvents for menu handling
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
     {
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WindowType::FLOATINGWINDOW ) )
@@ -198,7 +198,7 @@ bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
 bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for taskpane cycling
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( rNEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         if( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F6 &&
             rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() &&

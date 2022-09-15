@@ -598,7 +598,7 @@ RoadmapItem* ORoadmap::GetByPointer(vcl::Window const * pWindow)
 bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
 {
     // capture KeyEvents for taskpane cycling
-    if ( _rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( _rNEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         vcl::Window* pWindow = _rNEvt.GetWindow();
         RoadmapItem* pItem = GetByPointer( pWindow );

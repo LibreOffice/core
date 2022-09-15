@@ -157,7 +157,7 @@ namespace dbaui
     }
     bool OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     {
-        if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS && m_pViewSwitch)
+        if (rNEvt.GetType() == NotifyEventType::GETFOCUS && m_pViewSwitch)
         {
             OJoinController& rController = m_pViewSwitch->getDesignView()->getController();
             rController.InvalidateFeature(SID_CUT);

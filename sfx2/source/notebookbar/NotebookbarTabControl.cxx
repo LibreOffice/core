@@ -222,7 +222,7 @@ void NotebookbarTabControl::KeyInput( const KeyEvent& rKEvt )
 
 bool NotebookbarTabControl::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( rNEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nCode = rKey.GetCode();

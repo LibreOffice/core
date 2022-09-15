@@ -98,7 +98,7 @@ namespace dbaui
         bool bHandled = false;
         switch ( _rNEvt.GetType() )
         {
-            case MouseNotifyEvent::KEYINPUT:
+            case NotifyEventType::KEYINPUT:
             {
                 const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
                 const vcl::KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
@@ -107,9 +107,9 @@ namespace dbaui
                     return true;
                 [[fallthrough]];
             }
-            case MouseNotifyEvent::KEYUP:
-            case MouseNotifyEvent::MOUSEBUTTONDOWN:
-            case MouseNotifyEvent::MOUSEBUTTONUP:
+            case NotifyEventType::KEYUP:
+            case NotifyEventType::MOUSEBUTTONDOWN:
+            case NotifyEventType::MOUSEBUTTONUP:
                 bHandled = m_xController->interceptUserInput( _rNEvt );
                 break;
             default:

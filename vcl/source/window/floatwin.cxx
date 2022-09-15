@@ -634,7 +634,7 @@ bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
     bool bRet = SystemWindow::EventNotify( rNEvt );
     if ( !bRet )
     {
-        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        if ( rNEvt.GetType() == NotifyEventType::KEYINPUT )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();

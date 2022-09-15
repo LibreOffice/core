@@ -151,14 +151,14 @@ void OTableGrantControl::Init()
 
 bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
+    if (rNEvt.GetType() == NotifyEventType::LOSEFOCUS)
         if (!HasChildPathFocus())
         {
             if (m_nDeactivateEvent)
                 Application::RemoveUserEvent(m_nDeactivateEvent);
             m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate), nullptr, true);
         }
-    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
+    if (rNEvt.GetType() == NotifyEventType::GETFOCUS)
     {
         if (m_nDeactivateEvent)
             Application::RemoveUserEvent(m_nDeactivateEvent);

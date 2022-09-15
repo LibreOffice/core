@@ -388,11 +388,11 @@ LongCurrencyBox::LongCurrencyBox(vcl::Window* pParent, WinBits nWinStyle)
 
 bool LongCurrencyBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if( rNEvt.GetType() == NotifyEventType::GETFOCUS )
     {
         MarkToBeReformatted( false );
     }
-    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() )
         {

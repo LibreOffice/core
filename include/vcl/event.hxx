@@ -272,7 +272,7 @@ inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
 }
 
 
-enum class MouseNotifyEvent
+enum class NotifyEventType
 {
     NONE             = 0,
     MOUSEBUTTONDOWN  = 1,
@@ -290,10 +290,10 @@ class VCL_DLLPUBLIC NotifyEvent
 private:
     VclPtr<vcl::Window>     mpWindow;
     void*                   mpData;
-    MouseNotifyEvent        mnEventType;
+    NotifyEventType        mnEventType;
 
 public:
-                            NotifyEvent( MouseNotifyEvent nEventType,
+                            NotifyEvent( NotifyEventType nEventType,
                                          vcl::Window* pWindow,
                                          const void* pEvent = nullptr );
                             ~NotifyEvent();
@@ -305,7 +305,7 @@ public:
                             NotifyEvent& operator=(const NotifyEvent&) = delete;
                             NotifyEvent& operator=(NotifyEvent&&) = delete;
 
-    MouseNotifyEvent        GetType() const { return mnEventType; }
+    NotifyEventType        GetType() const { return mnEventType; }
     vcl::Window*            GetWindow() const { return mpWindow; }
     void*                   GetData() const { return mpData; }
     const KeyEvent*         GetKeyEvent() const;
@@ -315,7 +315,7 @@ public:
 
 inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 {
-    if ( (mnEventType == MouseNotifyEvent::KEYINPUT) || (mnEventType == MouseNotifyEvent::KEYUP) )
+    if ( (mnEventType == NotifyEventType::KEYINPUT) || (mnEventType == NotifyEventType::KEYUP) )
         return static_cast<const KeyEvent*>(mpData);
     else
         return nullptr;
@@ -323,7 +323,7 @@ inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 
 inline const MouseEvent* NotifyEvent::GetMouseEvent() const
 {
-    if ( (mnEventType >= MouseNotifyEvent::MOUSEBUTTONDOWN) && (mnEventType <= MouseNotifyEvent::MOUSEMOVE) )
+    if ( (mnEventType >= NotifyEventType::MOUSEBUTTONDOWN) && (mnEventType <= NotifyEventType::MOUSEMOVE) )
         return static_cast<const MouseEvent*>(mpData);
     else
         return nullptr;
@@ -331,7 +331,7 @@ inline const MouseEvent* NotifyEvent::GetMouseEvent() const
 
 inline const CommandEvent* NotifyEvent::GetCommandEvent() const
 {
-    if ( mnEventType == MouseNotifyEvent::COMMAND )
+    if ( mnEventType == NotifyEventType::COMMAND )
         return static_cast<const CommandEvent*>(mpData);
     else
         return nullptr;

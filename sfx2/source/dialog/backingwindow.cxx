@@ -409,7 +409,7 @@ void BackingWindow::checkInstalledModules()
 
 bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
 {
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if( rNEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode(pEvt->GetKeyCode());

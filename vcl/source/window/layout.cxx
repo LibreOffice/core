@@ -2107,7 +2107,7 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue
 bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
 {
     bool bDone = false;
-    if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
+    if ( rNEvt.GetType() == NotifyEventType::COMMAND )
     {
         const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
         if ( rCEvt.GetCommand() == CommandEventId::Wheel )

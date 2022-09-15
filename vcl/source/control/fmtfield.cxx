@@ -1256,14 +1256,14 @@ void FormattedField::Modify()
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
         GetFormatter().SetLastSelection(GetSelection());
     return SpinField::PreNotify(rNEvt);
 }
 
 bool FormattedField::EventNotify(NotifyEvent& rNEvt)
 {
-    if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !IsReadOnly())
+    if ((rNEvt.GetType() == NotifyEventType::KEYINPUT) && !IsReadOnly())
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         sal_uInt16 nMod = rKEvt.GetKeyCode().GetModifier();
@@ -1285,7 +1285,7 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
         }
     }
 
-    if ((rNEvt.GetType() == MouseNotifyEvent::COMMAND) && !IsReadOnly())
+    if ((rNEvt.GetType() == NotifyEventType::COMMAND) && !IsReadOnly())
     {
         const CommandEvent* pCommand = rNEvt.GetCommandEvent();
         if (pCommand->GetCommand() == CommandEventId::Wheel)
@@ -1303,7 +1303,7 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
         }
     }
 
-    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_pFormatter)
+    if (rNEvt.GetType() == NotifyEventType::LOSEFOCUS && m_pFormatter)
         m_pFormatter->EntryLostFocus();
 
     return SpinField::EventNotify( rNEvt );

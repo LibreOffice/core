@@ -472,8 +472,8 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
 {
     bool bResult = true;
 
-    MouseNotifyEvent nSwitch=rNEvt.GetType();
-    if (pEdQuery && pEdQuery->has_focus() && nSwitch == MouseNotifyEvent::KEYINPUT)
+    NotifyEventType nSwitch=rNEvt.GetType();
+    if (pEdQuery && pEdQuery->has_focus() && nSwitch == NotifyEventType::KEYINPUT)
     {
         const vcl::KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();

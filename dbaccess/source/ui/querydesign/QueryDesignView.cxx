@@ -2681,7 +2681,7 @@ void OQueryDesignView::fillValidFields(std::u16string_view sAliasName, weld::Com
 
 bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
+    if (rNEvt.GetType() == NotifyEventType::GETFOCUS)
     {
         if ( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
             m_eChildFocus = SELECTION;

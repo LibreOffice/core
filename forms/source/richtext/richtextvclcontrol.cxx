@@ -187,7 +187,7 @@ namespace frm
     {
         if ( IsWindowOrChild( _rNEvt.GetWindow() ) )
         {
-            if ( MouseNotifyEvent::KEYINPUT == _rNEvt.GetType() )
+            if ( NotifyEventType::KEYINPUT == _rNEvt.GetType() )
             {
                 const ::KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
 
@@ -278,7 +278,7 @@ namespace frm
     bool RichTextControl::EventNotify( NotifyEvent& _rNEvt )
     {
         bool bDone = false;
-        if ( _rNEvt.GetType() == MouseNotifyEvent::COMMAND )
+        if ( _rNEvt.GetType() == NotifyEventType::COMMAND )
         {
             const CommandEvent& rEvent = *_rNEvt.GetCommandEvent();
             bDone = m_pImpl->HandleCommand( rEvent );

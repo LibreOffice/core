@@ -564,7 +564,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
     bool bHandled = false;
     switch (rNEvt.GetType())
     {
-        case MouseNotifyEvent::KEYINPUT:
+        case NotifyEventType::KEYINPUT:
         {
             if ( getDesignView()->getController().isReadOnly() )
                 break;
@@ -674,7 +674,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
             }
             break;
         }
-        case MouseNotifyEvent::KEYUP:
+        case NotifyEventType::KEYUP:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();

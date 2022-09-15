@@ -184,7 +184,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
     bool bRet = ODataView::PreNotify(rNEvt); // 1 := has to be handled here
     switch(rNEvt.GetType())
     {
-        case MouseNotifyEvent::KEYINPUT:
+        case NotifyEventType::KEYINPUT:
         {
             if ( m_pPropWin && m_pPropWin->HasChildPathFocus() )
                 return false;

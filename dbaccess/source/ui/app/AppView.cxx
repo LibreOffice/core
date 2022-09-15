@@ -174,7 +174,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 {
     switch(rNEvt.GetType())
     {
-        case MouseNotifyEvent::KEYINPUT:
+        case NotifyEventType::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             // give the pane the chance to intercept mnemonic accelerators

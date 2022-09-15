@@ -623,7 +623,7 @@ namespace svt
 
     bool EditBrowseBox::PreNotify(NotifyEvent& rEvt)
     {
-        if (rEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+        if (rEvt.GetType() == NotifyEventType::KEYINPUT)
         {
             if  (   (IsEditing() && ControlHasFocus())
                 ||  rEvt.GetWindow() == &GetDataWindow()
@@ -647,11 +647,11 @@ namespace svt
     {
         switch (rEvt.GetType())
         {
-            case MouseNotifyEvent::GETFOCUS:
+            case NotifyEventType::GETFOCUS:
                 DetermineFocus(getRealGetFocusFlags(this));
                 break;
 
-            case MouseNotifyEvent::LOSEFOCUS:
+            case NotifyEventType::LOSEFOCUS:
                 DetermineFocus();
                 break;
 

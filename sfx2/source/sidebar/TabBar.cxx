@@ -178,8 +178,8 @@ void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 
 bool TabBar::EventNotify(NotifyEvent& rEvent)
 {
-    MouseNotifyEvent nType = rEvent.GetType();
-    if(MouseNotifyEvent::KEYINPUT == nType)
+    NotifyEventType nType = rEvent.GetType();
+    if(NotifyEventType::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
         if (!mpAccel)
@@ -193,7 +193,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
             return InterimItemWindow::EventNotify(rEvent);
         return true;
     }
-    else if(MouseNotifyEvent::COMMAND == nType)
+    else if(NotifyEventType::COMMAND == nType)
     {
         const CommandEvent& rCommandEvent = *rEvent.GetCommandEvent();
         if(rCommandEvent.GetCommand() == CommandEventId::Wheel)

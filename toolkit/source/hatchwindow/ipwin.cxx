@@ -596,7 +596,7 @@ void SvResizeWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
 bool SvResizeWindow::PreNotify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS && !m_bActive )
+    if ( rEvt.GetType() == NotifyEventType::GETFOCUS && !m_bActive )
     {
         m_bActive = true;
         m_pWrapper->Activated();
@@ -607,7 +607,7 @@ bool SvResizeWindow::PreNotify( NotifyEvent& rEvt )
 
 bool SvResizeWindow::EventNotify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_bActive )
+    if ( rEvt.GetType() == NotifyEventType::LOSEFOCUS && m_bActive )
     {
         bool bHasFocus = HasChildPathFocus(true);
         if ( !bHasFocus )

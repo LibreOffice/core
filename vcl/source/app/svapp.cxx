@@ -947,7 +947,7 @@ bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
     {
         case VclEventId::WindowMouseMove:
             aMouseEvent.mnButton = 0;
-            bSuccess = ImplLOKHandleMouseEvent(pWindow, MouseNotifyEvent::MOUSEMOVE, false,
+            bSuccess = ImplLOKHandleMouseEvent(pWindow, NotifyEventType::MOUSEMOVE, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime, aMouseEvent.mnCode,
                                                ImplGetMouseMoveMode(&aMouseEvent),
@@ -956,7 +956,7 @@ bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
 
         case VclEventId::WindowMouseButtonDown:
             aMouseEvent.mnButton = pEvent->GetButtons();
-            bSuccess = ImplLOKHandleMouseEvent(pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
+            bSuccess = ImplLOKHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONDOWN, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime,
 #ifdef MACOSX
@@ -972,7 +972,7 @@ bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
 
         case VclEventId::WindowMouseButtonUp:
             aMouseEvent.mnButton = pEvent->GetButtons();
-            bSuccess = ImplLOKHandleMouseEvent(pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
+            bSuccess = ImplLOKHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONUP, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime,
 #ifdef MACOSX

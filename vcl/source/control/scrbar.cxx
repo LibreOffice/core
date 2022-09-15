@@ -1251,7 +1251,7 @@ tools::Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
 
 bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
+    if( rNEvt.GetType() == NotifyEventType::MOUSEMOVE )
     {
         const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
         if( pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )

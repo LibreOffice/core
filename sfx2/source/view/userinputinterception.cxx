@@ -173,13 +173,13 @@ namespace sfx2
     {
         Reference < XInterface > xHoldAlive( m_pData->m_rControllerImpl );
 
-        MouseNotifyEvent nType = _rEvent.GetType();
+        NotifyEventType nType = _rEvent.GetType();
         bool bHandled = false;
 
         switch ( nType )
         {
-            case MouseNotifyEvent::KEYINPUT:
-            case MouseNotifyEvent::KEYUP:
+            case NotifyEventType::KEYINPUT:
+            case NotifyEventType::KEYUP:
             {
                 KeyEvent aEvent;
                 lcl_initKeyEvent( aEvent, *_rEvent.GetKeyEvent() );
@@ -192,7 +192,7 @@ namespace sfx2
                     Reference< XKeyHandler > xHandler( aIterator.next() );
                     try
                     {
-                        if ( nType == MouseNotifyEvent::KEYINPUT )
+                        if ( nType == NotifyEventType::KEYINPUT )
                             bHandled = xHandler->keyPressed( aEvent );
                         else
                             bHandled = xHandler->keyReleased( aEvent );
@@ -213,8 +213,8 @@ namespace sfx2
             }
             break;
 
-            case MouseNotifyEvent::MOUSEBUTTONDOWN:
-            case MouseNotifyEvent::MOUSEBUTTONUP:
+            case NotifyEventType::MOUSEBUTTONDOWN:
+            case NotifyEventType::MOUSEBUTTONUP:
             {
                 MouseEvent aEvent;
                 lcl_initMouseEvent( aEvent, *_rEvent.GetMouseEvent() );
@@ -227,7 +227,7 @@ namespace sfx2
                     Reference< XMouseClickHandler > xHandler( aIterator.next() );
                     try
                     {
-                        if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
+                        if ( nType == NotifyEventType::MOUSEBUTTONDOWN )
                             bHandled = xHandler->mousePressed( aEvent );
                         else
                             bHandled = xHandler->mouseReleased( aEvent );

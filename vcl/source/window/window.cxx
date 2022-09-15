@@ -1816,14 +1816,14 @@ void Window::KeyInput( const KeyEvent& rKEvt )
             return;
     }
 
-    NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );
+    NotifyEvent aNEvt( NotifyEventType::KEYINPUT, this, &rKEvt );
     if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbKeyInput = true;
 }
 
 void Window::KeyUp( const KeyEvent& rKEvt )
 {
-    NotifyEvent aNEvt( MouseNotifyEvent::KEYUP, this, &rKEvt );
+    NotifyEvent aNEvt( NotifyEventType::KEYUP, this, &rKEvt );
     if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbKeyUp = true;
 }
@@ -1850,13 +1850,13 @@ void Window::GetFocus()
             return;
     }
 
-    NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
+    NotifyEvent aNEvt( NotifyEventType::GETFOCUS, this );
     CompatNotify( aNEvt );
 }
 
 void Window::LoseFocus()
 {
-    NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, this );
+    NotifyEvent aNEvt( NotifyEventType::LOSEFOCUS, this );
     CompatNotify( aNEvt );
 }
 
@@ -1926,7 +1926,7 @@ void Window::Command( const CommandEvent& rCEvt )
 {
     CallEventListeners( VclEventId::WindowCommand, const_cast<CommandEvent *>(&rCEvt) );
 
-    NotifyEvent aNEvt( MouseNotifyEvent::COMMAND, this, &rCEvt );
+    NotifyEvent aNEvt( NotifyEventType::COMMAND, this, &rCEvt );
     if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbCommand = true;
 }

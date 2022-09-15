@@ -138,7 +138,7 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
 
 bool SidebarToolBox::EventNotify (NotifyEvent& rEvent)
 {
-    if (rEvent.GetType() == MouseNotifyEvent::KEYINPUT)
+    if (rEvent.GetType() == NotifyEventType::KEYINPUT)
     {
         if (rEvent.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB)
         {

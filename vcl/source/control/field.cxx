@@ -853,7 +853,7 @@ Size NumericBox::CalcMinimumSize() const
 
 bool NumericBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplNumericProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -864,9 +864,9 @@ bool NumericBox::PreNotify( NotifyEvent& rNEvt )
 
 bool NumericBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
@@ -1472,7 +1472,7 @@ sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 
 bool MetricField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplMetricProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -1483,9 +1483,9 @@ bool MetricField::PreNotify( NotifyEvent& rNEvt )
 
 bool MetricField::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
@@ -1585,7 +1585,7 @@ Size MetricBox::CalcMinimumSize() const
 
 bool MetricBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2()  )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2()  )
     {
         if ( ImplMetricProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -1596,9 +1596,9 @@ bool MetricBox::PreNotify( NotifyEvent& rNEvt )
 
 bool MetricBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
@@ -1740,7 +1740,7 @@ void CurrencyField::dispose()
 
 bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -1751,9 +1751,9 @@ bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
 
 bool CurrencyField::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
@@ -1823,7 +1823,7 @@ void CurrencyBox::dispose()
 
 bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -1834,9 +1834,9 @@ bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 
 bool CurrencyBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();

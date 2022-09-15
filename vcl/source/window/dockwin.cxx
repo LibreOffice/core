@@ -531,7 +531,7 @@ bool DockingWindow::EventNotify( NotifyEvent& rNEvt )
     {
         const bool bDockingSupportCrippled = !StyleSettings::GetDockingFloatsSupported();
 
-        if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
+        if ( rNEvt.GetType() == NotifyEventType::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
             if ( pMEvt->IsLeft() )
@@ -563,7 +563,7 @@ bool DockingWindow::EventNotify( NotifyEvent& rNEvt )
                 }
             }
         }
-        else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        else if( rNEvt.GetType() == NotifyEventType::KEYINPUT )
         {
             const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
             if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&

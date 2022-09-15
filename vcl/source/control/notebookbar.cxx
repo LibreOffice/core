@@ -157,7 +157,7 @@ void NotebookBar::dispose()
 bool NotebookBar::PreNotify(NotifyEvent& rNEvt)
 {
     // capture KeyEvents for taskpane cycling
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
     {
         if (m_pSystemWindow)
             return m_pSystemWindow->PreNotify(rNEvt);

@@ -485,7 +485,7 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
 bool SpinField::EventNotify(NotifyEvent& rNEvt)
 {
     bool bDone = false;
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         if (!IsReadOnly())
@@ -539,7 +539,7 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
         }
     }
 
-    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+    if (rNEvt.GetType() == NotifyEventType::COMMAND)
     {
         if ((rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) && !IsReadOnly())
         {
@@ -857,7 +857,7 @@ tools::Rectangle* SpinField::ImplFindPartRect(const Point& rPt)
 
 bool SpinField::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE)
+    if (rNEvt.GetType() == NotifyEventType::MOUSEMOVE)
     {
         const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
         if (pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())

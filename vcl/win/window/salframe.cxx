@@ -5235,7 +5235,7 @@ static bool ImplHandleAppCommand( HWND hWnd, LPARAM lParam, LRESULT & nRet )
         const Point aPoint;
         CommandMediaData aMediaData(nCommand);
         CommandEvent aCEvt( aPoint, CommandEventId::Media, false, &aMediaData );
-        NotifyEvent aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
+        NotifyEvent aNCmdEvt( NotifyEventType::COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {

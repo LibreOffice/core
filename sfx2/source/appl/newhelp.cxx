@@ -1596,7 +1596,7 @@ TextWin_Impl::TextWin_Impl( vcl::Window* p ) : DockingWindow( p, 0 )
 
 bool TextWin_Impl::EventNotify( NotifyEvent& rNEvt )
 {
-    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
+    if( ( rNEvt.GetType() == NotifyEventType::KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
         return GetParent()->EventNotify( rNEvt );
     else
         return DockingWindow::EventNotify( rNEvt );
@@ -1979,8 +1979,8 @@ void SfxHelpTextWindow_Impl::Resize()
 bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
-    MouseNotifyEvent nType = rNEvt.GetType();
-    if ( MouseNotifyEvent::COMMAND == nType && rNEvt.GetCommandEvent() )
+    NotifyEventType nType = rNEvt.GetType();
+    if ( NotifyEventType::COMMAND == nType && rNEvt.GetCommandEvent() )
     {
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
         vcl::Window* pCmdWin = rNEvt.GetWindow();
@@ -2046,7 +2046,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             bDone = true;
         }
     }
-    else if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
+    else if ( NotifyEventType::KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
@@ -2492,7 +2492,7 @@ void SfxHelpWindow_Impl::dispose()
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( rNEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         // Backward == <ALT><LEFT> or <BACKSPACE> Forward == <ALT><RIGHT>
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();

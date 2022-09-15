@@ -2914,8 +2914,8 @@ static void lcl_InitMouseEvent(css::awt::MouseEvent& rEvent, const MouseEvent& r
 bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
-    MouseNotifyEvent nType = rNEvt.GetType();
-    if ( nType == MouseNotifyEvent::MOUSEBUTTONUP || nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
+    NotifyEventType nType = rNEvt.GetType();
+    if ( nType == NotifyEventType::MOUSEBUTTONUP || nType == NotifyEventType::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         if (pWindow == this)
@@ -2933,7 +2933,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
                         lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
                         if ( rNEvt.GetWindow() )
                             aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                        if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN)
+                        if ( nType == NotifyEventType::MOUSEBUTTONDOWN)
                             bDone = pImp->MousePressed( aEvent );
                         else
                             bDone = pImp->MouseReleased( aEvent );
@@ -2944,7 +2944,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
     }
     if (bDone)      // event consumed by a listener
     {
-        if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
+        if ( nType == NotifyEventType::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMouseEvent = rNEvt.GetMouseEvent();
             if ( pMouseEvent->IsRight() && pMouseEvent->GetClicks() == 1 )

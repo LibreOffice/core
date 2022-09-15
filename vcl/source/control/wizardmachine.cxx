@@ -429,7 +429,7 @@ namespace vcl
 
     bool RoadmapWizard::EventNotify( NotifyEvent& rNEvt )
     {
-        if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && mpPrevBtn && mpNextBtn )
+        if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && mpPrevBtn && mpNextBtn )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();

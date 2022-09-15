@@ -180,7 +180,7 @@ namespace svt::table
     bool TableDataWindow::EventNotify(NotifyEvent& rNEvt )
     {
         bool bDone = false;
-        if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
+        if ( rNEvt.GetType() == NotifyEventType::COMMAND )
         {
             const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
             if ( rCEvt.GetCommand() == CommandEventId::Wheel )

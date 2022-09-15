@@ -102,7 +102,7 @@ bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
     if ( !pView || !pView->GetObjectShell() )
         return Window::EventNotify( rNEvt );
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !m_pFrame->IsInPlace() )
         {
@@ -115,7 +115,7 @@ bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
         pView->GetBindings().Invalidate( SID_PASTE_SPECIAL );
         return true;
     }
-    else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    else if( rNEvt.GetType() == NotifyEventType::KEYINPUT )
     {
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
             return true;
@@ -134,15 +134,15 @@ IMPL_LINK(SfxFrameWindow_Impl, ModalHierarchyHdl, bool, bSetModal, void)
 
 bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    MouseNotifyEvent nType = rNEvt.GetType();
-    if ( nType == MouseNotifyEvent::KEYINPUT || nType == MouseNotifyEvent::KEYUP )
+    NotifyEventType nType = rNEvt.GetType();
+    if ( nType == NotifyEventType::KEYINPUT || nType == NotifyEventType::KEYUP )
     {
         SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
         SfxViewShell* pShell = pView ? pView->GetViewShell() : nullptr;
         if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
             return true;
     }
-    else if ( nType == MouseNotifyEvent::MOUSEBUTTONUP || nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
+    else if ( nType == NotifyEventType::MOUSEBUTTONUP || nType == NotifyEventType::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
@@ -153,7 +153,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     return true;
     }
 
-    if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
+    if ( nType == NotifyEventType::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         const MouseEvent* pMEvent = rNEvt.GetMouseEvent();

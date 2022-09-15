@@ -1068,7 +1068,7 @@ namespace
 
 bool PatternField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         EditImplementation aAdapt(*GetField());
         if ( ImplPatternProcessKeyInput( aAdapt, *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
@@ -1082,9 +1082,9 @@ bool PatternField::PreNotify( NotifyEvent& rNEvt )
 
 bool PatternField::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
@@ -1121,7 +1121,7 @@ void PatternBox::dispose()
 
 bool PatternBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         EditImplementation aAdapt(*GetField());
         if ( ImplPatternProcessKeyInput( aAdapt, *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
@@ -1135,9 +1135,9 @@ bool PatternBox::PreNotify( NotifyEvent& rNEvt )
 
 bool PatternBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
@@ -2024,7 +2024,7 @@ void DateField::dispose()
 
 bool DateField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && IsStrictFormat() &&
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && IsStrictFormat() &&
          ( GetExtDateFormat() != ExtDateFieldFormat::SystemLong ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
@@ -2037,9 +2037,9 @@ bool DateField::PreNotify( NotifyEvent& rNEvt )
 
 bool DateField::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() )
         {
@@ -2129,7 +2129,7 @@ void DateBox::dispose()
 
 bool DateBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && IsStrictFormat() &&
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && IsStrictFormat() &&
          ( GetExtDateFormat() != ExtDateFieldFormat::SystemLong ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
@@ -2153,9 +2153,9 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool DateBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() )
         {
@@ -2897,7 +2897,7 @@ void TimeField::dispose()
 
 bool TimeField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplTimeProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -2908,9 +2908,9 @@ bool TimeField::PreNotify( NotifyEvent& rNEvt )
 
 bool TimeField::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
         {
@@ -3039,7 +3039,7 @@ void TimeBox::dispose()
 
 bool TimeBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == NotifyEventType::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplTimeProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
             return true;
@@ -3050,9 +3050,9 @@ bool TimeBox::PreNotify( NotifyEvent& rNEvt )
 
 bool TimeBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+    if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
         MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+    else if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
     {
         if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();

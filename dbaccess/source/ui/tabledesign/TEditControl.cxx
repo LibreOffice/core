@@ -1661,7 +1661,7 @@ void OTableEditorCtrl::DeactivateCell(bool bUpdate)
 
 bool OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
+    if (rNEvt.GetType() == NotifyEventType::GETFOCUS)
     {
         if( pHelpTextCell && pHelpTextCell->HasChildPathFocus() )
             m_eChildFocus = HELPTEXT;
