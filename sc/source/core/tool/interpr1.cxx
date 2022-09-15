@@ -2308,8 +2308,26 @@ void ScInterpreter::ScCell()
         }
         else if( aInfoType == "ADDRESS" )
         {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
+
+            // Follow the configurable string reference address syntax as also
+            // used by INDIRECT() (and ADDRESS() for the sheet separator).
+            FormulaGrammar::AddressConvention eConv = maCalcConfig.meStringRefAddressSyntax;
+            switch (eConv)
+            {
+                default:
+                    // Use the current address syntax if unspecified or says
+                    // one or the other or one we don't explicitly handle.
+                    eConv = mrDoc.GetAddressConvention();
+                break;
+                case FormulaGrammar::CONV_OOO:
+                case FormulaGrammar::CONV_XL_A1:
+                case FormulaGrammar::CONV_XL_R1C1:
+                    // Use that.
+                break;
+            }
+
             ScRefFlags nFlags = (aCellPos.Tab() == aPos.Tab()) ? ScRefFlags::ADDR_ABS : ScRefFlags::ADDR_ABS_3D;
-            OUString aStr(aCellPos.Format(nFlags, &mrDoc, mrDoc.GetAddressConvention()));
+            OUString aStr(aCellPos.Format(nFlags, &mrDoc, eConv));
             PushString(aStr);
         }
         else if( aInfoType == "FILENAME" )
