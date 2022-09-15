@@ -2662,7 +2662,7 @@ bool SwCursorShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
 
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
 
-    pPos->nContent = nPos;
+    pPos->SetContent(nPos)  ;
     UpdateCursor();
 
     return true;
@@ -3476,7 +3476,7 @@ bool SwCursorShell::SelectHiddenRange()
             {
                 // make selection:
                 m_pCurrentCursor->SetMark();
-                m_pCurrentCursor->GetMark()->nContent = nHiddenEnd;
+                m_pCurrentCursor->GetMark()->SetContent(nHiddenEnd);
                 bRet = true;
             }
         }
@@ -3742,12 +3742,9 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
                    SwTextNode& rNode, sal_Int32 nBegin, sal_Int32 nLen )
 {
     // create SwPosition for nStartIndex
-    SwContentIndex aIndex( &rNode, nBegin );
-    SwPosition aStartPos( rNode, aIndex );
-
+    SwPosition aStartPos( rNode, nBegin );
     // create SwPosition for nEndIndex
-    SwPosition aEndPos( aStartPos );
-    aEndPos.nContent = nBegin + nLen;
+    SwPosition aEndPos( rNode, nBegin + nLen );
 
     const uno::Reference<text::XTextRange> xRange =
         SwXTextRange::CreateXTextRange(rNode.GetDoc(), aStartPos, &aEndPos);
@@ -3844,7 +3841,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     while (pChar && *pChar-- == CH_TXTATR_INWORD)
         ++nRight;
 
-    aPos.nContent = nBegin + nLeft;
+    aPos.SetContent( nBegin + nLeft );
     pCursor = GetCursor();
     *pCursor->GetPoint() = aPos;
     pCursor->SetMark();
@@ -3856,8 +3853,8 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     const sal_Int32 nWordEnd = std::min(nBegin + nLen - nLeft - nRight, nLineEnd);
     Push();
     pCursor->DeleteMark();
-    SwContentIndex& rContent = GetCursor()->GetPoint()->nContent;
-    rContent = nWordStart;
+    SwPosition& rPos = *GetCursor()->GetPoint();
+    rPos.SetContent( nWordStart );
     SwRect aStartRect;
     SwCursorMoveState aState;
     aState.m_bRealWidth = true;
@@ -3867,7 +3864,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
             GetLayout(), pCursor->GetPoint(), &tmp);
 
     pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
-    rContent = nWordEnd - 1;
+    rPos.SetContent( nWordEnd - 1 );
     SwRect aEndRect;
     pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
     rSelectRect = aStartRect.Union( aEndRect );
