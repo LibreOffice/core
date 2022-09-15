@@ -119,12 +119,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     StoreToTempFile("writer_pdf_Export");
 
     // Then make sure the field links the source.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     // Without the accompanying fix in place, this test would have failed, the field was not
     // clickable (while it was clickable on the UI).
@@ -632,16 +627,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     StoreToTempFile("writer_pdf_Export");
 
     // Then make sure that a fillable form widget is emitted:
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
-    {
-        return;
-    }
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -661,16 +647,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     StoreToTempFile("writer_pdf_Export");
 
     // Then make sure that a checkbox form widget is emitted:
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
-    {
-        return;
-    }
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -695,16 +672,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     StoreToTempFile("writer_pdf_Export");
 
     // Then make sure that a dropdown form widget is emitted:
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
-    {
-        return;
-    }
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -715,6 +683,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
     // Also check the form widget type (our dropdown is called combo in PDF terms):
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::ComboBox,
+                         pAnnotation->getFormFieldType(pPdfDocument.get()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
+{
+    // Given a file with a date content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DATE);
+
+    // When exporting to PDF:
+    StoreToTempFile("writer_pdf_Export");
+
+    // Then make sure that a date form widget is emitted:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the date content control was just exported as normal text.
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+    // Also check the form widget type (our date is a mode of text in PDF terms):
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::TextField,
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
 }
 

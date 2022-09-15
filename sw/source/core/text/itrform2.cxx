@@ -958,6 +958,17 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             }
             break;
         }
+        case SwContentControlType::DATE:
+        {
+            pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
+            auto pEditWidget = static_cast<vcl::PDFWriter::EditWidget*>(pDescriptor.get());
+            pEditWidget->Format = vcl::PDFWriter::Date;
+            // GetDateFormat() uses a syntax that works with SvNumberFormatter::PutEntry(), PDF's
+            // AFDate_FormatEx() uses a similar syntax, but uses lowercase characters in case of
+            // "Y", "M" and "D" at least.
+            pEditWidget->DateFormat = pContentControl->GetDateFormat().toAsciiLowerCase();
+            break;
+        }
         default:
             break;
     }

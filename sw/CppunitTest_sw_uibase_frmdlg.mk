@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uibase_frmdlg, \
     unotest \
     utl \
     vcl \
+    tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_uibase_frmdlg,\

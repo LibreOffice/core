@@ -84,6 +84,13 @@
     void TestName::verify()
 
 class SwXTextDocument;
+namespace vcl
+{
+namespace pdf
+{
+class PDFiumDocument;
+}
+}
 
 /// Base class for filter tests loading or roundtripping a document, then asserting the document model.
 class SWQAHELPER_DLLPUBLIC SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
@@ -104,6 +111,7 @@ protected:
 
     sal_uInt32 mnStartTime;
     utl::TempFile maTempFile;
+    SvMemoryStream maMemory; ///< Underlying memory for parsed PDF files.
     bool mbExported; ///< Does maTempFile already contain something useful?
     bool mbFontNameWYSIWYG;
 
@@ -397,6 +405,8 @@ protected:
     SwDoc* getSwDoc();
 
     void StoreToTempFile(const OUString& rFilterName);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> LoadPdfFromTempFile();
 };
 
 /**

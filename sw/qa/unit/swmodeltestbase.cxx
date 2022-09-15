@@ -27,6 +27,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
@@ -764,6 +765,18 @@ void SwModelTestBase::StoreToTempFile(const OUString& rFilterName)
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= rFilterName;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+}
+
+std::unique_ptr<vcl::pdf::PDFiumDocument> SwModelTestBase::LoadPdfFromTempFile()
+{
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return nullptr;
+    }
+    return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
