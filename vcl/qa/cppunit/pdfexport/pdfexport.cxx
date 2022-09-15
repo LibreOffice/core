@@ -2231,6 +2231,51 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf114256)
     CPPUNIT_ASSERT_EQUAL(13, pPdfPage->getObjectCount());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150931)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
+    saveAsPDF(u"tdf150931.ods");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 15
+    // - Actual  : 16
+    CPPUNIT_ASSERT_EQUAL(16, nPageObjectCount);
+
+    int nYellowPathCount = 0;
+    int nBlackPathCount = 0;
+    int nGrayPathCount = 0;
+    int nRedPathCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
+        if (pPdfPageObject->getType() != vcl::pdf::PDFPageObjectType::Path)
+            continue;
+
+        int nSegments = pPdfPageObject->getPathSegmentCount();
+        CPPUNIT_ASSERT_EQUAL(5, nSegments);
+
+        if (pPdfPageObject->getFillColor() == COL_YELLOW)
+            ++nYellowPathCount;
+        else if (pPdfPageObject->getFillColor() == COL_BLACK)
+            ++nBlackPathCount;
+        else if (pPdfPageObject->getFillColor() == COL_GRAY)
+            ++nGrayPathCount;
+        else if (pPdfPageObject->getFillColor() == COL_LIGHTRED)
+            ++nRedPathCount;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(3, nYellowPathCount);
+    CPPUNIT_ASSERT_EQUAL(3, nRedPathCount);
+    CPPUNIT_ASSERT_EQUAL(3, nGrayPathCount);
+    CPPUNIT_ASSERT_EQUAL(3, nBlackPathCount);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147027)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
