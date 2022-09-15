@@ -452,6 +452,8 @@ void PivotTableDataProvider::collectPivotTableData()
 
                                 if (bFound)
                                 {
+                                    assert(pItem && "bHasContinueFlag must be false on this or some preceding element");
+
                                     if (i >= m_aCategoriesRowOrientation.size())
                                         m_aCategoriesRowOrientation.resize(i + 1);
 
