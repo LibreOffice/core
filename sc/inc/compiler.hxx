@@ -33,6 +33,7 @@
 #include <queue>
 #include <vector>
 #include <memory>
+#include <unordered_set>
 #include <set>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -324,7 +325,7 @@ private:
         formula::FormulaTokenRef operation;
     };
     std::vector< PendingImplicitIntersectionOptimization > mPendingImplicitIntersectionOptimizations;
-    std::set<formula::FormulaTokenRef> mUnhandledPossibleImplicitIntersections;
+    std::unordered_set<formula::FormulaTokenRef> mUnhandledPossibleImplicitIntersections;
 #ifdef DBG_UTIL
     std::set<OpCode> mUnhandledPossibleImplicitIntersectionsOpCodes;
 #endif
