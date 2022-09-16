@@ -8,7 +8,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 #test bookmark dialog
 class bookmarkDialog(UITestCase):
@@ -120,5 +120,34 @@ class bookmarkDialog(UITestCase):
 
                 self.assertEqual(xDoc.Text.String, "fubar")
                 self.assertEqual(get_state_as_dict(x1stListEntry)["Text"], "1\tBookmark 1\tfubar\tNo\t")
+
+    def test_bookmark_dialog_hidden_from_DOCX_import(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf95495.docx")) as XDoc:
+
+            # check Hidden field of the imported hidden bookmarks
+            with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="close") as xBookDlg:
+                xBmk = xBookDlg.getChild("bookmarks")
+                xFirstListEntry = xBmk.getChild("0") #  select first bookmark
+
+                # _Toc bookmark had Hidden == "No"
+                self.assertEqual(get_state_as_dict(xFirstListEntry)["Text"], "1\t_Toc448303248\t    A. Comment-Based Help         A.1 Introduction…\tYes\t")
+
+                xSecondListEntry = xBmk.getChild("1") #  select second bookmark
+
+                # _Rec bookmark had Hidden == "No"
+                self.assertEqual(get_state_as_dict(xSecondListEntry)["Text"], "1\t_Ref463365573\t    A. Comment-Based Help         A.1 Introduction…\tYes\t")
+
+            # insert a new bookmark with the default name
+            with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="insert"):
+                pass
+
+            # check Hidden field of the newly inserted bookmark
+            with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="close") as xBookDlg:
+                xBmk = xBookDlg.getChild("bookmarks")
+                xFirstListEntry = xBmk.getChild("0") #  select first bookmark
+                xFirstListEntry.executeAction("SELECT", tuple())
+
+                # Newly inserted bookmarks get Hidden = "No"
+                self.assertEqual(get_state_as_dict(xFirstListEntry)["Text"], "1\tBookmark 1\t\tNo\t")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -517,13 +517,22 @@ void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::IMark* const pMark
     }
 
     const OUString& sHideCondition = pBookmark->GetHideCondition();
-    OUString sHidden = SwResId(STR_BOOKMARK_NO);
-    if (pBookmark->IsHidden() || !sHideCondition.isEmpty())
-        sHidden = SwResId(STR_BOOKMARK_YES);
+    const OUString& sName = pBookmark->GetName();
+    OUString sHidden
+        = (pBookmark->IsHidden() || !sHideCondition.isEmpty() ||
+           // tdf#150955 add "hidden" status to the imported OOXML _Toc and _Ref bookmarks
+           // to allow separating custom bookmarks by sorting based on their Hidden status.
+           // Note: this "hidden" means here only that these bookmarks haven't got
+           // visible bookmark formatting aids (gray I-shape or brackets), otherwise
+           // their anchor are still visible.
+           sName.startsWith("_Toc") || sName.startsWith("_Ref"))
+              ? SwResId(STR_BOOKMARK_YES)
+              : SwResId(STR_BOOKMARK_NO);
+
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     int nRow = m_xControl->n_children();
     m_xControl->append(weld::toId(pMark), sPageNum);
-    m_xControl->set_text(nRow, pBookmark->GetName(), 1);
+    m_xControl->set_text(nRow, sName, 1);
     m_xControl->set_text(nRow, sBookmarkNodeText, 2);
     m_xControl->set_text(nRow, sHidden, 3);
     m_xControl->set_text(nRow, sHideCondition, 4);
