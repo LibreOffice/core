@@ -835,8 +835,7 @@ Reference< XShape > const & Shape::createAndInsert(
         maSize.Height = 0;
         for (auto const& elem : mpTablePropertiesPtr->getTableRows())
         {
-            // WARN: When less than minimum sized rows exist, calculated height here
-            // is corrected before layouting takes place
+            // WARN: If some rows can't fit the content, this is not the final height
             maSize.Height = o3tl::saturating_add(maSize.Height, elem.getHeight());
         }
     }
@@ -1263,7 +1262,7 @@ Reference< XShape > const & Shape::createAndInsert(
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
             if ( auto* pTableShape = dynamic_cast<sdr::table::SdrTableObj*>(SdrObject::getSdrObjectFromXShape(mxShape)) )
             {
-                // Disable layouting until an attempt at correcting faulty table height is made
+                // Disable layouting until table height is expanded to fit the content
                 pTableShape->SetSkipChangeLayout(true);
             }
         }
@@ -1502,11 +1501,13 @@ Reference< XShape > const & Shape::createAndInsert(
 
             if (mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape")
             {
-                // Powerpoint sometimes export row heights less than the minimum size,
-                // which during import expanded to the minimum
+                // Powerpoint exports desired row heights (i.e. what user attempted to set it as, not how it appears visually)
+                // Expand table height if there are rows that can't fit the content
                 if (auto* pTableShape = dynamic_cast<sdr::table::SdrTableObj*>(SdrObject::getSdrObjectFromXShape(mxShape)))
                 {
-                    sal_Int32 nCorrectedHeight = pTableShape->getHeightWithoutFitting();
+                    tools::Rectangle aArea{};
+                    pTableShape->LayoutTableHeight(aArea, /*bFit=*/false);
+                    sal_Int32 nCorrectedHeight = aArea.GetHeight();
                     const auto& aShapeSize = mxShape->getSize();
                     if( nCorrectedHeight > aShapeSize.Height )
                         mxShape->setSize( {aShapeSize.Width, nCorrectedHeight} );
