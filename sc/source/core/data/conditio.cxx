@@ -649,12 +649,15 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     // Evaluate formulas
     bool bDirty = false; // 1 and 2 separate?
 
-    std::unique_ptr<ScFormulaCell> pTemp1;
+    std::optional<ScFormulaCell> oTemp;
     ScFormulaCell* pEff1 = pFCell1.get();
     if ( bRelRef1 )
     {
-        pTemp1.reset(pFormula1 ? new ScFormulaCell(*mpDoc, rPos, *pFormula1) : new ScFormulaCell(*mpDoc, rPos));
-        pEff1 = pTemp1.get();
+        if (pFormula1)
+            oTemp.emplace(*mpDoc, rPos, *pFormula1);
+        else
+            oTemp.emplace(*mpDoc, rPos);
+        pEff1 = &*oTemp;
         pEff1->SetFreeFlying(true);
     }
     if ( pEff1 )
@@ -678,14 +681,16 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             }
         }
     }
-    pTemp1.reset();
+    oTemp.reset();
 
-    std::unique_ptr<ScFormulaCell> pTemp2;
     ScFormulaCell* pEff2 = pFCell2.get(); //@ 1!=2
     if ( bRelRef2 )
     {
-        pTemp2.reset(pFormula2 ? new ScFormulaCell(*mpDoc, rPos, *pFormula2) : new ScFormulaCell(*mpDoc, rPos));
-        pEff2 = pTemp2.get();
+        if (pFormula2)
+            oTemp.emplace(*mpDoc, rPos, *pFormula2);
+        else
+            oTemp.emplace(*mpDoc, rPos);
+        pEff2 = &*oTemp;
         pEff2->SetFreeFlying(true);
     }
     if ( pEff2 )
@@ -708,7 +713,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             }
         }
     }
-    pTemp2.reset();
+    oTemp.reset();
 
     // If IsRunning, the last values remain
     if (bDirty && !bFirstRun)
