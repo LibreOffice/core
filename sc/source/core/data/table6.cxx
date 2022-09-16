@@ -482,6 +482,11 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     if (bSkipFiltered)
                         SkipFilteredRows(nRow, nLastNonFilteredRow, true);
 
+                    // GetSearchAndReplaceStart sets a nCol of -1 for
+                    // ColDirection() only if rSearchItem.GetPattern() is true,
+                    // so a negative column shouldn't be possible here.
+                    assert(nCol >= 0 && "negative nCol for ColDirection");
+
                     bFound = SearchCell(rSearchItem, nCol, blockPos[ nCol ],
                                         nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
