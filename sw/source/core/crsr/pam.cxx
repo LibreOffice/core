@@ -61,29 +61,36 @@ static sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentIndex & rContent )
     : nNode( rNodeIndex ), nContent( rContent )
 {
+    assert((!rNodeIndex.GetNode().GetContentNode() || rNodeIndex.GetNode().GetContentNode() == rContent.GetContentNode())
+            && "parameters point to different nodes");
 }
 
 SwPosition::SwPosition( const SwNode & rNode, const SwContentIndex & rContent )
     : nNode( rNode ), nContent( rContent )
 {
+    assert((!rNode.GetContentNode() || rNode.GetContentNode() == rContent.GetContentNode())
+            && "parameters point to different nodes");
 }
 
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
     : nNode( rNodeIndex ), nContent( pContentNode, nContentOffset )
 {
-    assert(!pContentNode || pContentNode == &rNodeIndex.GetNode());
+    assert((!pContentNode || pContentNode == &rNodeIndex.GetNode()) &&
+            "parameters point to different nodes");
 }
 
 SwPosition::SwPosition( const SwNode & rNode, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
     : nNode( rNode ), nContent( pContentNode, nContentOffset )
 {
-    assert(!pContentNode || pContentNode == &rNode);
+    assert((!pContentNode || pContentNode == &rNode) &&
+            "parameters point to different nodes");
 }
 
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
     : nNode( rNodeIndex, nDiff ), nContent( pContentNode, nContentOffset )
 {
-    assert(!pContentNode || pContentNode == &rNodeIndex.GetNode());
+    assert((!pContentNode || pContentNode == &rNodeIndex.GetNode()) &&
+            "parameters point to different nodes");
 }
 
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff )
