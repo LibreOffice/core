@@ -1117,6 +1117,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         {
             sSelectionText = "EMPTY";
             sSelectionTextView = "EMPTY";
+            if (!pOtherShell)
+                pViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", OString());
         }
 
         if (bTableSelection)
