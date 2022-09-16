@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <sdpage.hxx>
 
@@ -118,6 +119,8 @@ public:
     void testTdf109169_OctagonBevel();
     void testTdf109169_DiamondBevel();
     void testTdf144092_emptyShapeTextProps();
+    void testTdf149551_tbrl90();
+    void testTdf149551_btlr();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -202,6 +205,8 @@ public:
     CPPUNIT_TEST(testTdf109169_OctagonBevel);
     CPPUNIT_TEST(testTdf109169_DiamondBevel);
     CPPUNIT_TEST(testTdf144092_emptyShapeTextProps);
+    CPPUNIT_TEST(testTdf149551_tbrl90);
+    CPPUNIT_TEST(testTdf149551_btlr);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2138,6 +2143,78 @@ void SdOOXMLExportTest3::testTdf144092_emptyShapeTextProps()
     xCell->getPropertyValue("CharColor") >>= aColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x70AD47), aColor);
     CPPUNIT_ASSERT_EQUAL(float(96), xCell->getPropertyValue("CharHeight").get<float>());
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf149551_tbrl90()
+{
+    // The document contains a shape with writing mode TB_RL90. That is the same as vert="vert" in
+    // OOXML. Without the patch it was not possible to use this writing mode at all.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf149551_tbrl90.odp"), ODP);
+
+    // Test, that the shape has writing mode TB_RL90.
+    uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0, xDocShRef));
+    sal_Int16 eWritingMode;
+    xShapeProps->getPropertyValue("WritingMode") >>= eWritingMode;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90, eWritingMode);
+
+    // Test, that it is exported to vert="vert"
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "//a:bodyPr", "vert", "vert");
+
+    // Test, that the shape has writing mode TB_RL90 after read from pptx
+    uno::Reference<beans::XPropertySet> xShapeProps2(getShapeFromPage(0, 0, xDocShRef));
+    sal_Int16 eWritingMode2;
+    xShapeProps2->getPropertyValue("WritingMode") >>= eWritingMode2;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90, eWritingMode2);
+
+    // Test, that it is written to odp with loext:writing-mode="tb-rl90"
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODP), aTempFile);
+    pXmlDoc = parseExport(aTempFile, "content.xml");
+    assertXPath(
+        pXmlDoc,
+        "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='tb-rl90']");
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf149551_btlr()
+{
+    // The document contains a shape with writing mode BT_LR. That is the same as vert="vert270" in
+    // OOXML. Without the patch it was not possible to use this writing mode at all for shapes.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf149551_btlr.odp"), ODP);
+
+    // Test, that the shape has writing mode BT_LR.
+    uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0, xDocShRef));
+    sal_Int16 eWritingMode;
+    xShapeProps->getPropertyValue("WritingMode") >>= eWritingMode;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, eWritingMode);
+
+    // Test, that it is exported to vert="vert270"
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "//a:bodyPr", "vert", "vert270");
+
+    // Test, that the shape has writing mode BT_LR after read from pptx
+    uno::Reference<beans::XPropertySet> xShapeProps2(getShapeFromPage(0, 0, xDocShRef));
+    sal_Int16 eWritingMode2;
+    xShapeProps2->getPropertyValue("WritingMode") >>= eWritingMode2;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, eWritingMode2);
+
+    // Test, that it is written to odp with loext:writing-mode="bt-lr"
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODP), aTempFile);
+    pXmlDoc = parseExport(aTempFile, "content.xml");
+    assertXPath(
+        pXmlDoc,
+        "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='bt-lr']");
+
     xDocShRef->DoClose();
 }
 
