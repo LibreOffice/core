@@ -2831,7 +2831,8 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             // that content
             aPam.DeleteMark();
             aIntPam.DeleteMark();
-            *aPam.GetPoint() = *aIntPam.GetPoint() = SwPosition(pDoc->GetNodes());
+            aIntPam.GetPoint()->Assign(*pDoc->GetNodes()[SwNodeOffset(0)]);
+            *aPam.GetPoint() = *aIntPam.GetPoint();
 
             pFormat = pDoc->MakeFlyAndMove( *pCopySource, aFrameSet,
                            nullptr,

@@ -517,7 +517,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                 do
                 {
                     // We want to be before the table
-                    *pNew->GetPoint() = SwPosition(*pTab);
+                    pNew->GetPoint()->Assign(*pTab);
                     pC = GoPreviousNds( &pNew->GetPoint()->nNode, false ); // here we are.
                     if( pC )
                         pNew->GetPoint()->nContent.Assign( pC, 0 );

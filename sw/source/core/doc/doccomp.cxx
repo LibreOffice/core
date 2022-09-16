@@ -1567,7 +1567,7 @@ void CompareData::ShowDelete(
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
             SwNodeIndex aTmpPos( pTmp->GetMark()->GetNode(), -1 );
-            *pCorr->GetPoint() = SwPosition( aTmpPos );
+            pCorr->GetPoint()->Assign( aTmpPos );
         }
     }
 }
@@ -1682,7 +1682,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                     SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
                     if (prev.GetNode().IsTextNode())
                     {
-                        *pTmp->GetMark() = SwPosition(
+                        pTmp->GetMark()->Assign(
                             *prev.GetNode().GetTextNode(),
                             prev.GetNode().GetTextNode()->Len());
                     }
@@ -1725,7 +1725,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
                 if (prev.GetNode().IsTextNode())
                 {
-                    *pTmp->GetMark() = SwPosition(
+                    pTmp->GetMark()->Assign(
                         *prev.GetNode().GetTextNode(),
                         prev.GetNode().GetTextNode()->Len());
                 }

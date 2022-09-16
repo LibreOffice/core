@@ -806,7 +806,7 @@ namespace sw
                 // the point node may be deleted in AppendRedline, so park
                 // the PaM somewhere safe
                 aRegion.DeleteMark();
-                *aRegion.GetPoint() = SwPosition(mrDoc.GetNodes());
+                aRegion.GetPoint()->Assign(*mrDoc.GetNodes()[SwNodeOffset(0)]);
                 mrDoc.getIDocumentRedlineAccess().AppendRedline(pNewRedline, true);
                 mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::NONE | RedlineFlags::ShowInsert |
                      RedlineFlags::ShowDelete );

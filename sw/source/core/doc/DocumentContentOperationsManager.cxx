@@ -688,13 +688,13 @@ namespace
 
         while (iter != Breaks.rend())
         {
-            rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
+            rStart.Assign(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
             if (rStart < rEnd) // check if part is empty
             {
                 bRet &= (rDocumentContentOperations.*pFunc)(aPam, flags);
                 nOffset = iter->first - rStart.GetNodeIndex(); // deleted fly nodes...
             }
-            rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
+            rEnd.Assign(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
             ++iter;
         }
 
@@ -3480,7 +3480,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     {
         // park aPam somewhere so it does not point to node that is deleted
         aPam.DeleteMark();
-        *aPam.GetPoint() = SwPosition(m_rDoc.GetNodes().GetEndOfContent());
+        aPam.GetPoint()->Assign(m_rDoc.GetNodes().GetEndOfContent());
         return ReplaceRangeImpl(rPam, rStr, bRegExReplace); // original pam!
     }
 
@@ -3504,7 +3504,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
 
     while (iter != Breaks.rend())
     {
-        rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
+        rStart.Assign(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
         if (rStart < rEnd) // check if part is empty
         {
             bRet &= (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
@@ -3512,7 +3512,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
                 : DeleteAndJoinImpl(aPam, SwDeleteFlags::Default);
             nOffset = iter->first - rStart.GetNodeIndex(); // deleted fly nodes...
         }
-        rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
+        rEnd.Assign(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
         ++iter;
     }
 
@@ -4825,7 +4825,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
 
     while (iter != Breaks.rend())
     {
-        rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
+        rStart.Assign(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
         if (rStart < rEnd) // check if part is empty
         {
             // pass in copyRange member as rPos; should work ...
@@ -4842,7 +4842,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
             }
             bFirst = false;
         }
-        rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
+        rEnd.Assign(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
         ++iter;
     }
 

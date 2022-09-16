@@ -717,9 +717,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     {
         SAL_WARN("sw.xml", "Recursive change tracking, removing");
         // reuse aPaM to remove it from nodes that will be deleted
-        *aPaM.GetPoint() = SwPosition(pRedlineInfo->pContentIndex->GetNode());
+        aPaM.GetPoint()->Assign(pRedlineInfo->pContentIndex->GetNode());
         aPaM.SetMark();
-        *aPaM.GetMark() = SwPosition(*pRedlineInfo->pContentIndex->GetNode().EndOfSectionNode());
+        aPaM.GetMark()->Assign(*pRedlineInfo->pContentIndex->GetNode().EndOfSectionNode());
         pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
     }
     else

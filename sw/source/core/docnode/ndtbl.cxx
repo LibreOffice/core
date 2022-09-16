@@ -2011,7 +2011,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             SwPaM aSavePaM( *pTableNd->EndOfSectionNode() );
             if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
             {
-                *aSavePaM.GetMark() = SwPosition( *pTableNd );
+                aSavePaM.GetMark()->Assign( *pTableNd );
                 aSavePaM.Move( fnMoveBackward, GoInNode );
             }
             {
@@ -2061,7 +2061,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             SwPaM aSavePaM( *pTableNd->EndOfSectionNode() );
             if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
             {
-                *aSavePaM.GetMark() = SwPosition( *pTableNd );
+                aSavePaM.GetMark()->Assign( *pTableNd );
                 aSavePaM.Move( fnMoveBackward, GoInNode );
             }
             {

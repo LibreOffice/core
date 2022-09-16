@@ -3397,7 +3397,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     // ooo103014-1.odt to .doc
     // park m_pOrigPam as well, as needed for exporting abi9915-1.odt to doc
     m_pOrigPam->DeleteMark();
-    *m_pOrigPam->GetPoint() = SwPosition(m_rDoc.GetNodes().GetEndOfContent());
+    m_pOrigPam->GetPoint()->Assign(m_rDoc.GetNodes().GetEndOfContent());
     static_cast<SwPaM&>(*m_pCurPam) = *m_pOrigPam;
 
     m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags);

@@ -95,7 +95,7 @@ namespace sw::mark
                             if (nFields == 0)
                             {
                                 assert(!ret); // one per field
-                                ret = SwPosition(rTextNode, i - 1);
+                                ret.emplace(rTextNode, i - 1);
 #ifndef DBG_UTIL
                                 return *ret;
 #endif

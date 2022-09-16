@@ -1065,9 +1065,9 @@ namespace
             {
                 m_pCursor->SetMark();
                 *m_pCursor->GetMark() = *m_rRedline.GetMark();
-                *m_rRedline.GetMark() = SwPosition(rDoc.GetNodes().GetEndOfContent());
+                m_rRedline.GetMark()->Assign(rDoc.GetNodes().GetEndOfContent());
             }
-            *m_rRedline.GetPoint() = SwPosition(rDoc.GetNodes().GetEndOfContent());
+            m_rRedline.GetPoint()->Assign(rDoc.GetNodes().GetEndOfContent());
         }
         ~TemporaryRedlineUpdater()
         {

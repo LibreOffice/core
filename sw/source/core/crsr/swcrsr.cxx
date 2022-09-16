@@ -1304,7 +1304,7 @@ bool SwCursor::GoStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayou
 
         if (nPtPos < pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            *GetPoint() = SwPosition(*pTextNd, nPtPos);
+            GetPoint()->Assign(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1334,7 +1334,7 @@ bool SwCursor::GoEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
         if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0 &&
             GetPoint()->GetContentIndex() != nPtPos )
         {
-            *GetPoint() = SwPosition(*pTextNd, nPtPos);
+            GetPoint()->Assign(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1362,7 +1362,7 @@ bool SwCursor::GoNextWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout
 
         if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            *GetPoint() = SwPosition(*pTextNd, nPtPos);
+            GetPoint()->Assign(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1397,7 +1397,7 @@ bool SwCursor::GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout
 
         if (nPtPos < pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            *GetPoint() = SwPosition(*pTextNd, nPtPos);
+            GetPoint()->Assign(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1479,11 +1479,11 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
 
             if( aBndry.startPos != aBndry.endPos )
             {
-                *GetPoint() = SwPosition(*pEndNode, nEndIndex);
+                GetPoint()->Assign(*pEndNode, nEndIndex);
                 if( !IsSelOvr() )
                 {
                     SetMark();
-                    *GetMark() = SwPosition(*pStartNode, nStartIndex);
+                    GetMark()->Assign(*pStartNode, nStartIndex);
                     if (sw::mark::IMark* pAnnotationMark = pMarksAccess->getAnnotationMarkFor(*GetPoint()))
                     {
                         // An annotation mark covers the selected word. Check
@@ -1607,7 +1607,7 @@ bool SwCursor::GoSentence(SentenceMoveType eMoveType, SwRootFrame const*const pL
         // character in the text thus <= ...Len
         if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            *GetPoint() = SwPosition(*pTextNd, nPtPos);
+            GetPoint()->Assign(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1651,11 +1651,11 @@ void SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
     // character in the text thus <= ...Len
     if (nStartPos <= pStartNd->GetText().getLength() && nStartPos >= 0)
     {
-        *GetMark() = SwPosition(*pStartNd, nStartPos);
+        GetMark()->Assign(*pStartNd, nStartPos);
     }
     if (nEndPos <= pEndNd->GetText().getLength() && nEndPos >= 0)
     {
-        *GetPoint() = SwPosition(*pEndNd, nEndPos);
+        GetPoint()->Assign(*pEndNd, nEndPos);
     }
 }
 

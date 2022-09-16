@@ -240,7 +240,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                 else
                 {
                     assert(pCnt->IsNoTextFrame());
-                    aTextPos = SwPosition( *static_cast<SwNoTextFrame const*>(pCnt)->GetNode() );
+                    aTextPos.Assign( *static_cast<SwNoTextFrame const*>(pCnt)->GetNode() );
                 }
             }
         }

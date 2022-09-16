@@ -475,11 +475,11 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound().GetContentNode() )
             {
-                rPam.GetBound() = SwPosition( *pTextNd );
+                rPam.GetBound().Assign( *pTextNd );
             }
             if( pDelNd == rPam.GetBound( false ).GetContentNode() )
             {
-                rPam.GetBound( false ) = SwPosition( *pTextNd );
+                rPam.GetBound( false ).Assign( *pTextNd );
             }
             pTextNd->JoinNext();
         }

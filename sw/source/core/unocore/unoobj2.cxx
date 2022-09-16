@@ -868,11 +868,11 @@ void SwXTextRange::DeleteAndInsert(
             }
         }
         // now there should be a text node at the start and end of it!
-        *aCursor.GetPoint() = SwPosition(start);
+        aCursor.GetPoint()->Assign(start);
         aCursor.Move( fnMoveForward, GoInContent );
         assert(aCursor.GetPoint()->GetNode() <= end.GetNode());
         aCursor.SetMark();
-        *aCursor.GetPoint() = SwPosition(end);
+        aCursor.GetPoint()->Assign(end);
         aCursor.Move( fnMoveBackward, GoInContent );
         assert(start <= aCursor.GetPoint()->GetNode());
     }

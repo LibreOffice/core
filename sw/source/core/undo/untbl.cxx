@@ -2419,7 +2419,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                                 pUndoRedlineDelete->ContentStart() );
                     }
                     else
-                        *aPam.GetPoint() = SwPosition( aTmpIdx );
+                        aPam.GetPoint()->Assign( aTmpIdx );
                 }
                 else if (pUndoDelete && pUndoDelete->IsDelFullPara())
                 {
@@ -2702,7 +2702,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
-        aCellEnd = SwPosition(*rBox.GetSttNd()->EndOfSectionNode(), SwNodeOffset(0));
+        aCellEnd.Assign(*rBox.GetSttNd()->EndOfSectionNode());
         SwPaM aTmpPam( aDeleteStart, aCellEnd );
         pUndo = std::make_unique<SwUndoDelete>(aTmpPam, SwDeleteFlags::Default, true);
     }

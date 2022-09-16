@@ -988,7 +988,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 }
                 else
                 {
-                    aPos = SwPosition( aCopyIndex );
+                    aPos.Assign( aCopyIndex );
                     nMoveIndex = aPos.GetNodeIndex() + m_nReplaceDummy + 1;
                 }
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);

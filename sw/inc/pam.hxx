@@ -234,7 +234,7 @@ public:
         {
             /** clear the mark position; this helps if mark's SwContentIndex is
                registered at some node, and that node is then deleted */
-            *m_pMark = SwPosition( GetPointNode().GetNodes() );
+            m_pMark->Assign( *GetPointNode().GetNodes()[SwNodeOffset(0)] );
             m_pMark = m_pPoint;
         }
     }

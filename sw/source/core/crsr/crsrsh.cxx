@@ -1541,7 +1541,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
     }
 
     if ( pTextNd )
-        rPos = SwPosition( *pTextNd, 0 );
+        rPos.Assign( *pTextNd, 0 );
 }
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
