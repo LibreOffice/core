@@ -324,15 +324,9 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
 OUString ScGlobal::GetDocTabName( std::u16string_view rFileName,
                                 std::u16string_view rTabName )
 {
-    OUString  aDocTab = OUString::Concat("'") + rFileName;
-    sal_Int32 nPos = 1;
-    while( (nPos = aDocTab.indexOf( '\'', nPos )) != -1 )
-    {   // escape Quotes
-        aDocTab = aDocTab.replaceAt( nPos, 0, u"\\" );
-        nPos += 2;
-    }
-    aDocTab += "'" + OUStringChar(SC_COMPILER_FILE_TAB_SEP) + rTabName;
-        // "'Doc'#Tab"
+    OUString aDocTab(rFileName);
+    // "'Doc'#Tab"
+    aDocTab = "'" + aDocTab.replaceAll(u"'", u"\\'") + "'" + OUStringChar(SC_COMPILER_FILE_TAB_SEP) + rTabName;
     return aDocTab;
 }
 
