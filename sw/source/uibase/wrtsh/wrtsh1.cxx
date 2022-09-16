@@ -650,7 +650,7 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     if (comphelper::LibreOfficeKit::isActive())
     {
         const auto classId = xRef->getClassID();
-        if (!SotExchange::IsChart(classId) /* && !SotExchange::IsMath(classId) */)
+        if (!SotExchange::IsChart(classId) && !SotExchange::IsMath(classId))
             return;
     }
 
