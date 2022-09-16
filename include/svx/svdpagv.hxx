@@ -57,7 +57,7 @@ class SVXCORE_DLLPUBLIC SdrPageView
 private:
     SdrView&     mrView;
     SdrPage*     mpPage;
-    Point        aPgOrg;   // The Page's point of origin
+    Point        maPageOrigin;   // The Page's point of origin
 
     tools::Rectangle    aMarkBound;
     tools::Rectangle    aMarkSnap;
@@ -199,12 +199,12 @@ public:
     bool IsReadOnly() const;
 
     /// The Origin always refers to the upper left corner of the Page
-    const Point& GetPageOrigin() const { return aPgOrg; }
+    const Point& GetPageOrigin() const { return maPageOrigin; }
     void SetPageOrigin(const Point& rOrg);
 
-    void LogicToPagePos(Point& rPnt) const { rPnt-=aPgOrg; }
-    void LogicToPagePos(tools::Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
-    void PagePosToLogic(Point& rPnt) const { rPnt+=aPgOrg; }
+    void LogicToPagePos(Point& rPnt) const { rPnt-=maPageOrigin; }
+    void LogicToPagePos(tools::Rectangle& rRect) const { rRect.Move(-maPageOrigin.X(),-maPageOrigin.Y()); }
+    void PagePosToLogic(Point& rPnt) const { rPnt+=maPageOrigin; }
 
     void SetVisibleLayers(const SdrLayerIDSet& rSet) { aLayerVisi=rSet; }
     const SdrLayerIDSet& GetVisibleLayers() const { return aLayerVisi; }
