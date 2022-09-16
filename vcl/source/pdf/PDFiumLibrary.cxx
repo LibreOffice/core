@@ -250,6 +250,7 @@ public:
     std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex) override;
     std::vector<basegfx::B2DPoint> getLineGeometry() override;
     PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) override;
+    float getFormFontSize(PDFiumDocument* pDoc) override;
 };
 
 class PDFiumPageObjectImpl final : public PDFiumPageObject
@@ -1133,6 +1134,18 @@ PDFFormFieldType PDFiumAnnotationImpl::getFormFieldType(PDFiumDocument* pDoc)
     auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
     return PDFFormFieldType(
         FPDFAnnot_GetFormFieldType(pDocImpl->getFormHandlePointer(), mpAnnotation));
+}
+
+float PDFiumAnnotationImpl::getFormFontSize(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    float fRet{};
+    if (!FPDFAnnot_GetFormFontSize(pDocImpl->getFormHandlePointer(), mpAnnotation, &fRet))
+    {
+        return 0.0f;
+    }
+
+    return fRet;
 }
 
 namespace

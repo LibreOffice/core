@@ -978,6 +978,12 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         return false;
     }
 
+    const SwFont* pFont = rInf.GetFont();
+    if (pFont)
+    {
+        pDescriptor->TextFont = pFont->GetActualFont();
+    }
+
     SwRect aLocation;
     rInf.CalcRect(*this, &aLocation);
     pDescriptor->Location = aLocation.SVRect();

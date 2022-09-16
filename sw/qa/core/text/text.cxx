@@ -18,6 +18,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
@@ -709,6 +710,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     // Also check the form widget type (our date is a mode of text in PDF terms):
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::TextField,
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
+{
+    // Given a document with a custom 24pt font size and a content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SfxItemSetFixed<RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE> aSet(pWrtShell->GetAttrPool());
+    SvxFontHeightItem aItem(480, 100, RES_CHRATR_FONTSIZE);
+    aSet.Put(aItem);
+    pWrtShell->SetAttrSet(aSet);
+    pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
+
+    // When exporting that document to PDF:
+    StoreToTempFile("writer_pdf_Export");
+
+    // Then make sure that the widget in the PDF result has that custom font size:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 24
+    // - Actual  : 8
+    // i.e. i.e. the font size was some default, not the 24pt specified in the model.
+    CPPUNIT_ASSERT_EQUAL(24.0f, pAnnotation->getFormFontSize(pPdfDocument.get()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
