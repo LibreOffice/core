@@ -1878,7 +1878,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveDeleteFieldEntry)
         xPop->remove("deletefield");
 
-    bool bRemoveDeleteEntry =
+    const bool bRemoveDeleteEntry =
             bRemoveDeleteChapterEntry ||
             bRemoveDeleteTableEntry ||
             bRemoveDeleteFrameEntry ||
