@@ -2299,6 +2299,23 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                     WriteSolidFill(color, nTransparency);
                 }
             }
+            else if (GetDocumentType() == DOCUMENT_PPTX)
+            {
+                // Resolve COL_AUTO for PPTX since MS Powerpoint doesn't have automatic colors.
+                bool bIsTextBackgroundDark = mbIsBackgroundDark;
+                if (rXShapePropSet.is() && GetProperty(rXShapePropSet, "FillStyle")
+                    && mAny.get<FillStyle>() != FillStyle_NONE
+                    && GetProperty(rXShapePropSet, "FillColor"))
+                {
+                    ::Color aShapeFillColor(ColorTransparency, mAny.get<sal_uInt32>());
+                    bIsTextBackgroundDark = aShapeFillColor.IsDark();
+                }
+
+                if (bIsTextBackgroundDark)
+                    WriteSolidFill(COL_WHITE);
+                else
+                    WriteSolidFill(COL_BLACK);
+            }
         }
     }
 

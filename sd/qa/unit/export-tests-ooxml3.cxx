@@ -121,6 +121,7 @@ public:
     void testTdf144092_emptyShapeTextProps();
     void testTdf149551_tbrl90();
     void testTdf149551_btlr();
+    void testTdf94122_autoColor();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -207,6 +208,7 @@ public:
     CPPUNIT_TEST(testTdf144092_emptyShapeTextProps);
     CPPUNIT_TEST(testTdf149551_tbrl90);
     CPPUNIT_TEST(testTdf149551_btlr);
+    CPPUNIT_TEST(testTdf94122_autoColor);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2216,6 +2218,46 @@ void SdOOXMLExportTest3::testTdf149551_btlr()
         "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='bt-lr']");
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf94122_autoColor()
+{
+    // Document contains three pages, with different scenarios for automatic
+    // color export to pptx.
+    // - First page: Page background light, automatic colored text on a FillType_NONE shape
+    // - Second page: Page background dark, automatic colored text on a FillType_NONE shape
+    // - Third page: Page background light, automatic colored text on a dark colored fill
+    //   and another automatic colored text on a light colored fill
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf94122_autocolor.odp"), ODP);
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Without the accompanying fix in place, these tests would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - In ..., XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr' number of nodes is incorrect
+    // i.e. automatic color wasn't resolved & exported
+
+    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
+                "000000");
+
+    xmlDocUniquePtr pXmlDocContent2 = parseExport(tempFile, "ppt/slides/slide2.xml");
+    assertXPath(pXmlDocContent2,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
+                "ffffff");
+
+    xmlDocUniquePtr pXmlDocContent3 = parseExport(tempFile, "ppt/slides/slide3.xml");
+    assertXPath(pXmlDocContent3,
+                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
+                "val", "ffffff");
+    assertXPath(pXmlDocContent3,
+                "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
+                "val", "000000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
