@@ -23,6 +23,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
+#include <tools/color.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
@@ -84,6 +85,14 @@ private:
     hb_blob_t* mpBlob;
 };
 
+struct ColorLayer
+{
+    sal_GlyphId nGlyphIndex;
+    uint32_t nColorIndex;
+};
+
+typedef std::vector<Color> ColorPalette;
+
 // TODO: no more direct access to members
 // TODO: get rid of height/width for scalable fonts
 // TODO: make cloning cheaper
@@ -125,6 +134,10 @@ public:
     bool CreateFontSubset(std::vector<sal_uInt8>&, const sal_GlyphId*, const sal_uInt8*, const int,
                           FontSubsetInfo&) const;
 
+    bool HasColorLayers() const;
+    const ColorPalette& GetColorPalette(size_t) const;
+    std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
+
     virtual hb_face_t* GetHbFace() const;
     virtual hb_blob_t* GetHbTable(hb_tag_t) const
     {
@@ -137,6 +150,7 @@ protected:
     mutable FontCharMapRef mxCharMap;
     mutable vcl::FontCapabilities maFontCapabilities;
     mutable bool mbFontCapabilitiesRead;
+    mutable std::vector<ColorPalette> maColorPalettes;
 
     explicit PhysicalFontFace(const FontAttributes&);
 };

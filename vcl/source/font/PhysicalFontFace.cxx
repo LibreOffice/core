@@ -36,6 +36,8 @@
 
 #include <string_view>
 
+#include <hb-ot.h>
+
 namespace vcl::font
 {
 PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
@@ -304,6 +306,59 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
 
     // write subset into destination file
     return CreateTTFfontSubset(aSftFont, rOutBuffer, pGlyphIds, pEncoding, nGlyphCount);
+}
+
+bool PhysicalFontFace::HasColorLayers() const
+{
+    const auto pHbFace = GetHbFace();
+    return hb_ot_color_has_layers(pHbFace) && hb_ot_color_has_palettes(pHbFace);
+}
+
+const ColorPalette& PhysicalFontFace::GetColorPalette(size_t nIndex) const
+{
+    if (maColorPalettes.empty())
+    {
+        const auto pHbFace = GetHbFace();
+
+        auto nPalettes = hb_ot_color_palette_get_count(pHbFace);
+        maColorPalettes.reserve(nPalettes);
+        for (auto nPalette = 0u; nPalette < nPalettes; nPalette++)
+        {
+            auto nColors = hb_ot_color_palette_get_colors(pHbFace, nPalette, 0, nullptr, nullptr);
+            ColorPalette aPalette(nColors);
+            for (auto nColor = 0u; nColor < nColors; nColor++)
+            {
+                uint32_t nCount = 1;
+                hb_color_t aColor;
+                hb_ot_color_palette_get_colors(pHbFace, nPalette, nColor, &nCount, &aColor);
+                auto a = hb_color_get_alpha(aColor);
+                auto r = hb_color_get_red(aColor);
+                auto g = hb_color_get_green(aColor);
+                auto b = hb_color_get_blue(aColor);
+                aPalette[nColor] = Color(ColorAlphaTag::ColorAlpha, a, r, g, b);
+            }
+            maColorPalettes.push_back(aPalette);
+        }
+    }
+
+    return maColorPalettes[nIndex];
+}
+
+std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyphIndex) const
+{
+    const auto pHbFace = GetHbFace();
+
+    auto nLayers = hb_ot_color_glyph_get_layers(pHbFace, nGlyphIndex, 0, nullptr, nullptr);
+    std::vector<ColorLayer> aLayers(nLayers);
+    for (auto nLayer = 0u; nLayer < nLayers; nLayer++)
+    {
+        hb_ot_color_layer_t aLayer;
+        uint32_t nCount = 1;
+        hb_ot_color_glyph_get_layers(pHbFace, nGlyphIndex, nLayer, &nCount, &aLayer);
+        aLayers[nLayer] = { aLayer.glyph, aLayer.color_index };
+    }
+
+    return aLayers;
 }
 }
 
