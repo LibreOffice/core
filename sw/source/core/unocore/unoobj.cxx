@@ -746,6 +746,12 @@ namespace {
 
 enum ForceIntoMetaMode { META_CHECK_BOTH, META_INIT_START, META_INIT_END };
 
+enum ForceIntoContentControlMode
+{
+    CONTENT_CONTROL_CHECK_BOTH,
+    CONTENT_CONTROL_INIT_START,
+    CONTENT_CONTROL_INIT_END
+};
 }
 
 static bool
@@ -790,6 +796,61 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
             break;
     }
     return bRet;
+}
+
+namespace
+{
+bool lcl_ForceIntoContentControl(SwPaM& rCursor, const uno::Reference<text::XText>& xParentText,
+                                 ForceIntoContentControlMode eMode)
+{
+    bool bRet = true; // means not forced in CONTENT_CONTROL_CHECK_BOTH
+    auto pXContentControl = dynamic_cast<SwXContentControl*>(xParentText.get());
+    if (!pXContentControl)
+    {
+        SAL_WARN("sw.core", "lcl_ForceIntoContentControl: no parent text");
+        throw uno::RuntimeException();
+    }
+
+    SwTextNode* pTextNode;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+    bool bSuccess = pXContentControl->SetContentRange(pTextNode, nStart, nEnd);
+    if (!bSuccess)
+    {
+        SAL_WARN("sw.core", "lcl_ForceIntoContentControl: SetContentRange() failed");
+        throw uno::RuntimeException();
+    }
+
+    // Force the cursor back into the content control if it has moved outside.
+    SwPosition aStart(*pTextNode, nStart);
+    SwPosition aEnd(*pTextNode, nEnd);
+    switch (eMode)
+    {
+        case CONTENT_CONTROL_INIT_START:
+            *rCursor.GetPoint() = aStart;
+            break;
+
+        case CONTENT_CONTROL_INIT_END:
+            *rCursor.GetPoint() = aEnd;
+            break;
+
+        case CONTENT_CONTROL_CHECK_BOTH:
+            if (*rCursor.Start() < aStart)
+            {
+                *rCursor.Start() = aStart;
+                bRet = false;
+            }
+
+            if (*rCursor.End() > aEnd)
+            {
+                *rCursor.End() = aEnd;
+                bRet = false;
+            }
+            break;
+    }
+
+    return bRet;
+}
 }
 
 bool SwXTextCursor::IsAtEndOfMeta() const
@@ -956,6 +1017,11 @@ SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand)
                     META_CHECK_BOTH)
             && bRet;
     }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH)
+               && bRet;
+    }
     return bRet;
 }
 
@@ -973,6 +1039,11 @@ SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand)
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
+    }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH)
+               && bRet;
     }
     return bRet;
 }
@@ -1023,6 +1094,10 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
     {
         lcl_ForceIntoMeta(rUnoCursor, m_xParentText, META_INIT_START);
     }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_INIT_START);
+    }
 }
 
 void SAL_CALL
@@ -1050,6 +1125,10 @@ SwXTextCursor::gotoEnd(sal_Bool Expand)
     else if (CursorType::Meta == m_eType)
     {
         lcl_ForceIntoMeta(rUnoCursor, m_xParentText, META_INIT_END);
+    }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_INIT_END);
     }
 }
 
@@ -1158,6 +1237,15 @@ SwXTextCursor::gotoRange(
                 static_cast<text::XWordCursor*>(this));
         }
     }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        SwPaM aPaM(*pPam->GetMark(), *pPam->GetPoint());
+        if (!lcl_ForceIntoContentControl(aPaM, m_xParentText, CONTENT_CONTROL_CHECK_BOTH))
+        {
+            throw uno::RuntimeException("gotoRange: xRange is out of bounds of the content control",
+                                        static_cast<text::XWordCursor*>(this));
+        }
+    }
 
     // selection has to be expanded here
     if(bExpand)
@@ -1261,6 +1349,10 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
+    else if (bRet && m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH);
+    }
 
     return bRet;
 }
@@ -1301,6 +1393,10 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
+    else if (bRet && m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH);
+    }
 
     return bRet;
 }
@@ -1336,6 +1432,10 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH);
+    }
 
     return bRet;
 }
@@ -1370,6 +1470,10 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
+    }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH);
     }
 
     return bRet;
@@ -1454,6 +1558,11 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand)
                     META_CHECK_BOTH)
             && bRet;
     }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH)
+               && bRet;
+    }
     return bRet;
 }
 
@@ -1482,6 +1591,11 @@ SwXTextCursor::gotoPreviousSentence(sal_Bool Expand)
                     META_CHECK_BOTH)
             && bRet;
     }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH)
+               && bRet;
+    }
     return bRet;
 }
 
@@ -1504,6 +1618,11 @@ SwXTextCursor::gotoStartOfSentence(sal_Bool Expand)
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
+    }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH)
+               && bRet;
     }
     return bRet;
 }
@@ -1528,6 +1647,11 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand)
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
+    }
+    else if (m_eType == CursorType::ContentControl)
+    {
+        bRet = lcl_ForceIntoContentControl(rUnoCursor, m_xParentText, CONTENT_CONTROL_CHECK_BOTH)
+               && bRet;
     }
     return bRet;
 }

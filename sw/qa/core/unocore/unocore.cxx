@@ -345,6 +345,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
     std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
+
+    // Also verify that setText() and getText() works:
+    uno::Reference<text::XText> xContentControlText(xContentControl, uno::UNO_QUERY);
+    xContentControlText->setString("new");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: new
+    // - Actual  :
+    // i.e. getString() always returned an empty string.
+    CPPUNIT_ASSERT_EQUAL(OUString("new"), xContentControlText->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)
