@@ -937,6 +937,7 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xCo
     m_xControl->enable_toggle_buttons(weld::ColumnToggleType::Check);
     CreateDropDown();
     m_xControl->connect_key_press(LINK(this, SvxMenuEntriesListBox, KeyInputHdl));
+    m_xControl->connect_query_tooltip(LINK(this, SvxMenuEntriesListBox, QueryTooltip));
 }
 
 SvxMenuEntriesListBox::~SvxMenuEntriesListBox()
@@ -966,6 +967,21 @@ IMPL_LINK(SvxMenuEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
         return false; // pass on to default handler
     }
     return true;
+}
+
+IMPL_LINK(SvxMenuEntriesListBox, QueryTooltip, const weld::TreeIter&, rIter, OUString)
+{
+    SvxConfigEntry *pEntry = weld::fromId<SvxConfigEntry*>(m_xControl->get_id(rIter));
+    if (!pEntry || pEntry->GetCommand().isEmpty())
+        return OUString();
+    const OUString sCommand(pEntry->GetCommand());
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(m_pPage->GetFrame()));
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
+    OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties,
+                                                                            m_pPage->GetFrame());
+    return CuiResId(RID_CUISTR_COMMANDLABEL) + ": " + pEntry->GetName().replaceFirst("~", "") + "\n" +
+            CuiResId(RID_CUISTR_COMMANDNAME) + ": " + sCommand + "\n" +
+            CuiResId(RID_CUISTR_COMMANDTIP) + ": " + sTooltipLabel.replaceFirst("~", "");
 }
 
 /******************************************************************************

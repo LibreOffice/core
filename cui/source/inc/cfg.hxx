@@ -348,6 +348,7 @@ public:
     }
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
 
     void CreateDropDown();
 };

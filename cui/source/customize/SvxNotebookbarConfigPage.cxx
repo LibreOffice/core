@@ -240,7 +240,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
         if (xImage.is())
             rTreeView.set_image(rIter, xImage, -1);
         rTreeView.set_text(rIter, aName, 0);
-        rTreeView.set_id(rIter, sUIItemId);
+        rTreeView.set_id(rIter, sUIItemCommand);
     }
 }
 
@@ -438,8 +438,6 @@ void SvxNotebookbarConfigPage::SelectElement()
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     rTreeView.bulk_insert_for_each(
         aEntries.size(), [this, &rTreeView, &aEntries](weld::TreeIter& rIter, int nIdx) {
-            OUString sId(OUString::number(nIdx));
-            rTreeView.set_id(rIter, sId);
             if (aEntries[nIdx].sActionName != "Null")
             {
                 if (aEntries[nIdx].sVisibleValue == "True")
@@ -467,6 +465,9 @@ SvxNotebookbarEntriesListBox::SvxNotebookbarEntriesListBox(std::unique_ptr<weld:
     m_xControl->connect_toggled(LINK(this, SvxNotebookbarEntriesListBox, CheckButtonHdl));
     m_xControl->connect_key_press(Link<const KeyEvent&, bool>());
     m_xControl->connect_key_press(LINK(this, SvxNotebookbarEntriesListBox, KeyInputHdl));
+    // remove the inherited connect_query_tooltip then add the new one
+    m_xControl->connect_query_tooltip(Link<const weld::TreeIter&, OUString>());
+    m_xControl->connect_query_tooltip(LINK(this, SvxNotebookbarEntriesListBox, QueryTooltip));
 }
 
 SvxNotebookbarEntriesListBox::~SvxNotebookbarEntriesListBox() {}
@@ -538,6 +539,21 @@ IMPL_LINK(SvxNotebookbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent,
         return true;
     }
     return SvxMenuEntriesListBox::KeyInputHdl(rKeyEvent);
+}
+
+IMPL_LINK(SvxNotebookbarEntriesListBox, QueryTooltip, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sCommand = m_xControl->get_id(rIter);
+    if (sCommand.isEmpty())
+        return OUString();
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(m_pPage->GetFrame()));
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
+    OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties,
+                                                                            m_pPage->GetFrame());
+    return CuiResId(RID_CUISTR_COMMANDLABEL) + ": "
+           + m_xControl->get_text(rIter).replaceFirst("~", "") + "\n"
+           + CuiResId(RID_CUISTR_COMMANDNAME) + ": " + sCommand + "\n"
+           + CuiResId(RID_CUISTR_COMMANDTIP) + ": " + sTooltipLabel.replaceFirst("~", "");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

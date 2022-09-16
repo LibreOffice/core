@@ -77,6 +77,7 @@ class SvxNotebookbarEntriesListBox final : public SvxMenuEntriesListBox
     void ChangedVisibility(int nRow);
     DECL_LINK(CheckButtonHdl, const weld::TreeView::iter_col&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
 
 public:
     SvxNotebookbarEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPg);
