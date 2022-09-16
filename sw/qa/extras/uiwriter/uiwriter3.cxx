@@ -948,6 +948,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
+{
+    createSwDoc();
+
+    // Insert text box with ctrl key
+    // Without the fix in place, this test would have crashed here
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+    dispatchCommand(mxComponent, ".uno:Edit", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147961)
 {
     SwDoc* pDoc = createSwDoc();
