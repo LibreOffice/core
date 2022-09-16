@@ -2355,7 +2355,7 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
 
 void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 {
-    OSL_ENSURE(pNewSubTree != nullptr, "OSQLParseNode: invalid NewSubTree");
+    assert(pNewSubTree != nullptr && "OSQLParseNode: invalid NewSubTree");
     OSL_ENSURE(pNewSubTree->getParent() == nullptr, "OSQLParseNode: Node is not an orphan");
 
     // Create connection to getParent
@@ -2367,7 +2367,7 @@ void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 
 OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 {
-    OSL_ENSURE(nPos < m_aChildren.size(),"Illegal position for removeAt");
+    assert(nPos < m_aChildren.size() && "Illegal position for removeAt");
     auto aPos(m_aChildren.begin() + nPos);
     auto pNode = std::move(*aPos);
 
@@ -2382,7 +2382,7 @@ OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 
 OSQLParseNode* OSQLParseNode::replace(OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
 {
-    OSL_ENSURE(pOldSubNode != nullptr && pNewSubNode != nullptr, "OSQLParseNode: invalid nodes");
+    assert(pOldSubNode != nullptr && pNewSubNode != nullptr && "OSQLParseNode: invalid nodes");
     OSL_ENSURE(pNewSubNode->getParent() == nullptr, "OSQLParseNode: node already has getParent");
     OSL_ENSURE(std::any_of(m_aChildren.begin(), m_aChildren.end(),
                    [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pOldSubNode; }),
