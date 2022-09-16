@@ -3385,7 +3385,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                     rProp.Value >>= aAdjustmentSeq;
                 else if (rProp.Name == "TextRotateAngle")
                 {
-                    double fTextRotateAngle; // degree
+                    double fTextRotateAngle = 0; // degree
                     rProp.Value >>= fTextRotateAngle;
                     nTextRotateAngleDeg100 = Degree100(std::lround(fTextRotateAngle * 100.0));
                 }
