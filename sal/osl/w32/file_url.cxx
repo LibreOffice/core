@@ -581,7 +581,7 @@ oslFileError osl_getSystemPathFromFileURL_(const OUString& strURL, rtl_uString *
 
     SAL_WARN_IF(
         sUTF8.getLength() != strURL.getLength() &&
-        0 == strURL.matchIgnoreAsciiCase("file:\\")
+        strURL.matchIgnoreAsciiCase("file:\\")
         , "sal.osl"
         ,"osl_getSystemPathFromFileURL: \"" << strURL << "\" is not encoded !!!");
 
