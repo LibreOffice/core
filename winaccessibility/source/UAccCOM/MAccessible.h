@@ -192,17 +192,8 @@ private:
     HRESULT GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
 
-    // the following private methods are used to implement accSelect method
-    HRESULT SelectChild(css::accessibility::XAccessible* pItem);
-    HRESULT DeSelectChild(css::accessibility::XAccessible* pItem);
-    HRESULT SelectMultipleChidren(css::accessibility::XAccessible** pItem,
-                int size);
-    HRESULT DeSelectMultipleChildren(css::accessibility::XAccessible** pItem,
-                int size);
     static css::accessibility::XAccessibleContext* GetContextByXAcc(
             css::accessibility::XAccessible* pXAcc);
-    css::uno::Reference<css::accessibility::XAccessibleSelection> GetSelection();
-    // end accSelect implementation methods
     static bool GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
             css::uno::XInterface**, XInterfaceType);
     HRESULT WINAPI SmartQI(void* pv, REFIID iid, void** ppvObject);
