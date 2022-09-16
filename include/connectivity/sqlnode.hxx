@@ -258,7 +258,7 @@ namespace connectivity
         void append(OSQLParseNode* pNewSubTree);
         void insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree);
 
-        OSQLParseNode* replace(OSQLParseNode* pOldSubTree, OSQLParseNode* pNewSubTree);
+        void replaceAndDelete(OSQLParseNode* pOldSubTree, OSQLParseNode* pNewSubTree);
 
         OSQLParseNode* removeAt(sal_uInt32 nPos);
 

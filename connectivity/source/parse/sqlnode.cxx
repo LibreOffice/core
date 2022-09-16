@@ -92,8 +92,7 @@ namespace
 
     void replaceAndReset(connectivity::OSQLParseNode*& _pResetNode,connectivity::OSQLParseNode* _pNewNode)
     {
-        _pResetNode->getParent()->replace(_pResetNode, _pNewNode);
-        delete _pResetNode;
+        _pResetNode->getParent()->replaceAndDelete(_pResetNode, _pNewNode);
         _pResetNode = _pNewNode;
     }
 
@@ -1500,7 +1499,7 @@ void OSQLParseNode::substituteParameterNames(OSQLParseNode const * _pNode)
         if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() > 1)
         {
             OSQLParseNode* pNewNode = new OSQLParseNode("?" ,SQLNodeType::Punctuation,0);
-            delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
+            pChildNode->replaceAndDelete(pChildNode->getChild(0), pNewNode);
             sal_Int32 nChildCount = pChildNode->count();
             for(sal_Int32 j=1;j < nChildCount;++j)
                 delete pChildNode->removeAt(1);
@@ -1865,9 +1864,9 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             disjunctiveNormalForm(pSearchCondition);
         }
         else if(SQL_ISRULE(pLeft,boolean_primary) && (!SQL_ISRULE(pLeft->getChild(1),search_condition) || !SQL_ISRULE(pLeft->getChild(1),boolean_term)))
-            pSearchCondition->replace(pLeft, pLeft->removeAt(1));
+            pSearchCondition->replaceAndDelete(pLeft, pLeft->removeAt(1));
         else if(SQL_ISRULE(pRight,boolean_primary) && (!SQL_ISRULE(pRight->getChild(1),search_condition) || !SQL_ISRULE(pRight->getChild(1),boolean_term)))
-            pSearchCondition->replace(pRight, pRight->removeAt(1));
+            pSearchCondition->replaceAndDelete(pRight, pRight->removeAt(1));
     }
 }
 
@@ -1954,8 +1953,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
                 assert(SQL_ISTOKEN(pNot,NOT));
                 pNotNot = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::sql_not));
             }
-            pComparison->replace(pNot, pNotNot);
-            delete pNot;
+            pComparison->replaceAndDelete(pNot, pNotNot);
         }
         else
         {
@@ -1984,8 +1982,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
                 pNewComparison = new OSQLParseNode("=",SQLNodeType::Equal,SQL_EQUAL);
                 break;
             }
-            pSearchCondition->replace(pComparison, pNewComparison);
-            delete pComparison;
+            pSearchCondition->replaceAndDelete(pComparison, pNewComparison);
         }
     }
 
@@ -2007,8 +2004,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
             assert(SQL_ISTOKEN(pNot,NOT));
             pNotNot = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::sql_not));
         }
-        pPart2->replace(pNot, pNotNot);
-        delete pNot;
+        pPart2->replaceAndDelete(pNot, pNotNot);
     }
     else if(bNegate && SQL_ISRULE(pSearchCondition,like_predicate))
     {
@@ -2018,8 +2014,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
             pNotNot = new OSQLParseNode("NOT",SQLNodeType::Keyword,SQL_TOKEN_NOT);
         else
             pNotNot = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::sql_not));
-        pSearchCondition->getChild( 1 )->replace(pNot, pNotNot);
-        delete pNot;
+        pSearchCondition->getChild( 1 )->replaceAndDelete(pNot, pNotNot);
     }
 }
 
@@ -2380,27 +2375,24 @@ OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 
 // Replace methods
 
-OSQLParseNode* OSQLParseNode::replace(OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
+void OSQLParseNode::replaceAndDelete(OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
 {
     assert(pOldSubNode != nullptr && pNewSubNode != nullptr && "OSQLParseNode: invalid nodes");
-    OSL_ENSURE(pNewSubNode->getParent() == nullptr, "OSQLParseNode: node already has getParent");
-    OSL_ENSURE(std::any_of(m_aChildren.begin(), m_aChildren.end(),
-                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pOldSubNode; }),
-               "OSQLParseNode::Replace() Node not element of parent");
-    OSL_ENSURE(std::none_of(m_aChildren.begin(), m_aChildren.end(),
-                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewSubNode; }),
-               "OSQLParseNode::Replace() Node already element of parent");
+    assert(pOldSubNode != pNewSubNode && "OSQLParseNode: same node");
+    assert(pNewSubNode->getParent() == nullptr && "OSQLParseNode: node already has getParent");
+    assert(std::any_of(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pOldSubNode; })
+               && "OSQLParseNode::Replace() Node not element of parent");
+    assert(std::none_of(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewSubNode; })
+               && "OSQLParseNode::Replace() Node already element of parent");
 
     pOldSubNode->setParent( nullptr );
     pNewSubNode->setParent( this );
     auto it = std::find_if(m_aChildren.begin(), m_aChildren.end(),
         [&pOldSubNode](const std::unique_ptr<OSQLParseNode>& rxChild) { return rxChild.get() == pOldSubNode; });
-    if (it != m_aChildren.end())
-    {
-        it->release();
-        it->reset(pNewSubNode);
-    }
-    return pOldSubNode;
+    assert(it != m_aChildren.end());
+    it->reset(pNewSubNode);
 }
 
 void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const

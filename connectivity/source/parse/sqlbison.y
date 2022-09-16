@@ -4749,8 +4749,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 		OSQLParseNode* pParent = pLiteral->getParent();
 
 		OSQLParseNode* pNewNode = new OSQLInternalNode(pLiteral->getTokenValue(), SQLNodeType::String);
-		pParent->replace(pLiteral, pNewNode);
-		delete pLiteral;
+		pParent->replaceAndDelete(pLiteral, pNewNode);
 		pLiteral = nullptr;
 		return 1;
 	}
