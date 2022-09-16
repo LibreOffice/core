@@ -24,6 +24,8 @@
 #include <rtl/ustring.hxx>
 
 #ifdef _WIN32
+#include <comphelper/windowserrorstring.hxx>
+
 #include <boost/property_tree/json_parser.hpp>
 
 #include <sqlite3.h>
@@ -98,7 +100,7 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
     char* err(nullptr);
     Value value;
     OString const statement("SELECT value, LENGTH(encrypted_value), encrypted_value FROM cookies "
-                            "WHERE name = \"FedAuth\"  and host_key = \""
+                            "WHERE name = \"FedAuth\" AND host_key = \""
                             + ::rtl::OUStringToOString(rHost, RTL_TEXTENCODING_ASCII_US) + "\";");
     rc = sqlite3_exec(db, statement.getStr(), callback, &value, &err);
     if (rc != SQLITE_OK)
@@ -113,7 +115,7 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
     }
     if (value.encryptedValue.getLength() < 3 + 12 + 16)
     {
-        SAL_INFO("ucb.ucp.webdav.curl", "encrypted_value too short");
+        SAL_INFO("ucb.ucp.webdav.curl", "encrypted_value too short: " << value.encryptedValue.getLength());
         return OString();
     }
 
@@ -125,7 +127,7 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
     OUString const stateUrl = localAppDirUrl + "/Microsoft/Edge/User Data/Local State";
     OUString statePathU;
     ::osl::File::getSystemPathFromFileURL(stateUrl, statePathU);
-    OString statePath(::rtl::OUStringToOString(statePathU, RTL_TEXTENCODING_UTF8));
+    OString const statePath(::rtl::OUStringToOString(statePathU, RTL_TEXTENCODING_UTF8));
     ::std::string sEncryptedKey;
     try
     {
@@ -142,6 +144,11 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
                                        RTL_TEXTENCODING_UTF8);
     uno::Sequence<sal_Int8> decodedEncryptedKey;
     ::comphelper::Base64::decode(decodedEncryptedKey, encodedEncryptedKey);
+    if (decodedEncryptedKey.getLength() < 5)
+    {
+        SAL_INFO("ucb.ucp.webdav.curl", "decoded key too short: " << decodedEncryptedKey.getLength());
+        return OString();
+    }
     DATA_BLOB protectedKey;
     protectedKey.cbData = decodedEncryptedKey.getLength() - 5;
     protectedKey.pbData
@@ -151,7 +158,7 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
                            CRYPTPROTECT_UI_FORBIDDEN, &unprotectedKey)
         == FALSE)
     {
-        SAL_INFO("ucb.ucp.webdav.curl", "CryptUnprotectData failed");
+        SAL_INFO("ucb.ucp.webdav.curl", "CryptUnprotectData failed: " << WindowsErrorString(GetLastError()));
         assert(false);
         return OString();
     }
@@ -161,7 +168,7 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
     });
     if (unprotectedKey.cbData < 16)
     {
-        SAL_WARN("ucb.ucp.webdav.curl", "CryptUnprotectData result too small");
+        SAL_WARN("ucb.ucp.webdav.curl", "CryptUnprotectData result too short: " << unprotectedKey.cbData);
         return OString();
     }
 
@@ -212,7 +219,7 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
         encryptedValue.getLength());
     if (rv != SECSuccess)
     {
-        SAL_WARN("ucb.ucp.webdav.curl", "PK11_AEADOp failed");
+        SAL_WARN("ucb.ucp.webdav.curl", "PK11_AEADOp failed: " << rv);
         return OString();
     }
     if (outLength != encryptedValue.getLength())

@@ -707,19 +707,6 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_FORBID_REUSE, 1L);
         assert(rc == CURLE_OK);
     }
-#ifdef _WIN32
-    if (m_URI.GetScheme() == "https")
-    {
-        OString const cookies(TryImportCookies(m_xContext, m_URI.GetHost()));
-        if (!cookies.isEmpty())
-        {
-            rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_COOKIEFILE, "");
-            assert(rc == CURLE_OK);
-            rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_COOKIE, cookies.getStr());
-            assert(rc == CURLE_OK);
-        }
-    }
-#endif
 }
 
 CurlSession::~CurlSession() {}
@@ -1247,6 +1234,7 @@ auto CurlProcessor::ProcessRequest(
     bool isRetry(false);
     int nAuthRequests(0);
     int nAuthRequestsProxy(0);
+    OString cookies;
 
     // libcurl does not have an authentication callback so handle auth
     // related status codes and requesting credentials via this loop
@@ -1383,6 +1371,30 @@ auto CurlProcessor::ProcessRequest(
                         if (TryRemoveExpiredLockToken(rSession, rURI, pEnv))
                         {
                             throw DAVException(DAVException::DAV_LOCK_EXPIRED);
+                        }
+                        break;
+                    }
+                    case SC_FORBIDDEN:
+                    {
+                        ::std::map<OUString, OUString> const headerMap(
+                            ProcessHeaders(headers.HeaderFields.back().first));
+                        // X-MSDAVEXT_Error see [MS-WEBDAVE] 2.2.3.1.9
+                        auto const it(headerMap.find("x-msdavext_error"));
+                        if (cookies.isEmpty() // retry only once - could be expired...
+                            && rSession.m_URI.GetScheme() == "https" // only encrypted
+                            && it != headerMap.end()
+                            && it->second.startsWith("917656;"))
+                        {
+                            cookies = TryImportCookies(rSession.m_xContext, rSession.m_URI.GetHost());
+                            if (!cookies.isEmpty())
+                            {
+                                CURLcode rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIEFILE, "");
+                                assert(rc == CURLE_OK);
+                                rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIE, cookies.getStr());
+                                assert(rc == CURLE_OK);
+                                (void)rc;
+                                isRetry = true;
+                            }
                         }
                         break;
                     }
