@@ -2642,7 +2642,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
                                 if (x.mOriginalFont.indexOf('/') == -1)
                                     for (const auto &j : x.mUsedFonts)
-                                        if (j.startsWith(OUStringConcatenation(x.mOriginalFont + "/")))
+                                        if (j == x.mOriginalFont ||
+                                            j.startsWith(OUStringConcatenation(x.mOriginalFont + "/")))
                                             return true;
 
                                 return false;
