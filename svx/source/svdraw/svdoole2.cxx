@@ -1474,8 +1474,10 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             // objects' visual area. The scaling will not change, but it might exist already and must
             // be used in calculations
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-            Size aVisSize( static_cast<tools::Long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
-                            static_cast<tools::Long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
+            Size aVisSize;
+            if (sal_Int32(aScaleWidth) != 0 && sal_Int32(aScaleHeight) != 0) // avoid div by zero
+                aVisSize = Size( static_cast<tools::Long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
+                                 static_cast<tools::Long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
 
             aVisSize = OutputDevice::LogicToLogic(
                 aVisSize,
