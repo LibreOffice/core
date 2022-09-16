@@ -270,11 +270,23 @@ void UnoEditControl::textChanged(const awt::TextEvent& e)
 
 void UnoEditControl::addTextListener(const uno::Reference< awt::XTextListener > & l)
 {
+    // tdf#150974 some extensions pass null
+    if (!l)
+    {
+        SAL_WARN("toolkit", "null XTextListener");
+        return;
+    }
     maTextListeners.addInterface( l );
 }
 
 void UnoEditControl::removeTextListener(const uno::Reference< awt::XTextListener > & l)
 {
+    // tdf#150974 some extensions pass null
+    if (!l)
+    {
+        SAL_WARN("toolkit", "null XTextListener");
+        return;
+    }
     maTextListeners.removeInterface( l );
 }
 
@@ -767,6 +779,13 @@ void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
 
 void UnoButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l)
 {
+    // tdf#150974 some extensions pass null
+    if (!l)
+    {
+        SAL_WARN("toolkit", "null XActionListener");
+        return;
+    }
+
     maActionListeners.addInterface( l );
     if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
@@ -777,6 +796,13 @@ void UnoButtonControl::addActionListener(const uno::Reference< awt::XActionListe
 
 void UnoButtonControl::removeActionListener(const uno::Reference< awt::XActionListener > & l)
 {
+    // tdf#150974 some extensions pass null
+    if (!l)
+    {
+        SAL_WARN("toolkit", "null XActionListener");
+        return;
+    }
+
     if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
         uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
