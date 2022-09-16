@@ -286,12 +286,9 @@ void BackingWindow::initControls()
     mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_OTHER;
     mxAllRecentThumbnails->Reload();
     mxAllRecentThumbnails->ShowTooltips( true );
-    mxAllRecentThumbnails->GrabFocus();
-    mxRecentButton->set_highlight_background();
 
-    //initialize Template view
-    mxLocalView->Hide();
-    mxActions->set_sensitive(true);
+    mxRecentButton->set_active(true);
+    ToggleHdl(*mxRecentButton);
 
     //set handlers
     mxLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
@@ -583,12 +580,20 @@ IMPL_LINK_NOARG( BackingWindow, FilterHdl, weld::ComboBox&, void )
 
 IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
 {
-    if( &rButton == mxRecentButton.get() )
+    bool bRecentMode;
+    if (&rButton == mxRecentButton.get())
+        bRecentMode = rButton.get_active();
+    else
+        bRecentMode = !rButton.get_active();
+
+    if (bRecentMode)
     {
         mxLocalView->Hide();
         mxAllRecentThumbnails->Show();
         mxAllRecentThumbnails->GrabFocus();
+        mxRecentButton->set_active(true);
         mxRecentButton->set_highlight_background();
+        mxTemplateButton->set_active(false);
         mxTemplateButton->set_stack_background();
         mxActions->set_sensitive(true);
     }
@@ -599,8 +604,10 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxLocalView->Show();
         mxLocalView->reload();
         mxLocalView->GrabFocus();
-        mxTemplateButton->set_highlight_background();
+        mxRecentButton->set_active(false);
         mxRecentButton->set_stack_background();
+        mxTemplateButton->set_active(true);
+        mxTemplateButton->set_highlight_background();
         mxActions->set_sensitive(false);
     }
     applyFilter();
