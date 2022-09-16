@@ -2338,10 +2338,16 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     style_context_set_state(pStyle, GTK_STATE_FLAG_PRELIGHT);
     style_context_get_color(pStyle, &text_color);
     aTextColor = getColor(text_color);
+    aStyleSet.SetDefaultButtonTextColor(aTextColor);
     aStyleSet.SetDefaultButtonRolloverTextColor(aTextColor);
+    aStyleSet.SetDefaultButtonPressedRolloverTextColor(aTextColor);
     aStyleSet.SetButtonRolloverTextColor(aTextColor);
     aStyleSet.SetDefaultActionButtonRolloverTextColor(aTextColor);
+    aStyleSet.SetDefaultActionButtonPressedRolloverTextColor(aTextColor);
     aStyleSet.SetActionButtonRolloverTextColor(aTextColor);
+    aStyleSet.SetActionButtonPressedRolloverTextColor(aTextColor);
+    aStyleSet.SetFlatButtonTextColor(aTextColor);
+    aStyleSet.SetFlatButtonPressedRolloverTextColor(aTextColor);
     aStyleSet.SetFlatButtonRolloverTextColor(aTextColor);
     aStyleSet.SetFieldRolloverTextColor(aTextColor);
 
