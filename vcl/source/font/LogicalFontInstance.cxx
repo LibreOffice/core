@@ -54,10 +54,11 @@ LogicalFontInstance::~LogicalFontInstance()
 
 hb_font_t* LogicalFontInstance::InitHbFont()
 {
-    hb_face_t* pHbFace = GetFontFace()->GetHbFace();
+    auto pFace = GetFontFace();
+    hb_face_t* pHbFace = pFace->GetHbFace();
     assert(pHbFace);
     hb_font_t* pHbFont = hb_font_create(pHbFace);
-    unsigned int nUPEM = hb_face_get_upem(pHbFace);
+    auto nUPEM = pFace->UnitsPerEm();
     hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
     ImplInitHbFont(pHbFont);
@@ -74,9 +75,7 @@ int LogicalFontInstance::GetKashidaWidth() const
 
 void LogicalFontInstance::GetScale(double* nXScale, double* nYScale) const
 {
-    hb_face_t* pHbFace = hb_font_get_face(const_cast<LogicalFontInstance*>(this)->GetHbFont());
-    unsigned int nUPEM = hb_face_get_upem(pHbFace);
-
+    double nUPEM = GetFontFace()->UnitsPerEm();
     double nHeight(m_aFontSelData.mnHeight);
 
     // On Windows, mnWidth is relative to average char width not font height,
@@ -162,8 +161,7 @@ double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bo
 
     if (bPDF)
     {
-        unsigned int nUPEM = hb_face_get_upem(hb_font_get_face(pHbFont));
-        return (nWidth * 1000) / nUPEM;
+        return (nWidth * 1000) / GetFontFace()->UnitsPerEm();
     }
     else
     {

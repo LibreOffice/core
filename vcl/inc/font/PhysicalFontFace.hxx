@@ -138,6 +138,8 @@ public:
     const ColorPalette& GetColorPalette(size_t) const;
     std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
 
+    uint32_t UnitsPerEm() const { return hb_face_get_upem(GetHbFace()); }
+
     virtual hb_face_t* GetHbFace() const;
     virtual hb_blob_t* GetHbTable(hb_tag_t) const
     {

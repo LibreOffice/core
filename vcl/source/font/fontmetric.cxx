@@ -380,7 +380,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
     vcl::TTGlobalFontInfo rInfo = {};
     GetTTFontMetrics(aHhea.data(), aHhea.size(), aOS_2.data(), aOS_2.size(), &rInfo);
 
-    double nUPEM = hb_face_get_upem(pFace->GetHbFace());
+    double nUPEM = pFace->UnitsPerEm();
     double fScale = mnHeight / nUPEM;
     double fAscent = 0, fDescent = 0, fExtLeading = 0;
 
@@ -438,8 +438,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
 void ImplFontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
 {
     hb_font_t* pHbFont = pFontInstance->GetHbFont();
-    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
-    double nUPEM = hb_face_get_upem(pHbFace);
+    double nUPEM = pFontInstance->GetFontFace()->UnitsPerEm();
     double fScale = mnHeight / nUPEM;
     hb_position_t nBaseline = 0;
 

@@ -165,13 +165,13 @@ float WinFontInstance::getHScale() const
     return nWidth / nHeight;
 }
 
-void WinFontInstance::ImplInitHbFont(hb_font_t* pHbFont)
+void WinFontInstance::ImplInitHbFont(hb_font_t* /*pHbFont*/)
 {
     assert(m_pGraphics);
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
     if (GetFontSelectPattern().mnWidth)
     {
-        double nUPEM = hb_face_get_upem(hb_font_get_face(pHbFont));
+        double nUPEM = GetFontFace()->UnitsPerEm();
 
         LOGFONTW aLogFont;
         GetObjectW(m_hFont, sizeof(LOGFONTW), &aLogFont);
