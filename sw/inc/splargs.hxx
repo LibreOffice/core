@@ -37,7 +37,7 @@ namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {
-    SwPosition *pStartPos; // these both both point to SwTextNode
+    SwPosition *pStartPos; // these both point to SwTextNode
     SwPosition *pEndPos;
 
     SwArgsBase(SwPosition& rStart, SwPosition& rEnd )
