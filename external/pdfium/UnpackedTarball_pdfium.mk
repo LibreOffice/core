@@ -28,6 +28,8 @@ pdfium_patches += include.patch
 
 pdfium_patches += abseil-trivial.patch
 
+pdfium_patches += annot.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
