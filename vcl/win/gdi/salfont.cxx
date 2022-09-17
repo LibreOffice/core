@@ -1456,15 +1456,15 @@ class ScopedFontHDC final
 public:
     explicit ScopedFontHDC(WinSalGraphics& rGraphics, const vcl::font::PhysicalFontFace& rFontFace)
         // use height=1000 for easier debugging (to match psprint's font units)
-        : m_aFSP(rFontFace, Size(0,1000), 1000.0, 0, false)
-        , m_hDC(nullptr)
+        : m_hDC(nullptr)
         , m_hOrigFont(nullptr)
     {
         m_hDC = CreateCompatibleDC(rGraphics.getHDC());
         if (!m_hDC)
             return;
 
-        rGraphics.ImplDoSetFont(m_hDC, m_aFSP, &rFontFace, m_hOrigFont);
+        vcl::font::FontSelectPattern aFSP(rFontFace, Size(0,1000), 1000.0, 0, false);
+        rGraphics.ImplDoSetFont(m_hDC, aFSP, &rFontFace, m_hOrigFont);
     }
 
     ~ScopedFontHDC()
@@ -1476,10 +1476,8 @@ public:
     }
 
     HDC hdc() const { return m_hDC; }
-    const vcl::font::FontSelectPattern& fsp() const { return m_aFSP; }
 
 private:
-    vcl::font::FontSelectPattern m_aFSP;
     HDC m_hDC;
     HFONT m_hOrigFont;
 };
