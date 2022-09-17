@@ -1040,7 +1040,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
     *nChildren = nChildCount;
     *children = static_cast<long*>(CoTaskMemAlloc(nChildCount * sizeof(long)));
 
-    for( long i = 0; i< nChildCount; i++)
+    for( sal_Int64 i = 0; i< nChildCount; i++)
     {
         Reference<XAccessible> pRAcc = pRSelection->getSelectedAccessibleChild(i);
         if(pRAcc.is())
@@ -1102,7 +1102,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedCells(IUnknown * * * ce
 
     *cells = static_cast<IUnknown**>(CoTaskMemAlloc(nSelected * sizeof(IUnknown*)));
 
-    for (long i = 0; i < nSelected; i++)
+    for (sal_Int64 i = 0; i < nSelected; i++)
     {
         Reference<XAccessible> xAcc = xSelection->getSelectedAccessibleChild(i);
         assert(xAcc.is());
