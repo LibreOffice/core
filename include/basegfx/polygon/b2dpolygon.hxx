@@ -36,6 +36,7 @@ namespace basegfx
     class B2DRange;
     class B2DHomMatrix;
     class B2DCubicBezier;
+    class B2DVector;
     class SystemDependentData;
     class SystemDependentDataManager;
     typedef std::shared_ptr<SystemDependentData> SystemDependentData_SharedPtr;
@@ -253,6 +254,8 @@ namespace basegfx
     private:
         void addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const;
         SystemDependentData_SharedPtr getSystemDependantDataInternal(size_t hash_code) const;
+        const basegfx::B2DVector& getPrevControlVector(sal_uInt32 nIndex) const;
+        const basegfx::B2DVector& getNextControlVector(sal_uInt32 nIndex) const;
     };
 
     // typedef for a vector of B2DPolygons
