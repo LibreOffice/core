@@ -1,0 +1,31 @@
+--- src/assuan-support.c
++++ src/assuan-support.c
+@@ -96,7 +96,7 @@
+ }
+ 
+ 
+-static gpgme_ssize_t
++static ssize_t
+ my_read (assuan_context_t ctx, assuan_fd_t fd, void *buffer, size_t size)
+ {
+   (void)ctx;
+@@ -104,7 +104,7 @@
+ }
+ 
+ 
+-static gpgme_ssize_t
++static ssize_t
+ my_write (assuan_context_t ctx, assuan_fd_t fd, const void *buffer, size_t size)
+ {
+   (void)ctx;
+--- src/gpgme-w32spawn.c
++++ src/gpgme-w32spawn.c
+@@ -244,7 +244,7 @@
+           handle = LoadLibrary ("user32.dll");
+           if (handle)
+             {
+-              func = GetProcAddress (handle, "AllowSetForegroundWindow");
++              func = (BOOL (WINAPI *)(DWORD)) GetProcAddress (handle, "AllowSetForegroundWindow");
+               if (!func)
+                 FreeLibrary (handle);
+             }
