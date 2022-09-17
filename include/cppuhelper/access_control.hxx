@@ -57,6 +57,10 @@ public:
     */
     AccessControl( ::cppu::AccessControl const & ac );
 
+#if defined LIBO_INTERNAL_ONLY
+    AccessControl & operator =(AccessControl const &) = default; // avoid deprecation warnings
+#endif
+
     /** Clears the access controller reference being used.
     */
     void SAL_CALL clear()
