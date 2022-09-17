@@ -169,14 +169,10 @@ class WinGlyphFallbackSubstititution
 {
 public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
-private:
-    bool HasMissingChars(vcl::font::PhysicalFontFace*, OUString& rMissingChars) const;
 };
 
-}
-
 // does a font face hold the given missing characters?
-bool WinGlyphFallbackSubstititution::HasMissingChars(vcl::font::PhysicalFontFace* pFace, OUString& rMissingChars) const
+bool HasMissingChars(vcl::font::PhysicalFontFace* pFace, OUString& rMissingChars)
 {
     FontCharMapRef xFontCharMap = pFace->GetFontCharMap();
 
@@ -205,8 +201,6 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(vcl::font::PhysicalFontFace
     return nMatchCount > 0;
 }
 
-namespace
-{
     //used by 2-level font fallback
     vcl::font::PhysicalFontFamily* findDevFontListByLocale(const vcl::font::PhysicalFontCollection &rFontCollection,
                                                 const LanguageTag& rLanguageTag )
