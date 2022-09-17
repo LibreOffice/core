@@ -1326,17 +1326,17 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     {
         // center window
 
-        HWND hWndParent = ::GetParent( mhWnd );
+        HWND hWndParent2 = ::GetParent( mhWnd );
         // Search for TopLevel Frame
-        while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_CHILD) )
-            hWndParent = ::GetParent( hWndParent );
+        while ( hWndParent2 && (GetWindowStyle( hWndParent2 ) & WS_CHILD) )
+            hWndParent2 = ::GetParent( hWndParent2 );
         // if the Window has a Parent, then center the window to
         // the parent, in the other case to the screen
-        if ( hWndParent && !IsIconic( hWndParent ) &&
-             (GetWindowStyle( hWndParent ) & WS_VISIBLE) )
+        if ( hWndParent2 && !IsIconic( hWndParent2 ) &&
+             (GetWindowStyle( hWndParent2 ) & WS_VISIBLE) )
         {
             RECT aParentRect;
-            GetWindowRect( hWndParent, &aParentRect );
+            GetWindowRect( hWndParent2, &aParentRect );
             int nParentWidth    = aParentRect.right-aParentRect.left;
             int nParentHeight   = aParentRect.bottom-aParentRect.top;
 
