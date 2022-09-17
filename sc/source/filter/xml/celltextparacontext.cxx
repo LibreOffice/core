@@ -66,6 +66,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
         case XML_ELEMENT(TEXT, XML_TAB):
             maContent += "\t";
             break;
+        case XML_ELEMENT(TEXT, XML_LINE_BREAK):
+            maContent += "\x0a";
+            break;
         default:
             assert(false && "unknown cell text: element");
             ;
