@@ -252,7 +252,7 @@ public:
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent );
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
                                                 std::u16string_view aPrefix,
-                                                const OUString& aExtension,
+                                                std::u16string_view aExtension,
                                                 const OUString& aDestDir );
 
     SAL_DLLPRIVATE bool UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,

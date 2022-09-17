@@ -2513,13 +2513,13 @@ void SfxMedium::Transfer_Impl()
 
 void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
                                        std::u16string_view aPrefix,
-                                       const OUString& aExtension,
+                                       std::u16string_view aExtension,
                                        const OUString& aDestDir )
 {
     if ( !pImpl->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
-    ::utl::TempFile aTransactTemp( aPrefix, true, &aExtension, &aDestDir );
+    ::utl::TempFile aTransactTemp( aPrefix, true, aExtension, &aDestDir );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
     OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
@@ -4270,9 +4270,9 @@ OUString SfxMedium::CreateTempCopyWithExt( std::u16string_view aURL )
     if ( !aURL.empty() )
     {
         size_t nPrefixLen = aURL.rfind( '.' );
-        OUString aExt = ( nPrefixLen == std::u16string_view::npos ) ? OUString() : OUString(aURL.substr( nPrefixLen ));
+        std::u16string_view aExt = ( nPrefixLen == std::u16string_view::npos ) ? std::u16string_view() : aURL.substr( nPrefixLen );
 
-        OUString aNewTempFileURL = ::utl::TempFile( u"", true, &aExt ).GetURL();
+        OUString aNewTempFileURL = ::utl::TempFile( u"", true, aExt ).GetURL();
         if ( !aNewTempFileURL.isEmpty() )
         {
             INetURLObject aSource( aURL );
@@ -4342,10 +4342,10 @@ OUString SfxMedium::SwitchDocumentToTempFile()
     if ( !aOrigURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aOrigURL.lastIndexOf( '.' );
-        OUString const aExt = (nPrefixLen == -1)
-                                ? OUString()
-                                : aOrigURL.copy(nPrefixLen);
-        OUString aNewURL = ::utl::TempFile( u"", true, &aExt ).GetURL();
+        std::u16string_view aExt = (nPrefixLen == -1)
+                                ? std::u16string_view()
+                                : aOrigURL.subView(nPrefixLen);
+        OUString aNewURL = ::utl::TempFile( u"", true, aExt ).GetURL();
 
         // TODO/LATER: In future the aLogicName should be set to shared folder URL
         //             and a temporary file should be created. Transport_Impl should be impossible then.

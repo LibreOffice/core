@@ -240,7 +240,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     OUString sLeading(aEntry.GetBase());
     aEntry.removeSegment();
     OUString sPath = aEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-    utl::TempFile aTemp(sLeading, true, &sExt, &sPath);
+    utl::TempFile aTemp(sLeading, true, sExt, &sPath);
     aTemp.EnableKillingFile();
 
     DateTime aTmplDate( DateTime::SYSTEM );
@@ -315,7 +315,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         pDoc->GetNodes().GetEndOfContent().GetIndex() )
                         pDoc->GetNodes().Delete( aIdx );
 
-                    utl::TempFile aTempFile2(sLeading, true, &sExt, &sPath);
+                    utl::TempFile aTempFile2(sLeading, true, sExt, &sPath);
                     sFileName = aTempFile2.GetURL();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
                                                 StreamMode::STD_READWRITE );

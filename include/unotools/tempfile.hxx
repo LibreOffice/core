@@ -58,7 +58,7 @@ public:
                     The temporary object is created in the local file system, even if there is no UCB that can access it.
                     If the given folder is part of the local file system, the TempFile is created in this folder.
                     */
-                    TempFile( const OUString* pParent=nullptr, bool bDirectory=false );
+                    TempFile( const OUString* pParent = nullptr, bool bDirectory=false );
 
                     /**
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
@@ -68,8 +68,8 @@ public:
                         @param  bCreateParentDirs If rLeadingChars contains a slash, this will create the required
                                 parent directories.
                     */
-                    TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
-                              const OUString* pParent=nullptr, bool bCreateParentDirs=false );
+                    TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero=true, std::u16string_view pExtension={},
+                              const OUString* pParent = nullptr, bool bCreateParentDirs=false );
 
                     TempFile(TempFile && other) noexcept;
 

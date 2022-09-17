@@ -1730,8 +1730,7 @@ void PngFilterTest::testMsGifInPng()
         aFilterProperty.Value <<= aAdditionalChunkSequence;
         uno::Sequence<beans::PropertyValue> aPNGParameters{ aFilterProperty };
         // Export the png with the chunk
-        OUString ext = u".png";
-        utl::TempFile aTempFile(u"testPngExportMsGif", true, &ext);
+        utl::TempFile aTempFile(u"testPngExportMsGif", true, u".png");
         if (!bKeepTemp)
             aTempFile.EnableKillingFile();
         {

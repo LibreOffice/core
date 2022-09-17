@@ -367,11 +367,10 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
 
         uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
         uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-        OUString const sExt(".odb");
         OUString sTmpName;
         {
             OUString sHomePath(SvtPathOptions().GetWorkPath());
-            utl::TempFile aTempFile(sFind, true, &sExt, &sHomePath);
+            utl::TempFile aTempFile(sFind, true, u".odb", &sHomePath);
             aTempFile.EnableKillingFile();
             sTmpName = aTempFile.GetURL();
         }

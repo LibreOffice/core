@@ -786,12 +786,11 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     if( sTempDirURL.isEmpty() )
         return;
 
-    const OUString sExt( ".odt" );
     OUString basename = OUString::createFromAscii( name );
     if (no > 0)
         basename += OUString::number(no) + "-";
     // aTempFile is not deleted, but that seems to be intentional
-    utl::TempFile aTempFile( basename, true, &sExt, &sTempDirURL );
+    utl::TempFile aTempFile( basename, true, u".odt", &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
     auto pDstMed = std::make_unique<SfxMedium>(
         aTempFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
@@ -1324,7 +1323,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
 
                 OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-                aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPrefix, true) );
+                aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), sExt, &sPrefix, true) );
                 if( !aTempFile->IsValid() )
                 {
                     ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
@@ -2743,9 +2742,8 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
             if (aOwnURL.isEmpty())
             {
                 // Cannot embed, as embedded data source would need the URL of the parent document.
-                OUString const sOutputExt = ".odb";
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
-                utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
+                utl::TempFile aTempFile(sNewName, true, u".odb", pDestDir ? pDestDir : &sHomePath);
                 const OUString& sTmpName = aTempFile.GetURL();
                 xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
             }

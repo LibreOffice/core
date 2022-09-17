@@ -2477,10 +2477,8 @@ OUString ODbaseTable::createTempFile()
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
         aIdent += "/";
 
-    OUString sTempName(aIdent);
     OUString sExt("." + m_pConnection->getExtension());
-    OUString sName(m_Name);
-    TempFile aTempFile(sName, true, &sExt, &sTempName);
+    TempFile aTempFile(m_Name, true, sExt, &aIdent);
     if(!aTempFile.IsValid())
         getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE, *this);
 

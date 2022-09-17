@@ -246,7 +246,7 @@ namespace
 };
 
 static OUString lcl_createName(
-    std::u16string_view rLeadingChars, Tokens & tokens, const OUString* pExtension,
+    std::u16string_view rLeadingChars, Tokens & tokens, std::u16string_view pExtension,
     const OUString* pParent, bool bDirectory, bool bKeep, bool bLock,
     bool bCreateParentDirs )
 {
@@ -270,8 +270,8 @@ static OUString lcl_createName(
     while (tokens.next(&token))
     {
         OUString aTmp( aName + token );
-        if ( pExtension )
-            aTmp += *pExtension;
+        if ( !pExtension.empty() )
+            aTmp += pExtension;
         else
             aTmp += ".tmp";
         if ( bDirectory )
@@ -342,7 +342,7 @@ static OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool b
     aEyeCatcher += aPidString;
 #endif
     UniqueTokens t;
-    return lcl_createName( aEyeCatcher, t, nullptr, pParent, bDir, bKeep,
+    return lcl_createName( aEyeCatcher, t, u"", pParent, bDir, bKeep,
                            false, false);
 }
 
@@ -365,7 +365,7 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
 }
 
 TempFile::TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero,
-                    const OUString* pExtension, const OUString* pParent,
+                    std::u16string_view pExtension, const OUString* pParent,
                     bool bCreateParentDirs )
     : bIsDirectory( false )
     , bKillingFileEnabled( false )
