@@ -1,0 +1,11 @@
+--- extern/cloop/src/tests/test1/CTest.c
++++ extern/cloop/src/tests/test1/CTest.c
+@@ -402,7 +402,7 @@
+ 	struct CALC_IFactory* (*createFactory)();
+ 
+ #ifdef WIN32
+-	createFactory = (struct Factory* (*)()) GetProcAddress(library, "createFactory");
++	createFactory = (struct CALC_IFactory* (*)()) GetProcAddress(library, "createFactory");
+ #else
+ 	createFactory = dlsym(library, "createFactory");
+ #endif
