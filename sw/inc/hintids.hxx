@@ -443,7 +443,6 @@ constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT(181);
 // empty
 constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(184);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE(185);
-constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_SWAPIN(186);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_NAME_CHANGED(187);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_TITLE_CHANGED(188);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_DESCRIPTION_CHANGED(189);

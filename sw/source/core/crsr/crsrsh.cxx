@@ -2516,14 +2516,9 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
         // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do
         // not need to send the expensive RES_FMT_CHG in Insert.
         CallChgLnk();
-    switch(nWhich)
+    if( nWhich == RES_OBJECTDYING )
     {
-        case RES_OBJECTDYING:
-            EndListeningAll();
-            break;
-        case RES_GRAPHIC_SWAPIN:
-            if(m_aGrfArrivedLnk.IsSet())
-                m_aGrfArrivedLnk.Call(*this);
+        EndListeningAll();
     }
 
 }
