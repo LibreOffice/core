@@ -1928,18 +1928,6 @@ sal_Int32 getTextSepPos(
     return nPos;
 }
 
-template<typename StrT, typename StrBufT>
-void escapeTextSep(sal_Int32 nPos, const StrT& rStrDelim, StrT& rStr)
-{
-    while (nPos >= 0)
-    {
-        StrBufT aBuf(rStr);
-        aBuf.insert(nPos, rStrDelim);
-        rStr = aBuf.makeStringAndClear();
-        nPos = rStr.indexOf(rStrDelim, nPos+1+rStrDelim.getLength());
-    }
-}
-
 }
 
 void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt, SCTAB nTab )
@@ -2240,11 +2228,13 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                     {
                         bool bNeedQuotes = false;
-                        sal_Int32 nPos = getTextSepPos(
-                            aUniString, rAsciiOpt, cStrDelim, cDelim, bNeedQuotes);
-
-                        escapeTextSep<OUString, OUStringBuffer>(
-                            nPos, OUString(cStrDelim), aUniString);
+                        sal_Int32 nPos = getTextSepPos(aUniString, rAsciiOpt, cStrDelim, cDelim, bNeedQuotes);
+                        if (nPos >= 0)
+                        {
+                            OUString strFrom(cStrDelim);
+                            OUString strTo = strFrom + strFrom;
+                            aUniString = aUniString.replaceAll(strFrom, strTo);
+                        }
 
                         if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
@@ -2277,11 +2267,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 
                             // search on re-decoded string
                             bool bNeedQuotes = false;
-                            sal_Int32 nPos = getTextSepPos(
-                                aStrDec, rAsciiOpt, aStrDelimDecoded, aDelimDecoded, bNeedQuotes);
-
-                            escapeTextSep<OUString, OUStringBuffer>(
-                                nPos, aStrDelimDecoded, aStrDec);
+                            sal_Int32 nPos = getTextSepPos(aStrDec, rAsciiOpt, aStrDelimDecoded, aDelimDecoded, bNeedQuotes);
+                            if (nPos >= 0)
+                            {
+                                OUString strTo = aStrDelimDecoded + aStrDelimDecoded;
+                                aStrDec = aStrDec.replaceAll(aStrDelimDecoded, strTo);
+                            }
 
                             // write byte re-encoded
                             if ( bNeedQuotes || bForceQuotes )
@@ -2296,11 +2287,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 
                             // search on encoded string
                             bool bNeedQuotes = false;
-                            sal_Int32 nPos = getTextSepPos(
-                                aStrEnc, rAsciiOpt, aStrDelimEncoded, aDelimEncoded, bNeedQuotes);
-
-                            escapeTextSep<OString, OStringBuffer>(
-                                nPos, aStrDelimEncoded, aStrEnc);
+                            sal_Int32 nPos = getTextSepPos(aStrEnc, rAsciiOpt, aStrDelimEncoded, aDelimEncoded, bNeedQuotes);
+                            if (nPos >= 0)
+                            {
+                                OString strTo = aStrDelimEncoded + aStrDelimEncoded;
+                                aStrEnc = aStrEnc.replaceAll(aStrDelimEncoded, strTo);
+                            }
 
                             // write byte encoded
                             if ( bNeedQuotes || bForceQuotes )
