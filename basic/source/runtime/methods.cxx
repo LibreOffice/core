@@ -3285,6 +3285,28 @@ void SbRtl_Format(StarBASIC *, SbxArray & rPar, bool)
     }
 }
 
+static bool IsMissing(SbxArray& rPar, const sal_uInt32 i)
+{
+    const sal_uInt32 nArgCount = rPar.Count();
+    if (nArgCount <= i)
+        return true;
+
+    SbxVariable* aPar = rPar.Get(i);
+    return (aPar->GetType() == SbxERROR && SbiRuntime::IsMissing(aPar, 1));
+}
+
+static sal_Int16 GetOptionalIntegerParamOrDefault(SbxArray& rPar, const sal_uInt32 i,
+                                                  const sal_Int16 defaultValue)
+{
+    return IsMissing(rPar, i) ? defaultValue : rPar.Get(i)->GetInteger();
+}
+
+static OUString GetOptionalOUStringParamOrDefault(SbxArray& rPar, const sal_uInt32 i,
+                                                  const OUString& defaultValue)
+{
+    return IsMissing(rPar, i) ? defaultValue : rPar.Get(i)->GetOUString();
+}
+
 static void lcl_FormatNumberPercent(SbxArray& rPar, bool isPercent)
 {
     const sal_uInt32 nArgCount = rPar.Count();
@@ -4328,19 +4350,15 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    // tdf#147529 - check for missing optional parameters
-    for (sal_uInt32 i = 2; i < nArgCount; i++)
+    // tdf#147529 - check for missing parameters
+    if (IsMissing(rPar, 1))
     {
-        if (rPar.Get(i)->GetType() == SbxERROR && SbiRuntime::IsMissing(rPar.Get(i), 1))
-        {
-            StarBASIC::Error(ERRCODE_BASIC_NOT_OPTIONAL);
-            return;
-        }
+        StarBASIC::Error(ERRCODE_BASIC_NOT_OPTIONAL);
+        return;
     }
 
-    WinBits nType = 0; // MB_OK
-    if( nArgCount >= 3 )
-        nType = static_cast<WinBits>(rPar.Get(2)->GetInteger());
+    // tdf#151012 - initialize optional parameters with their default values (number of buttons)
+    WinBits nType = static_cast<WinBits>(GetOptionalIntegerParamOrDefault(rPar, 2, 0)); // MB_OK
     WinBits nStyle = nType;
     nStyle &= 15; // delete bits 4-16
     if (nStyle > 5)
@@ -4358,15 +4376,8 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     };
 
     OUString aMsg = rPar.Get(1)->GetOUString();
-    OUString aTitle;
-    if( nArgCount >= 4 )
-    {
-        aTitle = rPar.Get(3)->GetOUString();
-    }
-    else
-    {
-        aTitle = Application::GetDisplayName();
-    }
+    // tdf#151012 - initialize optional parameters with their default values (title of dialog box)
+    OUString aTitle = GetOptionalOUStringParamOrDefault(rPar, 3, Application::GetDisplayName());
 
     WinBits nDialogType = nType & (16+32+64);
 

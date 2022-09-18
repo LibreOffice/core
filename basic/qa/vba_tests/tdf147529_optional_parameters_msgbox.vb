@@ -19,9 +19,7 @@ Sub verify_testOptionalParametersMsgBox
     On Error GoTo errorHandler
 
     ' tdf#147529 - check for missing optional parameters
-    TestUtil.AssertEqual(TestOptionalParametersMsgBox(),          True, "TestOptionalParametersMsgBox()")
-    TestUtil.AssertEqual(TestOptionalParametersMsgBox("test"),    True, "TestOptionalParametersMsgBox(""test"")")
-    TestUtil.AssertEqual(TestOptionalParametersMsgBox("test", 1), True, "TestOptionalParametersMsgBox(""test"", 1)")
+    TestUtil.AssertEqual(TestOptionalParametersMsgBox(), True, "TestOptionalParametersMsgBox()")
 
     Exit Sub
 errorHandler:
