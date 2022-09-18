@@ -224,10 +224,10 @@ private:
 
 private:
 
-    std::unique_ptr<::utl::TempFile> mpTmp;
+    std::optional<::utl::TempFile>   moTmp;
     SvStream*                        mpOStm;
     Reference< XOutputStream >       mxStmWrapper;
-    std::unique_ptr<GraphicObject>   mxGrfObj;
+    std::optional<GraphicObject>     moGrfObj;
     bool                             mbClosed;
 
 public:
@@ -243,13 +243,13 @@ public:
 };
 
 SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
-    : mpTmp(new ::utl::TempFile)
-    , mxGrfObj(new GraphicObject)
+    : moTmp(std::in_place)
+    , moGrfObj(std::in_place)
     , mbClosed(false)
 {
-    mpTmp->EnableKillingFile();
+    moTmp->EnableKillingFile();
 
-    mpOStm = mpTmp->GetStream( StreamMode::READWRITE );
+    mpOStm = moTmp->GetStream( StreamMode::READWRITE );
 
     if( mpOStm )
         mxStmWrapper = new ::utl::OOutputStreamWrapper( *mpOStm );
@@ -257,7 +257,7 @@ SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
 
 SvXMLGraphicOutputStream::~SvXMLGraphicOutputStream()
 {
-    mpTmp.reset();
+    moTmp.reset();
 }
 
 void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
@@ -291,7 +291,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
 {
     Graphic aGraphic;
 
-    if (mbClosed && mxGrfObj->GetType() == GraphicType::NONE && mpOStm)
+    if (mbClosed && moGrfObj->GetType() == GraphicType::NONE && mpOStm)
     {
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
@@ -347,7 +347,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
     if (aGraphic.GetType() != GraphicType::NONE)
     {
         mpOStm = nullptr;
-        mpTmp.reset();
+        moTmp.reset();
     }
     return aGraphic;
 }
@@ -357,9 +357,9 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
     Graphic aGraphic(GetGraphic());
     if (aGraphic.GetType() != GraphicType::NONE)
     {
-        mxGrfObj.reset(new GraphicObject(std::move(aGraphic)));
+        moGrfObj.emplace(std::move(aGraphic));
     }
-    return *mxGrfObj;
+    return *moGrfObj;
 }
 
 }
