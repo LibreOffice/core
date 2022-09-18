@@ -1830,10 +1830,10 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     else // emit default FontMatrix if needed
         pOut += sprintf( pOut, "/FontMatrix [0.001 0 0 0.001 0 0]readonly def\n");
     // emit FontBBox
-    if( maFontBBox.size() == 4)
-        rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", maFontBBox);
-    else // emit default FontBBox if needed
-        pOut += sprintf( pOut, "/FontBBox {0 0 999 999}readonly def\n");
+    auto aFontBBox = maFontBBox;
+    if (aFontBBox.size() != 4)
+        aFontBBox = { 0, 0, 999, 999 }; // emit default FontBBox if needed
+    rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", aFontBBox);
     // emit FONTINFO into TOPDICT
     pOut += sprintf( pOut,
         "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
@@ -2049,10 +2049,10 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         fXFactor = 1000.0F * maFontMatrix[0];
         fYFactor = 1000.0F * maFontMatrix[3];
     }
-    rFSInfo.m_aFontBBox = tools::Rectangle( Point( static_cast<sal_Int32>(maFontBBox[0] * fXFactor),
-                                        static_cast<sal_Int32>(maFontBBox[1] * fYFactor) ),
-                                    Point( static_cast<sal_Int32>(maFontBBox[2] * fXFactor),
-                                        static_cast<sal_Int32>(maFontBBox[3] * fYFactor) ) );
+    rFSInfo.m_aFontBBox = { Point(static_cast<sal_Int32>(aFontBBox[0] * fXFactor),
+                                  static_cast<sal_Int32>(aFontBBox[1] * fYFactor)),
+                            Point(static_cast<sal_Int32>(aFontBBox[2] * fXFactor),
+                                  static_cast<sal_Int32>(aFontBBox[3] * fYFactor)) };
     // PDF-Spec says the values below mean the ink bounds!
     // TODO: use better approximations for these ink bounds
     rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters
