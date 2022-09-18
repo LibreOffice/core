@@ -193,18 +193,17 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
             // create TypeDetection.xcu
             utl::TempFile aTempFile;
             aTempFile.EnableKillingFile();
-            OUString aTempFileURL( aTempFile.GetURL() );
+            SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
 
             {
-                osl::File aOutputFile( aTempFileURL );
-                (void)aOutputFile.open(osl_File_OpenFlag_Write);
-                Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
+                Reference< XOutputStream > xOS( new ::utl::OOutputStreamWrapper( *pStream ) );
 
                 TypeDetectionExporter aExporter( mxContext );
                 aExporter.doExport(xOS,rFilters);
             }
 
-            Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( new SvFileStream(aTempFileURL, StreamMode::READ ), true ) );
+            pStream->Seek(0);
+            Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( *pStream ) );
             addFile_( xRootFolder, xFactory,  XIS, "TypeDetection.xcu" );
 
             Reference< XChangesBatch > xBatch( xIfc, UNO_QUERY );
