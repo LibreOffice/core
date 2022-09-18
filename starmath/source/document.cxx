@@ -285,11 +285,12 @@ void SmDocShell::ImInitialize() {
     Reference<XComponentContext> xContext(GetContext());
 
     // TODO: Handle case when ImInitialize() is called after options were changed through the UI
-    initialOptions = std::make_shared<GiNaC::optionmap>();
-    initialCompiler = std::make_shared<eqc>();
+
+    mpInitialOptions = std::make_shared<GiNaC::optionmap>();
+    mpInitialCompiler = std::make_shared<eqc>();
 
     // Get access to the registry that contains the global options
-    Reference< XHierarchicalPropertySet > xProperties = getRegistryAccess(xContext, OU("/org.openoffice.Office.iMath/"));
+    Reference<XHierarchicalPropertySet> xProperties = getRegistryAccess(xContext, OU("/org.openoffice.Office.iMath/"));
     // Get access to the RDF graph that contains the document-specific options. Create one if it doesn't exist
     Reference<XModel> xModel(GetBaseModel());
     Reference<XNamedGraph> xGraph = getGraph(xContext, xModel);
@@ -309,7 +310,7 @@ void SmDocShell::ImInitialize() {
     // Formatting
     // TODO: This will copy all the options from the registry into the local document graph, which is not what we want for multi-formula documents in Writer or Presentation
     // Note: We could mis-use the master document flag to avoid the copying
-    Settingsmanager::initializeOptionmap(xContext, xModel, xGraph, xProperties, &*initialOptions, false);
+    Settingsmanager::initializeOptionmap(xContext, xModel, xGraph, xProperties, &*mpInitialOptions, false);
 
     // Path to iMath's own include files (references)
     OUString shareFolder;
@@ -330,28 +331,28 @@ void SmDocShell::ImInitialize() {
 
         if (!rawtext.equalsAscii("")) {
             MSG_INFO(0, "Reading referenced files\n" << STR(rawtext));
-            imath::smathparser parser(*this, nullptr, initialCompiler, initialOptions);
+            imath::smathparser parser(*this, nullptr, mpInitialCompiler, mpInitialOptions);
             smathlexer::scan_begin(STR(rawtext));
             parser.parse(); // we discard the return value
             smathlexer::scan_end();
-            if (lines.size() > 0) initialOptions = lines.back()->getGlobalOptions(); // Options might have been changed by the OPTIONS keyword
+            if (lines.size() > 0) mpInitialOptions = lines.back()->getGlobalOptions(); // Options might have been changed by the OPTIONS keyword
         }
 
         // units must be set AFTER units.imath is read, because the preferred units list might use user-defined units
         // Note that this will delete any preferred units declared in the previous include files (there shouldn't be any!)
-        OUString units = OUS8(*(*initialOptions)[o_unitstr].value.str); // This was populated in initializeOptionmap()
-        (*initialOptions)[o_units] = option(GiNaC::exvector()); // All keys are expected to exist in global_options
-        (*initialOptions).at(o_unitstr).value.str->clear(); // Clear o_unitstr, because it will be populated again
+        OUString units = OUS8(*(*mpInitialOptions)[o_unitstr].value.str); // This was populated in initializeOptionmap()
+        (*mpInitialOptions)[o_units] = option(GiNaC::exvector()); // All keys are expected to exist in global_options
+        (*mpInitialOptions).at(o_unitstr).value.str->clear(); // Clear o_unitstr, because it will be populated again
 
         if (units.getLength() > 0) {
             // Recreate the global units expression vector, since this cannot be stored in the registry
             MSG_INFO(0, "Parsing default units\n" << STR(rawtext));
             rawtext = OU("%%ii OPTIONS {units={") + units + OU("}}\n");
-            imath::smathparser parser(*this, nullptr, initialCompiler, initialOptions);
+            imath::smathparser parser(*this, nullptr, mpInitialCompiler, mpInitialOptions);
             smathlexer::scan_begin(STR(rawtext));
             parser.parse(); // we discard the return value
-            smathlexer::scan_end(); // Result is stored in initialOptions map under the keys o_unit and o_unitstr
-            if (lines.size() > 0) initialOptions = lines.back()->getGlobalOptions();
+            smathlexer::scan_end(); // Result is stored in mpInitialOptions map under the keys o_unit and o_unitstr
+            if (lines.size() > 0) mpInitialOptions = lines.back()->getGlobalOptions();
         }
 
         // Read user include files
@@ -372,11 +373,11 @@ void SmDocShell::ImInitialize() {
 
         if (!rawtext.equalsAscii("")) {
             MSG_INFO(0, "Reading user include files\n" << STR(rawtext));
-            imath::smathparser parser(*this, nullptr, initialCompiler, initialOptions);
+            imath::smathparser parser(*this, nullptr, mpInitialCompiler, mpInitialOptions);
             smathlexer::scan_begin(STR(rawtext));
             parser.parse();
             smathlexer::scan_end();
-            if (lines.size() > 0) initialOptions = lines.back()->getGlobalOptions();
+            if (lines.size() > 0) mpInitialOptions = lines.back()->getGlobalOptions();
         }
     } catch (Exception &e) {
         // TODO: Show error message to user
@@ -391,7 +392,7 @@ void SmDocShell::ImInitialize() {
 
 void SmDocShell::Compile()
 {
-    if (iMathBlocked) {
+    if (mImBlocked) {
         SAL_WARN("starmath.imath", "iMath cannot be used because an iMath extension is still installed");
         return;
     }
@@ -400,17 +401,17 @@ void SmDocShell::Compile()
     if (initialOptions == nullptr || initialCompiler == nullptr)
         ImInitialize();
 
-    // Important settings for the compiler. Note: Initialization must do without them, since no initialOptions are available before initialization...
-    GiNaC::imathprint::decimalpoint = decimalSeparator;
+    // Important settings for the compiler. Note: Initialization must do without them, since no mpInitialOptions are available before initialization...
+    GiNaC::imathprint::decimalpoint = mDecimalSeparator;
     setlocale(LC_NUMERIC, "C"); // Ensure printf() always uses decimal points! TODO Why is that important?
     // Inhibit floating point underflow exceptions?
-    cln::cl_inhibit_floating_point_underflow = (initialOptions->at(o_underflow).value.boolean);
+    cln::cl_inhibit_floating_point_underflow = (mpInitialOptions->at(o_underflow).value.boolean);
     MSG_INFO(3, "Inhibit floating point underflow exception: " << (cln::cl_inhibit_floating_point_underflow ? "true" : "false") << endline);
     // Evaluate odd negative roots to the positive real value?
-    GiNaC::expression::evalf_real_roots_flag = (initialOptions->at(o_evalf_real_roots).value.boolean);
+    GiNaC::expression::evalf_real_roots_flag = (mpInitialOptions->at(o_evalf_real_roots).value.boolean);
 
     // Prepare options and compiler. Note: Since currentCompiler is a shared_ptr, the old data will automatically get cleaned up when the last reference is released
-    currentCompiler = initialCompiler->clone(); // Takes a deep copy TODO: Reduce the amount of data copied, e.g. by copy-on-write semantics in the eqc private data structures
+    mpCurrentCompiler = mpInitialCompiler->clone(); // Takes a deep copy TODO: Reduce the amount of data copied, e.g. by copy-on-write semantics in the eqc private data structures
 
     try {
         if (maImText.equalsAscii("")) return; // empty iFormula
@@ -427,13 +428,13 @@ void SmDocShell::Compile()
         } while (idx >= 0);
 
         lines.clear();
-        imath::smathparser parser(*this, nullptr, currentCompiler, initialOptions); // initialOptions are not modified, copy is taken when OPTIONS keyword is encountered
+        imath::smathparser parser(*this, nullptr, mpCurrentCompiler, mpInitialOptions); // mpInitialOptions are not modified, copy is taken when OPTIONS keyword is encountered
         smathlexer::scan_begin(STR(rawtext));
         parser.parse(); // we discard the return value
         smathlexer::scan_end();
 
         if (lines.size() > 0) {
-            currentOptions = lines.back()->getGlobalOptions();
+            mpCurrentOptions = lines.back()->getGlobalOptions();
 
             MSG_INFO(0, "Printing " << lines.size() << " lines");
             for (const auto& i : lines)
@@ -519,9 +520,9 @@ bool SmDocShell::align_makes_sense() const {
   unsigned count = 0;
 
   for (const auto& i : lines) {
-    iExpression_ptr p_expr = std::dynamic_pointer_cast<iFormulaNodeExpression>(i);
-    if ((p_expr != nullptr) && !p_expr->getHide())
-      count += p_expr->countLinesWithOperators(have_operator);
+    iExpression_ptr pExpr = std::dynamic_pointer_cast<iFormulaNodeExpression>(i);
+    if ((pExpr != nullptr) && !pExpr->getHide())
+      count += pExpr->countLinesWithOperators(have_operator);
     if (count > 1) return true; // Avoid unnecessary iterations
   }
 
@@ -575,9 +576,9 @@ void SmDocShell::addResultLines() {
       // Note: A valid xModel is only required for the CHART statement
       (*i)->display(GetModel(), resultText, prev_lhs, a, do_not_align);
       hasResult = (*i)->getSelectionType() != formulaTypeChart; // CHART is displayable but has no textual result
-      iExpression_ptr p_expr = std::dynamic_pointer_cast<iFormulaNodeExpression>(*i);
-      if (p_expr != nullptr && !(p_expr->getHide() && p_expr->getDisplayedLhs().getLength() == 0))
-        prev_lhs = p_expr->getDisplayedLhs();
+      iExpression_ptr pExpr = std::dynamic_pointer_cast<iFormulaNodeExpression>(*i);
+      if (pExpr != nullptr && !(pExpr->getHide() && pExpr->getDisplayedLhs().getLength() == 0))
+        prev_lhs = pExpr->getDisplayedLhs();
       MSG_INFO(3, "Line is displayable and has " << (hasResult ? "a" : "no") << " textual result" << endline);
     }
 
@@ -621,7 +622,7 @@ void SmDocShell::addResultLines() {
   }
 }
 
-void SmDocShell::setOption(const option_name oname, const option& value) {
+void SmDocShell::SetOption(const option_name oname, const option& value) {
   for (auto& i : lines)
     i->setOption(oname, value);
 } // setOption()

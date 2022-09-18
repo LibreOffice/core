@@ -265,7 +265,8 @@ public:
     ::com::sun::star::uno::Reference<::com::sun::star::uno::XComponentContext> GetContext() const;
 
     /// Set an option on the formula (all lines of it) if its value is different from the global option
-    void setOption(const option_name oname, const option& value);
+    void SetOption(const option_name oname, const option& value);
+
 
 private:
     /**
@@ -275,45 +276,48 @@ private:
      * OLE mode: This is a chain of pointers, unless a formula with the OPTIONS keyword is processed. In this
      * case the options are copied and modified. The modified pointer is passed to the following formulas
      **/
-    std::shared_ptr<GiNaC::optionmap> initialOptions;
+    std::shared_ptr<GiNaC::optionmap> mpInitialOptions;
     /**
      * Initial compiler for this formula.
      * Stand-alone (Math) mode: Initialized on first call to Compile() by reading include files and processing default options
      * OLE (Writer/Impress) mode: Set to currentCompiler of previous formula by the parent document
      * OLE mode: Before compilation, a copy is taken into the formula's currentCompiler
      **/
-    std::shared_ptr<eqc> initialCompiler;
+    std::shared_ptr<eqc> mpInitialCompiler;
+
     /// Modified options of this formula after compilation. If nothing is modified, remains same pointer as initialOptions
-    std::shared_ptr<GiNaC::optionmap> currentOptions;
+    std::shared_ptr<GiNaC::optionmap> mpCurrentOptions;
     /// Modified compiler of ths formula after compilation
-    std::shared_ptr<eqc> currentCompiler;
+    std::shared_ptr<eqc> mpCurrentCompiler;
 
     /// Initialize options and compiler from document options and registry. Must be repeated whenever document options are changed throught the UI
     // TODO: Update on UI changes not implemented yet
     void ImInitialize();
-    /// Internal iMath is blocked because an iMath extension is still installed
-    bool iMathBlocked;
 
-    /// Decimal separator character(s)
-    std::string decimalSeparator;
-
-    /// Allow others to access the following private data
+    /// Allow others to access the following private data. Required for compatibility with the iMath extension
     friend class imath::smathparser;
     /// The raw text split into lines
+    // Note: This cannot be called mLines as long as we require compatibility with the iMath extension
     std::list<iFormulaLine_ptr> lines;
     /// the raw formula text from the UI
+    // Note: This cannot be called mRawtext as long as we require compatibility with the iMath extension
     OUString rawtext;
     /// The compiled equations of the iFormula are cacheable (saving time on re-compilation)
+    // Note: This cannot be called mCacheable as long as we require compatibility with the iMath extension
     bool cacheable;
-
     /// The results of the last compilation (for cacheable iFormulas only)
     // TODO: Caching is not implemented yet
+    // Note: This cannot be called mCachedResults as long as we require compatibility with the iMath extension
     std::vector<std::pair<std::string, GiNaC::expression> > cached_results;
 
     /// Add result lines to the list of iFormulaLines
     void addResultLines();
     /// Count the number of lines of a certain type
     bool align_makes_sense() const;
+    /// Internal iMath is blocked because an iMath extension is still installed
+    bool mImBlocked;
+    /// Decimal separator character(s)
+    static std::string mDecimalSeparator;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
