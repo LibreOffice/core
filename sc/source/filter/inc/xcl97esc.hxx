@@ -38,7 +38,7 @@ private:
 
 private:
     ::std::unique_ptr< ::utl::TempFile > mxPicTempFile;
-    ::std::unique_ptr< SvStream > mxPicStrm;
+    SvStream* mpPicStrm;
 };
 
 class XclObj;

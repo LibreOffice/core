@@ -75,13 +75,10 @@ XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot ) :
 SvStream* XclEscherExGlobal::ImplQueryPictureStream()
 {
     mxPicTempFile.reset( new ::utl::TempFile );
-    if( mxPicTempFile->IsValid() )
-    {
-        mxPicTempFile->EnableKillingFile();
-        mxPicStrm = ::utl::UcbStreamHelper::CreateStream( mxPicTempFile->GetURL(), StreamMode::STD_READWRITE );
-        mxPicStrm->SetEndian( SvStreamEndian::LITTLE );
-    }
-    return mxPicStrm.get();
+    mxPicTempFile->EnableKillingFile();
+    mpPicStrm = mxPicTempFile->GetStream( StreamMode::READWRITE );
+    mpPicStrm->SetEndian( SvStreamEndian::LITTLE );
+    return mpPicStrm;
 }
 
 XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr, SvStream& rStrm, const XclEscherEx* pParent ) :

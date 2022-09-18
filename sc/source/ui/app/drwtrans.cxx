@@ -472,8 +472,9 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
 
                 ::utl::TempFile     aTempFile;
                 aTempFile.EnableKillingFile();
+                SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
                 uno::Reference< embed::XStorage > xWorkStore =
-                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
+                    ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream) );
 
                 uno::Reference < embed::XEmbedPersist > xPers( static_cast<embed::XVisualObject*>(pEmbObj), uno::UNO_QUERY );
                 if ( xPers.is() )
@@ -516,8 +517,9 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                 {
                     ::utl::TempFile     aTempFile;
                     aTempFile.EnableKillingFile();
+                    SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
                     uno::Reference< embed::XStorage > xWorkStore =
-                        ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
+                        ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream) );
 
                     // write document storage
                     pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
@@ -531,13 +533,8 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                     if ( xTransact.is() )
                         xTransact->commit();
 
-                    std::unique_ptr<SvStream> pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ );
-                    if( pSrcStm )
-                    {
-                        rxOStm->SetBufferSize( 0xff00 );
-                        rxOStm->WriteStream( *pSrcStm );
-                        pSrcStm.reset();
-                    }
+                    rxOStm->SetBufferSize( 0xff00 );
+                    rxOStm->WriteStream( *pTempStream );
 
                     xWorkStore->dispose();
                     xWorkStore.clear();
