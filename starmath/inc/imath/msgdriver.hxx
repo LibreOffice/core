@@ -1,8 +1,8 @@
 /* **************************************************************************
-                          msgdriver.hxx  - Driver class for class message
+                          msgdriver.hxx  - Convert iMath messages to SAL messages
                              -------------------
-    begin               : Thu Jun 5 10:33:44 CEST 2008
-    copyright           : (C) 2008 by Jan Rheinlaender
+    begin               : Sat Oct 23 17:00:00 CEST 2021
+    copyright           : (C) 2021 by Jan Rheinlaender
     email               : jrheinlaender@users.sourceforge.net
  ***************************************************************************/
 
@@ -18,29 +18,62 @@
 #ifndef _MSGDRIVER_H
 #define _MSGDRIVER_H
 
+#include <sal/log.hxx>
+
 #include "iostream"
-#include "fstream"
-#include "message.hxx"
+
+namespace GiNaC {
+    class equation;
+    class relational;
+}
+class operands;
 
 class msg {
-  private:
-    static message msg_error;
-    static message msg_warn;
-    static message msg_info;
-    static message devnull;
-    static std::ofstream devnullstream;
+private:
+    int level;
+
+    static msg msg_error;
+    static msg msg_warn;
+    static msg msg_info;
+
   public:
-    static inline message& error() { return msg_error; }
-    static inline message& warn() { return msg_warn; }
-    static inline message& info() { return msg_info; }
-    static  message& error(const int priority);
-    static  message& warn(const int priority);
-    static  message& info(const int priority);
+    /*  Check if messages of a certain priority will be printed. Returns true
+        if (p % 8) <= the priority level of the stream.
+        p > 7 adds parser debug output to the messages of priority (p % 8)
+        @param p The priority
+        @returns True or false
+    */
+    inline bool checkprio(const int p) {
+        if ((level >> 3) > 0) // i.e. level > 7
+            return ((p % 8) <= (level % 8));
+        else
+            return (p <= level);
+    }
+
+    /// Set priority of message stream
+    inline void setlevel(const int p) { level = p; }
+
+    // TODO: This is extremely inefficient
+    template<typename T> inline msg& operator<<(const T& element) { SAL_WARN("starmath.imath", element); return *this; }
+
+    static inline msg& error() { return msg_error; }
+    static inline msg& warn()  { return msg_warn; }
+    static inline msg& info()  { return msg_info; }
     static void init();
 };
 
-#define MSG_ERROR(priority, output) if (msg::error().checkprio(priority)) msg::error() << output
-#define MSG_WARN(priority, output)  if (msg::warn().checkprio(priority)) msg::warn() << output
-#define MSG_INFO(priority, output) if (msg::info().checkprio(priority)) msg::info() << output
+// Note: SAL_INFO appends a newline anyway, so ignore this
+// TODO: Change imath code to make this superfluous
+inline std::ostream& endline(std::ostream& os) { return os; }
+
+#define MSG_ERROR(priority, output) SAL_WARN_IF(msg::error().checkprio(priority), "starmath.imath", output)
+#define MSG_WARN(priority, output)  SAL_WARN_IF(msg::warn( ).checkprio(priority), "starmath.imath", output)
+#define MSG_INFO(priority, output)  SAL_INFO_IF(msg::info( ).checkprio(priority), "starmath.imath", output)
+
+namespace GiNaC {
+    std::ostream& operator<<(std::ostream& os, const equation& e);
+    std::ostream& operator<<(std::ostream& os, const operands& r);
+    std::ostream& operator<<(std::ostream& os, const relational& r);
+}
 
 #endif

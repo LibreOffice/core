@@ -1,8 +1,8 @@
 /* **************************************************************************
-                          msgdriver.cpp  - Driver class for class message
+                          msgdriver.cpp  - Convert iMath messages to SAL messages
                              -------------------
-    begin               : Thu Jun 5 10:33:44 CEST 2008
-    copyright           : (C) 2008 by Jan Rheinlaender
+    begin               : Sat Oct 23 17:00:00 CEST 2021
+    copyright           : (C) 2021 by Jan Rheinlaender
     email               : jrheinlaender@users.sourceforge.net
  ***************************************************************************/
 
@@ -15,43 +15,35 @@
  *                                                                         *
  ***************************************************************************/
 
-//#include "../config/config.h" // *** added in 1.3.1
 #include <sstream>
 #include "msgdriver.hxx"
+#include "equation.hxx"
+#include "operands.hxx"
 
 // Define static members
-message msg::msg_error(t_msg_error, 1);
-message msg::msg_warn(t_msg_warn, 1);
-message msg::msg_info(t_msg_info, -1);
-message msg::devnull(devnullstream, t_msg_info, 0);
-std::ofstream msg::devnullstream;
-
-inline message& msg::error(const int priority) {
-  if (msg_error.checkprio(priority))
-    return msg_error;
-  else
-    return devnull;
-}
-
-inline message& msg::warn(const int priority) {
-  if (msg_warn.checkprio(priority))
-    return msg_warn;
-  else
-    return devnull;
-}
-
-inline message& msg::info(const int priority) {
-  if (msg_info.checkprio(priority))
-    return msg_info;
-  else
-    return devnull;
-}
+msg msg::msg_error = msg();
+msg msg::msg_warn = msg();
+msg msg::msg_info = msg();
 
 void msg::init() {
-  msg_error = message(t_msg_error, 1);
-  msg_warn = message(t_msg_warn, 1);
-  msg_info = message(t_msg_info, -1);
-  devnullstream.open("/dev/null");
-  devnull = message(devnullstream, t_msg_info, 0);
+  msg_error.level = 1;
+  msg_warn.level = 1;
+  msg_info.level = -1;
 }
 
+namespace GiNaC {
+    std::ostream& operator<<(std::ostream& os, const equation& e) {
+        e.print(print_dflt(os));
+        return os;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const operands& o) {
+        o.print(os);
+        return os;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const relational& r) {
+        r.print(print_dflt(os));
+        return os;
+    }
+}
