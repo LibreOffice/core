@@ -793,13 +793,13 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         // some |text| here
         //     [[    ]]
         if (m_nStart > 1)
-            aNewPos.AdjustX(mnHalfCharWidth * -2 * (m_oColors.size() - 1));
+            aNewPos.AdjustX(static_cast<tools::Long>(mnHalfCharWidth) * -2 * (m_oColors.size() - 1));
     }
     else if ( m_nStart != 0 && m_nEnd != 0 )
         // both end and start boundary marks: adjust them around the bookmark position
         // |te|xt|
         //  ]] [[
-        aNewPos.AdjustX(mnHalfCharWidth * -(2 * m_nEnd - 1 + m_nPoint) );
+        aNewPos.AdjustX(static_cast<tools::Long>(mnHalfCharWidth) * -(2 * m_nEnd - 1 + m_nPoint) );
 
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
