@@ -15,6 +15,7 @@
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -55,6 +56,7 @@ public:
     void tearDown() override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     void load(std::u16string_view rURL);
+    uno::Reference<drawing::XShape> getShapeByName(std::u16string_view aName);
 };
 
 void OoxShapeTest::setUp()
@@ -76,6 +78,26 @@ void OoxShapeTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
+}
+
+uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view aName)
+{
+    uno::Reference<drawing::XShape> xRet;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+    {
+        uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        if (xShape->getName() == aName)
+        {
+            xRet.set(xShape, uno::UNO_QUERY);
+            break;
+        }
+    }
+
+    return xRet;
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
@@ -173,6 +195,42 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     drawing::TextVerticalAdjust eAdjust;
     xPropSet->getPropertyValue("TextVerticalAdjust") >>= eAdjust;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TextVerticalAdjust", drawing::TextVerticalAdjust_BOTTOM, eAdjust);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
+{
+    // The document contains shapes with all six kind of anchor positions in pptx. The text in the
+    // shapes is larger than the shape and has no word wrap. That way anchor position is visible
+    // in case you inspect the file manually.
+    load(u"tdf151008_eaVertAnchor.pptx");
+
+    struct anchorDesc
+    {
+        OUString sShapeName;
+        drawing::TextHorizontalAdjust eAnchorHori;
+        drawing::TextVerticalAdjust eAnchorVert;
+    };
+    anchorDesc aExpected[6] = {
+        { u"Right", drawing::TextHorizontalAdjust_RIGHT, drawing::TextVerticalAdjust_TOP },
+        { u"Center", drawing::TextHorizontalAdjust_CENTER, drawing::TextVerticalAdjust_TOP },
+        { u"Left", drawing::TextHorizontalAdjust_LEFT, drawing::TextVerticalAdjust_TOP },
+        { u"RightMiddle", drawing::TextHorizontalAdjust_RIGHT, drawing::TextVerticalAdjust_CENTER },
+        { u"CenterMiddle", drawing::TextHorizontalAdjust_CENTER,
+          drawing::TextVerticalAdjust_CENTER },
+        { u"LeftMiddle", drawing::TextHorizontalAdjust_LEFT, drawing::TextVerticalAdjust_CENTER }
+    };
+    // without the fix horizontal and vertical anchor positions were exchanged
+    for (size_t i = 0; i < 6; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeByName(aExpected[i].sShapeName),
+                                                   uno::UNO_QUERY);
+        drawing::TextHorizontalAdjust eHori;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("TextHorizontalAdjust") >>= eHori);
+        drawing::TextVerticalAdjust eVert;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("TextVerticalAdjust") >>= eVert);
+        CPPUNIT_ASSERT_EQUAL(aExpected[i].eAnchorHori, eHori);
+        CPPUNIT_ASSERT_EQUAL(aExpected[i].eAnchorVert, eVert);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -3318,22 +3318,12 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
-    TextVerticalAdjust eVerticalAlignment( TextVerticalAdjust_TOP );
-    const char* sVerticalAlignment = nullptr;
-    if (GetProperty(rXPropSet, "TextVerticalAdjust"))
-        mAny >>= eVerticalAlignment;
-    sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
-
     std::optional<OString> sWritingMode;
-    bool bVertical = false;
     if (GetProperty(rXPropSet, "TextWritingMode"))
     {
         WritingMode eMode;
         if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL )
-        {
             sWritingMode = "eaVert";
-            bVertical = true;
-        }
     }
     if (GetProperty(rXPropSet, "WritingMode"))
     {
@@ -3341,25 +3331,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         if (mAny >>= nWritingMode)
         {
             if (nWritingMode == text::WritingMode2::TB_RL)
-            {
                 sWritingMode = "eaVert";
-                bVertical = true;
-            }
             else if (nWritingMode == text::WritingMode2::BT_LR)
-            {
                 sWritingMode = "vert270";
-                bVertical = true;
-            }
             else if (nWritingMode == text::WritingMode2::TB_RL90)
-            {
                 sWritingMode = "vert";
-                bVertical = true;
-            }
             else if (nWritingMode == text::WritingMode2::TB_LR)
-            {
                 sWritingMode = "mongolianVert";
-                bVertical = true;
-            }
         }
     }
 
@@ -3423,19 +3401,15 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         {
                         case WritingMode2::TB_RL:
                             sWritingMode = "eaVert";
-                            bVertical = true;
                             break;
                         case WritingMode2::BT_LR:
                             sWritingMode = "vert270";
-                            bVertical = true;
                             break;
                         case WritingMode2::TB_RL90:
                             sWritingMode = "vert";
-                            bVertical = true;
                             break;
                         case WritingMode2::TB_LR:
                             sWritingMode = "mongolianVert";
-                            bVertical = true;
                             break;
                         default:
                             break;
@@ -3529,15 +3503,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if (nTextPreRotateAngle != 0 && !sWritingMode)
     {
         if (nTextPreRotateAngle == -90 || nTextPreRotateAngle == 270)
-        {
             sWritingMode = "vert";
-            bVertical = true;
-        }
         else if (nTextPreRotateAngle == -270 || nTextPreRotateAngle == 90)
-        {
             sWritingMode = "vert270";
-            bVertical = true;
-        }
         else if (nTextPreRotateAngle == -180 || nTextPreRotateAngle == 180)
         {
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
@@ -3600,14 +3568,44 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 #pragma GCC diagnostic pop
 #endif
 
-    TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
-    bool bHorizontalCenter = false;
+    // Prepare attributes 'anchor' and 'anchorCtr'
+    // LibreOffice has 12 value sets, MS Office only 6. We map them so, that it reverses the
+    // 6 mappings from import, and we assign the others approximately.
+    TextVerticalAdjust eVerticalAlignment(TextVerticalAdjust_TOP);
+    if (GetProperty(rXPropSet, "TextVerticalAdjust"))
+        mAny >>= eVerticalAlignment;
+    TextHorizontalAdjust eHorizontalAlignment(TextHorizontalAdjust_CENTER);
     if (GetProperty(rXPropSet, "TextHorizontalAdjust"))
         mAny >>= eHorizontalAlignment;
-    if( eHorizontalAlignment == TextHorizontalAdjust_CENTER )
-        bHorizontalCenter = true;
-    else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
-        sVerticalAlignment = "b";
+
+    const char* sAnchor = nullptr;
+    bool bAnchorCtr = false;
+    if (sWritingMode.has_value()
+        && (sWritingMode.value() == "eaVert" || sWritingMode.value() == "mongolianVert"))
+    {
+        bAnchorCtr = eVerticalAlignment == TextVerticalAdjust_CENTER
+                     || eVerticalAlignment == TextVerticalAdjust_BOTTOM
+                     || eVerticalAlignment == TextVerticalAdjust_BLOCK;
+        switch (eHorizontalAlignment)
+        {
+            case TextHorizontalAdjust_CENTER:
+                sAnchor = "ctr";
+                break;
+            case TextHorizontalAdjust_LEFT:
+                sAnchor = sWritingMode.value() == "eaVert" ? "b" : "t";
+                break;
+            case TextHorizontalAdjust_RIGHT:
+            default: // TextHorizontalAdjust_BLOCK, should not happen
+                sAnchor = sWritingMode.value() == "eaVert" ? "t" : "b";
+                break;
+        }
+    }
+    else
+    {
+        bAnchorCtr = eHorizontalAlignment == TextHorizontalAdjust_CENTER
+                     || eHorizontalAlignment == TextHorizontalAdjust_RIGHT;
+        sAnchor = GetTextVerticalAdjust(eVerticalAlignment);
+    }
 
     bool bHasWrap = false;
     bool bWrap = false;
@@ -3658,8 +3656,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != constDefaultLeftRightInset),
                                XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != constDefaultTopBottomInset),
                                XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != constDefaultTopBottomInset),
-                               XML_anchor, sVerticalAlignment,
-                               XML_anchorCtr, sax_fastparser::UseIf("1", bHorizontalCenter),
+                               XML_anchor, sAnchor,
+                               XML_anchorCtr, sax_fastparser::UseIf("1", bAnchorCtr),
                                XML_vert, sWritingMode,
                                XML_upright, isUpright,
                                XML_rot, sTextRotateAngleMSUnit);

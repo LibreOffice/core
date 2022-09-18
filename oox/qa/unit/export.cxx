@@ -808,6 +808,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
     assertXPath(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "upright", "1");
     assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "rot");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf151008_eaVertAnchor.pptx";
+    loadAndSave(aURL, "Impress Office Open XML");
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // The order of the shapes in the file is by name "Right", "Center", "Left", "RightMiddle",
+    // "CenterMiddle" and "LeftMiddle". I access the shapes here by index, because the XPath is
+    // easier then.
+    // As of Sep 2022 LibreOffice does not write the default anchorCtr="0"
+    // Right
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:txBody/a:bodyPr", "anchor", "t");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[1]/p:txBody/a:bodyPr", "anchorCtr");
+    // Center
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchor", "ctr");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[2]/p:txBody/a:bodyPr", "anchorCtr");
+    // Left
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:txBody/a:bodyPr", "anchor", "b");
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[3]/p:txBody/a:bodyPr", "anchorCtr");
+    // RightMiddle
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:txBody/a:bodyPr", "anchor", "t");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:txBody/a:bodyPr", "anchorCtr", "1");
+    // CenterMiddle
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[5]/p:txBody/a:bodyPr", "anchor", "ctr");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[5]/p:txBody/a:bodyPr", "anchorCtr", "1");
+    // LeftMiddle
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr", "anchor", "b");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[6]/p:txBody/a:bodyPr", "anchorCtr", "1");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

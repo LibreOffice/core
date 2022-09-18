@@ -75,10 +75,6 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
             mrTextBodyProp.moInsets[i] = GetCoordinate( sValue );
     }
 
-    mrTextBodyProp.mbAnchorCtr = rAttribs.getBool( XML_anchorCtr, false );
-    if( mrTextBodyProp.mbAnchorCtr )
-        mrTextBodyProp.maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER );
-
 //   bool bCompatLineSpacing = rAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = rAttribs.getBool( XML_forceAA, false );
     bool bFromWordArt = rAttribs.getBool(XML_fromWordArt, false);
@@ -148,10 +144,46 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     }
 
     // ST_TextAnchoringType
-    if( rAttribs.hasAttribute( XML_anchor ) )
+    mrTextBodyProp.mbAnchorCtr = rAttribs.getBool(XML_anchorCtr, false );
+    if (rAttribs.hasAttribute(XML_anchor))
+        mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken(XML_anchor, XML_t));
+    // else meVA is initialized to TextVerticalAdjust_TOP
+
+    sal_Int32 tVert = mrTextBodyProp.moVert.value_or(XML_horz);
+    if (tVert == XML_eaVert || tVert == XML_mongolianVert)
     {
-        mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
-        mrTextBodyProp.maPropertyMap.setProperty( PROP_TextVerticalAdjust, mrTextBodyProp.meVA);
+        if (mrTextBodyProp.mbAnchorCtr)
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextVerticalAdjust,
+                                                     TextVerticalAdjust_CENTER);
+        else
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextVerticalAdjust,
+                                                     TextVerticalAdjust_TOP);
+
+        if (mrTextBodyProp.meVA == TextVerticalAdjust_CENTER)
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextHorizontalAdjust,
+                                                     TextHorizontalAdjust_CENTER);
+        else if (mrTextBodyProp.meVA == TextVerticalAdjust_TOP)
+        {
+            mrTextBodyProp.maPropertyMap.setProperty(
+                PROP_TextHorizontalAdjust,
+                tVert == XML_eaVert ? TextHorizontalAdjust_RIGHT : TextHorizontalAdjust_LEFT);
+        }
+        else // meVA == TextVerticalAdjust_BOTTOM
+        {
+            mrTextBodyProp.maPropertyMap.setProperty(
+                PROP_TextHorizontalAdjust,
+                tVert == XML_eaVert ? TextHorizontalAdjust_LEFT : TextHorizontalAdjust_RIGHT);
+        }
+    }
+    else
+    {
+        if (mrTextBodyProp.mbAnchorCtr)
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextHorizontalAdjust,
+                                                     TextHorizontalAdjust_CENTER);
+        else // BLOCK is nearer to rendering in MS Office than LEFT, see tdf#137023
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextHorizontalAdjust,
+                                                     TextHorizontalAdjust_BLOCK);
+        mrTextBodyProp.maPropertyMap.setProperty(PROP_TextVerticalAdjust, mrTextBodyProp.meVA);
     }
 
     // Push defaults
