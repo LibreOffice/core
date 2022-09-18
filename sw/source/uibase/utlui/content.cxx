@@ -1880,7 +1880,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     const bool bRemoveDeleteEntry =
             bRemoveDeleteChapterEntry ||
-            bRemoveDeleteTableEntry ||
             bRemoveDeleteFrameEntry ||
             bRemoveDeleteImageEntry ||
             bRemoveDeleteOLEObjectEntry ||
@@ -1889,7 +1888,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteIndexEntry ||
             bRemoveDeleteCommentEntry ||
             bRemoveDeleteDrawingObjectEntry ||
-            bRemoveDeleteFieldEntry;
+            bRemoveDeleteFieldEntry ||
+            bRemoveDeleteTableEntry;
 
     if (bRemoveRenameEntry)
         xPop->remove(OString::number(502));
