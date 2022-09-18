@@ -2505,16 +2505,18 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
 
     utl::TempFile aFile;
     aFile.EnableKillingFile();
+    SvStream* pStream = aFile.GetStream(StreamMode::READWRITE);
 
     Sequence< PropertyValue > aDescriptor{
         comphelper::makePropertyValue("FilterName", OUString( "SVM" )),
-        comphelper::makePropertyValue("URL", aFile.GetURL()),
+        comphelper::makePropertyValue("OutputStream", uno::Reference<XOutputStream>(new utl::OOutputStreamWrapper(*pStream))),
         comphelper::makePropertyValue("ExportOnlyBackground", true)
     };
 
     xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
     xExporter->filter( aDescriptor );
-    SvmReader aReader( *aFile.GetStream( StreamMode::READ ) );
+    pStream->Seek(0);
+    SvmReader aReader( *pStream );
     aReader.Read( aMtf );
 
     bool bIsBitmap = false;
