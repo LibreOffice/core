@@ -27,11 +27,14 @@ x^{(3+4i)} looks ugly. Therefore another approach to bracketing is implemented i
 #ifndef PRINTING_H
 #define PRINTING_H
 
-#include "option.hxx"
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#pragma warning(push)
+#pragma warning(disable: 4099 4100 4996)
 #include <ginac/ginac.h>
+#pragma warning(pop)
+#include "option.hxx"
 
 namespace GiNaC {
 

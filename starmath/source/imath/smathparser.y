@@ -30,6 +30,8 @@
   #include <vector>
   #include <stack>
   #include <sstream>
+  
+  #include <cln/cln.h>
 
   #include "eqc.hxx"
   #include "func.hxx"

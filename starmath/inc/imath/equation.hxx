@@ -28,7 +28,6 @@ Class equation is used to store, print and evaluate equations
 #include <iostream>
 #include <string>
 #include <stdexcept>
-#include <ginac/ginac.h>
 #include "expression.hxx"
 #include "option.hxx"
 #include "printing.hxx"

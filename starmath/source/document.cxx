@@ -100,6 +100,10 @@ using namespace ::com::sun::star::uno;
 #include <rtl/bootstrap.hxx>
 
 #include <smim.hrc>
+#pragma warning(push)
+#pragma warning(disable: 4099)
+#include <cln/cln.h>
+#pragma warning(pop)
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <imath/msgdriver.hxx>
@@ -444,7 +448,7 @@ void SmDocShell::Compile()
 
             SetText(result);
         }
-    } catch (Exception &e) {
+    } catch (Exception &) {
         // TODO: Show error message to user
         MSG_ERROR(0, "ERROR1: " << STR(e.Message) << endline);
     } catch (duplication_error &e) {

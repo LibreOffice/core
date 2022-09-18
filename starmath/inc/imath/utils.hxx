@@ -26,8 +26,6 @@
 #include <set>
 #include <string>
 #include <stdexcept>
-#include <cln/cln.h>
-#include <ginac/ginac.h>
 #ifndef _MSC_VER
   #include <backward/hash_fun.h>
 #endif

@@ -19,7 +19,6 @@
 
 #include <string>
 #include <vector>
-#include <ginac/ginac.h>
 #include "expression.hxx"
 // TODO: How to pull in sal_Bool directly?
 #ifndef _RTL_USTRING_HXX_

@@ -396,7 +396,7 @@ GINAC_IMPLEMENT_REGISTERED_CLASS_OPT(differential, basic,
     // Ideally, this should never happen, since single differentials cannot be differentiated properly
     // Mainly, it is unclear what variable the denominator has for partial differentials
     // TODO: The current implementation does not take into account the chain rule
-    return differential(e, partial, grade+1, parent, true) / differential(s, partial, 1, e); // Increase the grade of the differential
+    return differential(e, partial, grade+1, parent, true) / expression(differential(s, partial, 1, e)); // Increase the grade of the differential
   }
 
 int differential::get_ngrade() const {

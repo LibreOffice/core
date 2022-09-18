@@ -19,7 +19,10 @@
 #include <sstream>
 #include <cmath>
 #include <cfloat>
+#pragma warning(push)
+#pragma warning (disable: 4099)
 #include <cln/cln.h>
+#pragma warning(pop)
 #include "printing.hxx"
 #include "operands.hxx"
 #include "msgdriver.hxx"
@@ -212,7 +215,10 @@ bool ex_compare(const ex& l, const ex& r) {
 } // ex_is_less();
 
 std::vector<ex> order_ex(const ex& e) {
+#pragma warning(push)
+#pragma warning (disable: 4996)
   std::vector<ex> result(e.begin(), e.end());
+#pragma warning(pop)
   std::sort(result.begin(), result.end(), ex_compare);
 
   return result;

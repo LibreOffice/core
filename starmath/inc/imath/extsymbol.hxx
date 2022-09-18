@@ -23,7 +23,10 @@
 #ifndef EXTSYMBOL_H
 #define EXTSYMBOL_H
 
+#pragma warning(push)
+#pragma warning (disable: 4099 4100 4996)
 #include <ginac/symbol.h>
+#pragma warning(pop)
 
 namespace GiNaC {
 

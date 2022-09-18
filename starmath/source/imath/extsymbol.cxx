@@ -14,7 +14,6 @@
  ***************************************************************************/
 
 #include "extsymbol.hxx"
-#include <ginac/ginac.h>
 #include "msgdriver.hxx"
 
 namespace GiNaC {

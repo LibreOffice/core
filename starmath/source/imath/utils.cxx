@@ -19,6 +19,10 @@
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
+#pragma warning(push)
+#pragma warning (disable: 4099)
+#include <cln/cln.h>
+#pragma warning(pop)
 #include "utils.hxx"
 #include "operands.hxx"
 #include "msgdriver.hxx"

@@ -24,7 +24,6 @@
  */
 
 #include <string>
-#include <ginac/ginac.h>
 #include "expression.hxx"
 #include "unit.hxx"
 

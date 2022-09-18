@@ -147,8 +147,9 @@
 #include <sstream>
 #include <fstream>
 #ifdef _MSC_VER
+#ifndef LIBO_INTERNAL_ONLY
 #define NOMINMAX
-#include <windows.h>
+#endif#include <windows.h>
 #else
 #include <unistd.h>
 #endif
@@ -1125,7 +1126,7 @@ Reference< XChartDocument > getChart(const Reference < XComponent >& xComponent)
 
 Reference < XPropertySet > getChartTitleProperties(const Reference< XChartDocument >& chart) {
   Reference < XTitled > xTitled(chart, UNO_QUERY_THROW);
-  Reference < XTitle > title = xTitled->getTitleObject();
+  Reference <com::sun::star::chart2::XTitle> title = xTitled->getTitleObject();
   if (!title.is()) return Reference < XPropertySet >();
   Sequence< Reference < XFormattedString > > titleText = title->getText();
   Reference < XFormattedString > titleTextPortion = titleText[0]; // No point iterating because UI only allows one font for the title
@@ -1135,7 +1136,7 @@ Reference < XPropertySet > getChartTitleProperties(const Reference< XChartDocume
 
 Reference< XPropertySet > getDiagramTitleProperties(const Reference< com::sun::star::chart2::XDiagram >& diagram) {
   Reference < XTitled > xTitled(diagram, UNO_QUERY_THROW);
-  Reference < XTitle > title = xTitled->getTitleObject();
+  Reference <com::sun::star::chart2::XTitle> title = xTitled->getTitleObject();
   if (!title.is()) return Reference < XPropertySet >();
   Sequence< Reference < XFormattedString > > titleText = title->getText();
   Reference < XFormattedString > titleTextPortion = titleText[0]; // No point iterating because UI only allows one font for the title
@@ -1163,7 +1164,7 @@ Sequence< Sequence< Sequence< Reference < XPropertySet > > > > getDiagramAxesTit
         Reference< XAxis > axis = cSystems[c]->getAxisByDimension(d, n);
         if (axis.is()) {
           Reference < XTitled > xTitled(axis, UNO_QUERY_THROW);
-          Reference < XTitle > title = xTitled->getTitleObject();
+          Reference <com::sun::star::chart2::XTitle> title = xTitled->getTitleObject();
           if (!title.is()) {
             result_axes[n] = Reference < XPropertySet >();
           } else {
@@ -1218,7 +1219,7 @@ void setDiagramAxesTitleProperties(Reference< com::sun::star::chart2::XDiagram >
         Reference< XAxis > axis = cSystems[c]->getAxisByDimension(d, n);
         if (axis.is()) {
           Reference < XTitled > xTitled(axis, UNO_QUERY_THROW);
-          Reference < XTitle > title = xTitled->getTitleObject();
+          Reference <com::sun::star::chart2::XTitle> title = xTitled->getTitleObject();
 
           if (title.is()) {
             Sequence< Reference < XFormattedString > > titleText = title->getText();

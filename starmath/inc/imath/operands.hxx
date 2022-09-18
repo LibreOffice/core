@@ -27,7 +27,6 @@
 **/
 
 #include <stdexcept>
-#include <ginac/ginac.h>
 
 #include "expression.hxx"
 #include "utils.hxx"

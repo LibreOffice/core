@@ -19,6 +19,11 @@
  #include "../config/config.h"
 #endif
 #include <cmath>
+#include <sstream>
+#pragma warning(push)
+#pragma warning (disable: 4099)
+#include <cln/cln.h>
+#pragma warning(pop)
 #include "func.hxx"
 #include "printing.hxx"
 #include "msgdriver.hxx"
@@ -30,7 +35,6 @@
 #include "operands.hxx"
 #include "stringex.hxx"
 #include "unit.hxx"
-#include <sstream>
 
 namespace GiNaC {
 
@@ -156,7 +160,10 @@ void func::print_imath(const imathprint&c, const ex& p, unsigned level) const {
   // Note that this depends on the locale being set to "C" (default)
   std::string delim = " , ";
   if (imathprint::decimalpoint != ".")
+#pragma warning(push)
+#pragma warning (disable: 4129)
     delim = " \%fc ";
+#pragma warning(pop)
 
   if (hard) {
     if ((hints & FUNCHINT_PRINT) && !seq.empty()) {
@@ -236,7 +243,10 @@ void func::print_diff_line(const ex& g, const int gr, const print_context& c) co
   // Set the argument delimiter
   std::string delim = " , ";
   if (imathprint::decimalpoint != ".")
+#pragma warning(push)
+#pragma warning (disable: 4129)
     delim = " \%fc ";
+#pragma warning(pop)
 
   std::string fname = printname;
   if (!hard && is_lib())
@@ -941,7 +951,7 @@ unsigned func::hint(const std::string &s) {
     }
   }
 
-  const unsigned max_unsigned = 1 << (sizeof(unsigned) * 8 - 1); // *** TODO: 1 << ...*8 gives warning
+  const unsigned max_unsigned = unsigned(1) << (sizeof(unsigned) * 8 - 1); // *** TODO: 1 << ...*8 gives warning
 
 void func::registr(const std::string &n, exvector &args, const unsigned h, const std::string& printname) {
   MSG_INFO(3, "Registering function " << n << " '" << printname << "' with arguments " << args << endline);

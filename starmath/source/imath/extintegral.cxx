@@ -348,7 +348,7 @@ ex extintegral::derivative(const symbol & s) const
     ex _b = op(2);
     ex _f = op(3);
     return
-    expression(_b).diff(s)*_f.subs(_x==_b)-expression(_a).diff(s)*_f.subs(_x==_a)+extintegral(_x, _a, _b, expression(_f).diff(s));
+    expression(_b).diff(s)*expression(_f.subs(_x==_b))-expression(_a).diff(s)*expression(_f.subs(_x==_a))+extintegral(_x, _a, _b, expression(_f).diff(s));
   } else {
     return dynallocate<extintegral>(op(0), expression(op(3)).diff(s), C);
   }
@@ -473,7 +473,7 @@ void init_table() {
 /*275*/ { pow(func("sin", a * x), 2), x / 2 - func("sin", 2 * a * x) / (4 * a) },
 /*345*/ { pow(1 - pow(func("cos", a * x), 2), -1), -1 / (func("tan", a * x) * a) },
 /*345*/ { pow(pow(func("cos", a * x), 2) - 1, -1),  1 / (func("tan", a * x) * a) },
-/*354*/ { func("sin", a * x) * func("cos", a * x), pow(func("sin", a * x), 2) / (2 * a) },
+/*354*/ { ex(func("sin", a * x)) * func("cos", a * x), pow(func("sin", a * x), 2) / (2 * a) },
 /*409 is a basic function */
 /*410*/ { pow(func("tan", a * x), 2),  func("tan", a * x) / a - x },
 /*418 is a basic function */
@@ -483,7 +483,7 @@ void init_table() {
 /*437 is a basic function */
 /*438*/ { pow(func("tanh", a * x), 2), x - func("tanh", a * x) / a },
 /*447 is a basic function */
-/*448*/ { x * func("exp", a * x), func("exp", a * x) / pow(a, 2) * (a * x - 1) },
+/*448*/ { x * ex(func("exp", a * x)), func("exp", a * x) / pow(a, 2) * (a * x - 1) },
 /*---*/ { pow(a, b * x + c), pow(a, b * x + c) / (b * func("ln", a)) },
 /*---*/ { pow(a, x), pow(a, x) / func("ln", a) }
 /*465 is a basic function */

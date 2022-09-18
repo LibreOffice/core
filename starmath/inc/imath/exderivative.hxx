@@ -23,7 +23,6 @@
  * @short Extends GiNaC to handle derivatives of arbitrary expressions
  */
 
-#include <ginac/ginac.h>
 #include "differential.hxx"
 #include "printing.hxx"
 

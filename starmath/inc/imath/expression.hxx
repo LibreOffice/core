@@ -21,7 +21,10 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
+#pragma warning(push)
+#pragma warning (disable: 4099 4100 4996)
 #include <ginac/ginac.h>
+#pragma warning(pop)
 
 namespace GiNaC {
 

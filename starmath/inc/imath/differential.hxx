@@ -24,7 +24,6 @@
  */
 
 #include <stdexcept>
-#include <ginac/ginac.h>
 #include "printing.hxx"
 #include "utils.hxx"
 
