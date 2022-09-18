@@ -282,12 +282,21 @@ struct TransparencyEmit
 };
 
 // font subsets
+
+struct ColorLayer
+{
+    sal_Int32 m_nFontID;
+    sal_uInt8 m_nSubsetGlyphID;
+    uint32_t m_nColorIndex;
+};
+
 class GlyphEmit
 {
     // performance: actually this should probably a vector;
     std::vector<sal_Ucs>            m_CodeUnits;
     sal_uInt8                       m_nSubsetGlyphID;
     sal_Int32                       m_nGlyphWidth;
+    std::vector<ColorLayer>         m_aColorLayers;
 
 public:
     GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
@@ -299,6 +308,9 @@ public:
 
     void setGlyphWidth( sal_Int32 nWidth ) { m_nGlyphWidth = nWidth; }
     sal_Int32 getGlyphWidth() const { return m_nGlyphWidth; }
+
+    void addColorLayer(ColorLayer aLayer) { m_aColorLayers.push_back(aLayer); }
+    const std::vector<ColorLayer>& getColorLayers() const { return m_aColorLayers; }
 
     void addCode( sal_Ucs i_cCode )
     {
@@ -740,6 +752,7 @@ private:
     /*  contains all font subsets in use */
     std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aSubsets;
     std::map<const vcl::font::PhysicalFontFace*, EmbedFont> m_aSystemFonts;
+    std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aType3Fonts;
     sal_Int32                           m_nNextFID;
 
     /// Cache some most recent bitmaps we've exported, in case we encounter them again..
@@ -823,7 +836,8 @@ i12626
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyph(const GlyphItem* pGlyph, const vcl::font::PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
+    void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
+    void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&, bool);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -869,11 +883,13 @@ i12626
     sal_Int32 emitBuildinFont( const pdf::BuildinFontFace*, sal_Int32 nObject );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitSystemFont(const vcl::font::PhysicalFontFace*, EmbedFont const &);
+    /* writes a type3 font object and appends it to the font id mapping, or returns false in case of failure */
+    bool emitType3Font(const vcl::font::PhysicalFontFace*, const FontSubset&, std::map<sal_Int32, sal_Int32>&);
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor(const vcl::font::PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream);
     /* writes a ToUnicode cmap, returns the corresponding stream object */
     sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const sal_Ucs* pCodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
-                                   const sal_Int32* pEncToUnicodeIndex, int nGlyphs );
+                                   const sal_Int32* pEncToUnicodeIndex, uint32_t nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()

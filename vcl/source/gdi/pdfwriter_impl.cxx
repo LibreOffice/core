@@ -2317,8 +2317,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
 {
     std::map< sal_Int32, sal_Int32 > aRet;
 
-    sal_Int32 nFontDescriptor = 0;
-    OString aSubType( "/Type1" );
+    if (g_bDebugDisableCompression)
+        emitComment("PDFWriterImpl::emitSystemFont");
+
     FontSubsetInfo aInfo;
     // fill in dummy values
     aInfo.m_nAscent = 1000;
@@ -2326,8 +2327,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     aInfo.m_nCapHeight = 1000;
     aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->GetFamilyName();
-
-    aSubType = OString( "/TrueType" );
 
     sal_Int32 pWidths[256] = { 0 };
     const LogicalFontInstance* pFontInstance = rEmbed.m_pFontInstance;
@@ -2338,13 +2337,13 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     }
 
     // We are interested only in filling aInfo
-    sal_GlyphId aGlyphIds[256] = { 0 };
-    sal_uInt8 pEncoding[256] = { 0 };
+    sal_GlyphId aGlyphIds[] = { 0 };
+    sal_uInt8 pEncoding[] = { 0 };
     std::vector<sal_uInt8> aBuffer;
-    pFont->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, 256, aInfo);
+    pFont->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, 1, aInfo);
 
     // write font descriptor
-    nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, 0 );
+    sal_Int32 nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, 0 );
     if( nFontDescriptor )
     {
         // write font object
@@ -2354,8 +2353,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
             OStringBuffer aLine( 1024 );
             aLine.append( nObject );
             aLine.append( " 0 obj\n"
-                          "<</Type/Font/Subtype" );
-            aLine.append( aSubType );
+                          "<</Type/Font/Subtype/TrueType" );
             aLine.append( "/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
@@ -2380,6 +2378,239 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     }
 
     return aRet;
+}
+
+namespace
+{
+uint32_t fillSubsetArrays(const FontEmit& rSubset, sal_GlyphId* pGlyphIds, sal_Int32* pWidths,
+                          sal_uInt8* pEncoding, sal_Int32* pEncToUnicodeIndex,
+                          sal_Int32* pCodeUnitsPerGlyph, std::vector<sal_Ucs>& rCodeUnits,
+                          sal_Int32& nToUnicodeStream)
+{
+    rCodeUnits.reserve(256);
+
+    // if it gets used then it will appear in s_subset.m_aMapping, otherwise 0 is fine
+    pWidths[0] = 0;
+
+    uint32_t nGlyphs = 1;
+    for (auto const& item : rSubset.m_aMapping)
+    {
+        sal_uInt8 nEnc = item.second.getGlyphId();
+
+        SAL_WARN_IF(pGlyphIds[nEnc] != 0 || pEncoding[nEnc] != 0, "vcl.pdfwriter",
+                    "duplicate glyph");
+        SAL_WARN_IF(nEnc > rSubset.m_aMapping.size(), "vcl.pdfwriter", "invalid glyph encoding");
+
+        pGlyphIds[nEnc] = item.first;
+        pEncoding[nEnc] = nEnc;
+        pEncToUnicodeIndex[nEnc] = static_cast<sal_Int32>(rCodeUnits.size());
+        pCodeUnitsPerGlyph[nEnc] = item.second.countCodes();
+        pWidths[nEnc] = item.second.getGlyphWidth();
+        for (sal_Int32 n = 0; n < pCodeUnitsPerGlyph[nEnc]; n++)
+            rCodeUnits.push_back(item.second.getCode(n));
+        if (item.second.getCode(0))
+            nToUnicodeStream = 1;
+        if (nGlyphs < 256)
+            nGlyphs++;
+        else
+            OSL_FAIL("too many glyphs for subset");
+    }
+
+    return nGlyphs;
+}
+}
+
+bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
+                                  const FontSubset& rType3Font,
+                                  std::map<sal_Int32, sal_Int32>& rFontIDToObject)
+{
+    if (g_bDebugDisableCompression)
+        emitComment("PDFWriterImpl::emitType3Font");
+
+    const auto& aPalette = pFace->GetColorPalette(0);
+
+    FontSubsetInfo aSubsetInfo;
+    sal_GlyphId pTempGlyphIds[] = { 0 };
+    sal_uInt8 pTempEncoding[] = { 0 };
+    std::vector<sal_uInt8> aBuffer;
+    pFace->CreateFontSubset(aBuffer, pTempGlyphIds, pTempEncoding, 1, aSubsetInfo);
+
+    for (auto& rSubset : rType3Font.m_aSubsets)
+    {
+        sal_GlyphId pGlyphIds[256] = {};
+        sal_Int32 pWidths[256];
+        sal_uInt8 pEncoding[256] = {};
+        sal_Int32 pEncToUnicodeIndex[256] = {};
+        sal_Int32 pCodeUnitsPerGlyph[256] = {};
+        std::vector<sal_Ucs> aCodeUnits;
+        sal_Int32 nToUnicodeStream = 0;
+
+        // fill arrays and prepare encoding index map
+        auto nGlyphs = fillSubsetArrays(rSubset, pGlyphIds, pWidths, pEncoding, pEncToUnicodeIndex,
+                                        pCodeUnitsPerGlyph, aCodeUnits, nToUnicodeStream);
+
+        // write font descriptor
+        sal_Int32 nFontDescriptor = 0;
+        if (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_4)
+            nFontDescriptor = emitFontDescriptor(pFace, aSubsetInfo, 0, 0);
+
+        if (nToUnicodeStream)
+            nToUnicodeStream = createToUnicodeCMap(pEncoding, aCodeUnits.data(), pCodeUnitsPerGlyph,
+                                                   pEncToUnicodeIndex, nGlyphs);
+
+        // write font object
+        sal_Int32 nFontObject = createObject();
+        if (!updateObject(nFontObject))
+            return false;
+
+        OStringBuffer aLine(1024);
+        aLine.append(nFontObject);
+        aLine.append(" 0 obj\n"
+                     "<</Type/Font/Subtype/Type3\n");
+
+        aLine.append("/FontBBox[");
+        // note: Top and Bottom are reversed in VCL and PDF rectangles
+        aLine.append(OString::number(aSubsetInfo.m_aFontBBox.Left()));
+        aLine.append(' ');
+        aLine.append(OString::number(aSubsetInfo.m_aFontBBox.Top()));
+        aLine.append(' ');
+        aLine.append(OString::number(aSubsetInfo.m_aFontBBox.Right()));
+        aLine.append(' ');
+        aLine.append(OString::number(aSubsetInfo.m_aFontBBox.Bottom() + 1));
+        aLine.append("]\n");
+
+        auto nScale = 1. / pFace->UnitsPerEm();
+        aLine.append("/FontMatrix[");
+        aLine.append(nScale);
+        aLine.append(" 0 0 ");
+        aLine.append(nScale);
+        aLine.append(" 0 0]\n");
+
+        sal_Int32 pGlyphStreams[256] = {};
+        aLine.append("/CharProcs<<\n");
+        for (auto i = 1u; i < nGlyphs; i++)
+        {
+            auto nStream = createObject();
+            aLine.append("/g" + OString::number(i) + " ");
+            aLine.append(nStream);
+            aLine.append(" 0 R\n");
+            pGlyphStreams[i] = nStream;
+        }
+        aLine.append(">>\n");
+
+        aLine.append("/Encoding<</Differences[1");
+        for (auto i = 1u; i < nGlyphs; i++)
+            aLine.append(" /g" + OString::number(i));
+        aLine.append("]>>\n");
+
+        aLine.append("/FirstChar 0\n"
+                     "/LastChar ");
+        aLine.append(OString::number(nGlyphs));
+        aLine.append("\n");
+
+        aLine.append("/Widths[");
+        for (auto i = 0u; i < nGlyphs; i++)
+        {
+            aLine.append(pWidths[i]);
+            aLine.append(" ");
+        }
+        aLine.append("]\n");
+
+        if (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_4)
+        {
+            aLine.append("/FontDescriptor ");
+            aLine.append(nFontDescriptor);
+            aLine.append(" 0 R\n");
+        }
+
+        auto nFontResources = createObject();
+        aLine.append("/Resources ");
+        aLine.append(nFontResources);
+        aLine.append(" 0 R\n");
+
+        if (nToUnicodeStream)
+        {
+            aLine.append("/ToUnicode ");
+            aLine.append(nToUnicodeStream);
+            aLine.append(" 0 R\n");
+        }
+
+        aLine.append(">>\n"
+                     "endobj\n\n");
+
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return false;
+
+        std::set<sal_Int32> aUsedFonts;
+        for (auto i = 1u; i < nGlyphs; i++)
+        {
+            auto nStream = pGlyphStreams[i];
+            if (!updateObject(nStream))
+                return false;
+            OStringBuffer aContents(1024);
+            aContents.append(pWidths[i]);
+            aContents.append(" 0 d0\n");
+
+            const auto& rGlyph = rSubset.m_aMapping.find(pGlyphIds[i])->second;
+            const auto& rLayers = rGlyph.getColorLayers();
+            for (const auto& rLayer : rLayers)
+            {
+                aUsedFonts.insert(rLayer.m_nFontID);
+
+                // 0xFFFF is a special value means foreground color.
+                aContents.append("q ");
+                if (rLayer.m_nColorIndex != 0xFFFF)
+                {
+                    appendNonStrokingColor(aPalette[rLayer.m_nColorIndex], aContents);
+                    aContents.append(" ");
+                }
+                aContents.append("BT ");
+                aContents.append("/F" + OString::number(rLayer.m_nFontID) + " ");
+                aContents.append(OString::number(pFace->UnitsPerEm()) + " Tf ");
+                aContents.append("<");
+                appendHex(rLayer.m_nSubsetGlyphID, aContents);
+                aContents.append(">Tj ");
+                aContents.append("ET ");
+                aContents.append("Q\n");
+            }
+
+            aLine.setLength(0);
+            aLine.append(nStream);
+            aLine.append(" 0 obj\n<</Length ");
+            aLine.append(aContents.getLength());
+            aLine.append(">>\nstream\n");
+            if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+                return false;
+            if (!writeBuffer(aContents.getStr(), aContents.getLength()))
+                return false;
+            aLine.setLength(0);
+            aLine.append("endstream\n"
+                         "endobj\n\n");
+            if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+                return false;
+        }
+
+        if (!updateObject(nFontResources))
+            return false;
+        aLine.setLength(0);
+        aLine.append(nFontResources);
+        aLine.append(" 0 obj\n<</Font\n<<\n");
+        for (auto nFontID : aUsedFonts)
+        {
+            aLine.append("/F");
+            aLine.append(nFontID);
+            aLine.append(" ");
+            aLine.append(rFontIDToObject[nFontID]);
+            aLine.append(" 0 R");
+        }
+        aLine.append("\n>>\n>>\nendobj\n\n");
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return false;
+
+        rFontIDToObject[rSubset.m_nFontID] = nFontObject;
+    }
+
+    return true;
 }
 
 typedef int ThreeInts[3];
@@ -2432,10 +2663,10 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
                                               const sal_Ucs* pCodeUnits,
                                               const sal_Int32* pCodeUnitsPerGlyph,
                                               const sal_Int32* pEncToUnicodeIndex,
-                                              int nGlyphs )
+                                              uint32_t nGlyphs )
 {
     int nMapped = 0;
-    for (int n = 0; n < nGlyphs; ++n)
+    for (auto n = 0u; n < nGlyphs; ++n)
         if( pCodeUnits[pEncToUnicodeIndex[n]] && pCodeUnitsPerGlyph[n] )
             nMapped++;
 
@@ -2462,7 +2693,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
                      "endcodespacerange\n"
                      );
     int nCount = 0;
-    for (int n = 0; n < nGlyphs; ++n)
+    for (auto n = 0u; n < nGlyphs; ++n)
     {
         if( pCodeUnits[pEncToUnicodeIndex[n]] && pCodeUnitsPerGlyph[n] )
         {
@@ -2640,46 +2871,22 @@ bool PDFWriterImpl::emitFonts()
     {
         for (auto & s_subset :subset.second.m_aSubsets)
         {
-            sal_GlyphId aGlyphIds[ 256 ] = {};
+            sal_GlyphId pGlyphIds[ 256 ] = {};
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ] = {};
             sal_Int32 pEncToUnicodeIndex[ 256 ] = {};
             sal_Int32 pCodeUnitsPerGlyph[ 256 ] = {};
             std::vector<sal_Ucs> aCodeUnits;
-            aCodeUnits.reserve( 256 );
-            // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
 
-            pWidths[0] = 0; // if it gets used then it will appear in s_subset.m_aMapping, otherwise 0 is fine
-            int nGlyphs = 1;
+            // fill arrays and prepare encoding index map
+            auto nGlyphs = fillSubsetArrays(s_subset, pGlyphIds, pWidths, pEncoding, pEncToUnicodeIndex,
+                                            pCodeUnitsPerGlyph, aCodeUnits, nToUnicodeStream);
 
-            for (auto const& item : s_subset.m_aMapping)
-            {
-                sal_uInt8 nEnc = item.second.getGlyphId();
-
-                SAL_WARN_IF( aGlyphIds[nEnc] != 0 || pEncoding[nEnc] != 0, "vcl.pdfwriter", "duplicate glyph" );
-                SAL_WARN_IF( nEnc > s_subset.m_aMapping.size(), "vcl.pdfwriter", "invalid glyph encoding" );
-
-                aGlyphIds[ nEnc ] = item.first;
-                pEncoding[ nEnc ] = nEnc;
-                pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aCodeUnits.size());
-                pCodeUnitsPerGlyph[ nEnc ] = item.second.countCodes();
-                pWidths[ nEnc ] = item.second.getGlyphWidth();
-                for( sal_Int32 n = 0; n < pCodeUnitsPerGlyph[ nEnc ]; n++ )
-                    aCodeUnits.push_back( item.second.getCode( n ) );
-                if( item.second.getCode(0) )
-                    nToUnicodeStream = 1;
-                if( nGlyphs < 256 )
-                    nGlyphs++;
-                else
-                {
-                    OSL_FAIL( "too many glyphs for subset" );
-                }
-            }
             std::vector<sal_uInt8> aBuffer;
             FontSubsetInfo aSubsetInfo;
             const auto* pFace = subset.first;
-            if (pFace->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, nGlyphs, aSubsetInfo))
+            if (pFace->CreateFontSubset(aBuffer, pGlyphIds, pEncoding, nGlyphs, aSubsetInfo))
             {
                 // create font stream
                 if (g_bDebugDisableCompression)
@@ -2795,7 +3002,7 @@ bool PDFWriterImpl::emitFonts()
                 aLine.append( static_cast<sal_Int32>(nGlyphs-1) );
                 aLine.append( "\n"
                              "/Widths[" );
-                for( int i = 0; i < nGlyphs; i++ )
+                for (auto i = 0u; i < nGlyphs; i++)
                 {
                     aLine.append( pWidths[ i ] );
                     aLine.append( ((i & 15) == 15) ? "\n" : " " );
@@ -2818,24 +3025,21 @@ bool PDFWriterImpl::emitFonts()
             }
             else
             {
-                const vcl::font::PhysicalFontFace* pFont = subset.first;
                 OStringBuffer aErrorComment( 256 );
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
-                aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
+                aErrorComment.append( OUStringToOString( pFace->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
                 aErrorComment.append( '\"' );
-                if( pFont->GetItalic() == ITALIC_NORMAL )
+                if( pFace->GetItalic() == ITALIC_NORMAL )
                     aErrorComment.append( " italic" );
-                else if( pFont->GetItalic() == ITALIC_OBLIQUE )
+                else if( pFace->GetItalic() == ITALIC_OBLIQUE )
                     aErrorComment.append( " oblique" );
                 aErrorComment.append( " weight=" );
-                aErrorComment.append( sal_Int32(pFont->GetWeight()) );
+                aErrorComment.append( sal_Int32(pFace->GetWeight()) );
                 emitComment( aErrorComment.getStr() );
             }
         }
     }
 
-    if (g_bDebugDisableCompression)
-        emitComment( "PDFWriterImpl::emitSystemFonts" );
     // emit system fonts
     for (auto const& systemFont : m_aSystemFonts)
     {
@@ -2845,6 +3049,13 @@ bool PDFWriterImpl::emitFonts()
             if ( !item.second ) return false;
             aFontIDToObject[ item.first ] = item.second;
         }
+    }
+
+    // emit Type3 fonts
+    for (auto const& it : m_aType3Fonts)
+    {
+        if (!emitType3Font(it.first, it.second, aFontIDToObject))
+            return false;
     }
 
     OStringBuffer aFontDict( 1024 );
@@ -3860,14 +4071,12 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
-    const GlyphItem aItem(0, 0, pFontInstance->GetGlyphIndex(cMark),
-                          DevicePoint(), GlyphItemFlags::NONE, 0, 0, 0);
-    const std::vector<sal_Ucs> aCodeUnits={ cMark };
-    auto nGlyphWidth = pFontInstance->GetGlyphWidth(aItem.glyphId(), aItem.IsVertical(), true);
+    const auto nGlyphId = pFontInstance->GetGlyphIndex(cMark);
+    const auto nGlyphWidth = pFontInstance->GetGlyphWidth(nGlyphId, false, true);
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
-    registerGlyph(&aItem, pDevFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+    registerGlyph(nGlyphId, pDevFont, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->HasColorLayers());
 
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
@@ -5764,14 +5973,13 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     return nFontID;
 }
 
-void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
+void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   const vcl::font::PhysicalFontFace* pFont,
                                   const std::vector<sal_Ucs>& rCodeUnits,
                                   sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
 {
-    const int nFontGlyphId = pGlyph->glyphId();
     FontSubset& rSubset = m_aSubsets[ pFont ];
     // search for font specific glyphID
     auto it = rSubset.m_aMapping.find( nFontGlyphId );
@@ -5807,6 +6015,72 @@ void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
         rNewGlyph.m_nFontID = nMappedFontObject;
         rNewGlyph.m_nSubsetGlyphID = nNewId;
     }
+}
+
+void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
+                                  const vcl::font::PhysicalFontFace* pFace,
+                                  const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth,
+                                  sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject,
+                                  bool bColor)
+{
+    if (bColor)
+    {
+        // Font has color layers, check if this glyph has color layers.
+        auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
+        if (!aLayers.empty())
+        {
+            auto& rSubset = m_aType3Fonts[pFace];
+            auto it = rSubset.m_aMapping.find(nFontGlyphId);
+            if (it != rSubset.m_aMapping.end())
+            {
+                nMappedFontObject = it->second.m_nFontID;
+                nMappedGlyph = it->second.m_nSubsetGlyphID;
+            }
+            else
+            {
+                // create new subset if necessary
+                if (rSubset.m_aSubsets.empty()
+                    || (rSubset.m_aSubsets.back().m_aMapping.size() > 254))
+                {
+                    rSubset.m_aSubsets.emplace_back(m_nNextFID++);
+                }
+
+                // copy font id
+                nMappedFontObject = rSubset.m_aSubsets.back().m_nFontID;
+                // create new glyph in subset
+                sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(
+                    rSubset.m_aSubsets.back().m_aMapping.size() + 1);
+                nMappedGlyph = nNewId;
+
+                // add new glyph to emitted font subset
+                auto& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[nFontGlyphId];
+                rNewGlyphEmit.setGlyphId(nNewId);
+                rNewGlyphEmit.setGlyphWidth(nGlyphWidth);
+                for (const auto nCode : rCodeUnits)
+                    rNewGlyphEmit.addCode(nCode);
+
+                // add color layers to the glyphs
+                for (const auto& aLayer : aLayers)
+                {
+                    sal_uInt8 nLayerGlyph;
+                    sal_Int32 nLayerFontID;
+                    registerGlyph(aLayer.nGlyphIndex, pFace, rCodeUnits, nGlyphWidth, nLayerGlyph,
+                                  nLayerFontID);
+
+                    rNewGlyphEmit.addColorLayer({ nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
+                }
+
+                // add new glyph to font mapping
+                Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];
+                rNewGlyph.m_nFontID = nMappedFontObject;
+                rNewGlyph.m_nSubsetGlyphID = nNewId;
+            }
+            return;
+        }
+    }
+
+    // If we reach here then the glyph has no color layers.
+    registerGlyph(nFontGlyphId, pFace, rCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 }
 
 void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines )
@@ -6240,13 +6514,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsInCluster())
             assert(aCodeUnits.empty());
 
+        const auto nGlyphId = pGlyph->glyphId();
+
         // A glyph can't have more than one ToUnicode entry, use ActualText
         // instead.
         if (!aCodeUnits.empty() && !bUseActualText)
         {
             for (const auto& rSubset : m_aSubsets[pFont].m_aSubsets)
             {
-                const auto& it = rSubset.m_aMapping.find(pGlyph->glyphId());
+                const auto& it = rSubset.m_aMapping.find(nGlyphId);
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
                 {
                     bUseActualText = true;
@@ -6257,11 +6533,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
-        auto nGlyphWidth = pGlyphFont->GetGlyphWidth(pGlyph->glyphId(), pGlyph->IsVertical(), true);
+        auto nGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, pGlyph->IsVertical(), true);
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
-        registerGlyph(pGlyph, pFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+        registerGlyph(nGlyphId, pFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->HasColorLayers());
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
