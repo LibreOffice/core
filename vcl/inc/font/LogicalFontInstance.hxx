@@ -102,7 +102,7 @@ public: // TODO: make data members private
 
     sal_GlyphId GetGlyphIndex(uint32_t, uint32_t = 0) const;
 
-    double GetGlyphWidth(sal_GlyphId, bool = false, bool = false) const;
+    double GetGlyphWidth(sal_GlyphId, bool = false, bool = true) const;
 
     int GetKashidaWidth() const;
 

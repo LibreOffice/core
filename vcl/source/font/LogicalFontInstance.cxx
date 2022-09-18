@@ -150,7 +150,7 @@ sal_GlyphId LogicalFontInstance::GetGlyphIndex(uint32_t nUnicode, uint32_t nVari
     return 0;
 }
 
-double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bool bPDF) const
+double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bool bScale) const
 {
     auto* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
     int nWidth;
@@ -159,16 +159,12 @@ double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bo
     else
         nWidth = hb_font_get_glyph_h_advance(pHbFont, nGlyph);
 
-    if (bPDF)
-    {
-        return (nWidth * 1000) / GetFontFace()->UnitsPerEm();
-    }
-    else
-    {
-        double nScale = 0;
-        GetScale(&nScale, nullptr);
-        return double(nWidth * nScale);
-    }
+    if (!bScale)
+        return nWidth;
+
+    double nScale = 0;
+    GetScale(&nScale, nullptr);
+    return double(nWidth * nScale);
 }
 
 bool LogicalFontInstance::IsGraphiteFont()

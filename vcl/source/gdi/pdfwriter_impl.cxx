@@ -2313,6 +2313,12 @@ sal_Int32 PDFWriterImpl::emitBuildinFont(const pdf::BuildinFontFace* pFD, sal_In
     return nFontObject;
 }
 
+namespace
+{
+// Translate units from TT to PS (standard 1/1000)
+int XUnits(int nUPEM, int n) { return (n * 1000) / nUPEM; }
+}
+
 std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font::PhysicalFontFace* pFont, EmbedFont const & rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
@@ -2330,10 +2336,11 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
 
     sal_Int32 pWidths[256] = { 0 };
     const LogicalFontInstance* pFontInstance = rEmbed.m_pFontInstance;
+    auto nUPEM = pFont->UnitsPerEm();
     for( sal_Ucs c = 32; c < 256; c++ )
     {
         sal_GlyphId nGlyph = pFontInstance->GetGlyphIndex(c);
-        pWidths[c] = pFontInstance->GetGlyphWidth(nGlyph, false, true);
+        pWidths[c] = XUnits(nUPEM, pFontInstance->GetGlyphWidth(nGlyph, false, false));
     }
 
     // We are interested only in filling aInfo
@@ -4072,7 +4079,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
     const auto nGlyphId = pFontInstance->GetGlyphIndex(cMark);
-    const auto nGlyphWidth = pFontInstance->GetGlyphWidth(nGlyphId, false, true);
+    const auto nGlyphWidth = pFontInstance->GetGlyphWidth(nGlyphId, false, false);
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
@@ -6006,7 +6013,7 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
         // add new glyph to emitted font subset
         GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
         rNewGlyphEmit.setGlyphId( nNewId );
-        rNewGlyphEmit.setGlyphWidth( nGlyphWidth );
+        rNewGlyphEmit.setGlyphWidth(XUnits(pFont->UnitsPerEm(), nGlyphWidth));
         for (const auto nCode : rCodeUnits)
             rNewGlyphEmit.addCode(nCode);
 
@@ -6533,7 +6540,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
-        auto nGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, pGlyph->IsVertical(), true);
+        auto nGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, pGlyph->IsVertical(), false);
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
@@ -6545,7 +6552,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         aGlyphs.emplace_back(aPos,
                              pGlyph,
-                             nGlyphWidth,
+                             XUnits(pFont->UnitsPerEm(), nGlyphWidth),
                              nMappedFontObject,
                              nMappedGlyph,
                              nCharPos);
