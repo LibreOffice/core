@@ -1,0 +1,16 @@
+--- src/Makefile.in	2022-02-19 17:12:57.000000000 +0100
++++ src/Makefile.in	2022-02-19 17:43:04.629478500 +0100
+@@ -6411,11 +6411,11 @@
+ 
+ .S.lo:
+ @am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+-@am__fastdepCCAS_TRUE@	$(LTCPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
++@am__fastdepCCAS_TRUE@	$(LTCPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -TC -c -o $@ $< &&\
+ @am__fastdepCCAS_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
+ @AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+ @AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(LTCPPASCOMPILE) -c -o $@ $<
++@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(LTCPPASCOMPILE) -TC -c -o $@ $<
+ 
+ .cc.o:
+ @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

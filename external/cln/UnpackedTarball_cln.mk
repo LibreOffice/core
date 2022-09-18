@@ -19,9 +19,9 @@ $(eval $(call gb_UnpackedTarball_set_post_action,cln,\
 ))
 endif
 
-cln_patches += malloc_static_initialization_order.patch
-
 $(eval $(call gb_UnpackedTarball_set_patchlevel,cln,0))
+
+cln_patches += max_cmdline_length.patch asm_files.patch
 
 $(eval $(call gb_UnpackedTarball_add_patches,cln, \
         $(foreach patch,$(cln_patches),external/cln/$(patch)) \

@@ -1,0 +1,24 @@
+--- ginac/lst.h	2022-01-01 16:57:10.000000000 +0100
++++ ginac/lst.h	2022-02-17 20:54:01.502610400 +0100
+@@ -31,9 +31,6 @@
+ 
+ typedef container<std::list> lst;
+ 
+-/** Declaration of container::reg_info for lst. */
+-template<> registered_class_info lst::reg_info;
+-
+ /** Specialization of container::get_default_flags() for lst. */
+ template<> inline unsigned lst::get_default_flags() { return status_flags::not_shareable; }
+ 
+--- ginac/exprseq.h	2022-01-01 16:57:10.000000000 +0100
++++ ginac/exprseq.h	2022-02-17 20:54:07.330977200 +0100
+@@ -31,9 +31,6 @@
+ 
+ typedef container<std::vector> exprseq;
+ 
+-/** Declaration of container::reg_info for exprseq. */
+-template<> registered_class_info exprseq::reg_info;
+-
+ // defined in exprseq.cpp
+ template<> bool exprseq::info(unsigned inf) const;
+ 

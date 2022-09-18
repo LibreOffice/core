@@ -11150,9 +11150,14 @@ else
     SYSTEM_CLN=
     SYSTEM_GINAC=
     CLN_CFLAGS="-I${WORKDIR}/UnpackedTarball/cln/include/"
-    GINAC_CFLAGS="-I${WORKDIR}/UnpackedTarball/ginac/install/include/"
-    CLN_LIBS="-L${WORKDIR}/UnpackedTarball/cln/install/lib -lcln"
-    GINAC_LIBS="-L${WORKDIR}/UnpackedTarball/ginac/install/lib -lginac"
+    GINAC_CFLAGS="-I${WORKDIR}/UnpackedTarball/ginac/instdir/include/"
+    if test "$COM" = "MSC"; then
+        CLN_LIBS="${WORKDIR}/UnpackedTarball/cln/instdir/lib/libcln.lib"
+        GINAC_LIBS="${WORKDIR}/UnpackedTarball/ginac/instdir/lib/libginac.lib"
+    else
+        CLN_LIBS="-L${WORKDIR}/UnpackedTarball/cln/instdir/lib -lcln"
+        GINAC_LIBS="-L${WORKDIR}/UnpackedTarball/ginac/instdir/lib -lginac"
+    fi
     BUILD_TYPE="$BUILD_TYPE CLN GINAC"
 fi
 AC_SUBST(SYSTEM_CLN)

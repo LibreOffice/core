@@ -14,7 +14,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,ginac,ginac))
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,ginac,$(LIBO_LIB_FOLDER)/libginac.dylib,ginac/.libs/libginac.dylib))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_file,ginac,$(LIBO_LIB_FOLDER)/libginac.dll,ginac/.libs/libginac.dll))
+$(eval $(call gb_ExternalPackage_add_file,ginac,$(LIBO_LIB_FOLDER)/libginac.lib,ginac/.libs/libginac.lib))
 else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,ginac,$(LIBO_LIB_FOLDER)/libginac.so.11,ginac/.libs/libginac.so.11.1.1))
 endif

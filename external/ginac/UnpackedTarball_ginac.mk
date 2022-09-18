@@ -19,7 +19,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,ginac,\
 ))
 endif
 
-ginac_patches += digits_static_initialization_order.patch container_missing_copy_dtr.patch print_missing_copy_dtr.patch numeric_unused_parameter.patch
+ginac_patches += workaround_error_c2766.patch add_header_crc32.patch
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,ginac,0))
 

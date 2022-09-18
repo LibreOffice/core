@@ -12,20 +12,9 @@ $(eval $(call gb_Module_Module,cln))
 $(eval $(call gb_Module_add_targets,cln,\
         UnpackedTarball_cln \
 ))
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,cln,\
-        StaticLibrary_cln \
-))
-else
-# Dynamic version
 $(eval $(call gb_Module_add_targets,cln,\
         ExternalProject_cln \
         ExternalPackage_cln \
 ))
-# Static version
-#$(eval $(call gb_Module_add_targets,cln,\
-#        ExternalProjectStatic_cln \
-#))
-endif
 
 # vim: set noet sw=4 ts=4:

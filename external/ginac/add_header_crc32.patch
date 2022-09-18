@@ -1,0 +1,12 @@
+--- ginac/Makefile.am	2022-01-01 16:57:10.000000000 +0100
++++ ginac/Makefile.am	2022-02-07 18:31:59.921633800 +0100
+@@ -69,7 +69,8 @@
+   power.h print.h pseries.h ptr.h registrar.h relational.h structure.h \
+   symbol.h symmetry.h tensor.h version.h wildcard.h compiler.h \
+   parser/parser.h \
+-  parser/parse_context.h
++  parser/parse_context.h \
++  crc32.h
+ 
+ EXTRA_DIST = function.py function.hppy function.cppy CMakeLists.txt
+ 

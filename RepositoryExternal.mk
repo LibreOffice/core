@@ -4355,23 +4355,14 @@ gb_ExternalProject__use_cln :=
 else # !SYSTEM_CLN
 
 define gb_LinkTarget__use_cln
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DCLN_STATIC \
-)
 $(call gb_LinkTarget_use_unpacked,$(1),cln)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cln/include)\
 	$$(INCLUDE) \
 )
 
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	cln \
-)
-else
 $(call gb_LinkTarget_add_libs,$(1),$(CLN_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),cln)
-endif
 
 endef
 
@@ -4397,23 +4388,14 @@ endef
 else # !SYSTEM_GINAC
 
 define gb_LinkTarget__use_ginac
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DGINAC_STATIC \
-)
 $(call gb_LinkTarget_use_unpacked,$(1),ginac)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,ginac/install/include)\
+	-I$(call gb_UnpackedTarball_get_dir,ginac/instdir/include) \
 	$$(INCLUDE) \
 )
 
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	ginac \
-)
-else
 $(call gb_LinkTarget_add_libs,$(1),$(GINAC_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),ginac)
-endif
 
 endef
 

@@ -1,0 +1,13 @@
+--- src/Makefile.in	2019-12-05 21:59:52.000000000 +0100
++++ src/Makefile.in	2022-02-19 17:10:28.348079800 +0100
+@@ -5336,7 +5336,9 @@
+ 	polynomial/elem/$(DEPDIR)/$(am__dirstamp)
+ 
+ libcln.la: $(libcln_la_OBJECTS) $(libcln_la_DEPENDENCIES) $(EXTRA_libcln_la_DEPENDENCIES)
+-	$(AM_V_CXXLD)$(libcln_la_LINK) -rpath $(libdir) $(libcln_la_OBJECTS) $(libcln_la_LIBADD) $(LIBS)
++	$(file >objectfiles,$(libcln_la_OBJECTS) $(libcln_la_LIBADD) $(LIBS))
++	sed -i  's/\r//g' objectfiles
++	$(AM_V_CXXLD)$(libcln_la_LINK) -rpath $(libdir) -objectlist objectfiles
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
