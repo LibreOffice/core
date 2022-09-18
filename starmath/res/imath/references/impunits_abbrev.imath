@@ -1,0 +1,25 @@
+%%***************************************************************************
+%%          impunits_abbrev.imath  -  provide imperial units (abbreviations)
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------- US and British units ----------------------------------
+%%ii UNITDEF{"RPM", %rpm = %revolutionsperminute}
+%%ii UNITDEF{"", %hp = %horsepower}
+%%ii UNITDEF{"″", %in = %inch}
+%%ii UNITDEF{"", %ft = %foot}
+%%ii UNITDEF {"°F", %Fa = %Fahrenheit}
+%%ii UNITDEF {"", %Btu = 1055 %joule}
+%%ii UNITDEF {"", %lbm = 0.45359237 %kilogram}

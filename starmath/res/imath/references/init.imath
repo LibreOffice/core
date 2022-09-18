@@ -1,0 +1,107 @@
+%%***************************************************************************
+%%                         	init.imath - basic mathematics init
+%%                             -------------------
+%%    begin                : Fri Oct 29 2008
+%%    copyright            : (C) 2008 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%%-------------- Mathematical functions ----------------------------------------
+%%%hard-coded functions that come with GiNaC
+%%ii function{ {lib;nobracket}, abs, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, arccos, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, arcosh, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, arcsin, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, arsinh, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, arctan, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, artanh, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, cos, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, cosh, x_{.x.}}
+%%ii function{ {lib;defdiff}, exp, x_{.x.}}
+%%ii function{ {lib;defdiff}, fact, x_{.x.}}
+%%ii function{ {lib;defdiff}, ln, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, sin, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, sinh, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, tan, x_{.x.}}
+%%ii function{ {lib;defdiff;trig}, tanh, x_{.x.}}
+%%ii function{ {lib;defdiff}, "Re", re, x_{.x.}}
+%%ii function{ {lib;defdiff}, Re, x_{.x.}  }
+%%ii function{ {lib;defdiff}, "Im", im, x_{.x.}}
+%%ii function{ {lib;defdiff}, Im, x_{.x.}}
+%%ii function{ {lib;defdiff}, conjugate, x_{.x.}}
+%%
+%%hard-coded functions that come with iMath
+%%ii function{ {lib;print}, mindex, m_{.m.};r_{.r.};c_{.c.}}
+%%ii function{ {lib;print}, hadamard, m_{.m.};n_{.n.};o_{.o.}}
+%%ii function{ {lib;print}, transpose, m_{.m.}}
+%%ii function{ {lib;print}, vecprod, e_{.e.};f_{.f.}}
+%%ii function{ {lib;print}, scalprod, e_{.e.};f_{.f.}}
+%%ii function{ {lib;print}, ifelse, c_{.c.};e_{.e.};f_{.f.}}
+%%ii function{ {lib;print}, round, e_{.e.};n_{.n.}}
+%%ii function{ {lib;print}, floor, e_{.e.};n_{.n.}}
+%%ii function{ {lib;print}, ceil, e_{.e.};n_{.n.}}
+%%ii function{ {lib;print}, vmin, v_{.v.}}
+%%ii function{ {lib;print}, vmax, v_{.v.}}
+%%ii function{ {lib;print}, concat, v_{.v.};w_{.w.}}
+%%ii function{ {lib;print}, sum, l_{.l.};h_{.h.};e_{.e.}}
+%%hard-coded matrix functions from GiNaC matrix.h
+%%ii function{ {lib;print}, diag, v_{.v.}}
+%%ii function{ {lib;print}, ident, r_{.r.};c_{.c.}}
+%%ii function{ {lib;print}, ones, r_{.r.};c_{.c.}}
+%%ii function{ {lib;print}, submatrix, m_{.m.};r_{.r.};nr_{.nr.};c_{.c.};nc_{.nc.}}
+%%ii function{ {lib;print}, reducematrix, m_{.m.};r_{.r.};c_{.c.}}
+%%ii function{ {lib;print}, det, m_{.m.}}
+%%ii function{ {lib;print}, tr, m_{.m.}}
+%%ii function{ {lib;print}, charpoly, m_{.m.};v_{.v.}}
+%%ii function{ {lib;print}, rank, m_{.m.}}
+%%ii function{ {lib;print}, solvematrix, m_{.m.};v_{.v.};r_{.r.}}
+%%ii function{ {lib;print}, invertmatrix, m_{.m.}}
+%%ii function{ {lib;print}, matrixrows, m_{.m.}}
+%%ii function{ {lib;print}, matrixcols, m_{.m.}}
+%%
+%%soft-coded functions
+%%ii function{ {lib;expand;defdiff}, square, x_{.x.}}
+%%ii @lib:__square__@ funcdef* square(x_{.x.}) = x_{.x.}^2
+%%ii function{ {lib;defdiff;trig}, cot, x_{.x.}}
+%%ii @lib:__cot__@ funcdef* cot(x_{.x.}) = 1 / tan(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, coth, x_{.x.}}
+%%ii @lib:__coth__@ funcdef* coth(x_{.x.}) = 1/tanh(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, sec, x_{.x.}}
+%%ii @lib:__sec__@ funcdef* sec(x_{.x.}) = 1 / cos(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, arcsec, x_{.x.}}
+%%ii @lib:__arcsec__@ funcdef* arcsec(x_{.x.}) = arccos(1/x_{.x.})
+%%ii function{ {lib;defdiff;trig}, csc, x_{.x.}}
+%%ii @lib:__csc__@ funcdef* csc(x_{.x.}) = 1 / sin(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, arccsc, x_{.x.}}
+%%ii @lib:__arccsc__@ funcdef* arccsc(x_{.x.}) = arcsin(1/x_{.x.})
+%%ii function{ {lib;defdiff}, log, x_{.x.}}
+%%ii @lib:__log__@ funcdef* log(x_{.x.}) = ln(x_{.x.}) / ln(10)
+%%ii function{ {lib;defdiff;nobracket;expand}, sqrt, x_{.x.}}
+%%ii @lib:__sqrt__@ funcdef* sqrt(x_{.x.}) = x_{.x.}^{1/2}
+%%ii function{ {lib;defdiff;trig}, arccot, x_{.x.}}
+%%ii @lib:__arccot__@ funcdef* arccot(x_{.x.}) = %pi/2 - arctan(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, arcoth, x_{.x.}}
+%%ii @lib:__arccoth__@ funcdef* arcoth(x_{.x.}) = 1/2 * ln((x_{.x.}+1) / (x_{.x.}-1))
+%%ii function{ {lib;defdiff;trig}, sech, x_{.x.}}
+%%ii @lib:__sech__@ funcdef* sech(x_{.x.}) = 1 / cosh(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, csch, x_{.x.}}   
+%%ii @lib:__csch__@ funcdef* csch(x_{.x.}) = 1 / sinh(x_{.x.})
+%%ii function{ {lib;defdiff;trig}, arsech, x_{.x.}}
+%%ii @lib:__arsech__@ funcdef* arsech(x_{.x.}) = ln((1 + sqrt(1 - x_{.x.}^2)) / x_{.x.})
+%%ii function{ {lib;defdiff;trig}, arcsch, x_{.x.}}
+%%ii @lib:__arcsch__@ funcdef* arcsch(x_{.x.}) = ln((1 + sqrt(1 + x_{.x.}^2)) / x_{.x.})
+%%ii function{ {lib}, max, x_{.x.}; y_{.y.}}
+%%ii @lib:__max__@ funcdef* max(x_{.x.}; y_{.y.}) = ifelse(x_{.x.} < y_{.y.}; y_{.y.}; x_{.x.})
+%%ii function{ {lib}, min, x_{.x.}; y_{.y.}}
+%%ii @lib:__min__@ funcdef* min(x_{.x.}; y_{.y.}) = ifelse(x_{.x.} > y_{.y.}; y_{.y.}; x_{.x.})
+%%ii function{ {lib}, interpol, w_{.w.};x_{.x.};y_{.y.};z_{.z.};t_{.t.}}
+%%ii @lib:__interpol__@ funcdef* interpol(w_{.w.};x_{.x.};y_{.y.};z_{.z.};t_{.t.}) = x_{.x.} + (t_{.t.} - w_{.w.}) * (z_{.z.} - x_{.x.})/(y_{.y.} - w_{.w.})

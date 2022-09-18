@@ -1,0 +1,39 @@
+%%***************************************************************************
+%%          siprefixes.imath  -  provide SI prefixes
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------SI Prefixes --------------------------------------------
+%%ii PREFIXDEF{%yotta = 10^24}
+%%ii PREFIXDEF{%zetta = 10^21}
+%%ii PREFIXDEF{%exa   = 10^18}
+%%ii PREFIXDEF{%peta  = 10^15}
+%%ii PREFIXDEF{%tera  = 10^12}
+%%ii PREFIXDEF{%giga  = 10^9}
+%%ii PREFIXDEF{%mega  = 10^6}
+%%ii PREFIXDEF{%kilo  = 10^3}
+%%ii PREFIXDEF{%hecto = 10^2}
+%%ii PREFIXDEF{%deka  = 10}
+%%ii PREFIXDEF{%deca  = 10}
+%%ii PREFIXDEF{%deci  = 10^{-1}}
+%%ii PREFIXDEF{%centi = 10^{-2}}
+%%ii PREFIXDEF{%milli = 10^{-3}}
+%%ii PREFIXDEF{%micro = 10^{-6}}
+%%ii PREFIXDEF{%nano  = 10^{-9}}
+%%ii PREFIXDEF{%pico  = 10^{-12}}
+%%ii PREFIXDEF{%femto = 10^{-15}}
+%%ii PREFIXDEF{%atto  = 10^{-18}}
+%%ii PREFIXDEF{%zepto = 10^{-21}}
+%%ii PREFIXDEF{%yocto = 10^{-24}}

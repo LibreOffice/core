@@ -1,0 +1,175 @@
+%%***************************************************************************
+%%          units.imath  -  provide SI units (deprecated)
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2010 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------ short forms of the base units --------------------------
+%%ii UNITDEF{"m", %m = %metre}
+%%ii UNITDEF{"kg", %kg = %kilogram}
+%%ii UNITDEF{"s", %s = %second}
+%%ii UNITDEF{"A", %A = %ampere}
+%%ii UNITDEF{"K", %K = %kelvin}
+%%ii UNITDEF{"mol", %mol = %mole}
+%%ii UNITDEF{"cd", %cd = %candela}
+%%
+%%------------------SI Prefixes --------------------------------------------
+%%UNITDEF*{%yotta}{10^{24}}
+%%UNITDEF*{%zetta}{10^{21}}
+%%UNITDEF*{%exa}{10^{18}}
+%%UNITDEF*{%peta}{10^{15}}
+%%UNITDEF*{%tera}{10^{12}}
+%%UNITDEF*{%giga}{10^{9}}
+%%UNITDEF*{%mega}{10^{6}}
+%%UNITDEF*{%kilo}{10^{3}}
+%%UNITDEF*{%hecto}{10^{2}}
+%%UNITDEF*{%deka}{10}
+%%UNITDEF*{%deca}{10}
+%%UNITDEF*{%deci}{10^-1}
+%%UNITDEF*{%centi}{10^-2}
+%%UNITDEF*{%milli}{10^-3}
+%%UNITDEF*{%micro}{10^-6}
+%%UNITDEF*{%nano}{10^-9}
+%%UNITDEF*{%pico}{10^-12}
+%%UNITDEF*{%femto}{10^-15}
+%%UNITDEF*{%atto}{10^-18}
+%%UNITDEF*{%zepto}{10^-21}
+%%UNITDEF*{%yocto}{10^-24}
+%%
+%%----------- SI derived units with special names and symbols --------------
+%%ii UNITDEF{"", %radian = %m / %m}
+%%ii UNITDEF{"rad", %rad = %radian}
+%%ii UNITDEF{"", %steradian = %m^2 %m^-2}
+%%ii UNITDEF{"sterad", %sr = %steradian}
+%%ii UNITDEF{"", %hertz = %s^-1}
+%%ii UNITDEF{"Hz", %Hz = %hertz}
+%%ii UNITDEF{"", %newton = %kg %m %s^-2}
+%%ii UNITDEF{"N", %N = %newton}
+%%ii UNITDEF{"", %pascal = %m^-1 %kg %s^-2}
+%%ii UNITDEF{"Pa", %Pa = %pascal}
+%%ii UNITDEF{"", %joule = %m^2 %kg %s^-2}
+%%ii UNITDEF{"J", %J = %joule}
+%%ii UNITDEF{"", %watt = %m^2 %kg %s^-3}
+%%ii UNITDEF{"W", %W = %watt}
+%%ii UNITDEF{"", %coulomb = %A %s}
+%%ii UNITDEF{"C", %C = %coulomb}
+%%ii UNITDEF{"", %volt = %m^2 %kg %s^-3 %A^-1}
+%%ii UNITDEF{"V", %V = %volt}
+%%ii UNITDEF{"", %farad = %m^-2 %kg^-1 %s^4 %A^2}
+%%ii UNITDEF{"F", %F = %farad}
+%%ii UNITDEF{"", %ohm = %m^2 %kg %s^-3 %A^-2}
+%%ii UNITDEF{"%OMEGA", %OMEGA = %ohm} 
+%%ii UNITDEF{"", %siemens = %m^-2 %kg^-1 %s^3 %A^2}
+%%ii UNITDEF{"S", %S = %siemens}
+%%ii UNITDEF{"", %weber = %m^2 %kg %s^-2 %A^-1}
+%%ii UNITDEF{"Wb", %Wb = %weber}
+%%ii UNITDEF{"", %tesla = %kg %s^-2 %A^-1}
+%%ii UNITDEF{"T", %T = %tesla}
+%%ii UNITDEF{"", %henry = %m^2 %kg %s^-2 %A^-2}
+%%ii UNITDEF{"H", %H = %henry}
+%%%celsius is already defined in the code
+%%ii UNITDEF{"°C", %degreecelsius = %celsius}
+%%ii FUNCTION{ {lib;expand}, celsiustokelvin, x_{.x.}}
+%%ii @lib:__c2k__@ FUNCDEF* celsiustokelvin(x_{.x.}) = x_{.x.} / %celsius * %K + 273.15 %K
+%%ii FUNCTION{ {lib;expand}, kelvintocelsius, x_{.x.}}
+%%ii @lib:__k2c__@ FUNCDEF* kelvintocelsius(x_{.x.}) = x_{.x.} / %K * %celsius - 273.15 %celsius
+%%ii UNITDEF{"", %lumen = %cd %m^2 %m^-2}
+%%ii UNITDEF{"lm", %lm = %lumen}
+%%ii UNITDEF{"", %lux = %cd %m^2 %m^-4}
+%%ii UNITDEF{"lx", %lx = %lux}
+%%ii UNITDEF{"", %becquerel = %s^-1}
+%%ii UNITDEF{"Bq", %Bq = %becquerel}
+%%ii UNITDEF{"", %gray = %m^2 %s^-2}
+%%ii UNITDEF{"Gy", %Gy = %gray}
+%%ii UNITDEF{"", %sievert = %m^2 %s^-2}
+%%ii UNITDEF{"Sv", %Sv = %sievert}
+%%
+%% --------------- Decimal values of prefixes ---------------------------
+%%UNITDEF*{%yottad}{%yotta}
+%%UNITDEF*{%zettad}{%zetta}
+%%UNITDEF*{%exad}{%exa}
+%%UNITDEF*{%petad}{%peta}
+%%UNITDEF*{%terad}{%tera}
+%%UNITDEF*{%gigad}{%giga}
+%%UNITDEF*{%megad}{%mega}
+%%UNITDEF*{%kilod}{%kilo}
+%%UNITDEF*{%hectod}{%hecto}
+%%UNITDEF*{%dekad}{%deka}
+%%UNITDEF*{%decad}{%deca}
+%%UNITDEF*{%decid}{%deci}
+%%UNITDEF*{%centid}{%centi}
+%%UNITDEF*{%millid}{%milli}
+%%UNITDEF*{%microd}{%micro}
+%%UNITDEF*{%nanod}{%nano}
+%%UNITDEF*{%picod}{%pico}
+%%UNITDEF*{%femtod}{%femto}
+%%UNITDEF*{%attod}{%atto}
+%%UNITDEF*{%zeptod}{%zepto}
+%%UNITDEF*{%yoctod}{%yocto}
+%%
+%%--------------------units outside the SI ----------------------------------
+%%units accepted for use with the SI
+%%ii UNITDEF{"", %minute = 60 %s}
+%%ii UNITDEF{"min", %min = %minute}
+%%ii UNITDEF{"", %hour = 60 %min}
+%%ii UNITDEF{"h", %h = %hour}
+%%ii UNITDEF{"", %day = 24 %h}
+%%ii UNITDEF{"d", %d = %day}
+%%ii UNITDEF{"°", %degree = %pi/180 %rad}
+%%ii UNITDEF{"'", %paminute = 1/60 %degree}
+%%ii UNITDEF{"''", %pasecond = 1/60 %paminute}
+%%ii UNITDEF{"", %litre = 10^-3 %m^3}
+%%liter is no SI unit but an US spelling
+%%ii UNITDEF{"l", %l = %litre}
+%%ii UNITDEF{"L", %L = %litre}
+%%ii UNITDEF{"", %tonne = 10^3 %kg}
+%%ii UNITDEF{"ton", %ton = %tonne}
+%%ii UNITDEF{"t", %t = %tonne}
+%%ii UNITDEF{"eV", %electronvolt = 1.60217733 * 10^-19 %J}
+%%ii UNITDEF{"", %atomicmass = 1.6605402 * 10^-27 %kg}
+%%ii UNITDEF{"u", %u = %atomicmass}
+%%ii UNITDEF{"gr", %gram = 10^-3 %kg}
+%%
+%%units temporarily accepted for use with the SI
+%%ii UNITDEF{"Â", %angstrom = 10^-10 %m}
+%%ii UNITDEF{"nauticalmile", %nauticalmile = 1852 %m}
+%%ii UNITDEF{"knot", %knot = %nauticalmile / %hour}
+%%ii UNITDEF{"Ar", %are = 100 %m^2}
+%%ii UNITDEF{"hectare", %hectare = 10^4 %m^2}
+%%ii UNITDEF{"barn", %barn = 10^-28 %m^2}
+%%ii UNITDEF{"bar", %bar = 10^5 %Pa}
+%%ii UNITDEF{"gal", %gal = 10^-2 %m %s^2}
+%%ii UNITDEF{"curie", %curie = 3.7 * 10^10 %Bq}
+%%ii UNITDEF{"roentgen", %roentgen = 2.58 * 10^-4 %C %s^-1}
+%%ii UNITDEF{"rd", %rd = 10^-2 %Gy} %%to avoid confusion with angular unit rad
+%%ii UNITDEF{"rem", %rem = 10^-2 %Sv}
+%%
+%%------------------- useful abbreviations ----------------------------------
+%%ii UNITDEF{"mm", %mm = 10^-3 %metre}
+%%ii UNITDEF{"cm", %cm = 10^-2 %metre}
+%%ii UNITDEF{"{\"mm\"^2}", %sqmm = %mm^2}
+%%ii UNITDEF{"Nm", %Nm = %N %m}
+%%ii UNITDEF{"{size-2 {\"N\" over \"mm\"^2}}", %Nosqmm = %N / %mm^2}
+%%ii UNITDEF{"MPa", %MPa = 10^6 %Pa}
+%%ii UNITDEF{"%", %percent = 1/100} 
+%%ii UNITDEF{"kW", %kW = 1000 %watt}
+%%ii UNITDEF{"kWh", %kWh = 1000 %watt %hour}
+%%ii UNITDEF{"kN", %kN = 1000 %newton}
+%%ii UNITDEF{"kJ", %kJ = 1000 %joule}
+%%
+%%------------------- US and British units ----------------------------------
+%%ii UNITDEF{"RPM", %rpm = 1 / %min}
+%%ii UNITDEF{"HP", %hp = 745.72 %W}
+%%ii UNITDEF {"″", %inch = 25.399956 %mm}
+%%ii UNITDEF{"ft", %ft = 0.3048 %m}

@@ -1,0 +1,65 @@
+%%***************************************************************************
+%%          siunits_abbrev.imath  -  provide SI units (abbreviations)
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------ short forms of the base units --------------------------
+%%ii UNITDEF{"m", %m = %metre}
+%%ii UNITDEF{"kg", %kg = %kilogram}
+%%ii UNITDEF{"s", %s = %second}
+%%ii UNITDEF{"A", %A = %ampere}
+%%ii UNITDEF{"K", %K = %kelvin}
+%%ii UNITDEF{"mol", %mol = %mole}
+%%ii UNITDEF{"cd", %cd = %candela}
+%%
+%%----------- SI derived units with special names and symbols --------------
+%%ii UNITDEF{"rad", %rad = %radian}
+%%ii UNITDEF{"sterad", %sr = %steradian}
+%%ii UNITDEF{"Hz", %Hz = %hertz}
+%%ii UNITDEF{"N", %N = %newton}
+%%ii UNITDEF{"Pa", %Pa = %pascal}
+%%ii UNITDEF{"J", %J = %joule}
+%%ii UNITDEF{"W", %W = %watt}
+%%ii UNITDEF{"C", %C = %coulomb}
+%%ii UNITDEF{"V", %V = %volt}
+%%ii UNITDEF{"F", %F = %farad}
+%%ii UNITDEF{"{%OMEGA}", %OMEGA = %ohm}
+%%ii UNITDEF{"S", %S = %siemens}
+%%ii UNITDEF{"Wb", %Wb = %weber}
+%%ii UNITDEF{"T", %T = %tesla}
+%%ii UNITDEF{"H", %H = %henry}
+%%%celsius is already defined in the code
+%%ii UNITDEF{"°C", %degreecelsius = %celsius}
+%%ii FUNCTION{ {lib;expand}, celsiustokelvin, x_{.x.}}
+%%ii @lib:__c2k__@ FUNCDEF* celsiustokelvin(x_{.x.}) = x_{.x.} / %celsius * %K + 273.15 %K
+%%ii FUNCTION{ {lib;expand}, kelvintocelsius, x_{.x.}}
+%%ii @lib:__k2c__@ FUNCDEF* kelvintocelsius(x_{.x.}) = x_{.x.} / %K * %celsius - 273.15 %celsius
+%%ii UNITDEF{"lm", %lm = %lumen}
+%%ii UNITDEF{"lx", %lx = %lux}
+%%ii UNITDEF{"Bq", %Bq = %becquerel}
+%%ii UNITDEF{"Gy", %Gy = %gray}
+%%ii UNITDEF{"Sv", %Sv = %sievert}
+%%
+%%--------------------units outside the SI ----------------------------------
+%%units accepted for use with the SI
+%%ii UNITDEF{"min", %min = %minute}
+%%ii UNITDEF{"h", %h = %hour}
+%%ii UNITDEF{"d", %d = %day}
+%%liter is no SI unit but an US spelling
+%%ii UNITDEF{"l", %l = %litre}
+%%ii UNITDEF{"L", %L = %litre}
+%%ii UNITDEF{"ton", %ton = %tonne}
+%%ii UNITDEF{"t", %t = %tonne}
+%%ii UNITDEF{"u", %u = %atomicmass}

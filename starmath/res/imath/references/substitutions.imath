@@ -1,0 +1,101 @@
+%%***************************************************************************
+%%                          substitutions.imath  - mathematical substitutions for
+%%                          use with iMath
+%%                             -------------------
+%%    begin                : Sat Apr 2  2011
+%%    copyright            : (C) 2014- by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%note that init.imah should be included first
+%%
+%%-------------- Basic Algebra ---------------------------------------
+%%ii@lib:alg:bin3@ EQDEF (wild(1))^2 - (wild(2))^2 = (wild(1) - wild(2)) (wild(1) + wild(2))
+%%
+%%-------------- Trigonometry ----------------------------------------
+%%reduction to functions of a single angle
+%%ii@lib:trig:sina+b@   EQDEF sin(wild(1) + wild(2)) = sin(wild(1)) cos(wild(2)) + cos(wild(1)) sin(wild(2))
+%%ii@lib:trig:sina-b@   EQDEF sin(wild(1) - wild(2)) = sin(wild(1)) cos(wild(2)) - cos(wild(1)) sin(wild(2))
+%%ii@lib:trig:cosa+b@   EQDEF cos(wild(1) + wild(2)) = cos(wild(1)) cos(wild(2)) - sin(wild(1)) sin(wild(2))
+%%ii@lib:trig:cosa-b@   EQDEF cos(wild(1) - wild(2)) = cos(wild(1)) cos(wild(2)) + sin(wild(1)) sin(wild(2))
+%%ii@lib:trig:tana+b@   EQDEF tan(wild(1) + wild(2)) = {tan(wild(1)) + tan(wild(2))} over {1 - tan(wild(1)) tan(wild(2))}
+%%ii@lib:trig:tana-b@   EQDEF tan(wild(1) - wild(2)) = {tan(wild(1)) - tan(wild(2))} over {1 + tan(wild(1)) tan(wild(2))}
+%%ii@lib:trig:cota+b@   EQDEF cot(wild(1) + wild(2)) = {cot(wild(1)) cot(wild(2)) - 1} over {cot(wild(2)) + cot(wild(1))}
+%%ii@lib:trig:cota-b@   EQDEF cot(wild(1) - wild(2)) = {cot(wild(1)) cot(wild(2)) + 1} over {cot(wild(2)) - cot(wild(1))}
+%%ii@lib:trig:sin2a@    EQDEF sin(2 wild) = 2 sin(wild) cos(wild)
+%%ii@lib:trig:cos2a@    EQDEF cos(2 wild) = square(cos(wild)) - square(sin(wild))
+%%ii@lib:trig:sin3a@    EQDEF sin(3 wild) = 3 sin(wild) - 4 (sin(wild))^3
+%%ii@lib:trig:cos3a@    EQDEF cos(3 wild) = 4 (cos(wild))^3 - 3 cos(wild)
+%%
+%%reduction of offset angles to a simple angle
+%%ii@lib:trig:sinpi-a@   EQDEF sin(%pi - wild) =  sin{wild}
+%%ii@lib:trig:sin2pi-a@  EQDEF sin(2 %pi - wild) = -sin{wild}
+%%ii@lib:trig:cospi-a@   EQDEF cos(%pi - wild) = -cos{wild}
+%%ii@lib:trig:cos2pi-a@  EQDEF cos(2 %pi - wild) = cos{wild}
+%%ii@lib:trig:sina+pi/2@ EQDEF sin(wild + %pi/2) =  cos{wild}
+%%ii@lib:trig:cosa+pi/2@ EQDEF cos(wild + %pi/2) = -sin{wild}
+%%ii@lib:trig:sina+pi@   EQDEF sin(wild + %pi) = -sin{wild}
+%%ii@lib:trig:cosa+pi@   EQDEF cos(wild + %pi) = -cos{wild}
+%%ii@lib:trig:sinpi/2-a@ EQDEF sin(%pi/2 - wild) = cos{wild}
+%%ii@lib:trig:cospi/2-a@ EQDEF cos(%pi/2 - wild) = sin{wild}
+%%ii@lib:trig:sina-pi/2@ EQDEF sin(wild - %pi/2) = -cos{wild}
+%%ii@lib:trig:cosa-pi/2@ EQDEF cos(wild - %pi/2) = sin{wild}
+%%only for use with numerics
+%%ii@lib:trig:sin-a_num@ EQDEF sin{wild} = -sin(-wild)
+%%ii@lib:trig:sin-a@     EQDEF sin(wild(1) * wild(2)) = -sin(-wild(1) * wild(2))
+%%ii@lib:trig:cos-a_num@ EQDEF cos{wild} = cos(-wild)
+%%ii@lib:trig:cos-a@     EQDEF cos(wild(1) * wild(2)) = cos(-wild(1) * wild(2))
+%%ii@lib:trig:tan-a@     EQDEF tan(wild(1) * wild(2)) = -tan(-wild(1) * wild(2))
+%%ii@lib:trig:cot-a@     EQDEF cot(wild(1) * wild(2)) = -cot(-wild(1) * wild(2))
+%%ii@lib:trig:tanpi/2+a@ EQDEF tan(%pi/2 + wild) = -cot{wild}
+%%ii@lib:trig:cotpi/2+a@ EQDEF cot(%pi/2 + wild) = -tan{wild}
+%%ii@lib:trig:tanpi/2-a@ EQDEF tan(%pi/2 - wild) = cot{wild}
+%%ii@lib:trig:cotpi/2-a@ EQDEF cot(%pi/2 - wild) = tan{wild}
+%%ii@lib:trig:tanpi-a@   EQDEF tan(%pi - wild) = -tan{wild}
+%%ii@lib:trig:cotpi-a@   EQDEF cot(%pi - wild) = -cot{wild}
+%%ii@lib:trig:tana-pi/2@ EQDEF tan(wild - %pi/2) = -cot{wild}
+%%
+%%conversion of functions to other functions
+%%ii@lib:trig:sincos@        EQDEF sin{wild} = sqrt{1 - square{cos{wild}}}
+%%ii@lib:trig:sintan@        EQDEF sin{wild} = tan{wild} over sqrt{1 + square{tan{wild}}}
+%%ii@lib:trig:sincot@        EQDEF sin{wild} = 1 over sqrt{1 + square{cot{wild}}}
+%%ii@lib:trig:cossin@        EQDEF cos{wild} = sqrt{1 - square{sin{wild}}}
+%%ii@lib:trig:costan@        EQDEF cos{wild} = 1 over sqrt{1 + square{tan{wild}}}
+%%ii@lib:trig:coscot@        EQDEF cos{wild} = cot{wild} over sqrt{1 + square{cot{wild}}}
+%%ii@lib:trig:tansin@        EQDEF tan{wild} = sin{wild} over sqrt{1 - square{sin{wild}}}
+%%ii@lib:trig:atanasin:main@ EQDEF arctan{wild} = arcsin(wild over sqrt{1 + square{wild}})
+%%ii@lib:trig:atanacos:x>0@  EQDEF arctan{wild} = arccos(1 over sqrt{1 + square{wild}})
+%%ii@lib:trig:atanacot:x>0@  EQDEF arctan{wild} = arccot(1 over wild)
+%%ii@lib:trig:tansincos@     EQDEF tan{wild} = sin{wild} over cos{wild}
+%%ii@lib:trig:tancos1@       EQDEF tan{wild} = sqrt{1 - square{cos{wild}}} over cos{wild}
+%%ii@lib:trig:tancos2@       EQDEF tan{wild} = sqrt{1 over square{cos{wild}} - 1}
+%%ii@lib:trig:tanhsinhcos@   EQDEF tanh{wild} = sinh{wild} over cosh{wild}
+%%ii@lib:trig:tancot@        EQDEF tan{wild} = 1 over cot{wild}
+%%ii@lib:trig:cotsincos@     EQDEF cot{wild} = cos{wild} over sin{wild}
+%%ii@lib:trig:cotcos@        EQDEF cot{wild} = cos{wild} over sqrt{1 - square{cos{wild}}}
+%%ii@lib:trig:cottan@        EQDEF cot{wild} = 1 over tan{wild}
+%%ii@lib:trig:cothsinhcosh@  EQDEF coth{wild} = cosh{wild} over sinh{wild}
+%%ii@lib:trig:acotacos:main@ EQDEF arccot{wild} = arccos(wild over sqrt{1 + square{wild}}) 
+%%ii@lib:trig:acotatan:x>0@  EQDEF arccot{wild} = arctan(1 over wild)
+%%ii@lib:trig:acotasin:x>0@  EQDEF arccot{wild} = arcsin(1 over sqrt{1 + square{wild}})
+%%ii@lib:trig:sinqcos@       EQDEF square{sin{wild}} = 1 over 2 (1 - cos(2 wild))
+%%ii@lib:trig:cosqcos@       EQDEF square{cos{wild}} = 1 over 2 (1 + cos(2 wild))
+%%
+%%theorems
+%%ii@lib:trig:sincos1@ EQDEF square{sin{wild}} + square{cos{wild}} = 1
+%%ii@lib:trig:cosine@  EQDEF c^2 = a^2 + b^2 - 2ab cos{gamma}
+%%ii@lib:trig:sine@    EQDEF a over sin{%alpha} = b over sin{beta}
+%%
+%%-------------- Basic Physics
+%%ii@lib:phys:u@     EQDEF u = %omega r
+%%ii@lib:phys:omega@ EQDEF %omega = 2 %pi N
+%%ii@lib:phys:P@     EQDEF P = T %omega

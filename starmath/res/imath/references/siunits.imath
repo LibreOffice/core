@@ -1,0 +1,71 @@
+%%***************************************************************************
+%%          siunits.imath  -  provide SI units
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%----------- SI derived units with special names and symbols --------------
+%% Radian and steradian cannot be re-substituted when defined in this way
+%% but the advantage is that trigonometric functions will evaluate numerically
+%%ii UNITDEF{"", %radian = %metre / %metre}
+%%ii UNITDEF{"", %steradian = %metre^2 %metre^-2}
+%%ii UNITDEF{"", %hertz = %second^-1}
+%%ii UNITDEF{"", %newton = %kilogram %metre %second^-2}
+%%ii UNITDEF{"", %pascal = %metre^-1 %kilogram %second^-2}
+%%ii UNITDEF{"", %joule = %metre^2 %kilogram %second^-2}
+%%ii UNITDEF{"", %watt = %metre^2 %kilogram %second^-3}
+%%ii UNITDEF{"", %coulomb = %ampere %second}
+%%ii UNITDEF{"", %volt = %metre^2 %kilogram %second^-3 %ampere^-1}
+%%ii UNITDEF{"", %farad = %metre^-2 %kilogram^-1 %second^4 %ampere^2}
+%%ii UNITDEF{"{%OMEGA}", %ohm = %metre^2 %kilogram %second^-3 %ampere^-2}
+%%ii UNITDEF{"", %siemens = %metre^-2 %kilogram^-1 %second^3 %ampere^2}
+%%ii UNITDEF{"", %weber = %metre^2 %kilogram %second^-2 %ampere^-1}
+%%ii UNITDEF{"", %tesla = %kilogram %second^-2 %ampere^-1}
+%%ii UNITDEF{"", %henry = %metre^2 %kilogram %second^-2 %ampere^-2}
+%%ii UNITDEF{"", %lumen = %candela %metre^2 %metre^-2}
+%%ii UNITDEF{"", %lux = %candela %metre^2 %metre^-4}
+%%ii UNITDEF{"", %becquerel = %second^-1}
+%%ii UNITDEF{"", %gray = %metre^2 %second^-2}
+%%ii UNITDEF{"", %sievert = %metre^2 %second^-2}
+%%
+%%--------------------units outside the SI ----------------------------------
+%%units accepted for use with the SI
+%%ii UNITDEF{"", %minute = 60 %second}
+%%ii UNITDEF{"", %hour = 60 %minute}
+%%ii UNITDEF{"", %day = 24 %hour}
+%%ii UNITDEF{"°", %degree = %pi/180 %radian}
+%%ii UNITDEF{"'", %paminute = 1/60 %degree}
+%%ii UNITDEF{"''", %pasecond = 1/60 %paminute}
+%%ii UNITDEF{"", %litre = 10^-3 %metre^3}
+%%ii UNITDEF{"", %tonne = 10^3 %kilogram}
+%%ii UNITDEF{"eV", %electronvolt = 1.60217733 * 10^-19 %joule}
+%%ii UNITDEF{"", %atomicmass = 1.6605402 * 10^-27 %kilogram}
+%%ii UNITDEF{"g", %gram = 10^-3 %kilogram}
+%%
+%%units temporarily accepted for use with the SI
+%%ii UNITDEF{"Â", %angstrom = 10^-10 %metre}
+%%ii UNITDEF{"nauticalmile", %nauticalmile = 1852 %metre}
+%%ii UNITDEF{"knot", %knot = %nauticalmile / %hour}
+%%ii UNITDEF{"Ar", %are = 100 %metre^2}
+%%ii UNITDEF{"hectare", %hectare = 10^4 %metre^2}
+%%ii UNITDEF{"barn", %barn = 10^-28 %metre^2}
+%%ii UNITDEF{"bar", %bar = 10^5 %pascal}
+%%ii UNITDEF{"gal", %gal = 10^-2 %metre %second^2}
+%%ii UNITDEF{"curie", %curie = 3.7 * 10^10 %becquerel}
+%%ii UNITDEF{"roentgen", %roentgen = 2.58 * 10^-4 %coulomb %second^-1}
+%%ii UNITDEF{"rd", %rd = 10^-2 %gray} %%to avoid confusion with angular unit rad
+%%ii UNITDEF{"rem", %rem = 10^-2 %sievert}
+%%
+%%-------------------exceptions for common usage --------------------------
+%%ii UNITDEF{"%", %percent = 1/100}

@@ -1,0 +1,28 @@
+%%***************************************************************************
+%%          impunits.imath  -  provide imperial units
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------- US and British units ----------------------------------
+%%ii UNITDEF{"", %revolutionsperminute = 1 / {60 %second}}
+%%ii UNITDEF{"", %horsepower = 745.72 %watt}
+%%ii UNITDEF {"", %inch = 25.399956 * 10^-3 %metre}
+%%ii UNITDEF{"", %foot = 0.3048 %metre}
+%%ii UNITDEF {"", %lbs = 4.44822 %newton}
+%%ii UNITDEF {"", %Fahrenheit = 9/5 %kelvin}
+%%ii FUNCTION {{lib;expand}, kelvintofahrenheit, x_{.x.}}
+%%ii @lib:__k2f__@ FUNCDEF* kelvintofahrenheit(x_{.x.}) = 9/5 * (x_{.x.} - 273.15 %kelvin) / x_{.x.} * %Fahrenheit + 32 %Fahrenheit
+%%ii FUNCTION {{lib;expand}, fahrenheittokelvin, x_{.x.}}
+%%ii @lib:__f2k__@ FUNCDEF* fahrenheittokelvin(x_{.x.}) = 5/9 * x_{.x.} * %kelvin / %Fahrenheit + 273.15 %kelvin - 5/9 * 32 %kelvin

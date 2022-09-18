@@ -1,0 +1,23 @@
+%%***************************************************************************
+%%          engunits.imath  -  provide SI engineering units
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------- useful units for engineering documents        ----------
+%%ii UNITDEF{"µm", %micrometre = 10^{-6} %metre}
+%%ii UNITDEF{"", %squaremillimetre = (10^{-3} %metre)^2}
+%%ii UNITDEF{"", %newtonmetre = %newton %metre}
+%%ii UNITDEF{"", %newtonpersquaremillimetre = %newton / %squaremillimetre}
+%%ii UNITDEF{"", %kilowatthour = 1000 %watt %hour}

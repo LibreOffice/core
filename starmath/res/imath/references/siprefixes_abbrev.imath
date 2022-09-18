@@ -1,0 +1,27 @@
+%%***************************************************************************
+%%          siprefixes.imath  -  provide abbreviations for SI prefixes
+%%                             -------------------
+%%    begin                : Mon Jan 11 2010
+%%    copyright            : (C) 2016 by Jan Rheinlaender
+%%    email                : jrheinlaender@users.sourceforge.net
+%% ***************************************************************************/
+%%
+%%***************************************************************************
+%% *                                                                         *
+%% *   This program is free software; you can redistribute it and/or modify  *
+%% *   it under the terms of the GNU General Public License as published by  *
+%% *   the Free Software Foundation; either version 2 of the License, or     *
+%% *   (at your option) any later version.                                   *
+%% *                                                                         *
+%% ***************************************************************************/
+%%
+%%------------------SI Prefixes --------------------------------------------
+%%ii PREFIXDEF{%T  = 10^12}
+%%ii PREFIXDEF{%G  = 10^9}
+%%ii PREFIXDEF{%M  = 10^6}
+%%ii PREFIXDEF{%k  = 10^3}
+%%ii PREFIXDEF{%c  = 10^{-2}}
+%%ii PREFIXDEF{%m  = 10^{-3}}
+%%ii PREFIXDEF{%µ  = 10^{-6}}
+%%ii PREFIXDEF{%n  = 10^{-9}}
+%%ii PREFIXDEF{%p  = 10^{-12}}
