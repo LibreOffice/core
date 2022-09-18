@@ -140,6 +140,7 @@ enum class SfxHintId {
     SwGatherRefFields,
     SwGatherFields,
     SwNameChanged, // this can possibly be replaced by the generic NameChanged above
+    SwDeleteText,
 
     ThisIsAnSdrHint
 };

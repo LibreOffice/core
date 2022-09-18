@@ -45,15 +45,16 @@ SwDelChr::SwDelChr( sal_Int32 nP )
 {
 }
 
-SwDelText::SwDelText( sal_Int32 nS, sal_Int32 nL )
-    : SwMsgPoolItem( RES_DEL_TXT ), nStart( nS ), nLen( nL )
-{
-}
 
 namespace sw {
 
 MoveText::MoveText(SwTextNode *const pD, sal_Int32 const nD, sal_Int32 const nS, sal_Int32 const nL)
     : pDestNode(pD), nDestStart(nD), nSourceStart(nS), nLen(nL)
+{
+}
+
+DeleteText::DeleteText( sal_Int32 nS, sal_Int32 nL )
+    : SfxHint( SfxHintId::SwDeleteText ), nStart( nS ), nLen( nL )
 {
 }
 

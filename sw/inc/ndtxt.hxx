@@ -68,7 +68,11 @@ enum class ExpandMode;
 enum class SwFieldIds : sal_uInt16;
 class SwField;
 
-namespace sw::mark { enum class RestoreMode; }
+namespace sw {
+    class TextNodeNotificationSuppressor;
+    class DeleteText;
+    namespace mark { enum class RestoreMode; }
+}
 
 namespace com::sun::star {
     namespace uno {
@@ -90,6 +94,7 @@ class SW_DLLPUBLIC SwTextNode final
     friend class SwNodes;
     friend class SwTextFrame;
     friend class SwScriptInfo;
+    friend class sw::TextNodeNotificationSuppressor;
 
     /** May be 0. It is only then not 0 if it contains hard attributes.
        Therefore: never access directly! */
@@ -216,6 +221,7 @@ public:
 
 public:
     using SwContentNode::GetAttr;
+    void HandleDeleteText(const sw::DeleteText&);
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
 

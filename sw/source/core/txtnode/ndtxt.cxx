@@ -86,6 +86,23 @@ using namespace ::com::sun::star;
 
 typedef std::vector<SwTextAttr*> SwpHts;
 
+namespace sw {
+    class TextNodeNotificationSuppressor {
+        SwTextNode& m_rNode;
+        bool m_bWasNotifiable;
+        public:
+            TextNodeNotificationSuppressor(SwTextNode& rNode)
+                : m_rNode(rNode)
+                , m_bWasNotifiable(rNode.m_bNotifiable)
+            {
+                m_rNode.m_bNotifiable = false;
+            }
+            ~TextNodeNotificationSuppressor()
+            {
+                m_rNode.m_bNotifiable = m_bWasNotifiable;
+            }
+    };
+}
 
 // unfortunately everyone can change Hints without ensuring order or the linking between them
 #ifdef DBG_UTIL
@@ -189,34 +206,35 @@ SwTextNode::SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl, const SfxIt
     m_bHiddenCharsHidePara(false),
     m_bRecalcHiddenCharFlags(false),
     m_bLastOutlineState( false ),
-    m_bNotifiable( false ),
+    m_bNotifiable( true ),
     mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
     mbInSetOrResetAttr( false ),
     m_bInUndo(false)
 {
-    InitSwParaStatistics( true );
-
-    if( pAutoAttr )
-        SetAttr( *pAutoAttr );
-
-    if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
     {
-        // #i101516#
-        // apply paragraph style's assigned outline style list level as
-        // list level of the paragraph, if it has none set already.
-        if ( !HasAttrListLevel() &&
-             pTextColl && pTextColl->IsAssignedToListLevelOfOutlineStyle() )
+        sw::TextNodeNotificationSuppressor(*this);
+        InitSwParaStatistics( true );
+
+        if( pAutoAttr )
+            SetAttr( *pAutoAttr );
+
+        if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
         {
-            SetAttrListLevel( pTextColl->GetAssignedOutlineStyleLevel() );
+            // #i101516#
+            // apply paragraph style's assigned outline style list level as
+            // list level of the paragraph, if it has none set already.
+            if ( !HasAttrListLevel() &&
+                 pTextColl && pTextColl->IsAssignedToListLevelOfOutlineStyle() )
+            {
+                SetAttrListLevel( pTextColl->GetAssignedOutlineStyleLevel() );
+            }
+            AddToList();
         }
-        AddToList();
+
+        // call method <UpdateOutlineNode(..)> only for the document nodes array
+        if (GetNodes().IsDocNodes())
+            GetNodes().UpdateOutlineNode(*this);
     }
-
-    // call method <UpdateOutlineNode(..)> only for the document nodes array
-    if (GetNodes().IsDocNodes())
-        GetNodes().UpdateOutlineNode(*this);
-
-    m_bNotifiable = true;
 
     m_bContainsHiddenChars = m_bHiddenCharsHidePara = false;
     m_bRecalcHiddenCharFlags = true;
@@ -2572,8 +2590,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     pDest->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aInsHint));
     const sw::MoveText aMoveHint(pDest, nDestStart, nTextStartIdx, nLen);
     CallSwClientNotify(aMoveHint);
-    const SwDelText aDelHint(nTextStartIdx, nLen);
-    TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aDelHint));
+    HandleDeleteText(sw::DeleteText(nTextStartIdx, nLen));
 
     // 2. move attributes
     // Iterate over attribute array until the start of the attribute
@@ -2808,8 +2825,7 @@ void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
     }
     else
     {
-        SwDelText aHint( nStartIdx, nCnt );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        CallSwClientNotify(sw::DeleteText(nStartIdx, nCnt));
     }
 
     OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
@@ -3815,8 +3831,7 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
     }
 
     SetIgnoreDontExpand( bOldExpFlg );
-    SwDelText aDelHint( nStartPos, nDelLen );
-    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aDelHint));
+    CallSwClientNotify(sw::DeleteText(nStartPos, nDelLen));
 
     if (sInserted.getLength())
     {
@@ -5366,57 +5381,10 @@ bool SwTextNode::IsInContent() const
     return !GetDoc().IsInHeaderFooter( *this );
 }
 
-void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
+void SwTextNode::HandleDeleteText(const sw::DeleteText& rHint)
 {
-    const auto pOldValue = rHint.m_pOld;
-    const auto pNewValue = rHint.m_pNew;
-    bool bWasNotifiable = m_bNotifiable;
-    m_bNotifiable = false;
-
-    // Override Modify so that deleting styles works properly (outline
-    // numbering!).
-    // Never call ChgTextCollUpdateNum for Nodes in Undo.
-    if( pOldValue
-            && pNewValue
-            && RES_FMT_CHG == pOldValue->Which()
-            && GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat
-            && GetNodes().IsDocNodes() )
-    {
-        assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat));
-        assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
-        ChgTextCollUpdateNum(
-                static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
-                static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
-    }
-
-    // reset fill information
-    if (maFillAttributes && pNewValue)
-    {
-        const sal_uInt16 nWhich = pNewValue->Which();
-        bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
-
-        if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
-        {
-            SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
-
-            for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
-            {
-                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
-            }
-        }
-
-        if(bReset)
-        {
-            maFillAttributes.reset();
-        }
-    }
-
-    if ( !mbInSetOrResetAttr )
-    {
-        HandleModifyAtTextNode( *this, pOldValue, pNewValue );
-    }
-
-    SwContentNode::SwClientNotify(*this, rHint);
+    sw::TextNodeNotificationSuppressor(*this);
+    CallSwClientNotify(rHint);
 
     SwDoc& rDoc = GetDoc();
     // #125329# - assure that text node is in document nodes array
@@ -5424,8 +5392,67 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
     {
         rDoc.GetNodes().UpdateOutlineNode(*this);
     }
+}
 
-    m_bNotifiable = bWasNotifiable;
+void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
+{
+    const auto pOldValue = rHint.m_pOld;
+    const auto pNewValue = rHint.m_pNew;
+    {
+        sw::TextNodeNotificationSuppressor(*this);
+
+        // Override Modify so that deleting styles works properly (outline
+        // numbering!).
+        // Never call ChgTextCollUpdateNum for Nodes in Undo.
+        if( pOldValue
+                && pNewValue
+                && RES_FMT_CHG == pOldValue->Which()
+                && GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat
+                && GetNodes().IsDocNodes() )
+        {
+            assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat));
+            assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
+            ChgTextCollUpdateNum(
+                    static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
+                    static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
+        }
+
+        // reset fill information
+        if (maFillAttributes && pNewValue)
+        {
+            const sal_uInt16 nWhich = pNewValue->Which();
+            bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
+
+            if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
+            {
+                SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
+
+                for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
+                {
+                    bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+                }
+            }
+
+            if(bReset)
+            {
+                maFillAttributes.reset();
+            }
+        }
+
+        if ( !mbInSetOrResetAttr )
+        {
+            HandleModifyAtTextNode( *this, pOldValue, pNewValue );
+        }
+
+        SwContentNode::SwClientNotify(*this, rHint);
+
+        SwDoc& rDoc = GetDoc();
+        // #125329# - assure that text node is in document nodes array
+        if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
+        {
+            rDoc.GetNodes().UpdateOutlineNode(*this);
+        }
+    }
 
     if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
     {   // invalidate cached uno object

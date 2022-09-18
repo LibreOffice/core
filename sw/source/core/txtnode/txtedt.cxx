@@ -2014,8 +2014,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
         Update(SwContentIndex(this, nMyOff), nLen - nMyOff, UpdateMode::Negative);
 
     // notify the layout!
-    SwDelText aDelHint( nPos, nTLen );
-    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aDelHint));
+    CallSwClientNotify(sw::DeleteText(nPos, nTLen));
 
     SwInsText const aHint(sw::MakeSwInsText(*this, nPos, nTLen));
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));

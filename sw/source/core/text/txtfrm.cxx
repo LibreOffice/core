@@ -1975,6 +1975,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     SfxPoolItem const* pOld(nullptr);
     SfxPoolItem const* pNew(nullptr);
     sw::MoveText const* pMoveText(nullptr);
+    sw::DeleteText const* pDeleteText(nullptr);
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
 
@@ -1985,6 +1986,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         pOld = pHint->m_pOld;
         pNew = pHint->m_pNew;
         nWhich = pHint->GetWhich();
+    }
+    else if (rHint.GetId() == SfxHintId::SwDeleteText)
+    {
+        pDeleteText = static_cast<const sw::DeleteText*>(&rHint);
     }
     else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
     {
@@ -2132,6 +2137,33 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             // assert(!m_pMergedPara || !getRootFrame()->IsHideRedlines() || !pMoveText->pDestNode->getLayoutFrame(getRootFrame()));
         }
     }
+    else if (pDeleteText)
+    {
+        nPos = MapModelToView(&rNode, pDeleteText->nStart);
+        if (m_pMergedPara)
+        {   // update merged before doing anything else
+            nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, pDeleteText->nStart, pDeleteText->nLen);
+        }
+        else
+        {
+            nLen = TextFrameIndex(pDeleteText->nLen);
+        }
+        const sal_Int32 m = -pDeleteText->nLen;
+        if ((!m_pMergedPara || nLen) && IsIdxInside(nPos, nLen))
+        {
+            if( !nLen )
+                InvalidateSize();
+            else
+                InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
+        }
+        lcl_SetWrong( *this, rNode, pDeleteText->nStart, m, true );
+        if (nLen)
+        {
+            lcl_SetScriptInval( *this, nPos );
+            bSetFieldsDirty = bRecalcFootnoteFlag = true;
+            lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
+        }
+    }
     else switch (nWhich)
     {
         case RES_LINENUMBER:
@@ -2201,36 +2233,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             if (nLen)
             {
                 InvalidateRange( SwCharRange(nPos, nLen), -1 );
-                lcl_SetScriptInval( *this, nPos );
-                bSetFieldsDirty = bRecalcFootnoteFlag = true;
-                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
-            }
-        }
-        break;
-        case RES_DEL_TXT:
-        {
-            sal_Int32 const nNPos = static_cast<const SwDelText*>(pNew)->nStart;
-            sal_Int32 const nNLen = static_cast<const SwDelText*>(pNew)->nLen;
-            nPos = MapModelToView(&rNode, nNPos);
-            if (m_pMergedPara)
-            {   // update merged before doing anything else
-                nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, nNPos, nNLen);
-            }
-            else
-            {
-                nLen = TextFrameIndex(nNLen);
-            }
-            const sal_Int32 m = -nNLen;
-            if ((!m_pMergedPara || nLen) && IsIdxInside(nPos, nLen))
-            {
-                if( !nLen )
-                    InvalidateSize();
-                else
-                    InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
-            }
-            lcl_SetWrong( *this, rNode, nNPos, m, true );
-            if (nLen)
-            {
                 lcl_SetScriptInval( *this, nPos );
                 bSetFieldsDirty = bRecalcFootnoteFlag = true;
                 lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);

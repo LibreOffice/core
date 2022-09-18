@@ -436,7 +436,6 @@
 //     class SwFormatChg: public SwMsgPoolItem
 //     class SwInsText: public SwMsgPoolItem
 //     class SwDelChr: public SwMsgPoolItem
-//     class SwDelText: public SwMsgPoolItem
 //     class SwUpdateAttr : public SwMsgPoolItem
 //     class SwRefMarkFieldUpdate : public SwMsgPoolItem
 //     class SwDocPosUpdate : public SwMsgPoolItem

@@ -95,14 +95,6 @@ public:
     SwDelChr( sal_Int32 nP );
 };
 
-class SwDelText final : public SwMsgPoolItem
-{
-public:
-    sal_Int32 nStart;
-    sal_Int32 nLen;
-
-    SwDelText( sal_Int32 nS, sal_Int32 nL );
-};
 
 namespace sw {
 
@@ -118,6 +110,14 @@ public:
     MoveText(SwTextNode *pD, sal_Int32 nD, sal_Int32 nS, sal_Int32 nL);
 };
 
+class DeleteText final : public SfxHint
+{
+public:
+    sal_Int32 nStart;
+    sal_Int32 nLen;
+
+    DeleteText( sal_Int32 nS, sal_Int32 nL );
+};
 /// new delete redline is created
 class RedlineDelText final : public SfxHint
 {
