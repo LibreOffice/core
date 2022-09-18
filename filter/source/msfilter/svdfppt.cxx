@@ -1849,18 +1849,14 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
             ::utl::TempFile aTmpFile;
             aTmpFile.EnableKillingFile();
 
-            if ( aTmpFile.IsValid() )
+            SvStream* pDest = aTmpFile.GetStream(StreamMode::READWRITE);
+            if (pDest)
             {
-                SvStream* pDest = aTmpFile.GetStream(StreamMode::TRUNC | StreamMode::WRITE);
-                if (pDest)
-                {
-                    bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
-                }
-                aTmpFile.CloseStream();
+                bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
             }
             if ( bSuccess )
             {
-                SvStream* pDest = aTmpFile.GetStream(StreamMode::READ);
+                pDest->Seek(0);
                 Storage* pObjStor = pDest ? new Storage( *pDest, true ) : nullptr;
                 if (pObjStor)
                 {
