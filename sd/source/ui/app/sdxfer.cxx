@@ -599,11 +599,12 @@ bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pOb
             SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pObject);
             ::utl::TempFile     aTempFile;
             aTempFile.EnableKillingFile();
+            SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
 
             try
             {
                 uno::Reference< embed::XStorage > xWorkStore =
-                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
+                    ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream), embed::ElementModes::READWRITE );
 
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
@@ -616,13 +617,8 @@ bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pOb
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                std::unique_ptr<SvStream> pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ );
-                if( pSrcStm )
-                {
-                    rxOStm->SetBufferSize( 0xff00 );
-                    rxOStm->WriteStream( *pSrcStm );
-                    pSrcStm.reset();
-                }
+                rxOStm->SetBufferSize( 0xff00 );
+                rxOStm->WriteStream( *pTempStream );
 
                 bRet = true;
             }
