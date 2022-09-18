@@ -82,7 +82,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="showDataTable">
-                <property name="label" translatable="yes" context="dlg_InsertDataTable|horizontalBorderCB">Show Data Table</property>
+                <property name="label" translatable="yes" context="dlg_InsertDataTable|horizontalBorderCB">Show data table</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -116,7 +116,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="horizontalBorderCB">
-                        <property name="label" translatable="yes" context="dlg_InsertDataTable|horizontalBorderCB">Show Horizontal Border</property>
+                        <property name="label" translatable="yes" context="dlg_InsertDataTable|horizontalBorderCB">Show horizontal border</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -132,7 +132,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="verticalBorderCB">
-                        <property name="label" translatable="yes" context="dlg_InsertDataTable|verticalBorderCB">Show Vertical Border</property>
+                        <property name="label" translatable="yes" context="dlg_InsertDataTable|verticalBorderCB">Show vertical border</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -148,7 +148,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="outlineCB">
-                        <property name="label" translatable="yes" context="dlg_InsertDataTable|outlineCB">Show Outline</property>
+                        <property name="label" translatable="yes" context="dlg_InsertDataTable|outlineCB">Show outline</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -164,7 +164,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="keysCB">
-                        <property name="label" translatable="yes" context="dlg_InsertDataTable|keysCB">Show Keys</property>
+                        <property name="label" translatable="yes" context="dlg_InsertDataTable|keysCB">Show keys</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
