@@ -69,7 +69,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
         case XML_ELEMENT(TEXT, XML_LINE_BREAK):
             maContent += "\x0a";
             break;
+        case XML_ELEMENT(TEXT, XML_BOOKMARK):
+            // TODO: ooo95423-1 [file.ods] and tdf#116079-3 have these bookmarks.
+            // Is this valid, and how can we prevent losing these?
+            break;
         default:
+            SAL_WARN("sc","unknown text element["<<nElement<<"]["<<SvXMLImport::getNameFromToken(nElement )<<"] lost");
             assert(false && "unknown cell text: element");
             ;
     }
