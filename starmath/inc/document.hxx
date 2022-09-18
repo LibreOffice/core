@@ -272,7 +272,7 @@ private:
     /**
      * Initial options for this formula.
      * Stand-alone (Math) mode: Initialized on first call to Compile() from document options and registry
-     * OLE (Writer/Impress) mode: Set to currentOptions of previous formula by the parent document
+     * OLE (Writer/Impress) mode: Pointer to mpCurrentOptions of previous formula
      * OLE mode: This is a chain of pointers, unless a formula with the OPTIONS keyword is processed. In this
      * case the options are copied and modified. The modified pointer is passed to the following formulas
      **/
@@ -280,7 +280,7 @@ private:
     /**
      * Initial compiler for this formula.
      * Stand-alone (Math) mode: Initialized on first call to Compile() by reading include files and processing default options
-     * OLE (Writer/Impress) mode: Set to currentCompiler of previous formula by the parent document
+     * OLE (Writer/Impress) mode: Pointer to mpCurrentCompiler of previous formula
      * OLE mode: Before compilation, a copy is taken into the formula's currentCompiler
      **/
     std::shared_ptr<eqc> mpInitialCompiler;
@@ -290,9 +290,9 @@ private:
     /// Modified compiler of ths formula after compilation
     std::shared_ptr<eqc> mpCurrentCompiler;
 
-    /// Initialize options and compiler from document options and registry. Must be repeated whenever document options are changed throught the UI
+    /// Initialize options and compiler from previous iFormula (if there is one), document options and registry. Must be repeated whenever document options are changed through the UI
     // TODO: Update on UI changes not implemented yet
-    void ImInitialize();
+    void ImInitializeCompiler();
 
     /// Allow others to access the following private data. Required for compatibility with the iMath extension
     friend class imath::smathparser;
@@ -314,8 +314,12 @@ private:
     void addResultLines();
     /// Count the number of lines of a certain type
     bool align_makes_sense() const;
+
+    // Initialize members once for the lifetime of the class
+    static void ImStaticInitialization();
+
     /// Internal iMath is blocked because an iMath extension is still installed
-    bool mImBlocked;
+    static bool mImBlocked;
     /// Decimal separator character(s)
     static std::string mDecimalSeparator;
 };

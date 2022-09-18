@@ -281,10 +281,11 @@ void SmDocShell::Parse()
     maUsedSymbols = maParser->GetUsedSymbols();
 }
 
-void SmDocShell::ImInitialize() {
-    Reference<XComponentContext> xContext(GetContext());
+void SmDocShell::ImInitializeCompiler() {
 
     // TODO: Handle case when ImInitialize() is called after options were changed through the UI
+    if (mpInitialOptions != nullptr && mpInitialCompiler != nullptr) return;
+    Reference<XComponentContext> xContext(GetContext());
 
     mpInitialOptions = std::make_shared<GiNaC::optionmap>();
     mpInitialCompiler = std::make_shared<eqc>();
@@ -398,8 +399,7 @@ void SmDocShell::Compile()
     }
     SAL_INFO("starmath.imath", "SmDocShell::Compile()");
 
-    if (initialOptions == nullptr || initialCompiler == nullptr)
-        ImInitialize();
+    ImInitializeCompiler();
 
     // Important settings for the compiler. Note: Initialization must do without them, since no mpInitialOptions are available before initialization...
     GiNaC::imathprint::decimalpoint = mDecimalSeparator;
@@ -910,20 +910,13 @@ void SmDocShell::Repaint()
         EnableSetModified(bIsEnabled);
 }
 
-SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
-    : SfxObjectShell(i_nSfxCreationFlags)
-    , m_pMlElementTree(nullptr)
-    , mpPrinter(nullptr)
-    , mpTmpPrinter(nullptr)
-    , mnModifyCount(0)
-    , mbFormulaArranged(false)
-    , mnSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
-    , initialOptions(nullptr)
-    , initialCompiler(nullptr)
-    , currentOptions(nullptr)
-    , currentCompiler(nullptr)
-    , iMathBlocked(false)
-{
+std::string SmDocShell::mDecimalSeparator = "";
+bool mImBlocked = false;
+
+void SmDocShell::ImStaticInitialization() {
+    static bool imInitialized = false;
+    if (imInitialized) return;
+
     // Ensure iMath extension is not installed
     // TODO: Put this in SmModule::SmModule() but how to get the MessageDialog to appear?!
     OUString iMathExtLocation = getPackageLocation(GetContext(), "de.gmx.rheinlaender.jan.imath");
@@ -931,24 +924,12 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
         MSG_INFO(-1, "ERROR: iMath extension found");
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr, VclMessageType::Error, VclButtonsType::Ok, SmResId(RID_STR_IMATHEXTENSIONFOUND)));
         xInfoBox->run();
-        iMathBlocked = true; // This will block execution of ::Compile() to avoid problems with CLN and GiNaC
+        mImBlocked = true; // This will block execution of ::Compile() to avoid problems with CLN and GiNaC
+        return;
     }
 
-    MSG_INFO(0, "SmDocShell::SmDocShell with iMath version=" << SM_MOD()->GetConfig()->GetDefaultImSyntaxVersion());
-    SvtLinguConfig().GetOptions(maLinguOptions);
-
-    SetPool(&SfxGetpApp()->GetPool());
-
-    SmModule *pp = SM_MOD();
-    maFormat = pp->GetConfig()->GetStandardFormat();
-
-    StartListening(maFormat);
-    StartListening(*pp->GetConfig());
-
-    SetBaseModel(new SmModel(this));
-    SetSmSyntaxVersion(mnSmSyntaxVersion);
-
-    // // Find decimal separator character from the Office locale and store it for iMath compilation
+    // Find decimal separator character from the Office locale and store it for iMath compilation
+    // TODO: Re-initialize if the locale is changed?
     Reference<XComponentContext> xContext = GetContext();
     Reference<lang::XMultiComponentFactory> xMCF = xContext->getServiceManager();
     OUString ooLocale = getLocaleName(xContext);
@@ -965,7 +946,40 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
         ooLocale2 = OU("");
     }
 
-    decimalSeparator = STR(xld->getLocaleItem(lang::Locale(ooLocale1, ooLocale2, OU(""))).decimalSeparator);
+    mDecimalSeparator = STR(xld->getLocaleItem(lang::Locale(ooLocale1, ooLocale2, OU(""))).decimalSeparator);
+
+    imInitialized = true;
+}
+
+SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
+    : SfxObjectShell(i_nSfxCreationFlags)
+    , m_pMlElementTree(nullptr)
+    , mpPrinter(nullptr)
+    , mpTmpPrinter(nullptr)
+    , mnModifyCount(0)
+    , mbFormulaArranged(false)
+    , mnSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    , mpInitialOptions(nullptr)
+    , mpInitialCompiler(nullptr)
+    , mpCurrentOptions(nullptr)
+    , mpCurrentCompiler(nullptr)
+    , mImBlocked(false)
+{
+    ImStaticInitialization();
+    MSG_INFO(0, "SmDocShell::SmDocShell with iMath version=" << SM_MOD()->GetConfig()->GetDefaultImSyntaxVersion());
+
+    SvtLinguConfig().GetOptions(maLinguOptions);
+
+    SetPool(&SfxGetpApp()->GetPool());
+
+    SmModule *pp = SM_MOD();
+    maFormat = pp->GetConfig()->GetStandardFormat();
+
+    StartListening(maFormat);
+    StartListening(*pp->GetConfig());
+
+    SetBaseModel(new SmModel(this));
+    SetSmSyntaxVersion(mnSmSyntaxVersion);
 }
 
 SmDocShell::~SmDocShell()
