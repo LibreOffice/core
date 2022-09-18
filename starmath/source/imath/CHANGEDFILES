@@ -1,5 +1,0 @@
-# This file names sources that have been changed from the iMath extension git repository version
-msgdriver.cxx
-smathparsery.yxx -> smathparser.y
-smathlexer.lxx -> smathlexer.l
-

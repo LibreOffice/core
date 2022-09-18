@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_libraries,sm,\
         editeng \
         i18nutil \
 		i18nlangtag \
+        imath \
         msfilter \
         oox \
         sal \
@@ -133,27 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/mathml/element \
         starmath/source/mathml/def \
         starmath/source/mathml/starmathdatabase \
-        starmath/source/imath/alignblock \
-        starmath/source/imath/differential \
-        starmath/source/imath/eqc \
-        starmath/source/imath/equation \
-        starmath/source/imath/exderivative \
-        starmath/source/imath/expression \
-        starmath/source/imath/extintegral \
-        starmath/source/imath/extsymbol \
-        starmath/source/imath/func \
-        starmath/source/imath/iFormulaLine \
-        starmath/source/imath/iIterator \
-        starmath/source/imath/imathutils \
-        starmath/source/imath/msgdriver \
-        starmath/source/imath/operands \
-        starmath/source/imath/option \
-        starmath/source/imath/printing \
-        starmath/source/imath/settingsmanager \
-        starmath/source/imath/stringex \
-        starmath/source/imath/unit \
-        starmath/source/imath/unitmgr \
-        starmath/source/imath/utils \
 ))
 	
 

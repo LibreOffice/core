@@ -28,19 +28,22 @@
               imath::smathparser::location_type* yylloc, std::shared_ptr<eqc> compiler, \
               unsigned include_level)
   // These includes are required for smathparser.hxx
-  #include "option.hxx"
-  #include "printing.hxx"
-  #include "imathutils.hxx"
-  #include "iFormulaLine.hxx"
+  #include <imath/option.hxx>
+  #include <imath/printing.hxx>
+  #include <imath/imathutils.hxx>
+  #include <imath/iFormulaLine.hxx>
+  #include <imath/unit.hxx>
+  #include <imath/func.hxx>
+  #include <imath/msgdriver.hxx>
 #else
   #include "iFormula.hxx"
   #define FORMULAOBJECT iFormula
   #define DOCUMENTOBJECT iMathDoc
-#endif
-  #include "smathparser.hxx"
   #include "unit.hxx"
   #include "func.hxx"
   #include "msgdriver.hxx"
+#endif
+#include "smathparser.hxx"
 
 // This can also be done by calling flex with --nounistd
 #ifdef _MSC_VER

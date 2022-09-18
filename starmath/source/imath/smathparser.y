@@ -30,9 +30,19 @@
   #include <vector>
   #include <stack>
   #include <sstream>
-  
   #include <cln/cln.h>
 
+#ifdef INSIDE_SM
+  #include <imath/eqc.hxx>
+  #include <imath/func.hxx>
+  #include <imath/unit.hxx>
+  #include <imath/option.hxx>
+  #include <imath/stringex.hxx>
+  #include <imath/extintegral.hxx>
+  #include <imath/differential.hxx>
+  #include <imath/msgdriver.hxx>
+  #include <imath/imathutils.hxx>
+#else
   #include "eqc.hxx"
   #include "func.hxx"
   #include "unit.hxx"
@@ -41,8 +51,8 @@
   #include "extintegral.hxx"
   #include "differential.hxx"
   #include "msgdriver.hxx"
-
   #include "imathutils.hxx"
+#endif
 #if defined INSIDE_SM
   #include <document.hxx>
   // Dummy class for now, document is nullptr inside Starmath
@@ -57,7 +67,7 @@
   };
   #define FORMULAOBJECT SmDocShell
   #define DOCUMENTOBJECT documentObject
-  #include "iFormulaLine.hxx"
+  #include <imath/iFormulaLine.hxx>
 #else
   #include "iFormula.hxx"
   #include "iMathDoc.hxx"
