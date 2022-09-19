@@ -1,0 +1,1707 @@
+Remove a few c++11-isms to fix build on VS201
+
+diff -ur workdir/UnpackedTrball/poppler/glib/poppler-document.cc poppler/glib/poppler-document.cc
+--- poppler/glib/poppler-document.cc	2022-09-16 21:58:38.029530600 +0300
++++ poppler/glib/poppler-document.cc	2022-09-16 16:27:33.387683800 +0300
+@@ -159,7 +159,7 @@
+     return document;
+ }
+ 
+-static std::optional<GooString> poppler_password_to_latin1(const gchar *password)
++static boost::optional<GooString> poppler_password_to_latin1(const gchar *password)
+ {
+     gchar *password_latin;
+ 
+@@ -168,7 +168,7 @@
+     }
+ 
+     password_latin = g_convert(password, -1, "ISO-8859-1", "UTF-8", nullptr, nullptr, nullptr);
+-    std::optional<GooString> password_g = GooString(password_latin);
++    boost::optional<GooString> password_g = GooString(password_latin);
+     g_free(password_latin);
+ 
+     return password_g;
+@@ -198,7 +198,7 @@
+         return nullptr;
+     }
+ 
+-    const std::optional<GooString> password_g = poppler_password_to_latin1(password);
++    const boost::optional<GooString> password_g = poppler_password_to_latin1(password);
+ 
+ #ifdef G_OS_WIN32
+     wchar_t *filenameW;
+@@ -262,7 +262,7 @@
+     // create stream
+     str = new MemStream(data, 0, length, Object(objNull));
+ 
+-    const std::optional<GooString> password_g = poppler_password_to_latin1(password);
++    const boost::optional<GooString> password_g = poppler_password_to_latin1(password);
+     newDoc = new PDFDoc(str, password_g, password_g);
+     if (!newDoc->isOk() && newDoc->getErrorCode() == errEncrypted && password) {
+         /* Try again with original password (which comes from GTK in UTF8) Issue #824 */
+@@ -327,7 +327,7 @@
+     // create stream
+     str = new BytesStream(bytes, Object(objNull));
+ 
+-    const std::optional<GooString> password_g = poppler_password_to_latin1(password);
++    const boost::optional<GooString> password_g = poppler_password_to_latin1(password);
+     newDoc = new PDFDoc(str, password_g, password_g);
+     if (!newDoc->isOk() && newDoc->getErrorCode() == errEncrypted && password) {
+         /* Try again with original password (which comes from GTK in UTF8) Issue #824 */
+@@ -391,7 +391,7 @@
+         str = new CachedFileStream(cachedFile, 0, false, cachedFile->getLength(), Object(objNull));
+     }
+ 
+-    const std::optional<GooString> password_g = poppler_password_to_latin1(password);
++    const boost::optional<GooString> password_g = poppler_password_to_latin1(password);
+     newDoc = new PDFDoc(str, password_g, password_g);
+     if (!newDoc->isOk() && newDoc->getErrorCode() == errEncrypted && password) {
+         /* Try again with original password (which comes from GTK in UTF8) Issue #824 */
+@@ -515,7 +515,7 @@
+         stream = new OwningFileStream(GooFile::open(fd), Object(objNull));
+     }
+ 
+-    const std::optional<GooString> password_g = poppler_password_to_latin1(password);
++    const boost::optional<GooString> password_g = poppler_password_to_latin1(password);
+     newDoc = new PDFDoc(stream, password_g, password_g);
+     if (!newDoc->isOk() && newDoc->getErrorCode() == errEncrypted && password) {
+         /* Try again with original password (which comes from GTK in UTF8) Issue #824 */
+@@ -2839,7 +2839,7 @@
+ 
+     info = iter->items[iter->index];
+ 
+-    const std::optional<std::string> &name = info->getName();
++    const boost::optional<std::string> &name = info->getName();
+     if (name) {
+         return name->c_str();
+     } else {
+@@ -2893,7 +2893,7 @@
+ 
+     info = iter->items[iter->index];
+ 
+-    const std::optional<std::string> &name = info->getSubstituteName();
++    const boost::optional<std::string> &name = info->getSubstituteName();
+     if (name) {
+         return name->c_str();
+     } else {
+@@ -2916,7 +2916,7 @@
+ 
+     info = iter->items[iter->index];
+ 
+-    const std::optional<std::string> &file = info->getFile();
++    const boost::optional<std::string> &file = info->getFile();
+     if (file) {
+         return file->c_str();
+     } else {
+diff -ur poppler/goo/GooString.h poppler/goo/GooString.h
+--- poppler/goo/GooString.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/goo/GooString.h	2022-09-16 16:27:39.202358800 +0300
+@@ -246,8 +246,8 @@
+     // Return true if string ends with suffix
+     POPPLER_PRIVATE_EXPORT bool endsWith(const char *suffix) const;
+ 
+-    static bool startsWith(std::string_view str, std::string_view prefix) { return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix); }
+-    static bool endsWith(std::string_view str, std::string_view suffix) { return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix); }
++    static bool startsWith(const std::string &str, const std::string &prefix) { return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix); }
++    static bool endsWith(const std::string &str, const std::string &suffix) { return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix); }
+ 
+     bool hasUnicodeMarker() const { return hasUnicodeMarker(*this); }
+     static bool hasUnicodeMarker(const std::string &s) { return s.size() >= 2 && s[0] == '\xfe' && s[1] == '\xff'; }
+diff -ur poppler/poppler/Annot.cc poppler/poppler/Annot.cc
+--- poppler/poppler/Annot.cc	2022-09-16 21:58:39.610103800 +0300
++++ poppler/poppler/Annot.cc	2022-09-16 16:32:09.879243000 +0300
+@@ -1258,7 +1258,7 @@
+ // Annot
+ //------------------------------------------------------------------------
+ 
+-#define annotLocker() const std::scoped_lock locker(mutex)
++#define annotLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ Annot::Annot(PDFDoc *docA, PDFRectangle *rectA)
+ {
+@@ -3020,7 +3020,7 @@
+ public:
+     HorizontalTextLayouter() = default;
+ 
+-    HorizontalTextLayouter(const GooString *text, const Form *form, const GfxFont *font, std::optional<double> availableWidth, const bool noReencode)
++    HorizontalTextLayouter(const GooString *text, const Form *form, const GfxFont *font, boost::optional<double> availableWidth, const bool noReencode)
+     {
+         int i = 0;
+         double blockWidth;
+diff -ur poppler/poppler/Array.cc poppler/poppler/Array.cc
+--- poppler/poppler/Array.cc	2022-09-16 21:58:39.678843800 +0300
++++ poppler/poppler/Array.cc	2022-09-16 16:32:14.266553700 +0300
+@@ -36,7 +36,7 @@
+ // Array
+ //------------------------------------------------------------------------
+ 
+-#define arrayLocker() const std::scoped_lock locker(mutex)
++#define arrayLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ Array::Array(XRef *xrefA)
+ {
+diff -ur poppler/poppler/CairoFontEngine.cc poppler/poppler/CairoFontEngine.cc
+--- poppler/poppler/CairoFontEngine.cc	2022-09-16 21:58:39.910021100 +0300
++++ poppler/poppler/CairoFontEngine.cc	2022-09-16 16:32:26.488191000 +0300
+@@ -163,7 +163,7 @@
+ CairoFreeTypeFont::~CairoFreeTypeFont() { }
+ 
+ // Create a cairo_font_face_t for the given font filename OR font data.
+-static std::optional<FreeTypeFontFace> createFreeTypeFontFace(FT_Library lib, const std::string &filename, std::vector<unsigned char> &&font_data)
++static boost::optional<FreeTypeFontFace> createFreeTypeFontFace(FT_Library lib, const std::string &filename, std::vector<unsigned char> &&font_data)
+ {
+     FreeTypeFontResource *resource = new FreeTypeFontResource;
+     FreeTypeFontFace font_face;
+@@ -196,7 +196,7 @@
+ 
+ // Create a cairo_font_face_t for the given font filename OR font data. First checks if external font
+ // is in the cache.
+-std::optional<FreeTypeFontFace> CairoFreeTypeFont::getFreeTypeFontFace(CairoFontEngine *fontEngine, FT_Library lib, const std::string &filename, std::vector<unsigned char> &&font_data)
++boost::optional<FreeTypeFontFace> CairoFreeTypeFont::getFreeTypeFontFace(CairoFontEngine *fontEngine, FT_Library lib, const std::string &filename, std::vector<unsigned char> &&font_data)
+ {
+     if (font_data.empty()) {
+         return fontEngine->getExternalFontFace(lib, filename);
+@@ -210,11 +210,11 @@
+     std::string fileName;
+     std::vector<unsigned char> font_data;
+     int i, n;
+-    std::optional<GfxFontLoc> fontLoc;
++    boost::optional<GfxFontLoc> fontLoc;
+     char **enc;
+     const char *name;
+     FoFiType1C *ff1c;
+-    std::optional<FreeTypeFontFace> font_face;
++    boost::optional<FreeTypeFontFace> font_face;
+     std::vector<int> codeToGID;
+     bool substitute = false;
+ 
+@@ -604,7 +604,7 @@
+ 
+ std::shared_ptr<CairoFont> CairoFontEngine::getFont(const std::shared_ptr<GfxFont> &gfxFont, PDFDoc *doc, bool printing, XRef *xref)
+ {
+-    std::scoped_lock lock(mutex);
++    std::unique_lock<std::recursive_mutex> locker(mutex);
+     Ref ref = *gfxFont->getID();
+     std::shared_ptr<CairoFont> font;
+ 
+@@ -638,9 +638,9 @@
+     return font;
+ }
+ 
+-std::optional<FreeTypeFontFace> CairoFontEngine::getExternalFontFace(FT_Library ftlib, const std::string &filename)
++boost::optional<FreeTypeFontFace> CairoFontEngine::getExternalFontFace(FT_Library ftlib, const std::string &filename)
+ {
+-    std::scoped_lock lock(fontFileCacheMutex);
++    std::unique_lock<std::recursive_mutex> locker(mutex);
+ 
+     auto it = fontFileCache.find(filename);
+     if (it != fontFileCache.end()) {
+@@ -649,7 +649,7 @@
+         return font;
+     }
+ 
+-    std::optional<FreeTypeFontFace> font_face = createFreeTypeFontFace(ftlib, filename, {});
++    boost::optional<FreeTypeFontFace> font_face = createFreeTypeFontFace(ftlib, filename, {});
+     if (font_face) {
+         cairo_font_face_reference(font_face->cairo_font_face);
+         fontFileCache[filename] = *font_face;
+diff -ur poppler/poppler/CairoFontEngine.h poppler/poppler/CairoFontEngine.h
+--- poppler/poppler/CairoFontEngine.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/CairoFontEngine.h	2022-09-16 16:27:41.762004500 +0300
+@@ -86,7 +86,7 @@
+ private:
+     CairoFreeTypeFont(Ref ref, cairo_font_face_t *cairo_font_face, std::vector<int> &&codeToGID, bool substitute);
+ 
+-    static std::optional<FreeTypeFontFace> getFreeTypeFontFace(CairoFontEngine *fontEngine, FT_Library lib, const std::string &filename, std::vector<unsigned char> &&data);
++    static boost::optional<FreeTypeFontFace> getFreeTypeFontFace(CairoFontEngine *fontEngine, FT_Library lib, const std::string &filename, std::vector<unsigned char> &&data);
+ };
+ 
+ //------------------------------------------------------------------------
+@@ -120,7 +120,7 @@
+ 
+     std::shared_ptr<CairoFont> getFont(const std::shared_ptr<GfxFont> &gfxFont, PDFDoc *doc, bool printing, XRef *xref);
+ 
+-    static std::optional<FreeTypeFontFace> getExternalFontFace(FT_Library ftlib, const std::string &filename);
++    static boost::optional<FreeTypeFontFace> getExternalFontFace(FT_Library ftlib, const std::string &filename);
+ 
+ private:
+     FT_Library lib;
+diff -ur poppler/poppler/CairoOutputDev.h poppler/poppler/CairoOutputDev.h
+--- poppler/poppler/CairoOutputDev.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/CairoOutputDev.h	2022-09-16 16:27:41.877862600 +0300
+@@ -300,7 +300,7 @@
+     bool setMimeDataForCCITTParams(Stream *str, cairo_surface_t *image, int height);
+ #endif
+ 
+-    std::optional<GfxRGB> fill_color, stroke_color;
++    boost::optional<GfxRGB> fill_color, stroke_color;
+     cairo_pattern_t *fill_pattern, *stroke_pattern;
+     double fill_opacity;
+     double stroke_opacity;
+diff -ur poppler/poppler/Catalog.cc poppler/poppler/Catalog.cc
+--- poppler/poppler/Catalog.cc	2022-09-16 21:58:40.110102500 +0300
++++ poppler/poppler/Catalog.cc	2022-09-16 16:32:32.360067100 +0300
+@@ -71,7 +71,7 @@
+ // Catalog
+ //------------------------------------------------------------------------
+ 
+-#define catalogLocker() const std::scoped_lock locker(mutex)
++#define catalogLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ Catalog::Catalog(PDFDoc *docA)
+ {
+diff -ur poppler/poppler/Catalog.h poppler/poppler/Catalog.h
+--- poppler/poppler/Catalog.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/Catalog.h	2022-09-16 16:29:19.213406500 +0300
+@@ -47,7 +47,7 @@
+ #include "Link.h"
+ 
+ #include <memory>
+-#include <optional>
++#include <boost/optional.hpp>
+ #include <vector>
+ 
+ class PDFDoc;
+@@ -133,7 +133,7 @@
+     Ref *getPageRef(int i);
+ 
+     // Return base URI, or NULL if none.
+-    const std::optional<std::string> &getBaseURI() const { return baseURI; }
++    const boost::optional<std::string> &getBaseURI() const { return baseURI; }
+ 
+     // Return the contents of the metadata stream, or NULL if there is
+     // no metadata.
+@@ -289,7 +289,7 @@
+     NameTree *destNameTree; // named destination name-tree
+     NameTree *embeddedFileNameTree; // embedded file name-tree
+     NameTree *jsNameTree; // Java Script name-tree
+-    std::optional<std::string> baseURI; // base URI for URI-type links
++    boost::optional<std::string> baseURI; // base URI for URI-type links
+     Object metadata; // metadata stream
+     StructTreeRoot *structTreeRoot; // structure tree root
+     unsigned int markInfo; // Flags from MarkInfo dictionary
+diff -ur poppler/poppler/CharCodeToUnicode.cc poppler/poppler/CharCodeToUnicode.cc
+--- poppler/poppler/CharCodeToUnicode.cc	2022-09-16 21:58:40.210089400 +0300
++++ poppler/poppler/CharCodeToUnicode.cc	2022-09-16 16:27:42.231876900 +0300
+@@ -263,7 +263,7 @@
+ {
+     CharCodeToUnicode *ctu;
+ 
+-    ctu = new CharCodeToUnicode(std::optional<std::string>());
++    ctu = new CharCodeToUnicode(boost::optional<std::string>());
+     const char *p = buf->c_str();
+     if (!ctu->parseCMap1(&getCharFromString, &p, nBits)) {
+         delete ctu;
+@@ -277,7 +277,7 @@
+     CharCodeToUnicode *ctu;
+     FILE *f;
+ 
+-    ctu = new CharCodeToUnicode(std::optional<std::string>());
++    ctu = new CharCodeToUnicode(boost::optional<std::string>());
+     if ((f = globalParams->findToUnicodeFile(fileName))) {
+         if (!ctu->parseCMap1(&getCharFromFile, f, nBits)) {
+             delete ctu;
+@@ -567,7 +567,7 @@
+     isIdentity = false;
+ }
+ 
+-CharCodeToUnicode::CharCodeToUnicode(const std::optional<std::string> &tagA) : tag(tagA)
++CharCodeToUnicode::CharCodeToUnicode(const boost::optional<std::string> &tagA) : tag(tagA)
+ {
+     CharCode i;
+ 
+@@ -582,7 +582,7 @@
+     isIdentity = false;
+ }
+ 
+-CharCodeToUnicode::CharCodeToUnicode(const std::optional<std::string> &tagA, Unicode *mapA, CharCode mapLenA, bool copyMap, CharCodeToUnicodeString *sMapA, int sMapLenA, int sMapSizeA) : tag(tagA)
++CharCodeToUnicode::CharCodeToUnicode(const boost::optional<std::string> &tagA, Unicode *mapA, CharCode mapLenA, bool copyMap, CharCodeToUnicodeString *sMapA, int sMapLenA, int sMapSizeA) : tag(tagA)
+ {
+     mapLen = mapLenA;
+     if (copyMap) {
+diff -ur poppler/poppler/CharCodeToUnicode.h poppler/poppler/CharCodeToUnicode.h
+--- poppler/poppler/CharCodeToUnicode.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/CharCodeToUnicode.h	2022-09-16 16:29:25.010173300 +0300
+@@ -32,7 +32,7 @@
+ #define CHARCODETOUNICODE_H
+ 
+ #include <atomic>
+-#include <optional>
++#include <boost/optional.hpp>
+ 
+ #include "poppler-config.h"
+ #include "CharTypes.h"
+@@ -104,10 +104,10 @@
+     void addMapping(CharCode code, char *uStr, int n, int offset);
+     void addMappingInt(CharCode code, Unicode u);
+     CharCodeToUnicode();
+-    explicit CharCodeToUnicode(const std::optional<std::string> &tagA);
+-    CharCodeToUnicode(const std::optional<std::string> &tagA, Unicode *mapA, CharCode mapLenA, bool copyMap, CharCodeToUnicodeString *sMapA, int sMapLenA, int sMapSizeA);
++    explicit CharCodeToUnicode(const boost::optional<std::string> &tagA);
++    CharCodeToUnicode(const boost::optional<std::string> &tagA, Unicode *mapA, CharCode mapLenA, bool copyMap, CharCodeToUnicodeString *sMapA, int sMapLenA, int sMapSizeA);
+ 
+-    const std::optional<std::string> tag;
++    const boost::optional<std::string> tag;
+     Unicode *map;
+     CharCode mapLen;
+     CharCodeToUnicodeString *sMap;
+diff -ur poppler/poppler/CurlPDFDocBuilder.cc poppler/poppler/CurlPDFDocBuilder.cc
+--- poppler/poppler/CurlPDFDocBuilder.cc	2022-09-16 21:58:40.396392700 +0300
++++ poppler/poppler/CurlPDFDocBuilder.cc	2022-09-16 16:27:43.096494100 +0300
+@@ -22,7 +22,7 @@
+ // CurlPDFDocBuilder
+ //------------------------------------------------------------------------
+ 
+-std::unique_ptr<PDFDoc> CurlPDFDocBuilder::buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA)
++std::unique_ptr<PDFDoc> CurlPDFDocBuilder::buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA)
+ {
+     CachedFile *cachedFile = new CachedFile(new CurlCachedFileLoader(uri.toStr()));
+ 
+diff -ur poppler/poppler/CurlPDFDocBuilder.h poppler/poppler/CurlPDFDocBuilder.h
+--- poppler/poppler/CurlPDFDocBuilder.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/CurlPDFDocBuilder.h	2022-09-16 16:27:43.181172700 +0300
+@@ -25,7 +25,7 @@
+ {
+ 
+ public:
+-    std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) override;
++    std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) override;
+     bool supports(const GooString &uri) override;
+ };
+ 
+diff -ur poppler/poppler/Dict.cc poppler/poppler/Dict.cc
+--- poppler/poppler/Dict.cc	2022-09-16 21:58:40.594972000 +0300
++++ poppler/poppler/Dict.cc	2022-09-16 16:32:36.347348700 +0300
+@@ -40,7 +40,7 @@
+ // Dict
+ //------------------------------------------------------------------------
+ 
+-#define dictLocker() const std::scoped_lock locker(mutex)
++#define dictLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ constexpr int SORT_LENGTH_LOWER_LIMIT = 32;
+ 
+diff -ur poppler/poppler/FDPDFDocBuilder.cc poppler/poppler/FDPDFDocBuilder.cc
+--- poppler/poppler/FDPDFDocBuilder.cc	2022-09-16 21:58:40.665573300 +0300
++++ poppler/poppler/FDPDFDocBuilder.cc	2022-09-16 16:27:43.914144400 +0300
+@@ -34,7 +34,7 @@
+     return fd;
+ }
+ 
+-std::unique_ptr<PDFDoc> FileDescriptorPDFDocBuilder::buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA)
++std::unique_ptr<PDFDoc> FileDescriptorPDFDocBuilder::buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA)
+ {
+     const auto fd = parseFdFromUri(uri);
+     if (fd == -1) {
+diff -ur poppler/poppler/FDPDFDocBuilder.h poppler/poppler/FDPDFDocBuilder.h
+--- poppler/poppler/FDPDFDocBuilder.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/FDPDFDocBuilder.h	2022-09-16 16:27:43.951956600 +0300
+@@ -26,7 +26,7 @@
+ {
+ 
+ public:
+-    std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) override;
++    std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) override;
+     bool supports(const GooString &uri) override;
+ 
+ private:
+diff -ur poppler/poppler/FontInfo.cc poppler/poppler/FontInfo.cc
+--- poppler/poppler/FontInfo.cc	2022-09-16 21:58:40.995479200 +0300
++++ poppler/poppler/FontInfo.cc	2022-09-16 16:27:44.484360100 +0300
+@@ -165,7 +165,7 @@
+     fontRef = *font->getID();
+ 
+     // font name
+-    const std::optional<std::string> &origName = font->getName();
++    const boost::optional<std::string> &origName = font->getName();
+     if (origName) {
+         name = *font->getName();
+     }
+diff -ur poppler/poppler/FontInfo.h poppler/poppler/FontInfo.h
+--- poppler/poppler/FontInfo.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/FontInfo.h	2022-09-16 16:29:28.697082100 +0300
+@@ -30,7 +30,7 @@
+ #include "Object.h"
+ #include "poppler_private_export.h"
+ 
+-#include <optional>
++#include <boost/optional.hpp>
+ #include <string>
+ #include <unordered_set>
+ 
+@@ -63,9 +63,9 @@
+ 
+     FontInfo &operator=(const FontInfo &) = delete;
+ 
+-    const std::optional<std::string> &getName() const { return name; };
+-    const std::optional<std::string> &getSubstituteName() const { return substituteName; };
+-    const std::optional<std::string> &getFile() const { return file; };
++    const boost::optional<std::string> &getName() const { return name; };
++    const boost::optional<std::string> &getSubstituteName() const { return substituteName; };
++    const boost::optional<std::string> &getFile() const { return file; };
+     const std::string &getEncoding() const { return encoding; };
+     Type getType() const { return type; };
+     bool getEmbedded() const { return emb; };
+@@ -75,9 +75,9 @@
+     Ref getEmbRef() const { return embRef; };
+ 
+ private:
+-    std::optional<std::string> name;
+-    std::optional<std::string> substituteName;
+-    std::optional<std::string> file;
++    boost::optional<std::string> name;
++    boost::optional<std::string> substituteName;
++    boost::optional<std::string> file;
+     std::string encoding;
+     Type type;
+     bool emb;
+diff -ur poppler/poppler/Form.cc poppler/poppler/Form.cc
+--- poppler/poppler/Form.cc	2022-09-16 21:58:41.064544700 +0300
++++ poppler/poppler/Form.cc	2022-09-16 16:27:44.615842800 +0300
+@@ -601,8 +601,8 @@
+ }
+ #endif
+ 
+-bool FormWidgetSignature::signDocument(const char *saveFilename, const char *certNickname, const char *digestName, const char *password, const GooString *reason, const GooString *location, const std::optional<GooString> &ownerPassword,
+-                                       const std::optional<GooString> &userPassword)
++bool FormWidgetSignature::signDocument(const char *saveFilename, const char *certNickname, const char *digestName, const char *password, const GooString *reason, const GooString *location, const boost::optional<GooString> &ownerPassword,
++                                       const boost::optional<GooString> &userPassword)
+ {
+ #ifdef ENABLE_NSS3
+     if (!certNickname) {
+@@ -689,7 +689,7 @@
+ }
+ 
+ bool FormWidgetSignature::signDocumentWithAppearance(const char *saveFilename, const char *certNickname, const char *digestName, const char *password, const GooString *reason, const GooString *location,
+-                                                     const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, const GooString &signatureText, const GooString &signatureTextLeft, double fontSize,
++                                                     const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, const GooString &signatureText, const GooString &signatureTextLeft, double fontSize,
+                                                      double leftFontSize, std::unique_ptr<AnnotColor> &&fontColor, double borderWidth, std::unique_ptr<AnnotColor> &&borderColor, std::unique_ptr<AnnotColor> &&backgroundColor)
+ {
+     // Set the appearance
+@@ -742,7 +742,7 @@
+ }
+ 
+ // Get start and end file position of objNum in the PDF named filename.
+-bool FormWidgetSignature::getObjectStartEnd(const GooString &filename, int objNum, Goffset *objStart, Goffset *objEnd, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword)
++bool FormWidgetSignature::getObjectStartEnd(const GooString &filename, int objNum, Goffset *objStart, Goffset *objEnd, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword)
+ {
+     PDFDoc newDoc(std::unique_ptr<GooString>(filename.copy()), ownerPassword, userPassword);
+     if (!newDoc.isOk()) {
+@@ -905,7 +905,7 @@
+     return static_cast<FormFieldSignature *>(field)->getSignedRangeBounds();
+ }
+ 
+-std::optional<GooString> FormWidgetSignature::getCheckedSignature(Goffset *checkedFileSize)
++boost::optional<GooString> FormWidgetSignature::getCheckedSignature(Goffset *checkedFileSize)
+ {
+     return static_cast<FormFieldSignature *>(field)->getCheckedSignature(checkedFileSize);
+ }
+@@ -2426,7 +2426,7 @@
+     return range_vec;
+ }
+ 
+-std::optional<GooString> FormFieldSignature::getCheckedSignature(Goffset *checkedFileSize)
++boost::optional<GooString> FormFieldSignature::getCheckedSignature(Goffset *checkedFileSize)
+ {
+     Goffset start = 0;
+     Goffset end = 0;
+diff -ur poppler/poppler/Form.h poppler/poppler/Form.h
+--- poppler/poppler/Form.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/Form.h	2022-09-16 16:29:32.981221400 +0300
+@@ -40,7 +40,7 @@
+ 
+ #include <ctime>
+ 
+-#include <optional>
++#include <boost/optional.hpp>
+ #include <set>
+ #include <vector>
+ 
+@@ -307,24 +307,24 @@
+     // field "ByteRange" in the dictionary "V".
+     // Arguments reason and location are UTF-16 big endian strings with BOM. An empty string and nullptr are acceptable too.
+     // Returns success.
+-    bool signDocument(const char *filename, const char *certNickname, const char *digestName, const char *password, const GooString *reason = nullptr, const GooString *location = nullptr, const std::optional<GooString> &ownerPassword = {},
+-                      const std::optional<GooString> &userPassword = {});
++    bool signDocument(const char *filename, const char *certNickname, const char *digestName, const char *password, const GooString *reason = nullptr, const GooString *location = nullptr, const boost::optional<GooString> &ownerPassword = {},
++                      const boost::optional<GooString> &userPassword = {});
+ 
+     // Same as above but adds text, font color, etc.
+     bool signDocumentWithAppearance(const char *filename, const char *certNickname, const char *digestName, const char *password, const GooString *reason = nullptr, const GooString *location = nullptr,
+-                                    const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, const GooString &signatureText = {}, const GooString &signatureTextLeft = {}, double fontSize = {},
++                                    const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, const GooString &signatureText = {}, const GooString &signatureTextLeft = {}, double fontSize = {},
+                                     double leftFontSize = {}, std::unique_ptr<AnnotColor> &&fontColor = {}, double borderWidth = {}, std::unique_ptr<AnnotColor> &&borderColor = {}, std::unique_ptr<AnnotColor> &&backgroundColor = {});
+ 
+     // checks the length encoding of the signature and returns the hex encoded signature
+     // if the check passed (and the checked file size as output parameter in checkedFileSize)
+     // otherwise a nullptr is returned
+-    std::optional<GooString> getCheckedSignature(Goffset *checkedFileSize);
++    boost::optional<GooString> getCheckedSignature(Goffset *checkedFileSize);
+ 
+     const GooString *getSignature() const;
+ 
+ private:
+     bool createSignature(Object &vObj, Ref vRef, const GooString &name, const GooString *signature, const GooString *reason = nullptr, const GooString *location = nullptr);
+-    bool getObjectStartEnd(const GooString &filename, int objNum, Goffset *objStart, Goffset *objEnd, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword);
++    bool getObjectStartEnd(const GooString &filename, int objNum, Goffset *objStart, Goffset *objEnd, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword);
+     bool updateOffsets(FILE *f, Goffset objStart, Goffset objEnd, Goffset *sigStart, Goffset *sigEnd, Goffset *fileSize);
+ 
+     bool updateSignature(FILE *f, Goffset sigStart, Goffset sigEnd, const GooString *signature);
+@@ -611,7 +611,7 @@
+     // checks the length encoding of the signature and returns the hex encoded signature
+     // if the check passed (and the checked file size as output parameter in checkedFileSize)
+     // otherwise a nullptr is returned
+-    std::optional<GooString> getCheckedSignature(Goffset *checkedFileSize);
++    boost::optional<GooString> getCheckedSignature(Goffset *checkedFileSize);
+ 
+     ~FormFieldSignature() override;
+     Object *getByteRange() { return &byte_range; }
+diff -ur poppler/poppler/GfxFont.cc poppler/poppler/GfxFont.cc
+--- poppler/poppler/GfxFont.cc	2022-09-16 21:58:41.211684900 +0300
++++ poppler/poppler/GfxFont.cc	2022-09-16 16:27:45.016943600 +0300
+@@ -199,7 +199,7 @@
+ 
+ std::unique_ptr<GfxFont> GfxFont::makeFont(XRef *xref, const char *tagA, Ref idA, Dict *fontDict)
+ {
+-    std::optional<std::string> name;
++    boost::optional<std::string> name;
+     Ref embFontIDA;
+     GfxFontType typeA;
+ 
+@@ -223,7 +223,7 @@
+     return std::unique_ptr<GfxFont>(font);
+ }
+ 
+-GfxFont::GfxFont(const char *tagA, Ref idA, std::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA) : tag(tagA), id(idA), name(std::move(nameA)), type(typeA)
++GfxFont::GfxFont(const char *tagA, Ref idA, boost::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA) : tag(tagA), id(idA), name(std::move(nameA)), type(typeA)
+ {
+     ok = false;
+     embFontID = embFontIDA;
+@@ -608,7 +608,7 @@
+     return ctu;
+ }
+ 
+-std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
++boost::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+ {
+     SysFontType sysFontType;
+     GooString *path, *base14Name;
+@@ -616,7 +616,7 @@
+     bool embed;
+ 
+     if (type == fontType3) {
+-        return std::nullopt;
++        return boost::none;
+     }
+ 
+     //----- embedded font
+@@ -682,7 +682,7 @@
+ 
+     //----- external font file (fontFile, fontDir)
+     if (name && (path = globalParams->findFontFile(*name))) {
+-        if (std::optional<GfxFontLoc> fontLoc = getExternalFont(path, isCIDFont())) {
++        if (boost::optional<GfxFontLoc> fontLoc = getExternalFont(path, isCIDFont())) {
+             return fontLoc;
+         }
+     }
+@@ -691,7 +691,7 @@
+     if (!ps && !isCIDFont() && ((Gfx8BitFont *)this)->base14) {
+         base14Name = new GooString(((Gfx8BitFont *)this)->base14->base14Name);
+         if ((path = globalParams->findBase14FontFile(base14Name, this))) {
+-            if (std::optional<GfxFontLoc> fontLoc = getExternalFont(path, false)) {
++            if (boost::optional<GfxFontLoc> fontLoc = getExternalFont(path, false)) {
+                 delete base14Name;
+                 return fontLoc;
+             }
+@@ -753,7 +753,7 @@
+         } else {
+             path = globalParams->findFontFile(substName);
+             if (path) {
+-                if (std::optional<GfxFontLoc> fontLoc = getExternalFont(path, false)) {
++                if (boost::optional<GfxFontLoc> fontLoc = getExternalFont(path, false)) {
+                     error(errSyntaxWarning, -1, "Substituting font '{0:s}' for '{1:s}'", base14SubstFonts[substIdx], name ? name->c_str() : "");
+                     name = base14SubstFonts[substIdx];
+                     fontLoc->substIdx = substIdx;
+@@ -763,14 +763,14 @@
+         }
+ 
+         // failed to find a substitute font
+-        return std::nullopt;
++        return boost::none;
+     }
+ 
+     // failed to find a substitute font
+-    return std::nullopt;
++    return boost::none;
+ }
+ 
+-std::optional<GfxFontLoc> GfxFont::getExternalFont(GooString *path, bool cid)
++boost::optional<GfxFontLoc> GfxFont::getExternalFont(GooString *path, bool cid)
+ {
+     FoFiIdentifierType fft;
+     GfxFontType fontType;
+@@ -805,7 +805,7 @@
+     }
+     if (fontType == fontUnknownType || (cid ? (fontType < fontCIDType0) : (fontType >= fontCIDType0))) {
+         delete path;
+-        return std::nullopt;
++        return boost::none;
+     }
+     GfxFontLoc fontLoc;
+     fontLoc.locType = gfxFontLocExternal;
+@@ -814,7 +814,7 @@
+     return std::move(fontLoc); // std::move only required to please g++-7
+ }
+ 
+-std::optional<std::vector<unsigned char>> GfxFont::readEmbFontFile(XRef *xref)
++boost::optional<std::vector<unsigned char>> GfxFont::readEmbFontFile(XRef *xref)
+ {
+     Stream *str;
+ 
+@@ -942,7 +942,7 @@
+     return numeric;
+ }
+ 
+-Gfx8BitFont::Gfx8BitFont(XRef *xref, const char *tagA, Ref idA, std::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict) : GfxFont(tagA, idA, std::move(nameA), typeA, embFontIDA)
++Gfx8BitFont::Gfx8BitFont(XRef *xref, const char *tagA, Ref idA, boost::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict) : GfxFont(tagA, idA, std::move(nameA), typeA, embFontIDA)
+ {
+     const BuiltinFont *builtinFont;
+     const char **baseEnc;
+@@ -1117,7 +1117,7 @@
+     ffT1 = nullptr;
+     ffT1C = nullptr;
+     if (type == fontType1 && embFontID != Ref::INVALID()) {
+-        const std::optional<std::vector<unsigned char>> buf = readEmbFontFile(xref);
++        const boost::optional<std::vector<unsigned char>> buf = readEmbFontFile(xref);
+         if (buf) {
+             if ((ffT1 = FoFiType1::make(buf->data(), buf->size()))) {
+                 if (ffT1->getName()) {
+@@ -1133,7 +1133,7 @@
+             }
+         }
+     } else if (type == fontType1C && embFontID != Ref::INVALID()) {
+-        const std::optional<std::vector<unsigned char>> buf = readEmbFontFile(xref);
++        const boost::optional<std::vector<unsigned char>> buf = readEmbFontFile(xref);
+         if (buf) {
+             if ((ffT1C = FoFiType1C::make(buf->data(), buf->size()))) {
+                 if (ffT1C->getName()) {
+@@ -1707,7 +1707,7 @@
+     bool operator()(const GfxFontCIDWidthExcepV &w1, const GfxFontCIDWidthExcepV &w2) { return w1.first < w2.first; }
+ };
+ 
+-GfxCIDFont::GfxCIDFont(XRef *xref, const char *tagA, Ref idA, std::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict) : GfxFont(tagA, idA, std::move(nameA), typeA, embFontIDA)
++GfxCIDFont::GfxCIDFont(XRef *xref, const char *tagA, Ref idA, boost::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict) : GfxFont(tagA, idA, std::move(nameA), typeA, embFontIDA)
+ {
+     Dict *desFontDict;
+     Object desFontDictObj;
+diff -ur poppler/poppler/GfxFont.h poppler/poppler/GfxFont.h
+--- poppler/poppler/GfxFont.h	2022-09-16 21:58:36.928310000 +0300
++++ poppler/poppler/GfxFont.h	2022-09-16 16:29:36.703166800 +0300
+@@ -35,7 +35,7 @@
+ #define GFXFONT_H
+ 
+ #include <memory>
+-#include <optional>
++#include <boost/optional.hpp>
+ 
+ #include "goo/GooString.h"
+ #include "Object.h"
+@@ -216,7 +216,7 @@
+ 
+     // Get the original font name (ignornig any munging that might have
+     // been done to map to a canonical Base-14 font name).
+-    const std::optional<std::string> &getName() const { return name; }
++    const boost::optional<std::string> &getName() const { return name; }
+ 
+     bool isSubset() const;
+ 
+@@ -275,11 +275,11 @@
+     virtual int getWMode() const { return 0; }
+ 
+     // Locate the font file for this font.  If <ps> is not null, includes PS
+-    // printer-resident fonts.  Returns std::optional without a value on failure.
+-    std::optional<GfxFontLoc> locateFont(XRef *xref, PSOutputDev *ps);
++    // printer-resident fonts.  Returns boost::optional without a value on failure.
++    boost::optional<GfxFontLoc> locateFont(XRef *xref, PSOutputDev *ps);
+ 
+     // Read an external or embedded font file into a buffer.
+-    std::optional<std::vector<unsigned char>> readEmbFontFile(XRef *xref);
++    boost::optional<std::vector<unsigned char>> readEmbFontFile(XRef *xref);
+ 
+     // Get the next char from a string <s> of <len> bytes, returning the
+     // char <code>, its Unicode mapping <u>, its displacement vector
+@@ -301,16 +301,16 @@
+     static const char *getAlternateName(const char *name);
+ 
+ protected:
+-    GfxFont(const char *tagA, Ref idA, std::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA);
++    GfxFont(const char *tagA, Ref idA, boost::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA);
+ 
+     static GfxFontType getFontType(XRef *xref, Dict *fontDict, Ref *embID);
+     void readFontDescriptor(XRef *xref, Dict *fontDict);
+     CharCodeToUnicode *readToUnicodeCMap(Dict *fontDict, int nBits, CharCodeToUnicode *ctu);
+-    static std::optional<GfxFontLoc> getExternalFont(GooString *path, bool cid);
++    static boost::optional<GfxFontLoc> getExternalFont(GooString *path, bool cid);
+ 
+     const std::string tag; // PDF font tag
+     const Ref id; // reference (used as unique ID)
+-    std::optional<std::string> name; // font name
++    boost::optional<std::string> name; // font name
+     GooString *family; // font family
+     Stretch stretch; // font stretch
+     Weight weight; // font weight
+@@ -335,7 +335,7 @@
+ class POPPLER_PRIVATE_EXPORT Gfx8BitFont : public GfxFont
+ {
+ public:
+-    Gfx8BitFont(XRef *xref, const char *tagA, Ref idA, std::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
++    Gfx8BitFont(XRef *xref, const char *tagA, Ref idA, boost::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
+ 
+     int getNextChar(const char *s, int len, CharCode *code, Unicode const **u, int *uLen, double *dx, double *dy, double *ox, double *oy) const override;
+ 
+@@ -395,7 +395,7 @@
+ class POPPLER_PRIVATE_EXPORT GfxCIDFont : public GfxFont
+ {
+ public:
+-    GfxCIDFont(XRef *xref, const char *tagA, Ref idA, std::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
++    GfxCIDFont(XRef *xref, const char *tagA, Ref idA, boost::optional<std::string> &&nameA, GfxFontType typeA, Ref embFontIDA, Dict *fontDict);
+ 
+     bool isCIDFont() const override { return true; }
+ 
+diff -ur poppler/poppler/GlobalParams.cc poppler/poppler/GlobalParams.cc
+--- poppler/poppler/GlobalParams.cc	2022-09-16 21:58:41.327712200 +0300
++++ poppler/poppler/GlobalParams.cc	2022-09-16 16:36:52.853893500 +0300
+@@ -395,9 +395,9 @@
+     return fi;
+ }
+ 
+-#define globalParamsLocker() const std::scoped_lock locker(mutex)
+-#define unicodeMapCacheLocker() const std::scoped_lock locker(unicodeMapCacheMutex)
+-#define cMapCacheLocker() const std::scoped_lock locker(cMapCacheMutex)
++#define globalParamsLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
++#define unicodeMapCacheLocker() std::unique_lock<std::recursive_mutex> locker(unicodeMapCacheMutex)
++#define cMapCacheLocker() std::unique_lock<std::recursive_mutex> locker(cMapCacheMutex)
+ 
+ //------------------------------------------------------------------------
+ // parsing
+@@ -953,7 +953,7 @@
+     const SysFontInfo *fi = nullptr;
+     FcPattern *p = nullptr;
+     GooString *path = nullptr;
+-    const std::optional<std::string> &fontName = font->getName();
++    const boost::optional<std::string> &fontName = font->getName();
+     GooString substituteName;
+     if (!fontName) {
+         return nullptr;
+@@ -1267,7 +1267,7 @@
+     const SysFontInfo *fi;
+     GooString *path;
+ 
+-    const std::optional<std::string> &fontName = font->getName();
++    const boost::optional<std::string> &fontName = font->getName();
+     if (!fontName)
+         return nullptr;
+ 
+@@ -1406,7 +1406,7 @@
+ 
+ GlobalParamsIniter::GlobalParamsIniter(ErrorCallback errorCallback)
+ {
+-    const std::scoped_lock lock { mutex };
++    std::lock_guard<std::mutex> lock { mutex };
+ 
+     if (count == 0) {
+         globalParams = std::make_unique<GlobalParams>(!customDataDir.empty() ? customDataDir.c_str() : nullptr);
+@@ -1419,7 +1419,7 @@
+ 
+ GlobalParamsIniter::~GlobalParamsIniter()
+ {
+-    const std::scoped_lock lock { mutex };
++    std::lock_guard<std::mutex> lock { mutex };
+ 
+     --count;
+ 
+@@ -1430,7 +1430,7 @@
+ 
+ bool GlobalParamsIniter::setCustomDataDir(const std::string &dir)
+ {
+-    const std::scoped_lock lock { mutex };
++    std::lock_guard<std::mutex> lock { mutex };
+ 
+     if (count == 0) {
+         customDataDir = dir;
+diff -ur poppler/poppler/GlobalParamsWin.cc poppler/poppler/GlobalParamsWin.cc
+--- poppler/poppler/GlobalParamsWin.cc	2022-09-16 21:58:41.381093500 +0300
++++ poppler/poppler/GlobalParamsWin.cc	2022-09-16 16:33:34.090528600 +0300
+@@ -467,10 +467,10 @@
+ {
+     const SysFontInfo *fi;
+     GooString *path = nullptr;
+-    const std::optional<std::string> &fontName = font->getName();
++    const boost::optional<std::string> &fontName = font->getName();
+     if (!fontName)
+         return nullptr;
+-    const std::scoped_lock locker(mutex);
++    std::unique_lock<std::recursive_mutex> locker(mutex);
+     setupBaseFonts(POPPLER_FONTSDIR);
+ 
+     // TODO: base14Name should be changed?
+@@ -505,7 +505,7 @@
+ 
+ FamilyStyleFontSearchResult GlobalParams::findSystemFontFileForFamilyAndStyle(const std::string &fontFamily, const std::string &fontStyle)
+ {
+-    const std::scoped_lock locker(mutex);
++    std::unique_lock<std::recursive_mutex> locker(mutex);
+     setupBaseFonts(POPPLER_FONTSDIR);
+ 
+     const std::string familyAndStyle = fontFamily + " " + fontStyle;
+@@ -520,7 +520,7 @@
+ 
+ UCharFontSearchResult GlobalParams::findSystemFontFileForUChar(Unicode uChar, const GfxFont &fontToEmulate)
+ {
+-    const std::scoped_lock locker(mutex);
++    std::unique_lock<std::recursive_mutex> locker(mutex);
+     setupBaseFonts(POPPLER_FONTSDIR);
+ 
+     const std::vector<SysFontInfo *> &fonts = sysFonts->getFonts();
+diff -ur poppler/poppler/Link.cc poppler/poppler/Link.cc
+--- poppler/poppler/Link.cc	2022-09-16 21:58:41.835750600 +0300
++++ poppler/poppler/Link.cc	2022-09-16 16:27:46.843405900 +0300
+@@ -63,13 +63,13 @@
+     return action;
+ }
+ 
+-std::unique_ptr<LinkAction> LinkAction::parseAction(const Object *obj, const std::optional<std::string> &baseURI)
++std::unique_ptr<LinkAction> LinkAction::parseAction(const Object *obj, const boost::optional<std::string> &baseURI)
+ {
+     std::set<int> seenNextActions;
+     return parseAction(obj, baseURI, &seenNextActions);
+ }
+ 
+-std::unique_ptr<LinkAction> LinkAction::parseAction(const Object *obj, const std::optional<std::string> &baseURI, std::set<int> *seenNextActions)
++std::unique_ptr<LinkAction> LinkAction::parseAction(const Object *obj, const boost::optional<std::string> &baseURI, std::set<int> *seenNextActions)
+ {
+ 
+     if (!obj->isDict()) {
+@@ -513,7 +513,7 @@
+ // LinkURI
+ //------------------------------------------------------------------------
+ 
+-LinkURI::LinkURI(const Object *uriObj, const std::optional<std::string> &baseURI)
++LinkURI::LinkURI(const Object *uriObj, const boost::optional<std::string> &baseURI)
+ {
+     hasURIFlag = false;
+     if (uriObj->isString()) {
+diff -ur poppler/poppler/Link.h poppler/poppler/Link.h
+--- poppler/poppler/Link.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/Link.h	2022-09-16 16:28:57.630770800 +0300
+@@ -35,7 +35,7 @@
+ #include "Object.h"
+ #include "poppler_private_export.h"
+ #include <memory>
+-#include <optional>
++#include <boost/optional.hpp>
+ #include <set>
+ 
+ class GooString;
+@@ -87,13 +87,13 @@
+     static std::unique_ptr<LinkAction> parseDest(const Object *obj);
+ 
+     // Parse an action dictionary.
+-    static std::unique_ptr<LinkAction> parseAction(const Object *obj, const std::optional<std::string> &baseURI = {});
++    static std::unique_ptr<LinkAction> parseAction(const Object *obj, const boost::optional<std::string> &baseURI = {});
+ 
+     // A List of the next actions to execute in order.
+     const std::vector<std::unique_ptr<LinkAction>> &nextActions() const;
+ 
+ private:
+-    static std::unique_ptr<LinkAction> parseAction(const Object *obj, const std::optional<std::string> &baseURI, std::set<int> *seenNextActions);
++    static std::unique_ptr<LinkAction> parseAction(const Object *obj, const boost::optional<std::string> &baseURI, std::set<int> *seenNextActions);
+ 
+     std::vector<std::unique_ptr<LinkAction>> nextActionList;
+ };
+@@ -243,7 +243,7 @@
+ {
+ public:
+     // Build a LinkURI given the URI (string) and base URI.
+-    LinkURI(const Object *uriObj, const std::optional<std::string> &baseURI);
++    LinkURI(const Object *uriObj, const boost::optional<std::string> &baseURI);
+ 
+     ~LinkURI() override;
+ 
+diff -ur poppler/poppler/LocalPDFDocBuilder.cc poppler/poppler/LocalPDFDocBuilder.cc
+--- poppler/poppler/LocalPDFDocBuilder.cc	2022-09-16 21:58:41.867032500 +0300
++++ poppler/poppler/LocalPDFDocBuilder.cc	2022-09-16 16:27:46.990572300 +0300
+@@ -18,7 +18,7 @@
+ // LocalPDFDocBuilder
+ //------------------------------------------------------------------------
+ 
+-std::unique_ptr<PDFDoc> LocalPDFDocBuilder::buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA)
++std::unique_ptr<PDFDoc> LocalPDFDocBuilder::buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA)
+ {
+     if (uri.cmpN("file://", 7) == 0) {
+         std::unique_ptr<GooString> fileName(uri.copy());
+diff -ur poppler/poppler/LocalPDFDocBuilder.h poppler/poppler/LocalPDFDocBuilder.h
+--- poppler/poppler/LocalPDFDocBuilder.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/LocalPDFDocBuilder.h	2022-09-16 16:27:47.037437500 +0300
+@@ -25,7 +25,7 @@
+ {
+ 
+ public:
+-    std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) override;
++    std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) override;
+     bool supports(const GooString &uri) override;
+ };
+ 
+diff -ur poppler/poppler/Page.cc poppler/poppler/Page.cc
+--- poppler/poppler/Page.cc	2022-09-16 21:58:42.283721100 +0300
++++ poppler/poppler/Page.cc	2022-09-16 16:33:42.958478900 +0300
+@@ -249,7 +249,7 @@
+ // Page
+ //------------------------------------------------------------------------
+ 
+-#define pageLocker() const std::scoped_lock locker(mutex)
++#define pageLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ Page::Page(PDFDoc *docA, int numA, Object &&pageDict, Ref pageRefA, PageAttrs *attrsA, Form *form)
+ {
+diff -ur poppler/poppler/PDFDoc.cc poppler/poppler/PDFDoc.cc
+--- poppler/poppler/PDFDoc.cc	2022-09-16 21:58:42.483511900 +0300
++++ poppler/poppler/PDFDoc.cc	2022-09-16 16:33:47.447609100 +0300
+@@ -121,11 +121,11 @@
+ // PDFDoc
+ //------------------------------------------------------------------------
+ 
+-#define pdfdocLocker() const std::scoped_lock locker(mutex)
++#define pdfdocLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ PDFDoc::PDFDoc() { }
+ 
+-PDFDoc::PDFDoc(std::unique_ptr<GooString> &&fileNameA, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA, const std::function<void()> &xrefReconstructedCallback)
++PDFDoc::PDFDoc(std::unique_ptr<GooString> &&fileNameA, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA, const std::function<void()> &xrefReconstructedCallback)
+     : fileName(std::move(fileNameA)), guiData(guiDataA)
+ {
+ #ifdef _WIN32
+@@ -160,7 +160,7 @@
+ }
+ 
+ #ifdef _WIN32
+-PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA, const std::function<void()> &xrefReconstructedCallback) : guiData(guiDataA)
++PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA, const std::function<void()> &xrefReconstructedCallback) : guiData(guiDataA)
+ {
+     OSVERSIONINFO version;
+ 
+@@ -196,7 +196,7 @@
+ }
+ #endif
+ 
+-PDFDoc::PDFDoc(BaseStream *strA, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA, const std::function<void()> &xrefReconstructedCallback) : guiData(guiDataA)
++PDFDoc::PDFDoc(BaseStream *strA, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA, const std::function<void()> &xrefReconstructedCallback) : guiData(guiDataA)
+ {
+     if (strA->getFileName()) {
+         fileName.reset(strA->getFileName()->copy());
+@@ -213,7 +213,7 @@
+     ok = setup(ownerPassword, userPassword, xrefReconstructedCallback);
+ }
+ 
+-bool PDFDoc::setup(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, const std::function<void()> &xrefReconstructedCallback)
++bool PDFDoc::setup(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, const std::function<void()> &xrefReconstructedCallback)
+ {
+     pdfdocLocker();
+ 
+@@ -389,7 +389,7 @@
+     // We don't do the version check. Don't add it back in.
+ }
+ 
+-bool PDFDoc::checkEncryption(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword)
++bool PDFDoc::checkEncryption(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword)
+ {
+     bool encrypted;
+     bool ret;
+@@ -2154,7 +2154,7 @@
+ 
+ bool PDFDoc::sign(const char *saveFilename, const char *certNickname, const char *password, GooString *partialFieldName, int page, const PDFRectangle &rect, const GooString &signatureText, const GooString &signatureTextLeft,
+                   double fontSize, double leftFontSize, std::unique_ptr<AnnotColor> &&fontColor, double borderWidth, std::unique_ptr<AnnotColor> &&borderColor, std::unique_ptr<AnnotColor> &&backgroundColor, const GooString *reason,
+-                  const GooString *location, const std::string &imagePath, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword)
++                  const GooString *location, const std::string &imagePath, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword)
+ {
+     ::Page *destPage = getPage(page);
+     if (destPage == nullptr) {
+diff -ur poppler/poppler/PDFDoc.h poppler/poppler/PDFDoc.h
+--- poppler/poppler/PDFDoc.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/PDFDoc.h	2022-09-16 16:27:48.425364000 +0300
+@@ -130,14 +130,14 @@
+ class POPPLER_PRIVATE_EXPORT PDFDoc
+ {
+ public:
+-    explicit PDFDoc(std::unique_ptr<GooString> &&fileNameA, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr,
++    explicit PDFDoc(std::unique_ptr<GooString> &&fileNameA, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr,
+                     const std::function<void()> &xrefReconstructedCallback = {});
+ 
+ #ifdef _WIN32
+-    PDFDoc(wchar_t *fileNameA, int fileNameLen, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr, const std::function<void()> &xrefReconstructedCallback = {});
++    PDFDoc(wchar_t *fileNameA, int fileNameLen, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr, const std::function<void()> &xrefReconstructedCallback = {});
+ #endif
+ 
+-    explicit PDFDoc(BaseStream *strA, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr, const std::function<void()> &xrefReconstructedCallback = {});
++    explicit PDFDoc(BaseStream *strA, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr, const std::function<void()> &xrefReconstructedCallback = {});
+     ~PDFDoc();
+ 
+     PDFDoc(const PDFDoc &) = delete;
+@@ -493,7 +493,7 @@
+     // sign() takes ownership of partialFieldName.
+     bool sign(const char *saveFilename, const char *certNickname, const char *password, GooString *partialFieldName, int page, const PDFRectangle &rect, const GooString &signatureText, const GooString &signatureTextLeft, double fontSize,
+               double leftFontSize, std::unique_ptr<AnnotColor> &&fontColor, double borderWidth, std::unique_ptr<AnnotColor> &&borderColor, std::unique_ptr<AnnotColor> &&backgroundColor, const GooString *reason = nullptr,
+-              const GooString *location = nullptr, const std::string &imagePath = "", const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {});
++              const GooString *location = nullptr, const std::string &imagePath = "", const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {});
+ 
+ private:
+     // insert referenced objects in XRef
+@@ -526,10 +526,10 @@
+     Hints *getHints();
+ 
+     PDFDoc();
+-    bool setup(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, const std::function<void()> &xrefReconstructedCallback);
++    bool setup(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, const std::function<void()> &xrefReconstructedCallback);
+     bool checkFooter();
+     void checkHeader();
+-    bool checkEncryption(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword);
++    bool checkEncryption(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword);
+     void extractPDFSubtype();
+ 
+     // Get the offset of the start xref table.
+diff -ur poppler/poppler/PDFDocBuilder.h poppler/poppler/PDFDocBuilder.h
+--- poppler/poppler/PDFDocBuilder.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/PDFDocBuilder.h	2022-09-16 16:27:48.525644000 +0300
+@@ -38,7 +38,7 @@
+     // Builds a new PDFDoc. Returns a PDFDoc. You should check this PDFDoc
+     // with PDFDoc::isOk() for failures.
+     // The caller is responsible for deleting ownerPassword, userPassWord and guiData.
+-    virtual std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) = 0;
++    virtual std::unique_ptr<PDFDoc> buildPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr) = 0;
+ 
+     // Returns true if the builder supports building a PDFDoc from the URI.
+     virtual bool supports(const GooString &uri) = 0;
+diff -ur poppler/poppler/PDFDocFactory.cc poppler/poppler/PDFDocFactory.cc
+--- poppler/poppler/PDFDocFactory.cc	2022-09-16 21:58:42.630812800 +0300
++++ poppler/poppler/PDFDocFactory.cc	2022-09-16 16:27:48.663754200 +0300
+@@ -54,7 +54,7 @@
+     }
+ }
+ 
+-std::unique_ptr<PDFDoc> PDFDocFactory::createPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword, void *guiDataA)
++std::unique_ptr<PDFDoc> PDFDocFactory::createPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword, void *guiDataA)
+ {
+     for (int i = builders->size() - 1; i >= 0; i--) {
+         PDFDocBuilder *builder = (*builders)[i];
+diff -ur poppler/poppler/PDFDocFactory.h poppler/poppler/PDFDocFactory.h
+--- poppler/poppler/PDFDocFactory.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/PDFDocFactory.h	2022-09-16 16:27:48.748339700 +0300
+@@ -46,7 +46,7 @@
+     // Create a PDFDoc. Returns a PDFDoc. You should check this PDFDoc
+     // with PDFDoc::isOk() for failures.
+     // The caller is responsible for deleting ownerPassword, userPassWord and guiData.
+-    std::unique_ptr<PDFDoc> createPDFDoc(const GooString &uri, const std::optional<GooString> &ownerPassword = {}, const std::optional<GooString> &userPassword = {}, void *guiDataA = nullptr);
++    std::unique_ptr<PDFDoc> createPDFDoc(const GooString &uri, const boost::optional<GooString> &ownerPassword = {}, const boost::optional<GooString> &userPassword = {}, void *guiDataA = nullptr);
+ 
+     // Extend supported URIs with the ones from the PDFDocBuilder.
+     void registerPDFDocBuilder(PDFDocBuilder *pdfDocBuilder);
+diff -ur poppler/poppler/PSOutputDev.cc poppler/poppler/PSOutputDev.cc
+--- poppler/poppler/PSOutputDev.cc	2022-09-16 21:58:42.831194900 +0300
++++ poppler/poppler/PSOutputDev.cc	2022-09-16 16:27:49.196271400 +0300
+@@ -1979,7 +1979,7 @@
+         psName = GooString::format("T3_{0:d}_{1:d}", font->getID()->num, font->getID()->gen).release();
+         setupType3Font(font, psName, parentResDict);
+     } else {
+-        std::optional<GfxFontLoc> fontLoc = font->locateFont(xref, this);
++        boost::optional<GfxFontLoc> fontLoc = font->locateFont(xref, this);
+         if (fontLoc) {
+             switch (fontLoc->locType) {
+             case gfxFontLocEmbedded:
+@@ -2395,7 +2395,7 @@
+     embFontList->append("\n");
+ 
+     // convert it to a Type 1 font
+-    const std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
++    const boost::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+         if ((ffT1C = FoFiType1C::make(fontBuf->data(), fontBuf->size()))) {
+             ffT1C->convertToType1(psName->c_str(), nullptr, true, outputFunc, outputStream);
+@@ -2434,7 +2434,7 @@
+     embFontList->append("\n");
+ 
+     // convert it to a Type 1 font
+-    const std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
++    const boost::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+         if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(fontBuf->data(), fontBuf->size())) {
+             if (ffTT->isOpenTypeCFF()) {
+@@ -2458,7 +2458,7 @@
+     embFontList->append("\n");
+ 
+     // convert it to a Type 42 font
+-    const std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
++    const boost::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+         if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(fontBuf->data(), fontBuf->size())) {
+             codeToGID = ((Gfx8BitFont *)font)->getCodeToGIDMap(ffTT.get());
+@@ -2595,7 +2595,7 @@
+     embFontList->append("\n");
+ 
+     // convert it to a Type 0 font
+-    const std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
++    const boost::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+         if ((ffT1C = FoFiType1C::make(fontBuf->data(), fontBuf->size()))) {
+             if (level >= psLevel3) {
+@@ -2622,7 +2622,7 @@
+     embFontList->append("\n");
+ 
+     // convert it to a Type 0 font
+-    const std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
++    const boost::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+         if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(fontBuf->data(), fontBuf->size())) {
+             if (level >= psLevel3) {
+@@ -2668,7 +2668,7 @@
+     embFontList->append("\n");
+ 
+     // convert it to a Type 0 font
+-    const std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
++    const boost::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+         if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(fontBuf->data(), fontBuf->size())) {
+             if (ffTT->isOpenTypeCFF()) {
+diff -ur poppler/poppler/SecurityHandler.cc poppler/poppler/SecurityHandler.cc
+--- poppler/poppler/SecurityHandler.cc	2022-09-16 21:58:43.016329200 +0300
++++ poppler/poppler/SecurityHandler.cc	2022-09-16 16:27:49.497002700 +0300
+@@ -62,7 +62,7 @@
+ 
+ SecurityHandler::~SecurityHandler() { }
+ 
+-bool SecurityHandler::checkEncryption(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword)
++bool SecurityHandler::checkEncryption(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword)
+ {
+     void *authData;
+ 
+@@ -290,7 +290,7 @@
+     return encVersion == -1 && encRevision == -1;
+ }
+ 
+-void *StandardSecurityHandler::makeAuthData(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword)
++void *StandardSecurityHandler::makeAuthData(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword)
+ {
+     return new StandardAuthData(ownerPassword ? ownerPassword->copy() : nullptr, userPassword ? userPassword->copy() : nullptr);
+ }
+diff -ur poppler/poppler/SecurityHandler.h poppler/poppler/SecurityHandler.h
+--- poppler/poppler/SecurityHandler.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/poppler/SecurityHandler.h	2022-09-16 16:29:39.504613800 +0300
+@@ -27,7 +27,7 @@
+ 
+ #include "Object.h"
+ 
+-#include <optional>
++#include <boost/optional.hpp>
+ 
+ class GooString;
+ class PDFDoc;
+@@ -59,12 +59,12 @@
+     // document can be opened (if it's unencrypted, or if a correct
+     // password is obtained); false otherwise (encrypted and no correct
+     // password).
+-    bool checkEncryption(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword);
++    bool checkEncryption(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword);
+ 
+     // Create authorization data for the specified owner and user
+     // passwords.  If the security handler doesn't support "batch" mode,
+     // this function should return NULL.
+-    virtual void *makeAuthData(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) = 0;
++    virtual void *makeAuthData(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) = 0;
+ 
+     // Free the authorization data returned by makeAuthData or
+     // getAuthData.
+@@ -101,7 +101,7 @@
+     ~StandardSecurityHandler() override;
+ 
+     bool isUnencrypted() const override;
+-    void *makeAuthData(const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) override;
++    void *makeAuthData(const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) override;
+     void freeAuthData(void *authData) override;
+     bool authorize(void *authData) override;
+     int getPermissionFlags() const override { return permFlags; }
+diff -ur poppler/poppler/SignatureHandler.cc poppler/poppler/SignatureHandler.cc
+--- poppler/poppler/SignatureHandler.cc	2022-09-16 21:58:43.053838500 +0300
++++ poppler/poppler/SignatureHandler.cc	2022-09-16 16:29:42.905567600 +0300
+@@ -26,7 +26,7 @@
+ #include "goo/gdir.h"
+ #include "goo/gmem.h"
+ 
+-#include <optional>
++#include <boost/optional.hpp>
+ 
+ #include <Error.h>
+ 
+@@ -703,7 +703,7 @@
+     }
+ }
+ 
+-static std::optional<std::string> getDefaultFirefoxCertDB()
++static boost::optional<std::string> getDefaultFirefoxCertDB()
+ {
+ #ifdef _WIN32
+     const char *env = getenv("APPDATA");
+@@ -756,7 +756,7 @@
+         initSuccess = (NSS_Init(nssDir.c_str()) == SECSuccess);
+         sNssDir = nssDir.toStr();
+     } else {
+-        const std::optional<std::string> certDBPath = getDefaultFirefoxCertDB();
++        const boost::optional<std::string> certDBPath = getDefaultFirefoxCertDB();
+         if (!certDBPath) {
+             initSuccess = (NSS_Init("sql:/etc/pki/nssdb") == SECSuccess);
+             sNssDir = "sql:/etc/pki/nssdb";
+diff -ur poppler/poppler/SplashOutputDev.cc poppler/poppler/SplashOutputDev.cc
+--- poppler/poppler/SplashOutputDev.cc	2022-09-16 21:58:43.216349700 +0300
++++ poppler/poppler/SplashOutputDev.cc	2022-09-16 16:27:50.045157400 +0300
+@@ -1880,7 +1880,7 @@
+ 
+     } else {
+ 
+-        std::optional<GfxFontLoc> fontLoc = gfxFont->locateFont((xref) ? xref : doc->getXRef(), nullptr);
++        boost::optional<GfxFontLoc> fontLoc = gfxFont->locateFont((xref) ? xref : doc->getXRef(), nullptr);
+         if (!fontLoc) {
+             error(errSyntaxError, -1, "Couldn't find a font for '{0:s}'", gfxFont->getName() ? gfxFont->getName()->c_str() : "(unnamed)");
+             goto err2;
+@@ -1888,7 +1888,7 @@
+ 
+         // embedded font
+         std::string fileName;
+-        std::optional<std::vector<unsigned char>> tmpBuf;
++        boost::optional<std::vector<unsigned char>> tmpBuf;
+ 
+         if (fontLoc->locType == gfxFontLocEmbedded) {
+             // if there is an embedded font, read it to memory
+diff -ur poppler/poppler/XRef.cc poppler/poppler/XRef.cc
+--- poppler/poppler/XRef.cc	2022-09-16 21:58:43.739914900 +0300
++++ poppler/poppler/XRef.cc	2022-09-16 16:33:54.004790900 +0300
+@@ -234,7 +234,7 @@
+ // XRef
+ //------------------------------------------------------------------------
+ 
+-#define xrefLocker() const std::scoped_lock locker(mutex)
++#define xrefLocker() std::unique_lock<std::recursive_mutex> locker(mutex)
+ 
+ XRef::XRef() : objStrs { 5 }
+ {
+diff -ur poppler/qt5/src/poppler-annotation.cc poppler/qt5/src/poppler-annotation.cc
+--- poppler/qt5/src/poppler-annotation.cc	2022-09-16 21:58:43.802403600 +0300
++++ poppler/qt5/src/poppler-annotation.cc	2022-09-16 16:27:54.525570000 +0300
+@@ -916,7 +916,7 @@
+     // data fields
+     TextAnnotation::TextType textType;
+     QString textIcon;
+-    std::optional<QFont> textFont;
++    boost::optional<QFont> textFont;
+     QColor textColor = Qt::black;
+     int inplaceAlign; // 0:left, 1:center, 2:right
+     QVector<QPointF> inplaceCallout;
+diff -ur poppler/qt5/src/poppler-form.cc poppler/qt5/src/poppler-form.cc
+--- poppler/qt5/src/poppler-form.cc	2022-09-16 21:58:44.156316400 +0300
++++ poppler/qt5/src/poppler-form.cc	2022-09-16 16:27:54.957870900 +0300
+@@ -1074,7 +1074,7 @@
+             priv->range_bounds.append(bound);
+         }
+     }
+-    const std::optional<GooString> checkedSignature = fws->getCheckedSignature(&priv->docLength);
++    const boost::optional<GooString> checkedSignature = fws->getCheckedSignature(&priv->docLength);
+     if (priv->range_bounds.size() == 4 && checkedSignature) {
+         priv->signature = QByteArray::fromHex(checkedSignature->c_str());
+     }
+@@ -1090,7 +1090,7 @@
+     }
+ 
+     Goffset file_size = 0;
+-    const std::optional<GooString> sig = fws->getCheckedSignature(&file_size);
++    const boost::optional<GooString> sig = fws->getCheckedSignature(&file_size);
+     if (sig) {
+         // the above unsigned_signature_field check
+         // should already catch this, but double check
+@@ -1098,8 +1098,8 @@
+     }
+     const auto reason = std::unique_ptr<GooString>(data.reason().isEmpty() ? nullptr : QStringToUnicodeGooString(data.reason()));
+     const auto location = std::unique_ptr<GooString>(data.location().isEmpty() ? nullptr : QStringToUnicodeGooString(data.location()));
+-    const auto ownerPwd = std::optional<GooString>(data.documentOwnerPassword().constData());
+-    const auto userPwd = std::optional<GooString>(data.documentUserPassword().constData());
++    const auto ownerPwd = boost::optional<GooString>(data.documentOwnerPassword().constData());
++    const auto userPwd = boost::optional<GooString>(data.documentUserPassword().constData());
+     const auto gSignatureText = std::unique_ptr<GooString>(QStringToUnicodeGooString(data.signatureText()));
+     const auto gSignatureLeftText = std::unique_ptr<GooString>(QStringToUnicodeGooString(data.signatureLeftText()));
+ 
+diff -ur poppler/qt5/src/poppler-pdf-converter.cc poppler/qt5/src/poppler-pdf-converter.cc
+--- poppler/qt5/src/poppler-pdf-converter.cc	2022-09-16 21:58:44.688637900 +0300
++++ poppler/qt5/src/poppler-pdf-converter.cc	2022-09-16 16:27:55.929224400 +0300
+@@ -138,8 +138,8 @@
+     std::unique_ptr<GooString> gSignatureLeftText = std::unique_ptr<GooString>(QStringToUnicodeGooString(data.signatureLeftText()));
+     const auto reason = std::unique_ptr<GooString>(data.reason().isEmpty() ? nullptr : QStringToUnicodeGooString(data.reason()));
+     const auto location = std::unique_ptr<GooString>(data.location().isEmpty() ? nullptr : QStringToUnicodeGooString(data.location()));
+-    const auto ownerPwd = std::optional<GooString>(data.documentOwnerPassword().constData());
+-    const auto userPwd = std::optional<GooString>(data.documentUserPassword().constData());
++    const auto ownerPwd = boost::optional<GooString>(data.documentOwnerPassword().constData());
++    const auto userPwd = boost::optional<GooString>(data.documentUserPassword().constData());
+     return doc->sign(d->outputFileName.toUtf8().constData(), data.certNickname().toUtf8().constData(), data.password().toUtf8().constData(), QStringToGooString(data.fieldPartialName()), data.page() + 1,
+                      boundaryToPdfRectangle(destPage, data.boundingRectangle(), Annotation::FixedRotation), *gSignatureText, *gSignatureLeftText, data.fontSize(), data.leftFontSize(), convertQColor(data.fontColor()), data.borderWidth(),
+                      convertQColor(data.borderColor()), convertQColor(data.backgroundColor()), reason.get(), location.get(), data.imagePath().toStdString(), ownerPwd, userPwd);
+diff -ur poppler/qt5/src/poppler-private.h poppler/qt5/src/poppler-private.h
+--- poppler/qt5/src/poppler-private.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/qt5/src/poppler-private.h	2022-09-16 16:27:56.082938600 +0300
+@@ -104,7 +104,7 @@
+ class DocumentData : private GlobalParamsIniter
+ {
+ public:
+-    DocumentData(const QString &filePath, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) : GlobalParamsIniter(qt5ErrorFunction)
++    DocumentData(const QString &filePath, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) : GlobalParamsIniter(qt5ErrorFunction)
+     {
+         init();
+         m_device = nullptr;
+@@ -117,7 +117,7 @@
+ #endif
+     }
+ 
+-    DocumentData(QIODevice *device, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) : GlobalParamsIniter(qt5ErrorFunction)
++    DocumentData(QIODevice *device, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) : GlobalParamsIniter(qt5ErrorFunction)
+     {
+         m_device = device;
+         QIODeviceInStream *str = new QIODeviceInStream(device, 0, false, device->size(), Object(objNull));
+@@ -125,7 +125,7 @@
+         doc = new PDFDoc(str, ownerPassword, userPassword, nullptr, std::bind(&DocumentData::noitfyXRefReconstructed, this));
+     }
+ 
+-    DocumentData(const QByteArray &data, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) : GlobalParamsIniter(qt5ErrorFunction)
++    DocumentData(const QByteArray &data, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) : GlobalParamsIniter(qt5ErrorFunction)
+     {
+         m_device = nullptr;
+         fileContents = data;
+diff -ur poppler/qt5/src/QPainterOutputDev.cc poppler/qt5/src/QPainterOutputDev.cc
+--- poppler/qt5/src/QPainterOutputDev.cc	2022-09-16 21:58:45.036351300 +0300
++++ poppler/qt5/src/QPainterOutputDev.cc	2022-09-16 16:27:56.631141300 +0300
+@@ -456,13 +456,13 @@
+         // New font: load it into the cache
+         float fontSize = state->getFontSize();
+ 
+-        std::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
++        boost::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
+ 
+         if (fontLoc) {
+             // load the font from respective location
+             switch (fontLoc->locType) {
+             case gfxFontLocEmbedded: { // if there is an embedded font, read it to memory
+-                const std::optional<std::vector<unsigned char>> fontData = gfxFont->readEmbFontFile(xref);
++                const boost::optional<std::vector<unsigned char>> fontData = gfxFont->readEmbFontFile(xref);
+ 
+                 // fontData gets copied in the QByteArray constructor
+                 m_rawFont = new QRawFont(QByteArray(fontData ? (const char *)fontData->data() : nullptr, fontData ? fontData->size() : 0), fontSize, m_hintingPreference);
+@@ -519,9 +519,9 @@
+ 
+     } else {
+ 
+-        std::optional<std::vector<unsigned char>> fontBuffer;
++        boost::optional<std::vector<unsigned char>> fontBuffer;
+ 
+-        std::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
++        boost::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
+         if (!fontLoc) {
+             error(errSyntaxError, -1, "Couldn't find a font for '{0:s}'", gfxFont->getName() ? gfxFont->getName()->c_str() : "(unnamed)");
+             return;
+diff -ur poppler/qt6/src/poppler-annotation.cc poppler/qt6/src/poppler-annotation.cc
+--- poppler/qt6/src/poppler-annotation.cc	2022-09-16 21:58:45.421753700 +0300
++++ poppler/qt6/src/poppler-annotation.cc	2022-09-16 16:28:00.741508000 +0300
+@@ -836,7 +836,7 @@
+     // data fields
+     TextAnnotation::TextType textType;
+     QString textIcon;
+-    std::optional<QFont> textFont;
++    boost::optional<QFont> textFont;
+     QColor textColor = Qt::black;
+     TextAnnotation::InplaceAlignPosition inplaceAlign;
+     QVector<QPointF> inplaceCallout;
+diff -ur poppler/qt6/src/poppler-form.cc poppler/qt6/src/poppler-form.cc
+--- poppler/qt6/src/poppler-form.cc	2022-09-16 21:58:45.690879600 +0300
++++ poppler/qt6/src/poppler-form.cc	2022-09-16 16:28:01.195951400 +0300
+@@ -1074,7 +1074,7 @@
+             priv->range_bounds.append(bound);
+         }
+     }
+-    const std::optional<GooString> checkedSignature = fws->getCheckedSignature(&priv->docLength);
++    const boost::optional<GooString> checkedSignature = fws->getCheckedSignature(&priv->docLength);
+     if (priv->range_bounds.size() == 4 && checkedSignature) {
+         priv->signature = QByteArray::fromHex(checkedSignature->c_str());
+     }
+@@ -1090,7 +1090,7 @@
+     }
+ 
+     Goffset file_size = 0;
+-    const std::optional<GooString> sig = fws->getCheckedSignature(&file_size);
++    const boost::optional<GooString> sig = fws->getCheckedSignature(&file_size);
+     if (sig) {
+         // the above unsigned_signature_field check
+         // should already catch this, but double check
+@@ -1098,8 +1098,8 @@
+     }
+     const auto reason = std::unique_ptr<GooString>(data.reason().isEmpty() ? nullptr : QStringToUnicodeGooString(data.reason()));
+     const auto location = std::unique_ptr<GooString>(data.location().isEmpty() ? nullptr : QStringToUnicodeGooString(data.location()));
+-    const auto ownerPwd = std::optional<GooString>(data.documentOwnerPassword().constData());
+-    const auto userPwd = std::optional<GooString>(data.documentUserPassword().constData());
++    const auto ownerPwd = boost::optional<GooString>(data.documentOwnerPassword().constData());
++    const auto userPwd = boost::optional<GooString>(data.documentUserPassword().constData());
+     const auto gSignatureText = std::unique_ptr<GooString>(QStringToUnicodeGooString(data.signatureText()));
+     const auto gSignatureLeftText = std::unique_ptr<GooString>(QStringToUnicodeGooString(data.signatureLeftText()));
+ 
+diff -ur poppler/qt6/src/poppler-pdf-converter.cc poppler/qt6/src/poppler-pdf-converter.cc
+--- poppler/qt6/src/poppler-pdf-converter.cc	2022-09-16 21:58:46.138849200 +0300
++++ poppler/qt6/src/poppler-pdf-converter.cc	2022-09-16 16:28:02.298624000 +0300
+@@ -138,8 +138,8 @@
+     std::unique_ptr<GooString> gSignatureLeftText = std::unique_ptr<GooString>(QStringToUnicodeGooString(data.signatureLeftText()));
+     const auto reason = std::unique_ptr<GooString>(data.reason().isEmpty() ? nullptr : QStringToUnicodeGooString(data.reason()));
+     const auto location = std::unique_ptr<GooString>(data.location().isEmpty() ? nullptr : QStringToUnicodeGooString(data.location()));
+-    const auto ownerPwd = std::optional<GooString>(data.documentOwnerPassword().constData());
+-    const auto userPwd = std::optional<GooString>(data.documentUserPassword().constData());
++    const auto ownerPwd = boost::optional<GooString>(data.documentOwnerPassword().constData());
++    const auto userPwd = boost::optional<GooString>(data.documentUserPassword().constData());
+     return doc->sign(d->outputFileName.toUtf8().constData(), data.certNickname().toUtf8().constData(), data.password().toUtf8().constData(), QStringToGooString(data.fieldPartialName()), data.page() + 1,
+                      boundaryToPdfRectangle(destPage, data.boundingRectangle(), Annotation::FixedRotation), *gSignatureText, *gSignatureLeftText, data.fontSize(), data.leftFontSize(), convertQColor(data.fontColor()), data.borderWidth(),
+                      convertQColor(data.borderColor()), convertQColor(data.backgroundColor()), reason.get(), location.get(), data.imagePath().toStdString(), ownerPwd, userPwd);
+diff -ur poppler/qt6/src/poppler-private.h poppler/qt6/src/poppler-private.h
+--- poppler/qt6/src/poppler-private.h	2022-09-01 01:30:57.000000000 +0300
++++ poppler/qt6/src/poppler-private.h	2022-09-16 16:28:02.430145200 +0300
+@@ -103,7 +103,7 @@
+ class DocumentData : private GlobalParamsIniter
+ {
+ public:
+-    DocumentData(const QString &filePath, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) : GlobalParamsIniter(qt6ErrorFunction)
++    DocumentData(const QString &filePath, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) : GlobalParamsIniter(qt6ErrorFunction)
+     {
+         init();
+         m_device = nullptr;
+@@ -116,7 +116,7 @@
+ #endif
+     }
+ 
+-    DocumentData(QIODevice *device, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) : GlobalParamsIniter(qt6ErrorFunction)
++    DocumentData(QIODevice *device, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) : GlobalParamsIniter(qt6ErrorFunction)
+     {
+         m_device = device;
+         QIODeviceInStream *str = new QIODeviceInStream(device, 0, false, device->size(), Object(objNull));
+@@ -124,7 +124,7 @@
+         doc = new PDFDoc(str, ownerPassword, userPassword, nullptr, std::bind(&DocumentData::noitfyXRefReconstructed, this));
+     }
+ 
+-    DocumentData(const QByteArray &data, const std::optional<GooString> &ownerPassword, const std::optional<GooString> &userPassword) : GlobalParamsIniter(qt6ErrorFunction)
++    DocumentData(const QByteArray &data, const boost::optional<GooString> &ownerPassword, const boost::optional<GooString> &userPassword) : GlobalParamsIniter(qt6ErrorFunction)
+     {
+         m_device = nullptr;
+         fileContents = data;
+diff -ur poppler/qt6/src/QPainterOutputDev.cc poppler/qt6/src/QPainterOutputDev.cc
+--- poppler/qt6/src/QPainterOutputDev.cc	2022-09-16 21:58:46.508788000 +0300
++++ poppler/qt6/src/QPainterOutputDev.cc	2022-09-16 16:28:03.084267900 +0300
+@@ -456,13 +456,13 @@
+         // New font: load it into the cache
+         float fontSize = state->getFontSize();
+ 
+-        std::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
++        boost::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
+ 
+         if (fontLoc) {
+             // load the font from respective location
+             switch (fontLoc->locType) {
+             case gfxFontLocEmbedded: { // if there is an embedded font, read it to memory
+-                const std::optional<std::vector<unsigned char>> fontData = gfxFont->readEmbFontFile(xref);
++                const boost::optional<std::vector<unsigned char>> fontData = gfxFont->readEmbFontFile(xref);
+ 
+                 // fontData gets copied in the QByteArray constructor
+                 m_rawFont = new QRawFont(QByteArray(fontData ? (const char *)fontData->data() : nullptr, fontData ? fontData->size() : 0), fontSize, m_hintingPreference);
+@@ -519,9 +519,9 @@
+ 
+     } else {
+ 
+-        std::optional<std::vector<unsigned char>> fontBuffer;
++        boost::optional<std::vector<unsigned char>> fontBuffer;
+ 
+-        std::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
++        boost::optional<GfxFontLoc> fontLoc = gfxFont->locateFont(xref, nullptr);
+         if (!fontLoc) {
+             error(errSyntaxError, -1, "Couldn't find a font for '{0:s}'", gfxFont->getName() ? gfxFont->getName()->c_str() : "(unnamed)");
+             return;
+diff -ur poppler/test/cairo-thread-test.cc poppler/test/cairo-thread-test.cc
+--- poppler/test/cairo-thread-test.cc	2022-09-16 21:58:47.521142700 +0300
++++ poppler/test/cairo-thread-test.cc	2022-09-16 16:34:02.295177800 +0300
+@@ -95,7 +95,7 @@
+ 
+     void pushJob(std::unique_ptr<Job> &job)
+     {
+-        std::scoped_lock lock { mutex };
++        std::unique_lock<std::recursive_mutex> locker(mutex);
+         queue.push_back(std::move(job));
+         condition.notify_one();
+     }
+diff -ur poppler/test/pdf-fullrewrite.cc poppler/test/pdf-fullrewrite.cc
+--- poppler/test/pdf-fullrewrite.cc	2022-09-16 21:58:47.948504400 +0300
++++ poppler/test/pdf-fullrewrite.cc	2022-09-16 16:28:07.674133900 +0300
+@@ -39,8 +39,8 @@
+ {
+     PDFDoc *doc = nullptr;
+     PDFDoc *docOut = nullptr;
+-    std::optional<GooString> ownerPW;
+-    std::optional<GooString> userPW;
++    boost::optional<GooString> ownerPW;
++    boost::optional<GooString> userPW;
+     int res = 0;
+ 
+     // parse args
+diff -ur poppler/utils/HtmlFonts.cc poppler/utils/HtmlFonts.cc
+--- poppler/utils/HtmlFonts.cc	2022-09-16 21:58:48.311749200 +0300
++++ poppler/utils/HtmlFonts.cc	2022-09-16 16:28:08.144188300 +0300
+@@ -142,7 +142,7 @@
+         italic = true;
+     }
+ 
+-    if (const std::optional<std::string> &fontname = font.getName()) {
++    if (const boost::optional<std::string> &fontname = font.getName()) {
+         FontName = new GooString(*fontname);
+ 
+         GooString fontnameLower(*fontname);
+diff -ur poppler/utils/pdfdetach.cc poppler/utils/pdfdetach.cc
+--- poppler/utils/pdfdetach.cc	2022-09-16 21:58:48.765935200 +0300
++++ poppler/utils/pdfdetach.cc	2022-09-16 16:28:09.200135500 +0300
+@@ -75,7 +75,7 @@
+     std::unique_ptr<PDFDoc> doc;
+     GooString *fileName;
+     const UnicodeMap *uMap;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     char uBuf[8];
+     char path[1024];
+     char *p;
+diff -ur poppler/utils/pdffonts.cc poppler/utils/pdffonts.cc
+--- poppler/utils/pdffonts.cc	2022-09-16 21:58:48.866190300 +0300
++++ poppler/utils/pdffonts.cc	2022-09-16 16:28:09.316058100 +0300
+@@ -68,7 +68,7 @@
+ 
+ int main(int argc, char *argv[])
+ {
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     bool ok;
+ 
+     Win32Console win32Console(&argc, &argv);
+diff -ur poppler/utils/pdfimages.cc poppler/utils/pdfimages.cc
+--- poppler/utils/pdfimages.cc	2022-09-16 21:58:48.966442700 +0300
++++ poppler/utils/pdfimages.cc	2022-09-16 16:28:09.416306000 +0300
+@@ -98,7 +98,7 @@
+ {
+     GooString *fileName;
+     char *imgRoot = nullptr;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     ImageOutputDev *imgOut;
+     bool ok;
+ 
+diff -ur poppler/utils/pdfinfo.cc poppler/utils/pdfinfo.cc
+--- poppler/utils/pdfinfo.cc	2022-09-16 21:58:49.113549500 +0300
++++ poppler/utils/pdfinfo.cc	2022-09-16 16:28:09.494410900 +0300
+@@ -920,7 +920,7 @@
+ {
+     std::unique_ptr<PDFDoc> doc;
+     GooString *fileName;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     const UnicodeMap *uMap;
+     FILE *f;
+     bool ok;
+diff -ur poppler/utils/pdfsig.cc poppler/utils/pdfsig.cc
+--- poppler/utils/pdfsig.cc	2022-09-16 21:58:49.314079800 +0300
++++ poppler/utils/pdfsig.cc	2022-09-16 16:28:09.701475800 +0300
+@@ -289,7 +289,7 @@
+ 
+     std::unique_ptr<GooString> fileName = std::make_unique<GooString>(argv[1]);
+ 
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     if (ownerPassword[0] != '\001') {
+         ownerPW = GooString(ownerPassword);
+     }
+@@ -425,7 +425,7 @@
+ 
+         FormFieldSignature *ffs = signatures.at(signatureNumber - 1);
+         Goffset file_size = 0;
+-        const std::optional<GooString> sig = ffs->getCheckedSignature(&file_size);
++        const boost::optional<GooString> sig = ffs->getCheckedSignature(&file_size);
+         if (sig) {
+             printf("Signature number %d is already signed\n", signatureNumber);
+             return 2;
+@@ -530,7 +530,7 @@
+         if (ranges.size() == 4) {
+             printf("  - Signed Ranges: [%lld - %lld], [%lld - %lld]\n", ranges[0], ranges[1], ranges[2], ranges[3]);
+             Goffset checked_file_size;
+-            const std::optional<GooString> signature = signatures.at(i)->getCheckedSignature(&checked_file_size);
++            const boost::optional<GooString> signature = signatures.at(i)->getCheckedSignature(&checked_file_size);
+             if (signature && checked_file_size == ranges[3]) {
+                 printf("  - Total document signed\n");
+             } else {
+diff -ur poppler/utils/pdftocairo.cc poppler/utils/pdftocairo.cc
+--- poppler/utils/pdftocairo.cc	2022-09-16 21:58:49.483371200 +0300
++++ poppler/utils/pdftocairo.cc	2022-09-16 16:28:09.948904300 +0300
+@@ -900,7 +900,7 @@
+     GooString *outputName = nullptr;
+     GooString *outputFileName = nullptr;
+     GooString *imageFileName = nullptr;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     CairoOutputDev *cairoOut;
+     int pg, pg_num_len;
+     double pg_w, pg_h, tmp, output_w, output_h;
+diff -ur poppler/utils/pdftohtml.cc poppler/utils/pdftohtml.cc
+--- poppler/utils/pdftohtml.cc	2022-09-16 21:58:49.599244600 +0300
++++ poppler/utils/pdftohtml.cc	2022-09-16 16:28:10.080425900 +0300
+@@ -165,7 +165,7 @@
+     SplashOutputDev *splashOut = nullptr;
+     bool doOutline;
+     bool ok;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     Object info;
+     int exit_status = EXIT_FAILURE;
+ 
+diff -ur poppler/utils/pdftoppm.cc poppler/utils/pdftoppm.cc
+--- poppler/utils/pdftoppm.cc	2022-09-16 21:58:49.683883000 +0300
++++ poppler/utils/pdftoppm.cc	2022-09-16 16:28:10.198840800 +0300
+@@ -401,7 +401,7 @@
+     GooString *fileName = nullptr;
+     char *ppmRoot = nullptr;
+     char *ppmFile;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     SplashColor paperColor;
+ #ifndef UTILS_USE_PTHREADS
+     SplashOutputDev *splashOut;
+diff -ur poppler/utils/pdftops.cc poppler/utils/pdftops.cc
+--- poppler/utils/pdftops.cc	2022-09-16 21:58:49.752940500 +0300
++++ poppler/utils/pdftops.cc	2022-09-16 16:28:10.318740600 +0300
+@@ -197,7 +197,7 @@
+     GooString *psFileName;
+     PSLevel level;
+     PSOutMode mode;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     PSOutputDev *psOut;
+     bool ok;
+     int exitCode;
+diff -ur poppler/utils/pdftotext.cc poppler/utils/pdftotext.cc
+--- poppler/utils/pdftotext.cc	2022-09-16 21:58:49.831085500 +0300
++++ poppler/utils/pdftotext.cc	2022-09-16 16:28:10.465845300 +0300
+@@ -167,7 +167,7 @@
+     std::unique_ptr<PDFDoc> doc;
+     GooString *fileName;
+     GooString *textFileName;
+-    std::optional<GooString> ownerPW, userPW;
++    boost::optional<GooString> ownerPW, userPW;
+     TextOutputDev *textOut;
+     FILE *f;
+     const UnicodeMap *uMap;

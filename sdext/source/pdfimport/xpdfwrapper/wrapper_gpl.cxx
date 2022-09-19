@@ -121,12 +121,12 @@ int main(int argc, char **argv)
 
 #if POPPLER_CHECK_VERSION(22, 6, 0)
     PDFDoc aDoc( std::make_unique<GooString>(pFileName),
-                 std::optional<GooString>(pOwnerPasswordStr),
-                 std::optional<GooString>(pUserPasswordStr) );
+                 boost::optional<GooString>(pOwnerPasswordStr),
+                 boost::optional<GooString>(pUserPasswordStr) );
 
     PDFDoc aErrDoc( std::make_unique<GooString>(pErrFileName),
-                 std::optional<GooString>(pOwnerPasswordStr),
-                 std::optional<GooString>(pUserPasswordStr) );
+                 boost::optional<GooString>(pOwnerPasswordStr),
+                 boost::optional<GooString>(pUserPasswordStr) );
 #else
     PDFDoc aDoc( pFileName,
                  pOwnerPasswordStr,
