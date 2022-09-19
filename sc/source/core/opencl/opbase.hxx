@@ -254,7 +254,7 @@ public:
     virtual void GenSlidingWindowFunction( outputstream&,
         const std::string&, SubArguments& ) = 0;
 protected:
-    // generate code for "double <name> = <value>;" from vSubArguments
+    // generate code for "double <name> = <value>;" from vSubArguments, svDoubleVectorRef is not supported
     static void GenerateArg( const char* name, int num, SubArguments& vSubArguments, outputstream& ss );
     // overload, variable will be named "arg<num>"
     static void GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss );
@@ -264,6 +264,13 @@ protected:
         outputstream& ss );
     void GenerateFunctionDeclaration( const std::string& sSymName,
         SubArguments& vSubArguments, outputstream& ss );
+    // Generate code that will handle all arguments firstArg-lastArg (zero-based, inclusive),
+    // including range arguments (svDoubleVectorRef) and each value will be processed by 'code',
+    // value will be named "arg". There is no isnan(arg) checking.
+    static void GenerateRangeArgs( int firstArg, int lastArg, SubArguments& vSubArguments,
+        outputstream& ss, const char* code );
+    // overload, handle all arguments
+    static void GenerateRangeArgs( SubArguments& vSubArguments, outputstream& ss, const char* code );
 };
 
 class Normal : public SlidingFunctionBase

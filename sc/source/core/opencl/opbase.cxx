@@ -222,6 +222,91 @@ void SlidingFunctionBase::GenerateArgWithDefault( const char* name, int num, dou
         ss << "    double " << name << " = " << def << ";\n";
 }
 
+void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArguments& vSubArguments,
+    outputstream& ss, const char* code )
+{
+    assert( firstArg >= 0 );
+    assert( lastArg < int( vSubArguments.size()));
+    for( int i = firstArg;
+         i <= lastArg;
+         ++i )
+    {
+        FormulaToken *token = vSubArguments[i]->GetFormulaToken();
+        if( token == nullptr )
+            throw Unhandled( __FILE__, __LINE__ );
+        if(token->GetOpCode() == ocPush)
+        {
+            if (token->GetType() == formula::svDoubleVectorRef)
+            {
+                const formula::DoubleVectorRefToken* pDVR =
+                    static_cast<const formula::DoubleVectorRefToken *>(token);
+                size_t nCurWindowSize = pDVR->GetRefRowSize();
+                ss << "    for (int i = ";
+                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+                {
+                    ss << "gid0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
+                    ss << "    {\n";
+                }
+                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+                    ss << "0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+                }
+                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+                }
+                else
+                {
+                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
+                    ss << "    {\n";
+                }
+                ss << "        double arg = ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << ";\n";
+                ss << code;
+                ss << "    }\n";
+            }
+            else if (token->GetType() == formula::svSingleVectorRef)
+            {
+                const formula::SingleVectorRefToken* pSVR =
+                    static_cast< const formula::SingleVectorRefToken*>(token);
+                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                ss << "    {\n";
+                ss << "        double arg = ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+                ss << code;
+                ss << "    }\n";
+            }
+            else
+            {
+                ss << "    {\n";
+                ss << "        double arg = " << token->GetDouble() << ";\n";
+                ss << code;
+                ss << "    }\n";
+            }
+        }
+        else
+        {
+            ss << "    {\n";
+            ss << "        double arg = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+            ss << code;
+            ss << "    }\n";
+        }
+    }
+}
+
+void SlidingFunctionBase::GenerateRangeArgs( SubArguments& vSubArguments,
+    outputstream& ss, const char* code )
+{
+    GenerateRangeArgs( 0, vSubArguments.size() - 1, vSubArguments, ss, code );
+}
+
 void SlidingFunctionBase::GenerateFunctionDeclaration( const std::string& sSymName,
     SubArguments& vSubArguments, outputstream& ss )
 {
