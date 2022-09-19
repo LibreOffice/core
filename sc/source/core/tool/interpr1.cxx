@@ -8190,6 +8190,72 @@ void ScInterpreter::ScIndirect()
     const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
     SCTAB nTab = aPos.Tab();
 
+    // Named expressions and DB range names need to be tried first, as older 1K
+    // columns allowed names that would now match a 16k columns cell address.
+    do
+    {
+        ScRangeData* pData = ScRangeStringConverter::GetRangeDataFromString( sRefStr, nTab, mrDoc, eConv);
+        if (!pData)
+            break;
+
+        // We need this in order to obtain a good range.
+        pData->ValidateTabRefs();
+
+        ScRange aRange;
+
+        // This is the usual way to treat named ranges containing
+        // relative references.
+        if (!pData->IsReference( aRange, aPos))
+            break;
+
+        if (aRange.aStart == aRange.aEnd)
+            PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aStart.Tab());
+        else
+            PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aStart.Tab(), aRange.aEnd.Col(),
+                    aRange.aEnd.Row(), aRange.aEnd.Tab());
+
+        // success!
+        return;
+    }
+    while (false);
+
+    do
+    {
+        OUString aName( ScGlobal::getCharClass().uppercase( sRefStr));
+        ScDBCollection::NamedDBs& rDBs = mrDoc.GetDBCollection()->getNamedDBs();
+        const ScDBData* pData = rDBs.findByUpperName( aName);
+        if (!pData)
+            break;
+
+        ScRange aRange;
+        pData->GetArea( aRange);
+
+        // In Excel, specifying a table name without [] resolves to the
+        // same as with [], a range that excludes header and totals
+        // rows and contains only data rows. Do the same.
+        if (pData->HasHeader())
+            aRange.aStart.IncRow();
+        if (pData->HasTotals())
+            aRange.aEnd.IncRow(-1);
+
+        if (aRange.aStart.Row() > aRange.aEnd.Row())
+            break;
+
+        if (aRange.aStart == aRange.aEnd)
+            PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aStart.Tab());
+        else
+            PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aStart.Tab(), aRange.aEnd.Col(),
+                    aRange.aEnd.Row(), aRange.aEnd.Tab());
+
+        // success!
+        return;
+    }
+    while (false);
+
     ScRefAddress aRefAd, aRefAd2;
     ScAddress::ExternalInfo aExtInfo;
     if ( ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
@@ -8220,70 +8286,6 @@ void ScInterpreter::ScIndirect()
     }
     else
     {
-        do
-        {
-            ScRangeData* pData = ScRangeStringConverter::GetRangeDataFromString( sRefStr, nTab, mrDoc, eConv);
-            if (!pData)
-                break;
-
-            // We need this in order to obtain a good range.
-            pData->ValidateTabRefs();
-
-            ScRange aRange;
-
-            // This is the usual way to treat named ranges containing
-            // relative references.
-            if (!pData->IsReference( aRange, aPos))
-                break;
-
-            if (aRange.aStart == aRange.aEnd)
-                PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
-                        aRange.aStart.Tab());
-            else
-                PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
-                        aRange.aStart.Tab(), aRange.aEnd.Col(),
-                        aRange.aEnd.Row(), aRange.aEnd.Tab());
-
-            // success!
-            return;
-        }
-        while (false);
-
-        do
-        {
-            OUString aName( ScGlobal::getCharClass().uppercase( sRefStr));
-            ScDBCollection::NamedDBs& rDBs = mrDoc.GetDBCollection()->getNamedDBs();
-            const ScDBData* pData = rDBs.findByUpperName( aName);
-            if (!pData)
-                break;
-
-            ScRange aRange;
-            pData->GetArea( aRange);
-
-            // In Excel, specifying a table name without [] resolves to the
-            // same as with [], a range that excludes header and totals
-            // rows and contains only data rows. Do the same.
-            if (pData->HasHeader())
-                aRange.aStart.IncRow();
-            if (pData->HasTotals())
-                aRange.aEnd.IncRow(-1);
-
-            if (aRange.aStart.Row() > aRange.aEnd.Row())
-                break;
-
-            if (aRange.aStart == aRange.aEnd)
-                PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
-                        aRange.aStart.Tab());
-            else
-                PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
-                        aRange.aStart.Tab(), aRange.aEnd.Col(),
-                        aRange.aEnd.Row(), aRange.aEnd.Tab());
-
-            // success!
-            return;
-        }
-        while (false);
-
         // It may be even a TableRef or an external name.
         // Anything else that resolves to one reference could be added
         // here, but we don't want to compile every arbitrary string. This
