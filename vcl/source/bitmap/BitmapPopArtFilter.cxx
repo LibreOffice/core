@@ -56,7 +56,7 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
             // sort table
             std::sort(aPopArtTable.begin(), aPopArtTable.end(),
                       [](const PopArtEntry& lhs, const PopArtEntry& rhs) {
-                          return lhs.mnCount < rhs.mnCount;
+                          return lhs.mnCount > rhs.mnCount;
                       });
 
             // get last used entry
