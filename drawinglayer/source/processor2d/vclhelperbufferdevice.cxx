@@ -529,7 +529,7 @@ void impBufferDevice::paint(double fTrans)
             // Note: I am aware that the Dbg are of limited usefulness, but include them here
             // for reference.
             //
-            // The important part is "av. last 500 Former/New is %ld" which decribes the averaged factor from Former/New
+            // The important part is "av. last 500 Former/New is %ld" which describes the averaged factor from Former/New
             // over the last 500 measurements. When < 1.0 Former is better (Linux), > 1.0 (Win) New is better. Since the
             // factor on Win is still close to 1.0 what means we lose nearly nothing and Linux Former is better, I will
             // use Former for now.

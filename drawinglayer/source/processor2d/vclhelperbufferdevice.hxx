@@ -33,7 +33,7 @@
 // - It initializes a 'Content' VDev which is buffered (since it had
 // shown that re-allocating all the time is slower). It checks
 // visibility and all usages initializing this should check for
-// isVisible() after contruction.
+// isVisible() after construction.
 // - It pre-initializes the 'Content' VDev with blitting the content
 // of the target VDev.
 // - It offers to get a 'Transparence' VDev (also from the buffer) if
@@ -64,7 +64,7 @@
 //
 // Note: This principle only works when the target is RGB, so
 // useful for EditViews like for PrimitiveRenderers where this is
-// the case. For usage with GBA tragets the starting conditions
+// the case. For usage with GBA targets the starting conditions
 // would have to be modified to not blend against the initial color
 // of 'Content' (usually COL_WHITE).
 //
