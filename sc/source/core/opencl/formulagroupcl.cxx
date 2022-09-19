@@ -915,8 +915,8 @@ public:
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         outputstream ss;
-        ss << "(!isnan(" << VectorRef::GenSlidingWindowDeclRef();
-        ss << ")?" << VectorRef::GenSlidingWindowDeclRef();
+        ss << "(!isnan(" << VectorRef::GenSlidingWindowDeclRef(nested);
+        ss << ")?" << VectorRef::GenSlidingWindowDeclRef(nested);
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
         ss << ")";
         return ss.str();
@@ -977,18 +977,18 @@ std::string DynamicKernelSlidingArgument<Base>::GenSlidingWindowDeclRef( bool ne
     outputstream ss;
     if (!bIsStartFixed && !bIsEndFixed)
     {
-        if (nested)
+        if (!nested)
             ss << "((i+gid0) <" << nArrayLength << "?";
         ss << Base::GetName() << "[i + gid0]";
-        if (nested)
+        if (!nested)
             ss << ":NAN)";
     }
     else
     {
-        if (nested)
+        if (!nested)
             ss << "(i <" << nArrayLength << "?";
         ss << Base::GetName() << "[i]";
-        if (nested)
+        if (!nested)
             ss << ":NAN)";
     }
     return ss.str();
@@ -1146,8 +1146,8 @@ public:
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         outputstream ss;
-        ss << "(!isnan(" << mDoubleArgument.GenSlidingWindowDeclRef();
-        ss << ")?" << mDoubleArgument.GenSlidingWindowDeclRef();
+        ss << "(!isnan(" << mDoubleArgument.GenSlidingWindowDeclRef(nested);
+        ss << ")?" << mDoubleArgument.GenSlidingWindowDeclRef(nested);
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
         ss << ")";
         return ss.str();
