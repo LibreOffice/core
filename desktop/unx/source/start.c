@@ -722,8 +722,23 @@ static void sigterm_handler(int ignored)
     (void) ignored;
 
     if (g_pProcess) {
-        osl_terminateProcess(g_pProcess); // forward signal to soffice.bin
-        osl_joinProcess(g_pProcess);
+        int SigTermSucceded = 0;
+        oslProcessInfo info;
+        info.Size = sizeof(oslProcessInfo);
+
+        // forward SIGTERM to soffice.bin and give it a chance to semi-gracefully exit
+        // enough to remove named pipe
+        if (osl_getProcessInfo(g_pProcess, osl_Process_IDENTIFIER, &info) == osl_Process_E_None) {
+            TimeValue delay = { 1, 0 }; // 1 sec
+            SigTermSucceded = kill(info.Ident, SIGTERM) == 0 &&
+                              osl_joinProcessWithTimeout(g_pProcess, &delay) == osl_Process_E_None;
+        }
+
+        // didn't work, SIGKILL instead
+        if (!SigTermSucceded) {
+            osl_terminateProcess(g_pProcess); // uses SIGKILL to terminate soffice.bin
+            osl_joinProcess(g_pProcess);
+        }
     }
 
     _exit(255);
