@@ -913,7 +913,11 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
         {
             aPam.GetPoint()->nNode--;
             SwContentNode* pNode = aPam.GetPoint()->GetNode().GetContentNode();
-            aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
+            if ( pNode )
+                aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
+            else
+                // tdf#147507 set it back to a content node to avoid of crashing
+                aPam.GetPoint()->nNode++;
         }
         else if (aPam.GetPoint()->GetNode() < aPam.GetMark()->GetNode())
         {
