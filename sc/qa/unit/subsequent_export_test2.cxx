@@ -125,6 +125,7 @@ public:
     void testTdf91634XLSX();
     void testTdf115159();
     void testTdf112567();
+    void testTdf75702();
     void testTdf103829();
     void testTdf122191();
     void testTdf142881();
@@ -249,6 +250,7 @@ public:
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
+    CPPUNIT_TEST(testTdf75702);
     CPPUNIT_TEST(testTdf103829);
     CPPUNIT_TEST(testTdf122191);
     CPPUNIT_TEST(testTdf142881);
@@ -1439,6 +1441,24 @@ void ScExportTest2::testTdf112567()
     xDocSh->DoClose();
 }
 
+void ScExportTest2::testTdf75702()
+{
+    // The problem was that line breaks were not imported.
+    const OUString sA1("line1\nline2");
+
+    ScDocShellRef xShell = loadDoc(u"tdf75702_textLineBreak.", FORMAT_ODS);
+    ScDocument& rDoc = xShell->GetDocument();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("load a1", sA1, rDoc.GetString(0, 0, 0));
+
+    xShell = saveAndReload(*xShell, FORMAT_ODS);
+    ScDocument& rDoc2 = xShell->GetDocument();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1, rDoc2.GetString(0, 0, 0));
+
+    xmlDocUniquePtr pContent
+        = XPathHelper::parseExport2(*this, *xShell, m_xSFactory, "content.xml", FORMAT_ODS);
+    assertXPath(pContent, "//table:table-row[1]/table:table-cell/text:p/text:line-break");
+}
+
 void ScExportTest2::testTdf103829()
 {
     // The problem was that tabspaces were not imported or exported at all.
@@ -1453,7 +1473,6 @@ void ScExportTest2::testTdf103829()
 
     xShell = saveAndReload(*xShell, FORMAT_ODS);
     ScDocument& rDoc2 = xShell->GetDocument();
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1.getLength(), rDoc2.GetString(0, 0, 0).getLength());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a1", sA1, rDoc2.GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a2", sA2, rDoc2.GetString(0, 1, 0));
 }
