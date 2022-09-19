@@ -70,6 +70,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
             maContent += "\x0a";
             break;
         case XML_ELEMENT(TEXT, XML_BOOKMARK):
+        case XML_ELEMENT(TEXT, XML_BOOKMARK_START):
+        case XML_ELEMENT(TEXT, XML_BOOKMARK_END):
             // TODO: ooo95423-1 [file.ods] and tdf#116079-3 have these bookmarks.
             // Is this valid, and how can we prevent losing these?
             break;
