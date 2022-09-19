@@ -163,6 +163,20 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             {
                 aNewValue <<= xAcc;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
+
+                // CHILD event above results in a11y event listeners getting registered,
+                // so send state change event for SHOWING event after that
+                uno::Reference<XAccessibleContext> xChildContext = xAcc->getAccessibleContext();
+                if (xChildContext.is())
+                {
+                    VCLXAccessibleComponent* pChildComponent = dynamic_cast<VCLXAccessibleComponent*>(xChildContext.get());
+                    if (pChildComponent)
+                    {
+                        css::uno::Any aNewStateValue;
+                        aNewStateValue <<= accessibility::AccessibleStateType::SHOWING;
+                        pChildComponent->NotifyAccessibleEvent(accessibility::AccessibleEventId::STATE_CHANGED, css::uno::Any(), aNewStateValue);
+                    }
+                }
             }
         }
         break;
@@ -171,6 +185,20 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             xAcc = GetChildAccessible( rVclWindowEvent );
             if( xAcc.is() )
             {
+                // send send state change event for SHOWING before sending the CHILD event below,
+                // since that one results in a11y event listeners getting removed
+                uno::Reference<XAccessibleContext> xChildContext = xAcc->getAccessibleContext();
+                if (xChildContext.is())
+                {
+                    VCLXAccessibleComponent* pChildComponent = dynamic_cast<VCLXAccessibleComponent*>(xChildContext.get());
+                    if (pChildComponent)
+                    {
+                        css::uno::Any aOldStateValue;
+                        aOldStateValue <<= accessibility::AccessibleStateType::SHOWING;
+                        pChildComponent->NotifyAccessibleEvent(accessibility::AccessibleEventId::STATE_CHANGED, aOldStateValue, css::uno::Any());
+                    }
+                }
+
                 aOldValue <<= xAcc;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
@@ -334,6 +362,10 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
+        case VclEventId::WindowHide:
+        case VclEventId::WindowShow:
+        // WindowHide and WindowShow are handled in ProcessWindowChildEvent so the right order
+        // regarding the CHILD event can be taken into account
         default:
         {
         }
