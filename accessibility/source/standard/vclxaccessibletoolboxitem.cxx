@@ -66,7 +66,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_bIndeterminate( false )
 
 {
-    OSL_ENSURE( m_pToolBox, "invalid toolbox" );
+    assert( m_pToolBox );
     m_nItemId = m_pToolBox->GetItemId( m_nIndexInParent );
     m_sOldName = GetText();
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );

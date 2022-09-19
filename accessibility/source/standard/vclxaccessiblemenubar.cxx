@@ -66,7 +66,7 @@ bool VCLXAccessibleMenuBar::IsFocused()
 
 IMPL_LINK( VCLXAccessibleMenuBar, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    OSL_ENSURE( rEvent.GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
+    assert( rEvent.GetWindow() );
     if ( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VclEventId::ObjectDying ) )
     {
         ProcessWindowEvent( rEvent );
