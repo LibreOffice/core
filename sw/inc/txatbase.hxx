@@ -132,7 +132,7 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SAL_DLLPUBLIC_RTTI SwTextAttrEnd : public virtual SwTextAttr
+class SW_DLLPUBLIC SwTextAttrEnd : public virtual SwTextAttr
 {
 protected:
     sal_Int32 m_nEnd;

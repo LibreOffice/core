@@ -1412,14 +1412,6 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                         --nRet;
                     }
                     break;
-                case RES_TXTATR_CONTENTCONTROL:
-                    pEnd = pHt->End();
-                    if (nPos == *pEnd && nPos != pHt->GetStart())
-                    {
-                        m_rExport.AttrOutput().EndContentControl(rNode, nPos);
-                        --nRet;
-                    }
-                    break;
             }
             if (nPos < pHt->GetAnyEnd())
                 break; // sorted by end
@@ -1473,17 +1465,6 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                         m_rExport.AttrOutput().EndRuby( rNd, nPos );
                         --nRet;
                     }
-                    break;
-                case RES_TXTATR_CONTENTCONTROL:
-                    if (nPos == pHt->GetStart())
-                    {
-                        auto pFormatContentControl
-                            = static_cast<const SwFormatContentControl*>(pItem);
-                        m_rExport.AttrOutput().StartContentControl(*pFormatContentControl);
-                        ++nRet;
-                    }
-                    // We know that the content control is never empty as it has a dummy character
-                    // at least.
                     break;
             }
             if (nPos < pHt->GetStart())
@@ -2441,7 +2422,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {
                 if( AttrOutput().FootnoteEndnoteRefTag() )
                 {
-                    AttrOutput().EndRun( &rNode, nCurrentPos, nNextAttr == nEnd );
+                    AttrOutput().EndRun( &rNode, nCurrentPos, -1, nNextAttr == nEnd );
                     AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
                 }
             }
@@ -2495,7 +2476,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     && nStateOfFlyFrame == FLY_PROCESSED)
                 {
                     // write flys in a separate run before field character
-                    AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
+                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, nNextAttr == nEnd);
                     AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
                 }
 
@@ -2790,7 +2771,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if (bPostponeWritingText
                 && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame))
             {
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, -1, nNextAttr == nEnd);
                 //write the postponed text run
                 AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
                 AttrOutput().SetAnchorIsLinkedToNode( false );
@@ -2802,7 +2783,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     AttrOutput().EndRunProperties( pRedlineData );
                 }
                 AttrOutput().RunText( aSavedSnippet, eChrSet );
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
             }
             else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
             {
@@ -2811,7 +2792,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
             }
             else
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
 
             nCurrentPos = nNextAttr;
             UpdatePosition( &aAttrIter, nCurrentPos );
