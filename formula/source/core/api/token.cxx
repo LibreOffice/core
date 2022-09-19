@@ -1623,8 +1623,8 @@ FormulaTokenIterator::Item::Item(const FormulaTokenArray* pArray, short pc, shor
 }
 
 FormulaTokenIterator::FormulaTokenIterator( const FormulaTokenArray& rArr )
+    : maStack{ FormulaTokenIterator::Item(&rArr, -1, SHRT_MAX) }
 {
-    Push( &rArr );
 }
 
 FormulaTokenIterator::~FormulaTokenIterator()
