@@ -20,6 +20,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/gcc7-EntityInfo.patch.1 \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,poppler,\
+	external/poppler/poppler-vs2015-buildfix.patch.1 \
+))
+endif
+
 # std::make_unique is only available in C++14
 # use "env -i" to avoid Cygwin "environment is too large for exec"
 # Mac OS X sed says "sed: RE error: illegal byte sequence"; Apple clang should
