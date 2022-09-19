@@ -527,10 +527,30 @@ IMAGE_SETEVENT:
         if (!bHeightProvided)
             nHeight = aPixelSize.Height();
         // tdf#142781 - calculate the width/height keeping the aspect ratio
-        if (!bPercentWidth && bWidthProvided && !bHeightProvided && aPixelSize.Width())
-            nHeight = nWidth * aPixelSize.Height() / aPixelSize.Width();
-        else if (!bPercentHeight && !bWidthProvided && bHeightProvided && aPixelSize.Height())
-            nWidth = nHeight * aPixelSize.Width() / aPixelSize.Height();
+        if (bWidthProvided && !bHeightProvided && aPixelSize.Width())
+        {
+            if (bPercentWidth)
+            {
+                nHeight = SwFormatFrameSize::SYNCED;
+                bPercentHeight = true;
+            }
+            else
+            {
+                nHeight = nWidth * aPixelSize.Height() / aPixelSize.Width();
+            }
+        }
+        else if (!bWidthProvided && bHeightProvided && aPixelSize.Height())
+        {
+            if (bPercentHeight)
+            {
+                nWidth = SwFormatFrameSize::SYNCED;
+                bPercentWidth = true;
+            }
+            else
+            {
+                nWidth = nHeight * aPixelSize.Width() / aPixelSize.Height();
+            }
+        }
     }
 
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -648,7 +668,11 @@ IMAGE_SETEVENT:
 
     // bPercentWidth / bPercentHeight means we have a percent size.  If that's not the case and we have no
     // size from nWidth / nHeight either, then inspect the image header.
-    if ((!bPercentWidth && !nWidth) && (!bPercentHeight && !nHeight) && !m_bFuzzing && allowAccessLink(*m_xDoc))
+    bool bRelWidthScale = bPercentWidth && nWidth == SwFormatFrameSize::SYNCED;
+    bool bNeedWidth = (!bPercentWidth && !nWidth) || bRelWidthScale;
+    bool bRelHeightScale = bPercentHeight && nHeight == SwFormatFrameSize::SYNCED;
+    bool bNeedHeight = (!bPercentHeight && !nHeight) || bRelHeightScale;
+    if ((bNeedWidth || bNeedHeight) && !m_bFuzzing && allowAccessLink(*m_xDoc))
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
@@ -657,12 +681,18 @@ IMAGE_SETEVENT:
             // HTML_DFLT_IMG_WIDTH/HEIGHT.
             aTwipSz = Application::GetDefaultDevice()->PixelToLogic(aDescriptor.GetSizePixel(),
                                                                     MapMode(MapUnit::MapTwip));
-            nWidth = aTwipSz.getWidth();
-            nHeight = aTwipSz.getHeight();
+            if (!bPercentWidth && !nWidth)
+            {
+                nWidth = aTwipSz.getWidth();
+            }
+            if (!bPercentHeight && !nHeight)
+            {
+                nHeight = aTwipSz.getHeight();
+            }
         }
     }
 
-    if( !nWidth || !nHeight )
+    if( !(nWidth && !bRelWidthScale) || !(nHeight && !bRelHeightScale) )
     {
         // When the graphic is in a table, it will be requested immediately,
         // so that it is available before the table is layouted.
@@ -753,9 +783,10 @@ IMAGE_SETEVENT:
     }
 
     // observe minimum values !!
+    bool bRelSizeScale = bRelWidthScale || bRelHeightScale;
     if( nPercentWidth )
     {
-        OSL_ENSURE( !aTwipSz.Width(),
+        OSL_ENSURE( !aTwipSz.Width() || bRelSizeScale,
                 "Why is a width set if we already have percentage value?" );
         aTwipSz.setWidth( aGrfSz.Width() ? aGrfSz.Width()
                                          : HTML_DFLT_IMG_WIDTH );
@@ -768,7 +799,7 @@ IMAGE_SETEVENT:
     }
     if( nPercentHeight )
     {
-        OSL_ENSURE( !aTwipSz.Height(),
+        OSL_ENSURE( !aTwipSz.Height() || bRelSizeScale,
                 "Why is a height set if we already have percentage value?" );
         aTwipSz.setHeight( aGrfSz.Height() ? aGrfSz.Height()
                                            : HTML_DFLT_IMG_HEIGHT );
