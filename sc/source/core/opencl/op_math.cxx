@@ -1443,6 +1443,8 @@ void OpSeriesSum::GenSlidingWindowFunction(outputstream &ss,
     GenerateArg( "var0", 0, vSubArguments, ss );
     GenerateArg( "var1", 1, vSubArguments, ss );
     GenerateArg( "var2", 2, vSubArguments, ss );
+    ss << "    if( var0 == 0 && var1 == 0 )\n";
+    ss << "        return CreateDoubleError(NoValue);\n"; // pow(0,0)
     ss << "    var[0] = var0;\n";
     ss << "    var[1] = var1;\n";
     ss << "    var[2] = var2;\n";

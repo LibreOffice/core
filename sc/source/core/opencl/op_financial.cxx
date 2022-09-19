@@ -726,18 +726,28 @@ void MIRR::GenSlidingWindowFunction(
     ss << "double NPV_reinvest = 0.0;\n\t";
     ss << "double Pow_reinvest = 1.0;\n\t";
     ss << "int nCount = 0;\n\t";
+    ss << "bool bHasPosValue = false;\n";
+    ss << "bool bHasNegValue = false;\n";
     GenerateRangeArg( 0, vSubArguments, ss,
         "        if (!isnan(arg))\n"
-        "            {\n"
+        "        {\n"
         "            if (arg > 0.0)\n"
+        "            {\n"
         "                NPV_reinvest += arg * Pow_reinvest;\n"
+        "                bHasPosValue = true;\n"
+        "            }\n"
         "            else if (arg < 0.0)\n"
+        "            {\n"
         "                NPV_invest += arg * Pow_invest;\n"
+        "                bHasNegValue = true;\n"
+        "            }\n"
         "            Pow_reinvest /= reinvest;\n"
         "            Pow_invest /= invest;\n"
         "            nCount++;\n"
-        "            }\n"
+        "        }\n"
         );
+    ss << "if ( !( bHasPosValue && bHasNegValue ) )\n";
+    ss << "    return CreateDoubleError(IllegalArgument);\n";
     ss << "tmp = ";
     ss << "-NPV_reinvest /NPV_invest * pow(reinvest,(double)nCount-1);\n\t";
     ss << "tmp =  pow(tmp, 1.0 / (nCount - 1)) - 1.0;\n\t";

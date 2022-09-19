@@ -2756,10 +2756,10 @@ void OpForecast::GenSlidingWindowFunction(outputstream &ss,
         ss << ";\n";
     }
     else
-        ss << "return HUGE_VAL";
+        throw Unhandled(__FILE__, __LINE__);
     if(pCur1->GetType() != formula::svDoubleVectorRef ||
         pCur2->GetType() != formula::svDoubleVectorRef)
-        ss << "return HUGE_VAL";
+        throw Unhandled(__FILE__, __LINE__);
     else
     {
         ss<< "    if(isnan(arg0)||(gid0>=";
