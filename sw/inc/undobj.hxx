@@ -283,6 +283,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
+/// Undo for Insert -> Text from file.
 class SwUndoInsDoc final : public SwUndoInserts
 {
 public:
