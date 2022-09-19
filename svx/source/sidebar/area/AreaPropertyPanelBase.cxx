@@ -465,26 +465,63 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
             mxMTRAngle->set_sensitive(true);
             mxLbFillAttr->clear();
 
-            const SvxGradientListItem* pItem = pSh->GetItem(SID_GRADIENT_LIST);
-
-            if (0 < pItem->GetGradientList()->Count())
+            if (bUpdateModel)
             {
-                const XGradient aGradient = pItem->GetGradientList()->GetGradient(0)->GetGradient();
-                const OUString aName = pItem->GetGradientList()->GetGradient(0)->GetName();
-                const XFillGradientItem aXFillGradientItem(aName, aGradient);
+                mxLbFillAttr->hide();
+                mxToolBoxColor->hide();
+                mxBmpImport->hide();
 
-                // #i122676# change FillStyle and Gradient in one call
-                if (bUpdateModel)
+                const SvxGradientListItem* pItem = pSh->GetItem(SID_GRADIENT_LIST);
+                if (pItem->GetGradientList()->Count() > 0)
                 {
+                    const XGradient aGradient
+                        = pItem->GetGradientList()->GetGradient(0)->GetGradient();
+                    const OUString aName = pItem->GetGradientList()->GetGradient(0)->GetName();
+                    const XFillGradientItem aXFillGradientItem(aName, aGradient);
+
+                    // #i122676# change FillStyle and Gradient in one call
                     XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
                     setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
-                }
-                mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                    mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                    mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
 
-                mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
-                css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
-                mxGradientStyle->set_active(sal::static_int_cast<sal_Int32>(eXGS));
+                    mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
+                    css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
+                    mxGradientStyle->set_active(sal::static_int_cast<sal_Int32>(eXGS));
+                }
+            }
+            else
+            {
+                if (pSh && pSh->GetItem(SID_GRADIENT_LIST))
+                {
+                    SvxFillAttrBox::Fill(*mxLbFillAttr,
+                                         pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+                    mxLbFillGradTo->SetNoSelection();
+                    mxLbFillGradFrom->SetNoSelection();
+                    if (mpFillGradientItem)
+                    {
+                        const OUString aString(mpFillGradientItem->GetName());
+                        mxLbFillAttr->set_active_text(aString);
+                        const XGradient aGradient = mpFillGradientItem->GetGradientValue();
+                        mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        mxGradientStyle->set_active(
+                            sal::static_int_cast<sal_Int32>(aGradient.GetGradientStyle()));
+                        if (mxGradientStyle->get_active() == sal_Int32(GradientStyle::Radial))
+                            mxMTRAngle->set_sensitive(false);
+                        else
+                            mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()),
+                                                  FieldUnit::DEGREE);
+                    }
+                    else
+                    {
+                        mxLbFillAttr->set_active(-1);
+                    }
+                }
+                else
+                {
+                    mxLbFillAttr->set_active(-1);
+                }
             }
             break;
         }
