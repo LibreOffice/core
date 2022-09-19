@@ -766,19 +766,15 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         }
     }
     const svl::SharedString* cellSharedString = nullptr;
-    OUString cellString;
-    bool cellStringSet = false;
+    std::optional<OUString> oCellString;
     const bool bFastCompareByString = isFastCompareByString(rEntry);
     if (rEntry.eOp == SC_EQUAL && rItems.size() >= 10 && bFastCompareByString)
     {
         // The same as above but for strings. Try to optimize the case when
         // it's a svl::SharedString comparison. That happens when SC_EQUAL is used
         // and simple matching is used, see compareByString()
-        if (!cellStringSet)
-        {
-            cellString = getCellString(aCell, nRow, rEntry.nField, &cellSharedString);
-            cellStringSet = true;
-        }
+        if (!oCellString)
+            oCellString = getCellString(aCell, nRow, rEntry.nField, &cellSharedString);
         // Allow also checking ScQueryEntry::ByValue if the cell is not numeric,
         // as in that case isQueryByNumeric() would be false and isQueryByString() would
         // be true because of SC_EQUAL making isTextMatchOp() true.
@@ -858,18 +854,15 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         }
         else if (isQueryByString(rEntry.eOp, rItem.meType, aCell))
         {
-            if (!cellStringSet)
-            {
-                cellString = getCellString(aCell, nRow, rEntry.nField, &cellSharedString);
-                cellStringSet = true;
-            }
+            if (!oCellString)
+                oCellString = getCellString(aCell, nRow, rEntry.nField, &cellSharedString);
             std::pair<bool, bool> aThisRes;
             if (cellSharedString && bFastCompareByString) // fast
                 aThisRes = compareByString<true>(rEntry, rItem, cellSharedString, nullptr);
             else if (cellSharedString)
                 aThisRes = compareByString(rEntry, rItem, cellSharedString, nullptr);
             else
-                aThisRes = compareByString(rEntry, rItem, nullptr, &cellString);
+                aThisRes = compareByString(rEntry, rItem, nullptr, &*oCellString);
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }
