@@ -307,6 +307,12 @@ void SlidingFunctionBase::GenerateRangeArgs( SubArguments& vSubArguments,
     GenerateRangeArgs( 0, vSubArguments.size() - 1, vSubArguments, ss, code );
 }
 
+void SlidingFunctionBase::GenerateRangeArg( int num, SubArguments& vSubArguments,
+    outputstream& ss, const char* code )
+{
+    GenerateRangeArgs( num, num, vSubArguments, ss, code );
+}
+
 void SlidingFunctionBase::GenerateFunctionDeclaration( const std::string& sSymName,
     SubArguments& vSubArguments, outputstream& ss )
 {

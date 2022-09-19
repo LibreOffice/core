@@ -271,6 +271,8 @@ protected:
         outputstream& ss, const char* code );
     // overload, handle all arguments
     static void GenerateRangeArgs( SubArguments& vSubArguments, outputstream& ss, const char* code );
+    // overload, handle the given argument
+    static void GenerateRangeArg( int num, SubArguments& vSubArguments, outputstream& ss, const char* code );
 };
 
 class Normal : public SlidingFunctionBase

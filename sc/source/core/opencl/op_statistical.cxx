@@ -45,6 +45,38 @@ void OpVar::GenSlidingWindowFunction(outputstream &ss,
     ss << "        return vSum / (fCount - 1.0);\n";
     ss << "}\n";
 }
+
+void OpVarP::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    CHECK_PARAMETER_COUNT( 1, 30 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double fSum = 0.0;\n";
+    ss << "    double fMean = 0.0;\n";
+    ss << "    double vSum = 0.0;\n";
+    ss << "    double fCount = 0.0;\n";
+    ss << "    double arg = 0.0;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            fCount += 1.0;\n"
+        "        }\n"
+        );
+    ss << "    fMean = fSum / fCount;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "            vSum += (arg - fMean) * (arg - fMean);\n"
+        );
+    ss << "    if (fCount == 0.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        return vSum / fCount;\n";
+    ss << "}\n";
+}
+
 void OpZTest::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
@@ -58,6 +90,7 @@ void OpZTest::BinInlineFun(std::set<std::string>& decls,
 void OpZTest::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
@@ -65,223 +98,24 @@ void OpZTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSumSqr = 0.0;\n";
     ss << "    double mue = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    ss << "    double sigma = 0.0;\n";
-    ss << "    double mu = 0.0;\n";
-    if(vSubArguments.size() == 1 || vSubArguments.empty())
-    {
-        ss << "    return DBL_MAX;\n";
-        ss << "}\n";
-        return ;
-    }
-    else if(vSubArguments.size() == 2)
-    {
-        FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
-        FormulaToken *pCur1 = vSubArguments[1]->GetFormulaToken();
-        assert(pCur);
-        assert(pCur1);
-        if(pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-            {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                ss << "    {\n";
-            }
-            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                ss << "    {\n";
-            }
-            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                ss << "    {\n";
-            }
-            else
-            {
-                ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                ss << "    {\n";
-            }
-
-            ss << "        arg = ";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if (isnan(arg))\n";
-            ss << "            continue;\n";
-            ss << "        fSum += arg;\n";
-            ss << "        fSumSqr += arg * arg;\n";
-            ss << "        fCount += 1.0;\n";
-            ss << "    }\n";
-            ss << "    if(fCount <= 1.0)\n";
-            ss << "        return DBL_MAX;\n";
-            ss << "    mue = fSum / fCount;\n";
-            ss << "    sigma = (fSumSqr-fSum*fSum/fCount)/(fCount-1.0);\n";
-        }
-        else
-        {
-            ss << "    return DBL_MAX;\n";
-            ss << "}\n";
-            return ;
-        }
-        if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
-        {
-            if(pCur1->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast<const formula::SingleVectorRefToken* >(pCur1);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        mu = " ;
-                ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(mu))\n";
-                ss << "            mu = 0.0;\n";
-                ss << "    }\n";
-
-            }
-            else if(pCur1->GetType() == formula::svDouble)
-            {
-                ss << "    mu = " << pCur1->GetDouble() << ";\n";
-            }
-            else
-            {
-                ss << "    return DBL_MAX;\n";
-                ss << "}\n";
-                return ;
-            }
-        }
-        else
-        {
-            ss << "    mu = " ;
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-        }
-        ss << "    return 0.5 - gauss((mue-mu)/sqrt(sigma/fCount));\n";
-        ss << "}\n";
-        return ;
-    }
+    GenerateRangeArg( 0, vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            fSumSqr += arg * arg;\n"
+        "            fCount += 1.0;\n"
+        "        }\n"
+        );
+    ss << "    if(fCount <= 1.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    mue = fSum / fCount;\n";
+    GenerateArg( "mu", 1, vSubArguments, ss );
+    if(vSubArguments.size() == 3)
+        GenerateArg( "sigma", 2, vSubArguments, ss );
     else
-    {
-        FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
-        FormulaToken *pCur1 = vSubArguments[1]->GetFormulaToken();
-        FormulaToken *pCur2 = vSubArguments[2]->GetFormulaToken();
-        assert(pCur);
-        assert(pCur1);
-        assert(pCur2);
-        if(pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-            {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                ss << "    {\n";
-            }
-            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                ss << "    {\n";
-            }
-            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                ss << "    {\n";
-            }
-            else
-            {
-                ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                ss << "    {\n";
-            }
-            ss << "        arg = ";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if (isnan(arg))\n";
-            ss << "            continue;\n";
-            ss << "        fSum += arg;\n";
-            ss << "        fSumSqr += arg * arg;\n";
-            ss << "        fCount += 1.0;\n";
-            ss << "    }\n";
-            ss << "    if(fCount <= 1.0)\n";
-            ss << "        return DBL_MAX;\n";
-            ss << "    mue = fSum / fCount;\n";
-        }
-        else
-        {
-            ss << "    return DBL_MAX;\n";
-            ss << "}\n";
-            return ;
-        }
-        if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
-        {
-            if(pCur1->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR1 =
-                    static_cast<const formula::SingleVectorRefToken* >(pCur1);
-                ss << "    if (gid0 < " << pSVR1->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        mu = " ;
-                ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(mu))\n";
-                ss << "            mu = 0.0;\n";
-                ss << "    }\n";
-            }
-            else if(pCur1->GetType() == formula::svDouble)
-            {
-                ss << "    mu = " << pCur1->GetDouble() << ";\n";
-            }
-            else
-            {
-                ss << "    return DBL_MAX;\n";
-                ss << "}\n";
-                return ;
-            }
-        }
-        else
-        {
-            ss << "    mu=" ;
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-        }
-        if(ocPush == vSubArguments[2]->GetFormulaToken()->GetOpCode())
-        {
-            if(pCur2->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR2 =
-                    static_cast<const formula::SingleVectorRefToken* >(pCur2);
-                ss << "    if (gid0 < " << pSVR2->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        sigma = " ;
-                ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(sigma))\n";
-                ss << "            sigma = 0.0;\n";
-                ss << "    }\n";
-            }
-            else if(pCur2->GetType() == formula::svDouble)
-            {
-                ss << "    sigma = " << pCur2->GetDouble() << ";\n";
-            }
-            else
-            {
-                ss << "    return DBL_MAX;\n";
-                ss << "}\n";
-                return ;
-            }
-        }
-        else
-        {
-            ss << "    sigma = " ;
-            ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
-        }
-        ss << "    return 0.5 - gauss((mue-mu)*sqrt(fCount)/sigma);\n";
-        ss << "}\n";
-    }
+        ss << "    double sigma = (fSumSqr-fSum*fSum/fCount)/(fCount-1.0);\n";
+    ss << "    return 0.5 - gauss((mue-mu)/sqrt(sigma/fCount));\n";
+    ss << "}\n";
 }
 
 void OpTTest::BinInlineFun(std::set<std::string>& decls,
@@ -626,174 +460,6 @@ void OpTTest::GenSlidingWindowFunction(outputstream &ss,
         ss << "}\n";
     }
 }
-void OpVarP::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    unsigned i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        fSum += arg;\n";
-                ss << "        fCount += 1.0;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken*>(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            fSum += arg;\n";
-                ss << "            fCount += 1.0;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    fSum += arg;\n";
-                ss << "    fCount += 1.0;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    fSum += arg;\n";
-            ss << "    fCount += 1.0;\n";
-        }
-        if (i == 0)
-        {
-            ss << "    fMean = fSum / fCount;\n";
-        }
-    }
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken*>(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-        }
-    }
-    ss << "    if (fCount == 0.0)\n";
-    ss << "        return DBL_MAX;\n";
-    ss << "    else\n";
-    ss << "        return vSum / fCount;\n";
-    ss << "}\n";
-}
 
 void OpTDist::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
@@ -950,6 +616,7 @@ void OpWeibull::GenSlidingWindowFunction(outputstream &ss,
 void OpSkew::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
@@ -957,241 +624,33 @@ void OpSkew::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fMean = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    unsigned i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        fSum += arg;\n";
-                ss << "        fCount += 1.0;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            fSum += arg;\n";
-                ss << "            fCount += 1.0;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    fSum += arg;\n";
-                ss << "    fCount += 1.0;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    fSum += arg;\n";
-            ss << "    fCount += 1.0;\n";
-        }
-
-        if(i == 0)
-        {
-            ss << "    if(fCount <= 2.0)\n";
-            ss << "        return DBL_MAX;\n";
-            ss << "    else\n";
-            ss << "        fMean = fSum / fCount;\n";
-        }
-    }
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            fCount += 1.0;\n"
+        "        }\n"
+        );
+    ss << "    if(fCount <= 2.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        fMean = fSum / fCount;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "            vSum += (arg - fMean) * (arg - fMean);\n"
+        );
     ss << "    double fStdDev = sqrt(vSum / (fCount - 1.0));\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xcube = 0.0;\n";
     ss << "    if(fStdDev == 0.0)\n";
-    ss << "        return DBL_MAX;\n";
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        dx = (arg - fMean) / fStdDev;\n";
-                ss << "        xcube = xcube + dx * dx * dx;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            dx = (arg - fMean) / fStdDev;\n";
-                ss << "            xcube = xcube + dx * dx * dx;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    dx = (arg - fMean) / fStdDev;\n";
-                ss << "    xcube = xcube + dx * dx * dx;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    dx = (arg - fMean) / fStdDev;\n";
-            ss << "    xcube = xcube + dx * dx * dx;\n";
-        }
-    }
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            dx = (arg - fMean) / fStdDev;\n"
+        "            xcube = xcube + dx * dx * dx;\n"
+        "        }\n"
+        );
     ss << "    return ((xcube * fCount) / (fCount - 1.0))";
     ss << " / (fCount - 2.0);\n";
     ss << "}\n";
@@ -1200,6 +659,7 @@ void OpSkew::GenSlidingWindowFunction(outputstream &ss,
 void OpSkewp::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
@@ -1207,241 +667,33 @@ void OpSkewp::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fMean = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    unsigned i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        fSum += arg;\n";
-                ss << "        fCount += 1.0;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            fSum += arg;\n";
-                ss << "            fCount += 1.0;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    fSum += arg;\n";
-                ss << "    fCount += 1.0;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    fSum += arg;\n";
-            ss << "    fCount += 1.0;\n";
-        }
-
-        if(i == 0)
-        {
-            ss << "    if(fCount <= 2.0)\n";
-            ss << "        return DBL_MAX;\n";
-            ss << "    else\n";
-            ss << "        fMean = fSum / fCount;\n";
-        }
-    }
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            fCount += 1.0;\n"
+        "        }\n"
+        );
+    ss << "    if(fCount <= 2.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        fMean = fSum / fCount;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "            vSum += (arg - fMean) * (arg - fMean);\n"
+        );
     ss << "    double fStdDev = sqrt(vSum / fCount);\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xcube = 0.0;\n";
     ss << "    if(fStdDev == 0.0)\n";
-    ss << "        return DBL_MAX;\n";
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        dx = (arg - fMean) / fStdDev;\n";
-                ss << "        xcube = xcube + dx * dx * dx;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            dx = (arg - fMean) / fStdDev;\n";
-                ss << "            xcube = xcube + dx * dx * dx;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    dx = (arg - fMean) / fStdDev;\n";
-                ss << "    xcube = xcube + dx * dx * dx;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    dx = (arg - fMean) / fStdDev;\n";
-            ss << "    xcube = xcube + dx * dx * dx;\n";
-        }
-    }
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            dx = (arg - fMean) / fStdDev;\n"
+        "            xcube = xcube + dx * dx * dx;\n"
+        "        }\n"
+        );
     ss << "    return xcube / fCount;\n";
     ss << "}\n";
 }
@@ -1499,6 +751,7 @@ void OpTInv::GenSlidingWindowFunction(outputstream &ss,
 void OpStDev::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
@@ -1506,158 +759,20 @@ void OpStDev::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double vSum = 0.0;\n";
     ss << "    double fMean = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    unsigned i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        fSum += arg;\n";
-                ss << "        fCount += 1.0;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            fSum += arg;\n";
-                ss << "            fCount += 1.0;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    fSum += arg;\n";
-                ss << "    fCount += 1.0;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    fSum += arg;\n";
-            ss << "    fCount += 1.0;\n";
-        }
-        if (i == 0)
-        {
-            ss << "    fMean = fSum / fCount;\n";
-        }
-    }
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            fCount += 1.0;\n"
+        "        }\n"
+        );
+    ss << "    fMean = fSum / fCount;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "            vSum += (arg - fMean) * (arg - fMean);\n"
+        );
     ss << "    if (fCount <= 1.0)\n";
-    ss << "        return DBL_MAX;\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    else\n";
     ss << "        return sqrt(vSum / (fCount - 1.0));\n";
     ss << "}\n";
@@ -1666,167 +781,28 @@ void OpStDev::GenSlidingWindowFunction(outputstream &ss,
 void OpStDevP::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double fSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
+    ss << "    double fMean = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    unsigned i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        fSum += arg;\n";
-                ss << "        fCount += 1.0;\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            fSum += arg;\n";
-                ss << "            fCount += 1.0;\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    fSum += arg;\n";
-                ss << "    fCount += 1.0;\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    fSum += arg;\n";
-            ss << "    fCount += 1.0;\n";
-
-        }
-        if (i == 0)
-        {
-            ss << "    fMean = fSum / fCount;\n";
-        }
-    }
-    i = vSubArguments.size();
-    while (i--)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            if (pCur->GetType() == formula::svDoubleVectorRef)
-            {
-                const formula::DoubleVectorRefToken* pDVR =
-                    static_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
-
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(arg))\n";
-                ss << "            continue;\n";
-                ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "    }\n";
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        arg = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (!isnan(arg))\n";
-                ss << "        {\n";
-                ss << "            vSum += (arg - fMean) * (arg - fMean);\n";
-                ss << "        }\n";
-                ss << "    }\n";
-            }
-            else
-            {
-                ss << "    arg = " << pCur->GetDouble() << ";\n";
-                ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-            }
-        }
-        else
-        {
-            ss << "    arg = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
-        }
-    }
-    ss << "    if (fCount == 0.0)\n";
-    ss << "        return DBL_MAX;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            fCount += 1.0;\n"
+        "        }\n"
+        );
+    ss << "    fMean = fSum / fCount;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "            vSum += (arg - fMean) * (arg - fMean);\n"
+        );
+    ss << "    if (fCount <= 1.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    else\n";
     ss << "        return sqrt(vSum / fCount);\n";
     ss << "}\n";
@@ -2119,9 +1095,8 @@ void OpSTEYX::GenSlidingWindowFunction(outputstream &ss,
         ss << "}\n";
     }
 }
-void OpFisher::GenSlidingWindowFunction(
-    outputstream &ss, const std::string &sSymName, SubArguments &
-vSubArguments)
+void OpFisher::GenSlidingWindowFunction( outputstream &ss,
+    const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 1, 1 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
@@ -2658,6 +1633,7 @@ void OpHarMean::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
@@ -2665,59 +1641,13 @@ vSubArguments)
     ss << "    double tmp = 0;\n";
     ss << "    int length;\n";
     ss << "    int totallength=0;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    length="<<nCurWindowSize;
-            ss << ";\n";
-            ss << "    for (int i = ";
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            length--;\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss << "        nVal += (1.0 *pow(";
-            ss << " arg"<<i<<",-1));\n";
-            ss << "    }\n";
-            ss << "    totallength +=length;\n";
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    tmp = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    if(!isnan(tmp))\n";
-            ss << "    {\n";
-            ss << "        nVal += (1.0 / tmp);\n";
-            ss << "        totallength +=1;\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-           ss << "    tmp = ";
-           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-           ss << ";\n";
-           ss << "    nVal += (1.0 / tmp);\n";
-           ss << "    totallength +=1;\n";
-        }
-        else
-        {
-            ss << "    return DBL_MIN;\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan(arg))\n"
+        "        {\n"
+        "            nVal += (1.0 / arg);\n"
+        "            ++totallength;\n"
+        "        }\n"
+        );
     ss << "    tmp = totallength/nVal;\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -2918,71 +1848,24 @@ void OpChiInv::GenSlidingWindowFunction(
     outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss << "    double tmp0,tmp1,tmp;\n";
+    ss << "    double tmp;\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss <<"\n    ";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-            } else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "{\n";
-        }
-
-        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-                ss << "if (isnan(";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << "))\n";
-                ss << "    tmp"<<i<<"= 0;\n";
-                ss << "else\n";
-                ss <<"tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << ";\n}\n";
-        }
-        else
-        {
-               ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-               ss << ";\n";
-        }
-    }
+    GenerateArg( "tmp0", 0, vSubArguments, ss );
+    GenerateArg( "tmp1", 1, vSubArguments, ss );
     ss << "    tmp1 = floor(tmp1);";
     ss << "    if (tmp1 < 1.0 || tmp0 <= 0.0 || tmp0 > 1.0 )\n";
     ss << "    {\n";
-    ss << "        return DBL_MIN;\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    }\n";
     ss << "    bool bConvError;\n";
     ss << "    double fVal = lcl_IterateInverseChiInv";
     ss << "(tmp0, tmp1, tmp1*0.5, tmp1, &bConvError);\n";
     ss << "    if(bConvError)\n";
-    ss << "        return DBL_MIN;\n";
+    ss << "        return CreateDoubleError(NoConvergence);\n";
     ss << "    return fVal;\n";
     ss << "}\n";
 }
@@ -3474,164 +2357,41 @@ void OpMedian::GenSlidingWindowFunction(
 void OpKurt:: GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double fSum = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
-    ss << "    double length;\n";
     ss << "    double totallength=0;\n";
-    ss << "    double tmp = 0;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    length="<<nCurWindowSize;
-            ss << ";\n";
-            ss << "    for (int i = ";
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            length-=1.0;\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss << "        fSum +=  arg"<<i<<";\n";
-            ss << "    }\n";
-            ss << "    totallength +=length;\n";
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    tmp = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    if(!isnan(tmp))\n";
-            ss << "    {\n";
-            ss << "        fSum += tmp;\n";
-            ss << "        totallength +=1;\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-           ss << "    tmp = ";
-           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-           ss << ";\n";
-           ss << "    fSum += tmp;\n";
-           ss << "    totallength +=1;\n";
-        }
-        else
-        {
-            ss << "    return DBL_MIN;\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan(arg))\n"
+        "        {\n"
+        "            fSum += arg;\n"
+        "            totallength +=1;\n"
+        "        }\n"
+        );
     ss << "    double fMean = fSum / totallength;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss << "        vSum +=  (arg"<<i<<"-fMean)*(arg"<<i<<"-fMean);\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    tmp = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    if(!isnan(tmp))\n";
-            ss << "    {\n";
-            ss << "        vSum += (tmp-fMean)*(tmp-fMean);\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-           ss << "    tmp = ";
-           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-           ss << ";\n";
-           ss << "    vSum += (tmp-fMean)*(tmp-fMean);\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan(arg))\n"
+        "            vSum += (arg-fMean)*(arg-fMean);\n"
+        );
     ss << "    double fStdDev = sqrt(vSum / (totallength - 1.0));\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xpower4 = 0.0;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss<< "        dx = (arg"<<i<<" -fMean) / fStdDev;\n";
-            ss<< "        xpower4 = xpower4 + (dx * dx * dx * dx);\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    tmp = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    if(!isnan(tmp))\n";
-            ss << "    {\n";
-            ss<< "        dx = (tmp -fMean) / fStdDev;\n";
-            ss<< "        xpower4 = xpower4 + (dx * dx * dx * dx);\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-           ss << "    tmp = ";
-           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-           ss << ";\n";
-           ss<< "        dx = (tmp -fMean) / fStdDev;\n";
-           ss<< "        xpower4 = xpower4 + (dx * dx * dx * dx);\n";
-        }
-    }
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan(arg))\n"
+        "        {\n"
+        "            dx = (arg -fMean) / fStdDev;\n"
+        "            xpower4 = xpower4 + (dx * dx * dx * dx);\n"
+        "        }\n"
+        );
     ss<< "    double k_d = (totallength - 2.0) * (totallength - 3.0);\n";
     ss<< "    double k_l = totallength * (totallength + 1.0) /";
     ss<< "((totallength - 1.0) * k_d);\n";
     ss<< "    double k_t = 3.0 * (totallength - 1.0) * ";
     ss<< "(totallength - 1.0) / k_d;\n";
-    ss<< "    tmp = xpower4 * k_l - k_t;\n";
-    ss<< "    return tmp;\n";
+    ss<< "    return xpower4 * k_l - k_t;\n";
     ss << "}";
 }
 
@@ -3792,65 +2552,14 @@ void OpIntercept::GenSlidingWindowFunction(outputstream &ss,
 void OpLogInv:: GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
-    ss << "    double arg0,arg1,arg2,arg3;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"=";
-            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"=";
-            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArgWithDefault( "arg1", 1, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "arg2", 2, 1, vSubArguments, ss );
     ss<< "    double q,t,z;\n";
     ss<< "    q = arg0 -0.5;\n";
     ss<< "    if(fabs(q)<=.425)\n";
@@ -4123,94 +2832,15 @@ void OpForecast::GenSlidingWindowFunction(outputstream &ss,
 void OpLogNormDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    CHECK_PARAMETER_COUNT(4,4);
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const
-        formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= static_cast<const
-        formula::SingleVectorRefToken *>(tmpCur1);
-    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR2= static_cast<const
-        formula::SingleVectorRefToken *>(tmpCur2);
-    FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR3= static_cast<const
-        formula::SingleVectorRefToken *>(tmpCur3);
+    CHECK_PARAMETER_COUNT( 2, 4 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    double arg0,arg1,arg2,arg3;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"=";
-            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"=";
-            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArgWithDefault( "arg1", 1, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "arg2", 2, 1, vSubArguments, ss );
+    GenerateArgWithDefault( "arg3", 3, 1, vSubArguments, ss );
     ss << "    double tmp;\n";
-    ss << "    if(isnan(arg0)||(gid0>=";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << "))\n";
-    ss << "        arg0 = 0;\n";
-    ss << "    if(isnan(arg1)||(gid0>=";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << "))\n";
-    ss << "        arg1 = 0;\n";
-    ss << "    if(isnan(arg2)||(gid0>=";
-    ss << tmpCurDVR2->GetArrayLength();
-    ss << "))\n";
-    ss << "        arg2 = 0;\n";
-    ss << "    if(isnan(arg3)||(gid0>=";
-    ss << tmpCurDVR3->GetArrayLength();
-    ss << "))\n";
-    ss << "        arg3 = 0;\n";
     ss << "    double temp = (log(arg0)-arg1)/arg2;\n";
     ss << "    if(arg3)\n";
     ss << "    {\n";
@@ -4242,66 +2872,15 @@ void OpGammaDist::BinInlineFun(std::set<std::string>& decls,
 void OpGammaDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 4 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArg( 1, vSubArguments, ss );
+    GenerateArg( 2, vSubArguments, ss );
+    GenerateArgWithDefault( "arg3", 3, 1, vSubArguments, ss );
     ss << "    double tmp;\n";
-    ss << "    double arg0,arg1,arg2,arg3;\n";
-
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"=";
-            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"=";
-            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
     ss << "    if (arg3)\n";
     ss << "        tmp=GetGammaDist( arg0, arg1, arg2);\n";
     ss << "    else\n";
@@ -4329,70 +2908,18 @@ void OpChiDist::GenSlidingWindowFunction(
     outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    double fx,fDF,tmp=0,tmp0=0,tmp1=0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-
-    ss <<"\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-            {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            }
-            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            }
-            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-            }
-            else
-            {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "{\n";
-        }
-
-        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        tmp"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        tmp"<<i<<"=\n";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n}\n";
-        }
-    }
+    GenerateArg( "tmp0", 0, vSubArguments, ss );
+    GenerateArg( "tmp1", 1, vSubArguments, ss );
     ss << "    fx = tmp0;\n";
     ss << "    fDF = floor(tmp1);\n";
     ss << "    if(fDF < 1.0)\n";
     ss << "    {\n";
-    ss << "        return DBL_MIN;\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    }\n";
     ss << "    tmp = GetChiDist( fx, fDF);\n";
     ss << "    return tmp;\n";
@@ -4428,78 +2955,21 @@ void OpBinomdist::GenSlidingWindowFunction(
     outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 4, 4 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss << "    double tmp0,tmp1,tmp2,tmp3;\n";
     ss << "    int gid0=get_global_id(0);\n";
-
-    ss <<"\n    ";
-    //while (i-- > 1)
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-            {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            }
-            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            }
-            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-            }
-            else
-            {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "{\n";
-        }
-
-        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        tmp"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        tmp"<<i<<"=\n";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n}\n";
-        }
-        else
-        {
-            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss <<";\n";
-        }
-    }
+    GenerateArg( "tmp0", 0, vSubArguments, ss );
+    GenerateArg( "tmp1", 1, vSubArguments, ss );
+    GenerateArg( "tmp2", 2, vSubArguments, ss );
+    GenerateArg( "tmp3", 3, vSubArguments, ss );
     ss << "    tmp0 = floor(tmp0);\n";
     ss << "    tmp1 = floor(tmp1);\n";
     ss << "    double rq = (0.5 - tmp2) + 0.5;\n";
     ss << "    if (tmp1 < 0.0 || tmp0 < 0.0 || tmp0 > tmp1 ||";
     ss << "tmp2 < 0.0 || tmp2 > 1.0)\n";
     ss << "    {\n";
-    ss << "        return DBL_MIN;\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    }\n";
     ss << "    if(tmp2 == 0.0)\n";
     ss << "        return ( (tmp0 == 0.0 || tmp3) ? 1.0 : 0.0 );\n";
@@ -4649,66 +3119,16 @@ void OpGammaInv::BinInlineFun(std::set<std::string>& decls,
 void OpGammaInv::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
-    ss << "    double arg0,arg1,arg2;\n";
-
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"=";
-            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"=";
-            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArg( 1, vSubArguments, ss );
+    GenerateArg( 2, vSubArguments, ss );
+    ss << "    if( arg0 < 0 || arg0 >= 1 || arg1 <= 0 || arg2 <= 0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    if (arg0 == 0.0)\n"
     "    {\n"
     "        tmp=0.0;\n"
@@ -4833,72 +3253,20 @@ void OpFInv::BinInlineFun(std::set<std::string>& decls,
 void OpFInv::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
-    ss << "    double arg0,arg1,arg2;\n";
-
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"="<<vSubArguments[i]->
-                                              GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"="<<vSubArguments[i]->
-                                             GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 1, vSubArguments, ss );
+    GenerateArg( 2, vSubArguments, ss );
+    GenerateArg( 3, vSubArguments, ss );
     ss << "    double fF2=floor(arg2);\n"
     "    double fF1=floor(arg1);\n"
-    "    bool bConvError;\n"
+    "    if( arg0 <= 0 || arg1 < 1 || arg2 < 1 || arg1 >= 1.0e10 || arg2 >= 1.0e10 || arg > 1 )\n"
+    "        return CreateDoubleError(IllegalArgument);\n"
     "    double fAx=fF1*0.5;\n"
     "    double fBx=fF1;\n"
-    "    bConvError = false;\n"
     "    const double fYEps = 1.0E-307;\n"
     "    const double fXEps = 2.22045e-016;\n"
     "    double fAy = arg0-GetFInvValue(fF1,fF2,fAx);\n"
@@ -4938,11 +3306,7 @@ void OpFInv::GenSlidingWindowFunction(outputstream &ss,
     "        return tmp;\n"
     "    }\n"
     "    if (!((fAy < 0.0 && fBy > 0.0) || (fAy > 0.0 && fBy < 0.0)))\n"
-    "    {\n"
-    "        bConvError = true;\n"
-    "        tmp = 0.0;\n"
-    "        return tmp;\n"
-    "    }\n"
+    "        return CreateDoubleError(NoConvergence);\n"
     "    double fPx = fAx;\n"
     "    double fPy = fAy;\n"
     "    double fQx = fBx;\n"
@@ -5010,16 +3374,7 @@ void OpFTest::BinInlineFun(std::set<std::string>& decls,
 void OpFTest::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
-    assert(pCur);
-    const formula::DoubleVectorRefToken* pCurDVR =
-        static_cast<const formula::DoubleVectorRefToken *>(pCur);
-    size_t nCurWindowSize = pCurDVR->GetRefRowSize();
-    FormulaToken *pCur1 = vSubArguments[1]->GetFormulaToken();
-    assert(pCur1);
-    const formula::DoubleVectorRefToken* pCurDVR1 =
-        static_cast<const formula::DoubleVectorRefToken *>(pCur1);
-    size_t nCurWindowSize1 = pCurDVR1->GetRefRowSize();
+    CHECK_PARAMETER_COUNT( 2, 2 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
@@ -5027,41 +3382,21 @@ void OpFTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSumSqr1 = 0.0;\n";
     ss << "    double fSum2 = 0.0;\n";
     ss << "    double fSumSqr2 = 0.0;\n";
-    ss << "    int length0="<<nCurWindowSize;
-    ss << ";\n";
-    ss << "    int length1= "<<nCurWindowSize1;
-    ss << ";\n";
     ss << "    double tmp = 0;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCurSub = vSubArguments[i]->GetFormulaToken();
-        assert(pCurSub);
-        if (pCurSub->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCurSub);
-            ss << "    for (int i = ";
-            ss << "0; i < "<< pDVR->GetRefRowSize() << "; i++){\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            length"<<i<<"--;\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss << "        fSum"<<i+1<<" += arg"<<i<<";\n";
-            ss << "        fSumSqr"<<i+1<<" += arg"<<i;
-            ss << " * arg"<<i<<";\n";
-            ss << "    }\n";
-        }
-        else if (pCurSub->GetType() == formula::svSingleVectorRef)
-            throw Unhandled(__FILE__, __LINE__);
-        else if (pCurSub->GetType() == formula::svDouble)
-            throw Unhandled(__FILE__, __LINE__);
-    }
+    GenerateRangeArg( 0, vSubArguments, ss,
+        "        if( !isnan(arg))\n"
+        "        {\n"
+        "            fSum1 += arg;\n"
+        "            fSumSqr1 += arg * arg;\n"
+        "        }\n"
+        );
+    GenerateRangeArg( 1, vSubArguments, ss,
+        "        if( !isnan(arg))\n"
+        "        {\n"
+        "            fSum2 += arg;\n"
+        "            fSumSqr2 += arg * arg;\n"
+        "        }\n"
+        );
     ss << "    double fS1 = (fSumSqr1-fSum1*fSum1/length0)/(length0-1.0);\n"
         "    double fS2 = (fSumSqr2-fSum2*fSum2/length1)/(length1-1.0);\n"
         "    double fF, fF1, fF2;\n"
@@ -5099,64 +3434,16 @@ void OpB::BinInlineFun(std::set<std::string>& decls,
 void OpB::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 4, 4 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double min = 2.22507e-308;\n";
     ss << "    double tmp;\n";
-    ss << "    double arg0,arg1,arg2,arg3;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArg( 1, vSubArguments, ss );
+    GenerateArg( 2, vSubArguments, ss );
+    GenerateArg( 3, vSubArguments, ss );
     ss << "    double rxs = floor(arg2);\n"
     "    double rxe = floor(arg3);\n"
     "    double rn = floor(arg0);\n"
@@ -5596,71 +3883,20 @@ void OpCovar::GenSlidingWindowFunction(outputstream& ss,
 void OpBetaDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 6 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
-    ss << "    double arg0,arg1,arg2,arg3,arg4,arg5;\n";
-
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArg( 1, vSubArguments, ss );
+    GenerateArg( 2, vSubArguments, ss );
+    GenerateArgWithDefault( "arg3", 3, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "arg4", 4, 1, vSubArguments, ss );
+    GenerateArgWithDefault( "arg5", 5, 1, vSubArguments, ss );
     ss << "    double fScale = arg4 - arg3;\n"
     "    if (fScale <= 0.0 || arg1 <= 0.0 || arg2 <= 0.0)\n"
-    "    {\n"
-    "        tmp = DBL_MIN;\n"
-    "        return tmp;\n"
-    "    }\n"
+    "        return CreateDoubleError(IllegalArgument);\n"
     "    if (arg5)\n"
     "    {\n"
     "        if (arg0< arg3)\n"
@@ -5721,67 +3957,19 @@ void OpBetainv::GenSlidingWindowFunction(
     outputstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 3, 5 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss << "    double tmp0,tmp1,tmp2,tmp3,tmp4;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss <<"\n    ";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "{\n";
-        }
-
-        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        tmp"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        tmp"<<i<<"=\n";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n}\n";
-        }
-        else
-        {
-            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss <<";\n";
-        }
-    }
+    GenerateArg( "tmp0", 0, vSubArguments, ss );
+    GenerateArg( "tmp1", 1, vSubArguments, ss );
+    GenerateArg( "tmp2", 2, vSubArguments, ss );
+    GenerateArgWithDefault( "tmp3", 3, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "tmp4", 4, 1, vSubArguments, ss );
     ss << "    if (tmp0 < 0.0 || tmp0 >= 1.0 ||";
     ss << "tmp3 == tmp4 || tmp1 <= 0.0 || tmp2 <= 0.0)\n";
     ss << "    {\n";
-    ss << "        return DBL_MIN;\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    }\n";
     ss << "    if (tmp0 == 0.0)\n";
     ss << "        return 0.0;\n";
@@ -5791,7 +3979,7 @@ void OpBetainv::GenSlidingWindowFunction(
     ss << "        double fVal = lcl_IterateInverseBetaInv";
     ss << "(tmp0, tmp1, tmp2, 0.0, 1.0, &bConvError);\n";
     ss << "        if(bConvError)\n";
-    ss << "            return DBL_MIN;\n";
+    ss << "            return CreateDoubleError(NoConvergence);\n";
     ss << "        else\n";
     ss << "            return (tmp3 + fVal*(tmp4 - tmp3));\n";
     ss << "    }";
@@ -5800,248 +3988,41 @@ void OpBetainv::GenSlidingWindowFunction(
 void OpDevSq::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
-        GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-        ss << "{\n";
-        ss << "    int gid0 = get_global_id(0);\n";
-        ss << "    double vSum = 0.0;\n";
-        ss << "    double vMean = 0.0;\n";
-        ss << "    int cnt = 0;\n";
-        for(size_t i = 0; i < vSubArguments.size(); i++ )
-        {
-        ss << "    double arg" << i << " = 0.0;\n";
-        FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-        const formula::DoubleVectorRefToken* pCurDVR =
-            static_cast<const formula::DoubleVectorRefToken* >(pCur);
-        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
-        ss << "    for(int i = ";
-        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan(arg" << i << ") || (i >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << i << " = 0.0;\n";
-            ss << "            --cnt;\n";
-            ss << "        }\n";
-            ss << "        ++cnt;\n";
-            ss << "        vSum += arg" << i << ";\n";
-            ss << "    }\n";
-        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-            ss << "0; i < gid0 + " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan(arg" << i << ") || (i >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << i << " = 0.0;\n";
-            ss << "            --cnt;\n";
-            ss << "        }\n";
-            ss << "        ++cnt;\n";
-            ss << "        vSum += arg" << i << ";\n";
-            ss << "    }\n";
-        } else if (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan(arg" << i << ") || (i >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << i << " = 0.0;\n";
-            ss << "            --cnt;\n";
-            ss << "        }\n";
-            ss << "        ++cnt;\n";
-            ss << "        vSum += arg" << i << ";\n";
-            ss << "    }\n";
-        } else {
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan(arg" << i << ") || (i + gid0 >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << i << " = 0.0;\n";
-            ss << "            --cnt;\n";
-            ss << "        }\n";
-            ss << "        ++cnt;\n";
-            ss << "        vSum += arg" << i << ";\n";
-            ss << "    }\n";
-        }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pTVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if(isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ") || gid0 >= " << pTVR->GetArrayLength() << ")\n";
-            ss << "        arg" << i << " = 0;\n    else\n";
-            ss << "        arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    cnt++;\n";
-            ss << "    vSum += arg" << i << ";\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if(isnan ( ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        arg" << i << " = 0;\n    else\n";
-            ss << "        arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    cnt++;\n";
-            ss << "    vSum += arg" << i << ";\n";
-        }
-        else
-        {
-            ss << "    arg" << i << " = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    cnt++;\n";
-            ss << "    vSum += arg" << i << ";\n";
-        }
-        }
-        ss << "    vMean = vSum / cnt;\n";
-        ss << "    vSum = 0.0;\n";
-        for(size_t k = 0; k < vSubArguments.size(); k++ )
-        {
-        FormulaToken* pCur = vSubArguments[k]->GetFormulaToken();
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-        const formula::DoubleVectorRefToken* pCurDVR =
-            static_cast<const formula::DoubleVectorRefToken* >(pCur);
-        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
-        ss << "    for(int i = ";
-        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan( arg" << k << " ) || (i >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << k << " = vXMean;\n";
-            ss << "        }\n";
-            ss << "        vSum += pow( arg" << k << " - vMean, 2 );\n";
-            ss << "    }\n";
-        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-            ss << "0; i < gid0 + " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan( arg" << k << ") || (i >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << k << " = vMean;\n";
-            ss << "        }\n";
-            ss << "        vSum += pow( arg" << k << " - vMean, 2 );\n";
-            ss << "    }\n";
-        } else if (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan(arg" << k << ") || (i >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << k << " = vMean;\n";
-            ss << "        }\n";
-            ss << "        vSum += pow( arg" << k << " - vMean, 2 );\n";
-            ss << "    }\n";
-        } else {
-            ss << "0; i < " << nCurWindowSize << "; i++) {\n";
-            ss << "        arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if(isnan(arg" << k << ") || (i + gid0 >= ";
-            ss << pCurDVR->GetArrayLength() << ")) {\n";
-            ss << "            arg" << k << " = vMean;\n";
-            ss << "        }\n";
-            ss << "        vSum += pow( arg" << k << " - vMean, 2 );\n";
-            ss << "    }\n";
-        }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pTVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if(isnan(";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef();
-            ss << ") || gid0 >= " << pTVR->GetArrayLength() << ")\n";
-            ss << "        arg" << k << " = vMean;\n    else\n";
-            ss << "        arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef()<<";\n";
-            ss << "    vSum += pow( arg" << k << " - vMean, 2 );\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    if(isnan(arg" << k << "))\n";
-            ss << "        arg" << k << " = vMean;\n";
-            ss << "    vSum += pow( arg" << k << " - vMean, 2 );\n";
-        }
-        else
-        {
-            ss << "    arg" << k << " = ";
-            ss << vSubArguments[k]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "    vSum += pow( arg" << k << " - vMean, 2 );\n";
-        }
-        }
-        ss << "    return vSum;\n";
-        ss << "}";
+    CHECK_PARAMETER_COUNT( 1, 30 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double vSum = 0.0;\n";
+    ss << "    double vMean = 0.0;\n";
+    ss << "    int cnt = 0;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan (arg))\n"
+        "        {\n"
+        "            vSum += arg;\n"
+        "            ++cnt;\n"
+        "        }\n"
+        );
+    ss << "    vMean = vSum / cnt;\n";
+    ss << "    vSum = 0.0;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan (arg))\n"
+        "            vSum += ( arg - vMean ) * ( arg - vMean );\n"
+        );
+    ss << "    return vSum;\n";
+    ss << "}\n";
 }
+
 void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 4, 4 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    double arg0,arg1,arg2,arg3;\n";
-
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
-            }
-            else {
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-            }
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            const formula::SingleVectorRefToken* pSVR =
-                static_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-            ss << "    {\n";
-            ss << "        if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "            arg"<<i<<"= 0;\n";
-            ss << "        else\n";
-            ss << "            arg"<<i<<"=";
-            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"= 0;\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-            ss << "    if (isnan(";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg"<<i<<"= 0;\n";
-            ss << "    else\n";
-            ss << "        arg"<<i<<"=";
-            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-        }
-    }
+    GenerateArg( 0, vSubArguments, ss );
+    GenerateArg( 1, vSubArguments, ss );
+    GenerateArg( 2, vSubArguments, ss );
+    GenerateArg( 3, vSubArguments, ss );
     ss << "    double N1=floor(arg3);\n"
     "    double M1=floor(arg2);\n"
     "    double n1=floor(arg1);\n"
@@ -6051,8 +4032,7 @@ void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
     "    if( (x1 < 0.0) || (n1 < x1) || (M1 < x1) || (N1 < n1) ||"
     "(N1 < M1) || (x1 < n1 - N1 + M1) )\n"
     "    {\n"
-    "        tmp = DBL_MIN;\n"
-    "        return tmp;\n"
+    "        return CreateDoubleError(IllegalArgument);\n"
     "    }\n"
     "    num[0]=M1;\n"
     "    num[1]=x1;\n"
@@ -6080,6 +4060,32 @@ void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
     ss << "-num[1]-num[2]-num[4]-num[5]-num[6]));\n";
     ss << "    return tmp;\n";
     ss << "}\n";
+}
+
+void OpAveDev:: GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    CHECK_PARAMETER_COUNT( 1, 30 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double sum=0.0;\n";
+    ss << "    double totallength=0;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan(arg))\n"
+        "        {\n"
+        "            sum += arg;\n"
+        "            ++totallength;\n"
+        "        }\n"
+        );
+    ss << "    double mean = sum / totallength;\n";
+    ss << "    sum = 0.0;\n";
+    GenerateRangeArgs( vSubArguments, ss,
+        "        if(!isnan(arg))\n"
+        "            sum += fabs(arg-mean);\n"
+        );
+    ss << "    return sum/totallength;\n";
+    ss << "}";
 }
 
 namespace {
@@ -8088,112 +6094,6 @@ void OpStDevPA::GenSlidingWindowFunction(outputstream &ss,
     ss << "}\n";
 }
 
-void OpAveDev:: GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double sum=0.0;\n";
-    ss << "    double length;\n";
-    ss << "    double totallength=0;\n";
-    ss << "    double tmp = 0;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    length="<<nCurWindowSize;
-            ss << ";\n";
-            ss << "    for (int i = ";
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            length-=1.0;\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss << "        sum +=  arg"<<i<<";\n";
-            ss << "    }\n";
-            ss << "    totallength +=length;\n";
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    tmp = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    if(!isnan(tmp))\n";
-            ss << "    {\n";
-            ss << "        sum += tmp;\n";
-            ss << "        totallength +=1;\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-           ss << "    tmp = ";
-           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-           ss << ";\n";
-           ss << "    sum += tmp;\n";
-           ss << "    totallength +=1;\n";
-        }
-    }
-    ss << "    double mean = sum / totallength;\n";
-    ss << "    sum = 0.0;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "        if(isnan(arg"<<i<<")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << "            continue;\n";
-            ss << "        }\n";
-            ss << "        sum +=  fabs(arg"<<i<<"-mean);\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
-        {
-            ss << "    tmp = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "    if(!isnan(tmp))\n";
-            ss << "    {\n";
-            ss << "        sum += fabs(tmp-mean);\n";
-            ss << "    }\n";
-        }
-        else if (pCur->GetType() == formula::svDouble)
-        {
-           ss << "    tmp = ";
-           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-           ss << ";\n";
-           ss << "    sum += fabs(tmp-mean);\n";
-        }
-    }
-    ss << "    tmp=sum/totallength;\n";
-    ss << "    return tmp;\n";
-    ss << "}";
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

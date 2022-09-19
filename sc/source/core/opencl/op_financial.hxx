@@ -167,6 +167,8 @@ class Fvschedule: public Normal
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override {return "Fvschedule"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class Cumipmt: public Normal
@@ -219,6 +221,8 @@ class MIRR: public Normal
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual bool canHandleMultiVector() const override { return true; }
+    virtual std::string BinFuncName() const override { return "MIRR"; }
 };
 
 class OpEffective:public Normal
@@ -331,6 +335,7 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "NPV"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpPrice: public Normal

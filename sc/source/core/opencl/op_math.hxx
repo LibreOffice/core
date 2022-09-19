@@ -314,6 +314,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
 
     virtual std::string BinFuncName() const override { return "SumSQ"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpCoth: public OpMathOneArgument
@@ -480,6 +481,7 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "SeriesSum"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 class OpSumIf: public Normal
 {
