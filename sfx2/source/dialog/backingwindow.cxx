@@ -172,9 +172,8 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mbLocalViewInitialized(false)
     , mbInitControls(false)
 {
-    // init background
+    // init background, undo InterimItemWindow defaults for this widget
     SetPaintTransparent(false);
-    SetBackground(svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
 
     // square action button
     auto nHeight = mxFilter->get_preferred_size().getHeight();
@@ -362,6 +361,7 @@ void BackingWindow::ApplyStyleSettings()
 
     mxAllButtonsBox->set_background(aButtonsBackground);
     mxSmallButtonsBox->set_background(aButtonsBackground);
+    SetBackground(aButtonsBackground);
 
     // compute the menubar height
     sal_Int32 nMenuHeight = 0;
