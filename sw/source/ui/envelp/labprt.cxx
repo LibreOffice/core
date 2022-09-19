@@ -26,7 +26,7 @@
 
 SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)
-    , pPrinter(nullptr)
+    , m_pPrinter(nullptr)
     , m_xPageButton(m_xBuilder->weld_radio_button("entirepage"))
     , m_xSingleButton(m_xBuilder->weld_radio_button("singlelabel"))
     , m_xSingleGrid(m_xBuilder->weld_widget("singlegrid"))
@@ -54,20 +54,20 @@ SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pCont
 
 SwLabPrtPage::~SwLabPrtPage()
 {
-    pPrinter.disposeAndClear();
+    m_pPrinter.disposeAndClear();
 }
 
 IMPL_LINK( SwLabPrtPage, PrtSetupHdl, weld::Button&, rButton, void )
 {
     // Call printer setup
-    if (!pPrinter)
-        pPrinter = VclPtr<Printer>::Create();
+    if (!m_pPrinter)
+        m_pPrinter = VclPtr<Printer>::Create();
 
     PrinterSetupDialog aDlg(GetFrameWeld());
-    aDlg.SetPrinter(pPrinter);
+    aDlg.SetPrinter(m_pPrinter);
     aDlg.run();
     rButton.grab_focus();
-    m_xPrinterInfo->set_label(pPrinter->GetName());
+    m_xPrinterInfo->set_label(m_pPrinter->GetName());
 }
 
 IMPL_LINK(SwLabPrtPage, CountHdl, weld::Toggleable&, rButton, void)
@@ -138,10 +138,10 @@ void SwLabPrtPage::Reset(const SfxItemSet* )
         m_xSingleButton->set_active(true);
     }
 
-    if (pPrinter)
+    if (m_pPrinter)
     {
         // show printer
-        m_xPrinterInfo->set_label(pPrinter->GetName());
+        m_xPrinterInfo->set_label(m_pPrinter->GetName());
     }
     else
         m_xPrinterInfo->set_label(Printer::GetDefaultPrinterName());

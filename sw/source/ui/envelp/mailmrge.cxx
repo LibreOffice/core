@@ -93,8 +93,8 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  )
 {
     //call the parent to enable selection mode
     Sequence <Any> aSelection;
-    if(rParent.pImpl->xSelSupp.is())
-        rParent.pImpl->xSelSupp->getSelection() >>= aSelection;
+    if(rParent.m_pImpl->xSelSupp.is())
+        rParent.m_pImpl->xSelSupp->getSelection() >>= aSelection;
 
     bool bEnable = aSelection.hasElements();
     rParent.m_xMarkedRB->set_sensitive(bEnable);
@@ -118,9 +118,9 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                                const uno::Reference< XConnection>& _xConnection,
                                Sequence< Any > const * pSelection)
     : SfxDialogController(pParent, "modules/swriter/ui/mailmerge.ui", "MailmergeDialog")
-    , pImpl(new SwMailMergeDlg_Impl)
-    , rSh(rShell)
-    , nMergeType(DBMGR_MERGE_EMAIL)
+    , m_pImpl(new SwMailMergeDlg_Impl)
+    , m_rSh(rShell)
+    , m_nMergeType(DBMGR_MERGE_EMAIL)
     , m_xBeamerWin(m_xBuilder->weld_container("beamer"))
     , m_xAllRB(m_xBuilder->weld_radio_button("all"))
     , m_xMarkedRB(m_xBuilder->weld_radio_button("selected"))
@@ -202,21 +202,21 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                 m_xBeamerWin->show();
             }
             uno::Reference<XController> xController = m_xFrame->getController();
-            pImpl->xFController.set(xController, UNO_QUERY);
-            if(pImpl->xFController.is()) {
-                uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
-                pImpl->xSelSupp.set(xCtrl, UNO_QUERY);
-                if(pImpl->xSelSupp.is()) {
-                    pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
-                    pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );
+            m_pImpl->xFController.set(xController, UNO_QUERY);
+            if(m_pImpl->xFController.is()) {
+                uno::Reference< awt::XControl > xCtrl = m_pImpl->xFController->getCurrentControl(  );
+                m_pImpl->xSelSupp.set(xCtrl, UNO_QUERY);
+                if(m_pImpl->xSelSupp.is()) {
+                    m_pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
+                    m_pImpl->xSelSupp->addSelectionChangeListener(  m_pImpl->xChgLstnr );
                 }
             }
         }
     }
 
-    pModOpt = SW_MOD()->GetModuleConfig();
+    m_pModOpt = SW_MOD()->GetModuleConfig();
 
-    MailTextFormats nMailingMode(pModOpt->GetMailingFormats());
+    MailTextFormats nMailingMode(m_pModOpt->GetMailingFormats());
     m_xFormatSwCB->set_active(bool(nMailingMode & MailTextFormats::OFFICE));
     m_xFormatHtmlCB->set_active(bool(nMailingMode & MailTextFormats::HTML));
     m_xFormatRtfCB->set_active(bool(nMailingMode & MailTextFormats::RTF));
@@ -237,7 +237,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     OutputTypeHdl(bIsPrintable ? *m_xPrinterRB : *m_xFileRB);
 
     m_xGenerateFromDataBaseCB->connect_toggled(LINK(this, SwMailMergeDlg, FilenameHdl));
-    bool bColumn = pModOpt->IsNameFromColumn();
+    bool bColumn = m_pModOpt->IsNameFromColumn();
     if(bColumn)
         m_xGenerateFromDataBaseCB->set_active(true);
 
@@ -255,7 +255,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     m_xFromNF->set_max(SAL_MAX_INT32);
     m_xToNF->set_max(SAL_MAX_INT32);
 
-    SwDBManager* pDBManager = rSh.GetDBManager();
+    SwDBManager* pDBManager = m_rSh.GetDBManager();
     if(_xConnection.is())
         SwDBManager::GetColumnNames(*m_xAddressFieldLB, _xConnection, rTableName);
     else
@@ -268,7 +268,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
 
     m_xAddressFieldLB->set_active_text("EMAIL");
 
-    OUString sPath(pModOpt->GetMailingPath());
+    OUString sPath(m_pModOpt->GetMailingPath());
     if(sPath.isEmpty()) {
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();
@@ -286,8 +286,8 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     }
     else
     {
-        m_xColumnLB->set_active_text(pModOpt->GetNameFromColumn());
-        m_xPasswordLB->set_active_text(pModOpt->GetPasswordFromColumn());
+        m_xColumnLB->set_active_text(m_pModOpt->GetNameFromColumn());
+        m_xPasswordLB->set_active_text(m_pModOpt->GetPasswordFromColumn());
     }
 
     if (m_xAddressFieldLB->get_active() == -1)
@@ -459,7 +459,7 @@ bool SwMailMergeDlg::AskUserFilename() const
 
 OUString SwMailMergeDlg::GetURLfromPath() const
 {
-    SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+    SfxMedium* pMedium = m_rSh.GetView().GetDocShell()->GetMedium();
     INetURLObject aAbs;
     if( pMedium )
         aAbs = pMedium->GetURLObject();
@@ -474,29 +474,29 @@ OUString SwMailMergeDlg::GetURLfromPath() const
 
 bool SwMailMergeDlg::ExecQryShell()
 {
-    if(pImpl->xSelSupp.is()) {
-        pImpl->xSelSupp->removeSelectionChangeListener( pImpl->xChgLstnr );
+    if(m_pImpl->xSelSupp.is()) {
+        m_pImpl->xSelSupp->removeSelectionChangeListener( m_pImpl->xChgLstnr );
     }
 
     if (m_xPrinterRB->get_active())
-        nMergeType = DBMGR_MERGE_PRINTER;
+        m_nMergeType = DBMGR_MERGE_PRINTER;
     else {
-        nMergeType = DBMGR_MERGE_FILE;
-        pModOpt->SetMailingPath( GetURLfromPath() );
-        pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
-        pModOpt->SetIsFileEncryptedFromColumn(m_xPasswordCB->get_active());
+        m_nMergeType = DBMGR_MERGE_FILE;
+        m_pModOpt->SetMailingPath( GetURLfromPath() );
+        m_pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
+        m_pModOpt->SetIsFileEncryptedFromColumn(m_xPasswordCB->get_active());
 
         if (!AskUserFilename())
         {
-            pModOpt->SetNameFromColumn(m_xColumnLB->get_active_text());
-            pModOpt->SetPasswordFromColumn(m_xPasswordLB->get_active_text());
+            m_pModOpt->SetNameFromColumn(m_xColumnLB->get_active_text());
+            m_pModOpt->SetPasswordFromColumn(m_xPasswordLB->get_active_text());
             if (m_xFilterLB->get_active() != -1)
                 m_sSaveFilter = m_xFilterLB->get_active_id();
             m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
-            pModOpt->SetNameFromColumn(OUString());
-            pModOpt->SetPasswordFromColumn(OUString());
+            m_pModOpt->SetNameFromColumn(OUString());
+            m_pModOpt->SetPasswordFromColumn(OUString());
             //start save as dialog
             OUString sFilter;
             m_sFilename = SwMailMergeHelper::CallSaveAsDialog(m_xDialog.get(), sFilter);
@@ -521,11 +521,11 @@ bool SwMailMergeDlg::ExecQryShell()
     } else if (m_xAllRB->get_active() )
         m_aSelection.realloc(0);    // Empty selection = insert all
     else {
-        if(pImpl->xSelSupp.is()) {
+        if(m_pImpl->xSelSupp.is()) {
             //update selection
             uno::Reference< XRowLocate > xRowLocate(GetResultSet(),UNO_QUERY);
             uno::Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
-            pImpl->xSelSupp->getSelection() >>= m_aSelection;
+            m_pImpl->xSelSupp->getSelection() >>= m_aSelection;
             if ( xRowLocate.is() ) {
                 for (Any& rRow : asNonConstRange(m_aSelection)) {
                     if ( xRowLocate->moveToBookmark(rRow) )
@@ -534,12 +534,12 @@ bool SwMailMergeDlg::ExecQryShell()
             }
         }
     }
-    IDocumentDeviceAccess& rIDDA = rSh.getIDocumentDeviceAccess();
+    IDocumentDeviceAccess& rIDDA = m_rSh.getIDocumentDeviceAccess();
     SwPrintData aPrtData( rIDDA.getPrintData() );
     aPrtData.SetPrintSingleJobs(m_xSingleJobsCB->get_active());
     rIDDA.setPrintData(aPrtData);
 
-    pModOpt->SetSinglePrintJob(m_xSingleJobsCB->get_active());
+    m_pModOpt->SetSinglePrintJob(m_xSingleJobsCB->get_active());
 
     MailTextFormats nMailingMode = MailTextFormats::NONE;
 
@@ -549,7 +549,7 @@ bool SwMailMergeDlg::ExecQryShell()
         nMailingMode |= MailTextFormats::HTML;
     if (m_xFormatRtfCB->get_active())
         nMailingMode |= MailTextFormats::RTF;
-    pModOpt->SetMailingFormats(nMailingMode);
+    m_pModOpt->SetMailingFormats(nMailingMode);
     return true;
 }
 
@@ -557,7 +557,7 @@ OUString SwMailMergeDlg::GetTargetURL() const
 {
     if( AskUserFilename() )
         return m_sFilename;
-    OUString sPath( pModOpt->GetMailingPath() );
+    OUString sPath( m_pModOpt->GetMailingPath() );
     if( sPath.isEmpty() ) {
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();
@@ -584,9 +584,9 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl, weld::Button&, void)
 uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 {
     uno::Reference< XResultSet >  xResSetClone;
-    if ( pImpl->xFController.is() ) {
+    if ( m_pImpl->xFController.is() ) {
         // we create a clone to do the task
-        uno::Reference< XResultSetAccess > xResultSetAccess( pImpl->xFController->getModel(),UNO_QUERY);
+        uno::Reference< XResultSetAccess > xResultSetAccess( m_pImpl->xFController->getModel(),UNO_QUERY);
         if ( xResultSetAccess.is() )
             xResSetClone = xResultSetAccess->createResultSet();
     }

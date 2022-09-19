@@ -45,12 +45,12 @@ class SwMailMergeDlg final : public SfxDialogController
 {
     friend class SwXSelChgLstnr_Impl;
 
-    std::unique_ptr<SwMailMergeDlg_Impl> pImpl;
+    std::unique_ptr<SwMailMergeDlg_Impl> m_pImpl;
 
-    SwWrtShell&     rSh;
-    SwModuleOptions* pModOpt;
+    SwWrtShell&     m_rSh;
+    SwModuleOptions* m_pModOpt;
 
-    DBManagerOptions nMergeType;
+    DBManagerOptions m_nMergeType;
     css::uno::Sequence< css::uno::Any >        m_aSelection;
     css::uno::Reference< css::frame::XFrame2 > m_xFrame;
 
@@ -122,7 +122,7 @@ public:
         css::uno::Sequence< css::uno::Any > const * pSelection);
     virtual ~SwMailMergeDlg() override;
 
-    DBManagerOptions GetMergeType() const { return nMergeType; }
+    DBManagerOptions GetMergeType() const { return m_nMergeType; }
 
     bool IsSaveSingleDoc() const { return m_xSaveSingleDocRB->get_active(); }
     bool IsGenerateFromDataBase() const { return m_xGenerateFromDataBaseCB->get_active(); }

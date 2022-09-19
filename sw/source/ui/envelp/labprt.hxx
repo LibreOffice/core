@@ -28,7 +28,7 @@ class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage
 {
-    VclPtr<Printer> pPrinter; // for the shaft setting - unfortunately
+    VclPtr<Printer> m_pPrinter; // for the shaft setting - unfortunately
 
     std::unique_ptr<weld::RadioButton> m_xPageButton;
     std::unique_ptr<weld::RadioButton> m_xSingleButton;
@@ -58,7 +58,7 @@ public:
     void FillItem(SwLabItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
-    Printer* GetPrt() { return pPrinter; }
+    Printer* GetPrt() { return m_pPrinter; }
 };
 
 #endif

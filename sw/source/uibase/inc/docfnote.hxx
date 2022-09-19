@@ -25,7 +25,7 @@ class SwWrtShell;
 
 class SwFootNoteOptionDlg final : public SfxTabDialogController
 {
-    SwWrtShell& rSh;
+    SwWrtShell& m_rSh;
 
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 

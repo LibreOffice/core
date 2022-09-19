@@ -37,7 +37,7 @@
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
     : SfxTabDialogController(pParent, "modules/swriter/ui/footendnotedialog.ui", "FootEndnoteDialog")
-    , rSh( rS )
+    , m_rSh( rS )
 {
     RemoveResetButton();
 
@@ -49,12 +49,12 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
 
 void SwFootNoteOptionDlg::PageCreated(const OString& /*rId*/, SfxTabPage &rPage)
 {
-    static_cast<SwEndNoteOptionPage&>(rPage).SetShell(rSh);
+    static_cast<SwEndNoteOptionPage&>(rPage).SetShell(m_rSh);
 }
 
 IMPL_LINK(SwFootNoteOptionDlg, OkHdl, weld::Button&, rBtn, void)
 {
-    SfxItemSetFixed<1, 1> aDummySet(rSh.GetAttrPool());
+    SfxItemSetFixed<1, 1> aDummySet(m_rSh.GetAttrPool());
     SfxTabPage *pPage = GetTabPage("footnotes");
     if ( pPage )
         pPage->FillItemSet( &aDummySet );
