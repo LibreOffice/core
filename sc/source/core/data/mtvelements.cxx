@@ -176,16 +176,16 @@ ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t
     {
         case sc::element_type_numeric:
             // Numeric cell
-            return ScRefCellValue(sc::numeric_block::at(*itPos->data, nOffset));
+            return ScRefCellValue(sc::numeric_block::get_value(*itPos->data, nOffset));
         case sc::element_type_string:
             // String cell
             return ScRefCellValue(&sc::string_block::at(*itPos->data, nOffset));
         case sc::element_type_edittext:
             // Edit cell
-            return ScRefCellValue(sc::edittext_block::at(*itPos->data, nOffset));
+            return ScRefCellValue(sc::edittext_block::get_value(*itPos->data, nOffset));
         case sc::element_type_formula:
             // Formula cell
-            return ScRefCellValue(sc::formula_block::at(*itPos->data, nOffset));
+            return ScRefCellValue(sc::formula_block::get_value(*itPos->data, nOffset));
         default:
             ;
     }
