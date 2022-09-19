@@ -173,7 +173,7 @@ public:
     virtual void StartRun( const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false ) = 0;
 
     /// End of the text run.
-    virtual void EndRun( const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false ) = 0;
+    virtual void EndRun( const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen, bool bLastRun = false ) = 0;
 
     /// Called before we start outputting the attributes.
     virtual void StartRunProperties() = 0;
@@ -369,12 +369,6 @@ public:
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
         const SvxBrushItem* pBrush) = 0; // #i120928 export graphic of bullet
-
-    /// Output content control start.
-    virtual void StartContentControl(const SwFormatContentControl& /*rFormatContentControl*/) {}
-
-    /// Output content control end.
-    virtual void EndContentControl( const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/ ) {}
 
 protected:
 

@@ -1969,7 +1969,7 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
             eChrSet = eNextChrSet;
             aAttrIter.NextPos();
 
-            AttrOutput().EndRun( nullptr, 0 );
+            AttrOutput().EndRun( nullptr, 0, -1 );
 
         } while( nCurrentPos < nEnd );
 

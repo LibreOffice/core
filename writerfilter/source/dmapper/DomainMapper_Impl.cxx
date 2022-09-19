@@ -892,6 +892,14 @@ void DomainMapper_Impl::PopSdt()
         xCursor->goRight(1, /*bExpand=*/false);
     }
     xCursor->gotoRange(xEnd, /*bExpand=*/true);
+
+    std::optional<OUString> oData = m_pSdtHelper->getValueFromDataBinding();
+    if (oData.has_value() && m_pSdtHelper->getControlType() != SdtControlType::datePicker)
+    {
+        // Data binding has a value for us, prefer that over the in-document value.
+        xCursor->setString(*oData);
+    }
+
     uno::Reference<text::XTextContent> xContentControl(
         m_xTextFactory->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);

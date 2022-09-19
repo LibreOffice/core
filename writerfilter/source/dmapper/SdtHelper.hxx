@@ -116,8 +116,6 @@ class SdtHelper final : public virtual SvRefBase
                             css::uno::Reference<css::awt::XControlModel> const& xControlModel,
                             const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 
-    std::optional<OUString> getValueFromDataBinding();
-
     void loadPropertiesXMLs();
 
     /// <w:placeholder>'s <w:docPart w:val="...">.
@@ -204,6 +202,8 @@ public:
 
     void SetColor(const OUString& rColor);
     const OUString& GetColor() const;
+
+    std::optional<OUString> getValueFromDataBinding();
 };
 
 } // namespace writerfilter::dmapper

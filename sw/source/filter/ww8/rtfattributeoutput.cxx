@@ -419,7 +419,8 @@ void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, sal_Int32 /
     OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
 }
 
-void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/, bool /*bLastRun*/)
+void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/, sal_Int32 /*nLen*/,
+                                bool /*bLastRun*/)
 {
     m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);

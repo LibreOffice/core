@@ -75,7 +75,8 @@ public:
                   bool bSingleEmptyRun = false) override;
 
     /// End of the text run.
-    void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
+    void EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen,
+                bool bLastRun = false) override;
 
     /// Called before we start outputting the attributes.
     void StartRunProperties() override;

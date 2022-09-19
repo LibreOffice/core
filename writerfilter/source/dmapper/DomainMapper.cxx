@@ -1111,11 +1111,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
                 if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
                 {
-                    // The plain text && data binding case needs more work before it can be enabled.
-                    if (m_pImpl->m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
-                    {
-                        m_pImpl->PopSdt();
-                    }
+                    m_pImpl->PopSdt();
                 }
             }
 
@@ -2781,11 +2777,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
         if (m_pImpl->m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
         {
-            if (m_pImpl->m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
-            {
-                m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-                break;
-            }
+            m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            break;
         }
         enableInteropGrabBag("ooxml:CT_SdtPr_text");
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -3786,7 +3779,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             return;
         }
     }
-    else if ((m_pImpl->m_pSdtHelper->GetSdtType() != NS_ooxml::LN_CT_SdtRun_sdtContent || !m_pImpl->m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty()) && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
+    else if (m_pImpl->m_pSdtHelper->GetSdtType() != NS_ooxml::LN_CT_SdtRun_sdtContent && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
     {
         m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
         if (bNewLine)

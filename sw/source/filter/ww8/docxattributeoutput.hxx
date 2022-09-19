@@ -185,7 +185,7 @@ public:
     virtual void StartRun( const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false ) override;
 
     /// End of the text run.
-    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
+    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen, bool bLastRun = false) override;
 
     /// Called before we start outputting the attributes.
     virtual void StartRunProperties() override;
@@ -403,12 +403,6 @@ public:
     void EndParaSdtBlock();
 
     void WriteFloatingTable(ww8::Frame const* pParentFrame);
-
-    /// See AttributeOutputBase::StartContentControl().
-    void StartContentControl(const SwFormatContentControl& rFormatContentControl) override;
-
-    /// See AttributeOutputBase::EndContentControl().
-    void EndContentControl( const SwTextNode& rNode, sal_Int32 nPos ) override;
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.
@@ -913,9 +907,6 @@ private:
     std::stack< std::vector<ww8::Frame> > m_aFramesOfParagraph;
     o3tl::sorted_vector<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
-
-    sal_Int32 m_nCloseContentControlInThisRun = 0;
-    sal_Int32 m_nCloseContentControlInPreviousRun = 0;
 
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;

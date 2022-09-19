@@ -1099,7 +1099,7 @@ void WW8AttributeOutput::OnTOXEnding()
     mbOnTOXEnding = true;
 }
 
-void WW8AttributeOutput::EndRun( const SwTextNode* /*pNode*/, sal_Int32 nPos, bool bLastRun )
+void WW8AttributeOutput::EndRun( const SwTextNode* /*pNode*/, sal_Int32 nPos, sal_Int32 /*nLen*/, bool bLastRun )
 {
     /// Insert bookmarks ended after this run
     auto aRange = m_aBookmarksOfParagraphEnd.equal_range(nPos);
@@ -2573,7 +2573,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 FieldFlags::CmdEnd );
             if (GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF)
             {
-                EndRun(nullptr, -42, true);
+                EndRun(nullptr, -42, -1, true);
             }
         }
     }

@@ -58,7 +58,7 @@ public:
     /// End of the text run.
     ///
     /// No-op for binary filters.
-    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
+    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen, bool bLastRun = false) override;
 
     /// Before we start outputting the attributes.
     virtual void StartRunProperties() override;

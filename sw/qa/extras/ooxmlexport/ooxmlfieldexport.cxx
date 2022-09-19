@@ -596,7 +596,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtBeforeField)
     loadAndReload("sdt-before-field.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Make sure the field doesn't sneak inside the SDT: the SDT should contain only a single run (there were 6 ones).
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtContent/w:r", 1);
+    assertXPath(pXmlDoc, "//w:p/w:sdt/w:sdtContent/w:r/w:t", 1);
+    assertXPath(pXmlDoc, "//w:p/w:r/w:fldChar", 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo81946)
@@ -901,36 +902,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf104823.docx";
     loadURL(aURL, nullptr);
 
-    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
-        mxComponent, css::uno::UNO_QUERY_THROW);
-    auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
-
-    // FIXME: seems order of fields is different than in source document
-    // so feel free to modify testcase if order is changed
-
-    // First field: content from core properties
-    uno::Reference<text::XTextField> xField1(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    // First paragraph: content from core properties
+    uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);
+    auto xContentControl1 = getProperty<uno::Reference<text::XText>>(getRun(xParagraph1, 2), "ContentControl");
     // Check field value (it should be value from data source) and set new
-    CPPUNIT_ASSERT_EQUAL(OUString("True Core Property Value"), xField1->getPresentation(false));
-    uno::Reference<beans::XPropertySet> xField1Props(xField1, uno::UNO_QUERY);
-    xField1Props->setPropertyValue("Content", uno::Any(OUString("New Core Property Value")));
+    CPPUNIT_ASSERT_EQUAL(OUString("True Core Property Value"), xContentControl1->getString());
+    xContentControl1->setString("New Core Property Value");
 
-    // Third field: content from custom properties
-    uno::Reference<text::XTextField> xField2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    // Third paragraph: content from custom properties
+    uno::Reference<text::XTextRange> xParagraph3 = getParagraph(3);
+    auto xContentControl3 = getProperty<uno::Reference<text::XText>>(getRun(xParagraph3, 2), "ContentControl");
     // Check field value (it should be value from data source) and set new
-    CPPUNIT_ASSERT_EQUAL(OUString("True Custom XML Value"), xField2->getPresentation(false));
-    uno::Reference<beans::XPropertySet> xField2Props(xField2, uno::UNO_QUERY);
-    xField2Props->setPropertyValue("Content", uno::Any(OUString("New Custom XML Value")));
+    CPPUNIT_ASSERT_EQUAL(OUString("True Custom XML Value"), xContentControl3->getString());
+    xContentControl3->setString("New Custom XML Value");
 
-    // Second field: content from extended properties
-    uno::Reference<text::XTextField> xField3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+    // Second paragraph: content from extended properties
+    uno::Reference<text::XTextRange> xParagraph2 = getParagraph(2);
+    auto xContentControl2 = getProperty<uno::Reference<text::XText>>(getRun(xParagraph2, 2), "ContentControl");
     // Check field value (it should be value from data source) and set new
-    CPPUNIT_ASSERT_EQUAL(OUString("True Extended Property Value"), xField3->getPresentation(false));
-    uno::Reference<beans::XPropertySet> xField3Props(xField3, uno::UNO_QUERY);
-    xField3Props->setPropertyValue("Content", uno::Any(OUString("New Extended Property Value")));
+    CPPUNIT_ASSERT_EQUAL(OUString("True Extended Property Value"), xContentControl2->getString());
+    xContentControl2->setString("New Extended Property Value");
 
     // Save and check saved data
     save("Office Open XML Text", maTempFile);
