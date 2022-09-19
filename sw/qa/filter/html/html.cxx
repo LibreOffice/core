@@ -78,6 +78,33 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SwFormatFrameSize::SYNCED),
                          static_cast<int>(rSize.GetHeightPercent()));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
+{
+    // Given a document with an image, width set to 100%, height is not set:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "relative-keep-aspect-image.xhtml";
+    uno::Sequence<beans::PropertyValue> aLoadArgs = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+
+    // When loading that file:
+    mxComponent = loadFromDesktop(aURL, OUString(), aLoadArgs);
+
+    // Then make sure that the aspect ratio of the image is kept:
+    auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDocument->GetDocShell()->GetDoc();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormat* pFormat = rFormats[0];
+    const SwFormatFrameSize& rSize = pFormat->GetFrameSize();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 255
+    // - Actual  : 0
+    // i.e. the height had a fixed value, not "keep aspect".
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SwFormatFrameSize::SYNCED),
+                         static_cast<int>(rSize.GetHeightPercent()));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
