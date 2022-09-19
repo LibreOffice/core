@@ -3599,9 +3599,10 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         }
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
-        pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
         if (bUpDown)
         {
+            // move outline position up/down (outline position promote/demote)
+            pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
             const size_t nEntryAbsPos(GetAbsPos(*pCurrentEntry));
             SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;
             if (!bOutlineWithChildren && ((nDir == -1 && nActPos > 0) ||
@@ -3754,8 +3755,44 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         }
         else
         {
+            // move outline left/right (outline level promote/demote)
             if (!pShell->IsProtectedOutlinePara())
-                pShell->OutlineUpDown(bLeft ? -1 : 1);
+            {
+                bool bAllow = true;
+                const SwOutlineNodes& rOutlNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
+                const int nActLevel = rOutlNds[nActPos]->GetTextNode()->GetAttrOutlineLevel();
+                if (!bLeft)
+                {
+                    // disallow if any outline node to demote will exceed MAXLEVEL
+                    SwOutlineNodes::size_type nPos = nActPos;
+                    do
+                    {
+                        int nLevel = rOutlNds[nPos]->GetTextNode()->GetAttrOutlineLevel();
+                        if (nLevel == MAXLEVEL)
+                        {
+                            bAllow = false;
+                            break;
+                        }
+                    } while (bOutlineWithChildren && ++nPos < rOutlNds.size() &&
+                             rOutlNds[nPos]->GetTextNode()->GetAttrOutlineLevel() > nActLevel);
+                }
+                else
+                {
+                    // disallow if trying to promote outline of level 1
+                    if (nActLevel == 1)
+                        bAllow = false;
+                }
+                if (bAllow)
+                {
+                    SwOutlineNodes::size_type nPos = nActPos;
+                    do
+                    {
+                        pShell->SwCursorShell::GotoOutline(nPos);
+                        pShell->OutlineUpDown(bLeft ? -1 : 1);
+                    } while (bOutlineWithChildren && ++nPos < rOutlNds.size() &&
+                             rOutlNds[nPos]->GetTextNode()->GetAttrOutlineLevel() > nActLevel);
+                }
+            }
         }
 
         pShell->ClearMark();
