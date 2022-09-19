@@ -255,12 +255,12 @@ public:
         const std::string&, SubArguments& ) = 0;
 protected:
     // generate code for "double <name> = <value>;" from vSubArguments, svDoubleVectorRef is not supported
-    static void GenerateArg( const char* name, int num, SubArguments& vSubArguments, outputstream& ss );
-    // overload, variable will be named "arg<num>"
-    static void GenerateArg( int num, SubArguments& vSubArguments, outputstream& ss );
+    static void GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss );
+    // overload, variable will be named "arg<arg>"
+    static void GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss );
     // generate code for "double <name> = <value>;" from vSubArguments, if it exists,
     // otherwise set to <def>
-    static void GenerateArgWithDefault( const char* name, int num, double def, SubArguments& vSubArguments,
+    static void GenerateArgWithDefault( const char* name, int arg, double def, SubArguments& vSubArguments,
         outputstream& ss );
     void GenerateFunctionDeclaration( const std::string& sSymName,
         SubArguments& vSubArguments, outputstream& ss );
@@ -272,7 +272,12 @@ protected:
     // overload, handle all arguments
     static void GenerateRangeArgs( SubArguments& vSubArguments, outputstream& ss, const char* code );
     // overload, handle the given argument
-    static void GenerateRangeArg( int num, SubArguments& vSubArguments, outputstream& ss, const char* code );
+    static void GenerateRangeArg( int arg, SubArguments& vSubArguments, outputstream& ss, const char* code );
+    // Generate code that will handle the given two arguments in one loop where n-th element of arg1 and arg2
+    // will be handled at the same time, named 'arg1' and 'arg2'.
+    // Both arguments must be svDoubleRef of the same size.
+    static void GenerateRangeArgPair( int arg1, int arg2, SubArguments& vSubArguments,
+        outputstream& ss, const char* code );
 };
 
 class Normal : public SlidingFunctionBase

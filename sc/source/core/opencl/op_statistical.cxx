@@ -154,311 +154,89 @@ void OpTTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSumSqr2 = 0.0;\n";
     ss << "    double fCount1 = 0.0;\n";
     ss << "    double fCount2 = 0.0;\n";
-    ss << "    double arg1 = 0.0;\n";
-    ss << "    double arg2 = 0.0;\n";
-    ss << "    double mode = 0.0;\n";
-    ss << "    double type = 0.0;\n";
     ss << "    double fT = 0.0;\n";
     ss << "    double fF = 0.0;\n";
-    if(vSubArguments.size() != 4)
-    {
-        ss << "    return DBL_MAX;\n";
-        ss << "}\n";
-        return ;
-    }
-    if(vSubArguments.size() == 4)
-    {
-        FormulaToken *pCur  = vSubArguments[0]->GetFormulaToken();
-        FormulaToken *pCur1 = vSubArguments[1]->GetFormulaToken();
-        FormulaToken *pCur2 = vSubArguments[2]->GetFormulaToken();
-        FormulaToken *pCur3 = vSubArguments[3]->GetFormulaToken();
-        assert(pCur);
-        assert(pCur1);
-        assert(pCur2);
-        assert(pCur3);
-        if(ocPush == vSubArguments[2]->GetFormulaToken()->GetOpCode())
-        {
-            if(pCur2->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken*>(pCur2);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        mode = " ;
-                ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
-                ss << "        if (isnan(mode))\n";
-                ss << "            mode = 0.0;\n";
-                ss << "        else\n";
-                ss << "            mode = floor(mode);\n";
-                ss << "    }\n";
-            }
-            else if(pCur2->GetType() == formula::svDouble)
-            {
-                ss << "    mode = floor(convert_double(";
-                ss << pCur2->GetDouble() << "));\n";
-            }
-            else
-            {
-                ss << "    return DBL_MAX;\n";
-                ss << "}\n";
-                return ;
-            }
-        }
-        else
-        {
-            ss << "    mode = floor(" ;
-            ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ");\n";
-        }
-        ss << "    if(!(mode == 1.0 || mode == 2.0))\n";
-        ss << "        return DBL_MAX;\n";
-        if(ocPush==vSubArguments[3]->GetFormulaToken()->GetOpCode())
-        {
-            if(pCur3->GetType() == formula::svSingleVectorRef)
-            {
-                const formula::SingleVectorRefToken* pSVR =
-                    static_cast< const formula::SingleVectorRefToken*>(pCur3);
-                assert(pSVR);
-                ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
-                ss << "    {\n";
-                ss << "        if (isnan(";
-                ss << vSubArguments[3]->GenSlidingWindowDeclRef() << "))\n";
-                ss << "            type=0.0;\n";
-                ss << "        else\n";
-                ss << "            type=floor(";
-                ss << vSubArguments[3]->GenSlidingWindowDeclRef() << ");\n";
-                ss << "    }\n";
-            }
-            else if(pCur3->GetType() == formula::svDouble)
-            {
-                ss << "    type = floor(convert_double(" << pCur3->GetDouble() <<
-                "));\n";
-            }
-            else
-            {
-                ss << "    return DBL_MAX;\n";
-                ss << "}\n";
-                return ;
-            }
-        }
-        else
-        {
-            ss << "    type=floor(";
-            ss << vSubArguments[3]->GenSlidingWindowDeclRef() << ");\n";
-        }
-        ss << "    if(!(type == 1.0||type == 2.0||type == 3.0))\n";
-        ss << "        return DBL_MAX;\n";
+    GenerateArg( "mode", 2, vSubArguments, ss );
+    GenerateArg( "type", 3, vSubArguments, ss );
+    ss << "    mode = floor(mode);\n";
+    ss << "    type = floor(type);\n";
+    ss << "    if(mode != 1.0 && mode != 2.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    if(type != 1.0 && type != 2.0 && type != 3.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
 
-        if(pCur->GetType() == formula::svDoubleVectorRef &&
-               pCur1->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            const formula::DoubleVectorRefToken* pDVR1 =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur1);
-
-            size_t nCurWindowSize  = pDVR->GetRefRowSize();
-            size_t nCurWindowSize1 = pDVR1->GetRefRowSize();
-
-            if(nCurWindowSize == nCurWindowSize1)
-            {
-                ss << "    if(type == 1.0)\n";
-                ss << "    {\n";
-                ss << "        for (int i = ";
-                if ((!pDVR->IsStartFixed() && pDVR->IsEndFixed()) &&
-                         (!pDVR1->IsStartFixed() && pDVR1->IsEndFixed()))
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "        {\n";
-                }
-                else if ((pDVR->IsStartFixed() && !pDVR->IsEndFixed()) &&
-                             (pDVR1->IsStartFixed() && !pDVR1->IsEndFixed()))
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+"<< nCurWindowSize << "; i++)\n";
-                    ss << "        {\n";
-                }
-                else if ((!pDVR->IsStartFixed() && !pDVR->IsEndFixed()) &&
-                             (!pDVR1->IsStartFixed() && !pDVR1->IsEndFixed()))
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "        {\n";
-                }
-                else if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) &&
-                             (pDVR1->IsStartFixed() && pDVR1->IsEndFixed()))
-                {
-                    ss << "0; i < " << nCurWindowSize << "; i++)\n";
-                    ss << "        {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << nCurWindowSize << "; i++)\n";
-                    ss << "        {\n";
-                    ss << "            break;\n";
-                    ss << "        }";
-                    ss << "        return DBL_MAX;\n";
-                    ss << "    }\n";
-                    ss << "}\n";
-                    return ;
-                }
-
-                ss << "            arg1 = ";
-                ss << vSubArguments[0]->GenSlidingWindowDeclRef(true) << ";\n";
-                ss << "            arg2 = ";
-                ss << vSubArguments[1]->GenSlidingWindowDeclRef(true) << ";\n";
-                ss << "            if (isnan(arg1)||isnan(arg2))\n";
-                ss << "                continue;\n";
-                ss << "            fSum1 += arg1;\n";
-                ss << "            fSum2 += arg2;\n";
-                ss << "            fSumSqr1 += (arg1 - arg2)*(arg1 - arg2);\n";
-                ss << "            fCount1 += 1;\n";
-                ss << "        }\n";
-                ss << "        if(fCount1 < 1.0)\n";
-                ss << "            return DBL_MAX;\n";
-                ss << "        fT = sqrt(fCount1-1.0) * fabs(fSum1 - fSum2)\n";
-                ss << "            /sqrt(fCount1 * fSumSqr1 - (fSum1-fSum2)\n";
-                ss << "             *(fSum1-fSum2));\n";
-                ss << "        fF = fCount1 - 1.0;\n";
-            }
-            else
-            {
-                ss << "    return DBL_MAX;\n";
-                ss << "}\n";
-                return ;
-            }
-        }
-        else
-        {
-            ss << "    return DBL_MAX;\n";
-            ss << "}\n";
-            return ;
-        }
-        ss << "    }\n";
-        ss << "    if(type == 2.0 || type == 3.0)\n";
-        ss << "    {\n";
-
-        if(pCur->GetType() == formula::svDoubleVectorRef &&
-               pCur1->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur);
-            const formula::DoubleVectorRefToken* pDVR1 =
-                static_cast<const formula::DoubleVectorRefToken *>(pCur1);
-
-            size_t nCurWindowSize  = pDVR->GetRefRowSize();
-            size_t nCurWindowSize1 = pDVR1->GetRefRowSize();
-            ss << "        for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-            {
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                ss << "        {\n";
-            }
-            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++)\n";
-                ss << "        {\n";
-            }
-            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-            {
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                ss << "        {\n";
-            }
-            else
-            {
-                ss << "0; i < " << nCurWindowSize << "; i++)\n";
-                ss << "        {\n";
-            }
-
-            ss << "            arg1 = ";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef(true) << ";\n";
-            ss << "            if (isnan(arg1))\n";
-            ss << "                continue;\n";
-            ss << "            fSum1 += arg1;\n";
-            ss << "            fSumSqr1 += arg1 * arg1;\n";
-            ss << "            fCount1 += 1;\n";
-            ss << "        }\n";
-
-            ss << "        for (int i = ";
-            if (!pDVR1->IsStartFixed() && pDVR1->IsEndFixed())
-            {
-                ss << "gid0; i < " << pDVR1->GetArrayLength();
-                ss << " && i < " << nCurWindowSize1  << "; i++)\n";
-                ss << "        {\n";
-            }
-            else if (pDVR1->IsStartFixed() && !pDVR1->IsEndFixed())
-            {
-                ss << "0; i < " << pDVR1->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize1 << "; i++)\n";
-                ss << "        {\n";
-            }
-            else if (!pDVR1->IsStartFixed() && !pDVR1->IsEndFixed())
-            {
-                ss << "0; i + gid0 < " << pDVR1->GetArrayLength();
-                ss << " &&  i < " << nCurWindowSize1 << "; i++)\n";
-                ss << "        {\n";
-            }
-            else
-            {
-                ss << "0; i < " << nCurWindowSize1 << "; i++)\n";
-                ss << "        {\n";
-            }
-            ss << "            arg2 = ";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef(true) << ";\n";
-            ss << "            if (isnan(arg2))\n";
-            ss << "                continue;\n";
-            ss << "            fSum2 += arg2;\n";
-            ss << "            fSumSqr2 += arg2 * arg2;\n";
-            ss << "            fCount2 += 1;\n";
-            ss << "        }\n";
-        }
-        else
-        {
-            ss << "        return DBL_MAX;\n";
-            ss << "    }\n";
-            ss << "}\n";
-            return ;
-        }
-        ss << "        if (fCount1 < 2.0 || fCount2 < 2.0)\n";
-        ss << "            return DBL_MAX;\n";
-        ss << "    }\n";
-        ss << "    if(type == 3.0)\n";
-        ss << "    {\n";
-        ss << "        double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)\n";
-        ss << "            /(fCount1-1.0)/fCount1;\n";
-        ss << "        double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)\n";
-        ss << "            /(fCount2-1.0)/fCount2;\n";
-        ss << "        if (fS1 + fS2 == 0.0)\n";
-        ss << "            return DBL_MAX;\n";
-        ss << "        fT = fabs(fSum1/fCount1 - fSum2/fCount2)\n";
-        ss << "             /sqrt(fS1+fS2);\n";
-        ss << "        double c = fS1/(fS1+fS2);\n";
-        ss << "        fF = 1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)\n";
-        ss << "             /(fCount2-1.0));\n";
-        ss << "    }\n";
-        ss << "    if(type == 2.0)\n";
-        ss << "    {\n";
-        ss << "        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1)\n";
-        ss << "             /(fCount1 - 1.0);\n";
-        ss << "        double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2)\n";
-        ss << "             /(fCount2 - 1.0);\n";
-        ss << "        fT = fabs( fSum1/fCount1 - fSum2/fCount2 )\n";
-        ss << "            /sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 )\n";
-        ss << "            *sqrt( fCount1*fCount2*(fCount1+fCount2-2)\n";
-        ss << "            /(fCount1+fCount2) );\n";
-        ss << "        fF = fCount1 + fCount2 - 2;\n";
-        ss << "    }\n";
-
-        ss << "    double tdist=GetTDist(fT, fF);\n";
-        ss << "    if (mode==1)\n";
-        ss << "        return tdist;\n";
-        ss << "    else\n";
-        ss << "        return 2.0*tdist;\n";
-        ss << "}\n";
-    }
+    ss << "    if(type == 1.0)\n";
+    ss << "    {\n";
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
+        "            if (!isnan(arg1) && !isnan(arg2))\n"
+        "            {\n"
+        "                fSum1 += arg1;\n"
+        "                fSum2 += arg2;\n"
+        "                fSumSqr1 += (arg1 - arg2)*(arg1 - arg2);\n"
+        "                fCount1 += 1;\n"
+        "            }\n"
+        );
+    ss << "        if(fCount1 < 1.0)\n";
+    ss << "            return CreateDoubleError(NoValue);\n";
+    ss << "        double divider = sqrt(fCount1 * fSumSqr1 - (fSum1-fSum2)*(fSum1-fSum2));\n";
+    ss << "        if(divider == 0)\n";
+    ss << "            return CreateDoubleError(DivisionByZero);\n";
+    ss << "        fT = sqrt(fCount1-1.0) * fabs(fSum1 - fSum2) / divider;\n";
+    ss << "        fF = fCount1 - 1.0;\n";
+    ss << "    }\n";
+    ss << "    if(type == 2.0 || type == 3.0)\n";
+    ss << "    {\n";
+    GenerateRangeArg( 0, vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum1 += arg;\n"
+        "            fSumSqr1 += arg * arg;\n"
+        "            fCount1 += 1;\n"
+        "        }\n"
+        );
+    GenerateRangeArg( 1, vSubArguments, ss,
+        "        if (!isnan(arg))\n"
+        "        {\n"
+        "            fSum2 += arg;\n"
+        "            fSumSqr2 += arg * arg;\n"
+        "            fCount2 += 1;\n"
+        "        }\n"
+        );
+    ss << "        if (fCount1 < 2.0 || fCount2 < 2.0)\n";
+    ss << "            return CreateDoubleError(NoValue);\n";
+    ss << "    }\n";
+    ss << "    if(type == 3.0)\n";
+    ss << "    {\n";
+    ss << "        double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)\n";
+    ss << "            /(fCount1-1.0)/fCount1;\n";
+    ss << "        double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)\n";
+    ss << "            /(fCount2-1.0)/fCount2;\n";
+    ss << "        if (fS1 + fS2 == 0.0)\n";
+    ss << "            return CreateDoubleError(NoValue);\n";
+    ss << "        fT = fabs(fSum1/fCount1 - fSum2/fCount2)\n";
+    ss << "             /sqrt(fS1+fS2);\n";
+    ss << "        double c = fS1/(fS1+fS2);\n";
+    ss << "        fF = 1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)\n";
+    ss << "             /(fCount2-1.0));\n";
+    ss << "    }\n";
+    ss << "    if(type == 2.0)\n";
+    ss << "    {\n";
+    ss << "        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1)\n";
+    ss << "             /(fCount1 - 1.0);\n";
+    ss << "        double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2)\n";
+    ss << "             /(fCount2 - 1.0);\n";
+    ss << "        fT = fabs( fSum1/fCount1 - fSum2/fCount2 )\n";
+    ss << "            /sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 )\n";
+    ss << "            *sqrt( fCount1*fCount2*(fCount1+fCount2-2)\n";
+    ss << "            /(fCount1+fCount2) );\n";
+    ss << "        fF = fCount1 + fCount2 - 2;\n";
+    ss << "    }\n";
+    ss << "    double tdist=GetTDist(fT, fF);\n";
+    ss << "    if (mode==1)\n";
+    ss << "        return tdist;\n";
+    ss << "    else\n";
+    ss << "        return 2.0*tdist;\n";
+    ss << "}\n";
 }
 
 void OpTDist::BinInlineFun(std::set<std::string>& decls,
