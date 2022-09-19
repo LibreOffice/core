@@ -26,11 +26,12 @@
 #include "xlformula.hxx"
 #include <svx/sdtaitm.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/tempfile.hxx>
 #include <memory>
+#include <optional>
 
 class ScPostIt;
 
-namespace utl { class TempFile; }
 namespace com::sun::star::chart { class XChartDocument; }
 namespace com::sun::star::script { struct ScriptEventDescriptor; }
 
@@ -437,8 +438,9 @@ private:
     void                InitStream( bool bTempFile );
 
 private:
-    std::shared_ptr< ::utl::TempFile > mxTempFile;
-    std::unique_ptr< SvStream >  mxDffStrm;
+    std::optional< ::utl::TempFile > moTempFile;
+    SvStream* mpDffStrm = nullptr;
+    std::unique_ptr<SvMemoryStream> mpBackupStrm;
     std::shared_ptr< XclEscherEx > mxEscherEx;
     rtl::Reference< XclExpObjList > mxObjList;
 };

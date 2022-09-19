@@ -1934,14 +1934,14 @@ XclExpObjectManager::XclExpObjectManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
     InitStream( true );
-    mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mxDffStrm );
+    mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mpDffStrm );
 }
 
 XclExpObjectManager::XclExpObjectManager( const XclExpObjectManager& rParent ) :
     XclExpRoot( rParent.GetRoot() )
 {
     InitStream( false );
-    mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mxDffStrm, rParent.mxEscherEx.get() );
+    mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mpDffStrm, rParent.mxEscherEx.get() );
 }
 
 XclExpObjectManager::~XclExpObjectManager()
@@ -2016,18 +2016,18 @@ void XclExpObjectManager::InitStream( bool bTempFile )
 {
     if( bTempFile )
     {
-        mxTempFile = std::make_shared<::utl::TempFile>();
-        if( mxTempFile->IsValid() )
-        {
-            mxTempFile->EnableKillingFile();
-            mxDffStrm = ::utl::UcbStreamHelper::CreateStream( mxTempFile->GetURL(), StreamMode::STD_READWRITE );
-        }
+        moTempFile.emplace();
+        moTempFile->EnableKillingFile();
+        mpDffStrm = moTempFile->GetStream( StreamMode::STD_READWRITE );
     }
 
-    if( !mxDffStrm )
-        mxDffStrm = std::make_unique<SvMemoryStream>();
+    if( !mpDffStrm )
+    {
+        mpBackupStrm = std::make_unique<SvMemoryStream>();
+        mpDffStrm = mpBackupStrm.get();
+    }
 
-    mxDffStrm->SetEndian( SvStreamEndian::LITTLE );
+    mpDffStrm->SetEndian( SvStreamEndian::LITTLE );
 }
 
 XclExpEmbeddedObjectManager::XclExpEmbeddedObjectManager(
