@@ -237,6 +237,7 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
             // UNO !SHOWING == MSAA OFFSCREEN
             pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING );
+            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_SHOWING, m_xAccessible.get());
             break;
         case AccessibleStateType::VISIBLE:
             // UNO !VISIBLE == MSAA INVISIBLE

@@ -198,6 +198,11 @@ bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc, UnoMSAAEvent eEvent
         UpdateAccFocus(pXAcc);
         NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
         break;
+    case UnoMSAAEvent::STATE_SHOWING:
+        // send EVENT_SYSTEM_ALERT when notification gets shown
+        if (pRContext->getAccessibleRole() == AccessibleRole::NOTIFICATION)
+            NotifyWinEvent(EVENT_SYSTEM_ALERT, hAcc, OBJID_CLIENT, dChildID);
+        break;
     case UnoMSAAEvent::MENU_START:
         NotifyWinEvent( EVENT_SYSTEM_MENUSTART,hAcc, OBJID_CLIENT,dChildID  );
         break;
