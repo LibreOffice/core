@@ -401,7 +401,7 @@ namespace slideshow::internal
                 // It lets us detect the potential error case that a PageField is contained in
                 // the Text of the Shape. That is a hint that maBounds contains the wrong Range
                 // and needs to be corrected. The correct size is in the PrefSize of the metafile.
-                // For more backgrund information please refer to tdf#150402, Comment 16.
+                // For more background information please refer to tdf#150402, Comment 16.
                 const double fWidthDiff(fabs(mpCurrMtf->GetPrefSize().Width() - maBounds.getWidth()));
                 const double fHeightDiff(fabs(mpCurrMtf->GetPrefSize().Height() - maBounds.getHeight()));
 
