@@ -44,13 +44,6 @@ public:
     virtual std::string BinFuncName() const override { return "VarP"; }
     virtual bool canHandleMultiVector() const override { return true; }
 };
-class OpSTEYX: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "STEYX"; }
-};
 class OpZTest: public Normal
 {
 public:
@@ -91,13 +84,6 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Skewp"; }
     virtual bool canHandleMultiVector() const override { return true; }
-};
-class OpSlope: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Slope"; }
 };
 class OpWeibull: public Normal
 {
@@ -162,28 +148,12 @@ public:
     virtual std::string BinFuncName() const override { return "Gamma"; }
 };
 
-class OpCorrel: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-        const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Correl"; }
-};
-
 class OpNegbinomdist: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "OpNegbinomdist"; }
-};
-
-class OpPearson: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "OpPearson"; }
 };
 
 class OpGammaLn: public Normal
@@ -222,13 +192,6 @@ public:
     virtual bool canHandleMultiVector() const override { return true; }
 };
 
-class OpRsq: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "OpRsq"; }
-};
 class OpNormdist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
@@ -273,13 +236,6 @@ public:
     virtual std::string BinFuncName() const override { return "Kurt"; }
     virtual bool canHandleMultiVector() const override { return true; }
 };
-class OpCovar: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream& ss,
-            const std::string &sSymName, SubArguments& vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Covar"; }
-};
 
 class OpPermut:public Normal{
     public:
@@ -306,13 +262,6 @@ public:
 
     virtual std::string BinFuncName() const override { return "Confidence"; }
 };
-class OpIntercept: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Intercept"; }
-};
 class OpLogInv: public Normal
 {
 public:
@@ -331,13 +280,6 @@ public:
         std::set<std::string>& ) override;
 
     virtual std::string BinFuncName() const override { return "CritBinom"; }
-};
-class OpForecast: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "Forecast"; }
 };
 class OpLogNormDist: public Normal
 {
@@ -466,6 +408,98 @@ class OpBetainv:public Normal{
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) override;
     virtual std::string BinFuncName() const override { return "OpBetainv"; }
 };
+
+class OpAveDev: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "AveDev"; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpCovar: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream& ss,
+            const std::string &sSymName, SubArguments& vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "Covar"; }
+};
+
+class OpForecast: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "Forecast"; }
+};
+
+class OpInterceptSlopeBase: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override = 0;
+protected:
+    void GenerateCode( outputstream& ss, const std::string &sSymName,
+        SubArguments &vSubArguments, const char* finalComputeCode );
+};
+
+class OpIntercept: public OpInterceptSlopeBase
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "Intercept"; }
+};
+
+class OpSlope: public OpInterceptSlopeBase
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "Slope"; }
+};
+
+class OpPearsonCovarBase: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override = 0;
+protected:
+    void GenerateCode( outputstream& ss, const std::string &sSymName,
+        SubArguments &vSubArguments, double minimalCountValue, const char* finalComputeCode );
+};
+
+class OpPearson: public OpPearsonCovarBase
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "OpPearson"; }
+};
+
+class OpCorrel: public OpPearson // they are identical
+{
+public:
+    virtual std::string BinFuncName() const override { return "Correl"; }
+};
+
+class OpSTEYX: public OpPearsonCovarBase
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "STEYX"; }
+};
+
+class OpRsq: public OpPearsonCovarBase
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "OpRsq"; }
+};
+
 class OpMinA: public Normal
 {
 public:
@@ -543,14 +577,6 @@ public:
     virtual std::string BinFuncName() const override { return "OpStDevA"; }
     virtual bool takeString() const override { return true; }
     virtual bool takeNumeric() const override { return true; }
-};
-class OpAveDev: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "AveDev"; }
-    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 }

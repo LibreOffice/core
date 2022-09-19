@@ -347,22 +347,23 @@ void SlidingFunctionBase::GenerateRangeArgPair( int arg1, int arg2, SubArguments
         throw Unhandled( __FILE__, __LINE__ );
     }
 
+    size_t arrayLength = std::min( pDVR1->GetArrayLength(), pDVR2->GetArrayLength());
     ss << "    for (int i = ";
     if (!pDVR1->IsStartFixed() && pDVR1->IsEndFixed())
     {
-        ss << "gid0; i < " << pDVR1->GetArrayLength();
+        ss << "gid0; i < " << arrayLength;
         ss << " && i < " << nCurWindowSize1  << "; i++)\n";
         ss << "    {\n";
     }
     else if (pDVR1->IsStartFixed() && !pDVR1->IsEndFixed())
     {
-        ss << "0; i < " << pDVR1->GetArrayLength();
+        ss << "0; i < " << arrayLength;
         ss << " && i < gid0+"<< nCurWindowSize1 << "; i++)\n";
         ss << "    {\n";
     }
     else if (!pDVR1->IsStartFixed() && !pDVR1->IsEndFixed())
     {
-        ss << "0; i + gid0 < " << pDVR1->GetArrayLength();
+        ss << "0; i + gid0 < " << arrayLength;
         ss << " &&  i < " << nCurWindowSize1 << "; i++)\n";
         ss << "    {\n";
     }

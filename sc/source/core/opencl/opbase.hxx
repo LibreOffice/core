@@ -92,6 +92,12 @@ public:
         if( count < ( min )) \
             throw InvalidParameterCount( count, __FILE__, __LINE__ ); \
     } while( false )
+#define CHECK_PARAMETER_DOUBLEVECTORREF(arg) \
+    do { \
+        FormulaToken *token = vSubArguments[arg]->GetFormulaToken(); \
+        if (token == nullptr || token->GetType() != formula::svDoubleVectorRef) \
+            throw Unhandled(__FILE__, __LINE__); \
+    } while( false )
 
 typedef std::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
 
