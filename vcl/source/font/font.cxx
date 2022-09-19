@@ -721,9 +721,9 @@ namespace
             TTGlobalFontInfo aInfo;
             GetTTGlobalFontInfo( pTTF, &aInfo );
             // most importantly: the family name
-            if( aInfo.ufamily )
-                o_rResult.SetFamilyName( OUString(aInfo.ufamily) );
-            else if( aInfo.family )
+            if( !aInfo.ufamily.isEmpty() )
+                o_rResult.SetFamilyName( aInfo.ufamily );
+            else if( !aInfo.family.isEmpty() )
                 o_rResult.SetFamilyName( OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
             // set weight
             if( aInfo.weight )
@@ -778,9 +778,9 @@ namespace
             o_rResult.SetPitch( (aInfo.pitch == 0) ? PITCH_VARIABLE : PITCH_FIXED );
 
             // set style name
-            if( aInfo.usubfamily )
-                o_rResult.SetStyleName( OUString( aInfo.usubfamily ) );
-            else if( aInfo.subfamily )
+            if( !aInfo.usubfamily.isEmpty() )
+                o_rResult.SetStyleName( aInfo.usubfamily );
+            else if( !aInfo.subfamily.isEmpty() )
                 o_rResult.SetStyleName( OUString::createFromAscii( aInfo.subfamily ) );
 
             // cleanup

@@ -574,13 +574,13 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
             }
         }
 
-        if( aInfo.usubfamily )
-            rFont.m_aStyleName = OUString( aInfo.usubfamily );
+        if( !aInfo.usubfamily.isEmpty() )
+            rFont.m_aStyleName = aInfo.usubfamily;
 
-        SAL_WARN_IF( !aInfo.psname, "vcl.fonts", "No PostScript name in font:" << aFile );
+        SAL_WARN_IF( aInfo.psname.isEmpty(), "vcl.fonts", "No PostScript name in font:" << aFile );
 
-        rFont.m_aPSName = aInfo.psname ?
-            OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
+        rFont.m_aPSName = !aInfo.psname.isEmpty() ?
+            OStringToOUString(aInfo.psname, aEncoding) :
             rFont.m_aFamilyName; // poor font does not have a postscript name
 
         rFont.m_eFamilyStyle = matchFamilyName(rFont.m_aFamilyName);

@@ -147,33 +147,33 @@ namespace vcl
 /** Return value of GetTTGlobalFontInfo() */
 
     typedef struct TTGlobalFontInfo_ {
-        char *family;             /**< family name                                             */
-        sal_Unicode *ufamily;     /**< family name UCS2                                         */
-        char *subfamily;          /**< subfamily name                                          */
-        sal_Unicode *usubfamily;  /**< subfamily name UCS2 */
-        char *psname;             /**< PostScript name                                         */
-        sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
-        int   weight;             /**< value of WeightClass or 0 if can't be determined        */
-        int   width;              /**< value of WidthClass or 0 if can't be determined         */
-        int   pitch;              /**< 0: proportional font, otherwise: monospaced             */
-        int   italicAngle;        /**< in counter-clockwise degrees * 65536                    */
-        int   xMin;               /**< global bounding box: xMin                               */
-        int   yMin;               /**< global bounding box: yMin                               */
-        int   xMax;               /**< global bounding box: xMax                               */
-        int   yMax;               /**< global bounding box: yMax                               */
-        int   ascender;           /**< typographic ascent.                                     */
-        int   descender;          /**< typographic descent.                                    */
-        int   linegap;            /**< typographic line gap.\ Negative values are treated as
+        OString    family;        /**< family name                                             */
+        OUString   ufamily;       /**< family name UCS2                                         */
+        OString    subfamily;     /**< subfamily name                                          */
+        OUString   usubfamily;    /**< subfamily name UCS2 */
+        OString    psname;        /**< PostScript name                                         */
+        sal_uInt16 macStyle = 0;      /**< macstyle bits from 'HEAD' table */
+        int   weight = 0;             /**< value of WeightClass or 0 if can't be determined        */
+        int   width = 0;              /**< value of WidthClass or 0 if can't be determined         */
+        int   pitch = 0;              /**< 0: proportional font, otherwise: monospaced             */
+        int   italicAngle = 0;        /**< in counter-clockwise degrees * 65536                    */
+        int   xMin = 0;               /**< global bounding box: xMin                               */
+        int   yMin = 0;               /**< global bounding box: yMin                               */
+        int   xMax = 0;               /**< global bounding box: xMax                               */
+        int   yMax = 0;               /**< global bounding box: yMax                               */
+        int   ascender = 0;           /**< typographic ascent.                                     */
+        int   descender = 0;          /**< typographic descent.                                    */
+        int   linegap = 0;            /**< typographic line gap.\ Negative values are treated as
                                      zero in Win 3.1, System 6 and System 7.                 */
-        int   typoAscender;       /**< OS/2 portable typographic ascender                      */
-        int   typoDescender;      /**< OS/2 portable typographic descender                     */
-        int   typoLineGap;        /**< OS/2 portable typographic line gap                       */
-        int   winAscent;          /**< ascender metric for Windows                             */
-        int   winDescent;         /**< descender metric for Windows                            */
-        bool  symbolEncoded;      /**< true: MS symbol encoded */
-        sal_uInt8  panose[10];    /**< PANOSE classification number                            */
-        sal_uInt32 typeFlags;     /**< type flags (copyright bits)                             */
-        sal_uInt16 fsSelection;   /**< OS/2 fsSelection */
+        int   typoAscender = 0;       /**< OS/2 portable typographic ascender                      */
+        int   typoDescender = 0;      /**< OS/2 portable typographic descender                     */
+        int   typoLineGap = 0;        /**< OS/2 portable typographic line gap                       */
+        int   winAscent = 0;          /**< ascender metric for Windows                             */
+        int   winDescent = 0;         /**< descender metric for Windows                            */
+        bool  symbolEncoded = false;      /**< true: MS symbol encoded */
+        sal_uInt8  panose[10] = {};   /**< PANOSE classification number                            */
+        sal_uInt32 typeFlags = 0;     /**< type flags (copyright bits)                             */
+        sal_uInt16 fsSelection = 0;   /**< OS/2 fsSelection */
     } TTGlobalFontInfo;
 
 /** ControlPoint structure used by GetTTGlyphPoints() */
@@ -768,11 +768,11 @@ public:
     virtual bool hasTable(sal_uInt32 ord) const = 0;
     virtual const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const = 0;
 
-    char        *psname;
-    char        *family;
-    sal_Unicode *ufamily;
-    char        *subfamily;
-    sal_Unicode *usubfamily;
+    OString     psname;
+    OString     family;
+    OUString    ufamily;
+    OString     subfamily;
+    OUString    usubfamily;
 };
 
 class TrueTypeFont final : public AbstractTrueTypeFont

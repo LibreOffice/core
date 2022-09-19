@@ -45,6 +45,7 @@
 #include "xlat.hxx"
 #include <rtl/crc.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
@@ -877,9 +878,9 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
 
 /*- Extracts a string from the name table and allocates memory for it -*/
 
-static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFlag, sal_Unicode** ucs2result )
+static OString nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFlag, OUString* ucs2result )
 {
-    char *res;
+    OStringBuffer res;
     const sal_uInt8* ptr = name + GetUInt16(name, 4) + GetUInt16(name + 6, 12 * n + 10);
     int len = GetUInt16(name+6, 12 * n + 8);
 
@@ -889,33 +890,36 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
     if( (len <= 0) || len > available_space)
     {
         if( ucs2result )
-            *ucs2result = nullptr;
-        return nullptr;
+            ucs2result->clear();
+        return OString();
     }
 
     if( ucs2result )
-        *ucs2result = nullptr;
+        ucs2result->clear();
     if (dbFlag) {
-        res = static_cast<char*>(malloc(1 + len/2));
-        assert(res != nullptr);
+        res.setLength(len/2);
         for (int i = 0; i < len/2; i++)
+        {
             res[i] = *(ptr + i * 2 + 1);
-        res[len/2] = 0;
+            assert(res[i] != 0);
+        }
         if( ucs2result )
         {
-            *ucs2result = static_cast<sal_Unicode*>(malloc( len+2 ));
+            OUStringBuffer buf(len/2);
+            buf.setLength(len/2);
             for (int i = 0; i < len/2; i++ )
-                (*ucs2result)[i] = GetUInt16( ptr, 2*i );
-            (*ucs2result)[len/2] = 0;
+            {
+                buf[i] = GetUInt16( ptr, 2*i );
+                assert(buf[i] != 0);
+            }
+            *ucs2result = buf.makeStringAndClear();
         }
     } else {
-        res = static_cast<char*>(malloc(1 + len));
-        assert(res != nullptr);
-        memcpy(res, ptr, len);
-        res[len] = 0;
+        res.setLength(len);
+        memcpy(static_cast<void*>(const_cast<char*>(res.getStr())), ptr, len);
     }
 
-    return res;
+    return res.makeStringAndClear();
 }
 
 static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
@@ -985,72 +989,65 @@ static void GetNames(AbstractTrueTypeFont *t)
     bool bPSNameOK = true;
 
     /* PostScript name: preferred Microsoft */
-    t->psname = nullptr;
+    t->psname.clear();
     if ((r = findname(table, n, 3, 1, 0x0409, 6)) != -1)
         t->psname = nameExtract(table, nTableSize, r, 1, nullptr);
-    if ( ! t->psname && (r = findname(table, n, 1, 0, 0, 6)) != -1)
+    if ( t->psname.isEmpty() && (r = findname(table, n, 1, 0, 0, 6)) != -1)
         t->psname = nameExtract(table, nTableSize, r, 0, nullptr);
-    if ( ! t->psname && (r = findname(table, n, 3, 0, 0x0409, 6)) != -1)
+    if ( t->psname.isEmpty() && (r = findname(table, n, 3, 0, 0x0409, 6)) != -1)
     {
         // some symbol fonts like Marlett have a 3,0 name!
         t->psname = nameExtract(table, nTableSize, r, 1, nullptr);
     }
     // for embedded font in Ghostscript PDFs
-    if ( ! t->psname && (r = findname(table, n, 2, 2, 0, 6)) != -1)
+    if ( t->psname.isEmpty() && (r = findname(table, n, 2, 2, 0, 6)) != -1)
     {
         t->psname = nameExtract(table, nTableSize, r, 0, nullptr);
     }
-    if ( ! t->psname )
+    if ( t->psname.isEmpty() )
     {
         if (!t->fileName().empty())
         {
             const char* pReverse = t->fileName().data() + t->fileName().length();
             /* take only last token of filename */
-            while (pReverse != t->fileName() && *pReverse != '/') pReverse--;
+            while (pReverse != t->fileName().data() && *pReverse != '/') pReverse--;
             if(*pReverse == '/') pReverse++;
-            t->psname = strdup(pReverse);
-            assert(t->psname != nullptr);
-            for (i=strlen(t->psname) - 1; i > 0; i--)
+            int nReverseLen = strlen(pReverse);
+            for (i=nReverseLen - 1; i > 0; i--)
             {
                 /*- Remove the suffix  -*/
-                if (t->psname[i] == '.' ) {
-                    t->psname[i] = 0;
+                if (*(pReverse + i) == '.' ) {
+                    nReverseLen = i;
                     break;
                 }
             }
+            t->psname = OString(std::string_view(pReverse, nReverseLen));
         }
         else
-            t->psname = strdup( "Unknown" );
+            t->psname = "Unknown";
     }
 
     /* Font family and subfamily names: preferred Apple */
-    t->family = nullptr;
+    t->family.clear();
     if ((r = findname(table, n, 0, 0, 0, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
-    if ( ! t->family && (r = findname(table, n, 3, 1, 0x0409, 1)) != -1)
+    if ( t->family.isEmpty() && (r = findname(table, n, 3, 1, 0x0409, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
-    if ( ! t->family && (r = findname(table, n, 1, 0, 0, 1)) != -1)
+    if ( t->family.isEmpty() && (r = findname(table, n, 1, 0, 0, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 0, nullptr);
-    if ( ! t->family && (r = findname(table, n, 3, 1, 0x0411, 1)) != -1)
+    if ( t->family.isEmpty() && (r = findname(table, n, 3, 1, 0x0411, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
-    if ( ! t->family && (r = findname(table, n, 3, 0, 0x0409, 1)) != -1)
+    if ( t->family.isEmpty() && (r = findname(table, n, 3, 0, 0x0409, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
-    if ( ! t->family )
-    {
-        t->family = strdup(t->psname);
-        assert(t->family != nullptr);
-    }
+    if ( t->family.isEmpty() )
+        t->family = t->psname;
 
-    t->subfamily = nullptr;
-    t->usubfamily = nullptr;
+    t->subfamily.clear();
+    t->usubfamily.clear();
     if ((r = findname(table, n, 1, 0, 0, 2)) != -1)
         t->subfamily = nameExtract(table, nTableSize, r, 0, &t->usubfamily);
-    if ( ! t->subfamily && (r = findname(table, n, 3, 1, 0x0409, 2)) != -1)
+    if ( t->subfamily.isEmpty() && (r = findname(table, n, 3, 1, 0x0409, 2)) != -1)
         t->subfamily = nameExtract(table, nTableSize, r, 1, &t->usubfamily);
-    if ( ! t->subfamily )
-    {
-        t->subfamily = strdup("");
-    }
 
     /* #i60349# sanity check psname
      * psname practically has to be 7bit ASCII and should not contain spaces
@@ -1058,25 +1055,24 @@ static void GetNames(AbstractTrueTypeFont *t)
      * if the family name is 7bit ASCII and take it instead if so
      */
     /* check psname */
-    for( i = 0; t->psname[i] != 0 && bPSNameOK; i++ )
+    for( i = 0; i < t->psname.getLength() && bPSNameOK; i++ )
         if( t->psname[ i ] < 33 || (t->psname[ i ] & 0x80) )
             bPSNameOK = false;
     if( bPSNameOK )
         return;
 
     /* check if family is a suitable replacement */
-    if( !(t->ufamily && t->family) )
+    if( t->ufamily.isEmpty() && t->family.isEmpty() )
         return;
 
     bool bReplace = true;
 
-    for( i = 0; t->ufamily[ i ] != 0 && bReplace; i++ )
+    for( i = 0; i < t->ufamily.getLength() && bReplace; i++ )
         if( t->ufamily[ i ] < 33 || t->ufamily[ i ] > 127 )
             bReplace = false;
     if( bReplace )
     {
-        free( t->psname );
-        t->psname = strdup( t->family );
+        t->psname = t->family;
     }
 }
 
@@ -1197,11 +1193,6 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
     , m_nUnitsPerEm(0)
     , m_xCharMap(xCharMap)
     , m_bIsSymbolFont(false)
-    , psname(nullptr)
-    , family(nullptr)
-    , ufamily(nullptr)
-    , subfamily(nullptr)
-    , usubfamily(nullptr)
 {
     if (pFileName)
         m_sFileName = pFileName;
@@ -1209,11 +1200,6 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
 
 AbstractTrueTypeFont::~AbstractTrueTypeFont()
 {
-    free(psname);
-    free(family);
-    free(ufamily);
-    free(subfamily);
-    free(usubfamily);
 }
 
 TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
@@ -1656,11 +1642,11 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 
     if ((nGlyphs <= 0) || (nGlyphs > 256)) return SFErrCodes::GlyphNum;
     if (!glyphArray) return SFErrCodes::BadArg;
-    if (!fname) fname = ttf->psname;
+    if (!fname) fname = ttf->psname.getStr();
 
     fprintf(outf, h01, GetInt16(table, 0), GetUInt16(table, 2), GetInt16(table, 4), GetUInt16(table, 6));
     fprintf(outf, h02, modname, modver, modextra);
-    fprintf(outf, h09, ttf->psname);
+    fprintf(outf, h09, ttf->psname.getStr());
 
     fprintf(outf, "%s", h10);
     fprintf(outf, h11, fname);
@@ -2185,9 +2171,9 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", static_cast<int>(ver), static_cast<int>(ver & 0xFF), static_cast<int>(rev>>16), static_cast<int>(rev & 0xFFFF));
     fprintf(outf, "%%%%Creator: %s %s %s\n", modname, modver, modextra);
     fprintf(outf, "%%- Font subset generated from a source font file: '%s'\n", ttf->fileName().data());
-    fprintf(outf, "%%- Original font name: %s\n", ttf->psname);
-    fprintf(outf, "%%- Original font family: %s\n", ttf->family);
-    fprintf(outf, "%%- Original font sub-family: %s\n", ttf->subfamily);
+    fprintf(outf, "%%- Original font name: %s\n", ttf->psname.getStr());
+    fprintf(outf, "%%- Original font family: %s\n", ttf->family.getStr());
+    fprintf(outf, "%%- Original font sub-family: %s\n", ttf->subfamily.getStr());
     fprintf(outf, "11 dict begin\n");
     fprintf(outf, "/FontName (%s) cvn def\n", psname);
     fprintf(outf, "/PaintType 0 def\n");
@@ -2308,8 +2294,6 @@ bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yM
 void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
 {
     int UPEm = ttf->unitsPerEm();
-
-    memset(info, 0, sizeof(TTGlobalFontInfo));
 
     info->family = ttf->family;
     info->ufamily = ttf->ufamily;
