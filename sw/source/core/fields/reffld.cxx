@@ -401,7 +401,7 @@ const SwTextNode* SwGetRefField::GetReferencedTextNode() const
 // strikethrough for tooltips using Unicode combining character
 static OUString lcl_formatStringByCombiningCharacter(const OUString& sText, const sal_Unicode cChar)
 {
-    OUStringBuffer sRet;
+    OUStringBuffer sRet(sText.getLength() * 2);
     for (sal_Int32 i = 0; i < sText.getLength(); ++i)
     {
         sRet.append(sText[i]);
