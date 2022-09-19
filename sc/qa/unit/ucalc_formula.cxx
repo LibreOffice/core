@@ -243,6 +243,7 @@ public:
     void testTdf97369();
     void testTdf97587();
     void testTdf93415();
+    void testTdf132519();
     void testTdf100818();
     void testMatConcat();
     void testMatConcatReplication();
@@ -363,6 +364,7 @@ public:
     CPPUNIT_TEST(testTdf97369);
     CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST(testTdf93415);
+    CPPUNIT_TEST(testTdf132519);
     CPPUNIT_TEST(testTdf100818);
     CPPUNIT_TEST(testMatConcat);
     CPPUNIT_TEST(testMatConcatReplication);
@@ -8897,6 +8899,29 @@ void TestFormula::testTdf93415()
     // - Expected: Sheet1!$A$1
     // - Actual  : Sheet1.$A$1
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1!$A$1"), m_pDoc->GetString(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void TestFormula::testTdf132519()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));
+
+    ScCalcConfig aConfig;
+    aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_R1C1 );
+    m_pDoc->SetCalcConfig(aConfig);
+    m_pDoc->CalcAll();
+
+    m_pDoc->SetString(2, 0, 0, "X");
+    m_pDoc->SetString(1, 0, 0, "=CELL(\"ADDRESS\"; C1)");
+    m_pDoc->SetString(0, 0, 0, "=INDIRECT(B1)");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: X
+    // - Actual  : #REF!
+    CPPUNIT_ASSERT_EQUAL(OUString("X"), m_pDoc->GetString(0,0,0));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("R1C3"), m_pDoc->GetString(1,0,0));
 
     m_pDoc->DeleteTab(0);
 }
