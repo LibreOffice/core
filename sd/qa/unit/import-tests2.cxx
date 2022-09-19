@@ -141,6 +141,7 @@ public:
     void testDefaultTabStop();
     void testCropToZero();
     void testTdf144092TableHeight();
+    void testTdf89928BlackWhiteThreshold();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -215,6 +216,7 @@ public:
     CPPUNIT_TEST(testDefaultTabStop);
     CPPUNIT_TEST(testCropToZero);
     CPPUNIT_TEST(testTdf144092TableHeight);
+    CPPUNIT_TEST(testTdf89928BlackWhiteThreshold);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2118,6 +2120,49 @@ void SdImportTest2::testTdf144092TableHeight()
     // - Actual  : 4595
     // i.e. the table height wasn't corrected by expanding less than minimum sized rows.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7208), xTableShape->getSize().Height);
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf89928BlackWhiteThreshold()
+{
+    // A slide with two graphics, one with color HSV{0,0,74%} and one with HSV{0,0,76%}
+    // where both have an applied 75% Black/White Color Effect.
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(
+                      u"sd/qa/unit/data/pptx/tdf89928-blackWhiteEffectThreshold.pptx"),
+                  PPTX);
+
+    // First graphic should appear black
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef),
+                                                   uno::UNO_SET_THROW);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xShape->getPropertyValue("Graphic") >>= xGraphic;
+        CPPUNIT_ASSERT(xGraphic.is());
+
+        Graphic aGraphic(xGraphic);
+        BitmapEx aBitmap(aGraphic.GetBitmapEx());
+
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: Color: R:0 G:0 B:0 A:0
+        // - Actual  : Color: R:189 G:189 B:189 A:0
+        CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x000000), aBitmap.GetPixelColor(0, 0));
+    }
+
+    // Second graphic should appear white
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0, xDocShRef),
+                                                   uno::UNO_SET_THROW);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xShape->getPropertyValue("Graphic") >>= xGraphic;
+        CPPUNIT_ASSERT(xGraphic.is());
+
+        Graphic aGraphic(xGraphic);
+        BitmapEx aBitmap(aGraphic.GetBitmapEx());
+
+        CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFF), aBitmap.GetPixelColor(0, 0));
+    }
+
     xDocShRef->DoClose();
 }
 

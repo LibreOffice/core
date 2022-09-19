@@ -24,6 +24,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <drawingml/graphicproperties.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/BitmapFilter.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -183,6 +185,32 @@ Reference< XGraphic > lclGreysScaleGraphic(uno::Reference<graphic::XGraphic> con
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
     return aReturnGraphic.GetXGraphic();
+}
+
+/// Applies the graphic Black&White (Monochrome) effect with the imported threshold
+Reference<XGraphic> lclApplyBlackWhiteEffect(const BlipFillProperties& aBlipProps,
+                                             const uno::Reference<graphic::XGraphic>& xGraphic)
+{
+    const auto& oBiLevelThreshold = aBlipProps.moBiLevelThreshold;
+    if (oBiLevelThreshold.has_value())
+    {
+        sal_uInt8 nThreshold
+            = static_cast<sal_uInt8>(oBiLevelThreshold.value() * 255 / MAX_PERCENT);
+
+        ::Graphic aGraphic(xGraphic);
+        ::Graphic aReturnGraphic;
+
+        BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+        AlphaMask aMask(aBitmapEx.GetAlpha());
+
+        BitmapEx aTmpBmpEx(aBitmapEx.GetBitmap());
+        BitmapFilter::Filter(aTmpBmpEx, BitmapMonochromeFilter{ nThreshold });
+
+        aReturnGraphic = ::Graphic(BitmapEx(aTmpBmpEx.GetBitmap(), aMask));
+        aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+        return aReturnGraphic.GetXGraphic();
+    }
+    return xGraphic;
 }
 
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
@@ -350,6 +378,7 @@ void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
     assignIfUsed( moColorEffect, rSourceProps.moColorEffect );
     assignIfUsed( moBrightness, rSourceProps.moBrightness );
     assignIfUsed( moContrast, rSourceProps.moContrast );
+    assignIfUsed( moBiLevelThreshold, rSourceProps.moBiLevelThreshold );
     maColorChangeFrom.assignIfUsed( rSourceProps.maColorChangeFrom );
     maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
     maDuotoneColors[0].assignIfUsed( rSourceProps.maDuotoneColors[0] );
@@ -906,6 +935,17 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         // created transformed graphic
         uno::Reference<graphic::XGraphic> xGraphic = lclCheckAndApplyChangeColorTransform(maBlipProps, maBlipProps.mxFillGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
         xGraphic = lclCheckAndApplyDuotoneTransform(maBlipProps, xGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
+
+        if( eColorMode == ColorMode_MONO )
+        {
+            // ColorMode_MONO is the same with MSO's biLevel with 50000 (50%) threshold,
+            // when threshold isn't 50000 bake the effect instead.
+            if( maBlipProps.moBiLevelThreshold != 50000 )
+            {
+                xGraphic = lclApplyBlackWhiteEffect(maBlipProps, xGraphic);
+                eColorMode = ColorMode_STANDARD;
+            }
+        }
 
         if (eColorMode == ColorMode_STANDARD && nBrightness == 70 && nContrast == -70)
         {

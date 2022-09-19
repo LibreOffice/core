@@ -172,6 +172,10 @@ ContextHandlerRef BlipContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( biLevel ):
+            mrBlipProps.moBiLevelThreshold = rAttribs.getInteger( XML_thresh );
+            mrBlipProps.moColorEffect = getBaseToken(nElement);
+            break;
+
         case A_TOKEN( grayscl ):
             mrBlipProps.moColorEffect = getBaseToken( nElement );
         break;

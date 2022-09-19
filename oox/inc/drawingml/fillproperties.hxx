@@ -113,6 +113,7 @@ struct BlipFillProperties
     std::optional< sal_Int32 > moColorEffect;        /// XML token for a color effect.
     std::optional< sal_Int32 > moBrightness;         /// Brightness in the range [-100000,100000].
     std::optional< sal_Int32 > moContrast;           /// Contrast in the range [-100000,100000].
+    std::optional< sal_Int32 > moBiLevelThreshold;   /// Bi-Level (Black/White) effect threshold (1/1000 percent)
     Color                 maColorChangeFrom;      /// Start color of color transformation.
     Color                 maColorChangeTo;        /// Destination color of color transformation.
     Color                 maDuotoneColors[2];     /// Duotone Colors
