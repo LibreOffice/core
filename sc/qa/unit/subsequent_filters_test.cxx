@@ -171,6 +171,7 @@ public:
     void testCellAnchoredHiddenShapesXLSX();
 
     void testFormulaDependency();
+    void testTdf151046();
 
     void testRowHeightODS();
     void testRichTextContentODS();
@@ -266,6 +267,7 @@ public:
 
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
+    CPPUNIT_TEST(testTdf151046);
     CPPUNIT_TEST(testRichTextContentODS);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
@@ -2976,6 +2978,23 @@ void ScFiltersTest::testFormulaDependency()
 
     // check that the number format is implicitly inherited
     // CPPUNIT_ASSERT_EQUAL(rDoc.GetString(0,4,0), rDoc.GetString(0,5,0));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf151046()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf151046.", FORMAT_ODS);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 1, 0));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 2, 0));
 
     xDocSh->DoClose();
 }
