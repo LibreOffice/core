@@ -6245,7 +6245,8 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
         bool possibleII = false;
         for( int i = 0; i < nNumParams; ++i )
         {
-            if( ParameterMayBeImplicitIntersection( token, i ))
+            if( ParameterMayBeImplicitIntersection( token, i )
+                && (*pppToken[i])->GetType() == svDoubleRef)
             {
                 possibleII = true;
                 break;
