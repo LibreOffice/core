@@ -2549,6 +2549,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             return false;
 
         std::set<sal_Int32> aUsedFonts;
+        std::set<sal_uInt8> aUsedAlpha;
         for (auto i = 1u; i < nGlyphs; i++)
         {
             auto nStream = pGlyphStreams[i];
@@ -2568,8 +2569,17 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 aContents.append("q ");
                 if (rLayer.m_nColorIndex != 0xFFFF)
                 {
-                    appendNonStrokingColor(aPalette[rLayer.m_nColorIndex], aContents);
+                    auto aColor(aPalette[rLayer.m_nColorIndex]);
+                    appendNonStrokingColor(aColor, aContents);
                     aContents.append(" ");
+                    if (aColor.GetAlpha() != 0xFF
+                        && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4)
+                    {
+                        aContents.append("/GS");
+                        appendHex(aColor.GetAlpha(), aContents);
+                        aContents.append(" gs ");
+                        aUsedAlpha.insert(aColor.GetAlpha());
+                    }
                 }
                 aContents.append("BT ");
                 aContents.append("/F" + OString::number(rLayer.m_nFontID) + " ");
@@ -2601,7 +2611,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             return false;
         aLine.setLength(0);
         aLine.append(nFontResources);
-        aLine.append(" 0 obj\n<</Font\n<<\n");
+        aLine.append(" 0 obj <<\n");
+        aLine.append("/Font <<\n");
         for (auto nFontID : aUsedFonts)
         {
             aLine.append("/F");
@@ -2610,7 +2621,21 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             aLine.append(rFontIDToObject[nFontID]);
             aLine.append(" 0 R");
         }
-        aLine.append("\n>>\n>>\nendobj\n\n");
+        aLine.append("\n>>\n");
+        if (!aUsedAlpha.empty())
+        {
+            aLine.append("/ExtGState <<\n");
+            for (auto nAlpha : aUsedAlpha)
+            {
+                aLine.append("/GS");
+                appendHex(nAlpha, aLine);
+                aLine.append(" <</ca ");
+                appendDouble(nAlpha / 255., aLine);
+                aLine.append(">>\n");
+            }
+            aLine.append(">>\n");
+        }
+        aLine.append(">>\nendobj\n\n");
         if (!writeBuffer(aLine.getStr(), aLine.getLength()))
             return false;
 
