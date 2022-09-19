@@ -5548,12 +5548,11 @@ ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStr
 
 namespace
 {
-    std::unique_ptr<utl::TempFile> MakeTemp(SvFileStream &rSt)
+    SvStream* MakeTemp(std::optional<utl::TempFile>& roTempFile)
     {
-        std::unique_ptr<utl::TempFile> pT(new utl::TempFile);
-        pT->EnableKillingFile();
-        rSt.Open(pT->GetFileName(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
-        return pT;
+        roTempFile.emplace();
+        roTempFile->EnableKillingFile();
+        return roTempFile->GetStream(StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
     }
 
 #define WW_BLOCKSIZE 0x200
@@ -5781,12 +5780,12 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (!nErrRet)
         nErrRet = SetSubStreams(xTableStream, xDataStream);
 
-    std::unique_ptr<utl::TempFile> pTempMain;
-    std::unique_ptr<utl::TempFile> pTempTable;
-    std::unique_ptr<utl::TempFile> pTempData;
-    SvFileStream aDecryptMain;
-    SvFileStream aDecryptTable;
-    SvFileStream aDecryptData;
+    std::optional<utl::TempFile> oTempMain;
+    std::optional<utl::TempFile> oTempTable;
+    std::optional<utl::TempFile> oTempData;
+    SvStream* pDecryptMain = nullptr;
+    SvStream* pDecryptTable = nullptr;
+    SvStream* pDecryptData = nullptr;
 
     bool bDecrypt = false;
     enum {RC4CryptoAPI, RC4, XOR, Other} eAlgo = Other;
@@ -5836,34 +5835,34 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                     if (aEncryptionData.hasElements() && aCtx.VerifyKey(m_xWwFib->m_nKey, m_xWwFib->m_nHash))
                     {
                         nErrRet = ERRCODE_NONE;
-                        pTempMain = MakeTemp(aDecryptMain);
+                        pDecryptMain = MakeTemp(oTempMain);
 
                         m_pStrm->Seek(0);
                         size_t nUnencryptedHdr =
                             (8 == m_xWwFib->m_nVersion) ? 0x44 : 0x34;
                         std::unique_ptr<sal_uInt8[]> pIn(new sal_uInt8[nUnencryptedHdr]);
                         nUnencryptedHdr = m_pStrm->ReadBytes(pIn.get(), nUnencryptedHdr);
-                        aDecryptMain.WriteBytes(pIn.get(), nUnencryptedHdr);
+                        pDecryptMain->WriteBytes(pIn.get(), nUnencryptedHdr);
                         pIn.reset();
 
-                        DecryptXOR(aCtx, *m_pStrm, aDecryptMain);
+                        DecryptXOR(aCtx, *m_pStrm, *pDecryptMain);
 
                         if (!m_pTableStream || m_pTableStream == m_pStrm)
-                            m_pTableStream = &aDecryptMain;
+                            m_pTableStream = pDecryptMain;
                         else
                         {
-                            pTempTable = MakeTemp(aDecryptTable);
-                            DecryptXOR(aCtx, *m_pTableStream, aDecryptTable);
-                            m_pTableStream = &aDecryptTable;
+                            pDecryptTable = MakeTemp(oTempTable);
+                            DecryptXOR(aCtx, *m_pTableStream, *pDecryptTable);
+                            m_pTableStream = pDecryptTable;
                         }
 
                         if (!m_pDataStream || m_pDataStream == m_pStrm)
-                            m_pDataStream = &aDecryptMain;
+                            m_pDataStream = pDecryptMain;
                         else
                         {
-                            pTempData = MakeTemp(aDecryptData);
-                            DecryptXOR(aCtx, *m_pDataStream, aDecryptData);
-                            m_pDataStream = &aDecryptData;
+                            pDecryptData = MakeTemp(oTempData);
+                            DecryptXOR(aCtx, *m_pDataStream, *pDecryptData);
+                            m_pDataStream = pDecryptData;
                         }
 
                         pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
@@ -5904,30 +5903,30 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                     {
                         nErrRet = ERRCODE_NONE;
 
-                        pTempMain = MakeTemp(aDecryptMain);
+                        pDecryptMain = MakeTemp(oTempMain);
 
                         m_pStrm->Seek(0);
                         std::size_t nUnencryptedHdr = 0x44;
                         std::unique_ptr<sal_uInt8[]> pIn(new sal_uInt8[nUnencryptedHdr]);
                         nUnencryptedHdr = m_pStrm->ReadBytes(pIn.get(), nUnencryptedHdr);
 
-                        DecryptRC4(*xCtx, *m_pStrm, aDecryptMain);
+                        DecryptRC4(*xCtx, *m_pStrm, *pDecryptMain);
 
-                        aDecryptMain.Seek(0);
-                        aDecryptMain.WriteBytes(pIn.get(), nUnencryptedHdr);
+                        pDecryptMain->Seek(0);
+                        pDecryptMain->WriteBytes(pIn.get(), nUnencryptedHdr);
                         pIn.reset();
 
-                        pTempTable = MakeTemp(aDecryptTable);
-                        DecryptRC4(*xCtx, *m_pTableStream, aDecryptTable);
-                        m_pTableStream = &aDecryptTable;
+                        pDecryptTable = MakeTemp(oTempTable);
+                        DecryptRC4(*xCtx, *m_pTableStream, *pDecryptTable);
+                        m_pTableStream = pDecryptTable;
 
                         if (!m_pDataStream || m_pDataStream == m_pStrm)
-                            m_pDataStream = &aDecryptMain;
+                            m_pDataStream = pDecryptMain;
                         else
                         {
-                            pTempData = MakeTemp(aDecryptData);
-                            DecryptRC4(*xCtx, *m_pDataStream, aDecryptData);
-                            m_pDataStream = &aDecryptData;
+                            pDecryptData = MakeTemp(oTempData);
+                            DecryptRC4(*xCtx, *m_pDataStream, *pDecryptData);
+                            m_pDataStream = pDecryptData;
                         }
 
                         pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
@@ -5940,7 +5939,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 
         if (nErrRet == ERRCODE_NONE)
         {
-            m_pStrm = &aDecryptMain;
+            m_pStrm = pDecryptMain;
 
             m_xWwFib = std::make_shared<WW8Fib>(*m_pStrm, m_nWantedVersion);
             if (m_xWwFib->m_nFibError)
@@ -5951,9 +5950,9 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (!nErrRet)
         nErrRet = CoreLoad(pGloss);
 
-    pTempMain.reset();
-    pTempTable.reset();
-    pTempData.reset();
+    oTempMain.reset();
+    oTempTable.reset();
+    oTempData.reset();
 
     m_xWwFib.reset();
     return nErrRet;

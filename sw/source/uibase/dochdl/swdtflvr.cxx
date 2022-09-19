@@ -740,8 +740,9 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
             {
                 ::utl::TempFile     aTempFile;
                 aTempFile.EnableKillingFile();
+                SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
                 uno::Reference< embed::XStorage > xWorkStore =
-                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
+                    ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream), embed::ElementModes::READWRITE );
 
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
@@ -754,13 +755,8 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                std::unique_ptr<SvStream> pSrcStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
-                if( pSrcStm )
-                {
-                    xStream->SetBufferSize( 0xff00 );
-                    xStream->WriteStream( *pSrcStm );
-                    pSrcStm.reset();
-                }
+                xStream->SetBufferSize( 0xff00 );
+                xStream->WriteStream( *pTempStream );
 
                 xWorkStore->dispose();
                 xWorkStore.clear();
