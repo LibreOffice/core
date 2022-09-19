@@ -155,20 +155,15 @@ rtl::Reference<ChartType> lcl_getFirstStockChartType( const rtl::Reference<::cha
 
 OUString lcl_getIndexStringAfterString( const OUString& rString, const OUString& rSearchString )
 {
-    OUStringBuffer aRet;
-
     sal_Int32 nIndexStart = rString.lastIndexOf( rSearchString );
-    if( nIndexStart != -1 )
-    {
-        nIndexStart += rSearchString.getLength();
-        sal_Int32 nIndexEnd = rString.getLength();
-        sal_Int32 nNextColon = rString.indexOf( ':', nIndexStart );
-        if( nNextColon != -1 )
-            nIndexEnd = nNextColon;
-        aRet = rString.subView(nIndexStart,nIndexEnd-nIndexStart);
-    }
-
-    return aRet.makeStringAndClear();
+    if( nIndexStart == -1 )
+        return OUString();
+    nIndexStart += rSearchString.getLength();
+    sal_Int32 nIndexEnd = rString.getLength();
+    sal_Int32 nNextColon = rString.indexOf( ':', nIndexStart );
+    if( nNextColon != -1 )
+        nIndexEnd = nNextColon;
+    return rString.copy(nIndexStart,nIndexEnd-nIndexStart);
 }
 
 sal_Int32 lcl_StringToIndex( std::u16string_view rIndexString )
