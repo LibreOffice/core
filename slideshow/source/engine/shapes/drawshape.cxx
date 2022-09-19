@@ -366,7 +366,8 @@ namespace slideshow::internal
             mbIsVisible( true ),
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
-            mbDrawingLayerAnim( false )
+            mbDrawingLayerAnim( false ),
+            mbContainsPageField( false )
         {
             ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
             ENSURE_OR_THROW( mxPage.is(), "DrawShape::DrawShape(): Invalid containing page" );
@@ -391,6 +392,26 @@ namespace slideshow::internal
             maSubsetting.reset( mpCurrMtf );
 
             prepareHyperlinkIndices();
+
+            if(mbContainsPageField && mpCurrMtf && !maBounds.isEmpty())
+            {
+                // tdf#150402 Use mbContainsPageField that gets set in prepareHyperlinkIndices
+                // which has to be run anyways, so this will cause no harm in execution speed.
+                // It lets us detect the potential error case that a PageField is contained in
+                // the Text of the Shape. That is a hint that maBounds contains the wrong Range
+                // and needs to be corrected. The correct size is in the PrefSize of the metafile.
+                // For more backgrund information please refer to tdf#150402, Comment 16.
+                const double fWidthDiff(fabs(mpCurrMtf->GetPrefSize().Width() - maBounds.getWidth()));
+                const double fHeightDiff(fabs(mpCurrMtf->GetPrefSize().Height() - maBounds.getHeight()));
+
+                if(fWidthDiff > 1.0 || fHeightDiff > 1.0)
+                {
+                    maBounds = basegfx::B2DRange(
+                        maBounds.getMinX(), maBounds.getMinY(),
+                        maBounds.getMinX() + mpCurrMtf->GetPrefSize().Width(),
+                        maBounds.getMinY() + mpCurrMtf->GetPrefSize().Height());
+                }
+            }
         }
 
         DrawShape::DrawShape( const uno::Reference< drawing::XShape >&      xShape,
@@ -425,7 +446,8 @@ namespace slideshow::internal
             mbIsVisible( true ),
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
-            mbDrawingLayerAnim( false )
+            mbDrawingLayerAnim( false ),
+            mbContainsPageField( false )
         {
             ENSURE_OR_THROW( rGraphic.IsAnimated(),
                               "DrawShape::DrawShape(): Graphic is no animation" );
@@ -475,7 +497,8 @@ namespace slideshow::internal
             mbIsVisible( rSrc.mbIsVisible ),
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
-            mbDrawingLayerAnim( false )
+            mbDrawingLayerAnim( false ),
+            mbContainsPageField( false )
         {
             ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
             ENSURE_OR_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
@@ -866,6 +889,10 @@ namespace slideshow::internal
                              maHyperlinkIndices.back().second == -1)
                     {
                         maHyperlinkIndices.back().second = nIndex;
+                    }
+                    else if (pAct->GetComment().equalsIgnoreAsciiCase("FIELD_SEQ_BEGIN;PageField"))
+                    {
+                        mbContainsPageField = true;
                     }
                     ++nIndex;
                 }
