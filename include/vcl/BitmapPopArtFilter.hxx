@@ -23,7 +23,7 @@ public:
 private:
     struct PopArtEntry
     {
-        sal_uInt32 mnIndex;
+        sal_uInt16 mnIndex;
         sal_uInt32 mnCount;
     };
 };
