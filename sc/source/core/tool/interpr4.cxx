@@ -809,7 +809,7 @@ double ScInterpreter::PopDouble()
     return 0.0;
 }
 
-svl::SharedString ScInterpreter::PopString()
+const svl::SharedString & ScInterpreter::PopString()
 {
     nCurFmtType = SvNumFormatType::TEXT;
     nCurFmtIndex = 0;
