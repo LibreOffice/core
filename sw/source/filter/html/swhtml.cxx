@@ -2835,13 +2835,12 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         continue;
                     }
                 }
-                aAttrPam.GetPoint()->nNode = pAttr->m_nStartPara;
 
                 // because of the deleting of BRs the start index can also
                 // point behind the end the text
                 if( pAttr->m_nStartContent > pCNd->Len() )
                     pAttr->m_nStartContent = pCNd->Len();
-                aAttrPam.GetPoint()->nContent.Assign( pCNd, pAttr->m_nStartContent );
+                aAttrPam.GetPoint()->Assign( *pCNd, pAttr->m_nStartContent );
 
                 aAttrPam.SetMark();
                 if ( (pAttr->GetStartParagraph() != pAttr->GetEndParagraph()) &&
@@ -2862,8 +2861,6 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                             continue;
                         }
                     }
-
-                    aAttrPam.GetPoint()->nNode = pAttr->m_nEndPara;
                 }
                 else if( pAttr->IsLikePara() )
                 {
@@ -2875,7 +2872,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 if( pAttr->m_nEndContent > pCNd->Len() )
                     pAttr->m_nEndContent = pCNd->Len();
 
-                aAttrPam.GetPoint()->nContent.Assign( pCNd, pAttr->m_nEndContent );
+                aAttrPam.GetPoint()->Assign( *pCNd, pAttr->m_nEndContent );
                 if( bBeforeTable &&
                     aAttrPam.GetPoint()->GetNodeIndex() ==
                         rEndIdx.GetIndex() )
@@ -3030,8 +3027,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         {
             pFrameFormat->DelFrames();
             *aAttrPam.GetPoint() = *pFlyPos;
-            aAttrPam.GetPoint()->nContent.Assign( aAttrPam.GetPointContentNode(),
-                                                   m_aMoveFlyCnts[n] );
+            aAttrPam.GetPoint()->SetContent( m_aMoveFlyCnts[n] );
             SwFormatAnchor aAnchor( rAnchor );
             aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
             aAnchor.SetAnchor( aAttrPam.GetPoint() );
