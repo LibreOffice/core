@@ -35,6 +35,7 @@
 #include <fmtfsize.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <formatcontentcontrol.hxx>
+#include <strings.hrc>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/text/data/";
 
@@ -623,6 +624,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    sal_Int32 nPlaceHolderLen = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER).getLength();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nPlaceHolderLen,
+                     /*bBasicCall=*/false);
+    pWrtShell->Insert("mydesc");
 
     // When exporting to PDF:
     StoreToTempFile("writer_pdf_Export");
@@ -635,6 +642,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     // - Actual  : 0
     // i.e. the content control was just exported as normal text.
     CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+
+    // Also verify that the widget description is correct, it was empty:
+    CPPUNIT_ASSERT_EQUAL(OUString("mydesc"),
+                         pAnnotation->getFormFieldAlternateName(pPdfDocument.get()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)

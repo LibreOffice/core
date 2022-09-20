@@ -56,6 +56,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <comphelper/string.hxx>
 #include <docsh.hxx>
 #include <unocrsrhelper.hxx>
 #include <textcontentcontrol.hxx>
@@ -983,6 +984,19 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     {
         pDescriptor->TextFont = pFont->GetActualFont();
     }
+
+    // Description for accessibility purposes.
+    SwTextContentControl* pTextAttr = pContentControl->GetTextAttr();
+    SwTextNode* pTextNode = pContentControl->GetTextNode();
+    SwPosition aPoint(*pTextNode, pTextAttr->GetStart());
+    SwPosition aMark(*pTextNode, *pTextAttr->GetEnd());
+    SwPaM aPam(aMark, aPoint);
+    OUString aDescription = aPam.GetText();
+    static sal_Unicode const aForbidden[] = {
+        CH_TXTATR_BREAKWORD,
+        0
+    };
+    pDescriptor->Description = comphelper::string::removeAny(aDescription, aForbidden);
 
     SwRect aLocation;
     rInf.CalcRect(*this, &aLocation);

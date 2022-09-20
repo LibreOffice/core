@@ -251,6 +251,7 @@ public:
     std::vector<basegfx::B2DPoint> getLineGeometry() override;
     PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) override;
     float getFormFontSize(PDFiumDocument* pDoc) override;
+    OUString getFormFieldAlternateName(PDFiumDocument* pDoc) override;
 };
 
 class PDFiumPageObjectImpl final : public PDFiumPageObject
@@ -1146,6 +1147,36 @@ float PDFiumAnnotationImpl::getFormFontSize(PDFiumDocument* pDoc)
     }
 
     return fRet;
+}
+
+OUString PDFiumAnnotationImpl::getFormFieldAlternateName(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    OUString aString;
+    unsigned long nSize = FPDFAnnot_GetFormFieldAlternateName(pDocImpl->getFormHandlePointer(),
+                                                              mpAnnotation, nullptr, 0);
+    assert(nSize % 2 == 0);
+    nSize /= 2;
+    if (nSize > 1)
+    {
+        std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nSize]);
+        unsigned long nStringSize = FPDFAnnot_GetFormFieldAlternateName(
+            pDocImpl->getFormHandlePointer(), mpAnnotation,
+            reinterpret_cast<FPDF_WCHAR*>(pText.get()), nSize * 2);
+        assert(nStringSize % 2 == 0);
+        nStringSize /= 2;
+        if (nStringSize > 0)
+        {
+#if defined OSL_BIGENDIAN
+            for (unsigned long i = 0; i != nStringSize; ++i)
+            {
+                pText[i] = OSL_SWAPWORD(pText[i]);
+            }
+#endif
+            aString = OUString(pText.get());
+        }
+    }
+    return aString;
 }
 
 namespace

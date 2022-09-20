@@ -29,6 +29,7 @@ pdfium_patches += include.patch
 pdfium_patches += abseil-trivial.patch
 
 pdfium_patches += annot.patch.1
+pdfium_patches += annot-alternate-name.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
