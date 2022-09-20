@@ -15,59 +15,9 @@
 
 using namespace formula;
 
-namespace sc::opencl {
-void OpVar::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 30 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        fCount += 1.0;\n"
-        );
-    ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg - fMean) * (arg - fMean);\n"
-        );
-    ss << "    if (fCount <= 1.0)\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    else\n";
-    ss << "        return vSum / (fCount - 1.0);\n";
-    ss << "}\n";
-}
+#include "op_math_helpers.hxx"
 
-void OpVarP::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 30 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    ss << "    double arg = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        fCount += 1.0;\n"
-        );
-    ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg - fMean) * (arg - fMean);\n"
-        );
-    ss << "    if (fCount == 0.0)\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    else\n";
-    ss << "        return vSum / fCount;\n";
-    ss << "}\n";
-}
+namespace sc::opencl {
 
 void OpZTest::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
@@ -371,77 +321,6 @@ void OpWeibull::GenSlidingWindowFunction(outputstream &ss,
     ss << "}\n";
 }
 
-void OpSkew::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 30 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        fCount += 1.0;\n"
-        );
-    ss << "    if(fCount <= 2.0)\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    else\n";
-    ss << "        fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg - fMean) * (arg - fMean);\n"
-        );
-    ss << "    double fStdDev = sqrt(vSum / (fCount - 1.0));\n";
-    ss << "    double dx = 0.0;\n";
-    ss << "    double xcube = 0.0;\n";
-    ss << "    if(fStdDev == 0.0)\n";
-    ss << "        return CreateDoubleError(IllegalArgument);\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        dx = (arg - fMean) / fStdDev;\n"
-        "        xcube = xcube + dx * dx * dx;\n"
-        );
-    ss << "    return ((xcube * fCount) / (fCount - 1.0))";
-    ss << " / (fCount - 2.0);\n";
-    ss << "}\n";
-}
-
-void OpSkewp::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 3 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        fCount += 1.0;\n"
-        );
-    ss << "    if(fCount <= 2.0)\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    else\n";
-    ss << "        fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg - fMean) * (arg - fMean);\n"
-        );
-    ss << "    double fStdDev = sqrt(vSum / fCount);\n";
-    ss << "    double dx = 0.0;\n";
-    ss << "    double xcube = 0.0;\n";
-    ss << "    if(fStdDev == 0.0)\n";
-    ss << "        return CreateDoubleError(IllegalArgument);\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        dx = (arg - fMean) / fStdDev;\n"
-        "        xcube = xcube + dx * dx * dx;\n"
-        );
-    ss << "    return xcube / fCount;\n";
-    ss << "}\n";
-}
-
 void OpTInv::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
@@ -489,58 +368,6 @@ void OpTInv::GenSlidingWindowFunction(outputstream &ss,
     ss << "    if (bConvError)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return fVal;\n";
-    ss << "}\n";
-}
-
-void OpStDev::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 30 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        fCount += 1.0;\n"
-        );
-    ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg - fMean) * (arg - fMean);\n"
-        );
-    ss << "    if (fCount <= 1.0)\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    else\n";
-    ss << "        return sqrt(vSum / (fCount - 1.0));\n";
-    ss << "}\n";
-}
-
-void OpStDevP::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 30 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double fMean = 0.0;\n";
-    ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        fCount += 1.0;\n"
-        );
-    ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg - fMean) * (arg - fMean);\n"
-        );
-    ss << "    if (fCount <= 1.0)\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    else\n";
-    ss << "        return sqrt(vSum / fCount);\n";
     ss << "}\n";
 }
 
@@ -1162,41 +989,6 @@ void OpMedian::GenSlidingWindowFunction(
     ss << "    }\n";
     ss <<"     return tmp;\n";
     ss << "}\n";
-}
-void OpKurt:: GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 30 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum = 0.0;\n";
-    ss << "    double vSum = 0.0;\n";
-    ss << "    double totallength=0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        fSum += arg;\n"
-        "        totallength +=1;\n"
-        );
-    ss << "    if( totallength < 4 )\n";
-    ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    double fMean = fSum / totallength;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        vSum += (arg-fMean)*(arg-fMean);\n"
-        );
-    ss << "    double fStdDev = sqrt(vSum / (totallength - 1.0));\n";
-    ss << "    double dx = 0.0;\n";
-    ss << "    double xpower4 = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
-        "        dx = (arg -fMean) / fStdDev;\n"
-        "        xpower4 = xpower4 + (dx * dx * dx * dx);\n"
-        );
-    ss<< "    double k_d = (totallength - 2.0) * (totallength - 3.0);\n";
-    ss<< "    double k_l = totallength * (totallength + 1.0) /";
-    ss<< "((totallength - 1.0) * k_d);\n";
-    ss<< "    double k_t = 3.0 * (totallength - 1.0) * ";
-    ss<< "(totallength - 1.0) / k_d;\n";
-    ss<< "    return xpower4 * k_l - k_t;\n";
-    ss << "}";
 }
 
 void OpLogInv::BinInlineFun(std::set<std::string>& decls,
@@ -2392,6 +2184,139 @@ void OpRsq::GenSlidingWindowFunction(
         "        return CreateDoubleError(DivisionByZero);\n"
         "    return ( fSumDeltaXDeltaY * fSumDeltaXDeltaY / (fSumSqrDeltaX * fSumSqrDeltaY));\n"
         );
+}
+
+void OpVarStDevBase::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+    decls.insert(fsub_approxDecl);
+    funs.insert(fsub_approx);
+}
+
+void OpVarStDevBase::GenerateCode(outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+{
+    CHECK_PARAMETER_COUNT( 1, 30 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n"; // this must be matched by whoever calls this function
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double fSum = 0.0;\n";
+    ss << "    double fCount = 0.0;\n";
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
+        );
+    ss << "    if (fCount == 0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    double fMean = fSum / fCount;\n";
+    ss << "    double vSum = 0.0;\n";
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += pown( fsub_approx(arg, fMean), 2 );\n"
+        );
+}
+
+void OpVar::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if (fCount <= 1.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        return vSum / (fCount - 1.0);\n";
+    ss << "}\n";
+}
+
+void OpVarP::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if (fCount == 0.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        return vSum / fCount;\n";
+    ss << "}\n";
+}
+
+void OpStDev::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if (fCount <= 1.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        return sqrt(vSum / (fCount - 1.0));\n";
+    ss << "}\n";
+}
+
+void OpStDevP::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if (fCount <= 0.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    else\n";
+    ss << "        return sqrt(vSum / fCount);\n";
+    ss << "}\n";
+}
+
+void OpSkew::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if(fCount <= 2.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    double fStdDev = sqrt(vSum / (fCount - 1.0));\n";
+    ss << "    double dx = 0.0;\n";
+    ss << "    double xcube = 0.0;\n";
+    ss << "    if(fStdDev == 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        dx = fsub_approx(arg, fMean) / fStdDev;\n"
+        "        xcube = xcube + dx * dx * dx;\n"
+        );
+    ss << "    return ((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0);\n";
+    ss << "}\n";
+}
+
+void OpSkewp::GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if(fCount <= 2.0)\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    double fStdDev = sqrt(vSum / fCount);\n";
+    ss << "    double dx = 0.0;\n";
+    ss << "    double xcube = 0.0;\n";
+    ss << "    if(fStdDev == 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        dx = fsub_approx(arg, fMean) / fStdDev;\n"
+        "        xcube = xcube + dx * dx * dx;\n"
+        );
+    ss << "    return xcube / fCount;\n";
+    ss << "}\n";
+}
+
+void OpKurt:: GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments)
+{
+    GenerateCode( ss, sSymName, vSubArguments );
+    ss << "    if( fCount < 4 )\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
+    ss << "    double fStdDev = sqrt(vSum / (fCount - 1.0));\n";
+    ss << "    double dx = 0.0;\n";
+    ss << "    double xpower4 = 0.0;\n";
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        dx = (arg -fMean) / fStdDev;\n"
+        "        xpower4 = xpower4 + (dx * dx * dx * dx);\n"
+        );
+    ss<< "    double k_d = (fCount - 2.0) * (fCount - 3.0);\n";
+    ss<< "    double k_l = fCount * (fCount + 1.0) / ((fCount - 1.0) * k_d);\n";
+    ss<< "    double k_t = 3.0 * (fCount - 1.0) * (fCount - 1.0) / k_d;\n";
+    ss<< "    return xpower4 * k_l - k_t;\n";
+    ss << "}";
 }
 
 void OpMin::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
