@@ -82,6 +82,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         assert(nIndex <= maVector.size());
         // add nCount copies of rValue
         maVector.insert(maVector.begin() + nIndex, nCount, rValue);
@@ -89,6 +90,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const CoordinateDataArray2D& rSource)
     {
+        assert(rSource.maVector.size() > 0);
         assert(nIndex <= maVector.size());
         // insert data
         auto aIndex = maVector.begin();
@@ -100,6 +102,7 @@ public:
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         assert(nIndex + nCount <= maVector.size());
         // remove point data
         const auto aStart = maVector.begin() + nIndex;
@@ -328,6 +331,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const ControlVectorPair2D& rValue, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         assert(nIndex <= maVector.size());
 
         // add nCount copies of rValue
@@ -342,6 +346,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const ControlVectorArray2D& rSource)
     {
+        assert(rSource.maVector.size() > 0);
         assert(nIndex <= maVector.size());
 
         // insert data
@@ -362,6 +367,7 @@ public:
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         assert(nIndex + nCount <= maVector.size());
 
         const ControlVectorPair2DVector::iterator aDeleteStart(maVector.begin() + nIndex);
@@ -689,6 +695,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         mpBufferedData.reset();
         auto aCoordinate = rPoint;
         maPoints.insert(nIndex, aCoordinate, nCount);
@@ -804,6 +811,7 @@ public:
 
     void append(const ImplB2DPolygon& rSource)
     {
+        assert(rSource.maPoints.count() > 0);
         const sal_uInt32 nIndex = count();
 
         mpBufferedData.reset();
@@ -828,6 +836,7 @@ public:
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         mpBufferedData.reset();
         maPoints.remove(nIndex, nCount);
 

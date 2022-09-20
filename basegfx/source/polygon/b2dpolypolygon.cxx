@@ -102,6 +102,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const basegfx::B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         assert(nIndex <= maPolygons.size());
         // add nCount copies of rPolygon
         maPolygons.insert(maPolygons.begin() + nIndex, nCount, rPolygon);
@@ -131,6 +132,7 @@ public:
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
+        assert(nCount > 0);
         assert(nIndex + nCount <= maPolygons.size());
         // remove polygon data
         auto aStart(maPolygons.begin() + nIndex);
