@@ -124,6 +124,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mbLastTryMerge(false),
     mbReplaceLeadingSingleQuotationMark(true),
     mbSkipOutsideFormat(false),
+    mbFuzzing(utl::ConfigManager::IsFuzzing()),
     mbNbspRunNext(false)
 {
     aStatus.GetControlWord() =  EEControlBits::USECHARATTRIBS | EEControlBits::DOIDLEFORMAT |
@@ -1948,7 +1949,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
     WritingDirectionInfos& rInfos = pParaPortion->aWritingDirectionInfos;
     rInfos.clear();
 
-    if (pParaPortion->GetNode()->Len())
+    if (pParaPortion->GetNode()->Len() && !mbFuzzing)
     {
         const OUString aText = pParaPortion->GetNode()->GetString();
 
@@ -2722,7 +2723,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
         aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
 
     OUString aText(convertLineEnd(rStr, LINEEND_LF));
-    if (utl::ConfigManager::IsFuzzing())    //tab expansion performance in editeng is appalling
+    if (mbFuzzing)    //tab expansion performance in editeng is appalling
         aText = aText.replaceAll("\t","-");
     SfxVoidItem aTabItem( EE_FEATURE_TAB );
 

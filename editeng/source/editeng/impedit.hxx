@@ -605,6 +605,7 @@ private:
     bool            mbLastTryMerge:1;
     bool            mbReplaceLeadingSingleQuotationMark:1;
     bool            mbSkipOutsideFormat:1;
+    bool            mbFuzzing:1;
 
     bool            mbNbspRunNext;  // can't be a bitfield as it is passed as bool&
 
