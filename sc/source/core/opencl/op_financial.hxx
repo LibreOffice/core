@@ -454,8 +454,16 @@ class OpDDB:public Normal
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
-
-     virtual std::string BinFuncName() const override { return "DDB"; }
+    virtual std::string BinFuncName() const override { return "DDB"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
+};
+class OpVDB: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "VDB"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
 };
 class OpDB:public Normal
 {
@@ -548,16 +556,6 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
                 const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "PV"; }
-};
-
-class OpVDB: public CheckVariables
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-
-    virtual std::string BinFuncName() const override { return "VDB"; }
-    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
 };
 
 }

@@ -2403,10 +2403,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpSumIfs>(), nResultSize));
                 break;
-                /*case ocVBD:
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                             ft->Children[i],std::make_shared<OpVDB));
-                     break;*/
+            case ocVBD:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
+                         ft->Children[i],std::make_shared<OpVDB>(), nResultSize));
+                 break;
             case ocKurt:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpKurt>(), nResultSize));

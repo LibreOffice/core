@@ -17,6 +17,7 @@ using namespace formula;
 namespace sc::opencl {
 // Definitions of inline functions
 #include "op_financial_helpers.hxx"
+#include "op_math_helpers.hxx"
 
 void OpRRI::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
@@ -1699,6 +1700,13 @@ void OpTbillyield::GenSlidingWindowFunction(
     ss << "}\n";
 }
 
+void OpDDB::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(ScGetDDBDecl);
+    funs.insert(ScGetDDB);
+}
+
 void OpDDB::GenSlidingWindowFunction(outputstream& ss,
             const std::string &sSymName, SubArguments& vSubArguments)
 {
@@ -1715,27 +1723,8 @@ void OpDDB::GenSlidingWindowFunction(outputstream& ss,
     ss << "    if (fCost < 0.0 || fSalvage < 0.0 || fFactor <= 0.0 || fSalvage > fCost\n";
     ss << "        || fPeriod < 1.0 || fPeriod > fLife)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
-    ss << "    double fRate, fOldValue, fNewValue;\n";
-    ss <<"    fRate = fFactor / fLife;\n";
-    ss <<"    if (fRate >= 1.0)\n";
-    ss <<"    {\n";
-    ss <<"        fRate = 1.0;\n";
-    ss <<"        if (fPeriod == 1.0)\n";
-    ss <<"            fOldValue = fCost;\n";
-    ss <<"        else\n";
-    ss <<"            fOldValue = 0.0;\n";
-    ss <<"    }\n";
-    ss <<"    else\n";
-    ss <<"        fOldValue = fCost * pow(1.0 - fRate, fPeriod - 1);\n";
-    ss <<"    fNewValue = fCost * pow(1.0 - fRate, fPeriod);\n";
-    ss <<"    if (fNewValue < fSalvage)\n";
-    ss <<"        tmp = fOldValue - fSalvage;\n";
-    ss <<"    else\n";
-    ss <<"        tmp = fOldValue - fNewValue;\n";
-    ss <<"    if (tmp < 0.0)\n";
-    ss <<"        tmp = 0.0;\n";
-    ss <<"    return tmp;\n";
-    ss <<"}";
+    ss << "   return ScGetDDB( fCost, fSalvage, fLife, fPeriod, fFactor );\n";
+    ss << "}\n";
 }
 
 void OpPV::GenSlidingWindowFunction(
@@ -1771,9 +1760,11 @@ void OpPV::GenSlidingWindowFunction(
 void OpVDB::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(ScGetDDBDecl);decls.insert(DblMinDecl);
+    decls.insert(is_representable_integerDecl);
+    decls.insert(ScGetDDBDecl);decls.insert(approx_equalDecl);
     decls.insert(ScInterVDBDecl);decls.insert(VDBImplementDecl);
-    funs.insert(ScGetDDB);funs.insert(DblMin);
+    funs.insert(is_representable_integer);
+    funs.insert(ScGetDDB);funs.insert(approx_equal);
     funs.insert(ScInterVDB);funs.insert(VDBImplement);
 }
 
@@ -1786,23 +1777,17 @@ void OpVDB::GenSlidingWindowFunction(
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int singleIndex = gid0;\n";
     ss << "    double result = 0;\n";
-    GenTmpVariables(ss,vSubArguments);
-    CheckAllSubArgumentIsNan(ss,vSubArguments);
-    if(vSubArguments.size() <= 6)
-    {
-        ss << "    int tmp6  = 0;\n";
-    }
-    if(vSubArguments.size() == 5)
-    {
-        ss << "    double tmp5= 2.0;\n";
-    }
-    ss << "    if(tmp3 < 0 || tmp4<tmp3 || tmp4>tmp2 || tmp0<0 ||tmp1>tmp0";
-    ss << "|| tmp5 <=0)\n";
-    ss << "        result = -DBL_MAX;\n";
-    ss << "    else\n";
-    ss << "        result =";
-    ss << "VDBImplement(tmp0,tmp1,tmp2,tmp3,tmp4,tmp5,tmp6);\n";
-    ss << "    return result;\n";
+    GenerateArg( "fCost", 0, vSubArguments, ss );
+    GenerateArg( "fSalvage", 1, vSubArguments, ss );
+    GenerateArg( "fLife", 2, vSubArguments, ss );
+    GenerateArg( "fStart", 3, vSubArguments, ss );
+    GenerateArg( "fEnd", 4, vSubArguments, ss );
+    GenerateArgWithDefault( "fFactor", 5, 2, vSubArguments, ss );
+    GenerateArgWithDefault( "fNoSwitch", 6, 0, vSubArguments, ss );
+    ss << "    if (fStart < 0.0 || fEnd < fStart || fEnd > fLife || fCost < 0.0\n";
+    ss << "        || fSalvage > fCost || fFactor <= 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    return VDBImplement(fCost, fSalvage, fLife, fStart, fEnd, fFactor, fNoSwitch != 0);\n";
     ss << "}";
 }
 
