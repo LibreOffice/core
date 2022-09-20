@@ -53,6 +53,7 @@
 #include <unotools/tempfile.hxx>
 #include <fontsubset.hxx>
 #include <algorithm>
+#include <memory>
 
 namespace vcl
 {
@@ -126,9 +127,8 @@ private:
 class GlyphOffsets {
 public:
     GlyphOffsets(sal_uInt8 *sfntP, sal_uInt32 sfntLen);
-    ~GlyphOffsets();
     sal_uInt32 nGlyphs;           /* number of glyphs in the font + 1 */
-    sal_uInt32 *offs;             /* array of nGlyphs offsets */
+    std::unique_ptr<sal_uInt32[]> offs;             /* array of nGlyphs offsets */
 };
 
 }
@@ -1964,7 +1964,7 @@ GlyphOffsets::GlyphOffsets(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
     this->nGlyphs = locaLen / ((indexToLocFormat == 1) ? 4 : 2);
     assert(this->nGlyphs != 0);
-    this->offs = static_cast<sal_uInt32*>(scalloc(this->nGlyphs, sizeof(sal_uInt32)));
+    this->offs = std::make_unique<sal_uInt32[]>(this->nGlyphs);
 
     for (sal_uInt32 i = 0; i < this->nGlyphs; i++) {
         if (indexToLocFormat == 1) {
@@ -1973,11 +1973,6 @@ GlyphOffsets::GlyphOffsets(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
             this->offs[i] = GetUInt16(loca, i * 2) << 1;
         }
     }
-}
-
-GlyphOffsets::~GlyphOffsets()
-{
-    free(this->offs);
 }
 
 static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
