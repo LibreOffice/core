@@ -385,6 +385,43 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     assertXPath(pXmlDoc, "//draw:frame", "width", "3.1492in");
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
+{
+    // Given a broken document where both IsSyncHeightToWidth and IsSyncWidthToHeight are set to
+    // true:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xTextFrame(
+        xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextFrameProps(xTextFrame, uno::UNO_QUERY);
+    xTextFrameProps->setPropertyValue("Width", uno::Any(static_cast<sal_Int16>(2000)));
+    xTextFrameProps->setPropertyValue("Height", uno::Any(static_cast<sal_Int16>(1000)));
+    xTextFrameProps->setPropertyValue("IsSyncHeightToWidth", uno::Any(true));
+    xTextFrameProps->setPropertyValue("IsSyncWidthToHeight", uno::Any(true));
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+
+    // Then make sure that we still export a non-zero size:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: 0.7874in
+    // - Actual  : 0in
+    // i.e. the exported size was 0, not 2000 mm100 in inches.
+    assertXPath(pXmlDoc, "//draw:frame", "width", "0.7874in");
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
 {
     // Given a document with a content control around one or more text portions:
