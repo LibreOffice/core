@@ -146,12 +146,15 @@ OUString ScCellFormat::GetInputString(
         break;
         case CELLTYPE_FORMULA:
         {
-            OUString str;
+            std::optional<OUString> str;
             ScFormulaCell* pFC = rCell.getFormula();
             if (pFC->IsEmptyDisplayedAsString())
                 ; // empty
             else if (pFC->IsValue())
-                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, str, bFiltering, bForceSystemLocale);
+            {
+                str.emplace();
+                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, *str, bFiltering, bForceSystemLocale);
+            }
             else
             {
                 const svl::SharedString& shared = pFC->GetString();
@@ -166,19 +169,19 @@ OUString ScCellFormat::GetInputString(
             const FormulaError nErrCode = pFC->GetErrCode();
             if (nErrCode != FormulaError::NONE)
             {
-                str.clear();
+                str.reset();
                 if( pShared != nullptr )
                     *pShared = nullptr;
             }
 
-            return str;
+            return str ? std::move(*str) : svl::SharedString::EMPTY_STRING;
         }
         case CELLTYPE_NONE:
             if( pShared != nullptr )
                 *pShared = &svl::SharedString::getEmptyString();
-            return OUString();
+            return svl::SharedString::EMPTY_STRING;
         default:
-            return OUString();
+            return svl::SharedString::EMPTY_STRING;
     }
 }
 

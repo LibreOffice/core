@@ -8178,7 +8178,8 @@ void ScInterpreter::ScIndirect()
         bTryXlA1 = false;
     }
 
-    OUString sRefStr = GetString().getString();
+    svl::SharedString sSharedRefStr = GetString();
+    const OUString & sRefStr = sSharedRefStr.getString();
     if (sRefStr.isEmpty())
     {
         // Bail out early for empty cells, rely on "we do have a string" below.
@@ -8223,7 +8224,7 @@ void ScInterpreter::ScIndirect()
 
     do
     {
-        OUString aName( ScGlobal::getCharClass().uppercase( sRefStr));
+        const OUString & aName( sSharedRefStr.getDataIgnoreCase() );
         ScDBCollection::NamedDBs& rDBs = mrDoc.GetDBCollection()->getNamedDBs();
         const ScDBData* pData = rDBs.findByUpperName( aName);
         if (!pData)
