@@ -26,6 +26,10 @@
 #include <postmac.h>
 #endif
 
+#ifdef LINUX
+#include <fcntl.h>
+#endif
+
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #endif
@@ -4554,13 +4558,27 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
         else
             sal_detail_set_log_selector(pCurrentSalLogOverride);
     }
+#ifdef LINUX
     else if (strcmp(pOption, "addfont") == 0)
     {
+        if (memcmp(pValue, "file://", 7) == 0)
+            pValue += 7;
+
+        int fd = open(pValue, O_RDONLY);
+        if (fd == -1)
+        {
+            std::cerr << "Could not open font file '" << pValue << "': " << strerror(errno) << std::endl;
+            return;
+        }
+
+        OUString sMagicFileName = "file:///:FD:/" + OUString::number(fd);
+
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OutputDevice::ImplClearAllFontData(false);
-        pDevice->AddTempDevFont(OUString::fromUtf8(pValue), "");
+        pDevice->AddTempDevFont(sMagicFileName, "");
         OutputDevice::ImplRefreshAllFontData(false);
     }
+#endif
 }
 
 static void lo_dumpState (LibreOfficeKit* pThis, const char* /* pOptions */, char** pState)

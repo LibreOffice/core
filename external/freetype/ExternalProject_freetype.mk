@@ -28,9 +28,9 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			$(gb_CONFIGURE_PLATFORMS) \
 			CFLAGS="$(CFLAGS) \
 				$(call gb_ExternalProject_get_build_flags,freetype) \
+				$(call gb_ExternalProject_get_link_flags,freetype) \
 				$(gb_VISIBILITY_FLAGS) \
 				$(gb_EMSCRIPTEN_CPPFLAGS)" \
-			LDFLAGS="$(call gb_ExternalProject_get_link_flags,freetype)" \
 		&& $(MAKE) install \
 		&& touch $@	)
 	$(call gb_Trace_EndRange,freetype,EXTERNAL)

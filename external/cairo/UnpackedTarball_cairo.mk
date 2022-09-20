@@ -28,6 +28,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo.ofz46165.patch.1 \
 	external/cairo/cairo/cairo.ofz50805.patch.1 \
 	external/cairo/cairo/0025-libtool-pass-use-ld.patch \
+	external/cairo/cairo/libcairo-bundled-soname.patch.0 \
+	external/cairo/cairo/cairo-fd-hack.patch.0 \
 ))
 
 ifeq ($(OS),iOS)
