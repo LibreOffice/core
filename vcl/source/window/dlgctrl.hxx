@@ -29,6 +29,6 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
 vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                              sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true );
 
-sal_Unicode getAccel( const OUString& rStr );
+sal_Unicode getAccel( std::u16string_view rStr );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

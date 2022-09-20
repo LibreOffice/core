@@ -697,24 +697,24 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles()
 namespace
 {
 
-bool lcl_matchFilter( const OUString& rFilter, const OUString& rExt )
+bool lcl_matchFilter( std::u16string_view rFilter, std::u16string_view rExt )
 {
     const sal_Unicode cSep {';'};
-    sal_Int32 nIdx {0};
+    size_t nIdx {0};
 
     for (;;)
     {
-        const sal_Int32 nBegin = rFilter.indexOf(rExt, nIdx);
+        const size_t nBegin = rFilter.find(rExt, nIdx);
 
-        if (nBegin<0) // not found
+        if (nBegin == std::u16string_view::npos) // not found
             break;
 
         // Let nIdx point to end of matched string, useful in order to
         // check string boundaries and also for a possible next iteration
-        nIdx = nBegin + rExt.getLength();
+        nIdx = nBegin + rExt.size();
 
         // Check if the found occurrence is an exact match: right side
-        if (nIdx<rFilter.getLength() && rFilter[nIdx]!=cSep)
+        if (nIdx < rFilter.size() && rFilter[nIdx]!=cSep)
             continue;
 
         // Check if the found occurrence is an exact match: left side
@@ -802,7 +802,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         if ( m_pFilterVector)
                             for (auto const& filter : *m_pFilterVector)
                             {
-                                if( lcl_matchFilter( filter.getFilter(), OUString::Concat("*.") + sExtension ) )
+                                if( lcl_matchFilter( filter.getFilter(), OUStringConcatenation(OUString::Concat("*.") + sExtension) ) )
                                 {
                                     if( aNewFilter.isEmpty() )
                                         aNewFilter = filter.getTitle();

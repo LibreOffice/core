@@ -61,7 +61,7 @@ public:
     vcl::font::PhysicalFontFamily* FindFontFamily( vcl::font::FontSelectPattern& ) const;
     vcl::font::PhysicalFontFamily* FindFontFamilyByTokenNames(std::u16string_view rTokenStr) const;
     vcl::font::PhysicalFontFamily* FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
-                                             FontItalic, const OUString& rSearchFamily) const;
+                                             FontItalic, std::u16string_view rSearchFamily) const;
 
     // suggest fonts for glyph fallback
     vcl::font::PhysicalFontFamily* GetGlyphFallbackFont( vcl::font::FontSelectPattern&,

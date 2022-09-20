@@ -264,10 +264,10 @@ void TextNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
         maCharAttribs.ResortAttribs();
 }
 
-void TextNode::InsertText( sal_Int32 nPos, const OUString& rText )
+void TextNode::InsertText( sal_Int32 nPos, std::u16string_view rText )
 {
     maText = maText.replaceAt( nPos, 0, rText );
-    ExpandAttribs( nPos, rText.getLength() );
+    ExpandAttribs( nPos, rText.size() );
 }
 
 void TextNode::InsertText( sal_Int32 nPos, sal_Unicode c )
@@ -472,15 +472,15 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, sal_Unicode c )
     return aPaM;
 }
 
-TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
+TextPaM TextDoc::InsertText( const TextPaM& rPaM, std::u16string_view rStr )
 {
-    SAL_WARN_IF( rStr.indexOf( 0x0A ) != -1, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
-    SAL_WARN_IF( rStr.indexOf( 0x0D ) != -1, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
+    SAL_WARN_IF( rStr.find( 0x0A ) != std::u16string_view::npos, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
+    SAL_WARN_IF( rStr.find( 0x0D ) != std::u16string_view::npos, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
 
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ].get();
     pNode->InsertText( rPaM.GetIndex(), rStr );
 
-    TextPaM aPaM( rPaM.GetPara(), rPaM.GetIndex()+rStr.getLength() );
+    TextPaM aPaM( rPaM.GetPara(), rPaM.GetIndex()+rStr.size() );
     return aPaM;
 }
 

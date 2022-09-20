@@ -84,7 +84,7 @@ void VclPhysicalFontFamilyTest::testAddOneFontFace()
 
     FontAttributes aFontAttrs;
     aFontAttrs.SetFamilyName("Test font face");
-    aFontAttrs.AddMapName("Alias name");
+    aFontAttrs.AddMapName(u"Alias name");
     aFontAttrs.SetFamilyType(FontFamily::FAMILY_ROMAN);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetItalic(FontItalic::ITALIC_NONE);
@@ -111,7 +111,7 @@ void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
 
     FontAttributes aFontAttrs;
     aFontAttrs.SetFamilyName("Test font face");
-    aFontAttrs.AddMapName("Alias name");
+    aFontAttrs.AddMapName(u"Alias name");
     aFontAttrs.SetFamilyType(FontFamily::FAMILY_ROMAN);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetItalic(FontItalic::ITALIC_NONE);
@@ -122,7 +122,7 @@ void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
     aFamily.AddFontFace(new TestFontFace(aFontAttrs, 1));
 
     aFontAttrs.SetFamilyName("Test font face");
-    aFontAttrs.AddMapName("Alias name 2");
+    aFontAttrs.AddMapName(u"Alias name 2");
     aFontAttrs.SetFamilyType(FontFamily::FAMILY_ROMAN);
     aFontAttrs.SetPitch(FontPitch::PITCH_VARIABLE);
     aFontAttrs.SetItalic(FontItalic::ITALIC_NORMAL);

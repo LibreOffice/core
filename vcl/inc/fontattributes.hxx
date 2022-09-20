@@ -66,7 +66,7 @@ public:
 
     void                SetQuality( int nQuality )                  { mnQuality = nQuality; }
     void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
-    void                AddMapName( OUString const& );
+    void                AddMapName( std::u16string_view );
 
 private:
     // device independent variables
@@ -105,14 +105,14 @@ inline void FontAttributes::SetSymbolFlag( const bool bSymbolFlag )
     }
 }
 
-inline void FontAttributes::AddMapName( OUString const & aMapName )
+inline void FontAttributes::AddMapName( std::u16string_view aMapName )
 {
     if( maMapNames.getLength() > 0 )
     {
         maMapNames += ";";
     }
 
-    if (aMapName.getLength() == 0)
+    if (aMapName.size() == 0)
     {
         SAL_WARN("vcl.fonts", "New map name is empty");
         return;

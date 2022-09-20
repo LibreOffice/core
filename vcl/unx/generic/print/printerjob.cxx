@@ -263,10 +263,10 @@ static void WriteLocalTimePS( osl::File *rFile )
         WritePS( rFile, "Unknown-Time" );
 }
 
-static bool isAscii( const OUString& rStr )
+static bool isAscii( std::u16string_view rStr )
 {
-    sal_Int32 nLen = rStr.getLength();
-    for( sal_Int32 i = 0; i < nLen; i++ )
+    size_t nLen = rStr.size();
+    for( size_t i = 0; i < nLen; i++ )
         if( rStr[i] > 127 )
             return false;
     return true;

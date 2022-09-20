@@ -368,8 +368,8 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 }
 
 void ImplUpdateSeparatorString( OUString& io_rText,
-                                       const OUString& rOldDecSep, std::u16string_view rNewDecSep,
-                                       const OUString& rOldThSep, std::u16string_view rNewThSep )
+                                       std::u16string_view rOldDecSep, std::u16string_view rNewDecSep,
+                                       std::u16string_view rOldThSep, std::u16string_view rNewThSep )
 {
     OUStringBuffer aBuf( io_rText.getLength() );
     sal_Int32 nIndexDec = 0, nIndexTh = 0, nIndex = 0;
@@ -385,13 +385,13 @@ void ImplUpdateSeparatorString( OUString& io_rText,
         {
             aBuf.append( pBuffer + nIndex, nIndexTh - nIndex );
             aBuf.append( rNewThSep );
-            nIndex = nIndexTh + rOldThSep.getLength();
+            nIndex = nIndexTh + rOldThSep.size();
         }
         else if( nIndexDec != -1 )
         {
             aBuf.append( pBuffer + nIndex, nIndexDec - nIndex );
             aBuf.append( rNewDecSep );
-            nIndex = nIndexDec + rOldDecSep.getLength();
+            nIndex = nIndexDec + rOldDecSep.size();
         }
         else
         {
@@ -403,8 +403,8 @@ void ImplUpdateSeparatorString( OUString& io_rText,
     io_rText = aBuf.makeStringAndClear();
 }
 
-void ImplUpdateSeparators( const OUString& rOldDecSep, std::u16string_view rNewDecSep,
-                                  const OUString& rOldThSep, std::u16string_view rNewThSep,
+void ImplUpdateSeparators( std::u16string_view rOldDecSep, std::u16string_view rNewDecSep,
+                                  std::u16string_view rOldThSep, std::u16string_view rNewThSep,
                                   Edit* pEdit )
 {
     bool bChangeDec = (rOldDecSep != rNewDecSep);
@@ -930,11 +930,11 @@ static bool ImplMetricProcessKeyInput( const KeyEvent& rKEvt,
     return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 
-static OUString ImplMetricGetUnitText(const OUString& rStr)
+static OUString ImplMetricGetUnitText(std::u16string_view rStr)
 {
     // fetch unit text
     OUStringBuffer aStr;
-    for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
+    for (sal_Int32 i = static_cast<sal_Int32>(rStr.size())-1; i >= 0; --i)
     {
         sal_Unicode c = rStr[i];
         if ( (c == '\'') || (c == '\"') || (c == '%') || (c == 0x2032) || (c == 0x2033) || unicode::isAlpha(c) || unicode::isControl(c) )
@@ -978,7 +978,7 @@ namespace
     }
 }
 
-static FieldUnit ImplMetricGetUnit(const OUString& rStr)
+static FieldUnit ImplMetricGetUnit(std::u16string_view rStr)
 {
     OUString aStr = ImplMetricGetUnitText(rStr);
     return StringToMetric(aStr);

@@ -1141,14 +1141,14 @@ KeyEvent Window::GetActivationKey() const
 
 } /* namespace vcl */
 
-sal_Unicode getAccel( const OUString& rStr )
+sal_Unicode getAccel( std::u16string_view rStr )
 {
     sal_Unicode nChar = 0;
-    sal_Int32 nPos = 0;
+    size_t nPos = 0;
     do
     {
-        nPos = rStr.indexOf( '~', nPos );
-        if( nPos != -1 && nPos < rStr.getLength() )
+        nPos = rStr.find( '~', nPos );
+        if( nPos != std::u16string_view::npos && nPos < rStr.size() )
             nChar = rStr[ ++nPos ];
         else
             nChar = 0;

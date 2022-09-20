@@ -504,7 +504,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             {
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsShift() &&
                         !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() &&
-                        ImplCheckTextLen( OUString('x') ) )
+                        ImplCheckTextLen( u"x" ) )
                 {
                     aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, '\t', !IsInsertMode() );
                     bModified = true;
@@ -518,7 +518,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 // do not swallow Shift-RETURN, as this would disable multi-line entries
                 // in dialogs & property editors
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod1() &&
-                        !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( OUString('x') ) )
+                        !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( u"x" ) )
                 {
                     mpImpl->mpTextEngine->UndoActionStart();
                     aCurSel = mpImpl->mpTextEngine->ImpInsertParaBreak( aCurSel );
@@ -553,7 +553,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
-                    if ( !mpImpl->mbReadOnly && ImplCheckTextLen( OUString(nCharCode) ) )    // otherwise swallow the character anyway
+                    if ( !mpImpl->mbReadOnly && ImplCheckTextLen( OUStringChar(nCharCode) ) )    // otherwise swallow the character anyway
                     {
                         aCurSel = mpImpl->mpTextEngine->ImpInsertText( nCharCode, aCurSel, !IsInsertMode(), true );
                         bModified = true;
@@ -1721,12 +1721,12 @@ bool TextView::ImplTruncateNewText( OUString& rNewText ) const
     return bTruncated;
 }
 
-bool TextView::ImplCheckTextLen( const OUString& rNewText ) const
+bool TextView::ImplCheckTextLen( std::u16string_view rNewText ) const
 {
     bool bOK = true;
     if ( mpImpl->mpTextEngine->GetMaxTextLen() )
     {
-        sal_Int32 n = mpImpl->mpTextEngine->GetTextLen() + rNewText.getLength();
+        sal_Int32 n = mpImpl->mpTextEngine->GetTextLen() + rNewText.size();
         if ( n > mpImpl->mpTextEngine->GetMaxTextLen() )
         {
             // calculate how much text is being deleted

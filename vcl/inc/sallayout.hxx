@@ -143,7 +143,7 @@ private:
 
     void            ApplyDXArray(const double*, const sal_Bool*);
     void            Justify(DeviceCoordinate nNewWidth);
-    void            ApplyAsianKerning(const OUString& rStr);
+    void            ApplyAsianKerning(std::u16string_view rStr);
 
     void            GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
                                   const OUString& rStr) const;

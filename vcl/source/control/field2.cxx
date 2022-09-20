@@ -325,13 +325,13 @@ static OUString ImplPatternReformat( const OUString& rStr,
     return aOutStr.makeStringAndClear();
 }
 
-static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
+static void ImplPatternMaxPos( std::u16string_view rStr, const OString& rEditMask,
                                sal_uInt16 nFormatFlags, bool bSameMask,
                                sal_Int32 nCursorPos, sal_Int32& rPos )
 {
 
     // last position must not be longer than the contained string
-    sal_Int32 nMaxPos = rStr.getLength();
+    sal_Int32 nMaxPos = rStr.size();
 
     // if non empty literals are allowed ignore blanks at the end as well
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
@@ -482,7 +482,7 @@ static sal_Int32 ImplPatternLeftPos(std::string_view rEditMask, sal_Int32 nCurso
     return nNewPos;
 }
 
-static sal_Int32 ImplPatternRightPos( const OUString& rStr, const OString& rEditMask,
+static sal_Int32 ImplPatternRightPos( std::u16string_view rStr, const OString& rEditMask,
                                        sal_uInt16 nFormatFlags, bool bSameMask,
                                        sal_Int32 nCursorPos )
 {
@@ -632,7 +632,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
                     nNewPos = ImplPatternLeftPos( rEditMask, nTempPos );
                 }
                 else
-                    nTempPos = ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos );
+                    nTempPos = ImplPatternRightPos( aStr, rEditMask, nFormatFlags, bSameMask, nNewPos );
 
                 if ( nNewPos != nTempPos )
                 {

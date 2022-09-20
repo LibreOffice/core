@@ -169,7 +169,7 @@ void VclPhysicalFontCollectionTest::testShouldFindNoFamilyWithWorthlessAttribute
     aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName(u"Test Font Family Name"));
 
     CPPUNIT_ASSERT(!aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::None, WEIGHT_NORMAL,
-                                                               WIDTH_NORMAL, ITALIC_NONE, ""));
+                                                               WIDTH_NORMAL, ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindCJKFamily()
@@ -182,7 +182,7 @@ void VclPhysicalFontCollectionTest::testShouldFindCJKFamily()
     AddNormalFontFace(pFontFamily, u"시험");
 
     vcl::font::PhysicalFontFamily* pCJKFamily = aFontCollection.FindFontFamilyByAttributes(
-        ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, "");
+        ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, u"");
     CPPUNIT_ASSERT_MESSAGE("family not found", pCJKFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cjk family not found", GetEnglishSearchFontName(u"시험"),
                                  pCJKFamily->GetSearchName());
@@ -197,7 +197,7 @@ void VclPhysicalFontCollectionTest::testShouldNotFindCJKFamily()
 
     CPPUNIT_ASSERT_MESSAGE("family found",
                            !aFontCollection.FindFontFamilyByAttributes(
-                               ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
+                               ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindStarsymbolFamily()
@@ -210,7 +210,7 @@ void VclPhysicalFontCollectionTest::testShouldFindStarsymbolFamily()
     CPPUNIT_ASSERT_MESSAGE("starsymbol created", pFontFamily);
 
     vcl::font::PhysicalFontFamily* pStarsymbolFamily = aFontCollection.FindFontFamilyByAttributes(
-        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, "");
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, u"");
     CPPUNIT_ASSERT_MESSAGE("family not found", pStarsymbolFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("starsymbol family not found", OUString("starsymbol"),
                                  pStarsymbolFamily->GetSearchName());
@@ -229,7 +229,7 @@ void VclPhysicalFontCollectionTest::testShouldFindOpensymbolFamilyWithMultipleSy
     AddNormalFontFace(pWingDingsFontFamily, "wingdings");
 
     vcl::font::PhysicalFontFamily* pStarsymbolFamily = aFontCollection.FindFontFamilyByAttributes(
-        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, "");
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, u"");
     CPPUNIT_ASSERT_MESSAGE("family not found", pStarsymbolFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("opensymbol family not found", OUString("opensymbol"),
                                  pStarsymbolFamily->GetSearchName());
@@ -244,7 +244,7 @@ void VclPhysicalFontCollectionTest::testShouldFindSymboltypeFamily()
     AddNormalFontFace(pFontFamily, "testsymbol");
 
     vcl::font::PhysicalFontFamily* pSymbolFamily = aFontCollection.FindFontFamilyByAttributes(
-        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, "");
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, u"");
     CPPUNIT_ASSERT_MESSAGE("family not found", pSymbolFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("test symbol family not found", OUString("testsymbol"),
                                  pSymbolFamily->GetSearchName());
@@ -264,7 +264,7 @@ void VclPhysicalFontCollectionTest::testShouldFindSymbolFamilyByMatchType()
     pFontFamily->AddFontFace(new TestFontFace(aFontAttr, FONTID));
 
     vcl::font::PhysicalFontFamily* pSymbolFamily = aFontCollection.FindFontFamilyByAttributes(
-        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, "");
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, u"");
     CPPUNIT_ASSERT_MESSAGE("family not found", pSymbolFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("test symbol family not found", OUString("symbols"),
                                  pSymbolFamily->GetSearchName());
@@ -286,7 +286,7 @@ void VclPhysicalFontCollectionTest::testImpossibleSymbolFamily()
     CPPUNIT_ASSERT_MESSAGE("match for family not possible, but was found anyway",
                            !aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::Normal,
                                                                        WEIGHT_NORMAL, WIDTH_NORMAL,
-                                                                       ITALIC_NORMAL, ""));
+                                                                       ITALIC_NORMAL, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldNotFindSymbolFamily()
@@ -297,7 +297,7 @@ void VclPhysicalFontCollectionTest::testShouldNotFindSymbolFamily()
 
     CPPUNIT_ASSERT_MESSAGE(
         "Family found", !aFontCollection.FindFontFamilyByAttributes(
-                            ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
+                            ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldMatchFamilyName()
@@ -313,7 +313,7 @@ void VclPhysicalFontCollectionTest::testShouldMatchFamilyName()
     CPPUNIT_ASSERT_MESSAGE("No family found",
                            aFontCollection.FindFontFamilyByAttributes(
                                ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE,
-                               "Matching family name"));
+                               u"Matching family name"));
 }
 
 void VclPhysicalFontCollectionTest::testShouldMatchBrushScriptFamily()
@@ -325,7 +325,7 @@ void VclPhysicalFontCollectionTest::testShouldMatchBrushScriptFamily()
     CPPUNIT_ASSERT_MESSAGE("Brush script family not found",
                            aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::BrushScript,
                                                                       WEIGHT_NORMAL, WIDTH_NORMAL,
-                                                                      ITALIC_NONE, ""));
+                                                                      ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldNotMatchBrushScriptFamily()
@@ -338,7 +338,7 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchBrushScriptFamily()
     CPPUNIT_ASSERT_MESSAGE("Brush script family found",
                            !aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::BrushScript,
                                                                        WEIGHT_NORMAL, WIDTH_NORMAL,
-                                                                       ITALIC_NONE, ""));
+                                                                       ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldMatchFixedFamily()
@@ -397,9 +397,9 @@ void VclPhysicalFontCollectionTest::testShouldMatchSerifFamily()
     TestFontFace* pFontFace = new TestFontFace(aFontAttr, FONTID);
     pFontFamily->AddFontFace(pFontFace);
 
-    CPPUNIT_ASSERT_MESSAGE("Serif family not found",
-                           aFontCollection.FindFontFamilyByAttributes(
-                               ImplFontAttrs::Serif, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
+    CPPUNIT_ASSERT_MESSAGE("Serif family not found", aFontCollection.FindFontFamilyByAttributes(
+                                                         ImplFontAttrs::Serif, WEIGHT_NORMAL,
+                                                         WIDTH_NORMAL, ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldNotMatchSerifFamily()
@@ -415,9 +415,9 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchSerifFamily()
     TestFontFace* pFontFace = new TestFontFace(aFontAttr, FONTID);
     pFontFamily->AddFontFace(pFontFace);
 
-    CPPUNIT_ASSERT_MESSAGE("Serif family found",
-                           !aFontCollection.FindFontFamilyByAttributes(
-                               ImplFontAttrs::Serif, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
+    CPPUNIT_ASSERT_MESSAGE("Serif family found", !aFontCollection.FindFontFamilyByAttributes(
+                                                     ImplFontAttrs::Serif, WEIGHT_NORMAL,
+                                                     WIDTH_NORMAL, ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldMatchSansSerifFamily()
@@ -436,7 +436,7 @@ void VclPhysicalFontCollectionTest::testShouldMatchSansSerifFamily()
     CPPUNIT_ASSERT_MESSAGE("SansSerif family not found",
                            aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::SansSerif,
                                                                       WEIGHT_NORMAL, WIDTH_NORMAL,
-                                                                      ITALIC_NONE, ""));
+                                                                      ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldNotMatchSansSerifFamily()
@@ -453,7 +453,7 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchSansSerifFamily()
 
     CPPUNIT_ASSERT_MESSAGE("SansSerif family found", !aFontCollection.FindFontFamilyByAttributes(
                                                          ImplFontAttrs::SansSerif, WEIGHT_NORMAL,
-                                                         WIDTH_NORMAL, ITALIC_NONE, ""));
+                                                         WIDTH_NORMAL, ITALIC_NONE, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldMatchDecorativeFamily()
@@ -472,7 +472,7 @@ void VclPhysicalFontCollectionTest::testShouldMatchDecorativeFamily()
     CPPUNIT_ASSERT_MESSAGE("Decorative family not found",
                            aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::Decorative,
                                                                       WEIGHT_NORMAL, WIDTH_NORMAL,
-                                                                      ITALIC_NORMAL, ""));
+                                                                      ITALIC_NORMAL, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindTitlingFamily()
@@ -484,7 +484,7 @@ void VclPhysicalFontCollectionTest::testShouldFindTitlingFamily()
 
     CPPUNIT_ASSERT_MESSAGE("Titling family not found", aFontCollection.FindFontFamilyByAttributes(
                                                            ImplFontAttrs::Titling, WEIGHT_NORMAL,
-                                                           WIDTH_NORMAL, ITALIC_NORMAL, ""));
+                                                           WIDTH_NORMAL, ITALIC_NORMAL, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindCapitalsFamily()
@@ -495,7 +495,7 @@ void VclPhysicalFontCollectionTest::testShouldFindCapitalsFamily()
 
     CPPUNIT_ASSERT_MESSAGE("All-caps family not found", aFontCollection.FindFontFamilyByAttributes(
                                                             ImplFontAttrs::Capitals, WEIGHT_NORMAL,
-                                                            WIDTH_NORMAL, ITALIC_NORMAL, ""));
+                                                            WIDTH_NORMAL, ITALIC_NORMAL, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindFamilyName()
@@ -520,7 +520,7 @@ void VclPhysicalFontCollectionTest::testShouldFindOtherStyleFamily()
 
     CPPUNIT_ASSERT_MESSAGE("Did not find font name", aFontCollection.FindFontFamilyByAttributes(
                                                          ImplFontAttrs::OtherStyle, WEIGHT_NORMAL,
-                                                         WIDTH_NORMAL, ITALIC_NORMAL, ""));
+                                                         WIDTH_NORMAL, ITALIC_NORMAL, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
@@ -531,7 +531,7 @@ void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
 
     CPPUNIT_ASSERT_MESSAGE("Found font name", !aFontCollection.FindFontFamilyByAttributes(
                                                   ImplFontAttrs::OtherStyle, WEIGHT_NORMAL,
-                                                  WIDTH_NORMAL, ITALIC_NORMAL, ""));
+                                                  WIDTH_NORMAL, ITALIC_NORMAL, u""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
@@ -543,7 +543,7 @@ void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
 
     CPPUNIT_ASSERT_MESSAGE("Did not find font name", aFontCollection.FindFontFamilyByAttributes(
                                                          ImplFontAttrs::Schoolbook, WEIGHT_NORMAL,
-                                                         WIDTH_NORMAL, ITALIC_NORMAL, ""));
+                                                         WIDTH_NORMAL, ITALIC_NORMAL, u""));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontCollectionTest);

@@ -50,6 +50,7 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
                 for (sal_Int32 nX = 0; nX < nWidth; nX++)
                 {
                     aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount++;
+                    assert(aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount != 0);
                 }
             }
 

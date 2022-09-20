@@ -31,11 +31,11 @@
 #include <font/PhysicalFontCollection.hxx>
 #include <font/fontsubstitution.hxx>
 
-static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
+static ImplFontAttrs lcl_IsCJKFont( std::u16string_view rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
     // mention that it is a CJK font
-    for(int i = 0; i < rFontName.getLength(); i++)
+    for(size_t i = 0; i < rFontName.size(); i++)
     {
         const sal_Unicode ch = rFontName[i];
         // japanese
@@ -378,7 +378,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySubstFontAttr(ut
         const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
 
         pFoundData = FindFontFamilyByAttributes( nSearchType,
-            eSearchWeight, eSearchWidth, eSearchSlant, "" );
+            eSearchWeight, eSearchWidth, eSearchSlant, u"" );
 
         if( pFoundData )
             return pFoundData;
@@ -413,7 +413,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
                                                                        FontWeight eSearchWeight,
                                                                        FontWidth eSearchWidth,
                                                                        FontItalic eSearchItalic,
-                                                                       OUString const& rSearchFamilyName ) const
+                                                                       std::u16string_view rSearchFamilyName ) const
 {
     if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW) )
         nSearchType |= ImplFontAttrs::Italic;
@@ -545,7 +545,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
         }
 
         // match stripped family name
-        if( !rSearchFamilyName.isEmpty() && (rSearchFamilyName == pData->GetMatchFamilyName()) )
+        if( !rSearchFamilyName.empty() && (rSearchFamilyName == pData->GetMatchFamilyName()) )
         {
             nTestMatch += 1000000*3;
         }
@@ -674,9 +674,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
 
         // test font name substrings
         // TODO: calculate name matching score using e.g. Levenstein distance
-        if( (rSearchFamilyName.getLength() >= 4) &&
+        if( (rSearchFamilyName.size() >= 4) &&
             (pData->GetMatchFamilyName().getLength() >= 4) &&
-            ((rSearchFamilyName.indexOf( pData->GetMatchFamilyName() ) != -1) ||
+            ((rSearchFamilyName.find( pData->GetMatchFamilyName() ) != std::u16string_view::npos) ||
              (pData->GetMatchFamilyName().indexOf( rSearchFamilyName ) != -1)) )
         {
             nTestMatch += 5000;

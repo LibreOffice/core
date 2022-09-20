@@ -546,10 +546,10 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 }
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
-                                      const OUString& rString,
+                                      std::u16string_view rString,
                                       o3tl::span<const sal_Int32> pDXAry )
 {
-    sal_Int32 nOriginalTextLen = rString.getLength();
+    sal_Int32 nOriginalTextLen = rString.size();
 
     if ( (nOriginalTextLen <= 1) || pDXAry.empty() )
     {
@@ -561,7 +561,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
     TrueExtTextOut(rPoint, rString, aByteString, pDXAry);
 }
 
-void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
+void WMFWriter::TrueExtTextOut( const Point& rPoint, std::u16string_view rString,
                                 const OString& rByteString, o3tl::span<const sal_Int32> pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
@@ -572,7 +572,7 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
     if ( nNewTextLen & 1 )
         pWMF->WriteUChar( 0 );
 
-    sal_Int32 nOriginalTextLen = rString.getLength();
+    sal_Int32 nOriginalTextLen = rString.size();
     std::unique_ptr<sal_Int16[]> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
     sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = static_cast<sal_Int16>(ScaleWidth( pDXAry[ 0 ] ));

@@ -389,7 +389,7 @@ void PDFWriter::CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote,
     xImplementation->createNote( rRect, rNote, nPageNr );
 }
 
-sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
+sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, std::u16string_view rAlias )
 {
     return xImplementation->beginStructureElement( eType, rAlias );
 }

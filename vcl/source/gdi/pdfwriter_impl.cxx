@@ -10407,7 +10407,7 @@ bool PDFWriterImpl::checkEmitStructure()
     return bEmit;
 }
 
-sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
+sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, std::u16string_view rAlias )
 {
     if( m_nCurrentPage < 0 )
         return -1;
@@ -10454,9 +10454,9 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     m_nCurrentStructElement = nNewId;
 
     // handle alias names
-    if( !rAlias.isEmpty() && eType != PDFWriter::NonStructElement )
+    if( !rAlias.empty() && eType != PDFWriter::NonStructElement )
     {
-        OStringBuffer aNameBuf( rAlias.getLength() );
+        OStringBuffer aNameBuf( rAlias.size() );
         appendName( rAlias, aNameBuf );
         OString aAliasName( aNameBuf.makeStringAndClear() );
         rEle.m_aAlias = aAliasName;

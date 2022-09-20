@@ -219,7 +219,7 @@ public:
     // helper function
 
     OUString   translateKey( const OUString& i_rKey ) const;
-    OUString   translateOption( const OUString& i_rKey,
+    OUString   translateOption( std::u16string_view i_rKey,
                                 const OUString& i_rOption ) const;
 };
 

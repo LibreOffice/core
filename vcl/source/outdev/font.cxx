@@ -1178,19 +1178,19 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
     return (nLen == static_cast<int>(rVector.size()));
 }
 
-sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& rStr,
+sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, std::u16string_view rStr,
     sal_Int32 nIndex, sal_Int32 nLen ) const
 {
-    if( nIndex >= rStr.getLength() )
+    if( nIndex >= static_cast<sal_Int32>(rStr.size()) )
         return nIndex;
     sal_Int32 nEnd;
     if( nLen == -1 )
-        nEnd = rStr.getLength();
+        nEnd = rStr.size();
     else
-        nEnd = std::min( rStr.getLength(), nIndex + nLen );
+        nEnd = std::min<sal_Int32>( rStr.size(), nIndex + nLen );
 
     SAL_WARN_IF( nIndex >= nEnd, "vcl.gdi", "StartPos >= EndPos?" );
-    SAL_WARN_IF( nEnd > rStr.getLength(), "vcl.gdi", "String too short" );
+    SAL_WARN_IF( nEnd > static_cast<sal_Int32>(rStr.size()), "vcl.gdi", "String too short" );
 
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();

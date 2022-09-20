@@ -59,11 +59,11 @@ void PhysicalFontFamily::CalcType( ImplFontAttrs& rType, FontWeight& rWeight, Fo
     }
 }
 
-static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
+static ImplFontAttrs lcl_IsCJKFont( std::u16string_view rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
     // mention that it is a CJK font
-    for(int i = 0; i < rFontName.getLength(); i++)
+    for(size_t i = 0; i < rFontName.size(); i++)
     {
         const sal_Unicode ch = rFontName[i];
         // japanese

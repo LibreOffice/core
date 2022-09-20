@@ -148,9 +148,9 @@ namespace vcl
 
     namespace
     {
-        bool lcl_normalizeLength( const OUString& _rText, const sal_Int32 _nStartIndex, sal_Int32& _io_nLength )
+        bool lcl_normalizeLength( std::u16string_view _rText, const sal_Int32 _nStartIndex, sal_Int32& _io_nLength )
         {
-            sal_Int32 nTextLength = _rText.getLength();
+            sal_Int32 nTextLength = _rText.size();
             if ( _nStartIndex > nTextLength )
                 return false;
             if ( _nStartIndex + _io_nLength > nTextLength )

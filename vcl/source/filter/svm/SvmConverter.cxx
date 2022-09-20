@@ -250,10 +250,10 @@ namespace
         return std::min(remainingActions, nFollowingActionCount);
     }
 
-    void ClampRange(const OUString& rStr, sal_Int32& rIndex, sal_Int32& rLength,
+    void ClampRange(std::u16string_view rStr, sal_Int32& rIndex, sal_Int32& rLength,
                         std::vector<sal_Int32>* pDXAry = nullptr)
     {
-        const sal_Int32 nStrLength = rStr.getLength();
+        const sal_Int32 nStrLength = rStr.size();
 
         if (rIndex < 0 || rIndex > nStrLength)
         {

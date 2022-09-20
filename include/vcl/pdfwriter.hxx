@@ -1076,7 +1076,7 @@ The following structure describes the permissions used in PDF security
     @returns
     the new structure element's id for use in SetCurrentStructureElement
      */
-     sal_Int32 BeginStructureElement( enum StructElement eType, const OUString& rAlias );
+     sal_Int32 BeginStructureElement( enum StructElement eType, std::u16string_view rAlias );
     /** end the current logical structure element
 
     Close the current structure element. The current element's

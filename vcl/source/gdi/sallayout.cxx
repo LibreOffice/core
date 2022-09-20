@@ -414,9 +414,9 @@ static bool lcl_CanApplyAsianKerning(sal_Unicode cp)
     return (0x3000 == (cp & 0xFF00)) || (0xFF00 == (cp & 0xFF00)) || (0x2010 == (cp & 0xFFF0));
 }
 
-void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
+void GenericSalLayout::ApplyAsianKerning(std::u16string_view rStr)
 {
-    const int nLength = rStr.getLength();
+    const int nLength = rStr.size();
     double nOffset = 0;
 
     for (std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin(),

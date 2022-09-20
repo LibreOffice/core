@@ -143,9 +143,9 @@ private:
     void WMFRecord_Ellipse(const tools::Rectangle& rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
     bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, o3tl::span<const sal_Int32> pDXAry );
-    void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, o3tl::span<const sal_Int32> pDXAry);
+    void WMFRecord_ExtTextOut(const Point& rPoint, std::u16string_view rString, o3tl::span<const sal_Int32> pDXAry);
 
-    void TrueExtTextOut(const Point& rPoint, const OUString& rString,
+    void TrueExtTextOut(const Point& rPoint, std::u16string_view rString,
                         const OString& rByteString, o3tl::span<const sal_Int32> pDXAry);
     void TrueTextOut(const Point& rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);

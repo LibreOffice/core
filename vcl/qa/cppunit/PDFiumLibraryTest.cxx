@@ -433,7 +433,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
 
 void PDFiumLibraryTest::testTools()
 {
-    OUString sConverted = vcl::pdf::convertPdfDateToISO8601("D:20200612201322+02'00");
+    OUString sConverted = vcl::pdf::convertPdfDateToISO8601(u"D:20200612201322+02'00");
 
     css::util::DateTime aDateTime;
     CPPUNIT_ASSERT(utl::ISO8601parseDateTime(sConverted, aDateTime));

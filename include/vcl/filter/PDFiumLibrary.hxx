@@ -233,7 +233,7 @@ struct VCL_DLLPUBLIC PDFiumLibrary final
 
 // Tools
 
-VCL_DLLPUBLIC OUString convertPdfDateToISO8601(OUString const& rInput);
+VCL_DLLPUBLIC OUString convertPdfDateToISO8601(std::u16string_view rInput);
 
 } // namespace vcl::pdf
 

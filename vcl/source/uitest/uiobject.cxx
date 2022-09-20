@@ -135,12 +135,11 @@ vcl::Window* get_top_parent(vcl::Window* pWindow)
     return get_top_parent(pParent);
 }
 
-std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
+std::vector<KeyEvent> generate_key_events_from_text(std::u16string_view rStr)
 {
     std::vector<KeyEvent> aEvents;
     vcl::KeyCode aCode;
-    for (sal_Int32 i = 0, n = rStr.getLength();
-            i != n; ++i)
+    for (size_t i = 0, n = rStr.size(); i != n; ++i)
     {
         aEvents.emplace_back(rStr[i], aCode);
     }

@@ -94,42 +94,42 @@ namespace psp
         PPDTranslator() {}
 
         void insertValue(
-            const OUString& i_rKey,
-            const OUString& i_rOption,
-            const OUString& i_rValue,
+            std::u16string_view i_rKey,
+            std::u16string_view i_rOption,
+            std::u16string_view i_rValue,
             const OUString& i_rTranslation,
             const css::lang::Locale& i_rLocale
             );
 
-        void insertOption( const OUString& i_rKey,
-                           const OUString& i_rOption,
+        void insertOption( std::u16string_view i_rKey,
+                           std::u16string_view i_rOption,
                            const OUString& i_rTranslation,
                            const css::lang::Locale& i_rLocale )
         {
-            insertValue( i_rKey, i_rOption, OUString(), i_rTranslation, i_rLocale );
+            insertValue( i_rKey, i_rOption, u"", i_rTranslation, i_rLocale );
         }
 
-        void insertKey( const OUString& i_rKey,
+        void insertKey( std::u16string_view i_rKey,
                         const OUString& i_rTranslation,
                         const css::lang::Locale& i_rLocale = css::lang::Locale() )
         {
-            insertValue( i_rKey, OUString(), OUString(), i_rTranslation, i_rLocale );
+            insertValue( i_rKey, u"", u"", i_rTranslation, i_rLocale );
         }
 
         OUString translateValue(
-            const OUString& i_rKey,
-            const OUString& i_rOption
+            std::u16string_view i_rKey,
+            std::u16string_view i_rOption
             ) const;
 
-        OUString translateOption( const OUString& i_rKey,
-                                       const OUString& i_rOption ) const
+        OUString translateOption( std::u16string_view i_rKey,
+                                       std::u16string_view i_rOption ) const
         {
             return translateValue( i_rKey, i_rOption  );
         }
 
-        OUString translateKey( const OUString& i_rKey ) const
+        OUString translateKey( std::u16string_view i_rKey ) const
         {
-            return translateValue( i_rKey, OUString() );
+            return translateValue( i_rKey, u"" );
         }
     };
 
@@ -167,21 +167,21 @@ namespace psp
     }
 
     void PPDTranslator::insertValue(
-        const OUString& i_rKey,
-        const OUString& i_rOption,
-        const OUString& i_rValue,
+        std::u16string_view i_rKey,
+        std::u16string_view i_rOption,
+        std::u16string_view i_rValue,
         const OUString& i_rTranslation,
         const css::lang::Locale& i_rLocale
         )
     {
-        OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
+        OUStringBuffer aKey( i_rKey.size() + i_rOption.size() + i_rValue.size() + 2 );
         aKey.append( i_rKey );
-        if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
+        if( !i_rOption.empty() || !i_rValue.empty() )
         {
             aKey.append( ':' );
             aKey.append( i_rOption );
         }
-        if( !i_rValue.isEmpty() )
+        if( !i_rValue.empty() )
         {
             aKey.append( ':' );
             aKey.append( i_rValue );
@@ -199,15 +199,15 @@ namespace psp
     }
 
     OUString PPDTranslator::translateValue(
-        const OUString& i_rKey,
-        const OUString& i_rOption
+        std::u16string_view i_rKey,
+        std::u16string_view i_rOption
         ) const
     {
         OUString aResult;
 
-        OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + 2 );
+        OUStringBuffer aKey( i_rKey.size() + i_rOption.size() + 2 );
         aKey.append( i_rKey );
-        if( !i_rOption.isEmpty() )
+        if( !i_rOption.empty() )
         {
             aKey.append( ':' );
             aKey.append( i_rOption );
@@ -1556,7 +1556,7 @@ OUString PPDParser::translateKey( const OUString& i_rKey ) const
     return aResult;
 }
 
-OUString PPDParser::translateOption( const OUString& i_rKey,
+OUString PPDParser::translateOption( std::u16string_view i_rKey,
                                           const OUString& i_rOption ) const
 {
     OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption ) );

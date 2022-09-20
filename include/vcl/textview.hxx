@@ -105,7 +105,7 @@ class VCL_DLLPUBLIC TextView final : public vcl::unohelper::DragAndDropClient
     void                ImpShowDDCursor();
 
     bool                ImplTruncateNewText( OUString& rNewText ) const;
-    bool                ImplCheckTextLen( const OUString& rNewText ) const;
+    bool                ImplCheckTextLen( std::u16string_view rNewText ) const;
 
     // DragAndDropClient
     virtual void        dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) override;

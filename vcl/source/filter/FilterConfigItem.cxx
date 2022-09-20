@@ -22,6 +22,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -42,9 +43,9 @@ using namespace ::com::sun::star::container ;
 using namespace ::com::sun::star::configuration;
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
-static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgProv, const OUString& rTree )
+static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgProv, std::u16string_view rTree )
 {
-    bool bAvailable = !rTree.isEmpty();
+    bool bAvailable = !rTree.empty();
     if ( bAvailable )
     {
         sal_Int32 nIdx{0};
@@ -53,7 +54,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
 
         // creation arguments: nodepath
         PropertyValue aPathArgument = comphelper::makePropertyValue("nodepath",
-                                                                    rTree.getToken(0, '/', nIdx));
+                                                                    OUString(o3tl::getToken(rTree, 0, '/', nIdx)));
         Sequence< Any > aArguments{ Any(aPathArgument) };
 
         Reference< XInterface > xReadAccess;
@@ -69,7 +70,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
         }
         if ( xReadAccess.is() )
         {
-            const sal_Int32 nEnd {rTree.getLength()};
+            const sal_Int32 nEnd  = rTree.size();
             while (bAvailable && nIdx>=0 && nIdx<nEnd)
             {
                 Reference< XHierarchicalNameAccess > xHierarchicalNameAccess
@@ -79,7 +80,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
                     bAvailable = false;
                 else
                 {
-                    const OUString aNode( rTree.getToken(0, '/', nIdx) );
+                    const OUString aNode( o3tl::getToken(rTree, 0, '/', nIdx) );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
                         bAvailable = false;
                     else

@@ -1278,7 +1278,7 @@ public:
     // notes
     void createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
     // structure elements
-    sal_Int32 beginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias );
+    sal_Int32 beginStructureElement( PDFWriter::StructElement eType, std::u16string_view rAlias );
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );
     bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );

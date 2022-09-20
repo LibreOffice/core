@@ -83,7 +83,7 @@ public:
     const TextCharAttribList&   GetCharAttribs() const  { return maCharAttribs; }
     TextCharAttribList&         GetCharAttribs()        { return maCharAttribs; }
 
-    void                InsertText( sal_Int32 nPos, const OUString& rText );
+    void                InsertText( sal_Int32 nPos, std::u16string_view rText );
     void                InsertText( sal_Int32 nPos, sal_Unicode c );
     void                RemoveText( sal_Int32 nPos, sal_Int32 nChars );
 
@@ -109,7 +109,7 @@ public:
 
     void                RemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
-    TextPaM             InsertText( const TextPaM& rPaM, const OUString& rStr );
+    TextPaM             InsertText( const TextPaM& rPaM, std::u16string_view rStr );
 
     TextPaM             InsertParaBreak( const TextPaM& rPaM );
     TextPaM             ConnectParagraphs( TextNode* pLeft, const TextNode* pRight );
