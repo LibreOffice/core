@@ -1865,6 +1865,30 @@ bool SwContentNode::CanJoinNext( SwNodeIndex* pIdx ) const
 
 /// Can we join two Nodes?
 /// We can return the 2nd position in pIdx.
+bool SwContentNode::CanJoinNext( SwPosition* pIdx ) const
+{
+    const SwNodes& rNds = GetNodes();
+    SwNodeIndex aIdx( *this, 1 );
+
+    const SwNode* pNd = this;
+    while( aIdx < rNds.Count()-1 &&
+        (( pNd = &aIdx.GetNode())->IsSectionNode() ||
+            ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
+        ++aIdx;
+
+    if (rNds.Count()-1 == aIdx.GetIndex())
+        return false;
+    if (!lcl_CheckMaxLength(*this, *pNd))
+    {
+        return false;
+    }
+    if( pIdx )
+        pIdx->Assign(aIdx);
+    return true;
+}
+
+/// Can we join two Nodes?
+/// We can return the 2nd position in pIdx.
 bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 {
     SwNodeIndex aIdx( *this, -1 );

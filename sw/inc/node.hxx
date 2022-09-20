@@ -407,7 +407,8 @@ public:
     virtual SwContentNode *JoinNext();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
-    bool CanJoinNext( SwNodeIndex* pIdx =nullptr ) const;
+    bool CanJoinNext( SwNodeIndex* pIdx = nullptr ) const;
+    bool CanJoinNext( SwPosition* pIdx ) const;
     bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
 
     void MakeStartIndex( SwContentIndex * pIdx )   { pIdx->Assign( this, 0 ); }

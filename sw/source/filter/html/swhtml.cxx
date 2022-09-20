@@ -768,13 +768,13 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos = m_pPam->GetBound().GetContentIndex();
-                    m_pPam->GetBound().nContent.Assign( pTextNode,
+                    m_pPam->GetBound().SetContent(
                                     pTextNode->GetText().getLength() + nCntPos );
                 }
                 if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos = m_pPam->GetBound( false ).GetContentIndex();
-                    m_pPam->GetBound( false ).nContent.Assign( pTextNode,
+                    m_pPam->GetBound( false ).SetContent(
                                     pTextNode->GetText().getLength() + nCntPos );
                 }
 #endif
@@ -834,10 +834,9 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             }
             else if( nullptr != ( pCurrentNd = m_xDoc->GetNodes()[ nNodeIdx ]->GetTextNode()) && !bHasFlysOrMarks )
             {
-                if( pCurrentNd->CanJoinNext( &pPos->nNode ))
+                if( pCurrentNd->CanJoinNext( pPos ))
                 {
                     SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
-                    pPos->nContent.Assign( pNextNd, 0 );
                     m_pPam->SetMark(); m_pPam->DeleteMark();
                     pNextNd->JoinPrev();
                 }

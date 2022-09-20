@@ -741,7 +741,7 @@ void SwXMLImport::endDocument()
             {
                 // Id we're in insert mode, the empty node is joined with
                 // the next and the previous one.
-                if( pCurrNd->CanJoinNext( &pPos->nNode ))
+                if( pCurrNd->CanJoinNext( pPos ))
                 {
                     SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
                     bool endNodeFound = pDoc->GetNodes()[nNodeIdx-1]->IsEndNode();
@@ -754,7 +754,6 @@ void SwXMLImport::endDocument()
                         pNextNd->ChgFormatColl(pLastPar->GetTextNode()->GetTextColl());
                     }
 
-                    pPos->nContent.Assign( pNextNd, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
 
