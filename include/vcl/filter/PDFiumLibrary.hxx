@@ -103,6 +103,7 @@ public:
     virtual std::vector<basegfx::B2DPoint> getLineGeometry() = 0;
     virtual PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) = 0;
     virtual float getFormFontSize(PDFiumDocument* pDoc) = 0;
+    virtual OUString getFormFieldAlternateName(PDFiumDocument* pDoc) = 0;
 };
 
 class PDFiumTextPage;
