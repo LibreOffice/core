@@ -1642,66 +1642,6 @@ public:
         {
             i += rxSubArgument->Marshal(k, argno + i, nVectorWidth, pProgram);
         }
-        if (dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
-        {
-            openclwrapper::KernelEnv kEnv;
-            openclwrapper::setKernelEnv(&kEnv);
-            cl_int err;
-            cl_mem pClmem2;
-
-            std::vector<cl_mem> vclmem;
-            for (const auto& rxSubArgument : mvSubArguments)
-            {
-                if (VectorRef* VR = dynamic_cast<VectorRef*>(rxSubArgument.get()))
-                    vclmem.push_back(VR->GetCLBuffer());
-                else
-                    vclmem.push_back(nullptr);
-            }
-            pClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
-                sizeof(double) * nVectorWidth, nullptr, &err);
-            if (CL_SUCCESS != err)
-                throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
-            SAL_INFO("sc.opencl", "Created buffer " << pClmem2 << " size " << sizeof(double) << "*" << nVectorWidth << "=" << (sizeof(double)*nVectorWidth));
-
-            std::string kernelName = "GeoMean_reduction";
-            cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
-            if (err != CL_SUCCESS)
-                throw OpenCLError("clCreateKernel", err, __FILE__, __LINE__);
-            SAL_INFO("sc.opencl", "Created kernel " << redKernel << " with name " << kernelName << " in program " << pProgram);
-
-            // set kernel arg of reduction kernel
-            for (size_t j = 0; j < vclmem.size(); j++)
-            {
-                SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": " << (vclmem[j] ? "cl_mem" : "double") << ": " << vclmem[j]);
-                err = clSetKernelArg(redKernel, j,
-                    vclmem[j] ? sizeof(cl_mem) : sizeof(double),
-                    static_cast<void*>(&vclmem[j]));
-                if (CL_SUCCESS != err)
-                    throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
-            }
-            SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << vclmem.size() << ": cl_mem: " << pClmem2);
-            err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), static_cast<void*>(&pClmem2));
-            if (CL_SUCCESS != err)
-                throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
-
-            // set work group size and execute
-            size_t global_work_size[] = { 256, static_cast<size_t>(nVectorWidth) };
-            size_t const local_work_size[] = { 256, 1 };
-            SAL_INFO("sc.opencl", "Enqueuing kernel " << redKernel);
-            err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
-                global_work_size, local_work_size, 0, nullptr, nullptr);
-            if (CL_SUCCESS != err)
-                throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
-            err = clFinish(kEnv.mpkCmdQueue);
-            if (CL_SUCCESS != err)
-                throw OpenCLError("clFinish", err, __FILE__, __LINE__);
-
-            // Pass pClmem2 to the "real" kernel
-            SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << pClmem2);
-            err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&pClmem2));
-            if (CL_SUCCESS != err)
-                throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
-        }
         if (OpSumIfs* OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
             openclwrapper::KernelEnv kEnv;
@@ -2303,9 +2243,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocGauss:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGauss>(), nResultSize));
                 break;
-            /*case ocGeoMean:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGeoMean));
-                break;*/
+            case ocGeoMean:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGeoMean>(), nResultSize));
+                break;
             case ocHarMean:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpHarMean>(), nResultSize));
                 break;

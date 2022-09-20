@@ -125,13 +125,13 @@ public:
     virtual std::string BinFuncName() const override { return "Gauss"; }
 };
 
-class OpGeoMean: public CheckVariables
+class OpGeoMean: public Normal
 {
 public:
-    OpGeoMean(): CheckVariables() {}
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "GeoMean"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpHarMean: public Normal

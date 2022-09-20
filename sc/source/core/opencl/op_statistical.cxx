@@ -477,160 +477,26 @@ vSubArguments)
 }
 
 void OpGeoMean::GenSlidingWindowFunction(
-    outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
+    outputstream &ss, const std::string &sSymName, SubArguments &
+vSubArguments)
 {
-    ss << "__kernel void ";
-    ss << "GeoMean_reduction(  ";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
-    {
-        if (i)
-            ss << ",";
-        vSubArguments[i]->GenSlidingWindowDecl(ss);
-    }
-    ss << ", __global double *result)\n";
-    ss << "{\n";
-    ss << "    double tmp =0;\n";
-    ss << "    int count = 0;\n";
-    ss << "    int i ;\n";
-    GenTmpVariables(ss,vSubArguments);
-    ss << "    double current_sum = 0.0;\n";
-    ss << "    int windowSize;\n";
-    ss << "    int arrayLength;\n";
-    ss << "    int current_count = 0;\n";
-    ss << "    int writePos = get_group_id(1);\n";
-    ss << "    int lidx = get_local_id(0);\n";
-    ss << "    __local double shm_buf[256];\n";
-    ss << "    __local int count_buf[256];\n";
-    ss << "    int loop;\n";
-    ss << "    int offset;\n";
-    ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-
-    for(const DynamicKernelArgumentRef & rArg : vSubArguments)
-    {
-        assert(rArg->GetFormulaToken());
-
-        if(rArg->GetFormulaToken()->GetType() ==
-        formula::svDoubleVectorRef)
-        {
-            FormulaToken *tmpCur = rArg->GetFormulaToken();
-            const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-                     formula::DoubleVectorRefToken *>(tmpCur);
-            size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-                pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-                pCurDVR->GetRefRowSize() ;
-
-            if (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
-                ss << "    offset = 0;\n";
-            else if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                ss << "    offset = get_group_id(1);\n";
-            else
-                throw Unhandled(__FILE__, __LINE__);
-            ss << "    windowSize = ";
-            ss << nCurWindowSize;
-            ss << ";\n";
-            ss << "    arrayLength = ";
-            ss << pCurDVR->GetArrayLength();
-            ss << ";\n";
-            ss << "    loop = arrayLength/512 + 1;\n";
-            ss << "    for (int l=0; l<loop; l++){\n";
-            ss << "        tmp = 0.0;\n";
-            ss << "        count = 0;\n";
-            ss << "        int loopOffset = l*512;\n";
-            ss << "        int p1 = loopOffset + lidx + offset, p2 = p1 + 256;\n";
-            ss << "        if (p2 < min(offset + windowSize, arrayLength)) {\n";
-            ss << "            tmp0 = 0.0;\n";
-            std::string p1 = "p1";
-            std::string p2 = "p2";
-
-            ss << "        tmp0 =";
-            rArg->GenDeclRef(ss);
-            ss << "["<<p1.c_str()<<"];\n";
-            ss << "        if(!isnan(tmp0))\n";
-            ss << "       {\n";
-            ss << "           tmp += log(tmp0);\n";
-            ss << "           count++;\n";
-            ss << "       }\n";
-
-            ss << "        tmp0 =";
-            rArg->GenDeclRef(ss);
-            ss << "["<<p2.c_str()<<"];\n";
-            ss << "        if(!isnan(tmp0))\n";
-            ss << "       {\n";
-            ss << "           tmp += log(tmp0);\n";
-            ss << "           count++;\n";
-            ss << "       }\n";
-
-            ss << "        }\n";
-            ss << "        else if (p1 < min(arrayLength, offset + windowSize)) {\n";
-
-            ss << "        tmp0 =";
-            rArg->GenDeclRef(ss);
-            ss << "["<<p1.c_str()<<"];\n";
-            ss << "        if(!isnan(tmp0))\n";
-            ss << "        {\n";
-            ss << "            tmp += log(tmp0);\n";
-            ss << "            count++;\n";
-            ss << "        }\n";
-
-            ss << "        }\n";
-            ss << "        shm_buf[lidx] = tmp;\n";
-            ss << "        count_buf[lidx] = count;\n";
-            ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
-
-            ss << "        for (int i = 128; i >0; i/=2) {\n";
-            ss << "            if (lidx < i)\n";
-            ss << "            {\n";
-            ss << "                shm_buf[lidx] += shm_buf[lidx + i];\n";
-            ss << "                count_buf[lidx] += count_buf[lidx + i];\n";
-            ss << "            }\n";
-            ss << "            barrier(CLK_LOCAL_MEM_FENCE);\n";
-            ss << "        }\n";
-            ss << "        if (lidx == 0)\n";
-            ss << "        {\n";
-            ss << "            current_sum += shm_buf[0];\n";
-            ss << "            current_count += count_buf[0];\n";
-            ss << "        }\n";
-             //  ss << "if(writePos == 14 && lidx ==0)\n";
-            //ss <<"printf(\"\\n********************sum is %f, count is%d\",current_sum,current_count);\n";
-            ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
-            ss << "    }\n";
-        }else
-        {
-            ss << "    if (lidx == 0)\n";
-            ss << "    {\n";
-            ss << "        tmp0 =";
-            if(rArg->GetFormulaToken()->GetType() == formula::svSingleVectorRef)
-            {
-                rArg->GenDeclRef(ss);
-                ss << "[writePos];\n";
-            }
-            else
-            {
-                rArg->GenDeclRef(ss);
-                ss <<";\n";
-                //ss <<"printf(\"\\n********************tmp0 is %f\",tmp0);\n";
-            }
-            ss << "        if(!isnan(tmp0))\n";
-            ss << "       {\n";
-            ss << "           current_sum += log(tmp0);\n";
-            ss << "           current_count++;\n";
-            ss << "       }\n";
-            ss << "    }\n";
-        }
-    }
-
-    ss << "    if (lidx == 0)\n";
-    ss << "        result[writePos] = exp(current_sum/current_count);\n";
-    ss << "}\n";
-
+    CHECK_PARAMETER_COUNT( 1, 30 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss <<"    int gid0=get_global_id(0);\n";
-    ss << "    double tmp =0;\n";
-    ss << "    tmp =";
-    vSubArguments[0]->GenDeclRef(ss);
-    ss << "[gid0];\n";
-    ss << "    return tmp;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double nVal=0.0;\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int length;\n";
+    ss << "    int totallength=0;\n";
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        if( arg < 0 )\n"
+        "            return CreateDoubleError(IllegalArgument);\n"
+        "        if( arg == 0 )\n"
+        "            return 0;\n"
+        "        nVal += log(arg);\n"
+        "        ++totallength;\n"
+        );
+    ss << "    return exp(nVal/totallength);\n";
     ss << "}";
 }
 
@@ -652,8 +518,7 @@ vSubArguments)
         "        nVal += (1.0 / arg);\n"
         "        ++totallength;\n"
         );
-    ss << "    tmp = totallength/nVal;\n";
-    ss << "    return tmp;\n";
+    ss << "    return totallength/nVal;\n";
     ss << "}";
 }
 
