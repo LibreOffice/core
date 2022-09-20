@@ -13,6 +13,8 @@
 #include <formula/token.hxx>
 #include <formula/types.hxx>
 #include <formula/vectortoken.hxx>
+#include <opencl/OpenCLZone.hxx>
+#include <sal/log.hxx>
 #include <memory>
 #include <set>
 #include <vector>
@@ -94,7 +96,7 @@ public:
     } while( false )
 #define CHECK_PARAMETER_DOUBLEVECTORREF(arg) \
     do { \
-        FormulaToken *token = vSubArguments[arg]->GetFormulaToken(); \
+        formula::FormulaToken *token = vSubArguments[arg]->GetFormulaToken(); \
         if (token == nullptr || token->GetType() != formula::svDoubleVectorRef) \
             throw Unhandled(__FILE__, __LINE__); \
     } while( false )
@@ -206,6 +208,17 @@ protected:
     cl_mem mpClmem;
     // index in multiple double vector refs that have multiple ranges
     const int mnIndex;
+    // Makes Marshall convert strings to 0 values.
+    bool forceStringsToZero;
+    // Used for storing when the data needs to be modified before sending to OpenCL.
+    std::vector< double > dataBuffer;
+};
+
+// Sets VectorRef::forceStringsToZero.
+class VectorRefStringsToZero : public VectorRef
+{
+public:
+    VectorRefStringsToZero( const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft, int index = 0 );
 };
 
 /// A vector of strings
@@ -229,6 +242,72 @@ public:
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
 };
 
+/// Arguments that are actually compile-time constants
+class DynamicKernelConstantArgument : public DynamicKernelArgument
+{
+public:
+    DynamicKernelConstantArgument( const ScCalcConfig& config, const std::string& s,
+        const FormulaTreeNodeRef& ft ) :
+        DynamicKernelArgument(config, s, ft) { }
+    /// Generate declaration
+    virtual void GenDecl( outputstream& ss ) const override
+    {
+        ss << "double " << mSymName;
+    }
+    virtual void GenDeclRef( outputstream& ss ) const override
+    {
+        ss << mSymName;
+    }
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
+    {
+        GenDecl(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
+    {
+        if (GetFormulaToken()->GetType() != formula::svDouble)
+            throw Unhandled(__FILE__, __LINE__);
+        return mSymName;
+    }
+    virtual size_t GetWindowSize() const override
+    {
+        return 1;
+    }
+    virtual double GetDouble() const
+    {
+        formula::FormulaToken* Tok = GetFormulaToken();
+        if (Tok->GetType() != formula::svDouble)
+            throw Unhandled(__FILE__, __LINE__);
+        return Tok->GetDouble();
+    }
+    /// Create buffer and pass the buffer to a given kernel
+    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
+    {
+        OpenCLZone zone;
+        double tmp = GetDouble();
+        // Pass the scalar result back to the rest of the formula kernel
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << preciseFloat( tmp ));
+        cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
+        if (CL_SUCCESS != err)
+            throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
+        return 1;
+    }
+};
+
+// Constant 0 argument when a string is forced to zero.
+class DynamicKernelStringToZeroArgument : public DynamicKernelConstantArgument
+{
+public:
+    DynamicKernelStringToZeroArgument( const ScCalcConfig& config, const std::string& s,
+        const FormulaTreeNodeRef& ft ) :
+        DynamicKernelConstantArgument(config, s, ft) { }
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
+    {
+        return mSymName;
+    }
+    virtual double GetDouble() const override { return 0; }
+};
+
+
 /// Abstract class for code generation
 class OpBase
 {
@@ -250,6 +329,8 @@ public:
     //Continue process 'Zero' or Not(like OpMul, not continue process when meet
     // 'Zero'
     virtual bool ZeroReturnZero() { return false;}
+    // For use with COUNTA() etc, input strings will be converted to 0 in data.
+    virtual bool forceStringsToZero() const { return false; }
     virtual ~OpBase() { }
 };
 
@@ -391,6 +472,30 @@ protected:
     std::shared_ptr<SlidingFunctionBase> mpCodeGen;
     // controls whether to invoke the reduction kernel during marshaling or not
     cl_mem mpClmem2;
+};
+
+class Reduction : public SlidingFunctionBase
+{
+    int const mnResultSize;
+public:
+    explicit Reduction(int nResultSize) : mnResultSize(nResultSize) {}
+
+    typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
+    typedef DynamicKernelSlidingArgument<VectorRefStringsToZero> NumericRangeStringsToZero;
+    typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
+    typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
+
+    virtual bool HandleNaNArgument( outputstream&, unsigned, SubArguments& ) const
+    {
+        return false;
+    }
+
+    virtual void GenSlidingWindowFunction( outputstream& ss,
+        const std::string& sSymName, SubArguments& vSubArguments ) override;
+    virtual bool isAverage() const { return false; }
+    virtual bool isMinOrMax() const { return false; }
+    virtual bool takeString() const override { return false; }
+    virtual bool takeNumeric() const override { return true; }
 };
 
 }

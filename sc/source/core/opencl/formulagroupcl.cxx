@@ -108,6 +108,7 @@ OUString LimitedString( const OUString& str )
         return OUString::Concat("\"") + str.subView( 0, 20 ) + "\"...";
 }
 
+const int MAX_PEEK_ELEMENTS = 5;
 // Returns formatted contents of the data (possibly shortened), to be used in debug output.
 std::string DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
 {
@@ -117,16 +118,19 @@ std::string DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
             static_cast<const formula::SingleVectorRefToken*>(ref);
         outputstream buf;
         buf << "SingleRef {";
-        for( size_t i = 0; i < std::min< size_t >( 4, pSVR->GetArrayLength()); ++i )
+        for( size_t i = 0; i < std::min< size_t >( MAX_PEEK_ELEMENTS, pSVR->GetArrayLength()); ++i )
         {
             if( i != 0 )
                 buf << ",";
-            if( pSVR->GetArray().mpNumericArray != nullptr )
-                buf << pSVR->GetArray().mpNumericArray[ i ];
-            else if( pSVR->GetArray().mpStringArray != nullptr )
+            if( pSVR->GetArray().mpStringArray != nullptr
+                && pSVR->GetArray().mpStringArray[ i ] != nullptr )
+            {
                 buf << LimitedString( OUString( pSVR->GetArray().mpStringArray[ i ] ));
+            }
+            else if( pSVR->GetArray().mpNumericArray != nullptr )
+                buf << pSVR->GetArray().mpNumericArray[ i ];
         }
-        if( pSVR->GetArrayLength() > 4 )
+        if( pSVR->GetArrayLength() > MAX_PEEK_ELEMENTS )
             buf << ",...";
         buf << "}";
         return buf.str();
@@ -137,16 +141,19 @@ std::string DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
             static_cast<const formula::DoubleVectorRefToken*>(ref);
         outputstream buf;
         buf << "DoubleRef {";
-        for( size_t i = 0; i < std::min< size_t >( 4, pDVR->GetArrayLength()); ++i )
+        for( size_t i = 0; i < std::min< size_t >( MAX_PEEK_ELEMENTS, pDVR->GetArrayLength()); ++i )
         {
             if( i != 0 )
                 buf << ",";
-            if( pDVR->GetArrays()[doubleRefIndex].mpNumericArray != nullptr )
-                buf << pDVR->GetArrays()[doubleRefIndex].mpNumericArray[ i ];
-            else if( pDVR->GetArrays()[doubleRefIndex].mpStringArray != nullptr )
+            if( pDVR->GetArrays()[doubleRefIndex].mpStringArray != nullptr
+                && pDVR->GetArrays()[doubleRefIndex].mpStringArray[ i ] != nullptr )
+            {
                 buf << LimitedString( OUString( pDVR->GetArrays()[doubleRefIndex].mpStringArray[ i ] ));
+            }
+            else if( pDVR->GetArrays()[doubleRefIndex].mpNumericArray != nullptr )
+                buf << pDVR->GetArrays()[doubleRefIndex].mpNumericArray[ i ];
         }
-        if( pDVR->GetArrayLength() > 4 )
+        if( pDVR->GetArrayLength() > MAX_PEEK_ELEMENTS )
             buf << ",...";
         buf << "}";
         return buf.str();
@@ -172,13 +179,13 @@ std::string DebugPeekDoubles(const double* data, int size)
 {
     outputstream buf;
     buf << "{";
-    for( int i = 0; i < std::min( 4, size ); ++i )
+    for( int i = 0; i < std::min( MAX_PEEK_ELEMENTS, size ); ++i )
     {
         if( i != 0 )
             buf << ",";
         buf << data[ i ];
     }
-    if( size > 4 )
+    if( size > MAX_PEEK_ELEMENTS )
         buf << ",...";
     buf << "}";
     return buf.str();
@@ -200,7 +207,21 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 
         SAL_INFO("sc.opencl", "SingleVectorRef len=" << pSVR->GetArrayLength() << " mpNumericArray=" << pSVR->GetArray().mpNumericArray << " (mpStringArray=" << pSVR->GetArray().mpStringArray << ")");
 
-        pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
+        if( forceStringsToZero && pSVR->GetArray().mpStringArray != nullptr )
+        {
+            dataBuffer.resize( pSVR->GetArrayLength());
+            for( size_t i = 0; i < pSVR->GetArrayLength(); ++i )
+                if( pSVR->GetArray().mpStringArray[ i ] != nullptr )
+                    dataBuffer[ i ] = 0;
+                else
+                    dataBuffer[ i ] = pSVR->GetArray().mpNumericArray[ i ];
+            pHostBuffer = dataBuffer.data();
+            SAL_INFO("sc.opencl", "Forced strings to zero : " << DebugPeekDoubles( pHostBuffer, pSVR->GetArrayLength()));
+        }
+        else
+        {
+            pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
+        }
         szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
     }
     else if (ref->GetType() == formula::svDoubleVectorRef)
@@ -210,8 +231,21 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 
         SAL_INFO("sc.opencl", "DoubleVectorRef index=" << mnIndex << " len=" << pDVR->GetArrayLength() << " mpNumericArray=" << pDVR->GetArrays()[mnIndex].mpNumericArray << " (mpStringArray=" << pDVR->GetArrays()[mnIndex].mpStringArray << ")");
 
-        pHostBuffer = const_cast<double*>(
-            pDVR->GetArrays()[mnIndex].mpNumericArray);
+        if( forceStringsToZero && pDVR->GetArrays()[mnIndex].mpStringArray != nullptr )
+        {
+            dataBuffer.resize( pDVR->GetArrayLength());
+            for( size_t i = 0; i < pDVR->GetArrayLength(); ++i )
+                if( pDVR->GetArrays()[mnIndex].mpStringArray[ i ] != nullptr )
+                    dataBuffer[ i ] = 0;
+                else
+                    dataBuffer[ i ] = pDVR->GetArrays()[mnIndex].mpNumericArray[ i ];
+            pHostBuffer = dataBuffer.data();
+            SAL_INFO("sc.opencl", "Forced strings to zero : " << DebugPeekDoubles( pHostBuffer, pDVR->GetArrayLength()));
+        }
+        else
+        {
+            pHostBuffer = const_cast<double*>(pDVR->GetArrays()[mnIndex].mpNumericArray);
+        }
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
     }
     else
@@ -327,57 +361,6 @@ public:
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode << "(" << DebugPeekData(ref) << ")" );
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), static_cast<void*>(&hashCode));
-        if (CL_SUCCESS != err)
-            throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
-        return 1;
-    }
-};
-
-/// Arguments that are actually compile-time constants
-class DynamicKernelConstantArgument : public DynamicKernelArgument
-{
-public:
-    DynamicKernelConstantArgument( const ScCalcConfig& config, const std::string& s,
-        const FormulaTreeNodeRef& ft ) :
-        DynamicKernelArgument(config, s, ft) { }
-    /// Generate declaration
-    virtual void GenDecl( outputstream& ss ) const override
-    {
-        ss << "double " << mSymName;
-    }
-    virtual void GenDeclRef( outputstream& ss ) const override
-    {
-        ss << mSymName;
-    }
-    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
-    {
-        GenDecl(ss);
-    }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
-    {
-        if (GetFormulaToken()->GetType() != formula::svDouble)
-            throw Unhandled(__FILE__, __LINE__);
-        return mSymName;
-    }
-    virtual size_t GetWindowSize() const override
-    {
-        return 1;
-    }
-    double GetDouble() const
-    {
-        FormulaToken* Tok = GetFormulaToken();
-        if (Tok->GetType() != formula::svDouble)
-            throw Unhandled(__FILE__, __LINE__);
-        return Tok->GetDouble();
-    }
-    /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
-    {
-        OpenCLZone zone;
-        double tmp = GetDouble();
-        // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << preciseFloat( tmp ));
-        cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;
@@ -1109,6 +1092,7 @@ size_t DynamicKernelSlidingArgument<Base>::GenReductionLoopHeader( outputstream&
 }
 
 template class DynamicKernelSlidingArgument<VectorRef>;
+template class DynamicKernelSlidingArgument<VectorRefStringsToZero>;
 template class DynamicKernelSlidingArgument<DynamicKernelStringArgument>;
 
 namespace {
@@ -2070,26 +2054,38 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         }
                         else if (pDVR->GetArrays()[j].mpNumericArray &&
                             pCodeGen->takeNumeric() &&
-                                 (AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()) || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO))
+                                 (AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength())
+                                    || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO
+                                    || pCodeGen->forceStringsToZero()))
                         {
                             // Function takes numbers, and either there
                             // are no strings, or there are strings but
                             // they are to be treated as zero
                             SAL_INFO("sc.opencl", "Numbers (no strings or strings treated as zero)");
-                            mvSubArguments.push_back(
-                                VectorRefFactory<VectorRef>(mCalcConfig,
-                                        ts, ft->Children[i], mpCodeGen, j));
+                            if(!AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()))
+                            {
+                                mvSubArguments.push_back(
+                                    VectorRefFactory<VectorRefStringsToZero>(mCalcConfig,
+                                            ts, ft->Children[i], mpCodeGen, j));
+                            }
+                            else
+                            {
+                                mvSubArguments.push_back(
+                                    VectorRefFactory<VectorRef>(mCalcConfig,
+                                            ts, ft->Children[i], mpCodeGen, j));
+                            }
                         }
                         else if (pDVR->GetArrays()[j].mpNumericArray == nullptr &&
                             pCodeGen->takeNumeric() &&
                             pDVR->GetArrays()[j].mpStringArray &&
-                            mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO)
+                            ( mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO
+                                || pCodeGen->forceStringsToZero()))
                         {
                             // Function takes numbers, and there are only
                             // strings, but they are to be treated as zero
                             SAL_INFO("sc.opencl", "Only strings even if want numbers but should be treated as zero");
                             mvSubArguments.push_back(
-                                VectorRefFactory<VectorRef>(mCalcConfig,
+                                VectorRefFactory<VectorRefStringsToZero>(mCalcConfig,
                                         ts, ft->Children[i], mpCodeGen, j));
                         }
                         else if (pDVR->GetArrays()[j].mpStringArray &&
@@ -2145,26 +2141,34 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     }
                     else if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric() &&
-                             (AllStringsAreNull(pSVR->GetArray().mpStringArray, pSVR->GetArrayLength()) || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO))
+                             (AllStringsAreNull(pSVR->GetArray().mpStringArray, pSVR->GetArrayLength())
+                                || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO
+                                || pCodeGen->forceStringsToZero()))
                     {
                         // Function takes numbers, and either there
                         // are no strings, or there are strings but
                         // they are to be treated as zero
                         SAL_INFO("sc.opencl", "Numbers (no strings or strings treated as zero)");
-                        mvSubArguments.push_back(
-                            std::make_shared<VectorRef>(mCalcConfig, ts,
-                                    ft->Children[i]));
+                        if( !AllStringsAreNull(pSVR->GetArray().mpStringArray, pSVR->GetArrayLength()))
+                            mvSubArguments.push_back(
+                                std::make_shared<VectorRefStringsToZero>(mCalcConfig, ts,
+                                        ft->Children[i]));
+                        else
+                            mvSubArguments.push_back(
+                                std::make_shared<VectorRef>(mCalcConfig, ts,
+                                        ft->Children[i]));
                     }
                     else if (pSVR->GetArray().mpNumericArray == nullptr &&
                         pCodeGen->takeNumeric() &&
                         pSVR->GetArray().mpStringArray &&
-                        mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO)
+                        (mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO
+                            || pCodeGen->forceStringsToZero()))
                     {
                         // Function takes numbers, and there are only
                         // strings, but they are to be treated as zero
                         SAL_INFO("sc.opencl", "Only strings even if want numbers but should be treated as zero");
                         mvSubArguments.push_back(
-                            std::make_shared<VectorRef>(mCalcConfig, ts,
+                            std::make_shared<VectorRefStringsToZero>(mCalcConfig, ts,
                                     ft->Children[i]));
                     }
                     else if (pSVR->GetArray().mpStringArray &&
@@ -2208,6 +2212,16 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         std::make_shared<ConstStringArgument>(mCalcConfig, ts,
                                 ft->Children[i]));
                 }
+                else if (pChild->GetType() == formula::svString
+                    && !pCodeGen->takeString()
+                    && pCodeGen->takeNumeric()
+                    && pCodeGen->forceStringsToZero())
+                {
+                    SAL_INFO("sc.opencl", "Constant string case, treated as zero");
+                    mvSubArguments.push_back(
+                        DynamicKernelArgumentRef(new DynamicKernelStringToZeroArgument(mCalcConfig, ts,
+                                ft->Children[i])));
+                }
                 else
                 {
                     SAL_INFO("sc.opencl", "Unhandled operand, rejecting for OpenCL");
@@ -2230,14 +2244,26 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocAverage:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpAverage>(nResultSize), nResultSize));
                 break;
+            case ocAverageA:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpAverageA>(nResultSize), nResultSize));
+                break;
             case ocMin:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMin>(nResultSize), nResultSize));
+                break;
+            case ocMinA:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMinA>(nResultSize), nResultSize));
                 break;
             case ocMax:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMax>(nResultSize), nResultSize));
                 break;
+            case ocMaxA:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMaxA>(nResultSize), nResultSize));
+                break;
             case ocCount:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCount>(nResultSize), nResultSize));
+                break;
+            case ocCount2:
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCountA>(nResultSize), nResultSize));
                 break;
             case ocSumProduct:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSumProduct>(), nResultSize));
@@ -2848,22 +2874,6 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocFact:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpFact>(), nResultSize));
-                break;
-            case ocMinA:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpMinA>(), nResultSize));
-                break;
-            case ocCount2:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpCountA>(), nResultSize));
-                break;
-            case ocMaxA:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpMaxA>(), nResultSize));
-                break;
-            case ocAverageA:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpAverageA>(), nResultSize));
                 break;
             case ocVarA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,

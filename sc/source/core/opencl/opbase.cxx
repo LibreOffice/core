@@ -84,7 +84,7 @@ bool DynamicKernelArgument::NeedParallelReduction() const
 }
 
 VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft, int idx ) :
-    DynamicKernelArgument(config, s, ft), mpClmem(nullptr), mnIndex(idx)
+    DynamicKernelArgument(config, s, ft), mpClmem(nullptr), mnIndex(idx), forceStringsToZero( false )
 {
     if (mnIndex)
     {
@@ -174,6 +174,13 @@ bool VectorRef::NeedParallelReduction() const
     return false;
 }
 
+VectorRefStringsToZero::VectorRefStringsToZero( const ScCalcConfig& config, const std::string& s,
+    const FormulaTreeNodeRef& ft, int index )
+    : VectorRef( config, s, ft, index )
+{
+    forceStringsToZero = true;
+}
+
 void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss )
 {
     assert( arg < int( vSubArguments.size()));
@@ -196,6 +203,11 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
         }
         else if(token->GetType() == formula::svDouble)
             ss << "    " << name << " = " << token->GetDouble() << ";\n";
+        else if(token->GetType() == formula::svString)
+        {
+            assert( dynamic_cast<DynamicKernelStringToZeroArgument*>(vSubArguments[arg].get()));
+            ss << "    " << name << " = 0.0;\n";
+        }
         else
             throw Unhandled( __FILE__, __LINE__ );
     }
@@ -259,13 +271,23 @@ void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArgum
                 ss << code;
                 ss << "    }\n";
             }
-            else
+            else if(token->GetType() == formula::svDouble)
             {
                 ss << "    {\n";
                 ss << "        double arg = " << token->GetDouble() << ";\n";
                 ss << code;
                 ss << "    }\n";
             }
+            else if(token->GetType() == formula::svString)
+            {
+                assert( dynamic_cast<DynamicKernelStringToZeroArgument*>(vSubArguments[i].get()));
+                ss << "    {\n";
+                ss << "        double arg = 0.0;\n";
+                ss << code;
+                ss << "    }\n";
+            }
+            else
+                throw Unhandled( __FILE__, __LINE__ );
         }
         else
         {
@@ -609,6 +631,104 @@ void CheckVariables::UnrollDoubleVector( outputstream& ss,
     }
     ss << unrollstr.str();
     ss << "    }\n";
+}
+
+void Reduction::GenSlidingWindowFunction( outputstream& ss,
+    const std::string& sSymName, SubArguments& vSubArguments )
+{
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "double tmp = " << GetBottom() << ";\n";
+    ss << "int gid0 = get_global_id(0);\n";
+    if (isAverage() || isMinOrMax())
+        ss << "int nCount = 0;\n";
+    ss << "double tmpBottom;\n";
+    unsigned i = vSubArguments.size();
+    while (i--)
+    {
+        if (NumericRange* NR = dynamic_cast<NumericRange*>(vSubArguments[i].get()))
+        {
+            bool needBody;
+            NR->GenReductionLoopHeader(ss, needBody);
+            if (!needBody)
+                continue;
+        }
+        else if (NumericRangeStringsToZero* NRS = dynamic_cast<NumericRangeStringsToZero*>(vSubArguments[i].get()))
+        {
+            bool needBody;
+            NRS->GenReductionLoopHeader(ss, needBody);
+            if (!needBody)
+                continue;
+        }
+        else if (ParallelNumericRange* PNR = dynamic_cast<ParallelNumericRange*>(vSubArguments[i].get()))
+        {
+            //did not handle yet
+            bool bNeedBody = false;
+            PNR->GenReductionLoopHeader(ss, mnResultSize, bNeedBody);
+            if (!bNeedBody)
+                continue;
+        }
+        else if (StringRange* SR = dynamic_cast<StringRange*>(vSubArguments[i].get()))
+        {
+            //did not handle yet
+            bool needBody;
+            SR->GenReductionLoopHeader(ss, needBody);
+            if (!needBody)
+                continue;
+        }
+        else
+        {
+            FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
+            if( pCur == nullptr || pCur->GetType() == formula::svDoubleVectorRef )
+            {
+                throw Unhandled(__FILE__, __LINE__);
+            }
+            ss << "{\n";
+        }
+        if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            bool bNanHandled = HandleNaNArgument(ss, i, vSubArguments);
+
+            ss << "    tmpBottom = " << GetBottom() << ";\n";
+
+            if (!bNanHandled)
+            {
+                ss << "    if (isnan(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << "))\n";
+                if (ZeroReturnZero())
+                    ss << "        return 0;\n";
+                else
+                {
+                    ss << "        tmp = ";
+                    ss << Gen2("tmpBottom", "tmp") << ";\n";
+                }
+                ss << "    else\n";
+            }
+            ss << "        tmp = ";
+            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+            ss << ";\n";
+        }
+        else
+        {
+            ss << "    tmp = ";
+            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+            ss << ";\n";
+        }
+        ss << "}\n";
+    }
+    if (isAverage())
+        ss <<
+            "if (nCount==0)\n"
+            "    return CreateDoubleError(DivisionByZero);\n";
+    else if (isMinOrMax())
+        ss <<
+            "if (nCount==0)\n"
+            "    return 0;\n";
+    ss << "return tmp";
+    if (isAverage())
+        ss << "/(double)nCount";
+    ss << ";\n}";
 }
 
 }

@@ -1650,102 +1650,6 @@ void SumOfProduct::GenSlidingWindowFunction( outputstream& ss,
     ss << "}";
 }
 
-void Reduction::GenSlidingWindowFunction( outputstream& ss,
-    const std::string& sSymName, SubArguments& vSubArguments )
-{
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "double tmp = " << GetBottom() << ";\n";
-    ss << "int gid0 = get_global_id(0);\n";
-    if (isAverage() || isMinOrMax())
-        ss << "int nCount = 0;\n";
-    ss << "double tmpBottom;\n";
-    unsigned i = vSubArguments.size();
-    while (i--)
-    {
-        if (NumericRange* NR = dynamic_cast<NumericRange*>(vSubArguments[i].get()))
-        {
-            bool needBody;
-            NR->GenReductionLoopHeader(ss, needBody);
-            if (!needBody)
-                continue;
-        }
-        else if (ParallelNumericRange* PNR = dynamic_cast<ParallelNumericRange*>(vSubArguments[i].get()))
-        {
-            //did not handle yet
-            bool bNeedBody = false;
-            PNR->GenReductionLoopHeader(ss, mnResultSize, bNeedBody);
-            if (!bNeedBody)
-                continue;
-        }
-        else if (StringRange* SR = dynamic_cast<StringRange*>(vSubArguments[i].get()))
-        {
-            //did not handle yet
-            bool needBody;
-            SR->GenReductionLoopHeader(ss, needBody);
-            if (!needBody)
-                continue;
-        }
-        else
-        {
-            FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
-            assert(pCur);
-            assert(pCur->GetType() != formula::svDoubleVectorRef);
-
-            if (pCur->GetType() == formula::svSingleVectorRef ||
-                pCur->GetType() == formula::svDouble)
-            {
-                ss << "{\n";
-            }
-        }
-        if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-        {
-            bool bNanHandled = HandleNaNArgument(ss, i, vSubArguments);
-
-            ss << "tmpBottom = " << GetBottom() << ";\n";
-
-            if (!bNanHandled)
-            {
-                ss << "if (isnan(";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << "))\n";
-                if (ZeroReturnZero())
-                    ss << "    return 0;\n";
-                else
-                {
-                    ss << "    tmp = ";
-                    ss << Gen2("tmpBottom", "tmp") << ";\n";
-                }
-                ss << "else\n";
-            }
-            ss << "{";
-            ss << "        tmp = ";
-            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-            ss << ";\n";
-            ss << "    }\n";
-            ss << "}\n";
-        }
-        else
-        {
-            ss << "tmp = ";
-            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-            ss << ";\n";
-        }
-    }
-    if (isAverage())
-        ss <<
-            "if (nCount==0)\n"
-            "    return CreateDoubleError(DivisionByZero);\n";
-    else if (isMinOrMax())
-        ss <<
-            "if (nCount==0)\n"
-            "    return 0;\n";
-    ss << "return tmp";
-    if (isAverage())
-        ss << "/(double)nCount";
-    ss << ";\n}";
-}
-
 void OpSum::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
 {
     decls.insert(is_representable_integerDecl);
@@ -1756,12 +1660,6 @@ void OpSum::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& fun
     funs.insert(fsum_approx);
 }
 
-void OpAverage::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
-{
-    decls.insert(fsum_countDecl);
-    funs.insert(fsum_count);
-}
-
 void OpSub::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
 {
     decls.insert(is_representable_integerDecl);
@@ -1770,18 +1668,6 @@ void OpSub::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& fun
     funs.insert(approx_equal);
     decls.insert(fsub_approxDecl);
     funs.insert(fsub_approx);
-}
-
-void OpMin::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
-{
-    decls.insert(fmin_countDecl);
-    funs.insert(fmin_count);
-}
-
-void OpMax::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
-{
-    decls.insert(fmax_countDecl);
-    funs.insert(fmax_count);
 }
 
 }

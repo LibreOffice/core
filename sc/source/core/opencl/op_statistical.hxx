@@ -503,83 +503,123 @@ public:
     virtual std::string BinFuncName() const override { return "OpRsq"; }
 };
 
-class OpMinA: public Normal
+class OpMin : public Reduction
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "OpMinA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
+    explicit OpMin(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "NAN"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return "fmin_count(" + lhs + "," + rhs + ", &nCount)";
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "min"; }
+    virtual bool isMinOrMax() const override { return true; }
     virtual bool canHandleMultiVector() const override { return true; }
 };
-class OpCountA: public Normal
+
+class OpMax : public Reduction
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
+    explicit OpMax(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "NAN"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        return "fmax_count(" + lhs + "," + rhs + ", &nCount)";
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "max"; }
+    virtual bool isMinOrMax() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpAverage : public Reduction
+{
+public:
+    explicit OpAverage(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        outputstream ss;
+        ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
+        return ss.str();
+    }
+    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
+    virtual std::string BinFuncName() const override { return "average"; }
+    virtual bool isAverage() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpCount : public Reduction
+{
+public:
+    explicit OpCount(int nResultSize) : Reduction(nResultSize) {}
+
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
+    {
+        outputstream ss;
+        ss << "(isnan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
+        return ss.str();
+    }
+    virtual std::string BinFuncName() const override { return "fcount"; }
+    virtual bool canHandleMultiVector() const override { return true; }
+};
+
+class OpCountA: public OpCount
+{
+public:
+    explicit OpCountA(int nResultSize) : OpCount(nResultSize) {}
     virtual std::string BinFuncName() const override { return "OpCountA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
-class OpMaxA: public Normal
+class OpMaxA: public OpMax
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
+    explicit OpMaxA(int nResultSize) : OpMax(nResultSize) {}
     virtual std::string BinFuncName() const override { return "OpMaxA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
-class OpVarA: public Normal
+class OpMinA : public OpMin
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
+    explicit OpMinA(int nResultSize) : OpMin(nResultSize) {}
+    virtual std::string BinFuncName() const override { return "OpMinA"; }
+    virtual bool forceStringsToZero() const override { return true; }
+};
+class OpVarA: public OpVar
+{
+public:
     virtual std::string BinFuncName() const override { return "OpVarA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
-class OpVarPA: public Normal
+class OpVarPA: public OpVarP
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "OpVarPA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
-class OpStDevPA: public Normal
+class OpStDevPA: public OpStDevP
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "OpStDevPA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
-class OpAverageA: public Normal
+class OpAverageA: public OpAverage
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
+    explicit OpAverageA(int nResultSize) : OpAverage(nResultSize) {}
     virtual std::string BinFuncName() const override { return "OpAverageA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
-class OpStDevA: public Normal
+class OpStDevA: public OpStDev
 {
 public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "OpStDevA"; }
-    virtual bool takeString() const override { return true; }
-    virtual bool takeNumeric() const override { return true; }
+    virtual bool forceStringsToZero() const override { return true; }
 };
 
 }

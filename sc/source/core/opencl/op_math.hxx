@@ -570,29 +570,6 @@ public:
     virtual std::string BinFuncName() const override { return "fsop"; }
 };
 
-class Reduction : public SlidingFunctionBase
-{
-    int const mnResultSize;
-public:
-    explicit Reduction(int nResultSize) : mnResultSize(nResultSize) {}
-
-    typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
-    typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
-    typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
-
-    virtual bool HandleNaNArgument( outputstream&, unsigned, SubArguments& ) const
-    {
-        return false;
-    }
-
-    virtual void GenSlidingWindowFunction( outputstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) override;
-    virtual bool isAverage() const { return false; }
-    virtual bool isMinOrMax() const { return false; }
-    virtual bool takeString() const override { return false; }
-    virtual bool takeNumeric() const override { return true; }
-};
-
 /// operator traits
 class OpNop : public Reduction
 {
@@ -605,22 +582,6 @@ public:
         return lhs;
     }
     virtual std::string BinFuncName() const override { return "nop"; }
-};
-
-class OpCount : public Reduction
-{
-public:
-    explicit OpCount(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "(isnan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
-        return ss.str();
-    }
-    virtual std::string BinFuncName() const override { return "fcount"; }
-    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpSum : public Reduction
@@ -638,24 +599,6 @@ public:
     virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
     virtual std::string BinFuncName() const override { return "fsum"; }
     // All arguments are simply summed, so it doesn't matter if SvDoubleVector is split.
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpAverage : public Reduction
-{
-public:
-    explicit OpAverage(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        outputstream ss;
-        ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
-        return ss.str();
-    }
-    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
-    virtual std::string BinFuncName() const override { return "average"; }
-    virtual bool isAverage() const override { return true; }
     virtual bool canHandleMultiVector() const override { return true; }
 };
 
@@ -722,39 +665,6 @@ public:
     }
 
 };
-
-class OpMin : public Reduction
-{
-public:
-    explicit OpMin(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "NAN"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return "fmin_count(" + lhs + "," + rhs + ", &nCount)";
-    }
-    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
-    virtual std::string BinFuncName() const override { return "min"; }
-    virtual bool isMinOrMax() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
-class OpMax : public Reduction
-{
-public:
-    explicit OpMax(int nResultSize) : Reduction(nResultSize) {}
-
-    virtual std::string GetBottom() override { return "NAN"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
-    {
-        return "fmax_count(" + lhs + "," + rhs + ", &nCount)";
-    }
-    virtual void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs) override;
-    virtual std::string BinFuncName() const override { return "max"; }
-    virtual bool isMinOrMax() const override { return true; }
-    virtual bool canHandleMultiVector() const override { return true; }
-};
-
 
 }
 
