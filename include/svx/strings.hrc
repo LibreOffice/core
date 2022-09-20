@@ -837,7 +837,7 @@
 #define RID_SVXSTR_BMP19                                    NC_("RID_SVXSTR_BMP19", "Night Sky")
 #define RID_SVXSTR_BMP20                                    NC_("RID_SVXSTR_BMP20", "Pool")
 #define RID_SVXSTR_BMP21                                    NC_("RID_SVXSTR_BMP21", "Bitmap")
-#define RID_SVXSTR_BMP79                                    NC_("RID_SVXSTR_BMP79", "Invoice Paper")
+#define RID_SVXSTR_BMP79                                    NC_("RID_SVXSTR_BMP79", "Kraft Paper")
 #define RID_SVXSTR_BMP80                                    NC_("RID_SVXSTR_BMP80", "Concrete")
 #define RID_SVXSTR_BMP81                                    NC_("RID_SVXSTR_BMP81", "Brick Wall")
 #define RID_SVXSTR_BMP82                                    NC_("RID_SVXSTR_BMP82", "Stone Wall")
