@@ -214,13 +214,15 @@ class OpNorminv:public Normal{
     public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
-     virtual std::string BinFuncName() const override { return "OpNorminv"; }
+    virtual std::string BinFuncName() const override { return "OpNorminv"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) override;
 };
 class OpNormsinv:public Normal{
     public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
-     virtual std::string BinFuncName() const override { return "OpNormsinv"; }
+    virtual std::string BinFuncName() const override { return "OpNormsinv"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) override;
 };
 class OpPhi:public Normal{
     public:
@@ -268,6 +270,7 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "LogInv"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) override;
 };
 class OpCritBinom: public Normal
 {
