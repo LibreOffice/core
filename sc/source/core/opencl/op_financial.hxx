@@ -14,19 +14,11 @@
 
 namespace sc::opencl {
 
-class RRI: public SlidingFunctionBase
+class OpRRI: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual bool takeString() const override { return false; }
-    virtual bool takeNumeric() const override { return true; }
-};
-
-class OpRRI:public RRI
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
     virtual std::string BinFuncName() const override { return "RRI"; }
 };
 
@@ -179,18 +171,29 @@ public:
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
 };
 
-class IRR: public Normal
+class OpIRR: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "IRR"; }
 };
 
-class OpIRR: public IRR
+class OpMIRR: public Normal
 {
 public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string BinFuncName() const override { return "IRR"; }
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual bool canHandleMultiVector() const override { return true; }
+    virtual std::string BinFuncName() const override { return "MIRR"; }
+};
+
+class OpXirr: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "Xirr"; }
 };
 
 class XNPV: public Normal
@@ -214,15 +217,6 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
 
      virtual std::string BinFuncName() const override { return "SYD"; }
-};
-
-class MIRR: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual bool canHandleMultiVector() const override { return true; }
-    virtual std::string BinFuncName() const override { return "MIRR"; }
 };
 
 class OpEffective:public Normal
@@ -546,13 +540,6 @@ public:
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
 };
 
-class OpMIRR: public MIRR
-{
-public:
-    virtual std::string GetBottom() override { return "0"; }
-    virtual std::string BinFuncName() const override { return "MIRR"; }
-};
-
 class OpPV: public Normal
 {
 public:
@@ -569,15 +556,6 @@ public:
 
     virtual std::string BinFuncName() const override { return "VDB"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
-};
-
-class OpXirr: public CheckVariables
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-
-    virtual std::string BinFuncName() const override { return "Xirr"; }
 };
 
 }

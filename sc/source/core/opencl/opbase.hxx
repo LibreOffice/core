@@ -279,11 +279,24 @@ protected:
     static void GenerateRangeArgs( SubArguments& vSubArguments, outputstream& ss, const char* code );
     // overload, handle the given argument
     static void GenerateRangeArg( int arg, SubArguments& vSubArguments, outputstream& ss, const char* code );
+    // Overload.
+    // Both arguments must be svDoubleRef of the same size.
+    // If 'firstElementDiff' is set, the loop start will be offset by '+ firstElementDiff'.
+    static void GenerateRangeArg( int arg1, int arg2, SubArguments& vSubArguments,
+        outputstream& ss, const char* code, const char* firstElementDiff = nullptr );
     // Generate code that will handle the given two arguments in one loop where n-th element of arg1 and arg2
     // will be handled at the same time, named 'arg1' and 'arg2'.
     // Both arguments must be svDoubleRef of the same size.
+    // If 'firstElementDiff' is set, the loop start will be offset by '+ firstElementDiff'.
     static void GenerateRangeArgPair( int arg1, int arg2, SubArguments& vSubArguments,
-        outputstream& ss, const char* code );
+        outputstream& ss, const char* code, const char* firstElementDiff = nullptr );
+    // Generate code for "double <name> = range[<element>]" from vSubArguments.
+    // The argument must be svDoubleRef.
+    // There is no isnan(arg) checking.
+    static void GenerateRangeArgElement( const char* name, int arg, const char* element,
+        SubArguments& vSubArguments, outputstream& ss );
+    static void GenerateDoubleVectorLoopHeader( outputstream& ss,
+        const formula::DoubleVectorRefToken* pDVR, const char* firstElementDiff );
 };
 
 class Normal : public SlidingFunctionBase

@@ -1917,7 +1917,6 @@ vSubArguments)
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    int singleIndex = gid0;\n";
     ss << "    double result = 0;\n";
     GenerateArg( "tmp0", 0, vSubArguments, ss );
     GenerateArg( "tmp1", 1, vSubArguments, ss );
@@ -1959,7 +1958,6 @@ vSubArguments)
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    int singleIndex = gid0;\n";
     ss << "    double result = 0;\n";
     GenerateArg( "tmp0", 0, vSubArguments, ss );
     GenerateArg( "tmp1", 1, vSubArguments, ss );

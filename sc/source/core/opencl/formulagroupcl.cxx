@@ -3024,11 +3024,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             std::make_shared<OpMDuration>(), nResultSize));
                 }
-                /*else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXirr")
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXirr")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            std::make_shared<OpXirr, nResultSize));
-                }*/
+                            std::make_shared<OpXirr>(), nResultSize));
+                }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getOddlprice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,

@@ -241,31 +241,7 @@ void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArgum
             {
                 const formula::DoubleVectorRefToken* pDVR =
                     static_cast<const formula::DoubleVectorRefToken *>(token);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "    for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-                {
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-                {
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
-                    ss << "    {\n";
-                }
-                else
-                {
-                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
-                    ss << "    {\n";
-                }
+                GenerateDoubleVectorLoopHeader( ss, pDVR, nullptr );
                 ss << "        double arg = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
@@ -315,7 +291,7 @@ void SlidingFunctionBase::GenerateRangeArg( int arg, SubArguments& vSubArguments
 }
 
 void SlidingFunctionBase::GenerateRangeArgPair( int arg1, int arg2, SubArguments& vSubArguments,
-    outputstream& ss, const char* code )
+    outputstream& ss, const char* code, const char* firstElementDiff )
 {
     assert( arg1 >= 0 && arg1 < int (vSubArguments.size()));
     assert( arg2 >= 0 && arg2 < int (vSubArguments.size()));
@@ -347,37 +323,71 @@ void SlidingFunctionBase::GenerateRangeArgPair( int arg1, int arg2, SubArguments
         throw Unhandled( __FILE__, __LINE__ );
     }
 
-    size_t arrayLength = std::min( pDVR1->GetArrayLength(), pDVR2->GetArrayLength());
-    ss << "    for (int i = ";
-    if (!pDVR1->IsStartFixed() && pDVR1->IsEndFixed())
-    {
-        ss << "gid0; i < " << arrayLength;
-        ss << " && i < " << nCurWindowSize1  << "; i++)\n";
-        ss << "    {\n";
-    }
-    else if (pDVR1->IsStartFixed() && !pDVR1->IsEndFixed())
-    {
-        ss << "0; i < " << arrayLength;
-        ss << " && i < gid0+"<< nCurWindowSize1 << "; i++)\n";
-        ss << "    {\n";
-    }
-    else if (!pDVR1->IsStartFixed() && !pDVR1->IsEndFixed())
-    {
-        ss << "0; i + gid0 < " << arrayLength;
-        ss << " &&  i < " << nCurWindowSize1 << "; i++)\n";
-        ss << "    {\n";
-    }
-    else
-    {
-        ss << "0; i < " << nCurWindowSize1 << "; i++)\n";
-        ss << "    {\n";
-    }
+    GenerateDoubleVectorLoopHeader( ss,
+        pDVR1->GetArrayLength() < pDVR2->GetArrayLength() ? pDVR1 : pDVR2,
+        firstElementDiff );
     ss << "        double arg1 = ";
     ss << vSubArguments[arg1]->GenSlidingWindowDeclRef(true) << ";\n";
     ss << "        double arg2 = ";
     ss << vSubArguments[arg2]->GenSlidingWindowDeclRef(true) << ";\n";
     ss << code;
     ss << "    }\n";
+}
+
+void SlidingFunctionBase::GenerateRangeArgElement( const char* name, int arg, const char* element,
+    SubArguments& vSubArguments, outputstream& ss )
+{
+    assert( arg >= 0 && arg < int (vSubArguments.size()));
+    FormulaToken *token = vSubArguments[arg]->GetFormulaToken();
+    if( token == nullptr )
+        throw Unhandled( __FILE__, __LINE__ );
+    if(token->GetType() != formula::svDoubleVectorRef)
+        throw Unhandled( __FILE__, __LINE__ );
+    const formula::DoubleVectorRefToken* pDVR =
+        static_cast<const formula::DoubleVectorRefToken *>(token);
+    ss << "    double " << name << " = NAN;\n";
+    ss << "    {\n";
+    // GenSlidingWindowDeclRef() may refer to 'i' variable.
+    ss << "        int i = 0;\n";
+    ss << "        if( ";
+    if( !pDVR->IsStartFixed())
+        ss << "gid0 + ";
+    ss << element << " < " << pDVR->GetArrayLength() << " )\n";
+    ss << "            " << name << " = " << vSubArguments[arg]->GenSlidingWindowDeclRef(true) << ";\n";
+    ss << "    }\n";
+}
+
+void SlidingFunctionBase::GenerateDoubleVectorLoopHeader( outputstream& ss,
+    const formula::DoubleVectorRefToken* pDVR, const char* firstElementDiff )
+{
+    size_t nCurWindowSize = pDVR->GetRefRowSize();
+    std::string startDiff;
+    if( firstElementDiff )
+        startDiff = std::string( " + " ) + firstElementDiff;
+    ss << "    for (int i = ";
+    if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+    {
+        ss << "gid0" << startDiff << "; i < " << pDVR->GetArrayLength();
+        ss << " && i < " << nCurWindowSize  << "; i++)\n";
+        ss << "    {\n";
+    }
+    else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+    {
+        ss << "0" << startDiff << "; i < " << pDVR->GetArrayLength();
+        ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
+        ss << "    {\n";
+    }
+    else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+    {
+        ss << "0" << startDiff << "; i + gid0 < " << pDVR->GetArrayLength();
+        ss << " &&  i < " << nCurWindowSize << "; i++)\n";
+        ss << "    {\n";
+    }
+    else
+    {
+        ss << "0" << startDiff << "; i < " << pDVR->GetArrayLength() << "; i++)\n";
+        ss << "    {\n";
+    }
 }
 
 void SlidingFunctionBase::GenerateFunctionDeclaration( const std::string& sSymName,

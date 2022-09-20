@@ -18,13 +18,13 @@ namespace sc::opencl {
 // Definitions of inline functions
 #include "op_financial_helpers.hxx"
 
-void RRI::GenSlidingWindowFunction(
+void OpRRI::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 3, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    double tmp;\n";
     ss << "    int gid0 = get_global_id(0);\n";
     GenerateArg( "nper", 0, vSubArguments, ss );
     GenerateArg( "pv", 1, vSubArguments, ss );
@@ -402,251 +402,64 @@ vSubArguments)
     ss <<"}";
 }
 
-void IRR::GenSlidingWindowFunction(outputstream &ss,
+void OpIRR::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 2 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 0 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    #define  Epsilon   1.0E-7\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    FormulaToken* pSur = vSubArguments[1]->GetFormulaToken();
-    assert(pSur);
-    ss << "    double fEstimated = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    GenerateArgWithDefault( "fEstimated", 1, 0.1, vSubArguments, ss );
     ss << "    double fEps = 1.0;\n";
-    ss << "    double x = 0.0, xNew = 0.0, fNumerator = 0.0, fDenominator = 0.0;\n";
+    ss << "    double xNew = 0.0, fNumerator = 0.0, fDenominator = 0.0;\n";
     ss << "    double nCount = 0.0;\n";
-    if (pSur->GetType() == formula::svSingleVectorRef)
-    {
-        const formula::SingleVectorRefToken* pSVR =
-            static_cast< const formula::SingleVectorRefToken* >(pSur);
-        ss << "    if (gid0 >= " << pSVR->GetArrayLength() << ")\n";
-        ss << "        fEstimated = 0.1;\n";
-        ss << "    if (isnan(fEstimated))\n";
-        ss << "        x = 0.1;\n";
-        ss << "    else\n";
-    }
-    else if (pSur->GetType() == formula::svDouble)
-    {
-        ss << "    if (isnan(fEstimated))\n";
-        ss << "        x = 0.1;\n";
-        ss << "    else\n";
-    }
-    ss << "        x = fEstimated;\n";
     ss << "    unsigned short nItCount = 0;\n";
-    ss << "    while (fEps > Epsilon && nItCount < 20){\n";
+    ss << "    double x = fEstimated;\n";
+    ss << "    while (fEps > Epsilon && nItCount < 20)\n";
+    ss << "    {\n";
     ss << "        nCount = 0.0; fNumerator = 0.0;  fDenominator = 0.0;\n";
-    ss << "        double arg0, arg1;\n";
-    ss << "        int i = 0;\n";
-    FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
-    assert(pCur);
-    const formula::DoubleVectorRefToken* pDVR =
-        static_cast<const formula::DoubleVectorRefToken* >(pCur);
-    size_t nCurWindowSize = pDVR->GetRefRowSize();
-    ss << "        for ( ";
-    if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-        ss << "i = gid0; i < " << pDVR->GetArrayLength();
-        ss << " && i < " << nCurWindowSize << " /2*2; i++){\n";
-        ss << "            arg0 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            i++;;\n";
-        ss << "            arg1 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            if (!isnan(arg0)){\n";
-        ss << "            fNumerator += arg0 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
-        ss << "            nCount += 1;\n";
-        ss << "            }\n";
-        ss << "            if (!isnan(arg1)){\n";
-        ss << "                fNumerator += arg1 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
-        ss << "                nCount += 1;\n";
-        ss << "            }\n";
-        ss << "        }\n";
-        ss << "if(i < " << pDVR->GetArrayLength();
-        ss << " && i < " << nCurWindowSize << ") ;{\n";
-    }
-    else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-        ss << "; i < " << pDVR->GetArrayLength();
-        ss << " && i < (gid0+" << nCurWindowSize << " )/2*2; i++){\n";
-        ss << "            arg0 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            if (!isnan(arg0)){\n";
-        ss << "            fNumerator += arg0 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
-        ss << "            nCount += 1;\n";
-        ss << "            }\n";
-        ss << "            i++;\n";
-        ss << "            arg1 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            if (!isnan(arg1)){\n";
-        ss << "                fNumerator += arg1 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
-        ss << "                nCount+=1;\n";
-        ss << "            }\n";
-        ss << "        }\n";
-        ss << "        if(i < " << pDVR->GetArrayLength();
-        ss << " && i < gid0+" << nCurWindowSize << "){\n";
-    }
-    else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-        ss << " ; i + gid0 < " << pDVR->GetArrayLength();
-        ss << " &&  i < " << nCurWindowSize << " /2*2; i++){\n";
-        ss << "            arg0 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            i++;;\n";
-        ss << "            arg1 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            if (!isnan(arg0)){\n";
-        ss << "            fNumerator += arg0 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
-        ss << "            nCount += 1;\n";
-        ss << "            }\n";
-        ss << "            if (!isnan(arg1)){\n";
-        ss << "                fNumerator += arg1 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
-        ss << "                nCount+=1;\n";
-        ss << "            }\n";
-        ss << "        }\n";
-        ss << "        if(i + gid0 < " << pDVR->GetArrayLength() << " &&";
-        ss << " i < " << nCurWindowSize << "){\n";
-
-    } else {
-        ss << "; i < " << nCurWindowSize << " /2*2; i++){\n";
-        ss << "            arg0 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            i++;;\n";
-        ss << "            arg1 = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            if (!isnan(arg0)){\n";
-        ss << "            fNumerator += arg0 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
-        ss << "            nCount += 1;\n";
-        ss << "            }\n";
-        ss << "            if (!isnan(arg1)){\n";
-        ss << "                fNumerator += arg1 / pow(1.0 + x, nCount);\n";
-        ss << "            fDenominator+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
-        ss << "                nCount+=1;\n";
-        ss << "            }\n";
-        ss << "        }\n";
-        ss << "if(i<" << nCurWindowSize << "){\n";
-
-    }
-    ss << "            arg0 = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-    ss << "        if (isnan(arg0))\n";
-    ss << "            continue;\n";
-    ss << "        fNumerator += arg0 / pow(1.0+x, nCount);\n";
-    ss << "        fDenominator  += -nCount * arg0 / pow(1.0+x,nCount+1.0);\n";
-    ss << "        nCount+=1;\n";
-    ss << "        }\n";
+    GenerateRangeArg( 0, vSubArguments, ss,
+        "            if (!isnan(arg))\n"
+        "            {\n"
+        "                fNumerator += arg / pow(1.0 + x, nCount);\n"
+        "                fDenominator+=-1*nCount*arg/pow(1.0+x,nCount+1.0);\n"
+        "                nCount += 1;\n"
+        "            }\n"
+        );
     ss << "        xNew = x - fNumerator / fDenominator;\n";
     ss << "        fEps = fabs(xNew - x);\n";
     ss << "        x = xNew;\n";
-    ss << "        nItCount++;\n    }\n";
-    ss << "        if (fEstimated == 0.0 && fabs(x) < Epsilon)\n";
-    ss << "            x = 0.0;\n";
-    ss << "        if (fEps < Epsilon)\n";
-    ss << "            return x;\n";
-    ss << "        else\n";
-    // FIXME: This is of course horribly wrong. 523 is the error code NoConvergence, and this should
-    // be CreateDoubleError(523). Ditto for the other occurrences of 523 in the OpenCL code
-    // generated in this file.
-    ss << "            return (double)523;\n";
-    ss << "}";
+    ss << "        nItCount++;\n";
+    ss << "    }\n";
+    ss << "    if (fEstimated == 0.0 && fabs(x) < Epsilon)\n";
+    ss << "        x = 0.0;\n";
+    ss << "    if (fEps < Epsilon)\n";
+    ss << "        return x;\n";
+    ss << "    else\n";
+    ss << "        return CreateDoubleError(NoConvergence);\n";
+    ss << "}\n";
 }
 
 void XNPV::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 3, 3 );
-    FormulaToken *pCur = vSubArguments[1]->GetFormulaToken();
-    assert(pCur);
-    const formula::DoubleVectorRefToken* pCurDVR =
-        static_cast<const formula::DoubleVectorRefToken *>(pCur);
-    size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+    CHECK_PARAMETER_DOUBLEVECTORREF( 1 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 2 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n\t";
-    ss << "double result = 0.0;\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "int i=0;\n\t";
-    ss << "double date;\n\t";
-    ss << "double value;\n\t";
-    ss << "double rate;\n\t";
-    ss << "double dateNull;\n\t";
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::DoubleVectorRefToken*tmpCurDVR1= static_cast<const
-    formula::DoubleVectorRefToken *>(tmpCur1);
-
-    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::DoubleVectorRefToken*tmpCurDVR2= static_cast<const
-    formula::DoubleVectorRefToken *>(tmpCur2);
-    ss<< "int buffer_rate_len = ";
-    ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_value_len = ";
-    ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_date_len = ";
-    ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
-    ss<<"if((gid0)>=buffer_date_len || isnan(";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"return NAN;\n\telse \n";
-    ss<<"dateNull = ";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-    ss<<"if((gid0)>=buffer_rate_len || isnan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"return NAN;\n\telse \n";
-    ss<<"rate = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-    ss<<"if(1 == buffer_date_len )\n";
-    ss<<"return ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-    ss << "for (int i = ";
-    if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
-    {
-        ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
-    }
-    else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-    {
-        ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n\t\t";
-    }
-    else
-    {
-        ss << "0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
-    }
-    ss << "{\n\t";
-    if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-    {
-        ss <<  "if((i+gid0)>=buffer_value_len || (i+gid0)>=buffer_date_len)\n\t\t";
-        ss <<  "return result;\n\telse \n\t\t";
-    }
-    else
-    {
-        ss <<  "if(i>=buffer_value_len || i>=buffer_date_len)\n\t\t";
-        ss <<  "return result;\n\telse \n\t\t";
-    }
-
-    ss <<  "value = ";
-    ss <<  vSubArguments[1]->GenSlidingWindowDeclRef(true);
-    ss <<  ";\n";
-    ss <<  " date = ";
-    ss <<  vSubArguments[2]->GenSlidingWindowDeclRef(true);
-    ss <<  ";\n";
-    ss <<  "result += value/(pow((rate+1),(date-dateNull)/365));\n";
-    ss <<  "}\n";
-    ss <<  "return result;\n";
-    ss <<  "}";
+    ss << "{\n";
+    ss << "    double result = 0.0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    GenerateArg( "rate", 0, vSubArguments, ss );
+    GenerateRangeArgElement( "dateNull", 2, "0", vSubArguments, ss );
+    GenerateRangeArgPair( 1, 2, vSubArguments, ss,
+        "        if( !isnan(arg1) && !isnan(arg2))\n"
+        "            result += arg1/(pow((rate+1),(arg2-dateNull)/365));\n"
+        );
+    ss << "    return result;\n";
+    ss << "}";
 }
 
 void PriceMat::BinInlineFun(std::set<std::string>& decls,
@@ -709,13 +522,13 @@ void OpSYD::GenSlidingWindowFunction(outputstream &ss,
     ss <<"}\n";
 }
 
-void MIRR::GenSlidingWindowFunction(
+void OpMIRR::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 3, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n\t";
-    ss << "double tmp = " << GetBottom() <<";\n\t";
+    ss << "double tmp;\n\t";
     ss << "int gid0 = get_global_id(0);\n\t";
     GenerateArg( 1, vSubArguments, ss );
     GenerateArg( 2, vSubArguments, ss );
@@ -2035,105 +1848,58 @@ void OpXirr::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 2, 3 );
-    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-    const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-         formula::DoubleVectorRefToken *>(tmpCur);
-    size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-    pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-    pCurDVR->GetRefRowSize() ;
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    int doubleIndex = gid0;\n";
-    ss << "    int singleIndex = gid0;\n";
-    ss << "    double result = 0;\n";
-    ss << "    int i=0;\n";
-    GenTmpVariables(ss,vSubArguments);
-    if(vSubArguments.size() == 2)
-    {
-        ss << "    double tmp2  = 0.1;\n";
-    }
-    else
-    {
-        CheckSubArgumentIsNan(ss,vSubArguments,2);
-    }
-    ss << "    if(tmp2<=-1)\n";
-    ss << "        result = -DBL_MAX;\n";
-    ss << "    else\n";
+    GenerateArgWithDefault( "fResultRate", 2, 0.1, vSubArguments, ss );
+    ss << "    if(fResultRate<=-1)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    double fMaxEps = 1e-10;\n";
+    ss << "    int nMaxIter = 50;\n";
+    ss << "    int nIter = 0;\n";
+    ss << "    double fResultValue;\n";
+    ss << "    int nIterScan = 0;\n";
+    ss << "    bool bContLoop = false;\n";
+    ss << "    bool bResultRateScanEnd = false;\n";
+    // Make 'V_0' and 'D_0' be the first elements of arguments 0 and 1.
+    GenerateRangeArgElement( "V_0", 0, "0", vSubArguments, ss );
+    GenerateRangeArgElement( "D_0", 1, "0", vSubArguments, ss );
+    ss << "    do\n";
     ss << "    {\n";
-    ss << "        double fMaxEps = 1e-10;\n";
-    ss << "        int nMaxIter = 50;\n";
-    ss << "        double fNewRate, fRateEps, fResultValue, fResultValue2;\n";
-    ss << "        int nIter = 0;\n";
-    ss << "        int bContLoop;\n";
-    ss << "        int windowsSize = ";
-    ss << nCurWindowSize;
-    ss << ";\n";
-    CheckSubArgumentIsNan(ss,vSubArguments,0);
-    CheckSubArgumentIsNan(ss,vSubArguments,1);
-    ss << "        double D_0 = tmp1;\n";
-    ss << "        double V_0 = tmp0;\n";
-    ss << "        double fResultRate = tmp2;\n";
-    ss << "        double r;\n";
-    ss << "        double fResult;\n";
+    ss << "        if (nIterScan >=1)\n";
+    ss << "            fResultRate = -0.99 + (nIterScan -1)* 0.01;\n";
     ss << "        do\n";
     ss << "        {\n";
+    ss << "            double r = fResultRate + 1;\n";
     ss << "            fResultValue = V_0;\n";
-    ss << "            r = fResultRate + 1;\n";
-    ss << "            for (i = ";
-    if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-       ss << "gid0+1; i < "<< nCurWindowSize <<"; i++)\n";
-    } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-       ss << "1; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-    } else {
-       ss << "1; i < "<< nCurWindowSize <<"; i++)\n";
-    }
-    ss << "            {\n";
-    if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-    {
-       ss<< "                doubleIndex =i+gid0;\n";
-    }else
-    {
-       ss<< "                doubleIndex =i;\n";
-    }
-    CheckSubArgumentIsNan(ss,vSubArguments,0);
-    CheckSubArgumentIsNan(ss,vSubArguments,1);
-    ss << "                fResultValue += tmp0/pow(r,(tmp1 - D_0)/365.0);\n";
-    ss << "            }\n";
-    ss << "            fResultValue2 = 0;\n";
-
-    ss << "            for (i = ";
-    if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-       ss << "gid0+1; i < "<< nCurWindowSize <<"; i++)\n";
-    } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-       ss << "1; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-    } else {
-       ss << "1; i < "<< nCurWindowSize <<"; i++)\n";
-    }
-    ss << "            {\n";
-    if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-    {
-       ss<< "                doubleIndex =i+gid0;\n";
-    }else
-    {
-       ss<< "                doubleIndex =i;\n";
-    }
-    CheckSubArgumentIsNan(ss,vSubArguments,0);
-    CheckSubArgumentIsNan(ss,vSubArguments,1);
-    ss << "                double E_i = (tmp1 - D_0)/365.0;\n";
-    ss << "                fResultValue2 -= E_i * tmp0 / pow(r,E_i + 1.0);\n";
-    ss << "            }\n";
-    ss << "            fNewRate = fResultRate - fResultValue / fResultValue2;\n";
-    ss << "            fRateEps = fabs( fNewRate - fResultRate );\n";
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
+        "                if(!isnan(arg1) && !isnan(arg2))\n"
+        "                    fResultValue += arg1/pow(r,(arg2 - D_0)/365.0);\n"
+        , "1" // start from 2nd element
+        );
+    ss << "            double fResultValue2 = 0;\n";
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
+        "                if(!isnan(arg1) && !isnan(arg2))\n"
+        "                {\n"
+        "                    double E_i = (arg2 - D_0)/365.0;\n"
+        "                    fResultValue2 -= E_i * arg1 / pow(r,E_i + 1.0);\n"
+        "                }\n"
+        , "1" // start from 2nd element
+        );
+    ss << "            double fNewRate = fResultRate - fResultValue / fResultValue2;\n";
+    ss << "            double fRateEps = fabs( fNewRate - fResultRate );\n";
     ss << "            fResultRate = fNewRate;\n";
     ss << "            bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);\n";
-    ss << "        }\n";
-    ss << "        while( bContLoop && (++nIter < nMaxIter) );\n";
-    ss << "        if( bContLoop )\n";
-    ss << "            result = -DBL_MAX;\n";
-    ss << "        result = fResultRate;\n";
-    ss << "    }\n";
-    ss << "    return result;\n";
+    ss << "        } while( bContLoop && (++nIter < nMaxIter) );\n";
+    ss << "        nIter = 0;\n";
+    ss << "        if( isnan(fResultRate) || isinf(fResultRate) || isnan(fResultValue) || isinf(fResultValue))\n";
+    ss << "            bContLoop = true;\n";
+    ss << "        ++nIterScan;\n";
+    ss << "        bResultRateScanEnd = (nIterScan >= 200);\n";
+    ss << "    } while(bContLoop && !bResultRateScanEnd);\n";
+    ss << "    if( bContLoop )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    return fResultRate;\n";
     ss << "}";
 }
 
