@@ -39,61 +39,73 @@ const char Round[] =
 "    return fValue;\n"
 "}\n";
 
-const char GetPMT_newDecl[] =
-"double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
-"int nPayType );\n";
-const char GetPMT_new[] =
-"double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
-"int nPayType)\n"
+const char GetPMTDecl[] =
+"double GetPMT( double fRate, double fNper, double fPv, double fFv, bool bPayInAdvance);\n";
+
+const char GetPMT[] =
+"double GetPMT( double fRate, double fNper, double fPv, double fFv, bool bPayInAdvance )\n"
 "{\n"
-"    double fPmt;\n"
-"        double  fTerm = pow( 1.0 + fRate, fNper );\n"
-"        if( nPayType > 0 )\n"
-"            fPmt = ( fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate /"
-"( 1.0 - 1.0 / fTerm ) ) / ( 1.0 + fRate );\n"
+"    double fPayment;\n"
+"    if (fRate == 0.0)\n"
+"        fPayment = (fPv + fFv) / fNper;\n"
+"    else\n"
+"    {\n"
+"        if (bPayInAdvance)\n"
+"            fPayment = (fFv + fPv * exp( fNper * log1p(fRate) ) ) * fRate\n"
+"                / (expm1( (fNper + 1) * log1p(fRate) ) - fRate);\n"
 "        else\n"
-"            fPmt = fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate / ( "
-"1.0 - 1.0 / fTerm);\n"
-"    return -fPmt;\n"
+"            fPayment = (fFv + fPv * exp(fNper * log1p(fRate) ) ) * fRate\n"
+"                / expm1( fNper * log1p(fRate) );\n"
+"    }\n"
+"    return -fPayment;\n"
 "}\n";
+
+const char GetIpmtDecl[] =
+"double GetIpmt(double fRate, double fPer, double fNper, double fPv,\n"
+"    double fFv, bool bPayInAdvance, double* fPmt);\n";
+
+const char GetIpmt[] =
+"double GetIpmt(double fRate, double fPer, double fNper, double fPv,\n"
+"    double fFv, bool bPayInAdvance, double* fPmt)\n"
+"{\n"
+"    *fPmt = GetPMT(fRate, fNper, fPv, fFv, bPayInAdvance);\n"
+"    double fIpmt;\n"
+"    if (fPer == 1.0)\n"
+"    {\n"
+"        if (bPayInAdvance)\n"
+"            fIpmt = 0.0;\n"
+"        else\n"
+"            fIpmt = -fPv;\n"
+"    }\n"
+"    else\n"
+"    {\n"
+"        if (bPayInAdvance)\n"
+"            fIpmt = GetFV(fRate, fPer-2.0, *fPmt, fPv, true) - *fPmt;\n"
+"        else\n"
+"            fIpmt = GetFV(fRate, fPer-1.0, *fPmt, fPv, false);\n"
+"    }\n"
+"    return fIpmt * fRate;\n"
+"}\n";
+
 const char GetFVDecl[] =
 "double GetFV( double fRate, double fNper, double fPmt,"
-"double fPv, int nPayType );\n";
+"    double fPv, bool bPayInAdvance );\n";
 
 const char GetFV[] =
 "double GetFV( double fRate, double fNper, double fPmt,"
-"double fPv, int nPayType )\n"
+"    double fPv, bool bPayInAdvance )\n"
 "{\n"
-"    double      fFv;\n"
-"    if( fRate == 0.0 )\n"
+"    double fFv;\n"
+"    if (fRate == 0.0)\n"
 "        fFv = fPv + fPmt * fNper;\n"
 "    else\n"
 "    {\n"
-"        double  fTerm = pow( 1.0 + fRate, fNper );\n"
-"        if( nPayType > 0 )\n"
-"                fFv = fPv * fTerm + fPmt * ( 1.0 + fRate ) *( fTerm - 1.0 ) "
-"/ fRate;\n"
+"        double fTerm = pow(1.0 + fRate, fNper);\n"
+"        if (bPayInAdvance)\n"
+"            fFv = fPv * fTerm + fPmt*(1.0 + fRate)*(fTerm - 1.0)/fRate;\n"
 "        else\n"
-"                fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) / fRate;\n"
+"            fFv = fPv * fTerm + fPmt*(fTerm - 1.0)/fRate;\n"
 "    }\n"
-"    return -fFv;\n"
-"}\n";
-
-const char GetFV_newDecl[] =
-"double GetFV_new( double fRate, double fNper, double fPmt,"
-"double fPv, int nPayType );\n";
-
-const char GetFV_new[] =
-"double GetFV_new( double fRate, double fNper, double fPmt,"
-"double fPv, int nPayType )\n"
-"{\n"
-"    double fFv;\n"
-"    double  fTerm = pow( 1.0 + fRate, fNper );\n"
-"    if( nPayType > 0 )\n"
-"        fFv = fPv * fTerm + fPmt * ( 1.0 + fRate ) *( fTerm - 1.0 ) "
-"/ fRate;\n"
-"    else\n"
-"        fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) / fRate;\n"
 "    return -fFv;\n"
 "}\n";
 

@@ -322,6 +322,7 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "PMT"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
 };
 class OpNPV: public Normal
 {

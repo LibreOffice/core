@@ -188,50 +188,34 @@ void OpIPMT::BinInlineFun(std::set<std::string>& decls,
 {
     decls.insert(GetFVDecl);
     funs.insert(GetFV);
+    decls.insert(GetPMTDecl);
+    funs.insert(GetPMT);
+    decls.insert(GetIpmtDecl);
+    funs.insert(GetIpmt);
 }
 
 void OpIPMT::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
-    CHECK_PARAMETER_COUNT( 6, 6 );
+    CHECK_PARAMETER_COUNT( 4, 6 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    GenerateArg( 0, vSubArguments, ss );
-    GenerateArg( 1, vSubArguments, ss );
-    GenerateArg( 2, vSubArguments, ss );
-    GenerateArg( 3, vSubArguments, ss );
-    GenerateArg( 4, vSubArguments, ss );
-    GenerateArg( 5, vSubArguments, ss );
-    ss << "    double pmt ;\n";
-    ss << "    if(arg0 == 0.0)\n";
-    ss << "        return 0;\n";
-    ss << "    double temp1 = 0;\n";
-    ss << "    double abl = pow(1.0 + arg0, arg2);\n";
-    ss << "    temp1 -= arg4;\n";
-    ss << "    temp1 -= arg3 * abl;\n";
-    ss << "    pmt = temp1 / (1.0 + arg0 * arg5) /";
-    ss << " ( (abl - 1.0) / arg0);\n";
-    ss << "    double temp = pow( 1 + arg0, arg1 - 2);\n";
-    ss << "    if(arg1 == 1.0)\n";
-    ss << "    {\n";
-    ss << "        if(arg5 > 0.0)\n";
-    ss << "            tmp = 0.0;\n";
-    ss << "        else\n";
-    ss << "            tmp = -arg3;\n";
-    ss << "    }\n";
+    GenerateArg( "fRate", 0, vSubArguments, ss );
+    GenerateArg( "fPer", 1, vSubArguments, ss );
+    GenerateArg( "fNper", 2, vSubArguments, ss );
+    GenerateArg( "fPv", 3, vSubArguments, ss );
+    GenerateArgWithDefault( "fFv", 4, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fPayInAdvance", 5, 0, vSubArguments, ss );
+    ss << "    if (fPer < 1.0 || fPer > fNper)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    else\n";
     ss << "    {\n";
-    ss << "        if(arg5 > 0.0)\n";
-    ss << "            tmp = GetFV(arg0, arg1 - 2.0, pmt, arg3, 1.0)";
-    ss << " - pmt;\n";
-    ss << "        else\n";
-    ss << "            tmp = GetFV(arg0, arg1 - 1.0, pmt, arg3, 0.0);\n";
-    ss << "    }\n";
-    ss << "    tmp = tmp * arg0;\n";
-    ss << "    return tmp;\n";
-    ss << "}";
+    ss << "        double fPmt;\n";
+    ss << "        return GetIpmt(fRate, fPer, fNper, fPv, fFv, fPayInAdvance != 0, &fPmt);\n";
+    ss << "     }\n";
+    ss << "}\n";
 }
 void OpISPMT::GenSlidingWindowFunction(outputstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
@@ -357,8 +341,8 @@ void Fvschedule::GenSlidingWindowFunction(
 void Cumipmt::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetPMT_newDecl); decls.insert(GetFV_newDecl);
-    funs.insert(GetPMT_new);funs.insert(GetFV_new);
+    decls.insert(GetPMTDecl); decls.insert(GetFV);
+    funs.insert(GetPMT);funs.insert(GetFV);
 }
 void Cumipmt::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &
@@ -379,7 +363,7 @@ vSubArguments)
     ss << "    int nEndPer = (int)fEndPer;\n";
     ss << "    int nPayType = (int)fPayType;\n";
     ss <<"    double fPmt;\n";
-    ss <<"    fPmt = GetPMT_new( fRate, nNumPeriods, fVal, 0.0, nPayType );\n";
+    ss <<"    fPmt = GetPMT( fRate, nNumPeriods, fVal, 0.0, nPayType != 0 );\n";
     ss <<"    double tmp = 0.0;\n";
     ss <<"    if( nStartPer == 1 )\n";
     ss <<"    {\n";
@@ -390,10 +374,10 @@ vSubArguments)
     ss <<"    for( ; nStartPer<= nEndPer ; nStartPer++ )\n";
     ss <<"    {\n";
     ss <<"        if( nPayType > 0 )\n";
-    ss <<"            tmp += GetFV_new( fRate,  nStartPer - 2 , ";
+    ss <<"            tmp += GetFV( fRate,  nStartPer - 2 , ";
     ss <<"fPmt, fVal, 1 ) - fPmt;\n";
     ss <<"        else\n";
-    ss <<"            tmp += GetFV_new( fRate,  nStartPer - 1 , ";
+    ss <<"            tmp += GetFV( fRate,  nStartPer - 1 , ";
     ss <<"fPmt, fVal, 0 );\n";
     ss <<"    }\n";
     ss <<"    tmp *= fRate;\n";
@@ -607,8 +591,8 @@ void OpTbilleq::GenSlidingWindowFunction(
 void OpCumprinc::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetPMT_newDecl); decls.insert(GetFV_newDecl);
-    funs.insert(GetPMT_new);funs.insert(GetFV_new);
+    decls.insert(GetPMTDecl); decls.insert(GetFVDecl);
+    funs.insert(GetPMT);funs.insert(GetFV);
 }
 void OpCumprinc::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
@@ -629,7 +613,7 @@ void OpCumprinc::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int nEndPer = (int)fEndPer;\n";
     ss << "    int nPayType = (int)fPayType;\n";
     ss <<"    double fPmt;\n";
-    ss <<"    fPmt = GetPMT_new( fRate, nNumPeriods,fVal,0.0,nPayType );\n";
+    ss <<"    fPmt = GetPMT( fRate, nNumPeriods,fVal,0.0,nPayType != 0 );\n";
     ss <<"    if(nStartPer == 1)\n";
     ss <<"    {\n";
     ss <<"        if( nPayType <= 0 )\n";
@@ -641,10 +625,10 @@ void OpCumprinc::GenSlidingWindowFunction(outputstream &ss,
     ss <<"    for( int i = nStartPer ; i <= nEndPer ; i++ )\n";
     ss <<"    {\n";
     ss <<"        if( nPayType > 0 )\n";
-    ss <<"            tmp += fPmt - ( GetFV_new( fRate,i - 2,";
+    ss <<"            tmp += fPmt - ( GetFV( fRate,i - 2,";
     ss <<"fPmt,fVal,1)- fPmt ) * fRate;\n";
     ss <<"        else\n";
-    ss <<"            tmp += fPmt - GetFV_new( fRate, i - 1,";
+    ss <<"            tmp += fPmt - GetFV( fRate, i - 1,";
     ss <<"fPmt,fVal,0 ) * fRate;\n";
     ss <<"    }\n";
     ss <<"    return tmp;\n";
@@ -826,27 +810,28 @@ void OpYieldmat::GenSlidingWindowFunction(
     ss << "}";
 }
 
+void OpPMT::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(GetPMTDecl);
+    funs.insert(GetPMT);
+}
+
 void OpPMT::GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
 {
     CHECK_PARAMETER_COUNT( 3, 5 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss<<"    double tmp = 0;\n";
-    ss<<"    int gid0 = get_global_id(0);\n";
-    GenerateArg( "tmp0", 0, vSubArguments, ss );
-    GenerateArg( "tmp1", 1, vSubArguments, ss );
-    GenerateArg( "tmp2", 2, vSubArguments, ss );
-    GenerateArgWithDefault( "tmp3", 3, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "tmp4", 4, 0, vSubArguments, ss );
-    ss<<"    if(tmp0==0.0)\n";
-    ss<<"        return -(tmp2+tmp3)/tmp1;\n";
-    ss<<"    tmp-=tmp3;\n";
-    ss<<"    tmp=tmp-tmp2*pow(1.0+tmp0,tmp1);\n";
-    ss<<"    tmp=tmp/( (1.0+tmp0*tmp4)* ";
-    ss<<"( (pow(1.0+tmp0,tmp1)-1.0)/tmp0));\n";
-    ss<<"    return tmp;\n";
-    ss<<"}";
+    ss<< "    double tmp = 0;\n";
+    ss<< "    int gid0 = get_global_id(0);\n";
+    GenerateArg( "fRate", 0, vSubArguments, ss );
+    GenerateArg( "fNper", 1, vSubArguments, ss );
+    GenerateArg( "fPv", 2, vSubArguments, ss );
+    GenerateArgWithDefault( "fFv", 3, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fPayInAdvance", 4, 0, vSubArguments, ss );
+    ss << "    return GetPMT( fRate, fNper, fPv, fFv, fPayInAdvance != 0 );\n";
+    ss << "}";
 }
 
 void OpNPV::GenSlidingWindowFunction(outputstream &ss,
@@ -1047,21 +1032,21 @@ void OpNper::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    double tmp = 0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    GenerateArg( "tmp0", 0, vSubArguments, ss );
-    GenerateArg( "tmp1", 1, vSubArguments, ss );
-    GenerateArg( "tmp2", 2, vSubArguments, ss );
-    GenerateArgWithDefault( "tmp3", 3, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "tmp4", 4, 0, vSubArguments, ss );
-    ss <<"    if (tmp0 == 0.0)\n";
-    ss <<"        tmp=(-1*(tmp2 + tmp3)/tmp1);\n";
-    ss <<"    else if (tmp4 > 0.0)\n";
-    ss <<"        tmp=log(-1*(tmp0*tmp3-tmp1*(1.0+tmp0))";
-    ss <<"/(tmp0*tmp2+tmp1*(1.0+tmp0)))/log(1.0+tmp0);\n";
-    ss <<"    else\n";
-    ss <<"        tmp=log(-1*(tmp0*tmp3-tmp1)/(tmp0*tmp2+tmp1))";
-    ss <<"/log(1.0+tmp0);\n";
-    ss <<"    return tmp;\n";
-    ss <<"}";
+    GenerateArg( "fRate", 0, vSubArguments, ss );
+    GenerateArg( "fPmt", 1, vSubArguments, ss );
+    GenerateArg( "fPV", 2, vSubArguments, ss );
+    GenerateArgWithDefault( "fFV", 3, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fPayInAdvance", 4, 0, vSubArguments, ss );
+    ss << "    if ( fPV + fFV == 0.0 )\n";
+    ss << "        return 0.0;\n";
+    ss << "    else if (fRate == 0.0)\n";
+    ss << "        return -(fPV + fFV)/fPmt;\n";
+    ss << "    else if (fPayInAdvance != 0)\n";
+    ss << "        return log(-(fRate*fFV-fPmt*(1.0+fRate))/(fRate*fPV+fPmt*(1.0+fRate)))\n";
+    ss << "                  / log1p(fRate);\n";
+    ss << "    else\n";
+    ss << "        return log(-(fRate*fFV-fPmt)/(fRate*fPV+fPmt)) / log1p(fRate);\n";
+    ss << "}\n";
  }
 
 void OpPPMT::BinInlineFun(std::set<std::string>& decls,
@@ -1069,6 +1054,10 @@ void OpPPMT::BinInlineFun(std::set<std::string>& decls,
 {
     decls.insert(GetFVDecl);
     funs.insert(GetFV);
+    decls.insert(GetPMTDecl);
+    funs.insert(GetPMT);
+    decls.insert(GetIpmtDecl);
+    funs.insert(GetIpmt);
 }
 
 void OpPPMT::GenSlidingWindowFunction(outputstream &ss,
@@ -1077,40 +1066,24 @@ void OpPPMT::GenSlidingWindowFunction(outputstream &ss,
     CHECK_PARAMETER_COUNT( 4, 6 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss<<"    double tmp = 0;\n";
-    ss<<"    int gid0 = get_global_id(0);\n";
-    ss<<"    double arg=0;\n";
-    GenerateArg( "tmp0", 0, vSubArguments, ss );
-    GenerateArg( "tmp1", 1, vSubArguments, ss );
-    GenerateArg( "tmp2", 2, vSubArguments, ss );
-    GenerateArg( "tmp3", 3, vSubArguments, ss );
-    GenerateArgWithDefault( "tmp4", 4, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "tmp5", 5, 0, vSubArguments, ss );
-    ss<<"    double pmt=0 ;\n";
-    ss<<"    if(tmp0==0.0)\n";
-    ss<<"        return -(tmp3+tmp4)/tmp2;\n";
-    ss<<"    pmt=pmt-tmp4-tmp3*pow(1.0+tmp0,tmp2);\n";
-    ss<<"    pmt=pmt/( (1.0+tmp0*tmp5)* ";
-    ss<<"( (pow(1.0+tmp0,tmp2)-1.0)/tmp0));\n";
-    ss<<"    double temp = pow( 1+tmp0,tmp1-2);\n";
-    ss<<"    double re;\n";
-    ss<<"    if(tmp1==1.0){\n";
-    ss<<"        if(tmp5>0.0)\n";
-    ss<<"            re=0.0;\n";
-    ss<<"        else\n";
-    ss<<"            re=-tmp3;\n";
-    ss<<"    }\n";
-    ss<<"    else\n";
-    ss<<"    {\n";
-    ss<<"        if(tmp5>0.0)\n    ";
-    ss<<"            re=GetFV(tmp0, tmp1-2.0, pmt, tmp3, 1.0) - pmt;\n";
-    ss<<"        else\n";
-    ss<<"            re=GetFV(tmp0, tmp1-1.0, pmt, tmp3, 0.0);\n";
-    ss<<"    }\n    ";
-    ss<<"    re = re * tmp0;\n";
-    ss<<"    tmp = pmt - re;\n";
-    ss<<"    return tmp;\n";
-    ss<<"}";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double arg=0;\n";
+    GenerateArg( "fRate", 0, vSubArguments, ss );
+    GenerateArg( "fPer", 1, vSubArguments, ss );
+    GenerateArg( "fNper", 2, vSubArguments, ss );
+    GenerateArg( "fPv", 3, vSubArguments, ss );
+    GenerateArgWithDefault( "fFv", 4, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fPayInAdvance", 5, 0, vSubArguments, ss );
+    ss << "    if (fPer < 1.0 || fPer > fNper)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    else\n";
+    ss << "    {\n";
+    ss << "        double fPmt;\n";
+    ss << "        double fInterestPer = GetIpmt(fRate, fPer, fNper, fPv, fFv, fPayInAdvance != 0, &fPmt);\n";
+    ss << "        return fPmt - fInterestPer;\n";
+    ss << "    }\n";
+    ss << "}\n";
 }
 
 void OpCoupdaybs::BinInlineFun(std::set<std::string>& decls,
@@ -1778,21 +1751,26 @@ void OpPV::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double result = 0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    GenerateArg( "rate", 0, vSubArguments, ss );
-    GenerateArg( "nper", 1, vSubArguments, ss );
-    GenerateArg( "pmt", 2, vSubArguments, ss );
-    GenerateArgWithDefault( "fv", 3, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "type", 4, 0, vSubArguments, ss );
-    ss << "    if(rate == 0)\n";
-    ss << "        result=fv+pmt*nper;\n";
-    ss << "    else if(type > 0)\n";
-    ss << "        result=(fv*pow(1+rate,-nper))+";
-    ss << "(pmt*(1-pow(1+rate,-nper+1))/rate)+pmt;\n";
+    GenerateArg( "fRate", 0, vSubArguments, ss );
+    GenerateArg( "fNper", 1, vSubArguments, ss );
+    GenerateArg( "fPmt", 2, vSubArguments, ss );
+    GenerateArgWithDefault( "fFv", 3, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fPayInAdvance", 4, 0, vSubArguments, ss );
+    ss << "    double fPv;\n";
+    ss << "    if (fRate == 0.0)\n";
+    ss << "        fPv = fFv + fPmt * fNper;\n";
     ss << "    else\n";
-    ss << "        result=(fv*pow(1+rate,-nper))+";
-    ss << "(pmt*(1-pow(1+rate,-nper))/rate);\n";
-    ss << "    return -result;\n";
-    ss << "}";
+    ss << "    {\n";
+    ss << "        if (fPayInAdvance != 0)\n";
+    ss << "            fPv = (fFv * pow(1.0 + fRate, -fNper))\n";
+    ss << "                    + (fPmt * (1.0 - pow(1.0 + fRate, -fNper + 1.0)) / fRate)\n";
+    ss << "                    + fPmt;\n";
+    ss << "        else\n";
+    ss << "            fPv = (fFv * pow(1.0 + fRate, -fNper))\n";
+    ss << "                    + (fPmt * (1.0 - pow(1.0 + fRate, -fNper)) / fRate);\n";
+    ss << "    }\n";
+    ss << "    return -fPv;\n";
+    ss << "}\n";
 }
 
 void OpVDB::BinInlineFun(std::set<std::string>& decls,
