@@ -32,6 +32,9 @@ public:
     virtual std::string BinFuncName() const override { return "And"; }
     virtual const char* openclOperator() const override { return "&&"; };
     virtual const char* defaultOpenclValue() const override { return "true"; }
+    // AND() with a svSingleVectorRef pointing to an empty cell skips that cell.
+    // See ScInterpreter::ScAnd().
+    virtual const char* rangeEmptyCellValue() const override { return "1.0"; };
 };
 
 class OpOr: public OpLogicalBinaryOperator

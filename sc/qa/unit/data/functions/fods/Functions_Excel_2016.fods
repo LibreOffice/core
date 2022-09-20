@@ -856,7 +856,7 @@
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce12" table:formula="of:=AND([Sheet2.C22];[.C33])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce12" table:formula="of:=AND([Sheet2.C22]:[.C33])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">

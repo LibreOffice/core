@@ -189,7 +189,7 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
                 static_cast<const formula::SingleVectorRefToken *>(token);
             ss << "    if (gid0 >= " << svr->GetArrayLength() << " || isnan(";
             ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        " << name << " = 0.0;\n";
+            ss << "        " << name << " = " << rangeEmptyCellValue() << ";\n";
             ss << "    else\n";
             ss << "        " << name << " = ";
             ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << ";\n";
@@ -345,7 +345,7 @@ void SlidingFunctionBase::GenerateRangeArgElement( const char* name, int arg, co
         throw Unhandled( __FILE__, __LINE__ );
     const formula::DoubleVectorRefToken* pDVR =
         static_cast<const formula::DoubleVectorRefToken *>(token);
-    ss << "    double " << name << " = NAN;\n";
+    ss << "    double " << name << " = " << rangeEmptyCellValue() << ";\n";
     ss << "    {\n";
     // GenSlidingWindowDeclRef() may refer to 'i' variable.
     ss << "        int i = 0;\n";
