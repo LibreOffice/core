@@ -50,10 +50,19 @@ void OpZTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    mue = fSum / fCount;\n";
     GenerateArg( "mu", 1, vSubArguments, ss );
     if(vSubArguments.size() == 3)
+    {
         GenerateArg( "sigma", 2, vSubArguments, ss );
+        ss << "    if(sigma <= 0.0)\n";
+        ss << "        return CreateDoubleError(IllegalArgument);\n";
+        ss << "    return 0.5 - gauss((mue-mu)*sqrt(fCount)/sigma);\n";
+    }
     else
+    {
         ss << "    double sigma = (fSumSqr-fSum*fSum/fCount)/(fCount-1.0);\n";
-    ss << "    return 0.5 - gauss((mue-mu)/sqrt(sigma/fCount));\n";
+        ss << "    if(sigma == 0.0)\n";
+        ss << "        return CreateDoubleError(DivisionByZero);\n";
+        ss << "    return 0.5 - gauss((mue-mu)/sqrt(sigma/fCount));\n";
+    }
     ss << "}\n";
 }
 
@@ -309,15 +318,13 @@ void OpWeibull::GenSlidingWindowFunction(outputstream &ss,
     GenerateArg( "alpha", 1, vSubArguments, ss );
     GenerateArg( "beta", 2, vSubArguments, ss );
     GenerateArg( "kum", 3, vSubArguments, ss );
-    ss << "    if(alpha <= 0.0 || beta <=0.0 || kum < 0.0)\n";
+    ss << "    if(alpha <= 0.0 || beta <=0.0 || x < 0.0)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
-    ss << "    else if(kum == 0.0)\n";
-    ss << "    {\n";
-    ss << "        return alpha*pow(pow(beta,alpha),-1.0)*pow(x,alpha-1.0)";
-    ss << "*exp(-pow(x*pow(beta,-1.0),alpha));\n";
-    ss << "    }\n";
+    ss << "    if (kum == 0.0)\n";
+    ss << "        return alpha/pow(beta,alpha)*pow(x,alpha-1.0)*\n";
+    ss << "                       exp(-pow(x/beta,alpha));\n";
     ss << "    else\n";
-    ss << "        return 1.0-exp(-pow(x*pow(beta,-1.0),alpha));\n";
+    ss << "        return 1.0 - exp(-pow(x/beta,alpha));\n";
     ss << "}\n";
 }
 
