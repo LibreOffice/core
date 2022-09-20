@@ -21,7 +21,6 @@
 #include <opencl/OpenCLZone.hxx>
 
 #include "op_financial.hxx"
-#include "op_database.hxx"
 #include "op_math.hxx"
 #include "op_logical.hxx"
 #include "op_statistical.hxx"
@@ -2791,53 +2790,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpXor>(), nResultSize));
                 break;
-            case ocDBMax:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDmax>(), nResultSize));
-                break;
-            case ocDBMin:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDmin>(), nResultSize));
-                break;
-            case ocDBProduct:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDproduct>(), nResultSize));
-                break;
-            case ocDBAverage:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDaverage>(), nResultSize));
-                break;
-            case ocDBStdDev:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDstdev>(), nResultSize));
-                break;
-            case ocDBStdDevP:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDstdevp>(), nResultSize));
-                break;
-            case ocDBSum:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDsum>(), nResultSize));
-                break;
-            case ocDBVar:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDvar>(), nResultSize));
-                break;
-            case ocDBVarP:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDvarp>(), nResultSize));
-                break;
             case ocAverageIf:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpAverageIf>(), nResultSize));
-                break;
-            case ocDBCount:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDcount>(), nResultSize));
-                break;
-            case ocDBCount2:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], std::make_shared<OpDcount2>(), nResultSize));
                 break;
             case ocDeg:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,

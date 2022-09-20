@@ -718,7 +718,6 @@ $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/formulagroupcl \
     sc/source/core/opencl/opbase \
     sc/source/core/opencl/op_financial \
-    sc/source/core/opencl/op_database \
     sc/source/core/opencl/op_math \
     sc/source/core/opencl/op_addin \
     sc/source/core/opencl/op_statistical \
