@@ -27,15 +27,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo47669, "fdo47669.docx")
@@ -80,8 +71,9 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc834035)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:hyperlink", "anchor", "_Toc363553908");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCp1000015, "cp1000015.odt")
+CPPUNIT_TEST_FIXTURE(Test, testCp1000015)
 {
+    loadAndReload("cp1000015.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Redline and hyperlink end got exported in an incorrect order.
     getParagraph(1, "Hello.");
@@ -659,20 +651,23 @@ DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testToxmarkHyperlink, "toxmarkhyperlink.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testToxmarkHyperlink)
 {
+    loadAndReload("toxmarkhyperlink.fodt");
     // test that export doesn't assert with overlapping fields / hyperlink attr
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO34469, "ooo34469-1.odt")
+CPPUNIT_TEST_FIXTURE(Test, testOO34469)
 {
+    loadAndReload("ooo34469-1.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport())
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating_New_files|outline");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO39845, "ooo39845-7.odt")
+CPPUNIT_TEST_FIXTURE(Test, testOO39845)
 {
+    loadAndReload("ooo39845-7.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport())
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "Figure4|graphic");
@@ -770,8 +765,9 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldAtEndOfParagraph, "date_field_at_end_of_p
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDropDownFieldEntryLimit, "tdf126792.odt" )
+CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
 {
+    loadAndReload("tdf126792.odt" );
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // In MSO, there is a limit of 25 for the items in a drop-down form field.
     // So we truncate the list of items to not exceed this limit.
