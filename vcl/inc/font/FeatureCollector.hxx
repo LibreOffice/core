@@ -15,19 +15,23 @@
 #include <hb.h>
 #include <i18nlangtag/lang.h>
 
+#include <font/PhysicalFontFace.hxx>
+
 namespace vcl::font
 {
 class FeatureCollector
 {
 private:
+    const PhysicalFontFace* m_pFace;
     hb_face_t* m_pHbFace;
     std::vector<vcl::font::Feature>& m_rFontFeatures;
     const LanguageTag& m_rLanguageTag;
 
 public:
-    FeatureCollector(hb_face_t* pHbFace, std::vector<vcl::font::Feature>& rFontFeatures,
+    FeatureCollector(const PhysicalFontFace* pFace, std::vector<vcl::font::Feature>& rFontFeatures,
                      const LanguageTag& rLanguageTag)
-        : m_pHbFace(pHbFace)
+        : m_pFace(pFace)
+        , m_pHbFace(pFace->GetHbFace())
         , m_rFontFeatures(rFontFeatures)
         , m_rLanguageTag(rLanguageTag)
     {

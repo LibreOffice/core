@@ -163,17 +163,9 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     if (!pFontInstance)
         return false;
 
-    hb_font_t* pHbFont = pFontInstance->GetHbFont();
-    if (!pHbFont)
-        return false;
-
-    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
-    if (!pHbFace)
-        return false;
-
     const LanguageTag& rOfficeLanguage = Application::GetSettings().GetUILanguageTag();
 
-    vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures, rOfficeLanguage);
+    vcl::font::FeatureCollector aFeatureCollector(pFontInstance->GetFontFace(), rFontFeatures, rOfficeLanguage);
     aFeatureCollector.collect();
 
     return true;

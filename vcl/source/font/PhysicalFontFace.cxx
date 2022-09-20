@@ -360,6 +360,36 @@ std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyph
 
     return aLayers;
 }
+
+OUString PhysicalFontFace::GetName(NameID aNameID, const LanguageTag& rLanguageTag) const
+{
+    auto pHbFace = GetHbFace();
+
+    auto aHbLang = HB_LANGUAGE_INVALID;
+    if (rLanguageTag.getLanguageType() != LANGUAGE_NONE)
+    {
+        auto aLanguage(rLanguageTag.getBcp47().toUtf8());
+        aHbLang = hb_language_from_string(aLanguage.getStr(), aLanguage.getLength());
+    }
+
+    auto nName = hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, nullptr, nullptr);
+    if (!nName && aHbLang == HB_LANGUAGE_INVALID)
+    {
+        // Fallback to English if localized name is missing.
+        aHbLang = hb_language_from_string("en", 2);
+        nName = hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, nullptr, nullptr);
+    }
+
+    OUString sName;
+    if (nName)
+    {
+        std::vector<uint16_t> aBuf(++nName); // make space for terminating NUL.
+        hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, &nName, aBuf.data());
+        sName = OUString(reinterpret_cast<sal_Unicode*>(aBuf.data()), nName);
+    }
+
+    return sName;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -21,8 +21,9 @@
 
 #include <sal/config.h>
 
-#include <salhelper/simplereferenceobject.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/color.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
@@ -93,6 +94,36 @@ struct ColorLayer
 
 typedef std::vector<Color> ColorPalette;
 
+// https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
+typedef enum {
+    NAME_ID_COPYRIGHT = 0,
+    NAME_ID_FONT_FAMILY = 1,
+    NAME_ID_FONT_SUBFAMILY = 2,
+    NAME_ID_UNIQUE_ID = 3,
+    NAME_ID_FULL_NAME = 4,
+    NAME_ID_VERSION_STRING = 5,
+    NAME_ID_POSTSCRIPT_NAME = 6,
+    NAME_ID_TRADEMARK = 7,
+    NAME_ID_MANUFACTURER = 8,
+    NAME_ID_DESIGNER = 9,
+    NAME_ID_DESCRIPTION = 10,
+    NAME_ID_VENDOR_URL = 11,
+    NAME_ID_DESIGNER_URL = 12,
+    NAME_ID_LICENSE = 13,
+    NAME_ID_LICENSE_URL = 14,
+    //NAME_ID_RESERVED = 15,
+    NAME_ID_TYPOGRAPHIC_FAMILY = 16,
+    NAME_ID_TYPOGRAPHIC_SUBFAMILY = 17,
+    NAME_ID_MAC_FULL_NAME = 18,
+    NAME_ID_SAMPLE_TEXT = 19,
+    NAME_ID_CID_FINDFONT_NAME = 20,
+    NAME_ID_WWS_FAMILY = 21,
+    NAME_ID_WWS_SUBFAMILY = 22,
+    NAME_ID_LIGHT_BACKGROUND = 23,
+    NAME_ID_DARK_BACKGROUND = 24,
+    NAME_ID_VARIATIONS_PS_PREFIX = 25,
+} NameID;
+
 // TODO: no more direct access to members
 // TODO: get rid of height/width for scalable fonts
 // TODO: make cloning cheaper
@@ -139,6 +170,9 @@ public:
     std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
 
     uint32_t UnitsPerEm() const { return hb_face_get_upem(GetHbFace()); }
+
+    OUString GetName(NameID, const LanguageTag&) const;
+    OUString GetName(NameID aNameID) const { return GetName(aNameID, LanguageTag(LANGUAGE_NONE)); }
 
     virtual hb_face_t* GetHbFace() const;
     virtual hb_blob_t* GetHbTable(hb_tag_t) const

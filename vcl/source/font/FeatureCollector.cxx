@@ -84,29 +84,6 @@ bool FeatureCollector::collectGraphite()
     return true;
 }
 
-static OUString getName(hb_face_t* pHbFace, hb_ot_name_id_t aNameID, OString& rLanguage)
-{
-    auto aHbLang = hb_language_from_string(rLanguage.getStr(), rLanguage.getLength());
-    auto nName = hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, nullptr, nullptr);
-
-    if (!nName)
-    {
-        // Fallback to English if localized name is missing.
-        aHbLang = hb_language_from_string("en", 2);
-        nName = hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, nullptr, nullptr);
-    }
-
-    OUString sName;
-    if (nName)
-    {
-        std::vector<uint16_t> aBuf(++nName); // make space for terminating NUL.
-        hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, &nName, aBuf.data());
-        sName = OUString(reinterpret_cast<sal_Unicode*>(aBuf.data()), nName);
-    }
-
-    return sName;
-}
-
 void FeatureCollector::collectForTable(hb_tag_t aTableTag)
 {
     unsigned int nFeatureCount
@@ -144,8 +121,7 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
                                                   nullptr, nullptr, &nNamedParameters,
                                                   &aFirstParameterID))
             {
-                OString sLanguage = m_rLanguageTag.getBcp47().toUtf8();
-                OUString sLabel = getName(m_pHbFace, aLabelID, sLanguage);
+                OUString sLabel = m_pFace->GetName(NameID(aLabelID), m_rLanguageTag);
                 if (!sLabel.isEmpty())
                     aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
 
@@ -154,7 +130,7 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
                 for (unsigned i = 0; i < nNamedParameters; i++)
                 {
                     hb_ot_name_id_t aNameID = aFirstParameterID + i;
-                    OUString sName = getName(m_pHbFace, aNameID, sLanguage);
+                    OUString sName = m_pFace->GetName(NameID(aNameID), m_rLanguageTag);
                     if (!sName.isEmpty())
                         aParameters.emplace_back(uint32_t(i + 1), sName);
                     else
