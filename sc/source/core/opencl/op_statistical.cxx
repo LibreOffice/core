@@ -1010,12 +1010,16 @@ void OpPermut::GenSlidingWindowFunction(
     ss <<"    double tmp = 1 ;\n";
     GenerateArg( "inA", 0, vSubArguments, ss );
     GenerateArg( "inB", 1, vSubArguments, ss );
-    ss << "      for( int i =0; i<inB; i++)\n";
-    ss << "      {\n";
+    ss << "    inA = floor( inA );\n";
+    ss << "    inB = floor( inB );\n";
+    ss << "    if (inA < 0.0 || inB < 0.0 || inB > inA)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    for( int i = 0; i<inB; i++)\n";
+    ss << "    {\n";
     ss << "        tmp *= inA ;\n";
     ss << "        inA = inA - 1.0;\n";
-    ss << "      }\n";
-    ss << "      return tmp;\n";
+    ss << "    }\n";
+    ss << "    return tmp;\n";
     ss << "}\n";
 }
 void OpPermutationA::GenSlidingWindowFunction(
@@ -1029,11 +1033,11 @@ void OpPermutationA::GenSlidingWindowFunction(
     ss <<"    double tmp = 1.0;\n";
     GenerateArg( "inA", 0, vSubArguments, ss );
     GenerateArg( "inB", 1, vSubArguments, ss );
-    ss << " for(int i=0; i<inB; i++)\n";
-    ss << " {\n";
-    ss << "     tmp *= inA;\n";
-    ss << " }\n";
-    ss << "    return tmp;\n";
+    ss << "    inA = floor( inA );\n";
+    ss << "    inB = floor( inB );\n";
+    ss << "    if (inA < 0.0 || inB < 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    return pow(inA, inB);\n";
     ss << "}\n";
 }
 
@@ -1275,6 +1279,8 @@ void OpGammaDist::GenSlidingWindowFunction(outputstream &ss,
     GenerateArg( 1, vSubArguments, ss );
     GenerateArg( 2, vSubArguments, ss );
     GenerateArgWithDefault( "arg3", 3, 1, vSubArguments, ss );
+    ss << "    if(arg1 <= 0 || arg2 <= 0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    double tmp;\n";
     ss << "    if (arg3)\n";
     ss << "        tmp=GetGammaDist( arg0, arg1, arg2);\n";
@@ -1306,7 +1312,7 @@ void OpChiDist::GenSlidingWindowFunction(
     CHECK_PARAMETER_COUNT( 2, 2 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss << "    double fx,fDF,tmp=0,tmp0=0,tmp1=0;\n";
+    ss << "    double fx,fDF,tmp=0;\n";
     ss << "    int gid0=get_global_id(0);\n";
     GenerateArg( "tmp0", 0, vSubArguments, ss );
     GenerateArg( "tmp1", 1, vSubArguments, ss );
@@ -1651,12 +1657,12 @@ void OpFInv::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
+    GenerateArg( 0, vSubArguments, ss );
     GenerateArg( 1, vSubArguments, ss );
     GenerateArg( 2, vSubArguments, ss );
-    GenerateArg( 3, vSubArguments, ss );
     ss << "    double fF2=floor(arg2);\n"
     "    double fF1=floor(arg1);\n"
-    "    if( arg0 <= 0 || arg1 < 1 || arg2 < 1 || arg1 >= 1.0e10 || arg2 >= 1.0e10 || arg > 1 )\n"
+    "    if( arg0 <= 0 || arg1 < 1 || arg2 < 1 || arg1 >= 1.0e10 || arg2 >= 1.0e10 || arg0 > 1 )\n"
     "        return CreateDoubleError(IllegalArgument);\n"
     "    double fAx=fF1*0.5;\n"
     "    double fBx=fF1;\n"
@@ -1938,6 +1944,8 @@ void OpPoisson::GenSlidingWindowFunction(
     GenerateArg( "lambda", 1, vSubArguments, ss );
     GenerateArgWithDefault( "bCumulative", 2, 1, vSubArguments, ss );
     ss << "    x = floor(x);\n";
+    ss << "    if (lambda <= 0.0 || x < 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    if (!bCumulative)\n";
     ss << "    {\n";
     ss << "        if(lambda == 0.0)\n";
@@ -2085,23 +2093,17 @@ void OpBetainv::GenSlidingWindowFunction(
     GenerateArg( "tmp2", 2, vSubArguments, ss );
     GenerateArgWithDefault( "tmp3", 3, 0, vSubArguments, ss );
     GenerateArgWithDefault( "tmp4", 4, 1, vSubArguments, ss );
-    ss << "    if (tmp0 < 0.0 || tmp0 >= 1.0 ||";
-    ss << "tmp3 == tmp4 || tmp1 <= 0.0 || tmp2 <= 0.0)\n";
+    ss << "    if (tmp0 < 0.0 || tmp0 > 1.0 ||";
+    ss << "tmp3 >= tmp4 || tmp1 <= 0.0 || tmp2 <= 0.0)\n";
     ss << "    {\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    }\n";
-    ss << "    if (tmp0 == 0.0)\n";
-    ss << "        return 0.0;\n";
-    ss << "    else\n";
-    ss << "    {";
-    ss << "        bool bConvError;";
-    ss << "        double fVal = lcl_IterateInverseBetaInv";
+    ss << "    bool bConvError;\n";
+    ss << "    double fVal = lcl_IterateInverseBetaInv";
     ss << "(tmp0, tmp1, tmp2, 0.0, 1.0, &bConvError);\n";
-    ss << "        if(bConvError)\n";
-    ss << "            return CreateDoubleError(NoConvergence);\n";
-    ss << "        else\n";
-    ss << "            return (tmp3 + fVal*(tmp4 - tmp3));\n";
-    ss << "    }";
+    ss << "    if(bConvError)\n";
+    ss << "        return CreateDoubleError(NoConvergence);\n";
+    ss << "    return (tmp3 + fVal*(tmp4 - tmp3));\n";
     ss << "}\n";
 }
 void OpDevSq::GenSlidingWindowFunction(outputstream& ss,
