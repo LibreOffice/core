@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,freetype))
 $(eval $(call gb_Module_add_targets,freetype,\
 	ExternalProject_freetype \
 	UnpackedTarball_freetype \
+	$(if $(filter LINUX,$(OS)),ExternalPackage_freetype) \
 ))
 
 # vim: set noet sw=4 ts=4:

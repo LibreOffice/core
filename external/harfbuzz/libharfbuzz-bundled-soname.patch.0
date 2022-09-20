@@ -1,0 +1,24 @@
+# -*- Mode: Diff -*-
+--- src/Makefile.in
++++ src/Makefile.in
+@@ -525,7 +525,7 @@
+ libharfbuzz_la_LINK = $(chosen_linker) $(libharfbuzz_la_LDFLAGS)
+ libharfbuzz_la_SOURCES = $(HBSOURCES) $(HBHEADERS)
+ libharfbuzz_la_CPPFLAGS = $(HBCFLAGS) $(CODE_COVERAGE_CFLAGS)
+-libharfbuzz_la_LDFLAGS = $(base_link_flags) $(export_symbols) $(CODE_COVERAGE_LDFLAGS)
++libharfbuzz_la_LDFLAGS = $(base_link_flags) $(export_symbols) $(CODE_COVERAGE_LDFLAGS) -export-dynamic -release lo
+ libharfbuzz_la_LIBADD = $(HBLIBS)
+ EXTRA_libharfbuzz_la_DEPENDENCIES = $(harfbuzz_def_dependency)
+ pkginclude_HEADERS = $(HBHEADERS) $(HB_SUBSET_headers) \
+--- src/hb-common.h
++++ src/hb-common.h
+@@ -34,7 +34,7 @@
+ #define HB_COMMON_H
+ 
+ #ifndef HB_EXTERN
+-#define HB_EXTERN extern
++#define HB_EXTERN __attribute__((__visibility__("default")))
+ #endif
+ 
+ #ifndef HB_BEGIN_DECLS
+

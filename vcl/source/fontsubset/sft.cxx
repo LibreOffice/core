@@ -1124,7 +1124,18 @@ int CountTTCFonts(const char* fname)
 {
     int nFonts = 0;
     sal_uInt8 buffer[12];
-    FILE* fd = fopen(fname, "rb");
+    FILE* fd;
+#ifdef LINUX
+    int nFD;
+    int n;
+    if (sscanf(fname, "/:FD:/%d%n", &nFD, &n) == 1 && fname[n] == '\0')
+    {
+        lseek(nFD, 0, SEEK_SET);
+        fd = fdopen(dup(nFD), "rb");
+    }
+    else
+#endif
+        fd = fopen(fname, "rb");
     if( fd ) {
         if (fread(buffer, 1, 12, fd) == 12) {
             if(GetUInt32(buffer, 0) == T_ttcf )
@@ -1155,7 +1166,15 @@ SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** 
         goto cleanup;
     }
 
-    fd = open(fname, O_RDONLY);
+    int nFD;
+    int n;
+    if (sscanf(fname, "/:FD:/%d%n", &nFD, &n) == 1 && fname[n] == '\0')
+    {
+        lseek(nFD, 0, SEEK_SET);
+        fd = dup(nFD);
+    }
+    else
+        fd = open(fname, O_RDONLY);
 
     if (fd == -1) {
         ret = SFErrCodes::BadFile;

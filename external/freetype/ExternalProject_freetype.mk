@@ -17,7 +17,10 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 	$(call gb_Trace_StartRange,freetype,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(gb_RUN_CONFIGURE) ./configure \
-			--disable-shared \
+			$(if $(filter LINUX,$(OS)), \
+				--disable-static, \
+				--disable-shared \
+			) \
 			--with-pic \
 			--without-zlib \
 			--without-brotli \

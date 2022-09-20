@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,harfbuzz))
+$(eval $(call gb_ExternalPackage_ExternalPackage,freetype,freetype))
 
-$(eval $(call gb_Module_add_targets,harfbuzz,\
-	ExternalProject_harfbuzz \
-	UnpackedTarball_harfbuzz \
-	$(if $(filter LINUX,$(OS)),ExternalPackage_harfbuzz) \
-))
+$(eval $(call gb_ExternalPackage_use_external_project,freetype,freetype))
+
+$(eval $(call gb_ExternalPackage_add_file,freetype,$(LIBO_LIB_FOLDER)/libfreetype-lo.so.6.18.0,instdir/lib/libfreetype-lo.so.6.18.0))
 
 # vim: set noet sw=4 ts=4:

@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,harfbuzz))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fontconfig,fontconfig))
 
-$(eval $(call gb_Module_add_targets,harfbuzz,\
-	ExternalProject_harfbuzz \
-	UnpackedTarball_harfbuzz \
-	$(if $(filter LINUX,$(OS)),ExternalPackage_harfbuzz) \
-))
+$(eval $(call gb_ExternalPackage_use_external_project,fontconfig,fontconfig))
+
+$(eval $(call gb_ExternalPackage_add_file,fontconfig,$(LIBO_LIB_FOLDER)/libfontconfig-lo.so.1.12.0,src/.libs/libfontconfig-lo.so.1.12.0))
 
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,11 @@
+# -*- Mode: Diff -*-
+--- builds/unix/unix-cc.in
++++ builds/unix/unix-cc.in
+@@ -123,6 +123,7 @@
+ LINK_LIBRARY = $(LIBTOOL) --mode=link $(CCraw) -o $@ $(OBJECTS_LIST) \
+                           -rpath $(libdir) -version-info $(version_info) \
+                           $(LDFLAGS) -no-undefined \
++                          -release lo -Wl,-soname -Wl,libfreetype-lo.so.6.18.0 \
+                           -export-symbols $(EXPORTS_LIST)
+ 
+ # EOF
