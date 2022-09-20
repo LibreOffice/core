@@ -330,7 +330,8 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "NPV"; }
-    virtual bool canHandleMultiVector() const override { return true; }
+    // doesn't handle svDoubleVectorRef properly, it should iterate horizontally
+    // virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpPrice: public Normal

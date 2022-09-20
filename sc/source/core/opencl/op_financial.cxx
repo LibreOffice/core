@@ -845,12 +845,7 @@ void OpNPV::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int nCount = 1;\n";
     GenerateArg( 0, vSubArguments, ss );
     GenerateRangeArgs( 1, vSubArguments.size() - 1, vSubArguments, ss, SkipEmpty,
-        "        double temp1=1.0;\n"
-        "        for(int i=1;i<nCount;i+=2)\n"
-        "            temp1*=pow(1.0f + arg0,2);\n"
-        "        if(nCount%2)\n"
-        "            temp1*=1.0f + arg0;\n"
-        "        tmp += arg / temp1;\n"
+        "        tmp += arg / pow( 1 + arg0, nCount );\n"
         "        nCount += 1;\n"
         );
     ss << "    return tmp;\n";

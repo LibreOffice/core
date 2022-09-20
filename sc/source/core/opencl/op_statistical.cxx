@@ -337,8 +337,8 @@ void OpStandard::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     GenerateArg( "x", 0, vSubArguments, ss );
-    GenerateArg( "mu", 0, vSubArguments, ss );
-    GenerateArg( "sigma", 0, vSubArguments, ss );
+    GenerateArg( "mu", 1, vSubArguments, ss );
+    GenerateArg( "sigma", 2, vSubArguments, ss );
     ss << "    if(sigma < 0.0)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    else if(sigma == 0.0)\n";
@@ -590,19 +590,20 @@ void OpNegbinomdist::GenSlidingWindowFunction(
 {
     CHECK_PARAMETER_COUNT( 3, 3 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n\t";
-    ss << " int gid0=get_global_id(0);\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
     GenerateArg( "f", 0, vSubArguments, ss );
-    GenerateArg( "s", 0, vSubArguments, ss );
-    GenerateArg( "p", 0, vSubArguments, ss );
-    ss << " double q = 1.0 - p;\n\t";
-    ss << " double fFactor = pow(p,s);\n\t";
-    ss << " for(int i=0; i<f; i++)\n\t";
-    ss << " {\n\t";
-    ss << "  fFactor *= ((double)i+s)*pow(((double)i+1.0),-1.0)/pow(q,-1);\n";
-    ss << " }\n\t";
-    ss << " double temp=fFactor;\n\t";
-    ss << " return temp;\n";
+    GenerateArg( "s", 1, vSubArguments, ss );
+    GenerateArg( "p", 2, vSubArguments, ss );
+    ss << "    f = floor( f );\n";
+    ss << "    s = floor( s );\n";
+    ss << "    if ((f + s) <= 1.0 || p < 0.0 || p > 1.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    double q = 1.0 - p;\n";
+    ss << "    double fFactor = pow(p,s);\n";
+    ss << "    for(int i=0; i<f; i++)\n";
+    ss << "        fFactor *= (i+s)/(i+1.0)*q;\n";
+    ss << "    return fFactor;\n";
     ss << "}\n";
 }
 
@@ -812,6 +813,8 @@ vSubArguments)
     ss << "    int length;\n";
     ss << "    int totallength=0;\n";
     GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        if( arg <= 0 )\n"
+        "            return CreateDoubleError(IllegalArgument);\n"
         "        nVal += (1.0 / arg);\n"
         "        ++totallength;\n"
         );
@@ -836,8 +839,8 @@ void OpConfidence::GenSlidingWindowFunction(outputstream& ss,
     ss << "    double tmp = " << GetBottom() <<";\n";
     ss << "    int gid0 = get_global_id(0);\n";
     GenerateArg( "alpha", 0, vSubArguments, ss );
-    GenerateArg( "sigma", 0, vSubArguments, ss );
-    GenerateArg( "size", 0, vSubArguments, ss );
+    GenerateArg( "sigma", 1, vSubArguments, ss );
+    GenerateArg( "size", 2, vSubArguments, ss );
     ss << "    double rn = floor(size);\n";
     ss << "    if(sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0";
     ss << "|| rn < 1.0)\n";
@@ -867,9 +870,13 @@ void OpCritBinom::GenSlidingWindowFunction(outputstream& ss,
     GenerateArg( "p", 1, vSubArguments, ss );
     GenerateArg( "alpha", 2, vSubArguments, ss );
     ss << "    double rn = floor(n);\n";
-    ss << "    if (rn < 0.0 || alpha <= 0.0 || alpha >= 1.0 || p < 0.0";
+    ss << "    if (rn < 0.0 || alpha < 0.0 || alpha > 1.0 || p < 0.0";
     ss << " || p > 1.0)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
+    ss << "    else if ( alpha == 0 )\n";
+    ss << "        return 0;\n";
+    ss << "    else if ( alpha == 1 )\n";
+    ss << "        return p == 0 ? 0 : rn;\n";
     ss << "    else\n";
     ss << "    {\n";
     ss << "        double rq = (0.5 - p) + 0.5;\n";
@@ -1166,6 +1173,8 @@ void OpKurt:: GenSlidingWindowFunction(outputstream &ss,
         "        fSum += arg;\n"
         "        totallength +=1;\n"
         );
+    ss << "    if( totallength < 4 )\n";
+    ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    double fMean = fSum / totallength;\n";
     GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
         "        vSum += (arg-fMean)*(arg-fMean);\n"
@@ -1217,22 +1226,27 @@ void OpLogNormDist::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    GenerateArg( 0, vSubArguments, ss );
-    GenerateArgWithDefault( "arg1", 1, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "arg2", 2, 1, vSubArguments, ss );
-    GenerateArgWithDefault( "arg3", 3, 1, vSubArguments, ss );
+    GenerateArg( "x", 0, vSubArguments, ss );
+    GenerateArgWithDefault( "mue", 1, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "sigma", 2, 1, vSubArguments, ss );
+    GenerateArgWithDefault( "fCumulative", 3, 1, vSubArguments, ss );
+    ss << "    if (sigma <= 0.0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    double tmp;\n";
-    ss << "    double temp = (log(arg0)-arg1)/arg2;\n";
-    ss << "    if(arg3)\n";
+    ss << "    double temp = (log(x)-mue)/sigma;\n";
+    ss << "    if(fCumulative != 0)\n";
     ss << "    {\n";
-    ss << "        if(arg0<=0)\n";
+    ss << "        if(x<=0)\n";
     ss << "            tmp = 0.0;\n";
     ss << "        else\n";
     ss << "            tmp = 0.5 * erfc(-temp * 0.7071067811865475);\n";
     ss << "    }\n";
     ss << "    else\n";
-    ss << "        tmp = (0.39894228040143268 * exp((-1)*pow(temp, 2)";
-    ss << " / 2.0))/(arg2*arg0);\n";
+    ss << "        if(x<=0)\n";
+    ss << "            return CreateDoubleError(IllegalArgument);\n";
+    ss << "        else\n";
+    ss << "            tmp = (0.39894228040143268 * exp((-1)*pow(temp, 2)";
+    ss << " / 2.0))/(sigma*x);\n";
     ss << "    return tmp;\n";
     ss << "}\n";
 }

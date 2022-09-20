@@ -331,6 +331,8 @@ void OpCombinA::GenerateCode( outputstream& ss ) const
 {
     ss << "    arg0 = trunc(arg0);\n";
     ss << "    arg1 = trunc(arg1);\n";
+    ss << "    if (arg0 < 0.0 || arg1 < 0.0 || arg1 > arg0)\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    double tem;\n";
     ss << "    if(arg0 >= arg1 && arg0 > 0 && arg1 > 0)\n";
     ss << "        tem = bik(arg0+arg1-1,arg1);\n";
