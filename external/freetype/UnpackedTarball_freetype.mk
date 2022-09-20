@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,freetype,$(FREETYPE_TARBALL),,freet
 $(eval $(call gb_UnpackedTarball_add_patches,freetype,\
 	external/freetype/freetype-2.6.5.patch.1 \
 	external/freetype/ubsan.patch \
+	external/freetype/freetype-fd-hack.patch.0 \
 ))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,freetype,0))
