@@ -157,7 +157,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
         if (bOk && bFuzzing)
         {
-            const uint64_t MAX_SIZE = 200000000;
+            const uint64_t MAX_SIZE = 150000000;
             if (TIFFTileSize64(tif) > MAX_SIZE || nPixelsRequired > MAX_SIZE)
             {
                 SAL_WARN("filter.tiff", "skipping large tiffs");
