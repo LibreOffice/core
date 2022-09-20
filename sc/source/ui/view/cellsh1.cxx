@@ -2213,6 +2213,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             pCondFormat = pList->GetFormat(rCondFormats[0]);
                             assert(pCondFormat);
+                            nIndex = pCondFormat->GetKey();
                             bCondFormatDlg = true;
                         }
                         else
@@ -2225,7 +2226,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                     {
                         // define an overlapping conditional format
-                        // does not need to be handled here
+                        pCondFormat = pList->GetFormat(rCondFormats[0]);
+                        assert(pCondFormat);
+                        bCondFormatDlg = true;
                     }
                 }
 
