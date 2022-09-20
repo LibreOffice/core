@@ -7,13 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,fontconfig))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fontconfig,fontconfig))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,fontconfig,$(FONTCONFIG_TARBALL),,fontconfig))
+$(eval $(call gb_ExternalPackage_use_external_project,fontconfig,fontconfig))
 
-$(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
-	external/fontconfig/fontconfig-2.12.1.patch.1 \
-	external/fontconfig/libfontconfig-bundled-soname.patch.0 \
-))
+$(eval $(call gb_ExternalPackage_add_file,fontconfig,$(LIBO_LIB_FOLDER)/libfontconfig-lo.so.1.12.0,src/.libs/libfontconfig-lo.so.1.12.0))
 
 # vim: set noet sw=4 ts=4:

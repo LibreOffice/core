@@ -1,0 +1,15 @@
+# -*- Mode: Diff -*-
+--- src/cairo-ft-font.c
++++ src/cairo-ft-font.c
+@@ -737,7 +737,10 @@
+     if (ret == FcResultOutOfMemory)
+ 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+     if (ret == FcResultMatch) {
+-	if (access (filename, R_OK) == 0) {
++       int nFD = -1;
++       int n;
++       if ((sscanf (filename, "/:FD:/%d%n", &nFD, &n) == 1 && filename[n] == '\0') ||
++	    access (filename, R_OK) == 0) {
+ 	    /* If FC_INDEX is not set, we just use 0 */
+ 	    ret = FcPatternGetInteger (pattern, FC_INDEX, 0, &id);
+ 	    if (ret == FcResultOutOfMemory)

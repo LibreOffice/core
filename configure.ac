@@ -4478,6 +4478,18 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
         AC_MSG_ERROR([--with-system-graphite conflicts with --enable-dbgutil])
     else
         with_system_graphite=no
+        if test -z "$with_system_harfbuzz"; then
+            with_system_harfbuzz=no
+        fi
+        if test -z "$with_system_cairo"; then
+            with_system_cairo=no
+        fi
+        if test -z "$with_system_fontconfig"; then
+            with_system_fontconfig=no
+        fi
+        if test -z "$with_system_freetype"; then
+            with_system_freetype=no
+        fi
     fi
     if test "$with_system_orcus" = "yes"; then
         AC_MSG_ERROR([--with-system-orcus conflicts with --enable-dbgutil])
@@ -10775,13 +10787,27 @@ AC_SUBST(SYSTEM_LIBORCUS)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],
+case "$_os" in
+    Linux)
+        libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],
+                         ["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],
+                         ["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"],
+                         TRUE)
+        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],
+                                 ["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],
+                                 ["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"],
+                                 TRUE)
+        ;;
+    *)
+        libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],
                          ["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],
                          ["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
+        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],
+                                 ["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],
+                                 ["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
+        ;;
+esac
 
-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],
-                         ["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],
-                         ["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
 
 if test "$COM" = "MSC"; then # override the above
     GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
@@ -13514,6 +13540,25 @@ AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
 AC_SUBST(ENABLE_CAIRO_CANVAS)
 AC_SUBST(SYSTEM_CAIRO)
+
+if test -z "$with_system_cairo"; then
+    with_system_cairo=yes
+fi
+
+case "$_os" in
+    Linux)
+        AC_MSG_CHECKING([for compatibility of system/bundled font-related libraries])
+        if test "$with_system_harfbuzz" != "$with_system_fontconfig" ||
+           test "$with_system_fontconfig" != "$with_system_freetype" ||
+           test "$with_system_freetype" != "$with_system_cairo" ||
+           test "$with_system_cairo" != "$with_system_graphite"; then
+           AC_MSG_RESULT([no])
+           AC_MSG_ERROR([cairo, fontconfig, freetype, graphite, and harfbuzz must all be either used from the system or bundled])
+        else
+           AC_MSG_RESULT([yes])
+        fi
+        ;;
+esac
 
 dnl ===================================================================
 dnl Test whether to use avahi
