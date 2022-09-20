@@ -2252,12 +2252,15 @@ void OpFTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSumSqr1 = 0.0;\n";
     ss << "    double fSum2 = 0.0;\n";
     ss << "    double fSumSqr2 = 0.0;\n";
+    ss << "    double fLength1 = 0.0;\n";
+    ss << "    double fLength2 = 0.0;\n";
     ss << "    double tmp = 0;\n";
     GenerateRangeArg( 0, vSubArguments, ss,
         "        if( !isnan(arg))\n"
         "        {\n"
         "            fSum1 += arg;\n"
         "            fSumSqr1 += arg * arg;\n"
+        "            fLength1 += 1;\n"
         "        }\n"
         );
     GenerateRangeArg( 1, vSubArguments, ss,
@@ -2265,25 +2268,30 @@ void OpFTest::GenSlidingWindowFunction(outputstream &ss,
         "        {\n"
         "            fSum2 += arg;\n"
         "            fSumSqr2 += arg * arg;\n"
+        "            fLength2 += 1;\n"
         "        }\n"
         );
-    ss << "    double fS1 = (fSumSqr1-fSum1*fSum1/length0)/(length0-1.0);\n"
-        "    double fS2 = (fSumSqr2-fSum2*fSum2/length1)/(length1-1.0);\n"
+    ss << "    if(fLength1 < 2 || fLength2 < 2)\n"
+        "        return CreateDoubleError(NoValue);\n"
+        "    double fS1 = (fSumSqr1-fSum1*fSum1/fLength1)/(fLength1-1.0);\n"
+        "    double fS2 = (fSumSqr2-fSum2*fSum2/fLength2)/(fLength2-1.0);\n"
+        "    if(fS1 == 0 || fS2 == 0)\n"
+        "        return CreateDoubleError(NoValue);\n"
         "    double fF, fF1, fF2;\n"
         "    if (fS1 > fS2)\n"
         "    {\n"
         "        fF = fS1/fS2;\n"
-        "        fF1 = length0-1.0;\n"
-        "        fF2 = length1-1.0;\n"
+        "        fF1 = fLength1-1.0;\n"
+        "        fF2 = fLength2-1.0;\n"
         "    }\n"
         "    else\n"
         "    {\n"
         "        fF = fS2/fS1;\n"
-        "        fF1 = length1-1.0;\n"
-        "        fF2 = length0-1.0;\n"
+        "        fF1 = fLength2-1.0;\n"
+        "        fF2 = fLength1-1.0;\n"
         "    }\n"
-        "    tmp = 2.0*GetFDist(fF, fF1, fF2);\n";
-    ss << "    return tmp;\n";
+        "    double fFcdf = GetFDist(fF, fF1, fF2);\n"
+        "    return 2.0*min(fFcdf, 1 - fFcdf);\n";
     ss << "}";
 }
 void OpB::BinInlineFun(std::set<std::string>& decls,
