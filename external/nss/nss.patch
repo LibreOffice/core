@@ -1,6 +1,6 @@
 --- a/a/nspr/configure	2017-08-29 23:44:13.686045013 +0530
 +++ b/b/nspr/configure	2017-08-29 23:46:53.774768655 +0530
-@@ -7034,7 +7034,7 @@
+@@ -6794,7 +6794,7 @@
      PR_MD_CSRCS=linux.c
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
@@ -11,7 +11,7 @@
                                     # combo is not yet good at debugging inlined
 --- a/nss.orig/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:44:13.690045031 +0530
 +++ b/nss/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:47:03.810814019 +0530
-@@ -438,7 +438,7 @@
+@@ -441,7 +441,7 @@
      char *buf = *bufp;
      PRIntn buflen = *buflenp;
  
@@ -51,7 +51,7 @@
  
 --- a/nss.org/nss/coreconf/arch.mk	2017-08-29 23:44:13.646044832 +0530
 +++ b/nss/nss/coreconf/arch.mk	2017-08-29 23:45:51.494487134 +0530
-@@ -305,11 +305,17 @@
+@@ -284,11 +284,17 @@
      OBJDIR_NAME_COMPILER = $(COMPILER_TAG)
  endif
  OBJDIR_NAME_BASE = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(OBJDIR_NAME_COMPILER)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG)
@@ -83,7 +83,7 @@
  # The default implementation strategy for FreeBSD is pthreads.
 --- a/nss.org/nss/coreconf/Linux.mk	2017-08-29 23:44:13.642044814 +0530
 +++ b/nss/nss/coreconf/Linux.mk	2017-08-29 23:47:26.318915759 +0530
-@@ -147,7 +147,7 @@
+@@ -158,7 +158,7 @@
  # Also, -z defs conflicts with Address Sanitizer, which emits relocations
  # against the libsanitizer runtime built into the main executable.
  ZDEFS_FLAG		= -Wl,-z,defs
@@ -92,7 +92,7 @@
  LDFLAGS		   += $(ARCHFLAG) -z noexecstack
  
  # On Maemo, we need to use the -rpath-link flag for even the standard system
-@@ -177,8 +177,13 @@
+@@ -188,8 +188,13 @@
  endif
  endif
  
@@ -108,7 +108,7 @@
  # dependencies in the same directory where it resides.
 --- a/nss.org/nss/coreconf/rules.mk	2017-08-29 23:44:13.646044832 +0530
 +++ b/nss/nss/coreconf/rules.mk	2017-08-29 23:47:37.442966042 +0530
-@@ -261,7 +261,7 @@
+@@ -176,7 +176,7 @@
  ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
  	$(AR) $(subst /,\\,$(OBJS))
  else
@@ -119,7 +119,7 @@
  
 --- a/nss.org/nss/coreconf/SunOS5.mk	2017-08-29 23:44:13.646044832 +0530
 +++ b/nss/nss/coreconf/SunOS5.mk	2017-08-29 23:45:00.902258445 +0530
-@@ -48,8 +48,11 @@
+@@ -46,8 +46,11 @@
  	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
  	endif
  else
@@ -135,7 +135,7 @@
  	ifndef BUILD_OPT
 --- a/nss.org/nss/coreconf/Werror.mk	2017-08-29 23:44:13.646044832 +0530
 +++ b/nss/nss/coreconf/Werror.mk	2017-08-29 23:44:23.994091608 +0530
-@@ -94,7 +94,8 @@
+@@ -96,7 +96,8 @@
      endif #ndef NSS_ENABLE_WERROR
  
      ifeq ($(NSS_ENABLE_WERROR),1)
