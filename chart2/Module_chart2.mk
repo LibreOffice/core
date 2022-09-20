@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_check_targets,chart2,\
 $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_export \
     CppunitTest_chart2_export2 \
+    CppunitTest_chart2_export3 \
     CppunitTest_chart2_import \
     CppunitTest_chart2_import2 \
     CppunitTest_chart2_trendcalculators \

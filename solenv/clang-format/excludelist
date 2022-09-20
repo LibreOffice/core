@@ -750,6 +750,7 @@ chart2/qa/extras/PivotChartTest.cxx
 chart2/qa/extras/chart2_trendcalculators.cxx
 chart2/qa/extras/chart2dump/chart2dump.cxx
 chart2/qa/extras/chart2export.cxx
+chart2/qa/extras/chart2export3.cxx
 chart2/qa/extras/chart2import.cxx
 chart2/qa/extras/charttest.hxx
 chart2/qa/unit/common_functor_test.cxx
