@@ -175,7 +175,7 @@ void SwHHCWrapper::GetNextPortion(
 void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd )
 {
     SwPaM *pCursor = m_rWrtShell.GetCursor();
-    pCursor->GetPoint()->nContent = m_nLastPos;
+    pCursor->GetPoint()->SetContent( m_nLastPos );
     pCursor->DeleteMark();
 
     m_rWrtShell.Right( SwCursorSkipMode::Chars, /*bExpand*/ false,
@@ -268,8 +268,8 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                     // set selection to sub string to be replaced in original text
                     sal_Int32 nChgInNodeStartIndex = nStartIndex + nCorrectionOffset + nChgPos;
                     OSL_ENSURE( m_rWrtShell.GetCursor()->HasMark(), "cursor misplaced (nothing selected)" );
-                    m_rWrtShell.GetCursor()->GetMark()->nContent.Assign( pStartTextNode, nChgInNodeStartIndex );
-                    m_rWrtShell.GetCursor()->GetPoint()->nContent.Assign( pStartTextNode, nChgInNodeStartIndex + nChgLen );
+                    m_rWrtShell.GetCursor()->GetMark()->Assign( *pStartTextNode, nChgInNodeStartIndex );
+                    m_rWrtShell.GetCursor()->GetPoint()->Assign( *pStartTextNode, nChgInNodeStartIndex + nChgLen );
 
                     // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
@@ -300,7 +300,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         // (as it would happen after ChangeText_impl (Delete and Insert)
         // of the whole text in the 'else' branch below)
         m_rWrtShell.ClearMark();
-        m_rWrtShell.GetCursor()->Start()->nContent.Assign( pStartTextNode, nStartIndex + nConvTextLen );
+        m_rWrtShell.GetCursor()->Start()->Assign( *pStartTextNode, nStartIndex + nConvTextLen );
     }
     else
     {
@@ -325,7 +325,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         if (!m_rWrtShell.GetCursor()->HasMark())
             m_rWrtShell.GetCursor()->SetMark();
         SwPosition *pMark = m_rWrtShell.GetCursor()->GetMark();
-        pMark->nContent = pMark->GetContentIndex() - rNewText.getLength();
+        pMark->SetContent( pMark->GetContentIndex() - rNewText.getLength() );
 
         // since 'SetAttr' below functions like merging with the attributes
         // from the itemset with any existing ones we have to get rid of all
@@ -457,7 +457,7 @@ void SwHHCWrapper::ReplaceUnit(
         if (bIsChineseConversion)
         {
             m_rWrtShell.SetMark();
-            m_rWrtShell.GetCursor()->GetMark()->nContent -= aNewText.getLength();
+            m_rWrtShell.GetCursor()->GetMark()->AdjustContent( -aNewText.getLength() );
 
             OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
