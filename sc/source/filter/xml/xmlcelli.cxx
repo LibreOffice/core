@@ -47,6 +47,7 @@
 #include "editattributemap.hxx"
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
+#include <stringutil.hxx>
 #include <documentimport.hxx>
 #include <externalrefmgr.hxx>
 
@@ -612,7 +613,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
         }
         mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
     }
-    else if (mbHasFormatRuns)
+    else if (mbHasFormatRuns || ScStringUtil::isMultiline(maParagraph))
     {
         mpEditEngine->Clear();
         mpEditEngine->SetTextCurrentDefaults(maParagraph.makeStringAndClear());

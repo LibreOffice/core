@@ -1456,7 +1456,7 @@ void ScExportTest2::testTdf75702()
 
     xmlDocUniquePtr pContent
         = XPathHelper::parseExport2(*this, *xShell, m_xSFactory, "content.xml", FORMAT_ODS);
-    assertXPath(pContent, "//table:table-row[1]/table:table-cell/text:p/text:line-break");
+    assertXPath(pContent, "//table:table-row[1]/table:table-cell/text:p", 2);
 }
 
 void ScExportTest2::testTdf103829()
