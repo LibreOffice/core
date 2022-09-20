@@ -293,7 +293,8 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     // Shortcut for CFF-subsetting.
     auto aData = GetRawFontData(T_CFF);
     if (!aData.empty())
-        return CreateCFFfontSubset(aData.data(), aData.size(), rOutBuffer, pGlyphIds, pEncoding,
+        return CreateCFFfontSubset(aData.data(), aData.size(), rOutBuffer,
+                                   GetName(NAME_ID_POSTSCRIPT_NAME), pGlyphIds, pEncoding,
                                    nGlyphCount, rInfo);
 
     // Prepare data for font subsetter.

@@ -1914,8 +1914,8 @@ bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>
 }
 
 bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
-                         const sal_uInt8* pEncoding, int nGlyphCount,
+                         std::vector<sal_uInt8>& rOutBuffer, const OUString& rPSName,
+                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding, int nGlyphCount,
                          FontSubsetInfo& rInfo)
 {
     utl::TempFile aTempFile;
@@ -1926,8 +1926,8 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
         return false;
 
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
-    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds, pEncoding,
-                                       nGlyphCount);
+    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, rPSName.toUtf8().getStr(),
+                                       pGlyphIds, pEncoding, nGlyphCount);
     fclose(pOutFile);
 
     if (bRet)

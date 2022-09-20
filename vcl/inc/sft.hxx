@@ -628,6 +628,7 @@ class TrueTypeFace;
     VCL_DLLPUBLIC bool CreateCFFfontSubset(const unsigned char* pFontBytes,
                               int nByteLength,
                               std::vector<sal_uInt8>& rOutBuffer,
+                              const OUString& rPSName,
                               const sal_GlyphId* pGlyphIds,
                               const sal_uInt8* pEncoding,
                               int nGlyphCount, FontSubsetInfo& rInfo);
