@@ -978,6 +978,21 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
+    // tdf#151081 need to use regular primitive decomposition when the gradient
+    // is transformed in any other way then just tanslate & scale
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+
+    maCurrentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // detect if transformation is rotated, sheared or mirrored in X and/or Y
+    if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX)
+        || aScale.getX() < 0.0 || aScale.getY() < 0.0)
+    {
+        process(rPrimitive);
+        return;
+    }
+
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
     Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
