@@ -72,72 +72,75 @@ void lcl_resolveCharEntities(OUString & aLocalString)
     aLocalString = aResult.makeStringAndClear();
 }
 
-bool splitLastFromConfigurationPath(OUString const& _sInPath,
+bool splitLastFromConfigurationPath(std::u16string_view _sInPath,
                                         OUString& _rsOutPath,
                                         OUString& _rsLocalName)
 {
-    sal_Int32 nStart,nEnd;
+    size_t nStart,nEnd;
 
-    sal_Int32 nPos = _sInPath.getLength()-1;
+    size_t nPos = _sInPath.size()-1;
 
     // strip trailing slash
-    if (nPos > 0 && _sInPath[ nPos ] == '/')
+    if (nPos != std::u16string_view::npos && _sInPath[ nPos ] == '/')
     {
         OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 
     // check for predicate ['xxx'] or ["yyy"]
-    if (nPos  > 0 && _sInPath[ nPos ] == ']')
+    if (nPos != std::u16string_view::npos && _sInPath[ nPos ] == ']')
     {
         sal_Unicode chQuote = _sInPath[--nPos];
 
         if (chQuote == '\'' || chQuote == '\"')
         {
             nEnd = nPos;
-            nPos = _sInPath.lastIndexOf(chQuote,nEnd);
+            nPos = _sInPath.find(chQuote,nEnd);
             nStart = nPos + 1;
             --nPos; // nPos = rInPath.lastIndexOf('[',nPos);
         }
         else // allow [xxx]
         {
             nEnd = nPos + 1;
-            nPos = _sInPath.lastIndexOf('[',nEnd);
+            nPos = _sInPath.rfind('[',nEnd);
             nStart = nPos + 1;
         }
 
-        OSL_ENSURE(nPos >= 0 && _sInPath[nPos] == '[', "Invalid config path: unmatched quotes or brackets");
-        if (nPos >= 0 && _sInPath[nPos] == '[')
+        OSL_ENSURE(nPos != std::u16string_view::npos && _sInPath[nPos] == '[', "Invalid config path: unmatched quotes or brackets");
+        if (nPos != std::u16string_view::npos && _sInPath[nPos] == '[')
         {
-            nPos =  _sInPath.lastIndexOf('/',nPos);
+            nPos =  _sInPath.rfind('/',nPos);
         }
         else // defined behavior for invalid paths
         {
             nStart = 0;
-            nEnd = _sInPath.getLength();
-            nPos = -1;
+            nEnd = _sInPath.size();
+            nPos = std::u16string_view::npos;
         }
 
     }
     else
     {
         nEnd = nPos+1;
-        nPos = _sInPath.lastIndexOf('/',nEnd);
+        nPos = _sInPath.rfind('/',nEnd);
         nStart = nPos + 1;
     }
-    OSL_ASSERT( -1 <= nPos &&
+    OSL_ASSERT( nPos != std::u16string_view::npos &&
                 nPos < nStart &&
                 nStart < nEnd &&
-                nEnd <= _sInPath.getLength() );
+                nEnd <= _sInPath.size() );
 
-    OSL_ASSERT(nPos == -1 || _sInPath[nPos] == '/');
+    OSL_ASSERT(nPos == std::u16string_view::npos || _sInPath[nPos] == '/');
     OSL_ENSURE(nPos != 0 , "Invalid config child path: immediate child of root");
 
-    _rsLocalName = _sInPath.copy(nStart, nEnd-nStart);
-    _rsOutPath = (nPos > 0) ? _sInPath.copy(0,nPos) : OUString();
+    _rsLocalName = _sInPath.substr(nStart, nEnd-nStart);
+    if (nPos > 0 && nPos != std::u16string_view::npos)
+        _rsOutPath = _sInPath.substr(0,nPos);
+    else
+        _rsOutPath.clear();
     lcl_resolveCharEntities(_rsLocalName);
 
-    return nPos >= 0;
+    return nPos != std::u16string_view::npos;
 }
 
 OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _sOutPath)

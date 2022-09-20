@@ -664,7 +664,7 @@ class FilterCache : public cppu::BaseMutex
                         Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
-        css::uno::Any impl_getDirectCFGValue(const OUString& sDirectKey);
+        css::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
 
 
         /** @short      load the underlying configuration into this cache.

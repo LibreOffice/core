@@ -51,7 +51,7 @@ namespace utl
             <FALSE/>, if the path was a one-level path or an invalid path
 
     */
-    UNOTOOLS_DLLPUBLIC bool splitLastFromConfigurationPath(OUString const& _sInPath,
+    UNOTOOLS_DLLPUBLIC bool splitLastFromConfigurationPath(std::u16string_view _sInPath,
                                             OUString& _rsOutPath,
                                             OUString& _rsLocalName);
 

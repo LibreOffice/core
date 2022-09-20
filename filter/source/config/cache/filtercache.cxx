@@ -840,7 +840,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     return *pConfig;
 }
 
-css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
+css::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey)
 {
     OUString sRoot;
     OUString sKey ;
