@@ -62,7 +62,7 @@ using ::com::sun::star::uno::Any;
 namespace
 {
 
-OUString lcl_getDataSeriesName( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel )
+OUString lcl_getDataSeriesName( std::u16string_view rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
 
@@ -81,7 +81,7 @@ OUString lcl_getDataSeriesName( const OUString& rObjectCID, const rtl::Reference
     return aRet;
 }
 
-OUString lcl_getFullSeriesName( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel )
+OUString lcl_getFullSeriesName( std::u16string_view rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet(SchResId(STR_TIP_DATASERIES));
     OUString aWildcard( "%SERIESNAME" );
@@ -323,7 +323,7 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
     return aRet;
 }
 
-OUString ObjectNameProvider::getAxisName( const OUString& rObjectCID
+OUString ObjectNameProvider::getAxisName( std::u16string_view rObjectCID
                         , const rtl::Reference<::chart::ChartModel>& xChartModel  )
 {
     OUString aRet;
@@ -399,7 +399,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
     return aRet;
 }
 
-OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
+OUString ObjectNameProvider::getTitleName( std::u16string_view rObjectCID
                         , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
@@ -418,7 +418,7 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
     return aRet;
 }
 
-OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
+OUString ObjectNameProvider::getGridName( std::u16string_view rObjectCID
                         , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
@@ -471,7 +471,7 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
     return aRet;
 }
 
-OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel, bool bVerbose )
+OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel, bool bVerbose )
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
@@ -716,7 +716,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl:
     return aRet;
 }
 
-OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartDocument )
+OUString ObjectNameProvider::getSelectedObjectText( std::u16string_view rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
@@ -768,7 +768,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
 }
 
 OUString ObjectNameProvider::getNameForCID(
-    const OUString& rObjectCID,
+    std::u16string_view rObjectCID,
     const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
     ObjectType eType( ObjectIdentifier::getObjectType( rObjectCID ));
@@ -836,7 +836,7 @@ OUString ObjectNameProvider::getNameForCID(
 
 OUString ObjectNameProvider::getName_ObjectForSeries(
         ObjectType eObjectType,
-        const OUString& rSeriesCID,
+        std::u16string_view rSeriesCID,
         const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartDocument );

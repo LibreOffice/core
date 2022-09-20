@@ -96,7 +96,7 @@ namespace
 {
 
 bool lcl_deleteDataSeries(
-    const OUString & rCID,
+    std::u16string_view rCID,
     const rtl::Reference<::chart::ChartModel> & xModel,
     const Reference< document::XUndoManager > & xUndoManager )
 {
@@ -128,7 +128,7 @@ bool lcl_deleteDataSeries(
 }
 
 bool lcl_deleteDataCurve(
-    const OUString & rCID,
+    std::u16string_view rCID,
     const rtl::Reference<::chart::ChartModel> & xModel,
     const Reference< document::XUndoManager > & xUndoManager )
 {
@@ -143,7 +143,7 @@ bool lcl_deleteDataCurve(
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
             ObjectIdentifier::getObjectPropertySet(
-                OUString(ObjectIdentifier::getFullParentParticle( rCID )), xModel), uno::UNO_QUERY );
+                ObjectIdentifier::getFullParentParticle( rCID ), xModel), uno::UNO_QUERY );
 
         if( xRegressionCurveContainer.is())
         {
@@ -679,7 +679,7 @@ bool ChartController::executeDispatch_Delete()
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
-                        OUString(ObjectIdentifier::getFullParentParticle( aCID )), getChartModel()), uno::UNO_QUERY );
+                        ObjectIdentifier::getFullParentParticle( aCID ), getChartModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
                     UndoGuard aUndoGuard(

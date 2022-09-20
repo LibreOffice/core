@@ -599,7 +599,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                 bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
 
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(), m_xChartView, OUString() ) );
+                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(), m_xChartView, u"" ) );
 
             if (aDlg.run() == RET_OK)
             {

@@ -153,17 +153,17 @@ rtl::Reference<ChartType> lcl_getFirstStockChartType( const rtl::Reference<::cha
     return nullptr;
 }
 
-OUString lcl_getIndexStringAfterString( const OUString& rString, const OUString& rSearchString )
+std::u16string_view lcl_getIndexStringAfterString( std::u16string_view rString, std::u16string_view rSearchString )
 {
-    sal_Int32 nIndexStart = rString.lastIndexOf( rSearchString );
-    if( nIndexStart == -1 )
-        return OUString();
-    nIndexStart += rSearchString.getLength();
-    sal_Int32 nIndexEnd = rString.getLength();
-    sal_Int32 nNextColon = rString.indexOf( ':', nIndexStart );
-    if( nNextColon != -1 )
+    size_t nIndexStart = rString.rfind( rSearchString );
+    if( nIndexStart == std::u16string_view::npos )
+        return std::u16string_view();
+    nIndexStart += rSearchString.size();
+    size_t nIndexEnd = rString.size();
+    size_t nNextColon = rString.find( ':', nIndexStart );
+    if( nNextColon != std::u16string_view::npos )
         nIndexEnd = nNextColon;
-    return rString.copy(nIndexStart,nIndexEnd-nIndexStart);
+    return rString.substr(nIndexStart,nIndexEnd-nIndexStart);
 }
 
 sal_Int32 lcl_StringToIndex( std::u16string_view rIndexString )
@@ -178,34 +178,34 @@ sal_Int32 lcl_StringToIndex( std::u16string_view rIndexString )
     return nRet;
 }
 
-void lcl_parseCooSysIndices( sal_Int32& rnDiagram, sal_Int32& rnCooSys, const OUString& rString )
+void lcl_parseCooSysIndices( sal_Int32& rnDiagram, sal_Int32& rnCooSys, std::u16string_view rString )
 {
-    rnDiagram = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "D=" ) );
-    rnCooSys = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "CS=" ) );
+    rnDiagram = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, u"D=" ) );
+    rnCooSys = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, u"CS=" ) );
 }
 
-void lcl_parseAxisIndices( sal_Int32& rnDimensionIndex, sal_Int32& rnAxisIndex, const OUString& rString )
+void lcl_parseAxisIndices( sal_Int32& rnDimensionIndex, sal_Int32& rnAxisIndex, std::u16string_view rString )
 {
-    OUString aAxisIndexString = lcl_getIndexStringAfterString( rString, ":Axis=" );
+    std::u16string_view aAxisIndexString = lcl_getIndexStringAfterString( rString, u":Axis=" );
     sal_Int32 nCharacterIndex=0;
     rnDimensionIndex = lcl_StringToIndex( o3tl::getToken(aAxisIndexString, 0, ',', nCharacterIndex ) );
     rnAxisIndex = lcl_StringToIndex( o3tl::getToken(aAxisIndexString, 0, ',', nCharacterIndex ) );
 }
 
-void lcl_parseGridIndices( sal_Int32& rnSubGridIndex, const OUString& rString )
+void lcl_parseGridIndices( sal_Int32& rnSubGridIndex, std::u16string_view rString )
 {
     rnSubGridIndex = -1;
-    rnSubGridIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, ":SubGrid=" ) );
+    rnSubGridIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, u":SubGrid=" ) );
 }
 
-void lcl_parseSeriesIndices( sal_Int32& rnChartTypeIndex, sal_Int32& rnSeriesIndex, sal_Int32& rnPointIndex, const OUString& rString )
+void lcl_parseSeriesIndices( sal_Int32& rnChartTypeIndex, sal_Int32& rnSeriesIndex, sal_Int32& rnPointIndex, std::u16string_view rString )
 {
-    rnChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "CT=" ) );
-    rnSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "Series=" ) );
-    rnPointIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "Point=" ) );
+    rnChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, u"CT=" ) );
+    rnSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, u"Series=" ) );
+    rnPointIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, u"Point=" ) );
 }
 
-void lcl_getDiagramAndCooSys( const OUString& rObjectCID
+void lcl_getDiagramAndCooSys( std::u16string_view rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel
                 , rtl::Reference< Diagram >& xDiagram
                 , rtl::Reference< BaseCoordinateSystem >& xCooSys )
@@ -1013,9 +1013,9 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
     return aRet.makeStringAndClear();
 }
 
-sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticleOrCID )
+sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( std::u16string_view rParticleOrCID )
 {
-    const OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, "=" );
+    const std::u16string_view aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, u"=" );
     return lcl_StringToIndex( o3tl::getToken(aIndexString, 0, ',' ) );
 }
 
@@ -1084,11 +1084,11 @@ bool ObjectIdentifier::isCID( std::u16string_view rName )
 }
 
 Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
-                const OUString& rObjectCID
+                std::u16string_view rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     //return the model object that is indicated by rObjectCID
-    if(rObjectCID.isEmpty())
+    if(rObjectCID.empty())
         return nullptr;
     if(!xChartModel.is())
         return nullptr;
@@ -1270,7 +1270,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
 }
 
 rtl::Reference< Axis > ObjectIdentifier::getAxisForCID(
-                const OUString& rObjectCID
+                std::u16string_view rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     rtl::Reference< Diagram > xDiagram;
@@ -1285,7 +1285,7 @@ rtl::Reference< Axis > ObjectIdentifier::getAxisForCID(
 }
 
 rtl::Reference< DataSeries > ObjectIdentifier::getDataSeriesForCID(
-                const OUString& rObjectCID
+                std::u16string_view rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     rtl::Reference< Diagram > xDiagram;
@@ -1310,7 +1310,7 @@ rtl::Reference< DataSeries > ObjectIdentifier::getDataSeriesForCID(
 }
 
 rtl::Reference< Diagram > ObjectIdentifier::getDiagramForCID(
-                  const OUString& rObjectCID
+                  std::u16string_view rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     rtl::Reference< Diagram > xDiagram;
@@ -1334,7 +1334,7 @@ TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( std::u16string_vie
     return eRet;
 }
 
-OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
+OUString ObjectIdentifier::getSeriesParticleFromCID( std::u16string_view rCID )
 {
     sal_Int32 nDiagramIndex = -1;
     sal_Int32 nCooSysIndex = -1;
@@ -1348,12 +1348,12 @@ OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
     return ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCooSysIndex, nChartTypeIndex, nSeriesIndex );
 }
 
-OUString ObjectIdentifier::getMovedSeriesCID( const OUString& rObjectCID, bool bForward )
+OUString ObjectIdentifier::getMovedSeriesCID( std::u16string_view rObjectCID, bool bForward )
 {
-    sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CID/D=" ) );
-    sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CS=" ) );
-    sal_Int32 nChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CT=" ) );
-    sal_Int32 nSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "Series=" ) );
+    sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, u"CID/D=" ) );
+    sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, u"CS=" ) );
+    sal_Int32 nChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, u"CT=" ) );
+    sal_Int32 nSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, u"Series=" ) );
 
     if( bForward )
         nSeriesIndex--;

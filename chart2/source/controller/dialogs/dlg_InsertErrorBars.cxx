@@ -69,7 +69,7 @@ void InsertErrorBarsDialog::SetAxisMinorStepWidthForErrorBarDecimals( double fMi
 double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     const rtl::Reference<::chart::ChartModel>& xChartModel,
     const Reference< uno::XInterface >& xChartView,
-    const OUString& rSelectedObjectCID )
+    std::u16string_view rSelectedObjectCID )
 {
     double fStepWidth = 0.001;
 

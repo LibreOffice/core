@@ -35,33 +35,33 @@ class ObjectNameProvider
 {
 public:
     static OUString getName( ObjectType eObjectType, bool bPlural=false );
-    static OUString getAxisName( const OUString& rObjectCID
+    static OUString getAxisName( std::u16string_view rObjectCID
                         , const rtl::Reference<::chart::ChartModel>& xChartModel  );
-    static OUString getGridName( const OUString& rObjectCID
+    static OUString getGridName( std::u16string_view rObjectCID
                         , const rtl::Reference<::chart::ChartModel>& xChartModel );
-    static OUString getTitleName( const OUString& rObjectCID
+    static OUString getTitleName( std::u16string_view rObjectCID
                         , const rtl::Reference<::chart::ChartModel>& xChartModel );
     static OUString getTitleNameByType( TitleHelper::eTitleType eType );
 
     static OUString getNameForCID(
-        const OUString& rObjectCID,
+        std::u16string_view rObjectCID,
         const rtl::Reference<::chart::ChartModel>& xChartDocument );
 
     static OUString getName_ObjectForSeries(
         ObjectType eObjectType,
-        const OUString& rSeriesCID,
+        std::u16string_view rSeriesCID,
         const rtl::Reference<::chart::ChartModel>& xChartDocument );
     static OUString getName_ObjectForAllSeries( ObjectType eObjectType );
 
     /** Provides help texts for the various chart elements.
         The parameter rObjectCID has to be a ClassifiedIdentifier - see class ObjectIdentifier.
      */
-    static OUString getHelpText( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel, bool bVerbose=false );
+    static OUString getHelpText( std::u16string_view rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel, bool bVerbose=false );
 
     /** This is used for showing the currently selected object in the status bar
         (command "Context")
      */
-    static OUString getSelectedObjectText( const OUString & rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartDocument );
+    static OUString getSelectedObjectText( std::u16string_view rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartDocument );
 };
 
 } //namespace chart

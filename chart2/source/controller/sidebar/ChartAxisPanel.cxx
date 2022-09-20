@@ -36,7 +36,7 @@ namespace chart::sidebar {
 namespace {
 
 bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
@@ -53,7 +53,7 @@ bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, bool bVisible)
+        std::u16string_view rCID, bool bVisible)
 {
     rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
@@ -77,7 +77,7 @@ AxisLabelPosMap const aLabelPosMap[] = {
 };
 
 sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
@@ -100,7 +100,7 @@ sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, sal_Int32 nPos)
+        std::u16string_view rCID, sal_Int32 nPos)
 {
     rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
@@ -118,7 +118,7 @@ void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     rtl::Reference< Axis > xAxis =
         ObjectIdentifier::getAxisForCID(rCID, xModel);
@@ -132,7 +132,7 @@ bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setReverse(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, bool bReverse)
+        std::u16string_view rCID, bool bReverse)
 {
     rtl::Reference< Axis > xAxis =
         ObjectIdentifier::getAxisForCID(rCID, xModel);
@@ -170,7 +170,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 }
 
 void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, double nVal)
+        std::u16string_view rCID, double nVal)
 {
     rtl::Reference< ::chart::Axis > xAxis =
         ObjectIdentifier::getAxisForCID(rCID, xModel);
@@ -182,7 +182,7 @@ void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     rtl::Reference< ::chart::Axis > xAxis =
         ObjectIdentifier::getAxisForCID(rCID, xModel);

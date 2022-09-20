@@ -76,7 +76,7 @@ namespace
 {
 
 wrapper::ItemConverter* createItemConverter(
-    const OUString & aObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel,
+    std::u16string_view aObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel,
     const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
     ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider const * pRefSizeProvider )
 {

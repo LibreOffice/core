@@ -536,7 +536,7 @@ private:
     /// @return </sal_True>, if resize/move was successful
     bool impl_moveOrResizeObject(
         const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
-    bool impl_DragDataPoint( const OUString & rCID, double fOffset );
+    bool impl_DragDataPoint( std::u16string_view rCID, double fOffset );
 
     static const o3tl::sorted_vector< OUString >& impl_getAvailableCommands();
 

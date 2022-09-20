@@ -1851,7 +1851,7 @@ bool ChartController::impl_moveOrResizeObject(
     return bResult;
 }
 
-bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditionalOffset )
+bool ChartController::impl_DragDataPoint( std::u16string_view rCID, double fAdditionalOffset )
 {
     bool bResult = false;
     if( fAdditionalOffset < -1.0 || fAdditionalOffset > 1.0 || fAdditionalOffset == 0.0 )

@@ -152,7 +152,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     return true;
 }
 
-bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
+bool PositionAndSizeHelper::moveObject( std::u16string_view rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel
                 , const awt::Rectangle& rNewPositionAndSize
                 , const awt::Rectangle& rOldPositionAndSize

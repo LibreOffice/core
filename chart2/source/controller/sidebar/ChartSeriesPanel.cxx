@@ -45,7 +45,7 @@ namespace chart::sidebar {
 
 namespace {
 
-bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
+bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -56,7 +56,7 @@ bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const
     return DataSeriesHelper::hasDataLabelsAtSeries(xSeries);
 }
 
-void setDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID, bool bVisible)
+void setDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID, bool bVisible)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -86,7 +86,7 @@ LabelPlacementMap const aLabelPlacementMap[] = {
 };
 
 sal_Int32 getDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -111,7 +111,7 @@ sal_Int32 getDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xMode
 }
 
 void setDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, sal_Int32 nPos)
+        std::u16string_view rCID, sal_Int32 nPos)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -133,7 +133,7 @@ void setDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     rtl::Reference< DataSeries > xRegressionCurveContainer =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -145,7 +145,7 @@ bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setTrendlineVisible(const rtl::Reference<::chart::ChartModel>&
-        xModel, const OUString& rCID, bool bVisible)
+        xModel, std::u16string_view rCID, bool bVisible)
 {
     rtl::Reference< DataSeries > xRegressionCurveContainer =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -166,7 +166,7 @@ void setTrendlineVisible(const rtl::Reference<::chart::ChartModel>&
 }
 
 bool isErrorBarVisible(const rtl::Reference<::chart::ChartModel>& xModel,
-                       const OUString& rCID, bool bYError)
+                       std::u16string_view rCID, bool bYError)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -178,7 +178,7 @@ bool isErrorBarVisible(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setErrorBarVisible(const rtl::Reference<::chart::ChartModel>&
-        xModel, const OUString& rCID, bool bYError, bool bVisible)
+        xModel, std::u16string_view rCID, bool bYError, bool bVisible)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -199,7 +199,7 @@ void setErrorBarVisible(const rtl::Reference<::chart::ChartModel>&
 }
 
 bool isPrimaryAxis(const rtl::Reference<::chart::ChartModel>&
-        xModel, const OUString& rCID)
+        xModel, std::u16string_view rCID)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -211,7 +211,7 @@ bool isPrimaryAxis(const rtl::Reference<::chart::ChartModel>&
 }
 
 void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
-        xModel, const OUString& rCID, bool bPrimary)
+        xModel, std::u16string_view rCID, bool bPrimary)
 {
     const rtl::Reference<DataSeries> xDataSeries = ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
@@ -230,7 +230,7 @@ rtl::Reference<ChartType> getChartType(
     return xCooSysSequence[0]->getChartTypes2()[0];
 }
 
-OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
+OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID)
 {
     rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);

@@ -43,7 +43,7 @@ public:
     static double getAxisMinorStepWidthForErrorBarDecimals(
         const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::uno::Reference<css::uno::XInterface>& xChartView,
-        const OUString& rSelectedObjectCID);
+        std::u16string_view rSelectedObjectCID);
 
     void FillItemSet(SfxItemSet& rOutAttrs);
 

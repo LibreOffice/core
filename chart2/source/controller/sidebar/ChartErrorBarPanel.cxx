@@ -41,13 +41,13 @@ enum class ErrorBarDirection
 };
 
 css::uno::Reference<css::beans::XPropertySet> getErrorBarPropSet(
-        const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
+        const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID)
 {
     return ObjectIdentifier::getObjectPropertySet(rCID, xModel);
 }
 
 bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -66,7 +66,7 @@ bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -85,7 +85,7 @@ bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, bool bShow)
+        std::u16string_view rCID, bool bShow)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -97,7 +97,7 @@ void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, bool bShow)
+        std::u16string_view rCID, bool bShow)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -125,7 +125,7 @@ ErrorBarTypeMap const aErrorBarType[] = {
 };
 
 sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID)
+        std::u16string_view rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -151,7 +151,7 @@ sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, sal_Int32 nPos)
+        std::u16string_view rCID, sal_Int32 nPos)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -170,7 +170,7 @@ void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, ErrorBarDirection eDir)
+        std::u16string_view rCID, ErrorBarDirection eDir)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
@@ -194,7 +194,7 @@ double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
 }
 
 void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
-        const OUString& rCID, double nVal, ErrorBarDirection eDir)
+        std::u16string_view rCID, double nVal, ErrorBarDirection eDir)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
