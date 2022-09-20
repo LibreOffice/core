@@ -299,13 +299,17 @@ public:
     B2DPolyPolygon B2DPolyPolygon::getDefaultAdaptiveSubdivision() const
     {
         B2DPolyPolygon aRetval;
-        // Avoid CoW overhead for the local variable
-        auto dest = const_cast<ImplB2DPolyPolygon*>(std::as_const(aRetval).mpPolyPolygon.get());
-        dest->reserve(count());
-
-        for(sal_uInt32 a(0); a < count(); a++)
+        if (count())
         {
-            dest->append(getB2DPolygon(a).getDefaultAdaptiveSubdivision(), 1);
+            // Avoid CoW overhead for the local variable
+            // But detach from shared static DEFAULT
+            ImplB2DPolyPolygon& dest = aRetval.mpPolyPolygon.make_unique();
+            dest.reserve(count());
+
+            for (sal_uInt32 a(0); a < count(); a++)
+            {
+                dest.append(getB2DPolygon(a).getDefaultAdaptiveSubdivision(), 1);
+            }
         }
 
         return aRetval;
