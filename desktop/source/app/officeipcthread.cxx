@@ -1249,7 +1249,6 @@ static void AddConversionsToDispatchList(
             nType = DispatchWatcher::REQUEST_CAT;
         else
             nType = DispatchWatcher::REQUEST_CONVERSION;
-        aParam = rParam;
     }
     else
     {
@@ -1262,8 +1261,6 @@ static void AddConversionsToDispatchList(
         }
     }
 
-    OUString aOutDir( rParamOut.trim() );
-    std::u16string_view aImgOut = o3tl::trim(rImgOut);
     OUString aPWD;
     if (cwdUrl)
     {
@@ -1274,11 +1271,10 @@ static void AddConversionsToDispatchList(
         utl::Bootstrap::getProcessWorkingDir( aPWD );
     }
 
-    if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
-        ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
-
-    if( !rParamOut.trim().isEmpty() )
+    if (OUString aOutDir(rParamOut.trim()); !aOutDir.isEmpty())
     {
+        if (osl::FileBase::getAbsoluteFileURL(aPWD, rParamOut, aOutDir) == osl::FileBase::E_None)
+            osl::FileBase::getSystemPathFromFileURL(aOutDir, aOutDir);
         aParam += ";" + aOutDir;
     }
     else
@@ -1288,7 +1284,7 @@ static void AddConversionsToDispatchList(
     }
 
     if( !rImgOut.empty() )
-        aParam += OUString::Concat("|") + aImgOut;
+        aParam += OUString::Concat("|") + o3tl::trim(rImgOut);
 
     for (auto const& request : rRequestList)
     {
