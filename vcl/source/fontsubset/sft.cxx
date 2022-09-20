@@ -123,18 +123,14 @@ private:
     int total = 0;
 };
 
-struct GlyphOffsets {
+class GlyphOffsets {
+public:
+    GlyphOffsets(sal_uInt8 *sfntP, sal_uInt32 sfntLen);
+    ~GlyphOffsets();
     sal_uInt32 nGlyphs;           /* number of glyphs in the font + 1 */
     sal_uInt32 *offs;             /* array of nGlyphs offsets */
 };
 
-}
-
-static void *smalloc(size_t size)
-{
-    void *res = malloc(size);
-    assert(res != nullptr);
-    return res;
 }
 
 static void *scalloc(size_t n, size_t size)
@@ -1929,9 +1925,8 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
     return bRet;
 }
 
-static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
+GlyphOffsets::GlyphOffsets(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
-    GlyphOffsets* res = static_cast<GlyphOffsets*>(smalloc(sizeof(GlyphOffsets)));
     sal_uInt8 *loca = nullptr;
     sal_uInt16 numTables = GetUInt16(sfntP, 4);
     sal_uInt32 locaLen = 0;
@@ -1967,26 +1962,22 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
         }
     }
 
-    res->nGlyphs = locaLen / ((indexToLocFormat == 1) ? 4 : 2);
-    assert(res->nGlyphs != 0);
-    res->offs = static_cast<sal_uInt32*>(scalloc(res->nGlyphs, sizeof(sal_uInt32)));
+    this->nGlyphs = locaLen / ((indexToLocFormat == 1) ? 4 : 2);
+    assert(this->nGlyphs != 0);
+    this->offs = static_cast<sal_uInt32*>(scalloc(this->nGlyphs, sizeof(sal_uInt32)));
 
-    for (sal_uInt32 i = 0; i < res->nGlyphs; i++) {
+    for (sal_uInt32 i = 0; i < this->nGlyphs; i++) {
         if (indexToLocFormat == 1) {
-            res->offs[i] = GetUInt32(loca, i * 4);
+            this->offs[i] = GetUInt32(loca, i * 4);
         } else {
-            res->offs[i] = GetUInt16(loca, i * 2) << 1;
+            this->offs[i] = GetUInt16(loca, i * 2) << 1;
         }
     }
-    return res;
 }
 
-static void GlyphOffsetsDispose(GlyphOffsets *_this)
+GlyphOffsets::~GlyphOffsets()
 {
-    if (_this) {
-        free(_this->offs);
-        free(_this);
-    }
+    free(this->offs);
 }
 
 static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
@@ -2004,7 +1995,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
     HexFmt h(outf);
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4);
-    GlyphOffsets *go = GlyphOffsetsNew(sfntP, sfntLen);
+    GlyphOffsets go(sfntP, sfntLen);
     sal_uInt8 const pad[] = {0,0,0,0};                     /* zeroes                       */
 
     if (numTables > nMaxPossibleTables)
@@ -2060,9 +2051,9 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
         {
             sal_uInt8 *glyf = pRecordStart;
             sal_uInt8 *eof = pRecordStart + nMaxLenPossible;
-            for (sal_uInt32 j = 0; j < go->nGlyphs - 1; j++)
+            for (sal_uInt32 j = 0; j < go.nGlyphs - 1; j++)
             {
-                sal_uInt32 nStartOffset = go->offs[j];
+                sal_uInt32 nStartOffset = go.offs[j];
                 sal_uInt8 *pSubRecordStart = glyf + nStartOffset;
                 if (pSubRecordStart > eof)
                 {
@@ -2071,7 +2062,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
                     break;
                 }
 
-                sal_uInt32 nEndOffset = go->offs[j + 1];
+                sal_uInt32 nEndOffset = go.offs[j + 1];
                 sal_uInt8 *pSubRecordEnd = glyf + nEndOffset;
                 if (pSubRecordEnd > eof)
                 {
@@ -2088,7 +2079,6 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     }
     h.CloseString();
     fputs("] def\n", outf);
-    GlyphOffsetsDispose(go);
     free(offs);
 }
 
