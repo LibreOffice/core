@@ -19,150 +19,55 @@ namespace sc::opencl {
 void OpSumX2MY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 0 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 1 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
-    ss <<"     int gid0=get_global_id(0);\n";
+    ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    GenTmpVariables(ss,vSubArguments);
-    if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
-    {
-        FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-            formula::DoubleVectorRefToken *>(tmpCur);
-        size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-        pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-        pCurDVR->GetRefRowSize() ;
-        ss << "    int i ;\n";
-        ss << "    for (i = ";
-        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-            ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-        } else {
-            ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-        }
-        ss << "    {\n";
-        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-        {
-            ss << "    int doubleIndex =i+gid0;\n";
-        }else
-        {
-            ss << "    int doubleIndex =i;\n";
-        }
-
-        CheckSubArgumentIsNan(ss,vSubArguments,0);
-        CheckSubArgumentIsNan(ss,vSubArguments,1);
-        ss << "     tmp +=pow(tmp0,2) - pow(tmp1,2);\n";
-        ss <<"    }\n";
-    }
-    else
-    {
-        ss << "    int singleIndex =gid0;\n";
-        CheckAllSubArgumentIsNan(ss, vSubArguments);
-        ss << "    tmp = pow(tmp0,2) - pow(tmp1,2);\n";
-    }
-    ss << "return tmp;\n";
-    ss << "}";
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
+        "        if( !isnan(arg1) && !isnan(arg2))\n"
+        "            tmp +=pow(arg1,2) - pow(arg2,2);\n"
+        );
+    ss << "    return tmp;\n";
+    ss << "}\n";
 }
 
 void OpSumX2PY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 0 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 1 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    GenTmpVariables(ss,vSubArguments);
-    if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
-    {
-        FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-            formula::DoubleVectorRefToken *>(tmpCur);
-        size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-        pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-        pCurDVR->GetRefRowSize() ;
-        ss << "    int i ;\n";
-        ss << "    for (i = ";
-        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-            ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-        } else {
-            ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-        }
-        ss << "    {\n";
-        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-        {
-            ss << "    int doubleIndex =i+gid0;\n";
-        }else
-        {
-            ss << "    int doubleIndex =i;\n";
-        }
-
-        CheckSubArgumentIsNan(ss,vSubArguments,0);
-        CheckSubArgumentIsNan(ss,vSubArguments,1);
-        ss << "     tmp +=pow(tmp0,2) + pow(tmp1,2);\n";
-        ss <<"    }\n";
-    }
-    else
-    {
-        ss << "    int singleIndex =gid0;\n";
-        CheckAllSubArgumentIsNan(ss, vSubArguments);
-        ss << "    tmp = pow(tmp0,2) + pow(tmp1,2);\n";
-    }
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
+        "        if( !isnan(arg1) && !isnan(arg2))\n"
+        "            tmp +=pow(arg1,2) + pow(arg2,2);\n"
+        );
     ss << "    return tmp;\n";
-    ss << "}";
+    ss << "}\n";
 }
+
 void OpSumXMY2::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 0 );
+    CHECK_PARAMETER_DOUBLEVECTORREF( 1 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    GenTmpVariables(ss,vSubArguments);
-    if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
-    {
-        FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
-            formula::DoubleVectorRefToken *>(tmpCur);
-        size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-        pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-        pCurDVR->GetRefRowSize() ;
-        ss << "    int i ;\n";
-        ss << "    for (i = ";
-        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-            ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-            ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-        } else {
-            ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-        }
-        ss << "    {\n";
-        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-        {
-            ss << "    int doubleIndex =i+gid0;\n";
-        }else
-        {
-            ss << "    int doubleIndex =i;\n";
-        }
-
-        CheckSubArgumentIsNan(ss,vSubArguments,0);
-        CheckSubArgumentIsNan(ss,vSubArguments,1);
-        ss << "     tmp +=pow((tmp0-tmp1),2);\n";
-        ss <<"    }\n";
-    }
-    else
-    {
-        ss << "    int singleIndex =gid0;\n";
-        CheckAllSubArgumentIsNan(ss, vSubArguments);
-        ss << "    tmp = pow((tmp0-tmp1),2);\n";
-    }
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
+        "        if( !isnan(arg1) && !isnan(arg2))\n"
+        "            tmp +=pow((arg1-arg2),2);\n"
+        );
     ss << "    return tmp;\n";
-    ss << "}";
+    ss << "}\n";
 }
 
 }
