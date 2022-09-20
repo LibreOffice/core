@@ -102,13 +102,25 @@ struct TTGlyphMetrics {
     sal_uInt16 ah;                /*- advance height (vertical writing mode)     */
 };
 
-#define HFORMAT_LINELEN 64
+constexpr int HFORMAT_LINELEN = 64;
 
-struct HexFmt {
+class HexFmt {
+public:
+    HexFmt(FILE *outf) : o(outf) {}
+    ~HexFmt()
+    {
+        Flush();
+    }
+    bool Flush();
+    void OpenString();
+    void CloseString();
+    void BlockWrite(const void *ptr, sal_uInt32 size);
+
+private:
     FILE *o;
     char buffer[HFORMAT_LINELEN];
-    size_t bufpos;
-    int total;
+    size_t bufpos = 0;
+    int total = 0;
 };
 
 struct GlyphOffsets {
@@ -207,62 +219,48 @@ static char toHex(sal_uInt8 nIndex)
     return HexChars[nIndex];
 }
 
-static HexFmt *HexFmtNew(FILE *outf)
-{
-    HexFmt* res = static_cast<HexFmt*>(smalloc(sizeof(HexFmt)));
-    res->bufpos = res->total = 0;
-    res->o = outf;
-    return res;
-}
-
-static bool HexFmtFlush(HexFmt *_this)
+bool HexFmt::Flush()
 {
     bool bRet = true;
-    if (_this->bufpos) {
-        size_t nWritten = fwrite(_this->buffer, 1, _this->bufpos, _this->o);
-        bRet = nWritten == _this->bufpos;
-        _this->bufpos = 0;
+    if (bufpos) {
+        size_t nWritten = fwrite(buffer, 1, bufpos, o);
+        bRet = nWritten == bufpos;
+        bufpos = 0;
     }
     return bRet;
 }
 
-static void HexFmtOpenString(HexFmt *_this)
+void HexFmt::OpenString()
 {
-    fputs("<\n", _this->o);
+    fputs("<\n", o);
 }
 
-static void HexFmtCloseString(HexFmt *_this)
+void HexFmt::CloseString()
 {
-    HexFmtFlush(_this);
-    fputs("00\n>\n", _this->o);
+    Flush();
+    fputs("00\n>\n", o);
 }
 
-static void HexFmtDispose(HexFmt *_this)
+void HexFmt::BlockWrite(const void *ptr, sal_uInt32 size)
 {
-    HexFmtFlush(_this);
-    free(_this);
-}
-
-static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
-{
-    if (_this->total + size > 65534) {
-        HexFmtFlush(_this);
-        HexFmtCloseString(_this);
-        _this->total = 0;
-        HexFmtOpenString(_this);
+    if (total + size > 65534) {
+        Flush();
+        CloseString();
+        total = 0;
+        OpenString();
     }
 
     for (sal_uInt32 i = 0; i < size; ++i) {
         sal_uInt8 Ch = static_cast<sal_uInt8 const *>(ptr)[i];
-        _this->buffer[_this->bufpos++] = toHex(Ch >> 4);
-        _this->buffer[_this->bufpos++] = toHex(Ch & 0xF);
-        if (_this->bufpos == HFORMAT_LINELEN) {
-            HexFmtFlush(_this);
-            fputc('\n', _this->o);
+        buffer[bufpos++] = toHex(Ch >> 4);
+        buffer[bufpos++] = toHex(Ch & 0xF);
+        if (bufpos == HFORMAT_LINELEN) {
+            Flush();
+            fputc('\n', o);
         }
 
     }
-    _this->total += size;
+    total += size;
 }
 
 /* Outline Extraction functions */
@@ -2004,7 +2002,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     const sal_uInt32 nTableSize = 16;
     const sal_uInt32 nMaxPossibleTables = nSpaceForTables/nTableSize;
 
-    HexFmt *h = HexFmtNew(outf);
+    HexFmt h(outf);
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4);
     GlyphOffsets *go = GlyphOffsetsNew(sfntP, sfntLen);
     sal_uInt8 const pad[] = {0,0,0,0};                     /* zeroes                       */
@@ -2021,9 +2019,9 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     sal_uInt32* offs = static_cast<sal_uInt32*>(scalloc(numTables, sizeof(sal_uInt32)));
 
     fputs("/sfnts [", outf);
-    HexFmtOpenString(h);
-    HexFmtBlockWrite(h, sfntP, 12);                         /* stream out the Offset Table    */
-    HexFmtBlockWrite(h, sfntP+12, 16 * numTables);          /* stream out the Table Directory */
+    h.OpenString();
+    h.BlockWrite(sfntP, 12);                         /* stream out the Offset Table    */
+    h.BlockWrite(sfntP+12, 16 * numTables);          /* stream out the Table Directory */
 
     for (i=0; i<numTables; i++)
     {
@@ -2056,7 +2054,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
         if (tag != T_glyf)
         {
-            HexFmtBlockWrite(h, pRecordStart, len);
+            h.BlockWrite(pRecordStart, len);
         }
         else
         {
@@ -2083,15 +2081,14 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
                 }
 
                 sal_uInt32 l = pSubRecordEnd - pSubRecordStart;
-                HexFmtBlockWrite(h, pSubRecordStart, l);
+                h.BlockWrite(pSubRecordStart, l);
             }
         }
-        HexFmtBlockWrite(h, pad, (4 - (len & 3)) & 3);
+        h.BlockWrite(pad, (4 - (len & 3)) & 3);
     }
-    HexFmtCloseString(h);
+    h.CloseString();
     fputs("] def\n", outf);
     GlyphOffsetsDispose(go);
-    HexFmtDispose(h);
     free(offs);
 }
 
