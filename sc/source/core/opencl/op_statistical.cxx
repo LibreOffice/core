@@ -27,17 +27,13 @@ void OpVar::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fMean = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            vSum += (arg - fMean) * (arg - fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg - fMean) * (arg - fMean);\n"
         );
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
@@ -58,17 +54,13 @@ void OpVarP::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double vSum = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
     ss << "    double arg = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            vSum += (arg - fMean) * (arg - fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg - fMean) * (arg - fMean);\n"
         );
     ss << "    if (fCount == 0.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
@@ -98,13 +90,10 @@ void OpZTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSumSqr = 0.0;\n";
     ss << "    double mue = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArg( 0, vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fSumSqr += arg * arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArg( 0, vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fSumSqr += arg * arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if(fCount <= 1.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
@@ -167,14 +156,11 @@ void OpTTest::GenSlidingWindowFunction(outputstream &ss,
 
     ss << "    if(type == 1.0)\n";
     ss << "    {\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "            if (!isnan(arg1) && !isnan(arg2))\n"
-        "            {\n"
-        "                fSum1 += arg1;\n"
-        "                fSum2 += arg2;\n"
-        "                fSumSqr1 += (arg1 - arg2)*(arg1 - arg2);\n"
-        "                fCount1 += 1;\n"
-        "            }\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "            fSum1 += arg1;\n"
+        "            fSum2 += arg2;\n"
+        "            fSumSqr1 += (arg1 - arg2)*(arg1 - arg2);\n"
+        "            fCount1 += 1;\n"
         );
     ss << "        if(fCount1 < 1.0)\n";
     ss << "            return CreateDoubleError(NoValue);\n";
@@ -186,21 +172,15 @@ void OpTTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    }\n";
     ss << "    if(type == 2.0 || type == 3.0)\n";
     ss << "    {\n";
-    GenerateRangeArg( 0, vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum1 += arg;\n"
-        "            fSumSqr1 += arg * arg;\n"
-        "            fCount1 += 1;\n"
-        "        }\n"
+    GenerateRangeArg( 0, vSubArguments, ss, SkipEmpty,
+        "        fSum1 += arg;\n"
+        "        fSumSqr1 += arg * arg;\n"
+        "        fCount1 += 1;\n"
         );
-    GenerateRangeArg( 1, vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum2 += arg;\n"
-        "            fSumSqr2 += arg * arg;\n"
-        "            fCount2 += 1;\n"
-        "        }\n"
+    GenerateRangeArg( 1, vSubArguments, ss, SkipEmpty,
+        "        fSum2 += arg;\n"
+        "        fSumSqr2 += arg * arg;\n"
+        "        fCount2 += 1;\n"
         );
     ss << "        if (fCount1 < 2.0 || fCount2 < 2.0)\n";
     ss << "            return CreateDoubleError(NoValue);\n";
@@ -402,32 +382,25 @@ void OpSkew::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fMean = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if(fCount <= 2.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    else\n";
     ss << "        fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            vSum += (arg - fMean) * (arg - fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg - fMean) * (arg - fMean);\n"
         );
     ss << "    double fStdDev = sqrt(vSum / (fCount - 1.0));\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xcube = 0.0;\n";
     ss << "    if(fStdDev == 0.0)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            dx = (arg - fMean) / fStdDev;\n"
-        "            xcube = xcube + dx * dx * dx;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        dx = (arg - fMean) / fStdDev;\n"
+        "        xcube = xcube + dx * dx * dx;\n"
         );
     ss << "    return ((xcube * fCount) / (fCount - 1.0))";
     ss << " / (fCount - 2.0);\n";
@@ -445,32 +418,25 @@ void OpSkewp::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fMean = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if(fCount <= 2.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
     ss << "    else\n";
     ss << "        fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            vSum += (arg - fMean) * (arg - fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg - fMean) * (arg - fMean);\n"
         );
     ss << "    double fStdDev = sqrt(vSum / fCount);\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xcube = 0.0;\n";
     ss << "    if(fStdDev == 0.0)\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            dx = (arg - fMean) / fStdDev;\n"
-        "            xcube = xcube + dx * dx * dx;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        dx = (arg - fMean) / fStdDev;\n"
+        "        xcube = xcube + dx * dx * dx;\n"
         );
     ss << "    return xcube / fCount;\n";
     ss << "}\n";
@@ -537,17 +503,13 @@ void OpStDev::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double vSum = 0.0;\n";
     ss << "    double fMean = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            vSum += (arg - fMean) * (arg - fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg - fMean) * (arg - fMean);\n"
         );
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
@@ -567,17 +529,13 @@ void OpStDevP::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double vSum = 0.0;\n";
     ss << "    double fMean = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    fMean = fSum / fCount;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            vSum += (arg - fMean) * (arg - fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg - fMean) * (arg - fMean);\n"
         );
     ss << "    if (fCount <= 1.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
@@ -853,12 +811,9 @@ vSubArguments)
     ss << "    double tmp = 0;\n";
     ss << "    int length;\n";
     ss << "    int totallength=0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "        {\n"
-        "            nVal += (1.0 / arg);\n"
-        "            ++totallength;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        nVal += (1.0 / arg);\n"
+        "        ++totallength;\n"
         );
     ss << "    tmp = totallength/nVal;\n";
     ss << "    return tmp;\n";
@@ -1207,27 +1162,20 @@ void OpKurt:: GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSum = 0.0;\n";
     ss << "    double vSum = 0.0;\n";
     ss << "    double totallength=0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "        {\n"
-        "            fSum += arg;\n"
-        "            totallength +=1;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        fSum += arg;\n"
+        "        totallength +=1;\n"
         );
     ss << "    double fMean = fSum / totallength;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "            vSum += (arg-fMean)*(arg-fMean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += (arg-fMean)*(arg-fMean);\n"
         );
     ss << "    double fStdDev = sqrt(vSum / (totallength - 1.0));\n";
     ss << "    double dx = 0.0;\n";
     ss << "    double xpower4 = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "        {\n"
-        "            dx = (arg -fMean) / fStdDev;\n"
-        "            xpower4 = xpower4 + (dx * dx * dx * dx);\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        dx = (arg -fMean) / fStdDev;\n"
+        "        xpower4 = xpower4 + (dx * dx * dx * dx);\n"
         );
     ss<< "    double k_d = (totallength - 2.0) * (totallength - 3.0);\n";
     ss<< "    double k_l = totallength * (totallength + 1.0) /";
@@ -1816,21 +1764,15 @@ void OpFTest::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fLength1 = 0.0;\n";
     ss << "    double fLength2 = 0.0;\n";
     ss << "    double tmp = 0;\n";
-    GenerateRangeArg( 0, vSubArguments, ss,
-        "        if( !isnan(arg))\n"
-        "        {\n"
-        "            fSum1 += arg;\n"
-        "            fSumSqr1 += arg * arg;\n"
-        "            fLength1 += 1;\n"
-        "        }\n"
+    GenerateRangeArg( 0, vSubArguments, ss, SkipEmpty,
+        "        fSum1 += arg;\n"
+        "        fSumSqr1 += arg * arg;\n"
+        "        fLength1 += 1;\n"
         );
-    GenerateRangeArg( 1, vSubArguments, ss,
-        "        if( !isnan(arg))\n"
-        "        {\n"
-        "            fSum2 += arg;\n"
-        "            fSumSqr2 += arg * arg;\n"
-        "            fLength2 += 1;\n"
-        "        }\n"
+    GenerateRangeArg( 1, vSubArguments, ss, SkipEmpty,
+        "        fSum2 += arg;\n"
+        "        fSumSqr2 += arg * arg;\n"
+        "        fLength2 += 1;\n"
         );
     ss << "    if(fLength1 < 2 || fLength2 < 2)\n"
         "        return CreateDoubleError(NoValue);\n"
@@ -2158,18 +2100,14 @@ void OpDevSq::GenSlidingWindowFunction(outputstream& ss,
     ss << "    double vSum = 0.0;\n";
     ss << "    double vMean = 0.0;\n";
     ss << "    int cnt = 0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan (arg))\n"
-        "        {\n"
-        "            vSum += arg;\n"
-        "            ++cnt;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += arg;\n"
+        "        ++cnt;\n"
         );
     ss << "    vMean = vSum / cnt;\n";
     ss << "    vSum = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan (arg))\n"
-        "            vSum += ( arg - vMean ) * ( arg - vMean );\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        vSum += ( arg - vMean ) * ( arg - vMean );\n"
         );
     ss << "    return vSum;\n";
     ss << "}\n";
@@ -2234,18 +2172,14 @@ void OpAveDev:: GenSlidingWindowFunction(outputstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double sum=0.0;\n";
     ss << "    double totallength=0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "        {\n"
-        "            sum += arg;\n"
-        "            ++totallength;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        sum += arg;\n"
+        "        ++totallength;\n"
         );
     ss << "    double mean = sum / totallength;\n";
     ss << "    sum = 0.0;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "            sum += fabs(arg-mean);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        sum += fabs(arg-mean);\n"
         );
     ss << "    return sum/totallength;\n";
     ss << "}";
@@ -2268,21 +2202,17 @@ void OpCovar::GenSlidingWindowFunction(outputstream& ss,
     ss << "    double fMeanY = 0.0;\n";
     ss << "    double fSumDeltaXDeltaY = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if (!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
-        "            fSumX += arg1;\n"
-        "            fSumY += arg2;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "        fSumX += arg1;\n"
+        "        fSumY += arg2;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if( fCount < 1 )\n";
     ss << "        return CreateDoubleError(NoValue);\n";
     ss << "    fMeanX = fSumX / fCount;\n";
     ss << "    fMeanY = fSumY / fCount;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if(!isnan(arg1) && !isnan(arg2))\n"
-        "            fSumDeltaXDeltaY +=(arg1-fMeanX)*(arg2-fMeanY);\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "        fSumDeltaXDeltaY +=(arg1-fMeanX)*(arg2-fMeanY);\n"
         );
     ss << "    return fSumDeltaXDeltaY / fCount;\n";
     ss << "}\n";
@@ -2305,25 +2235,19 @@ void OpForecast::GenSlidingWindowFunction(outputstream &ss,
     ss << "    double fSumSqrDeltaX = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
     GenerateArg( "arg0", 0, vSubArguments, ss );
-    GenerateRangeArgPair( 1, 2, vSubArguments, ss,
-        "        if (!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
+    GenerateRangeArgPair( 1, 2, vSubArguments, ss, SkipEmpty,
         // note that arg1 -> Y, arg2 -> X
-        "            fSumX += arg2;\n"
-        "            fSumY += arg1;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+        "        fSumX += arg2;\n"
+        "        fSumY += arg1;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if( fCount < 1 )\n";
     ss << "        return CreateDoubleError(NoValue);\n";
     ss << "    fMeanX = fSumX / fCount;\n";
     ss << "    fMeanY = fSumY / fCount;\n";
-    GenerateRangeArgPair( 1, 2, vSubArguments, ss,
-        "        if(!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
-        "            fSumDeltaXDeltaY +=(arg2-fMeanX)*(arg1-fMeanY);\n"
-        "            fSumSqrDeltaX += (arg2-fMeanX)*(arg2-fMeanX);\n"
-        "        }\n"
+    GenerateRangeArgPair( 1, 2, vSubArguments, ss, SkipEmpty,
+        "        fSumDeltaXDeltaY +=(arg2-fMeanX)*(arg1-fMeanY);\n"
+        "        fSumSqrDeltaX += (arg2-fMeanX)*(arg2-fMeanX);\n"
         );
     ss << "    if(fSumSqrDeltaX == 0.0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
@@ -2347,25 +2271,19 @@ void OpInterceptSlopeBase::GenerateCode( outputstream &ss, const std::string &sS
     ss << "    double fSumDeltaXDeltaY = 0.0;\n";
     ss << "    double fSumSqrDeltaX = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if (!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
         // note that arg1 -> Y, arg2 -> X
-        "            fSumX += arg2;\n"
-        "            fSumY += arg1;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+        "        fSumX += arg2;\n"
+        "        fSumY += arg1;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if( fCount < 1 )\n";
     ss << "        return CreateDoubleError(NoValue);\n";
     ss << "    fMeanX = fSumX / fCount;\n";
     ss << "    fMeanY = fSumY / fCount;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if(!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
-        "            fSumDeltaXDeltaY +=(arg2-fMeanX)*(arg1-fMeanY);\n"
-        "            fSumSqrDeltaX += (arg2-fMeanX)*(arg2-fMeanX);\n"
-        "        }\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "        fSumDeltaXDeltaY +=(arg2-fMeanX)*(arg1-fMeanY);\n"
+        "        fSumSqrDeltaX += (arg2-fMeanX)*(arg2-fMeanX);\n"
         );
     ss << finalComputeCode;
     ss << "}\n";
@@ -2408,26 +2326,20 @@ void OpPearsonCovarBase::GenerateCode( outputstream &ss, const std::string &sSym
     ss << "    double fSumSqrDeltaX = 0.0;\n";
     ss << "    double fSumSqrDeltaY = 0.0;\n";
     ss << "    double fCount = 0.0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if (!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
         // note that arg1 -> Y, arg2 -> X
-        "            fSumX += arg2;\n"
-        "            fSumY += arg1;\n"
-        "            fCount += 1.0;\n"
-        "        }\n"
+        "        fSumX += arg2;\n"
+        "        fSumY += arg1;\n"
+        "        fCount += 1.0;\n"
         );
     ss << "    if( fCount < " << minimalCountValue <<" )\n";
     ss << "        return CreateDoubleError(NoValue);\n";
     ss << "    fMeanX = fSumX / fCount;\n";
     ss << "    fMeanY = fSumY / fCount;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if(!isnan(arg1) && !isnan(arg2))\n"
-        "        {\n"
-        "            fSumDeltaXDeltaY +=(arg2-fMeanX)*(arg1-fMeanY);\n"
-        "            fSumSqrDeltaX += (arg2-fMeanX)*(arg2-fMeanX);\n"
-        "            fSumSqrDeltaY += (arg1-fMeanY)*(arg1-fMeanY);\n"
-        "        }\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "        fSumDeltaXDeltaY +=(arg2-fMeanX)*(arg1-fMeanY);\n"
+        "        fSumSqrDeltaX += (arg2-fMeanX)*(arg2-fMeanX);\n"
+        "        fSumSqrDeltaY += (arg1-fMeanY)*(arg1-fMeanY);\n"
         );
     ss << finalComputeCode;
     ss << "}\n";

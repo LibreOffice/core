@@ -26,9 +26,8 @@ void OpSumX2MY2::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if( !isnan(arg1) && !isnan(arg2))\n"
-        "            tmp +=pow(arg1,2) - pow(arg2,2);\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, EmptyIsZero,
+        "        tmp +=pow(arg1,2) - pow(arg2,2);\n"
         );
     ss << "    return tmp;\n";
     ss << "}\n";
@@ -44,9 +43,8 @@ void OpSumX2PY2::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if( !isnan(arg1) && !isnan(arg2))\n"
-        "            tmp +=pow(arg1,2) + pow(arg2,2);\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, EmptyIsZero,
+        "        tmp +=pow(arg1,2) + pow(arg2,2);\n"
         );
     ss << "    return tmp;\n";
     ss << "}\n";
@@ -62,9 +60,8 @@ void OpSumXMY2::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "        if( !isnan(arg1) && !isnan(arg2))\n"
-        "            tmp +=pow((arg1-arg2),2);\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, EmptyIsZero,
+        "        tmp +=pow((arg1-arg2),2);\n"
         );
     ss << "    return tmp;\n";
     ss << "}\n";

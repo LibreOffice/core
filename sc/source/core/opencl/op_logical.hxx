@@ -22,19 +22,15 @@ class OpLogicalBinaryOperator : public Normal
     virtual bool canHandleMultiVector() const override { return true; }
     /// The C operator implementing the function.
     virtual const char* openclOperator() const = 0;
-    /// Default value when chaining the operator.
-    virtual const char* defaultOpenclValue() const = 0;
 };
 
 class OpAnd: public OpLogicalBinaryOperator
 {
 public:
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "And"; }
     virtual const char* openclOperator() const override { return "&&"; };
-    virtual const char* defaultOpenclValue() const override { return "true"; }
-    // AND() with a svSingleVectorRef pointing to an empty cell skips that cell.
-    // See ScInterpreter::ScAnd().
-    virtual const char* rangeEmptyCellValue() const override { return "1.0"; };
 };
 
 class OpOr: public OpLogicalBinaryOperator
@@ -42,7 +38,6 @@ class OpOr: public OpLogicalBinaryOperator
 public:
     virtual std::string BinFuncName() const override { return "Or"; }
     virtual const char* openclOperator() const override { return "||"; };
-    virtual const char* defaultOpenclValue() const override { return "false"; }
 };
 
 class OpNot: public Normal
@@ -58,7 +53,6 @@ class OpXor: public OpLogicalBinaryOperator
 public:
     virtual std::string BinFuncName() const override { return "Xor"; }
     virtual const char* openclOperator() const override { return "^"; };
-    virtual const char* defaultOpenclValue() const override { return "false"; }
 };
 
 class OpIf:public Normal

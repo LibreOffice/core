@@ -1229,9 +1229,8 @@ void OpSumSQ::GenSlidingWindowFunction(outputstream &ss,
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double sum = 0.0f, arg;\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if (!isnan(arg))\n"
-        "            sum += pown(arg, 2);\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        sum += pown(arg, 2);\n"
         );
     ss << "    return sum;\n";
     ss << "}";
@@ -1267,12 +1266,9 @@ void OpProduct::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double product=1.0;\n";
     ss << "    int count = 0;\n\n";
-    GenerateRangeArgs( vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "        {\n"
-        "            product = product*arg;\n"
-        "            ++count;\n"
-        "        }\n"
+    GenerateRangeArgs( vSubArguments, ss, SkipEmpty,
+        "        product = product*arg;\n"
+        "        ++count;\n"
         );
     ss << "    if(count == 0)\n";
     ss << "        return 0;\n";
@@ -1449,13 +1445,10 @@ void OpSeriesSum::GenSlidingWindowFunction(outputstream &ss,
     ss << "    var[1] = var1;\n";
     ss << "    var[2] = var2;\n";
     ss << "    int j = 0;\n";
-    GenerateRangeArg( 3, vSubArguments, ss,
+    GenerateRangeArg( 3, vSubArguments, ss, SkipEmpty,
         "        double coeff = arg;\n"
-        "        if (!isnan(coeff))\n"
-        "        {\n"
-        "            res = res + coeff * pow(var[0], var[1] + j * var[2]);\n"
-        "            ++j;\n"
-        "        }\n"
+        "        res = res + coeff * pow(var[0], var[1] + j * var[2]);\n"
+        "        ++j;\n"
         );
     ss << "    return res;\n";
     ss << "}";

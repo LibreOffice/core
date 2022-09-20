@@ -181,61 +181,72 @@ VectorRefStringsToZero::VectorRefStringsToZero( const ScCalcConfig& config, cons
     forceStringsToZero = true;
 }
 
-void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss )
+void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& vSubArguments,
+    outputstream& ss, EmptyArgType empty )
 {
     assert( arg < int( vSubArguments.size()));
     FormulaToken *token = vSubArguments[arg]->GetFormulaToken();
     if( token == nullptr )
         throw Unhandled( __FILE__, __LINE__ );
-    ss << "    double " << name << ";\n";
     if(token->GetOpCode() == ocPush)
     {
         if(token->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken* svr =
                 static_cast<const formula::SingleVectorRefToken *>(token);
-            ss << "    if (gid0 >= " << svr->GetArrayLength() << " || isnan(";
-            ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        " << name << " = " << rangeEmptyCellValue() << ";\n";
-            ss << "    else\n";
+            ss << "    double " << name << " = NAN;\n";
+            ss << "    if (gid0 < " << svr->GetArrayLength() << ")\n";
             ss << "        " << name << " = ";
             ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << ";\n";
+            switch( empty )
+            {
+                case EmptyIsZero:
+                    ss << "    if( isnan( " << name << " ))\n";
+                    ss << "        " << name << " = 0;\n";
+                    break;
+                case EmptyIsNan:
+                    break;
+                case SkipEmpty:
+                    abort();
+                    break;
+            }
         }
         else if(token->GetType() == formula::svDouble)
-            ss << "    " << name << " = " << token->GetDouble() << ";\n";
+            ss << "    double " << name << " = " << token->GetDouble() << ";\n";
         else if(token->GetType() == formula::svString)
         {
             assert( dynamic_cast<DynamicKernelStringToZeroArgument*>(vSubArguments[arg].get()));
-            ss << "    " << name << " = 0.0;\n";
+            ss << "    double " << name << " = 0.0;\n";
         }
         else
             throw Unhandled( __FILE__, __LINE__ );
     }
     else
     {
-        ss << "    " << name << " = ";
+        ss << "    double " << name << " = ";
         ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << ";\n";
     }
 }
 
-void SlidingFunctionBase::GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss )
+void SlidingFunctionBase::GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss,
+    EmptyArgType empty )
 {
     char buf[ 30 ];
     sprintf( buf, "arg%d", arg );
-    GenerateArg( buf, arg, vSubArguments, ss );
+    GenerateArg( buf, arg, vSubArguments, ss, empty );
 }
 
 void SlidingFunctionBase::GenerateArgWithDefault( const char* name, int arg, double def,
-    SubArguments& vSubArguments, outputstream& ss )
+    SubArguments& vSubArguments, outputstream& ss, EmptyArgType empty )
 {
     if( arg < int(vSubArguments.size()))
-        GenerateArg( name, arg, vSubArguments, ss );
+        GenerateArg( name, arg, vSubArguments, ss, empty );
     else
         ss << "    double " << name << " = " << def << ";\n";
 }
 
 void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArguments& vSubArguments,
-    outputstream& ss, const char* code )
+    outputstream& ss, EmptyArgType empty, const char* code )
 {
     assert( firstArg >= 0 );
     assert( firstArg <= lastArg );
@@ -257,6 +268,19 @@ void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArgum
                 ss << "        double arg = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
+                switch( empty )
+                {
+                    case EmptyIsZero:
+                        ss << "        if( isnan( arg ))\n";
+                        ss << "            arg = 0;\n";
+                        break;
+                    case EmptyIsNan:
+                        break;
+                    case SkipEmpty:
+                        ss << "        if( isnan( arg ))\n";
+                        ss << "            continue;\n";
+                        break;
+                }
                 ss << code;
                 ss << "    }\n";
             }
@@ -268,7 +292,23 @@ void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArgum
                 ss << "    {\n";
                 ss << "        double arg = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
-                ss << code;
+                switch( empty )
+                {
+                    case EmptyIsZero:
+                        ss << "        if( isnan( arg ))\n";
+                        ss << "            arg = 0;\n";
+                        ss << code;
+                        break;
+                    case EmptyIsNan:
+                        ss << code;
+                        break;
+                    case SkipEmpty:
+                        ss << "        if( !isnan( arg ))\n";
+                        ss << "        {\n";
+                        ss << code;
+                        ss << "        }\n";
+                        break;
+                }
                 ss << "    }\n";
             }
             else if(token->GetType() == formula::svDouble)
@@ -301,19 +341,19 @@ void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArgum
 }
 
 void SlidingFunctionBase::GenerateRangeArgs( SubArguments& vSubArguments,
-    outputstream& ss, const char* code )
+    outputstream& ss, EmptyArgType empty, const char* code )
 {
-    GenerateRangeArgs( 0, vSubArguments.size() - 1, vSubArguments, ss, code );
+    GenerateRangeArgs( 0, vSubArguments.size() - 1, vSubArguments, ss, empty, code );
 }
 
 void SlidingFunctionBase::GenerateRangeArg( int arg, SubArguments& vSubArguments,
-    outputstream& ss, const char* code )
+    outputstream& ss, EmptyArgType empty, const char* code )
 {
-    GenerateRangeArgs( arg, arg, vSubArguments, ss, code );
+    GenerateRangeArgs( arg, arg, vSubArguments, ss, empty, code );
 }
 
 void SlidingFunctionBase::GenerateRangeArgPair( int arg1, int arg2, SubArguments& vSubArguments,
-    outputstream& ss, const char* code, const char* firstElementDiff )
+    outputstream& ss, EmptyArgType empty, const char* code, const char* firstElementDiff )
 {
     assert( arg1 >= 0 && arg1 < int (vSubArguments.size()));
     assert( arg2 >= 0 && arg2 < int (vSubArguments.size()));
@@ -345,19 +385,50 @@ void SlidingFunctionBase::GenerateRangeArgPair( int arg1, int arg2, SubArguments
         throw Unhandled( __FILE__, __LINE__ );
     }
 
-    GenerateDoubleVectorLoopHeader( ss,
-        pDVR1->GetArrayLength() < pDVR2->GetArrayLength() ? pDVR1 : pDVR2,
-        firstElementDiff );
+    // If either of the ranges ends with empty cells, it will not include those last
+    // nan values (its GetArrayLength() will be less than its GetRefRowSize().
+    // If we skip empty cells, just iterate until both ranges have elements, but if
+    // we need to iterate even over empty cells, so use the longer one.
+    // FIXME: If both ranges end with empty cells, this does not actually iterate
+    // over all empty cells.
+    const formula::DoubleVectorRefToken* loopDVR;
+    bool checkBounds;
+    if( empty == SkipEmpty )
+    {
+        loopDVR = pDVR1->GetArrayLength() < pDVR2->GetArrayLength() ? pDVR1 : pDVR2;
+        checkBounds = false;
+    }
+    else
+    {
+        loopDVR = pDVR1->GetArrayLength() > pDVR2->GetArrayLength() ? pDVR1 : pDVR2;
+        checkBounds = true;
+    }
+    GenerateDoubleVectorLoopHeader( ss, loopDVR, firstElementDiff );
     ss << "        double arg1 = ";
-    ss << vSubArguments[arg1]->GenSlidingWindowDeclRef(true) << ";\n";
+    ss << vSubArguments[arg1]->GenSlidingWindowDeclRef(!checkBounds) << ";\n";
     ss << "        double arg2 = ";
-    ss << vSubArguments[arg2]->GenSlidingWindowDeclRef(true) << ";\n";
+    ss << vSubArguments[arg2]->GenSlidingWindowDeclRef(!checkBounds) << ";\n";
+    switch( empty )
+    {
+        case EmptyIsZero:
+            ss << "        if( isnan( arg1 ))\n";
+            ss << "            arg1 = 0;\n";
+            ss << "        if( isnan( arg2 ))\n";
+            ss << "            arg2 = 0;\n";
+            break;
+        case EmptyIsNan:
+            break;
+        case SkipEmpty:
+            ss << "        if( isnan( arg1 ) || isnan( arg2 ))\n";
+            ss << "            continue;\n";
+            break;
+    }
     ss << code;
     ss << "    }\n";
 }
 
 void SlidingFunctionBase::GenerateRangeArgElement( const char* name, int arg, const char* element,
-    SubArguments& vSubArguments, outputstream& ss )
+    SubArguments& vSubArguments, outputstream& ss, EmptyArgType empty )
 {
     assert( arg >= 0 && arg < int (vSubArguments.size()));
     FormulaToken *token = vSubArguments[arg]->GetFormulaToken();
@@ -367,7 +438,7 @@ void SlidingFunctionBase::GenerateRangeArgElement( const char* name, int arg, co
         throw Unhandled( __FILE__, __LINE__ );
     const formula::DoubleVectorRefToken* pDVR =
         static_cast<const formula::DoubleVectorRefToken *>(token);
-    ss << "    double " << name << " = " << rangeEmptyCellValue() << ";\n";
+    ss << "    double " << name << " = NAN;\n";
     ss << "    {\n";
     // GenSlidingWindowDeclRef() may refer to 'i' variable.
     ss << "        int i = 0;\n";
@@ -377,6 +448,18 @@ void SlidingFunctionBase::GenerateRangeArgElement( const char* name, int arg, co
     ss << element << " < " << pDVR->GetArrayLength() << " )\n";
     ss << "            " << name << " = " << vSubArguments[arg]->GenSlidingWindowDeclRef(true) << ";\n";
     ss << "    }\n";
+    switch( empty )
+    {
+        case EmptyIsZero:
+            ss << "        if( isnan( " << name << " ))\n";
+            ss << "            " << name << " = 0;\n";
+            break;
+        case EmptyIsNan:
+            break;
+        case SkipEmpty:
+            abort();
+            break;
+    }
 }
 
 void SlidingFunctionBase::GenerateDoubleVectorLoopHeader( outputstream& ss,

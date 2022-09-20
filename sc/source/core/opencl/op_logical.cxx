@@ -23,11 +23,31 @@ void OpLogicalBinaryOperator::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    bool t = " << defaultOpenclValue() << ";\n";
+    ss << "    bool t = false;\n";
     for(size_t j = 0; j< vSubArguments.size(); j++)
     {
         GenerateArg( j, vSubArguments, ss );
         ss << "    t = t " << openclOperator() << " (arg" << j << " != 0);\n";
+    }
+    ss << "    return t;\n";
+    ss << "}\n";
+}
+
+void OpAnd::GenSlidingWindowFunction(outputstream &ss,
+    const std::string &sSymName, SubArguments &vSubArguments)
+{
+    CHECK_PARAMETER_COUNT( 1, 30 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    bool t = true;\n";
+    for(size_t j = 0; j< vSubArguments.size(); j++)
+    {
+        GenerateArg( j, vSubArguments, ss, EmptyIsNan );
+        // AND() with a svSingleVectorRef pointing to an empty cell skips that cell.
+        // See ScInterpreter::ScAnd().
+        ss << "    if( !isnan( arg" << j << " ))\n";
+        ss << "        t = t " << openclOperator() << " (arg" << j << " != 0);\n";
     }
     ss << "    return t;\n";
     ss << "}\n";

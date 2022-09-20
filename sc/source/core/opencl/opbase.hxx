@@ -341,45 +341,53 @@ public:
     virtual void GenSlidingWindowFunction( outputstream&,
         const std::string&, SubArguments& ) = 0;
 protected:
-    // generate code for "double <name> = <value>;" from vSubArguments, svDoubleVectorRef is not supported
-    void GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss );
-    // overload, variable will be named "arg<arg>"
-    void GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss );
-    // generate code for "double <name> = <value>;" from vSubArguments, if it exists,
-    // otherwise set to <def>
-    void GenerateArgWithDefault( const char* name, int arg, double def, SubArguments& vSubArguments,
-        outputstream& ss );
+    // This enum controls how the generated code will handle empty cells in ranges.
+    enum EmptyArgType
+    {
+        EmptyIsZero, // empty cells become 0.0
+        EmptyIsNan,  // empty cells become NAN, use isnan() to check in code
+        SkipEmpty    // empty cells will be skipped
+    };
     void GenerateFunctionDeclaration( const std::string& sSymName,
         SubArguments& vSubArguments, outputstream& ss );
+    // Generate code for "double <name> = <value>;" from vSubArguments, svDoubleVectorRef is not supported.
+    static void GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss,
+        EmptyArgType empty = EmptyIsZero );
+    // overload, variable will be named "arg<arg>"
+    static void GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss,
+        EmptyArgType empty = EmptyIsZero );
+    // generate code for "double <name> = <value>;" from vSubArguments, if it exists,
+    // otherwise set to <def>
+    static void GenerateArgWithDefault( const char* name, int arg, double def, SubArguments& vSubArguments,
+        outputstream& ss, EmptyArgType empty = EmptyIsZero );
     // Generate code that will handle all arguments firstArg-lastArg (zero-based, inclusive),
     // including range arguments (svDoubleVectorRef) and each value will be processed by 'code',
-    // value will be named "arg". There is no isnan(arg) checking.
+    // value will be named "arg".
     static void GenerateRangeArgs( int firstArg, int lastArg, SubArguments& vSubArguments,
-        outputstream& ss, const char* code );
+        outputstream& ss, EmptyArgType empty, const char* code );
     // overload, handle all arguments
-    static void GenerateRangeArgs( SubArguments& vSubArguments, outputstream& ss, const char* code );
+    static void GenerateRangeArgs( SubArguments& vSubArguments, outputstream& ss,
+        EmptyArgType empty, const char* code );
     // overload, handle the given argument
-    static void GenerateRangeArg( int arg, SubArguments& vSubArguments, outputstream& ss, const char* code );
+    static void GenerateRangeArg( int arg, SubArguments& vSubArguments, outputstream& ss,
+        EmptyArgType empty, const char* code );
     // Overload.
     // Both arguments must be svDoubleRef of the same size.
     // If 'firstElementDiff' is set, the loop start will be offset by '+ firstElementDiff'.
     void GenerateRangeArg( int arg1, int arg2, SubArguments& vSubArguments,
-        outputstream& ss, const char* code, const char* firstElementDiff = nullptr );
+        outputstream& ss, EmptyArgType empty, const char* code, const char* firstElementDiff = nullptr );
     // Generate code that will handle the given two arguments in one loop where n-th element of arg1 and arg2
     // will be handled at the same time, named 'arg1' and 'arg2'.
     // Both arguments must be svDoubleRef of the same size.
     // If 'firstElementDiff' is set, the loop start will be offset by '+ firstElementDiff'.
     static void GenerateRangeArgPair( int arg1, int arg2, SubArguments& vSubArguments,
-        outputstream& ss, const char* code, const char* firstElementDiff = nullptr );
+        outputstream& ss, EmptyArgType empty, const char* code, const char* firstElementDiff = nullptr );
     // Generate code for "double <name> = range[<element>]" from vSubArguments.
     // The argument must be svDoubleRef.
-    // There is no isnan(arg) checking.
-    void GenerateRangeArgElement( const char* name, int arg, const char* element,
-        SubArguments& vSubArguments, outputstream& ss );
+    static void GenerateRangeArgElement( const char* name, int arg, const char* element,
+        SubArguments& vSubArguments, outputstream& ss, EmptyArgType empty );
     static void GenerateDoubleVectorLoopHeader( outputstream& ss,
         const formula::DoubleVectorRefToken* pDVR, const char* firstElementDiff );
-    // The default value when there is an empty cell in a range (or it's out of bounds).
-    virtual const char* rangeEmptyCellValue() const { return "0.0"; };
 };
 
 class Normal : public SlidingFunctionBase

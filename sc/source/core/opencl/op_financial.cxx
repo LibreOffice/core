@@ -347,9 +347,8 @@ void Fvschedule::GenSlidingWindowFunction(
     ss << "int gid0 = get_global_id(0);\n";
     GenerateArg( 0, vSubArguments, ss );
     ss << "\t";
-    GenerateRangeArg( 1, vSubArguments, ss,
-        "        if(!isnan(arg))\n"
-        "            tmp *= arg + 1;\n"
+    GenerateRangeArg( 1, vSubArguments, ss, SkipEmpty,
+        "        tmp *= arg + 1;\n"
         );
     ss << "\t";
     ss << "return (double)tmp * arg0";
@@ -420,13 +419,10 @@ void OpIRR::GenSlidingWindowFunction(outputstream &ss,
     ss << "    while (fEps > Epsilon && nItCount < 20)\n";
     ss << "    {\n";
     ss << "        nCount = 0.0; fNumerator = 0.0;  fDenominator = 0.0;\n";
-    GenerateRangeArg( 0, vSubArguments, ss,
-        "            if (!isnan(arg))\n"
-        "            {\n"
-        "                fNumerator += arg / pow(1.0 + x, nCount);\n"
-        "                fDenominator+=-1*nCount*arg/pow(1.0+x,nCount+1.0);\n"
-        "                nCount += 1;\n"
-        "            }\n"
+    GenerateRangeArg( 0, vSubArguments, ss, SkipEmpty,
+        "            fNumerator += arg / pow(1.0 + x, nCount);\n"
+        "            fDenominator+=-1*nCount*arg/pow(1.0+x,nCount+1.0);\n"
+        "            nCount += 1;\n"
         );
     ss << "        xNew = x - fNumerator / fDenominator;\n";
     ss << "        fEps = fabs(xNew - x);\n";
@@ -453,10 +449,9 @@ void XNPV::GenSlidingWindowFunction(
     ss << "    double result = 0.0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
     GenerateArg( "rate", 0, vSubArguments, ss );
-    GenerateRangeArgElement( "dateNull", 2, "0", vSubArguments, ss );
-    GenerateRangeArgPair( 1, 2, vSubArguments, ss,
-        "        if( !isnan(arg1) && !isnan(arg2))\n"
-        "            result += arg1/(pow((rate+1),(arg2-dateNull)/365));\n"
+    GenerateRangeArgElement( "dateNull", 2, "0", vSubArguments, ss, EmptyIsZero );
+    GenerateRangeArgPair( 1, 2, vSubArguments, ss, SkipEmpty,
+        "        result += arg1/(pow((rate+1),(arg2-dateNull)/365));\n"
         );
     ss << "    return result;\n";
     ss << "}";
@@ -541,23 +536,20 @@ void OpMIRR::GenSlidingWindowFunction(
     ss << "int nCount = 0;\n\t";
     ss << "bool bHasPosValue = false;\n";
     ss << "bool bHasNegValue = false;\n";
-    GenerateRangeArg( 0, vSubArguments, ss,
-        "        if (!isnan(arg))\n"
+    GenerateRangeArg( 0, vSubArguments, ss, SkipEmpty,
+        "        if (arg > 0.0)\n"
         "        {\n"
-        "            if (arg > 0.0)\n"
-        "            {\n"
-        "                NPV_reinvest += arg * Pow_reinvest;\n"
-        "                bHasPosValue = true;\n"
-        "            }\n"
-        "            else if (arg < 0.0)\n"
-        "            {\n"
-        "                NPV_invest += arg * Pow_invest;\n"
-        "                bHasNegValue = true;\n"
-        "            }\n"
-        "            Pow_reinvest /= reinvest;\n"
-        "            Pow_invest /= invest;\n"
-        "            nCount++;\n"
+        "            NPV_reinvest += arg * Pow_reinvest;\n"
+        "            bHasPosValue = true;\n"
         "        }\n"
+        "        else if (arg < 0.0)\n"
+        "        {\n"
+        "             NPV_invest += arg * Pow_invest;\n"
+        "             bHasNegValue = true;\n"
+        "        }\n"
+        "        Pow_reinvest /= reinvest;\n"
+        "        Pow_invest /= invest;\n"
+        "        nCount++;\n"
         );
     ss << "if ( !( bHasPosValue && bHasNegValue ) )\n";
     ss << "    return CreateDoubleError(IllegalArgument);\n";
@@ -867,17 +859,14 @@ void OpNPV::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int nCount = 1;\n";
     GenerateArg( 0, vSubArguments, ss );
-    GenerateRangeArgs( 1, vSubArguments.size() - 1, vSubArguments, ss,
+    GenerateRangeArgs( 1, vSubArguments.size() - 1, vSubArguments, ss, SkipEmpty,
         "        double temp1=1.0;\n"
-        "        if (!isnan(arg))\n"
-        "        {\n"
-        "            for(int i=1;i<nCount;i+=2)\n"
-        "                temp1*=pow(1.0f + arg0,2);\n"
-        "            if(nCount%2)\n"
-        "                temp1*=1.0f + arg0;\n"
-        "            tmp += arg / temp1;\n"
+        "        for(int i=1;i<nCount;i+=2)\n"
+        "            temp1*=pow(1.0f + arg0,2);\n"
+        "        if(nCount%2)\n"
+        "            temp1*=1.0f + arg0;\n"
+        "        tmp += arg / temp1;\n"
         "        nCount += 1;\n"
-        "        }\n"
         );
     ss << "    return tmp;\n";
     ss << "}";
@@ -1862,8 +1851,8 @@ void OpXirr::GenSlidingWindowFunction(outputstream &ss,
     ss << "    bool bContLoop = false;\n";
     ss << "    bool bResultRateScanEnd = false;\n";
     // Make 'V_0' and 'D_0' be the first elements of arguments 0 and 1.
-    GenerateRangeArgElement( "V_0", 0, "0", vSubArguments, ss );
-    GenerateRangeArgElement( "D_0", 1, "0", vSubArguments, ss );
+    GenerateRangeArgElement( "V_0", 0, "0", vSubArguments, ss, EmptyIsZero );
+    GenerateRangeArgElement( "D_0", 1, "0", vSubArguments, ss, EmptyIsZero );
     ss << "    do\n";
     ss << "    {\n";
     ss << "        if (nIterScan >=1)\n";
@@ -1872,18 +1861,14 @@ void OpXirr::GenSlidingWindowFunction(outputstream &ss,
     ss << "        {\n";
     ss << "            double r = fResultRate + 1;\n";
     ss << "            fResultValue = V_0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "                if(!isnan(arg1) && !isnan(arg2))\n"
-        "                    fResultValue += arg1/pow(r,(arg2 - D_0)/365.0);\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "                fResultValue += arg1/pow(r,(arg2 - D_0)/365.0);\n"
         , "1" // start from 2nd element
         );
     ss << "            double fResultValue2 = 0;\n";
-    GenerateRangeArgPair( 0, 1, vSubArguments, ss,
-        "                if(!isnan(arg1) && !isnan(arg2))\n"
-        "                {\n"
-        "                    double E_i = (arg2 - D_0)/365.0;\n"
-        "                    fResultValue2 -= E_i * arg1 / pow(r,E_i + 1.0);\n"
-        "                }\n"
+    GenerateRangeArgPair( 0, 1, vSubArguments, ss, SkipEmpty,
+        "                double E_i = (arg2 - D_0)/365.0;\n"
+        "                fResultValue2 -= E_i * arg1 / pow(r,E_i + 1.0);\n"
         , "1" // start from 2nd element
         );
     ss << "            double fNewRate = fResultRate - fResultValue / fResultValue2;\n";
