@@ -2866,6 +2866,14 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         rPropSet->getPropertyValue("LayoutSize") >>= aLayoutSize;
     }
 
+    bool bUseLayoutSize = true;
+    if (bSyncWidth && bSyncHeight)
+    {
+        // This is broken, width depends on height and height depends on width. Don't use the
+        // invalid layout size we got.
+        bUseLayoutSize = false;
+    }
+
     // svg:width
     sal_Int16 nWidthType = SizeType::FIX;
     if( xPropSetInfo->hasPropertyByName( gsWidthType ) )
@@ -2891,7 +2899,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
         else
         {
-            if (nRelWidth > 0 || bSyncWidth)
+            if ((nRelWidth > 0 || bSyncWidth) && bUseLayoutSize)
             {
                 // Relative width: write the layout size for the fallback width.
                 sValue.setLength(0);
@@ -2947,7 +2955,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
         else
         {
-            if (nRelHeight > 0 || bSyncHeight)
+            if ((nRelHeight > 0 || bSyncHeight) && bUseLayoutSize)
             {
                 // Relative height: write the layout size for the fallback height.
                 sValue.setLength(0);
