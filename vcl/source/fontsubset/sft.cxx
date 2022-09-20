@@ -1733,12 +1733,11 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
                           sal_uInt8 const *encoding,
                           int            nGlyphs)
 {
-    TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;
     int i;
     SFErrCodes res;
 
-    TrueTypeCreatorNewEmpty(T_true, &ttcr);
+    TrueTypeCreator ttcr(T_true);
 
     /**                       name                         **/
 
@@ -1818,18 +1817,17 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
     else
         post = TrueTypeTableNew_post(0x00030000, 0, 0, 0, 0);
 
-    AddTable(ttcr, name); AddTable(ttcr, maxp); AddTable(ttcr, hhea);
-    AddTable(ttcr, head); AddTable(ttcr, glyf); AddTable(ttcr, cmap);
-    AddTable(ttcr, cvt ); AddTable(ttcr, prep); AddTable(ttcr, fpgm);
-    AddTable(ttcr, post); AddTable(ttcr, os2);
+    ttcr.AddTable(name); ttcr.AddTable(maxp); ttcr.AddTable(hhea);
+    ttcr.AddTable(head); ttcr.AddTable(glyf); ttcr.AddTable(cmap);
+    ttcr.AddTable(cvt ); ttcr.AddTable(prep); ttcr.AddTable(fpgm);
+    ttcr.AddTable(post); ttcr.AddTable(os2);
 
-    res = StreamToMemory(ttcr, rOutBuffer);
+    res = ttcr.StreamToMemory(rOutBuffer);
 #if OSL_DEBUG_LEVEL > 1
     SAL_WARN_IF(res != SFErrCodes::Ok, "vcl.fonts", "StreamToMemory: error code: "
             << (int) res << ".");
 #endif
 
-    TrueTypeCreatorDispose(ttcr);
     free(gID);
 
     return res;
@@ -2084,7 +2082,6 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                            sal_uInt8          *encoding,
                            int            nGlyphs)
 {
-    TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr;
     int i;
     SFErrCodes res;
@@ -2098,7 +2095,7 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 
     assert(psname != nullptr);
 
-    TrueTypeCreatorNewEmpty(T_true, &ttcr);
+    TrueTypeCreator ttcr(T_true);
 
     /*                        head                          */
     sal_uInt32 nTableSize;
@@ -2140,12 +2137,11 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
         gID[i] = static_cast<sal_uInt16>(glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf));
     }
 
-    AddTable(ttcr, head); AddTable(ttcr, hhea); AddTable(ttcr, maxp); AddTable(ttcr, cvt);
-    AddTable(ttcr, prep); AddTable(ttcr, glyf); AddTable(ttcr, fpgm);
+    ttcr.AddTable(head); ttcr.AddTable(hhea); ttcr.AddTable(maxp); ttcr.AddTable(cvt);
+    ttcr.AddTable(prep); ttcr.AddTable(glyf); ttcr.AddTable(fpgm);
 
     std::vector<sal_uInt8> aOutBuffer;
-    if ((res = StreamToMemory(ttcr, aOutBuffer)) != SFErrCodes::Ok) {
-        TrueTypeCreatorDispose(ttcr);
+    if ((res = ttcr.StreamToMemory(aOutBuffer)) != SFErrCodes::Ok) {
         free(gID);
         return res;
     }
@@ -2181,7 +2177,6 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "end readonly def\n");
 
     fprintf(outf, "FontName currentdict end definefont pop\n");
-    TrueTypeCreatorDispose(ttcr);
     free(gID);
     return SFErrCodes::Ok;
 }

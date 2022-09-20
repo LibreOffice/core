@@ -27,7 +27,6 @@
 #include <sal/log.hxx>
 
 #include "ttcr.hxx"
-#include "list.h"
 #include <string.h>
 
 namespace vcl
@@ -36,11 +35,6 @@ namespace vcl
 /*
  * Private Data Types
  */
-
-    struct TrueTypeCreator {
-        sal_uInt32 tag;                         /**< TrueType file tag */
-        list   tables;                      /**< List of table tags and pointers */
-    };
 
 namespace {
 
@@ -145,40 +139,36 @@ static void *scalloc(sal_uInt32 n, sal_uInt32 size)
  * Public functions
  */
 
-void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
+TrueTypeCreator::TrueTypeCreator(sal_uInt32 _tag)
 {
-    TrueTypeCreator* ptr = static_cast<TrueTypeCreator*>(smalloc(sizeof(TrueTypeCreator)));
+    this->tables = listNewEmpty();
+    listSetElementDtor(this->tables, TrueTypeTableDispose);
 
-    ptr->tables = listNewEmpty();
-    listSetElementDtor(ptr->tables, TrueTypeTableDispose);
-
-    ptr->tag = tag;
-
-    *_this = ptr;
+    this->tag = _tag;
 }
 
-void AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
+void TrueTypeCreator::AddTable(TrueTypeTable *table)
 {
     if (table != nullptr) {
-        listAppend(_this->tables, table);
+        listAppend(this->tables, table);
     }
 }
 
-void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
+void TrueTypeCreator::RemoveTable(sal_uInt32 tableTag)
 {
-    if (!listCount(_this->tables))
+    if (!listCount(this->tables))
         return;
 
-    listToFirst(_this->tables);
+    listToFirst(this->tables);
     int done = 0;
     do {
-        if (static_cast<TrueTypeTable *>(listCurrent(_this->tables))->tag == tag)
+        if (static_cast<TrueTypeTable *>(listCurrent(this->tables))->tag == tableTag)
         {
-            listRemove(_this->tables);
+            listRemove(this->tables);
         }
         else
         {
-            if (listNext(_this->tables))
+            if (listNext(this->tables))
             {
                 done = 1;
             }
@@ -186,31 +176,29 @@ void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
     } while (!done);
 }
 
-static void ProcessTables(TrueTypeCreator *);
-
-SFErrCodes StreamToMemory(TrueTypeCreator *_this, std::vector<sal_uInt8>& rOutBuffer)
+SFErrCodes TrueTypeCreator::StreamToMemory(std::vector<sal_uInt8>& rOutBuffer)
 {
     sal_uInt16 searchRange=1, entrySelector=0, rangeShift;
     sal_uInt32 s, offset, checkSumAdjustment = 0;
     sal_uInt32 *p;
     sal_uInt8 *head = nullptr;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
-    if (listIsEmpty(_this->tables)) return SFErrCodes::TtFormat;
+    if (listIsEmpty(this->tables)) return SFErrCodes::TtFormat;
 
-    ProcessTables(_this);
+    ProcessTables();
 
     /* ProcessTables() adds 'loca' and 'hmtx' */
 
-    sal_uInt16 numTables = listCount(_this->tables);
+    sal_uInt16 numTables = listCount(this->tables);
 
     TableEntry* te = static_cast<TableEntry*>(scalloc(numTables, sizeof(TableEntry)));
     TableEntry* e = te;
 
-    listToFirst(_this->tables);
+    listToFirst(this->tables);
     do {
-        GetRawData(static_cast<TrueTypeTable *>(listCurrent(_this->tables)), &e->data, &e->length, &e->tag);
+        GetRawData(static_cast<TrueTypeTable *>(listCurrent(this->tables)), &e->data, &e->length, &e->tag);
         ++e;
-    } while (listNext(_this->tables));
+    } while (listNext(this->tables));
 
     qsort(te, numTables, sizeof(TableEntry), TableEntryCompareF);
 
@@ -234,7 +222,7 @@ SFErrCodes StreamToMemory(TrueTypeCreator *_this, std::vector<sal_uInt8>& rOutBu
     sal_uInt8* ttf = rOutBuffer.data();
 
     /* Offset Table */
-    PutUInt32(_this->tag, ttf, 0);
+    PutUInt32(this->tag, ttf, 0);
     PutUInt16(numTables, ttf, 4);
     PutUInt16(searchRange, ttf, 6);
     PutUInt16(entrySelector, ttf, 8);
@@ -265,12 +253,12 @@ SFErrCodes StreamToMemory(TrueTypeCreator *_this, std::vector<sal_uInt8>& rOutBu
     return SFErrCodes::Ok;
 }
 
-SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
+SFErrCodes TrueTypeCreator::StreamToFile(const char* fname)
 {
     SFErrCodes r;
     std::vector<sal_uInt8> aOutBuffer;
 
-    if ((r = StreamToMemory(_this, aOutBuffer)) != SFErrCodes::Ok) return r;
+    if ((r = StreamToMemory(aOutBuffer)) != SFErrCodes::Ok) return r;
     r = SFErrCodes::BadFile;
     if (fname)
     {
@@ -1198,17 +1186,17 @@ sal_uInt32 glyfCount(const TrueTypeTable *table)
     return listCount(static_cast<list>(table->data));
 }
 
-static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
+TrueTypeTable *TrueTypeCreator::FindTable(sal_uInt32 tableTag)
 {
-    if (listIsEmpty(tt->tables)) return nullptr;
+    if (listIsEmpty(this->tables)) return nullptr;
 
-    listToFirst(tt->tables);
+    listToFirst(this->tables);
 
     do {
-        if (static_cast<TrueTypeTable *>(listCurrent(tt->tables))->tag == tag) {
-            return static_cast<TrueTypeTable*>(listCurrent(tt->tables));
+        if (static_cast<TrueTypeTable *>(listCurrent(this->tables))->tag == tableTag) {
+            return static_cast<TrueTypeTable*>(listCurrent(this->tables));
         }
-    } while (listNext(tt->tables));
+    } while (listNext(this->tables));
 
     return nullptr;
 }
@@ -1228,7 +1216,7 @@ static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
  *   in 'hhea' table
  *
  */
-static void ProcessTables(TrueTypeCreator *tt)
+void TrueTypeCreator::ProcessTables()
 {
     TrueTypeTable *glyf, *loca, *head, *maxp, *hhea;
     list glyphlist;
@@ -1243,7 +1231,7 @@ static void ProcessTables(TrueTypeCreator *tt)
     int nlsb = 0;
     sal_uInt32 *gid;                        /* array of old glyphIDs */
 
-    glyf = FindTable(tt, T_glyf);
+    glyf = FindTable(T_glyf);
     glyphlist = static_cast<list>(glyf->data);
     nGlyphs = listCount(glyphlist);
     if (!nGlyphs)
@@ -1253,8 +1241,8 @@ static void ProcessTables(TrueTypeCreator *tt)
     }
     gid = static_cast<sal_uInt32*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
 
-    RemoveTable(tt, T_loca);
-    RemoveTable(tt, T_hmtx);
+    RemoveTable(T_loca);
+    RemoveTable(T_hmtx);
 
     /* XXX Need to make sure that composite glyphs do not break during glyph renumbering */
 
@@ -1394,9 +1382,9 @@ static void ProcessTables(TrueTypeCreator *tt)
     static_cast<tdata_loca *>(loca->data)->ptr = locaPtr;
     static_cast<tdata_loca *>(loca->data)->nbytes = locaLen;
 
-    AddTable(tt, loca);
+    AddTable(loca);
 
-    head = FindTable(tt, T_head);
+    head = FindTable(T_head);
     sal_uInt8* const pHeadData = static_cast<sal_uInt8*>(head->data);
     PutInt16(xMin, pHeadData, HEAD_xMin_offset);
     PutInt16(yMin, pHeadData, HEAD_yMin_offset);
@@ -1404,7 +1392,7 @@ static void ProcessTables(TrueTypeCreator *tt)
     PutInt16(yMax, pHeadData, HEAD_yMax_offset);
     PutInt16(indexToLocFormat, pHeadData, HEAD_indexToLocFormat_offset);
 
-    maxp = FindTable(tt, T_maxp);
+    maxp = FindTable(T_maxp);
 
     sal_uInt8* const pMaxpData = static_cast<sal_uInt8*>(maxp->data);
     PutUInt16(static_cast<sal_uInt16>(nGlyphs), pMaxpData, MAXP_numGlyphs_offset);
@@ -1416,7 +1404,7 @@ static void ProcessTables(TrueTypeCreator *tt)
     /*
      * Generate an htmx table and update hhea table
      */
-    hhea = FindTable(tt, T_hhea); assert(hhea != nullptr);
+    hhea = FindTable(T_hhea); assert(hhea != nullptr);
     hheaPtr = static_cast<sal_uInt8 *>(hhea->data);
     if (nGlyphs > 2) {
         for (i = nGlyphs - 1; i > 0; i--) {
@@ -1439,25 +1427,24 @@ static void ProcessTables(TrueTypeCreator *tt)
         }
     }
 
-    AddTable(tt, TrueTypeTableNew(T_hmtx, hmtxSize, hmtxPtr));
+    AddTable(TrueTypeTableNew(T_hmtx, hmtxSize, hmtxPtr));
     PutUInt16(static_cast<sal_uInt16>(nGlyphs - nlsb), hheaPtr, 34);
     free(hmtxPtr);
     free(met);
+}
+
+/**
+ * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
+ */
+TrueTypeCreator::~TrueTypeCreator()
+{
+    listDispose(this->tables);
 }
 
 } // namespace vcl
 
 extern "C"
 {
-    /**
-     * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
-     */
-     void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this)
-    {
-        listDispose(_this->tables);
-        free(_this);
-    }
-
     /**
      * Destructor for the TrueTypeTable object.
      */
