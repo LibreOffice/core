@@ -148,13 +148,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testOptimalHeightReset)
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf123026_optimalRowHeight)
 {
     createScDoc("xlsx/tdf123026_optimalRowHeight.xlsx");
-
-    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
-    dispatchCommand(
-        mxComponent, ".uno:SetOptimalRowHeight",
-        comphelper::InitPropertySequence({ { "aExtraHeight", uno::Any(sal_uInt16(0)) } }));
-    Scheduler::ProcessEventsToIdle();
-
     SCTAB nTab = 0;
     SCROW nRow = 4;
     int nHeight = convertTwipToMm100(getScDoc()->GetRowHeight(nRow, nTab, false));

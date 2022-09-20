@@ -457,10 +457,10 @@ public:
         ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY,
         const ::std::vector<TabRanges>* pTabRangesArray);
 
-    void update();
+    void update(const bool bOnlyUsedRows = false);
 
 private:
-    void updateAll();
+    void updateAll(const bool bOnlyUsedRows);
 
 private:
     ScDocument& mrDoc;

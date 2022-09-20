@@ -1615,12 +1615,12 @@ ScDocRowHeightUpdater::ScDocRowHeightUpdater(ScDocument& rDoc, OutputDevice* pOu
 {
 }
 
-void ScDocRowHeightUpdater::update()
+void ScDocRowHeightUpdater::update(const bool bOnlyUsedRows)
 {
     if (!mpTabRangesArray || mpTabRangesArray->empty())
     {
         // No ranges defined. Update all rows in all tables.
-        updateAll();
+        updateAll(bOnlyUsedRows);
         return;
     }
 
@@ -1668,7 +1668,7 @@ void ScDocRowHeightUpdater::update()
     }
 }
 
-void ScDocRowHeightUpdater::updateAll()
+void ScDocRowHeightUpdater::updateAll(const bool bOnlyUsedRows)
 {
     sal_uInt64 nCellCount = 0;
     for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
@@ -1689,7 +1689,10 @@ void ScDocRowHeightUpdater::updateAll()
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
             continue;
 
-        mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, mrDoc.MaxRow(), true, &aProgress, nProgressStart);
+        SCCOL nEndCol = 0;
+        SCROW nEndRow = mrDoc.MaxRow();
+        if (!bOnlyUsedRows || mrDoc.GetPrintArea(nTab, nEndCol, nEndRow))
+            mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, nEndRow, true, &aProgress, nProgressStart);
         nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount();
     }
 }

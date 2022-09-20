@@ -31,6 +31,7 @@
 
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
+#include <dociter.hxx>
 #include <docsh.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
@@ -427,6 +428,15 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
     Fraction aZoom(1,1);
     sc::RowHeightContext aCxt(m_pDocument->MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
     m_pDocument->UpdateAllRowHeights(aCxt, pTabMark);
+}
+
+void ScDocShell::UpdateAllRowHeights(const bool bOnlyUsedRows)
+{
+    // update automatic roow heights on all sheets using the newer ScDocRowHeightUpdater
+    ScSizeDeviceProvider aProv(this);
+    ScDocRowHeightUpdater aUpdater(*m_pDocument, aProv.GetDevice(), aProv.GetPPTX(),
+                                   aProv.GetPPTY(), nullptr);
+    aUpdater.update(bOnlyUsedRows);
 }
 
 void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )

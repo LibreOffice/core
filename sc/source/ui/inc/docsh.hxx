@@ -267,6 +267,7 @@ public:
 
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
     void            UpdateAllRowHeights( const ScMarkData* pTabMark = nullptr );
+    void            UpdateAllRowHeights(const bool bOnlyUsedRows);
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
     void            RefreshPivotTables( const ScRange& rSource );

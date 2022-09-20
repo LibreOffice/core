@@ -628,6 +628,7 @@ void WorkbookGlobals::finalize()
     mpDoc->EnableExecuteLink(true);
     // #i79826# enable updating automatic row height after loading the document
     mpDoc->UnlockAdjustHeight();
+    mpDocShell->UpdateAllRowHeights(/*bOnlyUsedRows=*/true);
 
     // #i76026# enable Undo after loading the document
     mpDoc->EnableUndo(true);
