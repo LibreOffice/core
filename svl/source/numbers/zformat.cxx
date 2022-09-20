@@ -1574,12 +1574,12 @@ bool SvNumberformat::LocaleType::isPlainLocale() const
 }
 
 // static
-SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const OUString& rString, sal_Int32& nPos )
+SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(std::u16string_view rString, sal_Int32& nPos )
 {
     sal_uInt32 nNum = 0;
     sal_Unicode cToken = 0;
     sal_Int32 nStart = nPos;
-    sal_Int32 nLen = rString.getLength();
+    sal_Int32 nLen = rString.size();
     while ( nPos < nLen && (nPos - nStart < 8) )
     {
         cToken = rString[nPos];
@@ -1610,12 +1610,12 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const OUString& rStr
     return (cToken == ']' || nPos == nLen) ? LocaleType(nNum) : LocaleType();
 }
 
-static bool lcl_matchKeywordAndGetNumber( const OUString & rString, const sal_Int32 nPos,
-        const OUString & rKeyword, sal_Int32 & nNumber )
+static bool lcl_matchKeywordAndGetNumber( std::u16string_view rString, const sal_Int32 nPos,
+        std::u16string_view rKeyword, sal_Int32 & nNumber )
 {
-    if (0 <= nPos && nPos + rKeyword.getLength() < rString.getLength() && rString.matchIgnoreAsciiCase( rKeyword, nPos))
+    if (0 <= nPos && nPos + static_cast<sal_Int32>(rKeyword.size()) < static_cast<sal_Int32>(rString.size()) && o3tl::matchIgnoreAsciiCase( rString, rKeyword, nPos))
     {
-        nNumber = o3tl::toInt32(rString.subView( nPos + rKeyword.getLength()));
+        nNumber = o3tl::toInt32(rString.substr( nPos + rKeyword.size()));
         return true;
     }
     else
@@ -2141,11 +2141,11 @@ short SvNumberformat::ImpCheckCondition(double fNumber,
     }
 }
 
-static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, const OUString& rStr )
+static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, std::u16string_view rStr )
 {
     // Right during user input the star symbol is the very
     // last character before the user enters another one.
-    if (rStr.getLength() > 1)
+    if (rStr.size() > 1)
     {
         rBuf.append(u'\x001B');
         rBuf.append(rStr[1]);
@@ -2154,9 +2154,9 @@ static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, const OUString& rStr )
     return false;
 }
 
-static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const OUString& rStr )
+static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, std::u16string_view rStr )
 {
-    if (rStr.getLength() > 1)
+    if (rStr.size() > 1)
     {
         rBuf.insert( nPos, rStr[1]);
         rBuf.insert( nPos, u'\x001B');
@@ -3429,11 +3429,11 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
     rCal.setDateTime( fOrgDateTime );
 }
 
-void SvNumberformat::SwitchToGregorianCalendar( const OUString& rOrgCalendar,
+void SvNumberformat::SwitchToGregorianCalendar( std::u16string_view rOrgCalendar,
                                                 double fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    if ( rOrgCalendar.getLength() && rCal.getUniqueID() != GREGORIAN )
+    if ( rOrgCalendar.size() && rCal.getUniqueID() != GREGORIAN )
     {
         rCal.loadCalendar( GREGORIAN, rLoc().getLanguageTag().getLocale() );
         rCal.setDateTime( fOrgDateTime );

@@ -25,6 +25,7 @@
 #include <svl/currencytable.hxx>
 
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
@@ -3968,18 +3969,18 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
 // static
 const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
                                                             std::u16string_view rSymbol,
-                                                            const OUString& rExtension,
+                                                            std::u16string_view rExtension,
                                                             LanguageType eFormatLanguage,
                                                             bool bOnlyStringLanguage )
 {
-    sal_Int32 nExtLen = rExtension.getLength();
+    sal_Int32 nExtLen = rExtension.size();
     LanguageType eExtLang;
     if ( nExtLen )
     {
         // rExtension should be a 16-bit hex value max FFFF which may contain a
         // leading "-" separator (that is not a minus sign, but toInt32 can be
         // used to parse it, with post-processing as necessary):
-        sal_Int32 nExtLang = rExtension.toInt32( 16 );
+        sal_Int32 nExtLang = o3tl::toInt32(rExtension, 16);
         if ( !nExtLang )
         {
             eExtLang = LANGUAGE_DONTKNOW;

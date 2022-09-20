@@ -413,20 +413,20 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& )
     }
 }
 
-std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view aLine, std::u16string_view aIV, const OUString& aMasterPasswd, css::task::PasswordRequestMode mode )
+std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view aLine, std::u16string_view aIV, std::u16string_view aMasterPasswd, css::task::PasswordRequestMode mode )
 {
-    if( !aMasterPasswd.isEmpty() )
+    if( !aMasterPasswd.empty() )
     {
         rtlCipher aDecoder = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream );
         OSL_ENSURE( aDecoder, "Can't create decoder" );
 
         if( aDecoder )
         {
-            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!" );
+            OSL_ENSURE( aMasterPasswd.size() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!" );
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = static_cast<char>(o3tl::toUInt32(aMasterPasswd.subView( ind*2, 2 ), 16));
+                code[ ind ] = static_cast<char>(o3tl::toUInt32(aMasterPasswd.substr( ind*2, 2 ), 16));
 
             unsigned char iv[RTL_DIGEST_LENGTH_MD5] = {0};
             if (!aIV.empty())
@@ -473,9 +473,9 @@ std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view 
         "Can't decode!", css::uno::Reference<css::uno::XInterface>(), mode);
 }
 
-OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, const OUString& aMasterPasswd)
+OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, std::u16string_view aMasterPasswd)
 {
-    if( !aMasterPasswd.isEmpty() )
+    if( !aMasterPasswd.empty() )
     {
         OString aSeq = OUStringToOString( createIndex( lines ), RTL_TEXTENCODING_UTF8 );
 
@@ -484,11 +484,11 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
 
         if( aEncoder )
         {
-            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!" );
+            OSL_ENSURE( aMasterPasswd.size() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!" );
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = static_cast<char>(o3tl::toUInt32(aMasterPasswd.subView( ind*2, 2 ), 16));
+                code[ ind ] = static_cast<char>(o3tl::toUInt32(aMasterPasswd.substr( ind*2, 2 ), 16));
 
             unsigned char iv[RTL_DIGEST_LENGTH_MD5] = {0};
             if (!aIV.empty())

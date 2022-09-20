@@ -21,6 +21,7 @@
 #include <dtoa.h>
 #include <float.h>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <rtl/math.hxx>
@@ -484,10 +485,10 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
 /**
  * Skips the supplied char
  */
-inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const OUString& rString,
+inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, std::u16string_view rString,
                                             sal_Int32& nPos )
 {
-    if ((nPos < rString.getLength()) && (rString[nPos] == c))
+    if ((nPos < static_cast<sal_Int32>(rString.size())) && (rString[nPos] == c))
     {
         nPos++;
         return true;
@@ -534,7 +535,7 @@ inline bool ImpSvNumberInputScan::SkipString( const OUString& rWhat,
 /**
  * Recognizes exactly ,111 in {3} and {3,2} or ,11 in {3,2} grouping
  */
-inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
+inline bool ImpSvNumberInputScan::GetThousandSep( std::u16string_view rString,
                                                   sal_Int32& nPos,
                                                   sal_uInt16 nStringPos ) const
 {
@@ -542,7 +543,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
     // Is it an ordinary space instead of a no-break space?
     bool bSpaceBreak = (rSep[0] == cNoBreakSpace || rSep[0] == cNarrowNoBreakSpace) &&
         rString[0] == u' ' &&
-        rSep.getLength() == 1 && rString.getLength() == 1;
+        rSep.getLength() == 1 && rString.size() == 1;
     if (!((rString == rSep || bSpaceBreak) &&      // nothing else
            nStringPos < nStringsCnt - 1 &&         // safety first!
            IsNum[ nStringPos + 1 ] ))              // number follows
@@ -850,18 +851,18 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos
  * ','   => true
  * else => false
  */
-inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32& nPos ) const
+inline bool ImpSvNumberInputScan::GetDecSep( std::u16string_view rString, sal_Int32& nPos ) const
 {
-    if ( rString.getLength() > nPos )
+    if ( static_cast<sal_Int32>(rString.size()) > nPos )
     {
         const OUString& rSep = pFormatter->GetNumDecimalSep();
-        if ( rString.match( rSep, nPos) )
+        if ( o3tl::starts_with(rString.substr(nPos), rSep) )
         {
             nPos = nPos + rSep.getLength();
             return true;
         }
         const OUString& rSepAlt = pFormatter->GetNumDecimalSepAlt();
-        if ( !rSepAlt.isEmpty() && rString.match( rSepAlt, nPos) )
+        if ( !rSepAlt.isEmpty() && o3tl::starts_with(rString.substr(nPos), rSepAlt) )
         {
             nPos = nPos + rSepAlt.getLength();
             return true;
@@ -874,9 +875,9 @@ inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32&
 /**
  * Reading a hundredth seconds separator
  */
-inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal_Int32& nPos ) const
+inline bool ImpSvNumberInputScan::GetTime100SecSep( std::u16string_view rString, sal_Int32& nPos ) const
 {
-    if ( rString.getLength() > nPos )
+    if ( static_cast<sal_Int32>(rString.size()) > nPos )
     {
         if (bIso8601Tsep)
         {
@@ -891,7 +892,7 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal
         // Even in an otherwise ISO 8601 string be lenient and accept the
         // locale defined separator.
         const OUString& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
-        if ( rString.match( rSep, nPos ))
+        if ( o3tl::starts_with(rString.substr(nPos), rSep))
         {
             nPos = nPos + rSep.getLength();
             return true;
@@ -908,9 +909,9 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal
  *  '('   => -1, bNegCheck = 1
  * else =>  0
  */
-int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
+int ImpSvNumberInputScan::GetSign( std::u16string_view rString, sal_Int32& nPos )
 {
-    if (rString.getLength() > nPos)
+    if (static_cast<sal_Int32>(rString.size()) > nPos)
         switch (rString[ nPos ])
         {
         case '+':
@@ -936,9 +937,9 @@ int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
  * '-'   => -1
  * else =>  0
  */
-short ImpSvNumberInputScan::GetESign( const OUString& rString, sal_Int32& nPos )
+short ImpSvNumberInputScan::GetESign( std::u16string_view rString, sal_Int32& nPos )
 {
-    if (rString.getLength() > nPos)
+    if (static_cast<sal_Int32>(rString.size()) > nPos)
     {
         switch (rString[nPos])
         {
@@ -1262,17 +1263,17 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
 /** If a string is a separator plus '-' minus sign preceding a 'Y' year in
     a date pattern at position nPat.
  */
-static bool lcl_IsSignedYearSep( const OUString& rStr, const OUString& rPat, sal_Int32 nPat )
+static bool lcl_IsSignedYearSep( std::u16string_view rStr, std::u16string_view rPat, sal_Int32 nPat )
 {
     bool bOk = false;
-    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nLen = rStr.size();
     if (nLen > 1 && rStr[nLen-1] == '-')
     {
         --nLen;
-        if (nPat + nLen < rPat.getLength() && rPat[nPat+nLen] == 'Y')
+        if (nPat + nLen < static_cast<sal_Int32>(rPat.size()) && rPat[nPat+nLen] == 'Y')
         {
             // Signed year is possible.
-            bOk = (rPat.indexOf( rStr.subView( 0, nLen), nPat) == nPat);
+            bOk = (rPat.find( rStr.substr( 0, nLen), nPat) == static_cast<size_t>(nPat));
         }
     }
     return bOk;
@@ -1280,11 +1281,11 @@ static bool lcl_IsSignedYearSep( const OUString& rStr, const OUString& rPat, sal
 
 
 /** Length of separator usually is 1 but theoretically could be anything. */
-static sal_Int32 lcl_getPatternSeparatorLength( const OUString& rPat, sal_Int32 nPat )
+static sal_Int32 lcl_getPatternSeparatorLength( std::u16string_view rPat, sal_Int32 nPat )
 {
     sal_Int32 nSep = nPat;
     sal_Unicode c;
-    while (nSep < rPat.getLength() && (c = rPat[nSep]) != 'D' && c != 'M' && c != 'Y')
+    while (nSep < static_cast<sal_Int32>(rPat.size()) && (c = rPat[nSep]) != 'D' && c != 'M' && c != 'Y')
         ++nSep;
     return nSep - nPat;
 }

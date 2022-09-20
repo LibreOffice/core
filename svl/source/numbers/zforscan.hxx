@@ -292,8 +292,8 @@ private: // Private section
     /** Swap nTypeArray and sStrArray elements at positions. */
     void SwapArrayElements( size_t nPos1, size_t nPos2 );
 
-    static bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
-        { return rStr.getLength() == 1 && rStr[0] == ch; }
+    static bool StringEqualsChar( std::u16string_view rStr, sal_Unicode ch )
+        { return rStr.size() == 1 && rStr[0] == ch; }
 
     // remove "..." and \... quotes from rStr, return how many chars removed
     static sal_Int32 RemoveQuotes( OUString& rStr );

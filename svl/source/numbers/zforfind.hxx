@@ -261,7 +261,7 @@ private:
 
     // Skip a special character
     static inline bool SkipChar( sal_Unicode c,
-                                 const OUString& rString,
+                                 std::u16string_view rString,
                                  sal_Int32& nPos );
 
     // Skip blank
@@ -274,7 +274,7 @@ private:
                                    sal_Int32& nPos );
 
     // Recognizes exactly ,111 as group separator
-    inline bool GetThousandSep( const OUString& rString,
+    inline bool GetThousandSep( std::u16string_view rString,
                                 sal_Int32& nPos,
                                 sal_uInt16 nStringPos ) const;
     // Get boolean value
@@ -297,20 +297,20 @@ private:
                       sal_Int32& nPos );
 
     // Get decimal separator and advance string position
-    inline bool GetDecSep( const OUString& rString,
+    inline bool GetDecSep( std::u16string_view rString,
                            sal_Int32& nPos ) const;
 
     // Get hundredth seconds separator and advance string position
-    inline bool GetTime100SecSep( const OUString& rString,
+    inline bool GetTime100SecSep( std::u16string_view rString,
                                   sal_Int32& nPos ) const;
 
     // Get sign  and advance string position
     // Including special case '('
-    int GetSign( const OUString& rString,
+    int GetSign( std::u16string_view rString,
                  sal_Int32& nPos );
 
     // Get sign of exponent and advance string position
-    static short GetESign( const OUString& rString,
+    static short GetESign( std::u16string_view rString,
                            sal_Int32& nPos );
 
     // Get next number as array offset

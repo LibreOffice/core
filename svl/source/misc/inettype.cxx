@@ -23,6 +23,7 @@
 
 #include <tools/wldcrd.hxx>
 #include <tools/inetmime.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <svl/inettype.hxx>
 
@@ -307,22 +308,22 @@ INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExt
 }
 
 //static
-INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
+INetContentType INetContentTypes::GetContentTypeFromURL(std::u16string_view rURL)
 {
     INetContentType eTypeID = CONTENT_TYPE_UNKNOWN;
     sal_Int32 nIdx{ 0 };
-    OUString aToken( rURL.getToken(0, ':', nIdx) );
+    OUString aToken( o3tl::getToken(rURL, 0, ':', nIdx) );
     if (!aToken.isEmpty())
     {
         if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))
-            if (rURL[ rURL.getLength() - 1 ] == '/') // folder
-                if (rURL.getLength() > RTL_CONSTASCII_LENGTH("file:///"))
+            if (rURL[ rURL.size() - 1 ] == '/') // folder
+                if (rURL.size() > RTL_CONSTASCII_LENGTH("file:///"))
                     if (WildCard(u"*/{*}/").Matches(rURL)) // special folder
                         eTypeID = CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER;
                     else
                         // drive? -> "file:///?|/"
-                        if (rURL.getLength() == 11
-                            && rURL[ rURL.getLength() - 2 ] == '|')
+                        if (rURL.size() == 11
+                            && rURL[ rURL.size() - 2 ] == '|')
                         {
                             // Drives need further processing, because of
                             // dynamic type according to underlying volume,
@@ -341,13 +342,13 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             eTypeID = CONTENT_TYPE_TEXT_HTML;
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_PRIVATE))
         {
-            aToken = rURL.getToken(0, '/', nIdx);
+            aToken = o3tl::getToken(rURL, 0, '/', nIdx);
             if (aToken == "factory")
             {
-                aToken = rURL.getToken(0, '/', nIdx);
+                aToken = o3tl::getToken(rURL, 0, '/', nIdx);
                 if (aToken == "swriter")
                 {
-                    aToken = rURL.getToken(0, '/', nIdx);
+                    aToken = o3tl::getToken(rURL, 0, '/', nIdx);
                     eTypeID = aToken == "web" ?
                                   CONTENT_TYPE_APP_VND_WRITER_WEB :
                               aToken == "GlobalDocument" ?
@@ -378,7 +379,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             eTypeID = CONTENT_TYPE_APP_MACRO;
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_DATA))
         {
-            aToken = rURL.getToken(0, ',', nIdx);
+            aToken = o3tl::getToken(rURL, 0, ',', nIdx);
             eTypeID = GetContentType(aToken);
         }
     }

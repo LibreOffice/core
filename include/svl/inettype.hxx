@@ -249,7 +249,7 @@ public:
 
     static INetContentType GetContentType4Extension(OUString const& rExtension);
 
-    static INetContentType GetContentTypeFromURL(OUString const& rURL);
+    static INetContentType GetContentTypeFromURL(std::u16string_view aURL);
 
     static bool GetExtensionFromURL(std::u16string_view rURL, OUString& rExtension);
 

@@ -489,7 +489,7 @@ public:
              else <NULL/>.
      */
     static const NfCurrencyEntry* GetCurrencyEntry(bool& bFoundBank, std::u16string_view rSymbol,
-                                                   const OUString& rExtension,
+                                                   std::u16string_view rExtension,
                                                    LanguageType eFormatLanguage,
                                                    bool bOnlyStringLanguage = false);
 

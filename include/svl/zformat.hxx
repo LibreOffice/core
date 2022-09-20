@@ -469,7 +469,7 @@ public:
         is non-"gregorian" and rOrgCalendar is not empty. Thus a preceding
         ImpSwitchToOtherCalendar() call should have been placed prior to
         calling this method. */
-    void SwitchToGregorianCalendar( const OUString& rOrgCalendar, double fOrgDateTime ) const;
+    void SwitchToGregorianCalendar( std::u16string_view rOrgCalendar, double fOrgDateTime ) const;
 
 #ifdef THE_FUTURE
     /** Switches to the first specified calendar, if any, in subformat nNumFor
@@ -584,7 +584,7 @@ private:
      *         list of language types. These numbers also correspond with the
      *         numbers used by Microsoft Office.
      */
-    SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( const OUString& rString, sal_Int32& nPos );
+    SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( std::u16string_view rString, sal_Int32& nPos );
 
     /** Obtain calendar and numerals from a LocaleType that was parsed from a
         LCID with ImpGetLocaleType().
