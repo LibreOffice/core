@@ -99,6 +99,21 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, tdf151100)
+{
+    // Similar to tdf135942
+
+    load(mpTestDocumentPath, "tdf151100.docx");
+    reload(mpFilter, "tdf151100.docx");
+    // All table autostyles should be collected, including nested, and must not crash.
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocPtr pXmlDoc = parseExport("styles.xml");
+
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 1);
+}
+
 DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
 {
     uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
