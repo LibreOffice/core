@@ -125,8 +125,8 @@ bool splitLastFromConfigurationPath(std::u16string_view _sInPath,
         nPos = _sInPath.rfind('/',nEnd);
         nStart = nPos + 1;
     }
-    OSL_ASSERT( nPos != std::u16string_view::npos &&
-                nPos < nStart &&
+    OSL_ASSERT( (nPos == std::u16string_view::npos ||
+                nPos < nStart) &&
                 nStart < nEnd &&
                 nEnd <= _sInPath.size() );
 
