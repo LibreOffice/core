@@ -520,6 +520,20 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf151100)
+{
+    // Similar to tdf135942
+
+    loadAndReload("tdf151100.docx");
+    // All table autostyles should be collected, including nested, and must not crash.
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 1);
+}
+
 DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
