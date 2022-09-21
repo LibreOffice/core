@@ -339,6 +339,13 @@ void testReinterpretConstCast() {
     (void) reinterpret_cast<std::size_t>((const_cast<int const *>(&n))); // expected-error-re {{redundant const_cast from 'int *' to 'const int *' within reinterpret_cast to fundamental type 'std::size_t' (aka 'unsigned {{.+}}') [loplugin:redundantcast]}}
 }
 
+void testSuspiciousReinterpretCast() {
+    D * p;
+    // expected-error@+1 {{suspicious reinterpret_cast from derived 'D *' to base 'S *', maybe this was meant to be a static_cast [loplugin:redundantcast]}}
+    (void) reinterpret_cast<S *>(p);
+    (void) reinterpret_cast<sal_uIntPtr>(p); // expected no error
+}
+
 void testDynamicCast() {
 
     struct S1 { virtual ~S1(); };

@@ -195,7 +195,7 @@ public:
     public:
         FrameAreaWriteAccess(SwFrameAreaDefinition& rTarget) : SwRect(rTarget.getFrameArea()), mrTarget(rTarget) {}
         ~FrameAreaWriteAccess();
-        void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
+        void setSwRect(const SwRect& rNew) { *static_cast< SwRect* >(this) = rNew; }
     };
 
     // same helper for FramePrintArea
@@ -210,7 +210,7 @@ public:
     public:
         FramePrintAreaWriteAccess(SwFrameAreaDefinition& rTarget) : SwRect(rTarget.getFramePrintArea()), mrTarget(rTarget) {}
         ~FramePrintAreaWriteAccess();
-        void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
+        void setSwRect(const SwRect& rNew) { *static_cast< SwRect* >(this) = rNew; }
     };
 
     // RotateFlyFrame3 - Support for Transformations

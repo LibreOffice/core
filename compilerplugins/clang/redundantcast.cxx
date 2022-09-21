@@ -682,6 +682,24 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
             return true;
         }
     }
+    if (auto const t1 = expr->getSubExpr()->getType()->getAs<clang::PointerType>()) {
+        if (auto const t2 = expr->getType()->getAs<clang::PointerType>()) {
+            if (auto const d1 = t1->getPointeeCXXRecordDecl()) {
+                if (auto const d2 = t2->getPointeeCXXRecordDecl()) {
+                    if (d1->hasDefinition() && d1->isDerivedFrom(d2)) {
+                        report(
+                            DiagnosticsEngine::Warning,
+                            "suspicious reinterpret_cast from derived %0 to base %1, maybe this was"
+                                " meant to be a static_cast",
+                            expr->getExprLoc())
+                            << expr->getSubExprAsWritten()->getType() << expr->getTypeAsWritten()
+                            << expr->getSourceRange();
+                        return true;
+                    }
+                }
+            }
+        }
+    }
     return true;
 }
 
