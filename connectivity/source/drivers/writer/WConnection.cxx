@@ -42,7 +42,6 @@ namespace connectivity::writer
 {
 OWriterConnection::OWriterConnection(ODriver* _pDriver)
     : OConnection(_pDriver)
-    , m_nDocCount(0)
 {
 }
 

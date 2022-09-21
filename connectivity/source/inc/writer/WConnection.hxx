@@ -40,11 +40,11 @@ namespace connectivity::writer
 class ODriver;
 class OWriterConnection : public file::OConnection
 {
-    // the spreadsheet document:
+    // the text document:
     css::uno::Reference<css::text::XTextDocument> m_xDoc;
     OUString m_sPassword;
     OUString m_aFileName;
-    oslInterlockedCount m_nDocCount;
+    oslInterlockedCount m_nDocCount = 0;
 
     class CloseVetoButTerminateListener
         : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
