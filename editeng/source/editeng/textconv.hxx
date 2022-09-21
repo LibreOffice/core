@@ -61,7 +61,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
                                     const sal_Int32 nUnitEnd );
 
     void        ChangeText( const OUString &rNewText,
-                            const OUString& rOrigText,
+                            std::u16string_view rOrigText,
                             const css::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );

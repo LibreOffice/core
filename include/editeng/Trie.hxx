@@ -28,8 +28,9 @@ public:
     Trie();
     ~Trie();
 
-    void insert(const OUString& sInputString) const;
-    void findSuggestions(const OUString& sWordPart, std::vector<OUString>& rSuggestionList) const;
+    void insert(std::u16string_view sInputString) const;
+    void findSuggestions(std::u16string_view sWordPart,
+                         std::vector<OUString>& rSuggestionList) const;
     size_t size() const;
 };
 }

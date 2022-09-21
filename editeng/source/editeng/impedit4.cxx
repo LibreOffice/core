@@ -3030,7 +3030,7 @@ short ImpEditEngine::ReplaceTextOnly(
         else
         {
             DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
-            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), OUString(rNewText[n]) );
+            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), OUStringChar(rNewText[n]) );
 
         }
         nDiffs = sal::static_int_cast< short >(nDiffs + nDiff);

@@ -2687,7 +2687,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
             InsertUndo( std::move(pNewUndo), bTryMerge );
         }
 
-        aEditDoc.InsertText( aPaM, OUString(c) );
+        aEditDoc.InsertText( aPaM, OUStringChar(c) );
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         assert(pPortion);
         pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
@@ -2813,7 +2813,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                         nEnd2 = aLine.getLength();    // not dereference!
 
                     if ( nEnd2 > nStart2 )
-                        aPaM = aEditDoc.InsertText( aPaM, aLine.copy( nStart2, nEnd2-nStart2 ) );
+                        aPaM = aEditDoc.InsertText( aPaM, aLine.subView( nStart2, nEnd2-nStart2 ) );
                     if ( nEnd2 < aLine.getLength() )
                     {
                         aPaM = aEditDoc.InsertFeature( aPaM, aTabItem );

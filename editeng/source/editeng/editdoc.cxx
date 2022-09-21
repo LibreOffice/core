@@ -2254,16 +2254,16 @@ EditPaM EditDoc::RemoveText()
     return EditPaM( pNode, 0 );
 }
 
-EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
+EditPaM EditDoc::InsertText( EditPaM aPaM, std::u16string_view rStr )
 {
-    DBG_ASSERT( rStr.indexOf( 0x0A ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( rStr.indexOf( 0x0D ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( rStr.indexOf( '\t' ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.find( 0x0A ) == std::u16string_view::npos, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.find( 0x0D ) == std::u16string_view::npos, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.find( '\t' ) == std::u16string_view::npos, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
     assert(aPaM.GetNode());
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
-    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.getLength(), GetItemPool() );
-    aPaM.SetIndex( aPaM.GetIndex() + rStr.getLength() );
+    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.size(), GetItemPool() );
+    aPaM.SetIndex( aPaM.GetIndex() + rStr.size() );
 
     SetModified( true );
 

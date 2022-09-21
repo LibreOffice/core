@@ -244,7 +244,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
         std::pair<editeng::SortedAutoCompleteStrings::const_iterator, bool>
             aInsPair = m_WordList.insert(pNew);
 
-        m_LookupTree.insert( aNewWord.copy(0, nWrdLen) );
+        m_LookupTree.insert( aNewWord.subView(0, nWrdLen) );
 
         if (aInsPair.second)
         {
@@ -330,7 +330,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
  *  @param aMatch the prefix to search for
  *  @param rWords the words found matching
  */
-bool SwAutoCompleteWord::GetWordsMatching(const OUString& aMatch, std::vector<OUString>& rWords) const
+bool SwAutoCompleteWord::GetWordsMatching(std::u16string_view aMatch, std::vector<OUString>& rWords) const
 {
     assert(rWords.empty());
     m_LookupTree.findSuggestions(aMatch, rWords);

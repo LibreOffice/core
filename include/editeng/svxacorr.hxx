@@ -162,7 +162,7 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
     const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ) = delete;
 
     const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
-                                       const OUString &rTxt,
+                                       std::u16string_view rTxt,
                                        sal_Int32 &rStt,
                                        sal_Int32 nEndPos) const;
 public:
@@ -179,7 +179,7 @@ public:
     typedef std::vector<SvxAutocorrWord> AutocorrWordSetType;
     const AutocorrWordSetType & getSortedContent() const;
 
-    const SvxAutocorrWord* SearchWordsInList(const OUString& rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
+    const SvxAutocorrWord* SearchWordsInList(std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
 };
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
@@ -321,7 +321,7 @@ public:
     // nEnd - to check position - as of this item forward
     // rLang - Input: in which language is searched
     //         Output: in which "language list" was it found
-    const SvxAutocorrWord* SearchWordsInList( const OUString& rTxt,
+    const SvxAutocorrWord* SearchWordsInList( std::u16string_view rTxt,
                                     sal_Int32& rStt, sal_Int32 nEndPos,
                                     SvxAutoCorrDoc& rDoc,
                                     LanguageTag& rLang );
@@ -410,7 +410,7 @@ public:
     bool FnChgToEnEmDash( SvxAutoCorrDoc&, std::u16string_view,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
-    bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const OUString&,
+    bool FnAddNonBrkSpace( SvxAutoCorrDoc&, std::u16string_view,
                                 sal_Int32 nEndPos,
                                 LanguageType eLang, bool& io_bNbspRunNext );
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,

@@ -106,7 +106,7 @@ const char
     /* also at these ends - Brackets and all kinds of begin characters */
     sImplEndSkipChars[] = "\"\')]}\x83\x84\x89\x91\x92\x93\x94";
 
-static OUString EncryptBlockName_Imp(const OUString& rName);
+static OUString EncryptBlockName_Imp(std::u16string_view rName);
 
 static bool NonFieldWordDelim( const sal_Unicode c )
 {
@@ -651,7 +651,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
 
 // Add non-breaking space before specific punctuation marks in French text
 bool SvxAutoCorrect::FnAddNonBrkSpace(
-                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+                                SvxAutoCorrDoc& rDoc, std::u16string_view rTxt,
                                 sal_Int32 nEndPos,
                                 LanguageType eLang, bool& io_bNbspRunNext )
 {
@@ -684,17 +684,17 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
 
             //See if the text is the start of a protocol string, e.g. have text of
             //"http" see if it is the start of "http:" and if so leave it alone
-            sal_Int32 nIndex = nSttWdPos + (bWasWordDelim ? 1 : 0);
-            sal_Int32 nProtocolLen = nEndPos - nSttWdPos + 1;
-            if (nIndex + nProtocolLen <= rTxt.getLength())
+            size_t nIndex = nSttWdPos + (bWasWordDelim ? 1 : 0);
+            size_t nProtocolLen = nEndPos - nSttWdPos + 1;
+            if (nIndex + nProtocolLen <= rTxt.size())
             {
-                if (INetURLObject::CompareProtocolScheme(rTxt.subView(nIndex, nProtocolLen)) != INetProtocol::NotValid)
+                if (INetURLObject::CompareProtocolScheme(rTxt.substr(nIndex, nProtocolLen)) != INetProtocol::NotValid)
                     return false;
             }
 
             // Check the presence of "://" in the word
-            sal_Int32 nStrPos = rTxt.indexOf( "://", nSttWdPos + 1 );
-            if ( nStrPos == -1 && nEndPos > 0 )
+            size_t nStrPos = rTxt.find( u"://", nSttWdPos + 1 );
+            if ( nStrPos == std::u16string_view::npos && nEndPos > 0 )
             {
                 // Check the previous char
                 sal_Unicode cPrevChar = rTxt[ nEndPos - 1 ];
@@ -723,7 +723,7 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
                     io_bNbspRunNext = true;
             }
         }
-        else if ( cChar == '/' && nEndPos > 1 && rTxt.getLength() > (nEndPos - 1) )
+        else if ( cChar == '/' && nEndPos > 1 && static_cast<sal_Int32>(rTxt.size()) > (nEndPos - 1) )
         {
             // Remove the hardspace right before to avoid formatting URLs
             sal_Unicode cPrevChar = rTxt[ nEndPos - 1 ];
@@ -1876,11 +1876,11 @@ bool SvxAutoCorrect::PutText( const css::uno::Reference < css::embed::XStorage >
     return false;
 }
 
-OUString EncryptBlockName_Imp(const OUString& rName)
+OUString EncryptBlockName_Imp(std::u16string_view rName)
 {
     OUStringBuffer aName;
     aName.append('#').append(rName);
-    for (sal_Int32 nLen = rName.getLength(), nPos = 1; nPos < nLen; ++nPos)
+    for (size_t nLen = rName.size(), nPos = 1; nPos < nLen; ++nPos)
     {
         if (lcl_IsInAsciiArr( "!/:.\\", aName[nPos]))
             aName[nPos] &= 0x0f;
@@ -1914,7 +1914,7 @@ static void GeneratePackageName ( std::u16string_view rShort, OUString& rPackage
 }
 
 static const SvxAutocorrWord* lcl_SearchWordsInList(
-                SvxAutoCorrectLanguageLists* pList, const OUString& rTxt,
+                SvxAutoCorrectLanguageLists* pList, std::u16string_view rTxt,
                 sal_Int32& rStt, sal_Int32 nEndPos)
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
@@ -1923,7 +1923,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 
 // the search for the words in the substitution table
 const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
-                const OUString& rTxt, sal_Int32& rStt, sal_Int32 nEndPos,
+                std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos,
                 SvxAutoCorrDoc&, LanguageTag& rLang )
 {
     const SvxAutocorrWord* pRet = nullptr;
@@ -2932,7 +2932,7 @@ const SvxAutocorrWordList::AutocorrWordSetType& SvxAutocorrWordList::getSortedCo
 }
 
 const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
-                                      const OUString &rTxt,
+                                      std::u16string_view rTxt,
                                       sal_Int32 &rStt,
                                       sal_Int32 nEndPos) const
 {
@@ -2940,10 +2940,11 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
 
     sal_Int32 left_wildcard = rChk.startsWith( ".*" ) ? 2 : 0; // ".*word" pattern?
     sal_Int32 right_wildcard = rChk.endsWith( ".*" ) ? 2 : 0; // "word.*" pattern?
-    sal_Int32 nSttWdPos = nEndPos;
+    assert(nEndPos >= 0);
+    size_t nSttWdPos = nEndPos;
 
     // direct replacement of keywords surrounded by colons (for example, ":name:")
-    bool bColonNameColon = rTxt.getLength() > nEndPos &&
+    bool bColonNameColon = static_cast<sal_Int32>(rTxt.size()) > nEndPos &&
         rTxt[nEndPos] == ':' && rChk[0] == ':' && rChk.endsWith(":");
     if ( nEndPos + (bColonNameColon ? 1 : 0) < rChk.getLength() - left_wildcard - right_wildcard )
         return nullptr;
@@ -2957,14 +2958,14 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
     {
         TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-        OUString sWord = rTxt.copy(nCalcStt, rChk.getLength() - left_wildcard);
+        OUString sWord( rTxt.substr(nCalcStt, rChk.getLength() - left_wildcard) );
         if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(left_wildcard), sWord) ))
         {
             rStt = nCalcStt;
             if (!left_wildcard)
             {
                 // fdo#33899 avoid "1/2", "1/3".. to be replaced by fractions in dates, eg. 1/2/14
-                if (rTxt.getLength() > nEndPos && rTxt[nEndPos] == '/' && rChk.indexOf('/') != -1)
+                if (static_cast<sal_Int32>(rTxt.size()) > nEndPos && rTxt[nEndPos] == '/' && rChk.indexOf('/') != -1)
                     return nullptr;
                 return pFnd;
             }
@@ -2972,10 +2973,10 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
                 ;
             if (bWasWordDelim) rStt++;
-            OUString left_pattern = rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard);
+            OUString left_pattern( rTxt.substr(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard) );
             // avoid double spaces before simple "word" replacement
             left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().subView(1) : pFnd->GetLong();
-            if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern) ) )
+            if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(OUString(rTxt.substr(rStt, nEndPos - rStt)), left_pattern) ) )
                 return pNew;
         }
     } else
@@ -2990,17 +2991,17 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
         while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
             ;
         // search the first occurrence (with a left word delimitation, if needed)
-        sal_Int32 nFndPos = -1;
+        size_t nFndPos = std::u16string_view::npos;
         do {
-            nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
-            if (nFndPos == -1)
+            nFndPos = rTxt.find( sTmp, nFndPos + 1);
+            if (nFndPos == std::u16string_view::npos)
                 break;
             not_suffix = bWasWordDelim && (nSttWdPos >= (nFndPos + sTmp.getLength()));
         } while ( (!left_wildcard && nFndPos && !IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix );
 
-        if ( nFndPos != -1 )
+        if ( nFndPos != std::u16string_view::npos )
         {
-            sal_Int32 extra_repl = nFndPos + sTmp.getLength() > nEndPos ? 1: 0; // for patterns with terminating characters, eg. "a:"
+            sal_Int32 extra_repl = static_cast<sal_Int32>(nFndPos) + sTmp.getLength() > nEndPos ? 1: 0; // for patterns with terminating characters, eg. "a:"
 
             if ( left_wildcard )
             {
@@ -3009,41 +3010,41 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                     ;
                 if (bWasWordDelim) nFndPos++;
             }
-            if (nEndPos + extra_repl <= nFndPos)
+            if (nEndPos + extra_repl <= static_cast<sal_Int32>(nFndPos))
             {
                 return nullptr;
             }
             // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
-            OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + extra_repl);
+            OUString aShort( rTxt.substr(nFndPos, nEndPos - nFndPos + extra_repl) );
 
             OUString aLong;
             rStt = nFndPos;
             if ( !left_wildcard )
             {
                 sal_Int32 siz = nEndPos - nFndPos - sTmp.getLength();
-                aLong = pFnd->GetLong() + (siz > 0 ? rTxt.subView(nFndPos + sTmp.getLength(), siz) : u"");
+                aLong = pFnd->GetLong() + (siz > 0 ? rTxt.substr(nFndPos + sTmp.getLength(), siz) : u"");
             } else {
                 OUStringBuffer buf;
                 do {
-                    nSttWdPos = rTxt.indexOf( sTmp, nFndPos);
-                    if (nSttWdPos != -1)
+                    nSttWdPos = rTxt.find( sTmp, nFndPos);
+                    if (nSttWdPos != std::u16string_view::npos)
                     {
                         sal_Int32 nTmp(nFndPos);
-                        while (nTmp < nSttWdPos && !IsWordDelim(rTxt[nTmp]))
+                        while (nTmp < static_cast<sal_Int32>(nSttWdPos) && !IsWordDelim(rTxt[nTmp]))
                             nTmp++;
-                        if (nTmp < nSttWdPos)
+                        if (nTmp < static_cast<sal_Int32>(nSttWdPos))
                             break; // word delimiter found
-                        buf.append(rTxt.subView(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
+                        buf.append(rTxt.substr(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
                         nFndPos = nSttWdPos + sTmp.getLength();
                     }
-                } while (nSttWdPos != -1);
-                if (nEndPos - nFndPos > extra_repl)
-                    buf.append(rTxt.subView(nFndPos, nEndPos - nFndPos));
+                } while (nSttWdPos != std::u16string_view::npos);
+                if (static_cast<sal_Int32>(nEndPos - nFndPos) > extra_repl)
+                    buf.append(rTxt.substr(nFndPos, nEndPos - nFndPos));
                 aLong = buf.makeStringAndClear();
             }
             if ( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(aShort, aLong) ) )
             {
-                if ( (rTxt.getLength() > nEndPos && IsWordDelim(rTxt[nEndPos])) || rTxt.getLength() == nEndPos )
+                if ( (static_cast<sal_Int32>(rTxt.size()) > nEndPos && IsWordDelim(rTxt[nEndPos])) || static_cast<sal_Int32>(rTxt.size()) == nEndPos )
                     return pNew;
             }
         }
@@ -3051,7 +3052,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     return nullptr;
 }
 
-const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rTxt, sal_Int32& rStt,
+const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(std::u16string_view rTxt, sal_Int32& rStt,
                                                               sal_Int32 nEndPos) const
 {
     for (auto const& elem : mpImpl->maHash)

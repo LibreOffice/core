@@ -52,7 +52,7 @@ using namespace ::com::sun::star::linguistic2;
 
 // misc functions ---------------------------------------------
 
-void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
+void SvxPrepareAutoCorrect( OUString &rOldText, std::u16string_view rNewText )
 {
     // This function should be used to strip (or add) trailing '.' from
     // the strings before passing them on to the autocorrect function in
@@ -64,7 +64,7 @@ void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
     // rNewText: replacement text
 
     sal_Int32 nOldLen = rOldText.getLength();
-    sal_Int32 nNewLen = rNewText.getLength();
+    sal_Int32 nNewLen = rNewText.size();
     if (nOldLen && nNewLen)
     {
         bool bOldHasDot = '.' == rOldText[ nOldLen - 1 ],

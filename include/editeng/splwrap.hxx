@@ -36,7 +36,7 @@ namespace com::sun::star::linguistic2 {
 
 // misc functions ---------------------------------------------------------------
 
-void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText );
+void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( OUString &rOldText, std::u16string_view rNewText );
 
 /*--------------------------------------------------------------------
      Description: The SpellWrapper

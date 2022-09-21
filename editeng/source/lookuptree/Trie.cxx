@@ -31,7 +31,7 @@ struct TrieNode final
 
     void      markWord();
     TrieNode* findChild(sal_Unicode aCharacter);
-    TrieNode* traversePath(const OUString& sPath);
+    TrieNode* traversePath(std::u16string_view sPath);
     void      addNewChild(TrieNode* pChild);
     void      collectSuggestions(std::u16string_view sPath, std::vector<OUString>& rSuggestionList);
     static void  collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, std::vector<OUString>& rSuggestionList);
@@ -110,11 +110,11 @@ void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16stri
     pCurrent->collectSuggestions(aStringPath, rSuggestionList);
 }
 
-TrieNode* TrieNode::traversePath(const OUString& sPath)
+TrieNode* TrieNode::traversePath(std::u16string_view sPath)
 {
     TrieNode* pCurrent = this;
 
-    for ( sal_Int32 i = 0; i < sPath.getLength(); i++ )
+    for ( size_t i = 0; i < sPath.size(); i++ )
     {
         sal_Unicode aCurrentChar = sPath[i];
         pCurrent = pCurrent->findChild(aCurrentChar);
@@ -134,10 +134,10 @@ Trie::Trie() :
 Trie::~Trie()
 {}
 
-void Trie::insert(const OUString& sInputString) const
+void Trie::insert(std::u16string_view sInputString) const
 {
     // adding an empty word is not allowed
-    if ( sInputString.isEmpty() )
+    if ( sInputString.empty() )
     {
         return;
     }
@@ -147,7 +147,7 @@ void Trie::insert(const OUString& sInputString) const
     TrieNode* pCurrent = mRoot.get();
     sal_Unicode aCurrentChar;
 
-    for ( sal_Int32 i = 0; i < sInputString.getLength(); i++ )
+    for ( size_t i = 0; i < sInputString.size(); i++ )
     {
         aCurrentChar = sInputString[i];
         TrieNode* pChild = pCurrent->findChild(aCurrentChar);
@@ -166,7 +166,7 @@ void Trie::insert(const OUString& sInputString) const
     pCurrent->markWord();
 }
 
-void Trie::findSuggestions(const OUString& sWordPart, std::vector<OUString>& rSuggestionList) const
+void Trie::findSuggestions(std::u16string_view sWordPart, std::vector<OUString>& rSuggestionList) const
 {
     TrieNode* pNode = mRoot->traversePath(sWordPart);
 
