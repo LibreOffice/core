@@ -34,6 +34,7 @@
 #include <fontsubset.hxx>
 
 #include <hb.h>
+#include <hb-ot.h>
 
 class LogicalFontInstance;
 struct FontMatchStatus;
@@ -95,7 +96,7 @@ struct ColorLayer
 typedef std::vector<Color> ColorPalette;
 
 // https://learn.microsoft.com/en-us/typography/opentype/spec/name#name-ids
-typedef enum {
+typedef enum : hb_ot_name_id_t {
     NAME_ID_COPYRIGHT = 0,
     NAME_ID_FONT_FAMILY = 1,
     NAME_ID_FONT_SUBFAMILY = 2,
