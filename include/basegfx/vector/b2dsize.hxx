@@ -46,7 +46,7 @@ public:
     }
 
     explicit B2DSize(B2ISize const& rSize)
-        : Size2D(rSize.getX(), rSize.getY())
+        : Size2D(rSize.getWidth(), rSize.getHeight())
     {
     }
 
@@ -81,12 +81,20 @@ public:
     }
 };
 
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const B2DSize& size)
+{
+    return stream << "(" << size.getWidth() << "," << size.getHeight() << ")";
+}
+
 inline B2DSize operator*(B2DHomMatrix const& rMatrix, B2DSize const& rSize)
 {
     B2DSize aRes(rSize);
     aRes *= rMatrix;
     return aRes;
 }
-}
+
+} // end basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-
+#include <basegfx/vector/b2ivector.hxx>
 #include "pagemanager.hxx"
 
 namespace canvas
@@ -98,7 +98,7 @@ namespace canvas
                 if( *aCurr && !( ( *aCurr )->isNaked() ) )
                 {
                     const ::basegfx::B2ISize& rSize( ( *aCurr )->getSize() );
-                    sal_uInt32                nArea( rSize.getX() * rSize.getY() );
+                    sal_uInt32                nArea( rSize.getWidth() * rSize.getHeight() );
 
                     if( nCurrMaxArea < nArea )
                     {
@@ -145,7 +145,8 @@ namespace canvas
 
     ::basegfx::B2ISize PageManager::getPageSize() const
     {
-        return mpRenderModule->getPageSize();
+        return { mpRenderModule->getPageSize().getX(),
+                 mpRenderModule->getPageSize().getY() };
     }
 }
 

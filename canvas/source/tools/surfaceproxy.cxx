@@ -36,10 +36,10 @@ namespace canvas
     {
         const ::basegfx::B2ISize aImageSize(mpBuffer->getWidth(),mpBuffer->getHeight());
         const ::basegfx::B2ISize aPageSize(mpPageManager->getPageSize());
-        const sal_Int32 aPageSizeX(aPageSize.getX());
-        const sal_Int32 aPageSizeY(aPageSize.getY());
-        const sal_Int32 aImageSizeX(aImageSize.getX());
-        const sal_Int32 aImageSizeY(aImageSize.getY());
+        const sal_Int32 aPageSizeX(aPageSize.getWidth());
+        const sal_Int32 aPageSizeY(aPageSize.getHeight());
+        const sal_Int32 aImageSizeX(aImageSize.getWidth());
+        const sal_Int32 aImageSizeY(aImageSize.getHeight());
 
         // see if the size of the colorbuffer is larger than the size
         // of a single page. if this is the case we divide the
@@ -64,10 +64,10 @@ namespace canvas
                 // the current surface is located at the position [x,y]
                 // and has the size [min(restx,pagesizex),min(resty,pagesizey)
                 ::basegfx::B2IPoint aOffset(x,y);
-                ::basegfx::B2ISize aSize( std::min( aImageSize.getX()-x,
-                                                      aPageSize.getX() ),
-                                          std::min( aImageSize.getY()-y,
-                                                      aPageSize.getY() ) );
+                ::basegfx::B2ISize aSize( std::min( aImageSize.getWidth()-x,
+                                                      aPageSize.getWidth() ),
+                                          std::min( aImageSize.getHeight()-y,
+                                                      aPageSize.getHeight() ) );
 
                 maSurfaceList.push_back(
                     std::make_shared<Surface>(

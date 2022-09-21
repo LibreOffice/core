@@ -881,7 +881,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 0.0,
                 0.0,
                 ShapeSharedPtr(),
-                basegfx::B2DVector( rEnteringSlide->getSlideSize() ) ),
+                basegfx::B2DVector(rEnteringSlide->getSlideSize().getWidth(), rEnteringSlide->getSlideSize().getHeight()) ),
             pTransition,
             true ));
 }
@@ -1360,8 +1360,7 @@ sal_Bool SlideShowImpl::addView(
     {
         // set view transformation
         const basegfx::B2ISize slideSize = mpCurrentSlide->getSlideSize();
-        pView->setViewSize( basegfx::B2DSize( slideSize.getX(),
-                                              slideSize.getY() ) );
+        pView->setViewSize( basegfx::B2DSize(slideSize) );
     }
 
     // clear view area (since it's newly added,

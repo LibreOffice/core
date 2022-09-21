@@ -141,7 +141,6 @@ namespace dxcanvas
     {
         if( !mpTarget )
             return geometry::IntegerSize2D(1, 1);
-
         return basegfx::unotools::integerSize2DFromB2ISize(mpTarget->getSize());
     }
 

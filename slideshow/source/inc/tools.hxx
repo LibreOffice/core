@@ -45,7 +45,7 @@ namespace basegfx
     class B2DVector;
     class B2IVector;
     class B2DHomMatrix;
-    typedef B2IVector B2ISize;
+    class B2ISize;
 }
 namespace cppcanvas{ class Canvas; }
 

@@ -19,15 +19,43 @@
 
 #pragma once
 
-#include <basegfx/vector/b2ivector.hxx>
+#include <basegfx/tuple/Size2D.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
-// syntactic sugar: a B2IVector exactly models a Size object,
-// thus, for interface clarity, we provide an alias name
+class B2ISize : public Size2D<sal_Int32>
+{
+public:
+    B2ISize()
+        : Size2D(0, 0)
+    {
+    }
 
-/// Alias name for interface clarity (not everybody is aware of the identity)
-typedef B2IVector B2ISize;
+    B2ISize(sal_Int32 nX, sal_Int32 nY)
+        : Size2D(nX, nY)
+    {
+    }
+
+    B2ISize(Size2D<sal_Int32> const& rSize)
+        : Size2D(rSize)
+    {
+    }
+
+    using Size2D<sal_Int32>::operator+=;
+    using Size2D<sal_Int32>::operator-=;
+    using Size2D<sal_Int32>::operator*=;
+    using Size2D<sal_Int32>::operator/=;
+    using Size2D<sal_Int32>::operator-;
+};
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const B2ISize& size)
+{
+    return stream << "(" << size.getWidth() << "," << size.getHeight() << ")";
 }
+
+} // end basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

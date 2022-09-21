@@ -31,18 +31,18 @@ namespace dxcanvas
     class DXSurfaceBitmap : public IBitmap
     {
     public:
-        DXSurfaceBitmap( const ::basegfx::B2IVector&                    rSize,
+        DXSurfaceBitmap( const ::basegfx::B2ISize& rSize,
                          const std::shared_ptr<canvas::ISurfaceProxyManager>&   rMgr,
                          const IDXRenderModuleSharedPtr&                rRenderModule,
                          bool                                           bWithAlpha );
 
-        bool resize( const ::basegfx::B2IVector& rSize );
+        bool resize(const ::basegfx::B2ISize& rSize);
         void clear();
 
         virtual GraphicsSharedPtr         getGraphics() override;
 
         virtual BitmapSharedPtr           getBitmap() const override;
-        virtual ::basegfx::B2IVector      getSize() const override;
+        virtual ::basegfx::B2ISize getSize() const override;
         virtual bool                      hasAlpha() const override;
 
         sal::systools::COMReference<surface_type> getSurface() const { return mpSurface; }
@@ -88,7 +88,7 @@ namespace dxcanvas
         GDIPlusUserSharedPtr mpGdiPlusUser;
 
         // size of this image in pixels [integral unit]
-        ::basegfx::B2IVector maSize;
+        ::basegfx::B2ISize maSize;
 
         // pointer to the rendermodule, needed to create surfaces
         // which are used as container for the actual pixel data.

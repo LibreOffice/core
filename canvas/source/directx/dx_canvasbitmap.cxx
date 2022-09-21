@@ -105,18 +105,18 @@ namespace dxcanvas
                     // need to copy&convert the bitmap, since dx
                     // canvas uses inline alpha channel
                     HDC hScreenDC=GetDC(nullptr);
-                    const basegfx::B2IVector aSize(mpBitmap->getSize());
+                    const basegfx::B2ISize aSize = mpBitmap->getSize();
                     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
-                                                                 aSize.getX(),
-                                                                 aSize.getY() );
+                                                                 aSize.getWidth(),
+                                                                 aSize.getHeight() );
                     if( !hBmpBitmap )
                         return aRes;
 
                     BITMAPINFOHEADER aBIH;
 
                     aBIH.biSize = sizeof( BITMAPINFOHEADER );
-                    aBIH.biWidth = aSize.getX();
-                    aBIH.biHeight = -aSize.getY();
+                    aBIH.biWidth = aSize.getWidth();
+                    aBIH.biHeight = -aSize.getHeight();
                     aBIH.biPlanes = 1;
                     aBIH.biBitCount = 32;
                     aBIH.biCompression = BI_RGB; // expects pixel in
@@ -129,12 +129,12 @@ namespace dxcanvas
                     aBIH.biClrImportant = 0;
 
                     Gdiplus::BitmapData aBmpData;
-                    aBmpData.Width       = aSize.getX();
-                    aBmpData.Height      = aSize.getY();
+                    aBmpData.Width       = aSize.getWidth();
+                    aBmpData.Height      = aSize.getHeight();
                     aBmpData.Stride      = 4*aBmpData.Width;
                     aBmpData.PixelFormat = PixelFormat32bppARGB;
                     aBmpData.Scan0       = nullptr;
-                    const Gdiplus::Rect aRect( 0,0,aSize.getX(),aSize.getY() );
+                    const Gdiplus::Rect aRect( 0,0,aSize.getWidth(),aSize.getHeight() );
                     BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
                                                                  Gdiplus::ImageLockModeRead,
@@ -147,7 +147,7 @@ namespace dxcanvas
 
                     // now aBmpData.Scan0 contains our bits - push
                     // them into HBITMAP, ignoring alpha
-                    SetDIBits( hScreenDC, hBmpBitmap, 0, aSize.getY(), aBmpData.Scan0, reinterpret_cast<PBITMAPINFO>(&aBIH), DIB_RGB_COLORS );
+                    SetDIBits( hScreenDC, hBmpBitmap, 0, aSize.getHeight(), aBmpData.Scan0, reinterpret_cast<PBITMAPINFO>(&aBIH), DIB_RGB_COLORS );
 
                     pGDIPlusBitmap->UnlockBits( &aBmpData );
 
@@ -170,14 +170,14 @@ namespace dxcanvas
                     // need to copy&convert the bitmap, since dx
                     // canvas uses inline alpha channel
                     HDC hScreenDC=GetDC(nullptr);
-                    const basegfx::B2IVector aSize(mpBitmap->getSize());
-                    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC, aSize.getX(), aSize.getY() );
+                    const basegfx::B2ISize aSize = mpBitmap->getSize();
+                    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC, aSize.getWidth(), aSize.getHeight() );
                     if( !hBmpBitmap )
                         return aRes;
 
                     aDIB.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
-                    aDIB.bmiHeader.biWidth = aSize.getX();
-                    aDIB.bmiHeader.biHeight = -aSize.getY();
+                    aDIB.bmiHeader.biWidth = aSize.getWidth();
+                    aDIB.bmiHeader.biHeight = -aSize.getHeight();
                     aDIB.bmiHeader.biPlanes = 1;
                     aDIB.bmiHeader.biBitCount = 8;
                     aDIB.bmiHeader.biCompression = BI_RGB;
@@ -188,12 +188,12 @@ namespace dxcanvas
                     aDIB.bmiHeader.biClrImportant = 0;
 
                     Gdiplus::BitmapData aBmpData;
-                    aBmpData.Width       = aSize.getX();
-                    aBmpData.Height      = aSize.getY();
+                    aBmpData.Width       = aSize.getWidth();
+                    aBmpData.Height      = aSize.getHeight();
                     aBmpData.Stride      = 4*aBmpData.Width;
                     aBmpData.PixelFormat = PixelFormat32bppARGB;
                     aBmpData.Scan0       = nullptr;
-                    const Gdiplus::Rect aRect( 0,0,aSize.getX(),aSize.getY() );
+                    const Gdiplus::Rect aRect( 0,0,aSize.getWidth(),aSize.getHeight() );
                     BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
                                                                  Gdiplus::ImageLockModeRead,
@@ -205,14 +205,14 @@ namespace dxcanvas
                     }
 
                     // copy only alpha channel to pAlphaBits
-                    const sal_Int32 nScanWidth((aSize.getX() + 3) & ~3);
-                    std::unique_ptr<sal_uInt8[]> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getY()] );
+                    const sal_Int32 nScanWidth((aSize.getWidth() + 3) & ~3);
+                    std::unique_ptr<sal_uInt8[]> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getHeight()] );
                     const sal_uInt8* pInBits=static_cast<sal_uInt8*>(aBmpData.Scan0);
                     pInBits+=3;
-                    for( sal_Int32 y=0; y<aSize.getY(); ++y )
+                    for( sal_Int32 y=0; y<aSize.getHeight(); ++y )
                     {
                         sal_uInt8* pOutBits=pAlphaBits.get()+y*nScanWidth;
-                        for( sal_Int32 x=0; x<aSize.getX(); ++x )
+                        for( sal_Int32 x=0; x<aSize.getWidth(); ++x )
                         {
                             *pOutBits++ = 255-*pInBits;
                             pInBits += 4;
@@ -223,7 +223,7 @@ namespace dxcanvas
 
                     // set bits to newly create HBITMAP
                     SetDIBits( hScreenDC, hBmpBitmap, 0,
-                               aSize.getY(), pAlphaBits.get(),
+                               aSize.getHeight(), pAlphaBits.get(),
                                reinterpret_cast<PBITMAPINFO>(&aDIB), DIB_RGB_COLORS );
 
                     uno::Sequence< uno::Any > args{ uno::Any(reinterpret_cast<sal_Int64>(hBmpBitmap)) };

@@ -185,7 +185,7 @@ namespace cairocanvas
             // background has changed, so we currently have no choice
             // but repaint everything (or caller requested that)
 
-            cairo_rectangle( pCompositingCairo.get(), 0, 0, rSize.getX(), rSize.getY() );
+            cairo_rectangle( pCompositingCairo.get(), 0, 0, rSize.getWidth(), rSize.getHeight() );
             cairo_clip( pCompositingCairo.get() );
             cairo_save( pCompositingCairo.get() );
             cairo_set_source_surface( pCompositingCairo.get(),
@@ -203,7 +203,7 @@ namespace cairocanvas
                     );
 
             // flush to screen
-            cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getX(), rSize.getY() );
+            cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getWidth(), rSize.getHeight() );
             cairo_clip( pWindowCairo.get() );
             cairo_set_source_surface( pWindowCairo.get(),
                                       pCompositingSurface->getCairoSurface().get(),
@@ -245,8 +245,8 @@ namespace cairocanvas
 
         const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
         const ::basegfx::B2IRange  aOutputBounds( 0,0,
-                                                  rSize.getX(),
-                                                  rSize.getY() );
+                                                  rSize.getWidth(),
+                                                  rSize.getHeight() );
 
         SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
         SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
@@ -312,7 +312,7 @@ namespace cairocanvas
                                       aDestPos.getY() - aSourceUpperLeftPos.getY() );
             cairo_rectangle( pScrollCairo.get(),
                     aDestPos.getX(), aDestPos.getY(),
-                    aScrollSize.getX(), aScrollSize.getY() );
+                    aScrollSize.getWidth(), aScrollSize.getHeight() );
             cairo_clip( pScrollCairo.get() );
             cairo_set_operator( pScrollCairo.get(), CAIRO_OPERATOR_SOURCE );
             cairo_paint( pScrollCairo.get() );
@@ -325,7 +325,7 @@ namespace cairocanvas
                                       0, 0 );
             cairo_rectangle( pCompositingCairo.get(),
                              aDestPos.getX(), aDestPos.getY(),
-                             aScrollSize.getX(), aScrollSize.getY() );
+                             aScrollSize.getWidth(), aScrollSize.getHeight() );
             cairo_clip( pCompositingCairo.get() );
             cairo_set_operator( pCompositingCairo.get(), CAIRO_OPERATOR_SOURCE );
             cairo_paint( pCompositingCairo.get() );
@@ -359,7 +359,7 @@ namespace cairocanvas
             repaintBackground( pCompositingCairo,
                                mpOwningSpriteCanvas->getBufferSurface(), rArea );
 
-        cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getX(), rSize.getY() );
+        cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getWidth(), rSize.getHeight() );
         cairo_clip( pWindowCairo.get() );
         cairo_set_source_surface( pWindowCairo.get(),
                                   pCompositingSurface->getCairoSurface().get(),
@@ -384,7 +384,7 @@ namespace cairocanvas
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
-        cairo_rectangle( pCompositingCairo.get(), 0, 0, rDeviceSize.getX(), rDeviceSize.getY() );
+        cairo_rectangle( pCompositingCairo.get(), 0, 0, rDeviceSize.getWidth(), rDeviceSize.getHeight() );
         cairo_clip( pCompositingCairo.get() );
 
         ::basegfx::B2DVector aPos( ceil( rTotalArea.getMinX() ), ceil( rTotalArea.getMinY() ) );
@@ -402,7 +402,7 @@ namespace cairocanvas
         }
 
         // flush to screen
-        cairo_rectangle( pWindowCairo.get(), 0, 0, rDeviceSize.getX(), rDeviceSize.getY() );
+        cairo_rectangle( pWindowCairo.get(), 0, 0, rDeviceSize.getWidth(), rDeviceSize.getHeight() );
         cairo_clip( pWindowCairo.get() );
         cairo_rectangle( pWindowCairo.get(), aPos.getX(), aPos.getY(), aSize.getX(), aSize.getY() );
         cairo_clip( pWindowCairo.get() );
@@ -444,9 +444,9 @@ namespace cairocanvas
         // fraction of a sprite pixel... Limit size of VDev to output
         // device's area.
         const Size  aOutputSize(
-            std::min( rSize.getX(),
+            std::min( rSize.getWidth(),
                         ::canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X()) ),
-            std::min( rSize.getY(),
+            std::min( rSize.getHeight(),
                         ::canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y()) ) );
 
         cairo_rectangle( pCompositingCairo.get(), aOutputPosition.X(), aOutputPosition.Y(), aOutputSize.Width(), aOutputSize.Height() );
@@ -482,8 +482,8 @@ namespace cairocanvas
 
     ::cairo::SurfaceSharedPtr const & SpriteCanvasHelper::getCompositingSurface( const ::basegfx::B2ISize& rNeededSize )
     {
-        if( rNeededSize.getX() > maCompositingSurfaceSize.getX() ||
-            rNeededSize.getY() > maCompositingSurfaceSize.getY() )
+        if( rNeededSize.getWidth() > maCompositingSurfaceSize.getWidth() ||
+            rNeededSize.getHeight() > maCompositingSurfaceSize.getHeight() )
         {
             // need to give buffer more size
             mpCompositingSurface.reset();
@@ -511,7 +511,7 @@ namespace cairocanvas
     {
         return mpOwningSpriteCanvas->getWindowSurface()->getSimilar(
                     CAIRO_CONTENT_COLOR,
-                    rNeededSize.getX(), rNeededSize.getY() );
+                    rNeededSize.getWidth(), rNeededSize.getHeight() );
     }
 }
 

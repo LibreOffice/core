@@ -110,8 +110,8 @@ void CombTransition::renderComb( double           t,
     // TODO(Q2): Use basegfx bitmaps here
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
-    const basegfx::B2DVector enteringSizePixel(
-        getEnteringSlideSizePixel( rViewEntry.mpView) );
+    auto aSlideSizePixel = getEnteringSlideSizePixel(rViewEntry.mpView);
+    const basegfx::B2DVector enteringSizePixel(aSlideSizePixel.getWidth(), aSlideSizePixel.getHeight());
 
     const basegfx::B2DVector aPushDirection(
         enteringSizePixel * maPushDirectionUnit );

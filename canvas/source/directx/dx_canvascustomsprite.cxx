@@ -49,7 +49,7 @@ namespace dxcanvas
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         mpSurface = std::make_shared<DXSurfaceBitmap>(
-                ::basegfx::B2IVector(
+                ::basegfx::B2ISize(
                     ::canvas::tools::roundUp( rSpriteSize.Width ),
                     ::canvas::tools::roundUp( rSpriteSize.Height )),
                 rSurfaceProxy,

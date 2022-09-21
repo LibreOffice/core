@@ -18,14 +18,14 @@
  */
 
 #include <sal/config.h>
-
+#include <basegfx/vector/b2ivector.hxx>
 #include "page.hxx"
 
 namespace canvas
 {
     Page::Page( const std::shared_ptr<IRenderModule> &rRenderModule ) :
         mpRenderModule(rRenderModule),
-        mpSurface(rRenderModule->createSurface(::basegfx::B2ISize()))
+        mpSurface(rRenderModule->createSurface(::basegfx::B2IVector()))
     {
     }
 
@@ -91,8 +91,8 @@ namespace canvas
             const sal_Int32 y = rect.maPos.getY();
             // to avoid interpolation artifacts from other textures,
             // one pixel gap between them
-            const sal_Int32 w = rect.maSize.getX()+1;
-            const sal_Int32 h = rect.maSize.getY()+1;
+            const sal_Int32 w = rect.maSize.getWidth() + 1;
+            const sal_Int32 h = rect.maSize.getHeight() + 1;
 
             // probe location to the right
             r.maPos.setX(x+w);
@@ -118,7 +118,8 @@ namespace canvas
         // the rectangle passed as argument has a valid
         // location if and only if there's no intersection
         // with existing areas.
-        SurfaceRect aBoundary(mpRenderModule->getPageSize());
+        basegfx::B2ISize aSize(mpRenderModule->getPageSize().getX(), mpRenderModule->getPageSize().getY());
+        SurfaceRect aBoundary(aSize);
         if( !r.inside(aBoundary) )
             return false;
 

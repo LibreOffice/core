@@ -48,7 +48,7 @@ namespace dxcanvas
         {
         public:
             DXColorBuffer( const sal::systools::COMReference<surface_type>& rSurface,
-                           const ::basegfx::B2IVector& rSize )
+                           const ::basegfx::B2ISize& rSize )
                 : maSize(rSize)
                 , maLockedRect{}
                 , mpSurface(rSurface)
@@ -67,7 +67,7 @@ namespace dxcanvas
 
         private:
 
-            ::basegfx::B2IVector maSize;
+            ::basegfx::B2ISize maSize;
             mutable D3DLOCKED_RECT maLockedRect;
             sal::systools::COMReference<surface_type> mpSurface;
         };
@@ -86,12 +86,12 @@ namespace dxcanvas
 
         sal_uInt32 DXColorBuffer::getWidth() const
         {
-            return maSize.getX();
+            return maSize.getWidth();
         }
 
         sal_uInt32 DXColorBuffer::getHeight() const
         {
-            return maSize.getY();
+            return maSize.getHeight();
         }
 
         sal_uInt32 DXColorBuffer::getStride() const
@@ -113,7 +113,7 @@ namespace dxcanvas
         public:
 
             GDIColorBuffer( const BitmapSharedPtr&      rSurface,
-                            const ::basegfx::B2IVector& rSize )
+                            const ::basegfx::B2ISize& rSize )
                 : maSize(rSize)
                 , aBmpData{}
                 , mpGDIPlusBitmap(rSurface)
@@ -132,15 +132,15 @@ namespace dxcanvas
 
         private:
 
-            ::basegfx::B2IVector maSize;
+            ::basegfx::B2ISize maSize;
             mutable Gdiplus::BitmapData aBmpData;
             BitmapSharedPtr mpGDIPlusBitmap;
         };
 
         sal_uInt8* GDIColorBuffer::lock() const
         {
-            aBmpData.Width = maSize.getX();
-            aBmpData.Height = maSize.getY();
+            aBmpData.Width = maSize.getWidth();
+            aBmpData.Height = maSize.getHeight();
             aBmpData.Stride = 4*aBmpData.Width;
             aBmpData.PixelFormat = PixelFormat32bppARGB;
             aBmpData.Scan0 = nullptr;
@@ -163,12 +163,12 @@ namespace dxcanvas
 
         sal_uInt32 GDIColorBuffer::getWidth() const
         {
-            return maSize.getX();
+            return maSize.getWidth();
         }
 
         sal_uInt32 GDIColorBuffer::getHeight() const
         {
-            return maSize.getY();
+            return maSize.getHeight();
         }
 
         sal_uInt32 GDIColorBuffer::getStride() const
@@ -186,10 +186,10 @@ namespace dxcanvas
     // DXSurfaceBitmap::DXSurfaceBitmap
 
 
-    DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2IVector&                   rSize,
+    DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2ISize& rSize,
                                       const std::shared_ptr<canvas::ISurfaceProxyManager>&  rMgr,
-                                      const IDXRenderModuleSharedPtr&               rRenderModule,
-                                      bool                                          bWithAlpha ) :
+                                      const IDXRenderModuleSharedPtr& rRenderModule,
+                                      bool bWithAlpha ) :
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         maSize(rSize),
         mpRenderModule(rRenderModule),
@@ -209,7 +209,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::getSize
 
 
-    ::basegfx::B2IVector DXSurfaceBitmap::getSize() const
+    ::basegfx::B2ISize DXSurfaceBitmap::getSize() const
     {
         return maSize;
     }
@@ -224,8 +224,8 @@ namespace dxcanvas
         if(mbAlpha)
         {
             mpGDIPlusBitmap = std::make_shared<Gdiplus::Bitmap>(
-                    maSize.getX(),
-                    maSize.getY(),
+                    maSize.getWidth(),
+                    maSize.getHeight(),
                     PixelFormat32bppARGB
                     );
             mpGraphics = tools::createGraphicsFromBitmap(mpGDIPlusBitmap);
@@ -234,7 +234,7 @@ namespace dxcanvas
             // wrapper around the directx surface. the colorbuffer is the
             // interface which is used by the surfaceproxy to support any
             // kind of underlying structure for the pixel data container.
-            mpColorBuffer = std::make_shared<GDIColorBuffer>(mpGDIPlusBitmap,maSize);
+            mpColorBuffer = std::make_shared<GDIColorBuffer>(mpGDIPlusBitmap, maSize);
         }
         else
         {
@@ -244,7 +244,7 @@ namespace dxcanvas
             // wrapper around the directx surface. the colorbuffer is the
             // interface which is used by the surfaceproxy to support any
             // kind of underlying structure for the pixel data container.
-            mpColorBuffer = std::make_shared<DXColorBuffer>(mpSurface,maSize);
+            mpColorBuffer = std::make_shared<DXColorBuffer>(mpSurface, maSize);
         }
 
         // create a (possibly hardware accelerated) mirror surface.
@@ -255,7 +255,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::resize
 
 
-    bool DXSurfaceBitmap::resize( const ::basegfx::B2IVector& rSize )
+    bool DXSurfaceBitmap::resize(const ::basegfx::B2ISize& rSize)
     {
         if(maSize != rSize)
         {
@@ -324,7 +324,7 @@ namespace dxcanvas
             Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
 
             // construct a gdi+ bitmap from the raw pixel data.
-            pResult = std::make_shared<Gdiplus::Bitmap>( maSize.getX(),maSize.getY(),
+            pResult = std::make_shared<Gdiplus::Bitmap>(maSize.getWidth(), maSize.getHeight(),
                                                 aLockedRect.Pitch,
                                                 nFormat,
                                                 static_cast<BYTE *>(aLockedRect.pBits) );
@@ -568,7 +568,7 @@ namespace dxcanvas
     {
         if(hasAlpha())
         {
-            const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );
+            const geometry::IntegerSize2D aSize( maSize.getWidth(), maSize.getHeight() );
 
             ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
                             "CanvasHelper::setPixel: X coordinate out of bounds" );
@@ -585,9 +585,9 @@ namespace dxcanvas
         }
         else
         {
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getX(),
+            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getWidth(),
                             "CanvasHelper::setPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(),
+            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getHeight(),
                             "CanvasHelper::setPixel: Y coordinate out of bounds" );
             ENSURE_ARG_OR_THROW( color.getLength() > 3,
                             "CanvasHelper::setPixel: not enough color components" );
@@ -616,7 +616,7 @@ namespace dxcanvas
     {
         if(hasAlpha())
         {
-            const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );
+            const geometry::IntegerSize2D aSize(maSize.getWidth(), maSize.getHeight());
 
             ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
                             "CanvasHelper::getPixel: X coordinate out of bounds" );
@@ -632,9 +632,9 @@ namespace dxcanvas
         }
         else
         {
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getX(),
+            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getWidth(),
                             "CanvasHelper::getPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(),
+            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getHeight(),
                             "CanvasHelper::getPixel: Y coordinate out of bounds" );
 
             // lock the directx surface to receive the pointer to the surface memory.

@@ -157,7 +157,7 @@ namespace dxcanvas
 
             if(!rOutputOffset.equalZero())
             {
-                aWorldTransform.translate(rOutputOffset.getX(), rOutputOffset.getY());
+                aWorldTransform.translate(rOutputOffset.getWidth(), rOutputOffset.getHeight());
             }
 
             // set ViewState clipping
@@ -169,7 +169,7 @@ namespace dxcanvas
 
                 if(!rOutputOffset.equalZero())
                 {
-                    aMatrix.translate(rOutputOffset.getX(), rOutputOffset.getY());
+                    aMatrix.translate(rOutputOffset.getWidth(), rOutputOffset.getHeight());
                 }
 
                 aClipPoly.transform(aMatrix);

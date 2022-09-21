@@ -322,7 +322,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                         xDrawPage)),
     mpSubsettableShapeManager( mpShapeManager ),
     mpBox2DWorld( std::make_shared<box2d::utils::box2DWorld>(
-                        basegfx::B2DVector( getSlideSizeImpl() ) ) ),
+                        basegfx::B2DVector(getSlideSizeImpl().getWidth(), getSlideSizeImpl().getHeight()) ) ),
     maContext( mpSubsettableShapeManager,
                rEventQueue,
                rEventMultiplexer,
@@ -336,7 +336,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                mpBox2DWorld ),
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
-                  basegfx::B2DVector( getSlideSizeImpl() ) ),
+                  basegfx::B2DVector(getSlideSizeImpl().getWidth(), getSlideSizeImpl().getHeight()) ),
     maPolygons(std::move(rPolyPolygonVector)),
     maUserPaintColor(aUserPaintColor),
     mdUserPaintStrokeWidth(dUserPaintStrokeWidth),
@@ -569,9 +569,8 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
     }
 
     SlideBitmapSharedPtr&     rBitmap( aIter->second.at( meAnimationState ));
-    const ::basegfx::B2ISize& rSlideSize(
-        getSlideSizePixel( ::basegfx::B2DVector( getSlideSize() ),
-                           rView ));
+    auto aSize = getSlideSizePixel(basegfx::B2DVector(getSlideSize().getWidth(), getSlideSize().getHeight()), rView);
+    const basegfx::B2ISize rSlideSize(aSize.getX(), aSize.getY());
 
     // is the bitmap valid (actually existent, and of correct
     // size)?
@@ -920,7 +919,7 @@ void SlideImpl::applyShapeAttributes(
                     extractValue( bVisible,
                                   rShapeProp.Value,
                                   pShape,
-                                  basegfx::B2DVector(getSlideSize()) ))
+                                  basegfx::B2DVector(getSlideSize().getWidth(), getSlideSize().getHeight()) ))
                 {
                     pAttrShape->setVisibility( bVisible );
                 }

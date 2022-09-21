@@ -209,7 +209,7 @@ namespace cairocanvas
 
     void CanvasHelper::clear()
     {
-        SAL_INFO( "canvas.cairo", "clear whole area: " << maSize.getX() << " x " << maSize.getY() );
+        SAL_INFO( "canvas.cairo", "clear whole area: " << maSize.getWidth() << " x " << maSize.getHeight() );
 
         if( !mpCairo )
             return;
@@ -226,7 +226,7 @@ namespace cairocanvas
             cairo_set_source_rgb( mpCairo.get(), 1.0, 1.0, 1.0 );
         cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
 
-        cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
+        cairo_rectangle( mpCairo.get(), 0, 0, maSize.getWidth(), maSize.getHeight() );
         cairo_fill( mpCairo.get() );
 
         cairo_restore( mpCairo.get() );
@@ -1087,7 +1087,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         {
             cairo_save( mpCairo.get() );
 
-            cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
+            cairo_rectangle( mpCairo.get(), 0, 0, maSize.getWidth(), maSize.getHeight() );
             cairo_clip( mpCairo.get() );
 
             useStates( viewState, renderState, true );
@@ -1146,8 +1146,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
                 // in case the bitmap doesn't have alpha and covers whole area
                 // we try to change surface to plain rgb
-                SAL_INFO( "canvas.cairo","chance to change surface to rgb, " << x << ", " << y << ", " << width << " x " << height << " (" << maSize.getX() << " x " << maSize.getY() << ")" );
-                if( x <= 0 && y <= 0 && x + width >= maSize.getX() && y + height >= maSize.getY() )
+                SAL_INFO( "canvas.cairo","chance to change surface to rgb, " << x << ", " << y << ", " << width << " x " << height << " (" << maSize.getWidth() << " x " << maSize.getHeight() << ")" );
+                if( x <= 0 && y <= 0 && x + width >= maSize.getWidth() && y + height >= maSize.getHeight() )
                 {
                     SAL_INFO( "canvas.cairo","trying to change surface to rgb");
                     if( mpSurfaceProvider ) {
@@ -2025,7 +2025,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
         cairo_save( mpCairo.get() );
 
-        cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
+        cairo_rectangle( mpCairo.get(), 0, 0, maSize.getWidth(), maSize.getHeight() );
         cairo_clip( mpCairo.get() );
 
         useStates( viewState, renderState, true );

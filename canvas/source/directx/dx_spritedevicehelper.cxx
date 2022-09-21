@@ -88,7 +88,7 @@ namespace dxcanvas
 
         // #i60490# ensure backbuffer has sensible minimal size
         mpBackBuffer = std::make_shared<DXSurfaceBitmap>(
-                               ::basegfx::B2ISize(w,h),
+                               basegfx::B2ISize(w,h),
                                mpSurfaceProxyManager,
                                mpRenderModule,
                                false);

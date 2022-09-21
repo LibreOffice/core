@@ -58,12 +58,12 @@ namespace canvas
         if( mpFragment )
             aDestOffset = mpFragment->getPos();
 
-        const double pw( aPageSize.getX() );
-        const double ph( aPageSize.getY() );
+        const double pw( aPageSize.getWidth() );
+        const double ph( aPageSize.getHeight() );
         const double ox( aDestOffset.getX() );
         const double oy( aDestOffset.getY() );
-        const double sx( maSize.getX() );
-        const double sy( maSize.getY() );
+        const double sx( maSize.getWidth() );
+        const double sy( maSize.getHeight() );
 
         return ::basegfx::B2DRectangle( ox/pw,
                                         oy/ph,
@@ -76,12 +76,12 @@ namespace canvas
     {
         ::basegfx::B2ISize aPageSize(mpPageManager->getPageSize());
 
-        const double pw( aPageSize.getX() );
-        const double ph( aPageSize.getY() );
+        const double pw( aPageSize.getWidth() );
+        const double ph( aPageSize.getHeight() );
         const double ox( rPos.getX() );
         const double oy( rPos.getY() );
-        const double sx( rSize.getX() );
-        const double sy( rSize.getY() );
+        const double sx( rSize.getWidth() );
+        const double sy( rSize.getHeight() );
 
         return ::basegfx::B2DRectangle( ox/pw,
                                         oy/ph,
@@ -145,10 +145,10 @@ namespace canvas
             ######################################
         */
 
-        const ::basegfx::B2DPoint& p0(aTransform * ::basegfx::B2DPoint(maSize.getX(),maSize.getY()));
-        const ::basegfx::B2DPoint& p1(aTransform * ::basegfx::B2DPoint(0.0,maSize.getY()));
+        const ::basegfx::B2DPoint& p0(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),maSize.getHeight()));
+        const ::basegfx::B2DPoint& p1(aTransform * ::basegfx::B2DPoint(0.0,maSize.getHeight()));
         const ::basegfx::B2DPoint& p2(aTransform * ::basegfx::B2DPoint(0.0,0.0));
-        const ::basegfx::B2DPoint& p3(aTransform * ::basegfx::B2DPoint(maSize.getX(),0.0));
+        const ::basegfx::B2DPoint& p3(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),0.0));
 
         canvas::Vertex vertex;
         vertex.r = 1.0f;
@@ -208,10 +208,10 @@ namespace canvas
             ::basegfx::fround(rArea.getMaximum().getY()) );
 
         // clip the positions to the area this surface covers
-        aPos1.setX(std::max(aPos1.getX(),maSourceOffset.getX()));
-        aPos1.setY(std::max(aPos1.getY(),maSourceOffset.getY()));
-        aPos2.setX(std::min(aPos2.getX(),maSourceOffset.getX()+maSize.getX()));
-        aPos2.setY(std::min(aPos2.getY(),maSourceOffset.getY()+maSize.getY()));
+        aPos1.setX(std::max(aPos1.getX(), maSourceOffset.getX()));
+        aPos1.setY(std::max(aPos1.getY(), maSourceOffset.getY()));
+        aPos2.setX(std::min(aPos2.getX(), maSourceOffset.getX() + maSize.getWidth()));
+        aPos2.setY(std::min(aPos2.getY(), maSourceOffset.getY() + maSize.getHeight()));
 
         // if the resulting area is empty, return immediately
         ::basegfx::B2IVector aSize(aPos2 - aPos1);
@@ -225,7 +225,7 @@ namespace canvas
         // convert size to normalized device coordinates
         const ::basegfx::B2DRectangle& rUV(
             getUVCoords(aPos1 - maSourceOffset + aDestOffset,
-                        aSize) );
+                        basegfx::B2ISize(aSize.getX(), aSize.getY())) );
         const double u1(rUV.getMinX());
         const double v1(rUV.getMinY());
         const double u2(rUV.getMaxX());
@@ -321,8 +321,8 @@ namespace canvas
         // the whole image, with non-zero maSourceOffset)
         const double x1(maSourceOffset.getX());
         const double y1(maSourceOffset.getY());
-        const double w(maSize.getX());
-        const double h(maSize.getY());
+        const double w(maSize.getWidth());
+        const double h(maSize.getHeight());
         const double x2(x1+w);
         const double y2(y1+h);
         const ::basegfx::B2DRectangle aSurfaceClipRect(x1,y1,x2,y2);

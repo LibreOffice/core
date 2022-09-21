@@ -90,7 +90,7 @@ namespace cairocanvas
     {
         SAL_INFO(
             "canvas.cairo",
-            "device size " << rSize.getX() << " x " << rSize.getY());
+            "device size " << rSize.getWidth() << " x " << rSize.getHeight());
 
         if( !mpSpriteCanvas )
             return; // disposed
@@ -102,7 +102,7 @@ namespace cairocanvas
         if( !mpBufferSurface )
             mpBufferSurface = getWindowSurface()->getSimilar(
                 CAIRO_CONTENT_COLOR,
-                rSize.getX(), rSize.getY() );
+                rSize.getWidth(), rSize.getHeight() );
 
         if( maSize != rSize )
             maSize = rSize;
@@ -124,7 +124,7 @@ namespace cairocanvas
     SurfaceSharedPtr SpriteDeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         if( mpBufferSurface )
-            return mpBufferSurface->getSimilar( aContent, rSize.getX(), rSize.getY() );
+            return mpBufferSurface->getSimilar( aContent, rSize.getWidth(), rSize.getHeight() );
 
         return SurfaceSharedPtr();
     }

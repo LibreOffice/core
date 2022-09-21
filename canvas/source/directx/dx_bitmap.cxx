@@ -47,8 +47,8 @@ namespace dxcanvas
     {
     }
 
-    DXBitmap::DXBitmap( const ::basegfx::B2IVector& rSize,
-                        bool                        bWithAlpha ) :
+    DXBitmap::DXBitmap( const ::basegfx::B2ISize& rSize,
+                        bool bWithAlpha ) :
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         maSize(rSize),
         mpBitmap(),
@@ -59,15 +59,15 @@ namespace dxcanvas
         if(mbAlpha)
         {
             mpBitmap = std::make_shared<Gdiplus::Bitmap>(
-                    maSize.getX(),
-                    maSize.getY(),
+                    maSize.getWidth(),
+                    maSize.getHeight(),
                     PixelFormat32bppARGB);
         }
         else
         {
             mpBitmap = std::make_shared<Gdiplus::Bitmap>(
-                    maSize.getX(),
-                    maSize.getY(),
+                    maSize.getWidth(),
+                    maSize.getHeight(),
                     PixelFormat24bppRGB);
         }
 
@@ -84,7 +84,7 @@ namespace dxcanvas
         return mpGraphics;
     }
 
-    ::basegfx::B2IVector DXBitmap::getSize() const
+    ::basegfx::B2ISize DXBitmap::getSize() const
     {
         return maSize;
     }
@@ -165,7 +165,7 @@ namespace dxcanvas
                              const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
                              const geometry::IntegerPoint2D&        pos )
     {
-        const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );
+        const geometry::IntegerSize2D aSize( maSize.getWidth(),maSize.getHeight() );
 
         ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
                              "CanvasHelper::setPixel: X coordinate out of bounds" );
@@ -184,7 +184,7 @@ namespace dxcanvas
     uno::Sequence< sal_Int8 > DXBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                   const geometry::IntegerPoint2D&   pos )
     {
-        const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );
+        const geometry::IntegerSize2D aSize( maSize.getWidth(),maSize.getHeight() );
 
         ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
                              "CanvasHelper::getPixel: X coordinate out of bounds" );

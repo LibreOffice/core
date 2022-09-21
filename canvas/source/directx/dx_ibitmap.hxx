@@ -33,7 +33,7 @@ namespace dxcanvas
     struct IBitmap : public GraphicsProvider
     {
         virtual BitmapSharedPtr           getBitmap() const = 0;
-        virtual ::basegfx::B2IVector      getSize() const = 0;
+        virtual ::basegfx::B2ISize getSize() const = 0;
         virtual bool                      hasAlpha() const = 0;
 
         virtual css::uno::Sequence< sal_Int8 > getData(

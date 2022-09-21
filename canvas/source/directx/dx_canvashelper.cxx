@@ -735,7 +735,7 @@ namespace dxcanvas
         if( !maOutputOffset.equalZero() )
         {
             const basegfx::B2DHomMatrix aOutputOffset(basegfx::utils::createTranslateB2DHomMatrix(
-                maOutputOffset.getX(), maOutputOffset.getY()));
+                maOutputOffset.getWidth(), maOutputOffset.getHeight()));
             aTransform = aOutputOffset * aTransform;
         }
 
@@ -774,7 +774,7 @@ namespace dxcanvas
         if( !maOutputOffset.equalZero() )
         {
             const basegfx::B2DHomMatrix aOutputOffset(basegfx::utils::createTranslateB2DHomMatrix(
-                maOutputOffset.getX(), maOutputOffset.getY()));
+                maOutputOffset.getWidth(), maOutputOffset.getHeight()));
             aTransform = aOutputOffset * aTransform;
         }
 

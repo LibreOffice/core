@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -427,16 +428,15 @@ namespace basegfx::unotools
                                         rRect.Z2);
         }
 
-        geometry::IntegerSize2D integerSize2DFromB2ISize( const ::basegfx::B2IVector& rSize )
+        geometry::IntegerSize2D integerSize2DFromB2ISize( const ::basegfx::B2ISize& rSize )
         {
-            return geometry::IntegerSize2D( rSize.getX(),
-                                            rSize.getY() );
+            return geometry::IntegerSize2D( rSize.getWidth(),
+                                            rSize.getHeight() );
         }
 
-        ::basegfx::B2IVector b2ISizeFromIntegerSize2D( const geometry::IntegerSize2D& rSize )
+        basegfx::B2ISize b2ISizeFromIntegerSize2D( const geometry::IntegerSize2D& rSize )
         {
-            return ::basegfx::B2IVector( rSize.Width,
-                                         rSize.Height );
+            return basegfx::B2ISize(rSize.Width, rSize.Height);
         }
 
         ::basegfx::B2IRange b2IRectangleFromIntegerRectangle2D( const geometry::IntegerRectangle2D& rRectangle )

@@ -92,7 +92,7 @@ namespace dxcanvas
             virtual bool update( const ::basegfx::B2IPoint& rDestPos,
                                 const ::basegfx::B2IRange& rSourceRect,
                                 ::canvas::IColorBuffer&    rSource ) override;
-            virtual ::basegfx::B2IVector getSize();
+            virtual ::basegfx::B2ISize getSize();
 
         private:
             /// Guard local methods against concurrent access to RenderModule
@@ -113,7 +113,7 @@ namespace dxcanvas
             DXRenderModule&                  mrRenderModule;
             sal::systools::COMReference<IDirect3DTexture9> mpTexture;
 
-            ::basegfx::B2IVector             maSize;
+            ::basegfx::B2ISize maSize;
         };
 
 
@@ -131,7 +131,7 @@ namespace dxcanvas
             virtual void unlock() const override { maMutex.release(); }
 
             virtual sal::systools::COMReference<IDirect3DSurface9>
-                createSystemMemorySurface( const ::basegfx::B2IVector& rSize ) override;
+                createSystemMemorySurface(const ::basegfx::B2ISize& rSize) override;
             virtual void disposing() override;
             virtual HWND getHWND() const override { return mhWnd; }
             virtual void screenShot() override;
@@ -172,7 +172,7 @@ namespace dxcanvas
             sal::systools::COMReference<IDirect3DVertexBuffer9> mpVertexBuffer;
             std::shared_ptr<canvas::ISurface>                 mpTexture;
             VclPtr<SystemChildWindow>                   mpWindow;
-            ::basegfx::B2IVector                        maSize;
+            ::basegfx::B2ISize maSize;
             typedef std::vector<canvas::Vertex>         vertexCache_t;
             vertexCache_t                               maVertexCache;
             std::size_t                                 mnCount;
@@ -225,8 +225,7 @@ namespace dxcanvas
         DXSurface::DXSurface( DXRenderModule&           rRenderModule,
                               const ::basegfx::B2ISize& rSize ) :
             mrRenderModule(rRenderModule),
-            mpTexture(nullptr),
-            maSize()
+            mpTexture(nullptr)
         {
             ImplRenderModuleGuard aGuard( mrRenderModule );
 
@@ -237,21 +236,21 @@ namespace dxcanvas
 #endif
 
 #ifdef FAKE_MAX_TEXTURE_SIZE
-            if(rSize.getX() > FAKE_MAX_TEXTURE_SIZE)
+            if(rSize.getWidth() > FAKE_MAX_TEXTURE_SIZE)
                 return;
-            if(rSize.getY() > FAKE_MAX_TEXTURE_SIZE)
+            if(rSize.getHeight() > FAKE_MAX_TEXTURE_SIZE)
                 return;
 #endif
 
-            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0,
+            ENSURE_ARG_OR_THROW(rSize.getWidth() > 0 && rSize.getHeight() > 0,
                             "DXSurface::DXSurface(): request for zero-sized surface");
 
             sal::systools::COMReference<IDirect3DDevice9> pDevice(rRenderModule.getDevice());
 
             IDirect3DTexture9 *pTexture(nullptr);
             if(FAILED(pDevice->CreateTexture(
-                rSize.getX(),
-                rSize.getY(),
+                rSize.getWidth(),
+                rSize.getHeight(),
                 1,0,D3DFMT_A8R8G8B8,
                 D3DPOOL_MANAGED,
                 &pTexture,nullptr)))
@@ -325,12 +324,12 @@ namespace dxcanvas
             // to avoid interpolation artifacts from other textures,
             // the surface manager allocates one pixel gap between
             // them. Clear that to transparent.
-            rect.right = std::min(maSize.getX(),
+            rect.right = std::min(maSize.getWidth(),
                                   rect.left + sal_Int32(rSourceRect.getWidth()+1));
-            rect.bottom = std::min(maSize.getY(),
+            rect.bottom = std::min(maSize.getHeight(),
                                    rect.top + sal_Int32(rSourceRect.getHeight()+1));
-            const bool bClearRightColumn( rect.right < maSize.getX() );
-            const bool bClearBottomRow( rect.bottom < maSize.getY() );
+            const bool bClearRightColumn( rect.right < maSize.getWidth() );
+            const bool bClearBottomRow( rect.bottom < maSize.getHeight() );
 
             if(SUCCEEDED(mpTexture->LockRect(0,&aLockedRect,&rect,D3DLOCK_NOSYSLOCK)))
             {
@@ -427,17 +426,10 @@ namespace dxcanvas
             return true;
         }
 
-
-        // DXSurface::getSize
-
-
-        ::basegfx::B2IVector DXSurface::getSize()
+        ::basegfx::B2ISize DXSurface::getSize()
         {
             return maSize;
         }
-
-        // DXRenderModule::DXRenderModule
-
 
         DXRenderModule::DXRenderModule( const vcl::Window& rWindow ) :
             mhWnd(nullptr),
@@ -446,14 +438,12 @@ namespace dxcanvas
             mpSwapChain(),
             mpVertexBuffer(),
             mpTexture(),
-            maSize(),
             maVertexCache(),
             mnCount(0),
             mnBeginSceneCount(0),
             mbCanUseDynamicTextures(false),
             mbError( false ),
             meType( PrimitiveType::Unknown ),
-            maPageSize(),
             mad3dpp(),
             maNumVertices( VERTEX_BUFFER_SIZE ),
             maWriteIndex(0),
@@ -469,10 +459,10 @@ namespace dxcanvas
 
             // allocate a single texture surface which can be used later.
             // we also use this to calibrate the page size.
-            ::basegfx::B2IVector aPageSize(maPageSize);
+            basegfx::B2IVector aPageSize(maPageSize);
             while(true)
             {
-                mpTexture = std::make_shared<DXSurface>(*this,aPageSize);
+                mpTexture = std::make_shared<DXSurface>(*this, basegfx::B2ISize(aPageSize.getX(), aPageSize.getY()));
                 if(mpTexture->isValid())
                     break;
 
@@ -577,11 +567,11 @@ namespace dxcanvas
 
             // remember the size of the parent window, since we
             // need to use this for our child window.
-            maSize.setX(static_cast<sal_Int32>(rSizePixel.Width()));
-            maSize.setY(static_cast<sal_Int32>(rSizePixel.Height()));
+            maSize.setWidth(sal_Int32(rSizePixel.Width()));
+            maSize.setHeight(sal_Int32(rSizePixel.Height()));
 
             // let the child window cover the same size as the parent window.
-            mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
+            mpWindow->setPosSizePixel(0, 0, maSize.getWidth(),maSize.getHeight());
 
             // create a device from the direct3d9 object.
             if(!(createDevice()))
@@ -697,10 +687,8 @@ namespace dxcanvas
             // a back buffer, and no way of falling back to a
             // different canvas implementation.
             ZeroMemory( &mad3dpp, sizeof(mad3dpp) );
-            mad3dpp.BackBufferWidth = std::max(maSize.getX(),
-                                               sal_Int32(d3ddm.Width));
-            mad3dpp.BackBufferHeight = std::max(maSize.getY(),
-                                                sal_Int32(d3ddm.Height));
+            mad3dpp.BackBufferWidth = std::max(maSize.getWidth(), sal_Int32(d3ddm.Width));
+            mad3dpp.BackBufferHeight = std::max(maSize.getHeight(), sal_Int32(d3ddm.Height));
             mad3dpp.BackBufferCount = 1;
             mad3dpp.Windowed = TRUE;
             mad3dpp.SwapEffect = D3DSWAPEFFECT_COPY;
@@ -757,7 +745,7 @@ namespace dxcanvas
         // DXRenderModule::createSystemMemorySurface
 
 
-        sal::systools::COMReference<IDirect3DSurface9> DXRenderModule::createSystemMemorySurface( const ::basegfx::B2IVector& rSize )
+        sal::systools::COMReference<IDirect3DSurface9> DXRenderModule::createSystemMemorySurface(const ::basegfx::B2ISize& rSize)
         {
             if(isDisposed())
                 return sal::systools::COMReference<IDirect3DSurface9>(nullptr);
@@ -767,8 +755,8 @@ namespace dxcanvas
             // other 32bit-format.
             IDirect3DSurface9 *pSurface(nullptr);
             if( FAILED(mpDevice->CreateOffscreenPlainSurface(
-                           rSize.getX(),
-                           rSize.getY(),
+                           rSize.getWidth(),
+                           rSize.getHeight(),
                            D3DFMT_X8R8G8B8,
                            D3DPOOL_SYSTEMMEM,
                            &pSurface,
@@ -868,33 +856,33 @@ namespace dxcanvas
                 return;
 
             // don't do anything if the size didn't change.
-            if(maSize.getX() == static_cast<sal_Int32>(rect.getWidth()) &&
-               maSize.getY() == static_cast<sal_Int32>(rect.getHeight()))
+            if(maSize.getWidth() == static_cast<sal_Int32>(rect.getWidth()) &&
+               maSize.getHeight() == static_cast<sal_Int32>(rect.getHeight()))
                return;
 
             // TODO(Q2): use numeric cast to prevent overflow
-            maSize.setX(static_cast<sal_Int32>(rect.getWidth()));
-            maSize.setY(static_cast<sal_Int32>(rect.getHeight()));
+            maSize.setWidth(sal_Int32(rect.getWidth()));
+            maSize.setHeight(sal_Int32(rect.getHeight()));
 
-            mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
+            mpWindow->setPosSizePixel(0, 0, maSize.getWidth(), maSize.getHeight());
 
             // resize back buffer, if necessary
 
 
             // don't attempt to create anything if the
             // requested size is NULL.
-            if(!(maSize.getX()))
+            if(!(maSize.getWidth()))
                 return;
-            if(!(maSize.getY()))
+            if(!(maSize.getHeight()))
                 return;
 
             // backbuffer too small (might happen, if window is
             // maximized across multiple monitors)
-            if( sal_Int32(mad3dpp.BackBufferWidth) < maSize.getX() ||
-                sal_Int32(mad3dpp.BackBufferHeight) < maSize.getY() )
+            if( sal_Int32(mad3dpp.BackBufferWidth) < maSize.getWidth() ||
+                sal_Int32(mad3dpp.BackBufferHeight) < maSize.getHeight() )
             {
-                mad3dpp.BackBufferWidth = maSize.getX();
-                mad3dpp.BackBufferHeight = maSize.getY();
+                mad3dpp.BackBufferWidth = maSize.getWidth();
+                mad3dpp.BackBufferHeight = maSize.getHeight();
 
                 // clear before, save resources
                 mpSwapChain.clear();
@@ -942,10 +930,10 @@ namespace dxcanvas
 
             const ::basegfx::B2IVector& rPageSize( getPageSize() );
             ::basegfx::B2ISize aSize(surfaceSize);
-            if(!(aSize.getX()))
-                aSize.setX(rPageSize.getX());
-            if(!(aSize.getY()))
-                aSize.setY(rPageSize.getY());
+            if(!(aSize.getWidth()))
+                aSize.setWidth(rPageSize.getX());
+            if(!(aSize.getHeight()))
+                aSize.setHeight(rPageSize.getY());
 
             if(mpTexture.use_count() == 1)
                 return mpTexture;

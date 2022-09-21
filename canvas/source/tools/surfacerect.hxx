@@ -49,8 +49,8 @@ namespace canvas
         {
             const sal_Int32 x1(maPos.getX());
             const sal_Int32 y1(maPos.getY());
-            const sal_Int32 x2(x1 + maSize.getX());
-            const sal_Int32 y2(y1 + maSize.getY());
+            const sal_Int32 x2(x1 + maSize.getWidth());
+            const sal_Int32 y2(y1 + maSize.getHeight());
             if(px  < x1) return false;
             if(px >= x2) return false;
             if(py  < y1) return false;
@@ -63,13 +63,13 @@ namespace canvas
         {
             const sal_Int32 x1(maPos.getX());
             const sal_Int32 y1(maPos.getY());
-            const sal_Int32 x1w(x1 + maSize.getX() - 1);
-            const sal_Int32 y1h(y1 + maSize.getY() - 1);
+            const sal_Int32 x1w(x1 + maSize.getWidth() - 1);
+            const sal_Int32 y1h(y1 + maSize.getHeight() - 1);
 
             const sal_Int32 x2(r.maPos.getX());
             const sal_Int32 y2(r.maPos.getY());
-            const sal_Int32 x2w(x2 + r.maSize.getX() - 1);
-            const sal_Int32 y2h(y2 + r.maSize.getY() - 1);
+            const sal_Int32 x2w(x2 + r.maSize.getWidth() - 1);
+            const sal_Int32 y2h(y2 + r.maSize.getHeight() - 1);
 
             return !((x1w < x2) || (x2w < x1) || (y1h < y2) || (y2h < y1));
         }
@@ -78,8 +78,8 @@ namespace canvas
         {
             const sal_Int32 x1(maPos.getX());
             const sal_Int32 y1(maPos.getY());
-            const sal_Int32 x2(x1 + maSize.getX() - 1);
-            const sal_Int32 y2(y1 + maSize.getY() - 1);
+            const sal_Int32 x2(x1 + maSize.getWidth() - 1);
+            const sal_Int32 y2(y1 + maSize.getHeight() - 1);
             if(!(r.pointInside(x1,y1))) return false;
             if(!(r.pointInside(x2,y2))) return false;
             return true;

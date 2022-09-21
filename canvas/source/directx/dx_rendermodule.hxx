@@ -62,7 +62,7 @@ namespace dxcanvas
 
         virtual sal::systools::COMReference<surface_type>
             createSystemMemorySurface(
-                const ::basegfx::B2IVector& rSize ) = 0;
+                const ::basegfx::B2ISize& rSize) = 0;
 
         virtual void disposing() = 0;
         virtual HWND getHWND() const = 0;

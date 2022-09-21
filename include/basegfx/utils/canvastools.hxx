@@ -61,6 +61,7 @@ namespace basegfx
     class B2DPolygon;
     class B2DPolyPolygon;
     class B2DSize;
+    class B2ISize;
 }
 
 namespace basegfx::unotools
@@ -129,9 +130,9 @@ namespace basegfx::unotools
         BASEGFX_DLLPUBLIC ::basegfx::B2DRange       b2DRectangleFromRealRectangle2D( const css::geometry::RealRectangle2D& );
         ::basegfx::B3DRange       b3DRectangleFromRealRectangle3D( const css::geometry::RealRectangle3D& );
 
-        BASEGFX_DLLPUBLIC css::geometry::IntegerSize2D         integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
+        BASEGFX_DLLPUBLIC css::geometry::IntegerSize2D integerSize2DFromB2ISize(basegfx::B2ISize const& rSize);
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2IVector      b2ISizeFromIntegerSize2D( const css::geometry::IntegerSize2D& );
+        BASEGFX_DLLPUBLIC ::basegfx::B2ISize b2ISizeFromIntegerSize2D( const css::geometry::IntegerSize2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromAwtRectangle( const css::awt::Rectangle& );

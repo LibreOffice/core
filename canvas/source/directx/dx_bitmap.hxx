@@ -35,15 +35,13 @@ namespace dxcanvas
     class DXBitmap : public IBitmap
     {
     public:
-        DXBitmap( const BitmapSharedPtr& rBitmap,
-                  bool                   bWithAlpha );
-        DXBitmap( const ::basegfx::B2IVector& rSize,
-                  bool                        bWithAlpha );
+        DXBitmap( const BitmapSharedPtr& rBitmap, bool bWithAlpha );
+        DXBitmap( const ::basegfx::B2ISize& rSize, bool bWithAlpha );
 
         virtual GraphicsSharedPtr         getGraphics() override;
 
         virtual BitmapSharedPtr           getBitmap() const override;
-        virtual ::basegfx::B2IVector      getSize() const override;
+        virtual ::basegfx::B2ISize getSize() const override;
         virtual bool                      hasAlpha() const override;
 
         css::uno::Sequence< sal_Int8 > getData(
@@ -69,7 +67,7 @@ namespace dxcanvas
         GDIPlusUserSharedPtr mpGdiPlusUser;
 
         // size of this image in pixels [integral unit]
-        ::basegfx::B2IVector maSize;
+        ::basegfx::B2ISize maSize;
 
         BitmapSharedPtr      mpBitmap;
         GraphicsSharedPtr    mpGraphics;

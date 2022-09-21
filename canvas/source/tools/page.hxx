@@ -20,6 +20,7 @@
 #pragma once
 
 #include <basegfx/vector/b2isize.hxx>
+#include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <rendering/icolorbuffer.hxx>
 #include <rendering/irendermodule.hxx>
@@ -132,7 +133,7 @@ namespace canvas
             return pSurface->update( maRect.maPos,
                                      ::basegfx::B2IRectangle(
                                          maSourceOffset,
-                                         maSourceOffset + maRect.maSize ),
+                                         maSourceOffset + basegfx::B2IVector(maRect.maSize.getWidth(), maRect.maSize.getHeight())),
                                      *mpBuffer );
         }
 

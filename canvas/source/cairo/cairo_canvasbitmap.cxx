@@ -48,7 +48,7 @@ namespace cairocanvas
 
         SAL_INFO(
             "canvas.cairo",
-            "bitmap size: " << rSize.getX() << "x" << rSize.getY());
+            "bitmap size: " << rSize.getWidth() << "x" << rSize.getHeight());
 
         mpBufferSurface = mpSurfaceProvider->createSurface( rSize, bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
         mpBufferCairo = mpBufferSurface->getCairo();
@@ -119,7 +119,7 @@ namespace cairocanvas
                     break;
 
                 BitmapEx* pBitmapEx = vcl::bitmap::CreateFromCairoSurface(
-                                          ::Size( maSize.getX(), maSize.getY() ),
+                                          ::Size( maSize.getWidth(), maSize.getHeight() ),
                                           getSurface()->getCairoSurface().get());
                 if (pBitmapEx)
                     aRV <<= reinterpret_cast<sal_Int64>( pBitmapEx );

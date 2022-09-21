@@ -122,7 +122,7 @@ namespace basegfx {
     class B2DHomMatrix;
     class B2DPolygon;
     class B2IVector;
-    typedef B2IVector B2ISize;
+    class B2ISize;
 }
 
 namespace com::sun::star::awt {

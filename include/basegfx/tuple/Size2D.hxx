@@ -76,6 +76,8 @@ public:
     }
 
     Size2D<TYPE> operator-(void) const { return Tuple2D<TYPE>::operator-(); }
+
+    using Tuple2D<TYPE>::equalZero;
 };
 
 template <typename TYPE>

@@ -76,7 +76,7 @@ namespace cairocanvas
     {
         SAL_INFO(
             "canvas.cairo",
-            "device size " << rSize.getX() << " x " << rSize.getY());
+            "device size " << rSize.getWidth() << " x " << rSize.getHeight());
 
         if( !mpRefDevice )
             return; // disposed
@@ -85,15 +85,15 @@ namespace cairocanvas
 
         // X11 only
         bool bReuseSurface = mpSurface &&
-                             mpSurface->Resize(rSize.getX() + pOutDev->GetOutOffXPixel(),
-                                               rSize.getY() + pOutDev->GetOutOffYPixel());
+                             mpSurface->Resize(rSize.getWidth() + pOutDev->GetOutOffXPixel(),
+                                               rSize.getHeight() + pOutDev->GetOutOffYPixel());
 
         if (!bReuseSurface)
         {
             mpSurface = pOutDev->CreateSurface(
                 pOutDev->GetOutOffXPixel(),
                 pOutDev->GetOutOffYPixel(),
-                rSize.getX(), rSize.getY() );
+                rSize.getWidth(), rSize.getHeight() );
         }
     }
 
@@ -240,7 +240,7 @@ namespace cairocanvas
     SurfaceSharedPtr DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         if( mpSurface )
-            return mpSurface->getSimilar( aContent, rSize.getX(), rSize.getY() );
+            return mpSurface->getSimilar( aContent, rSize.getWidth(), rSize.getHeight() );
 
         return SurfaceSharedPtr();
     }

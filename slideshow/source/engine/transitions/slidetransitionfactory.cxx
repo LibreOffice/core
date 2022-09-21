@@ -616,10 +616,11 @@ void MovingSlideChange::performIn(
         aViewTransform * basegfx::B2DPoint() );
 
     // move sprite
+    auto aSlideSizePixel = getEnteringSlideSizePixel(rViewEntry.mpView);
     rSprite->movePixel(
         aPageOrigin +
         ((t - 1.0) *
-         basegfx::B2DVector( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
+         basegfx::B2DVector( aSlideSizePixel.getWidth(), aSlideSizePixel.getHeight()) *
          maEnteringDirection) );
 }
 
@@ -648,9 +649,10 @@ void MovingSlideChange::performOut(
         aViewTransform * basegfx::B2DPoint() );
 
     // move sprite
+    auto aSlideSizePixel = getEnteringSlideSizePixel(rViewEntry.mpView);
     rSprite->movePixel(
         aPageOrigin + (t *
-                       basegfx::B2DVector( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
+                       basegfx::B2DVector(aSlideSizePixel.getWidth(), aSlideSizePixel.getHeight()) *
                        maLeavingDirection) );
 }
 

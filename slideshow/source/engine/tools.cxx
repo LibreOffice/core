@@ -686,8 +686,8 @@ namespace slideshow::internal
             // line will show to the bottom and the right.
             fillRect( pCanvas,
                       ::basegfx::B2DRectangle( 0.0, 0.0,
-                                               rSize.getX(),
-                                               rSize.getY() ),
+                                               rSize.getWidth(),
+                                               rSize.getHeight() ),
                       0x000000FFU );
 
             // tdf#148884 in dark mode impress's auto text color assumes it will render against
@@ -710,8 +710,8 @@ namespace slideshow::internal
             // thus revealing ugly white pixel to the right and the bottom.
             fillRect( pCanvas,
                       ::basegfx::B2DRectangle( 0.0, 0.0,
-                                               rSize.getX()-1,
-                                               rSize.getY()-1 ),
+                                               rSize.getWidth()-1,
+                                               rSize.getHeight()-1 ),
                       nCanvasColor );
         }
 
