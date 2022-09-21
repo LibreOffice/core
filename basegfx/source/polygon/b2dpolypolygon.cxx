@@ -211,10 +211,7 @@ public:
     }
 };
 
-    static o3tl::cow_wrapper<ImplB2DPolyPolygon, o3tl::ThreadSafeRefCountingPolicy> DEFAULT;
-
-    B2DPolyPolygon::B2DPolyPolygon() :
-        mpPolyPolygon(DEFAULT) {}
+    B2DPolyPolygon::B2DPolyPolygon() = default;
 
     B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon&) = default;
 
@@ -301,9 +298,7 @@ public:
         B2DPolyPolygon aRetval;
         if (count())
         {
-            // Avoid CoW overhead for the local variable
-            // But detach from shared static DEFAULT
-            ImplB2DPolyPolygon& dest = aRetval.mpPolyPolygon.make_unique();
+            ImplB2DPolyPolygon& dest = *aRetval.mpPolyPolygon;
             dest.reserve(count());
 
             for (sal_uInt32 a(0); a < count(); a++)
