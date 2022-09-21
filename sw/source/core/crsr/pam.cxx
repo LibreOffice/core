@@ -957,7 +957,16 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
                     = rFormatContentControl.GetContentControl();
                 if (pContentControl && !pContentControl->GetReadWrite())
                 {
-                    bRet = pContentControl->GetCheckbox() || pContentControl->GetPicture();
+                    switch (pContentControl->GetType())
+                    {
+                        case SwContentControlType::CHECKBOX:
+                        case SwContentControlType::PICTURE:
+                        case SwContentControlType::DROP_DOWN_LIST:
+                            bRet = true;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
