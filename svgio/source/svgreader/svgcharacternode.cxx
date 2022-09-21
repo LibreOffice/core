@@ -549,11 +549,6 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgCharacterNode::addGap()
-        {
-            maText += " ";
-        }
-
         void SvgCharacterNode::concatenate(std::u16string_view rText)
         {
             maText += rText;

@@ -73,6 +73,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void test123926();
     void test47446();
     void test47446b();
+    void testTdf103888();
     void testMaskText();
     void testTdf99994();
     void testTdf99115();
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(test123926);
     CPPUNIT_TEST(test47446);
     CPPUNIT_TEST(test47446b);
+    CPPUNIT_TEST(testTdf103888);
     CPPUNIT_TEST(testMaskText);
     CPPUNIT_TEST(testTdf99994);
     CPPUNIT_TEST(testTdf99115);
@@ -479,7 +481,7 @@ void Test::testTdf85770()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "11");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#000000");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "11");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "Times New Roman");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "fontcolor", "#000000");
@@ -844,6 +846,22 @@ void Test::test47446b()
 
     assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygoncolor", "color", "#ffff00");
 
+}
+
+void Test::testTdf103888()
+{
+    Primitive2DSequence aSequenceMaskText = parseSvg(u"/svgio/qa/cppunit/data/tdf103888.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceMaskText.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceMaskText));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, this test would have failed here with number of nodes is incorrect
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion[1]", "text", "Her");
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion[2]", "text", "vor");
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion[3]", "text", "hebung");
 }
 
 void Test::testMaskText()
