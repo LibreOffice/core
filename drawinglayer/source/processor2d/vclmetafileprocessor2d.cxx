@@ -1938,6 +1938,13 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
         return;
     }
 
+    // tdf#150551 for PDF export, use the decomposition for better gradient visualization
+    if (nullptr != mpPDFExtOutDevData)
+    {
+        process(rGradientCandidate);
+        return;
+    }
+
     basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
 
     if (aLocalPolyPolygon.getB2DRange() != rGradientCandidate.getDefinitionRange())
