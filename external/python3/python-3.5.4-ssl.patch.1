@@ -81,3 +81,14 @@ diff -ru python3.orig/setup.py python3/setup.py
                                        '/usr/contrib/ssl/lib/'
                                       ] )
  
+--- python3/setup.py.orig2	2022-09-21 16:04:12.855249707 +0200
++++ python3/setup.py	2022-09-21 16:04:30.752236913 +0200
+@@ -848,7 +848,7 @@
+ 
+         # look for the openssl version header on the compiler search path.
+         opensslv_h = find_file('openssl/opensslv.h', [],
+-                inc_dirs + search_for_ssl_incs_in)
++                search_for_ssl_incs_in + inc_dirs)
+         if opensslv_h:
+             name = os.path.join(opensslv_h[0], 'openssl/opensslv.h')
+             if host_platform == 'darwin' and is_macosx_sdk_path(name):
