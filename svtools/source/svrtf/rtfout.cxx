@@ -178,11 +178,11 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
 
 }
 
-SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
+SvStream& RTFOutFuncs::Out_String( SvStream& rStream, std::u16string_view rStr,
     rtl_TextEncoding eDestEnc)
 {
     int nUCMode = 1;
-    for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
+    for (size_t n = 0; n < rStr.size(); ++n)
         Out_Char(rStream, rStr[n], &nUCMode, eDestEnc);
     if (nUCMode != 1)
       rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;

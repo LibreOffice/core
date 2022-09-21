@@ -36,7 +36,7 @@ public:
         return _rMatcher.Matches( m_rCompareString );
     }
 
-    static void createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters);
+    static void createWildCardFilterList(std::u16string_view _rFilterList,::std::vector< WildCard >& _rFilters);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

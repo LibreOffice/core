@@ -40,6 +40,7 @@
 #include <comphelper/string.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/debug.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/historyoptions.hxx>
@@ -76,7 +77,7 @@ public:
 
     SvtURLBox_Impl( )
     {
-        FilterMatch::createWildCardFilterList(OUString(),m_aFilters);
+        FilterMatch::createWildCardFilterList(u"",m_aFilters);
     }
 };
 
@@ -1079,22 +1080,22 @@ void SvtURLBox::DisableHistory()
     UpdatePicklistForSmartProtocol_Impl();
 }
 
-void SvtURLBox::SetFilter(const OUString& _sFilter)
+void SvtURLBox::SetFilter(std::u16string_view _sFilter)
 {
     pImpl->m_aFilters.clear();
     FilterMatch::createWildCardFilterList(_sFilter,pImpl->m_aFilters);
 }
 
-void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
+void FilterMatch::createWildCardFilterList(std::u16string_view _rFilterList,::std::vector< WildCard >& _rFilters)
 {
-    if( _rFilterList.getLength() )
+    if( !_rFilterList.empty() )
     {
         // filter is given
         sal_Int32 nIndex = 0;
         OUString sToken;
         do
         {
-            sToken = _rFilterList.getToken( 0, ';', nIndex );
+            sToken = o3tl::getToken(_rFilterList, 0, ';', nIndex );
             if ( !sToken.isEmpty() )
             {
                 _rFilters.emplace_back( sToken.toAsciiUpperCase() );

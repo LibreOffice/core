@@ -101,7 +101,7 @@ public:
         return (!aPlaceHolder.isEmpty() && aPlaceHolder == sToMatch);
     }
 
-    void                SetFilter(const OUString& _sFilter);
+    void                SetFilter(std::u16string_view _sFilter);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

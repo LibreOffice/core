@@ -295,7 +295,7 @@ public:
         const FolderDescriptor& _rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
         const css::uno::Sequence< OUString >& rDenyList );
-    void                    FilterFolderContent_Impl( const OUString &rFilter );
+    void                    FilterFolderContent_Impl( std::u16string_view rFilter );
     void                    CancelRunningAsyncAction();
 
     void                    OpenFolder_Impl();
@@ -1286,9 +1286,9 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     return eFailure;
 }
 
-void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
+void SvtFileView_Impl::FilterFolderContent_Impl( std::u16string_view rFilter )
 {
-    if ( rFilter.isEmpty() || ( rFilter == ALL_FILES_FILTER ) )
+    if ( rFilter.empty() || ( rFilter == ALL_FILES_FILTER ) )
         // when replacing names, there is always something to filter (no view of ".nametranslation.table")
         return;
 

@@ -276,21 +276,20 @@ void SAL_CALL PopupMenuControllerBase::removeStatusListener(
     rBHelper.removeListener( cppu::UnoType<decltype(xControl)>::get(), xControl );
 }
 
-OUString PopupMenuControllerBase::determineBaseURL( const OUString& aURL )
+OUString PopupMenuControllerBase::determineBaseURL( std::u16string_view aURL )
 {
     // Just use the main part of the URL for popup menu controllers
-    sal_Int32     nSchemePart( 0 );
     OUString aMainURL( "vnd.sun.star.popup:" );
 
-    nSchemePart = aURL.indexOf( ':' );
-    if (( nSchemePart > 0 ) &&
-        ( aURL.getLength() > ( nSchemePart+1 )))
+    size_t nSchemePart = aURL.find( ':' );
+    if (( nSchemePart != std::u16string_view::npos && nSchemePart > 0 ) &&
+        ( aURL.size() > ( nSchemePart+1 )))
     {
-        sal_Int32 nQueryPart = aURL.indexOf( '?', nSchemePart );
-        if ( nQueryPart > 0 )
-            aMainURL += aURL.subView( nSchemePart, nQueryPart-nSchemePart );
-        else if ( nQueryPart == -1 )
-            aMainURL += aURL.subView( nSchemePart+1 );
+        size_t nQueryPart = aURL.find( '?', nSchemePart );
+        if ( nQueryPart != std::u16string_view::npos && nQueryPart > 0 )
+            aMainURL += aURL.substr( nSchemePart, nQueryPart-nSchemePart );
+        else if ( nQueryPart == std::u16string_view::npos )
+            aMainURL += aURL.substr( nSchemePart+1 );
     }
 
     return aMainURL;

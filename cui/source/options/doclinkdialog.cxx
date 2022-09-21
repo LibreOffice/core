@@ -51,7 +51,7 @@ namespace svx
 
         m_xURL->SetSmartProtocol(INetProtocol::File);
         m_xURL->DisableHistory();
-        m_xURL->SetFilter("*.odb");
+        m_xURL->SetFilter(u"*.odb");
 
         m_xName->connect_changed( LINK(this, ODocumentLinkDialog, OnEntryModified) );
         m_xURL->connect_changed( LINK(this, ODocumentLinkDialog, OnComboBoxModified) );
