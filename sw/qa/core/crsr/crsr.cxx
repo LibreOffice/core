@@ -19,11 +19,13 @@
 #include <comphelper/propertysequence.hxx>
 #include <svl/srchitem.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
+#include <formatcontentcontrol.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/crsr/data/";
 
@@ -161,6 +163,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
     // Then make sure that the cursor is read-only:
     // Without the accompanying fix in place, this test would have failed, it was possible to type
     // into the checkbox content control, just to loose the typed content on the next click.
+    CPPUNIT_ASSERT(pWrtShell->HasReadonlySel());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testDropdownContentControl)
+{
+    // Given a document with a dropdown content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When entering the content control:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // Then make sure that the cursor is read-only:
+    // Without the accompanying fix in place, this test would have failed, it was possible to type
+    // into the drop-down content control, providing content that is not one of the list items.
     CPPUNIT_ASSERT(pWrtShell->HasReadonlySel());
 }
 
