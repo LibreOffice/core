@@ -11,4 +11,6 @@
 
 $(eval $(call sw_uiwriter_test,6))
 
+$(call gb_CppunitTest_get_target,sw_uiwriter6): $(call gb_Package_get_target,extras_autocorr)
+
 # vim: set noet sw=4 ts=4:
