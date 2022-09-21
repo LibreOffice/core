@@ -394,7 +394,7 @@ public:
     static OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
     static OUString getNamespaceURIFromToken( sal_Int32 nToken );
     static OUString getNamespacePrefixFromURI( const OUString& rURI );
-    static sal_Int32 getTokenFromName(const OUString& sName);
+    static sal_Int32 getTokenFromName(std::u16string_view sName);
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mxNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mxNamespaceMap; }
@@ -421,7 +421,7 @@ public:
 
     css::uno::Reference< css::io::XOutputStream > GetStreamForGraphicObjectURLFromBase64() const;
 
-    bool IsPackageURL( const OUString& rURL ) const;
+    bool IsPackageURL( std::u16string_view rURL ) const;
     OUString ResolveEmbeddedObjectURL( const OUString& rURL,
                                        std::u16string_view rClassId );
     css::uno::Reference< css::io::XOutputStream >

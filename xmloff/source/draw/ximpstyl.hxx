@@ -175,7 +175,7 @@ class SdXMLStylesContext : public SvXMLStylesContext
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
     void ImpSetGraphicStyles( css::uno::Reference< css::container::XNameAccess > const & xPageStyles,
-        XmlStyleFamily nFamily, const OUString& rPrefix) const;
+        XmlStyleFamily nFamily, std::u16string_view rPrefix) const;
 
 protected:
     using SvXMLStylesContext::CreateStyleChildContext;

@@ -171,32 +171,32 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     }
 }
 
-uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr, bool bAddOneToEachOldIndex )
+uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( std::u16string_view rStr, bool bAddOneToEachOldIndex )
 {
     const sal_Unicode aSpace( ' ' );
 
     // count number of entries
     ::std::vector< sal_Int32 > aVec;
-    sal_Int32 nLastPos = 0;
-    sal_Int32 nPos = 0;
-    while( nPos != -1 )
+    size_t nLastPos = 0;
+    size_t nPos = 0;
+    while( nPos != std::u16string_view::npos )
     {
-        nPos = rStr.indexOf( aSpace, nLastPos );
+        nPos = rStr.find( aSpace, nLastPos );
         if( nPos > nLastPos )
         {
-            aVec.push_back( o3tl::toInt32(rStr.subView( nLastPos, (nPos - nLastPos) )) );
+            aVec.push_back( o3tl::toInt32(rStr.substr( nLastPos, (nPos - nLastPos) )) );
         }
-        if( nPos != -1 )
+        if( nPos != std::u16string_view::npos )
             nLastPos = nPos + 1;
     }
     // last entry
     if( nLastPos != 0 &&
-        rStr.getLength() > nLastPos )
+        rStr.size() > nLastPos )
     {
-        aVec.push_back( o3tl::toInt32(rStr.subView( nLastPos )) );
+        aVec.push_back( o3tl::toInt32(rStr.substr( nLastPos )) );
     }
 
-    const sal_Int32 nVecSize = aVec.size();
+    const size_t nVecSize = aVec.size();
     uno::Sequence< sal_Int32 > aSeq( nVecSize );
 
     if(!bAddOneToEachOldIndex)
@@ -623,8 +623,8 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         , css::chart::ChartDataRowSource eDataRowSource
         , bool bRowHasLabels, bool bColHasLabels
         , bool bSwitchOnLabelsAndCategoriesForOwnData
-        , const OUString& sColTrans
-        , const OUString& sRowTrans )
+        , std::u16string_view sColTrans
+        , std::u16string_view sRowTrans )
 {
     if( !xNewDoc.is() )
         return;
@@ -660,12 +660,12 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
            beans::PropertyState_DIRECT_VALUE )
     };
 
-    if( !sColTrans.isEmpty() || !sRowTrans.isEmpty() )
+    if( !sColTrans.empty() || !sRowTrans.empty() )
     {
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
             "SequenceMapping",
-            -1, uno::Any( !sColTrans.isEmpty()
+            -1, uno::Any( !sColTrans.empty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
                 : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
         beans::PropertyState_DIRECT_VALUE );

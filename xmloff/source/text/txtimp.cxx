@@ -710,7 +710,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars )
     }
 }
 
-void XMLTextImportHelper::InsertString( const OUString& rChars,
+void XMLTextImportHelper::InsertString( std::u16string_view rChars,
                                         bool& rIgnoreLeadingSpace )
 {
     assert(m_xImpl->m_xText.is());
@@ -718,7 +718,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
     if (!m_xImpl->m_xText.is())
         return;
 
-    sal_Int32 nLen = rChars.getLength();
+    sal_Int32 nLen = rChars.size();
     OUStringBuffer sChars( nLen );
 
     for( sal_Int32 i=0; i < nLen; i++ )

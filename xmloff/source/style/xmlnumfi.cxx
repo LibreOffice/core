@@ -1947,10 +1947,10 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     }
 }
 
-static bool lcl_IsAtEnd( OUStringBuffer& rBuffer, const OUString& rToken )
+static bool lcl_IsAtEnd( OUStringBuffer& rBuffer, std::u16string_view rToken )
 {
     sal_Int32 nBufLen = rBuffer.getLength();
-    sal_Int32 nTokLen = rToken.getLength();
+    sal_Int32 nTokLen = rToken.size();
 
     if ( nTokLen > nBufLen )
         return false;

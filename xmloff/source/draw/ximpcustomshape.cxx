@@ -171,10 +171,10 @@ static void GetB3DVector( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-static bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUString& rEquationName )
+static bool GetEquationName( std::u16string_view rEquation, const sal_Int32 nStart, OUString& rEquationName )
 {
     sal_Int32 nIndex = nStart;
-    while( nIndex < rEquation.getLength() )
+    while( nIndex < static_cast<sal_Int32>(rEquation.size()) )
     {
         sal_Unicode nChar = rEquation[ nIndex ];
         if (
@@ -190,13 +190,13 @@ static bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, 
     }
     bool bValid = ( nIndex - nStart ) != 0;
     if ( bValid )
-        rEquationName = rEquation.copy( nStart, nIndex - nStart );
+        rEquationName = rEquation.substr( nStart, nIndex - nStart );
     return bValid;
 }
 
-static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
+static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, std::u16string_view rParaString )
 {
-    if ( nIndex >= rParaString.getLength() )
+    if ( nIndex >= static_cast<sal_Int32>(rParaString.size()) )
         return false;
 
     bool bValid = true;
@@ -226,62 +226,62 @@ static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParam
     else if ( rParaString[ nIndex ] > '9' )
     {
         bNumberRequired = false;
-        if ( rParaString.matchIgnoreAsciiCase( "left", nIndex ) )
+        if ( o3tl::matchIgnoreAsciiCase( rParaString, u"left", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::LEFT;
             nIndex += 4;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "top", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"top", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::TOP;
             nIndex += 3;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "right", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"right", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::RIGHT;
             nIndex += 5;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "bottom", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"bottom", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::BOTTOM;
             nIndex += 6;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "xstretch", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"xstretch", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
             nIndex += 8;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "ystretch", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"ystretch", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
             nIndex += 8;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "hasstroke", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"hasstroke", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
             nIndex += 9;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "hasfill", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"hasfill", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::HASFILL;
             nIndex += 7;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "width", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"width", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::WIDTH;
             nIndex += 5;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "height", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"height", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::HEIGHT;
             nIndex += 6;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "logwidth", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"logwidth", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
             nIndex += 8;
         }
-        else if ( rParaString.matchIgnoreAsciiCase( "logheight", nIndex ) )
+        else if ( o3tl::matchIgnoreAsciiCase( rParaString, u"logheight", nIndex ) )
         {
             rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
             nIndex += 9;
@@ -301,7 +301,7 @@ static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParam
             bool bDot = false;  // set if there is a dot included
             bool bEnd = false;  // set for each value that can not be part of a double/integer
 
-            while( ( nIndex < rParaString.getLength() ) && bValid )
+            while( ( nIndex < static_cast<sal_Int32>(rParaString.size()) ) && bValid )
             {
                 switch( rParaString[ nIndex ] )
                 {
@@ -383,7 +383,7 @@ static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParam
                 bValid = false;
             if ( bValid )
             {
-                std::u16string_view aNumber( rParaString.subView( nStartIndex, nIndex - nStartIndex ) );
+                std::u16string_view aNumber( rParaString.substr( nStartIndex, nIndex - nStartIndex ) );
                 if ( bE || bDot )
                 {
                     double fAttrDouble;
@@ -409,7 +409,7 @@ static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParam
         const sal_Unicode aSpace(' ');
         const sal_Unicode aCommata(',');
 
-        while(nIndex < rParaString.getLength())
+        while(nIndex < static_cast<sal_Int32>(rParaString.size()))
         {
             const sal_Unicode aCandidate(rParaString[nIndex]);
 
@@ -503,7 +503,7 @@ static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
 }
 
 static void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
     css::drawing::EnhancedCustomShapeParameter aParameter;
@@ -517,7 +517,7 @@ static void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDes
 }
 
 static void GetEnhancedParameterPair( std::vector< css::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
     css::drawing::EnhancedCustomShapeParameterPair aParameterPair;
@@ -532,7 +532,7 @@ static void GetEnhancedParameterPair( std::vector< css::beans::PropertyValue >& 
 }
 
 static sal_Int32 GetEnhancedParameterPairSequence( std::vector< css::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< css::drawing::EnhancedCustomShapeParameterPair > vParameter;
     css::drawing::EnhancedCustomShapeParameterPair aParameter;
@@ -554,7 +554,7 @@ static sal_Int32 GetEnhancedParameterPairSequence( std::vector< css::beans::Prop
 }
 
 static void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< css::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
     css::drawing::EnhancedCustomShapeTextFrame aParameter;
@@ -579,7 +579,7 @@ static void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue
 
 static void
 GetEnhancedPath(std::vector<css::beans::PropertyValue>& rDest, // e.g. draw:enhanced-path
-                const OUString& rValue, std::u16string_view rType)
+                std::u16string_view rValue, std::u16string_view rType)
 {
     std::vector< css::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
     std::vector< css::drawing::EnhancedCustomShapeSegment >      vSegments;
@@ -592,7 +592,7 @@ GetEnhancedPath(std::vector<css::beans::PropertyValue>& rDest, // e.g. draw:enha
 
     bool bValid = true;
 
-    while( bValid && ( nIndex < rValue.getLength() ) )
+    while( bValid && ( nIndex < static_cast<sal_Int32>(rValue.size()) ) )
     {
         switch( rValue[ nIndex ] )
         {
@@ -850,7 +850,7 @@ GetEnhancedPath(std::vector<css::beans::PropertyValue>& rDest, // e.g. draw:enha
 }
 
 static void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest,               // draw:adjustments
-                        const OUString& rValue )
+                        std::u16string_view rValue )
 {
     std::vector< css::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
     css::drawing::EnhancedCustomShapeParameter aParameter;

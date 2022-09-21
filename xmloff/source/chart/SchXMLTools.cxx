@@ -271,7 +271,7 @@ OUString GetChartTypeByClassName(
 }
 
 XMLTokenEnum getTokenByChartType(
-    const OUString & rChartTypeService, bool bUseOldNames )
+    std::u16string_view rChartTypeService, bool bUseOldNames )
 {
     XMLTokenEnum eResult = XML_TOKEN_INVALID;
     OUString aPrefix, aPostfix;
@@ -287,15 +287,15 @@ XMLTokenEnum getTokenByChartType(
         aPostfix = "ChartType";
     }
 
-    if( rChartTypeService.match( aPrefix ))
+    if( o3tl::starts_with(rChartTypeService, aPrefix))
     {
         sal_Int32 nSkip = aPrefix.getLength();
-        SAL_WARN_IF( rChartTypeService.getLength() < nSkip, "xmloff.chart", "ChartTypeService.getLength() < nSkip" );
-        sal_Int32 nTypeLength = rChartTypeService.getLength() - nSkip - aPostfix.getLength();
+        SAL_WARN_IF( static_cast<sal_Int32>(rChartTypeService.size()) < nSkip, "xmloff.chart", "ChartTypeService.getLength() < nSkip" );
+        sal_Int32 nTypeLength = rChartTypeService.size() - nSkip - aPostfix.getLength();
         // if postfix matches and leaves a non-empty type
-        if( nTypeLength > 0 && rChartTypeService.match( aPostfix, nSkip + nTypeLength ))
+        if( nTypeLength > 0 && o3tl::starts_with(rChartTypeService.substr(nSkip + nTypeLength), aPostfix) )
         {
-            std::u16string_view aServiceName( rChartTypeService.subView( nSkip, nTypeLength ));
+            std::u16string_view aServiceName( rChartTypeService.substr( nSkip, nTypeLength ));
 
             if ( aServiceName == u"Line" )
                 eResult = XML_LINE;
@@ -323,7 +323,7 @@ XMLTokenEnum getTokenByChartType(
         }
     }
 
-    if( eResult == XML_TOKEN_INVALID && !rChartTypeService.isEmpty() )
+    if( eResult == XML_TOKEN_INVALID && !rChartTypeService.empty() )
         eResult = XML_ADD_IN;
 
     return eResult;

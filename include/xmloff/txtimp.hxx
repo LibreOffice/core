@@ -159,7 +159,7 @@ public:
     // insert a string without special whitespace processing enabled
     void InsertString( const OUString& rChars );
     // insert a string with special whitespace processing enabled
-    void InsertString( const OUString& rChars,
+    void InsertString( std::u16string_view rChars,
                        bool& rIgnoreLeadingSpace );
     // Delete current paragraph
     void DeleteParagraph();

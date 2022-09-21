@@ -155,7 +155,7 @@ namespace xmloff::EnhancedCustomShapeToken {
         EAS_NotFound
     };
 
-    EnhancedCustomShapeTokenEnum EASGet( const OUString& );
+    EnhancedCustomShapeTokenEnum EASGet( std::u16string_view );
     EnhancedCustomShapeTokenEnum EASGet( sal_Int32 nToken );
     OUString EASGet( const EnhancedCustomShapeTokenEnum );
 }

@@ -27,7 +27,7 @@ class XMLFormPropOASISTransformerContext :
     bool const m_bIsList;
     bool const m_bIsListValue;
 
-    static ::xmloff::token::XMLTokenEnum GetValueType( const OUString& rValue );
+    static ::xmloff::token::XMLTokenEnum GetValueType( std::u16string_view rValue );
 
 public:
     XMLFormPropOASISTransformerContext( XMLTransformerBase& rTransformer,

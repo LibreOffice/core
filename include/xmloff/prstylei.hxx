@@ -52,7 +52,7 @@ public:
     // Helper to check if the local maProperties contains the given
     // FillStyle tag and if the FillStyle there is different from FillStyle_NONE
     bool doNewDrawingLayerFillStyleDefinitionsExist(
-        const OUString& rFillStyleTag) const;
+        std::u16string_view rFillStyleTag) const;
 
 protected:
 

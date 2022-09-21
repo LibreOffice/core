@@ -32,14 +32,14 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
-                const OUString& rValue )
+                std::u16string_view rValue )
 {
     XMLTokenEnum eRet = XML_DOUBLE;
     bool bNeg = false;
     sal_uInt32 nVal = 0;
 
     sal_Int32 nPos = 0;
-    sal_Int32 nLen = rValue.getLength();
+    sal_Int32 nLen = rValue.size();
 
     // skip white space
     while( nPos < nLen && ' ' == rValue[nPos] )

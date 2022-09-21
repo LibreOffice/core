@@ -181,10 +181,10 @@ static const TypeNameHashMap& GetNameHashMap()
     return aHashMap;
 }
 
-EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
+EnhancedCustomShapeTokenEnum EASGet( std::u16string_view rShapeType )
 {
     EnhancedCustomShapeTokenEnum eRetValue = EAS_NotFound;
-    int i, nLen = rShapeType.getLength();
+    size_t i, nLen = rShapeType.size();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = static_cast<char>(rShapeType[ i ]);

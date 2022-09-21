@@ -543,9 +543,9 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 }
 
 bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
-    const OUString& rFillStyleTag) const
+    std::u16string_view rFillStyleTag) const
 {
-    if(!maProperties.empty() && rFillStyleTag.getLength())
+    if(!maProperties.empty() && !rFillStyleTag.empty())
     {
         // no & to avoid non-obvious UAF due to the 2nd temp Reference
         const rtl::Reference<XMLPropertySetMapper> rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();

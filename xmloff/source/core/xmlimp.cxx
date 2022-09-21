@@ -1236,7 +1236,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return mxDashHelper;
 }
 
-bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
+bool SvXMLImport::IsPackageURL( std::u16string_view rURL ) const
 {
 
     // if, and only if, only parts are imported, then we're in a package
@@ -1247,7 +1247,7 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
     // TODO: from this point extract to own static function
 
     // Some quick tests: Some may rely on the package structure!
-    sal_Int32 nLen = rURL.getLength();
+    size_t nLen = rURL.size();
     if( nLen > 0 && '/' == rURL[0] )
         // RFC2396 net_path or abs_path
         return false;
@@ -1263,7 +1263,7 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
     }
 
     // Now check for a RFC2396 schema
-    sal_Int32 nPos = 1;
+    size_t nPos = 1;
     while( nPos < nLen )
     {
         switch( rURL[nPos] )
@@ -2001,10 +2001,10 @@ OUString SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
         return OUString();
 }
 
-sal_Int32 SvXMLImport::getTokenFromName( const OUString& rName )
+sal_Int32 SvXMLImport::getTokenFromName( std::u16string_view rName )
 {
     Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
-        OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr()), rName.getLength() );
+        OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr()), rName.size() );
     return xTokenHandler->getTokenFromUTF8( aLocalNameSeq );
 }
 

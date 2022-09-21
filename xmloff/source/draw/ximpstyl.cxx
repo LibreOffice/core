@@ -1126,7 +1126,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
     {
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName("graphics"), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, OUString());
+        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, u"");
     }
     catch( uno::Exception& )
     {
@@ -1140,7 +1140,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     {
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName("cell"), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, OUString());
+        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, u"");
     }
     catch( uno::Exception& )
     {
@@ -1182,9 +1182,9 @@ static bool canSkipReset(std::u16string_view rName, const XMLPropStyleContext* p
 
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 
-void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess > const & xPageStyles,  XmlStyleFamily nFamily,  const OUString& rPrefix) const
+void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess > const & xPageStyles,  XmlStyleFamily nFamily, std::u16string_view rPrefix) const
 {
-    sal_Int32 nPrefLen(rPrefix.getLength());
+    sal_Int32 nPrefLen(rPrefix.size());
 
     sal_uInt32 a;
 
