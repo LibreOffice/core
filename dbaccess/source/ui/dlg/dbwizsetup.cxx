@@ -153,10 +153,14 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
     declarePath( static_cast<PathId>(m_pCollection->size()+1), aPath);
 
+    // Set general help ID for the roadmap
+    SetRoadmapHelpId(HID_DBWIZ_ROADMAP);
+
     m_xPrevPage->set_help_id(HID_DBWIZ_PREVIOUS);
     m_xNextPage->set_help_id(HID_DBWIZ_NEXT);
     m_xCancel->set_help_id(HID_DBWIZ_CANCEL);
     m_xFinish->set_help_id(HID_DBWIZ_FINISH);
+    m_xHelp->set_help_id(HID_DBWIZ_HELP);
     ActivatePage();
     setTitleBase(DBA_RES(STR_DBWIZARDTITLE));
     m_xAssistant->set_current_page(0);

@@ -104,6 +104,9 @@ inline constexpr OStringLiteral HID_DBWIZ_PREVIOUS = "DBACCESS_HID_DBWIZ_PREVIOU
 inline constexpr OStringLiteral HID_DBWIZ_NEXT = "DBACCESS_HID_DBWIZ_NEXT";
 inline constexpr OStringLiteral HID_DBWIZ_CANCEL = "DBACCESS_HID_DBWIZ_CANCEL";
 inline constexpr OStringLiteral HID_DBWIZ_FINISH = "DBACCESS_HID_DBWIZ_FINISH";
+inline constexpr OStringLiteral HID_DBWIZ_HELP = "DBACCESS_HID_DBWIZ_HELP";
+
+inline constexpr OStringLiteral HID_DBWIZ_ROADMAP = "DBACCESS_HID_DBWIZ_ROADMAP";
 
 #endif
 
