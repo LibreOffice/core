@@ -1211,64 +1211,6 @@ TrueTypeFont::~TrueTypeFont()
 #endif
 }
 
-TrueTypeFace::TrueTypeFace(const font::PhysicalFontFace& rFace)
-    : AbstractTrueTypeFont(nullptr, rFace.GetFontCharMap())
-    , m_rFace(rFace)
-{
-}
-
-TrueTypeFace::~TrueTypeFace()
-{
-}
-
-sal_uInt32 TrueTypeFace::TableTag(sal_uInt32 nIdx)
-{
-    switch (nIdx)
-    {
-        case O_cmap: return T_cmap;
-        case O_cvt: return T_cvt;
-        case O_fpgm: return T_fpgm;
-        case O_glyf: return T_glyf;
-        case O_gsub: return T_gsub;
-        case O_head: return T_head;
-        case O_hhea: return T_hhea;
-        case O_hmtx: return T_hmtx;
-        case O_loca: return T_loca;
-        case O_maxp: return T_maxp;
-        case O_name: return T_name;
-        case O_post: return T_post;
-        case O_prep: return T_prep;
-        case O_vhea: return T_vhea;
-        case O_vmtx: return T_vmtx;
-        case O_OS2: return T_OS2;
-        case O_CFF: return T_CFF;
-        default:
-            assert(false);
-            return 0;
-    }
-}
-
-bool TrueTypeFace::hasTable(sal_uInt32 nIdx) const
-{
-    uint32_t nTag = TableTag(nIdx);
-    if (!nTag)
-        return false;
-    if (m_aTableList[nIdx].empty())
-        m_aTableList[nIdx] = std::move(m_rFace.GetRawFontData(nTag));
-    return !m_aTableList[nIdx].empty();
-}
-
-const sal_uInt8* TrueTypeFace::table(sal_uInt32 nIdx, sal_uInt32& nSize) const
-{
-    uint32_t nTag = TableTag(nIdx);
-    if (!nTag)
-        return nullptr;
-    if (m_aTableList[nIdx].empty())
-        m_aTableList[nIdx] = std::move(m_rFace.GetRawFontData(nTag));
-    nSize = m_aTableList[nIdx].size();
-    return reinterpret_cast<const sal_uInt8*>(m_aTableList[nIdx].data());
-}
-
 void CloseTTFont(TrueTypeFont* ttf) { delete ttf; }
 
 SFErrCodes AbstractTrueTypeFont::initialize()

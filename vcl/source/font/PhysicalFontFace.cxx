@@ -296,6 +296,42 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
+namespace
+{
+class TrueTypeFace final : public AbstractTrueTypeFont
+{
+    const PhysicalFontFace& m_rFace;
+    mutable std::array<RawFontData, NUM_TAGS> m_aTableList;
+
+    const RawFontData& table(sal_uInt32 nIdx) const
+    {
+        assert(nIdx < NUM_TAGS);
+        static const uint32_t aTags[NUM_TAGS] = {
+            T_maxp, T_glyf, T_head, T_loca, T_name, T_hhea, T_hmtx, T_cmap, T_vhea,
+            T_vmtx, T_OS2,  T_post, T_cvt,  T_prep, T_fpgm, T_gsub, T_CFF,
+        };
+        if (m_aTableList[nIdx].empty())
+            m_aTableList[nIdx] = std::move(m_rFace.GetRawFontData(aTags[nIdx]));
+        return m_aTableList[nIdx];
+    }
+
+public:
+    TrueTypeFace(const PhysicalFontFace& rFace)
+        : AbstractTrueTypeFont(nullptr, rFace.GetFontCharMap())
+        , m_rFace(rFace)
+    {
+    }
+
+    bool hasTable(sal_uInt32 nIdx) const override { return !table(nIdx).empty(); }
+    const sal_uInt8* table(sal_uInt32 nIdx, sal_uInt32& nSize) const override
+    {
+        auto& rTable = table(nIdx);
+        nSize = rTable.size();
+        return rTable.data();
+    }
+};
+}
+
 bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                         const int nGlyphCount, FontSubsetInfo& rInfo) const

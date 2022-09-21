@@ -453,7 +453,6 @@ constexpr sal_uInt32 T_CFF  = 0x43464620;
 
 class AbstractTrueTypeFont;
 class TrueTypeFont;
-class TrueTypeFace;
 
 /**
  * @defgroup sft Sun Font Tools Exported Functions
@@ -787,21 +786,6 @@ const sal_uInt8* TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
     size = rTable.nSize;
     return rTable.pData;
 }
-
-class VCL_DLLPUBLIC TrueTypeFace final : public AbstractTrueTypeFont
-{
-    const font::PhysicalFontFace& m_rFace;
-    mutable std::array<font::RawFontData, NUM_TAGS> m_aTableList;
-
-    static sal_uInt32 TableTag(sal_uInt32);
-
-public:
-    TrueTypeFace(const font::PhysicalFontFace&);
-    ~TrueTypeFace() override;
-
-    bool hasTable(sal_uInt32) const override;
-    const sal_uInt8* table(sal_uInt32, sal_uInt32&) const override;
-};
 
 } // namespace vcl
 
