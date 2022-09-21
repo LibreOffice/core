@@ -555,7 +555,11 @@ Point  SwDrawBase::GetDefaultCenterPos() const
     }
 
     Point aCenter = aVisArea.Center();
-    if (aVisArea.Width() > aDocSz.Width())
+    // To increase the chance that aCenter actually falls somewhere on a page (rather than on the
+    // background between pages), keep it centered horizontally for the "Single-page view"
+    // (GetViewLayoutColumns() == 1) and "Book view" (GetViewLayoutColumns() == 2) cases that
+    // display the pages centered on the background:
+    if (aVisArea.Width() > aDocSz.Width() && m_pSh->GetViewOptions()->GetViewLayoutColumns() == 0)
         aCenter.setX(aDocSz.Width() / 2 + aVisArea.Left());
     if (aVisArea.Height() > aDocSz.Height())
         aCenter.setY(aDocSz.Height() / 2 + aVisArea.Top());
