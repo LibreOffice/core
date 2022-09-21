@@ -32,7 +32,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,epoxy, \
     external/epoxy/epoxy.windows.api.patch \
     external/epoxy/epoxy.noegl.by.default.patch \
     external/epoxy/clang-cl.patch \
-    external/epoxy/epoxy.android.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
