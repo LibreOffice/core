@@ -93,6 +93,12 @@ service ContentControl
     /** The color: just remembered.
     */
     [optional, property] string Color;
+
+    /** Combo box that allows free-form text as well, i.e. not dropdown.
+
+        @since LibreOffice 7.5
+    */
+    [optional, property] boolean ComboBox;
 };
 
 
