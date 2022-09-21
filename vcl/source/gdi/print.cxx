@@ -1347,6 +1347,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
         rData.SetPaperFormat( PAPER_USER );
         rData.SetPaperWidth( aPageSize.Width() );
         rData.SetPaperHeight( aPageSize.Height() );
+        rData.SetOrientation( Orientation::Portrait );
 
         if ( IsDisplayPrinter() )
         {

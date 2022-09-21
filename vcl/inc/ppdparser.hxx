@@ -36,6 +36,8 @@
 
 namespace psp {
 
+enum class orientation;
+
 class PPDCache;
 class PPDTranslator;
 
@@ -110,7 +112,6 @@ struct PPDKeyhash
         { return reinterpret_cast<size_t>(pKey); }
 };
 
-
 /*
  * PPDParser - parses a PPD file and contains all available keys from it
  */
@@ -177,6 +178,9 @@ private:
     static void scanPPDDir( const OUString& rDir );
     static void initPPDFiles(PPDCache &rPPDCache);
     static OUString getPPDFile( const OUString& rFile );
+
+    OUString        matchPaperImpl(int nWidth, int nHeight, bool bDontSwap = false, psp::orientation* pOrientation = nullptr) const;
+
 public:
     ~PPDParser();
     static const PPDParser* getParser( const OUString& rFile );
@@ -201,7 +205,7 @@ public:
     // returns false if paper not found
 
     // match the best paper for width and height
-    OUString        matchPaper( int nWidth, int nHeight, bool bDontSwap = false ) const;
+    OUString        matchPaper( int nWidth, int nHeight, psp::orientation* pOrientation = nullptr ) const;
 
     bool getMargins( std::u16string_view rPaperName,
                      int &rLeft, int& rRight,
