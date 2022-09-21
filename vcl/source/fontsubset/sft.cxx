@@ -89,6 +89,13 @@ struct PSPathElement
                                    x3( 0 ), y3( 0 )
     {
     }
+
+    PSPathElement() : type( PS_NOOP ),
+                                   x1( 0 ), y1( 0 ),
+                                   x2( 0 ), y2( 0 ),
+                                   x3( 0 ), y3( 0 )
+    {
+    }
 };
 
 /*- In horizontal writing mode right sidebearing is calculated using this formula
@@ -131,13 +138,6 @@ public:
     std::unique_ptr<sal_uInt32[]> offs;             /* array of nGlyphs offsets */
 };
 
-}
-
-static void *scalloc(size_t n, size_t size)
-{
-    void *res = calloc(n, size);
-    assert(res != nullptr);
-    return res;
 }
 
 /*- Data access methods for data stored in big-endian format */
@@ -744,7 +744,7 @@ static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std:
 
 /*- returns the number of items in the path -*/
 
-static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement **path)
+static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, std::unique_ptr<PSPathElement[]>& path)
 {
     std::vector< PSPathElement > aPathList;
     int nPathCount = 0;
@@ -757,7 +757,7 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
     int cp = 0;                                             /*- current point */
     int StartContour = 0, EndContour = 1;
 
-    *path = nullptr;
+    path.reset();
 
     /* if (srcCount > 0) for(;;) */
     while (srcCount > 0) {                                  /*- srcCount does not get changed inside the loop. */
@@ -862,9 +862,8 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
 
     if( (nPathCount = static_cast<int>(aPathList.size())) > 0)
     {
-        *path = static_cast<PSPathElement*>(calloc(nPathCount, sizeof(PSPathElement)));
-        assert(*path != nullptr);
-        memcpy( *path, aPathList.data(), nPathCount * sizeof(PSPathElement) );
+        path.reset(new PSPathElement[nPathCount]);
+        memcpy( path.get(), aPathList.data(), nPathCount * sizeof(PSPathElement) );
     }
 
     return nPathCount;
@@ -1580,7 +1579,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
                           int wmode)
 {
     std::vector<ControlPoint> pa;
-    PSPathElement *path;
+    std::unique_ptr<PSPathElement[]> path;
     int i, j, n;
     sal_uInt32 nSize;
     const sal_uInt8* table = ttf->table(O_head, nSize);
@@ -1674,7 +1673,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
         int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->glyphCount() ? glyphArray[i] : 0, pa, &metrics, nullptr);
 
         if (r > 0) {
-            n =  BSplineToPSPath(pa.data(), r, &path);
+            n =  BSplineToPSPath(pa.data(), r, path);
         } else {
             n = 0;                      /* glyph might have zero contours but valid metrics ??? */
             path = nullptr;
@@ -1717,7 +1716,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 
         fprintf(outf, "%s", h34);
 
-        free(path);
+        path.reset();
     }
     fprintf(outf, "%s", h35);
 
@@ -1733,7 +1732,14 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
                           sal_uInt8 const *encoding,
                           int            nGlyphs)
 {
-    TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;
+    std::unique_ptr<TrueTypeTableGeneric> cvt, prep, fpgm, os2;
+    std::unique_ptr<TrueTypeTableName> name;
+    std::unique_ptr<TrueTypeTableMaxp> maxp;
+    std::unique_ptr<TrueTypeTableHhea> hhea;
+    std::unique_ptr<TrueTypeTableHead> head;
+    std::unique_ptr<TrueTypeTableGlyf> glyf;
+    std::unique_ptr<TrueTypeTableCmap> cmap;
+    std::unique_ptr<TrueTypeTablePost> post;
     int i;
     SFErrCodes res;
 
@@ -1741,62 +1747,61 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
 
     /**                       name                         **/
 
-    NameRecord *names = nullptr;
-    int n = GetTTNameRecords(ttf, &names);
-    name = TrueTypeTableNew_name(n, names);
-    DisposeNameRecords(names, n);
+    std::vector<NameRecord> names;
+    GetTTNameRecords(ttf, names);
+    name.reset(new TrueTypeTableName(std::move(names)));
 
     /**                       maxp                         **/
     sal_uInt32 nTableSize;
     const sal_uInt8* p = ttf->table(O_maxp, nTableSize);
-    maxp = TrueTypeTableNew_maxp(p, nTableSize);
+    maxp.reset(new TrueTypeTableMaxp(p, nTableSize));
 
     /**                       hhea                         **/
     p = ttf->table(O_hhea, nTableSize);
     if (p && nTableSize >= HHEA_caretSlopeRun_offset + 2)
-        hhea = TrueTypeTableNew_hhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset));
+        hhea.reset(new TrueTypeTableHhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset)));
     else
-        hhea = TrueTypeTableNew_hhea(0, 0, 0, 0, 0);
+        hhea.reset(new TrueTypeTableHhea(0, 0, 0, 0, 0));
 
     /**                       head                         **/
 
     p = ttf->table(O_head, nTableSize);
     assert(p != nullptr);
-    head = TrueTypeTableNew_head(GetInt32(p, HEAD_fontRevision_offset),
+    head.reset(new TrueTypeTableHead(GetInt32(p, HEAD_fontRevision_offset),
                                  GetUInt16(p, HEAD_flags_offset),
                                  GetUInt16(p, HEAD_unitsPerEm_offset),
                                  p+HEAD_created_offset,
                                  GetUInt16(p, HEAD_macStyle_offset),
                                  GetUInt16(p, HEAD_lowestRecPPEM_offset),
-                                 GetInt16(p, HEAD_fontDirectionHint_offset));
+                                 GetInt16(p, HEAD_fontDirectionHint_offset)));
 
     /**                       glyf                          **/
 
-    glyf = TrueTypeTableNew_glyf();
-    sal_uInt32* gID = static_cast<sal_uInt32*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
+    glyf.reset(new TrueTypeTableGlyf());
+    std::unique_ptr<sal_uInt32[]> gID(new sal_uInt32[nGlyphs]);
 
     for (i = 0; i < nGlyphs; i++) {
-        gID[i] = glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
+        gID[i] = glyf->glyfAdd(GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
     }
 
     /**                       cmap                          **/
-    cmap = TrueTypeTableNew_cmap();
+    cmap.reset(new TrueTypeTableCmap());
 
     for (i=0; i < nGlyphs; i++) {
-        cmapAdd(cmap, 0x010000, encoding[i], gID[i]);
+        cmap->cmapAdd(0x010000, encoding[i], gID[i]);
     }
 
     /**                       cvt                           **/
     if ((p = ttf->table(O_cvt, nTableSize)) != nullptr)
-        cvt = TrueTypeTableNew(T_cvt, nTableSize, p);
+        cvt.reset(new TrueTypeTableGeneric(T_cvt, nTableSize, p));
 
     /**                       prep                          **/
     if ((p = ttf->table(O_prep, nTableSize)) != nullptr)
-        prep = TrueTypeTableNew(T_prep, nTableSize, p);
+        prep.reset(new TrueTypeTableGeneric(T_prep, nTableSize, p));
 
     /**                       fpgm                          **/
     if ((p = ttf->table(O_fpgm, nTableSize)) != nullptr)
-        fpgm = TrueTypeTableNew(T_fpgm, nTableSize, p);
+        fpgm.reset(new TrueTypeTableGeneric(T_fpgm, nTableSize, p));
 
     /**                       post                          **/
     if ((p = ttf->table(O_post, nTableSize)) != nullptr)
@@ -1810,25 +1815,23 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
         sal_uInt32 nFixedPitch = (POST_isFixedPitch_offset + 4 < nTableSize) ?
             GetUInt32(p, POST_isFixedPitch_offset) : 0;
 
-        post = TrueTypeTableNew_post(0x00030000,
+        post.reset(new TrueTypeTablePost(0x00030000,
                                      nItalic, nPosition,
-                                     nThickness, nFixedPitch);
+                                     nThickness, nFixedPitch));
     }
     else
-        post = TrueTypeTableNew_post(0x00030000, 0, 0, 0, 0);
+        post.reset(new TrueTypeTablePost(0x00030000, 0, 0, 0, 0));
 
-    ttcr.AddTable(name); ttcr.AddTable(maxp); ttcr.AddTable(hhea);
-    ttcr.AddTable(head); ttcr.AddTable(glyf); ttcr.AddTable(cmap);
-    ttcr.AddTable(cvt ); ttcr.AddTable(prep); ttcr.AddTable(fpgm);
-    ttcr.AddTable(post); ttcr.AddTable(os2);
+    ttcr.AddTable(std::move(name)); ttcr.AddTable(std::move(maxp)); ttcr.AddTable(std::move(hhea));
+    ttcr.AddTable(std::move(head)); ttcr.AddTable(std::move(glyf)); ttcr.AddTable(std::move(cmap));
+    ttcr.AddTable(std::move(cvt)); ttcr.AddTable(std::move(prep)); ttcr.AddTable(std::move(fpgm));
+    ttcr.AddTable(std::move(post)); ttcr.AddTable(std::move(os2));
 
     res = ttcr.StreamToMemory(rOutBuffer);
 #if OSL_DEBUG_LEVEL > 1
     SAL_WARN_IF(res != SFErrCodes::Ok, "vcl.fonts", "StreamToMemory: error code: "
             << (int) res << ".");
 #endif
-
-    free(gID);
 
     return res;
 }
@@ -2000,7 +2003,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
     assert(numTables <= 9);                                 /* Type42 has 9 required tables */
 
-    sal_uInt32* offs = static_cast<sal_uInt32*>(scalloc(numTables, sizeof(sal_uInt32)));
+    std::unique_ptr<sal_uInt32[]> offs(new sal_uInt32[numTables]);
 
     fputs("/sfnts [", outf);
     h.OpenString();
@@ -2072,7 +2075,6 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     }
     h.CloseString();
     fputs("] def\n", outf);
-    free(offs);
 }
 
 SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
@@ -2082,7 +2084,8 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                            sal_uInt8          *encoding,
                            int            nGlyphs)
 {
-    TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr;
+    std::unique_ptr<TrueTypeTable> head, hhea, maxp, cvt, prep, fpgm;
+    std::unique_ptr<TrueTypeTableGlyf> glyf;
     int i;
     SFErrCodes res;
 
@@ -2102,47 +2105,46 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     const sal_uInt8* p = ttf->table(O_head, nTableSize);
     const sal_uInt8* headP = p;
     assert(p != nullptr);
-    head = TrueTypeTableNew_head(GetInt32(p, HEAD_fontRevision_offset), GetUInt16(p, HEAD_flags_offset), GetUInt16(p, HEAD_unitsPerEm_offset), p+HEAD_created_offset, GetUInt16(p, HEAD_macStyle_offset), GetUInt16(p, HEAD_lowestRecPPEM_offset), GetInt16(p, HEAD_fontDirectionHint_offset));
+    head.reset(new TrueTypeTableHead(GetInt32(p, HEAD_fontRevision_offset), GetUInt16(p, HEAD_flags_offset), GetUInt16(p, HEAD_unitsPerEm_offset), p+HEAD_created_offset, GetUInt16(p, HEAD_macStyle_offset), GetUInt16(p, HEAD_lowestRecPPEM_offset), GetInt16(p, HEAD_fontDirectionHint_offset)));
     ver = GetUInt16(p, HEAD_majorVersion_offset);
     rev = GetInt32(p, HEAD_fontRevision_offset);
 
     /**                       hhea                         **/
     p = ttf->table(O_hhea, nTableSize);
     if (p)
-        hhea = TrueTypeTableNew_hhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset));
+        hhea.reset(new TrueTypeTableHhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset)));
     else
-        hhea = TrueTypeTableNew_hhea(0, 0, 0, 0, 0);
+        hhea.reset(new TrueTypeTableHhea(0, 0, 0, 0, 0));
 
     /**                       maxp                         **/
     p = ttf->table(O_maxp, nTableSize);
-    maxp = TrueTypeTableNew_maxp(p, nTableSize);
+    maxp.reset(new TrueTypeTableMaxp(p, nTableSize));
 
     /**                       cvt                           **/
     if ((p = ttf->table(O_cvt, nTableSize)) != nullptr)
-        cvt = TrueTypeTableNew(T_cvt, nTableSize, p);
+        cvt.reset(new TrueTypeTableGeneric(T_cvt, nTableSize, p));
 
     /**                       prep                          **/
     if ((p = ttf->table(O_prep, nTableSize)) != nullptr)
-        prep = TrueTypeTableNew(T_prep, nTableSize, p);
+        prep.reset(new TrueTypeTableGeneric(T_prep, nTableSize, p));
 
     /**                       fpgm                          **/
     if ((p = ttf->table(O_fpgm, nTableSize)) != nullptr)
-        fpgm = TrueTypeTableNew(T_fpgm, nTableSize, p);
+        fpgm.reset(new TrueTypeTableGeneric(T_fpgm, nTableSize, p));
 
     /**                       glyf                          **/
-    glyf = TrueTypeTableNew_glyf();
-    sal_uInt16* gID = static_cast<sal_uInt16*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
+    glyf.reset(new TrueTypeTableGlyf());
+    std::unique_ptr<sal_uInt16[]> gID(new sal_uInt16[nGlyphs]);
 
     for (i = 0; i < nGlyphs; i++) {
-        gID[i] = static_cast<sal_uInt16>(glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf));
+        gID[i] = static_cast<sal_uInt16>(glyf->glyfAdd(GetTTRawGlyphData(ttf, glyphArray[i]), ttf));
     }
 
-    ttcr.AddTable(head); ttcr.AddTable(hhea); ttcr.AddTable(maxp); ttcr.AddTable(cvt);
-    ttcr.AddTable(prep); ttcr.AddTable(glyf); ttcr.AddTable(fpgm);
+    ttcr.AddTable(std::move(head)); ttcr.AddTable(std::move(hhea)); ttcr.AddTable(std::move(maxp)); ttcr.AddTable(std::move(cvt));
+    ttcr.AddTable(std::move(prep)); ttcr.AddTable(std::move(glyf)); ttcr.AddTable(std::move(fpgm));
 
     std::vector<sal_uInt8> aOutBuffer;
     if ((res = ttcr.StreamToMemory(aOutBuffer)) != SFErrCodes::Ok) {
-        free(gID);
         return res;
     }
 
@@ -2171,13 +2173,12 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     /* dump charstrings */
     fprintf(outf, "/CharStrings %d dict dup begin\n", nGlyphs);
     fprintf(outf, "/.notdef 0 def\n");
-    for (i = 1; i < static_cast<int>(glyfCount(glyf)); i++) {
+    for (i = 1; i < static_cast<int>(glyf->glyfCount()); i++) {
         fprintf(outf,"/glyph%d %d def\n", i, i);
     }
     fprintf(outf, "end readonly def\n");
 
     fprintf(outf, "FontName currentdict end definefont pop\n");
-    free(gID);
     return SFErrCodes::Ok;
 }
 
@@ -2344,7 +2345,7 @@ void FillFontSubsetInfo(AbstractTrueTypeFont *ttf, FontSubsetInfo& rInfo)
         rInfo.m_nDescent = -aTTInfo.descender;
 }
 
-GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
+std::unique_ptr<GlyphData> GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
 {
     if (glyphID >= ttf->glyphCount())
         return nullptr;
@@ -2370,14 +2371,14 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
 
     sal_uInt32 length = nNextOffset - nOffset;
 
-    GlyphData* d = static_cast<GlyphData*>(malloc(sizeof(GlyphData))); assert(d != nullptr);
+    std::unique_ptr<GlyphData> d(new GlyphData);
 
     if (length > 0) {
         const sal_uInt8* srcptr = glyf + ttf->glyphOffset(glyphID);
         const size_t nChunkLen = ((length + 1) & ~1);
-        d->ptr = static_cast<sal_uInt8*>(malloc(nChunkLen)); assert(d->ptr != nullptr);
-        memcpy(d->ptr, srcptr, length);
-        memset(d->ptr + length, 0, nChunkLen - length);
+        d->ptr.reset(new sal_uInt8[nChunkLen]);
+        memcpy(d->ptr.get(), srcptr, length);
+        memset(d->ptr.get() + length, 0, nChunkLen - length);
         d->compflag = (GetInt16( srcptr, 0 ) < 0);
     } else {
         d->ptr = nullptr;
@@ -2434,25 +2435,26 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
     return d;
 }
 
-int GetTTNameRecords(AbstractTrueTypeFont const *ttf, NameRecord **nr)
+void GetTTNameRecords(AbstractTrueTypeFont const *ttf, std::vector<NameRecord>& nr)
 {
     sal_uInt32 nTableSize;
     const sal_uInt8* table = ttf->table(O_name, nTableSize);
+
+    nr.clear();
 
     if (nTableSize < 6)
     {
 #if OSL_DEBUG_LEVEL > 1
         SAL_WARN("vcl.fonts", "O_name table too small.");
 #endif
-        return 0;
+        return;
     }
 
     sal_uInt16 n = GetUInt16(table, 2);
     sal_uInt32 nStrBase = GetUInt16(table, 4);
     int i;
 
-    *nr = nullptr;
-    if (n == 0) return 0;
+    if (n == 0) return;
 
     const sal_uInt32 remaining_table_size = nTableSize-6;
     const sal_uInt32 nMinRecordSize = 12;
@@ -2465,8 +2467,7 @@ int GetTTNameRecords(AbstractTrueTypeFont const *ttf, NameRecord **nr)
         n = nMaxRecords;
     }
 
-    NameRecord* rec = static_cast<NameRecord*>(calloc(n, sizeof(NameRecord)));
-    assert(rec);
+    nr.resize(n);
 
     for (i = 0; i < n; i++) {
         sal_uInt32 nLargestFixedOffsetPos = 6 + 10 + 12 * i;
@@ -2479,51 +2480,28 @@ int GetTTNameRecords(AbstractTrueTypeFont const *ttf, NameRecord **nr)
             break;
         }
 
-        rec[i].platformID = GetUInt16(table, 6 + 0 + 12 * i);
-        rec[i].encodingID = GetUInt16(table, 6 + 2 + 12 * i);
-        rec[i].languageID = LanguageType(GetUInt16(table, 6 + 4 + 12 * i));
-        rec[i].nameID = GetUInt16(table, 6 + 6 + 12 * i);
-        rec[i].slen = GetUInt16(table, 6 + 8 + 12 * i);
+        nr[i].platformID = GetUInt16(table, 6 + 0 + 12 * i);
+        nr[i].encodingID = GetUInt16(table, 6 + 2 + 12 * i);
+        nr[i].languageID = LanguageType(GetUInt16(table, 6 + 4 + 12 * i));
+        nr[i].nameID = GetUInt16(table, 6 + 6 + 12 * i);
+        sal_uInt16 slen = GetUInt16(table, 6 + 8 + 12 * i);
         sal_uInt32 nStrOffset = GetUInt16(table, nLargestFixedOffsetPos);
-        if (rec[i].slen) {
-            if (nStrBase + nStrOffset + rec[i].slen >= nTableSize)
-            {
-                rec[i].sptr = nullptr;
-                rec[i].slen = 0;
+        if (slen) {
+            if (nStrBase + nStrOffset + slen >= nTableSize)
                 continue;
-            }
 
             const sal_uInt32 rec_string = nStrBase + nStrOffset;
             const size_t available_space = rec_string > nTableSize ? 0 : (nTableSize - rec_string);
-            if (rec[i].slen <= available_space)
+            if (slen <= available_space)
             {
-                rec[i].sptr = static_cast<sal_uInt8 *>(malloc(rec[i].slen)); assert(rec[i].sptr != nullptr);
-                memcpy(rec[i].sptr, table + rec_string, rec[i].slen);
+                nr[i].sptr.resize(slen);
+                memcpy(nr[i].sptr.data(), table + rec_string, slen);
             }
-            else
-            {
-                rec[i].sptr = nullptr;
-                rec[i].slen = 0;
-            }
-        } else {
-            rec[i].sptr = nullptr;
         }
         // some fonts have 3.0 names => fix them to 3.1
-        if( (rec[i].platformID == 3) && (rec[i].encodingID == 0) )
-            rec[i].encodingID = 1;
+        if( (nr[i].platformID == 3) && (nr[i].encodingID == 0) )
+            nr[i].encodingID = 1;
     }
-
-    *nr = rec;
-    return n;
-}
-
-void DisposeNameRecords(NameRecord* nr, int n)
-{
-    int i;
-    for (i = 0; i < n; i++) {
-        if (nr[i].sptr) free(nr[i].sptr);
-    }
-    free(nr);
 }
 
 template<size_t N> static void

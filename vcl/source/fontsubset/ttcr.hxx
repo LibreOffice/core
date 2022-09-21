@@ -24,13 +24,17 @@
 
 #pragma once
 
-#include "list.h"
 #include <sft.hxx>
 #include <vector>
 
 namespace vcl
 {
-struct TrueTypeTable;
+class TrueTypeTable;
+struct tdata_post;
+struct tdata_loca;
+struct table_cmap;
+struct tdata_generic;
+struct TableEntry;
 
 
 /* TrueType data types */
@@ -38,13 +42,6 @@ struct TrueTypeTable;
         sal_uInt16 aw;
         sal_Int16  lsb;
     } longHorMetrics;
-
-/* A generic base class for all TrueType tables */
-    struct TrueTypeTable {
-        sal_uInt32  tag;                         /* table tag                                                */
-        sal_uInt8   *rawdata;                    /* raw data allocated by GetRawData_*()                     */
-        void        *data;                       /* table specific data                                      */
-    };
 
 /** Error codes for most functions */
     enum TTCRErrCodes {
@@ -67,7 +64,7 @@ struct TrueTypeTable;
         /**
          * Adds a TrueType table to the TrueType creator.
          */
-        void AddTable(TrueTypeTable *table);
+        void AddTable(std::unique_ptr<TrueTypeTable> table);
         /**
          * Removes a TrueType table from the TrueType creator if it is stored there.
          * It also calls a TrueTypeTable destructor.
@@ -93,32 +90,54 @@ struct TrueTypeTable;
         TrueTypeTable *FindTable(sal_uInt32 tag);
         void ProcessTables();
 
-        sal_uInt32 tag;                         /**< TrueType file tag */
-        list   tables;                      /**< List of table tags and pointers */
+        sal_uInt32 m_tag;                                     /**< TrueType file tag */
+        std::vector<std::unique_ptr<TrueTypeTable>> m_tables; /**< List of table tags and pointers */
     };
 
-/**
- * This function converts the data of a TrueType table to a raw array of bytes.
- * It may allocates the memory for it and returns the size of the raw data in bytes.
- * If memory is allocated it does not need to be freed by the caller of this function,
- * since the pointer to it is stored in the TrueTypeTable and it is freed by the destructor
- * @return TTCRErrCode
- *
- */
+    /* A generic base class for all TrueType tables */
+    class TrueTypeTable {
+    protected:
+        TrueTypeTable(sal_uInt32 tag_) : m_tag(tag_) {}
 
-    int GetRawData(TrueTypeTable *, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag);
+    public:
+        virtual ~TrueTypeTable();
 
-/**
- *
- * Creates a new raw TrueType table. The difference between this constructor and
- * TrueTypeTableNew_tag constructors is that the latter create structured tables
- * while this constructor just copies memory pointed to by ptr to its buffer
- * and stores its length. This constructor is suitable for data that is not
- * supposed to be processed in any way, just written to the resulting TTF file.
- */
-    TrueTypeTable *TrueTypeTableNew(sal_uInt32 tag,
-                                    sal_uInt32 nbytes,
-                                    const sal_uInt8* ptr);
+        /**
+         * This function converts the data of a TrueType table to a raw array of bytes.
+         * It may allocates the memory for it and returns the size of the raw data in bytes.
+         * If memory is allocated it does not need to be freed by the caller of this function,
+         * since the pointer to it is stored in the TrueTypeTable and it is freed by the destructor
+         * @return TTCRErrCode
+         *
+         */
+        virtual int GetRawData(TableEntry*) = 0;
+
+        sal_uInt32  m_tag = 0;                       /* table tag                                                */
+        std::unique_ptr<sal_uInt8[]> m_rawdata;      /* raw data allocated by GetRawData_*()                     */
+    };
+
+    class TrueTypeTableGeneric : public TrueTypeTable
+    {
+    public:
+        /**
+         *
+         * Creates a new raw TrueType table. The difference between this constructor and
+         * TrueTypeTableNew_tag constructors is that the latter create structured tables
+         * while this constructor just copies memory pointed to by ptr to its buffer
+         * and stores its length. This constructor is suitable for data that is not
+         * supposed to be processed in any way, just written to the resulting TTF file.
+         */
+        TrueTypeTableGeneric(sal_uInt32 tag,
+                        sal_uInt32 nbytes,
+                        const sal_uInt8* ptr);
+        TrueTypeTableGeneric(sal_uInt32 tag,
+                        sal_uInt32 nbytes,
+                        std::unique_ptr<sal_uInt8[]> ptr);
+        virtual ~TrueTypeTableGeneric() override;
+        virtual int GetRawData(TableEntry*) override;
+    private:
+        std::unique_ptr<tdata_generic> m_generic;
+    };
 
 /**
  * Creates a new 'head' table for a TrueType font.
@@ -126,30 +145,54 @@ struct TrueTypeTable;
  * rest of the tables in the TrueType font this table should be the last one added
  * to the font.
  */
-    TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
-                                         sal_uInt16 flags,
-                                         sal_uInt16 unitsPerEm,
-                                         const sal_uInt8  *created,
-                                         sal_uInt16 macStyle,
-                                         sal_uInt16 lowestRecPPEM,
-                                         sal_Int16  fontDirectionHint);
+    class TrueTypeTableHead : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableHead(sal_uInt32 fontRevision,
+                         sal_uInt16 flags,
+                         sal_uInt16 unitsPerEm,
+                         const sal_uInt8  *created,
+                         sal_uInt16 macStyle,
+                         sal_uInt16 lowestRecPPEM,
+                         sal_Int16  fontDirectionHint);
+        virtual ~TrueTypeTableHead() override;
+        virtual int GetRawData(TableEntry*) override;
+
+        std::unique_ptr<sal_uInt8[]> m_head;
+    };
 
 /**
  * Creates a new 'hhea' table for a TrueType font.
  * Allocates memory for it and stores it in the hhea pointer.
  */
-    TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
+    class TrueTypeTableHhea : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableHhea(sal_Int16  ascender,
                                          sal_Int16  descender,
                                          sal_Int16  linegap,
                                          sal_Int16  caretSlopeRise,
                                          sal_Int16  caretSlopeRun);
+        virtual ~TrueTypeTableHhea() override;
+        virtual int GetRawData(TableEntry*) override;
+
+        std::unique_ptr<sal_uInt8[]> m_hhea;
+    };
 
 /**
  * Creates a new empty 'loca' table for a TrueType font.
  *
  * INTERNAL: gets called only from ProcessTables();
  */
-    TrueTypeTable *TrueTypeTableNew_loca();
+    class TrueTypeTableLoca : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableLoca();
+        virtual ~TrueTypeTableLoca() override;
+        virtual int GetRawData(TableEntry*) override;
+
+        std::unique_ptr<tdata_loca> m_loca;
+    };
 
 /**
  * Creates a new 'maxp' table based on an existing maxp table.
@@ -157,17 +200,63 @@ struct TrueTypeTable;
  * size specifies the size of existing maxp table for
  * error-checking purposes
  */
-    TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size);
+    class TrueTypeTableMaxp : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableMaxp(const sal_uInt8* maxp, int size);
+        virtual ~TrueTypeTableMaxp() override;
+        virtual int GetRawData(TableEntry*) override;
+
+        std::unique_ptr<sal_uInt8[]> m_maxp;
+    };
 
 /**
  * Creates a new empty 'glyf' table.
  */
-    TrueTypeTable *TrueTypeTableNew_glyf();
+    class TrueTypeTableGlyf : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableGlyf();
+        virtual ~TrueTypeTableGlyf() override;
+        virtual int GetRawData(TableEntry*) override;
+
+        /**
+         * Add a glyph to a glyf table.
+         *
+         * @return glyphID of the glyph in the new font
+         *
+         * NOTE: This function does not duplicate GlyphData, so memory will be
+         * deallocated in the table destructor
+         */
+        sal_uInt32 glyfAdd(std::unique_ptr<GlyphData> glyphdata, AbstractTrueTypeFont *fnt);
+
+        /**
+         * Query the number of glyphs currently stored in the 'glyf' table
+         *
+         */
+        sal_uInt32 glyfCount() { return m_list.size(); }
+
+        std::vector<std::unique_ptr<GlyphData>> m_list;
+    };
 
 /**
  * Creates a new empty 'cmap' table.
  */
-    TrueTypeTable *TrueTypeTableNew_cmap();
+    class TrueTypeTableCmap : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableCmap();
+        virtual ~TrueTypeTableCmap() override;
+        virtual int GetRawData(TableEntry*) override;
+
+        /**
+         * Add a character/glyph pair to a cmap table
+         */
+        void cmapAdd(sal_uInt32 id, sal_uInt32 c, sal_uInt32 g);
+
+    private:
+        std::unique_ptr<table_cmap> m_cmap;
+    };
 
 /**
  * Creates a new 'name' table. If n != 0 the table gets populated by
@@ -175,53 +264,34 @@ struct TrueTypeTable;
  * memory for its own copy of NameRecords, so nr array has to
  * be explicitly deallocated when it is not needed.
  */
-    TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord const *nr);
+    class TrueTypeTableName : public TrueTypeTable
+    {
+    public:
+        TrueTypeTableName(int n, NameRecord const *nr);
+        TrueTypeTableName(std::vector<NameRecord> nr);
+        virtual ~TrueTypeTableName() override;
+        virtual int GetRawData(TableEntry*) override;
+    private:
+        std::vector<NameRecord> m_list;
+    };
 
 /**
  * Creates a new 'post' table of one of the supported formats
  */
-    TrueTypeTable *TrueTypeTableNew_post(sal_Int32 format,
-                                         sal_Int32 italicAngle,
-                                         sal_Int16 underlinePosition,
-                                         sal_Int16 underlineThickness,
-                                         sal_uInt32 isFixedPitch);
-
-//  Table manipulation functions
-
-/**
- * Add a character/glyph pair to a cmap table
- */
-    void cmapAdd(TrueTypeTable *, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g);
-
-/**
- * Add a glyph to a glyf table.
- *
- * @return glyphID of the glyph in the new font
- *
- * NOTE: This function does not duplicate GlyphData, so memory will be
- * deallocated in the table destructor
- */
-    sal_uInt32 glyfAdd(TrueTypeTable *, GlyphData *glyphdata, AbstractTrueTypeFont *fnt);
-
-/**
- * Query the number of glyphs currently stored in the 'glyf' table
- *
- */
-    sal_uInt32 glyfCount(const TrueTypeTable *);
+    class TrueTypeTablePost : public TrueTypeTable
+    {
+    public:
+        TrueTypeTablePost(sal_Int32 format,
+                     sal_Int32 italicAngle,
+                     sal_Int16 underlinePosition,
+                     sal_Int16 underlineThickness,
+                     sal_uInt32 isFixedPitch);
+        virtual ~TrueTypeTablePost() override;
+        virtual int GetRawData(TableEntry*) override;
+    private:
+        std::unique_ptr<tdata_post> m_postdata;
+    };
 
 } // namespace
-
-extern "C"
-{
-/**
- * Destructor for the TrueTypeTable object.
- */
- void TrueTypeTableDispose(void *);
-
-/**
- * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
- */
- void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

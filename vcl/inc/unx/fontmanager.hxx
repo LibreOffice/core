@@ -50,6 +50,7 @@ namespace vcl::font
 {
 class FontSelectPattern;
 }
+namespace vcl { struct NameRecord; }
 class GenericUnixSalData;
 
 namespace psp {
@@ -154,7 +155,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     OString getFontFile(const PrintFont& rFont) const;
 
     std::vector<PrintFont> analyzeFontFile(int nDirID, const OString& rFileName, const char *pFormat=nullptr) const;
-    static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* format font subsetting code
+    static OUString convertSfntName( const vcl::NameRecord& rNameRecord ); // format font subsetting code
     static void analyzeSfntFamilyName( void const * pTTFont, std::vector< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
     bool analyzeSfntFile(PrintFont& rFont) const;
     // finds the font id for the nFaceIndex face in this font file

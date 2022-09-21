@@ -29,6 +29,7 @@
 
 #include <tools/urlobj.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -313,25 +314,24 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
     return aIds;
 }
 
-OUString PrintFontManager::convertSfntName( void* pRecord )
+OUString PrintFontManager::convertSfntName( const NameRecord& rNameRecord )
 {
-    NameRecord* pNameRecord = static_cast<NameRecord*>(pRecord);
     OUString aValue;
     if(
-       ( pNameRecord->platformID == 3 && ( pNameRecord->encodingID == 0 || pNameRecord->encodingID == 1 ) )  // MS, Unicode
+       ( rNameRecord.platformID == 3 && ( rNameRecord.encodingID == 0 || rNameRecord.encodingID == 1 ) )  // MS, Unicode
        ||
-       ( pNameRecord->platformID == 0 ) // Apple, Unicode
+       ( rNameRecord.platformID == 0 ) // Apple, Unicode
        )
     {
-        OUStringBuffer aName( pNameRecord->slen/2 );
-        const sal_uInt8* pNameBuffer = pNameRecord->sptr;
-        for(int n = 0; n < pNameRecord->slen/2; n++ )
+        OUStringBuffer aName( rNameRecord.sptr.size()/2 );
+        const sal_uInt8* pNameBuffer = rNameRecord.sptr.data();
+        for(size_t n = 0; n < rNameRecord.sptr.size()/2; n++ )
             aName.append( static_cast<sal_Unicode>(getUInt16BE( pNameBuffer )) );
         aValue = aName.makeStringAndClear();
     }
-    else if( pNameRecord->platformID == 3 )
+    else if( rNameRecord.platformID == 3 )
     {
-        if( pNameRecord->encodingID >= 2 && pNameRecord->encodingID <= 6 )
+        if( rNameRecord.encodingID >= 2 && rNameRecord.encodingID <= 6 )
         {
             /*
              *  and now for a special kind of madness:
@@ -340,8 +340,8 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
              *  while others code two bytes as a uint16 and swap to BE
              */
             OStringBuffer aName;
-            const sal_uInt8* pNameBuffer = pNameRecord->sptr;
-            for(int n = 0; n < pNameRecord->slen/2; n++ )
+            const sal_uInt8* pNameBuffer = rNameRecord.sptr.data();
+            for(size_t n = 0; n < rNameRecord.sptr.size()/2; n++ )
             {
                 sal_Unicode aCode = static_cast<sal_Unicode>(getUInt16BE( pNameBuffer ));
                 char aChar = aCode >> 8;
@@ -351,7 +351,7 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
                 if( aChar )
                     aName.append( aChar );
             }
-            switch( pNameRecord->encodingID )
+            switch( rNameRecord.encodingID )
             {
                 case 2:
                     aValue = OStringToOUString( aName, RTL_TEXTENCODING_MS_932 );
@@ -371,11 +371,11 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
             }
         }
     }
-    else if( pNameRecord->platformID == 1 )
+    else if( rNameRecord.platformID == 1 )
     {
-        OString aName(reinterpret_cast<char*>(pNameRecord->sptr), pNameRecord->slen);
+        std::string_view aName(reinterpret_cast<const char*>(rNameRecord.sptr.data()), rNameRecord.sptr.size());
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
-        switch (pNameRecord->encodingID)
+        switch (rNameRecord.encodingID)
         {
             case 0:
                 eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
@@ -423,9 +423,9 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
                 eEncoding = RTL_TEXTENCODING_UTF8;
                 break;
             default:
-                if (aName.startsWith("Khmer OS"))
+                if (o3tl::starts_with(aName, "Khmer OS"))
                     eEncoding = RTL_TEXTENCODING_UTF8;
-                SAL_WARN_IF(eEncoding == RTL_TEXTENCODING_DONTKNOW, "vcl.fonts", "Unimplemented mac encoding " << pNameRecord->encodingID << " to unicode conversion for fontname " << aName);
+                SAL_WARN_IF(eEncoding == RTL_TEXTENCODING_DONTKNOW, "vcl.fonts", "Unimplemented mac encoding " << rNameRecord.encodingID << " to unicode conversion for fontname " << aName);
                 break;
         }
         if (eEncoding != RTL_TEXTENCODING_DONTKNOW)
@@ -465,36 +465,36 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
     rNames.clear();
     ::std::set< OUString > aSet;
 
-    NameRecord* pNameRecords = nullptr;
-    int nNameRecords = GetTTNameRecords( static_cast<TrueTypeFont const *>(pTTFont), &pNameRecords );
-    if( nNameRecords && pNameRecords )
+    std::vector<NameRecord> aNameRecords;
+    GetTTNameRecords( static_cast<TrueTypeFont const *>(pTTFont), aNameRecords );
+    if( !aNameRecords.empty() )
     {
         LanguageTag aSystem("");
         LanguageType eLang = aSystem.getLanguageType();
         int nLastMatch = -1;
-        for( int i = 0; i < nNameRecords; i++ )
+        for( size_t i = 0; i < aNameRecords.size(); i++ )
         {
-            if( pNameRecords[i].nameID != 1 || pNameRecords[i].sptr == nullptr )
+            if( aNameRecords[i].nameID != 1 || aNameRecords[i].sptr.empty() )
                 continue;
             int nMatch = -1;
-            if( pNameRecords[i].platformID == 0 ) // Unicode
+            if( aNameRecords[i].platformID == 0 ) // Unicode
                 nMatch = 4000;
-            else if( pNameRecords[i].platformID == 3 )
+            else if( aNameRecords[i].platformID == 3 )
             {
                 // this bases on the LanguageType actually being a Win LCID
-                if (pNameRecords[i].languageID == eLang)
+                if (aNameRecords[i].languageID == eLang)
                     nMatch = 8000;
-                else if( pNameRecords[i].languageID == LANGUAGE_ENGLISH_US )
+                else if( aNameRecords[i].languageID == LANGUAGE_ENGLISH_US )
                     nMatch = 2000;
-                else if( pNameRecords[i].languageID == LANGUAGE_ENGLISH ||
-                         pNameRecords[i].languageID == LANGUAGE_ENGLISH_UK )
+                else if( aNameRecords[i].languageID == LANGUAGE_ENGLISH ||
+                         aNameRecords[i].languageID == LANGUAGE_ENGLISH_UK )
                     nMatch = 1500;
                 else
                     nMatch = 1000;
             }
-            else if (pNameRecords[i].platformID == 1)
+            else if (aNameRecords[i].platformID == 1)
             {
-                AppleLanguageId aAppleId = static_cast<AppleLanguageId>(static_cast<sal_uInt16>(pNameRecords[i].languageID));
+                AppleLanguageId aAppleId = static_cast<AppleLanguageId>(static_cast<sal_uInt16>(aNameRecords[i].languageID));
                 LanguageTag aApple(makeLanguageTagFromAppleLanguageId(aAppleId));
                 if (aApple == aSystem)
                     nMatch = 8000;
@@ -503,7 +503,7 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
                 else
                     nMatch = 1000;
             }
-            OUString aName = convertSfntName( pNameRecords + i );
+            OUString aName = convertSfntName( aNameRecords[i] );
             aSet.insert( aName );
             if (aName.isEmpty())
                 continue;
@@ -514,7 +514,6 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
             }
         }
     }
-    DisposeNameRecords( pNameRecords, nNameRecords );
     if( !aFamily.isEmpty() )
     {
         rNames.push_back( aFamily );

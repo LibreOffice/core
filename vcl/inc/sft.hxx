@@ -124,7 +124,7 @@ namespace vcl
     typedef struct {
         sal_uInt32 glyphID;                     /**< glyph ID                           */
         sal_uInt16 nbytes;                      /**< number of bytes in glyph data      */
-        sal_uInt8  *ptr;                         /**< pointer to glyph data              */
+        std::unique_ptr<sal_uInt8[]> ptr;       /**< pointer to glyph data              */
         sal_uInt16 aw;                          /**< advance width                      */
         sal_Int16  lsb;                         /**< left sidebearing                   */
         bool compflag;                          /**< false- if non-composite */
@@ -135,14 +135,13 @@ namespace vcl
     } GlyphData;
 
 /** Structure used by the TrueType Creator and CreateTTFromTTGlyphs() */
-    typedef struct {
+    struct NameRecord {
         sal_uInt16 platformID;                  /**< Platform ID                                            */
         sal_uInt16 encodingID;                  /**< Platform-specific encoding ID                          */
         LanguageType languageID;                /**< Language ID                                            */
         sal_uInt16 nameID;                      /**< Name ID                                                */
-        sal_uInt16 slen;                        /**< String length in bytes                                 */
-        sal_uInt8  *sptr;                        /**< Pointer to string data (not zero-terminated!)          */
-    } NameRecord;
+        std::vector<sal_uInt8> sptr;            /**< string data (not zero-terminated!)          */
+    };
 
 /** Return value of GetTTGlobalFontInfo() */
 
@@ -535,7 +534,7 @@ class TrueTypeFace;
  * @ingroup sft
  *
  */
-    GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID);
+    std::unique_ptr<GlyphData> GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID);
 
 /**
  * For a specified glyph adds all component glyphs IDs to the list and
@@ -559,23 +558,12 @@ class TrueTypeFace;
  * array of NameRecord structs
  *
  * @param ttf       pointer to the TrueTypeFont struct
- * @param nr        pointer to the array of NameRecord structs
- *
- * @return          number of NameRecord structs
- * @ingroup sft
- */
-
-    int GetTTNameRecords(AbstractTrueTypeFont const *ttf, NameRecord **nr);
-
-/**
- * Deallocates previously allocated array of NameRecords.
- *
- * @param nr        array of NameRecord structs
- * @param n         number of elements in the array
+ * @param nr        reference to the vector of NameRecord structs
  *
  * @ingroup sft
  */
-    void DisposeNameRecords(NameRecord* nr, int n);
+
+    void GetTTNameRecords(AbstractTrueTypeFont const *ttf, std::vector<NameRecord>& nr);
 
 /**
  * Generates a new PostScript Type 3 font and dumps it to <b>outf</b> file.
