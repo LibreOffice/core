@@ -979,7 +979,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     }
 
     // tdf#151081 need to use regular primitive decomposition when the gradient
-    // is transformed in any other way then just tanslate & scale
+    // is transformed in any other way then just translate & scale
     basegfx::B2DVector aScale, aTranslate;
     double fRotate, fShearX;
 
