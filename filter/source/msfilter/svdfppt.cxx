@@ -1857,7 +1857,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
             if ( bSuccess )
             {
                 pDest->Seek(0);
-                Storage* pObjStor = pDest ? new Storage( *pDest, true ) : nullptr;
+                Storage* pObjStor = new Storage(*pDest, true);
                 if (pObjStor)
                 {
                     tools::SvRef<SotStorage> xObjStor( new SotStorage( pObjStor ) );
