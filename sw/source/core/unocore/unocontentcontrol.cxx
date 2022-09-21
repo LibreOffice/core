@@ -168,6 +168,7 @@ public:
     OUString m_aDateLanguage;
     OUString m_aCurrentDate;
     bool m_bPlainText;
+    bool m_bComboBox;
     OUString m_aPlaceholderDocPart;
     OUString m_aDataBindingPrefixMappings;
     OUString m_aDataBindingXpath;
@@ -188,6 +189,7 @@ public:
         , m_bPicture(false)
         , m_bDate(false)
         , m_bPlainText(false)
+        , m_bComboBox(false)
     {
         if (m_pContentControl)
         {
@@ -474,6 +476,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetDateLanguage(m_pImpl->m_aDateLanguage);
     pContentControl->SetCurrentDate(m_pImpl->m_aCurrentDate);
     pContentControl->SetPlainText(m_pImpl->m_bPlainText);
+    pContentControl->SetComboBox(m_pImpl->m_bComboBox);
     pContentControl->SetPlaceholderDocPart(m_pImpl->m_aPlaceholderDocPart);
     pContentControl->SetDataBindingPrefixMappings(m_pImpl->m_aDataBindingPrefixMappings);
     pContentControl->SetDataBindingXpath(m_pImpl->m_aDataBindingXpath);
@@ -808,6 +811,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_COMBO_BOX)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bComboBox = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetComboBox(bValue);
+            }
+        }
+    }
     else if (rPropertyName == UNO_NAME_PLACEHOLDER_DOC_PART)
     {
         OUString aValue;
@@ -1026,6 +1044,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetPlainText();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_COMBO_BOX)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bComboBox;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetComboBox();
         }
     }
     else if (rPropertyName == UNO_NAME_PLACEHOLDER_DOC_PART)

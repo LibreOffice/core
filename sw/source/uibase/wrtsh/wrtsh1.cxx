@@ -1058,6 +1058,11 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             aPlaceholder = u"\u2610";
             break;
         }
+        case SwContentControlType::COMBO_BOX:
+        {
+            pContentControl->SetComboBox(true);
+            [[fallthrough]];
+        }
         case SwContentControlType::DROP_DOWN_LIST:
         {
             pContentControl->SetShowingPlaceHolder(true);

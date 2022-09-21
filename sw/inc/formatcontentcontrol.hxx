@@ -47,6 +47,7 @@ enum class SwContentControlType
     PICTURE,
     DATE,
     PLAIN_TEXT,
+    COMBO_BOX,
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
@@ -146,6 +147,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 
     /// Plain text, i.e. not rich text.
     bool m_bPlainText = false;
+
+    /// Same as drop-down, but free-form input is also accepted.
+    bool m_bComboBox = false;
 
     /// The placeholder's doc part: just remembered.
     OUString m_aPlaceholderDocPart;
@@ -262,6 +266,10 @@ public:
     void SetPlainText(bool bPlainText) { m_bPlainText = bPlainText; }
 
     bool GetPlainText() const { return m_bPlainText; }
+
+    void SetComboBox(bool bComboBox) { m_bComboBox = bComboBox; }
+
+    bool GetComboBox() const { return m_bComboBox; }
 
     void SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
     {

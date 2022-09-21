@@ -341,6 +341,11 @@ SwContentControlType SwContentControl::GetType() const
         return SwContentControlType::CHECKBOX;
     }
 
+    if (m_bComboBox)
+    {
+        return SwContentControlType::COMBO_BOX;
+    }
+
     if (!m_aListItems.empty())
     {
         return SwContentControlType::DROP_DOWN_LIST;
@@ -391,6 +396,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aCurrentDate.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("plain-text"),
                                       BAD_CAST(OString::boolean(m_bPlainText).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("combo-box"),
+                                      BAD_CAST(OString::boolean(m_bComboBox).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("placeholder-doc-part"),
                                       BAD_CAST(m_aPlaceholderDocPart.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("data-binding-prefix-mappings"),
