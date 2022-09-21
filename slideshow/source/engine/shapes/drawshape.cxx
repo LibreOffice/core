@@ -394,7 +394,7 @@ namespace slideshow::internal
 
             prepareHyperlinkIndices();
 
-            if(mbContainsPageField && mpCurrMtf && !maBounds.isEmpty())
+            if(mbContainsPageField && !maBounds.isEmpty())
             {
                 // tdf#150402 Use mbContainsPageField that gets set in prepareHyperlinkIndices
                 // which has to be run anyways, so this will cause no harm in execution speed.
