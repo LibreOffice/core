@@ -138,7 +138,7 @@ void XmlScriptTest::testBasicElements()
     CPPUNIT_ASSERT(xModel.is());
 
     // Export
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     exportToFile(aTempFile.GetURL(), xModel);
 
@@ -196,7 +196,7 @@ void XmlScriptTest::testEmptyPopupItems()
     CPPUNIT_ASSERT(xModel.is());
 
     // Export
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     exportToFile(aTempFile.GetURL(), xModel);
 

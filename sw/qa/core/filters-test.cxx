@@ -117,7 +117,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 
     bool bSaved;
     {
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         SfxMedium aDstMed(aTempFile.GetURL(), StreamMode::STD_WRITE);
         aDstMed.SetFilter(pExportFilter);

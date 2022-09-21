@@ -92,7 +92,7 @@ void OoxDrawingmlTest::loadAndReload(const OUString& rURL, const OUString& rFilt
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= rFilterName;
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     mxComponent->dispose();
@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     getComponent()->dispose();

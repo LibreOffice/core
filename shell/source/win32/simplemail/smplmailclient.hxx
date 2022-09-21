@@ -42,7 +42,7 @@ private:
     // Don't try to delete the copied attachment files; let the spawned process cleanup them
     void ReleaseAttachments();
 
-    std::vector< std::unique_ptr<utl::TempFile> > maAttachmentFiles;
+    std::vector< std::unique_ptr<utl::TempFileNamed> > maAttachmentFiles;
 };
 
 #endif

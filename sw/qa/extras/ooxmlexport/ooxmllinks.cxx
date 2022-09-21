@@ -45,7 +45,7 @@
             CPPUNIT_ASSERT(!sFileName.isEmpty());                                                  \
                                                                                                    \
             /* Get temp path */                                                                    \
-            OUString sTempDir = utl::TempFile::GetTempNameBaseDirectory();                         \
+            OUString sTempDir = utl::GetTempNameBaseDirectory();                                   \
                                                                                                    \
             /* Create & apply new URL */                                                           \
             OUString sOriginalFileInTempDir = sTempDir + sFileName;                                \

@@ -6624,7 +6624,7 @@ static void preloadData()
     // Create user profile in the temp directory for loading the dictionaries
     OUString sUserPath;
     rtl::Bootstrap::get("UserInstallation", sUserPath);
-    utl::TempFile aTempDir(nullptr, true);
+    utl::TempFileNamed aTempDir(nullptr, true);
     aTempDir.EnableKillingFile();
     rtl::Bootstrap::set("UserInstallation", aTempDir.GetURL());
 

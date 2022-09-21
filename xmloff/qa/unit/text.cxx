@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     getComponent()->dispose();
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     uno::Sequence<beans::PropertyValue> aStoreProps = {
         comphelper::makePropertyValue("FilterName", OUString("writer8")),
     };
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     // Without the accompanying fix in place, this test would have resulted in an assertion failure,
     // as LocalURL was mapped to XML_TOKEN_INVALID.
@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -371,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
@@ -408,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
@@ -444,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -517,7 +517,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -614,7 +614,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -709,7 +709,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -778,7 +778,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -855,7 +855,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -921,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
     validate(aTempFile.GetFileName(), test::ODF);
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     // Without the accompanying fix in place, this test would have failed, we had duplicated XML
     // attributes.

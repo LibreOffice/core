@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
     // a stream.
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -333,7 +333,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
 {
     // Copy the test document to a temporary file, as it'll be modified.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(
@@ -408,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(
@@ -441,7 +441,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 {
     // Copy the test document to a temporary file, as it'll be modified.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(
@@ -799,7 +799,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     if (!IsDefaultDPI())
         return;
     // Given: copy the test document to a temporary file, as it'll be modified.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "add-visible-signature.pdf";
     OUString aURL = aTempFile.GetURL();
@@ -876,7 +876,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     // Save a copy
-    utl::TempFile aTempFileSaveCopy;
+    utl::TempFileNamed aTempFileSaveCopy;
     aTempFileSaveCopy.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
         { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(OUString("calc8")) } }));
@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     try
     {
         // Save As
-        utl::TempFile aTempFileSaveAs;
+        utl::TempFileNamed aTempFileSaveAs;
         aTempFileSaveAs.EnableKillingFile();
         uno::Sequence<beans::PropertyValue> descSaveAs(
             comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc8")) } }));
@@ -913,7 +913,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     // Save a copy
-    utl::TempFile aTempFileSaveCopy;
+    utl::TempFileNamed aTempFileSaveCopy;
     aTempFileSaveCopy.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
         { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(OUString("writer8")) } }));
@@ -922,7 +922,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     try
     {
         // Save As
-        utl::TempFile aTempFileSaveAs;
+        utl::TempFileNamed aTempFileSaveAs;
         aTempFileSaveAs.EnableKillingFile();
         uno::Sequence<beans::PropertyValue> descSaveAs(
             comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
 {
     // Create a working copy.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString aURL = aTempFile.GetURL();
     CPPUNIT_ASSERT_EQUAL(
@@ -999,7 +999,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
     // Create an empty document, store it to a tempfile and load it as a storage.
     createDoc(OUString());
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -1057,7 +1057,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 {
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -1136,7 +1136,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 {
     createDoc("");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -1346,7 +1346,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
     CPPUNIT_ASSERT(pObjectShell);
 
     // export and import again
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     {
         uno::Sequence<beans::PropertyValue> props(
             comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
@@ -1419,7 +1419,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                    SignatureState::OK, ODFVER_012_TEXT);
 
     // save as new ODT document
-    utl::TempFile aTempFileSaveAsODT;
+    utl::TempFileNamed aTempFileSaveAsODT;
     aTempFileSaveAsODT.EnableKillingFile();
     try
     {
@@ -1434,7 +1434,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
     }
 
     // save as new OTT template
-    utl::TempFile aTempFileSaveAsOTT;
+    utl::TempFileNamed aTempFileSaveAsOTT;
     aTempFileSaveAsOTT.EnableKillingFile();
     try
     {
@@ -1466,7 +1466,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                    SignatureState::OK, ODFVER_013_TEXT);
 
     // save as new OTT template
-    utl::TempFile aTempFileSaveAsODT_OTT;
+    utl::TempFileNamed aTempFileSaveAsODT_OTT;
     aTempFileSaveAsODT_OTT.EnableKillingFile();
     try
     {
@@ -1516,7 +1516,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new ODT document
-    utl::TempFile aTempFileSaveAs;
+    utl::TempFileNamed aTempFileSaveAs;
     aTempFileSaveAs.EnableKillingFile();
     try
     {
@@ -1547,7 +1547,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new OTT template
-    utl::TempFile aTempFileSaveAsOTT;
+    utl::TempFileNamed aTempFileSaveAsOTT;
     aTempFileSaveAsOTT.EnableKillingFile();
     try
     {
@@ -1609,7 +1609,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new ODT document
-    utl::TempFile aTempFileSaveAsODT;
+    utl::TempFileNamed aTempFileSaveAsODT;
     aTempFileSaveAsODT.EnableKillingFile();
     try
     {
@@ -1624,7 +1624,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
     }
 
     // save as new OTT template
-    utl::TempFile aTempFileSaveAsOTT;
+    utl::TempFileNamed aTempFileSaveAsOTT;
     aTempFileSaveAsOTT.EnableKillingFile();
     try
     {
@@ -1656,7 +1656,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new OTT template
-    utl::TempFile aTempFileSaveAsODT_OTT;
+    utl::TempFileNamed aTempFileSaveAsODT_OTT;
     aTempFileSaveAsODT_OTT.EnableKillingFile();
     try
     {

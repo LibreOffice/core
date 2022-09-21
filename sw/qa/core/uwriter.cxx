@@ -196,7 +196,7 @@ void SwDocTest::testFileNameFields()
 {
     //Here's a file name with some chars in it that will be %% encoded, when expanding
     //SwFileNameFields we want to restore the original readable filename
-    utl::TempFile aTempFile(u"demo [name]");
+    utl::TempFileNamed aTempFile(u"demo [name]");
     aTempFile.EnableKillingFile();
 
     INetURLObject aTempFileURL(aTempFile.GetURL());

@@ -399,7 +399,7 @@ public:
 
     uno::Sequence < util::RevisionTag > aVersions;
 
-    std::unique_ptr<::utl::TempFile> pTempFile;
+    std::unique_ptr<::utl::TempFileNamed> pTempFile;
 
     uno::Reference<embed::XStorage> xStorage;
     uno::Reference<embed::XStorage> m_xZipStorage;
@@ -1785,8 +1785,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
                 if ( pStream && pStream->GetError() == ERRCODE_NONE )
                 {
                     // Unpack Stream  in TempDir
-                    ::utl::TempFile aTempFile;
-                    const OUString& aTmpName = aTempFile.GetURL();
+                    const OUString aTmpName = ::utl::CreateTempURL();
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
                     pStream->ReadStream( aTmpStream );
@@ -2519,7 +2518,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     if ( !pImpl->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
-    ::utl::TempFile aTransactTemp( aPrefix, true, aExtension, &aDestDir );
+    ::utl::TempFileNamed aTransactTemp( aPrefix, true, aExtension, &aDestDir );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
     OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
@@ -3324,7 +3323,7 @@ void SfxMedium::CompleteReOpen()
     bool bUseInteractionHandler = pImpl->bUseInteractionHandler;
     pImpl->bUseInteractionHandler = false;
 
-    std::unique_ptr<::utl::TempFile> pTmpFile;
+    std::unique_ptr<::utl::TempFileNamed> pTmpFile;
     if ( pImpl->pTempFile )
     {
         pTmpFile = std::move(pImpl->pTempFile);
@@ -3831,7 +3830,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
     }
 
     OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset(new ::utl::TempFile(&aLogicBase));
+    pImpl->pTempFile.reset(new ::utl::TempFileNamed(&aLogicBase));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     OUString aTmpURL = pImpl->pTempFile->GetURL();
@@ -3927,7 +3926,7 @@ void SfxMedium::CreateTempFileNoCopy()
     pImpl->pTempFile.reset();
 
     OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset(new ::utl::TempFile(&aLogicBase));
+    pImpl->pTempFile.reset(new ::utl::TempFileNamed(&aLogicBase));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     if ( pImpl->m_aName.isEmpty() )
@@ -4272,7 +4271,7 @@ OUString SfxMedium::CreateTempCopyWithExt( std::u16string_view aURL )
         size_t nPrefixLen = aURL.rfind( '.' );
         std::u16string_view aExt = ( nPrefixLen == std::u16string_view::npos ) ? std::u16string_view() : aURL.substr( nPrefixLen );
 
-        OUString aNewTempFileURL = ::utl::TempFile( u"", true, aExt ).GetURL();
+        OUString aNewTempFileURL = ::utl::CreateTempURL( u"", true, aExt );
         if ( !aNewTempFileURL.isEmpty() )
         {
             INetURLObject aSource( aURL );
@@ -4345,7 +4344,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
         std::u16string_view aExt = (nPrefixLen == -1)
                                 ? std::u16string_view()
                                 : aOrigURL.subView(nPrefixLen);
-        OUString aNewURL = ::utl::TempFile( u"", true, aExt ).GetURL();
+        OUString aNewURL = ::utl::CreateTempURL( u"", true, aExt );
 
         // TODO/LATER: In future the aLogicName should be set to shared folder URL
         //             and a temporary file should be created. Transport_Impl should be impossible then.

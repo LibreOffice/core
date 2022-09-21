@@ -3478,12 +3478,9 @@ ErrCode WW8Export::ExportDocument_Impl()
 
     Strm().SetEndian( SvStreamEndian::LITTLE );
 
-    utl::TempFile aTempMain;
-    aTempMain.EnableKillingFile();
-    utl::TempFile aTempTable;
-    aTempTable.EnableKillingFile();
-    utl::TempFile aTempData;
-    aTempData.EnableKillingFile();
+    utl::TempFileFast aTempMain;
+    utl::TempFileFast aTempTable;
+    utl::TempFileFast aTempData;
 
     msfilter::MSCodec_Std97 aCtx;
     bool bEncrypt = GetWriter().InitStd97CodecUpdateMedium(aCtx);

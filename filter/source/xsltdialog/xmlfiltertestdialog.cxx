@@ -418,7 +418,7 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
         Reference< XStorable > xStorable( xComp, UNO_QUERY );
         if( xStorable.is() )
         {
-            utl::TempFile aTempFile(u"", true, u".xml");
+            utl::TempFileNamed aTempFile(u"", true, u".xml");
             OUString aTempFileURL( aTempFile.GetURL() );
 
             const application_info_impl* pAppInfo = getApplicationInfo( m_xFilterInfo->maExportService );
@@ -577,7 +577,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
         if( m_xCBXDisplaySource->get_active() )
         {
-            TempFile aTempFile(u"", true, u".xml");
+            TempFileNamed aTempFile(u"", true, u".xml");
             OUString aTempFileURL( aTempFile.GetURL() );
 
             Reference< XImportFilter > xImporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );

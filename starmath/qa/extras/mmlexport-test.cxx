@@ -77,7 +77,7 @@ void MathMLExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 
 xmlDocUniquePtr MathMLExportTest::exportAndParse()
 {
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium(aTempFile.GetURL(), StreamMode::STD_WRITE);
     std::shared_ptr<const SfxFilter> pExportFilter = SfxFilter::GetFilterByName(MATHML_XML);

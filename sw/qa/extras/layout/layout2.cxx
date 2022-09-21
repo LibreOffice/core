@@ -740,7 +740,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
     uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
     }));
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), props);
 
@@ -2233,7 +2233,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
 
     // Reload (docx)
-    auto aTemp = utl::TempFile();
+    utl::TempFileNamed aTemp;
     save("Office Open XML Text", aTemp);
 
     // The second part: check if the reloaded doc has flys inside a fly

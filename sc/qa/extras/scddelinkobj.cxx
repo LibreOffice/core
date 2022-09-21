@@ -33,9 +33,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-static utl::TempFile createTempCopy(OUString const& url)
+static utl::TempFileNamed createTempCopy(OUString const& url)
 {
-    utl::TempFile tmp;
+    utl::TempFileNamed tmp;
     tmp.EnableKillingFile();
     auto const e = osl::File::copy(url, tmp.GetURL());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -50,7 +50,7 @@ namespace
 {
 struct TempFileBase
 {
-    utl::TempFile m_TempFile;
+    utl::TempFileNamed m_TempFile;
     explicit TempFileBase(OUString const& url)
         : m_TempFile(createTempCopy(url))
     {

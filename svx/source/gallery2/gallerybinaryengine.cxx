@@ -554,7 +554,7 @@ SgaObjectSvDraw GalleryBinaryEngine::updateSvDrawObject(const GalleryObject* pEn
 
 void GalleryBinaryEngine::updateTheme()
 {
-    ::utl::TempFile aTmp;
+    ::utl::TempFileNamed aTmp;
     INetURLObject aInURL(GetSdgURL());
     INetURLObject aTmpURL(aTmp.GetURL());
 

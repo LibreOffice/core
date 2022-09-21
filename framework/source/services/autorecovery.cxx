@@ -3485,9 +3485,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
 
     // TODO: Must we strip some illegal signs - if we use the title?
 
-    ::utl::TempFile aTempFile(sUniqueName, true, rInfo.Extension, &sBackupPath, true);
-
-    rInfo.NewTempURL = aTempFile.GetURL();
+    rInfo.NewTempURL = ::utl::CreateTempURL(sUniqueName, true, rInfo.Extension, &sBackupPath, true);
 }
 
 void AutoRecovery::implts_informListener(      Job                      eJob  ,

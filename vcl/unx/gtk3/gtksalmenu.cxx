@@ -1072,7 +1072,7 @@ void GtkSalMenu::ApplyPersona()
     {
         if (maPersonaBitmap != rPersonaBitmap)
         {
-            mxPersonaImage.reset(new utl::TempFile);
+            mxPersonaImage.reset(new utl::TempFileNamed);
             mxPersonaImage->EnableKillingFile(true);
             SvStream* pStream = mxPersonaImage->GetStream(StreamMode::WRITE);
             vcl::PngImageWriter aPNGWriter(*pStream);

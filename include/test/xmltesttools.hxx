@@ -42,7 +42,7 @@ protected:
     XmlTestTools();
     virtual ~XmlTestTools();
 
-    static xmlDocUniquePtr parseXml(utl::TempFile const & aTempFile);
+    static xmlDocUniquePtr parseXml(utl::TempFileNamed const & aTempFile);
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 

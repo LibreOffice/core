@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
     // picture.
     xExportFilter->setSourceDocument(xShape);
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "URL", uno::Any(aTempFile.GetURL()) },

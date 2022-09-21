@@ -248,7 +248,7 @@ bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
 
 OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
 {
-    OUString aTempURL = ::utl::TempFile().GetURL();
+    OUString aTempURL = ::utl::CreateTempURL();
 
     DBG_ASSERT( !aTempURL.isEmpty(), "Can't create a temporary file!\n" );
     if ( !aTempURL.isEmpty() )

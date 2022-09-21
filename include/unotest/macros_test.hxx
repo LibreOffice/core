@@ -37,7 +37,7 @@ class Directories;
 }
 namespace utl
 {
-class TempFile;
+class TempFileNamed;
 }
 
 namespace com::sun::star::security
@@ -92,7 +92,7 @@ public:
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
     /// Opens rStreamName from rTempFile, assuming it's a ZIP storage.
-    static std::unique_ptr<SvStream> parseExportStream(const utl::TempFile& rTempFile,
+    static std::unique_ptr<SvStream> parseExportStream(const utl::TempFileNamed& rTempFile,
                                                        const OUString& rStreamName);
 
     void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);

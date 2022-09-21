@@ -231,7 +231,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     }
 
     { // save as PDF and check annotations
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
 
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

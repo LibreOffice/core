@@ -44,7 +44,7 @@ class EPUBExportTest : public test::BootstrapFixture,
 {
 protected:
     uno::Reference<lang::XComponent> mxComponent;
-    utl::TempFile maTempFile;
+    utl::TempFileNamed maTempFile;
     xmlDocUniquePtr mpXmlDoc;
     uno::Reference<packages::zip::XZipFileAccess2> mxZipFile;
     OUString maFilterOptions;

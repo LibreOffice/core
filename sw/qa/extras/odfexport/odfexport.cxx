@@ -901,7 +901,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
      * and replacement image) OLE objects using UNO, so we'll check the zip file directly.
      */
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     uno::Sequence<uno::Any> aArgs{ uno::Any(aTempFile.GetURL()) };

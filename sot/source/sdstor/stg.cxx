@@ -339,7 +339,7 @@ Storage::Storage( OUString aFile, StreamMode m, bool bDirect )
     if( aName.isEmpty() )
     {
         // no name = temporary name!
-        aName = utl::TempFile::CreateTempName();
+        aName = utl::CreateTempName();
         bTemp = true;
     }
     // the root storage creates the I/O system

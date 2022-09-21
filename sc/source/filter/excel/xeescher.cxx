@@ -2017,7 +2017,6 @@ void XclExpObjectManager::InitStream( bool bTempFile )
     if( bTempFile )
     {
         moTempFile.emplace();
-        moTempFile->EnableKillingFile();
         mpDffStrm = moTempFile->GetStream( StreamMode::STD_READWRITE );
     }
 

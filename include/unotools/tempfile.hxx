@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_UNOTOOLS_TEMPFILE_HXX
-#define INCLUDED_UNOTOOLS_TEMPFILE_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <tools/stream.hxx>
@@ -26,6 +24,74 @@
 
 namespace utl
 {
+
+
+/**
+  This is the "fast" temp file. Different OSes have different ideas how this should work, so this
+  class presents an interface that is fast across Windows and Unix (which differ in how they want
+  temp files to work).
+  The key point is that such a temporary file is only a readable/writeable stream, and does not have
+  a filename, or a location in the filesystem hierarchy.
+  If you need a name or a URL, you should use TempFileNamed, which is slower, but creates an actual
+  file in the filesystem.
+*/
+class UNOTOOLS_DLLPUBLIC TempFileFast
+{
+    std::unique_ptr<SvFileStream> mxStream;
+
+public:
+                    TempFileFast();
+                    TempFileFast(TempFileFast && other) noexcept;
+                    ~TempFileFast();
+
+                    /**
+                    Returns a stream to the tempfiles data; the stream is owned by the tempfile object, so you have to keep this
+                    alive as long as you want to use the stream.
+                    */
+    SvStream*       GetStream( StreamMode eMode );
+
+                    /**
+                    Close and destroy the owned stream object if any.
+                    */
+    void            CloseStream();
+
+};
+
+/**
+Only create a "physical" file name for a temporary file that would be valid at that moment.
+Should only be used for 3rd party code with a file name interface that wants to create the file by itself.
+If you want to convert file name into a URL, always use class LocalFileHelper, but never use any
+conversion functions of osl.
+*/
+UNOTOOLS_DLLPUBLIC OUString CreateTempName();
+
+UNOTOOLS_DLLPUBLIC OUString CreateTempURL( const OUString* pParent=nullptr, bool bDirectory=false );
+
+/**
+Same as above; additionally the name starts with some given characters followed by a counter ( example:
+rLeadingChars="abc" means "abc0","abc1" and so on, depending on existing files in the folder ).
+The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
+    @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
+    @param  bCreateParentDirs If rLeadingChars contains a slash, this will create the required
+            parent directories.
+*/
+UNOTOOLS_DLLPUBLIC OUString CreateTempURL( std::u16string_view rLeadingChars, bool _bStartWithZero=true, std::u16string_view pExtension={},
+                          const OUString* pParent=nullptr, bool bCreateParentDirs=false );
+
+/**
+The TempNameBaseDirectory is a subfolder in the folder that is passed as a "physical" file name in the
+SetTempNameBaseDirectory method.
+This subfolder will be used if a TempFile or TempName is created without a parent name or a parent name
+that does not belong to the local file system.
+The caller of the SetTempNameBase is responsible for deleting this folder and all temporary files in it.
+The return value of both methods is the complete "physical" name of the tempname base folder.
+It is not a URL because all URLs must be "UCB compatible", so there may be no suitable URL at all.
+*/
+UNOTOOLS_DLLPUBLIC OUString SetTempNameBaseDirectory( const OUString &rBaseName );
+
+// Return the URL of the temp directory (the one set with SetTempNameBaseDirectory or the
+// default tempfile folder):
+UNOTOOLS_DLLPUBLIC OUString GetTempNameBaseDirectory();
 
 /**
     The class TempFile gives access to temporary files in the local file system. Sometimes they are needed because a 3rd party
@@ -42,9 +108,9 @@ namespace utl
     So it is a potential error to convert between the filename and the URL of a TempFile object using functions or methods
     outside this class.
 */
-
-class UNOTOOLS_DLLPUBLIC TempFile
+class UNOTOOLS_DLLPUBLIC TempFileNamed
 {
+friend UNOTOOLS_DLLPUBLIC OUString SetTempNameBaseDirectory( const OUString & );
     OUString    aName;
     std::unique_ptr<SvStream>
                 pStream;
@@ -58,7 +124,7 @@ public:
                     The temporary object is created in the local file system, even if there is no UCB that can access it.
                     If the given folder is part of the local file system, the TempFile is created in this folder.
                     */
-                    TempFile( const OUString* pParent = nullptr, bool bDirectory=false );
+                    TempFileNamed( const OUString* pParent=nullptr, bool bDirectory=false );
 
                     /**
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
@@ -68,16 +134,16 @@ public:
                         @param  bCreateParentDirs If rLeadingChars contains a slash, this will create the required
                                 parent directories.
                     */
-                    TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero=true, std::u16string_view pExtension={},
+                    TempFileNamed( std::u16string_view rLeadingChars, bool _bStartWithZero=true, std::u16string_view pExtension={},
                               const OUString* pParent = nullptr, bool bCreateParentDirs=false );
 
-                    TempFile(TempFile && other) noexcept;
+                    TempFileNamed(TempFileNamed && other) noexcept;
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.
                     Temporary directories will be removed recursively in that case.
                     */
-                    ~TempFile();
+                    ~TempFileNamed();
 
                     /**
                     Returns sal_True if it has a valid file name.
@@ -114,32 +180,8 @@ public:
     void            EnableKillingFile( bool bEnable=true )
                     { bKillingFileEnabled = bEnable; }
 
-                    /**
-                    Only create a "physical" file name for a temporary file that would be valid at that moment.
-                    Should only be used for 3rd party code with a file name interface that wants to create the file by itself.
-                    If you want to convert file name into a URL, always use class LocalFileHelper, but never use any
-                    conversion functions of osl.
-                    */
-    static OUString CreateTempName();
-
-                    /**
-                    The TempNameBaseDirectory is a subfolder in the folder that is passed as a "physical" file name in the
-                    SetTempNameBaseDirectory method.
-                    This subfolder will be used if a TempFile or TempName is created without a parent name or a parent name
-                    that does not belong to the local file system.
-                    The caller of the SetTempNameBase is responsible for deleting this folder and all temporary files in it.
-                    The return value of both methods is the complete "physical" name of the tempname base folder.
-                    It is not a URL because all URLs must be "UCB compatible", so there may be no suitable URL at all.
-                    */
-    static OUString SetTempNameBaseDirectory( const OUString &rBaseName );
-
-    // Return the URL of the temp directory (the one set with SetTempNameBaseDirectory or the
-    // default tempfile folder):
-    static OUString GetTempNameBaseDirectory();
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

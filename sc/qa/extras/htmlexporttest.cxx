@@ -39,7 +39,7 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Calc.SpreadsheetDocument");
     }
 
-    void save(const OUString& aFilterName, TempFile const & rTempFile)
+    void save(const OUString& aFilterName, TempFileNamed const & rTempFile)
     {
         Reference<XStorable> xStorable(mxComponent, UNO_QUERY);
         MediaDescriptor aMediaDescriptor;
@@ -70,10 +70,10 @@ public:
     void testHtmlSkipImage()
     {
         // need a temp dir, because there's an image exported too
-        TempFile aTempDir(nullptr, true);
+        TempFileNamed aTempDir(nullptr, true);
         aTempDir.EnableKillingFile();
         OUString const url(aTempDir.GetURL());
-        TempFile aTempFile(&url, false);
+        TempFileNamed aTempFile(&url, false);
 
         htmlDocUniquePtr pDoc;
 

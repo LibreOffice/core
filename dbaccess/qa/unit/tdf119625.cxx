@@ -66,7 +66,7 @@ void Tdf119625Test::testTime()
     }
 
     // the migration requires the file to be writable
-    utl::TempFile const temp(createTempCopy(u"tdf119625.odb"));
+    utl::TempFileNamed const temp(createTempCopy(u"tdf119625.odb"));
     uno::Reference<XOfficeDatabaseDocument> const xDocument = getDocumentForUrl(temp.GetURL());
 
     uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);

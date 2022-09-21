@@ -460,7 +460,7 @@ public:
     OUString                    m_aContentType;
     OUString                    m_aOriginalContentType;
     std::unique_ptr<::ucbhelper::Content> m_pContent;     // the content that provides the storage elements
-    std::unique_ptr<::utl::TempFile>      m_pTempFile;    // temporary file, only for storages on stream
+    std::unique_ptr<::utl::TempFileNamed> m_pTempFile;    // temporary file, only for storages on stream
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
     ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
@@ -681,7 +681,7 @@ bool UCBStorageStream_Impl::Init()
         // create one
 
         if ( m_aTempURL.isEmpty() )
-            m_aTempURL = ::utl::TempFile().GetURL();
+            m_aTempURL = ::utl::CreateTempURL();
 
         m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, StreamMode::STD_READWRITE, true /* bFileExists */ );
 #if OSL_DEBUG_LEVEL > 0
@@ -1451,7 +1451,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     {
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
-        m_pTempFile.reset(new ::utl::TempFile);
+        m_pTempFile.reset(new ::utl::TempFileNamed);
         m_pTempFile->EnableKillingFile();
         m_aName = aName = m_pTempFile->GetURL();
     }
@@ -1479,7 +1479,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     {
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
-        m_pTempFile.reset(new ::utl::TempFile);
+        m_pTempFile.reset(new ::utl::TempFileNamed);
         m_pTempFile->EnableKillingFile();
         m_aName = aName = m_pTempFile->GetURL();
     }
@@ -1507,7 +1507,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
 
 UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool bDirect )
     : m_pAntiImpl( pStorage )
-    , m_pTempFile( new ::utl::TempFile )
+    , m_pTempFile( new ::utl::TempFileNamed )
     , m_pSource( &rStream )
     , m_nError( ERRCODE_NONE )
     , m_bCommited( false )
@@ -2108,7 +2108,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         {
                             // create a stream to write the manifest file - use a temp file
                             OUString aURL( aNewSubFolder.getURL() );
-                            std::optional< ::utl::TempFile> pTempFile(&aURL );
+                            std::optional< ::utl::TempFileNamed > pTempFile(&aURL );
 
                             // get the stream from the temp file and create an output stream wrapper
                             SvStream* pStream = pTempFile->GetStream( StreamMode::STD_READWRITE );

@@ -3376,7 +3376,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 {
     createSwDoc(DATA_DIRECTORY, "tdf109137.docx");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
@@ -3538,7 +3538,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 {
     createSwDoc(DATA_DIRECTORY, "tdf117188.docx");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
@@ -3788,7 +3788,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
     uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
     }));
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), props);
 
@@ -3832,7 +3832,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150616)
     uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
     }));
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), props);
 

@@ -111,7 +111,7 @@ bool SwFiltersTest2::filter(const OUString& rFilter, const OUString& rURL,
     if (bLoaded)
         xDocShRef->ResetError();
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     SfxMedium aDstMed(aTempFile.GetURL(), StreamMode::STD_WRITE);
     aDstMed.SetFilter(pExportFilter);

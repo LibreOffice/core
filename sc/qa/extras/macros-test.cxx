@@ -122,7 +122,7 @@ void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 void ScMacrosTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                                  const OUString& rFilter)
 {
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
     css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
@@ -314,7 +314,7 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("Calc MS Excel 2007 VBA XML");
-    auto pTempFile = std::make_shared<utl::TempFile>();
+    auto pTempFile = std::make_shared<utl::TempFileNamed>();
     pTempFile->EnableKillingFile();
     xStorable->storeToURL(pTempFile->GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     xComponent->dispose();

@@ -186,7 +186,8 @@ void SparklineImportExportTest::testSparklinesExportODS()
     ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
 
     // Save as ODS and check content.xml with XPath
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
 
     // We have 3 sparkline groups = 3 tables that contain sparklines
@@ -250,7 +251,8 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     // Load the document containing NO sparklines
     ScDocShellRef xDocSh = loadDoc(u"empty.", FORMAT_XLSX);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pXmlDoc
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pXmlDoc);

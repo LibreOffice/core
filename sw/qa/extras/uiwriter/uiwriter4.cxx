@@ -646,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
     CPPUNIT_ASSERT(pDoc);
 
     // save original document
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
     }
 
     // save document
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
@@ -825,7 +825,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
     }
 
     // save document
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
     }
 
     // save original document
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document

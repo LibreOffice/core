@@ -35,11 +35,11 @@ struct OWriteStream_Impl;
 class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XInputStream,
                                                                css::io::XSeekable >
 {
-    std::optional<utl::TempFile> m_oTempFile;
+    std::optional<utl::TempFileFast> m_oTempFile;
     rtl::Reference< utl::OSeekableInputStreamWrapper > m_xStreamWrapper;
 
 public:
-    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, utl::TempFile aTempFile );
+    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile );
 
     virtual ~OSelfTerminateFileStream() override;
 

@@ -609,7 +609,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     else
     {
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
-            INetURLObject(), utl::TempFile::CreateTempName(),
+            INetURLObject(), utl::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 FILTER_XML,
@@ -1082,7 +1082,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         sFilterOptions = "EmbedImages";
     }
     OUString sTargetTempURL = URIHelper::SmartRel2Abs(
-        INetURLObject(), utl::TempFile::CreateTempName(),
+        INetURLObject(), utl::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     std::shared_ptr<const SfxFilter> pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
             FILTER_XML,
@@ -1134,7 +1134,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         //then save it
         SfxStringItem aName(SID_FILE_NAME,
                 URIHelper::SmartRel2Abs(
-                    INetURLObject(), utl::TempFile::CreateTempName(),
+                    INetURLObject(), utl::CreateTempName(),
                     URIHelper::GetMaybeFileHdl()) );
 
         {

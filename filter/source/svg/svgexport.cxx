@@ -2503,8 +2503,7 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
 
     GDIMetaFile             aMtf;
 
-    utl::TempFile aFile;
-    aFile.EnableKillingFile();
+    utl::TempFileFast aFile;
     SvStream* pStream = aFile.GetStream(StreamMode::READWRITE);
 
     Sequence< PropertyValue > aDescriptor{

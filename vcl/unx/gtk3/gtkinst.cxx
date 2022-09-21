@@ -9623,7 +9623,7 @@ class WidgetBackground
 private:
     GtkWidget* m_pWidget;
     GtkCssProvider* m_pCustomCssProvider;
-    std::unique_ptr<utl::TempFile> m_xCustomImage;
+    std::unique_ptr<utl::TempFileNamed> m_xCustomImage;
 
 public:
     // See: https://developer.gnome.org/Buttons/
@@ -9642,7 +9642,7 @@ public:
         if (!pDevice)
             return;
 
-        m_xCustomImage.reset(new utl::TempFile);
+        m_xCustomImage.reset(new utl::TempFileNamed);
         m_xCustomImage->EnableKillingFile(true);
 
         cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);

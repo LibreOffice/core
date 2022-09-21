@@ -1730,7 +1730,7 @@ void PngFilterTest::testMsGifInPng()
         aFilterProperty.Value <<= aAdditionalChunkSequence;
         uno::Sequence<beans::PropertyValue> aPNGParameters{ aFilterProperty };
         // Export the png with the chunk
-        utl::TempFile aTempFile(u"testPngExportMsGif", true, u".png");
+        utl::TempFileNamed aTempFile(u"testPngExportMsGif", true, u".png");
         if (!bKeepTemp)
             aTempFile.EnableKillingFile();
         {
@@ -1758,7 +1758,7 @@ void PngFilterTest::testMsGifInPng()
 
 void PngFilterTest::testPngRoundtrip8BitGrey()
 {
-    utl::TempFile aTempFile(u"testPngRoundtrip8BitGrey");
+    utl::TempFileNamed aTempFile(u"testPngRoundtrip8BitGrey");
     if (!bKeepTemp)
         aTempFile.EnableKillingFile();
     {
@@ -1806,7 +1806,7 @@ void PngFilterTest::testPngRoundtrip8BitGrey()
 
 void PngFilterTest::testPngRoundtrip24()
 {
-    utl::TempFile aTempFile(u"testPngRoundtrip24");
+    utl::TempFileNamed aTempFile(u"testPngRoundtrip24");
     if (!bKeepTemp)
         aTempFile.EnableKillingFile();
     {
@@ -1854,7 +1854,7 @@ void PngFilterTest::testPngRoundtrip24()
 
 void PngFilterTest::testPngRoundtrip24_8()
 {
-    utl::TempFile aTempFile(u"testPngRoundtrip24_8");
+    utl::TempFileNamed aTempFile(u"testPngRoundtrip24_8");
     if (!bKeepTemp)
         aTempFile.EnableKillingFile();
     {

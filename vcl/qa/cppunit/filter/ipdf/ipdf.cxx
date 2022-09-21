@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     if (!IsDefaultDPI())
         return;
     // Given: copy the test document to a temporary file, as it'll be modified.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString aSourceURL
         = m_directories.getURLFromSrc(DATA_DIRECTORY) + "add-visible-signature-last-page.pdf";

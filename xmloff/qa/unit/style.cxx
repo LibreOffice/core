@@ -48,7 +48,7 @@ public:
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     void load(std::u16string_view rURL);
-    void save(const OUString& rFilterName, utl::TempFile& rTempFile);
+    void save(const OUString& rFilterName, utl::TempFileNamed& rTempFile);
 };
 
 void XmloffStyleTest::setUp()
@@ -77,7 +77,7 @@ void XmloffStyleTest::load(std::u16string_view rFileName)
     mxComponent = loadFromDesktop(aURL);
 }
 
-void XmloffStyleTest::save(const OUString& rFilterName, utl::TempFile& rTempFile)
+void XmloffStyleTest::save(const OUString& rFilterName, utl::TempFileNamed& rTempFile)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
 
     // When saving that document to ODT:
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
@@ -291,7 +291,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
@@ -374,7 +374,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in

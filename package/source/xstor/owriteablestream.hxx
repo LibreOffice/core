@@ -74,7 +74,7 @@ struct OWriteStream_Impl
     friend class OInputCompStream;
 
     OWriteStream*   m_pAntiImpl;
-    std::optional<utl::TempFile> m_oTempFile;
+    std::optional<utl::TempFileFast> m_oTempFile;
 
     css::uno::Reference< css::io::XStream > m_xCacheStream;
     css::uno::Reference< css::io::XSeekable > m_xCacheSeek;

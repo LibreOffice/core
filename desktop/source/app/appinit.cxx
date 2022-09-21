@@ -245,11 +245,11 @@ void Desktop::CreateTemporaryDirectory()
     }
 
     // create new current temporary directory
-    OUString aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempBaseURL );
+    OUString aTempPath = ::utl::SetTempNameBaseDirectory( aTempBaseURL );
     if ( aTempPath.isEmpty()
          && ::osl::File::getTempDirURL( aTempBaseURL ) == osl::FileBase::E_None )
     {
-        aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempBaseURL );
+        aTempPath = ::utl::SetTempNameBaseDirectory( aTempBaseURL );
     }
 
     // set new current temporary directory

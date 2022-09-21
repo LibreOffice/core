@@ -21,7 +21,7 @@ private:
     {
         FileFormat* pFormat = getFormat(HTML);
         OUString aExt = "." + OUString::createFromAscii(pFormat->pName);
-        utl::TempFile aTempFile(u"", true, aExt);
+        utl::TempFileNamed aTempFile(u"", true, aExt);
         aTempFile.EnableKillingFile();
         exportTo(xDocShRef.get(), pFormat, aTempFile);
         return parseHtml(aTempFile);

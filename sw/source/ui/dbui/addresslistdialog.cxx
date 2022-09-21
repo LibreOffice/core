@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
         OUString sTmpName;
         {
             OUString sHomePath(SvtPathOptions().GetWorkPath());
-            utl::TempFile aTempFile(sFind, true, u".odb", &sHomePath);
+            utl::TempFileNamed aTempFile(sFind, true, u".odb", &sHomePath);
             aTempFile.EnableKillingFile();
             sTmpName = aTempFile.GetURL();
         }

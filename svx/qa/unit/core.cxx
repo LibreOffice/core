@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // When exporting that chart to PDF:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     GraphicHelper::SaveShapeAsGraphicToPath(getComponent(), xShape, "application/pdf",
                                             aTempFile.GetURL());
 

@@ -567,7 +567,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
     pBatch->commit();
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
@@ -617,7 +617,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
     pBatch->commit();
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
@@ -659,7 +659,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
     pBatch->commit();
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
@@ -710,7 +710,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
     pBatch->commit();
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
@@ -757,7 +757,7 @@ void SdMiscTest::testTdf119392()
     pPageView -> SetLayerVisible("-P-", false);
     pPageView -> SetLayerPrintable("-P-", true);
     pPageView -> SetLayerLocked("-P-", false);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
@@ -849,7 +849,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     pShape->Mirror(Point(4000, 2000), Point(4000, 10000));
 
     // Save and examine attribute draw:transform
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile);
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");

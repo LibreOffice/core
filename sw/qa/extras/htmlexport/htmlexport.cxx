@@ -1217,7 +1217,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     mxComponent.clear();
     ImportFromReqif(maTempFile.GetURL());
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue("FilterName", OUString("writer8")),

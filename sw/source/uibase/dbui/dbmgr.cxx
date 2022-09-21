@@ -775,7 +775,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     if( sTempDirURL.isEmpty() )
     {
         SvtPathOptions aPathOpt;
-        utl::TempFile aTempDir( &aPathOpt.GetTempPath(), true );
+        utl::TempFileNamed aTempDir( &aPathOpt.GetTempPath(), true );
         if( aTempDir.IsValid() )
         {
             INetURLObject aTempDirURL( aTempDir.GetURL() );
@@ -790,7 +790,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     if (no > 0)
         basename += OUString::number(no) + "-";
     // aTempFile is not deleted, but that seems to be intentional
-    utl::TempFile aTempFile( basename, true, u".odt", &sTempDirURL );
+    utl::TempFileNamed aTempFile( basename, true, u".odt", &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
     auto pDstMed = std::make_unique<SfxMedium>(
         aTempFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
@@ -1180,7 +1180,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     SwDoc*            pTargetDoc      = nullptr;
     SfxObjectShellRef xTargetDocShell;
 
-    std::unique_ptr< utl::TempFile > aTempFile;
+    std::unique_ptr< utl::TempFileNamed > aTempFile;
     sal_uInt16 nStartingPageNo = 0;
 
     std::shared_ptr<weld::GenericDialogController> xProgressDlg;
@@ -1323,7 +1323,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
 
                 OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-                aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), sExt, &sPrefix, true) );
+                aTempFile.reset( new utl::TempFileNamed(sLeading, sColumnData.isEmpty(), sExt, &sPrefix, true) );
                 if( !aTempFile->IsValid() )
                 {
                     ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
@@ -2743,8 +2743,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
             {
                 // Cannot embed, as embedded data source would need the URL of the parent document.
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
-                utl::TempFile aTempFile(sNewName, true, u".odb", pDestDir ? pDestDir : &sHomePath);
-                const OUString& sTmpName = aTempFile.GetURL();
+                const OUString sTmpName = utl::CreateTempURL(sNewName, true, u".odb", pDestDir ? pDestDir : &sHomePath);
                 xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
             }
             else

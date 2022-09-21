@@ -767,8 +767,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
     OUString aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
-    utl::TempFile aTempFile( u"SwMM", true, aExtension );
-    m_aTmpFileName = aTempFile.GetURL();
+    m_aTmpFileName = utl::CreateTempURL( u"SwMM", true, aExtension );
 
     Reference< XStorable > xStorable( xCurModel, UNO_QUERY );
     bool bStoredAsTemporary = false;

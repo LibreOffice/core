@@ -76,7 +76,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
         INetURLObject aTempURL(rPathArr[i]);
         const OUString sPath = aTempURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset );
         sal_uInt32 nCaseReadonly = 0;
-        utl::TempFile aTempFile(&sPath);
+        utl::TempFileNamed aTempFile(sPath);
         aTempFile.EnableKillingFile();
         if(!aTempFile.IsValid())
             nCaseReadonly |= PATH_READONLY;

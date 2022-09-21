@@ -280,7 +280,7 @@ void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtua
 
     if (bWriteCompareBitmap)
     {
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
 
         {

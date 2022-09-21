@@ -187,7 +187,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
             + m_directories.getPathFromSrc(u"/schema/mathml2/mathml2.xsd");
     }
 
-    utl::TempFile aOutput;
+    utl::TempFileNamed aOutput;
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
     OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile + " 2>&1";

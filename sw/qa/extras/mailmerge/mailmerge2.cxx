@@ -84,7 +84,7 @@ public:
         header();
         preTest(filename);
 
-        utl::TempFile aTempDir(nullptr, true);
+        utl::TempFileNamed aTempDir(nullptr, true);
         aTempDir.EnableKillingFile();
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );

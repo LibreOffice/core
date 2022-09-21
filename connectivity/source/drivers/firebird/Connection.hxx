@@ -104,7 +104,7 @@ namespace connectivity::firebird
              * The extracted .fbk is written in firebird.fbk, the temporary
              * .fdb is stored as firebird.fdb.
              */
-            std::unique_ptr< ::utl::TempFile >  m_pDatabaseFileDir;
+            std::unique_ptr< ::utl::TempFileNamed >  m_pDatabaseFileDir;
             /**
              * Path for our extracted .fbk file.
              *

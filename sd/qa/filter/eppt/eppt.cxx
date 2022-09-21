@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
     // Save the bugdoc to PPT.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "custom-shape-bitmap-fill.pptx";
     getComponent() = loadFromDesktop(aURL);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // When exporting to PPTX:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     getComponent() = loadFromDesktop(aURL);
 
     // When exporting that to PPTX:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");

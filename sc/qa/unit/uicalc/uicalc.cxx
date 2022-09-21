@@ -48,8 +48,8 @@ public:
     virtual void tearDown() override;
 
     ScModelObj* createDoc(const char* pName);
-    utl::TempFile save(css::uno::Reference<css::lang::XComponent>& xComponent,
-                       const OUString& rFilter);
+    utl::TempFileNamed save(css::uno::Reference<css::lang::XComponent>& xComponent,
+                            const OUString& rFilter);
     ScModelObj* saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                               const OUString& rFilter);
     void goToCell(const OUString& rCell);
@@ -170,10 +170,10 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     return pModelObj;
 }
 
-utl::TempFile ScUiCalcTest::save(css::uno::Reference<css::lang::XComponent>& xComponent,
-                                 const OUString& rFilter)
+utl::TempFileNamed ScUiCalcTest::save(css::uno::Reference<css::lang::XComponent>& xComponent,
+                                      const OUString& rFilter)
 {
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
     css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
@@ -187,7 +187,7 @@ utl::TempFile ScUiCalcTest::save(css::uno::Reference<css::lang::XComponent>& xCo
 ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                                         const OUString& rFilter)
 {
-    utl::TempFile aTempFile = save(xComponent, rFilter);
+    utl::TempFileNamed aTempFile = save(xComponent, rFilter);
 
     mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
     CPPUNIT_ASSERT(pDoc);
 
     // Save the document
-    utl::TempFile aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     insertStringToCell(*pModelObj, "D3", u"FISHY");
 
     // Save the document
-    utl::TempFile aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     insertStringToCell(*pModelObj, "B1", u"2");
 
     // Save the document
-    utl::TempFile aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     insertStringToCell(*pModelObj, "A1", u"50");
 
     // Save the document
-    utl::TempFile aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");

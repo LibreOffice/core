@@ -357,7 +357,8 @@ void ScExportTest::testTdf139167()
     ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
     CPPUNIT_ASSERT(pDoc);
 
@@ -375,7 +376,8 @@ void ScExportTest::testTdf113271()
     ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
     CPPUNIT_ASSERT(pDoc);
 
@@ -397,7 +399,8 @@ void ScExportTest::testTdf139394()
     ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pDoc
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
@@ -428,7 +431,8 @@ void ScExportTest::testExtCondFormatXLSX()
     ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pDoc
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
@@ -474,7 +478,8 @@ void ScExportTest::testTdf90104()
     ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
 
     xmlDocUniquePtr pDoc
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
@@ -657,7 +662,8 @@ void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc,
                 "//office:spreadsheet[@table:structure-protected='true' and "
@@ -685,7 +691,8 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA1()
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc,
                 "//office:spreadsheet[@table:structure-protected='true' and "
@@ -713,7 +720,8 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(
         pXmlDoc,
@@ -743,7 +751,8 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(
         pXmlDoc,
@@ -773,7 +782,8 @@ void ScExportTest::testProtectionKeyODS_XL_SHA1()
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(
         pXmlDoc,
@@ -856,7 +866,8 @@ void ScExportTest::testCommentExportXLSX()
     //tdf#104729 FILESAVE OpenOffice do not save author of the comment during export to .xlsx
     ScDocShellRef xShell = loadDoc(u"comment.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pComments
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
@@ -901,7 +912,8 @@ void ScExportTest::testCommentExportXLSX_2_XLSX()
 
     pNote->ShowCaption(aPosC9, true);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pComments
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
@@ -924,7 +936,8 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     //tdf#100946 FILESAVE Excel on macOS ignored column widths in XLSX last saved by LO
     ScDocShellRef xShell = loadDoc(u"custom_column_width.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
@@ -999,7 +1012,8 @@ void ScExportTest::testXfDefaultValuesXLSX()
     //tdf#70565 FORMATTING: User Defined Custom Formatting is not applied during importing XLSX documents
     ScDocShellRef xShell = loadDoc(u"xf_default_values.", FORMAT_XLSX);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
     CPPUNIT_ASSERT(pSheet);
 
@@ -1087,7 +1101,7 @@ void ScExportTest::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
 
-        std::shared_ptr<utl::TempFile> pXPathFile
+        std::shared_ptr<utl::TempFileNamed> pXPathFile
             = ScBootstrapFixture::exportTo(*pShell, FORMAT_ODS);
 
         // check XML
@@ -1116,7 +1130,7 @@ void ScExportTest::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
         pBatch->commit();
 
-        std::shared_ptr<utl::TempFile> pXPathFile
+        std::shared_ptr<utl::TempFileNamed> pXPathFile
             = exportTo(*pShell, FORMAT_ODS, /*bValidate*/ false);
         pShell->DoClose();
 
@@ -1146,7 +1160,7 @@ void ScExportTest::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
         pBatch->commit();
 
-        std::shared_ptr<utl::TempFile> pXPathFile = exportTo(*pShell, FORMAT_ODS);
+        std::shared_ptr<utl::TempFileNamed> pXPathFile = exportTo(*pShell, FORMAT_ODS);
         pShell->DoClose();
 
         // check XML
@@ -1177,7 +1191,8 @@ void ScExportTest::testColumnWidthResaveXLSX()
     // Test if after resave .xlsx file, columns width is identical with previous one
     ScDocShellRef xShell = loadDoc(u"different-column-width-excel2010.", FORMAT_XLSX);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
@@ -1282,7 +1297,8 @@ void ScExportTest::testOutlineExportXLSX()
     //tdf#51524  FILESAVE .xlsx and.xls looses width information for hidden/collapsed grouped columns
     ScDocShellRef xShell = loadDoc(u"outline.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
@@ -1429,7 +1445,7 @@ void ScExportTest::testAllRowsHiddenXLSX()
 {
     ScDocShellRef xOrigDocSh = loadDoc(u"tdf105840_allRowsHidden.", FORMAT_XLSX);
 
-    std::shared_ptr<utl::TempFile> pXPathFile
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
         = ScBootstrapFixture::exportTo(*xOrigDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
@@ -1445,7 +1461,8 @@ void ScExportTest::testHiddenEmptyRowsXLSX()
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
     ScDocShellRef xShell = loadDoc(u"hidden-empty-rows.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
@@ -1464,7 +1481,8 @@ void ScExportTest::testHiddenEmptyColsODS()
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
     ScDocShellRef xShell = loadDoc(u"tdf128895_emptyHiddenCols.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "//table:table/table:table-column[2]");
@@ -1478,7 +1496,8 @@ void ScExportTest::testLandscapeOrientationXLSX()
     //tdf#48767 - Landscape page orientation is not loaded from .xlsx format with MS Excel, after export with Libre Office
     ScDocShellRef xShell = loadDoc(u"hidden-empty-rows.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
@@ -2194,7 +2213,8 @@ void ScExportTest::testRichTextCellFormatXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"cellformat.", FORMAT_XLS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pSheet
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
@@ -2448,7 +2468,8 @@ void ScExportTest::testEmbeddedChartODS()
 {
     ScDocShellRef xShell = loadDoc(u"embedded-chart.", FORMAT_XLS);
 
-    std::shared_ptr<utl::TempFile> pTempFile(ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS));
+    std::shared_ptr<utl::TempFileNamed> pTempFile(
+        ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS));
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pDoc);
@@ -3194,7 +3215,8 @@ void ScExportTest::testTdf133487()
 {
     ScDocShellRef xShell = loadDoc(u"shapes_foreground_background.", FORMAT_FODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -3562,7 +3584,8 @@ void ScExportTest::testCeilingFloorODSToXLSX()
     // tdf#100011 - Cannot open sheet containing FLOOR/CEILING functions by MS Excel, after export to .xlsx
     ScDocShellRef xShell = loadDoc(u"ceiling-floor.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/workbook.xml");
     CPPUNIT_ASSERT(pSheet);
 
@@ -3581,7 +3604,8 @@ void ScExportTest::testCustomXml()
     // Load document and export it to a temporary file
     ScDocShellRef xShell = loadDoc(u"customxml.", FORMAT_XLSX);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFileNamed> pXPathFile
+        = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
     xmlDocUniquePtr pXmlDoc
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/item1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -3616,7 +3640,7 @@ void ScExportTest::testRelativePathsODS()
 {
     ScDocShellRef xDocSh = loadDoc(u"fdo79305.", FORMAT_ODS);
 
-    std::shared_ptr<utl::TempFile> pTempFile = exportTo(*xDocSh, FORMAT_ODS);
+    std::shared_ptr<utl::TempFileNamed> pTempFile = exportTo(*xDocSh, FORMAT_ODS);
     xmlDocUniquePtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
@@ -4527,9 +4551,9 @@ void ScExportTest::testDateStandardfilterXLSX()
 
 void ScExportTest::testTdf90299()
 {
-    utl::TempFile aTmpDirectory1(nullptr, true);
-    utl::TempFile aTmpDirectory2(nullptr, true);
-    utl::TempFile aSavedFile(&aTmpDirectory1.GetURL());
+    const OUString aTmpDirectory1URL = utl::CreateTempURL(nullptr, true);
+    const OUString aTmpDirectory2URL = utl::CreateTempURL(nullptr, true);
+    const OUString aSavedFileURL = utl::CreateTempURL(&aTmpDirectory1URL);
 
     struct
     {
@@ -4555,16 +4579,16 @@ void ScExportTest::testTdf90299()
     OUString aReferencingFileURL;
     createFileURL(u"tdf90299.", u"xls", aReferencingFileURL);
 
-    auto eError = osl::File::copy(aReferencingFileURL, aTmpDirectory1.GetURL() + "/tdf90299.xls");
+    auto eError = osl::File::copy(aReferencingFileURL, aTmpDirectory1URL + "/tdf90299.xls");
     CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
 
-    aReferencingFileURL = aTmpDirectory1.GetURL() + "/tdf90299.xls";
-    aReferencedFileURL = aTmpDirectory1.GetURL() + "/dummy.xls";
+    aReferencingFileURL = aTmpDirectory1URL + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirectory1URL + "/dummy.xls";
 
     ScDocShellRef xShell = load(aReferencingFileURL, FORMAT_XLS);
     aCheckShell.checkFormula(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
 
-    aReferencingFileURL = aSavedFile.GetURL();
+    aReferencingFileURL = aSavedFileURL;
 
     FileFormat afilterFormat = ScBootstrapFixture::getFileFormats()[FORMAT_XLS];
     OUString aFilterName(afilterFormat.pFilterName, strlen(afilterFormat.pFilterName),
@@ -4584,11 +4608,11 @@ void ScExportTest::testTdf90299()
     xShell->DoSaveAs(aStoreMedium);
     xShell->DoClose();
 
-    eError = osl::File::copy(aReferencingFileURL, aTmpDirectory2.GetURL() + "/tdf90299.xls");
+    eError = osl::File::copy(aReferencingFileURL, aTmpDirectory2URL + "/tdf90299.xls");
     CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
 
-    aReferencingFileURL = aTmpDirectory2.GetURL() + "/tdf90299.xls";
-    aReferencedFileURL = aTmpDirectory2.GetURL() + "/dummy.xls";
+    aReferencingFileURL = aTmpDirectory2URL + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirectory2URL + "/dummy.xls";
 
     xShell = load(aReferencingFileURL, FORMAT_XLS);
     aCheckShell.checkFormula(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");

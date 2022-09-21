@@ -30,7 +30,7 @@ class DBTestBase
 public:
     DBTestBase() : UnoApiTest("dbaccess/qa/unit/data") {};
 
-    utl::TempFile createTempCopy(std::u16string_view pathname);
+    utl::TempFileNamed createTempCopy(std::u16string_view pathname);
 
     uno::Reference< XOfficeDatabaseDocument >
         getDocumentForFileName(std::u16string_view sFileName);
@@ -42,10 +42,10 @@ public:
             uno::Reference< XOfficeDatabaseDocument > const & xDocument);
 };
 
-utl::TempFile DBTestBase::createTempCopy(std::u16string_view pathname) {
+utl::TempFileNamed DBTestBase::createTempCopy(std::u16string_view pathname) {
     OUString url;
     createFileURL(pathname, url);
-    utl::TempFile tmp;
+    utl::TempFileNamed tmp;
     tmp.EnableKillingFile();
     auto const e = osl::File::copy(url, tmp.GetURL());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(

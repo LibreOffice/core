@@ -100,7 +100,7 @@ void BaseIndex::testBaseIndexProperties()
         // BackGraphicURL is "set-only" attribute
         CPPUNIT_ASSERT_MESSAGE("Expected RuntimeException wasn't thrown", bOK);
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         writerFileWithBitmap(aTempFile.GetURL());
 

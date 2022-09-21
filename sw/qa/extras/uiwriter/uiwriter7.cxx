@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testExportToPicture)
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "FilterName", uno::Any(OUString("writer_png_Export")) },
           { "FilterData", uno::Any(aFilterData) } }));
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
     bool extchk = aTempFile.IsValid();
@@ -1290,7 +1290,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74230)
     createSwDoc();
     //exporting the empty document to ODT via TempFile
     uno::Sequence<beans::PropertyValue> aDescriptor;
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
     CPPUNIT_ASSERT(aTempFile.IsValid());
@@ -2765,7 +2765,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149184)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("MS Word 97")) },
     });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     // Without the fix in place, the test fails with:

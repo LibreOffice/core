@@ -206,7 +206,7 @@ private:
 
     uno::Reference<lang::XComponent> mxComponent;
     TestLokCallbackWrapper m_callbackWrapper;
-    std::unique_ptr<utl::TempFile> mpTempFile;
+    std::unique_ptr<utl::TempFileNamed> mpTempFile;
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
@@ -249,7 +249,7 @@ void ScTiledRenderingTest::tearDown()
 
 void ScTiledRenderingTest::makeTempCopy(const OUString& rOrigURL)
 {
-    mpTempFile.reset(new utl::TempFile());
+    mpTempFile.reset(new utl::TempFileNamed());
     mpTempFile->EnableKillingFile();
     auto const aError = osl::File::copy(rOrigURL, mpTempFile->GetURL());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(

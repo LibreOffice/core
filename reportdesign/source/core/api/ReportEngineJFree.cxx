@@ -171,12 +171,14 @@ OUString OReportEngineJFree::getNewOutputName()
     OUString sName = m_xReport->getCaption();
     if ( sName.isEmpty() )
         sName = m_xReport->getName();
+    sFileURL = ::utl::CreateTempURL(sName, false, sExt);
+    if ( sFileURL.isEmpty() )
     {
-        ::utl::TempFile aTestFile(sName, false, sExt);
+        ::utl::TempFileNamed aTestFile(sName, false, sExt);
         if ( !aTestFile.IsValid() )
         {
             sName = RptResId(RID_STR_REPORT);
-            ::utl::TempFile aFile(sName, false, sExt);
+            ::utl::TempFileNamed aFile(sName, false, sExt);
             sFileURL = aFile.GetURL();
         }
         else

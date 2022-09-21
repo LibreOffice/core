@@ -1321,8 +1321,7 @@ bool ImpGraphic::swapOut()
     else
     {
         // Create a temp filename for the swap file
-        utl::TempFile aTempFile;
-        const INetURLObject aTempFileURL(aTempFile.GetURL());
+        const INetURLObject aTempFileURL(utl::CreateTempURL());
 
         // Create a swap file
         auto pSwapFile = o3tl::make_shared<ImpSwapFile>(aTempFileURL, getOriginURL());

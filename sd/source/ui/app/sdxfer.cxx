@@ -597,8 +597,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pOb
         case SDTRANSFER_OBJECTTYPE_DRAWOLE:
         {
             SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pObject);
-            ::utl::TempFile     aTempFile;
-            aTempFile.EnableKillingFile();
+            ::utl::TempFileFast aTempFile;
             SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
 
             try

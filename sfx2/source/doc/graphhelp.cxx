@@ -77,7 +77,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 #ifdef _WIN32
     if ( pGDIMeta )
     {
-        ::utl::TempFile aTempFile( u"", true, u".emf" );
+        ::utl::TempFileNamed aTempFile( u"", true, u".emf" );
 
         OUString aMetaFile = aTempFile.GetFileName();
         OUString aMetaURL = aTempFile.GetURL();

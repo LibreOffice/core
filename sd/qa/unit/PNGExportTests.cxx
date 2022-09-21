@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue("Translucent",
                                                                                    sal_Int32(0)) };
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -241,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
         comphelper::makePropertyValue("PixelHeight", sal_Int32(100))
     };
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -296,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
         comphelper::makePropertyValue("Translucent", sal_Int32(1)),
     };
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
         comphelper::makePropertyValue("PixelHeight", sal_Int32(100)),
     };
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -403,7 +403,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
         comphelper::makePropertyValue("PixelHeight", sal_Int32(180))
     };
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     uno::Sequence<beans::PropertyValue> aDescriptor{
@@ -466,7 +466,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
             comphelper::makePropertyValue("PixelHeight", sal_Int32(240))
         };
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
 
         uno::Sequence<beans::PropertyValue> aDescriptor{

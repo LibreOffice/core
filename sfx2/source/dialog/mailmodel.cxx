@@ -457,9 +457,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             // This makes it possible to store the file for "send document as e-mail"
             // with the original file name. We cannot use the original file as
             // some mail programs need exclusive access.
-            ::utl::TempFile aTempDir( nullptr, true );
-
-            INetURLObject aFilePathObj( aTempDir.GetURL() );
+            INetURLObject aFilePathObj( ::utl::CreateTempURL(nullptr, true) );
             aFilePathObj.insertName( aFileName );
             aFilePathObj.setExtension( aExtension );
 

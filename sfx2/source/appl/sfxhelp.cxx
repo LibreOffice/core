@@ -961,7 +961,7 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
     if (flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent)) {
         return false;
     }
-    ::utl::TempFile aTempFile(u"NewHelp", true, aExtension, parent, false );
+    ::utl::TempFileNamed aTempFile(u"NewHelp", true, aExtension, parent, false );
 
     SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
     pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);

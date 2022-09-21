@@ -225,7 +225,7 @@ void SdOOXMLExportTest1::testTdf149311()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf149311.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -239,7 +239,7 @@ void SdOOXMLExportTest1::testTdf149128()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf149128.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -254,7 +254,7 @@ void SdOOXMLExportTest1::testTdf66228()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf66228.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -267,7 +267,7 @@ void SdOOXMLExportTest1::testTdf147919()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf147919.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -327,7 +327,7 @@ void SdOOXMLExportTest1::testTdf130165()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf146223.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -339,7 +339,7 @@ void SdOOXMLExportTest1::testTdf124781()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf124781.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -356,7 +356,7 @@ void SdOOXMLExportTest1::testTdf144914()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf144616.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -398,7 +398,7 @@ void SdOOXMLExportTest1::testTdf144914()
 void SdOOXMLExportTest1::testTdf124232()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf141704.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -440,7 +440,7 @@ void SdOOXMLExportTest1::testTdf124232()
 void SdOOXMLExportTest1::testTdf143624()
 {
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf143624.pptx"), PPTX );
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -454,7 +454,7 @@ void SdOOXMLExportTest1::testTdf143624()
 void SdOOXMLExportTest1::testTdf142648()
 {
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf142648.pptx"), PPTX );
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
 
     uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
@@ -475,7 +475,7 @@ void SdOOXMLExportTest1::testTdf142648()
 void SdOOXMLExportTest1::testTdf47365()
 {
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/loopNoPause.pptx"), PPTX );
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -489,7 +489,7 @@ void SdOOXMLExportTest1::testTdf47365()
 void SdOOXMLExportTest1::testTdf125071()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf125071.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -502,7 +502,7 @@ void SdOOXMLExportTest1::testTdf125071()
 void SdOOXMLExportTest1::testTdf54037()
 {
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf54037.pptx"), PPTX );
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -938,7 +938,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[PPTX].pFilterName), RTL_TEXTENCODING_UTF8);
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     xComponent.set(xStorable, uno::UNO_QUERY);
@@ -1274,7 +1274,7 @@ void SdOOXMLExportTest1::testTdf112633()
 {
     // Load document and export it to a temporary file
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112633.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1301,7 +1301,7 @@ void SdOOXMLExportTest1::testTdf112633()
 void SdOOXMLExportTest1::testTdf128952()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf128952.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1316,7 +1316,7 @@ void SdOOXMLExportTest1::testTdf128952()
 void SdOOXMLExportTest1::testTdf127090()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf127090.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1329,7 +1329,7 @@ void SdOOXMLExportTest1::testCustomXml()
 {
     // Load document and export it to a temporary file
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/customxml.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1351,7 +1351,7 @@ void SdOOXMLExportTest1::testTdf94238()
     // Load document and export it to a temporary file.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf94238.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
                                                      uno::UNO_QUERY);
@@ -1389,7 +1389,7 @@ void SdOOXMLExportTest1::testPictureTransparency()
     // Load document and export it to a temporary file.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/image_transparency.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
                                                      uno::UNO_QUERY);
@@ -1443,7 +1443,7 @@ void SdOOXMLExportTest1::testRoundtripOwnLineStyles()
     }
 
     // Save to pptx, reload and compare the LineDash values
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocpptx.is());
@@ -1472,7 +1472,7 @@ void SdOOXMLExportTest1::testRoundtripPrstDash()
     // load and save document, compare prstDash values in saved document with original.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/presetDashDot.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
     const OUString sOriginal[] = {
@@ -1522,7 +1522,7 @@ void SdOOXMLExportTest1::testDashOnHairline()
     // load and save document, make sure the custDash has 11 child elements.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf127267DashOnHairline.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1534,7 +1534,7 @@ void SdOOXMLExportTest1::testNarrationNonMediaShape()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/narration-non-media-shape.pptx"), PPTX);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     // Without the accompanying fix in place, this test would have failed,
     // beans::UnknownPropertyException was thrown.
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
@@ -1546,7 +1546,7 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
     ::sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/customshape-bitmapfill-srcrect.pptx"),
         PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1582,7 +1582,7 @@ void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf100348_FontworkBitmapFill.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1598,7 +1598,7 @@ void SdOOXMLExportTest1::testTdf100348FontworkGradientGlow()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf100348_FontworkGradientGlow.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1615,7 +1615,7 @@ void SdOOXMLExportTest1::testTdf128345FullTransparentGradient()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf128345_FullTransparentGradient.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1628,7 +1628,7 @@ void SdOOXMLExportTest1::testTdf128345GradientLinear()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf128345_GradientLinear.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1649,7 +1649,7 @@ void SdOOXMLExportTest1::testTdf128345GradientRadial()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf128345_GradientRadial.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1686,7 +1686,7 @@ void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf134969_TransparencyOnColorGradient.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1702,7 +1702,7 @@ void SdOOXMLExportTest1::testArcTo()
 {
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/arc-validiert.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1718,7 +1718,7 @@ void SdOOXMLExportTest1::testNarrationMimeType()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/narration.pptx"), PPTX);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "[Content_Types].xml");
     // Without the accompanying fix in place, this test would have failed with:
@@ -1783,7 +1783,7 @@ void SdOOXMLExportTest1::testTdf140865Wordart3D()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140865Wordart3D.pptx"), PPTX);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
 
@@ -1804,7 +1804,7 @@ void SdOOXMLExportTest1::testTdf140865Wordart3D()
 void SdOOXMLExportTest1::testTdf124457()
 {
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf124457.pptx"), PPTX );
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1824,7 +1824,7 @@ void SdOOXMLExportTest1::testTdf124457()
 void SdOOXMLExportTest1::testTdf143126()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf143126.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1838,7 +1838,7 @@ void SdOOXMLExportTest1::testTdf143126()
 void SdOOXMLExportTest1::testTdf143129()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf143129.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1852,7 +1852,7 @@ void SdOOXMLExportTest1::testTdf118045()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf118045.odp"), ODP);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
@@ -1865,7 +1865,7 @@ void SdOOXMLExportTest1::testTdf137675()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf137675.pptx"), PPTX);
-    utl::TempFile tempFile;
+    utl::TempFileNamed tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 

@@ -68,7 +68,7 @@ class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
 {
     std::mutex    maMutex;
     Reference < XOutputStream > xOut;
-    TempFile aTempFile;
+    TempFileFast aTempFile;
     bool bStreamClosed : 1;
     SvStream* pStream;
 
@@ -87,7 +87,6 @@ OutputStorageWrapper_Impl::OutputStorageWrapper_Impl()
     : bStreamClosed( false )
     , pStream(nullptr)
 {
-    aTempFile.EnableKillingFile();
     pStream = aTempFile.GetStream( StreamMode::READWRITE );
     xOut = new OOutputStreamWrapper( *pStream );
 }

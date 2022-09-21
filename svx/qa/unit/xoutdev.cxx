@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
                          GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
 
     // Export it.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
                              | XOutFlags::UseNativeIfPossible;
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
                          GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
 
     // Export it.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
                              | XOutFlags::UseNativeIfPossible;

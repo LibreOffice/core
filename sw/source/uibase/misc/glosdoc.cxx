@@ -78,7 +78,7 @@ OUString lcl_CheckFileName( const OUString& rNewFilePath,
     }
 
     //generate generic name
-    utl::TempFile aTemp(u"group", true, SwGlossaries::GetExtension(), &rNewFilePath);
+    utl::TempFileNamed aTemp(u"group", true, SwGlossaries::GetExtension(), &rNewFilePath);
     aTemp.EnableKillingFile();
 
     INetURLObject aTempURL( aTemp.GetURL() );

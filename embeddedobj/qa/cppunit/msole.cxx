@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
     getComponent().set(loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties));
 
     // When saving that document on a thread:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OdtExportThread aThread(getComponent(), aTempFile.GetURL());
     aThread.create();

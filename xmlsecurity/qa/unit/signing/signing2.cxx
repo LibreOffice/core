@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
     mxComponent = loadFromDesktop(aURL, "com.sun.star.sdb.OfficeDatabaseDocument");
 
     // save as ODB
-    utl::TempFile aTempFileSaveAsODB;
+    utl::TempFileNamed aTempFileSaveAsODB;
     aTempFileSaveAsODB.EnableKillingFile();
     try
     {

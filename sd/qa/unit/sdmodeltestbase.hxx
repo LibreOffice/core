@@ -198,7 +198,7 @@ protected:
         return pFormat;
     }
 
-    void exportTo(sd::DrawDocShell* pShell, FileFormat const * pFormat, utl::TempFile const & rTempFile)
+    void exportTo(sd::DrawDocShell* pShell, FileFormat const * pFormat, utl::TempFileNamed const & rTempFile)
     {
         SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
         if ( std::strcmp(pFormat->pName, "odg") == 0)
@@ -238,7 +238,7 @@ protected:
 
     }
 
-    void save(sd::DrawDocShell* pShell, FileFormat const * pFormat, utl::TempFile const & rTempFile)
+    void save(sd::DrawDocShell* pShell, FileFormat const * pFormat, utl::TempFileNamed const & rTempFile)
     {
         SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
         if ( std::strcmp(pFormat->pName, "odg") == 0 )
@@ -276,13 +276,13 @@ protected:
     }
 
     sd::DrawDocShellRef saveAndReload(sd::DrawDocShell *pShell, sal_Int32 nExportType,
-            utl::TempFile * pTempFile = nullptr)
+            utl::TempFileNamed * pTempFile = nullptr)
     {
         FileFormat* pFormat = getFormat(nExportType);
-        std::unique_ptr<utl::TempFile> pNewTempFile;
+        std::unique_ptr<utl::TempFileNamed> pNewTempFile;
         if (!pTempFile)
         {
-            pNewTempFile.reset(new utl::TempFile);
+            pNewTempFile.reset(new utl::TempFileNamed);
             pTempFile = pNewTempFile.get();
         }
         save(pShell, pFormat, *pTempFile);
@@ -444,7 +444,7 @@ class SdModelTestBaseXML
 {
 
 public:
-    xmlDocUniquePtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
+    xmlDocUniquePtr parseExport(utl::TempFileNamed const & rTempFile, OUString const& rStreamName)
     {
         std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
         xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());

@@ -65,7 +65,7 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 protected:
     uno::Reference<lang::XComponent> mxComponent;
-    utl::TempFile maTempFile;
+    utl::TempFileNamed maTempFile;
     SvMemoryStream maMemory;
     utl::MediaDescriptor aMediaDescriptor;
     std::unique_ptr<vcl::pdf::PDFiumDocument> parseExport(const OString& rPassword = OString());
@@ -3415,48 +3415,47 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
         OUString in;
         OString out;
         bool relativeFsys;
-    } URIs[]
-        = { {
-                "http://example.com/",
-                "http://example.com/",
-                true,
-            },
-            {
-                "file://localfile.odt/",
-                "file://localfile.odt/",
-                true,
-            },
-            {
-                // tdf 143216
-                "http://username:password@example.com",
-                "http://username:password@example.com",
-                true,
-            },
-            {
-                "git://git.example.org/project/example",
-                "git://git.example.org/project/example",
-                true,
-            },
-            {
-                // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
-                "filebypath.odt",
-                "filebypath.pdf",
-                true,
-            },
-            {
-                // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
-                // but this time with ExportLinksRelativeFsys off the path is added
-                "filebypath.odt",
-                OUStringToOString(utl::TempFile::GetTempNameBaseDirectory(), RTL_TEXTENCODING_UTF8)
-                    + "filebypath.pdf",
-                false,
-            },
-            {
-                // This also gets made relative due to 'ExportLinksRelativeFsys'
-                utl::TempFile::GetTempNameBaseDirectory() + "fileintempdir.odt",
-                "fileintempdir.pdf",
-                true,
-            } };
+    } URIs[] = { {
+                     "http://example.com/",
+                     "http://example.com/",
+                     true,
+                 },
+                 {
+                     "file://localfile.odt/",
+                     "file://localfile.odt/",
+                     true,
+                 },
+                 {
+                     // tdf 143216
+                     "http://username:password@example.com",
+                     "http://username:password@example.com",
+                     true,
+                 },
+                 {
+                     "git://git.example.org/project/example",
+                     "git://git.example.org/project/example",
+                     true,
+                 },
+                 {
+                     // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
+                     "filebypath.odt",
+                     "filebypath.pdf",
+                     true,
+                 },
+                 {
+                     // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
+                     // but this time with ExportLinksRelativeFsys off the path is added
+                     "filebypath.odt",
+                     OUStringToOString(utl::GetTempNameBaseDirectory(), RTL_TEXTENCODING_UTF8)
+                         + "filebypath.pdf",
+                     false,
+                 },
+                 {
+                     // This also gets made relative due to 'ExportLinksRelativeFsys'
+                     utl::GetTempNameBaseDirectory() + "fileintempdir.odt",
+                     "fileintempdir.pdf",
+                     true,
+                 } };
 
     // Create an empty document.
     // Note: The test harness gets very upset if we try and create multiple

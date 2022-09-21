@@ -37,8 +37,7 @@ using namespace ::com::sun::star;
 
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
 {
-    OUString aTempURL = ::utl::TempFile( nullptr, true ).GetURL();
-
+    OUString aTempURL = ::utl::CreateTempURL( nullptr, true );
     if ( aTempURL.isEmpty() )
         throw uno::RuntimeException("Cannot create tempfile.");
 

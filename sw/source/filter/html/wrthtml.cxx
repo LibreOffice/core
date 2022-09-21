@@ -159,7 +159,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     if (rBaseURL.isEmpty())
     {
         // Paste: set base URL to a tempfile, so images are not lost.
-        mpTempBaseURL.reset(new utl::TempFile());
+        mpTempBaseURL.reset(new utl::TempFileNamed());
         mpTempBaseURL->EnableKillingFile();
         SetBaseURL(mpTempBaseURL->GetURL());
     }

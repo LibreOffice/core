@@ -262,7 +262,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
     ::sd::DrawDocShellRef xDocShell
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/TextDistancesInsets3.pptx"), PPTX);
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     xDocShell = saveAndReload(xDocShell.get(), PPTX, &aTempFile);
     xDocShell->DoClose();
 

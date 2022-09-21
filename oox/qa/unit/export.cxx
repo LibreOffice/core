@@ -26,13 +26,13 @@ class Test : public test::BootstrapFixture, public unotest::MacrosTest, public X
 {
 private:
     uno::Reference<lang::XComponent> mxComponent;
-    utl::TempFile maTempFile;
+    utl::TempFileNamed maTempFile;
 
 public:
     void setUp() override;
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
-    utl::TempFile& getTempFile() { return maTempFile; }
+    utl::TempFileNamed& getTempFile() { return maTempFile; }
     void loadAndSave(const OUString& rURL, const OUString& rFilterName);
 };
 

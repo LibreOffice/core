@@ -626,7 +626,7 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
         calcLayout();
 }
 
-void SwModelTestBase::save(const OUString& aFilterName, utl::TempFile& rTempFile)
+void SwModelTestBase::save(const OUString& aFilterName, utl::TempFileNamed& rTempFile)
 {
     rTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

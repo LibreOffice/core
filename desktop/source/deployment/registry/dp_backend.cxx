@@ -215,9 +215,7 @@ OUString PackageRegistryBackend::createFolder(
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
 
-    const OUString baseDir(sDataFolder);
-    ::utl::TempFile aTemp(&baseDir, true);
-    const OUString& url = aTemp.GetURL();
+    const OUString url = ::utl::CreateTempURL(&sDataFolder, true);
     return sDataFolder + url.subView(url.lastIndexOf('/'));
 }
 

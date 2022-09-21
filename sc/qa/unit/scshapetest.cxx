@@ -107,7 +107,7 @@ ScShapeTest::ScShapeTest()
 void ScShapeTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                                 const OUString& rFilter)
 {
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName",
                                                             rFilter) }; // e.g. "calc8"

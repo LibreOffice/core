@@ -21,12 +21,12 @@
 
 xmlDocUniquePtr XPathHelper::parseExport2(ScBootstrapFixture & rFixture, ScDocShell& rShell, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile, sal_Int32 nFormat)
 {
-    std::shared_ptr<utl::TempFile> pTempFile = rFixture.exportTo(rShell, nFormat);
+    std::shared_ptr<utl::TempFileNamed> pTempFile = rFixture.exportTo(rShell, nFormat);
 
     return parseExport(pTempFile, xSFactory, rFile);
 }
 
-std::unique_ptr<SvStream> XPathHelper::parseExportStream(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
+std::unique_ptr<SvStream> XPathHelper::parseExportStream(std::shared_ptr<utl::TempFileNamed> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
 {
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(xSFactory), pTempFile->GetURL());
@@ -36,7 +36,7 @@ std::unique_ptr<SvStream> XPathHelper::parseExportStream(std::shared_ptr<utl::Te
     return pStream;
 }
 
-xmlDocUniquePtr XPathHelper::parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
+xmlDocUniquePtr XPathHelper::parseExport(std::shared_ptr<utl::TempFileNamed> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
 {
     std::unique_ptr<SvStream> pStream = parseExportStream(pTempFile, xSFactory, rFile);
     return XmlTestTools::parseXmlStream(pStream.get());

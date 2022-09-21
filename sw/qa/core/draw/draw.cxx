@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
 
     // Export to RTF and reload
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("Rich Text Format");

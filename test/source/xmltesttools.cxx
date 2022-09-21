@@ -42,7 +42,7 @@ XmlTestTools::XmlTestTools()
 XmlTestTools::~XmlTestTools()
 {}
 
-xmlDocUniquePtr XmlTestTools::parseXml(utl::TempFile const & aTempFile)
+xmlDocUniquePtr XmlTestTools::parseXml(utl::TempFileNamed const & aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     return parseXmlStream(&aFileStream);

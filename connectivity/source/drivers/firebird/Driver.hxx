@@ -45,8 +45,8 @@ namespace connectivity::firebird
         {
         private:
             css::uno::Reference<css::uno::XComponentContext> m_aContext;
-            ::utl::TempFile m_firebirdTMPDirectory;
-            ::utl::TempFile m_firebirdLockDirectory;
+            ::utl::TempFileNamed m_firebirdTMPDirectory;
+            ::utl::TempFileNamed m_firebirdLockDirectory;
 
         protected:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access

@@ -128,7 +128,7 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
     }
 
-    std::shared_ptr<utl::TempFile> exportedFile;
+    std::shared_ptr<utl::TempFileNamed> exportedFile;
     ScDocShellRef xDocSh2 = saveAndReloadNoClose(*xDocSh1, FORMAT_ODS, &exportedFile);
     CPPUNIT_ASSERT(xDocSh2.is());
 
@@ -189,7 +189,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges()
         }
     }
 
-    std::shared_ptr<utl::TempFile> exportedFile;
+    std::shared_ptr<utl::TempFileNamed> exportedFile;
     ScDocShellRef xDocSh2 = saveAndReloadNoClose(*xDocSh1, FORMAT_ODS, &exportedFile);
     CPPUNIT_ASSERT(xDocSh2.is());
 

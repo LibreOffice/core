@@ -239,7 +239,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     if (nSuccess != SFErrCodes::Ok)
         return;
 
-    utl::TempFile aTmpFile;
+    utl::TempFileFast aTmpFile;
     SvStream* pTmpFile = aTmpFile.GetStream(StreamMode::READWRITE);
 
     // encoding vector maps character encoding to the ordinal number

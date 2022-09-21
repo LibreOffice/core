@@ -112,7 +112,7 @@ void OlePicture::Read(HWPFile & hwpf)
           return;
     }
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);

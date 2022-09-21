@@ -405,7 +405,7 @@ void GraphicTest::testWMFRoundtrip()
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
 
     // Save as WMF.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
     SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
@@ -467,8 +467,7 @@ void GraphicTest::testWMFWithEmfPlusRoundtrip()
     for (bool useConvertMetafile : { false, true })
     {
         // Save as WMF.
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
+        utl::TempFileNamed aTempFile;
         SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
         if (useConvertMetafile)
             ConvertGraphicToWMF(aGraphic, rOutStream, nullptr);

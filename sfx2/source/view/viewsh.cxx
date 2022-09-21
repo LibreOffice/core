@@ -616,9 +616,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     SAL_WARN("sfx.view", "cannot create Flatpak html temp dir");
                 }
-                ::utl::TempFile aTempDir( parent, true );
 
-                INetURLObject aFilePathObj( aTempDir.GetURL() );
+                INetURLObject aFilePathObj( ::utl::CreateTempURL(parent, true) );
                 aFilePathObj.insertName( aFileName );
                 aFilePathObj.setExtension( u"htm" );
 

@@ -836,7 +836,7 @@ bool ODatabaseModelImpl::commitEmbeddedStorage( bool _bPreventRootCommits )
 bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage )
 {
     bool bTryToPreserveScriptSignature = false;
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OUString sTmpFileUrl = aTempFile.GetURL();
     SignatureState aSignatureState = getScriptingSignatureState();

@@ -608,9 +608,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
 
-    OUString baseDir(m_activePackages_expanded);
-    ::utl::TempFile aTemp(&baseDir, false);
-    OUString tempEntry = aTemp.GetURL();
+    OUString tempEntry = ::utl::CreateTempURL(&m_activePackages_expanded, false);
     tempEntry = tempEntry.copy(tempEntry.lastIndexOf('/') + 1);
     OUString destFolder = makeURL( m_activePackages, tempEntry) + "_";
 

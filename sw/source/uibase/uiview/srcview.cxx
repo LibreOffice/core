@@ -794,7 +794,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     }
     else
     {
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         const OUString sFileURL( aTempFile.GetURL() );
 

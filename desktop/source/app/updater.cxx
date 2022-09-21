@@ -285,7 +285,7 @@ bool isUserWritable(const OUString& rFileURL)
 
 bool update()
 {
-    utl::TempFile aTempDir(nullptr, true);
+    utl::TempFileNamed aTempDir(nullptr, true);
     OUString aTempDirURL = aTempDir.GetURL();
     CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL);
 
@@ -566,7 +566,7 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 
     std::string response_body;
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     WriteDataFile aFile(aTempFile.GetStream(StreamMode::WRITE));
     if (!bFile)
     {

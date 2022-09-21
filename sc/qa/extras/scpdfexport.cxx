@@ -51,12 +51,12 @@ public:
 
     // helpers
 private:
-    std::shared_ptr<utl::TempFile> exportToPDF(const uno::Reference<frame::XModel>& xModel,
-                                               const ScRange& range);
+    std::shared_ptr<utl::TempFileNamed> exportToPDF(const uno::Reference<frame::XModel>& xModel,
+                                                    const ScRange& range);
 
-    std::shared_ptr<utl::TempFile> exportToPDFWithUnoCommands(const OUString& rRange);
+    std::shared_ptr<utl::TempFileNamed> exportToPDFWithUnoCommands(const OUString& rRange);
 
-    static bool hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFile, const char* sText,
+    static bool hasTextInPdf(const std::shared_ptr<utl::TempFileNamed>& pPDFFile, const char* sText,
                              bool& bFound);
 
     void setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
@@ -110,7 +110,7 @@ void ScPDFExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-bool ScPDFExportTest::hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFile,
+bool ScPDFExportTest::hasTextInPdf(const std::shared_ptr<utl::TempFileNamed>& pPDFFile,
                                    const char* sText, bool& bFound)
 {
     SvStream* pStream = pPDFFile->GetStream(StreamMode::STD_READ);
@@ -140,11 +140,11 @@ bool ScPDFExportTest::hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFil
     return (nRead == nFileSize);
 }
 
-std::shared_ptr<utl::TempFile>
+std::shared_ptr<utl::TempFileNamed>
 ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range)
 {
     // create temp file name
-    auto pTempFile = std::make_shared<utl::TempFile>();
+    auto pTempFile = std::make_shared<utl::TempFileNamed>();
     pTempFile->EnableKillingFile();
     OUString sFileURL = pTempFile->GetURL();
     // Note: under Windows path path should be with "/" delimiters instead of "\\"
@@ -195,10 +195,11 @@ ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const 
     return pTempFile;
 }
 
-std::shared_ptr<utl::TempFile> ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
+std::shared_ptr<utl::TempFileNamed>
+ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
 {
     // create temp file name
-    auto pTempFile = std::make_shared<utl::TempFile>();
+    auto pTempFile = std::make_shared<utl::TempFileNamed>();
     pTempFile->EnableKillingFile();
     OUString sFileURL = pTempFile->GetURL();
     // Note: under Windows path path should be with "/" delimiters instead of "\\"
@@ -276,7 +277,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
     // A1:G1
     {
         ScRange range1(0, 0, 0, 6, 0, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(false, bFound);
@@ -285,7 +286,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
     // G1:H1
     {
         ScRange range1(6, 0, 0, 7, 0, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -294,7 +295,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
     // H1:I1
     {
         ScRange range1(7, 0, 0, 8, 0, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -329,7 +330,7 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
     // A1:G50: 2-page export
     {
         ScRange range1(0, 0, 0, 6, 49, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 2>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -338,7 +339,7 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
     // A1:L80: 4-page export
     {
         ScRange range1(0, 0, 0, 11, 79, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -368,7 +369,7 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
     // A1:G50 with fit to page width=1: slightly smaller zoom results only 1-page export
     {
         ScRange range1(0, 0, 0, 6, 49, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 1>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -377,7 +378,7 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
     // A1:L80 with fit to page width=1: slightly smaller zoom results only 1-page export
     {
         ScRange range1(0, 0, 0, 11, 79, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 1>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -391,7 +392,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
     // A1:G1
     {
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("A1:G1");
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDFWithUnoCommands("A1:G1");
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(false, bFound);
@@ -399,7 +400,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
     // G1:H1
     {
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("G1:H1");
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDFWithUnoCommands("G1:H1");
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -407,7 +408,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
     // H1:I1
     {
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("H1:I1");
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDFWithUnoCommands("H1:I1");
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -424,7 +425,7 @@ void ScPDFExportTest::testTdf64703_hiddenPageBreak()
     // A1:A11: 4-page export
     {
         ScRange range1(0, 0, 0, 0, 10, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -445,7 +446,7 @@ void ScPDFExportTest::testTdf143978()
 
     // A1:A2
     ScRange range1(0, 0, 0, 0, 1, 0);
-    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
     // Parse the export result with pdfium.
     SvFileStream aFile(pPDFFile->GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
@@ -492,7 +493,7 @@ void ScPDFExportTest::testTdf84012()
 
     // A1
     ScRange range1(0, 0, 0, 0, 0, 0);
-    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
     // Parse the export result with pdfium.
     SvFileStream aFile(pPDFFile->GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
@@ -533,7 +534,7 @@ void ScPDFExportTest::testTdf78897()
 
     // C3:D3
     ScRange range1(2, 2, 0, 3, 2, 0);
-    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
     // Parse the export result with pdfium.
     SvFileStream aFile(pPDFFile->GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
@@ -569,7 +570,7 @@ void ScPDFExportTest::testForcepoint97()
 
     // A1:H81
     ScRange range1(0, 0, 0, 7, 81, 0);
-    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    std::shared_ptr<utl::TempFileNamed> pPDFFile = exportToPDF(xModel, range1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);

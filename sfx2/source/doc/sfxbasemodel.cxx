@@ -2057,7 +2057,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
             try
             {
-                utl::TempFile aTmp;
+                utl::TempFileNamed aTmp;
                 aTmp.EnableKillingFile();
                 storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
                 std::unique_ptr<SvStream> pStream(aTmp.GetStream( StreamMode::READ ));

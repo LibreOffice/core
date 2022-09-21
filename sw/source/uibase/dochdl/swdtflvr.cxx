@@ -738,8 +738,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
             SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pObject);
             try
             {
-                ::utl::TempFile     aTempFile;
-                aTempFile.EnableKillingFile();
+                ::utl::TempFileFast aTempFile;
                 SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
                 uno::Reference< embed::XStorage > xWorkStore =
                     ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream), embed::ElementModes::READWRITE );

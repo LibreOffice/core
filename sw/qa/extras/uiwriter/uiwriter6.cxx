@@ -688,7 +688,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
 {
     const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
 
-    utl::TempFile aTempDir(nullptr, true);
+    utl::TempFileNamed aTempDir(nullptr, true);
     aTempDir.EnableKillingFile();
     const OUString aWorkDir = aTempDir.GetURL();
 
@@ -1078,7 +1078,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
 
     xmlDocUniquePtr pXmlDoc;
     uno::Sequence<beans::PropertyValue> aDescriptor;
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     // Get document settings
@@ -1301,7 +1301,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
     // save document and verify the bookmark scoup
     {
         // save document
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         save("writer8", aTempFile);
 
         // load only content.xml

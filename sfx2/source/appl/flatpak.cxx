@@ -72,13 +72,12 @@ bool flatpak::createTemporaryHtmlDirectory(OUString ** url) {
         if (!parent.endsWith("/")) {
             parent += "/";
         }
-        auto const tmp = utl::TempFile(&parent, true);
-        if (!tmp.IsValid()) {
+        temporaryHtmlDirectoryStatus.url = utl::CreateTempURL(&parent, true);
+        if (temporaryHtmlDirectoryStatus.url.isEmpty()) {
             SAL_WARN(
                 "sfx.appl", "LIBO_FLATPAK mode failure creating temp dir at <" << parent << ">");
             return false;
         }
-        temporaryHtmlDirectoryStatus.url = tmp.GetURL();
         temporaryHtmlDirectoryStatus.created = true;
     }
     *url = &temporaryHtmlDirectoryStatus.url;

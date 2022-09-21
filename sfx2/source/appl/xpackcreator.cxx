@@ -65,7 +65,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     ::ucbhelper::Content aContent;
     if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, comphelper::getProcessComponentContext(), aContent ) )
     {
-        OUString aTempURL = ::utl::TempFile().GetURL();
+        OUString aTempURL = ::utl::CreateTempURL();
         try {
             if ( aContent.isFolder() )
             {

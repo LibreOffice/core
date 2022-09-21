@@ -216,7 +216,7 @@ extern "C" int unopkg_main()
     Reference<XLogHandler> xFileHandler;
     Reference<XLogHandler> xConsoleHandler;
     std::unique_ptr<comphelper::EventLogger> logger;
-    std::unique_ptr<utl::TempFile> pUserProfileTempDir;
+    std::unique_ptr<utl::TempFileNamed> pUserProfileTempDir;
 
     OptionInfo const * info_shared = getOptionInfo(
         s_option_infos, "shared" );
@@ -314,7 +314,7 @@ extern "C" int unopkg_main()
         // tdf#129917 Use temp user profile when installing shared extensions
         if (option_shared)
         {
-            pUserProfileTempDir.reset(new utl::TempFile(nullptr, true));
+            pUserProfileTempDir.reset(new utl::TempFileNamed(nullptr, true));
             pUserProfileTempDir->EnableKillingFile();
         }
 

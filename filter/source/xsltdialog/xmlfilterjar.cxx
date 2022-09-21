@@ -191,8 +191,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
             }
 
             // create TypeDetection.xcu
-            utl::TempFile aTempFile;
-            aTempFile.EnableKillingFile();
+            utl::TempFileFast aTempFile;
             SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
 
             {

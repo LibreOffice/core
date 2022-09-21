@@ -83,7 +83,7 @@ public:
 
 std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_view sFileName, bool bEmpty)
 {
-    utl::TempFile tmp;
+    utl::TempFileNamed tmp;
     tmp.EnableKillingFile();
     OUString rURL = tmp.GetURL();
     CPPUNIT_ASSERT_EQUAL(

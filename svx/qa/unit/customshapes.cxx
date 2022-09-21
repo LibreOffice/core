@@ -179,7 +179,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_NonUI)
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", aTempFile.GetURL());
 
@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FrontLightDim)
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", aTempFile.GetURL());
 
@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FirstLightHarsh)
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", aTempFile.GetURL());
 
@@ -1234,7 +1234,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
 
     // Save and reload
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("draw8");
@@ -1276,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
 
     // Generate bitmap from shape
     uno::Reference<drawing::XShape> xShape = getShape(0);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", aTempFile.GetURL());
 

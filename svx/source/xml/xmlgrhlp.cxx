@@ -90,7 +90,7 @@ private:
     virtual void SAL_CALL closeInput() override;
 
 private:
-    utl::TempFile maTempFile;
+    utl::TempFileFast maTempFile;
     Reference<XInputStream> mxStreamWrapper;
 
 public:
@@ -109,8 +109,6 @@ public:
 
 GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, const OUString & rMimeType)
 {
-    maTempFile.EnableKillingFile();
-
     if (aGraphicObject.GetType() == GraphicType::NONE)
         return;
 
@@ -224,7 +222,7 @@ private:
 
 private:
 
-    std::optional<::utl::TempFile>   moTmp;
+    std::optional<::utl::TempFileFast> moTmp;
     SvStream*                        mpOStm;
     Reference< XOutputStream >       mxStmWrapper;
     std::optional<GraphicObject>     moGrfObj;
@@ -247,8 +245,6 @@ SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
     , moGrfObj(std::in_place)
     , mbClosed(false)
 {
-    moTmp->EnableKillingFile();
-
     mpOStm = moTmp->GetStream( StreamMode::READWRITE );
 
     if( mpOStm )

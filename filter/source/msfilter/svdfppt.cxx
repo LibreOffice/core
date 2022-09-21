@@ -1846,9 +1846,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
 
             rStCtrl.SeekRel( 4 );
 
-            ::utl::TempFile aTmpFile;
-            aTmpFile.EnableKillingFile();
-
+            ::utl::TempFileFast aTmpFile;
             SvStream* pDest = aTmpFile.GetStream(StreamMode::READWRITE);
             if (pDest)
             {

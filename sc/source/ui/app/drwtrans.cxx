@@ -470,8 +470,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                 // impl. for "single OLE"
                 embed::XEmbeddedObject* pEmbObj = static_cast<embed::XEmbeddedObject*>(pUserObject);
 
-                ::utl::TempFile     aTempFile;
-                aTempFile.EnableKillingFile();
+                ::utl::TempFileFast aTempFile;
                 SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
                 uno::Reference< embed::XStorage > xWorkStore =
                     ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream) );
@@ -515,8 +514,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
 
                 try
                 {
-                    ::utl::TempFile     aTempFile;
-                    aTempFile.EnableKillingFile();
+                    ::utl::TempFileFast aTempFile;
                     SvStream* pTempStream = aTempFile.GetStream(StreamMode::READWRITE);
                     uno::Reference< embed::XStorage > xWorkStore =
                         ::comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper(*pTempStream) );

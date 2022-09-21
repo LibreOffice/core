@@ -197,8 +197,8 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 
 static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
-    utl::TempFile aTempOutput;
-    utl::TempFile aTempInput;
+    utl::TempFileNamed aTempOutput;
+    utl::TempFileNamed aTempInput;
     aTempOutput.EnableKillingFile();
     aTempInput.EnableKillingFile();
     OUString output;

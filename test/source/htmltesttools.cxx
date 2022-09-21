@@ -12,7 +12,7 @@
 
 #include <memory>
 
-htmlDocUniquePtr HtmlTestTools::parseHtml(utl::TempFile const & aTempFile)
+htmlDocUniquePtr HtmlTestTools::parseHtml(utl::TempFileNamed const & aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     htmlDocUniquePtr doc = parseHtmlStream(&aFileStream);

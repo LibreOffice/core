@@ -438,7 +438,7 @@ private:
     void                InitStream( bool bTempFile );
 
 private:
-    std::optional< ::utl::TempFile > moTempFile;
+    std::optional< ::utl::TempFileFast > moTempFile;
     SvStream* mpDffStrm = nullptr;
     std::unique_ptr<SvMemoryStream> mpBackupStrm;
     std::shared_ptr< XclEscherEx > mxEscherEx;

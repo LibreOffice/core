@@ -71,24 +71,24 @@ namespace
 class InitNSSPrivate
 {
 private:
-    std::unique_ptr<utl::TempFile> m_pTempFileDatabaseDirectory;
+    std::optional<utl::TempFileNamed> m_oTempFileDatabaseDirectory;
 
 public:
     OUString getTempDatabasePath()
     {
-        if (!m_pTempFileDatabaseDirectory)
+        if (!m_oTempFileDatabaseDirectory)
         {
-            m_pTempFileDatabaseDirectory.reset(new utl::TempFile(nullptr, true));
-            m_pTempFileDatabaseDirectory->EnableKillingFile();
+            m_oTempFileDatabaseDirectory.emplace(nullptr, true);
+            m_oTempFileDatabaseDirectory->EnableKillingFile();
         }
-        return m_pTempFileDatabaseDirectory->GetFileName();
+        return m_oTempFileDatabaseDirectory->GetFileName();
     }
 
     void reset()
     {
-        if (m_pTempFileDatabaseDirectory)
+        if (m_oTempFileDatabaseDirectory)
         {
-            m_pTempFileDatabaseDirectory.reset();
+            m_oTempFileDatabaseDirectory.reset();
         }
     }
 };

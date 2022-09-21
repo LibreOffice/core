@@ -346,7 +346,7 @@ static OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool b
                            false, false);
 }
 
-OUString TempFile::CreateTempName()
+OUString CreateTempName()
 {
     OUString aName(CreateTempName_Impl( nullptr, false ));
 
@@ -357,14 +357,56 @@ OUString TempFile::CreateTempName()
     return aTmp;
 }
 
-TempFile::TempFile( const OUString* pParent, bool bDirectory )
+TempFileFast::TempFileFast( )
+{
+}
+
+TempFileFast::TempFileFast(TempFileFast && other) noexcept :
+    mxStream(std::move(other.mxStream))
+{
+}
+
+TempFileFast::~TempFileFast()
+{
+}
+
+SvStream* TempFileFast::GetStream( StreamMode eMode )
+{
+    if (!mxStream)
+    {
+        OUString aName = CreateTempName_Impl( /*pParent*/nullptr, /*bKeep*/true, /*bDirectory*/false );
+        mxStream.reset(new SvFileStream(aName, eMode | StreamMode::TEMPORARY));
+    }
+    return mxStream.get();
+}
+
+void TempFileFast::CloseStream()
+{
+    mxStream.reset();
+}
+
+OUString CreateTempURL( const OUString* pParent, bool bDirectory )
+{
+    return CreateTempName_Impl( pParent, true, bDirectory );
+}
+
+OUString CreateTempURL( std::u16string_view rLeadingChars, bool _bStartWithZero,
+                    std::u16string_view pExtension, const OUString* pParent,
+                    bool bCreateParentDirs )
+{
+    SequentialTokens t(_bStartWithZero);
+    return lcl_createName( rLeadingChars, t, pExtension, pParent, false,
+                            true, true, bCreateParentDirs );
+}
+
+TempFileNamed::TempFileNamed( const OUString* pParent, bool bDirectory )
     : bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
     aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
-TempFile::TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero,
+TempFileNamed::TempFileNamed( std::u16string_view rLeadingChars, bool _bStartWithZero,
                     std::u16string_view pExtension, const OUString* pParent,
                     bool bCreateParentDirs )
     : bIsDirectory( false )
@@ -375,14 +417,14 @@ TempFile::TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero,
                             true, true, bCreateParentDirs );
 }
 
-TempFile::TempFile(TempFile && other) noexcept :
+TempFileNamed::TempFileNamed(TempFileNamed && other) noexcept :
     aName(std::move(other.aName)), pStream(std::move(other.pStream)), bIsDirectory(other.bIsDirectory),
     bKillingFileEnabled(other.bKillingFileEnabled)
 {
     other.bKillingFileEnabled = false;
 }
 
-TempFile::~TempFile()
+TempFileNamed::~TempFileNamed()
 {
     if ( !bKillingFileEnabled )
         return;
@@ -398,19 +440,19 @@ TempFile::~TempFile()
     }
 }
 
-bool TempFile::IsValid() const
+bool TempFileNamed::IsValid() const
 {
     return !aName.isEmpty();
 }
 
-OUString TempFile::GetFileName() const
+OUString TempFileNamed::GetFileName() const
 {
     OUString aTmp;
     FileBase::getSystemPathFromFileURL(aName, aTmp);
     return aTmp;
 }
 
-OUString const & TempFile::GetURL() const
+OUString const & TempFileNamed::GetURL() const
 {
     // if you request the URL, then you presumably want to access this via UCB,
     // and UCB will want to open the file via a separate file handle, which means
@@ -422,7 +464,7 @@ OUString const & TempFile::GetURL() const
     return aName;
 }
 
-SvStream* TempFile::GetStream( StreamMode eMode )
+SvStream* TempFileNamed::GetStream( StreamMode eMode )
 {
     if (!pStream)
     {
@@ -435,12 +477,12 @@ SvStream* TempFile::GetStream( StreamMode eMode )
     return pStream.get();
 }
 
-void TempFile::CloseStream()
+void TempFileNamed::CloseStream()
 {
     pStream.reset();
 }
 
-OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
+OUString SetTempNameBaseDirectory( const OUString &rBaseName )
 {
     if( rBaseName.isEmpty() )
         return OUString();
@@ -468,7 +510,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
         OUString &rTempNameBase_Impl = gTempNameBase_Impl;
         rTempNameBase_Impl = rBaseName + "/";
 
-        TempFile aBase( nullptr, true );
+        TempFileNamed aBase( {}, true );
         if ( aBase.IsValid() )
             // use it in case of success
             rTempNameBase_Impl = aBase.aName;
@@ -480,7 +522,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
     return aTmp;
 }
 
-OUString TempFile::GetTempNameBaseDirectory()
+OUString GetTempNameBaseDirectory()
 {
     return ConstructTempDir_Impl(nullptr, false);
 }

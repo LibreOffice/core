@@ -2478,13 +2478,13 @@ OUString ODbaseTable::createTempFile()
         aIdent += "/";
 
     OUString sExt("." + m_pConnection->getExtension());
-    TempFile aTempFile(m_Name, true, sExt, &aIdent);
-    if(!aTempFile.IsValid())
+    OUString aTempFileURL = utl::CreateTempURL(m_Name, true, sExt, &aIdent);
+    if(aTempFileURL.isEmpty())
         getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE, *this);
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INetProtocol::File);
-    aURL.SetURL(aTempFile.GetURL());
+    aURL.SetURL(aTempFileURL);
 
     OUString sNewName(aURL.getName().copy(0, aURL.getName().getLength() - sExt.getLength()));
 

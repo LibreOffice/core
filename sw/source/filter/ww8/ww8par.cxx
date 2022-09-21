@@ -5571,10 +5571,9 @@ ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStr
 
 namespace
 {
-    SvStream* MakeTemp(std::optional<utl::TempFile>& roTempFile)
+    SvStream* MakeTemp(std::optional<utl::TempFileFast>& roTempFile)
     {
         roTempFile.emplace();
-        roTempFile->EnableKillingFile();
         return roTempFile->GetStream(StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
     }
 
@@ -5803,9 +5802,9 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (!nErrRet)
         nErrRet = SetSubStreams(xTableStream, xDataStream);
 
-    std::optional<utl::TempFile> oTempMain;
-    std::optional<utl::TempFile> oTempTable;
-    std::optional<utl::TempFile> oTempData;
+    std::optional<utl::TempFileFast> oTempMain;
+    std::optional<utl::TempFileFast> oTempTable;
+    std::optional<utl::TempFileFast> oTempData;
     SvStream* pDecryptMain = nullptr;
     SvStream* pDecryptTable = nullptr;
     SvStream* pDecryptData = nullptr;

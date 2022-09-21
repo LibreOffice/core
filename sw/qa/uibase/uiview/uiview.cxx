@@ -39,7 +39,7 @@ class SwUibaseUiviewTest : public SwModelTestBase
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
 {
     // Make a temporary copy of the test document
-    utl::TempFile tmp;
+    utl::TempFileNamed tmp;
     tmp.EnableKillingFile();
     OUString sTempCopy = tmp.GetURL();
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,

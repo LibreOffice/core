@@ -57,8 +57,8 @@ public:
 void GalleryObjTest::TestCreateTheme()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -86,8 +86,8 @@ void GalleryObjTest::TestCreateTheme()
 void GalleryObjTest::TestDeleteTheme()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -122,8 +122,8 @@ void GalleryObjTest::TestDeleteTheme()
 void GalleryObjTest::TestSetThemeName()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -153,8 +153,8 @@ void GalleryObjTest::TestSetThemeName()
 void GalleryObjTest::TestThemeURLCase()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -191,8 +191,8 @@ void GalleryObjTest::TestThemeURLCase()
 
 void GalleryObjTest::TestThemeCount()
 {
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -232,8 +232,8 @@ void GalleryObjTest::TestThemeCount()
 void GalleryObjTest::TestGalleryThemeEntry()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -286,8 +286,8 @@ void GalleryObjTest::TestGalleryThemeEntry()
 void GalleryObjTest::TestInsertGalleryObject()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -331,8 +331,8 @@ void GalleryObjTest::TestInsertGalleryObject()
 void GalleryObjTest::TestRemoveGalleryObject()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -386,8 +386,8 @@ void GalleryObjTest::TestRemoveGalleryObject()
 void GalleryObjTest::TestChangePositionGalleryObject()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();
@@ -448,8 +448,8 @@ void GalleryObjTest::TestChangePositionGalleryObject()
 void GalleryObjTest::TestGetThemeNameFromGalleryTheme()
 {
     // Create theme
-    std::unique_ptr<utl::TempFile> pTempDir;
-    pTempDir.reset(new utl::TempFile(nullptr, true));
+    std::unique_ptr<utl::TempFileNamed> pTempDir;
+    pTempDir.reset(new utl::TempFileNamed(nullptr, true));
     CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
     pTempDir->EnableKillingFile();
     const OUString aGalleryURL = pTempDir->GetURL();

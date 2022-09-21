@@ -461,11 +461,11 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         /// this describes the target location for the printed temp file
         OUString m_sTargetURL;
         /// it holds the temp file alive, till the print job will finish and remove it from disk automatically if the object die
-        ::utl::TempFile* m_pTempFile;
+        ::utl::TempFileNamed* m_pTempFile;
 
     public:
         /* initialize this watcher but don't start it */
-        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, OUString sTargetURL )
+        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFileNamed* pTempFile, OUString sTargetURL )
                 : m_pPrinter  ( pPrinter   )
                 , m_sTargetURL(std::move( sTargetURL ))
                 , m_pTempFile ( pTempFile  )
@@ -508,7 +508,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
            the thread, if finishing of the job was detected outside this thread.
            But it must be called without using a corresponding thread for the given parameter!
          */
-        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, std::u16string_view sTargetURL )
+        static void moveAndDeleteTemp( ::utl::TempFileNamed** ppTempFile, std::u16string_view sTargetURL )
         {
             // move the file
             try
@@ -577,7 +577,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // a local one we can suppress this special handling. Because then vcl makes all
     // right for us.
     OUString sUcbUrl;
-    ::utl::TempFile* pUCBPrintTempFile = nullptr;
+    ::utl::TempFileNamed* pUCBPrintTempFile = nullptr;
 
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
     auto pCheckedArgs = aCheckedArgs.getArray();
@@ -654,7 +654,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // Execution of the print job will be done later by executing
                 // a slot ...
                 if(!pUCBPrintTempFile)
-                    pUCBPrintTempFile = new ::utl::TempFile();
+                    pUCBPrintTempFile = new ::utl::TempFileNamed();
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?

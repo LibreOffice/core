@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext >& xContext, utl::TempFile aTempFile )
+OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext >& xContext, utl::TempFileFast aTempFile )
 : m_oTempFile( std::move(aTempFile) )
 {
     uno::Reference< uno::XComponentContext > xOwnContext = xContext;

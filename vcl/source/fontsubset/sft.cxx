@@ -1931,7 +1931,7 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
                          const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding, int nGlyphCount,
                          FontSubsetInfo& rInfo)
 {
-    utl::TempFile aTempFile;
+    utl::TempFileFast aTempFile;
     SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
 
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);

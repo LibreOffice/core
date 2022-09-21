@@ -49,7 +49,7 @@ typedef ::cppu::WeakImplHelper< css::io::XTempFile
 class OTempFileService : public OTempFileBase
 {
 protected:
-    std::optional<utl::TempFile> mpTempFile;
+    std::optional<utl::TempFileNamed> mpTempFile;
     std::mutex maMutex;
     SvStream* mpStream;
     bool mbRemoveFile;

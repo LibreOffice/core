@@ -484,7 +484,6 @@ void OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputS
     if ( !m_oTempFile.has_value() )
     {
         m_oTempFile.emplace();
-        m_oTempFile->EnableKillingFile();
 
         try {
             if ( xStream.is() )
@@ -550,7 +549,6 @@ void OWriteStream_Impl::FillTempGetFileName()
             else if ( !m_oTempFile.has_value() )
             {
                 m_oTempFile.emplace();
-                m_oTempFile->EnableKillingFile();
 
                 try {
                     // copy stream contents to the file

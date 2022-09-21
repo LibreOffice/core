@@ -760,9 +760,9 @@ void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& 
 ScDocShellRef ScBootstrapFixture::saveAndReload(
     ScDocShell& rShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
-    std::shared_ptr<utl::TempFile>* pTempFileOut,  const OUString* pPassword, bool bClose)
+    std::shared_ptr<utl::TempFileNamed>* pTempFileOut,  const OUString* pPassword, bool bClose)
 {
-    auto pTempFile = std::make_shared<utl::TempFile>();
+    auto pTempFile = std::make_shared<utl::TempFileNamed>();
     SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
@@ -804,7 +804,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
+ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
@@ -814,7 +814,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 n
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
+ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
@@ -826,7 +826,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
+ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
@@ -837,12 +837,12 @@ ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_
     return xDocSh;
 }
 
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat, bool bValidate )
+std::shared_ptr<utl::TempFileNamed> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat, bool bValidate )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    auto pTempFile = std::make_shared<utl::TempFile>();
+    auto pTempFile = std::make_shared<utl::TempFileNamed>();
     pTempFile->EnableKillingFile();
     SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;

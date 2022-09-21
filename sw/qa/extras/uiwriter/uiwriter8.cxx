@@ -2241,7 +2241,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
     SwWrtShell* pWrtShell
         = createSwDoc(DATA_DIRECTORY, "cross_reference_demo_bmk.odt")->GetDocShell()->GetWrtShell();
 
-    utl::TempFile tempDir(nullptr, true);
+    utl::TempFileNamed tempDir(nullptr, true);
 
     const auto aPropertyValues = comphelper::InitPropertySequence(
         { { "FileName", css::uno::Any(tempDir.GetURL() + "/test.odm") } });

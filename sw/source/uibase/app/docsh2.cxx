@@ -704,7 +704,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bSetModified = IsModified() || pSrcView->IsModified();
                     if(pSrcView->IsModified()||pSrcView->HasSourceSaved())
                     {
-                        utl::TempFile aTempFile;
+                        utl::TempFileNamed aTempFile;
                         aTempFile.EnableKillingFile();
                         pSrcView->SaveContent(aTempFile.GetURL());
                         bDone = true;

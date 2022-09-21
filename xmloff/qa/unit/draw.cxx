@@ -53,7 +53,7 @@ public:
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void save(const OUString& rFilterName, utl::TempFile& rTempFile);
+    void save(const OUString& rFilterName, utl::TempFileNamed& rTempFile);
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
 };
 
@@ -77,7 +77,7 @@ void XmloffDrawTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
-void XmloffDrawTest::save(const OUString& rFilterName, utl::TempFile& rTempFile)
+void XmloffDrawTest::save(const OUString& rFilterName, utl::TempFileNamed& rTempFile)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "textbox-loss.docx";
     getComponent() = loadFromDesktop(aURL);
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer8");
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     getComponent() = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
 
     // Prepare use of XPath
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("draw8", aTempFile);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
@@ -163,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // Export to ODP:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("impress8", aTempFile);
 
     // Check if the 12 colors are written in the XML:
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1356), rCrop.Right);
 
     // Execute ODP export:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("impress8", aTempFile);
 
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
 
     // When loading and saving that document:
     getComponent() = loadFromDesktop(aURL);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("impress8", aTempFile);
 
     // Make sure the export result has the theme reference:
@@ -372,7 +372,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     lcl_assertMetalProperties("from doc", xShape);
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // assert XML.
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     // added to ODF.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // assert XML.
@@ -444,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     // assert XML.
@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
     // Save to ODF 1.3 strict and make sure it does not produce a validation error.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save("writer8", aTempFile);
 
     SetODFDefaultVersion(nCurrentODFVersion);
@@ -576,7 +576,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     // Save to ODF. Without the fix, a file format error was produced, because attribute
     // draw:text-rotate-angle was written twice, one from TextPreRotateAngle and the other from
     // TextRotateAngle.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     // This should already catch the format error, but does not, see tdf#149567
     save("impress8", aTempFile);
     // But reload catches it.

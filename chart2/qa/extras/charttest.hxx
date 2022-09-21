@@ -116,8 +116,8 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest, pub
 public:
     ChartTest():mbSkipValidation(false) {}
     void load( std::u16string_view rDir, std::u16string_view rFileName );
-    std::shared_ptr<utl::TempFile> save( const OUString& rFileName );
-    std::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
+    std::shared_ptr<utl::TempFileNamed> save( const OUString& rFileName );
+    std::shared_ptr<utl::TempFileNamed> reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( std::u16string_view pDir, const char* pName );
     std::u16string_view getFileExtension( std::u16string_view rFileName );
 
@@ -174,22 +174,22 @@ void ChartTest::load( std::u16string_view aDir, std::u16string_view aName )
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aDir) + aName, maServiceName);
 }
 
-std::shared_ptr<utl::TempFile> ChartTest::save(const OUString& rFilterName)
+std::shared_ptr<utl::TempFileNamed> ChartTest::save(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     auto aArgs(::comphelper::InitPropertySequence({
         { "FilterName", Any(rFilterName) }
     }));
-    std::shared_ptr<utl::TempFile> pTempFile = std::make_shared<utl::TempFile>();
+    std::shared_ptr<utl::TempFileNamed> pTempFile = std::make_shared<utl::TempFileNamed>();
     pTempFile->EnableKillingFile();
     xStorable->storeToURL(pTempFile->GetURL(), aArgs);
 
     return pTempFile;
 }
 
-std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
+std::shared_ptr<utl::TempFileNamed> ChartTest::reload(const OUString& rFilterName)
 {
-    std::shared_ptr<utl::TempFile> pTempFile = save(rFilterName);
+    std::shared_ptr<utl::TempFileNamed> pTempFile = save(rFilterName);
     mxComponent->dispose();
     mxComponent = loadFromDesktop(pTempFile->GetURL(), maServiceName);
     std::cout << pTempFile->GetURL();
@@ -723,7 +723,7 @@ getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& 
 
 xmlDocUniquePtr ChartTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
 {
-    std::shared_ptr<utl::TempFile> pTempFile = save(rFilterFormat);
+    std::shared_ptr<utl::TempFileNamed> pTempFile = save(rFilterFormat);
 
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), pTempFile->GetURL());

@@ -179,7 +179,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     if( mxSrcDoc.is() && xOStm.is() )
     {
         PDFExport       aExport( mxSrcDoc, xStatusIndicator, xIH, mxContext );
-        ::utl::TempFile aTempFile;
+        ::utl::TempFileNamed aTempFile;
 
         aTempFile.EnableKillingFile();
         bRet = aExport.Export( aTempFile.GetURL(), aFilterData );

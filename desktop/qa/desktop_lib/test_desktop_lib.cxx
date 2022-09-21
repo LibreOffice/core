@@ -678,7 +678,7 @@ void DesktopLOKTest::testPaintTile()
 void DesktopLOKTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
@@ -689,7 +689,7 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     LibLODocument_Impl* pDocument = loadDoc("3page.odg");
 
     // When exporting that document to PDF, skipping the first page:
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}");
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
@@ -714,7 +714,7 @@ void DesktopLOKTest::testSaveAsJsonOptions()
 void DesktopLOKTest::testSaveAsCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
@@ -2731,7 +2731,7 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
@@ -2781,7 +2781,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
@@ -2838,7 +2838,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.docx");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
     closeDoc();
@@ -2895,7 +2895,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     Scheduler::ProcessEventsToIdle();
@@ -3105,7 +3105,7 @@ void DesktopLOKTest::testCalcSaveAs()
     Scheduler::ProcessEventsToIdle();
 
     // Save as a new file.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "ods", nullptr);
     closeDoc();

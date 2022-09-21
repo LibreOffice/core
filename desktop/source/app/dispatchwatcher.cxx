@@ -572,10 +572,10 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             OUString aOutFile
                                 = aOutFilename.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
-                            std::unique_ptr<utl::TempFile> fileForCat;
+                            std::unique_ptr<utl::TempFileNamed> fileForCat;
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
                             {
-                                fileForCat = std::make_unique<utl::TempFile>();
+                                fileForCat = std::make_unique<utl::TempFileNamed>();
                                 if (fileForCat->IsValid())
                                     fileForCat->EnableKillingFile();
                                 else

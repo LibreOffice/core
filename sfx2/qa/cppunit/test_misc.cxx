@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
     uno::Sequence<beans::PropertyValue> mimeArgs({
         beans::PropertyValue("MediaType", -1, uno::Any(OUString("application/vnd.oasis.opendocument.text")), beans::PropertyState_DIRECT_VALUE)
         });
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     xProps->storeToMedium(aTempFile.GetURL(), mimeArgs);
 
     // check that custom metadata is preserved
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 #endif
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "NoThumbnail", uno::Any(true) } }));
@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
 {
     // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     uno::Reference<lang::XComponent> xComponent
         = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");

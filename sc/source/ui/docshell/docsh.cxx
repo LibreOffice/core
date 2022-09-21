@@ -3432,11 +3432,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
     // we need a real file for this filter
 
     // put it in an empty dir
-    utl::TempFile aTmpDir(nullptr, true);
+    utl::TempFileNamed aTmpDir(nullptr, true);
     aTmpDir.EnableKillingFile();
     OUString sTmpDir = aTmpDir.GetURL();
 
-    utl::TempFile aTempInput(u"", true, u".dbf", &sTmpDir);
+    utl::TempFileNamed aTempInput(u"", true, u".dbf", &sTmpDir);
     aTempInput.EnableKillingFile();
 
     SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);

@@ -35,7 +35,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
 {
-    utl::TempFile aTempFile(nullptr, true);
+    utl::TempFileNamed aTempFile(nullptr, true);
     aTempFile.EnableKillingFile();
     OUString aTempURL = aTempFile.GetURL();
     BitmapChecksum aChecksum(0);

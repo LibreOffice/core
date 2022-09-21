@@ -191,7 +191,7 @@ OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUStrin
     // removed in Desktop::RemoveTemporaryDirectory() if soffice process gets closed before the
     // mailer finishes using them.
 
-    maAttachmentFiles.emplace_back(std::make_unique<utl::TempFile>(&GetBaseTempDirURL()));
+    maAttachmentFiles.emplace_back(std::make_unique<utl::TempFileNamed>(&GetBaseTempDirURL()));
     maAttachmentFiles.back()->EnableKillingFile();
     INetURLObject aFilePathObj(maAttachmentFiles.back()->GetURL());
     OUString sNewAttachmentURL = aFilePathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);

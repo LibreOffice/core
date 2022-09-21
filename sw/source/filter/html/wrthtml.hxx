@@ -63,7 +63,7 @@ class SwHTMLPosFlyFrames;
 class SwTextFootnote;
 enum class HtmlPosition;
 enum class HtmlTokenId : sal_Int16;
-namespace utl { class TempFile; }
+namespace utl { class TempFileNamed; }
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 
@@ -405,7 +405,7 @@ public:
     bool mbSkipHeaderFooter : 1;
     bool mbEmbedImages : 1;
     /// Temporary base URL for paste of images.
-    std::unique_ptr<utl::TempFile> mpTempBaseURL;
+    std::unique_ptr<utl::TempFileNamed> mpTempBaseURL;
     /// If XHTML markup should be written instead of HTML.
     bool mbXHTML = false;
     /// XML namespace, in case of XHTML.

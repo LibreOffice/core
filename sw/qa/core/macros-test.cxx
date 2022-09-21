@@ -383,7 +383,7 @@ void SwMacrosTest::testFdo68983()
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
     Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     Sequence<beans::PropertyValue> desc( comphelper::InitPropertySequence({
             { "FilterName", Any(OUString("writer8")) }
@@ -415,7 +415,7 @@ void SwMacrosTest::testFdo87530()
     Reference<css::lang::XComponent> xComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
 
     Sequence<beans::PropertyValue> desc( comphelper::InitPropertySequence({

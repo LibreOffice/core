@@ -96,7 +96,7 @@ class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTes
     };
 
     uno::Reference<lang::XComponent> mxComponent;
-    utl::TempFile maTempFile;
+    utl::TempFileNamed maTempFile;
 
 protected:
     void load(std::u16string_view pDir, const char* pName)

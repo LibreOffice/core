@@ -110,7 +110,7 @@ protected:
     const char* mpFilter;
 
     sal_uInt32 mnStartTime;
-    utl::TempFile maTempFile;
+    utl::TempFileNamed maTempFile;
     SvMemoryStream maMemory; ///< Underlying memory for parsed PDF files.
     bool mbExported; ///< Does maTempFile already contain something useful?
     bool mbFontNameWYSIWYG;
@@ -338,7 +338,7 @@ protected:
     void reload(const char* pFilter, const char* filename, const char* pPassword = nullptr);
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
-    void save(const OUString& aFilterName, utl::TempFile& rTempFile);
+    void save(const OUString& aFilterName, utl::TempFileNamed& rTempFile);
 
     /// Combines load() and save().
     void loadAndSave(const char* pName);

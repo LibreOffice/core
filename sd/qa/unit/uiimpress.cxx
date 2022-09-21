@@ -72,7 +72,8 @@ public:
     void insertStringToObject(sal_uInt16 nObj, const std::u16string_view& rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
     FileFormat* getFormat(sal_Int32 nExportType);
-    void save(sd::DrawDocShell* pShell, FileFormat const* pFormat, utl::TempFile const& rTempFile);
+    void save(sd::DrawDocShell* pShell, FileFormat const* pFormat,
+              utl::TempFileNamed const& rTempFile);
 };
 
 void SdUiImpressTest::setUp()
@@ -174,7 +175,7 @@ FileFormat* SdUiImpressTest::getFormat(sal_Int32 nExportType)
 }
 
 void SdUiImpressTest::save(sd::DrawDocShell* pShell, FileFormat const* pFormat,
-                           utl::TempFile const& rTempFile)
+                           utl::TempFileNamed const& rTempFile)
 {
     SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
     if (std::strcmp(pFormat->pName, "odg") == 0)
@@ -1118,7 +1119,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     dispatchCommand(mxComponent, ".uno:OutlineFont", {});
 
     // Save it as PPTX and load it again.
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     save(dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDocShell(), getFormat(PPTX),
          aTempFile);
     mxComponent = loadFromDesktop(aTempFile.GetURL());

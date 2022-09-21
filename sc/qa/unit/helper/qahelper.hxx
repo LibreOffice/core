@@ -31,7 +31,7 @@
 #include <memory>
 #include <tuple>
 
-namespace utl { class TempFile; }
+namespace utl { class TempFileNamed; }
 
 #define ODS_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PASSWORDTOMODIFY)
 #define XLS_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PASSWORDTOMODIFY | SfxFilterFlags::PREFERED)
@@ -219,13 +219,13 @@ public:
 
     ScDocShellRef saveAndReload(ScDocShell& rShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
-    std::shared_ptr<utl::TempFile>* pTempFile = nullptr, const OUString* pPassword = nullptr, bool bClose = true );
+    std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr, const OUString* pPassword = nullptr, bool bClose = true );
 
-    ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
-    ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
-    ScDocShellRef saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
+    ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr );
+    ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr );
+    ScDocShellRef saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr );
 
-    std::shared_ptr<utl::TempFile> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
+    std::shared_ptr<utl::TempFileNamed> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
 
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
 };

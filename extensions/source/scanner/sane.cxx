@@ -698,7 +698,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 if( nStatus != SANE_STATUS_GOOD )
                     bSynchronousRead = true;
             }
-            utl::TempFile aFrame;
+            utl::TempFileNamed aFrame;
             aFrame.EnableKillingFile();
             FILE* pFrame = fopen(OUStringToOString(aFrame.GetFileName(), osl_getThreadTextEncoding()).getStr(), "w+b");
             if( ! pFrame )

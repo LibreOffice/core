@@ -114,7 +114,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -182,7 +182,7 @@ void Test::testLinkedGraphicRT()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -248,7 +248,7 @@ void Test::testImageWithSpecialID()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -343,7 +343,7 @@ void Test::testGraphicShape()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -447,7 +447,7 @@ void Test::testMultipleIdenticalGraphics()
         // Export the document and import again for a check
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -505,7 +505,7 @@ void Test::testCharHighlightBody()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -601,7 +601,7 @@ void Test::testCharStyleHighlight()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -675,7 +675,7 @@ void Test::testCharHighlightODF()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer8");
 
-    utl::TempFile aTempFile;
+    utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
@@ -790,7 +790,7 @@ void Test::testMSCharBackgroundEditing()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -854,7 +854,7 @@ void Test::testCharBackgroundToHighlighting()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -1064,7 +1064,7 @@ void Test::testNestedFieldmark()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName.first;
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         mxComponent->dispose();
 
@@ -1133,7 +1133,7 @@ void Test::testODF13()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OUString("writer8");
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
@@ -1169,7 +1169,7 @@ void Test::testODF13()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OUString("writer8");
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
@@ -1205,7 +1205,7 @@ void Test::testODF13()
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OUString("writer8");
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
@@ -1268,7 +1268,7 @@ void Test::testRedlineFlags()
 
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(),
                 aMediaDescriptor.getAsConstPropertyValueList());
@@ -1351,7 +1351,7 @@ void Test::testBulletAsImage()
         aMediaDescriptor["FilterName"] <<= rFilterName;
 
 
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
@@ -1440,7 +1440,7 @@ void Test::testTextFormField()
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -1503,7 +1503,7 @@ void Test::testCheckBoxFormField()
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -1566,7 +1566,7 @@ void Test::testDropDownFormField()
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -1651,7 +1651,7 @@ void Test::testDateFormField()
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
@@ -1845,7 +1845,7 @@ void Test::testDateFormFieldCharacterFormatting()
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFile aTempFile;
+        utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);

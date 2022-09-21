@@ -92,7 +92,7 @@ void MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xCompon
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
-std::unique_ptr<SvStream> MacrosTest::parseExportStream(const utl::TempFile& rTempFile,
+std::unique_ptr<SvStream> MacrosTest::parseExportStream(const utl::TempFileNamed& rTempFile,
                                                         const OUString& rStreamName)
 {
     const OUString aUrl = rTempFile.GetURL();

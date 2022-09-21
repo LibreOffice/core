@@ -269,7 +269,7 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
         if ( bRet )
         {
             // now we need to copy the stream
-            ::utl::TempFile aTmp;
+            ::utl::TempFileNamed aTmp;
             _rAsyncDrop.aUrl = aTmp.GetURL();
             ::tools::SvRef<SotTempStream> aNew = new SotTempStream( aTmp.GetFileName() );
             _rAsyncDrop.aHtmlRtfStorage->Seek(STREAM_SEEK_TO_BEGIN);
