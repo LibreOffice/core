@@ -311,8 +311,8 @@ INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExt
 INetContentType INetContentTypes::GetContentTypeFromURL(std::u16string_view rURL)
 {
     INetContentType eTypeID = CONTENT_TYPE_UNKNOWN;
-    sal_Int32 nIdx{ 0 };
-    OUString aToken( o3tl::getToken(rURL, 0, ':', nIdx) );
+    std::size_t nIdx{ 0 };
+    OUString aToken( o3tl::getToken(rURL, u':', nIdx) );
     if (!aToken.isEmpty())
     {
         if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))
@@ -342,13 +342,13 @@ INetContentType INetContentTypes::GetContentTypeFromURL(std::u16string_view rURL
             eTypeID = CONTENT_TYPE_TEXT_HTML;
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_PRIVATE))
         {
-            aToken = o3tl::getToken(rURL, 0, '/', nIdx);
+            aToken = o3tl::getToken(rURL, u'/', nIdx);
             if (aToken == "factory")
             {
-                aToken = o3tl::getToken(rURL, 0, '/', nIdx);
+                aToken = o3tl::getToken(rURL, u'/', nIdx);
                 if (aToken == "swriter")
                 {
-                    aToken = o3tl::getToken(rURL, 0, '/', nIdx);
+                    aToken = o3tl::getToken(rURL, u'/', nIdx);
                     eTypeID = aToken == "web" ?
                                   CONTENT_TYPE_APP_VND_WRITER_WEB :
                               aToken == "GlobalDocument" ?
@@ -379,7 +379,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(std::u16string_view rURL
             eTypeID = CONTENT_TYPE_APP_MACRO;
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_DATA))
         {
-            aToken = o3tl::getToken(rURL, 0, ',', nIdx);
+            aToken = o3tl::getToken(rURL, u',', nIdx);
             eTypeID = GetContentType(aToken);
         }
     }
