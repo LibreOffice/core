@@ -141,7 +141,6 @@ namespace svgio::svgreader
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             void decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
-            void addGap();
             void concatenate(std::u16string_view rText);
 
             /// Text content

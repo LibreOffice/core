@@ -538,11 +538,6 @@ namespace svgio::svgreader
             maText = xmlSpaceHandling(maText, XmlSpace::Default == getXmlSpace());
         }
 
-        void SvgCharacterNode::addGap()
-        {
-            maText += " ";
-        }
-
         void SvgCharacterNode::concatenate(std::u16string_view rText)
         {
             maText += rText;

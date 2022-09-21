@@ -55,7 +55,7 @@ namespace svgio::svgreader
 
 namespace
 {
-    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgCharacterNode* pLast)
+    void whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode)
     {
         if(pNode)
         {
@@ -75,41 +75,6 @@ namespace
                             // clean whitespace in text span
                             svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
                             pCharNode->whiteSpaceHandling();
-
-                            // pCharNode may have lost all text. If that's the case, ignore
-                            // as invalid character node
-                            if(!pCharNode->getText().isEmpty())
-                            {
-                                if(pLast)
-                                {
-                                    bool bAddGap(true);
-                                    static bool bNoGapsForBaselineShift(true); // loplugin:constvars:ignore
-
-                                    if(bNoGapsForBaselineShift)
-                                    {
-                                        // With this option a baseline shift between two char parts ('words')
-                                        // will not add a space 'gap' to the end of the (non-last) word. This
-                                        // seems to be the standard behaviour, see last bugdoc attached #122524#
-                                        const svgio::svgreader::SvgStyleAttributes* pStyleLast = pLast->getSvgStyleAttributes();
-                                        const svgio::svgreader::SvgStyleAttributes* pStyleCurrent = pCandidate->getSvgStyleAttributes();
-
-                                        if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
-                                        {
-                                            bAddGap = false;
-                                        }
-                                    }
-
-                                    // add in-between whitespace (single space) to last
-                                    // known character node
-                                    if(bAddGap)
-                                    {
-                                        pLast->addGap();
-                                    }
-                                }
-
-                                // remember new last corrected character node
-                                pLast = pCharNode;
-                            }
                             break;
                         }
                         case SVGToken::Tspan:
@@ -117,7 +82,7 @@ namespace
                         case SVGToken::Tref:
                         {
                             // recursively clean whitespaces in subhierarchy
-                            pLast = whiteSpaceHandling(pCandidate, pLast);
+                            whiteSpaceHandling(pCandidate);
                             break;
                         }
                         default:
@@ -129,9 +94,8 @@ namespace
                 }
             }
         }
-
-        return pLast;
     }
+
 } // end anonymous namespace
 
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
@@ -548,7 +512,7 @@ namespace
             if(pWhitespaceCheck)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pWhitespaceCheck, nullptr);
+                whiteSpaceHandling(pWhitespaceCheck);
             }
         }
 
