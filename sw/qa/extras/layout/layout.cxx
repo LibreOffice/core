@@ -3807,6 +3807,55 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
     aTempFile.EnableKillingFile();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150616)
+{
+    discardDumpedLayout();
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    OUString const pName("in_056132_mod.odt");
+
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + pName);
+
+    // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
+    // does *not* forward initial VCL Window Resize and thereby triggers a
+    // layout which does not happen on soffice --convert-to pdf.
+    std::vector<beans::PropertyValue> aFilterOptions = {
+        { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
+    };
+
+    std::cout << pName << ":\n";
+
+    // inline the loading because currently properties can't be passed...
+    mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
+                                  comphelper::containerToSequence(aFilterOptions));
+    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), props);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // this one was 0 height
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/LineBreak", "Line",
+                "Important information here!");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/infos/bounds", "height",
+                "253");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[2]/infos/bounds", "top",
+                "7925");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/LineBreak", "Line",
+                "xxx 111 ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/infos/bounds", "height",
+                "697");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/infos/bounds", "top",
+                "8178");
+
+    aTempFile.EnableKillingFile();
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "btlr-cell.odt");

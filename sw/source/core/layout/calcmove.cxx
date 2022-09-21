@@ -1727,13 +1727,6 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // an unsolvable problem: We ignore it with all our power.
         if ( !bMoveable || IsUndersized() )
         {
-            if( !bMoveable && IsInTab() )
-            {
-                tools::Long nDiff = -aRectFnSet.BottomDist( getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()) );
-                tools::Long nReal = GetUpper()->Grow( nDiff );
-                if( nReal )
-                    continue;
-            }
             break;
         }
 
