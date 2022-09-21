@@ -66,8 +66,9 @@ using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::script::XEventAttacherManager;
 
-XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot ) :
-    XclExpRoot( rRoot )
+XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot )
+    : XclExpRoot(rRoot)
+    , mpPicStrm(nullptr)
 {
     SetBaseURI( GetMedium().GetBaseURL( true ) );
 }
