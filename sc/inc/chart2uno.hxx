@@ -147,10 +147,6 @@ private:
     ScDocument*                 m_pDocument;
     SfxItemPropertySet          m_aPropSet;
     bool                        m_bIncludeHiddenCells;
-    css::uno::Reference< css::chart2::data::XDataSource > mxCachedDataSource;
-    css::uno::Sequence< css::beans::PropertyValue > maCachedArguments;
-    css::uno::Sequence< css::beans::PropertyValue > maCreateDataSourceArguments;
-    css::uno::Reference< css::chart2::data::XDataSource > mxCreatedDataSource;
 };
 
 // DataSource
