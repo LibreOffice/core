@@ -1362,7 +1362,7 @@ namespace svgio::svgreader
             }
         }
 
-        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew)
+        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew, bool bRemove)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1379,7 +1379,11 @@ namespace svgio::svgreader
                     if(nPattern == aChar)
                     {
                         bChanged = true;
-                        aBuffer.append(nNew);
+
+                        if(!bRemove)
+                        {
+                            aBuffer.append(nNew);
+                        }
                     }
                     else
                     {
@@ -1503,10 +1507,10 @@ namespace svgio::svgreader
             const sal_Unicode aSpace(' ');
 
             // remove all newline characters
-            OUString aRetval(convert(rCandidate, aNewline, aSpace));
+            OUString aRetval(convert(rCandidate, aNewline, aSpace, bIsDefault));
 
             // convert tab to space
-            aRetval = convert(aRetval, aTab, aSpace);
+            aRetval = convert(aRetval, aTab, aSpace, false);
 
             // strip of all leading and trailing spaces
             aRetval = aRetval.trim();

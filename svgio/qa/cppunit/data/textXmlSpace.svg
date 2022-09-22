@@ -4,9 +4,13 @@
   <text y="30" xml:space="default">a	b</text>
   <text y="50" xml:space="default">a
   b</text>
-  <text y="70" xml:space="preserve">a  b</text>
-  <text y="90" xml:space="preserve">a	b</text>
-  <text y="110" xml:space="preserve">a
+  <text y="70" xml:space="default">a
+b</text>
+  <text y="90" xml:space="preserve">a  b</text>
+  <text y="110" xml:space="preserve">a	b</text>
+  <text y="130" xml:space="preserve">a
   b</text>
+  <text y="150" xml:space="preserve">a
+b</text>
 </svg>
 

@@ -535,14 +535,7 @@ namespace svgio::svgreader
 
         void SvgCharacterNode::whiteSpaceHandling()
         {
-            if (XmlSpace::Default == getXmlSpace())
-            {
-                maText = xmlSpaceHandling(maText, true);
-            }
-            else
-            {
-                maText = xmlSpaceHandling(maText, false);
-            }
+            maText = xmlSpaceHandling(maText, XmlSpace::Default == getXmlSpace());
         }
 
         void SvgCharacterNode::addGap()
