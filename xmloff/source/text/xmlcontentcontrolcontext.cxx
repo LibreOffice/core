@@ -125,6 +125,14 @@ void XMLContentControlContext::startFastElement(
                 }
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_COMBOBOX):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bComboBox = bTmp;
+                }
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -214,6 +222,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (m_bPlainText)
     {
         xPropertySet->setPropertyValue("PlainText", uno::Any(m_bPlainText));
+    }
+
+    if (m_bComboBox)
+    {
+        xPropertySet->setPropertyValue("ComboBox", uno::Any(m_bComboBox));
     }
 }
 

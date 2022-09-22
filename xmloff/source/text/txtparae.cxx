@@ -4027,6 +4027,15 @@ void XMLTextParagraphExport::ExportContentControl(
             sax::Converter::convertBool(aBuffer, bPlainText);
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PLAIN_TEXT, aBuffer.makeStringAndClear());
         }
+
+        bool bComboBox = false;
+        xPropertySet->getPropertyValue("ComboBox") >>= bComboBox;
+        if (bComboBox)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bComboBox);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_COMBOBOX, aBuffer.makeStringAndClear());
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
