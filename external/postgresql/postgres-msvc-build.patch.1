@@ -42,7 +42,7 @@ Also Cygwin perl has $Config{osname} different from MSWin32, and why even check 
  	{
  		# Examine CL help output to determine if we are in 32 or 64-bit mode.
  		my $output = `cl /? 2>&1`;
-@@ -1081,7 +1081,7 @@
+@@ -1100,7 +1100,7 @@
  		}
  		if ($fld ne "")
  		{
@@ -53,7 +53,7 @@ Also Cygwin perl has $Config{osname} different from MSWin32, and why even check 
  EndProject
 --- postgresql/src/tools/msvc/VSObjectFactory.pm.orig	2021-01-19 18:06:42.633421700 +0100
 +++ postgresql/src/tools/msvc/VSObjectFactory.pm	2021-01-19 18:06:28.663523200 +0100
-@@ -111,7 +111,7 @@
+@@ -131,7 +131,7 @@
  
  sub DetermineVisualStudioVersion
  {
@@ -85,7 +85,7 @@ Also Cygwin perl has $Config{osname} different from MSWin32, and why even check 
  	my $sslout = `$opensslcmd`;
  
  	$? >> 8 == 0
-@@ -964,8 +964,8 @@
+@@ -967,8 +967,8 @@
  				# On both Win32 and Win64 the same library
  				# names are used without a debugging context.
  				$dbgsuffix     = 0;
@@ -96,7 +96,7 @@ Also Cygwin perl has $Config{osname} different from MSWin32, and why even check 
  			}
  
  			$proj->AddLibrary($self->{options}->{openssl} . $libsslpath,
-@@ -990,9 +990,9 @@
+@@ -993,9 +993,9 @@
  				# to be here, so don't ask for it in last
  				# parameter.
  				$proj->AddLibrary(
