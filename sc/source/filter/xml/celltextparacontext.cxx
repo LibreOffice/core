@@ -77,8 +77,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
             break;
         default:
             SAL_WARN("sc","unknown text element["<<nElement<<"]["<<SvXMLImport::getNameFromToken(nElement )<<"] lost");
-            assert(false && "unknown cell text: element");
-            ;
     }
 
     return nullptr;
