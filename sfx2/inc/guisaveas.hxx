@@ -31,7 +31,14 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
+
+#include <sfx2/bindings.hxx>
 #include <sfx2/signaturestate.hxx>
+
+#include <svtools/dialogclosedlistener.hxx>
+
+#include <tools/urlobj.hxx>
 
 
 namespace com::sun::star::document { class XDocumentProperties; }
@@ -48,9 +55,31 @@ private:
     css::uno::Reference< css::container::XContainerQuery > m_xFilterQuery;
     css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
 
+    std::shared_ptr<ModelData_Impl> m_xModelData;
+    css::uno::Sequence< css::beans::PropertyValue > m_aArgsSequence;
+
     css::uno::Reference< css::container::XNameAccess > const & GetFilterConfiguration();
     css::uno::Reference< css::container::XContainerQuery > const & GetFilterQuery();
     css::uno::Reference< css::frame::XModuleManager2 > const & GetModuleManager();
+
+    bool m_xDialogUsed;
+    bool m_bRemote;
+    bool m_bPreselectPassword;
+    bool m_bDialogUsed;
+    bool m_bSetStandardName;
+    sal_Int16 m_nStoreMode;
+
+    DECL_LINK(FilterDialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
+
+    static bool FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
+                             ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
+                             css::uno::Sequence< css::beans::PropertyValue >& aFilterProps,
+                             bool bSetStandardName, bool bPreselectPassword, bool bDialogUsed,
+                             std::u16string_view aFilterFromMediaDescr, std::u16string_view aOldFilterName,
+                             css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
+                             OUString aFilterName);
+
+    void CallFinishGUIStoreModel();
 
 public:
     SfxStoringHelper();
@@ -60,7 +89,8 @@ public:
                     std::u16string_view aSlotName,
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
-                    SignatureState nDocumentSignatureState );
+                    SignatureState nDocumentSignatureState,
+                    bool bIsAsync );
 
     static bool CheckFilterOptionsAppearance(
                     const css::uno::Reference< css::container::XNameAccess >& xFilterCFG,

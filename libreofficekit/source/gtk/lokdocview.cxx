@@ -1486,6 +1486,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_PRINT_RANGES:
     case LOK_CALLBACK_FONTS_MISSING:
     case LOK_CALLBACK_MEDIA_SHAPE:
+    case LOK_CALLBACK_EXPORT_FILE:
     {
         // TODO: Implement me
         break;

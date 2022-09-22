@@ -40,6 +40,7 @@ service PDFDialog
         "officecfg/registry/schema/org/openoffice/Office/Common.xcs"
     */
 
+    interface ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog;
 };
 
 
