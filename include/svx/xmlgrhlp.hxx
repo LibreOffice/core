@@ -70,7 +70,7 @@ private:
     SVX_DLLPRIVATE SvxGraphicHelperStream_Impl
                                             ImplGetGraphicStream( const OUString& rPictureStorageName,
                                                       const OUString& rPictureStreamName );
-    SVX_DLLPRIVATE static OUString      ImplGetGraphicMimeType( const OUString& rFileName );
+    SVX_DLLPRIVATE static OUString      ImplGetGraphicMimeType( std::u16string_view rFileName );
     SVX_DLLPRIVATE Graphic                  ImplReadGraphic( const OUString& rPictureStorageName,
                                                  const OUString& rPictureStreamName );
 

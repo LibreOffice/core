@@ -483,11 +483,11 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     return aRet;
 }
 
-OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
+OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( std::u16string_view rFileName )
 {
-    if( ( rFileName.getLength() >= 4 ) && ( rFileName[ rFileName.getLength() - 4 ] == '.' ) )
+    if( ( rFileName.size() >= 4 ) && ( rFileName[ rFileName.size() - 4 ] == '.' ) )
     {
-        const OString aExt(OUStringToOString(rFileName.subView(rFileName.getLength() - 3),
+        const OString aExt(OUStringToOString(rFileName.substr(rFileName.size() - 3),
             RTL_TEXTENCODING_ASCII_US));
         return comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension( aExt );
     }

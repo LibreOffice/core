@@ -259,7 +259,7 @@ private:
     static void AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family);
 
     /** Reads the style family from a style name to which the family has been appended. */
-    static SfxStyleFamily ReadFamilyFromStyleName(const OUString& styleName);
+    static SfxStyleFamily ReadFamilyFromStyleName(std::u16string_view styleName);
 
 protected:
     bool ImpCanConvTextToCurve() const;

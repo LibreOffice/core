@@ -955,7 +955,7 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
     }
 }
 
-void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
+void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGradient)
 {
     XGradient aXGradient = XGradient::fromJSON(sJSONGradient);
     css::awt::Gradient aGradient = aXGradient.toGradientUNO();

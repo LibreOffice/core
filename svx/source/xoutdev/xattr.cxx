@@ -2066,10 +2066,10 @@ namespace
         return css::awt::GradientStyle_LINEAR;
     }
 
-    StringMap lcl_jsonToStringMap(const OUString& rJSON)
+    StringMap lcl_jsonToStringMap(std::u16string_view rJSON)
     {
         StringMap aArgs;
-        if (rJSON.getLength() && rJSON[0] != '\0')
+        if (rJSON.size() && rJSON[0] != '\0')
         {
             std::stringstream aStream(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US).getStr());
             boost::property_tree::ptree aTree;
@@ -2096,7 +2096,7 @@ namespace
     }
 }
 
-XGradient XGradient::fromJSON(const OUString& rJSON)
+XGradient XGradient::fromJSON(std::u16string_view rJSON)
 {
     StringMap aMap(lcl_jsonToStringMap(rJSON));
     return lcl_buildGradientFromStringMap(aMap);

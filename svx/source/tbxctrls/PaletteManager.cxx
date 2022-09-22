@@ -226,7 +226,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             std::set<Color> aColors = pDocSh->GetDocColors();
             mnColorCount = aColors.size();
             rColorSet.Clear();
-            rColorSet.addEntriesForColorSet(aColors, SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
+            rColorSet.addEntriesForColorSet(aColors, OUStringConcatenation(SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " ") );
         }
     }
     else

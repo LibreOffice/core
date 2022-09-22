@@ -504,7 +504,7 @@ private:
     void executeDispatch_LOKSetTextSelection(int nType, int nX, int nY);
     void executeDispatch_LOKPieSegmentDragging(int nOffset);
     void executeDispatch_FillColor(sal_uInt32 nColor);
-    void executeDispatch_FillGradient(OUString sJSONGradient);
+    void executeDispatch_FillGradient(std::u16string_view sJSONGradient);
     void executeDispatch_LineColor(sal_uInt32 nColor);
     void executeDispatch_LineWidth(sal_uInt32 nWidth);
 

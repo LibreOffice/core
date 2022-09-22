@@ -1124,7 +1124,7 @@ void SAL_CALL ChartController::dispatch(
     }
     else if(aCommand.startsWith("FillGradient"))
     {
-        this->executeDispatch_FillGradient(aCommand.copy(aCommand.indexOf('=') + 1));
+        this->executeDispatch_FillGradient(aCommand.subView(aCommand.indexOf('=') + 1));
     }
     else if(aCommand == "Paste")
         this->executeDispatch_Paste();
