@@ -1098,8 +1098,7 @@ public:
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    mutable Any                             m_aOuterValue;
-    mutable bool                            m_bDetectedRangeSegmentation { false };
+    mutable Any                                 m_aOuterValue;
 };
 
 }
@@ -1153,19 +1152,15 @@ Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPro
     bool bHasCategories = true;
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
-    if (!m_bDetectedRangeSegmentation)
+    if( DataSourceHelper::detectRangeSegmentation(
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
+            , bFirstCellAsLabel, bHasCategories ) )
     {
-        if( DataSourceHelper::detectRangeSegmentation(
-                m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
-                , bFirstCellAsLabel, bHasCategories ) )
-        {
-            css::chart::ChartDataRowSource eChartDataRowSource = css::chart::ChartDataRowSource_ROWS;
-            if(bUseColumns)
-                eChartDataRowSource = css::chart::ChartDataRowSource_COLUMNS;
+        css::chart::ChartDataRowSource eChartDataRowSource = css::chart::ChartDataRowSource_ROWS;
+        if(bUseColumns)
+            eChartDataRowSource = css::chart::ChartDataRowSource_COLUMNS;
 
-            m_aOuterValue <<= eChartDataRowSource;
-        }
-        m_bDetectedRangeSegmentation = true;
+        m_aOuterValue <<= eChartDataRowSource;
     }
 
     return m_aOuterValue;
