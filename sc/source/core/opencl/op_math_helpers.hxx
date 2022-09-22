@@ -117,12 +117,12 @@ const char is_representable_integerDecl[] =  "int is_representable_integer(doubl
 const char is_representable_integer[] =
 "int is_representable_integer(double a) {\n"
 "    long kMaxInt = (1L << 53) - 1;\n"
-"    if (a <= as_double(kMaxInt))\n"
+"    if (a <= (double)kMaxInt)\n"
 "    {\n"
-"        long nInt = as_long(a);\n"
+"        long nInt = (long)a;\n"
 "        double fInt;\n"
 "        return (nInt <= kMaxInt &&\n"
-"                (!((fInt = as_double(nInt)) < a) && !(fInt > a)));\n"
+"                (!((fInt = (double)nInt) < a) && !(fInt > a)));\n"
 "    }\n"
 "    return 0;\n"
 "}\n";
