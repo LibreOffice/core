@@ -950,7 +950,8 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(m_pSdtHelper->GetUncheckedState()));
     }
 
-    if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)
+    if (m_pSdtHelper->getControlType() == SdtControlType::dropDown
+        || m_pSdtHelper->getControlType() == SdtControlType::comboBox)
     {
         std::vector<OUString>& rDisplayTexts = m_pSdtHelper->getDropDownDisplayTexts();
         std::vector<OUString>& rValues = m_pSdtHelper->getDropDownItems();
@@ -967,6 +968,10 @@ void DomainMapper_Impl::PopSdt()
                 pItems[i] = aItem;
             }
             xContentControlProps->setPropertyValue("ListItems", uno::Any(aItems));
+            if (m_pSdtHelper->getControlType() == SdtControlType::comboBox)
+            {
+                xContentControlProps->setPropertyValue("ComboBox", uno::Any(true));
+            }
         }
     }
 

@@ -209,7 +209,8 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
 
 void SdtHelper::createDropDownControl()
 {
-    assert(getControlType() == SdtControlType::dropDown);
+    assert(getControlType() == SdtControlType::dropDown
+           || getControlType() == SdtControlType::comboBox);
 
     const bool bDropDown
         = officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::get();

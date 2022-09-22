@@ -1101,6 +1101,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case SdtControlType::richText:
                     case SdtControlType::checkBox:
                     case SdtControlType::dropDown:
+                    case SdtControlType::comboBox:
                     case SdtControlType::picture:
                     case SdtControlType::datePicker:
                         m_pImpl->PopSdt();
@@ -1127,6 +1128,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             switch (m_pImpl->m_pSdtHelper->getControlType())
             {
                 case SdtControlType::dropDown:
+                case SdtControlType::comboBox:
                     m_pImpl->m_pSdtHelper->createDropDownControl();
                     break;
                 case SdtControlType::plainText:
@@ -2723,8 +2725,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
     }
     break;
-    case NS_ooxml::LN_CT_SdtPr_dropDownList:
     case NS_ooxml::LN_CT_SdtPr_comboBox:
+    {
+        m_pImpl->m_pSdtHelper->setControlType(SdtControlType::comboBox);
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties)
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtPr_dropDownList:
     {
         m_pImpl->m_pSdtHelper->setControlType(SdtControlType::dropDown);
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -3758,7 +3767,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     }
 
     bool bNewLine = len == 1 && (sText[0] == 0x0d || sText[0] == 0x07);
-    if (m_pImpl->GetSdtStarts().empty() && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::dropDown)
+    if (m_pImpl->GetSdtStarts().empty()
+        && (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::dropDown
+            || m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::comboBox))
     {
         // Block, cell or row SDT.
         if (bNewLine)
@@ -3813,7 +3824,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 pContext = m_pImpl->GetTopFieldContext()->getProperties();
 
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-            if (m_pImpl->GetSdtStarts().empty() || m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown)
+            if (m_pImpl->GetSdtStarts().empty()
+                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown
+                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::comboBox))
             {
                 pContext->Insert(PROP_SDTPR, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
             }
@@ -3822,7 +3835,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         {
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             if (m_pImpl->GetSdtStarts().empty()
-                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::richText))
+                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown
+                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::comboBox
+                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::richText))
             {
                 m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
                         uno::Any(aGrabBag), true, PARA_GRAB_BAG);

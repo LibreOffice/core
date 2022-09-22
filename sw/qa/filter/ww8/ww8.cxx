@@ -11,6 +11,10 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <docsh.hxx>
+#include <formatcontentcontrol.hxx>
+#include <wrtsh.hxx>
+
 namespace
 {
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/filter/ww8/data/";
@@ -80,6 +84,28 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
     // - XPath '//w:sdt/w:sdtPr/w:text' number of nodes is incorrect
     // i.e. the plain text content control was turned into a rich text one on export.
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
+{
+    // Given a document with a combo box content control around a text portion:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//w:sdt/w:sdtPr/w:comboBox' number of nodes is incorrect
+    // i.e. the combo box content control was turned into a drop-down one on export.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:comboBox", 1);
 }
 }
 
