@@ -9,9 +9,6 @@
 
 #pragma once
 
-const char SCdEpsilonDecl[] =
-"constant double SCdEpsilon = 1.0E-7;\n";
-
 const char GetPMTDecl[] =
 "double GetPMT( double fRate, double fNper, double fPv, double fFv, bool bPayInAdvance);\n";
 
@@ -98,25 +95,6 @@ const char DaysInMonthDecl[] =
 const char DaysInMonth[] =
 "int DaysInMonth( int nMonth, int nYear )\n"
 "{\n"
-"    int aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,\n"
-"                31, 31, 30, 31, 30, 31 };\n"
-"\n"
-"    if ( nMonth != 2 )\n"
-"        return aDaysInMonth[nMonth-1];\n"
-"    else\n"
-"    {\n"
-"        if ( IsLeapYear(nYear) )\n"
-"            return aDaysInMonth[nMonth-1] + 1;\n"
-"        else\n"
-"            return aDaysInMonth[nMonth-1];\n"
-"    }\n"
-"}\n";
-const char DaysInMonth_newDecl[] =
-"int DaysInMonth( int nMonth, int nYear );\n";
-
-const char DaysInMonth_new[] =
-"int DaysInMonth( int nMonth, int nYear )\n"
-"{\n"
 "    int tmp = 0;\n"
 "    switch(nMonth)\n"
 "    {\n"
@@ -145,77 +123,14 @@ const char DaysInMonth_new[] =
 "    return tmp;\n"
 "}\n";
 
-const char DaysToDateDecl[] =
-"void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear );\n";
-
-const char DaysToDate[] =
-"void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear )\n"
-"{\n"
-"\n"
-"    int   nTempDays;\n"
-"    int   i = 0;\n"
-"    bool    bCalc;\n"
-
-"    do\n"
-"    {\n"
-"        nTempDays = nDays;\n"
-"        *rYear = (int)((nTempDays / 365) - i);\n"
-"        nTempDays -= ((int) *rYear -1) * 365;\n"
-"        nTempDays -= (( *rYear -1) / 4) - (( *rYear -1) / 100) +"
-"((*rYear -1) / 400);\n"
-"        bCalc = false;\n"
-"        if ( nTempDays < 1 )\n"
-"        {\n"
-"            i++;\n"
-"            bCalc = true;\n"
-"        }\n"
-"        else\n"
-"        {\n"
-"            if ( nTempDays > 365 )\n"
-"            {\n"
-"                if ( (nTempDays != 366) || !IsLeapYear( *rYear ) )\n"
-"                {\n"
-"                    i--;\n"
-"                    bCalc = true;\n"
-"                }\n"
-"            }\n"
-"        }\n"
-"    }\n"
-"    while ( bCalc );\n"
-"     if(nTempDays!=0){\n"
-"      for (*rMonth = 1; (int)nTempDays > DaysInMonth( *rMonth, *rYear );"
-"*rMonth+=1)\n"
-"      {\n"
-"       nTempDays -= DaysInMonth( *rMonth, *rYear );\n"
-"      }\n"
-"      *rDay = (int)nTempDays;\n"
-"     }\n"
-"}\n";
-
 const char DateToDaysDecl[] =
 "int  DateToDays( int nDay, int nMonth, int nYear );\n";
 
 const char DateToDays[] =
 "int  DateToDays( int nDay, int nMonth, int nYear )\n"
 "{\n"
-"    int nDays = ((int)nYear-1) * 365;\n"
-"    nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);\n"
-"    for( int i = 1; i < nMonth; i++ )\n"
-"        nDays += DaysInMonth(i,nYear);\n"
-"    nDays += nDay;\n"
-"\n"
-"    return nDays;\n"
-"}\n";
-
-const char DateToDays_newDecl[] =
-"int  DateToDays_new( int nDay, int nMonth, int nYear );\n";
-
-const char DateToDays_new[] =
-"int  DateToDays_new( int nDay, int nMonth, int nYear )\n"
-"{\n"
 "    int nDays = (nYear-1) * 365;\n"
-"    nDays += (int)((nYear-1) / 4.0 - (nYear-1) / 100.0"
-"+ (nYear-1) / 400.0);\n"
+"    nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);\n"
 "    for( int i = 1; i < nMonth; i++ )\n"
 "        nDays += DaysInMonth(i,nYear);\n"
 "    nDays += nDay;\n"
@@ -230,14 +145,6 @@ const char GetNullDate[] =
 "int GetNullDate()\n"
 "{\n"
 "    return DateToDays(30,12,1899 );\n"
-"}\n";
-const char GetNullDate_newDecl[] =
-"int GetNullDate_new();\n";
-
-const char GetNullDate_new[] =
-"int GetNullDate_new()\n"
-"{\n"
-"    return DateToDays_new(30,12,1899 );\n"
 "}\n";
 
 const char ScaDateDecl[] =
@@ -512,45 +419,11 @@ const char getDiff[] =
 "}\n";
 
 const char lcl_GetcoupdaybsDecl[] =
-"int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase);\n";
-
-const char lcl_Getcoupdaybs[] =
-"int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase)\n"
-"{\n"
-"    int aDate = nMat;\n"
-"    int rDay=0,rMonth=0, rYear=0;int mDay=0,mMonth=0, mYear=0;int sDay=0,"
-"sMonth=0, sYear=0;\n"
-"    int rbLastDayMode=0, rbLastDay=0,rb30Days=0,rbUSMode=0,rnDay=0;\n"
-"    int sbLastDayMode=0, sbLastDay=0,sb30Days=0,sbUSMode=0,snDay=0;\n"
-"    ScaDate( nNullDate,aDate,nBase,&rDay,&rMonth,&rYear,&rbLastDayMode,&"
-"rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
-"    ScaDate( nNullDate,nSettle,nBase,&sDay,&sMonth,&sYear,&sbLastDayMode,&"
-"sbLastDay,&sb30Days,&sbUSMode,&snDay);\n"
-"    rYear= sYear;\n"
-"    nSettle=nSettle+nNullDate;\n"
-"    aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    if( aDate < nSettle )\n"
-"    {\n"
-"        rYear+= 1;\n"
-"        aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    }\n"
-"    while(aDate > nSettle )\n"
-"    {\n"
-"        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,-1*(12/nFreq),&rYear"
-");\n"
-"        aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    }\n"
-"    return getDiff( aDate, nSettle, rDay, rMonth, rYear, rbLastDayMode, "
-"rbLastDay, rb30Days, rbUSMode, rnDay, sDay, sMonth, sYear, sbLastDayMode,"
-"sbLastDay, sb30Days, sbUSMode, snDay);\n"
-"}\n";
-
-const char lcl_Getcoupdaybs_newDecl[] =
-"int lcl_Getcoupdaybs_new(int nNullDate,int nSettle,int nMat,int nFreq,"
+"int lcl_Getcoupdaybs(int nNullDate,int nSettle,int nMat,int nFreq,"
 "int nBase);\n";
 
-const char lcl_Getcoupdaybs_new[] =
-"int lcl_Getcoupdaybs_new(int nNullDate,int nSettle,int nMat,int nFreq,"
+const char lcl_Getcoupdaybs[] =
+"int lcl_Getcoupdaybs(int nNullDate,int nSettle,int nMat,int nFreq,"
 "int nBase)\n"
 "{\n"
 "    int aDate = nMat;\n"
@@ -564,20 +437,20 @@ const char lcl_Getcoupdaybs_new[] =
 "&rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
 "    rYear=sYear;\n"
 "    setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
-"    aDate=DateToDays_new( rnDay,rMonth,rYear);\n"
+"    aDate=DateToDays( rnDay,rMonth,rYear);\n"
 "    if(checklessthan(rYear,sYear,rMonth,sMonth,rnDay,snDay,rbLastDay,"
 "sbLastDay,rDay,sDay))\n"
 "    {\n"
 "        rYear+=1;\n"
 "        setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
-"        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
+"        aDate=DateToDays( rnDay,rMonth,rYear );\n"
 "    }\n"
 "    while(checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
 "rbLastDay,sDay,rDay))\n"
 "    {\n"
 "        double d = -1*(12/nFreq);\n"
 "        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,d,&rYear);\n"
-"        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
+"        aDate=DateToDays( rnDay,rMonth,rYear );\n"
 "    }\n"
 "    return getDiff( aDate,nSettle+nNullDate,rDay,rMonth,rYear,rbLastDayMode,"
 "rbLastDay,rb30Days,rbUSMode,rnDay,sDay,sMonth,sYear,sbLastDayMode,sbLastDay,"
@@ -593,46 +466,6 @@ const char lcl_Getcoupdays[] =
 "int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int aDate = nMat;\n"
-"    int rDay=0,rMonth=0, rYear=0;int mDay=0,mMonth=0, mYear=0;int sDay=0,"
-"sMonth=0, sYear=0;\n"
-"    int rbLastDayMode=0, rbLastDay=0,rb30Days=0,rbUSMode=0,rnDay=0;\n"
-"    int sbLastDayMode=0, sbLastDay=0,sb30Days=0,sbUSMode=0,snDay=0;\n"
-"    ScaDate( nNullDate,aDate,nBase,&rDay,&rMonth,&rYear,&rbLastDayMode,&"
-"rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
-"    ScaDate( nNullDate,nSettle,nBase,&sDay,&sMonth,&sYear,&sbLastDayMode,&"
-"sbLastDay,&sb30Days,&sbUSMode,&snDay);\n"
-"    rYear= sYear;\n"
-"    nSettle=nSettle+nNullDate;\n"
-"    aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    if( aDate < nSettle )\n"
-"    {  \n"
-"        rYear+= 1;\n"
-"        aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    }\n"
-"    while(aDate > nSettle )\n"
-"    {\n"
-"        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,-1*(12/nFreq),&rYear"
-");\n"
-"        aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    }\n"
-"    int aNextDate=aDate;int aDay=rDay,aMonth=rMonth, aYear=rYear;\n"
-"    int abLastDayMode=rbLastDayMode, abLastDay=rbLastDay,ab30Days=rb30Days,"
-"abUSMode=rbUSMode,anDay=rnDay;\n"
-"    addMonths(ab30Days,abLastDay,&anDay,aDay,&aMonth,12/nFreq,&aYear);\n"
-"    return getDiff( aDate, aNextDate, rDay, rMonth, rYear, rbLastDayMode, "
-"rbLastDay, rb30Days, rbUSMode, rnDay, aDay, aMonth, aYear, abLastDayMode,"
-"abLastDay, ab30Days, abUSMode, anDay);\n"
-"}\n";
-
-const char lcl_Getcoupdays_newDecl[] =
-"int lcl_Getcoupdays_new(int nNullDate,int nSettle, "
-"int nMat,int nFreq,int nBase);\n";
-
-const char lcl_Getcoupdays_new[] =
-"int lcl_Getcoupdays_new(int nNullDate,int nSettle, "
-"int nMat,int nFreq,int nBase)\n"
-"{\n"
-"    int aDate = nMat;\n"
 "    int rDay=0,rMonth=0, rYear=0,rbLastDayMode=0, rbLastDay=0,rb30Days=0,"
 "rbUSMode=0,rnDay=0;\n"
 "    int sDay=0,sMonth=0, sYear=0,sbLastDayMode=0, sbLastDay=0,sb30Days=0,"
@@ -643,20 +476,20 @@ const char lcl_Getcoupdays_new[] =
 "&rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
 "    rYear=sYear;\n"
 "    setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
-"    aDate=DateToDays_new( rnDay,rMonth,rYear);\n"
+"    aDate=DateToDays( rnDay,rMonth,rYear);\n"
 "    if(checklessthan(rYear,sYear,rMonth,sMonth,rnDay,snDay,rbLastDay,"
 "sbLastDay,rDay,sDay))\n"
 "    {\n"
 "        rYear+=1;\n"
 "        setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
-"        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
+"        aDate=DateToDays( rnDay,rMonth,rYear );\n"
 "    }\n"
 "    while(checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
 "rbLastDay,sDay,rDay))\n"
 "    {\n"
 "        double d = -1*12/(double)nFreq;\n"
 "        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,d,&rYear);\n"
-"        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
+"        aDate=DateToDays( rnDay,rMonth,rYear );\n"
 "    }\n"
 "    int aNextDate=aDate;int aDay=rDay,aMonth=rMonth, aYear=rYear;\n"
 "    int abLastDayMode=rbLastDayMode, abLastDay=rbLastDay,ab30Days=rb30Days,"
@@ -669,51 +502,10 @@ const char lcl_Getcoupdays_new[] =
 "}\n";
 
 const char lcl_GetcoupnumDecl[] =
-"int lcl_Getcoupnum(int nNullDate,int nSettle, int nMat,int nFreq);\n";
-
-const char lcl_Getcoupnum[] =
-"int lcl_Getcoupnum(int nNullDate,int nSettle, int nMat,int nFreq)\n"
-"{\n"
-"    int aDate = nMat;int rDay=0,rMonth=0, rYear=0;int mDay=0,mMonth=0, mYear="
-"0;\n"
-"    int sDay=0,sMonth=0, sYear=0;\n"
-"    DaysToDate(aDate+nNullDate,&rDay, &rMonth, &rYear );\n"
-"    DaysToDate(nMat+nNullDate,&mDay, &mMonth, &mYear );\n"
-"    DaysToDate(nSettle+nNullDate,&sDay, &sMonth, &sYear );\n"
-"    rYear= sYear;\n"
-"    nSettle=nSettle+nNullDate;\n"
-"    aDate=DateToDays( rDay,rMonth,rYear );\n"
-"    if( aDate < nSettle )\n"
-"        rYear+= 1;\n"
-"    int d=DateToDays( rDay,rMonth,rYear );\n"
-"    int nMonthCount=-1*(12 / nFreq);\n"
-"    while(d > nSettle )\n"
-"    {\n"
-"        int nNewMonth = nMonthCount + rMonth;\n"
-"        if( nNewMonth > 12 )\n"
-"        {\n"
-"            --nNewMonth;\n"
-"            rYear+=nNewMonth / 12;\n"
-"            rMonth = nNewMonth % 12 + 1;\n"
-"        }\n"
-"        else if( nNewMonth < 1 )\n"
-"        {\n"
-"            rYear+= nNewMonth / 12 - 1;\n"
-"            rMonth = nNewMonth % 12 + 12;\n"
-"        }\n"
-"        else\n"
-"            rMonth =  nNewMonth;\n"
-"        d=DateToDays( rDay,rMonth,rYear );\n"
-"    }\n"
-"    int n=(mYear-rYear)*12+mMonth-rMonth;\n"
-"    n=n*nFreq/12;\n"
-"    return n;\n"
-"}\n";
-const char lcl_Getcoupnum_newDecl[] =
-"double lcl_Getcoupnum_new(int nNullDate,int nSettle,int nMat,int nFreq,int"
+"double lcl_Getcoupnum(int nNullDate,int nSettle,int nMat,int nFreq,int"
 " nBase);\n";
-const char lcl_Getcoupnum_new[] =
-"double lcl_Getcoupnum_new(int nNullDate,int nSettle, int nMat,int nFreq,int"
+const char lcl_Getcoupnum[] =
+"double lcl_Getcoupnum(int nNullDate,int nSettle, int nMat,int nFreq,int"
 " nBase)\n"
 "{\n"
 "    int aDate = nMat;\n"
@@ -775,21 +567,9 @@ const char coupdaysDecl[] =
 const char coupdays[] =
 "double coupdays(int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
-"    int nNullDate=GetNullDate();\n"
-"    if( nBase == 1 )\n"
-"        return lcl_Getcoupdays(nNullDate, nSettle, nMat,nFreq, nBase);\n"
-"    else\n"
-"        return (double)GetDaysInYear(0,0,nBase)/nFreq;\n"
-"}\n";
-const char coupdays_newDecl[] =
-"double coupdays_new(int nSettle,int nMat,int nFreq,int nBase);\n";
-
-const char coupdays_new[] =
-"double coupdays_new(int nSettle,int nMat,int nFreq,int nBase)\n"
-"{\n"
 "    int nNullDate=693594;\n"
 "    if( nBase == 1 )\n"
-"        return lcl_Getcoupdays_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
+"        return lcl_Getcoupdays(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "    else\n"
 "        return (double)GetDaysInYear(0,0,nBase)/(double)nFreq;\n"
 "}\n";
@@ -800,65 +580,15 @@ const char coupdaybsDecl[] =
 const char coupdaybs[] =
 "double coupdaybs( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
-"    int nNullDate=GetNullDate();\n"
-"    return lcl_Getcoupdaybs(nNullDate, nSettle, nMat,nFreq, nBase);\n"
-"}\n";
-
-const char coupdaybs_newDecl[] =
-"double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase);\n";
-
-const char coupdaybs_new[] =
-"double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase)\n"
-"{\n"
 "    int nNullDate=693594;\n"
-"    return lcl_Getcoupdaybs_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
+"    return lcl_Getcoupdaybs(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "}\n";
 
 const char coupdaysncDecl[] =
 "double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase);\n";
 
 const char coupdaysnc[] =
-    "double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase)\n"
-"{\n"
-"    int nNullDate=GetNullDate();\n"
-"    if((nBase != 0) && (nBase != 4))\n"
-"    {\n"
-"        int aDate = nMat;\n"
-"        int rDay=0,rMonth=0, rYear=0;int mDay=0,mMonth=0, mYear=0;int sDay=0,"
-"sMonth=0, sYear=0;\n"
-"        int rbLastDayMode=0, rbLastDay=0,rb30Days=0,rbUSMode=0,rnDay=0;\n"
-"        int sbLastDayMode=0, sbLastDay=0,sb30Days=0,sbUSMode=0,snDay=0;\n"
-"        ScaDate( nNullDate,aDate,nBase,&rDay,&rMonth,&rYear,&rbLastDayMode,&"
-"rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
-"        ScaDate( nNullDate,nSettle,nBase,&sDay,&sMonth,&sYear,&sbLastDayMode,"
-"&sbLastDay,&sb30Days,&sbUSMode,&snDay);\n"
-"        rYear= sYear;\n"
-"        nSettle=nSettle+nNullDate;\n"
-"        aDate=DateToDays( rDay,rMonth,rYear );\n"
-"        if( aDate > nSettle )\n"
-"        {\n"
-"            rYear-= 1;\n"
-"            aDate=DateToDays( rDay,rMonth,rYear );\n"
-"        }\n"
-"        while(aDate <= nSettle )\n"
-"        {\n"
-"            addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,12/nFreq,&rYear)"
-";\n"
-"            aDate=DateToDays( rDay,rMonth,rYear );\n"
-"        }\n"
-"        return getDiff( nSettle, aDate, sDay, sMonth, sYear, sbLastDayMode, "
-"sbLastDay, sb30Days, sbUSMode, snDay, rDay, rMonth, rYear, rbLastDayMode, "
-"rbLastDay, rb30Days, rbUSMode, rnDay);\n"
-"    }\n"
-"    else\n"
-"        return coupdays(nSettle,nMat,nFreq,nBase)- coupdaybs( nSettle,nMat,"
-"nFreq,nBase);\n"
-"}\n";
-const char coupdaysnc_newDecl[] =
-"double coupdaysnc_new( int nSettle,int nMat,int nFreq,int nBase);\n";
-
-const char coupdaysnc_new[] =
-"double coupdaysnc_new( int nSettle,int nMat,int nFreq,int nBase)\n"
+"double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
 "    int nNullDate=693594;\n"
 "    if((nBase != 0) && (nBase != 4))\n"
@@ -893,7 +623,7 @@ const char coupdaysnc_new[] =
 "rbLastDay, rb30Days, rbUSMode, rnDay);\n"
 "    }\n"
 "    else\n"
-"        return coupdays_new(nSettle,nMat,nFreq,nBase)- coupdaybs_new( nSettle,"
+"        return coupdays(nSettle,nMat,nFreq,nBase)- coupdaybs( nSettle,"
 "nMat,nFreq,nBase);\n"
 "}\n";
 
@@ -921,25 +651,16 @@ const char coupnumDecl[] =
 const char coupnum[] =
 "double coupnum( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
-"    int nNullDate=GetNullDate();\n"
-"    return lcl_Getcoupnum(nNullDate,nSettle,nMat,nFreq);\n"
-"}\n";
-const char coupnum_newDecl[] =
-"double coupnum_new( int nSettle,int nMat,int nFreq,int nBase);\n";
-
-const char coupnum_new[] =
-"double coupnum_new( int nSettle,int nMat,int nFreq,int nBase)\n"
-"{\n"
 "    int nNullDate=693594;\n"
-"    return lcl_Getcoupnum_new(nNullDate,nSettle,nMat,nFreq,nBase);\n"
+"    return lcl_Getcoupnum(nNullDate,nSettle,nMat,nFreq,nBase);\n"
 "}\n";
 
-const char getPrice_Decl[] =
-"double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
+const char getPriceDecl[] =
+"double getPrice(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase );\n";
 
-const char getPrice_[] =
-"double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
+const char getPrice[] =
+"double getPrice(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase )\n"
 "{\n"
 "    double      fFreq = nFreq;\n"
@@ -947,28 +668,6 @@ const char getPrice_[] =
 "    double      fDSC_E = coupdaysnc(  nSettle, nMat, nFreq, nBase ) / fE;\n"
 "    double      fN = coupnum( nSettle, nMat, nFreq, nBase );\n"
 "    double      fA = coupdaybs( nSettle, nMat, nFreq, nBase );\n"
-"    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + "
-"fDSC_E ) );\n"
-"    fRet -= 100.0 * fRate / fFreq * fA / fE;\n"
-"    double      fT1 = 100.0 * fRate / fFreq;\n"
-"    double      fT2 = 1.0 + fYield / fFreq;\n"
-"    for( double fK = 0.0 ; fK < fN ; fK+=1.0 )\n"
-"        fRet += fT1 / pow( fT2, fK + fDSC_E );\n"
-"    return fRet;\n"
-"}\n";
-const char getPrice_new_Decl[] =
-"double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
-    "double fRedemp, int nFreq, int nBase );\n";
-
-const char getPrice_new[] =
-"double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
-    "double fRedemp, int nFreq, int nBase )\n"
-"{\n"
-"    double      fFreq = nFreq;\n"
-"    double      fE = coupdays_new( nSettle, nMat, nFreq, nBase );\n"
-"    double      fDSC_E = coupdaysnc_new(  nSettle, nMat, nFreq, nBase ) / fE;\n"
-"    double      fN = coupnum_new( nSettle, nMat, nFreq, nBase );\n"
-"    double      fA = coupdaybs_new( nSettle, nMat, nFreq, nBase );\n"
 "    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + "
 "fDSC_E ) );\n"
 "    fRet -= 100.0 * fRate / fFreq * fA / fE;\n"
@@ -991,15 +690,15 @@ const char getYield_[] =
 "    double      fPriceN = 0.0;\n"
 "    double      fYield1 = 0.0;\n"
 "    double      fYield2 = 1.0;\n"
-"    double      fPrice1 = getPrice_(nSettle, nMat, fRate, fYield1, fRedemp, "
+"    double      fPrice1 = getPrice(nSettle, nMat, fRate, fYield1, fRedemp, "
 "nFreq, nBase );\n"
-"    double      fPrice2 = getPrice_(nSettle, nMat, fRate, fYield2, fRedemp, "
+"    double      fPrice2 = getPrice(nSettle, nMat, fRate, fYield2, fRedemp, "
 "nFreq, nBase );\n"
 "    double      fYieldN = ( fYield2 - fYield1 ) * 0.5;\n"
 "    for( unsigned int nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ "
 ")\n"
 "    {\n"
-"        fPriceN = getPrice_(nSettle, nMat, fRate, fYieldN, fRedemp, nFreq, "
+"        fPriceN = getPrice(nSettle, nMat, fRate, fYieldN, fRedemp, nFreq, "
 "nBase );\n"
 "        if( fPrice == fPrice1 )\n"
 "            return fYield1;\n"
@@ -1010,7 +709,7 @@ const char getYield_[] =
 "        else if( fPrice < fPrice2 )\n"
 "        {\n"
 "            fYield2 *= 2.0;\n"
-"            fPrice2 = getPrice_(nSettle, nMat, fRate, fYield2, fRedemp, nFreq"
+"            fPrice2 = getPrice(nSettle, nMat, fRate, fYield2, fRedemp, nFreq"
 ", nBase );\n"
 "            fYieldN = ( fYield2 - fYield1 ) * 0.5;\n"
 "        }\n"
@@ -1033,144 +732,6 @@ const char getYield_[] =
 "    return fYieldN;\n"
 "}\n";
 
-const char GetYearFracDecl[] =
-"double GetYearFrac( int nNullDate, int nStartDate, int nEndDate,"
-"int nMode );\n";
-
-const char GetYearFrac[] =
-"double GetYearFrac( int nNullDate, int nStartDate, int nEndDate,"
-"int nMode ) \n"
-"{\n"
-"    if( nStartDate == nEndDate )\n"
-"        return 0.0;     \n"
-
- "   if( nStartDate > nEndDate )\n"
- "   {\n"
- "       int   n = nEndDate;\n"
- "       nEndDate = nStartDate;\n"
- "       nStartDate = n;\n"
- "   }\n"
-
-  "  int nDate1 = nStartDate + nNullDate;\n"
-  "  int nDate2 = nEndDate + nNullDate;\n"
-
-  "  int  nDay1, nDay2;\n"
-  "  int  nMonth1, nMonth2;\n"
-  "  int  nYear1, nYear2;\n"
-
-  "  DaysToDate( nDate1, &nDay1, &nMonth1, &nYear1 );\n"
-  "  DaysToDate( nDate2, &nDay2, &nMonth2, &nYear2 );\n"
-
-  "  int nDayDiff;\n"
-  "  switch( nMode )\n"
-  "  {\n"
-  "      case 0:         \n"
-  "          if ( nDay1 == 31 )\n"
-  "          {\n"
-  "              nDay1--;\n"
-  "          }\n"
-  "          if ( nDay1 == 30 && nDay2 == 31 )\n"
-  "          {\n"
-  "              nDay2--;\n"
-  "          }\n"
-  "          else\n"
-  "          {\n"
-  "              if ( nMonth1 == 2 && nDay1 == "
-  "( IsLeapYear( nYear1 ) ? 29 : 28 ) )\n"
-  "              {\n"
-  "                  nDay1 = 30;\n"
-  "                  if ( nMonth2 == 2 && nDay2 == "
-  "( IsLeapYear( nYear2 ) ? 29 : 28 ) )\n"
-  "                  {\n"
-  "                      nDay2 = 30;\n"
-  "                  }\n"
-  "              }\n"
-  "          }\n"
-  "          nDayDiff = ( nYear2 - nYear1 ) * 360 + "
-  "( nMonth2 - nMonth1 ) * 30 + ( nDay2 - nDay1 );\n"
-  "          break;\n"
-  "      case 1:         \n"
-  "      case 2:        \n"
-  "      case 3:         \n"
-  "         nDayDiff = nDate2 - nDate1;\n"
-  "          break;\n"
-  "      case 4:         \n"
-  "          if ( nDay1 == 31 )\n"
-  "          {\n"
-  "              nDay1--;\n"
-  "          }\n"
-  "          if ( nDay2 == 31 )\n"
-  "          {\n"
-  "              nDay2--;\n"
-  "          }\n"
-  "          nDayDiff = ( nYear2 - nYear1 ) * 360 + "
-  "( nMonth2 - nMonth1 ) * 30 + ( nDay2 - nDay1 );\n"
-  "          break;\n"
-  "  }\n"
-
-  "  double nDaysInYear;\n"
-  "  switch( nMode )\n"
-  "  {\n"
-  "      case 0:         \n"
-  "      case 2:         \n"
-  "      case 4:         \n"
-  "          nDaysInYear = 360;\n"
-  "          break;\n"
-  "      case 1:         \n"
-  "          {\n"
-  "              bool isYearDifferent = ( nYear1 != nYear2 );\n"
-  "              if ( isYearDifferent &&\n"
-  "                   ( ( nYear2 != nYear1 + 1 ) ||\n"
-  "                     ( nMonth1 < nMonth2 ) ||\n"
-  "                     ( nMonth1 == nMonth2 && nDay1 < nDay2 ) ) )\n"
-  "              {\n"
-
-  "                  int nDayCount = 0;\n"
-  "                 for ( int i = nYear1; i <= nYear2; i++ )\n"
-  "                      nDayCount += ( IsLeapYear( i ) ? 366 : 365 );\n"
-
-  "                  nDaysInYear = ( double ) nDayCount / "
-  "( double ) ( nYear2 - nYear1 + 1 );\n"
-  "              }\n"
-  "             else\n"
-  "              {\n"
-  "                  if ( isYearDifferent && IsLeapYear( nYear1 ) )\n"
-  "                  {\n"
-  "                      nDaysInYear = 366;\n"
-  "                  }\n"
-  "                   else\n"
-  "                  {\n"
-
-  "                      if ( ( IsLeapYear( nYear1 ) && nMonth1 <= 2 "
-  "&& nDay1 <= 29 ) ||\n"
-  "                           ( IsLeapYear( nYear2 ) && ( nMonth2 > 3 || "
-  "( nMonth2 == 2 && nDay1 == 29 ) ) ) )\n"
-   "                     {\n"
-   "                         nDaysInYear = 366;\n"
-   "                     }\n"
-  "                      else\n"
-  "                      {\n"
-  "                          nDaysInYear = 365;\n"
- "                           for ( int i = nYear1; i <= nYear2; i++ )\n"
-  "                          {\n"
-   "                             if ( IsLeapYear( i ) )\n"
-  "                              {\n"
-  "                                  nDaysInYear = 366;\n"
-   "                                 break;\n"
-   "                             }\n"
-  "                          }\n"
-   "                     }\n"
-   "                 }\n"
-   "             }\n"
-   "         }\n"
-  "          break;\n"
-  "      case 3:         \n"
-  "          nDaysInYear = 365;\n"
- "           break;\n"
-  "  }\n"
-  "  return (double)( nDayDiff ) / (nDaysInYear);\n"
-"}\n";
-
 const char GetYieldmatDecl[] =
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
         "double fRate, double fPrice, int nBase );\n";
@@ -1179,90 +740,14 @@ const char GetYieldmat[] =
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
         "double fRate, double fPrice, int nBase )\n"
 "{\n"
-"    double      fIssMat = GetYearFrac_new( nNullDate, nIssue, nMat, nBase );\n"
-"    double      fIssSet = GetYearFrac_new( nNullDate, nIssue, nSettle, nBase );\n"
-"    double      fSetMat = GetYearFrac_new( nNullDate, nSettle, nMat, nBase );\n"
+"    double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );\n"
+"    double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );\n"
+"    double      fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );\n"
 "    double      y = 1.0 + fIssMat * fRate;\n"
 "    y =y / (fPrice / 100.0 + fIssSet * fRate);\n"
 "    y-=1.0;\n"
 "    y = y / fSetMat;\n"
 "    return y;\n"
-"}\n";
-
-const char GetDiffDateDecl[] =
-"int GetDiffDate( int nNullDate, int nStartDate, int nEndDate, int nMode,"
-"    int* pOptDaysIn1stYear );\n";
-
-const char GetDiffDate[] =
-"int GetDiffDate( int nNullDate, int nStartDate, int nEndDate, int nMode,"
-"    int* pOptDaysIn1stYear )\n"
-"{\n"
-"    bool    bNeg = nStartDate > nEndDate;\n"
-"    if( bNeg )\n"
-"    {\n"
-"        int   n = nEndDate;\n"
-"        nEndDate = nStartDate;\n"
-"        nStartDate = n;\n"
-"    }\n"
-"    int       nRet;\n"
-"    switch( nMode )\n"
-"    {\n"
-"    case 0:   \n"
-"    case 4:   \n"
-"        {\n"
-"        int      nD1, nM1, nY1, nD2, nM2, nY2;\n"
-"        nStartDate += nNullDate;\n"
-"        nEndDate += nNullDate;\n"
-"        DaysToDate( nStartDate, &nD1, &nM1, &nY1 );\n"
-"        DaysToDate( nEndDate, &nD2, &nM2, &nY2 );\n"
-"        bool        bLeap = IsLeapYear( nY1 );\n"
-"        int       nDays, nMonths;\n"
-"        nMonths = nM2 - nM1;\n"
-"        nDays = nD2 - nD1;\n"
-"        nMonths += ( nY2 - nY1 ) * 12;\n"
-"        nRet = nMonths * 30 + nDays;\n"
-"        if( nMode == 0 && nM1 == 2 && nM2 != 2 && nY1 == nY2 )\n"
-"            nRet -= bLeap? 1 : 2;\n"
-"        if( pOptDaysIn1stYear )\n"
-"            *pOptDaysIn1stYear = 360;\n"
-"        }\n"
-"        break;\n"
-"    case 1:    \n"
-"        if( pOptDaysIn1stYear )\n"
-"        {\n"
-"            int      nD, nM, nY;\n"
-"            DaysToDate( nStartDate + nNullDate, &nD, &nM, &nY );\n"
-"            *pOptDaysIn1stYear = IsLeapYear( nY )? 366 : 365;\n"
-"        }\n"
-"        nRet = nEndDate - nStartDate;\n"
-"        break;\n"
-"    case 2:      \n"
-"        nRet = nEndDate - nStartDate;\n"
-"        if( pOptDaysIn1stYear )\n"
-"            *pOptDaysIn1stYear = 360;\n"
-"        break;\n"
-"    case 3:        \n"
-"        nRet = nEndDate - nStartDate;\n"
-"        if( pOptDaysIn1stYear )\n"
-"            *pOptDaysIn1stYear = 365;\n"
-"        break;\n"
-"    }\n"
-"    return bNeg? -nRet : nRet;\n"
-"}\n";
-
-const char GetYearDiffDecl[] =
-"double GetYearDiff( int nNullDate, int nStartDate, int nEndDate,"
-"int nMode);\n";
-
-const char GetYearDiff[] =
-"double GetYearDiff( int nNullDate, int nStartDate, int nEndDate,"
-"int nMode )\n"
-"{\n"
-"    int   nDays1stYear;\n"
-"    int   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate,"
-"nMode, &"
-"nDays1stYear );\n"
-"     return (double)(nTotalDays)/(double)nDays1stYear;\n"
 "}\n";
 
 const char GetDiffDate360_Decl[] =
@@ -1328,40 +813,9 @@ const char GetDuration[] =
 "double GetDuration( \n"
 "                int nNullDate, int nSettle, int nMat, double fCoup,\n"
 "                double fYield, int nFreq, int nBase )\n"
-"{\n"
-"    double fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );\n"
-"    double fNumOfCoups = lcl_Getcoupnum(nNullDate,nSettle,nMat,nFreq);\n"
-"    double fDur = 0.0;\n"
-"    double f100 = 100.0;\n"
-"    fCoup *= f100 / nFreq;\n"
-"    fYield /= nFreq;\n"
-"    fYield += 1.0;\n"
-"    double nDiff = fYearfrac * nFreq - fNumOfCoups;\n"
-"    int  t;\n"
-"    for( t = 1 ; t < fNumOfCoups ; t++ )\n"
-"        fDur += ( t + nDiff ) * ( fCoup ) / pow( fYield, t + nDiff );\n"
-"    fDur += ( fNumOfCoups + nDiff ) * ( fCoup + f100 ) /"
-" pow( fYield, fNumOfCoups + nDiff );\n"
-"    double  p = 0.0;\n"
-"    for( t = 1 ; t < fNumOfCoups ; t++ )\n"
-"      p += fCoup / pow( fYield, t + nDiff );\n"
-"    p += ( fCoup + f100 ) / pow( fYield, fNumOfCoups + nDiff );\n"
-"    fDur /= p;\n"
-"    fDur /= nFreq;\n"
-"    return fDur;\n""}\n";
-
-const char GetDuration_newDecl[] =
-"double GetDuration_new( \n"
-"                int nNullDate, int nSettle, int nMat, double fCoup,\n"
-"                double fYield, int nFreq, int nBase );\n";
-
-const char GetDuration_new[] =
-"double GetDuration_new( \n"
-"                int nNullDate, int nSettle, int nMat, double fCoup,\n"
-"                double fYield, int nFreq, int nBase )\n"
 "    {\n"
 "        double fYearfrac = GetYearFrac(nNullDate,nSettle,nMat,nBase);\n"
-"        double fNumOfCoups = lcl_Getcoupnum_new(nNullDate,nSettle,nMat,"
+"        double fNumOfCoups = lcl_Getcoupnum(nNullDate,nSettle,nMat,"
 "nFreq,nBase);\n"
 "        double fDur = 0.0;\n"
 "        fCoup = fCoup * 100.0 / nFreq;\n"
@@ -1568,12 +1022,12 @@ const char GetOddlyield[] =
 "    return y;\n"
 "}\n";
 
-const char GetYearFrac_newDecl[] =
-"double GetYearFrac_new( int nNullDate, int nStartDate, int nEndDate,"
+const char GetYearFracDecl[] =
+"double GetYearFrac( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode );\n";
 
-const char GetYearFrac_new[] =
-"double GetYearFrac_new( int nNullDate, int nStartDate, int nEndDate,"
+const char GetYearFrac[] =
+"double GetYearFrac( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode ) \n"
 "{\n"
 "    if( nStartDate == nEndDate )\n"
@@ -1589,8 +1043,8 @@ const char GetYearFrac_new[] =
 "  int  nDay1, nDay2;\n"
 "  int  nMonth1, nMonth2;\n"
 "  int  nYear1, nYear2;\n"
-"  DaysToDate_new( nDate1, &nDay1, &nMonth1, &nYear1 );\n"
-"  DaysToDate_new( nDate2, &nDay2, &nMonth2, &nYear2 );\n"
+"  DaysToDate( nDate1, &nDay1, &nMonth1, &nYear1 );\n"
+"  DaysToDate( nDate2, &nDay2, &nMonth2, &nYear2 );\n"
 "  int nDayDiff;\n"
 "  switch( nMode )\n"
 "  {\n"
@@ -1697,11 +1151,11 @@ const char GetYearFrac_new[] =
 "  return (double)( nDayDiff ) / (nDaysInYear);\n"
 "}\n";
 
-const char DaysToDate_newDecl[] =
-"void DaysToDate_new( int nDays, int *rDay, int* rMonth, int* rYear );\n";
+const char DaysToDateDecl[] =
+"void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear );\n";
 
-const char DaysToDate_new[] =
-"void DaysToDate_new( int nDays, int *rDay, int* rMonth, int* rYear )\n"
+const char DaysToDate[] =
+"void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear )\n"
 "{\n"
 "    int   nTempDays;\n"
 "    int   i = 0;\n"
@@ -1788,27 +1242,27 @@ const char DaysToDate_LocalBarrier[] =
 "    }\n"
 "}\n";
 
-const char GetYearDiff_newDecl[] =
-"double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
+const char GetYearDiffDecl[] =
+"double GetYearDiff( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode);\n";
 
-const char GetYearDiff_new[] =
-"double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
+const char GetYearDiff[] =
+"double GetYearDiff( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode )\n"
 "{\n"
 "    int   nDays1stYear;\n"
-"    int   nTotalDays = GetDiffDate_new( nNullDate, nStartDate, nEndDate,"
+"    int   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate,"
 "nMode, &"
 "nDays1stYear );\n"
 "    return (double)(nTotalDays) / (double)nDays1stYear;\n"
 "}\n";
 
-const char GetDiffDate_newDecl[] =
-"int GetDiffDate_new( int nNullDate, int nStartDate, int nEndDate, int nMode,"
+const char GetDiffDateDecl[] =
+"int GetDiffDate( int nNullDate, int nStartDate, int nEndDate, int nMode,"
 "    int* pOptDaysIn1stYear );\n";
 
-const char GetDiffDate_new[] =
-"int GetDiffDate_new( int nNullDate, int nStartDate, int nEndDate, int nMode,"
+const char GetDiffDate[] =
+"int GetDiffDate( int nNullDate, int nStartDate, int nEndDate, int nMode,"
 "    int* pOptDaysIn1stYear )\n"
 "{\n"
 "    bool    bNeg = nStartDate > nEndDate;\n"
@@ -1827,8 +1281,8 @@ const char GetDiffDate_new[] =
 "        int      nD1, nM1, nY1, nD2, nM2, nY2;\n"
 "        nStartDate += nNullDate;\n"
 "        nEndDate += nNullDate;\n"
-"        DaysToDate_new( nStartDate, &nD1, &nM1, &nY1 );\n"
-"        DaysToDate_new( nEndDate, &nD2, &nM2, &nY2 );\n"
+"        DaysToDate( nStartDate, &nD1, &nM1, &nY1 );\n"
+"        DaysToDate( nEndDate, &nD2, &nM2, &nY2 );\n"
 "        bool        bLeap = IsLeapYear( nY1 );\n"
 "        int       nDays, nMonths;\n"
 "        nMonths = nM2 - nM1;\n"
@@ -1845,7 +1299,7 @@ const char GetDiffDate_new[] =
 "        if( pOptDaysIn1stYear )\n"
 "        {\n"
 "            int      nD, nM, nY;\n"
-"            DaysToDate_new( nStartDate + nNullDate, &nD, &nM, &nY );\n"
+"            DaysToDate( nStartDate + nNullDate, &nD, &nM, &nY );\n"
 "            *pOptDaysIn1stYear = IsLeapYear( nY )? 366 : 365;\n"
 "        }\n"
 "        nRet = nEndDate - nStartDate;\n"

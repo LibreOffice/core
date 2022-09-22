@@ -99,9 +99,9 @@ void OpDollarfr::GenSlidingWindowFunction(outputstream &ss,
 void OpDISC::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetYearFrac_newDecl);decls.insert(DaysToDate_newDecl);
+    decls.insert(GetYearFracDecl);decls.insert(DaysToDateDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
-    funs.insert(GetYearFrac_new);funs.insert(DaysToDate_new);
+    funs.insert(GetYearFrac);funs.insert(DaysToDate);
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
 }
 
@@ -121,7 +121,7 @@ void OpDISC::GenSlidingWindowFunction(outputstream& ss,
     ss << "    int nNullDate = 693594;\n";
     ss << "    tmp = 1.0 - arg2 / arg3;\n";
     ss << "    tmp /=";
-    ss << " GetYearFrac_new(nNullDate, (int)arg0, (int)arg1, (int)arg4);\n";
+    ss << " GetYearFrac(nNullDate, (int)arg0, (int)arg1, (int)arg4);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -129,12 +129,12 @@ void OpDISC::GenSlidingWindowFunction(outputstream& ss,
 void OpINTRATE::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetYearDiff_newDecl);decls.insert(GetDiffDate_newDecl);
-    decls.insert(DaysToDate_newDecl);decls.insert(GetNullDateDecl);
+    decls.insert(GetYearDiffDecl);decls.insert(GetDiffDateDecl);
+    decls.insert(DaysToDateDecl);decls.insert(GetNullDateDecl);
     decls.insert(DateToDaysDecl);decls.insert(DaysInMonthDecl);
     decls.insert(IsLeapYearDecl);
-    funs.insert(GetYearDiff_new);funs.insert(GetDiffDate_new);
-    funs.insert(DaysToDate_new);funs.insert(GetNullDate);
+    funs.insert(GetYearDiff);funs.insert(GetDiffDate);
+    funs.insert(DaysToDate);funs.insert(GetNullDate);
     funs.insert(DateToDays);funs.insert(DaysInMonth);
     funs.insert(IsLeapYear);
 }
@@ -153,7 +153,7 @@ void OpINTRATE::GenSlidingWindowFunction(outputstream& ss,
     GenerateArg( 3, vSubArguments, ss );
     GenerateArg( 4, vSubArguments, ss );
     ss << "    int nNullDate = GetNullDate();\n";
-    ss << "    tmp = ((arg3 / arg2) - 1) / GetYearDiff_new(nNullDate, (int)arg0,";
+    ss << "    tmp = ((arg3 / arg2) - 1) / GetYearDiff(nNullDate, (int)arg0,";
     ss << "             (int)arg1,(int)arg4);\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -289,12 +289,12 @@ void OpDuration_ADD::GenSlidingWindowFunction(outputstream& ss,
 void OpMDuration::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetDuration_newDecl);decls.insert(lcl_Getcoupnum_newDecl);
+    decls.insert(GetDurationDecl);decls.insert(lcl_GetcoupnumDecl);
     decls.insert(addMonthsDecl);decls.insert(checklessthanDecl);
     decls.insert(setDayDecl);decls.insert(ScaDateDecl);
     decls.insert(GetYearFracDecl);decls.insert(DaysToDateDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
-    funs.insert(GetDuration_new);funs.insert(lcl_Getcoupnum_new);
+    funs.insert(GetDuration);funs.insert(lcl_Getcoupnum);
     funs.insert(addMonths);funs.insert(checklessthan);
     funs.insert(setDay);funs.insert(ScaDate);
     funs.insert(GetYearFrac);funs.insert(DaysToDate);
@@ -316,7 +316,7 @@ void OpMDuration::GenSlidingWindowFunction(outputstream& ss,
     GenerateArg( 4, vSubArguments, ss );
     GenerateArg( 5, vSubArguments, ss );
     ss << "    int nNullDate = 693594;\n";
-    ss << "    tmp = GetDuration_new( nNullDate, (int)arg0, (int)arg1, arg2,";
+    ss << "    tmp = GetDuration( nNullDate, (int)arg0, (int)arg1, arg2,";
     ss << " arg3, (int)arg4, (int)arg5);\n";
     ss << "    tmp = tmp * pow(1.0 + arg3 * pow((int)arg4, -1.0), -1);\n";
     ss << "    return tmp;\n";
@@ -712,10 +712,10 @@ void OpAccrintm::GenSlidingWindowFunction(
     ss << "}";
 }
 
- void OpYield::BinInlineFun(std::set<std::string>& decls,
+void OpYield::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(getYield_Decl);decls.insert(getPrice_Decl);
+    decls.insert(getYield_Decl);decls.insert(getPriceDecl);
     decls.insert(coupnumDecl);decls.insert(coupdaysncDecl);
     decls.insert(coupdaybsDecl);decls.insert(coupdaysDecl);
     decls.insert(lcl_GetcoupnumDecl);decls.insert(lcl_GetcoupdaysDecl);
@@ -725,9 +725,10 @@ void OpAccrintm::GenSlidingWindowFunction(
     decls.insert(addMonthsDecl);decls.insert(ScaDateDecl);
     decls.insert(GetNullDateDecl);decls.insert(DateToDaysDecl);
     decls.insert(DaysToDateDecl);decls.insert(DaysInMonthDecl);
-    decls.insert(IsLeapYearDecl);
+    decls.insert(IsLeapYearDecl);decls.insert(setDayDecl);
+    decls.insert(checklessthanDecl);
 
-    funs.insert(getYield_);funs.insert(getPrice_);
+    funs.insert(getYield_);funs.insert(getPrice);
     funs.insert(coupnum);funs.insert(coupdaysnc);
     funs.insert(coupdaybs);funs.insert(coupdays);
     funs.insert(lcl_Getcoupnum);funs.insert(lcl_Getcoupdays);
@@ -737,7 +738,8 @@ void OpAccrintm::GenSlidingWindowFunction(
     funs.insert(addMonths);funs.insert(ScaDate);
     funs.insert(GetNullDate);funs.insert(DateToDays);
     funs.insert(DaysToDate);funs.insert(DaysInMonth);
-    funs.insert(IsLeapYear);
+    funs.insert(IsLeapYear);decls.insert(setDay);
+    funs.insert(checklessthan);
 }
 
 void OpYield::GenSlidingWindowFunction(
@@ -780,13 +782,13 @@ void OpSLN::GenSlidingWindowFunction(outputstream &ss,
  void OpYieldmat::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetYearFrac_newDecl);decls.insert(GetNullDateDecl);
-    decls.insert(DateToDaysDecl);decls.insert(DaysToDate_newDecl);
+    decls.insert(GetYearFracDecl);decls.insert(GetNullDateDecl);
+    decls.insert(DateToDaysDecl);decls.insert(DaysToDateDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
     decls.insert(GetYieldmatDecl);
 
-    funs.insert(GetYearFrac_new);funs.insert(GetNullDate);
-    funs.insert(DateToDays);funs.insert(DaysToDate_new);
+    funs.insert(GetYearFrac);funs.insert(GetNullDate);
+    funs.insert(DateToDays);funs.insert(DaysToDate);
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
     funs.insert(GetYieldmat);
 }
@@ -856,39 +858,39 @@ void OpNPV::GenSlidingWindowFunction(outputstream &ss,
  void OpPrice::BinInlineFun(std::set<std::string>& decls,
      std::set<std::string>& funs)
  {
-    decls.insert(getPrice_new_Decl);
+    decls.insert(getPriceDecl);
     decls.insert(IsLeapYearDecl);decls.insert(DaysInMonthDecl);
     decls.insert(DaysToDateDecl);
     decls.insert(DateToDaysDecl);
     decls.insert(ScaDateDecl);
     decls.insert(setDayDecl);decls.insert(checklessthanDecl);
-    decls.insert(addMonthsDecl);decls.insert(lcl_Getcoupnum_newDecl);
-    decls.insert(coupnum_newDecl);
-    decls.insert(DateToDays_newDecl);
+    decls.insert(addMonthsDecl);decls.insert(lcl_GetcoupnumDecl);
+    decls.insert(coupnumDecl);
+    decls.insert(DateToDaysDecl);
     decls.insert(getDaysInMonthRangeDecl);
     decls.insert(GetDaysInYearsDecl); decls.insert(GetDaysInYearDecl);
     decls.insert(getDaysInYearRangeDecl); decls.insert(getDiffDecl);
-    decls.insert(coupdaybs_newDecl);
-    decls.insert(lcl_Getcoupdays_newDecl);
-    decls.insert(lcl_Getcoupdaybs_newDecl);
-    decls.insert(coupdays_newDecl);
-    decls.insert(coupdaysnc_newDecl);
-    funs.insert(IsLeapYear);funs.insert(DaysInMonth_new);
-    funs.insert(DaysToDate);funs.insert(DateToDays_new);
+    decls.insert(coupdaybsDecl);
+    decls.insert(lcl_GetcoupdaysDecl);
+    decls.insert(lcl_GetcoupdaybsDecl);
+    decls.insert(coupdaysDecl);
+    decls.insert(coupdaysncDecl);
+    funs.insert(IsLeapYear);funs.insert(DaysInMonth);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
     funs.insert(DateToDays);
     funs.insert(ScaDate);
     funs.insert(addMonths);funs.insert(getDaysInMonthRange);
     funs.insert(GetDaysInYears);funs.insert(GetDaysInYear);
     funs.insert(getDaysInYearRange);funs.insert(getDiff);
     funs.insert(setDay);funs.insert(checklessthan);
-    funs.insert(lcl_Getcoupdaybs_new);
-    funs.insert(coupdaybs_new);
-    funs.insert(lcl_Getcoupdays_new);
-    funs.insert(coupdaysnc_new);
-    funs.insert(coupdays_new);
+    funs.insert(lcl_Getcoupdaybs);
+    funs.insert(coupdaybs);
+    funs.insert(lcl_Getcoupdays);
+    funs.insert(coupdaysnc);
+    funs.insert(coupdays);
     funs.insert(setDay);funs.insert(checklessthan);
-    funs.insert(lcl_Getcoupnum_new);
-    funs.insert(coupnum_new);funs.insert(getPrice_new);
+    funs.insert(lcl_Getcoupnum);
+    funs.insert(coupnum);funs.insert(getPrice);
  }
 void OpPrice::GenSlidingWindowFunction(outputstream &ss,
           const std::string &sSymName, SubArguments &vSubArguments)
@@ -906,7 +908,7 @@ void OpPrice::GenSlidingWindowFunction(outputstream &ss,
     GenerateArg( "tmp5", 5, vSubArguments, ss );
     GenerateArgWithDefault( "tmp6", 6, 0, vSubArguments, ss );
     ss << "    if(tmp4*tmp5 == 0) return NAN;\n";
-    ss << "    tmp = getPrice_(tmp0,tmp1,tmp2,tmp3,tmp4,tmp5,tmp6);\n";
+    ss << "    tmp = getPrice(tmp0,tmp1,tmp2,tmp3,tmp4,tmp5,tmp6);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -1086,23 +1088,23 @@ void OpCoupdaybs::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
     decls.insert(IsLeapYearDecl); decls.insert(DaysInMonthDecl);
-    decls.insert(DaysToDateDecl); decls.insert(DateToDays_newDecl);
-    decls.insert(GetNullDate_newDecl); decls.insert(ScaDateDecl);
+    decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
+    decls.insert(GetNullDateDecl); decls.insert(ScaDateDecl);
     decls.insert(addMonthsDecl); decls.insert(getDaysInMonthRangeDecl);
     decls.insert(GetDaysInYearsDecl);
     decls.insert(getDaysInYearRangeDecl); decls.insert(getDiffDecl);
     decls.insert(setDayDecl);decls.insert(checklessthanDecl);
-    decls.insert(lcl_Getcoupdaybs_newDecl);
-    decls.insert(coupdaybs_newDecl);
+    decls.insert(lcl_GetcoupdaybsDecl);
+    decls.insert(coupdaybsDecl);
     funs.insert(IsLeapYear);funs.insert(DaysInMonth);
-    funs.insert(DaysToDate);funs.insert(DateToDays_new);
-    funs.insert(GetNullDate_new);funs.insert(ScaDate);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
+    funs.insert(GetNullDate);funs.insert(ScaDate);
     funs.insert(addMonths);funs.insert(getDaysInMonthRange);
     funs.insert(GetDaysInYears);
     funs.insert(getDaysInYearRange);funs.insert(getDiff);
     funs.insert(setDay);funs.insert(checklessthan);
-    funs.insert(lcl_Getcoupdaybs_new);
-    funs.insert(coupdaybs_new);
+    funs.insert(lcl_Getcoupdaybs);
+    funs.insert(coupdaybs);
 }
 void OpCoupdaybs::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
@@ -1120,7 +1122,7 @@ void OpCoupdaybs::GenSlidingWindowFunction(
     ss << "    int nMat = fMat;\n";
     ss << "    int nFreq = fFreq;\n";
     ss << "    int nBase = fBase;\n";
-    ss <<"    tmp = coupdaybs_new(nSettle,nMat,nFreq,nBase);\n";
+    ss <<"    tmp = coupdaybs(nSettle,nMat,nFreq,nBase);\n";
     ss <<"    return tmp;\n";
     ss <<"}";
 }
@@ -1129,23 +1131,23 @@ void OpCoupdays::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
     decls.insert(IsLeapYearDecl); decls.insert(DaysInMonthDecl);
-    decls.insert(DaysToDateDecl); decls.insert(DateToDays_newDecl);
-    decls.insert(GetNullDate_newDecl); decls.insert(ScaDateDecl);
+    decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
+    decls.insert(GetNullDateDecl); decls.insert(ScaDateDecl);
     decls.insert(addMonthsDecl); decls.insert(getDaysInMonthRangeDecl);
     decls.insert(GetDaysInYearsDecl); decls.insert(GetDaysInYearDecl);
     decls.insert(getDaysInYearRangeDecl); decls.insert(getDiffDecl);
     decls.insert(setDayDecl);decls.insert(checklessthanDecl);
-    decls.insert(lcl_Getcoupdays_newDecl);
-    decls.insert(coupdays_newDecl);
+    decls.insert(lcl_GetcoupdaysDecl);
+    decls.insert(coupdaysDecl);
     funs.insert(IsLeapYear);funs.insert(DaysInMonth);
-    funs.insert(DaysToDate);funs.insert(DateToDays_new);
-    funs.insert(GetNullDate_new);funs.insert(ScaDate);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
+    funs.insert(GetNullDate);funs.insert(ScaDate);
     funs.insert(addMonths);funs.insert(getDaysInMonthRange);
     funs.insert(GetDaysInYears);funs.insert(GetDaysInYear);
     funs.insert(getDaysInYearRange);funs.insert(getDiff);
-    funs.insert(lcl_Getcoupdays_new);
+    funs.insert(lcl_Getcoupdays);
     funs.insert(setDay);funs.insert(checklessthan);
-    funs.insert(coupdays_new);
+    funs.insert(coupdays);
 }
 void OpCoupdays::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
@@ -1163,7 +1165,7 @@ void OpCoupdays::GenSlidingWindowFunction(
     ss << "    int nMat = fMat;\n";
     ss << "    int nFreq = fFreq;\n";
     ss << "    int nBase = fBase;\n";
-    ss <<"    tmp = coupdays_new(nSettle,nMat,nFreq,nBase);\n";
+    ss <<"    tmp = coupdays(nSettle,nMat,nFreq,nBase);\n";
     ss <<"    return tmp;\n";
     ss << "}";
 }
@@ -1250,32 +1252,32 @@ void OpCoupncd::GenSlidingWindowFunction(
 void OpCoupdaysnc::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(IsLeapYearDecl); decls.insert(DaysInMonth_newDecl);
+    decls.insert(IsLeapYearDecl); decls.insert(DaysInMonthDecl);
     decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
-    decls.insert(DateToDays_newDecl);
+    decls.insert(DateToDaysDecl);
     decls.insert(ScaDateDecl);
     decls.insert(addMonthsDecl); decls.insert(getDaysInMonthRangeDecl);
     decls.insert(GetDaysInYearsDecl); decls.insert(GetDaysInYearDecl);
     decls.insert(getDaysInYearRangeDecl); decls.insert(getDiffDecl);
     decls.insert(setDayDecl);decls.insert(checklessthanDecl);
-    decls.insert(coupdaybs_newDecl);
-    decls.insert(lcl_Getcoupdays_newDecl);
-    decls.insert(lcl_Getcoupdaybs_newDecl);
-    decls.insert(coupdays_newDecl);
-    decls.insert(coupdaysnc_newDecl);
-    funs.insert(IsLeapYear);funs.insert(DaysInMonth_new);
-    funs.insert(DaysToDate);funs.insert(DateToDays_new);
+    decls.insert(coupdaybsDecl);
+    decls.insert(lcl_GetcoupdaysDecl);
+    decls.insert(lcl_GetcoupdaybsDecl);
+    decls.insert(coupdaysDecl);
+    decls.insert(coupdaysncDecl);
+    funs.insert(IsLeapYear);funs.insert(DaysInMonth);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
     funs.insert(DateToDays);
     funs.insert(ScaDate);
     funs.insert(addMonths);funs.insert(getDaysInMonthRange);
     funs.insert(GetDaysInYears);funs.insert(GetDaysInYear);
     funs.insert(getDaysInYearRange);funs.insert(getDiff);
     funs.insert(setDay);funs.insert(checklessthan);
-    funs.insert(lcl_Getcoupdaybs_new);
-    funs.insert(coupdaybs_new);
-    funs.insert(lcl_Getcoupdays_new);
-    funs.insert(coupdaysnc_new);
-    funs.insert(coupdays_new);
+    funs.insert(lcl_Getcoupdaybs);
+    funs.insert(coupdaybs);
+    funs.insert(lcl_Getcoupdays);
+    funs.insert(coupdaysnc);
+    funs.insert(coupdays);
 }
 void OpCoupdaysnc::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName,
@@ -1294,7 +1296,7 @@ void OpCoupdaysnc::GenSlidingWindowFunction(
     ss << "    int nMat = fMat;\n";
     ss << "    int nFreq = fFreq;\n";
     ss << "    int nBase = fBase;\n";
-    ss <<"    tmp = coupdaysnc_new(nSettle,nMat,nFreq,nBase);\n";
+    ss <<"    tmp = coupdaysnc(nSettle,nMat,nFreq,nBase);\n";
     ss <<"    return tmp;\n";
     ss << "}";
 }
@@ -1307,15 +1309,15 @@ void OpCoupnum::BinInlineFun(std::set<std::string>& decls,
     decls.insert(DateToDaysDecl);
     decls.insert(ScaDateDecl);
     decls.insert(setDayDecl);decls.insert(checklessthanDecl);
-    decls.insert(addMonthsDecl);decls.insert(lcl_Getcoupnum_newDecl);
-    decls.insert(coupnum_newDecl);
-    funs.insert(IsLeapYear);funs.insert(DaysInMonth_new);
+    decls.insert(addMonthsDecl);decls.insert(lcl_GetcoupnumDecl);
+    decls.insert(coupnumDecl);
+    funs.insert(IsLeapYear);funs.insert(DaysInMonth);
     funs.insert(DaysToDate);
     funs.insert(DateToDays);
     funs.insert(ScaDate);
     funs.insert(setDay);funs.insert(checklessthan);
-    funs.insert(addMonths);funs.insert(lcl_Getcoupnum_new);
-    funs.insert(coupnum_new);
+    funs.insert(addMonths);funs.insert(lcl_Getcoupnum);
+    funs.insert(coupnum);
 }
 void OpCoupnum::GenSlidingWindowFunction(outputstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments)
@@ -1333,7 +1335,7 @@ void OpCoupnum::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int nMat = fMat;\n";
     ss << "    int nFreq = fFreq;\n";
     ss << "    int nBase = fBase;\n";
-    ss <<"    tmp = coupnum_new(nSettle,nMat,nFreq,nBase);\n";
+    ss <<"    tmp = coupnum(nSettle,nMat,nFreq,nBase);\n";
     ss <<"    return tmp;\n";
     ss << "}";
 }
