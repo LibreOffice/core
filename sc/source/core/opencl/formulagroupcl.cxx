@@ -2670,10 +2670,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpProduct>(), nResultSize));
                 break;
-            /*case ocHypGeomDist:
+            case ocHypGeomDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],std::make_shared<OpHypGeomDist));
-                break;*/
+                         ft->Children[i],std::make_shared<OpHypGeomDist>(), nResultSize));
+                break;
             case ocSumX2MY2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpSumX2MY2>(), nResultSize));

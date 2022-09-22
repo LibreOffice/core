@@ -1796,50 +1796,56 @@ void OpDevSq::GenSlidingWindowFunction(outputstream& ss,
 void OpHypGeomDist::GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    CHECK_PARAMETER_COUNT( 4, 4 );
+    CHECK_PARAMETER_COUNT( 4, 5 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    GenerateArg( 0, vSubArguments, ss );
-    GenerateArg( 1, vSubArguments, ss );
-    GenerateArg( 2, vSubArguments, ss );
-    GenerateArg( 3, vSubArguments, ss );
-    ss << "    double N1=floor(arg3);\n"
-    "    double M1=floor(arg2);\n"
-    "    double n1=floor(arg1);\n"
-    "    double x1=floor(arg0);\n"
+    GenerateArg( "x", 0, vSubArguments, ss );
+    GenerateArg( "n", 1, vSubArguments, ss );
+    GenerateArg( "M", 2, vSubArguments, ss );
+    GenerateArg( "N", 3, vSubArguments, ss );
+    GenerateArgWithDefault( "fCumulative", 4, 0, vSubArguments, ss );
+    ss <<
+    "    x = floor(x);\n"
+    "    n = floor(n);\n"
+    "    M = floor(M);\n"
+    "    N = floor(N);\n"
     "    double num[9];\n"
-    "    double tmp;\n"
-    "    if( (x1 < 0.0) || (n1 < x1) || (M1 < x1) || (N1 < n1) ||"
-    "(N1 < M1) || (x1 < n1 - N1 + M1) )\n"
+    "    double tmp = 0;\n"
+    "    if( (x < 0.0) || (n < x) || (N < n) ||"
+    "(N < M) || (M < 0.0) )\n"
     "    {\n"
     "        return CreateDoubleError(IllegalArgument);\n"
     "    }\n"
-    "    num[0]=M1;\n"
-    "    num[1]=x1;\n"
-    "    num[2]=M1-x1;\n"
-    "    num[3]=N1-M1;\n"
-    "    num[4]=n1-x1;\n"
-    "    num[5]=N1-M1-n1+x1;\n"
-    "    num[6]=N1;\n"
-    "    num[7]=n1;\n"
-    "    num[8]=N1-n1;\n"
-    "    for(int i=0;i<9;i++)\n"
+    "    for(int i = (fCumulative ? 0 : x); i <= x; ++i )\n"
     "    {\n"
-    "        if(num[i]<171)\n"
+    "        if( (M < i) || (i < n - N + M) )\n"
+    "            continue;\n"
+    "        num[0]=M;\n"
+    "        num[1]=i;\n"
+    "        num[2]=M-i;\n"
+    "        num[3]=N-M;\n"
+    "        num[4]=n-i;\n"
+    "        num[5]=N-M-n+i;\n"
+    "        num[6]=N;\n"
+    "        num[7]=n;\n"
+    "        num[8]=N-n;\n"
+    "        for(int i=0;i<9;i++)\n"
     "        {\n"
-    "            if(num[i]==0)\n"
-    "                num[i]=0;\n"
+    "            if(num[i]<171)\n"
+    "            {\n"
+    "                if(num[i]==0)\n"
+    "                    num[i]=0;\n"
+    "                else\n"
+    "                    num[i]=log(tgamma(num[i])*num[i]);\n"
+    "            }\n"
     "            else\n"
-    "                num[i]=log(tgamma(num[i])*num[i]);\n"
+    "                num[i]=0.5*log(2.0*M_PI)+(num[i]+0.5)*log(num[i])-num[i]+\n"
+    "                    (1.0/(12.0*num[i])-1.0/(360*pow(num[i],3)));\n"
     "        }\n"
-    "        else\n"
-    "            num[i]=0.5*log(2.0*M_PI)+(num[i]+0.5)*log(num[i])-num[i]+"
-    "(1.0/(12.0*num[i])-1.0/(360*pow(num[i],3)));\n"
-    "    }\n";
-    ss << "    tmp=pow(M_E,(num[0]+num[3]+num[7]+num[8]";
-    ss << "-num[1]-num[2]-num[4]-num[5]-num[6]));\n";
-    ss << "    return tmp;\n";
+    "        tmp+=pow(M_E,(num[0]+num[3]+num[7]+num[8]-num[1]-num[2]-num[4]-num[5]-num[6]));\n"
+    "    }\n"
+    "    return tmp;\n";
     ss << "}\n";
 }
 
