@@ -48,6 +48,15 @@ static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
     return rStrm;
 }
 
+namespace svl
+{
+static std::ostream& operator<<(std::ostream& rStrm, const SharedString& string )
+{
+    return rStrm << "(" << static_cast<const void*>(string.getData()) << ")" << string.getString();
+}
+}
+
+
 namespace {
 
 class Test : public CppUnit::TestFixture {
@@ -62,6 +71,7 @@ public:
     void testSharedStringPool();
     void testSharedStringPoolPurge();
     void testSharedStringPoolPurgeBug1();
+    void testSharedStringPoolEmptyString();
     void testFdo60915();
     void testI116701();
     void testTdf103060();
@@ -80,6 +90,7 @@ public:
     CPPUNIT_TEST(testSharedStringPool);
     CPPUNIT_TEST(testSharedStringPoolPurge);
     CPPUNIT_TEST(testSharedStringPoolPurgeBug1);
+    CPPUNIT_TEST(testSharedStringPoolEmptyString);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST(testTdf103060);
@@ -363,18 +374,21 @@ void Test::testSharedStringPoolPurge()
 {
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(aSysLocale.GetCharClass());
+    size_t extraCount = aPool.getCount(); // internal items such as SharedString::getEmptyString()
+    size_t extraCountIgnoreCase = aPool.getCountIgnoreCase();
+
     aPool.intern("Andy");
     aPool.intern("andy");
     aPool.intern("ANDY");
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong string count.", static_cast<size_t>(3), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong case insensitive string count.", static_cast<size_t>(1), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong string count.", 3+extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong case insensitive string count.", 1+extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Since no string objects referencing the pooled strings exist, purging
-    // the pool should empty it.
+    // the pool should empty it (except for internal items).
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Now, create string objects using optional so we can clear them
     std::optional<svl::SharedString> pStr1 = aPool.intern("Andy");
@@ -382,37 +396,37 @@ void Test::testSharedStringPoolPurge()
     std::optional<svl::SharedString> pStr3 = aPool.intern("ANDY");
     std::optional<svl::SharedString> pStr4 = aPool.intern("Bruce");
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(5+extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // This shouldn't purge anything.
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(5+extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Delete one heap string object, and purge. That should purge one string.
     pStr1.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(4+extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Nothing changes, because the upper-string is still in the map
     pStr3.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(4+extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Again.
     pStr2.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(2+extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(1+extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Delete 'Bruce' and purge.
     pStr4.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, aPool.getCountIgnoreCase());
 }
 
 void Test::testSharedStringPoolPurgeBug1()
@@ -421,11 +435,26 @@ void Test::testSharedStringPoolPurgeBug1()
     // purge() would de-reference a dangling pointer and consequently cause an ASAN failure.
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(aSysLocale.GetCharClass());
+    size_t extraCount = aPool.getCount(); // internal items such as SharedString::getEmptyString()
+    size_t extraCountIgnoreCase = aPool.getCountIgnoreCase();
     aPool.intern("Andy");
     aPool.intern("andy");
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(extraCount, aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, aPool.getCountIgnoreCase());
+}
+
+void Test::testSharedStringPoolEmptyString()
+{
+    // Make sure SharedString::getEmptyString() is in the pool and matches empty strings.
+    SvtSysLocale aSysLocale;
+    svl::SharedStringPool aPool(aSysLocale.GetCharClass());
+    aPool.intern("");
+    CPPUNIT_ASSERT_EQUAL(SharedString::getEmptyString(), aPool.intern(""));
+    CPPUNIT_ASSERT_EQUAL(SharedString::getEmptyString(), aPool.intern(SharedString::EMPTY_STRING));
+    // And it should still work even after purging.
+    aPool.purge();
+    CPPUNIT_ASSERT_EQUAL(SharedString::getEmptyString(), aPool.intern(SharedString::EMPTY_STRING));
 }
 
 void Test::checkPreviewString(SvNumberFormatter& aFormatter,
