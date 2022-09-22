@@ -4178,10 +4178,6 @@ vcl/source/filter/wmf/wmfwr.hxx:162
     void WMFWriter::WMFRecord_SetBkMode(_Bool)
     _Bool bTransparent
     1
-vcl/source/fontsubset/list.h:64
-    int listSkipForward(struct list_ *,int)
-    int n
-    1
 vcl/source/gdi/FileDefinitionWidgetDraw.cxx:102
     _Bool getSettingValueBool(class std::basic_string_view<char, struct std::char_traits<char> >,_Bool)
     _Bool bDefault

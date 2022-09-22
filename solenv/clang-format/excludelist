@@ -14819,8 +14819,6 @@ vcl/source/font/fontcharmap.cxx
 vcl/source/font/fontmetric.cxx
 vcl/source/fontsubset/cff.cxx
 vcl/source/fontsubset/fontsubset.cxx
-vcl/source/fontsubset/list.cxx
-vcl/source/fontsubset/list.h
 vcl/source/fontsubset/sft.cxx
 vcl/source/fontsubset/ttcr.cxx
 vcl/source/fontsubset/ttcr.hxx
