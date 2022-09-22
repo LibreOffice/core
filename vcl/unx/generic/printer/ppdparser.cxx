@@ -1466,7 +1466,7 @@ bool PPDParser::getPaperDimension(
     return true;
 }
 
-OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
+OUString PPDParser::matchPaper(int nWidth, int nHeight, bool bDontSwap) const
 {
     if( ! m_pPaperDimensions )
         return OUString();
@@ -1497,14 +1497,10 @@ OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
         }
     }
 
-    static bool bDontSwap = false;
     if( nPDim == -1 && ! bDontSwap )
     {
         // swap portrait/landscape and try again
-        bDontSwap = true;
-        OUString rRet = matchPaper( nHeight, nWidth );
-        bDontSwap = false;
-        return rRet;
+        return matchPaper( nHeight, nWidth, true );
     }
 
     return nPDim != -1 ? m_pPaperDimensions->getValue( nPDim )->m_aOption : OUString();

@@ -201,7 +201,7 @@ public:
     // returns false if paper not found
 
     // match the best paper for width and height
-    OUString        matchPaper( int nWidth, int nHeight ) const;
+    OUString        matchPaper( int nWidth, int nHeight, bool bDontSwap = false ) const;
 
     bool getMargins( std::u16string_view rPaperName,
                      int &rLeft, int& rRight,
