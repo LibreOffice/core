@@ -205,6 +205,7 @@ class SwLayIdle
     bool DoIdleJob_( const SwContentFrame*, IdleJobType );
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
 
+    static bool isJobEnabled(IdleJobType eJob, const SwViewShell* pViewShell);
 public:
     SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pImp );
     ~SwLayIdle();
