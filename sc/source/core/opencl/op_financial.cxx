@@ -1555,113 +1555,61 @@ void OpTbillprice::GenSlidingWindowFunction(
     ss << "}\n";
 }
 
-void RATE::BinInlineFun(std::set<std::string>& decls,
+void OpRate::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(nCorrValDecl);
-    decls.insert(SCdEpsilonDecl);decls.insert(RoundDecl);
-    funs.insert(Round);
+    decls.insert(RateIterationDecl);
+    funs.insert(RateIteration);
 }
 
-void RATE::GenSlidingWindowFunction(
+void OpRate::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
-    CHECK_PARAMETER_COUNT( 6, 6 );
+    CHECK_PARAMETER_COUNT( 3, 6 );
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    GenerateArg( "arg0", 0, vSubArguments, ss );
-    GenerateArg( "arg1", 1, vSubArguments, ss );
-    GenerateArg( "arg2", 2, vSubArguments, ss );
-    GenerateArgWithDefault( "arg3", 3, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "arg4", 4, 0, vSubArguments, ss );
-    GenerateArgWithDefault( "arg5", 5, 0.1, vSubArguments, ss );
-    ss << "    double result;\n";
-    ss << "    bool bValid = true, bFound = false;\n";
-    ss << "    double fX, fXnew, fTerm, fTermDerivation;\n";
-    ss << "    double fGeoSeries, fGeoSeriesDerivation;\n";
-    ss << "    int nIterationsMax = 150;\n";
-    ss << "    int nCount = 0;\n";
-    ss << "    double fEpsilonSmall = 1.0E-14;\n";
-    ss << "    if( arg0 <= 0 )\n";
+    GenerateArg( "fNper", 0, vSubArguments, ss );
+    GenerateArg( "fPayment", 1, vSubArguments, ss );
+    GenerateArg( "fPv", 2, vSubArguments, ss );
+    GenerateArgWithDefault( "fFv", 3, 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fPayType", 4, 0, vSubArguments, ss );
+    ss << "    bool bPayType = fPayType != 0;\n";
+    if( vSubArguments.size() == 6 )
+    {
+        GenerateArgWithDefault( "fGuess", 5, 0.1, vSubArguments, ss );
+        ss << "    double fOrigGuess = fGuess;\n";
+        ss << "    bool bDefaultGuess = false;\n";
+    }
+    else
+    {
+        ss << "    double fGuess = 0.1, fOrigGuess = 0.1;\n";
+        ss << "    bool bDefaultGuess = true;\n";
+    }
+    ss << "    if( fNper <= 0 )\n";
     ss << "        return CreateDoubleError(IllegalArgument);\n";
-    ss << "    arg3 = arg3 - arg1 * arg4;\n";
-    ss << "    arg2 = arg2 + arg1 * arg4;\n";
-    ss << "    if (arg0 == Round(arg0)){\n";
-    ss << "        fX = arg5;\n";
-    ss << "        double fPowN, fPowNminus1;\n";
-    ss << "        while (!bFound && nCount < nIterationsMax)\n";
+    ss << "    bool bValid = RateIteration(fNper, fPayment, fPv, fFv, bPayType, &fGuess);\n";
+    ss << "    if (!bValid)\n";
+    ss << "    {\n";
+    ss << "        if (bDefaultGuess)\n";
     ss << "        {\n";
-    ss << "            fPowNminus1 = pow( 1.0+fX, arg0-1.0);\n";
-    ss << "            fPowN = fPowNminus1 * (1.0+fX);\n";
-    ss << "            if (fX == 0.0)\n";
+    ss << "            double fX = fOrigGuess;\n";
+    ss << "            for (int nStep = 2; nStep <= 10 && !bValid; ++nStep)\n";
     ss << "            {\n";
-    ss << "                fGeoSeries = arg0;\n";
-    ss << "                fGeoSeriesDerivation = arg0 * (arg0-1.0) / 2.0;\n";
-    ss << "            }\n";
-    ss << "            else\n";
-    ss << "            {";
-    ss << "                fGeoSeries = (fPowN-1.0)/fX;\n";
-    ss << "                fGeoSeriesDerivation =";
-    ss << " arg0 * fPowNminus1 / fX - fGeoSeries / fX;\n";
-    ss << "            }\n";
-    ss << "            fTerm = arg3 + arg2 *fPowN+ arg1 * fGeoSeries;\n";
-    ss << "            fTermDerivation = arg2 * arg0 * fPowNminus1 +";
-    ss << "arg1 * fGeoSeriesDerivation;\n";
-    ss << "            if (fabs(fTerm) < fEpsilonSmall)\n";
-    ss << "                bFound = true;\n";
-    ss << "            else\n";
-    ss << "            {\n";
-    ss << "                if (fTermDerivation == 0.0)\n";
-    ss << "                    fXnew = fX + 1.1 * SCdEpsilon;\n";
-    ss << "                else\n";
-    ss << "                    fXnew = fX - fTerm / fTermDerivation;\n";
-    ss << "                nCount++;\n";
-    ss << "                bFound = (fabs(fXnew - fX) < SCdEpsilon);\n";
-    ss << "                fX = fXnew;\n";
+    ss << "                fGuess = fX * nStep;\n";
+    ss << "                bValid = RateIteration( fNper, fPayment, fPv, fFv, bPayType, &fGuess);\n";
+    ss << "                if (!bValid)\n";
+    ss << "                {\n";
+    ss << "                    fGuess = fX / nStep;\n";
+    ss << "                    bValid = RateIteration( fNper, fPayment, fPv, fFv, bPayType, &fGuess);\n";
+    ss << "                }\n";
     ss << "            }\n";
     ss << "        }\n";
+    ss << "        if (!bValid)\n";
+    ss << "            return CreateDoubleError(NoConvergence);\n";
     ss << "    }\n";
-    ss << "    else\n";
-    ss << "    {";
-    ss << "        fX = (arg5 < -1.0) ? -1.0 : arg5;\n";
-    ss << "        while (bValid && !bFound && nCount < nIterationsMax)\n";
-    ss << "        {\n";
-    ss << "            if (fX == 0.0){\n";
-    ss << "                fGeoSeries = arg0;\n";
-    ss << "                fGeoSeriesDerivation = arg0 * ";
-    ss << "(arg0-1.0) / 2.0;\n";
-    ss << "            }else{\n";
-    ss << "                fGeoSeries = (pow( 1.0+fX, arg0) - 1.0) / fX;\n";
-    ss << "                fGeoSeriesDerivation =";
-    ss << " arg0 * pow(1.0+fX,arg0-1.0) / fX";
-    ss << " - fGeoSeries / fX;\n";
-    ss << "            }\n";
-    ss << "            fTerm = arg3 + arg2 *pow(1.0+fX, arg0)";
-    ss << "+ arg1 * fGeoSeries;\n";
-    ss << "            fTermDerivation =";
-    ss << "arg2*arg0*pow(1.0+fX,arg0-1.0)";
-    ss << "+arg1*fGeoSeriesDerivation;\n";
-    ss << "            if (fabs(fTerm) < fEpsilonSmall)\n";
-    ss << "                bFound = true;\n";
-    ss << "            else{\n";
-    ss << "                if (fTermDerivation == 0.0)\n";
-    ss << "                    fXnew = fX + 1.1 * SCdEpsilon;\n";
-    ss << "                else\n";
-    ss << "                    fXnew = fX - fTerm / fTermDerivation;\n";
-    ss << "                nCount++;\n";
-    ss << "                bFound = (fabs(fXnew - fX) < SCdEpsilon);\n";
-    ss << "                fX = fXnew;\n";
-    ss << "                bValid = (fX >= -1.0);\n";
-    ss << "            }\n";
-    ss << "        }\n";
-    ss << "    }\n";
-    ss << "    if (bValid && bFound)\n";
-    ss << "        result = fX;\n";
-    ss << "    else\n";
-    ss << "        return CreateDoubleError(NoConvergence);\n";
-    ss << "    return result;\n";
-    ss << "}";
+    ss << "    return fGuess;\n";
+    ss << "}\n";
 }
 
 void OpTbillyield::BinInlineFun(std::set<std::string>& decls,

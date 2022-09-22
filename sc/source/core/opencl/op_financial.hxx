@@ -527,15 +527,11 @@ public:
     virtual std::string BinFuncName() const override { return "PriceMat"; }
 };
 
-class RATE: public Normal
-{
+class OpRate: public Normal {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
-};
-class OpIntrate: public RATE {
-public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string BinFuncName() const override { return "rate"; }
 };
