@@ -235,6 +235,10 @@ private:
     bool m_bSetCursorInReadOnly : 1;// true -> Cursor is allowed in ReadOnly-Areas
     bool m_bOverwriteCursor : 1;    // true -> show Overwrite Cursor
 
+    // true -> send accessible events when cursor changes
+    // (set to false when using internal-only helper cursor)
+    bool m_bSendAccessibleCursorEvents : 1;
+
     bool m_bMacroExecAllowed : 1;
 
     SwFrame* m_oldColFrame;
@@ -467,6 +471,9 @@ public:
 
     bool IsOverwriteCursor() const { return m_bOverwriteCursor; }
     void SetOverwriteCursor( bool bFlag ) { m_bOverwriteCursor = bFlag; }
+
+    bool IsSendAccessibleCursorEvents() const { return m_bSendAccessibleCursorEvents; };
+    void SetSendAccessibleCursorEvents(bool bEnable) { m_bSendAccessibleCursorEvents = bEnable; };
 
     // Return current frame in which the cursor is placed.
     SwContentFrame *GetCurrFrame( const bool bCalcFrame = true ) const;

@@ -6598,6 +6598,10 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.LockView(true);
         rSh.Push();
 
+        // disable accessible events for internal-only helper cursor
+        const bool bSendAccessibleEventOld = rSh.IsSendAccessibleCursorEvents();
+        rSh.SetSendAccessibleCursorEvents(false);
+
         // get the sentence around the cursor
         rSh.HideCursor();
         rSh.GoStartSentence();
@@ -6606,6 +6610,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
 
         rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rSh.SetSendAccessibleCursorEvents(bSendAccessibleEventOld);
         rSh.HideCursor();
 
         if (bUnLockView)
@@ -6641,11 +6646,16 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         ::std::optional<SwCallLink> aLink(std::in_place, rSh);
         rSh.Push();
 
+        // disable accessible events for internal-only helper cursor
+        const bool bSendAccessibleEventOld = rSh.IsSendAccessibleCursorEvents();
+        rSh.SetSendAccessibleCursorEvents(false);
+
         rSh.HideCursor();
         rSh.GoStartSentence();
         TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
 
         rSh.Pop(SwCursorShell::PopMode::DeleteCurrent, aLink);
+        rSh.SetSendAccessibleCursorEvents(bSendAccessibleEventOld);
         rSh.ShowCursor();
 
         if (bUnLockView)
@@ -6668,11 +6678,17 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
     // rSelection is relative to the start of the sentence, so find that and
     // adjust the range by it
     rSh.Push();
+
+    // disable accessible events for internal-only helper cursor
+    const bool bSendAccessibleEventOld = rSh.IsSendAccessibleCursorEvents();
+    rSh.SetSendAccessibleCursorEvents(false);
+
     rSh.HideCursor();
     rSh.GoStartSentence();
     TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
 
     rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    rSh.SetSendAccessibleCursorEvents(bSendAccessibleEventOld);
     rSh.ShowCursor();
 
     if (rSh.SelectTextView(nStartPos + TextFrameIndex(rSelection.Min()), nStartPos + TextFrameIndex(rSelection.Max())))
