@@ -1375,7 +1375,7 @@ namespace svgio::svgreader
             }
         }
 
-        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew, bool bRemove)
+        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1392,11 +1392,7 @@ namespace svgio::svgreader
                     if(nPattern == aChar)
                     {
                         bChanged = true;
-
-                        if(!bRemove)
-                        {
-                            aBuffer.append(nNew);
-                        }
+                        aBuffer.append(nNew);
                     }
                     else
                     {
@@ -1513,40 +1509,28 @@ namespace svgio::svgreader
             return rCandidate;
         }
 
-        OUString whiteSpaceHandlingDefault(const OUString& rCandidate)
+        OUString xmlSpaceHandling(const OUString& rCandidate, bool bIsDefault)
         {
             const sal_Unicode aNewline('\n');
             const sal_Unicode aTab('\t');
             const sal_Unicode aSpace(' ');
 
             // remove all newline characters
-            OUString aRetval(convert(rCandidate, aNewline, aNewline, true));
+            OUString aRetval(convert(rCandidate, aNewline, aSpace));
 
             // convert tab to space
-            aRetval = convert(aRetval, aTab, aSpace, false);
+            aRetval = convert(aRetval, aTab, aSpace);
 
             // strip of all leading and trailing spaces
             aRetval = aRetval.trim();
 
-            // consolidate contiguous space
-            aRetval = consolidateContiguousSpace(aRetval);
+            if(bIsDefault)
+            {
+                // consolidate contiguous space
+                aRetval = consolidateContiguousSpace(aRetval);
+            }
 
             return aRetval;
-        }
-
-        OUString whiteSpaceHandlingPreserve(const OUString& rCandidate)
-        {
-            const sal_Unicode aNewline('\n');
-            const sal_Unicode aTab('\t');
-            const sal_Unicode aSpace(' ');
-
-            // convert newline to space
-            convert(rCandidate, aNewline, aSpace, false);
-
-            // convert tab to space
-            convert(rCandidate, aTab, aSpace, false);
-
-            return rCandidate;
         }
 
         ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider)

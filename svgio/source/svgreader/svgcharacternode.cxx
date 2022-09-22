@@ -541,11 +541,11 @@ namespace svgio::svgreader
         {
             if (XmlSpace::Default == getXmlSpace())
             {
-                maText = whiteSpaceHandlingDefault(maText);
+                maText = xmlSpaceHandling(maText, true);
             }
             else
             {
-                maText = whiteSpaceHandlingPreserve(maText);
+                maText = xmlSpaceHandling(maText, false);
             }
         }
 

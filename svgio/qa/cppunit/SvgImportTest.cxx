@@ -48,6 +48,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testMarkerOrient();
     void testMarkerInPresentation();
     void testMarkerInCssStyle();
+    void testTextXmlSpace();
     void testTdf45771();
     void testTdf97941();
     void testTdf104339();
@@ -97,6 +98,7 @@ public:
     CPPUNIT_TEST(testMarkerOrient);
     CPPUNIT_TEST(testMarkerInPresentation);
     CPPUNIT_TEST(testMarkerInCssStyle);
+    CPPUNIT_TEST(testTextXmlSpace);
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf97941);
     CPPUNIT_TEST(testTdf104339);
@@ -418,6 +420,25 @@ void Test::testMarkerInCssStyle()
     assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygonstroke/line", "linejoin", "Miter");
     assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygonstroke/line", "miterangle", "28");
     assertXPath(pDocument, "/primitive2D/transform/transform[1]/polypolygonstroke/line", "linecap", "BUTT");
+}
+
+void Test::testTextXmlSpace()
+{
+    //Check tspan fontsize when using relative units
+    Primitive2DSequence aSequenceTdf97941 = parseSvg(u"/svgio/qa/cppunit/data/textXmlSpace.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97941.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf97941);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]", "text", "a b");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]", "text", "a b");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]", "text", "a b");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]", "text", "a  b");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[5]", "text", "a b");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[6]", "text", "a   b");
 }
 
 void Test::testTdf45771()
