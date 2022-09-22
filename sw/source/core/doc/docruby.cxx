@@ -153,7 +153,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
                         {
                             getIDocumentContentOperations().InsertString( aPam, pEntry->GetText() );
                             aPam.SetMark();
-                            aPam.GetMark()->nContent -= pEntry->GetText().getLength();
+                            aPam.GetMark()->AdjustContent( -pEntry->GetText().getLength() );
                             getIDocumentContentOperations().InsertPoolItem(
                                 aPam, pEntry->GetRubyAttr(), SetAttrMode::DONTEXPAND );
                         }
@@ -213,7 +213,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
                     if( !bHasMark && nStart > pAttr->GetStart() )
                     {
                         nStart = pAttr->GetStart();
-                        pPos->nContent = nStart;
+                        pPos->SetContent(nStart);
                     }
                 }
                 break;
@@ -232,7 +232,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
         if (nWordStt < nStart && nWordStt >= 0)
         {
             nStart = nWordStt;
-            pPos->nContent = nStart;
+            pPos->SetContent(nStart);
         }
     }
 
@@ -243,13 +243,13 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
     {
         if( pAttr && nStart == pAttr->GetStart() )
         {
-            pPos->nContent = nStart;
+            pPos->SetContent(nStart);
             if( !rPam.HasMark() )
             {
                 rPam.SetMark();
-                pPos->nContent = pAttr->GetAnyEnd();
+                pPos->SetContent(pAttr->GetAnyEnd());
                 if( pPos->GetContentIndex() > nEnd )
-                    pPos->nContent = nEnd;
+                    pPos->SetContent(nEnd);
                 rEntry.SetRubyAttr( pAttr->GetRuby() );
             }
             break;
