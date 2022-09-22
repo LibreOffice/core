@@ -67,7 +67,7 @@ void FontSubsetInfo::LoadFont( vcl::TrueTypeFont* pSftTTFont )
 
 bool FontSubsetInfo::CreateFontSubset(
     FontType nReqFontTypeMask,
-    FILE* pOutFile, const char* pReqFontName,
+    SvStream* pOutFile, const char* pReqFontName,
     const sal_GlyphId* pReqGlyphIds, const sal_uInt8* pReqEncodedIds, int nReqGlyphCount)
 {
     // prepare request details needed by all underlying subsetters

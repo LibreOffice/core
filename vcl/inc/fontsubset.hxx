@@ -29,6 +29,7 @@
 #include "glyphid.hxx"
 
 namespace vcl { class TrueTypeFont; } ///< SFT's idea of a TTF font
+class SvStream;
 
 enum class FontType {
     NO_FONT     = 0,
@@ -57,7 +58,7 @@ public:
     void        LoadFont( vcl::TrueTypeFont* pSftTrueTypeFont );
 
     bool        CreateFontSubset( FontType nOutFontTypeMask,
-                    FILE* pOutFile, const char* pOutFontName,
+                    SvStream* pOutFile, const char* pOutFontName,
                     const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncodedIds,
                     int nReqGlyphCount);
 
@@ -79,7 +80,7 @@ private:
 
     // subset-request details
     FontType                mnReqFontTypeMask;  ///< allowed subset-target font types
-    FILE*                   mpOutFile;
+    SvStream*               mpOutFile;
     const char*             mpReqFontName;
     const sal_GlyphId*      mpReqGlyphIds;
     const sal_uInt8*        mpReqEncodedIds;

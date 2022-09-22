@@ -27,6 +27,7 @@
 #include <o3tl/safeint.hxx>
 #include <strhelper.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 
 typedef sal_uInt8 U8;
 typedef sal_uInt16 U16;
@@ -1610,7 +1611,7 @@ namespace {
 class Type1Emitter
 {
 public:
-    explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset);
+    explicit    Type1Emitter( SvStream* pOutFile, bool bPfbSubset);
     ~Type1Emitter();
     void        setSubsetName( const char* );
 
@@ -1622,7 +1623,7 @@ public:
     void        updateLen( int nTellPos, size_t nLength);
     void        emitValVector( const char* pLineHead, const char* pLineTail, const std::vector<ValType>&);
 private:
-    FILE*       mpFileOut;
+    SvStream*   mpFileOut;
     char        maBuffer[MAX_T1OPS_SIZE];   // TODO: dynamic allocation
     unsigned    mnEECryptR;
 public:
@@ -1635,7 +1636,7 @@ public:
 
 }
 
-Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
+Type1Emitter::Type1Emitter( SvStream* pOutFile, bool bPfbSubset)
 :   mpFileOut( pOutFile)
 ,   maBuffer{}
 ,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
@@ -1663,7 +1664,7 @@ void Type1Emitter::setSubsetName( const char* pSubsetName)
 
 int Type1Emitter::tellPos() const
 {
-    int nTellPos = ftell( mpFileOut);
+    int nTellPos = mpFileOut->Tell();
     return nTellPos;
 }
 
@@ -1675,18 +1676,18 @@ void Type1Emitter::updateLen( int nTellPos, size_t nLength)
     cData[1] = static_cast<U8>(nLength >>  8);
     cData[2] = static_cast<U8>(nLength >> 16);
     cData[3] = static_cast<U8>(nLength >> 24);
-    const tools::Long nCurrPos = ftell(mpFileOut);
+    const tools::Long nCurrPos = mpFileOut->Tell();
     if (nCurrPos < 0)
         return;
-    if (fseek( mpFileOut, nTellPos, SEEK_SET) != 0)
+    if (mpFileOut->Seek(nTellPos) != static_cast<sal_uInt64>(nTellPos))
         return;
-    fwrite(cData, 1, sizeof(cData), mpFileOut);
-    (void)fseek(mpFileOut, nCurrPos, SEEK_SET);
+    mpFileOut->WriteBytes(cData, sizeof(cData));
+    mpFileOut->Seek(nCurrPos);
 }
 
 inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
 {
-    return fwrite( pData, 1, nLength, mpFileOut);
+    return mpFileOut->WriteBytes( pData, nLength );
 }
 
 inline void Type1Emitter::emitAllRaw()

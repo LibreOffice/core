@@ -193,7 +193,7 @@ struct EncEntry
 
 }
 
-static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
+static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, SvStream* pTmpFile,
     const char* pGlyphSetName, int nGlyphCount,
     /*const*/ const sal_uInt16* pRequestedGlyphs, /*const*/ const unsigned char* pEncoding,
     bool bAllowType42 )
@@ -240,10 +240,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         return;
 
     utl::TempFile aTmpFile;
-    aTmpFile.EnableKillingFile();
-    FILE* pTmpFile = fopen(OUStringToOString(aTmpFile.GetFileName(), osl_getThreadTextEncoding()).getStr(), "w+b");
-    if (pTmpFile == nullptr)
-        return;
+    SvStream* pTmpFile = aTmpFile.GetStream(StreamMode::READWRITE);
 
     // encoding vector maps character encoding to the ordinal number
     // of the glyph in the output file
@@ -271,31 +268,30 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
 
         // create the current subset
         OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
-        fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aGlyphSetName.getStr() );
+        pTmpFile->WriteOString( OStringConcatenation(OString::Concat("%%BeginResource: font ")+ aGlyphSetName + "\n") );
         CreatePSUploadableFont( pTTFont, pTmpFile, aGlyphSetName.getStr(), glyph.size(),
                                 pTTGlyphMapping, pEncoding, bAllowType42 );
-        fprintf( pTmpFile, "%%%%EndResource\n" );
+        pTmpFile->WriteOString("%%EndResource\n" );
         rSuppliedFonts.push_back( aGlyphSetName );
         ++nGlyphSetID;
     }
 
     // copy the file into the page header
-    rewind(pTmpFile);
-    fflush(pTmpFile);
+    pTmpFile->Seek(0);
+    pTmpFile->Flush();
 
     unsigned char  pBuffer[0x2000];
     sal_uInt64 nIn;
     sal_uInt64 nOut;
     do
     {
-        nIn = fread(pBuffer, 1, sizeof(pBuffer), pTmpFile);
+        nIn = pTmpFile->ReadBytes(pBuffer, sizeof(pBuffer));
         rOutFile.write (pBuffer, nIn, nOut);
     }
-    while ((nIn == nOut) && !feof(pTmpFile));
+    while ((nIn == nOut) && !pTmpFile->eof());
 
     // cleanup
     CloseTTFont (pTTFont);
-    fclose (pTmpFile);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

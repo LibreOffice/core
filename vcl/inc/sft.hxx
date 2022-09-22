@@ -52,6 +52,8 @@
 
 #include "font/PhysicalFontFace.hxx"
 
+class SvStream;
+
 namespace vcl
 {
 
@@ -582,7 +584,7 @@ class TrueTypeFace;
  * @ingroup sft
  *
  */
-    SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
+    SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *fname, sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
 
 /**
  * Generates a new TrueType font and dumps it to <b>outf</b> file.
@@ -644,7 +646,7 @@ class TrueTypeFace;
  *
  */
     SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
-                               FILE          *outf,
+                               SvStream      *outf,
                                const char    *psname,
                                sal_uInt16 const *glyphArray,
                                sal_uInt8          *encoding,
