@@ -56,6 +56,7 @@ class SfxPrinter;
 class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
+class SfxStoringHelper;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
@@ -172,6 +173,9 @@ friend class SfxPrinterController;
 
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
+
+    /// Used for async export
+    std::shared_ptr<SfxStoringHelper> m_xHelper;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -416,6 +420,8 @@ public:
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);
     bool isBlockedCommand(OUString command);
+
+    void SetStoringHelper(std::shared_ptr<SfxStoringHelper> xHelper) { m_xHelper = xHelper; }
 };
 
 

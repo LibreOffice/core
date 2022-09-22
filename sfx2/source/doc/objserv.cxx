@@ -590,6 +590,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     bool bIsPDFExport = false;
     bool bIsAutoRedact = false;
+    bool bIsAsync = false;
     std::vector<std::pair<RedactionTarget, OUString>> aRedactionTargets;
     switch(nId)
     {
@@ -896,6 +897,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_SAVEASREMOTE:
         case SID_SAVEDOC:
         {
+            // so far only pdf and epub support Async interface
+            if (comphelper::LibreOfficeKit::isActive() && rReq.GetCallMode() == SfxCallMode::ASYNCHRON
+                && (nId == SID_EXPORTDOCASEPUB || nId == SID_EXPORTDOCASPDF))
+                bIsAsync = true;
+
             // derived class may decide to abort this
             if( !QuerySlotExecutable( nId ) )
             {
@@ -1014,7 +1020,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( !pSlot )
                     throw uno::Exception("no slot", nullptr);
 
-                SfxStoringHelper aHelper;
+                std::shared_ptr<SfxStoringHelper> xHelper = std::make_shared<SfxStoringHelper>();
+                if (bIsAsync && SfxViewShell::Current())
+                    SfxViewShell::Current()->SetStoringHelper(xHelper);
 
                 if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, nullptr ) != RET_YES )
                 {
@@ -1036,11 +1044,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     ExecuteSlot(aRequest);
                 }
 
-                aHelper.GUIStoreModel( GetModel(),
+                xHelper->GUIStoreModel( GetModel(),
                                        OUString::createFromAscii( pSlot->GetUnoName() ),
                                        aDispatchArgs,
                                        bPreselectPassword,
-                                       GetDocumentSignatureState() );
+                                       GetDocumentSignatureState(),
+                                       bIsAsync );
 
                 if (bMailPrepareExport)
                 {

@@ -899,6 +899,14 @@ typedef enum
      *      which is a representation of the pie segment.
      */
     LOK_CALLBACK_MEDIA_SHAPE = 58,
+
+    /**
+     * The document is available to download by the client.
+     *
+     * Payload example:
+     * "file:///tmp/hello-world.pdf"
+     */
+    LOK_CALLBACK_EXPORT_FILE = 59,
 }
 LibreOfficeKitCallbackType;
 
@@ -1045,6 +1053,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FONTS_MISSING";
     case LOK_CALLBACK_MEDIA_SHAPE:
         return "LOK_CALLBACK_MEDIA_SHAPE";
+    case LOK_CALLBACK_EXPORT_FILE:
+        return "LOK_CALLBACK_EXPORT_FILE";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

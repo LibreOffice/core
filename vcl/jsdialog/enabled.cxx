@@ -97,6 +97,15 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"xmlsec/ui/certpage.ui"
         || rUIFile == u"xmlsec/ui/digitalsignaturesdialog.ui"
         || rUIFile == u"xmlsec/ui/viewcertdialog.ui"
+        || rUIFile == u"filter/ui/pdfoptionsdialog.ui"
+        || rUIFile == u"filter/ui/pdfgeneralpage.ui"
+        || rUIFile == u"filter/ui/pdfviewpage.ui"
+        || rUIFile == u"filter/ui/pdfuserinterfacepage.ui"
+        || rUIFile == u"filter/ui/pdfsecuritypage.ui"
+        || rUIFile == u"filter/ui/pdflinkspage.ui"
+        || rUIFile == u"filter/ui/warnpdfdialog.ui"
+        || rUIFile == u"filter/ui/pdfsignpage.ui"
+        || rUIFile == u"writerperfect/ui/exportepub.ui"
         )
     {
         return true;
