@@ -1,6 +1,6 @@
 --- configure
 +++ configure
-@@ -22699,7 +22699,6 @@
+@@ -22808,7 +22808,6 @@
  clean_CPPFLAGS=$CPPFLAGS
  clean_LDFLAGS=$LDFLAGS
  clean_LIBS=$LIBS
@@ -8,7 +8,7 @@
  
  # Check whether --with-zlib was given.
  if test ${with_zlib+y}
-@@ -22709,6 +22708,7 @@
+@@ -22818,6 +22818,7 @@
  
  
  if test "$OPT_ZLIB" = "no" ; then
@@ -16,7 +16,7 @@
      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: zlib disabled" >&5
  printf "%s\n" "$as_me: WARNING: zlib disabled" >&2;}
  else
-@@ -22716,6 +22716,21 @@
+@@ -22825,6 +825,21 @@
      OPT_ZLIB=""
    fi
  
@@ -38,7 +38,7 @@
    if test -z "$OPT_ZLIB" ; then
  
      if test -n "$PKG_CONFIG"; then
-@@ -23011,6 +23026,7 @@
+@@ -23120,6 +23120,7 @@
  printf "%s\n" "$as_me: found both libz and libz.h header" >&6;}
      curl_zlib_msg="enabled"
    fi
@@ -48,7 +48,7 @@
   if test x"$AMFIXLIB" = x1; then
 --- configure.ac
 +++ configure.ac
-@@ -880,19 +880,30 @@
+@@ -1222,19 +1222,30 @@
  clean_CPPFLAGS=$CPPFLAGS
  clean_LDFLAGS=$LDFLAGS
  clean_LIBS=$LIBS
@@ -80,7 +80,7 @@
    if test -z "$OPT_ZLIB" ; then
      CURL_CHECK_PKGCONFIG(zlib)
  
-@@ -975,6 +986,7 @@
+@@ -1316,6 +1316,7 @@
      AC_MSG_NOTICE([found both libz and libz.h header])
      curl_zlib_msg="enabled"
    fi
