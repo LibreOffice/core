@@ -81,14 +81,14 @@ bool splitLastFromConfigurationPath(std::u16string_view _sInPath,
     size_t nPos = _sInPath.size()-1;
 
     // strip trailing slash
-    if (nPos != std::u16string_view::npos && _sInPath[ nPos ] == '/')
+    if (nPos != std::u16string_view::npos && nPos > 0 && _sInPath[ nPos ] == '/')
     {
         OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 
     // check for predicate ['xxx'] or ["yyy"]
-    if (nPos != std::u16string_view::npos && _sInPath[ nPos ] == ']')
+    if (nPos != std::u16string_view::npos && nPos > 0 && _sInPath[ nPos ] == ']')
     {
         sal_Unicode chQuote = _sInPath[--nPos];
 
