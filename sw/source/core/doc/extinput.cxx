@@ -53,8 +53,8 @@ SwExtTextInput::~SwExtTextInput()
     if( !pTNd )
         return;
 
-    SwContentIndex& rIdx = GetPoint()->nContent;
-    sal_Int32 nSttCnt = rIdx.GetIndex();
+    SwPosition& rPtPos = *GetPoint();
+    sal_Int32 nSttCnt = rPtPos.GetContentIndex();
     sal_Int32 nEndCnt = GetMark()->GetContentIndex();
     if( nEndCnt == nSttCnt )
         return;
@@ -74,7 +74,7 @@ SwExtTextInput::~SwExtTextInput()
 
     // In order to get Undo/Redlining etc. working correctly,
     // we need to go through the Doc interface
-    rIdx = nSttCnt;
+    rPtPos.SetContent(nSttCnt);
     const OUString sText( pTNd->GetText().copy(nSttCnt, nEndCnt - nSttCnt));
     if( m_bIsOverwriteCursor && !m_sOverwriteText.isEmpty() )
     {
@@ -82,13 +82,13 @@ SwExtTextInput::~SwExtTextInput()
         const sal_Int32 nOWLen = m_sOverwriteText.getLength();
         if( nLen > nOWLen )
         {
-            rIdx += nOWLen;
-            pTNd->EraseText( rIdx, nLen - nOWLen );
-            rIdx = nSttCnt;
-            pTNd->ReplaceText( rIdx, nOWLen, m_sOverwriteText );
+            rPtPos.AdjustContent(+nOWLen);
+            pTNd->EraseText( rPtPos, nLen - nOWLen );
+            rPtPos.SetContent(nSttCnt);
+            pTNd->ReplaceText( rPtPos, nOWLen, m_sOverwriteText );
             if( m_bInsText )
             {
-                rIdx = nSttCnt;
+                rPtPos.SetContent(nSttCnt);
                 rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::OVERWRITE, nullptr );
                 rDoc.getIDocumentContentOperations().Overwrite( *this, sText.copy( 0, nOWLen ) );
                 rDoc.getIDocumentContentOperations().InsertString( *this, sText.copy( nOWLen ) );
@@ -97,10 +97,10 @@ SwExtTextInput::~SwExtTextInput()
         }
         else
         {
-            pTNd->ReplaceText( rIdx, nLen, m_sOverwriteText.copy( 0, nLen ));
+            pTNd->ReplaceText( rPtPos, nLen, m_sOverwriteText.copy( 0, nLen ));
             if( m_bInsText )
             {
-                rIdx = nSttCnt;
+                rPtPos.SetContent(nSttCnt);
                 rDoc.getIDocumentContentOperations().Overwrite( *this, sText );
             }
         }
@@ -116,11 +116,11 @@ SwExtTextInput::~SwExtTextInput()
 
         if( m_bInsText )
         {
-            rIdx = nSttCnt;
+            rPtPos.SetContent(nSttCnt);
             rDoc.getIDocumentContentOperations().InsertString( *this, sText, SwInsertFlags::EMPTYEXPAND );
         }
 
-        pTNd->EraseText( rIdx, nLenghtOfOldString );
+        pTNd->EraseText( rPtPos, nLenghtOfOldString );
     }
     if (!bWasIME)
     {
@@ -142,7 +142,7 @@ SwExtTextInput::~SwExtTextInput()
     if (RES_CHRATR_LANGUAGE != nWhich && pTNd->GetLang( nSttCnt, nEndCnt-nSttCnt, nScriptType) != m_eInputLanguage)
     {
         SvxLanguageItem aLangItem( m_eInputLanguage, nWhich );
-        rIdx = nSttCnt;
+        rPtPos.SetContent(nSttCnt);
         GetMark()->nContent = nEndCnt;
         rDoc.getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
     }

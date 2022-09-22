@@ -357,6 +357,8 @@ public:
     /// the capacity of the node
     void ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
+    void ReplaceText( SwPosition& rStart, const sal_Int32 nDelLen,
+            const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             const OUString& rText,
             const css::uno::Sequence<sal_Int32>& rOffsets );

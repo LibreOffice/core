@@ -3825,6 +3825,12 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
     }
 }
 
+void SwTextNode::ReplaceText( SwPosition& rStart, const sal_Int32 nDelLen,
+                             const OUString & rStr)
+{
+    ReplaceText(rStart.nContent, nDelLen, rStr);
+}
+
 namespace {
     void lcl_ResetParAttrs( SwTextNode &rTextNode )
     {

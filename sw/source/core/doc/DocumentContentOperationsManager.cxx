@@ -4668,7 +4668,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 }
                 else if( nStt < nEnd || !sIns.isEmpty() )
                 {
-                    pTextNd->ReplaceText( pStt->nContent, nEnd - nStt, sIns );
+                    pTextNd->ReplaceText( *pStt, nEnd - nStt, sIns );
                 }
                 SplitNode( *pStt, false);
                 bFirst = false;
@@ -4682,7 +4682,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 }
                 else if( nStt < nEnd || !sIns.isEmpty() )
                 {
-                    pTextNd->ReplaceText( pStt->nContent, nEnd - nStt, sIns );
+                    pTextNd->ReplaceText( *pStt, nEnd - nStt, sIns );
                 }
             }
 
