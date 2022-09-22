@@ -250,21 +250,22 @@ public:
     virtual void GenerateCode( outputstream& ss ) const override;
 };
 
-class OpRound: public CheckVariables
+class OpRound: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Round"; }
+    virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
 };
-class OpRoundUp: public CheckVariables
+class OpRoundUp: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "RoundUp"; }
 };
-class OpRoundDown: public CheckVariables
+class OpRoundDown: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(outputstream &ss,

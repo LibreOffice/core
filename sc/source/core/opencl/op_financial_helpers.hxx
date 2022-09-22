@@ -9,35 +9,8 @@
 
 #pragma once
 
-const char nCorrValDecl[] ="double constant nCorrVal[]"
-"= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
-"9e-8,9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15};\n";
-
 const char SCdEpsilonDecl[] =
 "constant double SCdEpsilon = 1.0E-7;\n";
-
-const char RoundDecl[] = "double  Round(double fValue);\n";
-
-const char Round[] =
-"double  Round(double fValue)\n"
-"{\n"
-"    if ( fValue == 0.0  )\n"
-"        return fValue;\n"
-"\n"
-"    double fFac = 0;\n"
-"    int nExp;\n"
-"    if ( fValue > 0.0 )\n"
-"        nExp = ( floor( log10( fValue ) ) );\n"
-"    else\n"
-"        nExp = 0;\n"
-"    int nIndex = 15 - nExp;\n"
-"    if ( nIndex > 15 )\n"
-"        nIndex = 15;\n"
-"    else if ( nIndex <= 1 )\n"
-"        nIndex = 0;\n"
-"    fValue = floor( fValue + 0.5 + nCorrVal[nIndex] );\n"
-"    return fValue;\n"
-"}\n";
 
 const char GetPMTDecl[] =
 "double GetPMT( double fRate, double fNper, double fPv, double fFv, bool bPayInAdvance);\n";

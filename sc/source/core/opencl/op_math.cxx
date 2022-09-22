@@ -861,6 +861,13 @@ void OpAverageIfs::GenSlidingWindowFunction(outputstream &ss,
     ss << "}";
 }
 
+void OpRound::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(nCorrValDecl);
+    decls.insert(RoundDecl);
+    funs.insert(Round);
+}
+
 void OpRound::GenSlidingWindowFunction(outputstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
@@ -868,25 +875,24 @@ void OpRound::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    int singleIndex =  gid0;\n";
-    GenTmpVariables(ss,vSubArguments);
-    CheckAllSubArgumentIsNan(ss,vSubArguments);
-    if(vSubArguments.size() ==2)
+    GenerateArg( "value", 0, vSubArguments, ss );
+    if(vSubArguments.size() ==1)
+        ss << "    return round(value);\n";
+    else
     {
-        ss << "    for(int i=0;i<tmp1;i++)\n";
-        ss << "        tmp0 = tmp0 * 10;\n";
-        ss << "    for(int i=0;i>tmp1;i--)\n";
-        ss << "        tmp0 = tmp0 / 10;\n";
+        GenerateArg( "fDec", 1, vSubArguments, ss );
+        ss << "    int dec = floor( fDec );\n";
+        ss << "    if( dec < -20 || dec > 20 )\n";
+        ss << "        return CreateDoubleError( IllegalArgument );\n";
+        ss << "    if( dec == 0 )\n";
+        ss << "        return round(value);\n";
+        ss << "    double orig_value = value;\n";
+        ss << "    value = fabs(value);\n";
+        ss << "    double multiply = pown(10.0, dec);\n";
+        ss << "    double tmp = value*multiply;\n";
+        ss << "    tmp = Round( tmp );\n";
+        ss << "    return copysign(tmp/multiply, orig_value);\n";
     }
-    ss << "    double tmp=round(tmp0);\n";
-    if(vSubArguments.size() ==2)
-    {
-        ss << "    for(int i=0;i<tmp1;i++)\n";
-        ss << "        tmp = tmp / 10;\n";
-        ss << "    for(int i=0;i>tmp1;i--)\n";
-        ss << "        tmp = tmp * 10;\n";
-    }
-    ss << "    return tmp;\n";
     ss << "}";
 }
 
@@ -897,32 +903,24 @@ void OpRoundUp::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    int singleIndex =  gid0;\n";
-    ss << "    int intTmp;\n";
-    ss << "    double tmp;\n";
-    GenTmpVariables(ss,vSubArguments);
-    CheckAllSubArgumentIsNan(ss,vSubArguments);
-    if( vSubArguments.size() == 1 )
-        ss << "    double tmp1 = 0;\n";
-    ss << "    int shift = (int)tmp1;\n";
-    ss << "    if(shift >20 || shift < -20)";
-    ss << "    {\n";
-    ss << "        tmp = NAN;\n";
-    ss << "    }else\n";
-    ss << "    {\n";
-    ss << "        double multiply = 1.0;\n";
-    ss << "        for(int i=0;i<shift;i++)\n";
-    ss << "            multiply *= 10;\n";
-    ss << "        for(int i=0;i>shift;i--)\n";
-    ss << "            multiply /= 10;\n";
-    ss << "        intTmp = (int)(tmp0*multiply);\n";
-    ss << "        if(tmp0 >= 0)\n";
-    ss << "            tmp = intTmp + 1;\n";
-    ss << "        else\n";
-    ss << "            tmp = intTmp - 1;\n";
-    ss << "        tmp /= multiply;\n";
-    ss << "    }\n";
-    ss << "    return tmp;\n";
+    GenerateArg( "value", 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fDec", 1, 0, vSubArguments, ss );
+    ss << "    int dec = floor( fDec );\n";
+    ss << "    if( dec < -20 || dec > 20 )\n";
+    ss << "        return CreateDoubleError( IllegalArgument );\n";
+    ss << "    double orig_value = value;\n";
+    ss << "    value = fabs(value);\n";
+    ss << "    double multiply = pown(10.0, dec);\n";
+    ss << "    double tmp = value*multiply;\n";
+    ss << "    double integral;\n";
+    // The pown() above increases rounding error, so compensate for it here.
+    // If the fractional part is close above zero, adjusted for rounding error,
+    // the number just needs to be rounded (=truncated).
+    ss << "    if( modf( tmp, &integral ) / multiply < 1e-12 )\n";
+    ss << "        tmp = integral;\n";
+    ss << "    else\n";
+    ss << "        tmp = integral + 1;\n";
+    ss << "    return copysign(tmp/multiply, orig_value);\n";
     ss << "}";
 }
 
@@ -933,29 +931,24 @@ void OpRoundDown::GenSlidingWindowFunction(outputstream &ss,
     GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    int singleIndex =  gid0;\n";
-    ss << "    int intTmp;\n";
-    ss << "    double tmp;\n";
-    GenTmpVariables(ss,vSubArguments);
-    CheckAllSubArgumentIsNan(ss,vSubArguments);
-    if( vSubArguments.size() == 1 )
-        ss << "    double tmp1 = 0;\n";
-    ss << "    int shift = (int)tmp1;\n";
-    ss << "    if(shift >20 || shift < -20)";
-    ss << "    {\n";
-    ss << "        tmp = NAN;\n";
-    ss << "    }else\n";
-    ss << "    {\n";
-    ss << "        double multiply = 1.0;\n";
-    ss << "        for(int i=0;i<shift;i++)\n";
-    ss << "            multiply *= 10;\n";
-    ss << "        for(int i=0;i>shift;i--)\n";
-    ss << "            multiply /= 10;\n";
-    ss << "        intTmp = (int)(tmp0*multiply);\n";
-    ss << "        tmp = intTmp;\n";
-    ss << "        tmp /= multiply;\n";
-    ss << "    }\n";
-    ss << "    return tmp;\n";
+    GenerateArg( "value", 0, vSubArguments, ss );
+    GenerateArgWithDefault( "fDec", 1, 0, vSubArguments, ss );
+    ss << "    int dec = floor( fDec );\n";
+    ss << "    if( dec < -20 || dec > 20 )\n";
+    ss << "        return CreateDoubleError( IllegalArgument );\n";
+    ss << "    double orig_value = value;\n";
+    ss << "    value = fabs(value);\n";
+    ss << "    double multiply = pown(10.0, dec);\n";
+    ss << "    double tmp = value*multiply;\n";
+    ss << "    double integral;\n";
+    // The pown() above increases rounding error, so compensate for it here.
+    // If the fractional part is close below one, adjusted for rounding error,
+    // the number just needs to be rounded (=truncated + 1).
+    ss << "    if(( 1 - modf( tmp, &integral )) / multiply < 1e-12 )\n";
+    ss << "        tmp = integral + 1;\n";
+    ss << "    else\n";
+    ss << "        tmp = integral;\n";
+    ss << "    return copysign(tmp/multiply, orig_value);\n";
     ss << "}";
 }
 
