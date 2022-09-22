@@ -153,6 +153,9 @@ public:
     /// When Mix, it will be called
     virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const;
 
+    /// Will generate value saying whether the value is a string.
+    virtual std::string GenIsString( bool = false ) const { return "false"; }
+
     /// Generate use/references to the argument
     virtual void GenDeclRef( outputstream& ss ) const;
 
@@ -165,10 +168,13 @@ public:
     /// If there's actually no argument, i.e. it expands to no code.
     virtual bool IsEmpty() const { return false; }
 
+    static void ClearStringIds();
+
 protected:
     const ScCalcConfig& mCalcConfig;
     std::string mSymName;
     FormulaTreeNodeRef mFormulaTree;
+    static int GetStringId( const rtl_uString* string );
 };
 
 typedef std::shared_ptr<DynamicKernelArgument> DynamicKernelArgumentRef;
@@ -233,12 +239,13 @@ public:
     /// Generate declaration
     virtual void GenDecl( outputstream& ss ) const override
     {
-        ss << "__global unsigned int *" << mSymName;
+        ss << "__global double *" << mSymName;
     }
     virtual void GenSlidingWindowDecl( outputstream& ss ) const override
     {
         DynamicKernelStringArgument::GenDecl(ss);
     }
+    virtual std::string GenIsString( bool = false ) const override;
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
 };
 
@@ -348,17 +355,24 @@ protected:
         EmptyIsNan,  // empty cells become NAN, use isnan() to check in code
         SkipEmpty    // empty cells will be skipped
     };
+    // This enum controls whether the generated code will also include variable
+    // <name>_is_string that will be set depending on the value type.
+    enum GenerateArgTypeType
+    {
+        DoNotGenerateArgType,
+        GenerateArgType
+    };
     void GenerateFunctionDeclaration( const std::string& sSymName,
         SubArguments& vSubArguments, outputstream& ss );
     // Generate code for "double <name> = <value>;" from vSubArguments, svDoubleVectorRef is not supported.
-    static void GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss,
-        EmptyArgType empty = EmptyIsZero );
+    void GenerateArg( const char* name, int arg, SubArguments& vSubArguments, outputstream& ss,
+        EmptyArgType empty = EmptyIsZero, GenerateArgTypeType generateType = DoNotGenerateArgType );
     // overload, variable will be named "arg<arg>"
-    static void GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss,
-        EmptyArgType empty = EmptyIsZero );
+    void GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss,
+        EmptyArgType empty = EmptyIsZero, GenerateArgTypeType generateType = DoNotGenerateArgType );
     // generate code for "double <name> = <value>;" from vSubArguments, if it exists,
     // otherwise set to <def>
-    static void GenerateArgWithDefault( const char* name, int arg, double def, SubArguments& vSubArguments,
+    void GenerateArgWithDefault( const char* name, int arg, double def, SubArguments& vSubArguments,
         outputstream& ss, EmptyArgType empty = EmptyIsZero );
     // Generate code that will handle all arguments firstArg-lastArg (zero-based, inclusive),
     // including range arguments (svDoubleVectorRef) and each value will be processed by 'code',

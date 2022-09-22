@@ -503,20 +503,24 @@ public:
     virtual void GenerateCode( outputstream& ss ) const override;
 };
 
-class OpEqual : public OpMathTwoArguments
+class OpEqual : public Normal
 {
 public:
-    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "eq"; }
     virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
+    virtual bool takeString() const override { return true; }
 };
 
-class OpNotEqual : public OpMathTwoArguments
+class OpNotEqual : public Normal
 {
 public:
-    virtual void GenerateCode( outputstream& ss ) const override;
+    virtual void GenSlidingWindowFunction(outputstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "neq"; }
     virtual void BinInlineFun(std::set<std::string>& , std::set<std::string>& ) override;
+    virtual bool takeString() const override { return true; }
 };
 
 class OpLessEqual : public OpMathTwoArguments

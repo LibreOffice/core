@@ -11,6 +11,7 @@
 #include <formula/vectortoken.hxx>
 #include <sal/log.hxx>
 #include <utility>
+#include <unordered_map>
 
 #include "opbase.hxx"
 
@@ -81,6 +82,49 @@ const std::string& DynamicKernelArgument::GetName() const
 bool DynamicKernelArgument::NeedParallelReduction() const
 {
     return false;
+}
+
+// Strings and OpenCL:
+// * Strings are non-trivial types and so passing them to OpenCL and handling them there
+// would be rather complex. However, in practice most string operations are checking
+// string equality, so only such string usage is supported (other cases will be
+// handled by Calc core when they get rejected for OpenCL).
+// * Strings from Calc core come from svl::SharedString, which already ensures that
+// equal strings have equal rtl_uString.
+// * Strings are passed to opencl as integer IDs, each uniquely identifying a different
+// string.
+// * OpenCL code generally handles all values as doubles, so merely converting rtl_uString*
+// to double could lead to loss of precision (double can store 52bits of precision).
+// This could lead to two strings possibly being considered equal by mistake (unlikely,
+// but not impossible). Therefore all rtl_uString* are mapped to internal integer IDs.
+// * Functions that can handle strings properly should override OpBase::takeString()
+// to return true. They should
+// * Empty string Id is 0. Empty cell Id is NAN.
+// * Since strings are marshalled as doubles too, it is important to check whether a value
+// is a real double or a string. Use e.g. GenerateArgType to generate also 'xxx_is_string'
+// variable, there is cell_equal() function to compare two cells.
+
+static std::unordered_map<const rtl_uString*, int>* stringIdsMap;
+
+int DynamicKernelArgument::GetStringId( const rtl_uString* string )
+{
+    assert( string != nullptr );
+    if( string->length == 0 )
+        return 0;
+    if( stringIdsMap == nullptr )
+        stringIdsMap = new std::unordered_map<const rtl_uString*, int>;
+    std::unordered_map<const rtl_uString*, int>::iterator it = stringIdsMap->find( string );
+    if( it != stringIdsMap->end())
+        return it->second;
+    int newId = stringIdsMap->size() + 1;
+    stringIdsMap->insert( std::pair( string, newId ));
+    return newId;
+}
+
+void DynamicKernelArgument::ClearStringIds()
+{
+    delete stringIdsMap;
+    stringIdsMap = nullptr;
 }
 
 VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft, int idx ) :
@@ -182,7 +226,7 @@ VectorRefStringsToZero::VectorRefStringsToZero( const ScCalcConfig& config, cons
 }
 
 void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& vSubArguments,
-    outputstream& ss, EmptyArgType empty )
+    outputstream& ss, EmptyArgType empty, GenerateArgTypeType generateType )
 {
     assert( arg < int( vSubArguments.size()));
     FormulaToken *token = vSubArguments[arg]->GetFormulaToken();
@@ -195,9 +239,19 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
             const formula::SingleVectorRefToken* svr =
                 static_cast<const formula::SingleVectorRefToken *>(token);
             ss << "    double " << name << " = NAN;\n";
+            if( generateType == GenerateArgType )
+                ss << "    bool " << name << "_is_string = false;\n";
             ss << "    if (gid0 < " << svr->GetArrayLength() << ")\n";
+            if( generateType == GenerateArgType )
+                ss << "    {\n";
             ss << "        " << name << " = ";
-            ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << ";\n";
+            ss << vSubArguments[arg]->GenSlidingWindowDeclRef( true ) << ";\n";
+            if( generateType == GenerateArgType )
+            {
+                ss << "        " << name << "_is_string = ";
+                ss << vSubArguments[arg]->GenIsString( true ) << ";\n";
+                ss << "    }\n";
+            }
             switch( empty )
             {
                 case EmptyIsZero:
@@ -212,11 +266,22 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
             }
         }
         else if(token->GetType() == formula::svDouble)
+        {
             ss << "    double " << name << " = " << token->GetDouble() << ";\n";
+            if( generateType == GenerateArgType )
+                ss << "    bool " << name << "_is_string = "
+                    << vSubArguments[arg]->GenIsString() << ";\n";
+        }
         else if(token->GetType() == formula::svString)
         {
-            assert( dynamic_cast<DynamicKernelStringToZeroArgument*>(vSubArguments[arg].get()));
+            if( forceStringsToZero())
+                assert( dynamic_cast<DynamicKernelStringToZeroArgument*>(vSubArguments[arg].get()));
+            else if( !takeString())
+                throw Unhandled( __FILE__, __LINE__ );
             ss << "    double " << name << " = 0.0;\n";
+            if( generateType == GenerateArgType )
+                ss << "    bool " << name << "_is_string = "
+                    << vSubArguments[arg]->GenIsString() << ";\n";
         }
         else
             throw Unhandled( __FILE__, __LINE__ );
@@ -225,15 +290,18 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
     {
         ss << "    double " << name << " = ";
         ss << vSubArguments[arg]->GenSlidingWindowDeclRef() << ";\n";
+        if( generateType == GenerateArgType )
+            ss << "    bool " << name << "_is_string = "
+                << vSubArguments[arg]->GenIsString() << ";\n";
     }
 }
 
 void SlidingFunctionBase::GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss,
-    EmptyArgType empty )
+    EmptyArgType empty, GenerateArgTypeType generateType )
 {
     char buf[ 30 ];
     sprintf( buf, "arg%d", arg );
-    GenerateArg( buf, arg, vSubArguments, ss, empty );
+    GenerateArg( buf, arg, vSubArguments, ss, empty, generateType );
 }
 
 void SlidingFunctionBase::GenerateArgWithDefault( const char* name, int arg, double def,

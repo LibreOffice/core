@@ -189,4 +189,20 @@ const char value_approx[] =
 "    return copysign(fValue, fOrigValue);\n"
 "}\n";
 
+// This compares two cell contents, including possible string equalities (based on string ids
+// coming from DynamicKernelArgument::GetStringId()).
+// The EmptyIsZero conversion must not be have been done for the arguments.
+const char cell_equalDecl[] = "bool cell_equal(double a, double b, bool a_is_string, bool b_is_string);\n";
+const char cell_equal[] =
+"bool cell_equal(double a, double b, bool a_is_string, bool b_is_string) {\n"
+"    if( !a_is_string && !b_is_string )\n"
+"        return approx_equal( isnan(a) ? 0 : a, isnan(b) ? 0 : b );\n"
+"    if( a_is_string && b_is_string )\n"
+"        return a == b;\n"
+// empty strings and empty cells compare equal
+"    if(( a_is_string && a == 0 && isnan(b)) || ( b_is_string && b == 0 && isnan(a)))\n"
+"        return true;\n"
+"    return false;\n"
+"}\n";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

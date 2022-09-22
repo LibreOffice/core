@@ -299,72 +299,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     return 1;
 }
 
-/// Arguments that are actually compile-time constant string
-/// Currently, only the hash is passed.
-/// TBD(IJSUNG): pass also length and the actual string if there is a
-/// hash function collision
-
-/// FIXME: This idea of passing of hashes of uppercased strings into OpenCL code is fairly potent
-/// crack. It is hopefully not used at all any more, but noticing that there are string arguments
-/// automatically disables use of OpenCL for a formula group. If at some point there are resources
-/// to drain the OpenCL swamp, this should go away.
-
 namespace {
-
-class ConstStringArgument : public DynamicKernelArgument
-{
-public:
-    ConstStringArgument( const ScCalcConfig& config, const std::string& s,
-        const FormulaTreeNodeRef& ft ) :
-        DynamicKernelArgument(config, s, ft) { }
-    /// Generate declaration
-    virtual void GenDecl( outputstream& ss ) const override
-    {
-        ss << "unsigned " << mSymName;
-    }
-    virtual void GenDeclRef( outputstream& ss ) const override
-    {
-        ss << GenSlidingWindowDeclRef();
-    }
-    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
-    {
-        GenDecl(ss);
-    }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
-    {
-        outputstream ss;
-        if (GetFormulaToken()->GetType() != formula::svString)
-            throw Unhandled(__FILE__, __LINE__);
-        FormulaToken* Tok = GetFormulaToken();
-        ss << Tok->GetString().getString().toAsciiUpperCase().hashCode() << "U";
-        return ss.str();
-    }
-    virtual size_t GetWindowSize() const override
-    {
-        return 1;
-    }
-    /// Pass the 32-bit hash of the string to the kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
-    {
-        OpenCLZone zone;
-        FormulaToken* ref = mFormulaTree->GetFormulaToken();
-        cl_uint hashCode = 0;
-        if (ref->GetType() != formula::svString)
-        {
-            throw Unhandled(__FILE__, __LINE__);
-        }
-
-        const OUString s = ref->GetString().getString().toAsciiUpperCase();
-        hashCode = s.hashCode();
-
-        // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode << "(" << DebugPeekData(ref) << ")" );
-        cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), static_cast<void*>(&hashCode));
-        if (CL_SUCCESS != err)
-            throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
-        return 1;
-    }
-};
 
 class DynamicKernelPiArgument : public DynamicKernelArgument
 {
@@ -773,9 +708,65 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
     }
 };
 
-}
+// Arguments that are actually compile-time constant string
+class ConstStringArgument : public DynamicKernelArgument
+{
+public:
+    ConstStringArgument( const ScCalcConfig& config, const std::string& s,
+        const FormulaTreeNodeRef& ft ) :
+        DynamicKernelArgument(config, s, ft) { }
+    /// Generate declaration
+    virtual void GenDecl( outputstream& ss ) const override
+    {
+        ss << "double " << mSymName;
+    }
+    virtual void GenDeclRef( outputstream& ss ) const override
+    {
+        ss << GenSlidingWindowDeclRef();
+    }
+    virtual void GenSlidingWindowDecl( outputstream& ss ) const override
+    {
+        GenDecl(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
+    {
+        outputstream ss;
+        if (GetFormulaToken()->GetType() != formula::svString)
+            throw Unhandled(__FILE__, __LINE__);
+        FormulaToken* Tok = GetFormulaToken();
+        ss << GetStringId(Tok->GetString().getData());
+        return ss.str();
+    }
+    virtual std::string GenIsString( bool = false ) const override
+    {
+        return "true";
+    }
+    virtual size_t GetWindowSize() const override
+    {
+        return 1;
+    }
+    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
+    {
+        FormulaToken* ref = mFormulaTree->GetFormulaToken();
+        if (ref->GetType() != formula::svString)
+        {
+            throw Unhandled(__FILE__, __LINE__);
+        }
+        cl_double stringId = GetStringId(ref->GetString().getData());
 
-/// Marshal a string vector reference
+        // Pass the scalar result back to the rest of the formula kernel
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno
+            << ": stringId: " << stringId << " (" << DebugPeekData(ref) << ")" );
+        cl_int err = clSetKernelArg(k, argno, sizeof(cl_double), static_cast<void*>(&stringId));
+        if (CL_SUCCESS != err)
+            throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
+        return 1;
+    }
+};
+
+} // namespace
+
+// Marshal a string vector reference
 size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_program )
 {
     OpenCLZone zone;
@@ -800,12 +791,12 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
         nStrings = pDVR->GetArrayLength();
         vRef = pDVR->GetArrays()[mnIndex];
     }
-    size_t szHostBuffer = nStrings * sizeof(cl_int);
-    cl_uint* pHashBuffer = nullptr;
+    size_t szHostBuffer = nStrings * sizeof(cl_double);
+    cl_double* pStringIdsBuffer = nullptr;
 
     if (vRef.mpStringArray != nullptr)
     {
-        // Marshal strings. Right now we pass hashes of these string
+        // Marshal strings. See GetStringId().
         mpClmem = clCreateBuffer(kEnv.mpkContext,
             cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, nullptr, &err);
@@ -813,7 +804,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
-        pHashBuffer = static_cast<cl_uint*>(clEnqueueMapBuffer(
+        pStringIdsBuffer = static_cast<cl_double*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
             szHostBuffer, 0, nullptr, nullptr, &err));
         if (CL_SUCCESS != err)
@@ -822,20 +813,15 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
         for (size_t i = 0; i < nStrings; i++)
         {
             if (vRef.mpStringArray[i])
-            {
-                const OUString tmp(vRef.mpStringArray[i]);
-                pHashBuffer[i] = tmp.hashCode();
-            }
+                pStringIdsBuffer[i] = GetStringId(vRef.mpStringArray[i]);
             else
-            {
-                pHashBuffer[i] = 0;
-            }
+                rtl::math::setNan(&pStringIdsBuffer[i]);
         }
     }
     else
     {
         if (nStrings == 0)
-            szHostBuffer = sizeof(cl_int); // a dummy small value
+            szHostBuffer = sizeof(cl_double); // a dummy small value
                                            // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
             cl_mem_flags(CL_MEM_READ_ONLY) | CL_MEM_ALLOC_HOST_PTR,
@@ -844,25 +830,52 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
-        pHashBuffer = static_cast<cl_uint*>(clEnqueueMapBuffer(
+        pStringIdsBuffer = static_cast<cl_double*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
             szHostBuffer, 0, nullptr, nullptr, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
-        for (size_t i = 0; i < szHostBuffer / sizeof(cl_int); i++)
-            pHashBuffer[i] = 0;
+        for (size_t i = 0; i < szHostBuffer / sizeof(cl_double); i++)
+            rtl::math::setNan(&pStringIdsBuffer[i]);
     }
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
-        pHashBuffer, 0, nullptr, nullptr);
+        pStringIdsBuffer, 0, nullptr, nullptr);
     if (CL_SUCCESS != err)
         throw OpenCLError("clEnqueueUnmapMemObject", err, __FILE__, __LINE__);
 
-    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem << " (" << DebugPeekData(ref,mnIndex) << ")");
+    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem
+        << " (stringIds: " << DebugPeekDoubles(pStringIdsBuffer, nStrings) << " "
+        << DebugPeekData(ref,mnIndex) << ")");
     err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&mpClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
     return 1;
+}
+
+std::string DynamicKernelStringArgument::GenIsString( bool nested ) const
+{
+    if( nested )
+        return "!isnan(" + mSymName + "[gid0])";
+    FormulaToken* ref = mFormulaTree->GetFormulaToken();
+    size_t nStrings = 0;
+    if (ref->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken* pSVR =
+            static_cast<const formula::SingleVectorRefToken*>(ref);
+        nStrings = pSVR->GetArrayLength();
+    }
+    else if (ref->GetType() == formula::svDoubleVectorRef)
+    {
+        const formula::DoubleVectorRefToken* pDVR =
+            static_cast<const formula::DoubleVectorRefToken*>(ref);
+        nStrings = pDVR->GetArrayLength();
+    }
+    else
+        return "!isnan(" + mSymName + "[gid0])";
+    outputstream ss;
+    ss << "(gid0 < " << nStrings << "? !isnan(" << mSymName << "[gid0]):NAN)";
+    return ss.str();
 }
 
 namespace {
@@ -903,17 +916,21 @@ public:
         ss << ")";
         return ss.str();
     }
-    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const override
+    virtual std::string GenDoubleSlidingWindowDeclRef( bool nested = false ) const override
     {
         outputstream ss;
-        ss << VectorRef::GenSlidingWindowDeclRef();
+        ss << VectorRef::GenSlidingWindowDeclRef( nested );
         return ss.str();
     }
-    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const override
+    virtual std::string GenStringSlidingWindowDeclRef( bool nested = false ) const override
     {
         outputstream ss;
-        ss << mStringArgument.GenSlidingWindowDeclRef();
+        ss << mStringArgument.GenSlidingWindowDeclRef( nested );
         return ss.str();
+    }
+    virtual std::string GenIsString( bool nested = false ) const override
+    {
+        return mStringArgument.GenIsString( nested );
     }
     virtual size_t Marshal( cl_kernel k, int argno, int vw, cl_program p ) override
     {
@@ -3513,19 +3530,19 @@ class CLInterpreterContext
     SCROW mnGroupLength;
 
 public:
-    explicit CLInterpreterContext(SCROW nGroupLength)
-        : mpKernel(nullptr)
+    explicit CLInterpreterContext(SCROW nGroupLength, std::shared_ptr<DynamicKernel> pKernel )
+        : mpKernelStore(std::move(pKernel))
+        , mpKernel(mpKernelStore.get())
         , mnGroupLength(nGroupLength) {}
+
+    ~CLInterpreterContext()
+    {
+        DynamicKernelArgument::ClearStringIds();
+    }
 
     bool isValid() const
     {
         return mpKernel != nullptr;
-    }
-
-    void setManagedKernel( std::shared_ptr<DynamicKernel> pKernel )
-    {
-        mpKernelStore = std::move(pKernel);
-        mpKernel = mpKernelStore.get();
     }
 
     CLInterpreterResult launchKernel()
@@ -3571,11 +3588,7 @@ public:
 CLInterpreterContext createCLInterpreterContext( const ScCalcConfig& rConfig,
     const ScFormulaCellGroupRef& xGroup, const ScTokenArray& rCode )
 {
-    CLInterpreterContext aCxt(xGroup->mnLength);
-
-    aCxt.setManagedKernel(DynamicKernel::create(rConfig, rCode, xGroup->mnLength));
-
-    return aCxt;
+    return CLInterpreterContext(xGroup->mnLength, DynamicKernel::create(rConfig, rCode, xGroup->mnLength));
 }
 
 void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCode )

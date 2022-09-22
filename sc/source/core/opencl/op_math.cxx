@@ -481,11 +481,22 @@ void OpEqual::BinInlineFun(std::set<std::string>& decls,
     funs.insert(is_representable_integer);
     decls.insert(approx_equalDecl);
     funs.insert(approx_equal);
+    decls.insert(cell_equalDecl);
+    funs.insert(cell_equal);
 }
 
-void OpEqual::GenerateCode( outputstream& ss ) const
+void OpEqual::GenSlidingWindowFunction(outputstream &ss,
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "    return approx_equal( arg0, arg1 );\n";
+    CHECK_PARAMETER_COUNT( 2, 2 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    GenerateArg( 0, vSubArguments, ss, EmptyIsNan, GenerateArgType );
+    GenerateArg( 1, vSubArguments, ss, EmptyIsNan, GenerateArgType );
+    ss << "    return cell_equal( arg0, arg1, arg0_is_string, arg1_is_string );\n";
+    ss << "}";
 }
 
 void OpNotEqual::BinInlineFun(std::set<std::string>& decls,
@@ -495,11 +506,22 @@ void OpNotEqual::BinInlineFun(std::set<std::string>& decls,
     funs.insert(is_representable_integer);
     decls.insert(approx_equalDecl);
     funs.insert(approx_equal);
+    decls.insert(cell_equalDecl);
+    funs.insert(cell_equal);
 }
 
-void OpNotEqual::GenerateCode( outputstream& ss ) const
+void OpNotEqual::GenSlidingWindowFunction(outputstream &ss,
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "    return !approx_equal( arg0, arg1 );\n";
+    CHECK_PARAMETER_COUNT( 2, 2 );
+    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
+    ss << "{\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    GenerateArg( 0, vSubArguments, ss, EmptyIsNan, GenerateArgType );
+    GenerateArg( 1, vSubArguments, ss, EmptyIsNan, GenerateArgType );
+    ss << "    return !cell_equal( arg0, arg1, arg0_is_string, arg1_is_string );\n";
+    ss << "}";
 }
 
 void OpLessEqual::BinInlineFun(std::set<std::string>& decls,
