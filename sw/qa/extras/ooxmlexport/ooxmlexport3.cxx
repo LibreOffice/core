@@ -322,7 +322,7 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
     // Both Word and LO display it as landscape, so ensure that it round-trips with landscape dimensions.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Width (mm) ", sal_Int32(148), getProperty<sal_Int32>(xPageStyle, "Width") / 100);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(105), getProperty<sal_Int32>(xPageStyle, "Height") / 100);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(104), getProperty<sal_Int32>(xPageStyle, "Height") / 100);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")

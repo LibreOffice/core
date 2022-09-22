@@ -676,9 +676,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak)
     assertXPath(pDump, "//page[2]/infos/prtBounds", "left", "2268");  //Left page style
 
     assertXPath(pDump, "//page[1]/infos/bounds", "width", "8391");  //landscape
-    assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
+    assertXPath(pDump, "//page[2]/infos/bounds", "width", "5940");  //portrait
     // This two-line 3rd page ought not to exist. DID YOU FIX ME? The real page 3 should be "8391" landscape.
-    assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "5940");
     // This really ought to be on odd page 3, but now it is on odd page 5.
     assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");
     assertXPath(pDump, "//page[5]/infos/prtBounds", "right", "6122");  //Left page style
