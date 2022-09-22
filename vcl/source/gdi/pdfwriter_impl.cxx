@@ -54,6 +54,7 @@
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -72,6 +73,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <comphelper/hash.hxx>
 
 #include <svdata.hxx>
@@ -2505,7 +2507,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         }
         aLine.append(">>\n");
 
-        aLine.append("/Encoding<</Differences[1");
+        aLine.append("/Encoding<</Type/Encoding/Differences[1");
         for (auto i = 1u; i < nGlyphs; i++)
             aLine.append(" /g" + OString::number(i));
         aLine.append("]>>\n");
@@ -2530,9 +2532,9 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             aLine.append(" 0 R\n");
         }
 
-        auto nFontResources = createObject();
+        auto nResources = createObject();
         aLine.append("/Resources ");
-        aLine.append(nFontResources);
+        aLine.append(nResources);
         aLine.append(" 0 R\n");
 
         if (nToUnicodeStream)
@@ -2549,7 +2551,11 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             return false;
 
         std::set<sal_Int32> aUsedFonts;
-        std::set<sal_uInt8> aUsedAlpha;
+        std::list<BitmapEmit> aUsedBitmaps;
+        std::map<sal_uInt8, sal_Int32> aUsedAlpha;
+        ResourceDict aResourceDict;
+        std::list<StreamRedirect> aOutputStreams;
+
         for (auto i = 1u; i < nGlyphs; i++)
         {
             auto nStream = pGlyphStreams[i];
@@ -2565,8 +2571,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             {
                 aUsedFonts.insert(rLayer.m_nFontID);
 
-                // 0xFFFF is a special value means foreground color.
                 aContents.append("q ");
+                // 0xFFFF is a special value means foreground color.
                 if (rLayer.m_nColorIndex != 0xFFFF)
                 {
                     auto aColor(aPalette[rLayer.m_nColorIndex]);
@@ -2575,10 +2581,20 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                     if (aColor.GetAlpha() != 0xFF
                         && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4)
                     {
-                        aContents.append("/GS");
-                        appendHex(aColor.GetAlpha(), aContents);
-                        aContents.append(" gs ");
-                        aUsedAlpha.insert(aColor.GetAlpha());
+                        auto nAlpha = aColor.GetAlpha();
+                        OStringBuffer aName(16);
+                        aName.append("GS");
+                        appendHex(nAlpha, aName);
+
+                        aContents.append("/" + aName + " gs ");
+
+                        if (aUsedAlpha.find(nAlpha) == aUsedAlpha.end())
+                        {
+                            auto nObject = createObject();
+                            aUsedAlpha[nAlpha] = nObject;
+                            pushResource(ResourceKind::ExtGState, aName.makeStringAndClear(),
+                                         nObject, aResourceDict, aOutputStreams);
+                        }
                     }
                 }
                 aContents.append("BT ");
@@ -2591,6 +2607,31 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 aContents.append("Q\n");
             }
 
+            tools::Rectangle aRect;
+            const auto& rBitmapData = rGlyph.getColorBitmap(aRect);
+            if (!rBitmapData.empty())
+            {
+                SvMemoryStream aStream(const_cast<uint8_t*>(rBitmapData.data()), rBitmapData.size(),
+                                       StreamMode::READ);
+                vcl::PngImageReader aReader(aStream);
+                auto aBitmapEmit = createBitmapEmit(std::move(aReader.read()), Graphic(),
+                                                    aUsedBitmaps, aResourceDict, aOutputStreams);
+
+                auto nObject = aBitmapEmit.m_aReferenceXObject.getObject();
+                aContents.append("q ");
+                aContents.append(aRect.GetWidth());
+                aContents.append(" 0 0 ");
+                aContents.append(aRect.GetHeight());
+                aContents.append(" ");
+                aContents.append(aRect.getX());
+                aContents.append(" ");
+                aContents.append(aRect.getY());
+                aContents.append(" cm ");
+                aContents.append("/Im");
+                aContents.append(nObject);
+                aContents.append(" Do Q\n");
+            }
+
             aLine.setLength(0);
             aLine.append(nStream);
             aLine.append(" 0 obj\n<</Length ");
@@ -2601,18 +2642,16 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             if (!writeBuffer(aContents.getStr(), aContents.getLength()))
                 return false;
             aLine.setLength(0);
-            aLine.append("endstream\n"
-                         "endobj\n\n");
+            aLine.append("endstream\nendobj\n\n");
             if (!writeBuffer(aLine.getStr(), aLine.getLength()))
                 return false;
         }
 
-        if (!updateObject(nFontResources))
-            return false;
+        // write font dict
+        auto nFontDict = createObject();
         aLine.setLength(0);
-        aLine.append(nFontResources);
-        aLine.append(" 0 obj <<\n");
-        aLine.append("/Font <<\n");
+        aLine.append(nFontDict);
+        aLine.append(" 0 obj\n<<");
         for (auto nFontID : aUsedFonts)
         {
             aLine.append("/F");
@@ -2621,21 +2660,52 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             aLine.append(rFontIDToObject[nFontID]);
             aLine.append(" 0 R");
         }
-        aLine.append("\n>>\n");
+        aLine.append(">>\nendobj\n\n");
+        if (!updateObject(nFontDict))
+            return false;
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return false;
+
+        // write ExtGState objects
         if (!aUsedAlpha.empty())
         {
-            aLine.append("/ExtGState <<\n");
-            for (auto nAlpha : aUsedAlpha)
+            for (const auto & [ nAlpha, nObject ] : aUsedAlpha)
             {
-                aLine.append("/GS");
-                appendHex(nAlpha, aLine);
-                aLine.append(" <</ca ");
-                appendDouble(nAlpha / 255., aLine);
-                aLine.append(">>\n");
+                aLine.setLength(0);
+                aLine.append(nObject);
+                aLine.append(" 0 obj\n<<");
+                if (m_bIsPDF_A1)
+                {
+                    aLine.append("/CA 1.0/ca 1.0");
+                    m_aErrors.insert(PDFWriter::Warning_Transparency_Omitted_PDFA);
+                }
+                else
+                {
+                    aLine.append("/CA ");
+                    appendDouble(nAlpha / 255., aLine);
+                    aLine.append("/ca ");
+                    appendDouble(nAlpha / 255., aLine);
+                }
+                aLine.append(">>\nendobj\n\n");
+                if (!updateObject(nObject))
+                    return false;
+                if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+                    return false;
             }
-            aLine.append(">>\n");
         }
-        aLine.append(">>\nendobj\n\n");
+
+        // write bitmap objects
+        for (auto& aBitmap : aUsedBitmaps)
+            writeBitmapObject(aBitmap);
+
+        // write resources dict
+        aLine.setLength(0);
+        aLine.append(nResources);
+        aLine.append(" 0 obj\n");
+        aResourceDict.append(aLine, nFontDict);
+        aLine.append("endobj\n\n");
+        if (!updateObject(nResources))
+            return false;
         if (!writeBuffer(aLine.getStr(), aLine.getLength()))
             return false;
 
@@ -4108,7 +4178,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
-    registerGlyph(nGlyphId, pDevFont, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->HasColorLayers());
+    registerGlyph(nGlyphId, pDevFont, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->IsColorFont());
 
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
@@ -6057,9 +6127,11 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
 {
     if (bColor)
     {
-        // Font has color layers, check if this glyph has color layers.
+        // Font has colors, check if this glyph has color layers or bitmap.
+        tools::Rectangle aRect;
         auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
-        if (!aLayers.empty())
+        auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
+        if (!aLayers.empty() || !aBitmap.empty())
         {
             auto& rSubset = m_aType3Fonts[pFace];
             auto it = rSubset.m_aMapping.find(nFontGlyphId);
@@ -6092,15 +6164,21 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                     rNewGlyphEmit.addCode(nCode);
 
                 // add color layers to the glyphs
-                for (const auto& aLayer : aLayers)
+                if (!aLayers.empty())
                 {
-                    sal_uInt8 nLayerGlyph;
-                    sal_Int32 nLayerFontID;
-                    registerGlyph(aLayer.nGlyphIndex, pFace, rCodeUnits, nGlyphWidth, nLayerGlyph,
-                                  nLayerFontID);
+                    for (const auto& aLayer : aLayers)
+                    {
+                        sal_uInt8 nLayerGlyph;
+                        sal_Int32 nLayerFontID;
+                        registerGlyph(aLayer.nGlyphIndex, pFace, rCodeUnits, nGlyphWidth,
+                                      nLayerGlyph, nLayerFontID);
 
-                    rNewGlyphEmit.addColorLayer({ nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
+                        rNewGlyphEmit.addColorLayer(
+                            { nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
+                    }
                 }
+                else if (!aBitmap.empty())
+                    rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
 
                 // add new glyph to font mapping
                 Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];
@@ -6569,7 +6647,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
-        registerGlyph(nGlyphId, pFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->HasColorLayers());
+        registerGlyph(nGlyphId, pFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->IsColorFont());
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
@@ -7673,7 +7751,7 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
     pushResource( ResourceKind::ExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
 }
 
-void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject )
+void PDFWriterImpl::pushResource(ResourceKind eKind, const OString& rResource, sal_Int32 nObject, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams)
 {
     if( nObject < 0 )
         return;
@@ -7681,26 +7759,31 @@ void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, 
     switch( eKind )
     {
         case ResourceKind::XObject:
-            m_aGlobalResourceDict.m_aXObjects[ rResource ] = nObject;
-            if( ! m_aOutputStreams.empty() )
-                m_aOutputStreams.front().m_aResourceDict.m_aXObjects[ rResource ] = nObject;
+            rResourceDict.m_aXObjects[rResource] = nObject;
+            if (!rOutputStreams.empty())
+                rOutputStreams.front().m_aResourceDict.m_aXObjects[rResource] = nObject;
             break;
         case ResourceKind::ExtGState:
-            m_aGlobalResourceDict.m_aExtGStates[ rResource ] = nObject;
-            if( ! m_aOutputStreams.empty() )
-                m_aOutputStreams.front().m_aResourceDict.m_aExtGStates[ rResource ] = nObject;
+            rResourceDict.m_aExtGStates[rResource] = nObject;
+            if (!rOutputStreams.empty())
+                rOutputStreams.front().m_aResourceDict.m_aExtGStates[rResource] = nObject;
             break;
         case ResourceKind::Shading:
-            m_aGlobalResourceDict.m_aShadings[ rResource ] = nObject;
-            if( ! m_aOutputStreams.empty() )
-                m_aOutputStreams.front().m_aResourceDict.m_aShadings[ rResource ] = nObject;
+            rResourceDict.m_aShadings[rResource] = nObject;
+            if (!rOutputStreams.empty())
+                rOutputStreams.front().m_aResourceDict.m_aShadings[rResource] = nObject;
             break;
         case ResourceKind::Pattern:
-            m_aGlobalResourceDict.m_aPatterns[ rResource ] = nObject;
-            if( ! m_aOutputStreams.empty() )
-                m_aOutputStreams.front().m_aResourceDict.m_aPatterns[ rResource ] = nObject;
+            rResourceDict.m_aPatterns[rResource] = nObject;
+            if (!rOutputStreams.empty())
+                rOutputStreams.front().m_aResourceDict.m_aPatterns[rResource] = nObject;
             break;
     }
+}
+
+void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject )
+{
+    pushResource(eKind, rResource, nObject, m_aGlobalResourceDict, m_aOutputStreams);
 }
 
 void PDFWriterImpl::beginRedirect( SvStream* pStream, const tools::Rectangle& rTargetRect )
@@ -9479,7 +9562,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, const Graphic& rGraphic )
+const BitmapEmit& PDFWriterImpl::createBitmapEmit(const BitmapEx& i_rBitmap, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams)
 {
     BitmapEx aBitmap( i_rBitmap );
     auto ePixelFormat = aBitmap.GetBitmap().getPixelFormat();
@@ -9495,24 +9578,29 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
     aID.m_nMaskChecksum     = 0;
     if( aBitmap.IsAlpha() )
         aID.m_nMaskChecksum = aBitmap.GetAlpha().GetChecksum();
-    std::list< BitmapEmit >::const_iterator it = std::find_if(m_aBitmaps.begin(), m_aBitmaps.end(),
+    std::list<BitmapEmit>::const_iterator it = std::find_if(rBitmaps.begin(), rBitmaps.end(),
                                              [&](const BitmapEmit& arg) { return aID == arg.m_aID; });
-    if( it == m_aBitmaps.end() )
+    if (it == rBitmaps.end())
     {
-        m_aBitmaps.push_front( BitmapEmit() );
-        m_aBitmaps.front().m_aID        = aID;
-        m_aBitmaps.front().m_aBitmap    = aBitmap;
+        rBitmaps.push_front(BitmapEmit());
+        rBitmaps.front().m_aID = aID;
+        rBitmaps.front().m_aBitmap = aBitmap;
         if (!rGraphic.getVectorGraphicData() || rGraphic.getVectorGraphicData()->getType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
-            m_aBitmaps.front().m_nObject = createObject();
-        createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
-        it = m_aBitmaps.begin();
+            rBitmaps.front().m_nObject = createObject();
+        createEmbeddedFile(rGraphic, rBitmaps.front().m_aReferenceXObject, rBitmaps.front().m_nObject);
+        it = rBitmaps.begin();
     }
 
     sal_Int32 nObject = it->m_aReferenceXObject.getObject();
     OString aObjName = "Im" + OString::number(nObject);
-    pushResource( ResourceKind::XObject, aObjName, nObject );
+    pushResource(ResourceKind::XObject, aObjName, nObject, rResourceDict, rOutputStreams);
 
     return *it;
+}
+
+const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, const Graphic& rGraphic )
+{
+    return createBitmapEmit(i_rBitmap, rGraphic, m_aBitmaps, m_aGlobalResourceDict, m_aOutputStreams);
 }
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic )

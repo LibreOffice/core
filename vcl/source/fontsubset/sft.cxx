@@ -1284,7 +1284,7 @@ SFErrCodes AbstractTrueTypeFont::initialize()
 
 sal_uInt32 AbstractTrueTypeFont::glyphOffset(sal_uInt32 glyphID) const
 {
-    if (m_aGlyphOffsets.empty()) // the O_CFF and Bitmap cases
+    if (m_aGlyphOffsets.empty()) // the O_CFF case
         return 0;
     return m_aGlyphOffsets[glyphID];
 }
@@ -1329,9 +1329,7 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
         /* TODO: implement to get subsetting */
     }
     else {
-        // Bitmap font, accept for now.
-        m_aGlyphOffsets.clear();
-        /* TODO: implement to get subsetting */
+        return SFErrCodes::TtFormat;
     }
 
     table = this->table(O_hhea, table_size);

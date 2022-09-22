@@ -43,6 +43,7 @@ namespace vcl::font
 PhysicalFontFace::PhysicalFontFace(const FontAttributes& rDFA)
     : FontAttributes(rDFA)
     , mpHbFace(nullptr)
+    , mpHbUnscaledFont(nullptr)
     , mbFontCapabilitiesRead(false)
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
@@ -55,6 +56,8 @@ PhysicalFontFace::~PhysicalFontFace()
 {
     if (mpHbFace)
         hb_face_destroy(mpHbFace);
+    if (mpHbUnscaledFont)
+        hb_font_destroy(mpHbUnscaledFont);
 }
 
 sal_Int32 PhysicalFontFace::CompareIgnoreSize(const PhysicalFontFace& rOther) const
@@ -235,6 +238,13 @@ hb_face_t* PhysicalFontFace::GetHbFace() const
     return mpHbFace;
 }
 
+hb_font_t* PhysicalFontFace::GetHbUnscaledFont() const
+{
+    if (mpHbUnscaledFont == nullptr)
+        mpHbUnscaledFont = hb_font_create(GetHbFace());
+    return mpHbUnscaledFont;
+}
+
 FontCharMapRef PhysicalFontFace::GetFontCharMap() const
 {
     if (mxCharMap.is())
@@ -347,6 +357,9 @@ const ColorPalette& PhysicalFontFace::GetColorPalette(size_t nIndex) const
 
 std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyphIndex) const
 {
+    if (!HasColorLayers())
+        return {};
+
     const auto pHbFace = GetHbFace();
 
     auto nLayers = hb_ot_color_glyph_get_layers(pHbFace, nGlyphIndex, 0, nullptr, nullptr);
@@ -360,6 +373,30 @@ std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyph
     }
 
     return aLayers;
+}
+
+bool PhysicalFontFace::HasColorBitmaps() const { return hb_ot_color_has_png(GetHbFace()); }
+
+RawFontData PhysicalFontFace::GetGlyphColorBitmap(sal_GlyphId nGlyphIndex,
+                                                  tools::Rectangle& rRect) const
+{
+    if (!HasColorBitmaps())
+        return {};
+
+    hb_font_t* pHbFont = GetHbUnscaledFont();
+    auto aData = RawFontData(hb_ot_color_glyph_reference_png(pHbFont, nGlyphIndex));
+    if (!aData.empty())
+    {
+        hb_glyph_extents_t aExtents;
+        if (hb_font_get_glyph_extents(pHbFont, nGlyphIndex, &aExtents))
+        {
+            auto aPoint = Point(aExtents.x_bearing, aExtents.y_bearing + aExtents.height);
+            auto aSize = Size(aExtents.width, -aExtents.height);
+            rRect = tools::Rectangle(aPoint, aSize);
+        }
+    }
+
+    return aData;
 }
 
 OUString PhysicalFontFace::GetName(NameID aNameID, const LanguageTag& rLanguageTag) const

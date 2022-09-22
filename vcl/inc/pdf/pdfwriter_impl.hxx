@@ -297,6 +297,8 @@ class GlyphEmit
     sal_uInt8                       m_nSubsetGlyphID;
     sal_Int32                       m_nGlyphWidth;
     std::vector<ColorLayer>         m_aColorLayers;
+    font::RawFontData               m_aColorBitmap;
+    tools::Rectangle                m_aRect;
 
 public:
     GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
@@ -311,6 +313,17 @@ public:
 
     void addColorLayer(ColorLayer aLayer) { m_aColorLayers.push_back(aLayer); }
     const std::vector<ColorLayer>& getColorLayers() const { return m_aColorLayers; }
+
+    void setColorBitmap(font::RawFontData aData, tools::Rectangle aRect)
+    {
+        m_aColorBitmap = aData;
+        m_aRect = aRect;
+    }
+    const font::RawFontData& getColorBitmap(tools::Rectangle& rRect) const
+    {
+        rRect = m_aRect;
+        return m_aColorBitmap;
+    }
 
     void addCode( sal_Ucs i_cCode )
     {
@@ -866,6 +879,7 @@ i12626
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
+    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams );
     const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, const Graphic& rGraphic );
 
     /* writes the Do operation inside the content stream */
@@ -906,6 +920,7 @@ i12626
         return m_nFontDictObject;
     }
     /* push resource into current (redirected) resource dict */
+    static void pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams );
     void pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject );
 
     void appendBuildinFontsToDict( OStringBuffer& rDict ) const;

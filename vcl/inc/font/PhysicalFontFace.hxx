@@ -67,6 +67,11 @@ public:
     {
     }
 
+    RawFontData(const RawFontData& rOther)
+        : mpBlob(hb_blob_reference(rOther.mpBlob))
+    {
+    }
+
     ~RawFontData() { hb_blob_destroy(mpBlob); }
 
     RawFontData& operator=(const RawFontData& rOther)
@@ -166,9 +171,14 @@ public:
     bool CreateFontSubset(std::vector<sal_uInt8>&, const sal_GlyphId*, const sal_uInt8*, const int,
                           FontSubsetInfo&) const;
 
+    bool IsColorFont() const { return HasColorLayers() || HasColorBitmaps(); }
+
     bool HasColorLayers() const;
     const ColorPalette& GetColorPalette(size_t) const;
     std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
+
+    bool HasColorBitmaps() const;
+    RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;
 
     uint32_t UnitsPerEm() const { return hb_face_get_upem(GetHbFace()); }
 
@@ -184,12 +194,15 @@ public:
 
 protected:
     mutable hb_face_t* mpHbFace;
+    mutable hb_font_t* mpHbUnscaledFont;
     mutable FontCharMapRef mxCharMap;
     mutable vcl::FontCapabilities maFontCapabilities;
     mutable bool mbFontCapabilitiesRead;
     mutable std::vector<ColorPalette> maColorPalettes;
 
     explicit PhysicalFontFace(const FontAttributes&);
+
+    hb_font_t* GetHbUnscaledFont() const;
 };
 }
 
