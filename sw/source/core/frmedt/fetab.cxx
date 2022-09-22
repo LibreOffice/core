@@ -281,7 +281,15 @@ bool SwFEShell::DeleteCol()
     // search boxes via the layout
     bool bRet;
     SwSelBoxes aBoxes;
-    GetTableSel( *this, aBoxes, SwTableSearchType::Col );
+    SwTableSearchType eSearchType = SwTableSearchType::Col;
+
+    // NewModel tables already ExpandColumnSelection, so don't do it here also.
+    const SwContentNode* pContentNd = getShellCursor(false)->GetPointNode().GetContentNode();
+    const SwTableNode* pTableNd = pContentNd ? pContentNd->FindTableNode() : nullptr;
+    if (pTableNd && pTableNd->GetTable().IsNewModel())
+        eSearchType = SwTableSearchType::NONE;
+
+    GetTableSel(*this, aBoxes, eSearchType);
     if ( !aBoxes.empty() )
     {
         TableWait aWait( aBoxes.size(), pFrame, *GetDoc()->GetDocShell() );
