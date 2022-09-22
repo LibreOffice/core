@@ -63,3 +63,10 @@ def InsertText(text):
             xSelectionSupplier.select(xTextRange)
 
         i += 1
+
+def InsertHello(event=None):
+    # Calls the InsertText function to insert the "Hello" string
+    InsertText("Hello")
+
+# Make InsertHello visible by the Macro Selector
+g_exportedScripts = (InsertHello, )
