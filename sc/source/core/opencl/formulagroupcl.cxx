@@ -3605,6 +3605,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
+    SAL_INFO("sc.opencl", "Interpret cell group " << rTopPos);
     MergeCalcConfig(rDoc);
 
     genRPNTokens(rDoc, rTopPos, rCode);
