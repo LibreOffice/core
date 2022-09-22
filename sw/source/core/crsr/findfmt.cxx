@@ -40,12 +40,12 @@ bool FindFormatImpl(SwPaM & rSearchPam,
         ? oPam->GetPoint()->GetContentIndex() == oPam->GetPointContentNode()->Len()
         : !oPam->GetPoint()->GetContentIndex() )
     {
-        if( !(*fnMove.fnNds)( &oPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnPos)( oPam->GetPoint(), false ))
         {
             return false;
         }
         SwContentNode *pNd = oPam->GetPoint()->GetNode().GetContentNode();
-        oPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
+        oPam->GetPoint()->SetContent( bSrchForward ? 0 : pNd->Len() );
     }
 
     bool bFirst = true;

@@ -931,12 +931,12 @@ bool FindAttrImpl(SwPaM & rSearchPam,
         ? oPam->GetPoint()->GetContentIndex() == oPam->GetPointContentNode()->Len()
         : !oPam->GetPoint()->GetContentIndex() )
     {
-        if( !(*fnMove.fnNds)( &oPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnPos)( oPam->GetPoint(), false ))
         {
             return false;
         }
         SwContentNode *pNd = oPam->GetPointContentNode();
-        oPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
+        oPam->GetPoint()->SetContent( bSrchForward ? 0 : pNd->Len() );
     }
 
     while (nullptr != (pNode = ::GetNode(*oPam, bFirst, fnMove, bInReadOnly, pLayout)))
@@ -1069,12 +1069,12 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
         ? oPam->GetPoint()->GetContentIndex() == oPam->GetPointContentNode()->Len()
         : !oPam->GetPoint()->GetContentIndex() ) )
     {
-        if( !(*fnMove.fnNds)( &oPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnPos)( oPam->GetPoint(), false ))
         {
             return false;
         }
         SwContentNode *pNd = oPam->GetPointContentNode();
-        oPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
+        oPam->GetPoint()->SetContent( bSrchForward ? 0 : pNd->Len() );
     }
 
     while (nullptr != (pNode = ::GetNode(*oPam, bFirst, fnMove, bInReadOnly, pLayout)))

@@ -421,6 +421,36 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
     return pNd;
 }
 
+SwContentNode* GoNextPos( SwPosition* pIdx, bool bChk )
+{
+    SwNodeIndex aIdx( pIdx->GetNode() );
+    SwContentNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
+    if( pNd )
+    {
+        if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetNodeIndex() &&
+            !CheckNodesRange( pIdx->GetNode(), aIdx.GetNode(), true ) )
+                pNd = nullptr;
+        else
+            pIdx->Assign(aIdx);
+    }
+    return pNd;
+}
+
+SwContentNode* GoPreviousPos( SwPosition * pIdx, bool bChk )
+{
+    SwNodeIndex aIdx( pIdx->GetNode() );
+    SwContentNode* pNd = SwNodes::GoPrevious( &aIdx );
+    if( pNd )
+    {
+        if( bChk && SwNodeOffset(1) != pIdx->GetNodeIndex() - aIdx.GetIndex() &&
+            !CheckNodesRange( pIdx->GetNode(), aIdx.GetNode(), true ) )
+                pNd = nullptr;
+        else
+            pIdx->Assign(aIdx);
+    }
+    return pNd;
+}
+
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rPos )
@@ -1132,9 +1162,9 @@ bool GoInSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 bool GoInNode( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    SwContentNode *pNd = (*fnMove.fnNds)( &rPam.GetPoint()->nNode, true );
+    SwContentNode *pNd = (*fnMove.fnPos)( rPam.GetPoint(), true );
     if( pNd )
-        rPam.GetPoint()->nContent.Assign( pNd,
+        rPam.GetPoint()->SetContent(
                         ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
     return pNd;
 }

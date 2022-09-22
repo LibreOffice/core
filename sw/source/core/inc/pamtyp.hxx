@@ -58,10 +58,13 @@ bool GoNext(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode );
 bool GoPrevious(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode );
 SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
+SwContentNode* GoNextPos( SwPosition * pIdx, bool );
+SwContentNode* GoPreviousPos( SwPosition * pIdx, bool );
 
 // type definitions of functions
 typedef bool (*GoNd)( SwNode*, SwContentIndex*, SwCursorSkipMode );
 typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
+typedef SwContentNode* (*GoPos)( SwPosition*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition::*CmpOp)( const SwPosition& ) const;
@@ -74,6 +77,7 @@ struct SwMoveFnCollection
 {
     GoNd      fnNd;
     GoNds     fnNds;
+    GoPos     fnPos;
     GoDoc     fnDoc;
     GoSection fnSections;
     CmpOp     fnCmpOp;
