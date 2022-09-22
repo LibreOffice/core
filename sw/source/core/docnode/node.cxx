@@ -1284,6 +1284,15 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
     return pOldColl;
 }
 
+bool SwContentNode::GoNext(SwPosition* pPos, SwCursorSkipMode nMode ) const
+{
+    if (!GoNext(&pPos->nContent, nMode))
+        return false;
+    if (pPos->nContent.GetContentNode() != &pPos->GetNode())
+        pPos->nNode.Assign(*pPos->nContent.GetContentNode());
+    return true;
+}
+
 bool SwContentNode::GoNext(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
 {
     bool bRet = true;
