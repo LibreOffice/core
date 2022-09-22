@@ -97,7 +97,8 @@ bool splitLastFromConfigurationPath(std::u16string_view _sInPath,
             nEnd = nPos;
             nPos = _sInPath.find(chQuote,nEnd);
             nStart = nPos + 1;
-            --nPos; // nPos = rInPath.lastIndexOf('[',nPos);
+            if (nPos != std::u16string_view::npos)
+                --nPos; // nPos = rInPath.lastIndexOf('[',nPos);
         }
         else // allow [xxx]
         {
