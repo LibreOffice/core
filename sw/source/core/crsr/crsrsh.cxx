@@ -1753,7 +1753,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             }
             m_eMvState = CursorMoveState::NONE;  // state for cursor travelling - GetModelPositionForViewPoint
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-            if (Imp()->IsAccessible())
+            if (Imp()->IsAccessible() && m_bSendAccessibleCursorEvents)
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
 #endif
             return;
@@ -2027,7 +2027,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     m_eMvState = CursorMoveState::NONE; // state for cursor travelling - GetModelPositionForViewPoint
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    if (Imp()->IsAccessible())
+    if (Imp()->IsAccessible() && m_bSendAccessibleCursorEvents)
         Imp()->InvalidateAccessibleCursorPosition( pFrame );
 #endif
 
@@ -2970,6 +2970,7 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
+    m_bSendAccessibleCursorEvents = true;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
     m_bSetCursorInReadOnly = true;
@@ -3014,6 +3015,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
+    m_bSendAccessibleCursorEvents = true;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
     m_bSetCursorInReadOnly = true;
