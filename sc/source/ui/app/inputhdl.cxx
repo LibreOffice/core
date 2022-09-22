@@ -2173,10 +2173,11 @@ void ScInputHandler::UpdateParenthesis()
             {
                 // Examine character left to the cursor
                 sal_Int32 nPos = aSel.nStartPos - 1;
-                OUString aFormula = mpEditEngine->GetText(0);
+                OUString aFormula = mpEditEngine->GetText(aSel.nStartPara);
                 sal_Unicode c = aFormula[nPos];
                 if ( c == '(' || c == ')' )
                 {
+                    // Note this matches only within one paragraph.
                     sal_Int32 nOther = lcl_MatchParenthesis( aFormula, nPos );
                     if ( nOther != -1 )
                     {
@@ -2192,9 +2193,9 @@ void ScInputHandler::UpdateParenthesis()
                                 mpEditEngine->RemoveCharAttribs( i, EE_CHAR_WEIGHT );
                         }
 
-                        ESelection aSelThis( 0,nPos, 0,nPos+1 );
+                        ESelection aSelThis( aSel.nStartPara, nPos, aSel.nStartPara, nPos+1);
                         mpEditEngine->QuickSetAttribs( aSet, aSelThis );
-                        ESelection aSelOther( 0,nOther, 0,nOther+1 );
+                        ESelection aSelOther( aSel.nStartPara, nOther, aSel.nStartPara, nOther+1);
                         mpEditEngine->QuickSetAttribs( aSet, aSelOther );
 
                         // Dummy InsertText for Update and Paint (selection is empty)
