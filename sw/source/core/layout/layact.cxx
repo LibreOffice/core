@@ -2131,7 +2131,7 @@ bool SwLayIdle::isJobEnabled(IdleJobType eJob, const SwViewShell* pViewShell)
     return false;
 }
 
-bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
+bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
 {
     // Spellcheck all contents of the pages. Either only the
     // visible ones or all of them.
@@ -2142,7 +2142,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
         return false;
 
     SwPageFrame *pPage;
-    if ( bVisAreaOnly )
+    if (eJobArea == IdleJobArea::VISIBLE)
         pPage = m_pImp->GetFirstVisPage(pViewShell->GetOut());
     else
         pPage = static_cast<SwPageFrame*>(m_pRoot->Lower());
@@ -2208,9 +2208,11 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
         }
 
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
-        if ( pPage && bVisAreaOnly &&
-             !pPage->getFrameArea().Overlaps( m_pImp->GetShell()->VisArea()))
+        if (pPage && eJobArea == IdleJobArea::VISIBLE &&
+            !pPage->getFrameArea().Overlaps( m_pImp->GetShell()->VisArea()))
+        {
              break;
+        }
     }
     return false;
 }
@@ -2257,9 +2259,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
     // First, spellcheck the visible area. Only if there's nothing
     // to do there, we trigger the IdleFormat.
-    if ( !DoIdleJob( IdleJobType::SMART_TAGS, true ) &&
-         !DoIdleJob( IdleJobType::ONLINE_SPELLING, true ) &&
-         !DoIdleJob( IdleJobType::AUTOCOMPLETE_WORDS, true ) )
+    if ( !DoIdleJob(IdleJobType::SMART_TAGS, IdleJobArea::VISIBLE) &&
+         !DoIdleJob(IdleJobType::ONLINE_SPELLING, IdleJobArea::VISIBLE) &&
+         !DoIdleJob(IdleJobType::AUTOCOMPLETE_WORDS, IdleJobArea::VISIBLE) )
     {
         // Format, then register repaint rectangles with the SwViewShell if necessary.
         // This requires running artificial actions, so we don't get undesired
@@ -2371,10 +2373,10 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
         if (!bInterrupt)
         {
-            if ( !DoIdleJob( IdleJobType::WORD_COUNT, false ) )
-                if ( !DoIdleJob( IdleJobType::SMART_TAGS, false ) )
-                    if ( !DoIdleJob( IdleJobType::ONLINE_SPELLING, false ) )
-                        DoIdleJob( IdleJobType::AUTOCOMPLETE_WORDS, false );
+            if (!DoIdleJob(IdleJobType::WORD_COUNT, IdleJobArea::ALL))
+                if (!DoIdleJob(IdleJobType::SMART_TAGS, IdleJobArea::ALL))
+                    if (!DoIdleJob(IdleJobType::ONLINE_SPELLING, IdleJobArea::ALL))
+                        DoIdleJob(IdleJobType::AUTOCOMPLETE_WORDS, IdleJobArea::ALL);
         }
 
         bool bInValid = false;
