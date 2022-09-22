@@ -1,6 +1,6 @@
 --- src/port/chklocale.c
 +++ src/port/chklocale.c
-@@ -211,7 +211,7 @@
+@@ -220,7 +220,7 @@
  	{
  		r = malloc(16);			/* excess */
  		if (r != NULL)
