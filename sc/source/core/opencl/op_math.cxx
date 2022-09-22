@@ -222,20 +222,13 @@ void OpInt::BinInlineFun(std::set<std::string>& decls,
 {
     decls.insert(is_representable_integerDecl);
     funs.insert(is_representable_integer);
-    decls.insert(approx_equalDecl);
-    funs.insert(approx_equal);
+    decls.insert(value_approxDecl);
+    funs.insert(value_approx);
 }
 
 void OpInt::GenerateCode( outputstream& ss ) const
 {
-    ss << "    int intTmp = (int)arg0;\n";
-    // check whether rounding error caused the float to be just less than the int value
-    ss << "    if( arg0 >=0 && approx_equal( intTmp + 1, arg0 ))\n";
-    ss << "        ++intTmp;\n";
-    // negative values are rounded down
-    ss << "    if( arg0 < 0 && !approx_equal( intTmp, arg0 ))\n";
-    ss << "        --intTmp;\n";
-    ss << "    return intTmp;\n";
+    ss << "    return floor( value_approx( arg0 ));\n";
 }
 
 void OpNegSub::GenerateCode( outputstream& ss ) const
