@@ -193,6 +193,12 @@ enum class IdleJobType
     SMART_TAGS
 };
 
+enum class IdleJobArea
+{
+    ALL,
+    VISIBLE
+};
+
 class SwLayIdle
 {
     SwRootFrame *m_pRoot;
@@ -207,7 +213,7 @@ class SwLayIdle
 #endif
 
     bool DoIdleJob_( const SwContentFrame*, IdleJobType );
-    bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
+    bool DoIdleJob(IdleJobType eJobType, IdleJobArea eJobArea);
 
     static bool isJobEnabled(IdleJobType eJob, const SwViewShell* pViewShell);
 public:
