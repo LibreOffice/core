@@ -70,6 +70,9 @@ struct SharedStringPool::Impl
 SharedStringPool::SharedStringPool(const CharClass& rCharClass)
     : mpImpl(new Impl(rCharClass))
 {
+    // make sure the one empty string instance is shared in this pool as well
+    intern(OUString());
+    assert(intern(OUString()) == SharedString::getEmptyString());
 }
 
 SharedStringPool::~SharedStringPool() {}

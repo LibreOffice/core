@@ -53,8 +53,9 @@ public:
      */
     void purge();
 
+    // For unit tests. Note that an "empty" pool may contain some internal items,
+    // such as SharedString::getEmptyString().
     size_t getCount() const;
-
     size_t getCountIgnoreCase() const;
 };
 }

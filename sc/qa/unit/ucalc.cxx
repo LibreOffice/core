@@ -380,6 +380,10 @@ void Test::testSharedStringPool()
 {
     m_pDoc->InsertTab(0, "foo");
 
+    svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
+    size_t extraCount = rPool.getCount(); // internal items such as SharedString::getEmptyString()
+    size_t extraCountIgnoreCase = rPool.getCountIgnoreCase();
+
     // Strings that are identical.
     m_pDoc->SetString(ScAddress(0,0,0), "Andy");  // A1
     m_pDoc->SetString(ScAddress(0,1,0), "Andy");  // A2
@@ -417,40 +421,39 @@ void Test::testSharedStringPool()
     }
 
     // Check the string counts after purging. Purging shouldn't remove any strings in this case.
-    svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(5+extraCount, rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Clear A1 and purge again.
     clearRange(m_pDoc, ScAddress(0,0,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(5+extraCount, rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Clear A2 and purge again.
     clearRange(m_pDoc, ScAddress(0,1,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(4+extraCount, rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Clear A3 and purge again.
     clearRange(m_pDoc, ScAddress(0,2,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(3+extraCount, rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Clear A4 and purge again.
     clearRange(m_pDoc, ScAddress(0,3,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(1+extraCount, rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(1+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Clear A5 and the pool should be completely empty.
     clearRange(m_pDoc, ScAddress(0,4,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rPool.getCountIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL(extraCount, rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Now, compare string and edit text cells.
     m_pDoc->SetString(ScAddress(0,0,0), "Andy and Bruce"); // A1
