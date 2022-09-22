@@ -212,6 +212,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
     CPPUNIT_ASSERT_EQUAL(OUString("choose a color"), xContent->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSdtRunComboBox)
+{
+    // Given a document with a combo box inline/run SDT:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-combobox.docx";
+
+    // When loading the document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the doc model has a clickable combo box content control:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bComboBox{};
+    xContentControlProps->getPropertyValue("ComboBox") >>= bComboBox;
+    // Without the accompanying fix in place, this failed as the content control was a drop-down,
+    // not a combo box.
+    CPPUNIT_ASSERT(bComboBox);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
 {
     // Given a document with a dropdown inline/run SDT:
