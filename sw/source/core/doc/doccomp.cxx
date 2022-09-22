@@ -1371,7 +1371,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                 if( !rpInsRing )
                     rpInsRing.reset(pTmp);
                 pTmp->SetMark();
-                pTmp->GetMark()->nContent = nDstFrom + nSkip;
+                pTmp->GetMark()->SetContent(nDstFrom + nSkip);
             }
 
             if ( nSrcFrom < nSrcTo )
@@ -1380,7 +1380,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                 rDstDoc.GetIDocumentUndoRedo().DoUndo( false );
                 SwPaM aCpyPam( rSrcNd, nSrcFrom );
                 aCpyPam.SetMark();
-                aCpyPam.GetPoint()->nContent = nSrcTo;
+                aCpyPam.GetPoint()->SetContent(nSrcTo);
                 aCpyPam.GetDoc().getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(),
                     SwCopyFlags::CheckPosInFly);
                 rDstDoc.GetIDocumentUndoRedo().DoUndo( bUndo );
@@ -1390,7 +1390,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                     rpDelRing.reset(pTmp);
 
                 pTmp->SetMark();
-                pTmp->GetMark()->nContent = nDstTo + nSkip;
+                pTmp->GetMark()->SetContent(nDstTo + nSkip);
                 nSkip += nSrcTo - nSrcFrom;
 
                 if( rpInsRing )
@@ -1921,7 +1921,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
 
     const SwPosition* pStt = rSrcRedl.Start();
     if( rDstNd.IsContentNode() )
-        aPos.nContent.Assign( static_cast<const SwContentNode*>(&rDstNd), pStt->GetContentIndex() );
+        aPos.SetContent( pStt->GetContentIndex() );
     pDestRedl = new SwRangeRedline( rSrcRedl.GetRedlineData(), aPos );
 
     if( RedlineType::Delete != pDestRedl->GetType() )
