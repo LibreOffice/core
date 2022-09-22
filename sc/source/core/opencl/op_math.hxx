@@ -177,15 +177,6 @@ public:
     virtual void GenerateCode( outputstream& ss ) const override;
 };
 
-class OpTrunc: public Normal
-{
-public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-
-    virtual std::string BinFuncName() const override { return "Trunc"; }
-};
-
 class OpArcTan2 : public OpMathTwoArguments
 {
 public:
@@ -271,6 +262,11 @@ public:
     virtual void GenSlidingWindowFunction(outputstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "RoundDown"; }
+};
+class OpTrunc: public OpRoundDown
+{
+public:
+    virtual std::string BinFuncName() const override { return "Trunc"; }
 };
 class OpInt: public OpMathOneArgument
 {

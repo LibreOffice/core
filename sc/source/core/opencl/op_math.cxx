@@ -1169,33 +1169,6 @@ void OpSumIf::GenSlidingWindowFunction(outputstream &ss,
     ss << "}";
 }
 
-void OpTrunc::GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments)
-{
-    CHECK_PARAMETER_COUNT( 1, 2 );
-    GenerateFunctionDeclaration( sSymName, vSubArguments, ss );
-    ss << "{\n";
-    ss << "    int gid0=get_global_id(0);\n";
-    GenerateArg( "arg0", 0, vSubArguments, ss );
-    GenerateArgWithDefault( "arg1", 1, 0, vSubArguments, ss );
-    ss << "    double argm = arg0;\n";
-    ss << "    int n = (int)arg1;\n";
-    ss << "    double nn = 1.0f;\n";
-    ss << "    for(int i = 0; i < n; ++i)\n";
-    ss << "    {\n";
-    ss << "        argm = argm * 10;\n";
-    ss << "        nn = nn * 10;\n";
-    ss << "    }\n";
-    ss << "    for(int i = 0; i > n; --i)\n";
-    ss << "    {\n";
-    ss << "        argm = argm / 10;\n";
-    ss << "        nn = nn / 10;\n";
-    ss << "    }\n";
-    ss << "    modf(argm, &argm);\n";
-    ss << "    return argm / nn;\n";
-    ss << "}\n";
-}
-
 void OpFloor::GenSlidingWindowFunction(
     outputstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
