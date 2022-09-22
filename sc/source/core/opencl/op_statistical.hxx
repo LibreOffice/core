@@ -149,12 +149,6 @@ class OpNormdist:public Normal{
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "OpNormdist"; }
 };
-class OpMedian:public Normal{
-    public:
-    virtual void GenSlidingWindowFunction(outputstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual std::string BinFuncName() const override { return "OpMedian"; }
-};
 class OpNormsdist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(outputstream &ss,

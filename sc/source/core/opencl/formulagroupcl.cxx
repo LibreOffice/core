@@ -2344,10 +2344,6 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpWeibull>(), nResultSize));
                 break;
-            /*case ocMedian:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],std::make_shared<OpMedian));
-                break;*/
             case ocDDB:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], std::make_shared<OpDDB>(), nResultSize));
