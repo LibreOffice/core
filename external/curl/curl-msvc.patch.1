@@ -2,7 +2,7 @@ MSVC: using SOLARINC
 
 --- curl/winbuild/MakefileBuild.vc.orig	2017-10-23 16:36:07.713550851 +0200
 +++ curl/winbuild/MakefileBuild.vc	2017-10-23 16:38:19.301547594 +0200
-@@ -60,7 +60,7 @@
+@@ -52,7 +52,7 @@
  !ELSE
  CC_NODEBUG  = $(CC) /O2 /DNDEBUG
  CC_DEBUG    = $(CC) /Od /D_DEBUG /RTC1 /Z7 /LDd
@@ -11,7 +11,7 @@ MSVC: using SOLARINC
  !ENDIF
  
  LFLAGS     = /nologo /machine:$(MACHINE)
-@@ -300,11 +300,11 @@
+@@ -426,11 +426,11 @@
  # CURL_XX macros are for the curl.exe command
  
  !IF "$(DEBUG)"=="yes"
