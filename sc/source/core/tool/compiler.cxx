@@ -6185,7 +6185,8 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
         mPendingImplicitIntersectionOptimizations.emplace_back( pppToken[0], token );
         return true;
     }
-    else if ((nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_BIN_OP)
+    else if ((nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_BIN_OP
+                && nOpCode != ocAnd && nOpCode != ocOr)
               || nOpCode == ocRound || nOpCode == ocRoundUp || nOpCode == ocRoundDown)
     {
         if (nNumParams != 2)
