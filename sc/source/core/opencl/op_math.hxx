@@ -405,6 +405,7 @@ class OpMod: public OpMathTwoArguments
 public:
     virtual std::string BinFuncName() const override { return "Mod"; }
     virtual void GenerateCode( outputstream& ss ) const override;
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) override;
 };
 
 class OpProduct: public Normal

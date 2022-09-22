@@ -163,4 +163,30 @@ const char fsub_approx[] =
 "    return a - b;\n"
 "}\n";
 
+const char value_approxDecl[] = "double value_approx( double fValue );\n";
+const char value_approx[] =
+"double value_approx( double fValue )\n"
+"{\n"
+"    const double fBigInt = 2199023255552.0;\n"
+"    if (fValue == 0.0 || fValue == HUGE_VAL || !isfinite(fValue))\n"
+"        return fValue;\n"
+"    double fOrigValue = fValue;\n"
+"    fValue = fabs(fValue);\n"
+"    if (fValue > fBigInt)\n"
+"        return fOrigValue;\n"
+"    if (is_representable_integer(fValue))\n" // TODO? || getBitsInFracPart(fValue) <= 11)\n"
+"        return fOrigValue;\n"
+"    int nExp = (int)(floor(log10(fValue)));\n"
+"    nExp = 14 - nExp;\n"
+"    double fExpValue = pow(10.0,nExp);\n"
+"    fValue *= fExpValue;\n"
+"    if (!isfinite(fValue))\n"
+"        return fOrigValue;\n"
+"    fValue = round(fValue);\n"
+"    fValue /= fExpValue;\n"
+"    if (!isfinite(fValue))\n"
+"        return fOrigValue;\n"
+"    return copysign(fValue, fOrigValue);\n"
+"}\n";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

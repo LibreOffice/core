@@ -391,23 +391,29 @@ void OpCombin::GenerateCode( outputstream& ss ) const
     ss << "    return result;\n";
 }
 
+void OpMod::BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs)
+{
+    decls.insert(is_representable_integerDecl);
+    funs.insert(is_representable_integer);
+    decls.insert(approx_equalDecl);
+    funs.insert(approx_equal);
+    decls.insert(fsub_approxDecl);
+    funs.insert(fsub_approx);
+    decls.insert(value_approxDecl);
+    funs.insert(value_approx);
+}
+
 void OpMod::GenerateCode( outputstream& ss ) const
 {
-    ss << "    if(isnan(arg0)||arg0 == 0)\n";
-    ss << "        return 0;\n";
-    ss << "    if(isnan(arg1) || arg1 ==0)\n";
+    ss << "    double fNum = arg0;\n";
+    ss << "    double fDenom = arg1;\n";
+    ss << "    if(fDenom == 0)\n";
     ss << "        return CreateDoubleError(DivisionByZero);\n";
-    ss << "    double tem;\n";
-    ss << "        if(arg0 < 0 && arg1 > 0)\n";
-    ss << "            while(arg0 < 0)\n";
-    ss << "                arg0 += arg1;\n";
-    ss << "        else if (arg0 > 0 && arg1 < 0)\n";
-    ss << "            while(arg0 > 0)\n";
-    ss << "                arg0 += arg1;\n";
-    ss << "        tem = fmod(arg0,arg1);\n";
-    ss << "    if(arg1 < 0 && tem > 0)\n";
-    ss << "        tem = -tem;\n";
-    ss << "    return tem;\n";
+    ss << "    double fRes = fsub_approx( fNum, floor( value_approx( fNum / fDenom )) * fDenom );\n";
+    ss << "    if ( ( fDenom > 0 && fRes >= 0 && fRes < fDenom ) ||\n";
+    ss << "             ( fDenom < 0 && fRes <= 0 && fRes > fDenom ) )\n";
+    ss << "        return fRes;\n";
+    ss << "    return CreateDoubleError(NoValue);\n";
 }
 
 void OpPower::GenerateCode( outputstream& ss ) const
