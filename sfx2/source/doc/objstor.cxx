@@ -3217,7 +3217,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             // calls SwXTextFieldMasters::getByName, which in turn maps property names by
             // calling SwStyleNameMapper::GetTextUINameArray, which uses
             // SvtSysLocale().GetUILanguageTag() to do the mapping, saving indirectly depends
-            // on the UI language. This is an unfortunate depenency. Here we use the loader's language.
+            // on the UI language. This is an unfortunate dependency. Here we use the loader's language.
             const LanguageTag viewLanguage = comphelper::LibreOfficeKit::getLanguageTag();
             const LanguageTag loadLanguage = SfxLokHelper::getLoadLanguage();
 
