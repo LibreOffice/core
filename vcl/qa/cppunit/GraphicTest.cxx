@@ -1331,8 +1331,9 @@ void GraphicTest::testLoadSVGZ()
 {
     Graphic aGraphic = loadGraphic(u"TypeDetectionExample.svgz");
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    const auto[scalingX, scalingY] = getDPIScaling();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
 }
 
 void GraphicTest::testAvailableThreaded()
