@@ -253,10 +253,10 @@ DECLARE_WW8EXPORT_TEST(testTdf75539_relativeWidth, "tdf75539_relativeWidth.doc")
     //divide everything by 10 to give a margin of error for rounding etc.
     sal_Int32 pageWidth = parseDump("/root/page[1]/body/infos/bounds", "width").toInt32()/10;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page width", sal_Int32(9354/10), pageWidth);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("100% width line", pageWidth,   parseDump("/root/page[1]/body/txt[2]/Special", "nWidth").toInt32()/10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("50% width line", pageWidth/2,  parseDump("/root/page[1]/body/txt[4]/Special", "nWidth").toInt32()/10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("25% width line", pageWidth/4,  parseDump("/root/page[1]/body/txt[6]/Special", "nWidth").toInt32()/10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("10% width line", pageWidth/10, parseDump("/root/page[1]/body/txt[8]/Special", "nWidth").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("100% width line", pageWidth,   parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("50% width line", pageWidth/2,  parseDump("/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("25% width line", pageWidth/4,  parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("10% width line", pageWidth/10, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion", "width").toInt32()/10);
 }
 
 DECLARE_WW8EXPORT_TEST(testN757905, "n757905.doc")
@@ -315,7 +315,7 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 {
-    OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='PortionType::Number']", "rText");
+    OUString aText = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand");
     // This was 1.1.
     CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
 }
@@ -323,7 +323,7 @@ DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
 {
     // Similar to fdo#36868, numbering portions had wrong values.
-    OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='PortionType::Number']", "rText");
+    OUString aText = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand");
     // PortionType::Number was completely missing.
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
@@ -612,10 +612,10 @@ DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
 DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 {
     // The problem was that the text was not displayed.
-    CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText").isEmpty() );
-    CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText") );
+    CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand").isEmpty() );
+    CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion", "expand") );
     // all crossreference bookmarks should have a target.  Shouldn't be any "Reference source not found" in the xml
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/Special[2]","rText").indexOf("Reference source not found"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/SwParaPortion/SwLineLayout/SwFieldPortion[2]","expand").indexOf("Reference source not found"));
 }
 #endif
 
