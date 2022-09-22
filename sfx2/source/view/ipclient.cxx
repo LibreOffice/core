@@ -922,7 +922,8 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                                             u"SaveAs",
                                             aDispatchArgs,
                                             false,
-                                            SignatureState::NOSIGNATURES );
+                                            SignatureState::NOSIGNATURES,
+                                            false );
                 }
                 catch( const task::ErrorCodeIOException& aErrorEx )
                 {

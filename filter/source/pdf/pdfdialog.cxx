@@ -62,11 +62,35 @@ std::unique_ptr<weld::DialogController> PDFDialog::createDialog(const css::uno::
     return nullptr;
 }
 
+std::shared_ptr<SfxTabDialogController> PDFDialog::createAsyncDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+{
+    if( mxSrcDoc.is() )
+        return std::make_shared<ImpPDFTabDialog>(Application::GetFrameWeld(rParent), maFilterData, mxSrcDoc);
+    return nullptr;
+}
+
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if (nExecutionResult && m_xDialog)
         maFilterData = static_cast<ImpPDFTabDialog*>(m_xDialog.get())->GetFilterData();
     destroyDialog();
+}
+
+void PDFDialog::runAsync(const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener)
+{
+    SfxTabDialogController::runAsync(m_xAsyncDialog, [this, xListener](sal_Int32 nResponse) {
+        executedAsyncDialog( m_xAsyncDialog, nResponse );
+        css::ui::dialogs::DialogClosedEvent aEvent;
+        aEvent.DialogResult = nResponse;
+        xListener->dialogClosed( aEvent );
+        destroyAsyncDialog();
+    });
+}
+
+void PDFDialog::executedAsyncDialog( std::shared_ptr<SfxTabDialogController> xAsyncDialog, sal_Int32 nExecutionResult )
+{
+    if (nExecutionResult && xAsyncDialog)
+        maFilterData = static_cast<ImpPDFTabDialog*>(xAsyncDialog.get())->GetFilterData();
 }
 
 Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()

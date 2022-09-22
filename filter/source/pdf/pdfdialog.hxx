@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <svtools/genericunodialog.hxx>
-
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -28,12 +26,16 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <sfx2/tabdlg.hxx>
+#include <svtools/genericasyncunodialog.hxx>
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-typedef ::cppu::ImplInheritanceHelper < ::svt::OGenericUnoDialog, XPropertyAccess, XExporter >  PDFDialog_Base;
+typedef ::cppu::ImplInheritanceHelper < ::svt::OGenericUnoAsyncDialog<SfxTabDialogController>,
+                                        XPropertyAccess, XExporter >  PDFDialog_Base;
 
 class PDFDialog final:
     public PDFDialog_Base,
@@ -53,6 +55,11 @@ private:
     virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+
+    // OGenericUnoAsyncDialog
+    virtual std::shared_ptr<SfxTabDialogController> createAsyncDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual void runAsync(const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener) override;
+    virtual void executedAsyncDialog(std::shared_ptr<SfxTabDialogController> xAsyncDialog, sal_Int32 nExecutionResult) override;
 
     // XPropertyAccess
     using OPropertySetHelper::getPropertyValues;

@@ -541,6 +541,8 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
 
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 {
+    if (mxPasswordUnusedWarnDialog)
+        mxPasswordUnusedWarnDialog->response(RET_CANCEL);
 }
 
 void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
@@ -871,10 +873,11 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         // if a password was set, inform the user that this will not be used
         if (pSecPage && pSecPage->hasPassword())
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
+            mxPasswordUnusedWarnDialog =
+                std::shared_ptr<weld::MessageDialog>(Application::CreateMessageDialog(m_xContainer.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                       FilterResId(STR_WARN_PASSWORD_PDFA)));
-            xBox->run();
+            mxPasswordUnusedWarnDialog->runAsync(mxPasswordUnusedWarnDialog, [] (sal_uInt32){ });
         }
     }
     else
