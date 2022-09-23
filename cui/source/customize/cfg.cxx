@@ -214,7 +214,6 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
     AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
-    m_xTabCtrl->connect_enter_page(LINK(this, SvxConfigDialog, ActivatePageHdl));
 
     const SfxPoolItem* pItem = pInSet->GetItem( SID_CONFIG );
 
@@ -229,8 +228,9 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     }
 }
 
-IMPL_LINK(SvxConfigDialog, ActivatePageHdl, const OString&, rPage, void)
+void SvxConfigDialog::ActivatePage(const OString& rPage)
 {
+    SfxTabDialogController::ActivatePage(rPage);
     GetResetButton()->set_visible(rPage != "keyboard");
 }
 
