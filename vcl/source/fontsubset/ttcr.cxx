@@ -137,12 +137,14 @@ void TrueTypeCreator::AddTable(std::unique_ptr<TrueTypeTable> table)
 
 void TrueTypeCreator::RemoveTable(sal_uInt32 tableTag)
 {
-    for (auto it = this->m_tables.begin(); it != this->m_tables.end(); ++it)
+    for (auto it = this->m_tables.begin(); it != this->m_tables.end(); )
     {
         if ((*it)->m_tag == tableTag)
         {
-            this->m_tables.erase(it);
+            it = this->m_tables.erase(it);
         }
+        else
+            ++it;
     }
 }
 
