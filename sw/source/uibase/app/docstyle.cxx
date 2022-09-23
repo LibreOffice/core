@@ -1729,27 +1729,27 @@ static void lcl_SaveStyles( SfxStyleFamily nFamily, std::vector<void*>& rArr, Sw
     case SfxStyleFamily::Char:
         {
             const SwCharFormats& rTable = *rDoc.GetCharFormats();
-            for( size_t n = 0, nCnt = rTable.size(); n < nCnt; ++n )
+            for(auto const& rChar: rTable)
             {
-                rArr.push_back( rTable[ n ] );
+                rArr.push_back(rChar);
             }
         }
         break;
     case SfxStyleFamily::Para:
         {
             const SwTextFormatColls& rTable = *rDoc.GetTextFormatColls();
-            for( size_t n = 0, nCnt = rTable.size(); n < nCnt; ++n )
+            for(auto const& rPara : rTable)
             {
-                rArr.push_back( rTable[ n ] );
+                rArr.push_back(rPara);
             }
         }
         break;
     case SfxStyleFamily::Frame:
         {
             const SwFrameFormats& rTable = *rDoc.GetFrameFormats();
-            for( size_t n = 0, nCnt = rTable.size(); n < nCnt; ++n )
+            for(auto const& rFrame: rTable)
             {
-                rArr.push_back( rTable[ n ] );
+                rArr.push_back(rFrame);
             }
         }
         break;
@@ -1766,9 +1766,9 @@ static void lcl_SaveStyles( SfxStyleFamily nFamily, std::vector<void*>& rArr, Sw
     case SfxStyleFamily::Pseudo:
         {
             const SwNumRuleTable& rTable = rDoc.GetNumRuleTable();
-            for( size_t n = 0, nCnt = rTable.size(); n < nCnt; ++n )
+            for(auto const& rPseudo: rTable)
             {
-                rArr.push_back( rTable[ n ] );
+                rArr.push_back(rPseudo);
             }
         }
         break;
@@ -1795,8 +1795,8 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
                 if( !lcl_Contains( rArr, rTable[ n ] ))
                     aDelArr.push_front( n );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelCharFormat( aDelArr[ n ] );
+            for(auto const& rDelArr: aDelArr)
+                rDoc.DelCharFormat( rDelArr );
         }
         break;
 
@@ -1809,8 +1809,8 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
                 if( !lcl_Contains( rArr, rTable[ n ] ))
                     aDelArr.push_front( n );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelTextFormatColl( aDelArr[ n ] );
+            for(auto const& rDelArr: aDelArr)
+                rDoc.DelTextFormatColl( rDelArr );
         }
         break;
 
@@ -1818,13 +1818,13 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
         {
             std::deque<SwFrameFormat*> aDelArr;
             const SwFrameFormats& rTable = *rDoc.GetFrameFormats();
-            for( n = 0, nCnt = rTable.size(); n < nCnt; ++n )
+            for( auto const& rFrame: rTable )
             {
-                if( !lcl_Contains( rArr, rTable[ n ] ))
-                    aDelArr.push_front( rTable[ n ] );
+                if( !lcl_Contains( rArr, rFrame ))
+                    aDelArr.push_front( rFrame );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelFrameFormat( aDelArr[ n ] );
+            for( auto const& rDelArr: aDelArr)
+                rDoc.DelFrameFormat( rDelArr );
         }
         break;
 
@@ -1836,8 +1836,8 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
                 if( !lcl_Contains( rArr, &rDoc.GetPageDesc( n ) ))
                     aDelArr.push_front( n );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelPageDesc( aDelArr[ n ] );
+            for( auto const& rDelArr: aDelArr )
+                rDoc.DelPageDesc( rDelArr);
         }
         break;
 
@@ -1845,13 +1845,13 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
         {
             std::deque<SwNumRule*> aDelArr;
             const SwNumRuleTable& rTable = rDoc.GetNumRuleTable();
-            for( n = 0, nCnt = rTable.size(); n < nCnt; ++n )
+            for( auto const& rPseudo: rTable)
             {
-                if( !lcl_Contains( rArr, rTable[ n ] ))
-                    aDelArr.push_front( rTable[ n ] );
+                if( !lcl_Contains( rArr, rPseudo ))
+                    aDelArr.push_front( rPseudo );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelNumRule( aDelArr[ n ]->GetName() );
+            for( auto const& rDelArr: aDelArr)
+                rDoc.DelNumRule( rDelArr->GetName() );
         }
         break;
     default: break;
@@ -3027,9 +3027,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         nSearchFamily == SfxStyleFamily::All )
     {
         const SwNumRuleTable& rNumTable = rDoc.GetNumRuleTable();
-        for(size_t i = 0; i < rNumTable.size(); ++i)
+        for(auto const& rNum: rNumTable)
         {
-            const SwNumRule& rRule = *rNumTable[ i ];
+            const SwNumRule& rRule = *rNum;
             if( !rRule.IsAutoRule() )
             {
                 if ( nSrchMask == SfxStyleSearchBits::Hidden && !rRule.IsHidden( ) )
