@@ -2500,7 +2500,9 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         for (auto i = 1u; i < nGlyphs; i++)
         {
             auto nStream = createObject();
-            aLine.append("/g" + OString::number(i) + " ");
+            aLine.append("/");
+            aLine.append(pFace->GetGlyphName(pGlyphIds[i], true));
+            aLine.append(" ");
             aLine.append(nStream);
             aLine.append(" 0 R\n");
             pGlyphStreams[i] = nStream;
@@ -2509,7 +2511,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
 
         aLine.append("/Encoding<</Type/Encoding/Differences[1");
         for (auto i = 1u; i < nGlyphs; i++)
-            aLine.append(" /g" + OString::number(i));
+            aLine.append(" /" + pFace->GetGlyphName(pGlyphIds[i], true));
         aLine.append("]>>\n");
 
         aLine.append("/FirstChar 0\n"

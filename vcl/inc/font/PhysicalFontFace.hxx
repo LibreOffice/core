@@ -180,6 +180,8 @@ public:
     bool HasColorBitmaps() const;
     RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;
 
+    OString GetGlyphName(sal_GlyphId, bool = false) const;
+
     uint32_t UnitsPerEm() const { return hb_face_get_upem(GetHbFace()); }
 
     OUString GetName(NameID, const LanguageTag&) const;

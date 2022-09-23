@@ -399,6 +399,25 @@ RawFontData PhysicalFontFace::GetGlyphColorBitmap(sal_GlyphId nGlyphIndex,
     return aData;
 }
 
+OString PhysicalFontFace::GetGlyphName(sal_GlyphId nGlyphIndex, bool bValidate) const
+{
+    char aBuffer[256];
+    hb_font_glyph_to_string(GetHbUnscaledFont(), nGlyphIndex, aBuffer, 256);
+    if (bValidate)
+    {
+        // https://learn.microsoft.com/en-us/typography/opentype/spec/post#version-20
+        // Valid characters are limited to A–Z, a–z, 0–9, “.” (FULL STOP), and “_” (LOW LINE).
+        const char* p = aBuffer;
+        while ((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') || (*p >= 'a' && *p <= 'z')
+               || *p == '.' || *p == '_')
+            ++p;
+        if (*p != '\0')
+            return "g" + OString::number(nGlyphIndex);
+    }
+
+    return OString(aBuffer);
+}
+
 OUString PhysicalFontFace::GetName(NameID aNameID, const LanguageTag& rLanguageTag) const
 {
     auto pHbFace = GetHbFace();
