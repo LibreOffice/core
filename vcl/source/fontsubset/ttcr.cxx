@@ -300,15 +300,6 @@ struct tdata_loca {
     std::unique_ptr<sal_uInt8[]> ptr;       /* pointer to the data */
 };
 
-struct tdata_post {
-    sal_uInt32 format;
-    sal_uInt32 italicAngle;
-    sal_Int16  underlinePosition;
-    sal_Int16  underlineThickness;
-    sal_uInt32 isFixedPitch;
-    void   *ptr;                        /* format-specific pointer */
-};
-
 /* allocate memory for a TT table */
 static std::unique_ptr<sal_uInt8[]> ttmalloc(sal_uInt32 nbytes)
 {
@@ -352,18 +343,15 @@ TrueTypeTableName::~TrueTypeTableName()
 
 TrueTypeTablePost::~TrueTypeTablePost()
 {
-    tdata_post *p = this->m_postdata.get();
-    if (p) {
-        if (p->format == 0x00030000) {
-            /* do nothing */
-        } else {
-            SAL_WARN("vcl.fonts", "Unsupported format of a 'post' table: "
-                    << std::setfill('0')
-                    << std::setw(8)
-                    << std::hex
-                    << std::uppercase
-                    << static_cast<int>(p->format) << ".");
-        }
+    if (m_format == 0x00030000) {
+        /* do nothing */
+    } else {
+        SAL_WARN("vcl.fonts", "Unsupported format of a 'post' table: "
+                << std::setfill('0')
+                << std::setw(8)
+                << std::hex
+                << std::uppercase
+                << static_cast<int>(m_format) << ".");
     }
 }
 
@@ -625,21 +613,20 @@ int TrueTypeTableName::GetRawData(TableEntry* te)
 
 int TrueTypeTablePost::GetRawData(TableEntry* te)
 {
-    tdata_post *p = this->m_postdata.get();
     std::unique_ptr<sal_uInt8[]> post;
     sal_uInt32 postLen = 0;
     int ret;
 
     this->m_rawdata.reset();
 
-    if (p->format == 0x00030000) {
+    if (m_format == 0x00030000) {
         postLen = 32;
         post = ttmalloc(postLen);
         PutUInt32(0x00030000, post.get(), 0);
-        PutUInt32(p->italicAngle, post.get(), 4);
-        PutUInt16(p->underlinePosition, post.get(), 8);
-        PutUInt16(p->underlineThickness, post.get(), 10);
-        PutUInt16(static_cast<sal_uInt16>(p->isFixedPitch), post.get(), 12);
+        PutUInt32(m_italicAngle, post.get(), 4);
+        PutUInt16(m_underlinePosition, post.get(), 8);
+        PutUInt16(m_underlineThickness, post.get(), 10);
+        PutUInt16(static_cast<sal_uInt16>(m_isFixedPitch), post.get(), 12);
         ret = TTCR_OK;
     } else {
         SAL_WARN("vcl.fonts", "Unrecognized format of a post table: "
@@ -647,7 +634,7 @@ int TrueTypeTablePost::GetRawData(TableEntry* te)
                 << std::setw(8)
                 << std::hex
                 << std::uppercase
-                << static_cast<int>(p->format) << ".");
+                << static_cast<int>(m_format) << ".");
         ret = TTCR_POSTFORMAT;
     }
 
@@ -806,16 +793,15 @@ TrueTypeTablePost::TrueTypeTablePost(sal_Int32 format,
                                      sal_Int16 underlineThickness,
                                      sal_uInt32 isFixedPitch)
     : TrueTypeTable(T_post)
-    , m_postdata(new tdata_post)
 {
     assert(format == 0x00030000);                 /* Only format 3.0 is supported at this time */
 
-    m_postdata->format = format;
-    m_postdata->italicAngle = italicAngle;
-    m_postdata->underlinePosition = underlinePosition;
-    m_postdata->underlineThickness = underlineThickness;
-    m_postdata->isFixedPitch = isFixedPitch;
-    m_postdata->ptr = nullptr;
+    m_format = format;
+    m_italicAngle = italicAngle;
+    m_underlinePosition = underlinePosition;
+    m_underlineThickness = underlineThickness;
+    m_isFixedPitch = isFixedPitch;
+    m_ptr = nullptr;
 }
 
 void TrueTypeTableCmap::cmapAdd(sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)

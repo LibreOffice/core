@@ -30,7 +30,6 @@
 namespace vcl
 {
 class TrueTypeTable;
-struct tdata_post;
 struct tdata_loca;
 struct table_cmap;
 struct tdata_generic;
@@ -289,7 +288,12 @@ struct TableEntry;
         virtual ~TrueTypeTablePost() override;
         virtual int GetRawData(TableEntry*) override;
     private:
-        std::unique_ptr<tdata_post> m_postdata;
+        sal_uInt32 m_format;
+        sal_uInt32 m_italicAngle;
+        sal_Int16  m_underlinePosition;
+        sal_Int16  m_underlineThickness;
+        sal_uInt32 m_isFixedPitch;
+        void   *m_ptr;                        /* format-specific pointer */
     };
 
 } // namespace
