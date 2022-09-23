@@ -1038,7 +1038,7 @@ void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
     if ( nIdx>0 && nIdx != std::u16string_view::npos )
     {
         // string contains at least 2 tokens
-        nIdx = rMacro.rfind('.', nIdx);
+        nIdx = rMacro.rfind('.', nIdx - 1);
         if (nIdx != std::u16string_view::npos)
         {
             // string contains at least 3 tokens
