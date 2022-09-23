@@ -41,14 +41,14 @@
 
 #include "path_helper.hxx"
 
-#define WSTR_SYSTEM_ROOT_PATH               u"\\\\.\\"
-#define WSTR_LONG_PATH_PREFIX               u"\\\\?\\"
-#define WSTR_LONG_PATH_PREFIX_UNC           u"\\\\?\\UNC\\"
-
 // FileURL functions
 
 namespace
 {
+constexpr std::u16string_view WSTR_SYSTEM_ROOT_PATH = u"\\\\.\\";
+constexpr std::u16string_view WSTR_LONG_PATH_PREFIX = u"\\\\?\\";
+constexpr std::u16string_view WSTR_LONG_PATH_PREFIX_UNC = u"\\\\?\\UNC\\";
+
 // Internal functions that expect only backslashes as path separators
 
 bool startsWithDriveColon(std::u16string_view s)
@@ -308,13 +308,13 @@ DWORD IsValidFilePath(const OUString& path, DWORD dwFlags, OUString* corrected)
         if (path.matchIgnoreAsciiCase(WSTR_LONG_PATH_PREFIX_UNC))
         {
             /* This is long path in UNC notation */
-            oComponent = path.subView(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1);
+            oComponent = path.subView(WSTR_LONG_PATH_PREFIX_UNC.size());
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC | PATHTYPE_IS_LONGPATH;
         }
         else if (path.matchIgnoreAsciiCase(WSTR_LONG_PATH_PREFIX))
         {
             /* This is long path */
-            oComponent = path.subView(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1);
+            oComponent = path.subView(WSTR_LONG_PATH_PREFIX.size());
 
             if (startsWithDriveColon(*oComponent))
             {
@@ -567,6 +567,71 @@ static OUString osl_encodeURL_(std::u16string_view sURL)
     return sEncodedURL.makeStringAndClear();
 }
 
+// A helper that makes sure that for existing part of the path, the case is correct.
+// Unlike GetLongPathNameW that it wraps, this function does not require the path to exist.
+static OUString GetCaseCorrectPathName(std::u16string_view sysPath)
+{
+    // Prepare a null-terminated string first.
+    // Neither OUString, nor u16string_view are guaranteed to be null-terminated
+    osl::LongPathBuffer<wchar_t> szPath(sysPath.size() + WSTR_LONG_PATH_PREFIX_UNC.size() + 1);
+    wchar_t* const pPath = szPath;
+    wchar_t* pEnd = pPath;
+    size_t sysPathOffset = 0;
+    if (sysPath.size() >= MAX_PATH && isAbsolute(sysPath)
+        && !o3tl::starts_with(sysPath, WSTR_LONG_PATH_PREFIX))
+    {
+        // Allow GetLongPathNameW consume long paths
+        std::u16string_view prefix = WSTR_LONG_PATH_PREFIX;
+        if (startsWithSlashSlash(sysPath))
+        {
+            sysPathOffset = 2; // skip leading "\\"
+            prefix = WSTR_LONG_PATH_PREFIX_UNC;
+        }
+        pEnd = std::copy(prefix.begin(), prefix.end(), pEnd);
+    }
+    wchar_t* const pStart = pEnd;
+    pEnd = std::copy(sysPath.begin() + sysPathOffset, sysPath.end(), pStart);
+    *pEnd = 0;
+    osl::LongPathBuffer<wchar_t> aBuf(MAX_LONG_PATH);
+    while (pEnd > pStart)
+    {
+        std::u16string_view curPath(o3tl::toU(pPath), pEnd - pPath);
+        if (curPath == u"\\\\" || curPath == WSTR_SYSTEM_ROOT_PATH
+            || curPath == WSTR_LONG_PATH_PREFIX
+            || o3tl::equalsIgnoreAsciiCase(curPath, WSTR_LONG_PATH_PREFIX_UNC))
+            break; // Do not check if the special path prefix exists itself
+
+        DWORD nNewLen = GetLongPathNameW(pPath, aBuf, aBuf.getBufSizeInSymbols());
+        if (nNewLen == 0)
+        {
+            // Error?
+            const DWORD err = GetLastError();
+            if (err == ERROR_FILE_NOT_FOUND || err == ERROR_PATH_NOT_FOUND)
+            {
+                // Check the base path; skip possible trailing separator
+                size_t sepPos = curPath.substr(0, curPath.size() - 1).rfind(u'\\');
+                if (sepPos != std::u16string_view::npos)
+                {
+                    pEnd = pPath + sepPos;
+                    *pEnd = 0;
+                    continue;
+                }
+            }
+            else
+            {
+                SAL_WARN("sal.osl", "GetLongPathNameW: Windows error code "
+                                        << err << " processing path " << OUString(curPath));
+            }
+            break; // All other errors, or no separators left
+        }
+        assert(nNewLen < aBuf.getBufSizeInSymbols());
+        // Combine the case-correct leading part with the non-existing trailing part
+        return OUString::Concat(std::u16string_view(o3tl::toU(aBuf), nNewLen))
+               + sysPath.substr(pEnd - pStart + sysPathOffset);
+    };
+    return OUString(sysPath); // We found no existing parts - just assume it's OK
+}
+
 oslFileError osl_getSystemPathFromFileURL_(const OUString& strURL, rtl_uString **pustrPath, bool bAllowRelative)
 {
     OUString sTempPath;
@@ -622,25 +687,21 @@ oslFileError osl_getSystemPathFromFileURL_(const OUString& strURL, rtl_uString *
                 }
                 else
                 {
-                    ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetLongPathNameW( o3tl::toW(sDecodedURL->getStr()) + nSkip,
-                                                                 o3tl::toW(aBuf),
-                                                                 aBuf.getBufSizeInSymbols() );
-
-                    if ( nNewLen <= MAX_PATH - 12
-                      || sDecodedURL->matchIgnoreAsciiCase(WSTR_SYSTEM_ROOT_PATH, nSkip)
-                      || sDecodedURL->matchIgnoreAsciiCase(WSTR_LONG_PATH_PREFIX, nSkip) )
+                    sDecodedURL = GetCaseCorrectPathName(sDecodedURL->subView(nSkip));
+                    if (sDecodedURL->getLength() <= MAX_PATH - 12
+                        || sDecodedURL->startsWith(WSTR_SYSTEM_ROOT_PATH)
+                        || sDecodedURL->startsWith(WSTR_LONG_PATH_PREFIX))
                     {
-                        sTempPath = std::u16string_view(aBuf, nNewLen);
+                        sTempPath = *sDecodedURL;
                     }
-                    else if ( sDecodedURL->match("\\\\", nSkip) )
+                    else if (sDecodedURL->startsWith("\\\\"))
                     {
                         /* it should be an UNC path, use the according prefix */
-                        sTempPath = OUString::Concat(WSTR_LONG_PATH_PREFIX_UNC) + std::u16string_view(aBuf + 2, nNewLen - 2);
+                        sTempPath = OUString::Concat(WSTR_LONG_PATH_PREFIX_UNC) + sDecodedURL->subView(2);
                     }
                     else
                     {
-                        sTempPath = OUString::Concat(WSTR_LONG_PATH_PREFIX) + std::u16string_view(aBuf, nNewLen);
+                        sTempPath = WSTR_LONG_PATH_PREFIX + *sDecodedURL;
                     }
                 }
             }
@@ -691,7 +752,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
-                    static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 == 8,
+                    static_assert(WSTR_LONG_PATH_PREFIX_UNC.size() == 8,
                                   "Unexpected long path UNC prefix!");
 
                     /* generate the normal UNC path */
@@ -699,7 +760,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
                     break;
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
-                    static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 == 4,
+                    static_assert(WSTR_LONG_PATH_PREFIX.size() == 4,
                                   "Unexpected long path prefix!");
 
                     /* generate the normal path */
