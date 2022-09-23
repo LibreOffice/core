@@ -56,7 +56,6 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
-#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <svl/cryptosign.hxx>
