@@ -45,6 +45,9 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         compareString (
                 const OUString& s1, const OUString& s2) const;
 
+        sal_Int32 compareSubstring (const OUString& s1, sal_Int32 off1, sal_Int32 len1,
+                                    const OUString& s2, sal_Int32 off2, sal_Int32 len2) const;
+
         css::uno::Sequence< OUString >
         listCollatorAlgorithms (
                 const css::lang::Locale& rLocale) const;

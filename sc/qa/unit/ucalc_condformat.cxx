@@ -818,7 +818,8 @@ void TestCondformat::testCondFormatEndsWithStr()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    ScConditionEntry aEntry(ScConditionMode::EndsWith, "\"TestString\"", "", *m_pDoc, ScAddress(),
+    // case insnsitive matching
+    ScConditionEntry aEntry(ScConditionMode::EndsWith, "\"teststring\"", "", *m_pDoc, ScAddress(),
             "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     svl::SharedStringPool& rStringPool = m_pDoc->GetSharedStringPool();

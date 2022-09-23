@@ -1175,14 +1175,34 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 bValid = !bValid;
         break;
         case ScConditionMode::BeginsWith:
-            bValid = rArg.startsWith(aUpVal1);
-        break;
+        {
+            const sal_Int32 nLen = aUpVal1.getLength();
+            if (!nLen || nLen > rArg.getLength())
+                bValid = false;
+            else
+            {
+                bValid = (ScGlobal::GetCollator().compareSubstring(rArg, 0, nLen,
+                                                                   aUpVal1, 0, nLen) == 0);
+            }
+        }
+       break;
         case ScConditionMode::EndsWith:
-            bValid = rArg.endsWith(aUpVal1);
+        {
+            sal_Int32 nStart = rArg.getLength();
+            const sal_Int32 nLen = aUpVal1.getLength();
+            if (!nLen || nLen > nStart)
+                bValid = false;
+            else
+            {
+                nStart = nStart - nLen;
+                bValid = (ScGlobal::GetCollator().compareSubstring(rArg, nStart, nLen,
+                                                                   aUpVal1, 0, nLen) == 0);
+            }
+        }
         break;
         case ScConditionMode::ContainsText:
         case ScConditionMode::NotContainsText:
-            bValid = rArg.indexOf(aUpVal1) != -1;
+            bValid = rArg.toAsciiLowerCase().indexOf(aUpVal1.toAsciiLowerCase()) != -1;
             if(eOp == ScConditionMode::NotContainsText)
                 bValid = !bValid;
         break;
