@@ -1375,46 +1375,6 @@ namespace svgio::svgreader
             }
         }
 
-        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew, bool bRemove)
-        {
-            const sal_Int32 nLen(rCandidate.getLength());
-
-            if(nLen)
-            {
-                sal_Int32 nPos(0);
-                OUStringBuffer aBuffer;
-                bool bChanged(false);
-
-                while(nPos < nLen)
-                {
-                    const sal_Unicode aChar(rCandidate[nPos]);
-
-                    if(nPattern == aChar)
-                    {
-                        bChanged = true;
-
-                        if(!bRemove)
-                        {
-                            aBuffer.append(nNew);
-                        }
-                    }
-                    else
-                    {
-                        aBuffer.append(aChar);
-                    }
-
-                    nPos++;
-                }
-
-                if(bChanged)
-                {
-                    return aBuffer.makeStringAndClear();
-                }
-            }
-
-            return rCandidate;
-        }
-
         // #i125325#
         OUString removeBlockComments(const OUString& rCandidate)
         {
@@ -1515,15 +1475,9 @@ namespace svgio::svgreader
 
         OUString xmlSpaceHandling(const OUString& rCandidate, bool bIsDefault)
         {
-            const sal_Unicode aNewline('\n');
-            const sal_Unicode aTab('\t');
-            const sal_Unicode aSpace(' ');
-
-            // remove all newline characters
-            OUString aRetval(convert(rCandidate, aNewline, aSpace, bIsDefault));
-
-            // convert tab to space
-            aRetval = convert(aRetval, aTab, aSpace, false);
+            // if xml:space="default" then remove all newline characters, otherwise convert them to space
+            // convert tab to space too
+            OUString aRetval(rCandidate.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" "));
 
             if(bIsDefault)
             {

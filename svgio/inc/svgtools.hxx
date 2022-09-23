@@ -125,7 +125,6 @@ namespace svgio::svgreader
 
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);
 
-        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew, bool bRemove);
         OUString consolidateContiguousSpace(const OUString& rCandidate);
         OUString xmlSpaceHandling(const OUString& rCandidate, bool bIsDefault);
 
