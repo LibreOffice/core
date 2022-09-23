@@ -2140,6 +2140,8 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
         gID[i] = static_cast<sal_uInt16>(glyf->glyfAdd(GetTTRawGlyphData(ttf, glyphArray[i]), ttf));
     }
 
+    const int nGlyfCount = static_cast<int>(glyf->glyfCount());
+
     ttcr.AddTable(std::move(head)); ttcr.AddTable(std::move(hhea)); ttcr.AddTable(std::move(maxp)); ttcr.AddTable(std::move(cvt));
     ttcr.AddTable(std::move(prep)); ttcr.AddTable(std::move(glyf)); ttcr.AddTable(std::move(fpgm));
 
@@ -2173,7 +2175,7 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     /* dump charstrings */
     fprintf(outf, "/CharStrings %d dict dup begin\n", nGlyphs);
     fprintf(outf, "/.notdef 0 def\n");
-    for (i = 1; i < static_cast<int>(glyf->glyfCount()); i++) {
+    for (i = 1; i < nGlyfCount; ++i) {
         fprintf(outf,"/glyph%d %d def\n", i, i);
     }
     fprintf(outf, "end readonly def\n");
