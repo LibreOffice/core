@@ -67,9 +67,9 @@ public:
     virtual void tearDown() override;
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
-    void typeString(SdXImpressDocument* rImpressDocument, const std::string& rStr);
+    void typeString(SdXImpressDocument* rImpressDocument, const std::u16string_view& rStr);
     void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey);
-    void insertStringToObject(sal_uInt16 nObj, const std::string& rStr, bool bUseEscape);
+    void insertStringToObject(sal_uInt16 nObj, const std::u16string_view& rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
     FileFormat* getFormat(sal_Int32 nExportType);
     void save(sd::DrawDocShell* pShell, FileFormat const* pFormat, utl::TempFile const& rTempFile);
@@ -109,9 +109,10 @@ void SdUiImpressTest::typeKey(SdXImpressDocument* rImpressDocument, const sal_uI
     Scheduler::ProcessEventsToIdle();
 }
 
-void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument, const std::string& rStr)
+void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument,
+                                 const std::u16string_view& rStr)
 {
-    for (const char c : rStr)
+    for (const char16_t c : rStr)
     {
         rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
         rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
@@ -119,7 +120,7 @@ void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument, const std
     }
 }
 
-void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& rStr,
+void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::u16string_view& rStr,
                                            bool bUseEscape)
 {
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -457,7 +458,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
 
-    insertStringToObject(0, "Test", /*bUseEscape*/ false);
+    insertStringToObject(0, u"Test", /*bUseEscape*/ false);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
@@ -505,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
 
-    insertStringToObject(0, "Test", /*bUseEscape*/ true);
+    insertStringToObject(0, u"Test", /*bUseEscape*/ true);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
@@ -611,17 +612,17 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(u""), xShape->getString());
 
-    insertStringToObject(1, "one", /*bUseEscape*/ false);
+    insertStringToObject(1, u"one", /*bUseEscape*/ false);
     typeKey(pXImpressDocument, KEY_RETURN);
-    typeString(pXImpressDocument, "two");
+    typeString(pXImpressDocument, u"two");
     typeKey(pXImpressDocument, KEY_RETURN);
-    typeString(pXImpressDocument, "three");
+    typeString(pXImpressDocument, u"three");
     typeKey(pXImpressDocument, KEY_RETURN);
-    typeString(pXImpressDocument, "four");
+    typeString(pXImpressDocument, u"four");
     typeKey(pXImpressDocument, KEY_RETURN);
-    typeString(pXImpressDocument, "five");
+    typeString(pXImpressDocument, u"five");
     typeKey(pXImpressDocument, KEY_RETURN);
-    typeString(pXImpressDocument, "six");
+    typeString(pXImpressDocument, u"six");
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nFive\nsix"), xShape->getString());
 
@@ -699,12 +700,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
         Scheduler::ProcessEventsToIdle();
     }
 
-    typeString(pXImpressDocument, "A");
+    typeString(pXImpressDocument, u"A");
 
     // Move to A2 with Tab and write 'B'
     typeKey(pXImpressDocument, KEY_TAB);
 
-    typeString(pXImpressDocument, "B");
+    typeString(pXImpressDocument, u"B");
 
     typeKey(pXImpressDocument, KEY_ESCAPE);
 
@@ -886,10 +887,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
     uno::Reference<container::XIndexAccess> xDraws = xDrawPagesSupplier->getDrawPages();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 
-    // Insert an UTF-8 character (176 is the code of the degree sign, i.e., '°')
-    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 176, 0);
-    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 176, 0);
-    Scheduler::ProcessEventsToIdle();
+    typeString(pImpressDocument, u"°");
 
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -997,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     {
         uno::Reference<text::XSimpleText> xText = xShape->getText();
-        xText->insertString(xText->getStart(), "test", false);
+        xText->insertString(xText->getStart(), u"test", false);
     }
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
@@ -1115,7 +1113,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
 
-    insertStringToObject(0, "Test", /*bUseEscape*/ false);
+    insertStringToObject(0, u"Test", /*bUseEscape*/ false);
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:OutlineFont", {});
 
