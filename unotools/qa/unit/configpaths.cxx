@@ -47,9 +47,6 @@ public:
             CPPUNIT_ASSERT_EQUAL(OUString(""), path);
             CPPUNIT_ASSERT_EQUAL(OUString("foo"), last);
         }
-        // TODO: Broken since 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
-        // unotools" (expected "" vs. actual "/foo"):
-        if ((false))
         {
             // Already prior to 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
             // unotools", and in discordance with the documentation, this returned true (but
@@ -65,9 +62,6 @@ public:
             CPPUNIT_ASSERT_EQUAL(OUString("/foo/bar"), path);
             CPPUNIT_ASSERT_EQUAL(OUString("baz"), last);
         }
-        // TODO: Broken since 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
-        // unotools" (expected "/foo/bar" vs. actual "/foo/bar/baz"):
-        if ((false))
         {
             // Trailing slash accepted for backwards compatibility (cf
             // . "for backwards compatibility, ignore a final slash" comment in
@@ -77,9 +71,6 @@ public:
             CPPUNIT_ASSERT_EQUAL(OUString("/foo/bar"), path);
             CPPUNIT_ASSERT_EQUAL(OUString("baz"), last);
         }
-        // TODO: Broken since 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
-        // unotools" (expected true vs. actual false return):
-        if ((false))
         {
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(
@@ -93,18 +84,14 @@ public:
             CPPUNIT_ASSERT_EQUAL(OUString(""), path);
             CPPUNIT_ASSERT_EQUAL(OUString("foo"), last);
         }
-        // TODO: Broken since 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
-        // unotools" (expected false vs. actual true return):
-        if ((false))
         {
-            // Already prior to 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
-            // unotools", and in discordance with the documentation, this set last to "foo" rather
-            // than "foo/" (but "If <var>_sInPath</var> could not be parsed as a valid configuration
-            // path, this is set to <var>_sInPath</var>"):
+            // In accordance with the documentation, this sets last to "foo/" ("If
+            // <var>_sInPath</var> could not be parsed as a valid configuration path, this is set to
+            // <var>_sInPath</var>"):
             OUString path, last;
             CPPUNIT_ASSERT(!utl::splitLastFromConfigurationPath(u"foo/", path, last));
             CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("foo"), last);
+            CPPUNIT_ASSERT_EQUAL(OUString("foo/"), last);
         }
         {
             // Some broken input missing a leading slash happens to be considered OK:

@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <string_view>
 
 #include <unotools/configpaths.hxx>
@@ -78,70 +79,87 @@ bool splitLastFromConfigurationPath(std::u16string_view _sInPath,
 {
     size_t nStart,nEnd;
 
-    size_t nPos = _sInPath.size()-1;
+    size_t nPos = _sInPath.size();
 
-    // strip trailing slash
-    if (nPos != std::u16string_view::npos && nPos > 0 && _sInPath[ nPos ] == '/')
+    // for backwards compatibility, strip trailing slash
+    if (nPos > 1 && _sInPath[ nPos - 1 ] == '/')
     {
-        OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 
-    // check for predicate ['xxx'] or ["yyy"]
-    if (nPos != std::u16string_view::npos && nPos > 0 && _sInPath[ nPos ] == ']')
+    // check for set element ['xxx'] or ["yyy"]
+    bool decode;
+    if (nPos > 0 && _sInPath[ nPos - 1 ] == ']')
     {
-        sal_Unicode chQuote = _sInPath[--nPos];
+        decode = true;
+        if (nPos < 3) { // expect at least chQuote + chQuote + ']' at _sInPath[nPos-3..nPos-1]
+            goto invalid;
+        }
+        nPos -= 2;
+        sal_Unicode chQuote = _sInPath[nPos];
 
         if (chQuote == '\'' || chQuote == '\"')
         {
             nEnd = nPos;
-            nPos = _sInPath.find(chQuote,nEnd);
+            nPos = _sInPath.rfind(chQuote,nEnd - 1);
+            if (nPos == std::u16string_view::npos) {
+                goto invalid;
+            }
             nStart = nPos + 1;
-            if (nPos != std::u16string_view::npos)
-                --nPos; // nPos = rInPath.lastIndexOf('[',nPos);
         }
-        else // allow [xxx]
+        else
         {
-            nEnd = nPos + 1;
-            nPos = _sInPath.rfind('[',nEnd);
-            nStart = nPos + 1;
+            goto invalid;
         }
 
-        OSL_ENSURE(nPos != std::u16string_view::npos && _sInPath[nPos] == '[', "Invalid config path: unmatched quotes or brackets");
-        if (nPos != std::u16string_view::npos && _sInPath[nPos] == '[')
+        OSL_ENSURE(nPos > 0 && _sInPath[nPos - 1] == '[', "Invalid config path: unmatched quotes or brackets");
+        if (nPos > 1 && _sInPath[nPos - 1] == '[')
+            // expect at least '/' + '[' at _sInPath[nPos-2..nPos-1]
         {
-            nPos =  _sInPath.rfind('/',nPos);
+            nPos =  _sInPath.rfind('/',nPos - 2);
+            if (nPos == std::u16string_view::npos) {
+                goto invalid;
+            }
         }
-        else // defined behavior for invalid paths
+        else
         {
-            nStart = 0;
-            nEnd = _sInPath.size();
-            nPos = std::u16string_view::npos;
+            goto invalid;
         }
 
     }
     else
     {
-        nEnd = nPos+1;
-        nPos = _sInPath.rfind('/',nEnd);
+        decode = false;
+        nEnd = nPos;
+        if (nEnd == 0) {
+            goto invalid;
+        }
+        nPos = _sInPath.rfind('/',nEnd - 1);
+        if (nPos == std::u16string_view::npos) {
+            goto invalid;
+        }
         nStart = nPos + 1;
     }
-    OSL_ASSERT( (nPos == std::u16string_view::npos ||
-                nPos < nStart) &&
-                nStart < nEnd &&
-                nEnd <= _sInPath.size() );
+    assert( nPos != std::u16string_view::npos &&
+            nPos < nStart &&
+            nStart <= nEnd &&
+            nEnd <= _sInPath.size() );
 
-    OSL_ASSERT(nPos == std::u16string_view::npos || _sInPath[nPos] == '/');
+    assert(_sInPath[nPos] == '/');
     OSL_ENSURE(nPos != 0 , "Invalid config child path: immediate child of root");
 
     _rsLocalName = _sInPath.substr(nStart, nEnd-nStart);
-    if (nPos > 0 && nPos != std::u16string_view::npos)
-        _rsOutPath = _sInPath.substr(0,nPos);
-    else
-        _rsOutPath.clear();
-    lcl_resolveCharEntities(_rsLocalName);
+    _rsOutPath = (nPos > 0) ? OUString(_sInPath.substr(0,nPos)) : OUString();
+    if (decode) {
+        lcl_resolveCharEntities(_rsLocalName);
+    }
 
-    return nPos != std::u16string_view::npos;
+    return true;
+
+invalid:
+    _rsOutPath.clear();
+    _rsLocalName = _sInPath;
+    return false;
 }
 
 OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _sOutPath)
