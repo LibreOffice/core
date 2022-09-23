@@ -959,6 +959,16 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             }
             break;
         }
+        case SwContentControlType::COMBO_BOX:
+        {
+            pDescriptor = std::make_unique<vcl::PDFWriter::ComboBoxWidget>();
+            auto pComboWidget = static_cast<vcl::PDFWriter::ComboBoxWidget*>(pDescriptor.get());
+            for (const auto& rItem : pContentControl->GetListItems())
+            {
+                pComboWidget->Entries.push_back(rItem.m_aDisplayText);
+            }
+            break;
+        }
         case SwContentControlType::DATE:
         {
             pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();

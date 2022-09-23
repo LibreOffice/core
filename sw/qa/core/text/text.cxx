@@ -751,6 +751,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     CPPUNIT_ASSERT_EQUAL(24.0f, pAnnotation->getFormFontSize(pPdfDocument.get()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
+{
+    // Given a file with a combo box content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
+
+    // When exporting to PDF:
+    StoreToTempFile("writer_pdf_Export");
+
+    // Then make sure that a combo box form widget is emitted:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the combo box content control was exported as plain text.
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::ComboBox,
+                         pAnnotation->getFormFieldType(pPdfDocument.get()));
+    // 19th bit: combo box, not dropdown.
+    CPPUNIT_ASSERT(pAnnotation->getFormFieldFlags(pPdfDocument.get()) & 0x00040000);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

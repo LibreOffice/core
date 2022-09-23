@@ -252,6 +252,7 @@ public:
     PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) override;
     float getFormFontSize(PDFiumDocument* pDoc) override;
     OUString getFormFieldAlternateName(PDFiumDocument* pDoc) override;
+    int getFormFieldFlags(PDFiumDocument* pDoc) override;
 };
 
 class PDFiumPageObjectImpl final : public PDFiumPageObject
@@ -1135,6 +1136,12 @@ PDFFormFieldType PDFiumAnnotationImpl::getFormFieldType(PDFiumDocument* pDoc)
     auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
     return PDFFormFieldType(
         FPDFAnnot_GetFormFieldType(pDocImpl->getFormHandlePointer(), mpAnnotation));
+}
+
+int PDFiumAnnotationImpl::getFormFieldFlags(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    return FPDFAnnot_GetFormFieldFlags(pDocImpl->getFormHandlePointer(), mpAnnotation);
 }
 
 float PDFiumAnnotationImpl::getFormFontSize(PDFiumDocument* pDoc)
