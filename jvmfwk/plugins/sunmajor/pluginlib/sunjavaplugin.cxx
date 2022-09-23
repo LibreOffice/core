@@ -486,7 +486,7 @@ static void load_msvcr(std::u16string_view jvm_dll, std::u16string_view msvcr)
     // Then check if msvcr71.dll is in the parent folder of where
     // jvm.dll is. That is currently (1.6.0_22) as far as I know the
     // normal case.
-    slash = jvm_dll.rfind('\\', slash);
+    slash = jvm_dll.substr(0, slash).rfind('\\');
 
     if (slash == std::u16string_view::npos)
         return;
