@@ -1177,16 +1177,33 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 bValid = !bValid;
         break;
         case ScConditionMode::BeginsWith:
-            bValid = rArg.startsWith(aUpVal1);
+            bValid = ScGlobal::GetTransliteration().isMatch(aUpVal1, rArg);
         break;
         case ScConditionMode::EndsWith:
-            bValid = rArg.endsWith(aUpVal1);
+        {
+            sal_Int32 nStart = rArg.getLength();
+            const sal_Int32 nLen = aUpVal1.getLength();
+            if (nLen > nStart)
+                bValid = false;
+            else
+            {
+                nStart = nStart - nLen;
+                sal_Int32 nMatch1(0), nMatch2(0);
+                bValid = ScGlobal::GetTransliteration().equals(rArg, nStart, nLen, nMatch1,
+                                                               aUpVal1, 0, nLen, nMatch2);
+            }
+        }
         break;
         case ScConditionMode::ContainsText:
         case ScConditionMode::NotContainsText:
-            bValid = rArg.indexOf(aUpVal1) != -1;
+        {
+            const OUString aArgStr(ScGlobal::getCharClass().lowercase(rArg));
+            const OUString aValStr(ScGlobal::getCharClass().lowercase(aUpVal1));
+            bValid = aArgStr.indexOf(aValStr) != -1;
+
             if(eOp == ScConditionMode::NotContainsText)
                 bValid = !bValid;
+        }
         break;
         default:
         {
