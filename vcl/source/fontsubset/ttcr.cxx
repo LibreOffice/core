@@ -838,7 +838,9 @@ void TrueTypeTableCmap::cmapAdd(sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
     if (!found) {
         if (m_cmap->n == m_cmap->m) {
             std::unique_ptr<CmapSubTable[]> tmp(new CmapSubTable[m_cmap->m + CMAP_SUBTABLE_INCR]);
-            memcpy(tmp.get(), s, sizeof(CmapSubTable) * m_cmap->m);
+            for (sal_uInt32 j = 0; j != m_cmap->m; ++j) {
+                tmp[j] = std::move(s[j]);
+            }
             m_cmap->m += CMAP_SUBTABLE_INCR;
             s = tmp.get();
             m_cmap->s = std::move(tmp);
@@ -849,7 +851,9 @@ void TrueTypeTableCmap::cmapAdd(sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
         }
 
         if (i < m_cmap->n) {
-            memmove(s+i+1, s+i, m_cmap->n-i);
+            for (sal_uInt32 j = m_cmap->n; j != i; --j) {
+                s[j + 1] = std::move(s[j]);
+            }
         }
 
         m_cmap->n++;
