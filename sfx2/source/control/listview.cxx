@@ -57,6 +57,9 @@ ListView::ListView(std::unique_ptr<weld::TreeView> xTreeView)
         static_cast<int>(nDigitWidth * 18) /* Modify Column */
     };
 
+    // tdf#151143 Make the size of ListView and ThumbnailView the same
+    mxTreeView->set_size_request(TEMPLATE_ITEM_MAX_WIDTH * 5, TEMPLATE_ITEM_MAX_HEIGHT_SUB * 3);
+
     mxTreeView->set_column_fixed_widths(aWidths);
     mxTreeView->set_selection_mode(SelectionMode::Multiple);
     mxTreeView->connect_query_tooltip(LINK(this, ListView, QueryTooltipHdl));
