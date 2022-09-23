@@ -1641,10 +1641,53 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         if ( aDenyListIter != aModelData.GetMediaDescr().end() )
             aDenyListIter->second >>= aDenyList;
 
+        bool bWasmPdfExport = false;
+#ifdef EMSCRIPTEN
+        // Do not create file dialoge for direct pdf export, (just a workaround for WASM pdf export now)
+        // because that is still buggy on the Qt side
+        if ( nStoreMode & PDFDIRECTEXPORT_REQUESTED )
+        {
+            // preselect a filter for the storing process
+            ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
+
+            // this is a WASM direct pdf export
+            const OUString aFilterUIName = aFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
+            if (aFilterUIName == "PDF - Portable Document Format")
+            {
+                OUString realfiltername;
+                const OUString aDocServiceName{ aModelData.GetDocServiceName() };
+                if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
+                    realfiltername = "draw_pdf_Export";
+                else if ( aDocServiceName == "com.sun.star.presentation.PresentationDocument" )
+                    realfiltername = "impress_pdf_Export";
+                else if ( aDocServiceName == "com.sun.star.text.TextDocument" )
+                    realfiltername = "writer_pdf_Export";
+                else if ( aDocServiceName == "com.sun.star.sheet.SpreadsheetDocument" )
+                    realfiltername = "calc_pdf_Export";
+
+                if (realfiltername.endsWith("pdf_Export"))
+                {
+                    const OUString aRecommendedDir {aModelData.GetRecommendedDir( aSuggestedDir )};
+                    OUString aAdjustToType = aFilterPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
+                    const OUString aRecommendedName {aModelData.GetRecommendedName( aSuggestedName, aAdjustToType )};
+                    OUString aTempURL = aRecommendedDir + aRecommendedName;
+                    INetURLObject aURL2(aTempURL);
+                    aModelData.GetMediaDescr()[OUString("URL")] <<= aURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                    aModelData.GetMediaDescr()[sFilterNameString] <<= realfiltername;
+                    bWasmPdfExport = true;
+                }
+            }
+        }
+#endif // EMSCRIPTEN
+
         for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aDenyList );
+            if (!bWasmPdfExport)
+                bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aDenyList );
+            else
+                bUseFilterOptions = true;
+
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
@@ -1665,7 +1708,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                 break;
         }
 
-        bDialogUsed = true;
+        bDialogUsed = !bWasmPdfExport;
         aFileNameIter = aModelData.GetMediaDescr().find( OUString("URL") );
     }
     else

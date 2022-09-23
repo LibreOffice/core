@@ -32,6 +32,22 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#ifdef EMSCRIPTEN
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+
+#include <unotools/mediadescriptor.hxx>
+
+#include <tools/urlobj.hxx>
+#endif
+
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/resmgr.hxx>
@@ -40,6 +56,9 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QHash>
+#ifdef EMSCRIPTEN
+#include <QtWidgets/QtWidgets>
+#endif
 #include <QtWidgets/QFileDialog>
 
 #include <memory>
@@ -172,6 +191,15 @@ private:
                                    const css::uno::Any& rValue);
 
     void prepareExecute();
+
+#ifdef EMSCRIPTEN
+    void headlessPdfConversionWASM();
+    void exportFileToPDFWASM(const OUString& rfileName);
+    css::uno::Reference<css::lang::XComponent>
+    loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
+                    const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args
+                    = css::uno::Sequence<css::beans::PropertyValue>());
+#endif
 
 private Q_SLOTS:
     // emit XFilePickerListener controlStateChanged event
