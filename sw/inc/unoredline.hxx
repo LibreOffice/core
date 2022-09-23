@@ -39,6 +39,9 @@ class SwXRedlineText final :
     SwNodeIndex m_aNodeIndex;
     virtual const SwStartNode *GetStartNode() const override;
 
+    virtual css::uno::Reference< css::text::XTextCursor >
+        CreateCursor() override;
+
 public:
     SwXRedlineText(SwDoc* pDoc, const SwNodeIndex& aNodeIndex);
 
