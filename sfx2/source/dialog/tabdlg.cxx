@@ -510,7 +510,11 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
 }
 
 IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
+{
+    ActivatePage(rPage);
+}
 
+void SfxTabDialogController::ActivatePage(const OString& rPage)
 /*  [Description]
 
     Handler that is called by StarView for switching to a different page.
@@ -545,7 +549,11 @@ IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
 }
 
 IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool)
+{
+    return DeactivatePage(rPage);
+}
 
+bool SfxTabDialogController::DeactivatePage(const OString& rPage)
 /*  [Description]
 
     Handler that is called by StarView before leaving a page.
@@ -997,7 +1005,7 @@ void SfxTabDialogController::Start_Impl()
             m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
     }
 
-    ActivatePageHdl(m_xTabCtrl->get_current_page_ident());
+    ActivatePage(m_xTabCtrl->get_current_page_ident());
 
     m_pImpl->bStarted = true;
 }
@@ -1015,7 +1023,7 @@ void SfxTabDialogController::SetCurPageId(const OString& rIdent)
 void SfxTabDialogController::ShowPage(const OString& rIdent)
 {
     SetCurPageId(rIdent);
-    ActivatePageHdl(rIdent);
+    ActivatePage(rIdent);
 }
 
 OString SfxTabDialogController::GetCurPageId() const
