@@ -436,7 +436,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
         }
         case TypeFieldmarkEnd:
         {
-            if (!m_rHelper.hasCurrentFieldSeparator())
+            if (m_rHelper.hasCurrentFieldCtx() && !m_rHelper.hasCurrentFieldSeparator())
             {   // backward compat for old files without separator
                 InsertFieldmark(GetImport(), m_rHelper, true);
             }

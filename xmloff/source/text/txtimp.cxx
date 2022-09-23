@@ -2127,49 +2127,26 @@ XMLTextImportHelper::popFieldCtx()
 void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& value )
 {
     assert(!m_xImpl->m_FieldStack.empty());
-    if (!m_xImpl->m_FieldStack.empty()) {
-        Impl::field_stack_item_t & FieldStackItem(m_xImpl->m_FieldStack.top());
-        std::get<1>(FieldStackItem).emplace_back( name, value );
-    }
+    Impl::field_stack_item_t & FieldStackItem(m_xImpl->m_FieldStack.top());
+    std::get<1>(FieldStackItem).emplace_back( name, value );
 }
 
 ::std::pair<OUString, OUString> XMLTextImportHelper::getCurrentFieldType() const
 {
     assert(!m_xImpl->m_FieldStack.empty());
-    if (!m_xImpl->m_FieldStack.empty())
-    {
-        return std::get<0>(m_xImpl->m_FieldStack.top());
-    }
-    else
-    {
-        return {};
-    }
+    return std::get<0>(m_xImpl->m_FieldStack.top());
 }
 
 uno::Reference<text::XTextRange> XMLTextImportHelper::getCurrentFieldStart() const
 {
     assert(!m_xImpl->m_FieldStack.empty());
-    if (!m_xImpl->m_FieldStack.empty())
-    {
-        return std::get<3>(m_xImpl->m_FieldStack.top());
-    }
-    else
-    {
-        return {};
-    }
+    return std::get<3>(m_xImpl->m_FieldStack.top());
 }
 
 bool XMLTextImportHelper::hasCurrentFieldSeparator() const
 {
     assert(!m_xImpl->m_FieldStack.empty());
-    if (!m_xImpl->m_FieldStack.empty())
-    {
-        return std::get<2>(m_xImpl->m_FieldStack.top()).is();
-    }
-    else
-    {
-        return {};
-    }
+    return std::get<2>(m_xImpl->m_FieldStack.top()).is();
 }
 
 bool XMLTextImportHelper::hasCurrentFieldCtx() const
@@ -2180,7 +2157,7 @@ bool XMLTextImportHelper::hasCurrentFieldCtx() const
 void XMLTextImportHelper::setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> const &xFormField)
 {
     assert(!m_xImpl->m_FieldStack.empty());
-    if (!m_xImpl->m_FieldStack.empty() && xFormField.is())
+    if (xFormField.is())
     {
         FieldParamImporter(&std::get<1>(m_xImpl->m_FieldStack.top()),
             xFormField->getParameters()).Import();
