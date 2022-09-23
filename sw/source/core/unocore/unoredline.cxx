@@ -90,6 +90,11 @@ uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
+uno::Reference<text::XTextCursor> SwXRedlineText::CreateCursor()
+{
+    return createTextCursor();
+}
+
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
 {
     SolarMutexGuard aGuard;
