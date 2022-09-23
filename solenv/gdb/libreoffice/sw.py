@@ -111,7 +111,7 @@ class MarkBasePrinter(object):
     def children(self):
         m = self.value.cast(self.value.dynamic_type)
         return [ ( v, m[ v ] )
-            for v in ( 'm_aName', 'm_pPos1', 'm_pPos2' ) ].__iter__()
+            for v in ( 'm_aName', 'm_oPos1', 'm_oPos2' ) ].__iter__()
 
 class SwXTextRangeImplPrinter(object):
     '''Prints SwXTextRange::Impl.'''
@@ -165,7 +165,7 @@ class SwXTextRangePrinter(object):
         self.value = value
 
     def to_string(self):
-        return "%s %s" % (self.typename, self.value['m_pImpl'])
+        return "%s %s" % (self.typename, self.value['m_pImpl']['_M_t']['_M_t'].cast(gdb.lookup_type("std::_Head_base<0, SwXTextRange::Impl*, false>"))['_M_head_impl'].dereference())
 
 class BigPtrArrayPrinter(object):
     '''Prints BigPtrArray.'''
