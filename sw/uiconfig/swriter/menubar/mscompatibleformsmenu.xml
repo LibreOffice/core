@@ -19,6 +19,7 @@
           <menu:menuitem menu:id=".uno:InsertPlainTextContentControl"/>
           <menu:menuitem menu:id=".uno:InsertPictureContentControl"/>
           <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
+          <menu:menuitem menu:id=".uno:InsertComboBoxContentControl"/>
           <menu:menuitem menu:id=".uno:InsertDropdownContentControl"/>
           <menu:menuitem menu:id=".uno:InsertDateContentControl"/>
           <menu:menuitem menu:id=".uno:ContentControlProperties"/>
