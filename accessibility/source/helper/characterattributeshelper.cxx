@@ -19,6 +19,7 @@
 
 #include <helper/characterattributeshelper.hxx>
 #include <tools/gen.hxx>
+#include <vcl/unohelp.hxx>
 #include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -39,7 +40,7 @@ CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sa
     m_aAttributeMap.emplace( OUString( "CharStrikeout" ),     Any( static_cast<sal_Int16>(rFont.GetStrikeout()) ) );
     m_aAttributeMap.emplace( OUString( "CharUnderline" ),     Any( static_cast<sal_Int16>(rFont.GetUnderline()) ) );
     m_aAttributeMap.emplace( OUString( "CharWeight" ),        Any( static_cast<float>(rFont.GetWeight()) ) );
-    m_aAttributeMap.emplace( OUString( "CharPosture" ),       Any( static_cast<sal_Int16>(rFont.GetItalic()) ) );
+    m_aAttributeMap.emplace( OUString( "CharPosture" ),       Any( vcl::unohelper::ConvertFontSlant(rFont.GetItalic()) ) );
 }
 
 
