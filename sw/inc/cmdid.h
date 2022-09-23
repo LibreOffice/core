@@ -229,6 +229,7 @@ class SwUINumRuleItem;
 #define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
 #define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
 #define FN_INSERT_STRING        (FN_INSERT+31)
+#define FN_INSERT_COMBO_BOX_CONTENT_CONTROL (FN_INSERT + 32) /* Combo box content control */
 #define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Insert interactive frame */
 #define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Insert Frame */
 

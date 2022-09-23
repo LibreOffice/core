@@ -388,6 +388,28 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
     // handling for plain text content controls.
     CPPUNIT_ASSERT(pContentControl->GetPlainText());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertComboBoxContentControl)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a combo box content control:
+    dispatchCommand(mxComponent, ".uno:InsertComboBoxContentControl", {});
+
+    // Then make sure that the matching text attribute is added to the document model:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed, no content control was
+    // inserted.
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    CPPUNIT_ASSERT(pAttr);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    CPPUNIT_ASSERT(pContentControl->GetComboBox());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

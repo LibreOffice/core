@@ -249,6 +249,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_INSERT_COMBO_BOX_CONTENT_CONTROL:
+        rSh.InsertContentControl(SwContentControlType::COMBO_BOX);
+        rReq.Done();
+        break;
+
     case FN_CONTENT_CONTROL_PROPERTIES:
     {
         SwWrtShell& rWrtSh = GetShell();
