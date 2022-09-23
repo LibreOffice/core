@@ -437,7 +437,7 @@ void Test::testTextXmlSpace()
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]", "text", "a b");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]", "text", "a b");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]", "text", "ab");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[5]", "text", "a  b");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[5]", "text", " a  b ");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[6]", "text", "a b");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[7]", "text", "a   b");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[8]", "text", "a b");

@@ -1525,13 +1525,11 @@ namespace svgio::svgreader
             // convert tab to space
             aRetval = convert(aRetval, aTab, aSpace, false);
 
-            // strip of all leading and trailing spaces
-            aRetval = aRetval.trim();
-
             if(bIsDefault)
             {
-                // consolidate contiguous space
-                aRetval = consolidateContiguousSpace(aRetval);
+                // strip of all leading and trailing spaces
+                // and consolidate contiguous space
+                aRetval = consolidateContiguousSpace(aRetval.trim());
             }
 
             return aRetval;
