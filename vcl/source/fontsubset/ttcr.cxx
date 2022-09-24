@@ -435,18 +435,16 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType0(CmapSubTable const *s, sal_uIn
 {
     std::unique_ptr<sal_uInt8[]> ptr(new sal_uInt8[262]);
     sal_uInt8 *p = ptr.get() + 6;
-    sal_uInt32 i;
-    sal_uInt16 g;
 
     PutUInt16(0, ptr.get(), 0);
     PutUInt16(262, ptr.get(), 2);
     PutUInt16(0, ptr.get(), 4);
 
-    for (i = 0; i < 256; i++) {
-        g = 0;
-        for (size_t j = 0; j < s->mappings.size(); j++) {
-            if (s->mappings[j].first == i) {
-                g = static_cast<sal_uInt16>(s->mappings[j].second);
+    for (sal_uInt32 i = 0; i < 256; i++) {
+        sal_uInt16 g = 0;
+        for (const auto& [ch, glyph] : s->mappings) {
+            if (ch == i) {
+                g = static_cast<sal_uInt16>(glyph);
             }
         }
         p[i] = static_cast<sal_uInt8>(g);
@@ -459,7 +457,6 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType6(CmapSubTable const *s, sal_uIn
 {
     std::unique_ptr<sal_uInt8[]> ptr(new sal_uInt8[s->mappings.size()*2 + 10]);
     sal_uInt8 *p = ptr.get() + 10;
-    sal_uInt16 g;
 
     PutUInt16(6, ptr.get(), 0);
     PutUInt16(static_cast<sal_uInt16>(s->mappings.size()*2+10), ptr.get(), 2);
@@ -468,10 +465,10 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType6(CmapSubTable const *s, sal_uIn
     PutUInt16(static_cast<sal_uInt16>(s->mappings.size()), ptr.get(), 8 );
 
     for (size_t i = 0; i < s->mappings.size(); i++) {
-        g = 0;
-        for (size_t j = 0; j < s->mappings.size(); j++) {
-            if (s->mappings[j].first == i) {
-                g = static_cast<sal_uInt16>(s->mappings[j].second);
+        sal_uInt16 g = 0;
+        for (const auto& [ch, glyph] : s->mappings) {
+            if (ch == i) {
+                g = static_cast<sal_uInt16>(glyph);
             }
         }
         PutUInt16( g, p, 2*i );
@@ -483,7 +480,7 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType6(CmapSubTable const *s, sal_uIn
 /* XXX it only handles Format 0 encoding tables */
 static std::unique_ptr<sal_uInt8[]> PackCmap(CmapSubTable const *s, sal_uInt32 *length)
 {
-    if( s->mappings[s->mappings.size()-1].second > 0xff )
+    if (s->mappings.back().second > 0xff)
         return PackCmapType6(s, length);
     else
         return PackCmapType0(s, length);
