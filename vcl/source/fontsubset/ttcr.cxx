@@ -268,17 +268,12 @@ SFErrCodes TrueTypeCreator::StreamToFile(const char* fname)
 
 #define CMAP_SUBTABLE_INIT 10
 #define CMAP_SUBTABLE_INCR 10
-#define CMAP_PAIR_INIT 500
-#define CMAP_PAIR_INCR 500
 
 namespace {
 
 struct CmapSubTable {
     sal_uInt32  id;                         /* subtable ID (platform/encoding ID)    */
-    sal_uInt32  n;                          /* number of used translation pairs      */
-    sal_uInt32  m;                          /* number of allocated translation pairs */
-    std::unique_ptr<sal_uInt32[]> xc;       /* character array                       */
-    std::unique_ptr<sal_uInt32[]> xg;       /* glyph array                           */
+    std::vector<std::pair<sal_uInt32, sal_uInt32>> mappings;  /* character to glyph mapping array */
 };
 
 }
@@ -440,7 +435,7 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType0(CmapSubTable const *s, sal_uIn
 {
     std::unique_ptr<sal_uInt8[]> ptr(new sal_uInt8[262]);
     sal_uInt8 *p = ptr.get() + 6;
-    sal_uInt32 i, j;
+    sal_uInt32 i;
     sal_uInt16 g;
 
     PutUInt16(0, ptr.get(), 0);
@@ -449,9 +444,9 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType0(CmapSubTable const *s, sal_uIn
 
     for (i = 0; i < 256; i++) {
         g = 0;
-        for (j = 0; j < s->n; j++) {
-            if (s->xc[j] == i) {
-                g = static_cast<sal_uInt16>(s->xg[j]);
+        for (size_t j = 0; j < s->mappings.size(); j++) {
+            if (s->mappings[j].first == i) {
+                g = static_cast<sal_uInt16>(s->mappings[j].second);
             }
         }
         p[i] = static_cast<sal_uInt8>(g);
@@ -462,34 +457,33 @@ static std::unique_ptr<sal_uInt8[]> PackCmapType0(CmapSubTable const *s, sal_uIn
 
 static std::unique_ptr<sal_uInt8[]> PackCmapType6(CmapSubTable const *s, sal_uInt32 *length)
 {
-    std::unique_ptr<sal_uInt8[]> ptr(new sal_uInt8[s->n*2 + 10]);
+    std::unique_ptr<sal_uInt8[]> ptr(new sal_uInt8[s->mappings.size()*2 + 10]);
     sal_uInt8 *p = ptr.get() + 10;
-    sal_uInt32 i, j;
     sal_uInt16 g;
 
     PutUInt16(6, ptr.get(), 0);
-    PutUInt16(static_cast<sal_uInt16>(s->n*2+10), ptr.get(), 2);
+    PutUInt16(static_cast<sal_uInt16>(s->mappings.size()*2+10), ptr.get(), 2);
     PutUInt16(0, ptr.get(), 4);
     PutUInt16(0, ptr.get(), 6);
-    PutUInt16(static_cast<sal_uInt16>(s->n), ptr.get(), 8 );
+    PutUInt16(static_cast<sal_uInt16>(s->mappings.size()), ptr.get(), 8 );
 
-    for (i = 0; i < s->n; i++) {
+    for (size_t i = 0; i < s->mappings.size(); i++) {
         g = 0;
-        for (j = 0; j < s->n; j++) {
-            if (s->xc[j] == i) {
-                g = static_cast<sal_uInt16>(s->xg[j]);
+        for (size_t j = 0; j < s->mappings.size(); j++) {
+            if (s->mappings[j].first == i) {
+                g = static_cast<sal_uInt16>(s->mappings[j].second);
             }
         }
         PutUInt16( g, p, 2*i );
     }
-    *length = s->n*2+10;
+    *length = s->mappings.size()*2+10;
     return ptr;
 }
 
 /* XXX it only handles Format 0 encoding tables */
 static std::unique_ptr<sal_uInt8[]> PackCmap(CmapSubTable const *s, sal_uInt32 *length)
 {
-    if( s->xg[s->n-1] > 0xff )
+    if( s->mappings[s->mappings.size()-1].second > 0xff )
         return PackCmapType6(s, length);
     else
         return PackCmapType0(s, length);
@@ -833,25 +827,9 @@ void TrueTypeTableCmap::cmapAdd(sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
         m_cmap->n++;
 
         s[i].id = id;
-        s[i].n = 0;
-        s[i].m = CMAP_PAIR_INIT;
-        s[i].xc.reset(new sal_uInt32[CMAP_PAIR_INIT]);
-        s[i].xg.reset(new sal_uInt32[CMAP_PAIR_INIT]);
     }
 
-    if (s[i].n == s[i].m) {
-        std::unique_ptr<sal_uInt32[]> tmp1(new sal_uInt32[s[i].m + CMAP_PAIR_INCR]);
-        std::unique_ptr<sal_uInt32[]> tmp2(new sal_uInt32[s[i].m + CMAP_PAIR_INCR]);
-        memcpy(tmp1.get(), s[i].xc.get(), sizeof(sal_uInt32) * s[i].m);
-        memcpy(tmp2.get(), s[i].xg.get(), sizeof(sal_uInt32) * s[i].m);
-        s[i].m += CMAP_PAIR_INCR;
-        s[i].xc = std::move(tmp1);
-        s[i].xg = std::move(tmp2);
-    }
-
-    s[i].xc[s[i].n] = c;
-    s[i].xg[s[i].n] = g;
-    s[i].n++;
+    s[i].mappings.emplace_back(c, g);
 }
 
 sal_uInt32 TrueTypeTableGlyf::glyfAdd(std::unique_ptr<GlyphData> glyphdata, AbstractTrueTypeFont *fnt)
