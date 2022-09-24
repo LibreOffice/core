@@ -289,12 +289,6 @@ struct table_cmap {
     std::unique_ptr<CmapSubTable[]> s;      /* sorted array of sub-tables           */
 };
 
-struct tdata_generic {
-    sal_uInt32 tag;
-    sal_uInt32 nbytes;
-    std::unique_ptr<sal_uInt8[]> ptr;
-};
-
 struct tdata_loca {
     sal_uInt32 nbytes;                      /* number of bytes in loca table */
     std::unique_ptr<sal_uInt8[]> ptr;       /* pointer to the data */
@@ -358,11 +352,9 @@ TrueTypeTablePost::~TrueTypeTablePost()
 
 int TrueTypeTableGeneric::GetRawData(TableEntry* te)
 {
-    assert(this->m_generic != nullptr);
-
-    te->data = this->m_generic->ptr.get();
-    te->length = this->m_generic->nbytes;
-    te->tag = this->m_generic->tag;
+    te->data = this->m_ptr.get();
+    te->length = this->m_nbytes;
+    te->tag = this->m_tag;
 
     return TTCR_OK;
 }
@@ -664,27 +656,23 @@ int TrueTypeTablePost::GetRawData(TableEntry* te)
 TrueTypeTableGeneric::TrueTypeTableGeneric(sal_uInt32 tag,
                                 sal_uInt32 nbytes,
                                 const sal_uInt8* ptr)
-    : TrueTypeTable(0),
-    m_generic(new tdata_generic)
+    : TrueTypeTable(tag),
+    m_nbytes(nbytes)
 {
-    m_generic->nbytes = nbytes;
-    m_generic->tag = tag;
     if (nbytes) {
-        m_generic->ptr = ttmalloc(nbytes);
-        memcpy(m_generic->ptr.get(), ptr, nbytes);
+        m_ptr = ttmalloc(nbytes);
+        memcpy(m_ptr.get(), ptr, nbytes);
     }
 }
 
 TrueTypeTableGeneric::TrueTypeTableGeneric(sal_uInt32 tag,
                                 sal_uInt32 nbytes,
                                 std::unique_ptr<sal_uInt8[]> ptr)
-    : TrueTypeTable(0),
-    m_generic(new tdata_generic)
+    : TrueTypeTable(tag),
+    m_nbytes(nbytes)
 {
-    m_generic->nbytes = nbytes;
-    m_generic->tag = tag;
     if (nbytes) {
-        m_generic->ptr = std::move(ptr);
+        m_ptr = std::move(ptr);
     }
 }
 

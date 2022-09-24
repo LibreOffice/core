@@ -32,7 +32,6 @@ namespace vcl
 class TrueTypeTable;
 struct tdata_loca;
 struct table_cmap;
-struct tdata_generic;
 struct TableEntry;
 
 
@@ -135,7 +134,8 @@ struct TableEntry;
         virtual ~TrueTypeTableGeneric() override;
         virtual int GetRawData(TableEntry*) override;
     private:
-        std::unique_ptr<tdata_generic> m_generic;
+        sal_uInt32 m_nbytes;
+        std::unique_ptr<sal_uInt8[]> m_ptr;
     };
 
 /**
