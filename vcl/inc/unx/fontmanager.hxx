@@ -58,15 +58,6 @@ class PPDParser;
 
 typedef int fontID;
 
-/*
- *  the difference between FastPrintFontInfo and PrintFontInfo
- *  is that the information in FastPrintFontInfo can usually
- *  be gathered from fontconfig results.
- *  if only FastPrintFontInfo is gathered and PrintFontInfo
- *  on demand and for less fonts, then performance in startup
- *  increases considerably
- */
-
 struct FastPrintFontInfo
 {
     fontID                         m_nID; // FontID
@@ -90,18 +81,6 @@ struct FastPrintFontInfo
         , m_eWeight(WEIGHT_DONTKNOW)
         , m_ePitch(PITCH_DONTKNOW)
         , m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
-    {}
-};
-
-struct PrintFontInfo : public FastPrintFontInfo
-{
-    int                                     m_nAscend;
-    int                                     m_nDescend;
-
-    PrintFontInfo() :
-            FastPrintFontInfo(),
-            m_nAscend( 0 ),
-            m_nDescend( 0 )
     {}
 };
 
@@ -174,7 +153,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         return it == m_aFonts.end() ? nullptr : &it->second;
     }
     static void fillPrintFontInfo(const PrintFont& rFont, FastPrintFontInfo& rInfo);
-    void fillPrintFontInfo( PrintFont& rFont, PrintFontInfo& rInfo ) const;
 
     OString getDirectory( int nAtom ) const;
     int getDirectoryAtom( const OString& rDirectory );
@@ -216,8 +194,6 @@ public:
     // returns the ids of all managed fonts.
     void getFontList( std::vector< fontID >& rFontIDs );
 
-    // get font info for a specific font
-    bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;
     // get fast font info for a specific font
     bool getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const;
 

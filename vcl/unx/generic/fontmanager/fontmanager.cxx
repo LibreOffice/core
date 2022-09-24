@@ -746,30 +746,6 @@ void PrintFontManager::fillPrintFontInfo(const PrintFont& rFont, FastPrintFontIn
     rInfo.m_aAliases        = rFont.m_aAliases;
 }
 
-void PrintFontManager::fillPrintFontInfo( PrintFont& rFont, PrintFontInfo& rInfo ) const
-{
-    if (rFont.m_nAscend == 0 && rFont.m_nDescend == 0)
-    {
-        analyzeSfntFile(rFont);
-    }
-
-    fillPrintFontInfo( rFont, static_cast< FastPrintFontInfo& >( rInfo ) );
-
-    rInfo.m_nAscend         = rFont.m_nAscend;
-    rInfo.m_nDescend        = rFont.m_nDescend;
-}
-
-bool PrintFontManager::getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const
-{
-    const PrintFont* pFont = getFont( nFontID );
-    if( pFont )
-    {
-        rInfo.m_nID = nFontID;
-        fillPrintFontInfo( *pFont, rInfo );
-    }
-    return pFont != nullptr;
-}
-
 bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const
 {
     const PrintFont* pFont = getFont( nFontID );
