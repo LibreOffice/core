@@ -818,7 +818,7 @@ void TestCondformat::testCondFormatEndsWithStr()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    // case insnsitive matching
+    // case insensitive matching
     ScConditionEntry aEntry(ScConditionMode::EndsWith, "\"teststring\"", "", *m_pDoc, ScAddress(),
             "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
