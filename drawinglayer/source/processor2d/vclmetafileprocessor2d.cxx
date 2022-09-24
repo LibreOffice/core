@@ -837,8 +837,17 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
         }
         case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
         {
-            processPolyPolygonGraphicPrimitive2D(
-                static_cast<const primitive2d::PolyPolygonGraphicPrimitive2D&>(rCandidate));
+            if (maBColorModifierStack.count())
+            {
+                // tdf#151104 unfortunately processPolyPolygonGraphicPrimitive2D below
+                // does not support an active BColorModifierStack, so use the default
+                process(rCandidate);
+            }
+            else
+            {
+                processPolyPolygonGraphicPrimitive2D(
+                    static_cast<const primitive2d::PolyPolygonGraphicPrimitive2D&>(rCandidate));
+            }
             break;
         }
         case PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D:
