@@ -133,7 +133,6 @@ class SwTableBoxNumFormat;
 class SwTextGridItem;
 class SwTransparencyGrf;
 class SwFormatRuby;
-class SwInsText;
 class SwDelChr;
 class SwRefMarkFieldUpdate;
 class SwTableFormulaUpdate;
@@ -423,7 +422,6 @@ constexpr sal_uInt16 RES_MSG_BEGIN(RES_FMT_END);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_MSG_BEGIN); // 161
 constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(162);
 constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(163);
-constexpr TypedWhichId<SwInsText> RES_INS_TXT(164);
 constexpr TypedWhichId<SwDelChr> RES_DEL_CHR(165);
 constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(167);
 constexpr TypedWhichId<SwRefMarkFieldUpdate> RES_REFMARKFLD_UPDATE(168);

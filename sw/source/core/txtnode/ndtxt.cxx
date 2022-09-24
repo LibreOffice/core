@@ -2374,8 +2374,8 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & r
 
     if ( HasWriterListeners() )
     {   // send this before messing with hints, which will send RES_UPDATE_ATTR
-        SwInsText const aHint(sw::MakeSwInsText(*this, aPos, nLen));
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        auto aInsHint = sw::MakeInsertText(*this, aPos, nLen);
+        CallSwClientNotify(aInsHint);
     }
 
     if ( HasHints() )
@@ -2586,11 +2586,12 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     // notify frames - before moving hints, because footnotes
     // want to find their anchor text frame in the follow chain
     // (also ignore fieldmarks, the caller will recreate frames)
-    SwInsText const aInsHint(nDestStart, nLen, false, false);
-    pDest->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aInsHint));
+    const sw::InsertText aInsHint(nDestStart, nLen, false, false);
+    pDest->HandleNonLegacyHint(aInsHint);
     const sw::MoveText aMoveHint(pDest, nDestStart, nTextStartIdx, nLen);
     CallSwClientNotify(aMoveHint);
-    HandleDeleteText(sw::DeleteText(nTextStartIdx, nLen));
+    const sw::DeleteText aDelText(nTextStartIdx, nLen);
+    HandleNonLegacyHint(aDelText);
 
     // 2. move attributes
     // Iterate over attribute array until the start of the attribute
@@ -3831,12 +3832,13 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
     }
 
     SetIgnoreDontExpand( bOldExpFlg );
-    CallSwClientNotify(sw::DeleteText(nStartPos, nDelLen));
+    auto aDelHint = sw::DeleteText(nStartPos, nDelLen);
+    CallSwClientNotify(aDelHint);
 
     if (sInserted.getLength())
     {
-        SwInsText const aHint(sw::MakeSwInsText(*this, nStartPos, sInserted.getLength()));
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        auto aInsHint = sw::MakeInsertText(*this, nStartPos, sInserted.getLength());
+        CallSwClientNotify(aInsHint);
     }
 }
 
@@ -5381,8 +5383,9 @@ bool SwTextNode::IsInContent() const
     return !GetDoc().IsInHeaderFooter( *this );
 }
 
-void SwTextNode::HandleDeleteText(const sw::DeleteText& rHint)
+void SwTextNode::HandleNonLegacyHint(const SfxHint& rHint)
 {
+    assert(!dynamic_cast<const sw::LegacyModifyHint*>(&rHint));
     sw::TextNodeNotificationSuppressor(*this);
     CallSwClientNotify(rHint);
 

@@ -1934,7 +1934,7 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
 //            assert(nDeleted == it.second - it.first);
         if(nDeleted)
         {
-            // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
+            // InvalidateRange/lcl_SetScriptInval was called sufficiently for InsertText
             lcl_SetWrong(rTextFrame, rDestNode, nStart, it.first - it.second, false);
             TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
             lcl_ModifyOfst(rTextFrame, nIndex, nDeleted, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
@@ -1975,6 +1975,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     SfxPoolItem const* pOld(nullptr);
     SfxPoolItem const* pNew(nullptr);
     sw::MoveText const* pMoveText(nullptr);
+    sw::InsertText const* pInsertText(nullptr);
     sw::DeleteText const* pDeleteText(nullptr);
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
@@ -1986,6 +1987,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         pOld = pHint->m_pOld;
         pNew = pHint->m_pNew;
         nWhich = pHint->GetWhich();
+    }
+    else if (rHint.GetId() == SfxHintId::SwInsertText)
+    {
+        pInsertText = static_cast<const sw::InsertText*>(&rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwDeleteText)
     {
@@ -2137,6 +2142,48 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             // assert(!m_pMergedPara || !getRootFrame()->IsHideRedlines() || !pMoveText->pDestNode->getLayoutFrame(getRootFrame()));
         }
     }
+    else if (pInsertText)
+    {
+        nPos = MapModelToView(&rNode, pInsertText->nPos);
+        // unlike redlines, inserting into fieldmark must be explicitly handled
+        bool isHidden(false);
+        switch (getRootFrame()->GetFieldmarkMode())
+        {
+            case sw::FieldmarkMode::ShowCommand:
+                isHidden = pInsertText->isInsideFieldmarkResult;
+            break;
+            case sw::FieldmarkMode::ShowResult:
+                isHidden = pInsertText->isInsideFieldmarkCommand;
+            break;
+            case sw::FieldmarkMode::ShowBoth: // just to avoid the warning
+            break;
+        }
+        if (!isHidden)
+        {
+            nLen = TextFrameIndex(pInsertText->nLen);
+            if (m_pMergedPara)
+            {
+                UpdateMergedParaForInsert(*m_pMergedPara, true, rNode, pInsertText->nPos, pInsertText->nLen);
+            }
+            if( IsIdxInside( nPos, nLen ) )
+            {
+                if( !nLen )
+                {
+                    // Refresh NumPortions even when line is empty!
+                    if( nPos )
+                        InvalidateSize();
+                    else
+                        Prepare();
+                }
+                else
+                    InvalidateRange_( SwCharRange( nPos, nLen ), pInsertText->nLen );
+            }
+            lcl_SetScriptInval( *this, nPos );
+            bSetFieldsDirty = true;
+            lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator+<sal_Int32, Tag_TextFrameIndex>);
+        }
+        lcl_SetWrong( *this, rNode, pInsertText->nPos, pInsertText->nLen, true );
+    }
     else if (pDeleteText)
     {
         nPos = MapModelToView(&rNode, pDeleteText->nStart);
@@ -2170,51 +2217,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         {
             assert(false); // should have been forwarded to SwContentFrame
             InvalidateLineNum();
-        }
-        break;
-        case RES_INS_TXT:
-        {
-            sal_Int32 const nNPos = static_cast<const SwInsText*>(pNew)->nPos;
-            sal_Int32 const nNLen = static_cast<const SwInsText*>(pNew)->nLen;
-            nPos = MapModelToView(&rNode, nNPos);
-            // unlike redlines, inserting into fieldmark must be explicitly handled
-            bool isHidden(false);
-            switch (getRootFrame()->GetFieldmarkMode())
-            {
-                case sw::FieldmarkMode::ShowCommand:
-                    isHidden = static_cast<const SwInsText*>(pNew)->isInsideFieldmarkResult;
-                break;
-                case sw::FieldmarkMode::ShowResult:
-                    isHidden = static_cast<const SwInsText*>(pNew)->isInsideFieldmarkCommand;
-                break;
-                case sw::FieldmarkMode::ShowBoth: // just to avoid the warning
-                break;
-            }
-            if (!isHidden)
-            {
-                nLen = TextFrameIndex(nNLen);
-                if (m_pMergedPara)
-                {
-                    UpdateMergedParaForInsert(*m_pMergedPara, true, rNode, nNPos, nNLen);
-                }
-                if( IsIdxInside( nPos, nLen ) )
-                {
-                    if( !nLen )
-                    {
-                        // Refresh NumPortions even when line is empty!
-                        if( nPos )
-                            InvalidateSize();
-                        else
-                            Prepare();
-                    }
-                    else
-                        InvalidateRange_( SwCharRange( nPos, nLen ), nNLen );
-                }
-                lcl_SetScriptInval( *this, nPos );
-                bSetFieldsDirty = true;
-                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator+<sal_Int32, Tag_TextFrameIndex>);
-            }
-            lcl_SetWrong( *this, rNode, nNPos, nNLen, true );
         }
         break;
         case RES_DEL_CHR:

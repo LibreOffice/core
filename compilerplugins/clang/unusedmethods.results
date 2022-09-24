@@ -1697,8 +1697,6 @@ include/svl/typedwhich.hxx:31
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwHeaderAndFooterEatSpacingItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
-     TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwInsText, derived_type>, int>::type)
-include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwInvertGrf, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwLuminanceGrf, derived_type>, int>::type)

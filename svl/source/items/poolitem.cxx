@@ -434,7 +434,6 @@
 // class SwMsgPoolItem : public SfxPoolItem
 //     class SwPtrMsgPoolItem : public SwMsgPoolItem
 //     class SwFormatChg: public SwMsgPoolItem
-//     class SwInsText: public SwMsgPoolItem
 //     class SwDelChr: public SwMsgPoolItem
 //     class SwUpdateAttr : public SwMsgPoolItem
 //     class SwRefMarkFieldUpdate : public SwMsgPoolItem

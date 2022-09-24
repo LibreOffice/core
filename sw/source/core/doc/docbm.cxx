@@ -688,7 +688,7 @@ namespace sw::mark
             && (eType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
                 || eType == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
         {
-            // due to SwInsText notifications everything is visible now - tell
+            // due to sw::InsertText notifications everything is visible now - tell
             // layout to hide as appropriate
             // note: we don't know how many layouts there are and which
             // parts they hide, so just notify the entire fieldmark, it
@@ -1994,7 +1994,7 @@ void DelBookmarks(
 
 namespace sw {
 
-SwInsText MakeSwInsText(SwTextNode & rNode, sal_Int32 const nPos, sal_Int32 const nLen)
+InsertText MakeInsertText(SwTextNode& rNode, const sal_Int32 nPos, const sal_Int32 nLen)
 {
     SwCursor cursor(SwPosition(rNode, nPos), nullptr);
     bool isInsideFieldmarkCommand(false);
@@ -2015,7 +2015,7 @@ SwInsText MakeSwInsText(SwTextNode & rNode, sal_Int32 const nPos, sal_Int32 cons
             break;
         }
     }
-    return SwInsText(nPos, nLen, isInsideFieldmarkCommand, isInsideFieldmarkResult);
+    return InsertText(nPos, nLen, isInsideFieldmarkCommand, isInsideFieldmarkResult);
 }
 
 } // namespace sw

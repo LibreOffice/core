@@ -32,13 +32,6 @@ SwFormatChg::SwFormatChg( SwFormat* pFormat )
 {
 }
 
-SwInsText::SwInsText(sal_Int32 const nP, sal_Int32 const nL, bool const isInFMCommand, bool const isInFMResult)
-    : SwMsgPoolItem( RES_INS_TXT )
-    , nPos( nP ), nLen( nL )
-    , isInsideFieldmarkCommand(isInFMCommand)
-    , isInsideFieldmarkResult(isInFMResult)
-{
-}
 
 SwDelChr::SwDelChr( sal_Int32 nP )
     : SwMsgPoolItem( RES_DEL_CHR ), nPos( nP )
@@ -53,7 +46,15 @@ MoveText::MoveText(SwTextNode *const pD, sal_Int32 const nD, sal_Int32 const nS,
 {
 }
 
-DeleteText::DeleteText( sal_Int32 nS, sal_Int32 nL )
+InsertText::InsertText(const sal_Int32 nP, const sal_Int32 nL, const bool isInFMCommand, const bool isInFMResult)
+    : SfxHint( SfxHintId::SwInsertText )
+    , nPos( nP ), nLen( nL )
+    , isInsideFieldmarkCommand(isInFMCommand)
+    , isInsideFieldmarkResult(isInFMResult)
+{
+}
+
+DeleteText::DeleteText( const sal_Int32 nS, const sal_Int32 nL )
     : SfxHint( SfxHintId::SwDeleteText ), nStart( nS ), nLen( nL )
 {
 }

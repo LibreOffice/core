@@ -76,17 +76,6 @@ public:
     SwFormatChg( SwFormat *pFormat );
 };
 
-class SwInsText final : public SwMsgPoolItem
-{
-public:
-    sal_Int32 nPos;
-    sal_Int32 nLen;
-    bool isInsideFieldmarkCommand;
-    bool isInsideFieldmarkResult;
-
-    SwInsText(sal_Int32 nP, sal_Int32 nL, bool isInFMCommand, bool isInFMResult);
-};
-
 class SwDelChr final : public SwMsgPoolItem
 {
 public:
@@ -110,14 +99,26 @@ public:
     MoveText(SwTextNode *pD, sal_Int32 nD, sal_Int32 nS, sal_Int32 nL);
 };
 
+class InsertText final : public SfxHint
+{
+public:
+    const sal_Int32 nPos;
+    const sal_Int32 nLen;
+    const bool isInsideFieldmarkCommand;
+    const bool isInsideFieldmarkResult;
+
+    InsertText(sal_Int32 nP, sal_Int32 nL, bool isInFMCommand, bool isInFMResult);
+};
+
 class DeleteText final : public SfxHint
 {
 public:
-    sal_Int32 nStart;
-    sal_Int32 nLen;
+    const sal_Int32 nStart;
+    const sal_Int32 nLen;
 
     DeleteText( sal_Int32 nS, sal_Int32 nL );
 };
+
 /// new delete redline is created
 class RedlineDelText final : public SfxHint
 {

@@ -2014,10 +2014,11 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
         Update(SwContentIndex(this, nMyOff), nLen - nMyOff, UpdateMode::Negative);
 
     // notify the layout!
-    CallSwClientNotify(sw::DeleteText(nPos, nTLen));
+    const auto aDelHint = sw::DeleteText(nPos, nTLen);
+    CallSwClientNotify(aDelHint);
 
-    SwInsText const aHint(sw::MakeSwInsText(*this, nPos, nTLen));
-    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+    const auto aInsHint = sw::MakeInsertText(*this, nPos, nTLen);
+    CallSwClientNotify(aInsHint);
 }
 
 // the return values allows us to see if we did the heavy-

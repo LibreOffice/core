@@ -70,7 +70,6 @@ class SwField;
 
 namespace sw {
     class TextNodeNotificationSuppressor;
-    class DeleteText;
     namespace mark { enum class RestoreMode; }
 }
 
@@ -184,6 +183,7 @@ class SW_DLLPUBLIC SwTextNode final
     const SwTextInputField* GetOverlappingInputField( const SwTextAttr& rTextAttr ) const;
 
     void DelFrames_TextNodePart();
+    void HandleNonLegacyHint(const SfxHint&);
 
 public:
     enum class WrongState { TODO, PENDING, DONE };
@@ -221,7 +221,6 @@ public:
 
 public:
     using SwContentNode::GetAttr;
-    void HandleDeleteText(const sw::DeleteText&);
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
 

@@ -31,7 +31,6 @@ namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 namespace sw::mark { class IMark; }
 class SwCharRange;
-class SwInsText;
 class SwTextNode;
 class SwTextAttrEnd;
 class SwTextFormatter;
@@ -99,6 +98,7 @@ struct Extent
 };
 
 struct MergedPara;
+class InsertText;
 
 std::pair<SwTextNode*, sal_Int32> MapViewToModel(MergedPara const&, TextFrameIndex nIndex);
 TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_Int32 nIndex);
@@ -149,7 +149,7 @@ bool IsMarkHintHidden(SwRootFrame const& rLayout,
 
 void RecreateStartTextFrames(SwTextNode & rNode);
 
-auto MakeSwInsText(SwTextNode & rNode, sal_Int32 nPos, sal_Int32 nLen) -> SwInsText;
+sw::InsertText MakeInsertText(SwTextNode& rNode, const sal_Int32 nPos, const sal_Int32 nLen);
 
 /**
  * Decides if rTextNode has a numbering which has layout-level values (e.g. Arabic, but not
