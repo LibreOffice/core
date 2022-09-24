@@ -24,35 +24,22 @@ Contains templates, clipart galleries, palettes, symbol font, autocorrections, a
 	+ in `extras/CustomTarget_autotextshare.mk`:
 		+ add all files of autotext in `extras_AUTOTEXTSHARE_XMLFILES`
 
-+ How-to add a new Impress template
-	+ clean-up template file as indicated on wiki <https://wiki.documentfoundation.org/Documentation/HowTo/Impress/Make_template_language_independent>
-	+ add `<dc:title>Foo</dc:title>` in `meta.xml` to make presentation name translatable
-	+ unzip `Foo.otp` file in `extras/source/templates/presnt/Foo` (no space allowed in any file names)
-	+ add `Foo.otp` in `Package_tplpresnt.mk`
-	+ in `CustomTarget_tplpresnt.mk`:
-		+ add `Foo /` in `extras_TEMPLATES_PRESENTATIONS`
-		+ add files names contained in `Foo.otp` (except mimetype) in `extras_PRESENTATIONS_XMLFILES`
-		+ if `Foo.otp` contains files with other extension than `.xml`, `.svm`, `.svg`, `.png` and `.jpg`
-			+ add a `CPY` call at the end of file
-
-+ How-to add a new Writer template
-	+ clean-up template file as much as possible, and choose a template category `<Category>`
-	+ unzip `Foo.ott` in `extras/source/templates/<Category>/Foo` (no space allowed in any file names)
-	+ add `Foo.ott` in `Package_<tplCategory>.mk`
-	+ in `CustomTarget_<tplCategory>.mk`:
-		+ add `Foo /` in `extras_TEMPLATES_<CATEGORY>`
-		+ add files names contained in `Foo.otp` (except mimetype) in `extras_<CATEGORY>_XMLFILES`
-		+ if `Foo.ott` contains files with other extension than `.xml`, `.rdf`, `.svm`, `.svg`, `.png` and `.jpg`
-			+ add a `CPY` call at the end of file
-
 + How-to add a new template category
-	+ create a directory `extras/source/templates/foo/`
-	+ unzip your foo0.ott template files in `extras/source/templates/foo/foo0`
-	+ add `Package_tplfoo` and `CustomTarget_tplfoo` in `Module_extras.mk`
-	+ use other category `Package_tplcategory.mk` to create `Package_tplfoo.mk`
-	+ use other category `CustomTarget_tplcategory.mk` to create `CustomTarget_tplfoo.mk`
-		+ replace all category by foo and `CATEGORY` by `FOO`
-		+ add all files contained in `foo0.ott` (except mimetype) in `extras_FOO_XMLFILES`
-		+ if `foo0.ott` contains files with other extension than `.xml`, `.rdf`, `.svm`, `.svg`, `.png` and `.jpg`
-			+ add a `CPY` call at the end of the file
-		+ optionally, replace extension ott (4 places)
+	+ add long category name in TEMPLATE_LONG_NAMES_ARY in sfx2/inc/doctempl.hrc
+	+ add short category name in TEMPLATE_SHORT_NAMES_ARY in sfx2/source/doc/doctemplates.cxx
+
++ How-to add a new template to an existing category
+	+ clean-up template file as indicated on wiki <https://wiki.documentfoundation.org/Documentation/HowTo/Impress/Make_template_language_independent>
+	+ recommendation for settings.xml are given on wiki <https://wiki.documentfoundation.org/Documentation/CompatibilityFlags#Settings_to_include_in_a_new_template>
+	+ add `<dc:title>Foo</dc:title>` in `meta.xml` to make presentation name translatable
+	+ choose a template category `<Category>`
+	+ unzip `Foo.ot?` (? = p, t, s or g) in `extras/source/templates/<Category>/Foo` (no space allowed in any file names)
+	+ add `<Category>/Foo.ot? /` in `Package_templates.mk` (or `Package_tplpresnt.mk` if it's a presentation)
+	+ in `CustomTarget_templates.mk` (or `CustomTarget_tplpresnt.mk` if it's a presentation):
+		+ add `<Category>/Foo/meta.xml /` and all files which are not automatically added in `extras_TEMPLATES_XMLFILES` (or `extras_PRESENTATIONS_XMLFILES` for presentation)
+	+ for translation of template name
+		+ define a new STR_TEMPLATE_NAMExx in include/sfx2/strings.hrc
+		+ define a new STR_TEMPLATE_NAMExx_DEF in sfx2/inc/strings.hxx
+		+ in sfx2/source/doc/doctempl.cxx
+			+ add STR_TEMPLATE_NAMExx_DEF to aTemplateNames
+			+ add STR_TEMPLATE_NAMExx to STR_TEMPLATE_NAME
