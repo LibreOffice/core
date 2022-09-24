@@ -1284,7 +1284,7 @@ SFErrCodes AbstractTrueTypeFont::initialize()
 
 sal_uInt32 AbstractTrueTypeFont::glyphOffset(sal_uInt32 glyphID) const
 {
-    if (m_aGlyphOffsets.empty()) // the O_CFF case
+    if (m_aGlyphOffsets.empty()) // the O_CFF and Bitmap cases
         return 0;
     return m_aGlyphOffsets[glyphID];
 }
@@ -1329,7 +1329,11 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
         /* TODO: implement to get subsetting */
     }
     else {
-        return SFErrCodes::TtFormat;
+        // Bitmap font, accept for now.
+        // TODO: We only need this for fonts with CBDT table since they usually
+        // lack glyf or CFF table, the check should be more specific, or better
+        // non-subsetting code should not be calling this.
+        m_aGlyphOffsets.clear();
     }
 
     table = this->table(O_hhea, table_size);
