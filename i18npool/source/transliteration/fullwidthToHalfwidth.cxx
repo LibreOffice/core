@@ -50,7 +50,7 @@ fullwidthToHalfwidth::transliterateImpl( const OUString& inStr, sal_Int32 startP
     const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
-    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), pOffset);
+    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
 }
 
 sal_Unicode SAL_CALL
