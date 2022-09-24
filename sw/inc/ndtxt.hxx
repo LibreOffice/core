@@ -63,7 +63,6 @@ class SwInterHyphInfo;
 class SwWrongList;
 class SwGrammarMarkUp;
 struct SwDocStat;
-struct SwParaIdleData_Impl;
 enum class ExpandMode;
 enum class SwFieldIds : sal_uInt16;
 class SwField;
@@ -80,6 +79,29 @@ namespace com::sun::star {
 }
 
 typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;
+
+namespace sw
+{
+
+enum class WrongState { TODO, PENDING, DONE };
+
+struct ParagraphIdleData
+{
+    std::unique_ptr<SwWrongList> pWrong;                // for spell checking
+    std::unique_ptr<SwGrammarMarkUp> pGrammarCheck;     // for grammar checking /  proof reading
+    std::unique_ptr<SwWrongList> pSmartTags;
+    sal_uLong nNumberOfWords  = 0;
+    sal_uLong nNumberOfAsianWords  = 0;
+    sal_uLong nNumberOfChars  = 0;
+    sal_uLong nNumberOfCharsExcludingSpaces = 0;
+    bool bWordCountDirty = true;
+    WrongState eWrongDirty = WrongState::TODO; ///< online spell checking needed/done?
+    bool bGrammarCheckDirty = true;
+    bool bSmartTagDirty = true;
+    bool bAutoComplDirty = true;               ///< auto complete list dirty
+};
+
+} // end namespace sw
 
 /// SwTextNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTextNode final
@@ -105,7 +127,7 @@ class SW_DLLPUBLIC SwTextNode final
 
     OUString m_Text;
 
-    SwParaIdleData_Impl* m_pParaIdleData_Impl;
+    mutable sw::ParagraphIdleData m_aParagraphIdleData;
 
     /** Some of the chars this para are hidden. Paragraph has to be reformatted
        on changing the view to print preview. */
@@ -172,10 +194,6 @@ class SW_DLLPUBLIC SwTextNode final
             LanguageType nLang, sal_uInt16 nLangWhichId,
             const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
 
-    /// Start: Data collected during idle time
-
-    SAL_DLLPRIVATE void InitSwParaStatistics( bool bNew );
-
     inline void TryDeleteSwpHints();
 
     SAL_DLLPRIVATE void impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet);
@@ -186,16 +204,14 @@ class SW_DLLPUBLIC SwTextNode final
     void HandleNonLegacyHint(const SfxHint&);
 
 public:
-    enum class WrongState { TODO, PENDING, DONE };
-
     bool IsWordCountDirty() const;
-    WrongState GetWrongDirty() const;
+    sw::WrongState GetWrongDirty() const;
     bool IsWrongDirty() const;
     bool IsGrammarCheckDirty() const;
     bool IsSmartTagDirty() const;
     bool IsAutoCompleteWordDirty() const;
     void SetWordCountDirty( bool bNew ) const;
-    void SetWrongDirty(WrongState eNew) const;
+    void SetWrongDirty(sw::WrongState eNew) const;
     void SetGrammarCheckDirty( bool bNew ) const;
     void SetSmartTagDirty( bool bNew ) const;
     void SetAutoCompleteWordDirty( bool bNew ) const;

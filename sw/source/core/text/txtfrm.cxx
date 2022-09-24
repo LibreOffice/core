@@ -1837,7 +1837,7 @@ static void lcl_SetWrong( SwTextFrame& rFrame, SwTextNode const& rNode,
             pTextNode->SetSmartTags( std::make_unique<SwWrongList>( WRONGLIST_SMARTTAG ) );
             pTextNode->GetSmartTags()->SetInvalid( nPos, nEnd );
         }
-        pTextNode->SetWrongDirty(SwTextNode::WrongState::TODO);
+        pTextNode->SetWrongDirty(sw::WrongState::TODO);
         pTextNode->SetGrammarCheckDirty( true );
         pTextNode->SetWordCountDirty( true );
         pTextNode->SetAutoCompleteWordDirty( true );

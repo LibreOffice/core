@@ -2029,7 +2029,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
             {
                 SwRect aRepaint( const_cast<SwTextFrame*>(pTextFrame)->AutoSpell_(*pTextNode, nPos) );
                 // PENDING should stop idle spell checking
-                m_bPageValid = m_bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
+                m_bPageValid = m_bPageValid && (sw::WrongState::TODO != pTextNode->GetWrongDirty());
                 if ( aRepaint.HasArea() )
                     m_pImp->GetShell()->InvalidateWindows( aRepaint );
                 if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))

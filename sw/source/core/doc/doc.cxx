@@ -1120,14 +1120,14 @@ static bool lcl_SpellAndGrammarAgain( SwNode* pNd, void* pArgs )
         {
             if( pTextNode->GetWrong() &&
                 pTextNode->GetWrong()->InvalidateWrong() )
-                pTextNode->SetWrongDirty(SwTextNode::WrongState::TODO);
+                pTextNode->SetWrongDirty(sw::WrongState::TODO);
             if( pTextNode->GetGrammarCheck() &&
                 pTextNode->GetGrammarCheck()->InvalidateWrong() )
                 pTextNode->SetGrammarCheckDirty( true );
         }
         else
         {
-            pTextNode->SetWrongDirty(SwTextNode::WrongState::TODO);
+            pTextNode->SetWrongDirty(sw::WrongState::TODO);
             if( pTextNode->GetWrong() )
                 pTextNode->GetWrong()->SetInvalid( 0, COMPLETE_STRING );
             pTextNode->SetGrammarCheckDirty( true );

@@ -2592,7 +2592,7 @@ void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
 
     if ( text::TextMarkupType::SPELLCHECK == nType )
     {
-        txtNode->SetWrongDirty(SwTextNode::WrongState::TODO);
+        txtNode->SetWrongDirty(sw::WrongState::TODO);
         txtNode->ClearWrong();
     }
     else if( text::TextMarkupType::PROOFREADING == nType )

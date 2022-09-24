@@ -201,7 +201,6 @@ SwTextNode *SwNodes::MakeTextNode( SwNode& rWhere,
 
 SwTextNode::SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
-    m_pParaIdleData_Impl(nullptr),
     m_bContainsHiddenChars(false),
     m_bHiddenCharsHidePara(false),
     m_bRecalcHiddenCharFlags(false),
@@ -213,7 +212,6 @@ SwTextNode::SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl, const SfxIt
 {
     {
         sw::TextNodeNotificationSuppressor(*this);
-        InitSwParaStatistics( true );
 
         if( pAutoAttr )
             SetAttr( *pAutoAttr );
@@ -264,7 +262,6 @@ SwTextNode::~SwTextNode()
 
     RemoveFromList();
 
-    InitSwParaStatistics( false );
     DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
 #if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
@@ -483,7 +480,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         {
             pNode->SetWrong( GetWrong()->SplitList( nSplitPos ) );
         }
-        SetWrongDirty(WrongState::TODO);
+        SetWrongDirty(sw::WrongState::TODO);
 
         if( GetGrammarCheck() )
         {
@@ -588,7 +585,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     else
     {
         std::unique_ptr<SwWrongList> pList = ReleaseWrong();
-        SetWrongDirty(WrongState::TODO);
+        SetWrongDirty(sw::WrongState::TODO);
 
         std::unique_ptr<SwGrammarMarkUp> pList3 = ReleaseGrammarCheck();
         SetGrammarCheckDirty( true );
@@ -1014,7 +1011,7 @@ SwContentNode *SwTextNode::JoinNext()
         if( pList )
         {
             pList->JoinList( pTextNode->GetWrong(), nOldLen );
-            SetWrongDirty(WrongState::TODO);
+            SetWrongDirty(sw::WrongState::TODO);
         }
         else
         {
@@ -1022,7 +1019,7 @@ SwContentNode *SwTextNode::JoinNext()
             if( pList )
             {
                 pList->Move( 0, nOldLen );
-                SetWrongDirty(WrongState::TODO);
+                SetWrongDirty(sw::WrongState::TODO);
             }
         }
 
@@ -1126,7 +1123,7 @@ void SwTextNode::JoinPrev()
         if( pList )
         {
             pList->JoinList( GetWrong(), Len() );
-            SetWrongDirty(WrongState::TODO);
+            SetWrongDirty(sw::WrongState::TODO);
             ClearWrong();
         }
         else
@@ -1135,7 +1132,7 @@ void SwTextNode::JoinPrev()
             if( pList )
             {
                 pList->Move( 0, nLen );
-                SetWrongDirty(WrongState::TODO);
+                SetWrongDirty(sw::WrongState::TODO);
             }
         }
 
@@ -1814,7 +1811,7 @@ const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& 
 void SwTextNode::DelFrames_TextNodePart()
 {
     SetWrong( nullptr );
-    SetWrongDirty(WrongState::TODO);
+    SetWrongDirty(sw::WrongState::TODO);
 
     SetGrammarCheck( nullptr );
     SetGrammarCheckDirty( true );
