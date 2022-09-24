@@ -128,10 +128,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int               m_nAscend;
         int               m_nDescend;
         int               m_nLeading;
-        int               m_nXMin; // font bounding box
-        int               m_nYMin;
-        int               m_nXMax;
-        int               m_nYMax;
 
         int               m_nDirectory;       // atom containing system dependent path
         OString           m_aFontFile;        // relative to directory
@@ -261,9 +257,6 @@ public:
 
     // get a specific fonts descent
     int getFontDescend( fontID nFontID );
-
-    // get a fonts glyph bounding box
-    void getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
 
     // font administration functions
 

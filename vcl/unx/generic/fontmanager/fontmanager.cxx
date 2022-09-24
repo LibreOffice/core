@@ -89,10 +89,6 @@ PrintFontManager::PrintFont::PrintFont()
 ,   m_nAscend(0)
 ,   m_nDescend(0)
 ,   m_nLeading(0)
-,   m_nXMin(0)
-,   m_nYMin(0)
-,   m_nXMax(0)
-,   m_nYMax(0)
 ,   m_nDirectory(0)
 ,   m_nCollectionEntry(0)
 ,   m_nVariationEntry(0)
@@ -650,12 +646,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
         if( rFont.m_nLeading == 0 )
             rFont.m_nLeading = 15 * (rFont.m_nAscend+rFont.m_nDescend) / 100;
 
-        // get bounding box
-        rFont.m_nXMin = aInfo.xMin;
-        rFont.m_nYMin = aInfo.yMin;
-        rFont.m_nXMax = aInfo.xMax;
-        rFont.m_nYMax = aInfo.yMax;
-
         CloseTTFont( pTTFont );
         bSuccess = true;
     }
@@ -789,22 +779,6 @@ bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo
         fillPrintFontInfo( *pFont, rInfo );
     }
     return pFont != nullptr;
-}
-
-void PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin, int& xMax, int& yMax )
-{
-    PrintFont* pFont = getFont( nFontID );
-    if( pFont )
-    {
-        if( pFont->m_nXMin == 0 && pFont->m_nYMin == 0 && pFont->m_nXMax == 0 && pFont->m_nYMax == 0 )
-        {
-            analyzeSfntFile(*pFont);
-        }
-        xMin = pFont->m_nXMin;
-        yMin = pFont->m_nYMin;
-        xMax = pFont->m_nXMax;
-        yMax = pFont->m_nYMax;
-    }
 }
 
 int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
