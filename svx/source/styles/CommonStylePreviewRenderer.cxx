@@ -302,17 +302,17 @@ void CommonStylePreviewRenderer::CalcRenderSize()
         if (m_oFont)
         {
             aFontSize = m_oFont->GetFontSize();
-            m_oFont->SetFontSize(Size(aFontSize.Height() * fRatio, aFontSize.Width() * fRatio));
+            m_oFont->SetFontSize(Size(aFontSize.Width() * fRatio, aFontSize.Height() * fRatio));
         }
         if (m_oCJKFont)
         {
             aFontSize = m_oCJKFont->GetFontSize();
-            m_oCJKFont->SetFontSize(Size(aFontSize.Height() * fRatio, aFontSize.Width() * fRatio));
+            m_oCJKFont->SetFontSize(Size(aFontSize.Width() * fRatio, aFontSize.Height() * fRatio));
         }
         if (m_oCTLFont)
         {
             aFontSize = m_oCTLFont->GetFontSize();
-            m_oCTLFont->SetFontSize(Size(aFontSize.Height() * fRatio, aFontSize.Width() * fRatio));
+            m_oCTLFont->SetFontSize(Size(aFontSize.Width() * fRatio, aFontSize.Height() * fRatio));
         }
 
         for (auto& aChange : maScriptChanges)
