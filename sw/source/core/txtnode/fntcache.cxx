@@ -1186,9 +1186,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     else
     {
-        const OUString* pStr = &rInf.GetText();
-
-        OUString aStr;
         OUString aBulletOverlay;
         bool bBullet = rInf.GetBullet();
         if( m_bSymbol )
@@ -1288,19 +1285,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         if( bBullet )
         {
-            // !!! HACK !!!
-            // The Arabic layout engine requires some context of the string
-            // which should be painted.
+            // Copy the substring that will be painted, and replace spaces with
+            // bullets, and everything else with space.
             sal_Int32 nCopyStart = sal_Int32(rInf.GetIdx());
-            if ( nCopyStart )
-                --nCopyStart;
-
             sal_Int32 nCopyLen = sal_Int32(rInf.GetLen());
-            if ( nCopyStart + nCopyLen < rInf.GetText().getLength() )
-                ++nCopyLen;
-
-            aStr = rInf.GetText().copy( nCopyStart, nCopyLen );
-            pStr = &aStr;
 
             aBulletOverlay = rInf.GetText().copy( nCopyStart, nCopyLen );
 
@@ -1351,7 +1339,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                          aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
             if( bBullet )
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray, {},
+                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(), aKernArray, {},
                                              rInf.GetIdx() ? 1 : 0, 1 );
         }
         else
@@ -1465,17 +1453,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( bSwitchH2V )
                     rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-                // If we paint bullets instead of spaces, we use a copy of
-                // the paragraph string. For the layout engine, the copy
-                // of the string has to be an environment of the range which
-                // is painted
-                sal_Int32 nTmpIdx = bBullet
-                            ? (rInf.GetIdx() ? 1 : 0)
-                            : sal_Int32(rInf.GetIdx());
+                sal_Int32 nIdx = sal_Int32(rInf.GetIdx());
                 const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rInf.GetOut(),
-                     *pStr, nTmpIdx, nLen);
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray, aKashidaArray,
-                                             nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
+                     rInf.GetText(), nIdx, nLen);
+                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(), aKernArray, aKashidaArray,
+                                             nIdx, nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
@@ -1495,8 +1477,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         tools::Long nAdd = 0;
 
-                        if (aBulletOverlay.getLength() > nTmpIdx &&
-                            aBulletOverlay[ nTmpIdx ] == CH_BULLET )
+                        if ( aBulletOverlay[ 0 ] == CH_BULLET )
                         {
                             if (bSwitchH2V)
                                 aTextOriginPos.AdjustY(nShift ) ;
@@ -1506,14 +1487,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         }
                         for( sal_Int32 i = 1 ; i < nLen ; ++i )
                         {
-                            if ( aBulletOverlay[ i + nTmpIdx ] == CH_BULLET )
+                            if ( aBulletOverlay[ i ] == CH_BULLET )
                                 aKernArray [ i - 1 ] += nShift ;
                             if ( nAdd )
                                 aKernArray [ i - 1 ] -= nAdd;
                         }
                     }
                     rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, aKernArray,
-                                                 {}, nTmpIdx , nLen );
+                                                 {}, 0, nLen );
                     pTmpFont->SetColor( aPreviousColor );
 
                     pTmpFont->SetUnderline(aPreviousUnderline);
