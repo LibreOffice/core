@@ -46,7 +46,7 @@ private:
     std::unique_ptr<weld::ComboBox> xCatBox;
     std::unique_ptr<weld::TreeView> xFuncList;
     std::unique_ptr<weld::Button> xInsertButton;
-    std::unique_ptr<weld::Label> xFiFuncDesc;
+    std::unique_ptr<weld::TextView> xFiFuncDesc;
 
     rtl::Reference<comphelper::ConfigurationListener> xConfigListener;
     std::unique_ptr<EnglishFunctionNameChange> xConfigChange;

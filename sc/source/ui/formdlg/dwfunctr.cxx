@@ -49,17 +49,17 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     , xCatBox(m_xBuilder->weld_combo_box("category"))
     , xFuncList(m_xBuilder->weld_tree_view("funclist"))
     , xInsertButton(m_xBuilder->weld_button("insert"))
-    , xFiFuncDesc(m_xBuilder->weld_label("funcdesc"))
+    , xFiFuncDesc(m_xBuilder->weld_text_view("funcdesc"))
     , xConfigListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Calc/Formula/Syntax"))
     , xConfigChange(std::make_unique<EnglishFunctionNameChange>(xConfigListener, this))
     , pFuncDesc(nullptr)
 {
-    xFuncList->set_size_request(-1, xFuncList->get_height_rows(10));
-
     InitLRUList();
 
     nArgs=0;
-    xFiFuncDesc->set_size_request(-1, 5 * xFiFuncDesc->get_text_height());
+
+    // Description box has a height of 8 lines of text
+    xFiFuncDesc->set_size_request(-1, 8 * xFiFuncDesc->get_text_height());
 
     xCatBox->connect_changed(LINK( this, ScFunctionWin, SelComboHdl));
     xFuncList->connect_changed(LINK( this, ScFunctionWin, SelTreeHdl));
@@ -162,7 +162,7 @@ void ScFunctionWin::UpdateLRUList()
 
 void ScFunctionWin::SetDescription()
 {
-    xFiFuncDesc->set_label(OUString());
+    xFiFuncDesc->set_text(OUString());
     const ScFuncDesc* pDesc =
              weld::fromId<const ScFuncDesc*>(xFuncList->get_selected_id());
     if (pDesc)
@@ -175,7 +175,7 @@ void ScFunctionWin::SetDescription()
             "\n\n" +
             *pDesc->mxFuncDesc;
 
-        xFiFuncDesc->set_label(aBuf);
+        xFiFuncDesc->set_text(aBuf);
     }
 }
 
