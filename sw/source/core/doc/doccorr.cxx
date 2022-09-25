@@ -176,7 +176,7 @@ void SwDoc::CorrAbs(const SwNode& rOldNode,
     SwPaM const aPam(rOldNode, 0,
                      rOldNode, pContentNode ? pContentNode->Len() : 0);
     SwPosition aNewPos(rNewPos);
-    aNewPos.nContent += nOffset;
+    aNewPos.AdjustContent(nOffset);
 
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     // fix redlines

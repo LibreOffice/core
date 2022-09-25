@@ -84,9 +84,9 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         }
         else
         {
-            aPos.nNode = rStartPos.GetNodeIndex() + rSave.nNdDiff;
+            aPos.Assign(rStartPos.GetNodeIndex() + rSave.nNdDiff);
             assert(aPos.GetNode().GetContentNode());
-            aPos.nContent.Assign(aPos.GetNode().GetContentNode(),
+            aPos.SetContent(
                 rSave.nNdDiff == SwNodeOffset(0)
                     ? rStartPos.GetContentIndex() + rSave.nContentIndex
                     : rSave.nContentIndex);

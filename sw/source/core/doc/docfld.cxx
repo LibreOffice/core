@@ -193,8 +193,7 @@ void SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
 
     if( pNd )
     {
-        rPos.nNode = *pNd;
-        rPos.nContent.Assign( static_cast<const SwContentNode*>(pNd), GetCntPosFromContent() );
+        rPos.Assign( *static_cast<const SwContentNode*>(pNd), GetCntPosFromContent() );
     }
     else
     {
