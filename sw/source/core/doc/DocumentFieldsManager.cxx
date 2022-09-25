@@ -509,8 +509,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            SwPosition aPosition( pDstTextField->GetTextNode() );
-            aPosition.nContent = pDstTextField->GetStart();
+            SwPosition aPosition( pDstTextField->GetTextNode(), pDstTextField->GetStart() );
 
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                 std::make_unique<SwUndoFieldFromDoc>( aPosition, *pDstField, rSrcField, pMsgHint, bUpdateFields) );

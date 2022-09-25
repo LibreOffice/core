@@ -302,8 +302,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                 {
                     // don't delete, set pointer to 0
                     const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-                    SwContentIndex aIdx( pPos->nContent );
-                    pTextNd->EraseText( aIdx, 1 );
+                    pTextNd->EraseText( *pPos, 1 );
                 }
             }
         }
