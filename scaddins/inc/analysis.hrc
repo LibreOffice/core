@@ -85,14 +85,14 @@ const TranslateId ANALYSIS_Networkdays[] =
 
 const TranslateId ANALYSIS_Iseven[] =
 {
-    NC_("ANALYSIS_Iseven", "Returns the value 'true' if the number is even"),
+    NC_("ANALYSIS_Iseven", "Returns the value 'true' if the number truncated to integer is even"),
     NC_("ANALYSIS_Iseven", "Number"),
     NC_("ANALYSIS_Iseven", "The number")
 };
 
 const TranslateId ANALYSIS_Isodd[] =
 {
-    NC_("ANALYSIS_Isodd", "Returns the value 'true' if the number is odd"),
+    NC_("ANALYSIS_Isodd", "Returns the value 'true' if the number truncated to integer is odd"),
     NC_("ANALYSIS_Isodd", "Number"),
     NC_("ANALYSIS_Isodd", "The number")
 };

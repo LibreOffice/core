@@ -1061,7 +1061,7 @@ const TranslateId SC_OPCODE_RANDOM_ARY[] =
 // -=*# Resource for function ISEVEN #*=-
 const TranslateId SC_OPCODE_IS_EVEN_ARY[] =
 {
-    NC_("SC_OPCODE_IS_EVEN", "Returns TRUE if value is an even integer."),
+    NC_("SC_OPCODE_IS_EVEN", "Returns TRUE if the value truncated to integer is even."),
     NC_("SC_OPCODE_IS_EVEN", "Value"),
     NC_("SC_OPCODE_IS_EVEN", "The value to be tested.")
 };
@@ -1069,7 +1069,7 @@ const TranslateId SC_OPCODE_IS_EVEN_ARY[] =
 // -=*# Resource for function ISODD #*=-
 const TranslateId SC_OPCODE_IS_ODD_ARY[] =
 {
-    NC_("SC_OPCODE_IS_ODD", "Returns TRUE if value is an odd integer."),
+    NC_("SC_OPCODE_IS_ODD", "Returns TRUE if the value truncated to integer is odd."),
     NC_("SC_OPCODE_IS_ODD", "Value"),
     NC_("SC_OPCODE_IS_ODD", "The value to be tested.")
 };
