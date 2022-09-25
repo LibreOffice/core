@@ -428,8 +428,6 @@ constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE(170);
 constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL(171);
 constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG(172);
 constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE(173);
-constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_HIDDEN(174);
-constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_NOT_HIDDEN(175);
 constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED(177);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(178);
 constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO(180);

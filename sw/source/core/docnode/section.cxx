@@ -289,8 +289,8 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
             // This should be shown by the bHiddenFlag.
 
             // Tell all Children that they are hidden
-            const SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
-            pFormat->CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));
+            const sw::SectionHidden aHint;
+            pFormat->CallSwClientNotify(aHint);
 
             // Delete all Frames
             pFormat->DelFrames();
@@ -304,8 +304,8 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
         if( !pParentSect || !pParentSect->IsHiddenFlag() )
         {
             // Tell all Children that the Parent is not hidden anymore
-            const SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
-            pFormat->CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));
+            const sw::SectionHidden aHint(false);
+            pFormat->CallSwClientNotify(aHint);
 
             pFormat->MakeFrames();
         }
@@ -393,7 +393,12 @@ void SwSection::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
 void SwSection::Notify(SfxHint const& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwSectionHidden)
+    {
+        auto rSectionHidden = static_cast<const sw::SectionHidden&>(rHint);
+        m_Data.SetHiddenFlag(rSectionHidden.m_isHidden || (m_Data.IsHidden() && m_Data.IsCondHidden()));
+        return;
+    } else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto pOld = pLegacy->m_pOld;
@@ -455,14 +460,6 @@ void SwSection::Notify(SfxHint const& rHint)
                 static_cast<const SwFormatEditInReadonly*>(pNew)->GetValue();
             m_Data.SetEditInReadonlyFlag( bNewFlag );
         }
-        return;
-
-    case RES_SECTION_HIDDEN:
-        m_Data.SetHiddenFlag(true);
-        return;
-
-    case RES_SECTION_NOT_HIDDEN:
-        m_Data.SetHiddenFlag( m_Data.IsHidden() && m_Data.IsCondHidden() );
         return;
 
     case RES_COL:
@@ -700,7 +697,15 @@ void SwSectionFormat::MakeFrames()
 
 void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwSectionHidden)
+    {
+        auto rSectionHidden = static_cast<const sw::SectionHidden&>(rHint);
+        auto pSect = GetSection();
+        if(!pSect || rSectionHidden.m_isHidden == pSect->IsHiddenFlag()) // already at target state, skipping.
+            return;
+        GetNotifier().Broadcast(rSectionHidden);
+        return;
+    } else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     sal_uInt16 nWhich = pLegacy->GetWhich();
@@ -750,14 +755,6 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         break;
 
-    case RES_SECTION_HIDDEN:
-    case RES_SECTION_NOT_HIDDEN:
-        {
-            auto pSect = GetSection();
-            if(!pSect || (RES_SECTION_HIDDEN == nWhich) == pSect->IsHiddenFlag()) // already at target state, skipping.
-                return;
-        }
-        [[fallthrough]];
     case RES_FTN_AT_TXTEND:
     case RES_END_AT_TXTEND:
         GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
@@ -918,10 +915,8 @@ void SwSectionFormat::UpdateParent()
 
     if(bIsHidden == pSection->IsHiddenFlag())
     {
-        SwMsgPoolItem aMsgItem(o3tl::narrowing<sal_uInt16>(bIsHidden
-                ? RES_SECTION_HIDDEN
-                : RES_SECTION_NOT_HIDDEN));
-        CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));
+        const sw::SectionHidden aHint(bIsHidden);
+        CallSwClientNotify(aHint);
     }
 }
 

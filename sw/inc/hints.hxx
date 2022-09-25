@@ -200,6 +200,12 @@ public:
     const OUString m_sNew;
     NameChanged(const OUString& rOld, const OUString& rNew) : SfxHint(SfxHintId::NameChanged), m_sOld(rOld), m_sNew(rNew) {};
 };
+class SectionHidden final: public SfxHint
+{
+public:
+    const bool m_isHidden;
+    SectionHidden(const bool isHidden = true) : SfxHint(SfxHintId::SwSectionHidden), m_isHidden(isHidden) {};
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem
