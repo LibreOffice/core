@@ -109,17 +109,16 @@ static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd
         nContentPos = rPam.GetPoint()->GetContentIndex();
     bool bTstEnd = rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode();
 
-    SwContentNode* pCNd = rPam.GetPointContentNode();
-    rPam.GetPoint()->nContent.Assign( pCNd, nStart );
+    rPam.GetPoint()->SetContent( nStart );
     rPam.SetMark(); // Point == GetMark
 
     // Point points to end of search area or end of attribute
     if( pEnd )
     {
         if( bTstEnd && *pEnd > nContentPos )
-            rPam.GetPoint()->nContent = nContentPos;
+            rPam.GetPoint()->SetContent(nContentPos);
         else
-            rPam.GetPoint()->nContent = *pEnd;
+            rPam.GetPoint()->SetContent(*pEnd);
     }
 }
 
