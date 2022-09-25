@@ -259,12 +259,12 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         oExtraPaM.emplace( *rRg.GetPoint() );
         pPam = &*oExtraPaM;
 
-        SwContentIndex& rSt = pPam->GetPoint()->nContent;
-        sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
+        SwPosition& rSt = *pPam->GetPoint();
+        sal_Int32 nMkPos, nPtPos = rSt.GetContentIndex();
 
         // Special case: if the Cursor is located within a URL attribute, we take over it's area
         SwTextAttr const*const pURLAttr(
-            pTextNd->GetTextAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
+            pTextNd->GetTextAttrAt(rSt.GetContentIndex(), RES_TXTATR_INETFMT));
         if (pURLAttr && !pURLAttr->GetINetFormat().GetValue().isEmpty())
         {
             nMkPos = pURLAttr->GetStart();
@@ -286,15 +286,15 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             }
             else
             {
-                nPtPos = nMkPos = rSt.GetIndex();
+                nPtPos = nMkPos = rSt.GetContentIndex();
                 if( bTextAttr )
                     pTextNd->DontExpandFormat( nPtPos );
             }
         }
 
-        rSt = nMkPos;
+        rSt.SetContent(nMkPos);
         pPam->SetMark();
-        pPam->GetPoint()->nContent = nPtPos;
+        pPam->GetPoint()->SetContent(nPtPos);
     }
 
     // #i96644#
@@ -1647,7 +1647,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
     const SvxTabStopItem& rTabItem = GetDefault( RES_PARATR_TABSTOP );
     const sal_Int32 nDefDist = rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134;
     const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
-    SwNodeIndex aIdx( rStt.nNode );
+    SwNodeIndex aIdx( rStt.GetNode() );
     while( aIdx <= rEnd.GetNode() )
     {
         SwTextNode* pTNd = aIdx.GetNode().GetTextNode();
@@ -1805,7 +1805,7 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
     if (pSet && pSet->Count())
     {
         aPam.SetMark();
-        aPam.GetMark()->nContent.Assign(pTNd, pTNd->GetText().getLength());
+        aPam.GetMark()->SetContent(pTNd->GetText().getLength());
         // sw_redlinehide: don't need layout currently because the only caller
         // passes in the properties node
         assert(static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(nullptr))->GetTextNodeForParaProps() == pTNd);
