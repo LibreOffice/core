@@ -2649,7 +2649,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
     }
 
-    // coverity[ reverse_inull : FALSE]
+    // coverity[ check_after_deref : FALSE]
     if (mxFrameSet)
     {
         /* #i33380# Moved the following line above the Dispatch() call.
