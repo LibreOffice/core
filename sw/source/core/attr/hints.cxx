@@ -33,11 +33,6 @@ SwFormatChg::SwFormatChg( SwFormat* pFormat )
 }
 
 
-SwDelChr::SwDelChr( sal_Int32 nP )
-    : SwMsgPoolItem( RES_DEL_CHR ), nPos( nP )
-{
-}
-
 
 namespace sw {
 
@@ -56,6 +51,11 @@ InsertText::InsertText(const sal_Int32 nP, const sal_Int32 nL, const bool isInFM
 
 DeleteText::DeleteText( const sal_Int32 nS, const sal_Int32 nL )
     : SfxHint( SfxHintId::SwDeleteText ), nStart( nS ), nLen( nL )
+{
+}
+
+DeleteChar::DeleteChar( const sal_Int32 nPos )
+    : SfxHint( SfxHintId::SwDeleteChar ), m_nPos( nPos )
 {
 }
 

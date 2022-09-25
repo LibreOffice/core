@@ -2819,14 +2819,13 @@ void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
 
     Update(rIdx, nCnt, UpdateMode::Negative);
 
-    if( 1 == nCnt )
+    if(1 == nCnt)
     {
-        SwDelChr aHint( nStartIdx );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
-    }
-    else
-    {
-        CallSwClientNotify(sw::DeleteText(nStartIdx, nCnt));
+        const auto aHint = sw::DeleteChar(nStartIdx);
+        CallSwClientNotify(aHint);
+    } else {
+        const auto aHint = sw::DeleteText(nStartIdx, nCnt);
+        CallSwClientNotify(aHint);
     }
 
     OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");

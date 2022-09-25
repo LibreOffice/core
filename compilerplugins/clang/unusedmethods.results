@@ -1593,8 +1593,6 @@ include/svl/typedwhich.hxx:31
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwCropGrf, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
-     TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwDelChr, derived_type>, int>::type)
-include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwDocDisplayItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SwDocPosUpdate, derived_type>, int>::type)

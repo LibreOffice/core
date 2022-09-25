@@ -1977,6 +1977,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     sw::MoveText const* pMoveText(nullptr);
     sw::InsertText const* pInsertText(nullptr);
     sw::DeleteText const* pDeleteText(nullptr);
+    sw::DeleteChar const* pDeleteChar(nullptr);
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
 
@@ -1995,6 +1996,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     else if (rHint.GetId() == SfxHintId::SwDeleteText)
     {
         pDeleteText = static_cast<const sw::DeleteText*>(&rHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwDeleteChar)
+    {
+        pDeleteChar = static_cast<const sw::DeleteChar*>(&rHint);
     }
     else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
     {
@@ -2211,34 +2216,32 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
         }
     }
+    else if (pDeleteChar)
+    {
+        nPos = MapModelToView(&rNode, pDeleteChar->m_nPos);
+        if (m_pMergedPara)
+        {
+            nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, pDeleteChar->m_nPos, 1);
+        }
+        else
+        {
+            nLen = TextFrameIndex(1);
+        }
+        lcl_SetWrong( *this, rNode, pDeleteChar->m_nPos, -1, true );
+        if (nLen)
+        {
+            InvalidateRange( SwCharRange(nPos, nLen), -1 );
+            lcl_SetScriptInval( *this, nPos );
+            bSetFieldsDirty = bRecalcFootnoteFlag = true;
+            lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
+        }
+    }
     else switch (nWhich)
     {
         case RES_LINENUMBER:
         {
             assert(false); // should have been forwarded to SwContentFrame
             InvalidateLineNum();
-        }
-        break;
-        case RES_DEL_CHR:
-        {
-            sal_Int32 const nNPos = static_cast<const SwDelChr*>(pNew)->nPos;
-            nPos = MapModelToView(&rNode, nNPos);
-            if (m_pMergedPara)
-            {
-                nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, nNPos, 1);
-            }
-            else
-            {
-                nLen = TextFrameIndex(1);
-            }
-            lcl_SetWrong( *this, rNode, nNPos, -1, true );
-            if (nLen)
-            {
-                InvalidateRange( SwCharRange(nPos, nLen), -1 );
-                lcl_SetScriptInval( *this, nPos );
-                bSetFieldsDirty = bRecalcFootnoteFlag = true;
-                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
-            }
         }
         break;
         case RES_UPDATE_ATTR:

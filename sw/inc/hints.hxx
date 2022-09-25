@@ -76,13 +76,6 @@ public:
     SwFormatChg( SwFormat *pFormat );
 };
 
-class SwDelChr final : public SwMsgPoolItem
-{
-public:
-    sal_Int32 nPos;
-
-    SwDelChr( sal_Int32 nP );
-};
 
 
 namespace sw {
@@ -117,6 +110,14 @@ public:
     const sal_Int32 nLen;
 
     DeleteText( sal_Int32 nS, sal_Int32 nL );
+};
+
+class DeleteChar final : public SfxHint
+{
+public:
+    const sal_Int32 m_nPos;
+
+    DeleteChar( const sal_Int32 nPos );
 };
 
 /// new delete redline is created

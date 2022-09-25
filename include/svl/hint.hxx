@@ -142,6 +142,7 @@ enum class SfxHintId {
     SwNameChanged, // this can possibly be replaced by the generic NameChanged above
     SwInsertText,
     SwDeleteText,
+    SwDeleteChar,
 
     ThisIsAnSdrHint
 };
