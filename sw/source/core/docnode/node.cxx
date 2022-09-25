@@ -1277,7 +1277,7 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
             ChkCondColl(static_cast<SwTextFormatColl*>(pNewColl));
             SwFormatChg aTmp1( pOldColl );
             SwFormatChg aTmp2( pNewColl );
-            SwClientNotify( *this, sw::LegacyModifyHint(&aTmp1, &aTmp2) );
+            CallSwClientNotify( sw::LegacyModifyHint(&aTmp1, &aTmp2) );
         }
     }
     InvalidateInSwCache(RES_ATTRSET_CHG);
