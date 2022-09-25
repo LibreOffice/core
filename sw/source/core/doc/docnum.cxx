@@ -1582,15 +1582,9 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     if( !bRet && !bOverUpper && pLast )     // do not iterate over higher numbers, but still to the end
     {
         if( bNext )
-        {
-            rPos.nNode = aIdx;
-            if( aIdx.GetNode().IsContentNode() )
-                rPos.nContent.Assign( aIdx.GetNode().GetContentNode(), 0 );
-        }
+            rPos.Assign(aIdx);
         else
-        {
             rPos.Assign( *pLast );
-        }
         bRet = true;
     }
 
@@ -2376,9 +2370,10 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         }
         if( pREnd->GetNodeIndex() != nRedlEndNd )
         {
-            pREnd->nNode = nRedlEndNd;
+            pREnd->Assign(nRedlEndNd);
             SwContentNode* pCNd = pREnd->GetNode().GetContentNode();
-            pREnd->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+            if(pCNd)
+                pREnd->SetContent( pCNd->Len() );
         }
     }
 
