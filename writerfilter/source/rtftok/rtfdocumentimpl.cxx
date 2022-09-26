@@ -3383,9 +3383,9 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
 
                 // Use it
                 putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
-                              NS_ooxml::LN_CT_NumPr_ilvl, pIlvlValue);
+                              NS_ooxml::LN_CT_NumPr_ilvl, pIlvlValue, RTFOverwrite::YES_PREPEND);
                 putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
-                              NS_ooxml::LN_CT_NumPr_numId, pIdValue);
+                              NS_ooxml::LN_CT_NumPr_numId, pIdValue, RTFOverwrite::YES_PREPEND);
             }
         }
         break;
