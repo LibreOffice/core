@@ -62,6 +62,7 @@ public:
     void testImplLayoutArgsBiDiRtl();
     void testImplLayoutArgsRightAlign();
     void testImplLayoutArgs_PrepareFallback_precalculatedglyphs();
+    void testGetTextBreak();
 
     CPPUNIT_TEST_SUITE(VclTextTest);
     CPPUNIT_TEST(testSimpleText);
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testImplLayoutArgsBiDiRtl);
     CPPUNIT_TEST(testImplLayoutArgsRightAlign);
     CPPUNIT_TEST(testImplLayoutArgs_PrepareFallback_precalculatedglyphs);
+    CPPUNIT_TEST(testGetTextBreak);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -572,6 +574,30 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
     CPPUNIT_ASSERT_EQUAL(18, nMinRunPos);
     CPPUNIT_ASSERT_EQUAL(22, nEndRunPos);
     CPPUNIT_ASSERT(!bRTL);
+}
+
+void VclTextTest::testGetTextBreak()
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    const OUString sTestStr(u"textline_ text_");
+    const auto nLen = sTestStr.getLength();
+    const auto nTextWidth = device->GetTextWidth("text");
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4),
+                         device->GetTextBreak(sTestStr, nTextWidth, 0, nLen));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7),
+                         device->GetTextBreak(sTestStr, nTextWidth, 3, nLen));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9),
+                         device->GetTextBreak(sTestStr, nTextWidth, 6, nLen));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
+                         device->GetTextBreak(sTestStr, nTextWidth, 8, nLen));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14),
+                         device->GetTextBreak(sTestStr, nTextWidth, 11, nLen));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
+                         device->GetTextBreak(sTestStr, nTextWidth, 13, nLen));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclTextTest);
