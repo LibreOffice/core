@@ -1175,36 +1175,33 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 bValid = !bValid;
         break;
         case ScConditionMode::BeginsWith:
-        {
-            const sal_Int32 nLen = aUpVal1.getLength();
-            if (!nLen || nLen > rArg.getLength())
-                bValid = false;
-            else
-            {
-                bValid = (ScGlobal::GetCollator().compareSubstring(rArg, 0, nLen,
-                                                                   aUpVal1, 0, nLen) == 0);
-            }
-        }
-       break;
+            bValid = ScGlobal::GetTransliteration().isMatch(aUpVal1, rArg);
+        break;
         case ScConditionMode::EndsWith:
         {
             sal_Int32 nStart = rArg.getLength();
             const sal_Int32 nLen = aUpVal1.getLength();
-            if (!nLen || nLen > nStart)
+            if (nLen > nStart)
                 bValid = false;
             else
             {
                 nStart = nStart - nLen;
-                bValid = (ScGlobal::GetCollator().compareSubstring(rArg, nStart, nLen,
-                                                                   aUpVal1, 0, nLen) == 0);
+                sal_Int32 nMatch1(0), nMatch2(0);
+                bValid = ScGlobal::GetTransliteration().equals(rArg, nStart, nLen, nMatch1,
+                                                               aUpVal1, 0, nLen, nMatch2);
             }
         }
         break;
         case ScConditionMode::ContainsText:
         case ScConditionMode::NotContainsText:
-            bValid = rArg.toAsciiLowerCase().indexOf(aUpVal1.toAsciiLowerCase()) != -1;
+        {
+            const OUString aArgStr(ScGlobal::getCharClass().lowercase(rArg));
+            const OUString aValStr(ScGlobal::getCharClass().lowercase(aUpVal1));
+            bValid = aArgStr.indexOf(aValStr) != -1;
+
             if(eOp == ScConditionMode::NotContainsText)
                 bValid = !bValid;
+        }
         break;
         default:
         {

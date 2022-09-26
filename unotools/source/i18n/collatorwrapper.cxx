@@ -46,23 +46,6 @@ CollatorWrapper::compareString (const OUString& s1, const OUString& s2) const
     return 0;
 }
 
-sal_Int32
-CollatorWrapper::compareSubstring (const OUString& s1, sal_Int32 off1, sal_Int32 len1,
-                                   const OUString& s2, sal_Int32 off2, sal_Int32 len2) const
-{
-    try
-    {
-        if (mxInternationalCollator.is())
-            return mxInternationalCollator->compareSubstring (s1, off1, len1, s2, off2, len2);
-    }
-    catch (const uno::RuntimeException&)
-    {
-        SAL_WARN( "unotools.i18n","CollatorWrapper: compareSubstring failed");
-    }
-
-    return 0;
-}
-
 uno::Sequence< OUString >
 CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
 {
