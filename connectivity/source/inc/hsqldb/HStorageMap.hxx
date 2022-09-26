@@ -86,7 +86,7 @@ namespace connectivity::hsqldb
             static TStreamMap::mapped_type getRegisteredStream( JNIEnv * env, jstring name, jstring key);
 
             static OUString jstring2ustring(JNIEnv * env, jstring jstr);
-            static OUString removeURLPrefix(std::u16string_view _sURL,const OUString& _sFileURL);
+            static OUString removeURLPrefix(std::u16string_view _sURL, std::u16string_view _sFileURL);
             static OUString removeOldURLPrefix(const OUString& _sURL);
             static void throwJavaException(const css::uno::Exception& _aException,JNIEnv * env);
         };

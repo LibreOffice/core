@@ -315,30 +315,30 @@ bool isWhitespace( sal_Unicode c )
     return ' ' == c || 9 == c || 10 == c || 13 == c;
 }
 
-OUString extractTableFromInsert( const OUString & sql )
+OUString extractTableFromInsert( std::u16string_view sql )
 {
     OUString ret;
-    int i = 0;
-    while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
+    size_t i = 0;
+    while (i < sql.size() && isWhitespace(sql[i])) { i++; }
 
-    if( sql.matchIgnoreAsciiCase("insert", i) )
+    if( o3tl::matchIgnoreAsciiCase(sql, u"insert", i) )
     {
         i += 6;
-        while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
-        if( sql.matchIgnoreAsciiCase("into", i) )
+        while (i < sql.size() && isWhitespace(sql[i])) { i++; }
+        if( o3tl::matchIgnoreAsciiCase(sql, u"into", i) )
         {
             i +=4;
-            while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
+            while (i < sql.size() && isWhitespace(sql[i])) { i++; }
             int start = i;
             bool quote = (sql[i] == '"');
-            for( i++ ; i < sql.getLength() ; i ++ )
+            for( i++ ; i < sql.size() ; i ++ )
             {
                 if( quote && sql[i] == '"' )
                 {
-                    while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
+                    while (i < sql.size() && isWhitespace(sql[i])) { i++; }
                     if( '.' == sql[i] )
                     {
-                        while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
+                        while (i < sql.size() && isWhitespace(sql[i])) { i++; }
                         if( '"' == sql[i] )
                         {
                             // the second part of the table name does not use quotes
@@ -361,7 +361,7 @@ OUString extractTableFromInsert( const OUString & sql )
                     }
                 }
             }
-            ret = o3tl::trim(sql.subView(start, i - start ));
+            ret = o3tl::trim(sql.substr(start, i - start ));
 //             printf( "pq_statement: parsed table name %s from insert\n" ,
 //                     OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr() );
         }
@@ -596,12 +596,12 @@ OUString array2String( const css::uno::Sequence< Any > &seq )
 }
 
 
-std::vector< Any > parseArray( const OUString & str )
+std::vector< Any > parseArray( std::u16string_view str )
 {
-    int len = str.getLength();
+    size_t len = str.size();
     bool doubleQuote = false;
     int brackets = 0;
-    int i = 0;
+    size_t i = 0;
 
     OUStringBuffer current;
     std::vector<Any> elements;

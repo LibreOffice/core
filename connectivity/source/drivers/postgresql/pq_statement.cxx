@@ -590,7 +590,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
     ConnectionSettings *pConnectionSettings,
     const Reference< XConnection > &connection,
     sal_Int32 nLastOid,
-    const OUString & lastTableInserted,
+    std::u16string_view lastTableInserted,
     const OString & lastQuery )
 {
     Reference< XResultSet > ret;
@@ -599,7 +599,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
     splitConcatenatedIdentifier(
         lastTableInserted, &schemaName, &tableName );
 
-    if( nLastOid && lastTableInserted.getLength() )
+    if( nLastOid && lastTableInserted.size() )
     {
         OUStringBuffer buf( 128 );
         buf.append( "SELECT * FROM " );
@@ -611,7 +611,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         buf.append( nLastOid );
         query = buf.makeStringAndClear();
     }
-    else if ( lastTableInserted.getLength() && lastQuery.getLength() )
+    else if ( lastTableInserted.size() && lastQuery.getLength() )
     {
         // extract nameValue Pairs
         String2StringMap namedValues;

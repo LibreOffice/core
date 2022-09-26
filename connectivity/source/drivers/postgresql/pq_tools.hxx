@@ -106,7 +106,7 @@ bool extractBoolProperty(
 void disposeNoThrow( const css::uno::Reference< css::uno::XInterface > & r );
 void disposeObject( const css::uno::Reference< css::uno::XInterface > & r );
 
-OUString extractTableFromInsert( const OUString & sql );
+OUString extractTableFromInsert( std::u16string_view sql );
 OString extractSingleTableFromSelect( const std::vector< OString > &vec );
 
 OUString getColExprForDefaultSettingVal(ConnectionSettings const *settings);
@@ -115,7 +115,7 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  );
 void splitSQL( const OString & sql, std::vector< OString > &vec  );
 std::vector< sal_Int32 > parseIntArray( const OUString & str );
 /// @throws css::sdbc::SQLException
-std::vector< css::uno::Any > parseArray( const OUString & str );
+std::vector< css::uno::Any > parseArray( std::u16string_view str );
 
 OUString array2String( const css::uno::Sequence< css::uno::Any > &seq );
 

@@ -189,7 +189,7 @@ css::uno::Reference< css::sdbc::XResultSet > getGeneratedValuesFromLastInsert(
     ConnectionSettings *pConnectionSettings,
     const css::uno::Reference< css::sdbc::XConnection > &connection,
     sal_Int32 nLastOid,
-    const OUString & lastTableInserted,
+    std::u16string_view lastTableInserted,
     const OString & lastQuery );
 
 
