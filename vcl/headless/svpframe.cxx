@@ -27,6 +27,7 @@
 #ifndef IOS
 #include <headless/svpgdi.hxx>
 #endif
+#include <salsys.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
 

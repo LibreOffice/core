@@ -174,6 +174,13 @@ void WinSalFrame::UpdateFrameState()
 // if pParentRect is set, the workarea of the monitor that contains pParentRect is returned
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
 {
+    if (Application::IsHeadlessModeEnabled()) {
+        pRect->left = 0;
+        pRect->top = 0;
+        pRect->right = VIRTUAL_DESKTOP_WIDTH;
+        pRect->bottom = VIRTUAL_DESKTOP_HEIGHT;
+        return;
+    }
     // check if we or our parent is fullscreen, then the taskbar should be ignored
     bool bIgnoreTaskbar = false;
     WinSalFrame* pFrame = GetWindowPtr( hWnd );

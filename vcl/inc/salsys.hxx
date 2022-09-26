@@ -82,6 +82,9 @@ public:
 
 VCL_DLLPUBLIC SalSystem* ImplGetSalSystem();
 
+#define VIRTUAL_DESKTOP_WIDTH 1024
+#define VIRTUAL_DESKTOP_HEIGHT 768
+
 #endif // INCLUDED_VCL_INC_SALSYS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
