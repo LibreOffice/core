@@ -185,7 +185,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             xAcc = GetChildAccessible( rVclWindowEvent );
             if( xAcc.is() )
             {
-                // send send state change event for SHOWING before sending the CHILD event below,
+                // send state change event for SHOWING before sending the CHILD event below,
                 // since that one results in a11y event listeners getting removed
                 uno::Reference<XAccessibleContext> xChildContext = xAcc->getAccessibleContext();
                 if (xChildContext.is())
