@@ -1030,6 +1030,19 @@ protected:
         // reqif-xhtml
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
     }
+
+    /**
+     * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
+     * parse it.
+     */
+    void WrapReqifFromTempFile(SvMemoryStream& rStream)
+    {
+        rStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+        SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+        rStream.WriteStream(aFileStream);
+        rStream.WriteCharPtr("</reqif-xhtml:html>\n");
+        rStream.Seek(0);
+    }
 };
 
 /**
