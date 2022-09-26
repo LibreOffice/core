@@ -1304,12 +1304,15 @@ cmd/sc_gotoend.png cmd/sc_lastrecord.png
 cmd/sc_gotoendofdoc.png cmd/sc_lastrecord.png
 cmd/sc_lastpage.png cmd/sc_lastrecord.png
 # |<
+cmd/32/firstpage.png cmd/32/firstrecord.png
 cmd/32/gotostartofdoc.png cmd/32/firstrecord.png
 cmd/32/gotostartoftable.png cmd/32/firstrecord.png
 
+cmd/lc_firstpage.png cmd/lc_firstrecord.png
 cmd/lc_gotostartofdoc.png cmd/lc_firstrecord.png
 cmd/lc_gotostartoftable.png cmd/lc_firstrecord.png
 
+cmd/sc_firstpage.png cmd/sc_firstrecord.png
 cmd/sc_gotostartofdoc.png cmd/sc_firstrecord.png
 cmd/sc_gotostartoftable.png cmd/sc_firstrecord.png
 
@@ -1877,7 +1880,6 @@ cmd/32/tableautofitmenu.png cmd/32/setoptimalrowheight.png
 cmd/32/tabledeletemenu.png cmd/32/deletetable.png
 cmd/32/tableinsertmenu.png cmd/32/insertrowsafter.png
 cmd/32/tablemenu.png cmd/32/inserttable.png
-cmd/32/tableselectall.png cmd/32/selecttable.png
 cmd/32/tableselectmenu.png cmd/32/selecttable.png
 
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
@@ -1886,7 +1888,6 @@ cmd/lc_tableautofitmenu.png cmd/lc_setoptimalrowheight.png
 cmd/lc_tabledeletemenu.png cmd/lc_deletetable.png
 cmd/lc_tableinsertmenu.png cmd/lc_insertrowsafter.png
 cmd/lc_tablemenu.png cmd/lc_inserttable.png
-cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
@@ -1895,7 +1896,6 @@ cmd/sc_tableautofitmenu.png cmd/sc_setoptimalrowheight.png
 cmd/sc_tabledeletemenu.png cmd/sc_deletetable.png
 cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
 cmd/sc_tablemenu.png cmd/sc_inserttable.png
-cmd/sc_tableselectall.png cmd/sc_selecttable.png
 cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 
 # text background colour Impress/Draw
@@ -1934,7 +1934,7 @@ cmd/sc_showbrowser.png cmd/sc_controlproperties.png
 cmd/sc_showpropbrowser.png cmd/sc_controlproperties.png
 
 # Slide command aliases
-cmd/32/firstslide.png cmd/32/firstpage.png
+cmd/32/firstslide.png cmd/32/firstrecord.png
 cmd/32/insertdatefieldfix.png cmd/32/datefield.png
 cmd/32/insertfilefield.png cmd/32/open.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
@@ -1953,7 +1953,7 @@ cmd/32/moveslideup.png cmd/32/upsearch.png
 cmd/32/nextslide.png cmd/32/nextrecord.png
 cmd/32/previousslide.png cmd/32/prevrecord.png
 
-cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_firstslide.png cmd/lc_firstrecord.png
 cmd/lc_insertdatefieldfix.png cmd/lc_datefield.png
 cmd/lc_insertfilefield.png cmd/lc_open.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
@@ -1972,7 +1972,7 @@ cmd/lc_moveslideup.png cmd/lc_upsearch.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
 
-cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_firstslide.png cmd/sc_firstrecord.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
@@ -2032,7 +2032,7 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 
 # fpicker
 # ==============================================
-fpicker/res/fp011.png cmd/sc_firstpage.png
+fpicker/res/fp011.png cmd/sc_firstrecord.png
 fpicker/res/fp014.png res/fp015.png
 fpicker/res/fp015.png cmd/sc_starshapes.png
 fpicker/res/fp016.png desktop/res/shared_16.png
@@ -2565,7 +2565,7 @@ cmd/sc_notecellstyles.png cmd/sc_shownote.png
 # res
 svx/res/reload.png cmd/sc_reload.png
 svx/res/time.png cmd/sc_timefield.png
-sw/res/all_left.png cmd/sc_firstpage.png
+sw/res/all_left.png cmd/sc_firstrecord.png
 sw/res/all_left.png cmd/sc_firstrecord.png
 sw/res/all_right.png cmd/sc_lastrecord.png
 sw/res/lc20556.png cmd/lc_dbviewfunctions.png
@@ -2743,21 +2743,21 @@ cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.p
 # LibreLogo
 cmd/32/librelogo-gobackward.png cmd/32/upsearch.png
 cmd/32/librelogo-goforward.png cmd/32/downsearch.png
-cmd/32/librelogo-home.png cmd/32/firstpage.png
+cmd/32/librelogo-home.png cmd/32/firstrecord.png
 cmd/32/librelogo-run.png cmd/32/mediaplay.png
 cmd/32/librelogo-stop.png cmd/32/basicstop.png
 cmd/32/librelogo-translate.png cmd/32/editglossary.png
 
 cmd/lc_librelogo-gobackward.png cmd/lc_upsearch.png
 cmd/lc_librelogo-goforward.png cmd/lc_downsearch.png
-cmd/lc_librelogo-home.png cmd/lc_firstpage.png
+cmd/lc_librelogo-home.png cmd/lc_firstrecord.png
 cmd/lc_librelogo-run.png cmd/lc_mediaplay.png
 cmd/lc_librelogo-stop.png cmd/lc_basicstop.png
 cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
 
 cmd/sc_librelogo-gobackward.png cmd/sc_upsearch.png
 cmd/sc_librelogo-goforward.png cmd/sc_downsearch.png
-cmd/sc_librelogo-home.png cmd/sc_firstpage.png
+cmd/sc_librelogo-home.png cmd/sc_firstrecord.png
 cmd/sc_librelogo-run.png cmd/sc_mediaplay.png
 cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
