@@ -123,7 +123,7 @@ public:
     OUString cutPrefix(std::u16string_view _sURL) const;
 
     /// on a given string, return the type prefix
-    OUString getPrefix(const OUString& _sURL) const;
+    OUString getPrefix(std::u16string_view _sURL) const;
 
     /// determines whether there is a driver for the given URL prefix/pattern
     bool    hasDriver( const char* _pAsciiPattern ) const;

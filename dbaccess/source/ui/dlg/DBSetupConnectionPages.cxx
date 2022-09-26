@@ -153,7 +153,7 @@ using namespace ::com::sun::star;
             OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
             if (pCollection)
             {
-                OUString sUrl = pCollection->getPrefix( "sdbc:address:ldap:") + m_xETHostServer->get_text();
+                OUString sUrl = pCollection->getPrefix( u"sdbc:address:ldap:") + m_xETHostServer->get_text();
                 _rSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
                 bChangedSomething = true;
             }

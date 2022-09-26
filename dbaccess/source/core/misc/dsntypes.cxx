@@ -106,7 +106,7 @@ OUString ODsnTypeCollection::cutPrefix(std::u16string_view _sURL) const
     return sRet;
 }
 
-OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
+OUString ODsnTypeCollection::getPrefix(std::u16string_view _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
@@ -119,7 +119,7 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
             //   foo*
             // that is, the very concept of "prefix" applies.
             sRet = comphelper::string::stripEnd(dsnPrefix, '*');
-            OSL_ENSURE(sRet.getLength() <= _sURL.getLength(), "How can A match B when A shorter than B?");
+            OSL_ENSURE(sRet.getLength() <= static_cast<sal_Int32>(_sURL.size()), "How can A match B when A shorter than B?");
             sOldPattern = dsnPrefix;
         }
     }

@@ -40,8 +40,8 @@ namespace dbaui
     {
         void convert(const css::uno::Reference< css::uno::XComponentContext> & xContext,
                      const ::dbaccess::ODsnTypeCollection* _pCollection,
-                     const OUString& _sOldURLPrefix,
-                     const OUString& _sNewURLPrefix,
+                     std::u16string_view _sOldURLPrefix,
+                     std::u16string_view _sNewURLPrefix,
                      const css::uno::Reference< css::beans::XPropertySet >& _xDatasource);
     };
     class IItemSetHelper;

@@ -131,9 +131,9 @@ OUString utils::getTableNameFromStmt(std::u16string_view sSql)
         return *wordIter;
 }
 
-void utils::ensureFirebirdTableLength(const OUString& sName)
+void utils::ensureFirebirdTableLength(std::u16string_view sName)
 {
-    if (sName.getLength() > 30) // Firebird limitation
+    if (sName.size() > 30) // Firebird limitation
     {
         static constexpr OUStringLiteral NAME_TOO_LONG
             = u"Firebird 3 doesn't support object (table, field) names "

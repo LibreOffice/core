@@ -115,11 +115,11 @@ OUString lcl_makeStringFromBigint(std::vector<sal_uInt8>&& aBytes)
     return sRet.makeStringAndClear();
 }
 
-OUString lcl_putDot(const OUString& sNum, sal_Int32 nScale)
+OUString lcl_putDot(std::u16string_view sNum, sal_Int32 nScale)
 {
     // e.g. sNum = "0", nScale = 2 -> "0.00"
     OUStringBuffer sBuf{ sNum };
-    sal_Int32 nNullsToAppend = nScale - sNum.getLength() + 1;
+    sal_Int32 nNullsToAppend = nScale - sNum.size() + 1;
     for (sal_Int32 i = 0; i < nNullsToAppend; ++i)
         sBuf.insert(0, "0");
 

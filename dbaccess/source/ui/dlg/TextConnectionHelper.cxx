@@ -33,14 +33,20 @@
 namespace
 {
 
-OUString lcl_getListEntry(const OUString& rStr, sal_Int32& rIdx)
+OUString lcl_getListEntry(std::u16string_view rStr, sal_Int32& rIdx)
 {
-    const OUString sTkn {rStr.getToken( 0, '\t', rIdx )};
+    const OUString sTkn {o3tl::getToken(rStr, 0, '\t', rIdx )};
     if (rIdx>=0)
     {
-        rIdx = rStr.indexOf('\t', rIdx);
-        if (rIdx>=0 && ++rIdx>=rStr.getLength())
+        size_t nFnd = rStr.find('\t', rIdx);
+        if (nFnd == std::u16string_view::npos)
             rIdx = -1;
+        else
+        {
+            rIdx = nFnd + 1;
+            if (rIdx >= static_cast<sal_Int32>(rStr.size()))
+                rIdx = -1;
+        }
     }
     return sTkn;
 }

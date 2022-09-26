@@ -43,7 +43,7 @@ namespace dbaui
         {
             m_bCheck = _bCheck;
         }
-        bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
+        bool checkString(std::u16string_view _sToCheck,OUString& _rsCorrected);
     };
 
     class OSQLNameEditControl : public svt::EditControl

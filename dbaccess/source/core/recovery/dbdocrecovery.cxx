@@ -28,6 +28,7 @@
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -65,23 +66,23 @@ namespace dbaccess
             o_rBuffer.append( sal_Unicode( i_rComponentDesc.second.bForEditing ? '1' : '0' ) );
         }
 
-        bool lcl_extractCompDesc( const OUString& i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
+        bool lcl_extractCompDesc( std::u16string_view i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
         {
-            const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( '=' );
-            if ( nEqualSignPos < 1 )
+            const size_t nEqualSignPos = i_rIniLine.find( '=' );
+            if ( nEqualSignPos == 0 || nEqualSignPos == std::u16string_view::npos )
             {
                 OSL_FAIL( "lcl_extractCompDesc: invalid map file entry - unexpected pos of '='" );
                 return false;
             }
-            o_rStorName = i_rIniLine.copy( 0, nEqualSignPos );
+            o_rStorName = i_rIniLine.substr( 0, nEqualSignPos );
 
-            const sal_Int32 nCommaPos = i_rIniLine.lastIndexOf( ',' );
-            if ( nCommaPos != i_rIniLine.getLength() - 2 )
+            const size_t nCommaPos = i_rIniLine.rfind( ',' );
+            if ( nCommaPos != i_rIniLine.size() - 2 )
             {
                 OSL_FAIL( "lcl_extractCompDesc: invalid map file entry - unexpected pos of ','" );
                 return false;
             }
-            o_rCompDesc.sName = i_rIniLine.copy( nEqualSignPos + 1, nCommaPos - nEqualSignPos - 1 );
+            o_rCompDesc.sName = i_rIniLine.substr( nEqualSignPos + 1, nCommaPos - nEqualSignPos - 1 );
             o_rCompDesc.bForEditing = ( i_rIniLine[ nCommaPos + 1 ] == '1' );
             return true;
         }
@@ -112,12 +113,12 @@ namespace dbaccess
             aTextOutput.writeLine();
         }
 
-        bool lcl_isSectionStart( const OUString& i_rIniLine, OUString& o_rSectionName )
+        bool lcl_isSectionStart( std::u16string_view i_rIniLine, OUString& o_rSectionName )
         {
-            const sal_Int32 nLen = i_rIniLine.getLength();
-            if ( i_rIniLine.startsWith("[") && i_rIniLine.endsWith("]") )
+            const size_t nLen = i_rIniLine.size();
+            if ( o3tl::starts_with(i_rIniLine, u"[") && o3tl::ends_with(i_rIniLine, u"]") )
             {
-                o_rSectionName = i_rIniLine.copy( 1, nLen -2 );
+                o_rSectionName = i_rIniLine.substr( 1, nLen -2 );
                 return true;
             }
             return false;

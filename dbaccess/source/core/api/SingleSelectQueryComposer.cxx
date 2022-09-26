@@ -1524,9 +1524,9 @@ OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode const & _aG
 
 namespace
 {
-    OUString lcl_getDecomposedColumnName(const OUString& rComposedName, const OUString& rQuoteString)
+    OUString lcl_getDecomposedColumnName(const OUString& rComposedName, std::u16string_view rQuoteString)
     {
-        const sal_Int32 nQuoteLength = rQuoteString.getLength();
+        const size_t nQuoteLength = rQuoteString.size();
         OUString sName = rComposedName.trim();
         OUString sColumnName;
         sal_Int32 nPos, nRPos = 0;
@@ -1539,7 +1539,7 @@ namespace
                 nRPos = sName.indexOf( rQuoteString, nPos + nQuoteLength );
                 if ( nRPos > nPos )
                 {
-                    if ( nRPos + nQuoteLength < sName.getLength() )
+                    if ( static_cast<sal_Int32>(nRPos + nQuoteLength) < sName.getLength() )
                     {
                         nRPos += nQuoteLength; // -1 + 1 skip dot
                     }
@@ -1561,7 +1561,7 @@ namespace
     OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter,
         const OPredicateInputController& i_aPredicateInputController,
         const Reference< XNameAccess >& i_xSelectColumns,
-        const OUString& rQuoteString)
+        std::u16string_view rQuoteString)
     {
         OUStringBuffer sRet;
         const Sequence< PropertyValue >* pOrIter = filter.getConstArray();

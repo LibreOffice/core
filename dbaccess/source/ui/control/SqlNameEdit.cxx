@@ -31,23 +31,23 @@ namespace dbaui
                  (_cChar >= 'a' && _cChar <= 'z')
                 );
     }
-    bool OSQLNameChecker::checkString(const OUString& _sToCheck,
+    bool OSQLNameChecker::checkString(std::u16string_view _sToCheck,
                                         OUString& _rsCorrected)
     {
         bool bCorrected = false;
         if ( m_bCheck )
         {
             sal_Int32 nMatch = 0;
-            for (sal_Int32 i = nMatch; i < _sToCheck.getLength(); ++i)
+            for (size_t i = nMatch; i < _sToCheck.size(); ++i)
             {
                 if ( !isCharOk( _sToCheck[i], i == 0, m_sAllowedChars ) )
                 {
-                    _rsCorrected += _sToCheck.subView(nMatch, i - nMatch);
+                    _rsCorrected += _sToCheck.substr(nMatch, i - nMatch);
                     bCorrected = true;
                     nMatch = i + 1;
                 }
             }
-            _rsCorrected += _sToCheck.subView( nMatch );
+            _rsCorrected += _sToCheck.substr( nMatch );
         }
         return bCorrected;
     }

@@ -266,7 +266,7 @@ static void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,con
     }
 }
 
-void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const OUString& _sOldURLPrefix,const OUString& _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection, std::u16string_view _sOldURLPrefix, std::u16string_view _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)
 {
     if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
         return ;
@@ -486,16 +486,16 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:odbc:")));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(u"sdbc:mysql:odbc:")));
             xPage = OConnectionTabPageSetup::CreateODBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:jdbc:")));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(u"sdbc:mysql:jdbc:")));
             xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:mysqlc:")));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(u"sdbc:mysql:mysqlc:")));
             xPage = MySQLNativeSetupPage::Create(pPageContainer, this, *m_pOutSet);
             break;
 
