@@ -734,6 +734,8 @@ constants AccessibleRole
            label.</p>
 
         <p>See also LABEL and TEXT.</p>
+
+        @since LibreOffice 6.2
     */
     const short STATIC = 86;
 
@@ -741,6 +743,8 @@ constants AccessibleRole
 
         <p>An object that presents information to the user when the SHOWING state change event is
            fired for the object.</p>
+
+        @since LibreOffice 7.5
     */
     const short NOTIFICATION = 87;
 
