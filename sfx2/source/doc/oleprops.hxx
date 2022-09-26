@@ -144,18 +144,18 @@ public:
     /** Loads a string from the passed stream with current encoding (maybe Unicode). */
     OUString            LoadString8( SvStream& rStrm ) const;
     /** Saves a string to the passed stream with current encoding (maybe Unicode). */
-    void                SaveString8( SvStream& rStrm, const OUString& rValue ) const;
+    void                SaveString8( SvStream& rStrm, std::u16string_view rValue ) const;
 
     /** Loads a Unicode string from the passed stream, ignores own encoding. */
     static OUString     LoadString16( SvStream& rStrm );
     /** Saves a Unicode string to the passed stream, ignores own encoding. */
-    static void         SaveString16( SvStream& rStrm, const OUString& rValue );
+    static void         SaveString16( SvStream& rStrm, std::u16string_view rValue );
 
 private:
     OUString            ImplLoadString8( SvStream& rStrm ) const;
     static OUString     ImplLoadString16( SvStream& rStrm );
     void                ImplSaveString8( SvStream& rStrm, std::u16string_view rValue ) const;
-    static void         ImplSaveString16( SvStream& rStrm, const OUString& rValue );
+    static void         ImplSaveString16( SvStream& rStrm, std::u16string_view rValue );
 };
 
 

@@ -249,7 +249,7 @@ OUString SfxOleStringHelper::LoadString8( SvStream& rStrm ) const
     return IsUnicode() ? ImplLoadString16( rStrm ) : ImplLoadString8( rStrm );
 }
 
-void SfxOleStringHelper::SaveString8( SvStream& rStrm, const OUString& rValue ) const
+void SfxOleStringHelper::SaveString8( SvStream& rStrm, std::u16string_view rValue ) const
 {
     if( IsUnicode() )
         ImplSaveString16( rStrm, rValue );
@@ -262,7 +262,7 @@ OUString SfxOleStringHelper::LoadString16( SvStream& rStrm )
     return ImplLoadString16( rStrm );
 }
 
-void SfxOleStringHelper::SaveString16( SvStream& rStrm, const OUString& rValue )
+void SfxOleStringHelper::SaveString16( SvStream& rStrm, std::u16string_view rValue )
 {
     ImplSaveString16( rStrm, rValue );
 }
@@ -316,13 +316,13 @@ void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, std::u16string_view r
     rStrm.WriteUChar( 0 );
 }
 
-void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rValue )
+void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, std::u16string_view rValue )
 {
     // write size field (including trailing NUL character)
-    sal_Int32 nSize = static_cast< sal_Int32 >( rValue.getLength() + 1 );
+    sal_Int32 nSize = static_cast< sal_Int32 >( rValue.size() + 1 );
     rStrm.WriteInt32( nSize );
     // write character array with trailing NUL character
-    for( sal_Int32 nIdx = 0; nIdx < rValue.getLength(); ++nIdx )
+    for( size_t nIdx = 0; nIdx < rValue.size(); ++nIdx )
         rStrm.WriteUInt16( rValue[ nIdx ] );
     rStrm.WriteUInt16( 0 );
     // stream is always padded to 32-bit boundary, add 2 bytes on odd character count

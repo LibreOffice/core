@@ -415,7 +415,7 @@ namespace sfx2
 
         explicit CheckAppendSingleWildcard( OUString& _rBase ) : _rToBeExtended( _rBase ) { }
 
-        void operator() ( const OUString& _rWC )
+        void operator() ( std::u16string_view _rWC )
         {
             // check for double wildcards
             sal_Int32 nExistentPos = _rToBeExtended.indexOf( _rWC );
@@ -425,7 +425,7 @@ namespace sfx2
                     ||  ( s_cWildcardSeparator == _rToBeExtended[ nExistentPos - 1 ] )
                     )
                 {   // the wildcard really starts at this position (it starts at pos 0 or the previous character is a separator
-                    sal_Int32 nExistentWCEnd = nExistentPos + _rWC.getLength();
+                    sal_Int32 nExistentWCEnd = nExistentPos + _rWC.size();
                     if  (   ( _rToBeExtended.getLength() == nExistentWCEnd )
                         ||  ( s_cWildcardSeparator == _rToBeExtended[ nExistentWCEnd ] )
                         )

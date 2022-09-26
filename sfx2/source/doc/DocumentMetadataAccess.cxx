@@ -282,17 +282,15 @@ splitPath(OUString const & i_rPath,
 }
 
 static bool
-splitXmlId(OUString const & i_XmlId,
+splitXmlId(std::u16string_view i_XmlId,
     OUString & o_StreamName, OUString& o_Idref )
 {
-    const sal_Int32 idx(i_XmlId.indexOf(u'#'));
-    if ((idx <= 0) || (idx >= i_XmlId.getLength() - 1)) {
+    const size_t idx(i_XmlId.find(u'#'));
+    if (idx == std::u16string_view::npos)
         return false;
-    } else {
-        o_StreamName = i_XmlId.copy(0, idx);
-        o_Idref      = i_XmlId.copy(idx+1);
-        return isValidXmlId(o_StreamName, o_Idref);
-    }
+    o_StreamName = i_XmlId.substr(0, idx);
+    o_Idref      = i_XmlId.substr(idx+1);
+    return isValidXmlId(o_StreamName, o_Idref);
 }
 
 
@@ -912,7 +910,7 @@ DocumentMetadataAccess::getElementByURI(
     }
     OUString path;
     OUString idref;
-    if (!splitXmlId(name.copy(baseURI.getLength()), path, idref)) {
+    if (!splitXmlId(name.subView(baseURI.getLength()), path, idref)) {
         return nullptr;
     }
 
