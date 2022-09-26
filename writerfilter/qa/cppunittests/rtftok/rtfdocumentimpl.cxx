@@ -16,6 +16,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <vcl/graph.hxx>
 
@@ -118,6 +119,30 @@ CPPUNIT_TEST_FIXTURE(Test, testDuplicatedImage)
     // - Actual  : 3
     // i.e. there was a 3rd, duplicated image.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOldParaNumLeftMargin)
+{
+    // Given a document with 3 paragraphs, the third one with a left indent:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "old-para-num-left-margin.rtf";
+
+    // When importing that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the third paragraph has a left indent:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+    xParagraphs->nextElement();
+    xParagraphs->nextElement();
+    uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nParaLeftMargin{};
+    xParagraph->getPropertyValue("ParaLeftMargin") >>= nParaLeftMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2101
+    // - Actual  : 0
+    // i.e. the left indent was 0, not 1191 twips (from the file) in mm100.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2101), nParaLeftMargin);
 }
 }
 
