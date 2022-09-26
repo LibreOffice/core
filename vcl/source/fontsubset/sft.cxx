@@ -894,7 +894,7 @@ static OString nameExtract( const sal_uInt8* name, int nTableSize, int n, int db
         for (int i = 0; i < len/2; i++)
         {
             res[i] = *(ptr + i * 2 + 1);
-            assert(res[i] != 0);
+            SAL_WARN_IF(res[i] == 0, "vcl.fonts", "font name is bogus");
         }
         if( ucs2result )
         {
@@ -903,7 +903,7 @@ static OString nameExtract( const sal_uInt8* name, int nTableSize, int n, int db
             for (int i = 0; i < len/2; i++ )
             {
                 buf[i] = GetUInt16( ptr, 2*i );
-                assert(buf[i] != 0);
+                SAL_WARN_IF(buf[i] == 0, "vcl.fonts", "font name is bogus");
             }
             *ucs2result = buf.makeStringAndClear();
         }
