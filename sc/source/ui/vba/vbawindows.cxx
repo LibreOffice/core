@@ -32,6 +32,9 @@
 #include <unordered_map>
 #include <utility>
 
+#include <osl/file.hxx>
+#include <ooo/vba/excel/XApplication.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
@@ -129,6 +132,10 @@ class WindowsAccessImpl : public WindowsAccessImpl_BASE
 public:
     explicit WindowsAccessImpl( uno::Reference< uno::XComponentContext > xContext ):m_xContext(std::move( xContext ))
     {
+        css::uno::Reference<css::container::XNameAccess> xNameAccess(m_xContext,
+                                                                     css::uno::UNO_QUERY_THROW);
+        const auto aAppplication = xNameAccess->getByName("Application");
+
         uno::Reference< container::XEnumeration > xEnum = new WindowComponentEnumImpl( m_xContext );
         sal_Int32 nIndex=0;
         while( xEnum->hasMoreElements() )
@@ -138,6 +145,21 @@ public:
             {
                 m_windows.push_back( xNext );
                 uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
+
+                // tdf#126457 - add workbook name to window titles
+                rtl::Reference<ScVbaWorkbook> workbook(new ScVbaWorkbook(
+                    uno::Reference<XHelperInterface>(aAppplication, uno::UNO_QUERY_THROW),
+                    m_xContext, xModel));
+                const OUString aWorkBookName(workbook->getName());
+                if (!hasByName(aWorkBookName))
+                    namesToIndices[aWorkBookName] = nIndex;
+
+                // tdf#126457 - add file url to window titles
+                OUString sName;
+                ::osl::File::getSystemPathFromFileURL(xModel->getURL(), sName);
+                if (!hasByName(sName))
+                    namesToIndices[sName] = nIndex;
+
                 // !! TODO !! iterate over all controllers
                 uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
                 uno::Reference< XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5

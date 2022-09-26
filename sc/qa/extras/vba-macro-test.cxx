@@ -31,6 +31,8 @@
 
 #include <ooo/vba/excel/XlSpecialCellsValue.hpp>
 
+#include <comphelper/propertysequence.hxx>
+
 using namespace css;
 using namespace ooo::vba;
 
@@ -62,6 +64,7 @@ public:
     void testTdf90278();
     void testTdf149531();
     void testTdf118247();
+    void testTdf126457();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -84,6 +87,7 @@ public:
     CPPUNIT_TEST(testTdf90278);
     CPPUNIT_TEST(testTdf149531);
     CPPUNIT_TEST(testTdf118247);
+    CPPUNIT_TEST(testTdf126457);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -762,6 +766,68 @@ void VBAMacroTest::testTdf118247()
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sRange, aReturnValue);
     }
+}
+
+void VBAMacroTest::testTdf126457()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    // Save a copy of the file to get its URL
+    uno::Reference<frame::XStorable> xDocStorable(xComponent, uno::UNO_QUERY);
+    utl::TempFileNamed aTempFile(u"testWindowsActivate", true, u".ods");
+    aTempFile.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> descSaveAs(
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc8")) } }));
+    xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
+
+    // Insert initial library
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(OUString("Option VBASupport 1\n"
+                          "Function TestWindowsActivate\n"
+                          "  dirName = Workbooks(1).Path\n"
+                          "  workbookName = Workbooks(1).Name\n"
+                          "  fileName = dirName + Application.PathSeparator + workbookName\n"
+                          "  Workbooks.Open Filename := fileName\n"
+                          "  On Error Goto handler\n"
+                          // activate window using its URL
+                          "  Windows(fileName).Activate\n"
+                          // activate window using its caption name
+                          "  Windows(workbookName).Activate\n"
+                          // activate window using a newly generated window caption
+                          "  newCaption = \"New Window Caption\"\n"
+                          "  Windows(fileName).Caption = newCaption\n"
+                          "  Windows(newCaption).Activate\n"
+                          "  TestWindowsActivate = 0\n"
+                          "  Exit Function\n"
+                          "handler:\n"
+                          "  TestWindowsActivate = 1\n"
+                          "End Function\n")));
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    ErrCode result
+        = SfxObjectShell::CallXScript(xComponent,
+                                      "vnd.sun.Star.script:TestLibrary.TestModule."
+                                      "TestWindowsActivate?language=Basic&location=document",
+                                      {}, aRet, aOutParamIndex, aOutParam);
+
+    // Without the fix in place, the windows could not be activated in the macro
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+    sal_Int16 nReturnValue;
+    aRet >>= nReturnValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nReturnValue);
+
+    pDocSh->DoClose();
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 
