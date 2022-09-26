@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/gdimtf.hxx>
 
 #include <docsh.hxx>
 #include <fmtfsize.hxx>
@@ -104,6 +105,44 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
     // i.e. the height had a fixed value, not "keep aspect".
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SwFormatFrameSize::SYNCED),
                          static_cast<int>(rSize.GetHeightPercent()));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
+{
+    // Given a document with an image, which has an SVM image data:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    GDIMetaFile aMetafile;
+    Graphic aGraphic(aMetafile);
+    xTextGraphic->setPropertyValue("Graphic", uno::Any(aGraphic.GetXGraphic()));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xBodyText->insertTextContent(xCursor, xTextContent, false);
+
+    // When exporting to reqif:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure we we only export PNG:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // - XPath '//reqif-xhtml:object' number of nodes is incorrect
+    // i.e. we wrote both GIF and PNG, not just PNG for SVM images.
+    assertXPath(pXmlDoc, "//reqif-xhtml:object", "type", "image/png");
 }
 }
 

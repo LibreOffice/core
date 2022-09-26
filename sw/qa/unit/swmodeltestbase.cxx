@@ -756,4 +756,13 @@ SwDoc* SwModelTestBase::createSwWebDoc(std::u16string_view rDataDirectory, const
     return pTextDoc->GetDocShell()->GetDoc();
 }
 
+void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
+{
+    rStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    rStream.WriteStream(aFileStream);
+    rStream.WriteCharPtr("</reqif-xhtml:html>\n");
+    rStream.Seek(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -383,6 +383,12 @@ protected:
      */
     SwDoc* createSwWebDoc(
         std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
+
+    /**
+     * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
+     * parse it.
+     */
+    void WrapReqifFromTempFile(SvMemoryStream& rStream);
 };
 
 /**
