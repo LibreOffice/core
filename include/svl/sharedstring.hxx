@@ -38,6 +38,7 @@ public:
     bool operator!= ( const SharedString& r ) const;
 
     const OUString & getString() const;
+    const OUString & getIgnoreCaseString() const;
 
     rtl_uString* getData();
     const rtl_uString* getData() const;
@@ -115,6 +116,11 @@ inline bool SharedString::operator!= ( const SharedString& r ) const
 inline const OUString & SharedString::getString() const
 {
     return mpData ? OUString::unacquired(&mpData) : EMPTY_STRING;
+}
+
+inline const OUString & SharedString::getIgnoreCaseString() const
+{
+    return mpDataIgnoreCase ? OUString::unacquired(&mpDataIgnoreCase) : EMPTY_STRING;
 }
 
 inline rtl_uString* SharedString::getData()

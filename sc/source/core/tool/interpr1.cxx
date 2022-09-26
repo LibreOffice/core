@@ -8224,7 +8224,7 @@ void ScInterpreter::ScIndirect()
 
     do
     {
-        const OUString & aName( sSharedRefStr.getDataIgnoreCase() );
+        const OUString & aName( sSharedRefStr.getIgnoreCaseString() );
         ScDBCollection::NamedDBs& rDBs = mrDoc.GetDBCollection()->getNamedDBs();
         const ScDBData* pData = rDBs.findByUpperName( aName);
         if (!pData)
