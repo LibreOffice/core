@@ -3276,7 +3276,7 @@ namespace
 {
     SfxChildWindow* lcl_initializeSidebar()
     {
-        // in init.cxx we do setupSidebar which creaes the controller, do it here
+        // in init.cxx we do setupSidebar which creates the controller, do it here
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
         CPPUNIT_ASSERT(pViewShell);
