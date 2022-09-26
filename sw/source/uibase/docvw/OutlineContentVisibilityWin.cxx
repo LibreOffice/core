@@ -131,13 +131,19 @@ void SwOutlineContentVisibilityWin::Set()
     SetQuickHelpText(sQuickHelp);
 
     // Set the position of the window
-    SwRect aFrameAreaRect = GetFrame()->getFrameArea();
-    aFrameAreaRect.AddTop(GetFrame()->GetTopMargin());
+    SwRect aFrameAreaRect = pTextFrame->getFrameArea();
+    aFrameAreaRect.AddTop(pTextFrame->GetTopMargin());
+    SwSpecialPos aSpecialPos;
+    aSpecialPos.nExtendRange = pTextNode->HasVisibleNumberingOrBullet() ? SwSPExtendRange::BEFORE
+                                                                        : SwSPExtendRange::NONE;
+    SwCursorMoveState aMoveState;
+    aMoveState.m_pSpecialPos = &aSpecialPos;
     SwRect aCharRect;
-    GetFrame()->GetCharRect(aCharRect, SwPosition(*pTextNode));
+    pTextFrame->GetCharRect(aCharRect, SwPosition(*(pTextFrame->GetTextNodeForParaProps())),
+                            &aMoveState);
     Point aPxPt(GetEditWin()->GetOutDev()->LogicToPixel(
         Point(aCharRect.Left(), aFrameAreaRect.Center().getY())));
-    if (GetFrame()->IsRightToLeft())
+    if (pTextFrame->IsRightToLeft())
         aPxPt.AdjustX(2);
     else
         aPxPt.AdjustX(-(GetSizePixel().getWidth() + 2));
