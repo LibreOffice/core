@@ -49,6 +49,13 @@ class tdf140754(UITestCase):
             # since tdf#117267, we are showing the hidden filter rows as inactive elements (25 active + 140 inactive)
             self.assertEqual(165, len(xList.getChildren()))
 
+            for i in range(165):
+                xChild = xList.getChild(str(i))
+                if i < 25:
+                    self.assertEqual("true", get_state_as_dict(xChild)["IsChecked"])
+                else:
+                    self.assertEqual("false", get_state_as_dict(xChild)["IsChecked"])
+
             # Without the fix in place, this test would have crashed here
             xOkBtn = xFloatWindow.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
@@ -68,6 +75,13 @@ class tdf140754(UITestCase):
             xList = xCheckListMenu.getChild("check_list_box")
             # since tdf#117267, we are showing the hidden filter rows as inactive elements (10 active + 35 inactive)
             self.assertEqual(45, len(xList.getChildren()))
+
+            for i in range(45):
+                xChild = xList.getChild(str(i))
+                if i < 10:
+                    self.assertEqual("true", get_state_as_dict(xChild)["IsChecked"])
+                else:
+                    self.assertEqual("false", get_state_as_dict(xChild)["IsChecked"])
 
             xOkBtn = xFloatWindow.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
