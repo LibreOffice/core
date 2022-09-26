@@ -5421,7 +5421,7 @@
         <info>
           <desc>Special font for rendering of emojis</desc>
         </info>
-        <value>EmojiOne Color</value>
+        <value>Segoe UI Emoji,Apple Color Emoji,Noto Color Emoji</value>
       </prop>
       <prop oor:name="FontsUseWinMetrics" oor:type="oor:string-list" oor:nillable="false">
         <info>

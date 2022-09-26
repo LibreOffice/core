@@ -1044,7 +1044,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_carlito \
 		$(if $(MPL_SUBSET),,fonts_culmus) \
 		fonts_dejavu \
-		fonts_emojione_color \
 		fonts_gentium \
 		$(if $(MPL_SUBSET),,fonts_kacst) \
 		fonts_liberation \

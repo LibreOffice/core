@@ -159,13 +159,6 @@
                     "dest-filename": "@FONT_SOURCESERIF_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@FONT_EMOJIONE_COLOR_TARBALL@",
-                    "sha256": "@FONT_EMOJIONE_COLOR_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@FONT_EMOJIONE_COLOR_TARBALL@"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/@BOOST_TARBALL@",
                     "sha256": "@BOOST_SHA256SUM@",
                     "type": "file",

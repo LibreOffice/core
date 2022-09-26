@@ -2508,45 +2508,6 @@
         <p>Except as contained in this notice, the name of Tavmjong Bah shall not be used in advertising or otherwise
         to promote the sale, use or other dealings in this Font Software without prior written authorization from
         Tavmjong Bah. For further information, contact: tavmjong @ free . fr.</p>
-        <h2>EmojiOne Color</h2>
-        <h3>Licenses</h3>
-        <ul>
-            <li>Copyright 2016 Brad Erickson CC-BY-4.0/MIT</li>
-            <li>Copyright 2015 Ranks.com Inc. CC-BY-4.0</li>
-            <li>Copyright 2013 Joe Loughry and Terence Eden MIT</li>
-        </ul>
-        <h4>Artwork</h4>
-        <ul>
-            <li>Applies to SVG files and TTF font files</li>
-            <li>License: Creative Commons Attribution 4.0 International</li>
-            <li>Human Readable License: <a href=
-            "http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a></li>
-            <li>Complete Legal Terms: <a href=
-            "http://creativecommons.org/licenses/by/4.0/legalcode">http://creativecommons.org/licenses/by/4.0/legalcode</a></li>
-        </ul>
-        <h4>Source Code</h4>
-        <ul>
-            <li>Applies to everything else</li>
-            <li>License: MIT</li>
-            <li>Complete Legal Terms: http://opensource.org/licenses/MIT</li>
-        </ul>
-        <h4>EmojiOne License</h4>
-        <p>The SVG files of the <a href="http://emojione.com/">EmojiOne</a> project have been modified to create the
-        fallback emoji glyphs and used as-is for the SVGinOT color glyphs. Files are stored in
-        <code>assets/emojione-svg</code>.</p>
-        <ul>
-            <li>Source: https://github.com/Ranks/emojione</li>
-            <li>Art License: Creative Commons Attribution 4.0 International</li>
-        </ul>
-        <p>Please review the specific attribution requirements for commercial use of EmojiOne graphics:
-        <a href="http://emojione.com/licensing/">http://emojione.com/licensing/</a></p>
-        <h4>Power Symbol License</h4>
-        <p>The SVG files from the <a href="http://unicodepowersymbol.com/">Unicode Power Symbol</a> project have been
-        modified to create B&amp;W Power Symbol glyphs. Files are stored in <code>assets/svg-bw</code>.</p>
-        <ul>
-            <li>Source: <a href="https://github.com/jloughry/Unicode">https://github.com/jloughry/Unicode</a></li>
-            <li>Art License: MIT</li>
-        </ul>
         <h2>Gentium</h2>
         <p>The following software may be included in this product: Gentium fonts. Use of any of this software is
         governed by the terms of the license below:</p>

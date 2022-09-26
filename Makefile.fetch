@@ -180,7 +180,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_SOURCECODE_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESERIF_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_EMOJIONE_COLOR_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_CULMUS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBRE_HEBREW_TARBALL) \
