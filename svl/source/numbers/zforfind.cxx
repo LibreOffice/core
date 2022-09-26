@@ -2633,15 +2633,17 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
     if (SkipChar('/', rString, nPos))               // fraction?
     {
         if ( eScannedType != SvNumFormatType::UNDEFINED &&  // already another type
-             eScannedType != SvNumFormatType::DATE)       // except date
+             eScannedType != SvNumFormatType::DATE)         // except date
         {
-            return MatchedReturn();                     // => jan/31/1994
+            return MatchedReturn();                         // => jan/31/1994
         }
-        else if (eScannedType != SvNumFormatType::DATE &&    // analyzed no date until now
-                 ( eSetType == SvNumFormatType::FRACTION ||  // and preset was fraction
-                   (nNumericsCnt == 3 &&                     // or 3 numbers
-                    (nStringPos == 3 ||                  // and 3rd string particle
-                     (nStringPos == 4 && nSign)))))      // or 4th  if signed
+        else if (eScannedType != SvNumFormatType::DATE &&   // analyzed no date until now
+                 (eSetType == SvNumFormatType::FRACTION ||  // and preset was fraction
+                  (nNumericsCnt == 3 &&                     // or 3 numbers
+                   (nStringPos == 3 ||                      // and 4th string particle
+                    (nStringPos == 4 && nSign)) &&          // or 5th if signed
+                   sStrArray[nStringPos-2].indexOf('/') == -1)))  // and not 23/11/1999
+                                                                  // that was not accepted as date yet
         {
             SkipBlanks(rString, nPos);
             if (nPos == rString.getLength())
