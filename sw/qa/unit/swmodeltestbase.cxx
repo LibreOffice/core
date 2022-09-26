@@ -779,4 +779,13 @@ std::unique_ptr<vcl::pdf::PDFiumDocument> SwModelTestBase::LoadPdfFromTempFile()
     return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
 }
 
+void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
+{
+    rStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    rStream.WriteStream(aFileStream);
+    rStream.WriteCharPtr("</reqif-xhtml:html>\n");
+    rStream.Seek(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

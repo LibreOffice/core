@@ -407,6 +407,12 @@ protected:
     void StoreToTempFile(const OUString& rFilterName);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> LoadPdfFromTempFile();
+
+    /**
+     * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
+     * parse it.
+     */
+    void WrapReqifFromTempFile(SvMemoryStream& rStream);
 };
 
 /**

@@ -1929,6 +1929,13 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
          nFrameFlags |= HTML_FRMOPTS_IMG_CSS1;
 
     Graphic aGraphic = pGrfNd->GetGraphic();
+
+    if (aGraphic.GetType() == GraphicType::GdiMetafile)
+    {
+        // We only have a metafile, write that as PNG without any fallback.
+        bWritePNGFallback = false;
+    }
+
     OUString aGraphicURL;
     OUString aMimeType;
     if(!rHTMLWrt.mbEmbedImages)
