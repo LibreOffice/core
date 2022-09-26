@@ -1340,7 +1340,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                          aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(), aKernArray, {},
-                                             rInf.GetIdx() ? 1 : 0, 1 );
+                                             sal_Int32(rInf.GetIdx()), 1 );
         }
         else
         {
