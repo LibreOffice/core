@@ -83,11 +83,11 @@ struct lcl_OUStringRestToInt32
     explicit lcl_OUStringRestToInt32( sal_Int32 nPrefixLength ) :
             m_nPrefixLength( nPrefixLength )
     {}
-    sal_Int32 operator() ( const OUString & rStr )
+    sal_Int32 operator() ( std::u16string_view rStr )
     {
-        if( m_nPrefixLength > rStr.getLength() )
+        if( m_nPrefixLength > static_cast<sal_Int32>(rStr.size()) )
             return 0;
-        return o3tl::toInt32(rStr.subView( m_nPrefixLength ));
+        return o3tl::toInt32(rStr.substr( m_nPrefixLength ));
     }
 private:
     sal_Int32 m_nPrefixLength;

@@ -177,8 +177,8 @@ public:
     bool isDragableObject() const;
     static bool isRotateableObject( std::u16string_view rClassifiedIdentifier );
     static bool isMultiClickObject( std::u16string_view rClassifiedIdentifier );
-    static bool areSiblings( const OUString& rCID1, const OUString& rCID2 );//identical object is no sibling
-    static bool areIdenticalObjects( const OUString& rCID1, const OUString& rCID2 );
+    static bool areSiblings( std::u16string_view rCID1, std::u16string_view rCID2 );//identical object is no sibling
+    static bool areIdenticalObjects( std::u16string_view rCID1, std::u16string_view rCID2 );
 
     static OUString getStringForType( ObjectType eObjectType );
     static ObjectType getObjectType( std::u16string_view rCID );
@@ -193,7 +193,7 @@ public:
     static OUString createDataCurveCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
     static OUString createDataCurveEquationCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex );
 
-    SAL_DLLPRIVATE static OUString getObjectID( const OUString& rCID );
+    SAL_DLLPRIVATE static OUString getObjectID( std::u16string_view rCID );
     static std::u16string_view getParticleID( std::u16string_view rCID );
     static std::u16string_view getFullParentParticle( std::u16string_view rCID );
 

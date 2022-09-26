@@ -2066,7 +2066,7 @@ css::uno::Reference<css::uno::XInterface> const & ChartController::getChartView(
     return m_xChartView;
 }
 
-void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle)
+void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangle aRectangle)
 {
     ChartModel* pChartModel = m_aModel->getModel().get();
     if (!pChartModel)
@@ -2085,10 +2085,10 @@ void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle a
         return;
 
     // Get dimension index from CID
-    sal_Int32 nStartPos = rCID.lastIndexOf('.');
+    size_t nStartPos = rCID.rfind('.');
     nStartPos++;
-    sal_Int32 nEndPos = rCID.getLength();
-    std::u16string_view sDimensionIndex = rCID.subView(nStartPos, nEndPos - nStartPos);
+    sal_Int32 nEndPos = rCID.size();
+    std::u16string_view sDimensionIndex = rCID.substr(nStartPos, nEndPos - nStartPos);
     sal_Int32 nDimensionIndex = o3tl::toInt32(sDimensionIndex);
 
     awt::Rectangle xRectangle {

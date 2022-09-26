@@ -620,7 +620,7 @@ void DataBrowser::RenewTable()
                             GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
 
     OUString aDefaultSeriesName(SchResId(STR_COLUMN_LABEL));
-    replaceParamterInString( aDefaultSeriesName, "%COLUMNNUMBER", OUString::number( 24 ) );
+    replaceParamterInString( aDefaultSeriesName, u"%COLUMNNUMBER", OUString::number( 24 ) );
     sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
         + GetDataWindow().LogicToPixel(Point(8 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0), MapMode(MapUnit::MapAppFont)).X();
     sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();

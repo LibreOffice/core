@@ -49,11 +49,11 @@ namespace
 {
 struct lcl_NumberedStringGenerator
 {
-    lcl_NumberedStringGenerator( const OUString & rStub, const OUString & rWildcard ) :
+    lcl_NumberedStringGenerator( const OUString & rStub, std::u16string_view rWildcard ) :
             m_aStub( rStub ),
             m_nCounter( 0 ),
             m_nStubStartIndex( rStub.indexOf( rWildcard )),
-            m_nWildcardLength( rWildcard.getLength())
+            m_nWildcardLength( rWildcard.size())
     {
     }
     vector< uno::Any > operator()()
@@ -114,12 +114,12 @@ void InternalData::createDefaultData()
     m_aRowLabels.clear();
     m_aRowLabels.reserve( m_nRowCount );
     generate_n( back_inserter( m_aRowLabels ), m_nRowCount,
-        lcl_NumberedStringGenerator( aRowName, "%ROWNUMBER" ));
+        lcl_NumberedStringGenerator( aRowName, u"%ROWNUMBER" ));
 
     m_aColumnLabels.clear();
     m_aColumnLabels.reserve( m_nColumnCount );
     generate_n( back_inserter( m_aColumnLabels ), m_nColumnCount,
-        lcl_NumberedStringGenerator( aColName, "%COLUMNNUMBER" ));
+        lcl_NumberedStringGenerator( aColName, u"%COLUMNNUMBER" ));
 }
 
 void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )

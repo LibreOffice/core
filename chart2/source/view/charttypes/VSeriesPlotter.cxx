@@ -2832,7 +2832,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             {
                 //label
                 OUString aResStr( RegressionCurveHelper::getUINameForRegressionCurve( aCurves[i] ) );
-                replaceParamterInString( aResStr, "%SERIESNAME", aLabelText );
+                replaceParamterInString( aResStr, u"%SERIESNAME", aLabelText );
                 aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
 
                 // symbol

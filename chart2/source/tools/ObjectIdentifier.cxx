@@ -751,14 +751,14 @@ bool ObjectIdentifier::isMultiClickObject( std::u16string_view rClassifiedIdenti
     return bRet;
 }
 
-bool ObjectIdentifier::areSiblings( const OUString& rCID1, const OUString& rCID2 )
+bool ObjectIdentifier::areSiblings( std::u16string_view rCID1, std::u16string_view rCID2 )
 {
     bool bRet=false;
-    sal_Int32 nLastSign1 = rCID1.lastIndexOf( '=' );
-    sal_Int32 nLastSign2 = rCID2.lastIndexOf( '=' );
-    if( nLastSign1 == rCID1.indexOf( '=' ) )//CID cannot be sibling if only one "=" occurs
+    size_t nLastSign1 = rCID1.rfind( '=' );
+    size_t nLastSign2 = rCID2.rfind( '=' );
+    if( nLastSign1 == rCID1.find( '=' ) )//CID cannot be sibling if only one "=" occurs
         bRet=false;
-    else if( nLastSign2 == rCID2.indexOf( '=' ) )//CID cannot be sibling if only one "=" occurs
+    else if( nLastSign2 == rCID2.find( '=' ) )//CID cannot be sibling if only one "=" occurs
         bRet=false;
     else if( ObjectIdentifier::areIdenticalObjects( rCID1, rCID2 ) )
         bRet=false;
@@ -781,14 +781,14 @@ bool ObjectIdentifier::areSiblings( const OUString& rCID1, const OUString& rCID2
     return bRet;
 }
 
-bool ObjectIdentifier::areIdenticalObjects( const OUString& rCID1, const OUString& rCID2 )
+bool ObjectIdentifier::areIdenticalObjects( std::u16string_view rCID1, std::u16string_view rCID2 )
 {
     if( rCID1 == rCID2 )
         return true;
     //draggable pie or donut segments need special treatment, as their CIDs do change with offset
     {
-        if( rCID1.indexOf( m_aPieSegmentDragMethodServiceName ) < 0
-            || rCID2.indexOf( m_aPieSegmentDragMethodServiceName ) < 0 )
+        if( rCID1.find( m_aPieSegmentDragMethodServiceName ) == std::u16string_view::npos
+            || rCID2.find( m_aPieSegmentDragMethodServiceName ) == std::u16string_view::npos )
             return false;
 
         OUString aID1( ObjectIdentifier::getObjectID( rCID1 ) );
@@ -1063,16 +1063,16 @@ std::u16string_view ObjectIdentifier::getFullParentParticle( std::u16string_view
     return aRet;
 }
 
-OUString ObjectIdentifier::getObjectID( const OUString& rCID )
+OUString ObjectIdentifier::getObjectID( std::u16string_view rCID )
 {
     OUString aRet;
 
-    sal_Int32 nStartPos = rCID.lastIndexOf('/');
-    if( nStartPos>=0 )
+    size_t nStartPos = rCID.rfind('/');
+    if( nStartPos != std::u16string_view::npos )
     {
         nStartPos++;
-        sal_Int32 nEndPos = rCID.getLength();
-        aRet = rCID.copy(nStartPos,nEndPos-nStartPos);
+        size_t nEndPos = rCID.size();
+        aRet = rCID.substr(nStartPos,nEndPos-nStartPos);
     }
 
     return aRet;

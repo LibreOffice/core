@@ -211,7 +211,7 @@ sal_Int16 getShortForLongAlso( const css::uno::Any& rAny );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 bool replaceParamterInString( OUString & rInOutResourceString,
-                            const OUString & rParamToReplace,
+                            std::u16string_view rParamToReplace,
                             std::u16string_view rReplaceWith );
 
 } //namespace chart

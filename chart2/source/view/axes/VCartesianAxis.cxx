@@ -80,7 +80,7 @@ VCartesianAxis::~VCartesianAxis()
 
 static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
                                              const AxisLabelProperties& rAxisLabelProperties,
-                                             const OUString& rLabel,
+                                             std::u16string_view rLabel,
                                              const tNameSequence& rPropNames,
                                              const tAnySequence& rPropValues,
                                              const bool bIsHorizontalAxis )
@@ -89,10 +89,10 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
     bool bIsDirectionVertical = bIsHorizontalAxis && bTextHorizontal;
     const sal_Int32 nFullSize = bIsDirectionVertical ? rAxisLabelProperties.m_aFontReferenceSize.Height : rAxisLabelProperties.m_aFontReferenceSize.Width;
 
-    if( !nFullSize || !rLabel.getLength() )
+    if( !nFullSize || rLabel.empty() )
         return;
 
-    const sal_Int32 nAvgCharWidth = rShape2DText.getSize().Width / rLabel.getLength();
+    const sal_Int32 nAvgCharWidth = rShape2DText.getSize().Width / rLabel.size();
 
     sal_Int32 nMaxLabelsSize = bIsDirectionVertical ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
 
@@ -105,16 +105,16 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
 
     static const OUStringLiteral sDots = u"...";
     const sal_Int32 nCharsToRemove = ( nTextSize - nMaxLabelsSize ) / nAvgCharWidth + 1;
-    sal_Int32 nNewLen = rLabel.getLength() - nCharsToRemove - sDots.getLength();
+    sal_Int32 nNewLen = rLabel.size() - nCharsToRemove - sDots.getLength();
     // Prevent from showing only dots
     if (nNewLen < 0)
-        nNewLen = ( rLabel.getLength() >= sDots.getLength() ) ? sDots.getLength() : rLabel.getLength();
+        nNewLen = ( sal_Int32(rLabel.size()) >= sDots.getLength() ) ? sDots.getLength() : rLabel.size();
 
     bool bCrop = nCharsToRemove > 0;
     if( !bCrop )
         return;
 
-    OUString aNewLabel = rLabel.copy( 0, nNewLen );
+    OUString aNewLabel( rLabel.substr( 0, nNewLen ) );
     if( nNewLen > sDots.getLength() )
         aNewLabel += sDots;
     rShape2DText.setString( aNewLabel );

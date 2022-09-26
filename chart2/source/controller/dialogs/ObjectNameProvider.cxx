@@ -732,7 +732,7 @@ OUString ObjectNameProvider::getSelectedObjectText( std::u16string_view rObjectC
             sal_Int32 nPointIndex = o3tl::toInt32( ObjectIdentifier::getParticleID(rObjectCID) );
 
             // replace data point index
-            replaceParamterInString( aRet, "%POINTNUMBER", OUString::number( nPointIndex + 1 ));
+            replaceParamterInString( aRet, u"%POINTNUMBER", OUString::number( nPointIndex + 1 ));
 
             // replace data series index
             {
@@ -744,11 +744,11 @@ OUString ObjectNameProvider::getSelectedObjectText( std::u16string_view rObjectC
                     if( aSeriesVector[nSeriesIndex] == xSeries )
                         break;
                 }
-                replaceParamterInString( aRet, "%SERIESNUMBER", OUString::number( nSeriesIndex + 1 ) );
+                replaceParamterInString( aRet, u"%SERIESNUMBER", OUString::number( nSeriesIndex + 1 ) );
             }
 
             // replace point value
-            replaceParamterInString( aRet, "%POINTVALUES", lcl_getDataPointValueText(
+            replaceParamterInString( aRet, u"%POINTVALUES", lcl_getDataPointValueText(
                 xSeries, nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartDocument ) );
         }
     }
@@ -760,7 +760,7 @@ OUString ObjectNameProvider::getSelectedObjectText( std::u16string_view rObjectC
         if( !aHelpText.isEmpty())
         {
             aRet = SchResId( STR_STATUS_OBJECT_MARKED );
-            replaceParamterInString( aRet, "%OBJECTNAME", aHelpText );
+            replaceParamterInString( aRet, u"%OBJECTNAME", aHelpText );
         }
     }
 
@@ -843,8 +843,8 @@ OUString ObjectNameProvider::getName_ObjectForSeries(
     if( xSeries.is() )
     {
         OUString aRet = SchResId(STR_OBJECT_FOR_SERIES);
-        replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType ) );
-        replaceParamterInString( aRet, "%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartDocument ) );
+        replaceParamterInString( aRet, u"%OBJECTNAME", getName( eObjectType ) );
+        replaceParamterInString( aRet, u"%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartDocument ) );
         return aRet;
     }
     else
@@ -854,7 +854,7 @@ OUString ObjectNameProvider::getName_ObjectForSeries(
 OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
 {
     OUString aRet = SchResId(STR_OBJECT_FOR_ALL_SERIES);
-    replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType, true /*bPlural*/ ) );
+    replaceParamterInString( aRet, u"%OBJECTNAME", getName( eObjectType, true /*bPlural*/ ) );
     return aRet;
 }
 

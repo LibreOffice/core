@@ -508,7 +508,7 @@ private:
     void executeDispatch_LineColor(sal_uInt32 nColor);
     void executeDispatch_LineWidth(sal_uInt32 nWidth);
 
-    void sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle);
+    void sendPopupRequest(std::u16string_view rCID, tools::Rectangle aRectangle);
 
     void impl_ShapeControllerDispatch( const css::util::URL& rURL,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
