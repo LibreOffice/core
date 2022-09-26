@@ -61,8 +61,8 @@ IMPL_LINK(SwInsTableDlg, TextFilterHdl, OUString&, rTest, bool)
 SwInsTableDlg::SwInsTableDlg(SwView& rView)
     : SfxDialogController(rView.GetFrameWeld(), "modules/swriter/ui/inserttable.ui", "InsertTableDialog")
     , m_aTextFilter(" .<>")
-    , pShell(&rView.GetWrtShell())
-    , nEnteredValRepeatHeaderNF(-1)
+    , m_pShell(&rView.GetWrtShell())
+    , m_nEnteredValRepeatHeaderNF(-1)
     , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
     , m_xWarning(m_xBuilder->weld_label("lbwarning"))
     , m_xColSpinButton(m_xBuilder->weld_spin_button("colspin"))
@@ -86,7 +86,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     m_xWndPreview->set_size_request(nWidth, nHeight);
 
     m_xNameEdit->connect_insert_text(LINK(this, SwInsTableDlg, TextFilterHdl));
-    m_xNameEdit->set_text(pShell->GetUniqueTableName());
+    m_xNameEdit->set_text(m_pShell->GetUniqueTableName());
     m_xNameEdit->connect_changed(LINK(this, SwInsTableDlg, ModifyName));
     m_xRowSpinButton->connect_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
     m_xColSpinButton->connect_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
@@ -125,7 +125,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
 
 void SwInsTableDlg::InitAutoTableFormat()
 {
-    m_aWndPreview.DetectRTL(pShell);
+    m_aWndPreview.DetectRTL(m_pShell);
 
     m_xLbFormat->connect_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
 
@@ -142,15 +142,15 @@ void SwInsTableDlg::InitAutoTableFormat()
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
         m_xLbFormat->append_text(rFormat.GetName());
         if (m_xTAutoFormat && rFormat.GetName() == m_xTAutoFormat->GetName())
-            lbIndex = i;
+            m_lbIndex = i;
     }
 
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(m_xTableTable->size());
-    lbIndex = 0;
-    m_xLbFormat->select( lbIndex );
-    tbIndex = lbIndexToTableIndex(lbIndex);
+    m_lbIndex = 0;
+    m_xLbFormat->select( m_lbIndex );
+    m_tbIndex = lbIndexToTableIndex(m_lbIndex);
 
     SelFormatHdl( *m_xLbFormat );
 }
@@ -180,13 +180,13 @@ static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
 IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
     // Get index of selected item from the listbox
-    lbIndex = static_cast<sal_uInt8>(m_xLbFormat->get_selected_index());
-    tbIndex = lbIndexToTableIndex( lbIndex );
+    m_lbIndex = static_cast<sal_uInt8>(m_xLbFormat->get_selected_index());
+    m_tbIndex = lbIndexToTableIndex( m_lbIndex );
 
     // To understand this index mapping, look InitAutoTableFormat function to
     // see how listbox item is implemented.
-    if( tbIndex < 255 )
-        m_aWndPreview.NotifyChange( (*m_xTableTable)[tbIndex] );
+    if( m_tbIndex < 255 )
+        m_aWndPreview.NotifyChange( (*m_xTableTable)[m_tbIndex] );
     else
     {
         SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
@@ -198,15 +198,15 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 {
-    if( tbIndex < 255 )
-        pShell->SetTableStyle((*m_xTableTable)[tbIndex]);
+    if( m_tbIndex < 255 )
+        m_pShell->SetTableStyle((*m_xTableTable)[m_tbIndex]);
 
-    if( tbIndex < 255 )
+    if( m_tbIndex < 255 )
     {
         if( m_xTAutoFormat )
-            *m_xTAutoFormat = (*m_xTableTable)[ tbIndex ];
+            *m_xTAutoFormat = (*m_xTableTable)[ m_tbIndex ];
         else
-            m_xTAutoFormat.reset(new SwTableAutoFormat( (*m_xTableTable)[ tbIndex ] ));
+            m_xTAutoFormat.reset(new SwTableAutoFormat( (*m_xTableTable)[ m_tbIndex ] ));
     }
     else
     {
@@ -220,7 +220,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 IMPL_LINK( SwInsTableDlg, ModifyName, weld::Entry&, rEdit, void )
 {
     OUString sTableName = rEdit.get_text();
-    m_xInsertBtn->set_sensitive(pShell->GetTableStyle(sTableName) == nullptr);
+    m_xInsertBtn->set_sensitive(m_pShell->GetTableStyle(sTableName) == nullptr);
 }
 
 // We use weld::Entry's "changed" notification here, not weld::SpinButton's "value_changed", because
@@ -271,8 +271,8 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry&, rEdit, void )
 
     if( nActVal > nMax )
         m_xRepeatHeaderNF->set_value( nMax );
-    else if( nActVal < nEnteredValRepeatHeaderNF )
-        m_xRepeatHeaderNF->set_value(std::min(nEnteredValRepeatHeaderNF, nMax));
+    else if( nActVal < m_nEnteredValRepeatHeaderNF )
+        m_xRepeatHeaderNF->set_value(std::min(m_nEnteredValRepeatHeaderNF, nMax));
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, weld::Toggleable&, void)
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, RepeatHeaderCheckBoxHdl, weld::Toggleable&, void)
 
 IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, weld::SpinButton&, void)
 {
-    nEnteredValRepeatHeaderNF = m_xRepeatHeaderNF->get_value();
+    m_nEnteredValRepeatHeaderNF = m_xRepeatHeaderNF->get_value();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

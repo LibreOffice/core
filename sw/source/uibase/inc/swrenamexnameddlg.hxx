@@ -25,10 +25,10 @@
 
 class SwRenameXNamedDlg final : public weld::GenericDialogController
 {
-    css::uno::Reference< css::container::XNamed > &   xNamed;
-    css::uno::Reference< css::container::XNameAccess > & xNameAccess;
-    css::uno::Reference< css::container::XNameAccess >   xSecondAccess;
-    css::uno::Reference< css::container::XNameAccess >   xThirdAccess;
+    css::uno::Reference< css::container::XNamed > &   m_xNamed;
+    css::uno::Reference< css::container::XNameAccess > & m_xNameAccess;
+    css::uno::Reference< css::container::XNameAccess >   m_xSecondAccess;
+    css::uno::Reference< css::container::XNameAccess >   m_xThirdAccess;
 
     TextFilter m_aTextFilter;
 
@@ -53,8 +53,8 @@ public:
             css::uno::Reference< css::container::XNameAccess > const & xSecond,
             css::uno::Reference< css::container::XNameAccess > const & xThird )
     {
-        xSecondAccess = xSecond;
-        xThirdAccess = xThird;
+        m_xSecondAccess = xSecond;
+        m_xThirdAccess = xThird;
     }
 };
 

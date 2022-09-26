@@ -516,9 +516,9 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, weld::Button&, void)
 
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabDlg* pParent, SwLabRec& rRec)
     : GenericDialogController(pParent->getDialog(), "modules/swriter/ui/savelabeldialog.ui", "SaveLabelDialog")
-    , bSuccess(false)
+    , m_bSuccess(false)
     , m_pLabDialog(pParent)
-    , rLabRec(rRec)
+    , m_rLabRec(rRec)
     , m_xMakeCB(m_xBuilder->weld_combo_box("brand"))
     , m_xTypeED(m_xBuilder->weld_entry("type"))
     , m_xOKPB(m_xBuilder->weld_button("ok"))
@@ -565,9 +565,9 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, weld::Button&, void)
         if (RET_YES != xQuery->run())
             return;
     }
-    rLabRec.m_aType = sType;
-    rCfg.SaveLabel(sMake, sType, rLabRec);
-    bSuccess = true;
+    m_rLabRec.m_aType = sType;
+    rCfg.SaveLabel(sMake, sType, m_rLabRec);
+    m_bSuccess = true;
     m_xDialog->response(RET_OK);
 }
 
@@ -588,22 +588,22 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyEntryHdl, weld::Entry&, void)
 
 bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
-    if(bSuccess)
+    if(m_bSuccess)
     {
         rItem.m_aMake = m_xMakeCB->get_active_text();
         rItem.m_aType = m_xTypeED->get_text();
-        rItem.m_lHDist  = rLabRec.m_nHDist;
-        rItem.m_lVDist  = rLabRec.m_nVDist;
-        rItem.m_lWidth  = rLabRec.m_nWidth;
-        rItem.m_lHeight = rLabRec.m_nHeight;
-        rItem.m_lLeft   = rLabRec.m_nLeft;
-        rItem.m_lUpper  = rLabRec.m_nUpper;
-        rItem.m_nCols   = rLabRec.m_nCols;
-        rItem.m_nRows   = rLabRec.m_nRows;
-        rItem.m_lPWidth  = rLabRec.m_nPWidth;
-        rItem.m_lPHeight = rLabRec.m_nPHeight;
+        rItem.m_lHDist  = m_rLabRec.m_nHDist;
+        rItem.m_lVDist  = m_rLabRec.m_nVDist;
+        rItem.m_lWidth  = m_rLabRec.m_nWidth;
+        rItem.m_lHeight = m_rLabRec.m_nHeight;
+        rItem.m_lLeft   = m_rLabRec.m_nLeft;
+        rItem.m_lUpper  = m_rLabRec.m_nUpper;
+        rItem.m_nCols   = m_rLabRec.m_nCols;
+        rItem.m_nRows   = m_rLabRec.m_nRows;
+        rItem.m_lPWidth  = m_rLabRec.m_nPWidth;
+        rItem.m_lPHeight = m_rLabRec.m_nPHeight;
     }
-    return bSuccess;
+    return m_bSuccess;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

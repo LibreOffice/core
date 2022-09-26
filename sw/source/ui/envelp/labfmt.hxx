@@ -112,9 +112,9 @@ public:
 
 class SwSaveLabelDlg : public weld::GenericDialogController
 {
-    bool bSuccess;
+    bool m_bSuccess;
     SwLabDlg* m_pLabDialog;
-    SwLabRec& rLabRec;
+    SwLabRec& m_rLabRec;
 
     std::unique_ptr<weld::ComboBox> m_xMakeCB;
     std::unique_ptr<weld::Entry> m_xTypeED;

@@ -36,15 +36,15 @@ class SwInsTableDlg final : public SfxDialogController
 {
     TextFilter m_aTextFilter;
 
-    SwWrtShell* pShell;
+    SwWrtShell* m_pShell;
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
-    sal_uInt8 lbIndex;
-    sal_uInt8 tbIndex;
+    sal_uInt8 m_lbIndex;
+    sal_uInt8 m_tbIndex;
     sal_uInt8 minTableIndexInLb;
     sal_uInt8 maxTableIndexInLb;
-    sal_Int64 nEnteredValRepeatHeaderNF;
+    sal_Int64 m_nEnteredValRepeatHeaderNF;
 
     AutoFormatPreview m_aWndPreview;
 

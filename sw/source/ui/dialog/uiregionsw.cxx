@@ -1998,7 +1998,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
     : SfxTabDialogController(pParent, "modules/swriter/ui/formatsectiondialog.ui",
                              "FormatSectionDialog", &rSet)
-    , rWrtSh(rSh)
+    , m_rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     AddTabPage("columns",   SwColumnPage::Create, nullptr);
@@ -2035,7 +2035,7 @@ void SwSectionPropertyTabDialog::PageCreated(const OString& rId, SfxTabPage &rPa
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
     }
     else if (rId == "indents")
-        static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
+        static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(m_rWrtSh);
 }
 
 SwSectionIndentTabPage::SwSectionIndentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)

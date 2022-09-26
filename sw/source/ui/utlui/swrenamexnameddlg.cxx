@@ -27,17 +27,17 @@ SwRenameXNamedDlg::SwRenameXNamedDlg(weld::Widget* pParent,
             uno::Reference< container::XNamed > & xN,
             uno::Reference< container::XNameAccess > & xNA )
     : GenericDialogController(pParent, "modules/swriter/ui/renameobjectdialog.ui", "RenameObjectDialog")
-    , xNamed(xN)
-    , xNameAccess(xNA)
+    , m_xNamed(xN)
+    , m_xNameAccess(xNA)
     , m_xNewNameED(m_xBuilder->weld_entry("entry"))
     , m_xOk(m_xBuilder->weld_button("ok"))
 {
     m_xNewNameED->connect_insert_text(LINK(this, SwRenameXNamedDlg, TextFilterHdl));
 
     OUString sTmp(m_xDialog->get_title());
-    m_xNewNameED->set_text(xNamed->getName());
+    m_xNewNameED->set_text(m_xNamed->getName());
     m_xNewNameED->select_region(0, -1);
-    sTmp += xNamed->getName();
+    sTmp += m_xNamed->getName();
     m_xDialog->set_title(sTmp);
 
     m_xOk->connect_clicked(LINK(this, SwRenameXNamedDlg, OkHdl));
@@ -55,7 +55,7 @@ IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl, weld::Button&, void)
 {
     try
     {
-        xNamed->setName(m_xNewNameED->get_text());
+        m_xNamed->setName(m_xNewNameED->get_text());
     }
     catch (const uno::RuntimeException&)
     {
@@ -69,9 +69,9 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, weld::Entry&, rEdit, void)
     OUString sTmp(rEdit.get_text());
 
     m_xOk->set_sensitive(!sTmp.isEmpty()
-                  && !xNameAccess->hasByName(sTmp)
-                  && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
-                  && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
+                  && !m_xNameAccess->hasByName(sTmp)
+                  && (!m_xSecondAccess.is() || !m_xSecondAccess->hasByName(sTmp))
+                  && (!m_xThirdAccess.is() || !m_xThirdAccess->hasByName(sTmp))
                  );
 }
 

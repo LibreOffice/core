@@ -242,7 +242,7 @@ public:
 
 class SwSectionPropertyTabDialog final : public SfxTabDialogController
 {
-    SwWrtShell& rWrtSh;
+    SwWrtShell& m_rWrtSh;
 
     virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
 public:
