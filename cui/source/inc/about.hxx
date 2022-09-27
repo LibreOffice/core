@@ -46,7 +46,7 @@ private:
     static OUString GetMiscString();
 
     static OUString GetCopyrightString();
-    static bool IsStringValidGitHash(const OUString& hash);
+    static bool IsStringValidGitHash(std::u16string_view hash);
 
     DECL_LINK(HandleClick, weld::Button&, void);
 

@@ -36,7 +36,7 @@ namespace pcr
         std::unique_ptr<weld::Entry> m_xName;
         std::unique_ptr<weld::Button> m_xOK;
     public:
-        NewDataTypeDialog(weld::Window* _pParent, const OUString& _rNameBase,
+        NewDataTypeDialog(weld::Window* _pParent, std::u16string_view _rNameBase,
             const std::vector< OUString >& _rProhibitedNames );
         virtual ~NewDataTypeDialog() override;
 

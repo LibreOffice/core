@@ -97,25 +97,27 @@ namespace
         return str.find_first_of(u"\",\n\r") != std::u16string_view::npos;
     };
 
-    void appendEncodedString(OUStringBuffer& buf, const OUString& str)
+    void appendEncodedString(OUStringBuffer& buf, std::u16string_view str)
     {
         if(needsQuoting(str))
         {
             // each double-quote will get replaced by two double-quotes
             buf.append(quote_char);
             const sal_Int32 buf_offset = buf.getLength();
-            const sal_Int32 str_length = str.getLength();
+            const size_t str_length = str.size();
             buf.append(str);
             // special treatment for the last character
             if(quote_char==str[str_length-1])
                 buf.append(quote_char);
             // iterating backwards because the index at which we insert won't be shifted
             // when moving that way.
-            for(sal_Int32 i = str_length; i>=0; )
+            for(size_t i = str_length;; )
             {
-                i=str.lastIndexOf(quote_char, --i);
-                if(i!=-1)
-                    buf.insert(buf_offset + i, quote_char);
+                --i;
+                i=str.substr(i).rfind(quote_char);
+                if(i==std::u16string_view::npos)
+                    break;
+                buf.insert(buf_offset + i, quote_char);
             }
             buf.append(quote_char);
         }

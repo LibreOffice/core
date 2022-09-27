@@ -26,7 +26,7 @@ namespace pcr
     //= NewDataTypeDialog
 
 
-    NewDataTypeDialog::NewDataTypeDialog(weld::Window* pParent, const OUString& _rNameBase, const std::vector< OUString >& _rProhibitedNames)
+    NewDataTypeDialog::NewDataTypeDialog(weld::Window* pParent, std::u16string_view _rNameBase, const std::vector< OUString >& _rProhibitedNames)
         : GenericDialogController(pParent, "modules/spropctrlr/ui/datatypedialog.ui", "DataTypeDialog")
         , m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )
         , m_xName(m_xBuilder->weld_entry("entry"))
@@ -36,7 +36,7 @@ namespace pcr
 
         // find an initial name
         // for this, first remove trailing digits
-        sal_Int32 nStripUntil = _rNameBase.getLength();
+        sal_Int32 nStripUntil = _rNameBase.size();
         while ( nStripUntil > 0 )
         {
             sal_Unicode nChar = _rNameBase[ --nStripUntil ];
@@ -48,7 +48,7 @@ namespace pcr
             }
         }
 
-        OUString sNameBase = OUString::Concat(_rNameBase.subView( 0, nStripUntil ? nStripUntil + 1 : 0 )) + " ";
+        OUString sNameBase = OUString::Concat(_rNameBase.substr( 0, nStripUntil ? nStripUntil + 1 : 0 )) + " ";
         OUString sInitialName;
         sal_Int32 nPostfixNumber = 1;
         do

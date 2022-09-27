@@ -136,8 +136,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
 
 AboutDialog::~AboutDialog() {}
 
-bool AboutDialog::IsStringValidGitHash(const OUString &hash) {
-  for (int i = 0; i < hash.getLength(); i++) {
+bool AboutDialog::IsStringValidGitHash(std::u16string_view hash) {
+  for (size_t i = 0; i < hash.size(); i++) {
     if (!std::isxdigit(hash[i])) {
       return false;
     }

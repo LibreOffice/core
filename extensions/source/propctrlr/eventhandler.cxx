@@ -973,14 +973,14 @@ namespace pcr
 
     namespace
     {
-        bool lcl_endsWith( const OUString& _rText, const OUString& _rCheck )
+        bool lcl_endsWith( std::u16string_view _rText, std::u16string_view _rCheck )
         {
-            sal_Int32 nTextLen = _rText.getLength();
-            sal_Int32 nCheckLen = _rCheck.getLength();
+            size_t nTextLen = _rText.size();
+            size_t nCheckLen = _rCheck.size();
             if ( nCheckLen > nTextLen )
                 return false;
 
-            return _rText.indexOf( _rCheck ) == ( nTextLen - nCheckLen );
+            return _rText.find( _rCheck ) == ( nTextLen - nCheckLen );
         }
     }
 

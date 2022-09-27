@@ -1091,14 +1091,14 @@ namespace {
 
 OUString ReplaceString(
     const OUString& source,
-    const OUString& token,
+    std::u16string_view token,
     std::u16string_view value )
 {
     sal_Int32 pos = source.indexOf( token );
 
     if ( pos != -1 && !value.empty() )
     {
-        return source.replaceAt( pos, token.getLength(), value );
+        return source.replaceAt( pos, token.size(), value );
     }
     else
     {
@@ -1116,9 +1116,9 @@ OUString FormatErrorString(
 {
     OUString result = unformatted;
 
-    result = ReplaceString(result, "%LANGUAGENAME", language );
-    result = ReplaceString(result, "%SCRIPTNAME", script );
-    result = ReplaceString(result, "%LINENUMBER", line );
+    result = ReplaceString(result, u"%LANGUAGENAME", language );
+    result = ReplaceString(result, u"%SCRIPTNAME", script );
+    result = ReplaceString(result, u"%LINENUMBER", line );
 
     if ( !type.empty() )
     {
@@ -1239,7 +1239,7 @@ OUString GetErrorMessage(
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
         message = CuiResId(RID_CUISTR_ERROR_LANG_NOT_SUPPORTED);
-        message = ReplaceString(message, "%LANGUAGENAME", language );
+        message = ReplaceString(message, u"%LANGUAGENAME", language );
 
     }
     else
