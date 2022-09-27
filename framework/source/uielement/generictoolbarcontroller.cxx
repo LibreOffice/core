@@ -356,8 +356,9 @@ ImageOrientationController::ImageOrientationController(const Reference<XComponen
 void ImageOrientationController::dispose()
 {
     ToolboxController::dispose();
-    if (!m_pToolbar)
-        VCLUnoHelper::GetWindow(getParent())->RemoveEventListener(LINK(this, ImageOrientationController, WindowEventListener));
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(getParent());
+    if (pWindow)
+        pWindow->RemoveEventListener(LINK(this, ImageOrientationController, WindowEventListener));
 }
 
 IMPL_LINK(ImageOrientationController, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
