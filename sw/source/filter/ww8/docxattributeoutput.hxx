@@ -1095,6 +1095,7 @@ struct DocxTableExportContext
     bool m_bStartedParaSdt;
     bool m_bStartedRunSdt;
     sal_uInt32 m_nTableDepth;
+    sal_Int32 m_nHyperLinkCount = 0;
     DocxTableExportContext(DocxAttributeOutput& rOutput) : m_rOutput(rOutput) { m_rOutput.pushToTableExportContext(*this); }
     ~DocxTableExportContext() { m_rOutput.popFromTableExportContext(*this); }
 };
