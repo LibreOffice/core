@@ -397,7 +397,7 @@ OUString SbxBasicFormater::GetNullFormatString( std::u16string_view sFormatStrg,
 }
 
 // returns value <> 0 in case of an error
-void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
+void SbxBasicFormater::AnalyseFormatString( std::u16string_view sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits, short& nNoOfOptionalExponentDigits,
@@ -408,7 +408,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
     sal_Int32 nLen;
     short nState = 0;
 
-    nLen = sFormatStrg.getLength();
+    nLen = sFormatStrg.size();
     nNoOfDigitsLeft = 0;
     nNoOfDigitsRight = 0;
     nNoOfOptionalDigitsLeft = 0;
@@ -419,7 +419,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
     bScientific = false;
     // from 11.7.97: as soon as a comma (point?) is found in the format string,
     // all three decimal powers are marked (i. e. thousand, million, ...)
-    bGenerateThousandSeparator = sFormatStrg.indexOf( ',' ) >= 0;
+    bGenerateThousandSeparator = sFormatStrg.find( ',' ) != std::u16string_view::npos;
     nMultipleThousandSeparators = 0;
 
     for( sal_Int32 i = 0; i < nLen; i++ )
@@ -513,7 +513,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
 // the flag bCreateSign says that at the mantissa a leading sign
 // shall be created
 void SbxBasicFormater::ScanFormatString( double dNumber,
-                                         const OUString& sFormatStrg, OUString& sReturnStrgFinal,
+                                         std::u16string_view sFormatStrg, OUString& sReturnStrgFinal,
                                          bool bCreateSign )
 {
     short   /*nErr,*/nNoOfDigitsLeft,nNoOfDigitsRight,nNoOfOptionalDigitsLeft,
@@ -565,7 +565,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     bSignHappend = false;
     bFoundFirstDigit = false;
     bIsNegative = dNumber < 0.0;
-    nLen = sFormatStrg.getLength();
+    nLen = sFormatStrg.size();
     dExponent = get_number_of_digits( dNumber );
     nExponentPos = 0;
     nMaxExponentDigit = 0;
@@ -837,7 +837,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
 
     if( nNoOfDigitsRight>0 )
     {
-        ParseBack( sReturnStrg, sFormatStrg, sFormatStrg.getLength()-1 );
+        ParseBack( sReturnStrg, sFormatStrg, sFormatStrg.size()-1 );
     }
     sReturnStrgFinal = sReturnStrg.makeStringAndClear();
 }

@@ -34,10 +34,10 @@ namespace configmgr {
 namespace {
 
 bool parseSegment(
-    OUString const & path, sal_Int32 * index, OUString * segment)
+    std::u16string_view path, sal_Int32 * index, OUString * segment)
 {
     assert(
-        index != nullptr && *index >= 0 && *index <= path.getLength() &&
+        index != nullptr && *index >= 0 && *index <= static_cast<sal_Int32>(path.size()) &&
         segment != nullptr);
     if (path[(*index)++] == '/') {
         OUString name;
@@ -47,10 +47,10 @@ bool parseSegment(
             path, *index, &name, &setElement, &templateName);
         if (*index != -1) {
             *segment = Data::createSegment(templateName, name);
-            return *index == path.getLength();
+            return *index == static_cast<sal_Int32>(path.size());
         }
     }
-    throw css::uno::RuntimeException("bad path " + path);
+    throw css::uno::RuntimeException(OUString::Concat("bad path ") + path);
 }
 
 }

@@ -116,7 +116,7 @@ class SbxBasicFormater {
     static OUString GetNegFormatString( std::u16string_view sFormatStrg, bool & bFound );
     static OUString Get0FormatString( std::u16string_view sFormatStrg, bool & bFound );
     static OUString GetNullFormatString( std::u16string_view sFormatStrg, bool & bFound );
-    static void AnalyseFormatString( const OUString& sFormatStrg,
+    static void AnalyseFormatString( std::u16string_view sFormatStrg,
                                                  short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                                                  short& nNoOfOptionalDigitsLeft,
                                                  short& nNoOfExponentDigits,
@@ -124,7 +124,7 @@ class SbxBasicFormater {
                                                  bool& bPercent, bool& bCurrency, bool& bScientific,
                                                  bool& bGenerateThousandSeparator,
                                                  short& nMultipleThousandSeparators );
-    void   ScanFormatString( double dNumber, const OUString& sFormatStrg,
+    void   ScanFormatString( double dNumber, std::u16string_view sFormatStrg,
                                               OUString& sReturnStrg, bool bCreateSign );
 
     //*** Data ***

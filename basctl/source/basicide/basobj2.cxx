@@ -77,9 +77,9 @@ void Organize(weld::Window* pParent, sal_Int16 tabId)
     weld::DialogController::runAsync(xDlg, [](int) {});
 }
 
-bool IsValidSbxName( const OUString& rName )
+bool IsValidSbxName( std::u16string_view rName )
 {
-    for ( sal_Int32 nChar = 0; nChar < rName.getLength(); nChar++ )
+    for ( size_t nChar = 0; nChar < rName.size(); nChar++ )
     {
         sal_Unicode c = rName[nChar];
         bool bValid = (

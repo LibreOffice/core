@@ -110,18 +110,18 @@ OUString Data::createSegment(
 }
 
 sal_Int32 Data::parseSegment(
-    OUString const & path, sal_Int32 index, OUString * name,
+    std::u16string_view path, sal_Int32 index, OUString * name,
     bool * setElement, OUString * templateName)
 {
     assert(
-        index >= 0 && index <= path.getLength() && name != nullptr &&
+        index >= 0 && index <= static_cast<sal_Int32>(path.size()) && name != nullptr &&
         setElement != nullptr);
-    sal_Int32 i = index;
-    while (i < path.getLength() && path[i] != '/' && path[i] != '[') {
+    size_t i = index;
+    while (i < path.size() && path[i] != '/' && path[i] != '[') {
         ++i;
     }
-    if (i == path.getLength() || path[i] == '/') {
-        *name = path.copy(index, i - index);
+    if (i == path.size() || path[i] == '/') {
+        *name = path.substr(index, i - index);
         *setElement = false;
         return i;
     }
@@ -129,18 +129,18 @@ sal_Int32 Data::parseSegment(
         if (i - index == 1 && path[index] == '*') {
             templateName->clear();
         } else {
-            *templateName = path.copy(index, i - index);
+            *templateName = path.substr(index, i - index);
         }
     }
-    if (++i == path.getLength()) {
+    if (++i == path.size()) {
         return -1;
     }
     sal_Unicode del = path[i++];
     if (del != '\'' && del != '"') {
         return -1;
     }
-    sal_Int32 j = path.indexOf(del, i);
-    if (j == -1 || j + 1 == path.getLength() || path[j + 1] != ']' ||
+    size_t j = path.find(del, i);
+    if (j == std::u16string_view::npos || j + 1 == path.size() || path[j + 1] != ']' ||
         !decode(path, i, j, name))
     {
         return -1;

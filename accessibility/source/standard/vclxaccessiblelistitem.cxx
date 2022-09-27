@@ -41,9 +41,9 @@
 namespace
 {
     /// @throws css::lang::IndexOutOfBoundsException
-    void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText )
+    void checkIndex_Impl( sal_Int32 _nIndex, std::u16string_view _sText )
     {
-        if ( _nIndex < 0 || _nIndex > _sText.getLength() )
+        if ( _nIndex < 0 || _nIndex > static_cast<sal_Int32>(_sText.size()) )
             throw css::lang::IndexOutOfBoundsException();
     }
 }

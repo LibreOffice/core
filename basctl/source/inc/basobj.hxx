@@ -45,7 +45,7 @@ namespace basctl
     void            BasicStopped( bool* pbAppWindowDisabled = nullptr, bool* pbDispatcherLocked = nullptr, sal_uInt16* pnWaitCount = nullptr,
                             SfxUInt16Item** ppSWActionCount = nullptr, SfxUInt16Item** ppSWLockViewCount = nullptr );
 
-    bool            IsValidSbxName( const OUString& rName );
+    bool            IsValidSbxName( std::u16string_view rName );
 
     BasicManager*   FindBasicManager( StarBASIC const * pLib );
 

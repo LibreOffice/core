@@ -33,9 +33,9 @@ namespace accessibility
         // FIXME this is a copy'n'paste from
         // source/extended/AccessibleBrowseBoxTableCell.cxx, get rid of that...
         /// @throws css::lang::IndexOutOfBoundsException
-        void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText )
+        void checkIndex_Impl( sal_Int32 _nIndex, std::u16string_view _sText )
         {
-            if ( _nIndex >= _sText.getLength() )
+            if ( _nIndex >= static_cast<sal_Int32>(_sText.size()) )
                 throw css::lang::IndexOutOfBoundsException();
         }
     }
