@@ -56,13 +56,13 @@ struct MSFILTER_DLLPUBLIC MacroResolvedInfo
 };
 
 MSFILTER_DLLPUBLIC OUString makeMacroURL( std::u16string_view sMacroName );
-MSFILTER_DLLPUBLIC OUString extractMacroName( const OUString& rMacroUrl );
+MSFILTER_DLLPUBLIC OUString extractMacroName( std::u16string_view rMacroUrl );
 MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell const * pShell );
 MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );
 MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, css::uno::Sequence< css::uno::Any >& aArgs, css::uno::Any& aRet, const css::uno::Any& aCaller );
 /// @throws css::uno::RuntimeException
-MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( const OUString& sKey );
+MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( std::u16string_view sKey );
 /// @throws css::uno::RuntimeException
 MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const css::uno::Reference< css::frame::XModel >& rxDoc, const css::awt::KeyEvent& rKeyEvent, const OUString& sMacro );
 

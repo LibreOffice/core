@@ -56,12 +56,12 @@ OUString makeMacroURL( std::u16string_view sMacroName )
     return sUrlPart0 + sMacroName + sUrlPart1;
 }
 
-OUString extractMacroName( const OUString& rMacroUrl )
+OUString extractMacroName( std::u16string_view rMacroUrl )
 {
-    if( rMacroUrl.startsWith( sUrlPart0 ) && rMacroUrl.endsWith( sUrlPart1 ) )
+    if( o3tl::starts_with(rMacroUrl, sUrlPart0 ) && o3tl::ends_with(rMacroUrl, sUrlPart1 ) )
     {
-        return rMacroUrl.copy( sUrlPart0.getLength(),
-            rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );
+        return OUString(rMacroUrl.substr( sUrlPart0.getLength(),
+            rMacroUrl.size() - sUrlPart0.getLength() - sUrlPart1.getLength() ));
     }
     return OUString();
 }
@@ -668,7 +668,7 @@ KeyCodeEntry const aMSKeyCodesData[] = {
     { "F15", KEY_F15 },
 };
 
-awt::KeyEvent parseKeyEvent( const OUString& Key )
+awt::KeyEvent parseKeyEvent( std::u16string_view Key )
 {
     static std::map< OUString, sal_uInt16 > s_KeyCodes = []()
     {
@@ -679,37 +679,37 @@ awt::KeyEvent parseKeyEvent( const OUString& Key )
         }
         return tmp;
     }();
-    OUString sKeyCode;
+    std::u16string_view sKeyCode;
     sal_uInt16 nVclKey = 0;
 
     // parse the modifier if any
-    for ( int i=0; i<Key.getLength(); ++i )
+    for ( size_t i=0; i<Key.size(); ++i )
     {
         if ( ! getModifier( Key[ i ], nVclKey ) )
         {
-            sKeyCode = Key.copy( i );
+            sKeyCode = Key.substr( i );
             break;
         }
     }
 
     // check if keycode is surrounded by '{}', if so scoop out the contents
     // else it should be just one char of ( 'a-z,A-Z,0-9' )
-    if ( sKeyCode.getLength() == 1 ) // ( a single char )
+    if ( sKeyCode.size() == 1 ) // ( a single char )
     {
         nVclKey |= parseChar( sKeyCode[ 0 ] );
     }
     else // key should be enclosed in '{}'
     {
-        if ( sKeyCode.getLength() < 3 || sKeyCode[0] != '{' || sKeyCode[sKeyCode.getLength() - 1 ] != '}' )
+        if ( sKeyCode.size() < 3 || sKeyCode[0] != '{' || sKeyCode[sKeyCode.size() - 1 ] != '}' )
             throw uno::RuntimeException();
 
-        sKeyCode = sKeyCode.copy(1, sKeyCode.getLength() - 2 );
+        sKeyCode = sKeyCode.substr(1, sKeyCode.size() - 2 );
 
-        if ( sKeyCode.getLength() == 1 )
+        if ( sKeyCode.size() == 1 )
             nVclKey |= parseChar( sKeyCode[ 0 ] );
         else
         {
-            auto it = s_KeyCodes.find( sKeyCode );
+            auto it = s_KeyCodes.find( OUString(sKeyCode) );
             if ( it == s_KeyCodes.end() ) // unknown or unsupported
                 throw uno::RuntimeException();
             nVclKey |= it->second;

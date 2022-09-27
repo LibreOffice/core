@@ -704,7 +704,7 @@ public:
 
     void AddOpt(
         sal_uInt16 nPropertyID,
-        const OUString& rString);
+        std::u16string_view rString);
 
     void AddOpt(
         sal_uInt16 nPropertyID,

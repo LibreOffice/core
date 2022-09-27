@@ -209,12 +209,12 @@ void EscherPropertyContainer::AddOpt(
 
 void EscherPropertyContainer::AddOpt(
     sal_uInt16 nPropID,
-    const OUString& rString)
+    std::u16string_view rString)
 {
     std::vector<sal_uInt8> aBuf;
-    aBuf.reserve(rString.getLength() * 2 + 2);
+    aBuf.reserve(rString.size() * 2 + 2);
 
-    for(sal_Int32 i(0); i < rString.getLength(); i++)
+    for(size_t i(0); i < rString.size(); i++)
     {
         const sal_Unicode nUnicode(rString[i]);
         aBuf.push_back(static_cast<sal_uInt8>(nUnicode));

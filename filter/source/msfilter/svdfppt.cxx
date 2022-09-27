@@ -5117,14 +5117,14 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
     }
 }
 
-void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, const OUString& aString,
+void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, std::u16string_view aString,
                                             sal_uInt32& nCharCount, sal_uInt32 nCharReadCnt,
                                             bool& bTextPropAtom, sal_uInt32 nExtParaPos,
                                             const std::vector< StyleTextProp9 >& aStyleTextProp9,
                                             sal_uInt32& nExtParaFlags, sal_uInt16& nBuBlip,
                                             sal_uInt16& nHasAnm, sal_uInt32& nAnmScheme )
 {
-    sal_uInt16 nStringLen = aString.getLength();
+    sal_uInt16 nStringLen = aString.size();
 
     sal_uInt16 nDummy16;
     rIn.ReadUInt16( nDummy16 );

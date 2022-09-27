@@ -1090,7 +1090,7 @@ struct PPTStyleTextPropReader
     static void ReadCharProps(
                 SvStream& rIn,
                 PPTCharPropSet& aCharPropSet,
-                const OUString& aString,
+                std::u16string_view aString,
                 sal_uInt32& nCharCount,
                 sal_uInt32 nCharReadCnt,
                 bool& bTextPropAtom,

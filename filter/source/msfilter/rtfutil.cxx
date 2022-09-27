@@ -231,10 +231,10 @@ OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode
 }
 
 /// Checks if lossless conversion of the string to eDestEnc is possible or not.
-static bool TryOutString(const OUString& rStr, rtl_TextEncoding eDestEnc)
+static bool TryOutString(std::u16string_view rStr, rtl_TextEncoding eDestEnc)
 {
     int nUCMode = 1;
-    for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
+    for (size_t n = 0; n < rStr.size(); ++n)
     {
         bool bRet;
         OutChar(rStr[n], &nUCMode, eDestEnc, &bRet);
