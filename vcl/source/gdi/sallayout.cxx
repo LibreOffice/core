@@ -265,6 +265,11 @@ SalLayoutGlyphs SalLayout::GetGlyphs() const
     return SalLayoutGlyphs(); // invalid
 }
 
+bool SalLayout::IsMultiSalLayout() const
+{
+    return false;
+}
+
 DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, const OUString& rStr ) const
 {
     if (pCharWidths)
@@ -1217,5 +1222,9 @@ SalLayoutGlyphs MultiSalLayout::GetGlyphs() const
     return glyphs;
 }
 
+bool MultiSalLayout::IsMultiSalLayout() const
+{
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
