@@ -84,7 +84,7 @@ public:
     /** Returns theme font properties by scheme type (major/minor). */
     const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const;
     /** Returns theme font by placeholder name, e.g. the major latin theme font for the font name '+mj-lt'. */
-    const TextFont*                 resolveFont( const OUString& rName ) const;
+    const TextFont*                 resolveFont( std::u16string_view rName ) const;
 
     Shape&                   getSpDef() { return maSpDef; }
     const Shape&             getSpDef() const { return maSpDef; }

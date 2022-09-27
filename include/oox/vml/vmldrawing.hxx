@@ -129,7 +129,7 @@ public:
     void                convertAndInsert() const;
 
     /** Returns the local shape index from the passed global shape identifier. */
-    sal_Int32           getLocalShapeIndex( const OUString& rShapeId ) const;
+    sal_Int32           getLocalShapeIndex( std::u16string_view rShapeId ) const;
     /** Returns the registered info structure for an OLE object, if extant. */
     const OleObjectInfo* getOleObjectInfo( const OUString& rShapeId ) const;
     /** Returns the registered info structure for a form control, if extant. */

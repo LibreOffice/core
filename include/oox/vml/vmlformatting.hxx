@@ -186,7 +186,7 @@ OOX_DLLPUBLIC sal_Int32 decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
     OOX_DLLPUBLIC void         decodeVmlPath(
                             ::std::vector< ::std::vector< css::awt::Point > >& rPoints,
                             ::std::vector< ::std::vector< css::drawing::PolygonFlags > >& rFlags,
-                            const OUString& rPath );
+                            std::u16string_view rPath );
 }
 
 

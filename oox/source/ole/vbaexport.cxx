@@ -514,10 +514,10 @@ void writePROJECTCODEPAGE(SvStream& rStrm, const rtl_TextEncoding eTextEncoding)
 }
 
 //section 2.3.4.2.1.5
-void writePROJECTNAME(SvStream& rStrm, const OUString& name, const rtl_TextEncoding eTextEncoding)
+void writePROJECTNAME(SvStream& rStrm, std::u16string_view name, const rtl_TextEncoding eTextEncoding)
 {
     rStrm.WriteUInt16(0x0004); // id
-    sal_uInt32 sizeOfProjectName = name.getLength();
+    size_t sizeOfProjectName = name.size();
     rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
     exportString(rStrm, name, eTextEncoding); // ProjectName
 }
@@ -575,7 +575,7 @@ void writePROJECTCONSTANTS(SvStream& rStrm)
 }
 
 // section 2.3.4.2.1
-void writePROJECTINFORMATION(SvStream& rStrm, const OUString& projectName,
+void writePROJECTINFORMATION(SvStream& rStrm, std::u16string_view projectName,
                              const rtl_TextEncoding eTextEncoding)
 {
     writePROJECTSYSKIND(rStrm);
@@ -605,11 +605,11 @@ void writeREFERENCENAME(SvStream& rStrm, const OUString& name, const rtl_TextEnc
 }
 
 // section 2.3.4.2.2.5
-void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString& libid,
+void writeREFERENCEREGISTERED(SvStream& rStrm, std::u16string_view libid,
                               const rtl_TextEncoding eTextEncoding)
 {
     rStrm.WriteUInt16(0x000D); // id
-    sal_Int32 sizeOfLibid = libid.getLength();
+    size_t sizeOfLibid = libid.size();
     sal_Int32 size = sizeOfLibid + 10; // size of Libid, sizeOfLibid(4 bytes), reserved 1(4 bytes) and reserved 2(2 bytes)
     rStrm.WriteUInt32(size); // size
     rStrm.WriteUInt32(sizeOfLibid); // sizeOfLibid
@@ -619,7 +619,7 @@ void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString& libid,
 }
 
 // section 2.3.4.2.2.1
-void writeREFERENCE(SvStream& rStrm, const OUString& name, const OUString& libid,
+void writeREFERENCE(SvStream& rStrm, const OUString& name, std::u16string_view libid,
                     const rtl_TextEncoding eTextEncoding)
 {
     writeREFERENCENAME(rStrm, name, eTextEncoding);
@@ -630,8 +630,8 @@ void writeREFERENCE(SvStream& rStrm, const OUString& name, const OUString& libid
 void writePROJECTREFERENCES(SvStream& rStrm, const rtl_TextEncoding eTextEncoding)
 {
     // TODO: find out where these references are coming from
-    writeREFERENCE(rStrm, "stdole", "*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation", eTextEncoding);
-    writeREFERENCE(rStrm, "Office", "*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library", eTextEncoding);
+    writeREFERENCE(rStrm, "stdole", u"*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation", eTextEncoding);
+    writeREFERENCE(rStrm, "Office", u"*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library", eTextEncoding);
 }
 
 // section 2.3.4.2.3.1
@@ -643,10 +643,10 @@ void writePROJECTCOOKIE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.1
-void writeMODULENAME(SvStream& rStrm, const OUString& name, const rtl_TextEncoding eTextEncoding)
+void writeMODULENAME(SvStream& rStrm, std::u16string_view name, const rtl_TextEncoding eTextEncoding)
 {
     rStrm.WriteUInt16(0x0019); // id
-    sal_Int32 n = name.getLength(); // sizeOfModuleName
+    sal_Int32 n = name.size(); // sizeOfModuleName
     rStrm.WriteUInt32(n);
     exportString(rStrm, name, eTextEncoding); // ModuleName
 }

@@ -67,10 +67,10 @@ bool Standard2007Engine::generateVerifier()
     return true;
 }
 
-bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
+bool Standard2007Engine::calculateEncryptionKey(std::u16string_view rPassword)
 {
     sal_uInt32 saltSize = mInfo.verifier.saltSize;
-    sal_uInt32 passwordByteLength = rPassword.getLength() * 2;
+    size_t passwordByteLength = rPassword.size() * 2;
     const sal_uInt8* saltArray = mInfo.verifier.salt;
 
     // Prepare initial data -> salt + password (in 16-bit chars)
@@ -78,7 +78,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     std::copy(saltArray, saltArray + saltSize, initialData.begin());
 
     auto p = initialData.begin() + saltSize;
-    for (sal_Int32 i = 0; i != rPassword.getLength(); ++i) {
+    for (size_t i = 0; i != rPassword.size(); ++i) {
         auto c = rPassword[i];
         *p++ = c & 0xFF;
         *p++ = c >> 8;

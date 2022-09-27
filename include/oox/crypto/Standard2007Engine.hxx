@@ -29,7 +29,7 @@ class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
     msfilter::StandardEncryptionInfo mInfo;
 
     bool generateVerifier();
-    bool calculateEncryptionKey(const OUString& rPassword);
+    bool calculateEncryptionKey(std::u16string_view rPassword);
 
 public:
     Standard2007Engine() = default;

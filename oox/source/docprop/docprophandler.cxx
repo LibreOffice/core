@@ -93,36 +93,36 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
     }
 }
 
-util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChars )
+util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( std::u16string_view aChars )
 {
     oslDateTime aOslDTime = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    const sal_Int32 nLen = aChars.getLength();
+    const size_t nLen = aChars.size();
     if ( nLen >= 4 )
     {
-        aOslDTime.Year = static_cast<sal_Int16>(o3tl::toInt32(aChars.subView( 0, 4 )));
+        aOslDTime.Year = static_cast<sal_Int16>(o3tl::toInt32(aChars.substr( 0, 4 )));
 
         if ( nLen >= 7 && aChars[4] == '-' )
         {
-            aOslDTime.Month = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 5, 2 )));
+            aOslDTime.Month = static_cast<sal_uInt16>(o3tl::toInt32(aChars.substr( 5, 2 )));
 
             if ( nLen >= 10 && aChars[7] == '-' )
             {
-                aOslDTime.Day = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 8, 2 )));
+                aOslDTime.Day = static_cast<sal_uInt16>(o3tl::toInt32(aChars.substr( 8, 2 )));
 
                 if ( nLen >= 16 && aChars[10] == 'T' && aChars[13] == ':' )
                 {
-                    aOslDTime.Hours = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 11, 2 )));
-                    aOslDTime.Minutes = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 14, 2 )));
+                    aOslDTime.Hours = static_cast<sal_uInt16>(o3tl::toInt32(aChars.substr( 11, 2 )));
+                    aOslDTime.Minutes = static_cast<sal_uInt16>(o3tl::toInt32(aChars.substr( 14, 2 )));
 
-                    sal_Int32 nOptTime = 0;
+                    size_t nOptTime = 0;
                     if ( nLen >= 19 && aChars[16] == ':' )
                     {
-                        aOslDTime.Seconds = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 17, 2 )));
+                        aOslDTime.Seconds = static_cast<sal_uInt16>(o3tl::toInt32(aChars.substr( 17, 2 )));
                         nOptTime += 3;
                         if ( nLen >= 20 && aChars[19] == '.' )
                         {
                             nOptTime += 1;
-                            sal_Int32 digitPos = 20;
+                            size_t digitPos = 20;
                             while (nLen > digitPos && digitPos < 29)
                             {
                                 sal_Unicode c = aChars[digitPos];
@@ -163,8 +163,8 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                         if ( ( aChars[16 + nOptTime] == '+' || aChars[16 + nOptTime] == '-' )
                           && aChars[16 + nOptTime + 3] == ':' )
                         {
-                            nModif = o3tl::toInt32(aChars.subView( 16 + nOptTime + 1, 2 )) * 3600;
-                            nModif += o3tl::toInt32(aChars.subView( 16 + nOptTime + 4, 2 )) * 60;
+                            nModif = o3tl::toInt32(aChars.substr( 16 + nOptTime + 1, 2 )) * 3600;
+                            nModif += o3tl::toInt32(aChars.substr( 16 + nOptTime + 4, 2 )) * 60;
                             if ( aChars[16 + nOptTime] == '-' )
                                 nModif *= -1;
                         }

@@ -315,7 +315,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     return aDmlColor;
 }
 
-void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& rPointLists, ::std::vector< ::std::vector< PolygonFlags > >& rFlagLists, const OUString& rPath )
+void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& rPointLists, ::std::vector< ::std::vector< PolygonFlags > >& rFlagLists, std::u16string_view rPath )
 {
     ::std::vector< sal_Int32 > aCoordList;
     Point aCurrentPoint;
@@ -330,7 +330,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
     rPointLists.emplace_back( );
     rFlagLists.emplace_back( );
 
-    for ( sal_Int32 i = 0; i < rPath.getLength(); i++ )
+    for ( size_t i = 0; i < rPath.size(); i++ )
     {
         // Keep track of current integer token
         if ( ( rPath[ i ] >= '0' && rPath[ i ] <= '9' ) || rPath[ i ] == '-' )
@@ -341,7 +341,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
             if ( state != START && state != UNSUPPORTED )
             {
                 if ( nTokenLen > 0 )
-                    aCoordList.push_back( o3tl::toInt32(rPath.subView( nTokenStart, nTokenLen )) );
+                    aCoordList.push_back( o3tl::toInt32(rPath.substr( nTokenStart, nTokenLen )) );
                 else
                     aCoordList.push_back( 0 );
                 nTokenLen = 0;
@@ -453,7 +453,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
 
             // Allow two-char commands to peek ahead to the next character
             sal_Unicode nextChar = '\0';
-            if (i+1 < rPath.getLength())
+            if (i+1 < rPath.size())
                 nextChar = rPath[i+1];
 
             // Move to relevant state upon finding a command

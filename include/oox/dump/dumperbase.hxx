@@ -236,7 +236,7 @@ struct ItemFormat
 
         @return  List containing remaining unhandled format strings.
      */
-    OUStringVector      parse( const OUString& rFormatStr );
+    OUStringVector      parse( std::u16string_view rFormatStr );
 };
 
 
@@ -247,7 +247,7 @@ public:
     // append string to string ------------------------------------------------
 
     static void         appendChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int32 nCount );
-    static void         appendString( OUStringBuffer& rStr, const OUString& rData, sal_Int32 nWidth, sal_Unicode cFill = ' ' );
+    static void         appendString( OUStringBuffer& rStr, std::u16string_view rData, sal_Int32 nWidth, sal_Unicode cFill = ' ' );
 
     // append decimal ---------------------------------------------------------
 
@@ -312,7 +312,7 @@ public:
 
     static void         appendCChar( OUStringBuffer& rStr, sal_Unicode cChar, bool bPrefix = true );
     static void         appendEncChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int32 nCount, bool bPrefix = true );
-    static void         appendEncString( OUStringBuffer& rStr, const OUString& rData, bool bPrefix = true );
+    static void         appendEncString( OUStringBuffer& rStr, std::u16string_view rData, bool bPrefix = true );
 
     // token list -------------------------------------------------------------
 
@@ -345,8 +345,8 @@ public:
 
     // string to list conversion ----------------------------------------------
 
-    static void         convertStringToStringList( OUStringVector& orVec, const OUString& rData, bool bIgnoreEmpty );
-    static void         convertStringToIntList( Int64Vector& orVec, const OUString& rData, bool bIgnoreEmpty );
+    static void         convertStringToStringList( OUStringVector& orVec, std::u16string_view rData, bool bIgnoreEmpty );
+    static void         convertStringToIntList( Int64Vector& orVec, std::u16string_view rData, bool bIgnoreEmpty );
 };
 
 
@@ -572,9 +572,9 @@ protected:
 
 private:
     /** Includes name lists, given in a comma separated list of names of the lists. */
-    void                include( const OUString& rListKeys );
+    void                include( std::u16string_view rListKeys );
     /** Excludes names from the list, given in a comma separated list of their keys. */
-    void                exclude( const OUString& rKeys );
+    void                exclude( std::u16string_view rKeys );
 
 private:
     OUStringMap         maMap;
@@ -789,8 +789,8 @@ private:
     bool                readConfigFile( const OUString& rFileUrl );
     template< typename ListType >
     void                readNameList( TextInputStream& rStrm, const OUString& rListName );
-    void                createShortList( const OUString& rData );
-    void                createUnitConverter( const OUString& rData );
+    void                createShortList( std::u16string_view rData );
+    void                createUnitConverter( std::u16string_view rData );
 
 private:
     typedef ::std::set< OUString >                   ConfigFileSet;
@@ -955,7 +955,7 @@ public:
 
     void                writeChar( sal_Unicode cChar, sal_Int32 nCount = 1 );
     void                writeAscii( const char* pcStr );
-    void                writeString( const OUString& rStr );
+    void                writeString( std::u16string_view rStr );
     void                writeArray( const sal_uInt8* pnData, std::size_t nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeBool( bool bData );
     void                writeDateTime( const css::util::DateTime& rDateTime );
@@ -1159,7 +1159,7 @@ protected:
 
 private:
     static OUString     getSysFileName(
-                            const OUString& rStrmName,
+                            std::u16string_view rStrmName,
                             std::u16string_view rSysOutPath );
 
     void                extractStream(
@@ -1219,7 +1219,7 @@ protected:
     void                writeEmptyItem( const String& rName );
     void                writeInfoItem( const String& rName, const String& rData );
     void                writeCharItem( const String& rName, sal_Unicode cData );
-    void                writeStringItem( const String& rName, const OUString& rData );
+    void                writeStringItem( const String& rName, std::u16string_view rData );
     void                writeArrayItem( const String& rName, const sal_uInt8* pnData, std::size_t nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeDateTimeItem( const String& rName, const css::util::DateTime& rDateTime );
     void                writeGuidItem( const String& rName, const OUString& rGuid );
@@ -1620,7 +1620,7 @@ public:
 
 private:
     virtual void        implDumpText( TextInputStream& rTextStrm ) override;
-    void        implDumpLine( const OUString& rLine, sal_uInt32 nLine );
+    void        implDumpLine( std::u16string_view rLine, sal_uInt32 nLine );
 };
 
 

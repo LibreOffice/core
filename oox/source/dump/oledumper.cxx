@@ -1827,11 +1827,11 @@ void VbaContainerStorageObject::implDumpStorage( const StorageRef& rxStrg, const
         OleStorageObject( *this, rxStrg, rSysPath ).dump();
 }
 
-bool VbaContainerStorageObject::isFormStorage( const OUString& rStrgPath ) const
+bool VbaContainerStorageObject::isFormStorage( std::u16string_view rStrgPath ) const
 {
-    if( (rStrgPath.getLength() >= 3) && (rStrgPath[ 0 ] == 'i') )
+    if( (rStrgPath.size() >= 3) && (rStrgPath[ 0 ] == 'i') )
     {
-        std::u16string_view aId = rStrgPath.subView( 1 );
+        std::u16string_view aId = rStrgPath.substr( 1 );
         if( (aId.size() == 2) && (aId[ 0 ] == '0') )
             aId = aId.substr( 1 );
         sal_Int32 nId = o3tl::toInt32(aId);

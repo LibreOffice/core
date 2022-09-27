@@ -501,14 +501,14 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
 }
 
 void ControlConverter::convertAxState( PropertyMap& rPropMap,
-        const OUString& rValue, sal_Int32 nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel )
+        std::u16string_view rValue, sal_Int32 nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel )
 {
     bool bBooleanState = eDefStateMode == API_DEFAULTSTATE_BOOLEAN;
     bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
 
     // state
     sal_Int16 nState = bSupportsTriState ? API_STATE_DONTKNOW : API_STATE_UNCHECKED;
-    if( rValue.getLength() == 1 ) switch( rValue[ 0 ] )
+    if( rValue.size() == 1 ) switch( rValue[ 0 ] )
     {
         case '0':   nState = API_STATE_UNCHECKED;   break;
         case '1':   nState = API_STATE_CHECKED;     break;

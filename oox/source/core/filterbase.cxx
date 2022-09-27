@@ -254,10 +254,10 @@ const OUString& FilterBase::getFileUrl() const
 
 namespace {
 
-bool lclIsDosDrive( const OUString& rUrl, sal_Int32 nPos = 0 )
+bool lclIsDosDrive( std::u16string_view rUrl, size_t nPos = 0 )
 {
     return
-        (rUrl.getLength() >= nPos + 3) &&
+        (rUrl.size() >= nPos + 3) &&
         ((('A' <= rUrl[ nPos ]) && (rUrl[ nPos ] <= 'Z')) || (('a' <= rUrl[ nPos ]) && (rUrl[ nPos ] <= 'z'))) &&
         (rUrl[ nPos + 1 ] == ':') &&
         (rUrl[ nPos + 2 ] == '/');

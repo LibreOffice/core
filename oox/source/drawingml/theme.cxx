@@ -62,14 +62,14 @@ const TextCharacterProperties* Theme::getFontStyle( sal_Int32 nSchemeType ) cons
     return maFontScheme.get( nSchemeType ).get();
 }
 
-const TextFont* Theme::resolveFont( const OUString& rName ) const
+const TextFont* Theme::resolveFont( std::u16string_view rName ) const
 {
     const TextCharacterProperties* pCharProps = nullptr;
     /*  Resolves the following names:
         +mj-lt, +mj-ea, +mj-cs  --  major Latin, Asian, Complex font
         +mn-lt, +mn-ea, +mn-cs  --  minor Latin, Asian, Complex font
      */
-    if( (rName.getLength() == 6) && (rName[ 0 ] == '+') && (rName[ 3 ] == '-') )
+    if( (rName.size() == 6) && (rName[ 0 ] == '+') && (rName[ 3 ] == '-') )
     {
         if( (rName[ 1 ] == 'm') && (rName[ 2 ] == 'j') )
             pCharProps = maFontScheme.get( XML_major ).get();
@@ -87,17 +87,17 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
     }
 
     // See writerfilter::dmapper::ThemeTable::getFontNameForTheme().
-    if (rName == "majorHAnsi" || rName == "majorAscii" || rName == "majorBidi" || rName == "majorEastAsia")
+    if (rName == u"majorHAnsi" || rName == u"majorAscii" || rName == u"majorBidi" || rName == u"majorEastAsia")
         pCharProps = maFontScheme.get(XML_major).get();
-    else if (rName == "minorHAnsi" || rName == "minorAscii" || rName == "minorBidi" || rName == "minorEastAsia")
+    else if (rName == u"minorHAnsi" || rName == u"minorAscii" || rName == u"minorBidi" || rName == u"minorEastAsia")
         pCharProps = maFontScheme.get(XML_minor).get();
     if (pCharProps)
     {
-        if (rName == "majorAscii" || rName == "majorHAnsi" || rName == "minorAscii" || rName == "minorHAnsi")
+        if (rName == u"majorAscii" || rName == u"majorHAnsi" || rName == u"minorAscii" || rName == u"minorHAnsi")
             return &pCharProps->maLatinFont;
-        else if (rName == "minorBidi" || rName == "majorBidi")
+        else if (rName == u"minorBidi" || rName == u"majorBidi")
             return &pCharProps->maComplexFont;
-        else if (rName == "minorEastAsia" || rName == "majorEastAsia")
+        else if (rName == u"minorEastAsia" || rName == u"majorEastAsia")
             return &pCharProps->maAsianFont;
     }
     return nullptr;

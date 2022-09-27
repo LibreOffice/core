@@ -312,7 +312,7 @@ public:
         properties. */
     static void         convertAxState(
                             PropertyMap& rPropMap,
-                            const OUString& rValue,
+                            std::u16string_view rValue,
                             sal_Int32 nMultiSelect,
                             ApiDefaultStateMode eDefStateMode,
                             bool bAwtModel );

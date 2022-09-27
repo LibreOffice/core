@@ -115,12 +115,12 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
 }
 
 /// Count the crop value based on a crop fraction and a reference size.
-sal_Int32 lclConvertCrop(const OUString& rCrop, sal_uInt32 nSize)
+sal_Int32 lclConvertCrop(std::u16string_view rCrop, sal_uInt32 nSize)
 {
-    if (rCrop.endsWith("f"))
+    if (o3tl::ends_with(rCrop, u"f"))
     {
         // Numeric value is specified in 1/65536-ths.
-        sal_uInt32 nCrop = o3tl::toUInt32(rCrop.subView(0, rCrop.getLength() - 1));
+        sal_uInt32 nCrop = o3tl::toUInt32(rCrop.substr(0, rCrop.size() - 1));
         return (nCrop * nSize) / 65536;
     }
 

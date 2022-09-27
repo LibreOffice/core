@@ -58,7 +58,7 @@ public:
     void InitNew();
     void AddCustomProperty( const css::uno::Any& aAny );
 
-    static css::util::DateTime GetDateTimeFromW3CDTF( const OUString& aChars );
+    static css::util::DateTime GetDateTimeFromW3CDTF( std::u16string_view aChars );
     static css::uno::Sequence< OUString > GetKeywordsSet( std::u16string_view aChars );
     void UpdateDocStatistic( std::u16string_view aChars );
 

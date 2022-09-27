@@ -69,7 +69,7 @@ const PresetGeometryName pPresetGeometryNameArray[]
         { "textCascadeDown", "fontwork-fade-up-and-left" } };
 }
 
-OUString PresetGeometryTypeNames::GetFontworkType(const OUString& rMsoType)
+OUString PresetGeometryTypeNames::GetFontworkType(std::u16string_view rMsoType)
 {
     static const PresetGeometryHashMap s_HashMap = []() {
         PresetGeometryHashMap aH;
@@ -78,7 +78,7 @@ OUString PresetGeometryTypeNames::GetFontworkType(const OUString& rMsoType)
         return aH;
     }();
     const char* pRetValue = "";
-    int i, nLen = rMsoType.getLength();
+    size_t i, nLen = rMsoType.size();
     std::unique_ptr<char[]> pBuf(new char[nLen + 1]);
     for (i = 0; i < nLen; i++)
         pBuf[i] = static_cast<char>(rMsoType[i]);
@@ -90,7 +90,7 @@ OUString PresetGeometryTypeNames::GetFontworkType(const OUString& rMsoType)
     return OUString(pRetValue, strlen(pRetValue), RTL_TEXTENCODING_ASCII_US);
 }
 
-OUString PresetGeometryTypeNames::GetMsoName(const OUString& rFontworkType)
+OUString PresetGeometryTypeNames::GetMsoName(std::u16string_view rFontworkType)
 {
     static const PresetGeometryHashMap s_HashMapInv = []() {
         PresetGeometryHashMap aHInv;
@@ -99,7 +99,7 @@ OUString PresetGeometryTypeNames::GetMsoName(const OUString& rFontworkType)
         return aHInv;
     }();
     const char* pRetValue = "";
-    int i, nLen = rFontworkType.getLength();
+    size_t i, nLen = rFontworkType.size();
     std::unique_ptr<char[]> pBuf(new char[nLen + 1]);
     for (i = 0; i < nLen; i++)
         pBuf[i] = static_cast<char>(rFontworkType[i]);

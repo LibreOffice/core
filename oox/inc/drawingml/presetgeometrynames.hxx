@@ -14,8 +14,8 @@
 
 namespace PresetGeometryTypeNames
 {
-OUString GetFontworkType(const OUString& rMsoType);
-OUString GetMsoName(const OUString& rFontworkType);
+OUString GetFontworkType(std::u16string_view rMsoType);
+OUString GetMsoName(std::u16string_view rFontworkType);
 }
 
 #endif

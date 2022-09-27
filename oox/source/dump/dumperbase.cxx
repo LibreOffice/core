@@ -184,7 +184,7 @@ OUStringVector::const_iterator ItemFormat::parse( const OUStringVector& rFormatV
     return aIt;
 }
 
-OUStringVector ItemFormat::parse( const OUString& rFormatStr )
+OUStringVector ItemFormat::parse( std::u16string_view rFormatStr )
 {
     OUStringVector aFormatVec;
     StringHelper::convertStringToStringList( aFormatVec, rFormatStr, false );
@@ -200,9 +200,9 @@ void StringHelper::appendChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_Int3
         rStr.append( cChar );
 }
 
-void StringHelper::appendString( OUStringBuffer& rStr, const OUString& rData, sal_Int32 nWidth, sal_Unicode cFill )
+void StringHelper::appendString( OUStringBuffer& rStr, std::u16string_view rData, sal_Int32 nWidth, sal_Unicode cFill )
 {
-    appendChar( rStr, cFill, nWidth - rData.getLength() );
+    appendChar( rStr, cFill, nWidth - rData.size() );
     rStr.append( rData );
 }
 
@@ -483,11 +483,11 @@ void StringHelper::appendEncChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_I
     }
 }
 
-void StringHelper::appendEncString( OUStringBuffer& rStr, const OUString& rData, bool bPrefix )
+void StringHelper::appendEncString( OUStringBuffer& rStr, std::u16string_view rData, bool bPrefix )
 {
-    sal_Int32 nBeg = 0;
-    sal_Int32 nIdx = 0;
-    sal_Int32 nEnd = rData.getLength();
+    size_t nBeg = 0;
+    size_t nIdx = 0;
+    size_t nEnd = rData.size();
     while( nIdx < nEnd )
     {
         // find next character that needs encoding
@@ -498,7 +498,7 @@ void StringHelper::appendEncString( OUStringBuffer& rStr, const OUString& rData,
             if( (nBeg == 0) && (nIdx == nEnd) )
                 rStr.append( rData );
             else
-                rStr.append( rData.subView(nBeg, nIdx - nBeg) );
+                rStr.append( rData.substr(nBeg, nIdx - nBeg) );
         }
         // append characters to be encoded
         while( (nIdx < nEnd) && (rData[ nIdx ] < 0x20) )
@@ -541,17 +541,17 @@ void StringHelper::enclose( OUStringBuffer& rStr, sal_Unicode cOpen, sal_Unicode
 
 namespace {
 
-sal_Int32 lclIndexOf( const OUString& rStr, sal_Unicode cChar, sal_Int32 nStartPos )
+sal_Int32 lclIndexOf( std::u16string_view rStr, sal_Unicode cChar, sal_Int32 nStartPos )
 {
-    sal_Int32 nIndex = rStr.indexOf( cChar, nStartPos );
-    return (nIndex < 0) ? rStr.getLength() : nIndex;
+    size_t nIndex = rStr.find( cChar, nStartPos );
+    return (nIndex == std::u16string_view::npos) ? rStr.size() : nIndex;
 }
 
-OUString lclTrimQuotedStringList( const OUString& rStr )
+OUString lclTrimQuotedStringList( std::u16string_view rStr )
 {
     OUStringBuffer aBuffer;
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rStr.getLength();
+    size_t nPos = 0;
+    size_t nLen = rStr.size();
     while( nPos < nLen )
     {
         if( rStr[ nPos ] == OOX_DUMP_CFG_QUOTE )
@@ -563,8 +563,8 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
             do
             {
                 // seek to next quote character and add text portion to token buffer
-                sal_Int32 nEnd = lclIndexOf( rStr, OOX_DUMP_CFG_QUOTE, nPos );
-                aToken.append( rStr.subView(nPos, nEnd - nPos) );
+                size_t nEnd = lclIndexOf( rStr, OOX_DUMP_CFG_QUOTE, nPos );
+                aToken.append( rStr.substr(nPos, nEnd - nPos) );
                 // process literal quotes
                 while( (nEnd + 1 < nLen) && (rStr[ nEnd ] == OOX_DUMP_CFG_QUOTE) && (rStr[ nEnd + 1 ] == OOX_DUMP_CFG_QUOTE) )
                 {
@@ -586,8 +586,8 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
         else
         {
             // find list separator, add token text to buffer
-            sal_Int32 nEnd = lclIndexOf( rStr, OOX_DUMP_CFG_LISTSEP, nPos );
-            aBuffer.append( rStr.subView(nPos, nEnd - nPos) );
+            size_t nEnd = lclIndexOf( rStr, OOX_DUMP_CFG_LISTSEP, nPos );
+            aBuffer.append( rStr.substr(nPos, nEnd - nPos) );
             if( nEnd < nLen )
                 aBuffer.append( OOX_DUMP_LF );
             // set current position behind list separator
@@ -760,7 +760,7 @@ OUStringPair StringHelper::convertStringToPair( const OUString& rString, sal_Uni
     return aPair;
 }
 
-void StringHelper::convertStringToStringList( OUStringVector& orVec, const OUString& rData, bool bIgnoreEmpty )
+void StringHelper::convertStringToStringList( OUStringVector& orVec, std::u16string_view rData, bool bIgnoreEmpty )
 {
     orVec.clear();
     OUString aUnquotedData = lclTrimQuotedStringList( rData );
@@ -774,7 +774,7 @@ void StringHelper::convertStringToStringList( OUStringVector& orVec, const OUStr
     }
 }
 
-void StringHelper::convertStringToIntList( Int64Vector& orVec, const OUString& rData, bool bIgnoreEmpty )
+void StringHelper::convertStringToIntList( Int64Vector& orVec, std::u16string_view rData, bool bIgnoreEmpty )
 {
     orVec.clear();
     OUString aUnquotedData = lclTrimQuotedStringList( rData );
@@ -918,7 +918,7 @@ const OUString* NameListBase::findRawName( sal_Int64 nKey ) const
     return (aIt == end()) ? nullptr : &aIt->second;
 }
 
-void NameListBase::include( const OUString& rListKeys )
+void NameListBase::include( std::u16string_view rListKeys )
 {
     OUStringVector aVec;
     StringHelper::convertStringToStringList( aVec, rListKeys, true );
@@ -926,7 +926,7 @@ void NameListBase::include( const OUString& rListKeys )
         includeList( mrCfgData.getNameList(elem) );
 }
 
-void NameListBase::exclude( const OUString& rKeys )
+void NameListBase::exclude( std::u16string_view rKeys )
 {
     Int64Vector aVec;
     StringHelper::convertStringToIntList( aVec, rKeys, true );
@@ -1352,7 +1352,7 @@ bool SharedConfigData::readConfigFile( const OUString& rFileUrl )
     return bLoaded;
 }
 
-void SharedConfigData::createShortList( const OUString& rData )
+void SharedConfigData::createShortList( std::u16string_view rData )
 {
     OUStringVector aDataVec;
     StringHelper::convertStringToStringList( aDataVec, rData, false );
@@ -1371,7 +1371,7 @@ void SharedConfigData::createShortList( const OUString& rData )
     }
 }
 
-void SharedConfigData::createUnitConverter( const OUString& rData )
+void SharedConfigData::createUnitConverter( std::u16string_view rData )
 {
     OUStringVector aDataVec;
     StringHelper::convertStringToStringList( aDataVec, rData, false );
@@ -1641,7 +1641,7 @@ void Output::writeAscii( const char* pcStr )
         maLine.appendAscii( pcStr );
 }
 
-void Output::writeString( const OUString& rStr )
+void Output::writeString( std::u16string_view rStr )
 {
     StringHelper::appendEncString( maLine, rStr );
 }
@@ -1686,7 +1686,7 @@ void Output::writeItemName( const String& rItemName )
 {
     if( rItemName.has() && (rItemName[ 0 ] == '#') )
     {
-        writeString( rItemName.copy( 1 ) );
+        writeString( rItemName.subView( 1 ) );
         StringHelper::appendIndex( maLine, mnItemIdx++ );
     }
     else
@@ -1846,7 +1846,7 @@ void StorageObjectBase::addPreferredStorage( const String& rStrgPath )
 }
 
 OUString StorageObjectBase::getSysFileName(
-    const OUString& rStrmName, std::u16string_view rSysOutPath )
+    std::u16string_view rStrmName, std::u16string_view rSysOutPath )
 {
     // encode all characters < 0x20
     OUStringBuffer aBuffer;
@@ -1968,16 +1968,16 @@ void OutputObjectBase::writeCharItem( const String& rName, sal_Unicode cData )
     mxOut->writeChar( OOX_DUMP_STRQUOTE );
 }
 
-void OutputObjectBase::writeStringItem( const String& rName, const OUString& rData )
+void OutputObjectBase::writeStringItem( const String& rName, std::u16string_view rData )
 {
     ItemGuard aItem( mxOut, rName );
     mxOut->writeAscii( "(len=" );
-    mxOut->writeDec( rData.getLength() );
+    mxOut->writeDec( sal_Int32(rData.size()) );
     mxOut->writeAscii( ")," );
-    OUStringBuffer aValue( rData.subView( 0, ::std::min( rData.getLength(), OOX_DUMP_MAXSTRLEN ) ) );
+    OUStringBuffer aValue( rData.substr( 0, ::std::min( sal_Int32(rData.size()), OOX_DUMP_MAXSTRLEN ) ) );
     StringHelper::enclose( aValue, OOX_DUMP_STRQUOTE );
     mxOut->writeString( aValue.makeStringAndClear() );
-    if( rData.getLength() > OOX_DUMP_MAXSTRLEN )
+    if( rData.size() > OOX_DUMP_MAXSTRLEN )
         mxOut->writeAscii( ",cut" );
 }
 
@@ -2354,7 +2354,7 @@ void TextLineStreamObject::implDumpText( TextInputStream& rTextStrm )
     }
 }
 
-void TextLineStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine )
+void TextLineStreamObject::implDumpLine( std::u16string_view rLine, sal_uInt32 nLine )
 {
     TableGuard aTabGuard( mxOut, 8 );
     mxOut->writeDec( nLine, 6 );
@@ -2408,7 +2408,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
                 the text of the old start element. */
             if( (bSimpleElem || bStartElem) && (aOldStartElem.getLength() > 0) )
             {
-                mxOut->writeString( aOldStartElem.makeStringAndClear().trim() );
+                mxOut->writeString( o3tl::trim(aOldStartElem.makeStringAndClear()) );
                 mxOut->newLine();
                 mxOut->incIndent();
             }

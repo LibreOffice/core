@@ -63,10 +63,10 @@ OUString lclGetShapeId( sal_Int32 nShapeId )
 }
 
 /** Returns the numeric VML shape identifier from its textual representation. */
-sal_Int32 lclGetShapeId( const OUString& rShapeId )
+sal_Int32 lclGetShapeId( std::u16string_view rShapeId )
 {
     // identifier consists of a literal NUL character, a lowercase 's', and the id
-    return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? o3tl::toInt32(rShapeId.subView( 2 )) : -1;
+    return ((rShapeId.size() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? o3tl::toInt32(rShapeId.substr( 2 )) : -1;
 }
 
 } // namespace
@@ -206,7 +206,7 @@ void Drawing::convertAndInsert() const
 
 }
 
-sal_Int32 Drawing::getLocalShapeIndex( const OUString& rShapeId ) const
+sal_Int32 Drawing::getLocalShapeIndex( std::u16string_view rShapeId ) const
 {
     sal_Int32 nShapeId = lclGetShapeId( rShapeId );
     if( nShapeId <= 0 ) return -1;

@@ -729,14 +729,14 @@ bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const V
 
 namespace {
 
-OUString lclGetQuotedString( const OUString& rCodeLine )
+OUString lclGetQuotedString( std::u16string_view rCodeLine )
 {
     OUStringBuffer aBuffer;
-    sal_Int32 nLen = rCodeLine.getLength();
+    size_t nLen = rCodeLine.size();
     if( (nLen > 0) && (rCodeLine[ 0 ] == '"') )
     {
         bool bExitLoop = false;
-        for( sal_Int32 nIndex = 1; !bExitLoop && (nIndex < nLen); ++nIndex )
+        for( size_t nIndex = 1; !bExitLoop && (nIndex < nLen); ++nIndex )
         {
             sal_Unicode cChar = rCodeLine[ nIndex ];
             // exit on closing quote char (but check on double quote chars)
@@ -766,11 +766,11 @@ bool lclEatWhitespace( OUString& rCodeLine )
     return false;
 }
 
-bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
+bool lclEatKeyword( OUString& rCodeLine, std::u16string_view rKeyword )
 {
     if( rCodeLine.matchIgnoreAsciiCase( rKeyword ) )
     {
-        rCodeLine = rCodeLine.copy( rKeyword.getLength() );
+        rCodeLine = rCodeLine.copy( rKeyword.size() );
         // success, if code line ends after keyword, or if whitespace follows
         return rCodeLine.isEmpty() || lclEatWhitespace( rCodeLine );
     }
@@ -813,7 +813,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         bBeginFound = lclEatKeyword( aLine, aBegin );
     }
     // check for the specific GUID that represents VBA forms
-    if( !bBeginFound || !lclEatKeyword( aLine, "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) )
+    if( !bBeginFound || !lclEatKeyword( aLine, u"{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) )
         return;
 
     // remaining line is the form name

@@ -696,7 +696,7 @@ protected:
                             const OUString& rSysPath ) override;
 
 private:
-    bool                isFormStorage( const OUString& rStrgPath ) const;
+    bool                isFormStorage( std::u16string_view rStrgPath ) const;
 
 private:
     VbaFormSharedData   maFormData;
