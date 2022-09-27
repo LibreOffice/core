@@ -366,7 +366,7 @@ private:
     rtl::Reference< ChildAccess > getUnmodifiedChild(
         OUString const & name);
 
-    rtl::Reference< ChildAccess > getSubChild(std::u16string_view path);
+    rtl::Reference< ChildAccess > getSubChild(OUString const & path);
 
     bool setChildProperty(
         OUString const & name, css::uno::Any const & value,

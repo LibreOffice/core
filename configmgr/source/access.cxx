@@ -74,7 +74,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <o3tl/string_view.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/character.hxx>
@@ -1971,10 +1970,10 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
     return createUnmodifiedChild(name,node);
 }
 
-rtl::Reference< ChildAccess > Access::getSubChild(std::u16string_view path) {
+rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
     sal_Int32 i = 0;
     // For backwards compatibility, allow absolute paths where meaningful:
-    if( o3tl::starts_with(path, u"/") ) {
+    if( path.startsWith("/") ) {
         ++i;
         if (!getRootAccess().is()) {
             return rtl::Reference< ChildAccess >();
@@ -1987,7 +1986,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(std::u16string_view path) {
             OUString templateName1;
             i = Data::parseSegment(
                 path, i, &name1, &setElement1, &templateName1);
-            if (i == -1 || (i != static_cast<sal_Int32>(path.size()) && path[i] != '/')) {
+            if (i == -1 || (i != path.getLength() && path[i] != '/')) {
                 return rtl::Reference< ChildAccess >();
             }
             OUString name2;
@@ -2000,7 +1999,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(std::u16string_view path) {
             {
                 return rtl::Reference< ChildAccess >();
             }
-            if (i != static_cast<sal_Int32>(path.size())) {
+            if (i != path.getLength()) {
                 ++i;
             }
         }
@@ -2010,7 +2009,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(std::u16string_view path) {
         bool setElement;
         OUString templateName;
         i = Data::parseSegment(path, i, &name, &setElement, &templateName);
-        if (i == -1 || (i != static_cast<sal_Int32>(path.size()) && path[i] != '/')) {
+        if (i == -1 || (i != path.getLength() && path[i] != '/')) {
             return rtl::Reference< ChildAccess >();
         }
         rtl::Reference< ChildAccess > child(parent->getChild(name));
@@ -2042,9 +2041,9 @@ rtl::Reference< ChildAccess > Access::getSubChild(std::u16string_view path) {
         // For backwards compatibility, ignore a final slash after non-value
         // nodes:
         if (child->isValue()) {
-            return i == static_cast<sal_Int32>(path.size())
+            return i == path.getLength()
                 ? child : rtl::Reference< ChildAccess >();
-        } else if (i >= static_cast<sal_Int32>(path.size()) - 1) {
+        } else if (i >= path.getLength() - 1) {
             return child;
         }
         ++i;

@@ -54,7 +54,7 @@ struct Data {
         std::u16string_view templateName, OUString const & name);
 
     static sal_Int32 parseSegment(
-        std::u16string_view path, sal_Int32 index, OUString * name,
+        OUString const & path, sal_Int32 index, OUString * name,
         bool * setElement, OUString * templateName);
 
     static OUString fullTemplateName(
