@@ -189,8 +189,9 @@ void SwFieldDlg::ReInitDlg()
     if(!pActiveView)
         return;
     const SwWrtShell& rSh = pActiveView->GetWrtShell();
-    GetOKButton().set_sensitive(!rSh.IsReadOnlyAvailable() ||
-                                !rSh.HasReadonlySel());
+    GetOKButton().set_sensitive((  !rSh.IsReadOnlyAvailable()
+                                || !rSh.HasReadonlySel())
+                            &&  !SwCursorShell::PosInsideInputField(*rSh.GetCursor()->GetPoint()));
 
     ReInitTabPage("document");
     ReInitTabPage("variables");
@@ -223,8 +224,10 @@ void SwFieldDlg::Activate()
 
     bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
     const SwWrtShell& rSh = pView->GetWrtShell();
-    GetOKButton().set_sensitive(!rSh.IsReadOnlyAvailable() ||
-                                !rSh.HasReadonlySel());
+    GetOKButton().set_sensitive((  !rSh.IsReadOnlyAvailable()
+                                || !rSh.HasReadonlySel())
+                            &&  !SwCursorShell::PosInsideInputField(*rSh.GetCursor()->GetPoint()));
+
 
     ReInitTabPage("variables", true);
 
@@ -243,8 +246,11 @@ void SwFieldDlg::EnableInsert(bool bEnable)
         OSL_ENSURE(pView, "no view found");
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
-                    pView->GetWrtShell().HasReadonlySel()) )
+                    pView->GetWrtShell().HasReadonlySel())
+            || SwCursorShell::PosInsideInputField(*pView->GetWrtShell().GetCursor()->GetPoint()))
+        {
             bEnable = false;
+        }
     }
     GetOKButton().set_sensitive(bEnable);
 }
