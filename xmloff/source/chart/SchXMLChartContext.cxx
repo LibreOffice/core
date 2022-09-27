@@ -182,12 +182,12 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( std::u16string_view 
     while( nPos != std::u16string_view::npos )
     {
         nPos = rStr.find( aSpace, nLastPos );
-        if( nPos > nLastPos )
-        {
-            aVec.push_back( o3tl::toInt32(rStr.substr( nLastPos, (nPos - nLastPos) )) );
-        }
         if( nPos != std::u16string_view::npos )
+        {
+            if( nPos > nLastPos )
+                aVec.push_back( o3tl::toInt32(rStr.substr( nLastPos, (nPos - nLastPos) )) );
             nLastPos = nPos + 1;
+        }
     }
     // last entry
     if( nLastPos != 0 &&
