@@ -1134,8 +1134,13 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         }
     }
 
+    if (eOp == ScConditionMode::Error)
+        return IsError(rPos);
+    if (eOp == ScConditionMode::NoError)
+        return !IsError(rPos);
+
     // If number contains condition, always false, except for "not equal".
-    if ( !bIsStr1 && (eOp != ScConditionMode::Error && eOp != ScConditionMode::NoError) )
+    if (!bIsStr1)
         return ( eOp == ScConditionMode::NotEqual );
     if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if ( !bIsStr2 )
@@ -1154,12 +1159,10 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     switch ( eOp )
     {
         case ScConditionMode::Equal:
-            bValid = (ScGlobal::GetCollator().compareString(
-                rArg, aUpVal1 ) == 0);
+            bValid = ScGlobal::GetTransliteration().isEqual(aUpVal1, rArg);
         break;
         case ScConditionMode::NotEqual:
-            bValid = (ScGlobal::GetCollator().compareString(
-                rArg, aUpVal1 ) != 0);
+            bValid = !ScGlobal::GetTransliteration().isEqual(aUpVal1, rArg);
         break;
         case ScConditionMode::TopPercent:
         case ScConditionMode::BottomPercent:
@@ -1168,12 +1171,6 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         case ScConditionMode::AboveAverage:
         case ScConditionMode::BelowAverage:
             return false;
-        case ScConditionMode::Error:
-        case ScConditionMode::NoError:
-            bValid = IsError( rPos );
-            if(eOp == ScConditionMode::NoError)
-                bValid = !bValid;
-        break;
         case ScConditionMode::BeginsWith:
             bValid = ScGlobal::GetTransliteration().isMatch(aUpVal1, rArg);
         break;
