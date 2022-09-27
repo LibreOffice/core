@@ -6918,6 +6918,9 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
     m_aParagraphSdt.m_bStartedSdt = false;
     rContext.m_bStartedRunSdt = m_aRunSdt.m_bStartedSdt;
     m_aRunSdt.m_bStartedSdt = false;
+
+    rContext.m_nHyperLinkCount = m_nHyperLinkCount;
+    m_nHyperLinkCount = 0;
 }
 
 void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
@@ -6927,6 +6930,7 @@ void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const
     m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
     m_aParagraphSdt.m_bStartedSdt = rContext.m_bStartedParaSdt;
     m_aRunSdt.m_bStartedSdt = rContext.m_bStartedRunSdt;
+    m_nHyperLinkCount = rContext.m_nHyperLinkCount;
 }
 
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
