@@ -2151,6 +2151,24 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 namespace
 {
+css::uno::Reference<css::ui::XSidebar>
+getSidebarFromModel(const css::uno::Reference<css::frame::XModel>& xModel)
+{
+    css::uno::Reference<css::container::XChild> xChild(xModel, css::uno::UNO_QUERY);
+    if (!xChild.is())
+        return nullptr;
+    css::uno::Reference<css::frame::XModel> xParent(xChild->getParent(), css::uno::UNO_QUERY);
+    if (!xParent.is())
+        return nullptr;
+    css::uno::Reference<css::frame::XController2> xController(xParent->getCurrentController(),
+                                                              css::uno::UNO_QUERY);
+    if (!xController.is())
+        return nullptr;
+    css::uno::Reference<css::ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
+    if (!xSidebarProvider.is())
+        return nullptr;
+    return xSidebarProvider->getSidebar();
+}
 class SmController : public SfxBaseController
 {
 public:
@@ -2170,7 +2188,19 @@ public:
         SfxBaseController::attachFrame(xFrame);
 
         if (comphelper::LibreOfficeKit::isActive())
+        {
             CopyLokViewCallbackFromFrameCreator();
+            // In lok mode, DocumentHolder::ShowUI is not called on OLE in-place activation,
+            // because respective code is skipped in OCommonEmbeddedObject::SwitchStateTo_Impl,
+            // so sidebar controller does not get registered properly; do it here
+            if (auto xSidebar = getSidebarFromModel(getModel()))
+            {
+                auto pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
+                assert(pSidebar);
+                pSidebar->registerSidebarForFrame(this);
+                pSidebar->updateModel(getModel());
+            }
+        }
 
         // No need to call mpSelectionChangeHandler->Connect() unless SmController implements XSelectionSupplier
         mpSelectionChangeHandler->selectionChanged({}); // Installs the correct context
