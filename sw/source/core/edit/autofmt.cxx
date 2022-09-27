@@ -560,7 +560,6 @@ bool SwAutoFormat::DoUnderline()
         // WARNING: rText may be deleted now, m_pCurTextFrame may be nullptr
         m_aDelPam.SetMark();
         // apply to last node & rely on InsertItemSet to apply it to props-node
-        m_aDelPam.GetMark()->nContent = 0;
 
         editeng::SvxBorderLine aLine;
         switch( eState )
@@ -680,7 +679,7 @@ bool SwAutoFormat::DoTable()
         m_pDoc->InsertTable( SwInsertTableOptions( SwInsertTableFlags::All , 1 ),
                            *m_aDelPam.GetPoint(), 1, nColCnt, eHori,
                            nullptr, &aPosArr );
-        m_aDelPam.GetPoint()->nNode = aIdx;
+        m_aDelPam.GetPoint()->Assign(aIdx);
     }
     return 1 < aPosArr.size();
 }
@@ -1246,22 +1245,21 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
             TextFrameIndex(0));
     m_aDelPam.SetMark();
 
-    m_aDelPam.GetMark()->nNode = m_pCurTextFrame->GetTextNodeFirst()->GetIndex() - 1;
+    m_aDelPam.GetMark()->Assign( m_pCurTextFrame->GetTextNodeFirst()->GetIndex() - 1 );
     SwTextNode* pTNd = m_aDelPam.GetMarkNode().GetTextNode();
     if( pTNd )
         // first use the previous text node
-        m_aDelPam.GetMark()->nContent.Assign(pTNd, pTNd->GetText().getLength());
+        m_aDelPam.GetMark()->SetContent(pTNd->GetText().getLength());
     else if( bTstNextPara )
     {
         // then try the next (at the beginning of a Doc, table cells, frames, ...)
-        m_aDelPam.GetMark()->nNode = (m_pCurTextFrame->GetMergedPara()
+        const SwTextNode* pNext = m_pCurTextFrame->GetMergedPara()
                     ? m_pCurTextFrame->GetMergedPara()->pLastNode
-                    : m_pCurTextNd
-                )->GetIndex() + 1;
+                    : m_pCurTextNd;
+        m_aDelPam.GetMark()->Assign(pNext->GetIndex() + 1);
         pTNd = m_aDelPam.GetMarkNode().GetTextNode();
         if( pTNd )
         {
-            m_aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
             *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
                 TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
         }
@@ -1332,12 +1330,12 @@ void SwAutoFormat::JoinPrevPara()
     m_aDelPam.GetPoint()->Assign( *m_pCurTextFrame->GetTextNodeFirst() );
     m_aDelPam.SetMark();
 
-    --m_aDelPam.GetPoint()->nNode;
+    m_aDelPam.GetPoint()->Adjust(SwNodeOffset(-1));
     SwTextNode* pTNd = m_aDelPam.GetPointNode().GetTextNode();
     if( pTNd )
     {
         // use the previous text node first
-        m_aDelPam.GetPoint()->nContent.Assign(pTNd, pTNd->GetText().getLength());
+        m_aDelPam.GetPoint()->SetContent(pTNd->GetText().getLength());
         DeleteSel( m_aDelPam );
     }
     m_aDelPam.DeleteMark();
@@ -1685,7 +1683,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     if ( bChgEnum || bChgBullet )
     {
         m_aDelPam.DeleteMark();
-        m_aDelPam.GetPoint()->nNode = *m_pCurTextFrame->GetTextNodeForParaProps();
+        m_aDelPam.GetPoint()->Assign( *m_pCurTextFrame->GetTextNodeForParaProps() );
 
         if( m_aFlags.bSetNumRule )
         {
@@ -1694,7 +1692,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 m_aDelPam.SetMark();
                 SwTextFrame const*const pNextFrame = GetNextNode(false);
                 assert(pNextFrame);
-                m_aDelPam.GetMark()->nNode = *pNextFrame->GetTextNodeForParaProps();
+                m_aDelPam.GetMark()->Assign( *pNextFrame->GetTextNodeForParaProps() );
                 m_aDelPam.GetMarkNode().GetTextNode()->SetAttrListLevel( nLvl );
             }
 
@@ -1968,7 +1966,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                                     sal_Int32(nPos), cChar, true ));
 
                 m_aDelPam.SetMark();
-                m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->GetContentIndex() + 1;
+                m_aDelPam.GetPoint()->SetContent( m_aDelPam.GetMark()->GetContentIndex() + 1 );
                 if( 2 == sReplace.getLength() && ' ' == sReplace[ 1 ])
                 {
                     sReplace = sReplace.copy( 0, 1 );
@@ -2027,7 +2025,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                         }
 
                         m_aDelPam.SetMark();
-                        m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->GetContentIndex() + 1;
+                        m_aDelPam.GetPoint()->SetContent( m_aDelPam.GetMark()->GetContentIndex() + 1 );
                         m_pDoc->getIDocumentContentOperations().ReplaceRange( m_aDelPam, sReplace, false );
 
                         if( m_aFlags.bWithRedlining )
@@ -2744,10 +2742,10 @@ void SwEditShell::AutoFormatBySplitNode()
 
     bool bRange = false;
     pCursor->SetMark();
-    SwContentIndex* pContent = &pCursor->GetMark()->nContent;
-    if( pContent->GetIndex() )
+    SwPosition* pMarkPos = pCursor->GetMark();
+    if( pMarkPos->GetContentIndex() )
     {
-        *pContent = 0;
+        pMarkPos->SetContent(0);
         bRange = true;
     }
     else
@@ -2758,8 +2756,7 @@ void SwEditShell::AutoFormatBySplitNode()
         SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
         if (pTextNd && !pTextNd->GetText().isEmpty())
         {
-            pContent->Assign( pTextNd, 0 );
-            pCursor->GetMark()->nNode = aNdIdx;
+            pCursor->GetMark()->Assign( aNdIdx );
             bRange = true;
         }
     }
