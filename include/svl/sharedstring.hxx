@@ -13,18 +13,20 @@
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
 
+#include <utility>
+
 namespace svl {
 
 class SVL_DLLPUBLIC SharedString
 {
-    rtl_uString* mpData;
-    rtl_uString* mpDataIgnoreCase;
+    rtl_uString* mpData = nullptr;
+    rtl_uString* mpDataIgnoreCase = nullptr;
 public:
 
     static const SharedString & getEmptyString();
     static const OUString EMPTY_STRING;
 
-    SharedString();
+    SharedString() = default;
     SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
     explicit SharedString( const OUString& rStr );
     SharedString( const SharedString& r );
@@ -52,8 +54,6 @@ public:
     sal_Int32 getLength() const;
 };
 
-inline SharedString::SharedString() : mpData(nullptr), mpDataIgnoreCase(nullptr) {}
-
 inline SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :
     mpData(pData), mpDataIgnoreCase(pDataIgnoreCase)
 {
@@ -63,7 +63,7 @@ inline SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreC
         rtl_uString_acquire(mpDataIgnoreCase);
 }
 
-inline SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData), mpDataIgnoreCase(nullptr)
+inline SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData)
 {
     rtl_uString_acquire(mpData);
 }
@@ -76,10 +76,10 @@ inline SharedString::SharedString( const SharedString& r ) : mpData(r.mpData), m
         rtl_uString_acquire(mpDataIgnoreCase);
 }
 
-inline SharedString::SharedString(SharedString&& r) noexcept : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
+inline SharedString::SharedString(SharedString&& r) noexcept
+    : mpData(std::exchange(r.mpData, nullptr))
+    , mpDataIgnoreCase(std::exchange(r.mpDataIgnoreCase, nullptr))
 {
-    r.mpData = nullptr;
-    r.mpDataIgnoreCase = nullptr;
 }
 
 inline SharedString::~SharedString()
@@ -99,11 +99,8 @@ inline SharedString& SharedString::operator=(SharedString&& r) noexcept
     if (mpDataIgnoreCase)
         rtl_uString_release(mpDataIgnoreCase);
 
-    mpData = r.mpData;
-    mpDataIgnoreCase = r.mpDataIgnoreCase;
-
-    r.mpData = nullptr;
-    r.mpDataIgnoreCase = nullptr;
+    mpData = std::exchange(r.mpData, nullptr);
+    mpDataIgnoreCase = std::exchange(r.mpDataIgnoreCase, nullptr);
 
     return *this;
 }
