@@ -28,13 +28,8 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 		GRAPHITE2_CFLAGS="$(GRAPHITE_CFLAGS)" \
 		GRAPHITE2_LIBS="$(GRAPHITE_LIBS)" \
 		$(gb_RUN_CONFIGURE) ./configure \
-			$(if $(filter LINUX,$(OS)), \
-				--enable-shared \
-				--disable-static \
-			, \
-				--enable-static \
-				--disable-shared \
-			) \
+			--enable-static \
+			--disable-shared \
 			--disable-gtk-doc \
 			--with-pic \
 			--with-icu=builtin \

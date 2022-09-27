@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,harfbuzz))
 $(eval $(call gb_Module_add_targets,harfbuzz,\
 	ExternalProject_harfbuzz \
 	UnpackedTarball_harfbuzz \
-	$(if $(filter LINUX,$(OS)),ExternalPackage_harfbuzz) \
 ))
 
 # vim: set noet sw=4 ts=4:

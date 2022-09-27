@@ -20,10 +20,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 #   be negative":
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/negativeadvance.patch \
-    $(if $(filter LINUX,$(OS)), \
-        external/harfbuzz/libharfbuzz-bundled-soname.patch.0 \
-        external/harfbuzz/harfbuzz-fd-hack.patch.0 \
-    ) \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -102,16 +102,7 @@ bool FreetypeFontFile::Map()
     if (mnRefCount++ == 0)
     {
         const char* pFileName = maNativeFileName.getStr();
-        int nFile;
-        int nFD;
-        int n;
-        if( sscanf( pFileName, "/:FD:/%d%n", &nFD, &n ) == 1 && pFileName[n] == '\0' )
-        {
-            lseek( nFD, 0, SEEK_SET );
-            nFile = dup( nFD );
-        }
-        else
-            nFile = open( pFileName, O_RDONLY );
+        int nFile = open( pFileName, O_RDONLY );
         if( nFile < 0 )
         {
             SAL_WARN("vcl.unx.freetype", "open('" << maNativeFileName << "') failed: " << strerror(errno));
@@ -134,8 +125,6 @@ bool FreetypeFontFile::Map()
             SAL_WARN("vcl.unx.freetype", "mmap of '" << maNativeFileName << "' failed: " << strerror(errno));
             mpFileMap = nullptr;
         }
-        else
-            SAL_INFO("vcl.unx.freetype", "mmap'ed '" << maNativeFileName << "' successfully");
         close( nFile );
     }
 
