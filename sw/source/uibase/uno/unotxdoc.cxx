@@ -3386,7 +3386,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
         }
 
         SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->GetContentIndex(),
-                                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                                                     RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
         if (!pAttr)
         {
             return;
@@ -3440,7 +3440,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
         }
 
         SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->GetContentIndex(),
-                                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                                                     RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
         if (!pAttr)
         {
             return;

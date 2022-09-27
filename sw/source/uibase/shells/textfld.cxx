@@ -177,7 +177,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.ClearMark();
                     if (!rSh.IsMultiSelection()
                         && (nullptr != dynamic_cast<const SwTextInputField*>(
-                               SwCursorShell::GetTextFieldAtCursor(rSh.GetCursor(), true))))
+                               SwCursorShell::GetTextFieldAtCursor(rSh.GetCursor(), ::sw::GetTextAttrMode::Default))))
                     {
                         rSh.SttSelect();
                         rSh.SelectTextModel(

@@ -380,10 +380,10 @@ void SwTextNode::RstTextAttr(
     sal_Int32 nEnd = nStt + nLen;
     {
         // enlarge range for the reset of text attributes in case of an overlapping input field
-        const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( nStt, RES_TXTATR_INPUTFIELD, PARENT ));
+        const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(nStt, RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent));
         if ( pTextInputField == nullptr )
         {
-            pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(nEnd, RES_TXTATR_INPUTFIELD, PARENT ));
+            pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(nEnd, RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent));
         }
         if ( pTextInputField != nullptr )
         {

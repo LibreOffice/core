@@ -578,7 +578,7 @@ void SwSelPaintRects::HighlightInputField()
     if (m_bShowTextInputFieldOverlay)
     {
         SwTextInputField* pCurTextInputFieldAtCursor =
-            dynamic_cast<SwTextInputField*>(SwCursorShell::GetTextFieldAtPos( GetShell()->GetCursor()->Start(), false ));
+            dynamic_cast<SwTextInputField*>(SwCursorShell::GetTextFieldAtPos( GetShell()->GetCursor()->Start(), ::sw::GetTextAttrMode::Expand));
         if ( pCurTextInputFieldAtCursor != nullptr )
         {
             SwTextNode* pTextNode = pCurTextInputFieldAtCursor->GetpTextNode();
@@ -644,10 +644,10 @@ void SwSelPaintRects::HighlightContentControl()
         SwTextContentControl* pCurContentControlAtCursor = nullptr;
         if (pTextNode)
         {
-            // SwTextNode::PARENT because this way we highlight when the user will type inside the
+            // GetTextAttrMode::Parent because this way we highlight when the user will type inside the
             // content control, not outside of it.
             SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                pStart->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                pStart->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
             if (pAttr)
             {
                 pCurContentControlAtCursor = static_txtattr_cast<SwTextContentControl*>(pAttr);

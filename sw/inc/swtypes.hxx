@@ -156,6 +156,16 @@ namespace o3tl
     template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x1ff> {};
 }
 
+namespace sw {
+
+enum class GetTextAttrMode {
+    Default,    /// DEFAULT: (Start <= nIndex <  End)
+    Expand,     /// EXPAND : (Start <  nIndex <= End)
+    Parent,     /// PARENT : (Start <  nIndex <  End)
+};
+
+} // namespace sw
+
 constexpr bool SW_ISPRINTABLE(sal_Unicode c) { return c >= ' ' && 127 != c; }
 
 #define CHAR_HARDBLANK      u'\x00A0'

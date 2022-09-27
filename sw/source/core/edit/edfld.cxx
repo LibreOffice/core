@@ -215,7 +215,7 @@ void SwEditShell::UpdateOneField(SwField &rField)
 
         if ( !pCursor->IsMultiSelection() && !pCursor->HasMark())
         {
-            pTextField = GetTextFieldAtPos( pCursor->Start(), true );
+            pTextField = GetTextFieldAtPos(pCursor->Start(), ::sw::GetTextAttrMode::Default);
 
             if (!pTextField) // #i30221#
                 pTextField = lcl_FindInputField( GetDoc(), rField);
@@ -260,7 +260,7 @@ void SwEditShell::UpdateOneField(SwField &rField)
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
-                    pTextField = GetTextFieldAtPos( pCurStt, true );
+                    pTextField = GetTextFieldAtPos(pCurStt, ::sw::GetTextAttrMode::Default);
                     if( nullptr != pTextField )
                     {
                         pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());

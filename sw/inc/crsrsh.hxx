@@ -719,10 +719,10 @@ public:
 
     static SwTextField* GetTextFieldAtPos(
         const SwPosition* pPos,
-        const bool bIncludeInputFieldAtStart );
+        ::sw::GetTextAttrMode eMode);
     static SwTextField* GetTextFieldAtCursor(
         const SwPaM* pCursor,
-        const bool bIncludeInputFieldAtStart );
+        ::sw::GetTextAttrMode eMode);
     static SwField* GetFieldAtCursor(
         const SwPaM* pCursor,
         const bool bIncludeInputFieldAtStart );

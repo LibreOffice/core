@@ -1159,7 +1159,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             if (pTextNode)
             {
                 sal_Int32 nIndex = aPosition.GetContentIndex();
-                if (SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+                if (SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent))
                 {
                     pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
                 }

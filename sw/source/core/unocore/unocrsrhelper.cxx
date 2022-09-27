@@ -279,8 +279,8 @@ GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
         bool const bParent)
 {
     // these should be unambiguous because of the dummy character
-    SwTextNode::GetTextAttrMode const eMode( bParent
-        ? SwTextNode::PARENT : SwTextNode::EXPAND );
+    auto const eMode( bParent
+        ? ::sw::GetTextAttrMode::Parent : ::sw::GetTextAttrMode::Expand );
     SwTextAttr *const pMetaTextAttr =
         rTextNode.GetTextAttrAt(nIndex, RES_TXTATR_META, eMode);
     SwTextAttr *const pMetaFieldTextAttr =
@@ -580,7 +580,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             const SwTextNode *pTextNd =
                 rPam.GetDoc().GetNodes()[pPos->GetNodeIndex()]->GetTextNode();
             const SwTextAttr* pTextAttr = pTextNd
-                ? pTextNd->GetFieldTextAttrAt( pPos->GetContentIndex(), true )
+                ? pTextNd->GetFieldTextAttrAt(pPos->GetContentIndex(), ::sw::GetTextAttrMode::Default)
                 : nullptr;
             if ( pTextAttr != nullptr )
             {
@@ -1028,13 +1028,13 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     {
         // TODO: check meta field here too in case it ever grows a 2nd char
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
-                    RES_TXTATR_INPUTFIELD, SwTextNode::PARENT))
+                RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent))
         {
             throw uno::RuntimeException("cannot insert file inside input field");
         }
 
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
-                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+                RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent))
         {
             throw uno::RuntimeException("cannot insert file inside content controls");
         }

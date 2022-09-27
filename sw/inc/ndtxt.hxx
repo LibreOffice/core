@@ -381,12 +381,6 @@ public:
     bool DontExpandFormat( sal_Int32 nContentIdx, bool bFlag = true,
                         bool bFormatToTextAttributes = true );
 
-    enum GetTextAttrMode {
-        DEFAULT,    /// DEFAULT: (Start <= nIndex <  End)
-        EXPAND,     /// EXPAND : (Start <  nIndex <= End)
-        PARENT,     /// PARENT : (Start <  nIndex <  End)
-    };
-
     /** get the innermost text attribute covering position nIndex.
         @param nWhich   only attribute with this id is returned.
         @param eMode    the predicate for matching (@see GetTextAttrMode).
@@ -398,7 +392,7 @@ public:
     SwTextAttr *GetTextAttrAt(
         sal_Int32 const nIndex,
         sal_uInt16 const nWhich,
-        enum GetTextAttrMode const eMode = DEFAULT ) const;
+        ::sw::GetTextAttrMode const eMode = ::sw::GetTextAttrMode::Default) const;
 
     /** get the innermost text attributes covering position nIndex.
         @param nWhich   only attributes with this id are returned.
@@ -429,7 +423,7 @@ public:
 
     SwTextField* GetFieldTextAttrAt(
         const sal_Int32 nIndex,
-        const bool bIncludeInputFieldAtStart = false ) const;
+        ::sw::GetTextAttrMode const eMode = ::sw::GetTextAttrMode::Expand) const;
 
     bool Spell(SwSpellArgs*);
     bool Convert( SwConversionArgs & );

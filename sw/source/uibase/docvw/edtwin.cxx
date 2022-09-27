@@ -1559,7 +1559,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if (pTextNode)
             {
                 SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                    pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                    pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
                 if (pAttr)
                 {
                     SwTextContentControl* pTextContentControl
@@ -2475,7 +2475,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if (pTextNode)
                 {
                     sal_Int32 nIndex = pStart->GetContentIndex();
-                    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
                     if (pAttr)
                     {
                         auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
@@ -4800,7 +4800,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 {
                                     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
                                         pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL,
-                                        SwTextNode::PARENT);
+                                        ::sw::GetTextAttrMode::Parent);
                                     if (pAttr)
                                     {
                                         SwTextContentControl* pTextContentControl

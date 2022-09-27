@@ -78,8 +78,8 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
         return;
     }
 
-    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->GetContentIndex(),
-                                                 RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
+        pStart->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
     if (!pAttr)
     {
         return;

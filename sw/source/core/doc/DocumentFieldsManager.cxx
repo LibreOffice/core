@@ -1726,7 +1726,7 @@ SwTextField * DocumentFieldsManager::GetTextFieldAtPos(const SwPosition & rPos)
     SwTextNode * const pNode = rPos.GetNode().GetTextNode();
 
     return (pNode != nullptr)
-        ? pNode->GetFieldTextAttrAt( rPos.GetContentIndex(), true )
+        ? pNode->GetFieldTextAttrAt(rPos.GetContentIndex(), ::sw::GetTextAttrMode::Default)
         : nullptr;
 }
 

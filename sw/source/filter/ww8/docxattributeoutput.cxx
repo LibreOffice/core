@@ -1769,7 +1769,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     if (nLen != -1)
     {
-        SwTextAttr* pAttr = pNode->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL, SwTextNode::DEFAULT);
+        SwTextAttr* pAttr = pNode->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Default);
         if (pAttr && pAttr->GetStart() == nPos)
         {
             auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
@@ -1799,7 +1799,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     if (nLen != -1)
     {
         sal_Int32 nEnd = nPos + nLen;
-        SwTextAttr* pAttr = pNode->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL, SwTextNode::DEFAULT);
+        SwTextAttr* pAttr = pNode->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Default);
         if (pAttr && *pAttr->GetEnd() == nEnd)
         {
             WriteContentControlEnd();

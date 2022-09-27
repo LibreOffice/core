@@ -495,7 +495,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                 if (pTextNode)
                 {
                     const SwTextField* pField(
-                        pTextNode->GetFieldTextAttrAt(oAnchor->GetContentIndex(), true));
+                        pTextNode->GetFieldTextAttrAt(oAnchor->GetContentIndex(), ::sw::GetTextAttrMode::Default));
                     if (pField
                         && dynamic_cast<const SwPostItField*>(pField->GetFormatField().GetField()))
                     {

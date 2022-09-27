@@ -977,7 +977,7 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
         {
             sal_Int32 nIndex = pStart->GetContentIndex();
             SwTextAttr* pAttr
-                = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent);
             auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
             if (pTextContentControl)
             {
