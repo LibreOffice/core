@@ -99,16 +99,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
     {
     }
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 /* IMPORT */
