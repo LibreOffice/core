@@ -75,8 +75,10 @@ published struct Locale
         field is empty. </p>
 
         <p>You can find BCP 47 language tag resources at <br/>
-        <a href="http://www.langtag.net/">
-        <code>http://www.langtag.net/</code></a>. </p>
+        <a href="https://en.wikipedia.org/wiki/IETF_language_tag">
+        <code>https://en.wikipedia.org/wiki/IETF_language_tag</code></a> and
+        <a href="https://www.w3.org/International/articles/language-tags/">
+        <code>https://www.w3.org/International/articles/language-tags/</code></a>. </p>
 
         <p>Earlier versions of the documentation mentioned "vendor and
         browser-specific" codes but that was never supported. Use of any
