@@ -774,7 +774,7 @@ bool SwCursorShell::MoveFieldType(
         SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
         OSL_ENSURE( pTNd, "No ContentNode" );
 
-        SwTextField * pTextField = pTNd->GetFieldTextAttrAt( rPos.nContent.GetIndex(), true );
+        SwTextField * pTextField = pTNd->GetFieldTextAttrAt(rPos.nContent.GetIndex(), ::sw::GetTextAttrMode::Default);
         const bool bDelField = ( pTextField == nullptr );
         sal_Int32 nContentOffset = -1;
 
@@ -878,14 +878,14 @@ bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
 
 SwTextField * SwCursorShell::GetTextFieldAtPos(
     const SwPosition* pPos,
-    const bool bIncludeInputFieldAtStart )
+    ::sw::GetTextAttrMode const eMode)
 {
     SwTextField* pTextField = nullptr;
 
     SwTextNode * const pNode = pPos->nNode.GetNode().GetTextNode();
     if ( pNode != nullptr )
     {
-        pTextField = pNode->GetFieldTextAttrAt( pPos->nContent.GetIndex(), bIncludeInputFieldAtStart );
+        pTextField = pNode->GetFieldTextAttrAt( pPos->nContent.GetIndex(), eMode);
     }
 
     return pTextField;
@@ -893,11 +893,11 @@ SwTextField * SwCursorShell::GetTextFieldAtPos(
 
 SwTextField* SwCursorShell::GetTextFieldAtCursor(
     const SwPaM* pCursor,
-    const bool bIncludeInputFieldAtStart )
+    ::sw::GetTextAttrMode const eMode)
 {
     SwTextField* pFieldAtCursor = nullptr;
 
-    SwTextField* pTextField = GetTextFieldAtPos( pCursor->Start(), bIncludeInputFieldAtStart );
+    SwTextField* pTextField = GetTextFieldAtPos(pCursor->Start(), eMode);
     if ( pTextField != nullptr
         && pCursor->Start()->nNode == pCursor->End()->nNode )
     {
@@ -918,7 +918,8 @@ SwField* SwCursorShell::GetFieldAtCursor(
     const SwPaM *const pCursor,
     const bool bIncludeInputFieldAtStart)
 {
-    SwTextField *const pField(GetTextFieldAtCursor(pCursor, bIncludeInputFieldAtStart));
+    SwTextField *const pField(GetTextFieldAtCursor(pCursor,
+        bIncludeInputFieldAtStart ? ::sw::GetTextAttrMode::Default : ::sw::GetTextAttrMode::Expand));
     return pField
         ? const_cast<SwField*>(pField->GetFormatField().GetField())
         : nullptr;
@@ -949,7 +950,7 @@ bool SwCursorShell::CursorInsideInputField() const
 {
     for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
-        if (dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, true)))
+        if (dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, ::sw::GetTextAttrMode::Parent)))
             return true;
     }
     return false;
@@ -957,7 +958,7 @@ bool SwCursorShell::CursorInsideInputField() const
 
 bool SwCursorShell::PosInsideInputField( const SwPosition& rPos )
 {
-    return dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, false )) != nullptr;
+    return dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos(&rPos, ::sw::GetTextAttrMode::Parent)) != nullptr;
 }
 
 bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
@@ -973,7 +974,7 @@ bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
 
 sal_Int32 SwCursorShell::StartOfInputFieldAtPos( const SwPosition& rPos )
 {
-    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, true ));
+    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos(&rPos, ::sw::GetTextAttrMode::Default));
     assert(pTextInputField != nullptr
         && "<SwEditShell::StartOfInputFieldAtPos(..)> - no Input Field at given position");
     return pTextInputField->GetStart();
@@ -981,7 +982,7 @@ sal_Int32 SwCursorShell::StartOfInputFieldAtPos( const SwPosition& rPos )
 
 sal_Int32 SwCursorShell::EndOfInputFieldAtPos( const SwPosition& rPos )
 {
-    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, true ));
+    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos(&rPos, ::sw::GetTextAttrMode::Default));
     assert(pTextInputField != nullptr
         && "<SwEditShell::EndOfInputFieldAtPos(..)> - no Input Field at given position");
     return *(pTextInputField->End());
@@ -2007,7 +2008,7 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
             pTextAttr = pTextNd
                 ? pTextNd->GetTextAttrAt(rPos.nContent.GetIndex(),
                         nWhich,
-                        bExpand ? SwTextNode::EXPAND : SwTextNode::DEFAULT)
+                    bExpand ? ::sw::GetTextAttrMode::Expand : ::sw::GetTextAttrMode::Default)
                 : nullptr;
         }
 

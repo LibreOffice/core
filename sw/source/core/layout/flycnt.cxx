@@ -1347,7 +1347,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             {
                 const SwTextAttr *const pTextInputField =
                     pos.nNode.GetNode().GetTextNode()->GetTextAttrAt(
-                        pos.nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT );
+                        pos.nContent.GetIndex(), RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent);
                 if (pTextInputField != nullptr)
                 {
                     pos.nContent = pTextInputField->GetStart();

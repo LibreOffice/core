@@ -422,7 +422,7 @@ void SwSelPaintRects::HighlightInputField()
     if (m_bShowTextInputFieldOverlay)
     {
         SwTextInputField* pCurTextInputFieldAtCursor =
-            dynamic_cast<SwTextInputField*>(SwCursorShell::GetTextFieldAtPos( GetShell()->GetCursor()->Start(), false ));
+            dynamic_cast<SwTextInputField*>(SwCursorShell::GetTextFieldAtPos( GetShell()->GetCursor()->Start(), ::sw::GetTextAttrMode::Expand));
         if ( pCurTextInputFieldAtCursor != nullptr )
         {
             SwTextNode* pTextNode = pCurTextInputFieldAtCursor->GetpTextNode();

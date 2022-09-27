@@ -210,7 +210,7 @@ namespace
         SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
         if (!pTextNd)
             return nullptr;
-        return pTextNd->GetTextAttrAt(pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT);
+        return pTextNd->GetTextAttrAt(pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent);
     }
 }
 
@@ -1790,7 +1790,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
             assert(pNode);
             SwTextAttr const*const pInputField(pNode->GetTextAttrAt(
-                GetPoint()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT));
+                GetPoint()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent));
             if (pInputField)
             {
                 continue; // skip over input fields

@@ -1327,7 +1327,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     bool bSuccess = rIDCO.InsertPoolItem(*pPamForTextField, tempFormat);
     assert(bSuccess);
     (void) bSuccess;
-    SwTextField const* pNewAttr(rNode.GetFieldTextAttrAt(nStart, true));
+    SwTextField const* pNewAttr(rNode.GetFieldTextAttrAt(nStart, ::sw::GetTextAttrMode::Default));
     assert(pNewAttr);
     SwFormatField const& rNewFormat(pNewAttr->GetFormatField());
     assert(rNewFormat.Which() == (static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
@@ -2011,7 +2011,7 @@ void SAL_CALL SwXTextField::attach(
         else
             pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFormat, nInsertFlags);
 
-        SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+        SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt(aPam.GetPoint()->nContent.GetIndex()-1, ::sw::GetTextAttrMode::Default);
 
         // What about updating the fields? (see fldmgr.cxx)
         if (!pTextAttr)
@@ -2075,7 +2075,7 @@ void SAL_CALL SwXTextField::attach(
             }
             // keep inserted annotation
             {
-                SwTextField* pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
+                SwTextField *const pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt(aEnd.End()->nContent.GetIndex()-1, ::sw::GetTextAttrMode::Default);
                 if ( pTextAttr != nullptr )
                 {
                     m_pImpl->SetFormatField(const_cast<SwFormatField*>(&pTextAttr->GetFormatField()), m_pImpl->m_pDoc);

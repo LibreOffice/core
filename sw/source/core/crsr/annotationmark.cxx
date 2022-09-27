@@ -54,7 +54,7 @@ namespace sw { namespace mark
         SwTextNode *pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
         assert(pTextNode);
         SwTextField *const pTextField = pTextNode->GetFieldTextAttrAt(
-            GetMarkEnd().nContent.GetIndex()-1, true);
+            GetMarkEnd().nContent.GetIndex()-1, ::sw::GetTextAttrMode::Default);
         assert(pTextField != nullptr);
         auto pPostItField
             = dynamic_cast<const SwPostItField*>(pTextField->GetFormatField().GetField());

@@ -1662,7 +1662,7 @@ lcl_GetTextAttrs(
     SwTextAttr **const ppTextAttr,
     SwpHints const *const pSwpHints,
     sal_Int32 const nIndex, sal_uInt16 const nWhich,
-    enum SwTextNode::GetTextAttrMode const eMode)
+    ::sw::GetTextAttrMode const eMode)
 {
     assert(nWhich >= RES_TXTATR_BEGIN && nWhich < RES_TXTATR_END);
     if (!pSwpHints)
@@ -1672,9 +1672,12 @@ lcl_GetTextAttrs(
     bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=nullptr;
     switch (eMode)
     {
-        case SwTextNode::DEFAULT:   pMatchFunc = &lcl_GetTextAttrDefault; break;
-        case SwTextNode::EXPAND:    pMatchFunc = &lcl_GetTextAttrExpand;  break;
-        case SwTextNode::PARENT:    pMatchFunc = &lcl_GetTextAttrParent;  break;
+        case ::sw::GetTextAttrMode::Default: pMatchFunc = &lcl_GetTextAttrDefault;
+        break;
+        case ::sw::GetTextAttrMode::Expand:  pMatchFunc = &lcl_GetTextAttrExpand;
+        break;
+        case ::sw::GetTextAttrMode::Parent:  pMatchFunc = &lcl_GetTextAttrParent;
+        break;
         default: assert(false);
     }
 
@@ -1724,13 +1727,13 @@ SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, sal_uInt16 const nWhich) cons
 {
     assert(nWhich >= RES_TXTATR_BEGIN && nWhich < RES_TXTATR_END);
     std::vector<SwTextAttr *> ret;
-    lcl_GetTextAttrs(&ret, nullptr, m_pSwpHints.get(), nIndex, nWhich, DEFAULT);
+    lcl_GetTextAttrs(&ret, nullptr, m_pSwpHints.get(), nIndex, nWhich, ::sw::GetTextAttrMode::Default);
     return ret;
 }
 
 SwTextAttr *
 SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, sal_uInt16 const nWhich,
-                        enum GetTextAttrMode const eMode) const
+        ::sw::GetTextAttrMode const eMode) const
 {
     assert(    (nWhich == RES_TXTATR_META)
             || (nWhich == RES_TXTATR_METAFIELD)
@@ -1748,11 +1751,11 @@ SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, sal_uInt16 const nWhich,
 
 const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& rTextAttr ) const
 {
-    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( rTextAttr.GetStart(), RES_TXTATR_INPUTFIELD, PARENT ));
+    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(rTextAttr.GetStart(), RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent));
 
     if ( pTextInputField == nullptr && rTextAttr.End() != nullptr )
     {
-        pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( *(rTextAttr.End()), RES_TXTATR_INPUTFIELD, PARENT ));
+        pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(*(rTextAttr.End()), RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent));
     }
 
     return pTextInputField;
@@ -1775,7 +1778,7 @@ void SwTextNode::DelFrames_TextNodePart()
 
 SwTextField* SwTextNode::GetFieldTextAttrAt(
     const sal_Int32 nIndex,
-    const bool bIncludeInputFieldAtStart ) const
+    ::sw::GetTextAttrMode const eMode) const
 {
     SwTextField* pTextField = dynamic_cast<SwTextField*>(GetTextAttrForCharAt( nIndex, RES_TXTATR_FIELD ));
     if ( pTextField == nullptr )
@@ -1788,7 +1791,7 @@ SwTextField* SwTextNode::GetFieldTextAttrAt(
             dynamic_cast<SwTextField*>( GetTextAttrAt(
                 nIndex,
                 RES_TXTATR_INPUTFIELD,
-                bIncludeInputFieldAtStart ? DEFAULT : EXPAND ));
+                eMode));
     }
 
     return pTextField;

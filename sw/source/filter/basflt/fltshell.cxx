@@ -660,7 +660,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwTextNode const*const pTextNode(
                         aRegion.End()->nNode.GetNode().GetTextNode());
                 SwTextField const*const pField = pTextNode ? pTextNode->GetFieldTextAttrAt(
-                        aRegion.End()->nContent.GetIndex() - 1, true) : nullptr;
+                        aRegion.End()->nContent.GetIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
                 if (pField)
                 {
                     SwPostItField const*const pPostIt(

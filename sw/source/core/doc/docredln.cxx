@@ -1784,7 +1784,7 @@ OUString SwRangeRedline::GetDescr()
     OUString sDescr = DenoteSpecialCharacters(pPaM->GetText());
     if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
     {
-        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, true ))
+        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, ::sw::GetTextAttrMode::Default))
         {
             sDescr = SwResId(STR_START_QUOTE)
                 + pTextAttr->GetFormatField().GetField()->GetFieldName()
