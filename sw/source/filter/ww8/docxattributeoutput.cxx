@@ -4199,15 +4199,20 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     // Horizontal spans
     const SwWriteTableRows& rRows = m_xTableWrt->GetRows( );
-    SwWriteTableRow *pRow = rRows[ nRow ].get();
-    const SwWriteTableCells& rTableCells =  pRow->GetCells();
-    if (nCell < rTableCells.size() )
+    if (nRow >= rRows.size())
+        SAL_WARN("sw.ww8", "DocxAttributeOutput::TableCellProperties: out of range row: " << nRow);
+    else
     {
-        const SwWriteTableCell& rCell = *rTableCells[nCell];
-        const sal_uInt16 nColSpan = rCell.GetColSpan();
-        if ( nColSpan > 1 )
-            m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
-                    FSNS( XML_w, XML_val ), OString::number(nColSpan) );
+        SwWriteTableRow *pRow = rRows[ nRow ].get();
+        const SwWriteTableCells& rTableCells =  pRow->GetCells();
+        if (nCell < rTableCells.size() )
+        {
+            const SwWriteTableCell& rCell = *rTableCells[nCell];
+            const sal_uInt16 nColSpan = rCell.GetColSpan();
+            if ( nColSpan > 1 )
+                m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
+                        FSNS( XML_w, XML_val ), OString::number(nColSpan) );
+        }
     }
 
     // Vertical merges
@@ -5086,7 +5091,13 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     }
 
     const SwWriteTableRows& rRows = m_xTableWrt->GetRows( );
-    SwWriteTableRow *pRow = rRows[ pTableTextNodeInfoInner->getRow( ) ].get();
+    const auto nRow = pTableTextNodeInfoInner->getRow();
+    if (nRow >= rRows.size())
+    {
+        SAL_WARN("sw.ww8", "DocxAttributeOutput::TableCellProperties: out of range row: " << nRow);
+        return;
+    }
+    SwWriteTableRow *pRow = rRows[nRow].get();
     sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
     const SwWriteTableCells& rTableCells =  pRow->GetCells();
     if (nCell >= rTableCells.size() )
