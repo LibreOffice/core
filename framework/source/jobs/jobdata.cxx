@@ -448,10 +448,10 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
     }
 }
 
-bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
+bool JobData::hasCorrectContext(std::u16string_view rModuleIdent) const
 {
     sal_Int32 nContextLen  = m_sContext.getLength();
-    sal_Int32 nModuleIdLen = rModuleIdent.getLength();
+    sal_Int32 nModuleIdLen = rModuleIdent.size();
 
     if ( nContextLen == 0 )
         return true;

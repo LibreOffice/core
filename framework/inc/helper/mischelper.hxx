@@ -31,6 +31,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <i18nlangtag/lang.h>
+#include <o3tl/string_view.hxx>
 #include <svl/languageoptions.hxx>
 #include <rtl/ustring.hxx>
 
@@ -82,24 +83,25 @@ inline bool IsScriptTypeMatchingToLanguage( SvtScriptType nScriptType, LanguageT
     return bool(nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
-inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUString& aType, OUString& aName )
+inline void RetrieveTypeNameFromResourceURL( std::u16string_view aResourceURL, OUString& aType, OUString& aName )
 {
-    static const char      RESOURCEURL_PREFIX[] = "private:resource/";
-    static const sal_Int32 RESOURCEURL_PREFIX_SIZE = strlen(RESOURCEURL_PREFIX);
+    static constexpr std::u16string_view RESOURCEURL_PREFIX = u"private:resource/";
 
-    if (aResourceURL.startsWith( RESOURCEURL_PREFIX ))
+    if (o3tl::starts_with(aResourceURL, RESOURCEURL_PREFIX ))
     {
-        sal_Int32 nIdx{ RESOURCEURL_PREFIX_SIZE };
-        while (nIdx<aResourceURL.getLength() && aResourceURL[nIdx]=='/') ++nIdx;
-        if (nIdx>=aResourceURL.getLength())
+        size_t nIdx = RESOURCEURL_PREFIX.size();
+        while (nIdx < aResourceURL.size() && aResourceURL[nIdx]=='/')
+            ++nIdx;
+        if (nIdx >= aResourceURL.size())
             return;
-        aType = aResourceURL.getToken(0, '/', nIdx);
-        if (nIdx<0)
+        aType = o3tl::getToken(aResourceURL, u'/', nIdx);
+        if (nIdx == std::u16string_view::npos)
             return;
-        while (nIdx<aResourceURL.getLength() && aResourceURL[nIdx]=='/') ++nIdx;
-        if (nIdx>=aResourceURL.getLength())
+        while (nIdx < aResourceURL.size() && aResourceURL[nIdx]=='/')
+            ++nIdx;
+        if (nIdx >= aResourceURL.size())
             return;
-        aName = aResourceURL.getToken(0, '/', nIdx);
+        aName = o3tl::getToken(aResourceURL, u'/', nIdx);
     }
 }
 

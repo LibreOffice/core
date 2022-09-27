@@ -180,7 +180,7 @@ class JobData final
         std::vector< css::beans::NamedValue >    getJobConfig            () const;
 
         bool                                     hasConfig               () const;
-        bool                                     hasCorrectContext       ( const OUString& rModuleIdent ) const;
+        bool                                     hasCorrectContext       ( std::u16string_view rModuleIdent ) const;
 
         void                                         setEnvironment (       EEnvironment                                  eEnvironment );
         void                                         setAlias       ( const OUString&                              sAlias       );

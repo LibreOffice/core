@@ -213,16 +213,15 @@ std::u16string_view UIELEMENTTYPENAMES[] =
     u"" UIELEMENTTYPE_TOOLPANEL_NAME
 };
 
-const char       RESOURCEURL_PREFIX[] = "private:resource/";
-const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
+constexpr std::u16string_view RESOURCEURL_PREFIX = u"private:resource/";
 
-sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
+sal_Int16 RetrieveTypeFromResourceURL( std::u16string_view aResourceURL )
 {
 
-    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
-        ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
+    if (( o3tl::starts_with(aResourceURL, RESOURCEURL_PREFIX ) ) &&
+        ( aResourceURL.size() > RESOURCEURL_PREFIX.size() ))
     {
-        std::u16string_view aTmpStr = aResourceURL.subView( RESOURCEURL_PREFIX_SIZE );
+        std::u16string_view aTmpStr = aResourceURL.substr( RESOURCEURL_PREFIX.size() );
         size_t nIndex = aTmpStr.find( '/' );
         if (( nIndex > 0 ) &&  ( aTmpStr.size() > nIndex ))
         {
@@ -238,14 +237,14 @@ sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
     return UIElementType::UNKNOWN;
 }
 
-OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
+OUString RetrieveNameFromResourceURL( std::u16string_view aResourceURL )
 {
-    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
-        ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
+    if (( o3tl::starts_with(aResourceURL, RESOURCEURL_PREFIX ) ) &&
+        ( aResourceURL.size() > RESOURCEURL_PREFIX.size() ))
     {
-        sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );
-        if (( nIndex > 0 ) && (( nIndex+1 ) < aResourceURL.getLength()))
-            return aResourceURL.copy( nIndex+1 );
+        size_t nIndex = aResourceURL.rfind( '/' );
+        if ( (nIndex > 0) && (nIndex != std::u16string_view::npos) && (( nIndex+1 ) < aResourceURL.size()) )
+            return OUString(aResourceURL.substr( nIndex+1 ));
     }
 
     return OUString();
