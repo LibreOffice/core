@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
     };
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
 
-    // Then make sure we we only export PNG:
+    // Then make sure we only export PNG:
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
