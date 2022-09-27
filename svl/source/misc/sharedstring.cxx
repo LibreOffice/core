@@ -11,15 +11,15 @@
 
 namespace svl {
 
-/** ref-counting traffic associated with SharedString temporaries can be significant, so use a singleton here, so we can return a const& from getEmptyString */
-static OUString EMPTY(u"");
-const SharedString EMPTY_SHARED_STRING(EMPTY.pData, EMPTY.pData);
-const OUString SharedString::EMPTY_STRING {};
+const OUString SharedString::EMPTY_STRING;
 
 const SharedString & SharedString::getEmptyString()
 {
+    // ref-counting traffic associated with SharedString temporaries can be significant,
+    // so use a singleton here, so we can return a const& from getEmptyString.
     // unicode string array for empty string is globally shared in OUString.
     // Let's take advantage of that.
+    static const SharedString EMPTY_SHARED_STRING(EMPTY_STRING.pData, EMPTY_STRING.pData);
     return EMPTY_SHARED_STRING;
 }
 
