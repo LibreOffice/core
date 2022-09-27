@@ -2223,8 +2223,8 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
             SwPaM aPaM(*rPaM.Start(), *rPaM.End());
             if (SwTextNode* pEndTextNode = aPaM.End()->GetNode().GetTextNode())
             {
-                aPaM.Start()->nContent = 0;
-                aPaM.End()->nContent = pEndTextNode->GetText().getLength();
+                aPaM.Start()->SetContent(0);
+                aPaM.End()->SetContent(pEndTextNode->GetText().getLength());
             }
             GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true, GetLayout());
 

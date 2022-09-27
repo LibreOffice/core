@@ -251,13 +251,13 @@ void SwEditShell::UpdateOneField(SwField &rField)
 
                 // Search for SwTextField ...
                 while(  bOkay
-                     && pCurStt->nContent != pCurEnd->nContent
+                     && pCurStt->GetContentIndex() != pCurEnd->GetContentIndex()
                      && (sw::FindAttrImpl(aPam, aFieldHint, fnMoveForward, aCurPam, true, GetLayout())
                           || sw::FindAttrImpl(aPam, aAnnotationFieldHint, fnMoveForward, aCurPam, false, GetLayout())
                           || sw::FindAttrImpl(aPam, aInputFieldHint, fnMoveForward, aCurPam, false, GetLayout())))
                 {
                     // if only one PaM has more than one field  ...
-                    if( aPam.Start()->nContent != pCurStt->nContent )
+                    if( aPam.Start()->GetContentIndex() != pCurStt->GetContentIndex() )
                         bOkay = false;
 
                     pTextField = GetTextFieldAtPos(pCurStt, ::sw::GetTextAttrMode::Default);
@@ -275,7 +275,7 @@ void SwEditShell::UpdateOneField(SwField &rField)
                                                            pMsgHint, false);
                     }
                     // The search area is reduced by the found area:
-                    ++pCurStt->nContent;
+                    pCurStt->AdjustContent(+1);
                 }
             }
 

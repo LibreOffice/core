@@ -71,7 +71,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
             else
             {
                 // then go to the end of the selection
-                aDelPam.GetPoint()->nNode = rEndNd;
+                aDelPam.GetPoint()->Assign(rEndNd);
                 aDelPam.Move( fnMoveBackward, GoInContent );
             }
             // skip protected boxes
@@ -102,15 +102,14 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
             while (SwTableNode const* pTableNode =
                 pNewPam->Start()->GetNode().StartOfSectionNode()->FindTableNode())
             {
-                pNewPam->Start()->nNode = *pTableNode;
+                pNewPam->Start()->Assign(*pTableNode);
             }
             // tdf#133990 ensure section is included in SwUndoDelete
             while (SwSectionNode const* pSectionNode =
                 pNewPam->Start()->GetNode().StartOfSectionNode()->FindSectionNode())
             {
-                pNewPam->Start()->nNode = *pSectionNode;
+                pNewPam->Start()->Assign(*pSectionNode);
             }
-            pNewPam->Start()->nContent.Assign(nullptr, 0);
             pPam = &*pNewPam;
         }
         // delete everything
