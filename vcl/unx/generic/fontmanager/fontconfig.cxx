@@ -1182,11 +1182,7 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     {
         if (bMissingJustBullet)
         {
-            assert(rPattern.maTargetName == "Amiri Quran" || rPattern.maTargetName == "David CLM" ||
-                   rPattern.maTargetName == "Frank Ruehl CLM" ||
-                   rPattern.maTargetName == "KacstBook" || rPattern.maTargetName == "KacstOffice" ||
-                   rPattern.maTargetName == "Noto Sans Arabic");
-            // These fonts exist in "more_fonts", but have no U+00B7 MIDDLE DOT
+            // Some fonts exist in "more_fonts", but have no U+00B7 MIDDLE DOT
             // so will always glyph fallback on measuring mnBulletOffset in
             // ImplFontMetricData::ImplInitTextLineSize
             return;
