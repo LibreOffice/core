@@ -19,7 +19,9 @@
 
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <svl/stritem.hxx>
 
 #include "SmElementsPanel.hxx"
@@ -84,7 +86,14 @@ IMPL_LINK(SmElementsPanel, ElementClickHandler, OUString, ElementSource, void)
 SmViewShell* SmElementsPanel::GetView() const
 {
     SfxViewShell* pView = mrBindings.GetDispatcher()->GetFrame()->GetViewShell();
-    return dynamic_cast<SmViewShell*>(pView);
+    SmViewShell* pSmViewShell = dynamic_cast<SmViewShell*>(pView);
+    if (!pSmViewShell && comphelper::LibreOfficeKit::isActive())
+    {
+        auto* pWindow = static_cast<SmGraphicWindow*>(LokStarMathHelper(pView).GetGraphicWindow());
+        if (pWindow)
+            pSmViewShell = &pWindow->GetGraphicWidget().GetView();
+    }
+    return pSmViewShell;
 }
 
 } // end of namespace sm::sidebar
