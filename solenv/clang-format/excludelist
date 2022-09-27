@@ -10280,7 +10280,6 @@ setup_native/source/win32/customactions/tools/seterror.hxx
 sfx2/inc/bitset.hxx
 sfx2/inc/bluthsndapi.hxx
 sfx2/inc/charmapcontrol.hxx
-sfx2/inc/emojiviewitem.hxx
 sfx2/inc/guisaveas.hxx
 sfx2/inc/inettbc.hxx
 sfx2/inc/notebookbar/NotebookbarTabControl.hxx
@@ -10368,9 +10367,6 @@ sfx2/source/control/bindings.cxx
 sfx2/source/control/charmapcontrol.cxx
 sfx2/source/control/ctrlitem.cxx
 sfx2/source/control/dispatch.cxx
-sfx2/source/control/emojicontrol.cxx
-sfx2/source/control/emojiview.cxx
-sfx2/source/control/emojiviewitem.cxx
 sfx2/source/control/minfitem.cxx
 sfx2/source/control/msg.cxx
 sfx2/source/control/msgpool.cxx

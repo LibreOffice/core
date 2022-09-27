@@ -89,10 +89,6 @@
       constructor="com_sun_star_sfx2_ClassificationCategoriesController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.InsertEmojiToolBoxControl"
-      constructor="com_sun_star_comp_sfx2_InsertEmojiToolBoxControl_get_implementation">
-    <service name="com.sun.star.frame.ToolbarController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.sfx2.InsertSymbolToolBoxControl"
       constructor="com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

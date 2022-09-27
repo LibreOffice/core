@@ -136,11 +136,6 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
-    SID_EMOJI_CONTROL // ole : no, status : ?
-    [
-        ExecMethod = FuTemporaryModify ;
-        StateMethod = GetMenuState ;
-    ]
     SID_CHARMAP_CONTROL // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;

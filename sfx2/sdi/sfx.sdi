@@ -1921,23 +1921,6 @@ SfxVoidItem TipOfTheDay SID_TIPOFTHEDAY
     GroupId = SfxGroupId::Application;
 ]
 
-SfxVoidItem EmojiControl SID_EMOJI_CONTROL
-
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Special;
-]
-
 
 SfxVoidItem HideCurPage SID_BASICIDE_HIDECURPAGE
 ()

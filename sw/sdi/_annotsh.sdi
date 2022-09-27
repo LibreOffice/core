@@ -204,11 +204,6 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_EMOJI_CONTROL
-    [
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
     SID_CHARMAP_CONTROL
     [
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";

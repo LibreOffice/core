@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,sfx2,\
     CustomTarget_classification \
     Library_sfx \
     Package_classification \
-    Package_emoji \
     UIConfig_sfx \
 ))
 

@@ -81,8 +81,6 @@ $(eval $(call gb_Library_use_externals,sfx,\
     icui18n \
     icuuc \
     libxml2 \
-    orcus \
-    orcus-parser\
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_RECENT),TRUE)
@@ -169,10 +167,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailviewitem \
     sfx2/source/control/thumbnailviewacc \
     sfx2/source/control/thumbnailview \
-    sfx2/source/control/emojiviewitem \
-    sfx2/source/control/emojiview \
-    sfx2/source/control/emojicontrol \
-    sfx2/source/control/emojipopup \
     sfx2/source/control/charmapcontrol \
     sfx2/source/control/charwin \
     sfx2/source/control/unoctitm \
