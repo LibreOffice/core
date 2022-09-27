@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XTextDocument.hpp>
+
 namespace
 {
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/filter/ww8/data/";
@@ -47,6 +49,37 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderDocImport)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
     auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
+{
+    // Given a document with a hyperlink at char positions 0 -> 6 and a shape with text anchored at
+    // char position 6:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "beforeafter", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->goRight(/*nCount=*/6, /*bExpand=*/true);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    xCursorProps->setPropertyValue("HyperLinkURL", uno::Any(OUString("http://www.example.com/")));
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->goRight(/*nCount=*/6, /*bExpand=*/false);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(5000, 5000));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
+    xShapeProps->setPropertyValue("TextBox", uno::Any(true));
+
+    // When saving this document to DOCX, then make sure we don't crash on export (due to an
+    // assertion failure for not-well-formed XML output):
+    save("Office Open XML Text", maTempFile);
 }
 }
 
