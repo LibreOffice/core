@@ -117,7 +117,7 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
     return aPattern;
 }
 
-bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
+bool OZipFileAccess::StringGoodForPattern_Impl( std::u16string_view aString,
                                                     const uno::Sequence< OUString >& aPattern )
 {
     sal_Int32 nInd = aPattern.getLength() - 1;
@@ -133,10 +133,10 @@ bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
     }
 
     sal_Int32 nBeginInd = aPattern[0].getLength();
-    sal_Int32 nEndInd = aString.getLength() - aPattern[nInd].getLength();
+    sal_Int32 nEndInd = aString.size() - aPattern[nInd].getLength();
     if ( nEndInd < nBeginInd
-      || ( nEndInd != aString.getLength() && aString.subView( nEndInd ) != aPattern[nInd] )
-      || ( nBeginInd != 0 && aString.subView( 0, nBeginInd ) != aPattern[0] ) )
+      || ( nEndInd != sal_Int32(aString.size()) && aString.substr( nEndInd ) != aPattern[nInd] )
+      || ( nBeginInd != 0 && aString.substr( 0, nBeginInd ) != aPattern[0] ) )
           return false;
 
     for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
@@ -148,12 +148,12 @@ bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
             return false;
 
         // check that search does not use nEndInd position
-        sal_Int32 nLastInd = aString.lastIndexOf( aPattern[nCurInd], nEndInd - 1 );
+        size_t nLastInd = aString.substr(0, nEndInd - 1).rfind( aPattern[nCurInd] );
 
-        if ( nLastInd == -1 )
+        if ( nLastInd == std::u16string_view::npos )
             return false;
 
-        if ( nLastInd < nBeginInd )
+        if ( sal_Int32(nLastInd) < nBeginInd )
             return false;
 
         nEndInd = nLastInd;

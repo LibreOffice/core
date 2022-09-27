@@ -55,7 +55,7 @@ public:
 
     static css::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
 
-    static bool StringGoodForPattern_Impl( const OUString& aString,
+    static bool StringGoodForPattern_Impl( std::u16string_view,
                                         const css::uno::Sequence< OUString >& aPattern );
 
     // XInitialization
