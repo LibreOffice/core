@@ -131,7 +131,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
 }
 
 
-void FormulaHelper::FillArgStrings( const OUString&   rFormula,
+void FormulaHelper::FillArgStrings( std::u16string_view rFormula,
                                     sal_Int32         nFuncPos,
                                     sal_uInt16        nArgs,
                                     ::std::vector< OUString >& _rArgs ) const
@@ -150,7 +150,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
             nEnd = GetArgStart( rFormula, nFuncPos, i+1 );
 
             if ( nEnd != nStart )
-                _rArgs.push_back(rFormula.copy( nStart, nEnd-1-nStart ));
+                _rArgs.push_back(OUString(rFormula.substr( nStart, nEnd-1-nStart )));
             else
             {
                 _rArgs.emplace_back();
@@ -161,7 +161,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
         {
             nEnd = GetFunctionEnd( rFormula, nFuncPos )-1;
             if ( nStart < nEnd )
-                _rArgs.push_back( rFormula.copy( nStart, nEnd-nStart ) );
+                _rArgs.push_back( OUString(rFormula.substr( nStart, nEnd-nStart )) );
             else
                 _rArgs.emplace_back();
         }
@@ -174,7 +174,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
 
 
 void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
-                                   const OUString& rFormula,
+                                   std::u16string_view rFormula,
                                    sal_Int32 nFuncPos,
                                    sal_uInt16 nArgs ) const
 {
@@ -299,9 +299,9 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
 }
 
 
-sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart ) const
+sal_Int32  FormulaHelper::GetFunctionEnd( std::u16string_view rStr, sal_Int32 nStart ) const
 {
-    sal_Int32 nStrLen = rStr.getLength();
+    sal_Int32 nStrLen = rStr.size();
 
     if ( nStrLen < nStart )
         return nStart;
@@ -358,9 +358,9 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
 }
 
 
-sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sal_uInt16 nArg ) const
+sal_Int32 FormulaHelper::GetArgStart( std::u16string_view rStr, sal_Int32 nStart, sal_uInt16 nArg ) const
 {
-    sal_Int32 nStrLen = rStr.getLength();
+    sal_Int32 nStrLen = rStr.size();
 
     if ( nStrLen < nStart )
         return nStart;

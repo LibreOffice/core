@@ -62,17 +62,17 @@ namespace formula
         sal_Int32           GetFunctionStart( const OUString& rFormula, sal_Int32 nStart,
                                                         bool bBack, OUString* pFuncName = nullptr ) const;
 
-        sal_Int32           GetFunctionEnd  ( const OUString& rFormula, sal_Int32 nStart ) const;
+        sal_Int32           GetFunctionEnd  ( std::u16string_view rFormula, sal_Int32 nStart ) const;
 
-        sal_Int32           GetArgStart     ( const OUString& rFormula, sal_Int32 nStart,
+        sal_Int32           GetArgStart     ( std::u16string_view rFormula, sal_Int32 nStart,
                                                       sal_uInt16 nArg ) const;
 
         void                GetArgStrings   ( ::std::vector< OUString >& _rArgs,
-                                                      const OUString&   rFormula,
+                                                      std::u16string_view   rFormula,
                                                       sal_Int32         nFuncPos,
                                                       sal_uInt16        nArgs ) const;
 
-        void                FillArgStrings  ( const OUString& rFormula,
+        void                FillArgStrings  ( std::u16string_view rFormula,
                                                       sal_Int32         nFuncPos,
                                                       sal_uInt16        nArgs,
                                                       ::std::vector< OUString >&      _rArgs ) const;
