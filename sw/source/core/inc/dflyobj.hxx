@@ -139,6 +139,7 @@ public:
     virtual bool HasLimitedRotation() const override;
 
     virtual bool IsTextBox() const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif
