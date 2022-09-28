@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;
@@ -102,19 +103,29 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     // mis-detect it.
                     if ( bIsDetected && aTypeName == "writer_MS_Word_97_Vorlage" )
                     {
+                        // It is common practice to rename a .doc to .dot to make it a template.
+                        // Since we have detected a.doc-ish format, always accept .dot-named-files
+                        // as valid templates to avoid flagging this as an invalid .dot format..
+                        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(
+                            utl::MediaDescriptor::PROP_URL, OUString()));
+
                         // Super ugly hack, but we don't want to use the whole WW8Fib thing here in
                         // the swd library, apparently. We know (do we?) that the "aBits1" byte, as
                         // the variable is called in WW8Fib::WW8Fib(SvStream&,sal_uInt8,sal_uInt32),
                         // is at offset 10 in the WordDocument stream. The fDot bit is bit 0x01 of
                         // that byte.
-                        tools::SvRef<SotStorageStream> xWordDocument = aStorage->OpenSotStream("WordDocument", StreamMode::STD_READ);
-                        xWordDocument->Seek( 10 );
-                        if ( xWordDocument->Tell() == 10 )
+                        if (aParser.getExtension().toAsciiLowerCase() != "dot")
                         {
-                            sal_uInt8 aBits1;
-                            xWordDocument->ReadUChar( aBits1 );
-                            // Check fDot bit
-                            bIsDetected = ((aBits1 & 0x01) == 0x01);
+                            tools::SvRef<SotStorageStream> xWordDocument
+                                = aStorage->OpenSotStream("WordDocument", StreamMode::STD_READ);
+                            xWordDocument->Seek(10);
+                            if (xWordDocument->Tell() == 10)
+                            {
+                                sal_uInt8 aBits1;
+                                xWordDocument->ReadUChar(aBits1);
+                                // Check fDot bit
+                                bIsDetected = ((aBits1 & 0x01) == 0x01);
+                            }
                         }
                     }
                 }
