@@ -1149,13 +1149,6 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     OUString aUpVal1( aStrVal1 ); //TODO: As a member? (Also set in Interpret)
     OUString aUpVal2( aStrVal2 );
 
-    if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
-        if (ScGlobal::GetCollator().compareString( aUpVal1, aUpVal2 ) > 0)
-        {
-            // Right order for value range
-            OUString aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
-        }
-
     switch ( eOp )
     {
         case ScConditionMode::Equal:
@@ -1220,14 +1213,14 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                     break;
                 case ScConditionMode::Between:
                 case ScConditionMode::NotBetween:
+                {
+                    const sal_Int32 nCompare2 = ScGlobal::GetCollator().compareString(rArg, aUpVal2);
                     //  Test for NOTBETWEEN:
-                    bValid = ( nCompare < 0 ||
-                        ScGlobal::GetCollator().compareString( rArg,
-                        aUpVal2 ) > 0 );
+                    bValid = (nCompare > 0 && nCompare2 > 0) || (nCompare < 0 && nCompare2 < 0);
                     if ( eOp == ScConditionMode::Between )
                         bValid = !bValid;
                     break;
-                //  ScConditionMode::Direct already handled above
+                }
                 default:
                     SAL_WARN("sc", "unknown operation in ScConditionEntry");
                     bValid = false;
