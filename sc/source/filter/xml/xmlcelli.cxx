@@ -1337,7 +1337,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     ScDocument* pDoc = rXMLImport.GetDocument();
     ScDocumentImport& rDocImport = rXMLImport.GetDoc();
 
-    OUString aText = maFormula->first;
+    const OUString & aText = maFormula->first;
 
     ScExternalRefManager::ApiGuard aExtRefGuard(*pDoc);
 
