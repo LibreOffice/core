@@ -352,6 +352,11 @@ void SpellDialog::SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGua
     //then GetNextSentence() has to be called followed again by MarkNextError()
     //MarkNextError is not initially called if the UndoEdit mode is active
     bool bNextSentence = false;
+    if (!m_xSentenceED)
+    {
+        return;
+    }
+
     if(!((!m_xSentenceED->IsUndoEditMode() && m_xSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
             ( bNextSentence = GetNextSentence_Impl(pGuard, bUseSavedSentence, m_xSentenceED->IsUndoEditMode()) && m_xSentenceED->MarkNextError( false, xSpell ))))
         return;
