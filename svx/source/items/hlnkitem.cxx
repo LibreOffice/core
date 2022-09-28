@@ -48,9 +48,9 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, c
     sURL        (rURL),
     sTarget     (rTarget),
     eType       (eTyp),
+    sReplacementText (rReplacementText),
     sIntName (rIntName),
-    nMacroEvents (nEvents),
-    sReplacementText (rReplacementText)
+    nMacroEvents (nEvents)
 {
     if (pMacroTbl)
         pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
