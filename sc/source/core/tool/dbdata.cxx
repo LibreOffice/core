@@ -1009,10 +1009,11 @@ public:
 OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
                                          const OUString& sOldName)
 {
-    sal_Int32 nLastIndex = sOldName.lastIndexOf('_') + 1;
+    sal_Int32 nLastIndex = sOldName.lastIndexOf('_');
     sal_Int32 nOldNumber = 1;
     if (nLastIndex >= 0)
     {
+        ++nLastIndex;
         std::u16string_view sLastPart(sOldName.subView(nLastIndex));
         nOldNumber = o3tl::toInt32(sLastPart);
 
