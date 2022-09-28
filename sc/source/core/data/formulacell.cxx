@@ -1290,9 +1290,8 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
 
             // The initial '=' is optional in ODFF.
             const sal_Int32 nLeadingEqual = (aFormula.getLength() > 0 && aFormula[0] == '=') ? 1 : 0;
-            OUString aShouldBe = aShouldBeBuf.makeStringAndClear();
-            if (aFormula.getLength() == aShouldBe.getLength() + nLeadingEqual &&
-                    aFormula.match( aShouldBe, nLeadingEqual))
+            if (aFormula.getLength() == aShouldBeBuf.getLength() + nLeadingEqual &&
+                    aFormula.match( aShouldBeBuf, nLeadingEqual))
             {
                 // Put them in the same formula group.
                 ScFormulaCellGroupRef xGroup = pPreviousCell->GetCellGroup();
