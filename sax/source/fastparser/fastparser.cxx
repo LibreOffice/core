@@ -435,7 +435,7 @@ void Entity::startElement( Event const *pEvent )
 
     try
     {
-        Reference< XFastAttributeList > xAttr( pEvent->mxAttributes );
+        const Reference< XFastAttributeList > & xAttr( pEvent->mxAttributes );
         Reference< XFastContextHandler > xContext;
 
         if ( mxNamespaceHandler.is() )
