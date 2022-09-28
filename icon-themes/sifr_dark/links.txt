@@ -2023,6 +2023,13 @@ res/queries_32.png cmd/32/dbviewqueries.png
 res/reports_32.png cmd/32/dbviewreports.png
 res/tables_32.png cmd/32/dbviewtables.png
 
+# desktop
+# ==============================================
+desktop/res/caution_16.png dbaccess/res/exwarning.png
+desktop/res/extension_16.png cmd/sc_insertplugin.png
+desktop/res/extension_32.png cmd/32/insertplugin.png
+desktop/res/lock_16.png cmd/sc_protect.png
+
 # formula
 # ==============================================
 formula/res/faperror.png cmd/sc_cancel.png
