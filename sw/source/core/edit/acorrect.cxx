@@ -206,7 +206,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
 
     SwPaM* pPam = &m_rCursor;
     if (pPam->GetPoint()->GetNode() != *pos.first
-        || pPam->GetPoint()->nContent != pos.second)
+        || pPam->GetPoint()->GetContentIndex() != pos.second)
     {
         pPam = new SwPaM(*pos.first, pos.second);
     }
@@ -250,8 +250,8 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
                 PaMIntoCursorShellRing aTmp( m_rEditSh, m_rCursor, *pPam );
 
                 pPam->SetMark();
-                pPam->GetPoint()->nContent = std::min<sal_Int32>(
-                    pos.first->GetText().getLength(), pos.second + nSourceLength);
+                pPam->GetPoint()->SetContent( std::min<sal_Int32>(
+                    pos.first->GetText().getLength(), pos.second + nSourceLength) );
                 pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rText, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
@@ -260,8 +260,8 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
         else
         {
             pPam->SetMark();
-            pPam->GetPoint()->nContent = std::min<sal_Int32>(
-                pos.first->GetText().getLength(), pos.second + nSourceLength);
+            pPam->GetPoint()->SetContent( std::min<sal_Int32>(
+                pos.first->GetText().getLength(), pos.second + nSourceLength) );
             pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rText, false );
             pPam->Exchange();
             pPam->DeleteMark();
@@ -476,10 +476,10 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 aCpyPam.SetMark();
 
                 // then until the end of the Nodes Array
-                aCpyPam.GetPoint()->nNode.Assign( pAutoDoc->GetNodes().GetEndOfContent(), -1 );
+                aCpyPam.GetPoint()->Assign( pAutoDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1) );
                 pContentNd = aCpyPam.GetPointContentNode();
-                aCpyPam.GetPoint()->nContent.Assign(
-                       pContentNd, pContentNd ? pContentNd->Len() : 0);
+                if (pContentNd)
+                    aCpyPam.GetPoint()->SetContent( pContentNd->Len() );
 
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );
