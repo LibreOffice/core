@@ -1960,7 +1960,8 @@ void OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 m_xColumn.set( m_xField, UNO_QUERY );
                 sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
                 m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
-                m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
+                // tdf#122319 - don't allow nullable form components if input is required
+                m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag || m_bInputRequired);
                 // we're optimistic: in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability...
             }
             else
