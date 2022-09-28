@@ -487,13 +487,7 @@ const char* TEMPLATE_SHORT_NAMES_ARY[] =
     "officorr",
     "offimisc",
     "personal",
-    "forms",
-    "finance",
-    "educate",
-    "layout",
     "presnt",
-    "misc",
-    "labels",
     "draw"
 };
 
