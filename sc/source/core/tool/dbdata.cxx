@@ -1007,31 +1007,47 @@ public:
 };
 
 OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
-                                         const OUString& sOldName)
+                                         std::u16string_view rOldName)
 {
-    sal_Int32 nLastIndex = sOldName.lastIndexOf('_');
+    // Append or increment a numeric suffix and do not generate names that
+    // could result in a cell reference by ensuring at least one underscore is
+    // present.
+    // "aa"     => "aa_2"
+    // "aaaa1"  => "aaaa1_2"
+    // "aa_a"   => "aa_a_2"
+    // "aa_a_"  => "aa_a__2"
+    // "aa_a1"  => "aa_a1_2"
+    // "aa_1a"  => "aa_1a_2"
+    // "aa_1"   => "aa_2"
+    // "aa_2"   => "aa_3"
+
+    size_t nLastIndex = rOldName.rfind('_');
     sal_Int32 nOldNumber = 1;
-    if (nLastIndex >= 0)
+    OUString aPrefix;
+    if (nLastIndex != std::u16string_view::npos)
     {
         ++nLastIndex;
-        std::u16string_view sLastPart(sOldName.subView(nLastIndex));
+        std::u16string_view sLastPart(rOldName.substr(nLastIndex));
         nOldNumber = o3tl::toInt32(sLastPart);
 
-        // When no number found, add number at the end.
-        // When there is a literal "0" at the end, keep the "lastIndex" from above
-        // (OUString::toInt32() also returns 0 on failure)
-        if (nOldNumber == 0 && sLastPart != u"0")
+        // If that number is exactly at the end then increment the number; else
+        // append "_" and number.
+        // toInt32() returns 0 on failure and also stops at trailing non-digit
+        // characters (toInt32("1a")==1).
+        if (OUString::number(nOldNumber) == sLastPart)
+            aPrefix = rOldName.substr(0, nLastIndex);
+        else
         {
+            aPrefix = OUString::Concat(rOldName) + "_";
             nOldNumber = 1;
-            nLastIndex = sOldName.getLength();
         }
     }
-    else // No "_" found, add number at the end
-        nLastIndex = sOldName.getLength();
+    else // No "_" found, append "_" and number.
+        aPrefix = OUString::Concat(rOldName) + "_";
     OUString sNewName;
     do
     {
-        sNewName = sOldName.subView(0, nLastIndex) + OUString::number(++nOldNumber);
+        sNewName = aPrefix + OUString::number(++nOldNumber);
     } while (namedDBs.findByName(sNewName) != nullptr);
     return sNewName;
 }
@@ -1544,17 +1560,23 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
 void ScDBCollection::CopyToTable(SCTAB nOldPos, SCTAB nNewPos)
 {
+    // Create temporary copy of pointers to not insert in a set we are
+    // iterating over.
+    std::vector<const ScDBData*> aTemp;
+    aTemp.reserve( maNamedDBs.size());
     for (const auto& rxNamedDB : maNamedDBs)
     {
         if (rxNamedDB->GetTab() != nOldPos)
-            return;
-
-        OUString newName
-            = lcl_IncrementNumberInNamedRange(getNamedDBs(), rxNamedDB->GetName());
+            continue;
+        aTemp.emplace_back( rxNamedDB.get());
+    }
+    for (const auto& rxNamedDB : aTemp)
+    {
+        const OUString newName( lcl_IncrementNumberInNamedRange( maNamedDBs, rxNamedDB->GetName()));
         std::unique_ptr<ScDBData> pDataCopy = std::make_unique<ScDBData>(newName, *rxNamedDB);
         pDataCopy->UpdateMoveTab(nOldPos, nNewPos);
         pDataCopy->SetIndex(0);
-        getNamedDBs().insert(std::move(pDataCopy));
+        maNamedDBs.insert(std::move(pDataCopy));
     }
 }
 
