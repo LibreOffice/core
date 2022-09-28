@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/math.h>
 #include <sax/saxdllapi.h>
 
 #include <string_view>
@@ -172,7 +173,9 @@ public:
         double toDouble() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
-            return rtl_str_toDouble(mrList.getFastAttributeValue(mnIdx));
+            const char* pStr = mrList.getFastAttributeValue(mnIdx);
+            sal_Int32 nLen = mrList.AttributeValueLength(mnIdx);
+            return rtl_math_stringToDouble(pStr, pStr + nLen, '.', 0, nullptr, nullptr);
         }
         bool toBoolean() const
         {
