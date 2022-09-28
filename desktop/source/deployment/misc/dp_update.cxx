@@ -41,7 +41,7 @@ int determineHighestVersion(
     OUString const & userVersion,
     OUString const & sharedVersion,
     OUString const & bundledVersion,
-    OUString const & onlineVersion)
+    std::u16string_view onlineVersion)
 {
     int index = 0;
     OUString  greatest = userVersion;
@@ -236,7 +236,7 @@ UPDATE_SOURCE isUpdateUserExtension(
     OUString const & userVersion,
     OUString const & sharedVersion,
     OUString const & bundledVersion,
-    OUString const & onlineVersion)
+    std::u16string_view onlineVersion)
 {
     UPDATE_SOURCE retVal = UPDATE_SOURCE_NONE;
     if (bReadOnlyShared)
@@ -285,7 +285,7 @@ UPDATE_SOURCE isUpdateSharedExtension(
     bool bReadOnlyShared,
     OUString const & sharedVersion,
     OUString const & bundledVersion,
-    OUString const & onlineVersion)
+    std::u16string_view onlineVersion)
 {
     if (bReadOnlyShared)
         return UPDATE_SOURCE_NONE;

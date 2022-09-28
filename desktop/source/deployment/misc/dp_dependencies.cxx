@@ -73,13 +73,13 @@ OUString getReferenceOpenOfficeOrgMajorMinor() {
 }
 
 bool satisfiesMinimalVersion(
-    OUString const & actual, OUString const & specified)
+    std::u16string_view actual, std::u16string_view specified)
 {
     return dp_misc::compareVersions(actual, specified) != dp_misc::LESS;
 }
 
 bool satisfiesMaximalVersion(
-    OUString const & actual, OUString const & specified)
+    std::u16string_view actual, std::u16string_view specified)
 {
     return dp_misc::compareVersions(actual, specified) != dp_misc::GREATER;
 }

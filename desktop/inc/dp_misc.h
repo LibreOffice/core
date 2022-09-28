@@ -64,7 +64,7 @@ OUString expandUnoRcUrl( OUString const & url );
     be again encoded for use in an "expand" URL.
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURL(
-    OUString const & baseURL, OUString const & relPath );
+    std::u16string_view baseURL, OUString const & relPath );
 
 
 /** appends a relative path to a url.
@@ -73,7 +73,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURL(
     of an system path.
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURLAppendSysPathSegment(
-    OUString const & baseURL, OUString const & relPath );
+    std::u16string_view baseURL, OUString const & relPath );
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateRandomPipeId();

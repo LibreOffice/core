@@ -24,6 +24,7 @@
 #include <dp_misc.h>
 #include <dp_interact.h>
 #include <dp_shared.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>
@@ -224,12 +225,12 @@ bool needToSyncRepository(std::u16string_view name)
 
 
 namespace {
-OUString encodeForRcFile( OUString const & str )
+OUString encodeForRcFile( std::u16string_view str )
 {
     // escape $\{} (=> rtl bootstrap files)
     OUStringBuffer buf(64);
-    sal_Int32 pos = 0;
-    const sal_Int32 len = str.getLength();
+    size_t pos = 0;
+    const size_t len = str.size();
     for ( ; pos < len; ++pos ) {
         sal_Unicode c = str[ pos ];
         switch (c) {
@@ -247,11 +248,11 @@ OUString encodeForRcFile( OUString const & str )
 }
 
 
-OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
+OUString makeURL( std::u16string_view baseURL, OUString const & relPath_ )
 {
     OUStringBuffer buf(128);
-    if (baseURL.getLength() > 1 && baseURL[ baseURL.getLength() - 1 ] == '/')
-        buf.append( baseURL.subView(0, baseURL.getLength() - 1) );
+    if (baseURL.size() > 1 && baseURL[ baseURL.size() - 1 ] == '/')
+        buf.append( baseURL.substr(0, baseURL.size() - 1) );
     else
         buf.append( baseURL );
     OUString relPath(relPath_);
@@ -260,7 +261,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
     if (!relPath.isEmpty())
     {
         buf.append( '/' );
-        if (baseURL.match( "vnd.sun.star.expand:" )) {
+        if (o3tl::starts_with(baseURL, u"vnd.sun.star.expand:" )) {
             // encode for macro expansion: relPath is supposed to have no
             // macros, so encode $, {} \ (bootstrap mimic)
             relPath = encodeForRcFile(relPath);
@@ -277,7 +278,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
     return buf.makeStringAndClear();
 }
 
-OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const & segment )
+OUString makeURLAppendSysPathSegment( std::u16string_view baseURL, OUString const & segment )
 {
     OSL_ASSERT(segment.indexOf(u'/') == -1);
 

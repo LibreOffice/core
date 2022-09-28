@@ -83,7 +83,7 @@ std::vector<OUString> getCmdBootstrapVariables()
 }
 
 bool jarManifestHeaderPresent(
-    OUString const & url, OUString const & name,
+    OUString const & url, std::u16string_view name,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString buf = "vnd.sun.star.zip://"
@@ -621,7 +621,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             else if (title.endsWithIgnoreAsciiCase(".jar"))
             {
                 if (jarManifestHeaderPresent(
-                        url, "RegistrationClassName", xCmdEnv ))
+                        url, u"RegistrationClassName", xCmdEnv ))
                     mediaType = "application/vnd.sun.star.uno-component;type=Java";
                 if (mediaType.isEmpty())
                     mediaType = "application/vnd.sun.star.uno-typelibrary;type=Java";
@@ -748,7 +748,7 @@ void BackendImpl::unorc_verify_init(
             xCmdEnv, false /* no throw */ ))
     {
         OUString line;
-        if (readLine( &line, "UNO_JAVA_CLASSPATH=", ucb_content,
+        if (readLine( &line, u"UNO_JAVA_CLASSPATH=", ucb_content,
                       RTL_TEXTENCODING_UTF8 ))
         {
             sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
@@ -770,7 +770,7 @@ void BackendImpl::unorc_verify_init(
             }
             while (index >= 0);
         }
-        if (readLine( &line, "UNO_TYPES=", ucb_content,
+        if (readLine( &line, u"UNO_TYPES=", ucb_content,
                       RTL_TEXTENCODING_UTF8 )) {
             sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
             do {
@@ -793,7 +793,7 @@ void BackendImpl::unorc_verify_init(
             }
             while (index >= 0);
         }
-        if (readLine( &line, "UNO_SERVICES=", ucb_content,
+        if (readLine( &line, u"UNO_SERVICES=", ucb_content,
                       RTL_TEXTENCODING_UTF8 ))
         {
             // The UNO_SERVICES line always has the BNF form
@@ -839,7 +839,7 @@ void BackendImpl::unorc_verify_init(
                 &ucb_content,
                 makeURL( getCachePath(), getPlatformString() + "rc"),
                 xCmdEnv, false /* no throw */ )) {
-            if (readLine( &line, "UNO_SERVICES=", ucb_content,
+            if (readLine( &line, u"UNO_SERVICES=", ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
                 m_nativeRDB_orig = line.copy(
                     sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
@@ -1376,7 +1376,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         impreg->registerImplementation(m_loader, url, rdb);
         // Only write to unorc after successful registration; it may fail if
         // there is no suitable java
-        if (m_loader == "com.sun.star.loader.Java2" && !jarManifestHeaderPresent(url, "UNO-Type-Path", xCmdEnv))
+        if (m_loader == "com.sun.star.loader.Java2" && !jarManifestHeaderPresent(url, u"UNO-Type-Path", xCmdEnv))
         {
             that->addToUnoRc(RCITEM_JAR_TYPELIB, url, xCmdEnv);
             data.javaTypeLibrary = true;

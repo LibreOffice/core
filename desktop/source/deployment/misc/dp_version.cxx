@@ -20,18 +20,19 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 
 #include <dp_version.hxx>
 
 namespace {
 
-OUString getElement(OUString const & version, ::sal_Int32 * index)
+std::u16string_view getElement(std::u16string_view version, std::size_t * index)
 {
-    while (*index < version.getLength() && version[*index] == '0') {
+    while (*index < version.size() && version[*index] == '0') {
         ++*index;
     }
-    return version.getToken(0, '.', *index);
+    return o3tl::getToken(version, u'.', *index);
 }
 
 }
@@ -39,14 +40,14 @@ OUString getElement(OUString const & version, ::sal_Int32 * index)
 namespace dp_misc {
 
 ::dp_misc::Order compareVersions(
-    OUString const & version1, OUString const & version2)
+    std::u16string_view version1, std::u16string_view version2)
 {
-    for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        OUString e1(i1 >= 0 ? getElement(version1, &i1) : OUString());
-        OUString e2(i2 >= 0 ? getElement(version2, &i2) : OUString());
-        if (e1.getLength() < e2.getLength()) {
+    for (size_t i1 = 0, i2 = 0; i1 != std::u16string_view::npos || i2 != std::u16string_view::npos;) {
+        std::u16string_view e1(i1 != std::u16string_view::npos ? getElement(version1, &i1) : std::u16string_view());
+        std::u16string_view e2(i2 != std::u16string_view::npos ? getElement(version2, &i2) : std::u16string_view());
+        if (e1.size() < e2.size()) {
             return ::dp_misc::LESS;
-        } else if (e1.getLength() > e2.getLength()) {
+        } else if (e1.size() > e2.size()) {
             return ::dp_misc::GREATER;
         } else if (e1 < e2) {
             return ::dp_misc::LESS;

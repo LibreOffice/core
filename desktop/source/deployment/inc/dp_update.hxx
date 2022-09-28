@@ -60,7 +60,7 @@ UPDATE_SOURCE isUpdateUserExtension(
     OUString const & userVersion,
     OUString const & sharedVersion,
     OUString const & bundledVersion,
-    OUString const & onlineVersion);
+    std::u16string_view onlineVersion);
 
 /* determine if an update is available which is installed in the
    shared repository.
@@ -74,7 +74,7 @@ UPDATE_SOURCE isUpdateSharedExtension(
     bool bReadOnlyShared,
     OUString const & sharedVersion,
     OUString const & bundledVersion,
-    OUString const & onlineVersion);
+    std::u16string_view onlineVersion);
 
 /* determines the extension with the highest identifier and returns it
 

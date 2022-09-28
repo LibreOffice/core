@@ -30,7 +30,7 @@ namespace dp_misc {
 enum Order { LESS, EQUAL, GREATER };
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order compareVersions(
-    OUString const & version1, OUString const & version2);
+    std::u16string_view version1, std::u16string_view version2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

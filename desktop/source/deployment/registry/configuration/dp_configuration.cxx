@@ -381,7 +381,7 @@ void BackendImpl::configmgrini_verify_init(
             xCmdEnv, false /* no throw */ ))
     {
         OUString line;
-        if (readLine( &line, "SCHEMA=", ucb_content,
+        if (readLine( &line, u"SCHEMA=", ucb_content,
                       RTL_TEXTENCODING_UTF8 ))
         {
             sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
@@ -397,7 +397,7 @@ void BackendImpl::configmgrini_verify_init(
             }
             while (index >= 0);
         }
-        if (readLine( &line, "DATA=", ucb_content,
+        if (readLine( &line, u"DATA=", ucb_content,
                       RTL_TEXTENCODING_UTF8 )) {
             sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
             do {
@@ -566,12 +566,12 @@ BackendImpl::PackageImpl::isRegistered_(
 }
 
 
-OUString encodeForXml( OUString const & text )
+OUString encodeForXml( std::u16string_view text )
 {
     // encode conforming xml:
-    sal_Int32 len = text.getLength();
+    size_t len = text.size();
     OUStringBuffer buf;
-    for ( sal_Int32 pos = 0; pos < len; ++pos )
+    for ( size_t pos = 0; pos < len; ++pos )
     {
         sal_Unicode c = text[ pos ];
         switch (c) {
@@ -651,7 +651,7 @@ OUString replaceOrigin(
             if (origin.isEmpty()) {
                 // encode only once
                 origin = OUStringToOString(
-                    encodeForXml( url.copy( 0, url.lastIndexOf( '/' ) ) ),
+                    encodeForXml( url.subView( 0, url.lastIndexOf( '/' ) ) ),
                     // xxx todo: encode always for UTF-8? => lookup doc-header?
                     RTL_TEXTENCODING_UTF8 );
             }

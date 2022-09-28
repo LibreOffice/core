@@ -80,7 +80,7 @@ std::vector<sal_Int8> readFile( ::ucbhelper::Content & ucb_content );
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool readLine( OUString * res, OUString const & startingWith,
+bool readLine( OUString * res, std::u16string_view startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc );
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
