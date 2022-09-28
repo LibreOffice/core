@@ -564,17 +564,17 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
 
             // put selection again
             pPam->DeleteMark();
-            pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
+            pPam->GetPoint()->Assign( aPrevIdx.GetNode(), SwNodeOffset(+1) );
             SwContentNode* pCNd = pPam->GetPointContentNode();
             sal_Int32 nLen = pCNd->Len();
             if( nLen > nCntStt )
                 nLen = nCntStt;
-            pPam->GetPoint()->nContent.Assign(pCNd, nLen );
+            pPam->GetPoint()->SetContent(nLen );
             pPam->SetMark();
 
-            pPam->GetPoint()->nNode += nOffset;
+            pPam->GetPoint()->Adjust(nOffset);
             pCNd = pPam->GetPointContentNode();
-            pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+            pPam->GetPoint()->SetContent( pCNd->Len() );
         }
     }
 
