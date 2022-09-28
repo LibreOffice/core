@@ -1187,7 +1187,7 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
     SetFieldsDirty( true );
     // look up and remove from the hash table
     sFieldName = GetAppCharClass().lowercase( sFieldName );
-    sal_uInt16 n;
+    sal_uInt32 n;
 
     SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
 
@@ -1219,7 +1219,7 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
     SetFieldsDirty( true );
     // look up and remove from the hash table
     sFieldName = GetAppCharClass().lowercase( sFieldName );
-    sal_uInt16 n;
+    sal_uInt32 n;
 
     SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
     if( !pFnd )

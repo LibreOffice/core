@@ -928,7 +928,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             case SwFieldIds::User:
                 {
                     // Entry present?
-                    sal_uInt16 nPos;
+                    sal_uInt32 nPos;
                     const OUString& rNm = pFieldType->GetName();
                     OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, LANGUAGE_SYSTEM));
                     SwHash* pFnd = aHashStrTable.Find( rNm, &nPos );
@@ -1110,7 +1110,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
 
             // Add entry to hash table
             // Entry present?
-            sal_uInt16 nPos;
+            sal_uInt32 nPos;
             HashStr* pFnd = aHashStrTable.Find( rName, &nPos );
             OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
             if( pFnd )
@@ -1159,7 +1159,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                     // lookup the field's name
                     aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName();
                     // Entry present?
-                    sal_uInt16 nPos;
+                    sal_uInt32 nPos;
                     HashStr* pFnd = aHashStrTable.Find( aNew, &nPos );
                     if( pFnd )
                         // Modify entry in the hash table
@@ -1659,7 +1659,7 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
                 // look up the field's name
                 aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName();
                 // Entry present?
-                sal_uInt16 nPos;
+                sal_uInt32 nPos;
                 SwHash* pFnd = rHashTable.Find( aNew, &nPos );
                 if( pFnd )
                     // modify entry in the hash table
@@ -1676,7 +1676,7 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
 
                 // Insert entry in the hash table
                 // Entry present?
-                sal_uInt16 nPos;
+                sal_uInt32 nPos;
                 HashStr* pFnd = rHashTable.Find( rName, &nPos );
                 OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
                 if( pFnd )

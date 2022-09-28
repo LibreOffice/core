@@ -154,15 +154,19 @@ class SwHashTable
 {
     std::vector<std::unique_ptr<T>> m_aData;
 public:
-    SwHashTable(size_t nSize) : m_aData(nSize) {}
+    SwHashTable(size_t nSize) : m_aData(nSize)
+    {
+        assert(nSize < SAL_MAX_UINT32);
+    }
     std::unique_ptr<T> & operator[](size_t idx) { return m_aData[idx]; }
     std::unique_ptr<T> const & operator[](size_t idx) const { return m_aData[idx]; }
     void resize(size_t nSize) { m_aData.resize(nSize); }
 
-    T* Find( const OUString& rStr, sal_uInt16* pPos = nullptr ) const
+    T* Find( const OUString& rStr, sal_uInt32* pPos = nullptr ) const
     {
         size_t nTableSize = m_aData.size();
-        sal_uLong ii = 0;
+        assert(nTableSize < SAL_MAX_UINT32);
+        sal_uInt32 ii = 0;
         for( sal_Int32 n = 0; n < rStr.getLength(); ++n )
         {
             ii = ii << 1 ^ rStr[n];
@@ -170,7 +174,7 @@ public:
         ii %= nTableSize;
 
         if( pPos )
-            *pPos = o3tl::narrowing<sal_uInt16>(ii);
+            *pPos = ii;
 
         for( T* pEntry = m_aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
         {

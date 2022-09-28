@@ -429,7 +429,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 {
     m_aErrExpr.nValue.SetVoidValue(false);
 
-    sal_uInt16 ii = 0;
+    sal_uInt32 ii = 0;
     OUString aStr = m_pCharClass->lowercase( rStr );
 
     SwCalcExp* pFnd = m_aVarTable.Find(aStr, &ii);
@@ -597,7 +597,7 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 {
     OUString aStr = m_pCharClass->lowercase( rStr );
 
-    sal_uInt16 nPos = 0;
+    sal_uInt32 nPos = 0;
     SwCalcExp* pFnd = m_aVarTable.Find( aStr, &nPos );
 
     if( !pFnd )
