@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // Then add a signature document.
     uno::Reference<security::XCertificate> xCertificate
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // Then add a signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -261,7 +261,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // Then add a document signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -347,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // Then add a document signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -383,7 +383,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
                                                                 embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
@@ -419,7 +419,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
                                                                 embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
                                                                 embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
@@ -952,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
     aManager.read(/*bUseTempStream=*/false);
 
     // Create a new signature.
@@ -1013,7 +1013,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
             ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.setStore(xStorage);
-    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+    aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // Create a signature.
     uno::Reference<security::XCertificate> xCertificate
@@ -1072,7 +1072,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
                 ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
         CPPUNIT_ASSERT(xStorage.is());
         aManager.setStore(xStorage);
-        aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+        aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
         // Create a signature.
         uno::Reference<security::XCertificate> xCertificate
@@ -1151,7 +1151,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
                 ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
         CPPUNIT_ASSERT(xStorage.is());
         aManager.setStore(xStorage);
-        aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+        aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
         // Create a signature.
         uno::Reference<security::XCertificate> xCertificate

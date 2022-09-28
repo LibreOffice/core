@@ -52,26 +52,26 @@ using namespace css::xml::sax;
 
 namespace
 {
-OUString getElement(OUString const & version, ::sal_Int32 * index)
+std::u16string_view getElement(std::u16string_view version, size_t * index)
 {
-    while (*index < version.getLength() && version[*index] == '0') {
+    while (*index < version.size() && version[*index] == '0') {
         ++*index;
     }
-    return version.getToken(0, '.', *index);
+    return o3tl::getToken(version, u'.', *index);
 }
 
 
 // Return 1 if version1 is greater than version 2, 0 if they are equal
 //and -1 if version1 is less version 2
 int compareVersions(
-    OUString const & version1, OUString const & version2)
+    std::u16string_view version1, std::u16string_view version2)
 {
-    for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        OUString e1(getElement(version1, &i1));
-        OUString e2(getElement(version2, &i2));
-        if (e1.getLength() < e2.getLength()) {
+    for (size_t i1 = 0, i2 = 0; i1 != std::u16string_view::npos || i2 != std::u16string_view::npos;) {
+        std::u16string_view e1(getElement(version1, &i1));
+        std::u16string_view e2(getElement(version2, &i2));
+        if (e1.size() < e2.size()) {
             return -1;
-        } else if (e1.getLength() > e2.getLength()) {
+        } else if (e1.size() > e2.size()) {
             return 1;
         } else if (e1 < e2) {
             return -1;
@@ -131,7 +131,7 @@ static void ImplFillElementList(
 }
 
 
-bool DocumentSignatureHelper::isODFPre_1_2(const OUString & sVersion)
+bool DocumentSignatureHelper::isODFPre_1_2(std::u16string_view sVersion)
 {
     //The property version exists only if the document is at least version 1.2
     //That is, if the document has version 1.1 and sVersion is empty.
@@ -148,9 +148,9 @@ bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & si
 
 DocumentSignatureAlgorithm
 DocumentSignatureHelper::getDocumentAlgorithm(
-    const OUString & sODFVersion, const SignatureInformation & sigInfo)
+    std::u16string_view sODFVersion, const SignatureInformation & sigInfo)
 {
-    OSL_ASSERT(!sODFVersion.isEmpty());
+    OSL_ASSERT(!sODFVersion.empty());
     DocumentSignatureAlgorithm mode = DocumentSignatureAlgorithm::OOo3_2;
     if (!isOOo3_2_Signature(sigInfo))
     {
@@ -423,7 +423,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 /** Check whether the current file can be signed with GPG (only ODF >= 1.2 can currently) */
 bool DocumentSignatureHelper::CanSignWithGPG(
     const Reference < css::embed::XStorage >& rxStore,
-    const OUString& sOdfVersion)
+    std::u16string_view sOdfVersion)
 {
     if (!rxStore.is())
         return false;

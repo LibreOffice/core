@@ -70,14 +70,14 @@ namespace DocumentSignatureHelper
         DocumentSignatureMode eMode,
         const DocumentSignatureAlgorithm mode);
 
-    bool isODFPre_1_2(const OUString & sODFVersion);
+    bool isODFPre_1_2(std::u16string_view sODFVersion);
     bool isOOo3_2_Signature(const SignatureInformation & sigInfo);
 
     DocumentSignatureAlgorithm getDocumentAlgorithm(
-        const OUString & sODFVersion, const SignatureInformation & sigInfo);
+        std::u16string_view sODFVersion, const SignatureInformation & sigInfo);
 
     bool CanSignWithGPG(const css::uno::Reference < css::embed::XStorage >& rxStore,
-                        const OUString& sOdfVersion);
+                        std::u16string_view sOdfVersion);
 
     bool checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
         const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);

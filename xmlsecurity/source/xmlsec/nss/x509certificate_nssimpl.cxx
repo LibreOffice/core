@@ -513,18 +513,18 @@ namespace xmlsecurity {
 // https://datatracker.ietf.org/doc/html/rfc1485
 // https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-certnametostra#CERT_X500_NAME_STR
 // the main problem appears to be that in values " is escaped as "" vs. \"
-static OUString CompatDNCryptoAPI(OUString const& rDN)
+static OUString CompatDNCryptoAPI(std::u16string_view rDN)
 {
-    OUStringBuffer buf(rDN.getLength());
+    OUStringBuffer buf(rDN.size());
     enum { DEFAULT, INVALUE, INQUOTE } state(DEFAULT);
-    for (sal_Int32 i = 0; i < rDN.getLength(); ++i)
+    for (size_t i = 0; i < rDN.size(); ++i)
     {
         if (state == DEFAULT)
         {
             buf.append(rDN[i]);
             if (rDN[i] == '=')
             {
-                if (rDN.getLength() == i+1)
+                if (rDN.size() == i+1)
                 {
                     break; // invalid?
                 }
@@ -553,7 +553,7 @@ static OUString CompatDNCryptoAPI(OUString const& rDN)
             assert(state == INQUOTE);
             if (rDN[i] == '"')
             {
-                if (rDN.getLength() != i+1 && rDN[i+1] == '"')
+                if (rDN.size() != i+1 && rDN[i+1] == '"')
                 {
                     buf.append('\\');
                     buf.append(rDN[i+1]);
@@ -597,7 +597,7 @@ bool EqualDistinguishedNames(
     if (!ret && eMode == COMPAT_2ND)
     {
         CERTName *const pName2Compat(CERT_AsciiToName(OUStringToOString(
-            CompatDNCryptoAPI(OUString(rName2)), RTL_TEXTENCODING_UTF8).getStr()));
+            CompatDNCryptoAPI(rName2), RTL_TEXTENCODING_UTF8).getStr()));
         if (pName2Compat == nullptr)
         {
             CERT_DestroyName(pName1);

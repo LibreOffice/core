@@ -71,7 +71,7 @@ XMLSignatureHelper::~XMLSignatureHelper()
 
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
-    const OUString& sODFVersion)
+    std::u16string_view sODFVersion)
 {
     SAL_WARN_IF( mxUriBinding.is(), "xmlsecurity.helper", "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );

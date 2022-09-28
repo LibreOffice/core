@@ -83,7 +83,7 @@ public:
     // Set the storage which should be used by the default UriBinding
     // Must be set before StartMission().
     //sODFVersion indicates  the ODF version
-    void        SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, const OUString& sODFVersion );
+    void        SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
