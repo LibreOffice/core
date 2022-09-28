@@ -4384,22 +4384,22 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
   -----------------------------------------------------------------------*/
-static OUString lcl_ExtractToken(OUString const& rCommand,
-        sal_Int32 & rIndex, bool & rHaveToken, bool & rIsSwitch)
+static OUString lcl_ExtractToken(std::u16string_view rCommand,
+        size_t & rIndex, bool & rHaveToken, bool & rIsSwitch)
 {
     rHaveToken = false;
     rIsSwitch = false;
 
     OUStringBuffer token;
     bool bQuoted(false);
-    for (; rIndex < rCommand.getLength(); ++rIndex)
+    for (; rIndex < rCommand.size(); ++rIndex)
     {
         sal_Unicode const currentChar(rCommand[rIndex]);
         switch (currentChar)
         {
             case '\\':
             {
-                if (rIndex == rCommand.getLength() - 1)
+                if (rIndex == rCommand.size() - 1)
                 {
                     SAL_INFO("writerfilter.dmapper", "field: trailing escape");
                     ++rIndex;
@@ -4418,7 +4418,7 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
                     {
                         rIsSwitch = true;
                         rIndex += 2; // read 2 chars
-                        return rCommand.copy(rIndex - 2, 2).toAsciiUpperCase();
+                        return OUString(rCommand.substr(rIndex - 2, 2)).toAsciiUpperCase();
                     }
                     else
                     {   // leave rIndex, read it again next time
@@ -4472,7 +4472,7 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
             break;
         }
     }
-    assert(rIndex == rCommand.getLength());
+    assert(rIndex == rCommand.size());
     if (bQuoted)
     {
         // MS Word allows this, so just emit a debug message
@@ -4483,16 +4483,16 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
     return token.makeStringAndClear();
 }
 
-std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCommand(const OUString& rCommand)
+std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCommand(std::u16string_view rCommand)
 {
     OUString sType;
     std::vector<OUString> arguments;
     std::vector<OUString> switches;
-    sal_Int32 nStartIndex(0);
+    size_t nStartIndex(0);
     // tdf#54584: Field may be prepended by a backslash
     // This is not an escapement, but already escaped literal "\"
     // MS Word allows this, so just skip it
-    if ((rCommand.getLength() >= nStartIndex + 2) &&
+    if ((rCommand.size() >= nStartIndex + 2) &&
         (rCommand[nStartIndex] == L'\\') &&
         (rCommand[nStartIndex + 1] != L'\\') &&
         (rCommand[nStartIndex + 1] != L' '))
@@ -4506,7 +4506,7 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
         bool bIsSwitch;
         OUString const token =
             lcl_ExtractToken(rCommand, nStartIndex, bHaveToken, bIsSwitch);
-        assert(nStartIndex <= rCommand.getLength());
+        assert(nStartIndex <= rCommand.size());
         if (bHaveToken)
         {
             if (sType.isEmpty())
@@ -4522,7 +4522,7 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
                 arguments.push_back(token);
             }
         }
-    } while (nStartIndex < rCommand.getLength());
+    } while (nStartIndex < rCommand.size());
 
     return std::make_tuple(sType, arguments, switches);
 }
@@ -4552,22 +4552,22 @@ static OUString lcl_ExtractVariableAndHint( std::u16string_view rCommand, OUStri
 
 
 static bool lcl_FindInCommand(
-    const OUString& rCommand,
+    std::u16string_view rCommand,
     sal_Unicode cSwitch,
     OUString& rValue )
 {
     bool bRet = false;
     OUString sSearch = "\\" + OUStringChar( cSwitch );
-    sal_Int32 nIndex = rCommand.indexOf( sSearch  );
-    if( nIndex >= 0 )
+    size_t nIndex = rCommand.find( sSearch  );
+    if( nIndex != std::u16string_view::npos )
     {
         bRet = true;
         //find next '\' or end of string
-        sal_Int32 nEndIndex = rCommand.indexOf( '\\', nIndex + 1);
-        if( nEndIndex < 0 )
-            nEndIndex = rCommand.getLength() ;
+        size_t nEndIndex = rCommand.find( '\\', nIndex + 1);
+        if( nEndIndex == std::u16string_view::npos )
+            nEndIndex = rCommand.size() ;
         if( nEndIndex - nIndex > 3 )
-            rValue = rCommand.copy( nIndex + 3, nEndIndex - nIndex - 3);
+            rValue = rCommand.substr( nIndex + 3, nEndIndex - nIndex - 3);
     }
     return bRet;
 }

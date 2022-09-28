@@ -286,10 +286,10 @@ void lcl_SwapQuotesInField(OUString &rFmt)
     }
     rFmt = aBuffer.makeStringAndClear();
 }
-bool lcl_IsNotAM(OUString const & rFmt, sal_Int32 nPos)
+bool lcl_IsNotAM(std::u16string_view rFmt, sal_Int32 nPos)
 {
     return (
-            (nPos == rFmt.getLength() - 1) ||
+            (nPos == static_cast<sal_Int32>(rFmt.size()) - 1) ||
             (
             (rFmt[nPos+1] != 'M') &&
             (rFmt[nPos+1] != 'm')

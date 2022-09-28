@@ -58,20 +58,20 @@ using namespace com::sun::star;
 namespace
 {
 /// Returns an util::DateTime from a 'YYYY. MM. DD.' string.
-util::DateTime getDateTimeFromUserProp(const OUString& rString)
+util::DateTime getDateTimeFromUserProp(std::u16string_view rString)
 {
     util::DateTime aRet;
-    sal_Int32 nLen = rString.getLength();
+    size_t nLen = rString.size();
     if (nLen >= 4)
     {
-        aRet.Year = o3tl::toInt32(rString.subView(0, 4));
+        aRet.Year = o3tl::toInt32(rString.substr(0, 4));
 
-        if (nLen >= 8 && rString.match(". ", 4))
+        if (nLen >= 8 && o3tl::starts_with(rString.substr(4), u". "))
         {
-            aRet.Month = o3tl::toInt32(rString.subView(6, 2));
+            aRet.Month = o3tl::toInt32(rString.substr(6, 2));
 
-            if (nLen >= 12 && rString.match(". ", 8))
-                aRet.Day = o3tl::toInt32(rString.subView(10, 2));
+            if (nLen >= 12 && o3tl::starts_with(rString.substr(8), u". "))
+                aRet.Day = o3tl::toInt32(rString.substr(10, 2));
         }
     }
     return aRet;

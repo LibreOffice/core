@@ -41,7 +41,7 @@ public:
 
 // export just for test
 SAL_DLLPUBLIC_EXPORT std::tuple<OUString, std::vector<OUString>, std::vector<OUString>>
-splitFieldCommand(const OUString& rCommand);
+splitFieldCommand(std::u16string_view rCommand);
 
 } // namespace writerfilter::dmapper
 
