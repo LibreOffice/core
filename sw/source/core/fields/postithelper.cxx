@@ -59,13 +59,13 @@ bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
         // This can be the as-char case: the comment placeholder character is exactly between the
         // annotation mark start and end.
         SwPosition aPosition(rMarkStart);
-        ++aPosition.nContent;
+        aPosition.AdjustContent(+1);
         if (aPosition != rAnchorPos)
         {
             return false;
         }
 
-        ++aPosition.nContent;
+        aPosition.AdjustContent(+1);
         if (aPosition != rMarkEnd)
         {
             return false;
@@ -74,7 +74,7 @@ bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
         return true;
     }
 
-    if (rMarkStart.nNode != rMarkEnd.nNode)
+    if (rMarkStart.GetNode() != rMarkEnd.GetNode())
     {
         return false;
     }
@@ -253,8 +253,7 @@ SwPosition SwAnnotationItem::GetAnchorPosition() const
     SwTextField* pTextField = mrFormatField.GetTextField();
     SwTextNode* pTextNode = pTextField->GetpTextNode();
 
-    SwPosition aPos( *pTextNode );
-    aPos.nContent.Assign( pTextNode, pTextField->GetStart() );
+    SwPosition aPos( *pTextNode, pTextField->GetStart() );
     return aPos;
 }
 
