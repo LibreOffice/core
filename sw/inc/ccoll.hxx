@@ -31,7 +31,7 @@ enum class Master_CollCondition;
 struct CommandStruct
 {
     Master_CollCondition nCnd;
-    sal_uLong nSubCond;
+    sal_uInt32 nSubCond;
 };
 
 sal_Int16 GetCommandContextIndex( std::u16string_view rContextName );

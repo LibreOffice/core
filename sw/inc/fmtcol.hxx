@@ -207,12 +207,12 @@ enum class Master_CollCondition
 class SW_DLLPUBLIC SwCollCondition final : public SwClient
 {
     Master_CollCondition m_nCondition;
-    sal_uLong m_nSubCondition;
+    sal_uInt32 m_nSubCondition;
 
 public:
 
     SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond,
-                    sal_uLong nSubCond );
+                    sal_uInt32 nSubCond );
     virtual ~SwCollCondition() override;
 
     /// @@@ public copy ctor, but no copy assignment?
@@ -225,9 +225,9 @@ public:
     bool operator==( const SwCollCondition& rCmp ) const;
 
     Master_CollCondition GetCondition() const      { return m_nCondition; }
-    sal_uLong GetSubCondition() const   { return m_nSubCondition; }
+    sal_uInt32 GetSubCondition() const   { return m_nSubCondition; }
 
-    void SetCondition( Master_CollCondition nCond, sal_uLong nSubCond );
+    void SetCondition( Master_CollCondition nCond, sal_uInt32 nSubCond );
     SwTextFormatColl* GetTextFormatColl() const     { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); }
     void RegisterToFormat( SwFormat& );
 };

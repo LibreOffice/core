@@ -495,7 +495,7 @@ void SwTextFormatColls::dumpAsXml(xmlTextWriterPtr pWriter) const
 //FEATURE::CONDCOLL
 
 SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond,
-                                sal_uLong nSubCond )
+                                sal_uInt32 nSubCond )
     : SwClient( pColl ), m_nCondition( nMasterCond ),
       m_nSubCondition( nSubCond )
 {
@@ -523,7 +523,7 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
         && ( m_nSubCondition == rCmp.m_nSubCondition );
 }
 
-void SwCollCondition::SetCondition( Master_CollCondition nCond, sal_uLong nSubCond )
+void SwCollCondition::SetCondition( Master_CollCondition nCond, sal_uInt32 nSubCond )
 {
     m_nCondition = nCond;
     m_nSubCondition = nSubCond;
