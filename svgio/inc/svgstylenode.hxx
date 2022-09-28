@@ -44,9 +44,9 @@ namespace svgio::svgreader
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
             /// CssStyleSheet add helpers
-            void addCssStyleSheet(const OUString& aSelectors, const SvgStyleAttributes& rNewStyle);
-            void addCssStyleSheet(const OUString& aSelectors, const OUString& aContent);
-            void addCssStyleSheet(const OUString& aSelectorsAndContent);
+            void addCssStyleSheet(std::u16string_view aSelectors, const SvgStyleAttributes& rNewStyle);
+            void addCssStyleSheet(std::u16string_view aSelectors, std::u16string_view aContent);
+            void addCssStyleSheet(std::u16string_view aSelectorsAndContent);
 
             /// textCss access
             bool isTextCss() const { return mbTextCss; }

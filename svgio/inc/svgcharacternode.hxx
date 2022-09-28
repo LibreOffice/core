@@ -45,7 +45,7 @@ namespace svgio::svgreader
         public:
             SvgTextPositions();
 
-            void parseTextPositionAttributes(SVGToken aSVGToken, const OUString& aContent);
+            void parseTextPositionAttributes(SVGToken aSVGToken, std::u16string_view aContent);
 
             /// X content
             const SvgNumberVector& getX() const { return maX; }

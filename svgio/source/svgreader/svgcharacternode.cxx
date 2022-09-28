@@ -37,14 +37,14 @@ namespace svgio::svgreader
         {
         }
 
-        void SvgTextPositions::parseTextPositionAttributes(SVGToken aSVGToken, const OUString& aContent)
+        void SvgTextPositions::parseTextPositionAttributes(SVGToken aSVGToken, std::u16string_view aContent)
         {
             // parse own
             switch(aSVGToken)
             {
                 case SVGToken::X:
                 {
-                    if(!aContent.isEmpty())
+                    if(!aContent.empty())
                     {
                         SvgNumberVector aVector;
 
@@ -57,7 +57,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Y:
                 {
-                    if(!aContent.isEmpty())
+                    if(!aContent.empty())
                     {
                         SvgNumberVector aVector;
 
@@ -70,7 +70,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Dx:
                 {
-                    if(!aContent.isEmpty())
+                    if(!aContent.empty())
                     {
                         SvgNumberVector aVector;
 
@@ -83,7 +83,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Dy:
                 {
-                    if(!aContent.isEmpty())
+                    if(!aContent.empty())
                     {
                         SvgNumberVector aVector;
 
@@ -96,7 +96,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Rotate:
                 {
-                    if(!aContent.isEmpty())
+                    if(!aContent.empty())
                     {
                         SvgNumberVector aVector;
 
@@ -122,7 +122,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::LengthAdjust:
                 {
-                    if(!aContent.isEmpty())
+                    if(!aContent.empty())
                     {
                         if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
                         {

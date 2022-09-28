@@ -297,7 +297,7 @@ namespace svgio::svgreader
             const SvgStyleAttributes* getCssStyleParent() const { return mpCssStyleParent; }
 
             /// scan helpers
-            void readCssStyle(const OUString& rCandidate);
+            void readCssStyle(std::u16string_view rCandidate);
             const SvgStyleAttributes* getParentStyle() const;
 
             SvgStyleAttributes(SvgNode& rOwner);

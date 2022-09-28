@@ -176,9 +176,9 @@ namespace svgio::svgreader
             return nRetval;
         }
 
-        void SvgStyleAttributes::readCssStyle(const OUString& rCandidate)
+        void SvgStyleAttributes::readCssStyle(std::u16string_view rCandidate)
         {
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
             sal_Int32 nPos(0);
 
             while(nPos < nLen)

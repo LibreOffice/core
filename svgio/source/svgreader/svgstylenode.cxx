@@ -71,15 +71,15 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgStyleNode::addCssStyleSheet(const OUString& aSelectors, const SvgStyleAttributes& rNewStyle)
+        void SvgStyleNode::addCssStyleSheet(std::u16string_view aSelectors, const SvgStyleAttributes& rNewStyle)
         {
             // aSelectors: CssStyle selectors, any combination, no comma separations, no spaces at start/end
             // rNewStyle: the already prepared style to register on that name
-            if(aSelectors.isEmpty())
+            if(aSelectors.empty())
                 return;
 
             std::vector< OUString > aSelectorParts;
-            const sal_Int32 nLen(aSelectors.getLength());
+            const sal_Int32 nLen(aSelectors.size());
             sal_Int32 nPos(0);
             OUStringBuffer aToken;
 
@@ -134,15 +134,15 @@ namespace svgio::svgreader
             const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aConcatenatedSelector.makeStringAndClear(), rNewStyle);
         }
 
-        void SvgStyleNode::addCssStyleSheet(const OUString& aSelectors, const OUString& aContent)
+        void SvgStyleNode::addCssStyleSheet(std::u16string_view aSelectors, std::u16string_view aContent)
         {
             // aSelectors: possible comma-separated list of CssStyle definitions, no spaces at start/end
             // aContent: the svg style definitions as string
-            if(aSelectors.isEmpty() || aContent.isEmpty())
+            if(aSelectors.empty() || aContent.empty())
                 return;
 
             // comma-separated split (Css abbreviation for same style for multiple selectors)
-            const sal_Int32 nLen(aSelectors.getLength());
+            const sal_Int32 nLen(aSelectors.size());
             sal_Int32 nPos(0);
             OUStringBuffer aToken;
 
@@ -181,9 +181,9 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgStyleNode::addCssStyleSheet(const OUString& aSelectorsAndContent)
+        void SvgStyleNode::addCssStyleSheet(std::u16string_view aSelectorsAndContent)
         {
-            const sal_Int32 nLen(aSelectorsAndContent.getLength());
+            const sal_Int32 nLen(aSelectorsAndContent.size());
 
             if(!nLen)
                 return;

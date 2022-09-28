@@ -296,7 +296,7 @@ namespace svgio::svgreader
         {
         }
 
-        void SvgNode::readLocalCssStyle(const OUString& aContent)
+        void SvgNode::readLocalCssStyle(std::u16string_view aContent)
         {
             if(!mpLocalCssStyle)
             {

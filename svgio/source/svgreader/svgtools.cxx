@@ -803,9 +803,9 @@ namespace svgio::svgreader
             return false;
         }
 
-        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider const & rInfoProvider)
+        basegfx::B2DRange readViewBox(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)
         {
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
 
             if(nLen)
             {
@@ -844,10 +844,10 @@ namespace svgio::svgreader
             return basegfx::B2DRange();
         }
 
-        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider const & rInfoProvider)
+        basegfx::B2DHomMatrix readTransform(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)
         {
             basegfx::B2DHomMatrix aMatrix;
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
 
             if(nLen)
             {
@@ -858,21 +858,21 @@ namespace svgio::svgreader
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
                     const sal_Int32 nInitPos(nPos);
-                    static const char aStrMatrix[] = "matrix";
-                    static const char aStrTranslate[] = "translate";
-                    static const char aStrScale[] = "scale";
-                    static const char aStrRotate[] = "rotate";
-                    static const char aStrSkewX[] = "skewX";
-                    static const char aStrSkewY[] = "skewY";
+                    static constexpr std::u16string_view aStrMatrix = u"matrix";
+                    static constexpr std::u16string_view aStrTranslate = u"translate";
+                    static constexpr std::u16string_view aStrScale = u"scale";
+                    static constexpr std::u16string_view aStrRotate = u"rotate";
+                    static constexpr std::u16string_view aStrSkewX = u"skewX";
+                    static constexpr std::u16string_view aStrSkewY = u"skewY";
 
                     switch(aChar)
                     {
                         case u'm' :
                         {
-                            if(rCandidate.matchIgnoreAsciiCase(aStrMatrix, nPos))
+                            if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrMatrix, nPos))
                             {
                                 // matrix element
-                                nPos += strlen(aStrMatrix);
+                                nPos += aStrMatrix.size();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aVal;
                                 basegfx::B2DHomMatrix aNew;
@@ -923,10 +923,10 @@ namespace svgio::svgreader
                         }
                         case u't' :
                         {
-                            if(rCandidate.matchIgnoreAsciiCase(aStrTranslate, nPos))
+                            if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrTranslate, nPos))
                             {
                                 // translate element
-                                nPos += strlen(aStrTranslate);
+                                nPos += aStrTranslate.size();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aTransX;
 
@@ -947,10 +947,10 @@ namespace svgio::svgreader
                         }
                         case u's' :
                         {
-                            if(rCandidate.matchIgnoreAsciiCase(aStrScale, nPos))
+                            if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrScale, nPos))
                             {
                                 // scale element
-                                nPos += strlen(aStrScale);
+                                nPos += aStrScale.size();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aScaleX;
 
@@ -967,10 +967,10 @@ namespace svgio::svgreader
                                         aScaleY.solve(rInfoProvider));
                                 }
                             }
-                            else if(rCandidate.matchIgnoreAsciiCase(aStrSkewX, nPos))
+                            else if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrSkewX, nPos))
                             {
                                 // skewx element
-                                nPos += strlen(aStrSkewX);
+                                nPos += aStrSkewX.size();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewX(0.0);
 
@@ -982,10 +982,10 @@ namespace svgio::svgreader
                                     aMatrix = aMatrix * basegfx::utils::createShearXB2DHomMatrix(tan(fSkewX));
                                 }
                             }
-                            else if(rCandidate.matchIgnoreAsciiCase(aStrSkewY, nPos))
+                            else if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrSkewY, nPos))
                             {
                                 // skewy element
-                                nPos += strlen(aStrSkewY);
+                                nPos += aStrSkewY.size();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewY(0.0);
 
@@ -1001,10 +1001,10 @@ namespace svgio::svgreader
                         }
                         case u'r' :
                         {
-                            if(rCandidate.matchIgnoreAsciiCase(aStrRotate, nPos))
+                            if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrRotate, nPos))
                             {
                                 // rotate element
-                                nPos += strlen(aStrRotate);
+                                nPos += aStrRotate.size();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fAngle(0.0);
 
@@ -1049,25 +1049,25 @@ namespace svgio::svgreader
             return aMatrix;
         }
 
-        bool readSingleNumber(const OUString& rCandidate, SvgNumber& aNum)
+        bool readSingleNumber(std::u16string_view rCandidate, SvgNumber& aNum)
         {
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
             sal_Int32 nPos(0);
 
             return readNumberAndUnit(rCandidate, nPos, aNum, nLen);
         }
 
-        bool readLocalLink(const OUString& rCandidate, OUString& rURL)
+        bool readLocalLink(std::u16string_view rCandidate, OUString& rURL)
         {
             sal_Int32 nPos(0);
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
 
             skip_char(rCandidate, ' ', nPos, nLen);
 
             if (nLen && nPos < nLen && '#' == rCandidate[nPos])
             {
                 ++nPos;
-                rURL = rCandidate.copy(nPos);
+                rURL = rCandidate.substr(nPos);
 
                 return true;
             }
@@ -1147,9 +1147,9 @@ namespace svgio::svgreader
             return false;
         }
 
-        bool readSvgNumberVector(const OUString& rCandidate, SvgNumberVector& rSvgNumberVector)
+        bool readSvgNumberVector(std::u16string_view rCandidate, SvgNumberVector& rSvgNumberVector)
         {
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
             rSvgNumberVector.clear();
 
             if(nLen)
@@ -1170,9 +1170,9 @@ namespace svgio::svgreader
             return false;
         }
 
-        SvgAspectRatio readSvgAspectRatio(const OUString& rCandidate)
+        SvgAspectRatio readSvgAspectRatio(std::u16string_view rCandidate)
         {
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
 
             if(nLen)
             {
@@ -1292,10 +1292,10 @@ namespace svgio::svgreader
             return SvgAspectRatio();
         }
 
-        bool readSvgStringVector(const OUString& rCandidate, SvgStringVector& rSvgStringVector)
+        bool readSvgStringVector(std::u16string_view rCandidate, SvgStringVector& rSvgStringVector)
         {
             rSvgStringVector.clear();
-            const sal_Int32 nLen(rCandidate.getLength());
+            const sal_Int32 nLen(rCandidate.size());
 
             if(nLen)
             {

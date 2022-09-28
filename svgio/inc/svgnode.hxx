@@ -137,7 +137,7 @@ namespace svgio::svgreader
             void accept(Visitor& rVisitor);
 
             /// scan helper to read and interpret a local CssStyle to mpLocalCssStyle
-            void readLocalCssStyle(const OUString& aContent);
+            void readLocalCssStyle(std::u16string_view aContent);
 
             /// style helpers
             void parseAttributes(const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs);
