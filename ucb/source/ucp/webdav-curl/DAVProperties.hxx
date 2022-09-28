@@ -48,7 +48,7 @@ struct DAVProperties
                                     OUString & rFullName );
 
     static bool isUCBDeadProperty( const SerfPropName & rName );
-    static bool isUCBSpecialProperty( const OUString & rFullName,
+    static bool isUCBSpecialProperty( std::u16string_view rFullName,
                                       OUString & rParsedName );
 };
 

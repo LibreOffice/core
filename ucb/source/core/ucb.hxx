@@ -136,8 +136,8 @@ private:
     void configureUcb();
 
     bool getContentProviderData(
-            const OUString & rKey1,
-            const OUString & rKey2,
+            std::u16string_view rKey1,
+            std::u16string_view rKey2,
             ucbhelper::ContentProviderDataList & rListToFill);
 
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);

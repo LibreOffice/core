@@ -279,16 +279,16 @@ namespace ucb::ucp::ext
     }
 
 
-    bool Content::denotesRootContent( const OUString& i_rContentIdentifier )
+    bool Content::denotesRootContent( std::u16string_view i_rContentIdentifier )
     {
         const OUString sRootURL( ContentProvider::getRootURL() );
         if ( i_rContentIdentifier == sRootURL )
             return true;
 
         // the root URL contains only two trailing /, but we also recognize 3 of them as denoting the root URL
-        if  (   i_rContentIdentifier.match( sRootURL )
-            &&  ( i_rContentIdentifier.getLength() == sRootURL.getLength() + 1 )
-            &&  ( i_rContentIdentifier[ i_rContentIdentifier.getLength() - 1 ] == '/' )
+        if  (   o3tl::starts_with(i_rContentIdentifier,  sRootURL )
+            &&  ( sal_Int32(i_rContentIdentifier.size()) == sRootURL.getLength() + 1 )
+            &&  ( i_rContentIdentifier[ i_rContentIdentifier.size() - 1 ] == '/' )
             )
             return true;
 

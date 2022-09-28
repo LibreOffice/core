@@ -760,7 +760,8 @@ auto CurlSession::abort() -> void
 /// this is just a bunch of static member functions called from CurlSession
 struct CurlProcessor
 {
-    static auto URIReferenceToURI(CurlSession& rSession, OUString const& rURIReference) -> CurlUri;
+    static auto URIReferenceToURI(CurlSession& rSession, std::u16string_view rURIReference)
+        -> CurlUri;
 
     static auto ProcessRequestImpl(
         CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
@@ -785,7 +786,7 @@ struct CurlProcessor
              ::std::vector<DAVResourceInfo>* const o_pResourceInfos,
              DAVRequestEnvironment const& rEnv) -> void;
 
-    static auto MoveOrCopy(CurlSession& rSession, OUString const& rSourceURIReference,
+    static auto MoveOrCopy(CurlSession& rSession, std::u16string_view rSourceURIReference,
                            ::std::u16string_view rDestinationURI, DAVRequestEnvironment const& rEnv,
                            bool isOverwrite, char const* pMethod) -> void;
 
@@ -799,19 +800,20 @@ struct CurlProcessor
                        DAVRequestEnvironment const* pEnv) -> void;
 };
 
-auto CurlProcessor::URIReferenceToURI(CurlSession& rSession, OUString const& rURIReference)
+auto CurlProcessor::URIReferenceToURI(CurlSession& rSession, std::u16string_view rURIReference)
     -> CurlUri
 {
     // No need to acquire rSession.m_Mutex because accessed members are const.
     if (rSession.UsesProxy())
     // very odd, but see DAVResourceAccess::getRequestURI() :-/
     {
-        assert(rURIReference.startsWith("http://") || rURIReference.startsWith("https://"));
+        assert(o3tl::starts_with(rURIReference, u"http://")
+               || o3tl::starts_with(rURIReference, u"https://"));
         return CurlUri(rURIReference);
     }
     else
     {
-        assert(rURIReference.startsWith("/"));
+        assert(o3tl::starts_with(rURIReference, u"/"));
         return rSession.m_URI.CloneWithRelativeRefPathAbsolute(rURIReference);
     }
 }
@@ -2047,7 +2049,7 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
                                   nullptr);
 }
 
-auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURIReference,
+auto CurlProcessor::MoveOrCopy(CurlSession& rSession, std::u16string_view rSourceURIReference,
                                ::std::u16string_view const rDestinationURI,
                                DAVRequestEnvironment const& rEnv, bool const isOverwrite,
                                char const* const pMethod) -> void

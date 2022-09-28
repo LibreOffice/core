@@ -40,6 +40,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
@@ -152,20 +153,20 @@ namespace {
 namespace fileaccess {
 
 
-    bool isChild( const OUString& srcUnqPath,
-                      const OUString& dstUnqPath )
+    bool isChild( std::u16string_view srcUnqPath,
+                      std::u16string_view dstUnqPath )
     {
         static const sal_Unicode slash = '/';
         // Simple lexical comparison
-        sal_Int32 srcL = srcUnqPath.getLength();
-        sal_Int32 dstL = dstUnqPath.getLength();
+        size_t srcL = srcUnqPath.size();
+        size_t dstL = dstUnqPath.size();
 
         return (
             ( srcUnqPath == dstUnqPath )
             ||
             ( ( dstL > srcL )
               &&
-              dstUnqPath.startsWith(srcUnqPath)
+              o3tl::starts_with(dstUnqPath, srcUnqPath)
               &&
               ( dstUnqPath[ srcL ] == slash ) )
         );
@@ -174,10 +175,10 @@ namespace fileaccess {
 
     OUString newName(
         std::u16string_view aNewPrefix,
-        const OUString& aOldPrefix,
+        std::u16string_view aOldPrefix,
         std::u16string_view old_Name )
     {
-        sal_Int32 srcL = aOldPrefix.getLength();
+        size_t srcL = aOldPrefix.size();
 
         return OUString::Concat(aNewPrefix) + old_Name.substr( srcL );
     }

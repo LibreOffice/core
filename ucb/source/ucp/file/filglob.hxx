@@ -40,14 +40,14 @@ namespace fileaccess {
 
     // Returns true if dstUnqPath is a child from srcUnqPath or both are equal
 
-    extern bool isChild( const OUString& srcUnqPath,
-                                      const OUString& dstUnqPath );
+    extern bool isChild( std::u16string_view srcUnqPath,
+                         std::u16string_view dstUnqPath );
 
 
     // Changes the prefix in name
     extern OUString newName( std::u16string_view aNewPrefix,
-                                           const OUString& aOldPrefix,
-                                           std::u16string_view old_Name );
+                             std::u16string_view aOldPrefix,
+                             std::u16string_view old_Name );
 
     // returns the last part of the given url as title
     extern std::u16string_view getTitle( std::u16string_view aPath );

@@ -59,13 +59,13 @@ using namespace com::sun::star::util;
 using namespace comphelper;
 using namespace cppu;
 
-static OUString makeHierarchalNameSegment( const OUString & rIn  )
+static OUString makeHierarchalNameSegment( std::u16string_view rIn  )
 {
     OUStringBuffer aBuffer;
     aBuffer.append( "['" );
 
-    sal_Int32 nCount = rIn.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    size_t nCount = rIn.size();
+    for ( size_t n = 0; n < nCount; ++n )
     {
         const sal_Unicode c = rIn[ n ];
         switch ( c )

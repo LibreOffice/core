@@ -136,10 +136,10 @@ bool fillPlaceholders(OUString const & rInput,
 }
 
 void makeAndAppendXMLName(
-                OUStringBuffer & rBuffer, const OUString & rIn )
+                OUStringBuffer & rBuffer, std::u16string_view rIn )
 {
-    sal_Int32 nCount = rIn.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    size_t nCount = rIn.size();
+    for ( size_t n = 0; n < nCount; ++n )
     {
         const sal_Unicode c = rIn[ n ];
         switch ( c )
@@ -767,11 +767,11 @@ void UniversalContentBroker::prepareAndRegister(
 
 
 bool UniversalContentBroker::getContentProviderData(
-            const OUString & rKey1,
-            const OUString & rKey2,
+            std::u16string_view rKey1,
+            std::u16string_view rKey2,
             ContentProviderDataList & rListToFill )
 {
-    if ( !m_xContext.is() || rKey1.isEmpty() || rKey2.isEmpty() )
+    if ( !m_xContext.is() || rKey1.empty() || rKey2.empty() )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - Invalid argument!" );
         return false;

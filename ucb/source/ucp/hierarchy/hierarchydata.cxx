@@ -47,10 +47,10 @@ namespace hierarchy_ucp
 {
 
 
-static void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
+static void makeXMLName( std::u16string_view rIn, OUStringBuffer & rBuffer  )
 {
-    sal_Int32 nCount = rIn.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    size_t nCount = rIn.size();
+    for ( size_t n = 0; n < nCount; ++n )
     {
         const sal_Unicode c = rIn[ n ];
         switch ( c )

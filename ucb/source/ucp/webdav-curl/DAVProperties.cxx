@@ -160,34 +160,36 @@ bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
                == 0 ) );
 }
 
-bool DAVProperties::isUCBSpecialProperty(const OUString& rFullName, OUString& rParsedName)
+bool DAVProperties::isUCBSpecialProperty(std::u16string_view rFullName, OUString& rParsedName)
 {
-    sal_Int32 nLen = rFullName.getLength();
+    size_t nLen = rFullName.size();
     if ( nLen <= 0 ||
-            !rFullName.startsWith( "<prop:" ) ||
-            !rFullName.endsWith( "\">" ) )
+            !o3tl::starts_with(rFullName, u"<prop:" ) ||
+            !o3tl::starts_with(rFullName, u"\">" ) )
         return false;
 
     sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
-    sal_Int32 nEnd = rFullName.indexOf( ' ', nStart );
-    if ( nEnd == -1 )
+    size_t nEnd = rFullName.find( ' ', nStart );
+    if ( nEnd == std::u16string_view::npos )
         return false;
 
-    OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
-    if ( !sPropName.getLength() )
+    std::u16string_view sPropName = rFullName.substr( nStart, nEnd - nStart );
+    if ( sPropName.empty() )
         return false;
 
     // TODO skip whitespaces?
-    if ( !rFullName.match( "xmlns:prop=\"", ++nEnd ) )
+    ++nEnd;
+    if ( !o3tl::starts_with(rFullName.substr(nEnd), u"xmlns:prop=\"" ) )
         return false;
 
     nStart = nEnd + RTL_CONSTASCII_LENGTH( "xmlns:prop=\"" );
-    nEnd = rFullName.indexOf( '"', nStart );
+    nEnd = rFullName.find( '"', nStart );
     if ( nEnd != nLen - RTL_CONSTASCII_LENGTH( "\">" ) )
         return false;
 
-    OUString sNamesp = rFullName.copy( nStart, nEnd - nStart );
-    if ( !( nLen = sNamesp.getLength() ) )
+    std::u16string_view sNamesp = rFullName.substr( nStart, nEnd - nStart );
+    nLen = sNamesp.size();
+    if ( !nLen )
         return false;
 
     OUStringBuffer aBuff( sNamesp );

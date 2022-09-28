@@ -114,7 +114,7 @@ namespace ucb::ucp::ext
                 const css::uno::Sequence< css::beans::PropertyValue >& rValues
             );
 
-        static bool denotesRootContent( const OUString& i_rContentIdentifier );
+        static bool denotesRootContent( std::u16string_view i_rContentIdentifier );
 
         bool impl_isFolder();
         void impl_determineContentType();
