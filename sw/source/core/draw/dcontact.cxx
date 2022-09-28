@@ -1954,6 +1954,36 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         {
                             // append 'master' drawing object
                             pAnchorFrameOfMaster = pFrame;
+
+                            const SwFrameFormat* pFlyFormat = nullptr;
+                            if (!maAnchoredDrawObj.GetDrawObj()->IsGroupObject())
+                            {
+                                pFlyFormat = SwTextBoxHelper::getOtherTextBoxFormat(GetFormat(), RES_DRAWFRMFMT);
+                            }
+
+                            if (pFlyFormat)
+                            {
+                                // This is a master draw object and it has an associated fly format.
+                                // See if a fly frame is already inserted to the layout: if so, this
+                                // master draw object should be ordered directly before the fly one.
+                                if (const SwSortedObjs* pObjs = pFrame->GetDrawObjs())
+                                {
+                                    for (const SwAnchoredObject* pAnchoredObj : *pObjs)
+                                    {
+                                        if (&pAnchoredObj->GetFrameFormat() == pFlyFormat)
+                                        {
+                                            SdrPage* pDrawPage = pAnchoredObj->GetDrawObj()->getSdrPageFromSdrObject();
+                                            if (pDrawPage)
+                                            {
+                                                sal_uInt32 nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
+                                                pDrawPage->SetObjectOrdNum(maAnchoredDrawObj.GetDrawObj()->GetOrdNumDirect(), nOrdNum);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                             pFrame->AppendDrawObj( maAnchoredDrawObj );
                         }
                         else
@@ -2328,6 +2358,17 @@ void SwDrawVirtObj::AddToDrawingPage(SwFrame const& rAnchorFrame)
                 if (&pAnchoredObj->GetFrameFormat() == pFlyFormat)
                 {
                     assert(dynamic_cast<SwFlyFrame const*>(pAnchoredObj));
+
+                    if (pAnchoredObj->GetDrawObj()->GetOrdNum() >= GetReferencedObj().GetOrdNum())
+                    {
+                        // This virtual draw object has an associated fly one, but the fly's index
+                        // is not below the masters, fix it up.
+                        if (pDrawPg)
+                        {
+                            pDrawPg->SetObjectOrdNum(pAnchoredObj->GetDrawObj()->GetOrdNumDirect(), GetReferencedObj().GetOrdNum());
+                        }
+                    }
+
                     nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
                     // the master SdrObj should have the highest index
                     assert(nOrdNum < GetReferencedObj().GetOrdNum());

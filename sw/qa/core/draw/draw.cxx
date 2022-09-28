@@ -141,6 +141,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
     CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(ColorTransparency, aBorder.Color));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testSdtTextboxHeader)
+{
+    // Given a 2 page document, same header on both pages, content control in the header and
+    // shape+fly pair (textbox) anchored in the same header:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-textbox-header.docx";
+
+    // When loading that document, then make sure that layout doesn't fail with an assertion because
+    // the "master SdrObj should have the highest index" invariant doesn't hold:
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

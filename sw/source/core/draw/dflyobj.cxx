@@ -1302,4 +1302,17 @@ bool SwVirtFlyDrawObj::IsTextBox() const
     return SwTextBoxHelper::isTextBox(GetFormat(), RES_FLYFRMFMT, this);
 }
 
+void SwVirtFlyDrawObj::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwVirtFlyDrawObj"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("fly-frame"),
+        BAD_CAST(OString::number(m_pFlyFrame->GetFrameId()).getStr()));
+
+    SdrVirtObj::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
