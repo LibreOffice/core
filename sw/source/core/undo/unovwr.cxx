@@ -150,7 +150,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
         if (rPos.GetContentIndex() < pDelTextNd->GetText().getLength())
         {
             m_aDelStr += OUStringChar( pDelTextNd->GetText()[rPos.GetContentIndex()] );
-            ++rPos.nContent;
+            rPos.AdjustContent(+1);
         }
         else
             m_bInsChar = true;
@@ -167,7 +167,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
 
     if( !m_bInsChar )
     {
-        const SwContentIndex aTmpIndex( rPos.nContent, -2 );
+        const SwContentIndex aTmpIndex( rPos.GetContentNode(), rPos.GetContentIndex() - 2 );
         pDelTextNd->EraseText( aTmpIndex, 1 );
     }
     pDelTextNd->SetIgnoreDontExpand( bOldExpFlg );
@@ -235,7 +235,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     if( rCurrentPam.GetMark()->GetContentIndex() != m_nStartContent )
     {
         rCurrentPam.SetMark();
-        rCurrentPam.GetMark()->nContent = m_nStartContent;
+        rCurrentPam.GetMark()->SetContent( m_nStartContent );
     }
 
     if( m_pRedlSaveData )
@@ -305,7 +305,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     if( rCurrentPam.GetMark()->GetContentIndex() != m_nStartContent )
     {
         rCurrentPam.SetMark();
-        rCurrentPam.GetMark()->nContent = m_nStartContent;
+        rCurrentPam.GetMark()->SetContent( m_nStartContent );
     }
 }
 
