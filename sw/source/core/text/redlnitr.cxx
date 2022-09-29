@@ -156,13 +156,13 @@ public:
                 {
                     m_Fieldmark.second.emplace(
                         sw::mark::FindFieldSep(*m_Fieldmark.first));
-                    ++m_Fieldmark.second->nContent;
-                    ++m_oNextFieldmarkHide->nContent; // skip start
+                    m_Fieldmark.second->AdjustContent(+1);
+                    m_oNextFieldmarkHide->AdjustContent(+1); // skip start
                 }
                 else
                 {
                     m_Fieldmark.second.emplace(pFieldmark->GetMarkEnd());
-                    --m_Fieldmark.second->nContent;
+                    m_Fieldmark.second->AdjustContent(-1);
                 }
             }
         }

@@ -1466,8 +1466,7 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
 
     if ( nIdx > 0 )
     {
-        SwPosition aPos( *this );
-        aPos.nContent += nIdx;
+        SwPosition aPos( *this, nIdx );
 
         // Find the non-follow text frame:
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);

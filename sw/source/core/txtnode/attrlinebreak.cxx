@@ -85,7 +85,7 @@ uno::Reference<text::XTextRange> SwFormatLineBreak::GetAnchor() const
 
     SwPaM aPam(m_pTextAttr->GetTextNode(), m_pTextAttr->GetStart());
     aPam.SetMark();
-    ++aPam.GetMark()->nContent;
+    aPam.GetMark()->AdjustContent(+1);
     uno::Reference<text::XTextRange> xRet
         = SwXTextRange::CreateXTextRange(aPam.GetDoc(), *aPam.Start(), aPam.End());
     return xRet;
