@@ -1021,7 +1021,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
             // always: incl. start and incl. end
             *rSearchPam.GetPoint() = *pPam->GetPoint();
             rSearchPam.SetMark();
-            pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
+            rSearchPam.GetPoint()->SetContent(pNode->Len());
             bFound = true;
             break;
         }
@@ -1204,11 +1204,11 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                 rSearchPam.SetMark();
                 if (bSrchForward)
                 {
-                    pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
+                    rSearchPam.GetPoint()->SetContent(pNode->Len());
                 }
                 else
                 {
-                    pNode->MakeStartIndex( &rSearchPam.GetPoint()->nContent );
+                    rSearchPam.GetPoint()->SetContent(0);
                 }
             }
             bFound = true;
@@ -1328,8 +1328,8 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
     {
         const bool bRegExp(
                 SearchAlgorithms2::REGEXP == pSearchOpt->AlgorithmType2);
-        SwContentIndex& rSttCntIdx = rCursor.Start()->nContent;
-        const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
+        SwPosition& rSttCntPos = *rCursor.Start();
+        const sal_Int32 nSttCnt = rSttCntPos.GetContentIndex();
 
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrevRing(nullptr);
@@ -1359,7 +1359,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
                 p->MoveTo(const_cast<SwPaM*>(&rRegion));
             } while( p != pPrevRing );
         }
-        rSttCntIdx = nSttCnt;
+        rSttCntPos.SetContent(nSttCnt);
     }
 
     if( bReplaceAttr )
