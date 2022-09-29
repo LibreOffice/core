@@ -856,6 +856,37 @@ void SwBookmarkPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), aStr.makeStringAndClear(), GetWhichPor(), Height(), Width() );
 }
 
+void SwBookmarkPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwBookmarkPortion"));
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
+
+    if (!m_oColors.empty())
+    {
+        OUStringBuffer aStr;
+        for (const auto& rColor : m_oColors)
+        {
+            aStr.append("#" + std::get<2>(rColor) + " " + SwResId(STR_BOOKMARK_DEF_NAME));
+            switch (std::get<0>(rColor))
+            {
+                case SwScriptInfo::MarkKind::Point:
+                    break;
+                case SwScriptInfo::MarkKind::Start:
+                    aStr.append(" " + SwResId(STR_CAPTION_BEGINNING));
+                    break;
+                case SwScriptInfo::MarkKind::End:
+                    aStr.append(" " + SwResId(STR_CAPTION_END));
+                    break;
+            }
+        }
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("colors"),
+                                          BAD_CAST(aStr.makeStringAndClear().toUtf8().getStr()));
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )
 {
     const SwLinePortion* pRoot = rInf.GetRoot();

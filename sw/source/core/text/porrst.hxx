@@ -215,6 +215,8 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual SwLinePortion * Compress() override { return this; }
     virtual void HandlePortion(SwPortionHandler& rPH) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                   TextFrameIndex& rOffset) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

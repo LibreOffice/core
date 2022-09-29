@@ -413,10 +413,10 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
     pXmlDoc = parseLayoutDump();
 
     // check the bookmark portions are of the expected height
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type", "PortionType::Bookmark");
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "height", "253");
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[3]", "type", "PortionType::Bookmark");
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[3]", "height", "253");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]", "type", "PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]", "height", "253");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "type", "PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "height", "253");
 
     // tdf#150947 check a11y of the newly inserted bookmark portions
     assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "rText", "#BookmarkTest Bookmark Start");

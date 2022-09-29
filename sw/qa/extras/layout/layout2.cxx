@@ -408,14 +408,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150717)
     createSwDoc(DATA_DIRECTORY, "tdf150717.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // check bookmark colors defined in metadata
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[1]", "rText", "#Bookmark1 Bookmark Start");
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "rText", "#Bookmark2 Bookmark Start");
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "rText",
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[2]", "colors",
+                "#Bookmark1 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[4]", "colors",
+                "#Bookmark2 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[6]", "colors",
                 "#Bookmark2 Bookmark End#Bookmark1 Bookmark End");
     // full text, if bookmarks are visible
-    assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", "Line",
-                "Lorem #Bookmark1 Bookmark Startipsum dolor et #Bookmark2 Bookmark Start"
-                "ames#Bookmark2 Bookmark End#Bookmark1 Bookmark End.");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[1]", "portion",
+                "Lorem ");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[3]", "portion",
+                "ipsum dolor et ");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[5]", "portion",
+                "ames");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[7]", "portion",
+                ".");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
@@ -423,15 +430,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
     createSwDoc(DATA_DIRECTORY, "tdf150790.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // point bookmark is shown as I-beam (only its text dump is |, as before on the screen)
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/Special", "rText", "#Bookmark 1 Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwBookmarkPortion",
+                "colors", "#Bookmark 1 Bookmark");
     // single start bookmark
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special[1]", "rText",
-                "#Bookmark 2 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]",
+                "colors", "#Bookmark 2 Bookmark Start");
     // single end bookmark
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special[3]", "rText", "#Bookmark 3 Bookmark End");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[3]",
+                "colors", "#Bookmark 3 Bookmark End");
     // This was |, as before the point bookmark (neighboring end and start bookmarks)
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special[2]", "rText",
-                "#Bookmark 2 Bookmark End#Bookmark 3 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]",
+                "colors", "#Bookmark 2 Bookmark End#Bookmark 3 Bookmark Start");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
@@ -1999,19 +2008,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200)
     createSwDoc(DATA_DIRECTORY, "tdf150200.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // dash
-    OUString sFirstLine = parseDump("/root/page/body/txt[1]/LineBreak[1]/@Line");
+    OUString sFirstLine
+        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
     // en-dash
-    sFirstLine = parseDump("/root/page/body/txt[2]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
     // em-dash
-    sFirstLine = parseDump("/root/page/body/txt[3]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
     // figure dash
-    sFirstLine = parseDump("/root/page/body/txt[4]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
 }
@@ -2021,19 +2031,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200_DOCX)
     createSwDoc(DATA_DIRECTORY, "tdf150200.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // dash
-    OUString sFirstLine = parseDump("/root/page/body/txt[1]/LineBreak[1]/@Line");
+    OUString sFirstLine
+        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
     // en-dash
-    sFirstLine = parseDump("/root/page/body/txt[2]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
     // em-dash
-    sFirstLine = parseDump("/root/page/body/txt[3]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
     // figure dash
-    sFirstLine = parseDump("/root/page/body/txt[4]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
 }
@@ -2043,19 +2054,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150438)
     createSwDoc(DATA_DIRECTORY, "tdf150438.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // left double quotation mark
-    OUString sFirstLine = parseDump("/root/page/body/txt[1]/LineBreak[1]/@Line");
+    OUString sFirstLine
+        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"“Lorem ipsum"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(92), sFirstLine.getLength());
     // right double quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[2]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"”Nunc viverra imperdiet enim."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), sFirstLine.getLength());
     // left single quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[3]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‘Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
     // right single quotation mark or apostrophe
-    sFirstLine = parseDump("/root/page/body/txt[4]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"’Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
 }
@@ -2065,19 +2077,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150438_DOCX)
     createSwDoc(DATA_DIRECTORY, "tdf150438.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // left double quotation mark
-    OUString sFirstLine = parseDump("/root/page/body/txt[1]/LineBreak[1]/@Line");
+    OUString sFirstLine
+        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"“Lorem ipsum"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(92), sFirstLine.getLength());
     // right double quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[2]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"”Nunc viverra imperdiet enim."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), sFirstLine.getLength());
     // left single quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[3]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‘Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
     // right single quotation mark or apostrophe
-    sFirstLine = parseDump("/root/page/body/txt[4]/LineBreak[1]/@Line");
+    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"’Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
 }

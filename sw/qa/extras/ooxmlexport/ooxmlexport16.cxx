@@ -624,7 +624,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
     nLineWidth = parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[4]", "width").toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Full paragraph area used", nLineWidth, nParaWidth);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[3]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[2]", "portion"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TabOverflow does what?"), parseDump("//page[3]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion"));
     // Not 1 line high (Word 2010 DOCX and ODT), or 4 lines high (prev LO DOCX),
     // but 8 lines high.
     nHeight = parseDump("//page[3]/body/txt[2]/infos/bounds", "height").toInt32();
