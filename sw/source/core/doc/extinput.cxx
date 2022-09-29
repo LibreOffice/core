@@ -143,7 +143,7 @@ SwExtTextInput::~SwExtTextInput()
     {
         SvxLanguageItem aLangItem( m_eInputLanguage, nWhich );
         rPtPos.SetContent(nSttCnt);
-        GetMark()->nContent = nEndCnt;
+        GetMark()->SetContent(nEndCnt);
         rDoc.getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
     }
 }
@@ -193,7 +193,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         pTNd->ReplaceText( aIdx, nReplace, rNewStr );
         if( !HasMark() )
             SetMark();
-        GetMark()->nContent = aIdx;
+        GetMark()->Assign(*aIdx.GetContentNode(), aIdx.GetIndex());
     }
     else
     {
@@ -208,7 +208,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             SetMark();
     }
 
-    GetPoint()->nContent = nSttCnt;
+    GetPoint()->SetContent(nSttCnt);
 
     m_aAttrs.clear();
     if( rData.GetTextAttr() )

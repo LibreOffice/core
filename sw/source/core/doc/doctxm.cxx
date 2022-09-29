@@ -1123,7 +1123,6 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     aInsPos = *pFirstEmptyNd;
     {
         SwPaM aCorPam( *pFirstEmptyNd );
-        aCorPam.GetPoint()->nContent.Assign( pFirstEmptyNd, 0 );
         if( !aCorPam.Move( fnMoveForward ) )
             aCorPam.Move( fnMoveBackward );
         SwNodeIndex aEndIdx( aInsPos, 1 );
