@@ -1812,7 +1812,7 @@ namespace //local functions originally from docfmt.cxx
 
         SwNodeIndex aSt( rDoc.GetNodes() );
         SwNodeIndex aEnd( rDoc.GetNodes() );
-        SwContentIndex aCntEnd( pEnd->nContent );
+        SwContentIndex aCntEnd( pEnd->GetContentNode(), pEnd->GetContentIndex() );
 
         if( pNode )
         {
@@ -1847,7 +1847,7 @@ namespace //local functions originally from docfmt.cxx
             }
             else
                 aSt = pStt->GetNode();
-            aCntEnd = pEnd->nContent; // aEnd was changed!
+            aCntEnd.Assign(pEnd->GetContentNode(), pEnd->GetContentIndex()); // aEnd was changed!
         }
         else
             aSt.Assign( pStt->GetNode(), +1 );
@@ -3968,10 +3968,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 : newPos.GetContentIndex();
             newPos.SetContent(nContent);
         }
-        else
-        {
-            newPos.nContent.Assign( nullptr, 0 );
-        }
         aAnchor.SetAnchor( &newPos );
 
         // Check recursion: if copying content inside the same frame, then don't copy the format.
@@ -4980,7 +4976,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             // Don't copy the beginning completely?
             if( !bCopyCollFormat || bColumnSel || pStt->GetContentIndex() )
             {
-                SwContentIndex aDestIdx( rPos.nContent );
+                SwContentIndex aDestIdx( rPos.GetContentNode(), rPos.GetContentIndex() );
                 bool bCopyOk = false;
                 if( !pDestTextNd )
                 {
