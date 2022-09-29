@@ -153,7 +153,7 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, SwNodeOffset nNodePos )
     if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
         (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()))
     {
-        aPos.nContent.Assign( aIdx.GetNode().GetContentNode(), nContentPos );
+        aPos.SetContent( nContentPos );
     }
     aTmp.SetAnchor( &aPos );
     RndStdIds nAnchorId = rAnchor.GetAnchorId();
