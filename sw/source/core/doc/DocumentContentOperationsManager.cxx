@@ -4610,9 +4610,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                         OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);
 
-                SwContentIndex& rIdx = aDelPam.GetPoint()->nContent;
-                rIdx.Assign( nullptr, 0 );
-                aDelPam.GetMark()->nContent = rIdx;
+                aDelPam.GetPoint()->Assign( SwNodeOffset(0) );
+                aDelPam.GetMark()->Assign( SwNodeOffset(0) );
                 rPam.GetPoint()->Assign( SwNodeOffset(0) );
                 *rPam.GetMark() = *rPam.GetPoint();
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
