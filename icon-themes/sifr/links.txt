@@ -2471,12 +2471,15 @@ cmd/sc_numberformatdate.png cmd/sc_datefield.png
 # Impress
 cmd/32/arrowtoolbox.png cmd/32/linearrowend.png
 cmd/32/displayqualitymenu.png cmd/32/outputqualitygrayscale.png
+cmd/32/leftpaneimpress.png cmd/32/leftpanedraw.png
 
 cmd/lc_arrowtoolbox.png cmd/lc_linearrowend.png
 cmd/lc_displayqualitymenu.png cmd/lc_outputqualitygrayscale.png
+cmd/lc_leftpaneimpress.png cmd/lc_leftpanedraw.png
 
 cmd/sc_arrowtoolbox.png cmd/sc_linearrowend.png
 cmd/sc_displayqualitymenu.png cmd/sc_outputqualitygrayscale.png
+cmd/sc_leftpaneimpress.png cmd/sc_leftpanedraw.png
 
 # Writer - Standard toolbar
 cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
