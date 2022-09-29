@@ -78,8 +78,8 @@ bool FindFormatImpl(SwPaM & rSearchPam,
             {
                 *rSearchPam.GetPoint() = *oPam->GetPoint();
                 rSearchPam.SetMark();
-                pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
-                rSearchPam.GetMark()->nContent = 0;
+                rSearchPam.GetPoint()->SetContent(pNode->Len());
+                rSearchPam.GetMark()->SetContent(0);
             }
 
             // if backward search, switch point and mark
