@@ -884,11 +884,12 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 // we do not transfer this paragraph.
                 if( !IsEmptyBox( *pBox, aChkPam ) )
                 {
-                    SwNodeIndex& rInsPosNd = aInsPos.nNode;
+                    SwNode& rInsPosNd = aInsPos.GetNode();
                     SwPaM aPam( aInsPos );
-                    aPam.GetPoint()->nNode.Assign( *pBox->GetSttNd()->EndOfSectionNode(), -1 );
+                    aPam.GetPoint()->Assign( *pBox->GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
                     SwContentNode* pCNd = aPam.GetPointContentNode();
-                    aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+                    if( pCNd )
+                        aPam.GetPoint()->SetContent( pCNd->Len() );
                     SwNodeIndex aSttNdIdx( *pBox->GetSttNd(), 1 );
                     bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
                     if( pUndo )
@@ -902,10 +903,10 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     }
                     SwNodeRange aRg( aSttNdIdx.GetNode(), aPam.GetPoint()->GetNode() );
                     if( pUndo )
-                        pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd.GetNode() );
+                        pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd );
                     else
                     {
-                        pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd.GetNode(),
+                        pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
                             SwMoveFlags::NO_DELFRMS );
                     }
                 }
@@ -948,13 +949,13 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if( nCurrLine )
                     {
                         SwPaM aPam( *pBox->GetSttNd(), 0 );
-                        aPam.GetPoint()->nNode++;
+                        aPam.GetPoint()->Adjust(SwNodeOffset(+1));
                         SwTextNode* pNd = aPam.GetPointNode().GetTextNode();
                         while( pNd )
                         {
                             pNd->SetCountedInList( false );
 
-                            aPam.GetPoint()->nNode++;
+                            aPam.GetPoint()->Adjust(SwNodeOffset(+1));
                             pNd = aPam.GetPointNode().GetTextNode();
                         }
                     }
