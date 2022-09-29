@@ -327,7 +327,7 @@ static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUString
     }
 }
 
-static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUString& i_rTitle )
+static void appendRecentMenu( NSMenu* i_pMenu, const OUString& i_rTitle )
 {
     if( ! pRecentDelegate )
         pRecentDelegate = [[RecentMenuDelegate alloc] init];
@@ -343,22 +343,6 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUStri
 
     [pRecentMenu setAutoenablesItems: NO];
     [pItem setSubmenu: pRecentMenu];
-
-    if( i_pDockMenu )
-    {
-        // create a similar entry in the dock menu
-        pItem = [i_pDockMenu addItemWithTitle: getAutoreleasedString( i_rTitle )
-                             action: @selector(executeMenuItem:)
-                             keyEquivalent: @""
-                        ];
-        [pItem setEnabled: YES];
-        pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
-
-        [pRecentMenu setDelegate: pRecentDelegate];
-
-        [pRecentMenu setAutoenablesItems: NO];
-        [pItem setSubmenu: pRecentMenu];
-    }
 }
 
 
@@ -451,7 +435,7 @@ void aqua_init_systray()
             // insert the remaining menu entries
 
             // add recent menu
-            appendRecentMenu( pMenu, pDockMenu, SfxResId(STR_QUICKSTART_RECENTDOC) );
+            appendRecentMenu( pMenu, SfxResId(STR_QUICKSTART_RECENTDOC) );
 
             OUString aTitle( SfxResId(STR_QUICKSTART_FROMTEMPLATE) );
             OUString aKeyEquiv( getShortCut( aTitle ) );
