@@ -23,6 +23,7 @@
 
 #include <tools/stream.hxx>
 #include <regionband.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
@@ -676,8 +677,8 @@ void RegionBand::Move(tools::Long nHorzMove, tools::Long nVertMove)
         // process the vertical move
         if(nVertMove)
         {
-            pBand->mnYTop = pBand->mnYTop + nVertMove;
-            pBand->mnYBottom = pBand->mnYBottom + nVertMove;
+            pBand->mnYTop = o3tl::saturating_add(pBand->mnYTop, nVertMove);
+            pBand->mnYBottom = o3tl::saturating_add(pBand->mnYBottom, nVertMove);
         }
 
         // process the horizontal move
