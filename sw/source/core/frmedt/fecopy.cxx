@@ -136,7 +136,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
             SwPosition aPos( aSttIdx );
             if ( RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId() )
             {
-                aPos.nContent.Assign( pTextNd, 0 );
+                aPos.SetContent( 0 );
             }
             aAnchor.SetAnchor( &aPos );
         }
@@ -160,14 +160,14 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
             //              clipboard, it should be found at pasting. Therefore
             //              the copied TextAttribut should be removed in the node
             //              otherwise it will be recognised as TextSelektion
-            const SwContentIndex& rIdx = pFlyFormat->GetAnchor().GetContentAnchor()->nContent;
+            const SwPosition& rPos = *pFlyFormat->GetAnchor().GetContentAnchor();
             SwTextFlyCnt *const pTextFly = static_cast<SwTextFlyCnt *>(
                 pTextNd->GetTextAttrForCharAt(
-                    rIdx.GetIndex(), RES_TXTATR_FLYCNT));
+                    rPos.GetContentIndex(), RES_TXTATR_FLYCNT));
             if( pTextFly )
             {
                 const_cast<SwFormatFlyCnt&>(pTextFly->GetFlyCnt()).SetFlyFormat();
-                pTextNd->EraseText( rIdx, 1 );
+                pTextNd->EraseText( rPos, 1 );
             }
         }
     }
@@ -918,10 +918,10 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 // If there are no more paragraphs e.g. at the end of a document,
                 // we insert complete paragraphs instead of text portions
                 if( bCompletePara )
-                    aInsertion.first->GetPoint()->nNode = aIdx;
+                    aInsertion.first->GetPoint()->Assign(aIdx);
                 else
-                    aInsertion.first->GetPoint()->nContent =
-                        aInsertion.first->GetPointContentNode()->Len();
+                    aInsertion.first->GetPoint()->SetContent(
+                        aInsertion.first->GetPointContentNode()->Len() );
                 aCopyVector.push_back( aInsertion );
             }
             // If there are no text portions left but there are some more
@@ -952,7 +952,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 {
                     ++aIndexBefore;
                     SwPaM aPaM(SwPosition(aIndexBefore),
-                               SwPosition(rInsPos.nNode));
+                               SwPosition(rInsPos.GetNode()));
                     aPaM.GetDoc().MakeUniqueNumRules(aPaM);
                 }
             }
@@ -1093,7 +1093,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // Note: aCpyPam is invalid now
 
                     ++aIndexBefore;
-                    SwPaM aPaM(aIndexBefore, rInsPos.nNode);
+                    SwPaM aPaM(aIndexBefore.GetNode(), rInsPos.GetNode());
 
                     aPaM.GetDoc().MakeUniqueNumRules(aPaM);
 
