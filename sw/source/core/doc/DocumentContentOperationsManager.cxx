@@ -967,10 +967,10 @@ namespace
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
-    bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
+    bool lcl_SaveFootnote( const SwNode& rSttNd, const SwNode& rEndNd,
                      const SwNode& rInsPos,
                      SwFootnoteIdxs& rFootnoteArr, SwFootnoteIdxs& rSaveArr,
-                     const SwContentIndex* pSttCnt = nullptr, const SwContentIndex* pEndCnt = nullptr )
+                     std::optional<sal_Int32> oSttCnt = std::nullopt, std::optional<sal_Int32> oEndCnt = std::nullopt )
     {
         bool bUpdateFootnote = false;
         const SwNodes& rNds = rInsPos.GetNodes();
@@ -982,7 +982,7 @@ namespace
         {
 
             size_t nPos = 0;
-            rFootnoteArr.SeekEntry( rSttNd.GetNode(), &nPos );
+            rFootnoteArr.SeekEntry( rSttNd, &nPos );
             SwTextFootnote* pSrch;
             const SwNode* pFootnoteNd;
 
@@ -992,12 +992,12 @@ namespace
                         <= rEndNd.GetIndex() )
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
-                if( ( pEndCnt && pSttCnt )
-                    ? (( &rSttNd.GetNode() == pFootnoteNd &&
-                         pSttCnt->GetIndex() > nFootnoteSttIdx) ||
-                       ( &rEndNd.GetNode() == pFootnoteNd &&
-                        nFootnoteSttIdx >= pEndCnt->GetIndex() ))
-                    : ( &rEndNd.GetNode() == pFootnoteNd ))
+                if( ( oEndCnt && oSttCnt )
+                    ? (( &rSttNd == pFootnoteNd &&
+                         *oSttCnt > nFootnoteSttIdx) ||
+                       ( &rEndNd == pFootnoteNd &&
+                        nFootnoteSttIdx >= *oEndCnt ))
+                    : ( &rEndNd == pFootnoteNd ))
                 {
                     ++nPos;     // continue searching
                 }
@@ -1025,11 +1025,11 @@ namespace
                     GetTextNode())->GetIndex() >= rSttNd.GetIndex() )
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
-                if( !pEndCnt || !pSttCnt ||
-                    !  (( &rSttNd.GetNode() == pFootnoteNd &&
-                        pSttCnt->GetIndex() > nFootnoteSttIdx ) ||
-                        ( &rEndNd.GetNode() == pFootnoteNd &&
-                        nFootnoteSttIdx >= pEndCnt->GetIndex() )) )
+                if( !oEndCnt || !oSttCnt ||
+                    !  (( &rSttNd == pFootnoteNd &&
+                        *oSttCnt > nFootnoteSttIdx ) ||
+                        ( &rEndNd == pFootnoteNd &&
+                        nFootnoteSttIdx >= *oEndCnt )) )
                 {
                     if( bDelFootnote )
                     {
@@ -2376,9 +2376,9 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     }
     else
     {
-        bUpdateFootnote = lcl_SaveFootnote( pStt->nNode, pEnd->nNode, rPos.GetNode(),
+        bUpdateFootnote = lcl_SaveFootnote( pStt->GetNode(), pEnd->GetNode(), rPos.GetNode(),
                                     m_rDoc.GetFootnoteIdxs(), aTmpFntIdx,
-                                    &pStt->nContent, &pEnd->nContent );
+                                    pStt->GetContentIndex(), pEnd->GetContentIndex() );
     }
 
     bool bSplit = false;
@@ -2577,7 +2577,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     }
     else
     {
-        bUpdateFootnote = lcl_SaveFootnote( rRange.aStart, rRange.aEnd, rDestNd,
+        bUpdateFootnote = lcl_SaveFootnote( rRange.aStart.GetNode(), rRange.aEnd.GetNode(), rDestNd,
                                     m_rDoc.GetFootnoteIdxs(), aTmpFntIdx );
     }
 
