@@ -122,7 +122,7 @@ SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
         SwPosition aPtPos( rRg.aEnd );
         SwContentNode* pCNd = rRg.aEnd.GetNode().GetContentNode();
         if( pCNd )
-            aPtPos.nContent.Assign( pCNd, pCNd->Len() );
+            aPtPos.SetContent( pCNd->Len() );
         SwPosition aMkPos( rRg.aStart );
 
         DelContentIndex( aMkPos, aPtPos, DelContentType::Ftn );
@@ -182,7 +182,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 
             SwPosition aPos( *pDoc->GetNodes()[ m_nInsPosNode] );
             SwContentNode* pCNd = aPos.GetNode().GetContentNode();
-            aPos.nContent.Assign( pCNd, m_nInsPosContent );
+            aPos.SetContent( m_nInsPosContent );
 
             if( pCNd->HasSwAttrSet() )
                 pCNd->ResetAllAttr();
