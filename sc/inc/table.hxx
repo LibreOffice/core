@@ -294,6 +294,14 @@ public:
     }
     // out-of-line the cold part of the function
     void CreateColumnIfNotExistsImpl( const SCCOL nScCol );
+
+    ScColumnData& GetColumnData( SCCOL nCol )
+    {
+        if( nCol >= aCol.size())
+            return aDefaultColData;
+        return aCol[nCol];
+    }
+
     sal_uInt64      GetCellCount() const;
     sal_uInt64      GetWeightedCount() const;
     sal_uInt64      GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;

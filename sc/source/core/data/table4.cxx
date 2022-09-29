@@ -910,9 +910,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if ( bGetPattern )
                 {
                     if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
-                        pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nAtSrc));
+                        pSrcPattern = GetColumnData(nCol).GetPattern(static_cast<SCROW>(nAtSrc));
                     else                // rInner&:=nCol, rOuter&:=nRow
-                        pSrcPattern = aCol[nAtSrc].GetPattern(static_cast<SCROW>(nRow));
+                        pSrcPattern = GetColumnData(nAtSrc).GetPattern(static_cast<SCROW>(nRow));
                     bGetPattern = false;
                     pStyleSheet = pSrcPattern->GetStyleSheet();
                     // do transfer ATTR_MERGE / ATTR_MERGE_FLAG
@@ -1894,7 +1894,7 @@ void ScTable::FillAutoSimple(
                         return;
                     }
                     const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
-                                aCol[rCol].GetNumberFormat( rDocument.GetNonThreadedContext(), nSource));
+                                GetColumnData(rCol).GetNumberFormat( rDocument.GetNonThreadedContext(), nSource));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
                     bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
 
@@ -1903,7 +1903,7 @@ void ScTable::FillAutoSimple(
                 {
                     aSrcCell = GetCellValue(nSource, rRow);
                     const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
-                                aCol[nSource].GetNumberFormat( rDocument.GetNonThreadedContext(), rRow));
+                                GetColumnData(nSource).GetNumberFormat( rDocument.GetNonThreadedContext(), rRow));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
                     bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
                 }
