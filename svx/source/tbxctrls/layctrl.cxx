@@ -133,8 +133,7 @@ TableWidget::TableWidget(SvxTableToolBoxControl* pControl, OUString aCommand)
     , mnTableHeight(0)
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    svtools::ColorConfig aColorConfig;
-    aFontColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    aFontColor = rStyles.GetLabelTextColor();
     aLineColor = rStyles.GetShadowColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
