@@ -1184,7 +1184,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
                 //SwPaM aCurPaM( *this, *this, nBegin, nBegin + nLen ); <-- wrong c-tor, does sth different
                 SwPaM aCurPaM( *this, nBegin );
                 aCurPaM.SetMark();
-                aCurPaM.GetPoint()->nContent = nBegin + nLen;
+                aCurPaM.GetPoint()->SetContent(nBegin + nLen);
 
                 // check script type of selected text
                 SwEditShell *pEditShell = GetDoc().GetEditShell();
@@ -1207,7 +1207,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
         {
             SwPaM aPaM( *this, rImplicitChange.first );
             aPaM.SetMark();
-            aPaM.GetPoint()->nContent = rImplicitChange.second;
+            aPaM.GetPoint()->SetContent( rImplicitChange.second );
             SetLanguageAndFont( aPaM, rArgs.nConvTargetLang, RES_CHRATR_CJK_LANGUAGE, rArgs.pTargetFont, RES_CHRATR_CJK_FONT );
         }
 
@@ -1960,7 +1960,7 @@ void SwTextNode::TransliterateText(
             //SwPaM aCurPaM( *this, *this, nBegin, nBegin + nLen ); <-- wrong c-tor, does sth different
             SwPaM aCurPaM( *this, rData.nStart );
             aCurPaM.SetMark();
-            aCurPaM.GetPoint()->nContent = rData.nStart + rData.nLen;
+            aCurPaM.GetPoint()->SetContent( rData.nStart + rData.nLen );
             // replace the changed words
             if ( aCurPaM.GetText() != rData.sChanged )
                 GetDoc().getIDocumentContentOperations().ReplaceRange( aCurPaM, rData.sChanged, false );
