@@ -243,7 +243,7 @@ static void parseMacro( const OUString& sMacro, OUString& sContainer, OUString& 
     {
         sProcedure = sMacro.copy( nMacroDot + 1 );
 
-        sal_Int32 nContainerDot = sMacro.lastIndexOf( '.',  nMacroDot - 1 );
+        const sal_Int32 nContainerDot = sMacro.lastIndexOf('.',  nMacroDot);
         if ( nContainerDot != -1 )
         {
             sModule = sMacro.copy( nContainerDot + 1, nMacroDot - nContainerDot - 1 );
