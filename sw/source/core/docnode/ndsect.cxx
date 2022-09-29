@@ -275,19 +275,19 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     SwTextNode* pTNd;
                     if( pEndPos->GetNodeIndex() == pSttPos->GetNodeIndex() )
                     {
-                        --pSttPos->nNode;
-                        --pEndPos->nNode;
+                        pSttPos->Adjust(SwNodeOffset(-1));
+                        pEndPos->Adjust(SwNodeOffset(-1));
                         pTNd = pSttPos->GetNode().GetTextNode();
-                        pSttPos->nContent.Assign( pTNd, nContent );
+                        pSttPos->SetContent( nContent );
                     }
                     else
                     {
                         // Set to the end of the previous
-                        --pEndPos->nNode;
+                        pEndPos->Adjust(SwNodeOffset(-1));
                         pTNd = pEndPos->GetNode().GetTextNode();
                     }
                     nContent = pTNd ? pTNd->GetText().getLength() : 0;
-                    pEndPos->nContent.Assign( pTNd, nContent );
+                    pEndPos->SetContent( nContent );
                 }
             }
             pNewSectNode = GetNodes().InsertTextSection(
