@@ -1163,10 +1163,12 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     Color aTextCol = rRenderContext.GetTextColor();
     Color aFillCol = rRenderContext.GetFillColor();
+    Color aLineCol = rRenderContext.GetFillColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Color aWindowTextColor(rStyleSettings.GetDialogTextColor());
     const Color aWindowColor(rStyleSettings.GetWindowColor());
+    const Color aShadowColor(rStyleSettings.GetShadowColor());
     rRenderContext.SetTextColor(aWindowTextColor);
     rRenderContext.SetFillColor(aWindowColor);
 
@@ -1237,10 +1239,12 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         }
     }
 
+    rRenderContext.SetLineColor(aShadowColor);
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
     rRenderContext.DrawText(aPoint, aText);
     rRenderContext.SetTextColor(aTextCol);
     rRenderContext.SetFillColor(aFillCol);
+    rRenderContext.SetLineColor(aLineCol);
     if (bShrankFont)
         rRenderContext.SetFont(aOrigFont);
 }

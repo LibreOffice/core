@@ -135,6 +135,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     Color aHighlightTextColor(rStyleSettings.GetHighlightTextColor());
     Color aFillColor(rStyleSettings.GetWindowColor());
     Color aTextColor(rStyleSettings.GetWindowTextColor());
+    Color aShadowColor(rStyleSettings.GetShadowColor());
 
     const OUString aText = GetText();
 
@@ -201,6 +202,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     else
     {
         rRenderContext.SetFillColor(aFillColor);
+        rRenderContext.SetLineColor(aShadowColor);
         rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
 
         rRenderContext.SetTextColor(aWindowTextColor);

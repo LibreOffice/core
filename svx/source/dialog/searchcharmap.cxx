@@ -157,7 +157,16 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
 
     Size aOutputSize(GetOutputSizePixel());
 
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Color aWindowTextColor(rStyleSettings.GetFieldTextColor());
+    Color aHighlightColor(rStyleSettings.GetHighlightColor());
+    Color aHighlightTextColor(rStyleSettings.GetHighlightTextColor());
+    Color aFaceColor(rStyleSettings.GetFaceColor());
+    Color aLightColor(rStyleSettings.GetLightColor());
+    Color aShadowColor(rStyleSettings.GetShadowColor());
+
     int i;
+    rRenderContext.SetLineColor(aShadowColor);
     for (i = 1; i < COLUMN_COUNT; ++i)
     {
         rRenderContext.DrawLine(Point(nX * i + m_nXGap, 0),
@@ -168,13 +177,6 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
         rRenderContext.DrawLine(Point(0, nY * i + m_nYGap),
                                 Point(aOutputSize.Width(), nY * i + m_nYGap));
     }
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Color aWindowTextColor(rStyleSettings.GetFieldTextColor());
-    Color aHighlightColor(rStyleSettings.GetHighlightColor());
-    Color aHighlightTextColor(rStyleSettings.GetHighlightTextColor());
-    Color aFaceColor(rStyleSettings.GetFaceColor());
-    Color aLightColor(rStyleSettings.GetLightColor());
-    Color aShadowColor(rStyleSettings.GetShadowColor());
 
     int nTextHeight = rRenderContext.GetTextHeight();
     tools::Rectangle aBoundRect;
