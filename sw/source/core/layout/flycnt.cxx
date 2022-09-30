@@ -1393,7 +1393,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
                         pos.GetContentIndex(), RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent);
                 if (pTextInputField != nullptr)
                 {
-                    pos.nContent = pTextInputField->GetStart();
+                    pos.SetContent( pTextInputField->GetStart() );
                 }
                 ResetLastCharRectHeight();
                 if( text::RelOrientation::CHAR == pFormat->GetVertOrient().GetRelationOrient() )
