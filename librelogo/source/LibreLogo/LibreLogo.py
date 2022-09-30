@@ -35,7 +35,7 @@ def __l12n__(lng):
                         __lng__[lng][i] = __lng_fallback__[i][lng]
                     except:
                         try:
-                            __lng__[lng][i] = __lng_fallback__[i][lng[:2]]
+                            __lng__[lng][i] = __lng_fallback__[i][lng.split('_')[0]]
                         except:
                             __lng__[lng][i] = __lng_fallback__[i]["en_US"]
                 return __lng__[lng]
