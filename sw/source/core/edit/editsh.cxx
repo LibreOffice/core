@@ -119,8 +119,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
         SwNode& rNode = pTmpCursor->GetPoint()->GetNode();
         if ( rNode.IsTextNode() )
         {
-            SwContentIndex& rIdx = pTmpCursor->GetPoint()->nContent;
-            sal_Int32 nPrevPos = rIdx.GetIndex();
+            sal_Int32 nPrevPos = pTmpCursor->GetPoint()->GetContentIndex();
             if ( nPrevPos )
                 --nPrevPos;
 

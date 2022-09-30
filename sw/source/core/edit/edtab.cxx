@@ -172,8 +172,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
     // move current Cursor out of the listing area
     SwNodeIndex aTabIdx( *pTableNd );
     pCursor->DeleteMark();
-    pCursor->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
-    pCursor->GetPoint()->nContent.Assign( nullptr, 0 );
+    pCursor->GetPoint()->Assign(*pTableNd->EndOfSectionNode());
     // move sPoint and Mark out of the area!
     pCursor->SetMark();
     pCursor->DeleteMark();
@@ -183,13 +182,11 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
     bool bRet = ConvertTableToText( pTableNd, cCh );
     EndUndo();
     //End  for bug #i119954#
-    pCursor->GetPoint()->nNode = aTabIdx;
+    pCursor->GetPoint()->Assign(aTabIdx);
 
     SwContentNode* pCNd = pCursor->GetPointContentNode();
     if( !pCNd )
         pCursor->Move( fnMoveForward, GoInContent );
-    else
-        pCursor->GetPoint()->nContent.Assign( pCNd, 0 );
 
     EndAllAction();
     return bRet;
