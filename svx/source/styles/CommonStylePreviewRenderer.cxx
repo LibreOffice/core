@@ -15,6 +15,7 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -54,6 +55,7 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
     , maHighlightColor(COL_AUTO)
     , maBackgroundColor(COL_AUTO)
     , mnHeight(0)
+    , mnBaseLine(0)
     , maStyleName(mpStyle->GetName())
 {
 }
@@ -78,6 +80,7 @@ static bool SetFont(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
         rFont.SetPitch(rFontItem.GetPitch());
         rFont.SetCharSet(rFontItem.GetCharSet());
         rFont.SetStyleName(rFontItem.GetStyleName());
+        rFont.SetAlignment(ALIGN_BASELINE);
         return true;
     }
     return false;
@@ -92,6 +95,8 @@ bool CommonStylePreviewRenderer::SetFontSize(const SfxItemSet& rSet, sal_uInt16 
         Size aFontSize(0, rFontHeightItem.GetHeight());
         aFontSize = mrOutputDev.LogicToPixel(aFontSize, MapMode(mrShell.GetMapUnit()));
         rFont.SetFontSize(aFontSize);
+        mrOutputDev.SetFont(rFont);
+        FontMetric aMetric(mrOutputDev.GetFontMetric());
         return true;
     }
     return false;
@@ -228,9 +233,8 @@ void CommonStylePreviewRenderer::CalcRenderSize()
 {
     const OUString& rText = maStyleName;
 
-    tools::Rectangle aTextRect;
-    tools::Long nHeight = 0;
-
+    mnBaseLine = 0;
+    mnHeight = 0;
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
     sal_Int32 nStart = 0;
@@ -258,23 +262,22 @@ void CommonStylePreviewRenderer::CalcRenderSize()
 
         mrOutputDev.Push(vcl::PushFlags::FONT);
 
-        Size aSize;
+        tools::Long nWidth;
         if (oFont)
         {
             mrOutputDev.SetFont(*oFont);
-            aSize = oFont->GetTextSize(mrOutputDev, rText, nStart, nEnd - nStart);
+            nWidth = oFont->GetTextSize(mrOutputDev, rText, nStart, nEnd - nStart).Width();
         }
         else
-            aSize = Size(mrOutputDev.GetTextWidth(rText, nStart, nEnd - nStart), mrOutputDev.GetFont().GetFontHeight());
+            nWidth = mrOutputDev.GetTextWidth(rText, nStart, nEnd - nStart);
 
         tools::Rectangle aRect;
         mrOutputDev.GetTextBoundRect(aRect, rText, nStart, nStart, nEnd - nStart);
-        aTextRect = aTextRect.Union(aRect);
 
         mrOutputDev.Pop();
 
-        auto nWidth = aSize.Width();
-        nHeight = std::max(nHeight, aSize.Height());
+        mnBaseLine = std::max(mnBaseLine, -aRect.Top());
+        mnHeight = std::max(mnHeight, aRect.GetHeight());
         if (nIdx >= maScriptChanges.size())
             break;
 
@@ -292,10 +295,11 @@ void CommonStylePreviewRenderer::CalcRenderSize()
     while(true);
 
     double fRatio = 1;
-    if (aTextRect.Bottom() > mnMaxHeight)
-        fRatio = double(mnMaxHeight) / aTextRect.Bottom();
+    if (mnHeight > mnMaxHeight)
+        fRatio = double(mnMaxHeight) / mnHeight;
 
-    mnHeight = std::min(tools::Long(nHeight * fRatio), mnMaxHeight);
+    mnHeight *= fRatio;
+    mnBaseLine *= fRatio;
     if (fRatio != 1)
     {
         Size aFontSize;
@@ -340,6 +344,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
         mrOutputDev.SetTextFillColor(maHighlightColor);
 
     Point aFontDrawPosition = aRectangle.TopLeft();
+    aFontDrawPosition.AdjustY(mnBaseLine);
     if (eRenderAlign == RenderAlign::CENTER)
     {
         if (aRectangle.GetHeight() > mnHeight)

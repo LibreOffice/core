@@ -38,6 +38,7 @@ class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
     Color maHighlightColor;
     Color maBackgroundColor;
     tools::Long mnHeight;
+    tools::Long mnBaseLine;
     OUString maStyleName;
     OUString maScriptText;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
