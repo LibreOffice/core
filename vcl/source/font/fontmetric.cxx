@@ -517,8 +517,8 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 void ImplFontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
 {
     hb_font_t* pHbFont = pFontInstance->GetHbFont();
-    double nUPEM = pFontInstance->GetFontFace()->UnitsPerEm();
-    double fScale = mnHeight / nUPEM;
+    double fScale = 0;
+    pFontInstance->GetScale(nullptr, &fScale);
     hb_position_t nBaseline = 0;
 
     if (hb_ot_layout_get_baseline(pHbFont,
