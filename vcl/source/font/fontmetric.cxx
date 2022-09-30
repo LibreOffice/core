@@ -394,7 +394,7 @@ bool ImplFontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTyp
 }
 
 // These are “private” HarfBuzz metrics tags, they are supported by not exposed
-// in the public header. They are safe ti use, HarfBuzz just does not want to
+// in the public header. They are safe to use, HarfBuzz just does not want to
 // advertise them.
 constexpr auto ASCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'a', 's', 'c'));
 constexpr auto DESCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'd', 's', 'c'));
