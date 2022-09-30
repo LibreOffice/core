@@ -493,7 +493,9 @@ OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
         STR_TEMPLATE_NAME27_DEF,
         STR_TEMPLATE_NAME28_DEF,
         STR_TEMPLATE_NAME29_DEF,
-        STR_TEMPLATE_NAME30_DEF
+        STR_TEMPLATE_NAME30_DEF,
+        STR_TEMPLATE_NAME31_DEF,
+        STR_TEMPLATE_NAME32_DEF,
     };
 
     TranslateId STR_TEMPLATE_NAME[] =
@@ -527,7 +529,9 @@ OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
         STR_TEMPLATE_NAME27,
         STR_TEMPLATE_NAME28,
         STR_TEMPLATE_NAME29,
-        STR_TEMPLATE_NAME30
+        STR_TEMPLATE_NAME30,
+        STR_TEMPLATE_NAME31,
+        STR_TEMPLATE_NAME32,
     };
 
     static_assert(SAL_N_ELEMENTS(aTemplateNames) == SAL_N_ELEMENTS(STR_TEMPLATE_NAME));
