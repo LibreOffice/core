@@ -102,6 +102,7 @@ public:
     void            ImplInitBaselines(LogicalFontInstance *pFontInstance);
 
 private:
+    bool            ImplInitTextLineSizeHarfBuzz(LogicalFontInstance *pFontInstance);
     bool            ShouldUseWinMetrics(int, int, int, int, int, int) const;
 
     // font instance attributes from the font request

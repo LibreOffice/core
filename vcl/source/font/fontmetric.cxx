@@ -176,8 +176,67 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
     SetStyleName( rFontSelData.GetStyleName() );
 }
 
+bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont)
+{
+    auto* pHbFont = pFont->GetHbFont();
+    double fScale = 0;
+    pFont->GetScale(nullptr, &fScale);
+
+    hb_position_t nUnderlineSize, nUnderlineOffset, nStrikeoutSize, nStrikeoutOffset;
+    if (hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &nUnderlineSize)
+        && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_UNDERLINE_OFFSET,
+                                      &nUnderlineOffset)
+        && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &nStrikeoutSize)
+        && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET,
+                                      &nStrikeoutOffset))
+    {
+        double nOffset = -nUnderlineOffset;
+        double nSize = nUnderlineSize;
+        double nSize2 = nSize / 2.;
+        double nBSize = nSize * 2.;
+        double n2Size = nBSize / 3.;
+
+        mnUnderlineSize = round(nSize * fScale);
+        mnUnderlineOffset = round(nOffset * fScale);
+
+        mnBUnderlineSize = round(nBSize * fScale);
+        mnBUnderlineOffset = round((nOffset - nSize2) * fScale);
+
+        mnDUnderlineSize = round(n2Size * fScale);
+        mnDUnderlineOffset1 = mnBUnderlineOffset;
+        mnDUnderlineOffset2 = round((nOffset - nSize2 - n2Size + nBSize) * fScale);
+
+        mnWUnderlineSize = mnBUnderlineSize;
+        mnWUnderlineOffset = round((nOffset + nSize) * fScale);
+
+        nOffset = -nStrikeoutOffset;
+        nSize = nStrikeoutSize;
+        nSize2 = nSize / 2.;
+        nBSize = nSize * 2.;
+        n2Size = nBSize / 3.;
+
+        mnStrikeoutSize = round(nSize * fScale);
+        mnStrikeoutOffset = round(nOffset * fScale);
+
+        mnBStrikeoutSize = round(nBSize * fScale);
+        mnBStrikeoutOffset = round((nOffset - nSize2) * fScale);
+
+        mnDStrikeoutSize = round(n2Size * fScale);
+        mnDStrikeoutOffset1 = mnBStrikeoutOffset;
+        mnDStrikeoutOffset2 = round((nOffset - nSize2 - n2Size + nBSize) * fScale);
+
+        return true;
+    }
+    return false;
+}
+
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
+    mnBulletOffset = ( pDev->GetTextWidth( OUString( u' ' ) ) - pDev->GetTextWidth( OUString( u'\x00b7' ) ) ) >> 1 ;
+
+    if (ImplInitTextLineSizeHarfBuzz(const_cast<LogicalFontInstance*>(pDev->GetFontInstance())))
+        return;
+
     tools::Long nDescent = mnDescent;
     if ( nDescent <= 0 )
     {
@@ -260,8 +319,6 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDStrikeoutSize       = n2LineHeight;
     mnDStrikeoutOffset1    = nStrikeoutOffset - n2LineDY2 - n2LineHeight;
     mnDStrikeoutOffset2    = mnDStrikeoutOffset1 + n2LineDY + n2LineHeight;
-
-    mnBulletOffset = ( pDev->GetTextWidth( OUString( u' ' ) ) - pDev->GetTextWidth( OUString( u'\x00b7' ) ) ) >> 1 ;
 
 }
 
