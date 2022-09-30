@@ -520,8 +520,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     DevicePoint& rPos, int& nStart,
-                                    const LogicalFontInstance** ppGlyphFont,
-                                    const vcl::font::PhysicalFontFace**) const
+                                    const LogicalFontInstance** ppGlyphFont) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
     std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.end();
@@ -1145,8 +1144,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                   DevicePoint& rPos, int& nStart,
-                                  const LogicalFontInstance** ppGlyphFont,
-                                  const vcl::font::PhysicalFontFace** pFallbackFont) const
+                                  const LogicalFontInstance** ppGlyphFont) const
 {
     // NOTE: nStart is tagged with current font index
     int nLevel = static_cast<unsigned>(nStart) >> GF_FONTSHIFT;
@@ -1155,13 +1153,10 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     {
         GenericSalLayout& rLayout = *mpLayouts[ nLevel ];
         rLayout.InitFont();
-        const vcl::font::PhysicalFontFace* pFontFace = rLayout.GetFont().GetFontFace();
         if (rLayout.GetNextGlyph(pGlyph, rPos, nStart, ppGlyphFont))
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
             nStart |= nFontTag;
-            if (pFallbackFont)
-                *pFallbackFont = pFontFace;
             rPos.adjustX(maDrawBase.getX() + maDrawOffset.X());
             rPos.adjustY(maDrawBase.getY() + maDrawOffset.Y());
             return true;

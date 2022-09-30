@@ -65,8 +65,7 @@ public:
     DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
     bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
-                                 const LogicalFontInstance** ppGlyphFont = nullptr,
-                                 const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
+                                 const LogicalFontInstance** ppGlyphFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
     bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const override;
     SalLayoutGlyphs GetGlyphs() const final override;
@@ -129,8 +128,7 @@ public:
         { return *m_GlyphItems.GetFont(); }
 
     bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
-                                 const LogicalFontInstance** ppGlyphFont = nullptr,
-                                 const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
+                                 const LogicalFontInstance** ppGlyphFont = nullptr) const override;
 
     const SalLayoutGlyphsImpl& GlyphsImpl() const { return m_GlyphItems; }
 

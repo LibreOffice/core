@@ -6580,7 +6580,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     FontMetric aRefDevFontMetric = GetFontMetric();
     const vcl::font::PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
     const GlyphItem* pGlyph = nullptr;
-    const vcl::font::PhysicalFontFace* pFallbackFont = nullptr;
     const LogicalFontInstance* pGlyphFont = nullptr;
 
     // collect the glyphs into a single array
@@ -6588,9 +6587,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aGlyphs.reserve( nMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     DevicePoint aPos;
-    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pGlyphFont, &pFallbackFont))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pGlyphFont))
     {
-        const auto* pFont = pFallbackFont ? pFallbackFont : pDevFont;
+        const auto* pFace = pGlyphFont->GetFontFace();
 
         aCodeUnits.clear();
 
@@ -6633,7 +6632,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // instead.
         if (!aCodeUnits.empty() && !bUseActualText)
         {
-            for (const auto& rSubset : m_aSubsets[pFont].m_aSubsets)
+            for (const auto& rSubset : m_aSubsets[pFace].m_aSubsets)
             {
                 const auto& it = rSubset.m_aMapping.find(nGlyphId);
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
@@ -6650,7 +6649,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
-        registerGlyph(nGlyphId, pFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->IsColorFont());
+        registerGlyph(nGlyphId, pFace, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->IsColorFont());
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
@@ -6658,7 +6657,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         aGlyphs.emplace_back(aPos,
                              pGlyph,
-                             XUnits(pFont->UnitsPerEm(), nGlyphWidth),
+                             XUnits(pFace->UnitsPerEm(), nGlyphWidth),
                              nMappedFontObject,
                              nMappedGlyph,
                              nCharPos);
