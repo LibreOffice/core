@@ -73,6 +73,11 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
         weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        OutputDevice& rDevice = pDrawingArea->get_ref_device();
+        rDevice.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
+
         SetPointer(PointerStyle::RefHand);
     }
 
