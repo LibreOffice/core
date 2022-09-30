@@ -36,6 +36,8 @@ extras_TEMPLATES_XMLFILES := \
 	offimisc/Businesscard-with-logo/settings.xml \
 	offimisc/Businesscard-with-logo/Pictures/10000201000001F4000000A0108F3F06.png \
 	draw/bpmn/meta.xml \
+	l10n/zh_CN_ott_normal/meta.xml \
+	l10n/zh_CN_ott_normal/content.xml \
 
 # param: style-base (e.g. Modern)
 extras_TEMPLATES_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_TEMPLATES_XMLFILES)))

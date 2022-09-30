@@ -19,6 +19,7 @@ $(eval $(call gb_Package_add_files_with_dir,extras_templates,$(LIBO_SHARE_FOLDER
 	styles/Modern.ott \
 	styles/Simple.ott \
 	draw/bpmn.otg \
+	l10n/zh_CN_ott_normal.ott \
 ))
 
 # vim: set noet sw=4 ts=4:

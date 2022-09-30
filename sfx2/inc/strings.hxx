@@ -47,6 +47,7 @@ inline constexpr OUStringLiteral STR_TEMPLATE_NAME29_DEF = u"Modern business let
 inline constexpr OUStringLiteral STR_TEMPLATE_NAME30_DEF = u"Businesscard with logo";
 inline constexpr OUStringLiteral STR_TEMPLATE_NAME31_DEF = u"Simple";
 inline constexpr OUStringLiteral STR_TEMPLATE_NAME32_DEF = u"BPMN";
+inline constexpr OUStringLiteral STR_TEMPLATE_NAME33_DEF = u"Simplified Chinese Normal";
 
 inline constexpr OUStringLiteral CMIS_TYPE_STRING = u"String";
 #define CMIS_TYPE_INTEGER "Integer"
