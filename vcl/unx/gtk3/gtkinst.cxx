@@ -21152,7 +21152,7 @@ private:
         GtkTreePath* path;
         if (pos == -1)
         {
-            path = gtk_tree_path_new();
+            path = gtk_tree_path_new_from_string("0:1:0");
             gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
             if (m_pCellView)
                 gtk_cell_view_set_displayed_row(m_pCellView, nullptr);
