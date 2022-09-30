@@ -970,7 +970,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	oox_generated \
 	package_dtd \
 	sd_web \
-	sfx2_emojiconfig \
 	$(call gb_Helper_optional,DESKTOP,\
 		$(if $(filter-out WNT,$(OS)),$(if $(ENABLE_MACOSX_SANDBOX),,shell_senddoc))) \
 	$(call gb_Helper_optional,DESKTOP,$(if $(filter-out EMSCRIPTEN MACOSX WNT,$(OS)),svx_gengal)) \
