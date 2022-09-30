@@ -2331,7 +2331,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
     }
 
     // draw drop position arrows
-    Color aBlackColor(COL_BLACK);
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    const Color aTextColor = rStyles.GetLabelTextColor();
     tools::Long nX;
     tools::Long nY = (maWinSize.Height() / 2) - 1;
     sal_uInt16 nCurPos = GetPagePos(mnCurPageId);
@@ -2340,8 +2341,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
 
     if (mnDropPos < nItemCount)
     {
-        GetOutDev()->SetLineColor(aBlackColor);
-        GetOutDev()->SetFillColor(aBlackColor);
+        GetOutDev()->SetLineColor(aTextColor);
+        GetOutDev()->SetFillColor(aTextColor);
 
         auto& rItem = mpImpl->maItemList[mnDropPos];
         nX = rItem.maRect.Left();
@@ -2364,8 +2365,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
     }
     if (mnDropPos > 0 && mnDropPos < nItemCount + 1)
     {
-        GetOutDev()->SetLineColor(aBlackColor);
-        GetOutDev()->SetFillColor(aBlackColor);
+        GetOutDev()->SetLineColor(aTextColor);
+        GetOutDev()->SetFillColor(aTextColor);
 
         auto& rItem = mpImpl->maItemList[mnDropPos - 1];
         nX = rItem.maRect.Right();
