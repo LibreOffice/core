@@ -46,6 +46,7 @@
 #include <ooo/vba/word/XDocumentOutgoing.hpp>
 
 #include "wordvbahelper.hxx"
+#include <doc.hxx>
 #include <docsh.hxx>
 #include "vbatemplate.hxx"
 #include "vbaparagraph.hxx"
@@ -99,7 +100,9 @@ SwVbaDocument::~SwVbaDocument()
 void SwVbaDocument::Initialize()
 {
     mxTextDocument.set( getModel(), uno::UNO_QUERY_THROW );
-    word::getDocShell( mxModel )->RegisterAutomationDocumentObject( this );
+    SwDocShell& rDocSh = *word::getDocShell(mxModel);
+    rDocSh.RegisterAutomationDocumentObject(this);
+    rDocSh.GetDoc()->SetVbaEventProcessor();
 }
 
 sal_uInt32

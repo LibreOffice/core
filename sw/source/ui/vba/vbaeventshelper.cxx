@@ -92,7 +92,7 @@ sal_Bool SwVbaEventsHelper::supportsService( const OUString& ServiceName )
 }
 css::uno::Sequence< OUString > SwVbaEventsHelper::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.vba.VBATextEventProcessor" };
+    return { "com.sun.star.script.vba.VBATextEventProcessor" };
 }
 
 

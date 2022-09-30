@@ -1796,8 +1796,13 @@ void SwDoc::ChkCondColls()
 uno::Reference< script::vba::XVBAEventProcessor > const &
 SwDoc::GetVbaEventProcessor()
 {
+    return mxVbaEvents;
+}
+
+void SwDoc::SetVbaEventProcessor()
+{
 #if HAVE_FEATURE_SCRIPTING
-    if( !mxVbaEvents.is() && mpDocShell && ooo::vba::isAlienWordDoc( *mpDocShell ) )
+    if (mpDocShell && ooo::vba::isAlienWordDoc(*mpDocShell))
     {
         try
         {
@@ -1810,7 +1815,6 @@ SwDoc::GetVbaEventProcessor()
         }
     }
 #endif
-    return mxVbaEvents;
 }
 
 void SwDoc::SetMissingDictionaries( bool bIsMissing )

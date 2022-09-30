@@ -23,7 +23,7 @@
     <service name="ooo.vba.word.Document"/>
   </implementation>
   <implementation name="SwVbaEventsHelper" constructor="Writer_SwVbaEventsHelper_get_implementation">
-    <service name="com.sun.star.document.vba.VBATextEventProcessor"/>
+    <service name="com.sun.star.script.vba.VBATextEventProcessor"/>
   </implementation>
   <implementation name="SwVbaGlobals" constructor="Writer_SwVbaGlobals_get_implementation">
     <service name="ooo.vba.word.Globals"/>

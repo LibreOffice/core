@@ -21,6 +21,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <comphelper/sequence.hxx>
+
 #include "vbaapplication.hxx"
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -189,15 +191,12 @@ SwVbaGlobals::getServiceNames()
 uno::Sequence< OUString >
 SwVbaGlobals::getAvailableServiceNames(  )
 {
-    static uno::Sequence< OUString > const serviceNames = [&]()
-    {
-        uno::Sequence< OUString > tmp = SwVbaGlobals_BASE::getAvailableServiceNames();
-        tmp.realloc( tmp.getLength() + 1 );
-        tmp.getArray()[ tmp.getLength() - 1 ] = "ooo.vba.word.Document";
-//            #FIXME #TODO make Application a proper service
-//            OUString( "ooo.vba.word.Application" ),
-        return tmp;
-    }();
+    static const uno::Sequence<OUString> serviceNames = comphelper::concatSequences(
+        SwVbaGlobals_BASE::getAvailableServiceNames(),
+        uno::Sequence<OUString>{ "ooo.vba.word.Document",
+                                 // "ooo.vba.word.Globals",
+                                 // "ooo.vba.word.WrapFormat",
+                                 "com.sun.star.script.vba.VBATextEventProcessor" });
     return serviceNames;
 }
 
