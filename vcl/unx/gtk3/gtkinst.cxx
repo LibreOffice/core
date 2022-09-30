@@ -15188,7 +15188,7 @@ public:
             gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         }
         else
-            path = gtk_tree_path_new();
+            path = gtk_tree_path_new_from_string("0:1:0");
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
