@@ -323,8 +323,10 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 }
 
 
-void ImplFontMetricData::ImplInitAboveTextLineSize()
+void ImplFontMetricData::ImplInitAboveTextLineSize( const OutputDevice* pDev )
 {
+    ImplInitTextLineSize(pDev);
+
     tools::Long nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)
     // if no leading is available, we assume 15% of the ascent
@@ -335,41 +337,19 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
             nIntLeading = 1;
     }
 
-    tools::Long nLineHeight = ((nIntLeading*25)+50) / 100;
-    if ( !nLineHeight )
-        nLineHeight = 1;
-
-    tools::Long nBLineHeight = ((nIntLeading*50)+50) / 100;
-    if ( nBLineHeight == nLineHeight )
-        nBLineHeight++;
-
-    tools::Long n2LineHeight = ((nIntLeading*16)+50) / 100;
-    if ( !n2LineHeight )
-        n2LineHeight = 1;
-
     tools::Long nCeiling = -mnAscent;
 
-    mnAboveUnderlineSize       = nLineHeight;
-    mnAboveUnderlineOffset     = nCeiling + (nIntLeading - nLineHeight + 1) / 2;
+    mnAboveUnderlineSize       = mnUnderlineSize;
+    mnAboveUnderlineOffset     = nCeiling + (nIntLeading - mnUnderlineSize + 1) / 2;
 
-    mnAboveBUnderlineSize      = nBLineHeight;
-    mnAboveBUnderlineOffset    = nCeiling + (nIntLeading - nBLineHeight + 1) / 2;
+    mnAboveBUnderlineSize      = mnBUnderlineSize;
+    mnAboveBUnderlineOffset    = nCeiling + (nIntLeading - mnBUnderlineSize + 1) / 2;
 
-    mnAboveDUnderlineSize      = n2LineHeight;
-    mnAboveDUnderlineOffset1   = nCeiling + (nIntLeading - 3*n2LineHeight + 1) / 2;
-    mnAboveDUnderlineOffset2   = nCeiling + (nIntLeading +   n2LineHeight + 1) / 2;
+    mnAboveDUnderlineSize      = mnDUnderlineSize;
+    mnAboveDUnderlineOffset1   = nCeiling + (nIntLeading - 3*mnDUnderlineSize + 1) / 2;
+    mnAboveDUnderlineOffset2   = nCeiling + (nIntLeading +   mnDUnderlineSize + 1) / 2;
 
-    tools::Long nWCalcSize = nIntLeading;
-    if ( nWCalcSize < 6 )
-    {
-        if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
-            mnAboveWUnderlineSize = nWCalcSize;
-        else
-            mnAboveWUnderlineSize = 3;
-    }
-    else
-        mnAboveWUnderlineSize = ((nWCalcSize*50)+50) / 100;
-
+    mnAboveWUnderlineSize = mnWUnderlineSize;
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
 }
 

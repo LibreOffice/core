@@ -108,7 +108,7 @@ void OutputDevice::ImplInitTextLineSize()
 
 void OutputDevice::ImplInitAboveTextLineSize()
 {
-    mpFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
+    mpFontInstance->mxFontMetric->ImplInitAboveTextLineSize( this );
 }
 
 void OutputDevice::ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY,
