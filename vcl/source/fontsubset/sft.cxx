@@ -2279,32 +2279,6 @@ std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const
     return res;
 }
 
-// TODO, clean up table parsing and re-use it elsewhere in this file.
-void GetTTFontMetrics(const uint8_t *pHhea, size_t nHhea,
-                      const uint8_t *pOs2, size_t nOs2,
-                      TTGlobalFontInfo *info)
-{
-    /* There are 3 different versions of OS/2 table: original (68 bytes long),
-     * Microsoft old (78 bytes long) and Microsoft new (86 bytes long,)
-     * Apple's documentation recommends looking at the table length.
-     */
-    if (nOs2 >= OS2_V0_length)
-    {
-        info->fsSelection   = GetUInt16(pOs2, OS2_fsSelection_offset);
-        info->typoAscender  = GetInt16(pOs2, OS2_typoAscender_offset);
-        info->typoDescender = GetInt16(pOs2, OS2_typoDescender_offset);
-        info->typoLineGap   = GetInt16(pOs2, OS2_typoLineGap_offset);
-        info->winAscent     = GetUInt16(pOs2, OS2_winAscent_offset);
-        info->winDescent    = GetUInt16(pOs2, OS2_winDescent_offset);
-    }
-
-    if (nHhea >= HHEA_lineGap_offset + 2) {
-        info->ascender      = GetInt16(pHhea, HHEA_ascender_offset);
-        info->descender     = GetInt16(pHhea, HHEA_descender_offset);
-        info->linegap       = GetInt16(pHhea, HHEA_lineGap_offset);
-    }
-}
-
 bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
 {
     sal_uInt32 table_size;

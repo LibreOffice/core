@@ -25,7 +25,6 @@
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include "fontattributes.hxx"
-#include "sft.hxx"
 
 #include <vector>
 
@@ -103,7 +102,7 @@ public:
     void            ImplInitBaselines(LogicalFontInstance *pFontInstance);
 
 private:
-    bool            ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo) const;
+    bool            ShouldUseWinMetrics(int, int, int, int, int, int) const;
 
     // font instance attributes from the font request
     tools::Long            mnHeight;                   // Font size

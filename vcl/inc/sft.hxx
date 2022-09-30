@@ -691,20 +691,6 @@ class TrueTypeFace;
  */
     VCL_DLLPUBLIC bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
 
-/**
- * Returns fonts metrics.
- * @see TTGlobalFontInfo
- *
- * @param hhea        hhea table data
- * @param os2         OS/2 table data
- * @param info        pointer to a TTGlobalFontInfo structure
- * @ingroup sft
- *
- */
- void GetTTFontMetrics(const uint8_t *pHhea, size_t nHhea,
-                       const uint8_t *pOs2, size_t nOs2,
-                       TTGlobalFontInfo *info);
-
 /*- private definitions */
 
 /* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */

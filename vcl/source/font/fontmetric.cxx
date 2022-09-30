@@ -21,10 +21,11 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <sal/log.hxx>
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -332,16 +333,18 @@ void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
     SetFullstopCenteredFlag( bCentered );
 }
 
-bool ImplFontMetricData::ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo) const
+bool ImplFontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTypoAscent,
+                                             int nTypoDescent, int nWinAscent,
+                                             int nWinDescent) const
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;
 
     OUString aFontIdentifier(
         GetFamilyName() + ","
-        + OUString::number(rInfo.ascender) + "," + OUString::number(rInfo.descender) + ","
-        + OUString::number(rInfo.typoAscender) + "," + OUString::number(rInfo.typoDescender) + ","
-        + OUString::number(rInfo.winAscent) + "," + OUString::number(rInfo.winDescent));
+        + OUString::number(nAscent) + "," + OUString::number(nDescent) + ","
+        + OUString::number(nTypoAscent) + "," + OUString::number(nTypoDescent) + ","
+        + OUString::number(nWinAscent) + "," + OUString::number(nWinDescent));
 
     css::uno::Sequence<OUString> rWinMetricFontList(
         officecfg::Office::Common::Misc::FontsUseWinMetrics::get());
@@ -353,65 +356,116 @@ bool ImplFontMetricData::ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo)
     return false;
 }
 
-/*
- * Calculate line spacing:
- *
- * - hhea metrics should be used, since hhea is a mandatory font table and
- *   should always be present.
- * - But if OS/2 is present, it should be used since it is mandatory in
- *   Windows.
- *   OS/2 has Typo and Win metrics, but the later was meant to control
- *   text clipping not line spacing and can be ridiculously large.
- *   Unfortunately many Windows application incorrectly use the Win metrics
- *   (thanks to GDI’s TEXTMETRIC) and old fonts might be designed with this
- *   in mind, so OpenType introduced a flag for fonts to indicate that they
- *   really want to use Typo metrics. So for best backward compatibility:
- *   - Use Win metrics if available.
- *   - Unless USE_TYPO_METRICS flag is set, in which case use Typo metrics.
-*/
-void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
+// These are “private” HarfBuzz metrics tags, they are supported by not exposed
+// in the public header. They are safe ti use, HarfBuzz just does not want to
+// advertise them.
+constexpr auto ASCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'a', 's', 'c'));
+constexpr auto DESCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'd', 's', 'c'));
+constexpr auto LINEGAP_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'l', 'g', 'p'));
+constexpr auto ASCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'a', 's', 'c'));
+constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 's', 'c'));
+constexpr auto LINEGAP_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'l', 'g', 'p'));
+
+void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 {
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
     auto* pFace = pFontInstance->GetFontFace();
+    auto* pHbFont = pFontInstance->GetHbFont();
 
-    auto aHhea(pFace->GetRawFontData(HB_TAG('h', 'h', 'e', 'a')));
-    auto aOS_2(pFace->GetRawFontData(HB_TAG('O', 'S', '/', '2')));
-
-    vcl::TTGlobalFontInfo rInfo = {};
-    GetTTFontMetrics(aHhea.data(), aHhea.size(), aOS_2.data(), aOS_2.size(), &rInfo);
-
-    double nUPEM = pFace->UnitsPerEm();
-    double fScale = mnHeight / nUPEM;
+    double fScale = 0;
+    pFontInstance->GetScale(nullptr, &fScale);
     double fAscent = 0, fDescent = 0, fExtLeading = 0;
 
-    // Try hhea table first.
-    // tdf#107605: Some fonts have weird values here, so check that ascender is
-    // +ve and descender is -ve as they normally should.
-    if (rInfo.ascender >= 0 && rInfo.descender <= 0)
+    auto aFvar(pFace->GetRawFontData(HB_TAG('f', 'v', 'a', 'r')));
+    if (!aFvar.empty())
     {
-        fAscent     =  rInfo.ascender  * fScale;
-        fDescent    = -rInfo.descender * fScale;
-        fExtLeading =  rInfo.linegap   * fScale;
-    }
-
-    // But if OS/2 is present, prefer it.
-    if (rInfo.winAscent || rInfo.winDescent ||
-        rInfo.typoAscender || rInfo.typoDescender)
-    {
-        if (ShouldUseWinMetrics(rInfo) || (fAscent == 0.0 && fDescent == 0.0))
+        // This is a variable font, trust HarfBuzz to give us the right metrics
+        // and apply variations to them.
+        hb_position_t nAscent, nDescent, nLineGap;
+        if (hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &nAscent)
+            && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER,
+                                          &nDescent)
+            && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP,
+                                          &nLineGap))
         {
-            fAscent     = rInfo.winAscent  * fScale;
-            fDescent    = rInfo.winDescent * fScale;
-            fExtLeading = 0;
+            fAscent = nAscent * fScale;
+            fDescent = -nDescent * fScale;
+            fExtLeading = nLineGap * fScale;
+        }
+    }
+    else
+    {
+        // This is not a variable font, we try to chose the best metrics
+        // ourselves for backward comparability:
+        //
+        // - hhea metrics should be used, since hhea is a mandatory font table
+        //   and should always be present.
+        // - But if OS/2 is present, it should be used since it is mandatory in
+        //   Windows.
+        //   OS/2 has Typo and Win metrics, but the later was meant to control
+        //   text clipping not line spacing and can be ridiculously large.
+        //   Unfortunately many Windows application incorrectly use the Win
+        //   metrics (thanks to GDI’s TEXTMETRIC) and old fonts might be
+        //   designed with this in mind, so OpenType introduced a flag for
+        //   fonts to indicate that they really want to use Typo metrics. So
+        //   for best backward compatibility:
+        //   - Use Win metrics if available.
+        //   - Unless USE_TYPO_METRICS flag is set, in which case use Typo
+        //     metrics.
+
+        // Try hhea table first.
+        hb_position_t nAscent = 0, nDescent = 0, nLineGap = 0;
+        if (hb_ot_metrics_get_position(pHbFont, ASCENT_HHEA, &nAscent)
+            && hb_ot_metrics_get_position(pHbFont, DESCENT_HHEA, &nDescent)
+            && hb_ot_metrics_get_position(pHbFont, LINEGAP_HHEA, &nLineGap))
+        {
+            // tdf#107605: Some fonts have weird values here, so check that
+            // ascender is +ve and descender is -ve as they normally should.
+            if (nAscent >= 0 && nDescent <= 0)
+            {
+                fAscent = nAscent * fScale;
+                fDescent = -nDescent * fScale;
+                fExtLeading = nLineGap * fScale;
+            }
         }
 
-        const uint16_t kUseTypoMetricsMask = 1 << 7;
-        if (rInfo.fsSelection & kUseTypoMetricsMask &&
-            rInfo.typoAscender >= 0 && rInfo.typoDescender <= 0)
+        // But if OS/2 is present, prefer it.
+        hb_position_t nTypoAscent, nTypoDescent, nTypoLineGap, nWinAscent, nWinDescent;
+        if (hb_ot_metrics_get_position(pHbFont, ASCENT_OS2, &nTypoAscent)
+            && hb_ot_metrics_get_position(pHbFont, DESCENT_OS2, &nTypoDescent)
+            && hb_ot_metrics_get_position(pHbFont, LINEGAP_OS2, &nTypoLineGap)
+            && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_ASCENT,
+                                          &nWinAscent)
+            && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_DESCENT,
+                                          &nWinDescent))
         {
-            fAscent     =  rInfo.typoAscender  * fScale;
-            fDescent    = -rInfo.typoDescender * fScale;
-            fExtLeading =  rInfo.typoLineGap   * fScale;
+            if ((fAscent == 0.0 && fDescent == 0.0)
+                || ShouldUseWinMetrics(nAscent, nDescent, nTypoAscent, nTypoDescent, nWinAscent,
+                                       nWinDescent))
+            {
+                fAscent = nWinAscent * fScale;
+                fDescent = nWinDescent * fScale;
+                fExtLeading = 0;
+            }
+
+            bool bUseTypoMetrics = false;
+            {
+                // TODO: Use HarfBuzz API instead of raw access
+                // https://github.com/harfbuzz/harfbuzz/issues/1920
+                sal_uInt16 fsSelection = 0;
+                auto aOS2(pFace->GetRawFontData(HB_TAG('O', 'S', '/', '2')));
+                SvMemoryStream aStream(const_cast<uint8_t*>(aOS2.data()), aOS2.size(),
+                                       StreamMode::READ);
+                if (aStream.Seek(vcl::OS2_fsSelection_offset) == vcl::OS2_fsSelection_offset)
+                    aStream.ReadUInt16(fsSelection);
+                bUseTypoMetrics = fsSelection & (1 << 7);
+            }
+            if (bUseTypoMetrics && nTypoAscent >= 0 && nTypoDescent <= 0)
+            {
+                fAscent = nTypoAscent * fScale;
+                fDescent = -nTypoDescent * fScale;
+                fExtLeading = nTypoLineGap * fScale;
+            }
         }
     }
 
@@ -421,18 +475,6 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
 
     if (mnAscent || mnDescent)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
-
-    SAL_INFO("vcl.gdi.fontmetric", GetFamilyName()
-             << ": fsSelection: "   << rInfo.fsSelection
-             << ", typoAscender: "  << rInfo.typoAscender
-             << ", typoDescender: " << rInfo.typoDescender
-             << ", typoLineGap: "   << rInfo.typoLineGap
-             << ", winAscent: "     << rInfo.winAscent
-             << ", winDescent: "    << rInfo.winDescent
-             << ", ascender: "      << rInfo.ascender
-             << ", descender: "     << rInfo.descender
-             << ", linegap: "       << rInfo.linegap
-             );
 }
 
 void ImplFontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
