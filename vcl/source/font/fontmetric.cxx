@@ -432,7 +432,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
     }
     else
     {
-        // This is not a variable font, we try to chose the best metrics
+        // This is not a variable font, we try to choose the best metrics
         // ourselves for backward comparability:
         //
         // - hhea metrics should be used, since hhea is a mandatory font table
