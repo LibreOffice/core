@@ -2162,14 +2162,14 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 /**************************************************************************/
 
-static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
+static bool lcl_IsFromGreekSymbolSet( std::u16string_view aTokenText )
 {
     bool bRes = false;
 
     // valid symbol name needs to have a '%' at pos 0 and at least an additional char
-    if (rTokenText.getLength() > 2 && rTokenText[0] == u'%')
+    if (aTokenText.size() > 2 && aTokenText[0] == u'%')
     {
-        OUString aName( rTokenText.copy(1) );
+        OUString aName( aTokenText.substr(1) );
         SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
         if (pSymbol && SmLocalizedSymbolData::GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
             bRes = true;

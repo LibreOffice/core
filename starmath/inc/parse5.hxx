@@ -55,7 +55,7 @@ class SmParser5 final : public AbstractSmParser
     void NextTokenColor(SmTokenType dvipload);
     void NextTokenFontSize();
     sal_Int32 GetTokenIndex() const { return m_nTokenIndex; }
-    void Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText);
+    void Replace(sal_Int32 nPos, sal_Int32 nLen, std::u16string_view aText);
 
     inline bool TokenInGroup(TG nGroup);
 

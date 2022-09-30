@@ -374,12 +374,12 @@ static bool lcl_IsNotWholeNumber16(const OUString& rText)
 }
 
 //Text replace onto m_aBufferString
-void SmParser5::Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText)
+void SmParser5::Replace(sal_Int32 nPos, sal_Int32 nLen, std::u16string_view aText)
 {
     assert(nPos + nLen <= m_aBufferString.getLength()); //checks if length allows text replace
 
-    m_aBufferString = m_aBufferString.replaceAt(nPos, nLen, rText); //replace and reindex
-    sal_Int32 nChg = rText.getLength() - nLen;
+    m_aBufferString = m_aBufferString.replaceAt(nPos, nLen, aText); //replace and reindex
+    sal_Int32 nChg = aText.size() - nLen;
     m_nBufferIndex = m_nBufferIndex + nChg;
     m_nTokenIndex = m_nTokenIndex + nChg;
 }

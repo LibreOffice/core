@@ -108,7 +108,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     return bSuccess;
 }
 
-bool SmIsMathAlpha(const OUString &rText)
+bool SmIsMathAlpha(std::u16string_view aText)
     // true iff symbol (from StarMath Font) should be treated as letter
 {
     // Set of symbols, which should be treated as letters in StarMath Font
@@ -125,11 +125,11 @@ bool SmIsMathAlpha(const OUString &rText)
         u'\x2130',              u'\x2131'
     });
 
-    if (rText.isEmpty())
+    if (aText.empty())
         return false;
 
-    OSL_ENSURE(rText.getLength() == 1, "Sm : string must be exactly one character long");
-    sal_Unicode cChar = rText[0];
+    OSL_ENSURE(aText.size() == 1, "Sm : string must be exactly one character long");
+    sal_Unicode cChar = aText[0];
 
     // is it a greek symbol?
     if (u'\xE0AC' <= cChar  &&  cChar <= u'\xE0D4')
