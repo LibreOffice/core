@@ -15188,7 +15188,7 @@ public:
             gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         }
         else
-            path = gtk_tree_path_new_from_string("0:1:0");
+            path = gtk_tree_path_new_from_indices(G_MAXINT, -1);
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
@@ -21152,7 +21152,7 @@ private:
         GtkTreePath* path;
         if (pos == -1)
         {
-            path = gtk_tree_path_new_from_string("0:1:0");
+            path = gtk_tree_path_new_from_indices(G_MAXINT, -1);
             gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
             if (m_pCellView)
                 gtk_cell_view_set_displayed_row(m_pCellView, nullptr);
