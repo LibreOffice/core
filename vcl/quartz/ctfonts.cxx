@@ -234,6 +234,41 @@ bool CoreTextStyle::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rR
 
 hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
 {
+    hb_blob_t* pBlob = nullptr;
+
+    if (!nTag)
+    {
+        // If nTag is 0, the whole font data is requested. CoreText does not
+        // give us that, so we will construct an HarfBuzz face from CoreText
+        // table data and return the blob of that face.
+        auto pFontDesc = reinterpret_cast<CTFontDescriptorRef>(GetFontId());
+        auto rCTFont = CTFontCreateWithFontDescriptor(pFontDesc, 0.0, nullptr);
+
+        auto pTags = CTFontCopyAvailableTables(rCTFont, kCTFontTableOptionNoOptions);
+        if (pTags)
+        {
+            auto nTags = CFArrayGetCount(pTags);
+            if (!nTags)
+                return nullptr;
+
+            hb_face_t* pHbFace = hb_face_builder_create();
+            for (auto i = 0u; i < nTags; i++)
+            {
+                auto nTable = reinterpret_cast<intptr_t>(CFArrayGetValueAtIndex(pTags, i));
+                assert(nTable);
+                auto pTable = GetHbTable(nTable);
+                assert(pTable);
+                hb_face_builder_add_table(pHbFace, nTable, pTable);
+            }
+            pBlob = hb_face_reference_blob(pHbFace);
+
+            hb_face_destroy(pHbFace);
+            CFRelease(pTags);
+        }
+
+        return pBlob;
+    }
+
     sal_uLong nLength = 0;
     unsigned char* pBuffer = nullptr;
     nLength = GetFontTable(nTag, nullptr);
@@ -243,7 +278,6 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
         GetFontTable(nTag, pBuffer);
     }
 
-    hb_blob_t* pBlob = nullptr;
     if (pBuffer != nullptr)
         pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
                                pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
@@ -307,8 +341,7 @@ int CoreTextFontFace::GetFontTable(uint32_t nTagCode, unsigned char* pResultBuf 
     // get the raw table length
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>( GetFontId());
     CTFontRef rCTFont = CTFontCreateWithFontDescriptor( pFontDesc, 0.0, nullptr);
-    const uint32_t opts( kCTFontTableOptionNoOptions );
-    CFDataRef pDataRef = CTFontCopyTable( rCTFont, nTagCode, opts);
+    CFDataRef pDataRef = CTFontCopyTable(rCTFont, nTagCode, kCTFontTableOptionNoOptions);
     CFRelease( rCTFont);
     if( !pDataRef)
         return 0;
