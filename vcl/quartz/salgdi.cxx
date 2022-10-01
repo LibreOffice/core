@@ -278,17 +278,8 @@ void AquaSalGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pFontCol
 
     AddLocalTempFontDirs();
 
-    // The idea is to cache the list of system fonts once it has been generated.
-    // SalData seems to be a good place for this caching. However we have to
-    // carefully make the access to the font list thread-safe. If we register
-    // a font-change event handler to update the font list in case fonts have
-    // changed on the system we have to lock access to the list. The right
-    // way to do that is the solar mutex since GetDevFontList is protected
-    // through it as should be all event handlers
-
     SalData* pSalData = GetSalData();
-    if( !pSalData->mpFontList )
-        pSalData->mpFontList = GetCoretextFontList();
+    pSalData->mpFontList = GetCoretextFontList();
 
     // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontCollection );
