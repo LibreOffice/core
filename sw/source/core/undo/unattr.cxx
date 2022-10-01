@@ -409,7 +409,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         SwPosition aPos( *pNd );
         if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
             (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) {
-            aPos.nContent.Assign( static_cast<SwTextNode*>(pNd), rAnchor.GetPageNum() );
+            aPos.SetContent( rAnchor.GetPageNum() );
             if ( aPos.GetContentIndex() > pNd->GetTextNode()->GetText().getLength()) {
                 // #i35443# - invalid position.
                 // Thus, anchor attribute not restored
@@ -724,7 +724,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
             aPam.DeleteMark();
             aPam.GetPoint()->Assign( m_nNodeIndex, m_nSttContent );
             aPam.SetMark();
-            ++aPam.GetPoint()->nContent;
+            aPam.GetPoint()->AdjustContent(+1);
             pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
         } else {
             // remove all format redlines, will be recreated if needed
