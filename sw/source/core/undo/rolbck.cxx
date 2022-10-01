@@ -945,17 +945,11 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
     SwContentNode* pCNd = pNd->GetContentNode();
     SwPosition aPos( *pNd );
     if ( COMPLETE_STRING != m_nOldContentIndex )
-    {
-        OSL_ENSURE(pCNd, "SwHistoryChangeFlyAnchor: no ContentNode");
-        if (pCNd)
-        {
-            aPos.nContent.Assign( pCNd, m_nOldContentIndex );
-        }
-    }
+        aPos.SetContent( m_nOldContentIndex );
     aTmp.SetAnchor( &aPos );
 
     // so the Layout does not get confused
-    if (!pCNd || !pCNd->getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr))
+    if (!pCNd->getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr))
     {
         m_rFormat.DelFrames();
     }
