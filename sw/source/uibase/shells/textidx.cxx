@@ -196,7 +196,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
 
         bool bEnableEdit = true;
         bool bInReadonly = rSh.HasReadonlySel();
-        if( rSh.HasSelection() || bInReadonly)
+        if(bInReadonly)
             bEnableEdit = false;
         else
         {

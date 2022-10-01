@@ -3514,6 +3514,25 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                         }
 
+                        // tdf#143158 - handle alphabetical index entries
+                        SwContentAtPos aToxContentAtPos(IsAttrAtPos::ToxMark);
+                        if (rSh.GetContentAtPos(aDocPos, aToxContentAtPos))
+                        {
+                            const OUString sToxText = aToxContentAtPos.sStr;
+                            if (!sToxText.isEmpty() && aToxContentAtPos.pFndTextAttr)
+                            {
+                                const SwTOXType* pTType
+                                    = aToxContentAtPos.pFndTextAttr->GetTOXMark().GetTOXType();
+                                if (pTType && pTType->GetType() == TOXTypes::TOX_INDEX)
+                                {
+                                    RstMBDownFlags();
+                                    GetView().GetViewFrame()->GetBindings().Execute(
+                                        FN_EDIT_IDX_ENTRY_DLG);
+                                    return;
+                                }
+                            }
+                        }
+
                         g_bHoldSelection = true;
                         return;
                     }
