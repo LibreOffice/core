@@ -77,9 +77,8 @@ namespace
             SwPosition & rPos = pPam->GetBound(bool(nb));
             if(&rPos.GetNode() == pOldNode)
             {
-                rPos.Assign( rNewPos.GetNode() );
-                if(rNewPos.GetNode().GetContentNode())
-                    rPos.AdjustContent(nCntIdx);
+                rPos.Assign(rNewPos.GetNode(), SwNodeOffset(0),
+                            nCntIdx + rPos.GetContentIndex());
             }
         }
     }
