@@ -136,14 +136,6 @@ bool QtGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUStri
     return false;
 }
 
-const void* QtGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,
-                                         tools::Long* /*pDataLen*/)
-{
-    return nullptr;
-}
-
-void QtGraphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
-
 namespace
 {
 class QtCommonSalLayout : public GenericSalLayout

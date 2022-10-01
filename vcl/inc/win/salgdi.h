@@ -349,14 +349,6 @@ public:
     virtual void            ClearDevFontCache() override;
     virtual bool            AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
 
-    // GetEmbedFontData: gets the font data for a font marked
-    // embeddable by GetDevFontList or NULL in case of error
-    // parameters: pFont: describes the font in question
-    //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
-    // frees the font data again
-    virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
-
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;

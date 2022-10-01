@@ -484,18 +484,6 @@ bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabiliti
     return mpTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
-const void* AquaSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* /*pDataLen*/)
-{
-    return nullptr;
-}
-
-void AquaSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nDataLen*/ )
-{
-    // TODO: implementing this only makes sense when the implementation of
-    //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
-    SAL_WARN_IF( (pData==nullptr), "vcl", "AquaSalGraphics::FreeEmbedFontData() is not implemented");
-}
-
 void AquaSalGraphics::Flush()
 {
     mpBackend->Flush();

@@ -67,8 +67,6 @@ public:
     static bool             AddTempDevFontHelper(vcl::font::PhysicalFontCollection* pFontCollection,
                                                  std::u16string_view rFileURL,
                                                  const OUString& rFontName);
-    static const void *     GetEmbedFontDataHelper(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen);
-    static void             FreeEmbedFontDataHelper(const void* pData, tools::Long nLen);
 
     // override all pure virtual methods
     virtual SalGraphicsImpl* GetImpl() const override
@@ -90,8 +88,6 @@ public:
                                             const OUString& rFileURL,
                                             const OUString& rFontName ) override;
 
-    virtual const void*     GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
-    virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;

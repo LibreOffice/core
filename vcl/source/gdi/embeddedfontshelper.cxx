@@ -292,9 +292,11 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     }
     if( selected != nullptr )
     {
-        tools::Long size;
-        if (const void* data = graphics->GetEmbedFontData(selected, &size))
+        auto aFontData(selected->GetRawFontData(0));
+        if (!aFontData.empty())
         {
+            auto data = aFontData.data();
+            auto size = aFontData.size();
             if( sufficientTTFRights( data, size, rights ))
             {
                 osl::File file( url );
@@ -306,7 +308,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
                     while( written < totalSize && !error)
                     {
                         sal_uInt64 nowWritten;
-                        switch( file.write( static_cast< const char* >( data ) + written, size - written, nowWritten ))
+                        switch( file.write( data + written, size - written, nowWritten ))
                         {
                             case osl::File::E_None:
                                 written += nowWritten;
@@ -326,7 +328,6 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
                         ok = true;
                 }
             }
-            graphics->FreeEmbedFontData( data, size );
         }
     }
     return ok ? url : "";

@@ -81,14 +81,4 @@ std::unique_ptr<GenericSalLayout> X11SalGraphics::GetTextLayout(int nFallbackLev
     return mxTextRenderImpl->GetTextLayout(nFallbackLevel);
 }
 
-const void* X11SalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
-{
-    return mxTextRenderImpl->GetEmbedFontData(pFont, pDataLen);
-}
-
-void X11SalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
-{
-    mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

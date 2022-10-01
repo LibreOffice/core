@@ -160,15 +160,6 @@ public:
                                     const OUString& rFileURL,
                                     const OUString& rFontName ) = 0;
 
-    // GetEmbedFontData: gets the font data for a font marked
-    // embeddable by GetDevFontList or NULL in case of error
-    // parameters: pFont: describes the font in question
-    //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*         GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen) = 0;
-
-    // free the font data again
-    virtual void                FreeEmbedFontData( const void* pData, tools::Long nDataLen ) = 0;
-
     virtual std::unique_ptr<GenericSalLayout>
                                 GetTextLayout(int nFallbackLevel) = 0;
     virtual void                DrawTextLayout( const GenericSalLayout& ) = 0;

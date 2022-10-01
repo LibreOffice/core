@@ -48,9 +48,6 @@ public:
     virtual void                ClearDevFontCache() override;
     virtual bool                AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
 
-    virtual const void*         GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
-    virtual void                FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
-
     virtual std::unique_ptr<GenericSalLayout>
                                 GetTextLayout(int nFallbackLevel) override;
 };

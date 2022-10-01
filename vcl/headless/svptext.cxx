@@ -62,16 +62,6 @@ bool SvpSalGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCol
     return m_aTextRenderImpl.AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
-const void* SvpSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
-{
-    return m_aTextRenderImpl.GetEmbedFontData(pFont, pDataLen);
-}
-
-void SvpSalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
-{
-    m_aTextRenderImpl.FreeEmbedFontData(pData, nLen);
-}
-
 std::unique_ptr<GenericSalLayout> SvpSalGraphics::GetTextLayout(int nFallbackLevel)
 {
     return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);

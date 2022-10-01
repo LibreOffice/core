@@ -222,7 +222,11 @@ bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchSta
 
 RawFontData PhysicalFontFace::GetRawFontData(uint32_t nTag) const
 {
-    return RawFontData(hb_face_reference_table(GetHbFace(), nTag));
+    auto pHbFace = GetHbFace();
+    // If nTag is 0, reference the whole font.
+    if (!nTag)
+        return RawFontData(hb_face_reference_blob(pHbFace));
+    return RawFontData(hb_face_reference_table(pHbFace, nTag));
 }
 
 static hb_blob_t* getTable(hb_face_t*, hb_tag_t nTag, void* pUserData)

@@ -127,14 +127,4 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
     return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]);
 }
 
-const void* FreeTypeTextRenderImpl::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
-{
-    return GenPspGraphics::GetEmbedFontDataHelper(pFont, pDataLen);
-}
-
-void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, tools::Long nLen )
-{
-    GenPspGraphics::FreeEmbedFontDataHelper(pData, nLen);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
