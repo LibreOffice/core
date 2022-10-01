@@ -298,9 +298,33 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
 
 namespace
 {
+class RawFace
+{
+public:
+    RawFace(hb_face_t* pFace)
+        : mpFace(hb_face_reference(pFace))
+    {
+    }
+
+    RawFace(const RawFace& rOther)
+        : mpFace(hb_face_reference(rOther.mpFace))
+    {
+    }
+
+    ~RawFace() { hb_face_destroy(mpFace); }
+
+    RawFontData GetTable(uint32_t nTag) const
+    {
+        return RawFontData(hb_face_reference_table(mpFace, nTag));
+    }
+
+private:
+    hb_face_t* mpFace;
+};
+
 class TrueTypeFace final : public AbstractTrueTypeFont
 {
-    const PhysicalFontFace& m_rFace;
+    const RawFace m_aFace;
     mutable std::array<RawFontData, NUM_TAGS> m_aTableList;
 
     const RawFontData& table(sal_uInt32 nIdx) const
@@ -311,14 +335,14 @@ class TrueTypeFace final : public AbstractTrueTypeFont
             T_vmtx, T_OS2,  T_post, T_cvt,  T_prep, T_fpgm, T_gsub, T_CFF,
         };
         if (m_aTableList[nIdx].empty())
-            m_aTableList[nIdx] = std::move(m_rFace.GetRawFontData(aTags[nIdx]));
+            m_aTableList[nIdx] = std::move(m_aFace.GetTable(aTags[nIdx]));
         return m_aTableList[nIdx];
     }
 
 public:
-    TrueTypeFace(const PhysicalFontFace& rFace)
-        : AbstractTrueTypeFont(nullptr, rFace.GetFontCharMap())
-        , m_rFace(rFace)
+    TrueTypeFace(const RawFace aFace, const FontCharMapRef rCharMap)
+        : AbstractTrueTypeFont(nullptr, rCharMap)
+        , m_aFace(std::move(aFace))
     {
     }
 
@@ -344,7 +368,7 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                    nGlyphCount, rInfo);
 
     // Prepare data for font subsetter.
-    TrueTypeFace aSftFont(*this);
+    TrueTypeFace aSftFont(RawFace(GetHbFace()), GetFontCharMap());
     if (aSftFont.initialize() != SFErrCodes::Ok)
         return false;
 
