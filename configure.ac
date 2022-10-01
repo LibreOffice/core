@@ -9577,7 +9577,7 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([xmlsec], [XMLSEC], [xmlsec1-nss >= 1.2.28])
 
 AC_MSG_CHECKING([whether to enable Embedded OpenType support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_eot" = "yes"; then
+if test "$enable_eot" = "yes"; then
     ENABLE_EOT="TRUE"
     AC_DEFINE([ENABLE_EOT])
     AC_MSG_RESULT([yes])
