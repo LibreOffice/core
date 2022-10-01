@@ -1,6 +1,6 @@
-#ifndef CONFIG_LIBEOT_H
-#define CONFIG_LIBEOT_H
+#ifndef CONFIG_EOT_H
+#define CONFIG_EOT_H
 
-#define ENABLE_LIBEOT 0
+#define ENABLE_EOT 0
 
 #endif
