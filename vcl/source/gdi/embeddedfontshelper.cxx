@@ -26,7 +26,7 @@
 #include <sft.hxx>
 
 
-#if ENABLE_LIBEOT
+#if ENABLE_EOT
 extern "C"
 {
 namespace libeot
@@ -108,7 +108,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
             break;
     }
     bool sufficientFontRights(false);
-#if ENABLE_LIBEOT
+#if ENABLE_EOT
     if( eot )
     {
         unsigned uncompressedFontSize = 0;
