@@ -335,8 +335,8 @@ class TrueTypeFace final : public AbstractTrueTypeFont
     {
         assert(nIdx < NUM_TAGS);
         static const uint32_t aTags[NUM_TAGS] = {
-            T_maxp, T_glyf, T_head, T_loca, T_name, T_hhea, T_hmtx, T_cmap, T_vhea,
-            T_vmtx, T_OS2,  T_post, T_cvt,  T_prep, T_fpgm, T_gsub, T_CFF,
+            T_maxp, T_glyf, T_head, T_loca, T_name, T_hhea, T_hmtx, T_cmap,
+            T_vhea, T_vmtx, T_OS2,  T_post, T_cvt,  T_prep, T_fpgm, T_CFF,
         };
         if (m_aTableList[nIdx].empty())
             m_aTableList[nIdx] = std::move(m_aFace.GetTable(aTags[nIdx]));

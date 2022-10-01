@@ -448,7 +448,6 @@ constexpr sal_uInt32 T_post = 0x706F7374;
 constexpr sal_uInt32 T_cvt  = 0x63767420;
 constexpr sal_uInt32 T_prep = 0x70726570;
 constexpr sal_uInt32 T_fpgm = 0x6670676D;
-constexpr sal_uInt32 T_gsub = 0x47535542;
 constexpr sal_uInt32 T_CFF  = 0x43464620;
 
 class AbstractTrueTypeFont;
@@ -708,9 +707,8 @@ constexpr int O_post = 11;   /* 'post' */
 constexpr int O_cvt  = 12;   /* 'cvt_' - only used in TT->TT generation */
 constexpr int O_prep = 13;   /* 'prep' - only used in TT->TT generation */
 constexpr int O_fpgm = 14;   /* 'fpgm' - only used in TT->TT generation */
-constexpr int O_gsub = 15;   /* 'GSUB' */
-constexpr int O_CFF = 16;   /* 'CFF' */
-constexpr int NUM_TAGS = 17;
+constexpr int O_CFF = 15;   /* 'CFF' */
+constexpr int NUM_TAGS = 16;
 
 class VCL_DLLPUBLIC AbstractTrueTypeFont
 {

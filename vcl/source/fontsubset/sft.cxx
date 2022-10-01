@@ -1356,7 +1356,6 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
             case T_cvt : nIndex = O_cvt;  break;
             case T_prep: nIndex = O_prep; break;
             case T_fpgm: nIndex = O_fpgm; break;
-            case T_gsub: nIndex = O_gsub; break;
             case T_CFF:  nIndex = O_CFF; break;
             default: nIndex = -1; break;
         }
