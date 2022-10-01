@@ -581,6 +581,11 @@ void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 #endif
 }
 
+static inline bool lcl_isFieldEnd( sal_Unicode c, const sal_Unicode* pSeps )
+{
+    return !c || ScGlobal::UnicodeStrChr( pSeps, c);
+}
+
 namespace {
 
 enum QuoteType
@@ -615,7 +620,7 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
     const bool bBlankSep = (p[1] == cBlank && !rcDetectSep && p[2] && p[2] != cBlank);
     while (p[1] == cBlank)
         ++p;
-    if (!p[1] || ScGlobal::UnicodeStrChr( pSeps, p[1]))
+    if (lcl_isFieldEnd( p[1], pSeps))
         return FIELDEND_QUOTE;
     // Extended separator detection after a closing quote (with or without
     // blanks). Note that nQuotes is incremented *after* the call so is not yet
@@ -712,9 +717,30 @@ enum class DoubledQuoteMode
 
 }
 
-static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString,
+/** Scan for a quoted string.
+
+    Precondition: initial current position *p is a cStr quote.
+
+    For DoubledQuoteMode::ESCAPE, if after the closing quote there is a field
+    end (with or without trailing blanks and as determined by
+    lcl_isFieldEndQuote()), then the content is appended to rField with quotes
+    processed and removed. Else if no field end after the quoted string was
+    detected, nothing is appended and processing continues and is repeated
+    until the next quote. If no closing quote at a field end was found at all,
+    nothing is appended and the initial position is returned and caller has to
+    decide, usually just taking all as literal data.
+
+    For DoubledQuoteMode::KEEP_ALL, the string up to and including the closing
+    quote is appended to rField and the next position returned, regardless
+    whether there is a field separator following or not.
+
+ */
+static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rField,
             const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
+    OUString aString;
+    bool bClosingQuote = (eMode == DoubledQuoteMode::KEEP_ALL);
+    const sal_Unicode* const pStart = p;
     if (eMode != DoubledQuoteMode::KEEP_ALL)
         p++;    //! jump over opening quote
     bool bCont;
@@ -724,8 +750,19 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
         const sal_Unicode* p0 = p;
         for( ;; )
         {
-            if( !*p )
-                break;
+            if (!*p)
+            {
+                // Encountering end of data after an opening quote is not a
+                // quoted string, ReadCsvLine() concatenated lines with '\n'
+                // for a properly quoted embedded linefeed.
+                if (eMode == DoubledQuoteMode::KEEP_ALL)
+                    // Caller would append that data anyway, so we can do it
+                    // already here.
+                    break;
+
+                return pStart;
+            }
+
             if( *p == cStr )
             {
                 if ( *++p != cStr )
@@ -735,7 +772,10 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
                     {
                         sal_Unicode cDetectSep = 0xffff;    // No separator detection here.
                         if (lcl_isFieldEndQuote( p-1, pSeps, cDetectSep) == FIELDEND_QUOTE)
+                        {
+                            bClosingQuote = true;
                             break;
+                        }
                         else
                             continue;
                     }
@@ -761,10 +801,17 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
         }
         if ( p0 < p )
         {
-            if (!lcl_appendLineData( rString, p0, ((eMode != DoubledQuoteMode::KEEP_ALL && (*p || *(p-1) == cStr)) ? p-1 : p)))
+            if (!lcl_appendLineData( aString, p0, ((eMode != DoubledQuoteMode::KEEP_ALL && (*p || *(p-1) == cStr)) ? p-1 : p)))
                 rbOverflowCell = true;
         }
     } while ( bCont );
+
+    if (!bClosingQuote)
+        return pStart;
+
+    if (!aString.isEmpty())
+        rField += aString;
+
     return p;
 }
 
@@ -950,18 +997,16 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
             {
                 aCell.clear();
                 const sal_Unicode* q = p;
-                while (*p && *p != cSep)
+                if (*p == cStr)
                 {
-                    // Always look for a pairing quote and ignore separator in between.
-                    while (*p && *p == cStr)
-                        q = p = lcl_ScanString( p, aCell, pSeps, cStr, mode, bOverflowCell );
-                    // All until next separator or quote.
-                    while (*p && *p != cSep && *p != cStr)
-                        ++p;
-                    if (!lcl_appendLineData( aCell, q, p))
-                        bOverflowCell = true;   // display warning on import
-                    q = p;
+                    // Look for a pairing quote.
+                    q = p = lcl_ScanString( p, aCell, pSeps, cStr, mode, bOverflowCell );
                 }
+                // All until next separator.
+                while (*p && *p != cSep)
+                    ++p;
+                if (!lcl_appendLineData( aCell, q, p))
+                    bOverflowCell = true;   // display warning on import
                 if (*p)
                     ++p;
                 if (rDoc.ValidCol(nCol) && rDoc.ValidRow(nRow) )
@@ -1825,7 +1870,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         rbIsQuoted = true;
         const sal_Unicode* p1;
         p1 = p = lcl_ScanString( p, rField, pSeps, cStr, DoubledQuoteMode::ESCAPE, rbOverflowCell );
-        while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
+        while (!lcl_isFieldEnd( *p, pSeps))
             p++;
         // Append remaining unquoted and undelimited data (dirty, dirty) to
         // this field.
@@ -1846,7 +1891,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     else                        // up to delimiter
     {
         const sal_Unicode* p0 = p;
-        while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
+        while (!lcl_isFieldEnd( *p, pSeps))
             p++;
         const sal_Unicode* ptrim_i = p0;
         const sal_Unicode* ptrim_f = p;  // [ptrim_i,ptrim_f) is cell data after trimming
@@ -1864,7 +1909,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     }
     if ( bMergeSeps )           // skip following delimiters
     {
-        while ( *p && ScGlobal::UnicodeStrChr( pSeps, *p ) )
+        while (!lcl_isFieldEnd( *p, pSeps))
             p++;
     }
     return p;
@@ -2694,6 +2739,8 @@ Label_RetryWithNewSep:
 
     if (bEmbeddedLineBreak)
     {
+        sal_Int32 nFirstLineLength = aStr.getLength();
+        sal_uInt64 nFirstLineStreamPos = rStream.Tell();
         sal_uInt32 nLine = 0;
 
         const sal_Unicode* pSeps = rFieldSeparators.getStr();
@@ -2726,6 +2773,8 @@ Label_RetryWithNewSep:
                             ++nQuotes;
                             bFieldStart = false;
                             eQuoteState = FIELDSTART_QUOTE;
+                            nFirstLineLength = aStr.getLength();
+                            nFirstLineStreamPos = rStream.Tell();
                         }
                         // Do not detect a FIELDSTART_QUOTE if not in
                         // bFieldStart mode, in which case for unquoted content
@@ -2766,6 +2815,8 @@ Label_RetryWithNewSep:
                         nQuotes = 1;
                         eQuoteState = FIELDSTART_QUOTE;
                         bFieldStart = false;
+                        nFirstLineLength = aStr.getLength();
+                        nFirstLineStreamPos = rStream.Tell();
                     }
                     else if (eQuoteState == FIELDEND_QUOTE)
                     {
@@ -2789,6 +2840,11 @@ Label_RetryWithNewSep:
                 // nArbitraryLineLengthLimit (or nMaxSourceLines below) we
                 // split a string right between a doubled quote pair.
                 break;
+            else if (eQuoteState == DONTKNOW_QUOTE)
+                // A single unescaped quote somewhere in a quote started
+                // field, most likely that was not meant to have embedded
+                // linefeeds either.
+                break;
             else if (++nLine >= nMaxSourceLines && nMaxSourceLines > 0)
                 // Unconditionally increment nLine even if nMaxSourceLines==0
                 // so it can be observed in debugger.
@@ -2798,8 +2854,16 @@ Label_RetryWithNewSep:
                 nLastOffset = aStr.getLength();
                 OUString aNext;
                 rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
-                aStr += "\n" + aNext;
+                if (!rStream.eof())
+                    aStr += "\n" + aNext;
             }
+        }
+        if (nQuotes & 1)
+        {
+            // No closing quote at all. A single quote at field start => no
+            // embedded linefeeds for that field, take only first logical line.
+            aStr = aStr.copy( 0, nFirstLineLength);
+            rStream.Seek( nFirstLineStreamPos);
         }
     }
     return aStr;
