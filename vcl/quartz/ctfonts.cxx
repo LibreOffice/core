@@ -302,15 +302,6 @@ rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const v
     return new CoreTextStyle(*this, rFSD);
 }
 
-int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
-{
-    SAL_WARN_IF( pTagName[4]!='\0', "vcl", "CoreTextFontFace::GetFontTable with invalid tagname!" );
-
-    const CTFontTableTag nTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
-
-    return GetFontTable(nTagCode, pResultBuf);
-}
-
 int CoreTextFontFace::GetFontTable(uint32_t nTagCode, unsigned char* pResultBuf ) const
 {
     // get the raw table length

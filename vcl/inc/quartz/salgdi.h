@@ -67,7 +67,6 @@ public:
     sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
-    int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
@@ -552,11 +551,6 @@ public:
 
     virtual SystemGraphicsData
                             GetGraphicsData() const override;
-
-private:
-    static bool             GetRawFontData( const vcl::font::PhysicalFontFace* pFontData,
-                                std::vector<unsigned char>& rBuffer,
-                                bool* pJustCFF );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
