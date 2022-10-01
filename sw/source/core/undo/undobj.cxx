@@ -830,8 +830,7 @@ bool SwUndoSaveContent::MovePtBackward( SwPaM& rPam )
 
     // If there is no content onwards, set Point simply to the previous position
     // (Node and Content, so that Content will be detached!)
-    --rPam.GetPoint()->nNode;
-    rPam.GetPoint()->nContent.Assign( nullptr, 0 );
+    rPam.GetPoint()->Adjust(SwNodeOffset(-1));
     return false;
 }
 
