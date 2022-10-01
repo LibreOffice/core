@@ -868,13 +868,12 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 pInsNd = rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
                         rDoc.GetDfltTextFormatColl() );
                 --aIdx;
-                aPos.nNode = aIdx;
-                aPos.nContent.Assign( pInsNd->GetContentNode(), m_nSttContent );
+                aPos.Assign( *pInsNd->GetContentNode(), m_nSttContent );
             }
             else
             {
                 if( pInsNd->IsContentNode() )
-                    aPos.nContent.Assign( static_cast<SwContentNode*>(pInsNd), m_nSttContent );
+                    aPos.SetContent( m_nSttContent );
                 if( !m_bTableDelLastNd )
                     pInsNd = nullptr;         // do not delete Node!
             }
@@ -1002,7 +1001,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( m_aSttStr )
         {
-            aPos.nNode = m_nSttNode - m_nNdDiff + ( m_bJoinNext ? SwNodeOffset(0) : m_nReplaceDummy );
+            aPos.Assign( m_nSttNode - m_nNdDiff + ( m_bJoinNext ? SwNodeOffset(0) : m_nReplaceDummy ) );
             SwTextNode * pTextNd = aPos.GetNode().GetTextNode();
             // If more than a single Node got deleted, also all "Node"
             // attributes were saved
@@ -1016,7 +1015,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
                 // SectionNode mode and selection from top to bottom:
                 //  -> in StartNode is still the rest of the Join => delete
-                aPos.nContent.Assign( pTextNd, m_nSttContent );
+                aPos.SetContent( m_nSttContent );
                 pTextNd->SetInSwUndo(true);
                 OUString const ins( pTextNd->InsertText(*m_aSttStr, aPos,
                         SwInsertFlags::NOHINTEXPAND) );
