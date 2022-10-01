@@ -90,12 +90,6 @@
 #include <pdf/PdfConfig.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-#include <config_eot.h>
-
-#if ENABLE_EOT
-#include <libeot/libeot.h>
-#endif
-
 using namespace::com::sun::star;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
