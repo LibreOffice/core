@@ -62,6 +62,9 @@ public:
     void testImplLayoutArgsBiDiRtl();
     void testImplLayoutArgsRightAlign();
     void testImplLayoutArgs_PrepareFallback_precalculatedglyphs();
+    void testGetStringWithCenterEllpsis();
+    void testGetStringWithEndEllpsis();
+    void testGetStringWithNewsEllpsis();
     void testGetTextBreak();
 
     CPPUNIT_TEST_SUITE(VclTextTest);
@@ -75,6 +78,9 @@ public:
     CPPUNIT_TEST(testImplLayoutArgsBiDiRtl);
     CPPUNIT_TEST(testImplLayoutArgsRightAlign);
     CPPUNIT_TEST(testImplLayoutArgs_PrepareFallback_precalculatedglyphs);
+    CPPUNIT_TEST(testGetStringWithCenterEllpsis);
+    CPPUNIT_TEST(testGetStringWithEndEllpsis);
+    CPPUNIT_TEST(testGetStringWithNewsEllpsis);
     CPPUNIT_TEST(testGetTextBreak);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -574,6 +580,71 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
     CPPUNIT_ASSERT_EQUAL(18, nMinRunPos);
     CPPUNIT_ASSERT_EQUAL(22, nEndRunPos);
     CPPUNIT_ASSERT(!bRTL);
+}
+
+void VclTextTest::testGetStringWithCenterEllpsis()
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"a b c d ...v w x y z"),
+        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w x y z", 100,
+                                  DrawTextFlags::CenterEllipsis));
+}
+
+void VclTextTest::testGetStringWithEndEllpsis()
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"a"), device->GetEllipsisString(u"abcde. f g h i j ...", 10,
+                                                                   DrawTextFlags::EndEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"a b c d e f g h i j ..."),
+        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w x y z", 100,
+                                  DrawTextFlags::EndEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"a"), device->GetEllipsisString(u"abcde. f g h i j ...", 1,
+                                                                   DrawTextFlags::EndEllipsis
+                                                                       | DrawTextFlags::Clip));
+}
+
+void VclTextTest::testGetStringWithNewsEllpsis()
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"a"), device->GetEllipsisString(u"abcde. f g h i j ...", 10,
+                                                                   DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"a b .... x y z"),
+        device->GetEllipsisString(u"a b c d. e f g. h i j k l m n o p q r s t u v w. x y z", 100,
+                                  DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"a b .... x y z"),
+        device->GetEllipsisString(u"a b c d. e f g h i j k l m n o p q r s t u v w. x y z", 100,
+                                  DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"a b c d e f g h i j ..."),
+        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w. x y z", 100,
+                                  DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"a..... x y z"),
+        device->GetEllipsisString(u"a. b c d e f g h i j k l m n o p q r s t u v w. x y z", 100,
+                                  DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"ab. cde..."),
+        device->GetEllipsisString(u"ab. cde. x y z", 50, DrawTextFlags::NewsEllipsis));
 }
 
 void VclTextTest::testGetTextBreak()
