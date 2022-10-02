@@ -150,7 +150,9 @@
 #define RPTUI_ID_START      XATTR_FILL_FIRST - 3
 #define RPTUI_ID_END        XATTR_FILL_FIRST - 2
 #define RPTUI_ID_BRUSH      TypedWhichId<SvxBrushItem>(XATTR_FILL_FIRST - 1)
-#define RPTUI_ID_METRIC     XATTR_FILL_LAST + 1
+/// Note that we deliberately overlap an existing item id, so that we can have contiguous item ids for
+/// the static defaults.
+#define RPTUI_ID_METRIC     XATTR_FILL_LAST
 
 using namespace ::com::sun::star;
 using namespace uno;
@@ -2336,26 +2338,26 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         { SID_PAPER_START,      true },
         { SID_PAPER_END,        true },
         { SID_ATTR_BRUSH,       true },
-        { XATTR_FILLSTYLE,      true },
-        { XATTR_FILLCOLOR,      true },
-        { XATTR_FILLGRADIENT,       true },
-        { XATTR_FILLHATCH,      true },
-        { XATTR_FILLBITMAP,     true },
-        { XATTR_FILLTRANSPARENCE,       true },
-        { XATTR_GRADIENTSTEPCOUNT,      true },
-        { XATTR_FILLBMP_TILE,       true },
-        { XATTR_FILLBMP_POS,        true },
-        { XATTR_FILLBMP_SIZEX,      true },
-        { XATTR_FILLBMP_SIZEY,      true },
-        { XATTR_FILLFLOATTRANSPARENCE,  true },
-        { XATTR_SECONDARYFILLCOLOR,     true },
-        { XATTR_FILLBMP_SIZELOG,        true },
-        { XATTR_FILLBMP_TILEOFFSETX,    true },
-        { XATTR_FILLBMP_TILEOFFSETY,    true },
-        { XATTR_FILLBMP_STRETCH,        true },
-        { XATTR_FILLBMP_POSOFFSETX,     true },
-        { XATTR_FILLBMP_POSOFFSETY,     true },
-        { XATTR_FILLBACKGROUND,     true },
+        { 0,      true }, // XATTR_FILLSTYLE
+        { 0,      true }, // XATTR_FILLCOLOR
+        { 0,       true }, // XATTR_FILLGRADIENT
+        { 0,      true }, // XATTR_FILLHATCH
+        { 0,     true }, // XATTR_FILLBITMAP
+        { 0,       true }, // XATTR_FILLTRANSPARENCE
+        { 0,      true }, // XATTR_GRADIENTSTEPCOUNT
+        { 0,       true }, // XATTR_FILLBMP_TILE
+        { 0,        true }, // XATTR_FILLBMP_POS
+        { 0,      true }, // XATTR_FILLBMP_SIZEX
+        { 0,      true }, // XATTR_FILLBMP_SIZEY
+        { 0,  true }, // XATTR_FILLFLOATTRANSPARENCE
+        { 0,     true }, // XATTR_SECONDARYFILLCOLOR
+        { 0,        true }, // XATTR_FILLBMP_SIZELOG
+        { 0,    true }, // XATTR_FILLBMP_TILEOFFSETX
+        { 0,    true }, // XATTR_FILLBMP_TILEOFFSETY
+        { 0,        true }, // XATTR_FILLBMP_STRETCH
+        { 0,     true }, // XATTR_FILLBMP_POSOFFSETX
+        { 0,     true }, // XATTR_FILLBMP_POSOFFSETY
+        { 0,     true }, // XATTR_FILLBACKGROUND
         { SID_ATTR_METRIC,      true }
     };
 
