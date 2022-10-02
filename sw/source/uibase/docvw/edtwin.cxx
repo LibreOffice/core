@@ -6846,6 +6846,7 @@ void SwEditWin::ToggleOutlineContentVisibility(const size_t nOutlinePos, const b
 
     rSh.InvalidateOutlineContentVisibility();
     rSh.GotoOutline(nOutlinePos);
+    rSh.SetModified();
     GetView().GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 

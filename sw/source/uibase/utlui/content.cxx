@@ -4578,6 +4578,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                 m_pActiveShell->GotoOutline(pCntFirst->GetOutlinePos());
             grab_focus();
             m_bIgnoreDocChange = false;
+            m_pActiveShell->SetModified();
             m_pActiveShell->GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
         }
         break;
