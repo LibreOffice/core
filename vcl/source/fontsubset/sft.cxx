@@ -1479,7 +1479,7 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
 
     const sal_uInt8* ptr = glyf + nOffset;
     const sal_uInt8* nptr = glyf + nNextOffset;
-    if (nptr <= ptr)
+    if (nptr < ptr)
         return 0;
 
     if (std::find(glyphlist.begin(), glyphlist.end(), glyphID) != glyphlist.end())
@@ -1489,6 +1489,10 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
     }
 
     glyphlist.push_back( glyphID );
+
+    // Empty glyph.
+    if (nptr == ptr)
+        return n;
 
     sal_uInt32 nRemainingData = glyflength - nOffset;
 
