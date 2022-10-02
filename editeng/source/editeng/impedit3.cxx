@@ -2190,14 +2190,19 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
     // Search blanks or Kashidas...
     std::vector<sal_Int32> aPositions;
+
+    // Kashidas ?
+    ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
+    auto nKashidas = aPositions.size();
+
     sal_uInt16 nLastScript = i18n::ScriptType::LATIN;
     for ( sal_Int32 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
         EditPaM aPaM( pNode, nChar+1 );
         LanguageType eLang = GetLanguage(aPaM).nLang;
         sal_uInt16 nScript = GetI18NScriptType(aPaM);
-        if ( MsLangId::getPrimaryLanguage( eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY )
-            // Arabic script is handled later.
+        // Arabic script is handled above, but if no Kashida positions are found, use blanks.
+        if (MsLangId::getPrimaryLanguage(eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY && nKashidas)
             continue;
 
         if ( pNode->GetChar(nChar) == ' ' )
@@ -2222,13 +2227,6 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
         nLastScript = nScript;
     }
-
-    // Save the number of blanks, we will use it below when marking Kashida
-    // positions.
-    auto nBlankSize = aPositions.size();
-
-    // Kashidas ?
-    ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
 
     if ( aPositions.empty() )
         return;
@@ -2268,10 +2266,10 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
     // Mark Kashida positions, so that VCL knows where to insert Kashida and
     // where to only expand the width.
-    if (aPositions.size() > nBlankSize)
+    if (nKashidas)
     {
         pLine->GetKashidaArray().resize(pLine->GetCharPosArray().size(), false);
-        for (auto i = nBlankSize; i < aPositions.size(); i++)
+        for (size_t i = 0; i < nKashidas; i++)
         {
             auto nChar = aPositions[i];
             if ( nChar < nLastChar )
@@ -2316,7 +2314,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, std::vector<sal_Int32>& rArray )
 {
     // Kashida glyph looks suspicious, skip Kashida justification
-    if (GetRefDevice()->GetMinKashida() < 0)
+    if (GetRefDevice()->GetMinKashida() <= 0)
         return;
 
     std::vector<sal_Int32> aKashidaArray;
