@@ -2047,8 +2047,15 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case FN_STAT_TEMPLATE:
         {
+            weld::Window* pDialogParent = GetViewFrame()->GetFrameWeld();
+            css::uno::Any aAny(pDialogParent->GetXWindow());
+            SfxUnoAnyItem aDialogParent(SID_DIALOG_PARENT, aAny);
+            const SfxPoolItem* pInternalItems[ 2 ];
+            pInternalItems[ 0 ] = &aDialogParent;
+            pInternalItems[ 1 ] = nullptr;
             GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_DLG,
-                                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
+                                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                                        nullptr, 0, pInternalItems);
         }
         break;
         case SID_ATTR_ZOOM:
