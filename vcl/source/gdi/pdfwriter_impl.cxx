@@ -1193,6 +1193,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
                                PDFWriter& i_rOuterFace)
         : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::NONE, OUTDEV_PDF),
         m_aMapMode( MapUnit::MapPoint, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
+        m_aWidgetStyleSettings(Application::GetSettings().GetStyleSettings()),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
@@ -1227,6 +1228,9 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     Font aFont;
     aFont.SetFamilyName( "Times" );
     aFont.SetFontSize( Size( 0, 12 ) );
+
+    // tdf#150786 use the same settings for widgets regardless of theme
+    m_aWidgetStyleSettings.SetStandardStyles();
 
     GraphicsState aState;
     aState.m_aMapMode       = m_aMapMode;
@@ -3902,7 +3906,7 @@ static const Color& replaceColor( const Color& rCol1, const Color& rCol2 )
 
 void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const PDFWriter::PushButtonWidget& rWidget )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = m_aWidgetStyleSettings;
 
     // save graphics state
     push( PushFlags::ALL );
@@ -4009,7 +4013,7 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
 
 void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWriter::EditWidget& rWidget )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = m_aWidgetStyleSettings;
     SvMemoryStream* pEditStream = new SvMemoryStream( 1024, 1024 );
 
     push( PushFlags::ALL );
@@ -4055,7 +4059,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
 
 void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWriter::ListBoxWidget& rWidget )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = m_aWidgetStyleSettings;
     SvMemoryStream* pListBoxStream = new SvMemoryStream( 1024, 1024 );
 
     push( PushFlags::ALL );
@@ -4100,7 +4104,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
 
 void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFWriter::CheckBoxWidget& rWidget )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = m_aWidgetStyleSettings;
 
     // save graphics state
     push( PushFlags::ALL );
@@ -4230,7 +4234,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
 void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const PDFWriter::RadioButtonWidget& rWidget )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = m_aWidgetStyleSettings;
 
     // save graphics state
     push( PushFlags::ALL );

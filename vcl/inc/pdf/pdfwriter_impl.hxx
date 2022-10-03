@@ -55,11 +55,11 @@
 #include <vcl/BinaryDataContainer.hxx>
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
+#include <vcl/settings.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
 #include <pdf/pdfbuildin_fonts.hxx>
 #include <salgdi.hxx>
 
-class StyleSettings;
 class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
@@ -692,6 +692,7 @@ private:
     void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint) override;
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
+    StyleSettings                       m_aWidgetStyleSettings;
     std::vector< PDFPage >              m_aPages;
     /* maps object numbers to file offsets (needed for xref) */
     std::vector< sal_uInt64 >           m_aObjects;
