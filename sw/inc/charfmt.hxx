@@ -36,10 +36,11 @@ class SW_DLLPUBLIC SwCharFormat final : public SwFormat
     {}
 
 public:
+    ~SwCharFormat();
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    void SetLinkedParaFormat(SwTextFormatColl& rLink);
+    void SetLinkedParaFormat(SwTextFormatColl* pLink);
 
     const SwTextFormatColl* GetLinkedParaFormat() const;
 };
