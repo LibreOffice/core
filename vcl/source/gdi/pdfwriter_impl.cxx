@@ -6616,11 +6616,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsClusterStart())
             bUseActualText = true;
 
-        // Or part of a complex cluster, will be handled by the ActualText
-        // of its cluster start.
-        if (pGlyph->IsInCluster())
-            assert(aCodeUnits.empty());
-
         const auto nGlyphId = pGlyph->glyphId();
 
         // A glyph can't have more than one ToUnicode entry, use ActualText
@@ -6637,8 +6632,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 }
             }
         }
-
-        assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
         auto nGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, pGlyph->IsVertical(), false);
 

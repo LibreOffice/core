@@ -315,7 +315,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     int nMaxGlyphWidth = 0;
     for(pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
     {
-        if( !pGlyphIter->IsDiacritic() )
+        if( !pGlyphIter->IsInCluster() )
             ++nStretchable;
         if (nMaxGlyphWidth < pGlyphIter->origWidth())
             nMaxGlyphWidth = pGlyphIter->origWidth();
@@ -342,7 +342,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
             pGlyphIter->adjustLinearPosX(nDeltaSum);
 
             // do not stretch non-stretchable glyphs
-            if( pGlyphIter->IsDiacritic() || (nStretchable <= 0) )
+            if( pGlyphIter->IsInCluster() || (nStretchable <= 0) )
                 continue;
 
             // distribute extra space equally to stretchable glyphs

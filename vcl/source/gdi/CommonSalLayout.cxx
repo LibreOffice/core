@@ -527,6 +527,15 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                         continue;
                 }
 
+                // For our purposes, a mark glyph is part of cluster as well.
+                hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+                if (hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK
+                    && nCharPos != mnMinCharPos)
+                {
+                    bClusterStart = false;
+                    bInCluster = true;
+                }
+
                 GlyphItemFlags nGlyphFlags = GlyphItemFlags::NONE;
                 if (bRightToLeft)
                     nGlyphFlags |= GlyphItemFlags::IS_RTL_GLYPH;
@@ -539,9 +548,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
                 sal_UCS4 aChar
                     = rArgs.mrStr.iterateCodePoints(&o3tl::temporary(sal_Int32(nCharPos)), 0);
-
-                if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
-                    nGlyphFlags |= GlyphItemFlags::IS_DIACRITIC;
 
                 if (u_isUWhiteSpace(aChar))
                     nGlyphFlags |= GlyphItemFlags::IS_SPACING;
@@ -790,14 +796,6 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
                 if (!m_GlyphItems[j].IsInCluster())
                     break;
                 m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
-            }
-
-            // Move any non-spacing marks to keep attached to this cluster.
-            while (j > 0)
-            {
-                if (!m_GlyphItems[j].IsDiacritic())
-                    break;
-                m_GlyphItems[j--].adjustLinearPosX(nDiff);
             }
 
             // This is a Kashida insertion position, mark it. Kashida glyphs
