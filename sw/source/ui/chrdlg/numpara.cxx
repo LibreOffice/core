@@ -309,10 +309,15 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, weld::Button&, void
 }
 
 // Internal: Perform functions through the Dispatcher
-bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
+void SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     sal_uInt16 nId, const OUString &rStr, SfxStyleFamily nFamily)
 {
-    SfxDispatcher &rDispatcher = *SfxViewShell::Current()->GetDispatcher();
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+
+    if( !pViewShell)
+        return;
+
+    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
     SfxStringItem aItem(nId, rStr);
     SfxUInt16Item aFamily(SID_STYLE_FAMILY, static_cast<sal_uInt16>(nFamily));
     const SfxPoolItem* pItems[ 3 ];
@@ -331,12 +336,9 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     pInternalItems[ 0 ] = &aDialogParent;
     pInternalItems[ 1 ] = nullptr;
 
-    const SfxPoolItem* pItem = rDispatcher.Execute(
+    pDispatcher->Execute(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
         pItems, 0, pInternalItems);
-
-    return pItem != nullptr;
-
 }
 
 IMPL_LINK(SwParagraphNumTabPage, StyleHdl_Impl, weld::ComboBox&, rBox, void)
