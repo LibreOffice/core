@@ -2075,6 +2075,8 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
 
 void ScTabView::RemoveSplit()
 {
+    if (aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX)
+        aViewData.GetDocShell()->SetDocumentModified();
     DoHSplit( 0 );
     DoVSplit( 0 );
     RepeatResize();
