@@ -103,7 +103,7 @@ public:
     inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
     SwTextFormatColl& GetNextTextFormatColl() const { return *mpNextTextFormatColl; }
 
-    void SetLinkedCharFormat(SwCharFormat& rLink);
+    void SetLinkedCharFormat(SwCharFormat* pLink);
 
     const SwCharFormat* GetLinkedCharFormat() const;
 

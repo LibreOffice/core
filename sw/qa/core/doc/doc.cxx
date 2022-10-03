@@ -19,6 +19,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
@@ -269,6 +270,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyFlagSkipBookmarks)
     // - Actual  : 2
     // i.e. the 2nd header had a duplicated bookmark.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
+{
+    // Given a document with linked styles: myparastyle is linked to mycharstyle and vica versa:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xParaStyle(
+        xFactory->createInstance("com.sun.star.style.ParagraphStyle"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCharStyle(
+        xFactory->createInstance("com.sun.star.style.CharacterStyle"), uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xParaStyles(getStyles("ParagraphStyles"),
+                                                          uno::UNO_QUERY);
+    xParaStyles->insertByName("myparastyle", uno::Any(xParaStyle));
+    uno::Reference<container::XNameContainer> xCharStyles(getStyles("CharacterStyles"),
+                                                          uno::UNO_QUERY);
+    xCharStyles->insertByName("mycharstyle", uno::Any(xCharStyle));
+    xParaStyle->setPropertyValue("LinkStyle", uno::Any(OUString("mycharstyle")));
+    xCharStyle->setPropertyValue("LinkStyle", uno::Any(OUString("myparastyle")));
+
+    // When deleting the paragraph style (and only that):
+    xParaStyles->removeByName("myparastyle");
+
+    // Then make sure we don't crash on save:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+    };
+    xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

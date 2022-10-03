@@ -744,7 +744,7 @@ void SwDocStyleSheet::SetLink(const OUString& rStr)
                 SwCharFormat* pLink = lcl_FindCharFormat(m_rDoc, rStr);
                 if (pLink)
                 {
-                    m_pColl->SetLinkedCharFormat(*pLink);
+                    m_pColl->SetLinkedCharFormat(pLink);
                 }
             }
             break;
@@ -756,7 +756,7 @@ void SwDocStyleSheet::SetLink(const OUString& rStr)
                 SwTextFormatColl* pLink = lcl_FindParaFormat(m_rDoc, rStr);
                 if (pLink)
                 {
-                    m_pCharFormat->SetLinkedParaFormat(*pLink);
+                    m_pCharFormat->SetLinkedParaFormat(pLink);
                 }
             }
             break;
