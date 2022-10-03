@@ -47,7 +47,7 @@ public:
 
     virtual void tearDown() override;
 
-    ScModelObj* createDoc(const char* pName);
+    ScModelObj* createDoc(const char* pName = nullptr);
     utl::TempFileNamed save(css::uno::Reference<css::lang::XComponent>& xComponent,
                             const OUString& rFilter);
     ScModelObj* saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
@@ -162,9 +162,14 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
 {
     if (mxComponent.is())
         mxComponent->dispose();
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                      + OUString::createFromAscii(pName),
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+
+    if (!pName)
+        mxComponent = loadFromDesktop("private:factory/scalc");
+    else
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                          + OUString::createFromAscii(pName),
+                                      "com.sun.star.sheet.SpreadsheetDocument");
+
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
@@ -198,9 +203,7 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -217,9 +220,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -338,9 +339,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -383,9 +382,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -419,9 +416,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -454,9 +449,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
 {
     // Without the fix in place, this test would have crashed
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -537,9 +530,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -589,9 +580,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147894)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -614,9 +603,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147894)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf94208)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -660,9 +647,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf94208)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf37623)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -690,9 +675,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf37623)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -723,9 +706,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -752,9 +733,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -792,9 +771,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf90579)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1000,9 +977,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143896)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1022,9 +997,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143896)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145085)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1040,9 +1013,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145085)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148863)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1389,9 +1360,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1424,9 +1393,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1452,9 +1419,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1582,9 +1547,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
 // Inspired from testTdf117706, test columns instead of rows
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1628,9 +1591,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
 // Note: the transpose functionality is tested in ucalc
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1691,9 +1652,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 // Note: the paste as link functionality is tested in ucalc
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1745,9 +1704,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1781,9 +1738,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1949,9 +1904,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf150219)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2281,9 +2234,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131073)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2330,9 +2281,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131073)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2488,9 +2437,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148669)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2516,9 +2463,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2694,9 +2639,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2719,9 +2662,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116421)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2843,9 +2784,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123202)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -2884,9 +2823,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123202)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf134675)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     insertStringToCell(*pModelObj, "A1", u"A");
@@ -2914,9 +2851,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf134675)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     insertStringToCell(*pModelObj, "A1", u"1");
@@ -2999,9 +2934,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118983)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107952)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -3077,9 +3010,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99386)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -3106,9 +3037,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99386)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149378)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -3146,9 +3075,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149378)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -3172,9 +3099,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc();
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
