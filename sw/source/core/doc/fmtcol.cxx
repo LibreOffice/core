@@ -114,6 +114,19 @@ SwTextFormatColl::~SwTextFormatColl()
 {
     if(m_bInSwFntCache)
         pSwFontCache->Delete( this );
+
+    if (GetDoc()->IsInDtor())
+    {
+        return;
+    }
+
+    for (const auto& pCharFormat : *GetDoc()->GetCharFormats())
+    {
+        if (pCharFormat->GetLinkedParaFormat() == this)
+        {
+            pCharFormat->SetLinkedParaFormat(nullptr);
+        }
+    }
 }
 void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
@@ -325,7 +338,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         SwFormatColl::SwClientNotify(rModify, rHint);
 }
 
-void SwTextFormatColl::SetLinkedCharFormat(SwCharFormat& rLink) { mpLinkedCharFormat = &rLink; }
+void SwTextFormatColl::SetLinkedCharFormat(SwCharFormat* pLink) { mpLinkedCharFormat = pLink; }
 
 const SwCharFormat* SwTextFormatColl::GetLinkedCharFormat() const { return mpLinkedCharFormat; }
 

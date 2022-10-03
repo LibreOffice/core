@@ -21,6 +21,7 @@
 
 #include <charfmt.hxx>
 #include <charformats.hxx>
+#include <doc.hxx>
 
 void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
@@ -38,9 +39,25 @@ void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SwCharFormat::SetLinkedParaFormat(SwTextFormatColl& rLink) { mpLinkedParaFormat = &rLink; }
+void SwCharFormat::SetLinkedParaFormat(SwTextFormatColl* pLink) { mpLinkedParaFormat = pLink; }
 
 const SwTextFormatColl* SwCharFormat::GetLinkedParaFormat() const { return mpLinkedParaFormat; }
+
+SwCharFormat::~SwCharFormat()
+{
+    if (GetDoc()->IsInDtor())
+    {
+        return;
+    }
+
+    for (const auto& pTextFormat : *GetDoc()->GetTextFormatColls())
+    {
+        if (pTextFormat->GetLinkedCharFormat() == this)
+        {
+            pTextFormat->SetLinkedCharFormat(nullptr);
+        }
+    }
+}
 
 void SwCharFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
