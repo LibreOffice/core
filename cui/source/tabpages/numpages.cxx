@@ -2202,7 +2202,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         tools::Long nWidthRelation = 30; // chapter dialog
 
         // height per level
-        tools::Long nXStep = aSize.Width() / (3 * pActNum->GetLevelCount());
+        tools::Long nXStep = aSize.Width() / (pActNum->GetLevelCount() > 1 ? 3 * pActNum->GetLevelCount() : 3);
         if (pActNum->GetLevelCount() < 10)
             nXStep /= 2;
         tools::Long nYStart = 4;
