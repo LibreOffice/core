@@ -59,10 +59,9 @@ public:
     LanguageType    GetType( std::u16string_view rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-    sal_uInt32      AddItem(const OUString& rLanguage, const LanguageType eType)
+    void            AddItem(const OUString& rLanguage, const LanguageType eType)
     {
         m_aStrings.emplace_back(rLanguage, eType);
-        return m_aStrings.size();
     }
     LanguageType    GetValue(sal_uInt32 nIndex) const
     {
@@ -298,10 +297,9 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 }
 
 
-sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
+void SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
 {
-    return theLanguageTable::get().AddItem( lcl_getDescription(rLanguageTag),
-            rLanguageTag.getLanguageType());
+    theLanguageTable::get().AddItem( lcl_getDescription(rLanguageTag), rLanguageTag.getLanguageType());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

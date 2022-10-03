@@ -42,7 +42,7 @@ public:
 
     /** Add a language tag to the table.
      */
-    static sal_uInt32   AddLanguageTag( const LanguageTag& rLanguageTag );
+    static void         AddLanguageTag( const LanguageTag& rLanguageTag );
 };
 
 // Add LRE or RLE embedding characters to the string based on the
