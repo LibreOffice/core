@@ -58,7 +58,7 @@ class SwParagraphNumTabPage final : public SfxTabPage
 
     static const WhichRangesContainer s_aPageRg;
 
-    bool ExecuteEditNumStyle_Impl(sal_uInt16 nId, const OUString& rStr,
+    void ExecuteEditNumStyle_Impl(sal_uInt16 nId, const OUString& rStr,
                                   SfxStyleFamily nFamily);
 
 public:
