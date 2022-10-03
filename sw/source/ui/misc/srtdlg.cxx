@@ -115,18 +115,18 @@ SwSortDlg::SwSortDlg(weld::Window* pParent, SwWrtShell &rShell)
     , m_xDelimPB(m_xBuilder->weld_button("delimpb"))
     , m_xLangLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("langlb")))
     , m_xCaseCB(m_xBuilder->weld_check_button("matchcase"))
-    , aColText(SwResId(STR_COL))
-    , aRowText(SwResId(STR_ROW))
-    , aNumericText(SwResId(STR_NUMERIC))
-    , rSh(rShell)
-    , nX(99)
-    , nY(99)
+    , m_aColText(SwResId(STR_COL))
+    , m_aRowText(SwResId(STR_ROW))
+    , m_aNumericText(SwResId(STR_NUMERIC))
+    , m_rSh(rShell)
+    , m_nX(99)
+    , m_nY(99)
 {
-    if(rSh.GetSelectionType() &
+    if(m_rSh.GetSelectionType() &
             (SelectionType::Table|SelectionType::TableCell) )
     {
         m_xColumnRB->set_active(bCol);
-        m_xColLbl->set_label(bCol ? aRowText : aColText);
+        m_xColLbl->set_label(bCol ? m_aRowText : m_aColText);
         m_xRowRB->set_active(!bCol);
         m_xDelimTabRB->set_sensitive(false);
         m_xDelimFreeRB->set_sensitive(false);
@@ -136,7 +136,7 @@ SwSortDlg::SwSortDlg(weld::Window* pParent, SwWrtShell &rShell)
     {
         m_xColumnRB->set_sensitive(false);
         m_xRowRB->set_active(true);
-        m_xColLbl->set_label(aColText);
+        m_xColLbl->set_label(m_aColText);
     }
 
     // Set accessible names here because text of m_xColLbl may be changed
@@ -196,9 +196,9 @@ SwSortDlg::SwSortDlg(weld::Window* pParent, SwWrtShell &rShell)
     else
         DelimHdl(*m_xDelimTabRB);
 
-    if( ::lcl_GetSelTable( rSh, nX, nY) )
+    if( ::lcl_GetSelTable( m_rSh, m_nX, m_nY) )
     {
-        sal_uInt16 nMax = m_xRowRB->get_active()? nY : nX;
+        sal_uInt16 nMax = m_xRowRB->get_active()? m_nY : m_nX;
         m_xColEdt1->set_max(nMax);
         m_xColEdt2->set_max(nMax);
         m_xColEdt3->set_max(nMax);
@@ -253,7 +253,7 @@ void SwSortDlg::Apply()
     if( bCheck1 )
     {
         OUString sEntry( m_xTypDLB1->get_active_text() );
-        if( sEntry == aNumericText )
+        if( sEntry == m_aNumericText )
             sEntry.clear();
         else if (!m_xTypDLB1->get_active_id().isEmpty())
             sEntry = m_xTypDLB1->get_active_id();
@@ -266,7 +266,7 @@ void SwSortDlg::Apply()
     if( bCheck2 )
     {
         OUString sEntry( m_xTypDLB2->get_active_text() );
-        if( sEntry == aNumericText )
+        if( sEntry == m_aNumericText )
             sEntry.clear();
         else if (!m_xTypDLB2->get_active_id().isEmpty())
             sEntry = m_xTypDLB2->get_active_id();
@@ -279,7 +279,7 @@ void SwSortDlg::Apply()
     if( bCheck3 )
     {
         OUString sEntry( m_xTypDLB3->get_active_text() );
-        if( sEntry == aNumericText )
+        if( sEntry == m_aNumericText )
             sEntry.clear();
         else if (!m_xTypDLB3->get_active_id().isEmpty())
             sEntry = m_xTypDLB3->get_active_id();
@@ -292,17 +292,17 @@ void SwSortDlg::Apply()
     aOptions.eDirection =  bCol ? SwSortDirection::Columns : SwSortDirection::Rows;
     aOptions.cDeli = cDeli;
     aOptions.nLanguage = nLang;
-    aOptions.bTable = rSh.IsTableMode();
+    aOptions.bTable = m_rSh.IsTableMode();
     aOptions.bIgnoreCase = !bCsSens;
 
     bool bRet;
     {
-        SwWait aWait( *rSh.GetView().GetDocShell(), true );
-        rSh.StartAllAction();
-        bRet = rSh.Sort( aOptions );
+        SwWait aWait( *m_rSh.GetView().GetDocShell(), true );
+        m_rSh.StartAllAction();
+        bRet = m_rSh.Sort( aOptions );
         if( bRet )
-            rSh.SetModified();
-        rSh.EndAllAction();
+            m_rSh.SetModified();
+        m_rSh.EndAllAction();
     }
 
     if (!bRet)
@@ -324,7 +324,7 @@ IMPL_LINK( SwSortDlg, DelimHdl, weld::Toggleable&, rButton, void )
 IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl, weld::Button&, void)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAllItemSet aSet( rSh.GetAttrPool() );
+    SfxAllItemSet aSet( m_rSh.GetAttrPool() );
     aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
     ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateCharMapDialog(m_xDialog.get(), aSet, nullptr));
     if( RET_OK == pMap->Execute() )
@@ -339,25 +339,25 @@ IMPL_LINK( SwSortDlg, CheckHdl, weld::Toggleable&, rControl, void )
 {
     if (&rControl == m_xRowRB.get())
     {
-        m_xColLbl->set_label(aColText);
-        m_xColEdt1->set_max(nY);
-        m_xColEdt2->set_max(nY);
-        m_xColEdt3->set_max(nY);
+        m_xColLbl->set_label(m_aColText);
+        m_xColEdt1->set_max(m_nY);
+        m_xColEdt2->set_max(m_nY);
+        m_xColEdt3->set_max(m_nY);
 
-        m_xColEdt1->set_accessible_name(aColText);
-        m_xColEdt2->set_accessible_name(aColText);
-        m_xColEdt3->set_accessible_name(aColText);
+        m_xColEdt1->set_accessible_name(m_aColText);
+        m_xColEdt2->set_accessible_name(m_aColText);
+        m_xColEdt3->set_accessible_name(m_aColText);
     }
     else if (&rControl == m_xColumnRB.get())
     {
-        m_xColLbl->set_label(aRowText);
-        m_xColEdt1->set_max(nX);
-        m_xColEdt2->set_max(nX);
-        m_xColEdt3->set_max(nX);
+        m_xColLbl->set_label(m_aRowText);
+        m_xColEdt1->set_max(m_nX);
+        m_xColEdt2->set_max(m_nX);
+        m_xColEdt3->set_max(m_nX);
 
-        m_xColEdt1->set_accessible_name(aRowText);
-        m_xColEdt2->set_accessible_name(aRowText);
-        m_xColEdt3->set_accessible_name(aRowText);
+        m_xColEdt1->set_accessible_name(m_aRowText);
+        m_xColEdt2->set_accessible_name(m_aRowText);
+        m_xColEdt3->set_accessible_name(m_aRowText);
     }
     else if(!m_xKeyCB1->get_active() &&
             !m_xKeyCB2->get_active() &&
@@ -404,7 +404,7 @@ void SwSortDlg::LanguageHdl(weld::ComboBox const* pLBox)
             sUINm = m_xColRes->GetTranslation( sAlg );
         }
         else
-            sUINm = sAlg = aNumericText;
+            sUINm = sAlg = m_aNumericText;
 
         for( int n = 0; n < nLstBoxCnt; ++n )
         {

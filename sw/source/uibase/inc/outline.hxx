@@ -65,12 +65,12 @@ public:
 
 class SwOutlineSettingsTabPage final : public SfxTabPage
 {
-    OUString            aNoFormatName;
-    OUString            aSaveCollNames[MAXLEVEL];
-    SwWrtShell*         pSh;
-    SwNumRule*          pNumRule;
-    OUString*           pCollNames;
-    sal_uInt16          nActLevel;
+    OUString            m_aNoFormatName;
+    OUString            m_aSaveCollNames[MAXLEVEL];
+    SwWrtShell*         m_pSh;
+    SwNumRule*          m_pNumRule;
+    OUString*           m_pCollNames;
+    sal_uInt16          m_nActLevel;
     NumberingPreview  m_aPreviewWIN;
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
@@ -113,8 +113,8 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
     void SetNumRule(SwNumRule *pRule)
     {
-        pNumRule = pRule;
-        m_aPreviewWIN.SetNumRule(pNumRule);
+        m_pNumRule = pRule;
+        m_aPreviewWIN.SetNumRule(m_pNumRule);
     }
 };
 

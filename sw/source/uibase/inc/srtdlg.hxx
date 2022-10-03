@@ -60,15 +60,15 @@ class SwSortDlg final : public weld::GenericDialogController
 
     std::unique_ptr<weld::CheckButton> m_xCaseCB;
 
-    OUString aColText;
-    OUString aRowText;
-    OUString aNumericText;
+    OUString m_aColText;
+    OUString m_aRowText;
+    OUString m_aNumericText;
 
-    SwWrtShell& rSh;
+    SwWrtShell& m_rSh;
     std::unique_ptr<CollatorResource> m_xColRes;
 
-    sal_uInt16 nX;
-    sal_uInt16 nY;
+    sal_uInt16 m_nX;
+    sal_uInt16 m_nY;
 
     void Apply();
     sal_Unicode GetDelimChar() const;

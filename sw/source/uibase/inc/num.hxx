@@ -29,17 +29,17 @@ class SwOutlineTabDialog;
 
 class SwNumPositionTabPage final : public SfxTabPage
 {
-    std::unique_ptr<SwNumRule> pActNum;
-    SwNumRule*          pSaveNum;
-    SwWrtShell*         pWrtSh;
+    std::unique_ptr<SwNumRule> m_pActNum;
+    SwNumRule*          m_pSaveNum;
+    SwWrtShell*         m_pWrtSh;
 
-    SwOutlineTabDialog* pOutlineDlg;
-    sal_uInt16          nActNumLvl;
+    SwOutlineTabDialog* m_pOutlineDlg;
+    sal_uInt16          m_nActNumLvl;
 
-    bool                bModified           : 1;
-    bool                bPreset             : 1;
-    bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
-    bool                bLabelAlignmentPosAndSpaceModeActive;
+    bool                m_bModified           : 1;
+    bool                m_bPreset             : 1;
+    bool                m_bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
+    bool                m_bLabelAlignmentPosAndSpaceModeActive;
 
     NumberingPreview  m_aPreviewWIN;
 
@@ -103,15 +103,15 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rAttrSet);
 
-    void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
+    void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){m_pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);
 #ifdef DBG_UTIL
     void                SetModified();
 #else
     void                SetModified()
     {
-        bModified = true;
-        m_aPreviewWIN.SetLevel(nActNumLvl);
+        m_bModified = true;
+        m_aPreviewWIN.SetLevel(m_nActNumLvl);
         m_aPreviewWIN.Invalidate();
     }
 #endif

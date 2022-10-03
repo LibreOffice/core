@@ -67,8 +67,8 @@ public:
 
 class SwInsertBookmarkDlg final : public SfxDialogController
 {
-    SwWrtShell&                         rSh;
-    std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;
+    SwWrtShell&                         m_rSh;
+    std::vector<std::pair<sw::mark::IMark*, OUString>> m_aTableBookmarks;
     sal_Int32                           m_nLastBookmarksCount;
     bool                                m_bSorted;
     bool m_bAreProtected;

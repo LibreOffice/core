@@ -105,14 +105,14 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
         sw::mark::IMark* pBookmark
             = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry));
         OUString sRemoved = pBookmark->GetName();
-        IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+        IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved), false);
-        SfxRequest aReq(rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK);
+        SfxRequest aReq(m_rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK);
         aReq.AppendItem(SfxStringItem(FN_DELETE_BOOKMARK, sRemoved));
         aReq.Done();
-        aTableBookmarks.erase(std::remove(aTableBookmarks.begin(), aTableBookmarks.end(),
-                                          std::make_pair(pBookmark, sRemoved)),
-                              aTableBookmarks.end());
+        m_aTableBookmarks.erase(std::remove(m_aTableBookmarks.begin(), m_aTableBookmarks.end(),
+                                            std::make_pair(pBookmark, sRemoved)),
+                                m_aTableBookmarks.end());
 
         ++nSelectedRows;
 
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
 
     sw::mark::IMark* pBookmark
         = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected));
-    uno::Reference<frame::XModel> xModel = rSh.GetView().GetDocShell()->GetBaseModel();
+    uno::Reference<frame::XModel> xModel = m_rSh.GetView().GetDocShell()->GetBaseModel();
     uno::Reference<text::XBookmarksSupplier> xBkms(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xNameAccess = xBkms->getBookmarks();
     uno::Any aObj = xNameAccess->getByName(pBookmark->GetName());
@@ -237,8 +237,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, weld::Button&, void)
 {
     OUString sBookmark = m_xEditBox->get_text();
-    rSh.SetBookmark2(vcl::KeyCode(), sBookmark, m_xHideCB->get_active(),
-                     m_xConditionED->get_text());
+    m_rSh.SetBookmark2(vcl::KeyCode(), sBookmark, m_xHideCB->get_active(),
+                       m_xConditionED->get_text());
 
     m_xDialog->response(RET_OK);
 }
@@ -272,18 +272,18 @@ IMPL_LINK(SwInsertBookmarkDlg, EditedHdl, weld::TreeView::iter_string const&, rI
         {
             return false; // don't allow editing if it spans multiple nodes
         }
-        rSh.Push();
-        rSh.GotoMark(pBookmark);
+        m_rSh.Push();
+        m_rSh.GotoMark(pBookmark);
         // GetSelText only works for 1 paragraph, but it's checked above
-        if (rSh.GetSelText() != rIterString.second)
+        if (m_rSh.GetSelText() != rIterString.second)
         {
-            bRet = rSh.Replace(rIterString.second, false);
+            bRet = m_rSh.Replace(rIterString.second, false);
         }
-        rSh.Pop(SwEditShell::PopMode::DeleteCurrent);
+        m_rSh.Pop(SwEditShell::PopMode::DeleteCurrent);
     }
     else if (pBookmark->IsExpanded() && !rIterString.second.isEmpty())
     { // SwEditShell::Replace does nothing for empty selection
-        rSh.Insert(rIterString.second);
+        m_rSh.Insert(rIterString.second);
         bRet = true;
     }
     return bRet;
@@ -302,8 +302,8 @@ void SwInsertBookmarkDlg::GotoSelectedBookmark()
     sw::mark::IMark* pBookmark
         = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected));
 
-    rSh.EnterStdMode();
-    rSh.GotoMark(pBookmark);
+    m_rSh.EnterStdMode();
+    m_rSh.GotoMark(pBookmark);
 }
 
 bool SwInsertBookmarkDlg::ValidateBookmarks()
@@ -319,19 +319,19 @@ bool SwInsertBookmarkDlg::ValidateBookmarks()
 
 bool SwInsertBookmarkDlg::HaveBookmarksChanged()
 {
-    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
     if (pMarkAccess->getBookmarksCount() != m_nLastBookmarksCount)
         return true;
 
     std::vector<std::pair<sw::mark::IMark*, OUString>>::const_iterator aListIter
-        = aTableBookmarks.begin();
+        = m_aTableBookmarks.begin();
     for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
             // more bookmarks then expected
-            if (aListIter == aTableBookmarks.end())
+            if (aListIter == m_aTableBookmarks.end())
                 return true;
             if (aListIter->first != *ppBookmark || aListIter->second != (*ppBookmark)->GetName())
                 return true;
@@ -339,22 +339,22 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
         }
     }
     // less bookmarks then expected
-    return aListIter != aTableBookmarks.end();
+    return aListIter != m_aTableBookmarks.end();
 }
 
 void SwInsertBookmarkDlg::PopulateTable()
 {
-    aTableBookmarks.clear();
+    m_aTableBookmarks.clear();
     m_xBookmarksBox->clear();
 
-    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
     for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            m_xBookmarksBox->InsertBookmark(rSh, *ppBookmark);
-            aTableBookmarks.emplace_back(*ppBookmark, (*ppBookmark)->GetName());
+            m_xBookmarksBox->InsertBookmark(m_rSh, *ppBookmark);
+            m_aTableBookmarks.emplace_back(*ppBookmark, (*ppBookmark)->GetName());
         }
     }
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
@@ -363,7 +363,7 @@ void SwInsertBookmarkDlg::PopulateTable()
 SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
                                          OUString const* const pSelected)
     : SfxDialogController(pParent, "modules/swriter/ui/insertbookmark.ui", "InsertBookmarkDialog")
-    , rSh(rS)
+    , m_rSh(rS)
     , m_nLastBookmarksCount(0)
     , m_bSorted(false)
     , m_xEditBox(m_xBuilder->weld_entry("name"))
@@ -415,7 +415,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
         m_xConditionED->set_visible(false);
     }
 
-    m_bAreProtected = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
+    m_bAreProtected = m_rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
 
     // disabled until "Hide" flag is not checked
     m_xConditionED->set_sensitive(false);
