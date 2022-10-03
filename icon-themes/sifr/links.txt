@@ -1677,14 +1677,17 @@ cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Grid
+cmd/32/grid.png cmd/32/viewrowcolumnheaders.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
-cmd/32/insertgridcontrol.png cmd/32/grid.png
+cmd/32/insertgridcontrol.png cmd/32/viewrowcolumnheaders.png
 
+cmd/lc_grid.png cmd/lc_viewrowcolumnheaders.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
-cmd/lc_insertgridcontrol.png cmd/lc_grid.png
+cmd/lc_insertgridcontrol.png cmd/lc_viewrowcolumnheaders.png
 
+cmd/sc_grid.png cmd/sc_viewrowcolumnheaders.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
-cmd/sc_insertgridcontrol.png cmd/sc_grid.png
+cmd/sc_insertgridcontrol.png cmd/sc_viewrowcolumnheaders.png
 
 # Extrusion Rotate
 cmd/32/rulerrows.png cmd/32/extrusiontiltleft.png
@@ -1780,7 +1783,7 @@ cmd/32/updateallindexes.png cmd/32/reload.png
 cmd/32/updatealllinks.png cmd/32/inserthyperlink.png
 cmd/32/updatecharts.png cmd/32/drawchart.png
 cmd/32/updatecurindex.png cmd/32/insertindexesentry.png
-cmd/32/updatefields.png cmd/32/addfield.png
+cmd/32/updatefields.png cmd/32/insertfield.png
 cmd/32/updatemenu.png cmd/32/reload.png
 
 cmd/lc_draw.png cmd/lc_reload.png
@@ -1792,7 +1795,7 @@ cmd/lc_updateallindexes.png cmd/lc_reload.png
 cmd/lc_updatealllinks.png cmd/lc_inserthyperlink.png
 cmd/lc_updatecharts.png cmd/lc_drawchart.png
 cmd/lc_updatecurindex.png cmd/lc_insertindexesentry.png
-cmd/lc_updatefields.png cmd/lc_addfield.png
+cmd/lc_updatefields.png cmd/lc_insertfield.png
 cmd/lc_updatemenu.png cmd/lc_reload.png
 
 cmd/sc_draw.png cmd/sc_reload.png
@@ -1804,7 +1807,7 @@ cmd/sc_updateallindexes.png cmd/sc_insertmultiindex.png
 cmd/sc_updatealllinks.png cmd/sc_inserthyperlink.png
 cmd/sc_updatecharts.png cmd/sc_drawchart.png
 cmd/sc_updatecurindex.png cmd/sc_insertindexesentry.png
-cmd/sc_updatefields.png cmd/sc_addfield.png
+cmd/sc_updatefields.png cmd/sc_insertfield.png
 cmd/sc_updatemenu.png cmd/sc_reload.png
 
 # Select
@@ -2193,7 +2196,7 @@ res/sx10598.png cmd/sc_groupbox.png
 res/sx10599.png cmd/sc_edit.png
 res/sx10600.png cmd/sc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
-res/sx10603.png cmd/sc_grid.png
+res/sx10603.png cmd/sc_viewrowcolumnheaders.png
 res/sx10604.png cmd/sc_imagebutton.png
 res/sx10605.png cmd/sc_filecontrol.png
 res/sx10607.png cmd/sc_navigationbar.png
