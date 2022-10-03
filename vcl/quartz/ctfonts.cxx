@@ -41,7 +41,7 @@
 #include <sallayout.hxx>
 #include <hb-coretext.h>
 
-CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
+CoreTextStyle::CoreTextStyle(const CoreTextFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
@@ -88,7 +88,7 @@ CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl:
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, basegfx::deg2rad(12), 1, 0, 0));
     }
 
-    CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>(rPFF.GetFontId());
+    CTFontDescriptorRef pFontDesc = rPFF.GetFontDescriptorRef();
     CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
@@ -536,8 +536,7 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
 
     if( bFontEnabled)
     {
-        const sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>(pValue);
-        rtl::Reference<CoreTextFontFace> pFontData = new CoreTextFontFace( rDFA, nFontId );
+        rtl::Reference<CoreTextFontFace> pFontData = new CoreTextFontFace( rDFA, pFD );
         SystemFontList* pFontList = static_cast<SystemFontList*>(pContext);
         pFontList->AddFont( pFontData.get() );
     }
@@ -607,12 +606,11 @@ bool SystemFontList::Init()
     return true;
 }
 
-SystemFontList* GetCoretextFontList()
+std::unique_ptr<SystemFontList> GetCoretextFontList()
 {
-    SystemFontList* pList = new SystemFontList();
+    std::unique_ptr<SystemFontList> pList(new SystemFontList());
     if( !pList->Init() )
     {
-        delete pList;
         return nullptr;
     }
 

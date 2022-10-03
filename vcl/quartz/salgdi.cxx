@@ -126,19 +126,21 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
     return bFound;
 }
 
-CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
+CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, CTFontDescriptorRef xFontDescriptor )
   : vcl::font::PhysicalFontFace( rDFA )
-  , mnFontId( nFontId )
+  , mxFontDescriptor( xFontDescriptor )
 {
+    CFRetain(mxFontDescriptor);
 }
 
 CoreTextFontFace::~CoreTextFontFace()
 {
+    CFRelease(mxFontDescriptor);
 }
 
 sal_IntPtr CoreTextFontFace::GetFontId() const
 {
-    return mnFontId;
+    return reinterpret_cast<sal_IntPtr>(mxFontDescriptor);
 }
 
 AquaSalGraphics::AquaSalGraphics()
@@ -291,8 +293,7 @@ void AquaSalGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pFontCol
 void AquaSalGraphics::ClearDevFontCache()
 {
     SalData* pSalData = GetSalData();
-    delete pSalData->mpFontList;
-    pSalData->mpFontList = nullptr;
+    pSalData->mpFontList.reset();
 }
 
 bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,

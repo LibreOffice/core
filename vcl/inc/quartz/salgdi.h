@@ -61,10 +61,12 @@ class XorEmulation;
 class CoreTextFontFace : public vcl::font::PhysicalFontFace
 {
 public:
-                                    CoreTextFontFace( const FontAttributes&, sal_IntPtr nFontID );
+                                    CoreTextFontFace( const FontAttributes&, CTFontDescriptorRef xRef );
     virtual                         ~CoreTextFontFace() override;
 
     sal_IntPtr                      GetFontId() const override;
+
+    CTFontDescriptorRef             GetFontDescriptorRef() const { return mxFontDescriptor; }
 
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
 
@@ -73,7 +75,7 @@ public:
     virtual hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
 
 private:
-    const sal_IntPtr                mnFontId;
+    CTFontDescriptorRef             mxFontDescriptor;
 };
 
 class CoreTextStyle final : public LogicalFontInstance
@@ -96,7 +98,7 @@ public:
     bool mbFauxBold;
 
 private:
-    explicit CoreTextStyle(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    explicit CoreTextStyle(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);
 
     virtual void ImplInitHbFont(hb_font_t*) override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;

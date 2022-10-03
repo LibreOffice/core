@@ -36,6 +36,7 @@
 #include <functional>
 #include <list>
 #include <map>
+#include <memory>
 #include <unordered_set>
 #include <vector>
 #include <o3tl/enumarray.hxx>
@@ -68,7 +69,7 @@ public:
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer
-    SystemFontList                               *mpFontList;
+    std::unique_ptr<SystemFontList>               mpFontList;
     NSStatusItem*                                 mpStatusItem;     // one status item that draws all our statuses
                                                                     // at the moment this is only one add menu button
     CGColorSpaceRef                               mxRGBSpace;

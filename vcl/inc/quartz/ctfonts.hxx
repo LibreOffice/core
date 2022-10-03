@@ -23,7 +23,7 @@
 #include <quartz/salgdi.h>
 #include <sallayout.hxx>
 
-SystemFontList* GetCoretextFontList();
+std::unique_ptr<SystemFontList> GetCoretextFontList();
 FontAttributes DevFontFromCTFontDescriptor(CTFontDescriptorRef, bool*);
 
 #endif // INCLUDED_VCL_INC_QUARTZ_CTFONTS_HXX

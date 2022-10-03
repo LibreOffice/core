@@ -289,7 +289,7 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
 
     if (!fontManager)
     {
-        SystemFontList* fontList = GetCoretextFontList();
+        std::unique_ptr<SystemFontList> fontList = GetCoretextFontList();
         if (fontList == nullptr)
         {
             SAL_WARN("vcl.skia", "DrawTextLayout(): No coretext font list");

@@ -31,6 +31,7 @@
 #include <sal/log.hxx>
 #include <bitmaps.hlst>
 #include <cursor_hotspots.hxx>
+#include <quartz/salgdi.h>
 
 #import "apple_remote/RemoteMainController.h"
 
@@ -49,7 +50,6 @@ SalData::SalData()
     mpFirstObject( nullptr ),
     mpFirstVD( nullptr ),
     mpFirstPrinter( nullptr ),
-    mpFontList( nullptr ),
     mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceSRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGrayGamma2_2) ),
