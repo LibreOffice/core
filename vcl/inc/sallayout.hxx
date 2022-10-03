@@ -85,8 +85,6 @@ public:
                                           vcl::text::ImplLayoutArgs& rMultiArgs,
                                           const double* pMultiDXArray);
 
-    virtual bool    IsMultiSalLayout() const override;
-
     virtual         ~MultiSalLayout() override;
 
 private:

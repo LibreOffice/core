@@ -108,8 +108,6 @@ public:
 
     virtual SalLayoutGlyphs GetGlyphs() const;
 
-    virtual bool IsMultiSalLayout() const;
-
 protected:
     // used by layout engines
     SalLayout();

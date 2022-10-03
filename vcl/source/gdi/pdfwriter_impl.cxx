@@ -6226,7 +6226,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
 
     rLayout.DrawOffset() += Point( nOff, nOff );
     updateGraphicsState();
-    drawLayout( rLayout, rText, bTextLines, false );
+    drawLayout( rLayout, rText, bTextLines );
 
     rLayout.DrawOffset() -= Point( nOff, nOff );
     setTextLineColor( aTextLineColor );
@@ -6234,7 +6234,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
     aSetFont.SetColor( aTextColor );
     setFont( aSetFont );
     updateGraphicsState();
-    drawLayout( rLayout, rText, bTextLines, true );
+    drawLayout( rLayout, rText, bTextLines );
 
     // clean up the mess
     pop();
@@ -6262,7 +6262,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
     if( rFont.IsOutline() )
         nOff++;
     rLayout.DrawBase() += DevicePoint(nOff, nOff);
-    drawLayout( rLayout, rText, bTextLines, false );
+    drawLayout( rLayout, rText, bTextLines );
     rLayout.DrawBase() -= DevicePoint(nOff, nOff);
 
     setFont( aSaveFont );
@@ -6279,11 +6279,10 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fAngle,
         double fXScale,
         double fSkew,
-        sal_Int32 nFontHeight,
-        bool bCheck )
+        sal_Int32 nFontHeight)
 {
     double nXOffset = 0;
-    Point aCurPos(SubPixelToLogic(rGlyphs[0].m_aPos, bCheck && fAngle == 0.0));
+    Point aCurPos(SubPixelToLogic(rGlyphs[0].m_aPos));
     aCurPos += rAlignOffset;
     for( size_t i = 0; i < rGlyphs.size(); i++ )
     {
@@ -6303,7 +6302,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fSkewA = -fSkewB;
             fSkewB = 0.0;
         }
-        aDeltaPos += SubPixelToLogic(DevicePoint(nXOffset / fXScale, 0), false) - SubPixelToLogic(DevicePoint(), bCheck);
+        aDeltaPos += SubPixelToLogic(DevicePoint(nXOffset / fXScale, 0)) - SubPixelToLogic(DevicePoint());
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
@@ -6347,9 +6346,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         double fXScale,
         double fSkew,
         sal_Int32 nFontHeight,
-        sal_Int32 nPixelFontHeight,
-        bool bCheck
-        )
+        sal_Int32 nPixelFontHeight)
 {
     // horizontal (= normal) case
 
@@ -6374,7 +6371,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     for( size_t nRun = 0; nRun < aRunEnds.size(); nRun++ )
     {
         // setup text matrix back transformed to current coordinate system
-        Point aCurPos(SubPixelToLogic(rGlyphs[nBeginRun].m_aPos, bCheck && fAngle == 0.0));
+        Point aCurPos(SubPixelToLogic(rGlyphs[nBeginRun].m_aPos));
         aCurPos += rAlignOffset;
         // the first run can be set with "Td" operator
         // subsequent use of that operator would move
@@ -6445,7 +6442,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     }
 }
 
-void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines, bool bCheckSubPixelToLogic )
+void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines )
 {
     // relief takes precedence over shadow (see outdev3.cxx)
     if(  m_aCurrentPDFState.m_aFont.GetRelief() != FontRelief::NONE )
@@ -6677,7 +6674,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // ascent / descent to match the on-screen rendering.
         // This is the top left of the text without ascent / descent.
         DevicePoint aDrawPosition(rLayout.GetDrawPosition());
-        tools::Rectangle aRectangle(SubPixelToLogic(aDrawPosition, bCheckSubPixelToLogic),
+        tools::Rectangle aRectangle(SubPixelToLogic(aDrawPosition),
                                     Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
@@ -6688,7 +6685,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // Adapt rectangle for rotated text.
             tools::Polygon aPolygon(aRectangle);
-            aPolygon.Rotate(SubPixelToLogic(aDrawPosition, bCheckSubPixelToLogic), pFontInstance->mnOrientation);
+            aPolygon.Rotate(SubPixelToLogic(aDrawPosition), pFontInstance->mnOrientation);
             drawPolygon(aPolygon);
         }
         else
@@ -6744,9 +6741,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             }
 
             if (bVertical)
-                drawVerticalGlyphs(aRun, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight, !rLayout.IsMultiSalLayout());
+                drawVerticalGlyphs(aRun, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight);
             else
-                drawHorizontalGlyphs(aRun, aLine, aAlignOffset, nStart == 0, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight, !rLayout.IsMultiSalLayout());
+                drawHorizontalGlyphs(aRun, aLine, aAlignOffset, nStart == 0, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight);
 
             if (nCharPos >= 0 && nCharCount)
                 aLine.append( "EMC\n" );
@@ -6791,7 +6788,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 }
                 else if( nWidth > 0 )
                 {
-                    drawTextLine( SubPixelToLogic(aStartPt, bCheckSubPixelToLogic),
+                    drawTextLine( SubPixelToLogic(aStartPt),
                                   ImplDevicePixelToLogicWidth( nWidth ),
                                   eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                     nWidth = 0;
@@ -6800,7 +6797,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
             if( nWidth > 0 )
             {
-                drawTextLine( SubPixelToLogic(aStartPt, bCheckSubPixelToLogic),
+                drawTextLine( SubPixelToLogic(aStartPt),
                               ImplDevicePixelToLogicWidth( nWidth ),
                               eStrikeout, eUnderline, eOverline, bUnderlineAbove );
             }
@@ -6809,7 +6806,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             DevicePoint aStartPt = rLayout.GetDrawPosition();
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
-            drawTextLine( SubPixelToLogic(aStartPt, bCheckSubPixelToLogic),
+            drawTextLine( SubPixelToLogic(aStartPt),
                           ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
@@ -6875,7 +6872,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
             DevicePoint aMarkDevPos(aPos);
             aMarkDevPos += aAdjOffset;
-            Point aMarkPos = SubPixelToLogic(aMarkDevPos, bCheckSubPixelToLogic);
+            Point aMarkPos = SubPixelToLogic(aMarkDevPos);
             drawEmphasisMark( aMarkPos.X(), aMarkPos.Y(),
                               aEmphasisMark.GetShape(), aEmphasisMark.IsShapePolyLine(),
                               aEmphasisMark.GetRect1(), aEmphasisMark.GetRect2() );
@@ -6940,7 +6937,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
         0, {}, {}, SalLayoutFlags::NONE, nullptr, layoutGlyphs );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText, bTextLines, true );
+        drawLayout( *pLayout, rText, bTextLines );
     }
 }
 
@@ -6958,7 +6955,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, o3t
         SalLayoutFlags::NONE, nullptr, layoutGlyphs );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText, true, true );
+        drawLayout( *pLayout, rText, true );
     }
 }
 
@@ -6976,7 +6973,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
         {}, {}, SalLayoutFlags::NONE, nullptr, layoutGlyphs );
     if( pLayout )
     {
-        drawLayout( *pLayout, rText, true, true );
+        drawLayout( *pLayout, rText, true );
     }
 }
 

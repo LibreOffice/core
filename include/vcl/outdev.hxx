@@ -1709,7 +1709,7 @@ public:
     SAL_DLLPRIVATE tools::Long         ImplLogicHeightToDevicePixel( tools::Long nHeight ) const;
     SAL_DLLPRIVATE double              ImplLogicHeightToDeviceSubPixel(tools::Long nHeight) const;
 
-    SAL_DLLPRIVATE Point               SubPixelToLogic(const DevicePoint& rDevicePt, bool bCheck) const;
+    SAL_DLLPRIVATE Point               SubPixelToLogic(const DevicePoint& rDevicePt) const;
 
     /** Convert device pixels to a width in logical units.
 
