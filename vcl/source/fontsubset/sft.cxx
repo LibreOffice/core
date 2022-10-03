@@ -1458,11 +1458,6 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
     if (nOffset > nNextOffset)
         return 0;
 
-    const sal_uInt8* ptr = glyf + nOffset;
-    const sal_uInt8* nptr = glyf + nNextOffset;
-    if (nptr < ptr)
-        return 0;
-
     if (std::find(glyphlist.begin(), glyphlist.end(), glyphID) != glyphlist.end())
     {
         SAL_WARN("vcl.fonts", "Endless loop found in a compound glyph.");
@@ -1472,9 +1467,10 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
     glyphlist.push_back( glyphID );
 
     // Empty glyph.
-    if (nptr == ptr)
+    if (nOffset == nNextOffset)
         return n;
 
+    const auto* ptr = glyf + nOffset;
     sal_uInt32 nRemainingData = glyflength - nOffset;
 
     if (nRemainingData >= 10 && GetInt16(ptr, 0) == -1) {
