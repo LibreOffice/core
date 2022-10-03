@@ -720,7 +720,13 @@ void RtfAttributeOutput::TableDefinition(
     // The cell-dependent properties
     const double fWidthRatio = m_pTableWrt->GetAbsWidthRatio();
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
-    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()].get();
+    sal_uInt32 nRow = pTableTextNodeInfoInner->getRow();
+    if (nRow >= aRows.size())
+    {
+        SAL_WARN("sw.ww8", "RtfAttributeOutput::TableDefinition: out of range row: " << nRow);
+        return;
+    }
+    SwWriteTableRow* pRow = aRows[nRow].get();
     SwTwips nSz = 0;
 
     // Not using m_nTableDepth, which is not yet incremented here.
