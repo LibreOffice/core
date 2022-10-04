@@ -557,26 +557,26 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { 0,      true },
-        { 0,      true },
-        { 0,       true },
-        { 0,      true },
-        { 0,     true },
-        { 0,       true },
-        { 0,      true },
-        { 0,       true },
-        { 0,        true },
-        { 0,      true },
-        { 0,      true },
-        { 0,  true },
-        { 0,     true },
-        { 0,        true },
-        { 0,    true },
-        { 0,    true },
-        { 0,        true },
-        { 0,     true },
-        { 0,     true },
-        { 0,     true },
+        { 0,      true }, // XATTR_FILLSTYLE
+        { 0,      true }, // XATTR_FILLCOLOR
+        { 0,       true }, // XATTR_FILLGRADIENT
+        { 0,      true }, // XATTR_FILLHATCH
+        { 0,     true }, // XATTR_FILLBITMAP
+        { 0,       true }, // XATTR_FILLTRANSPARENCE
+        { 0,      true }, // XATTR_GRADIENTSTEPCOUNT
+        { 0,       true }, // XATTR_FILLBMP_TILE
+        { 0,        true }, // XATTR_FILLBMP_POS
+        { 0,      true }, // XATTR_FILLBMP_SIZEX
+        { 0,      true }, // XATTR_FILLBMP_SIZEY
+        { 0,  true }, // XATTR_FILLFLOATTRANSPARENCE
+        { 0,     true }, // XATTR_SECONDARYFILLCOLOR
+        { 0,        true }, // XATTR_FILLBMP_SIZELOG
+        { 0,    true }, // XATTR_FILLBMP_TILEOFFSETX
+        { 0,    true }, // XATTR_FILLBMP_TILEOFFSETY
+        { 0,        true }, // XATTR_FILLBMP_STRETCH
+        { 0,     true }, // XATTR_FILLBMP_POSOFFSETX
+        { 0,     true }, // XATTR_FILLBMP_POSOFFSETY
+        { 0,     true }, // XATTR_FILLBACKGROUND
 
         { SID_ATTR_CHAR_FONT, true },
         { SID_ATTR_CHAR_FONTHEIGHT, true },
