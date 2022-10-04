@@ -506,7 +506,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_BORDER:
-            aDefault <<= sal_Int16(1);
+            aDefault <<= sal_Int16(2);
             break;
 
         default:
