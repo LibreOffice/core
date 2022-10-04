@@ -24,6 +24,7 @@
 #include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>
 #include <unicode/numfmt.h>
+#include <unicode/uchar.h>
 #include "unicode_data.h"
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
@@ -188,6 +189,37 @@ sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
     else
         nRet = scriptTypes[eScript];
     return nRet;
+}
+
+sal_Int16 unicode::getScriptClassFromLanguageTag( const LanguageTag& rLanguageTag )
+{
+    static UScriptCode nMaxScript = static_cast<UScriptCode>(u_getIntPropertyMaxValue(UCHAR_SCRIPT));
+    constexpr int32_t nBuf = 42;
+    UScriptCode aBuf[nBuf];
+    if (rLanguageTag.hasScript())
+    {
+        aBuf[0] = static_cast<UScriptCode>(u_getPropertyValueEnum( UCHAR_SCRIPT,
+                OUStringToOString( rLanguageTag.getScript(), RTL_TEXTENCODING_ASCII_US).getStr()));
+    }
+    else
+    {
+        OUString aName;
+        if (rLanguageTag.getCountry().isEmpty())
+            aName = rLanguageTag.getLanguage();
+        else
+            aName = rLanguageTag.getLanguage() + "-" + rLanguageTag.getCountry();
+        UErrorCode status = U_ZERO_ERROR;
+        const int32_t nScripts = uscript_getCode(
+                OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US).getStr(),
+                aBuf, nBuf, &status);
+        // U_BUFFER_OVERFLOW_ERROR would be set with too many scripts for buffer
+        // and required capacity returned, but really..
+        if (nScripts == 0 || !U_SUCCESS(status))
+            return css::i18n::ScriptType::LATIN;
+    }
+    if (aBuf[0] > nMaxScript)
+        return css::i18n::ScriptType::COMPLEX;
+    return getScriptClassFromUScriptCode( aBuf[0]);
 }
 
 OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
