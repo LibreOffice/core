@@ -961,7 +961,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                         // May have involved canonicalize(), so compare with
                         // pImpl->maBcp47 instead of maBcp47!
                         aBcp47 = LanguageTagImpl::convertToBcp47(
-                                MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID ));
+                                MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
                         bInsert = (aBcp47 == pImpl->maBcp47);
                     }
                 }
@@ -1352,7 +1352,7 @@ void LanguageTagImpl::convertLocaleToBcp47()
         // locale via LanguageTag::convertToBcp47(LanguageType) and
         // LanguageTag::convertToLocale(LanguageType) would instantiate another
         // LanguageTag.
-        maLocale = MsLangId::Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM );
+        maLocale = MsLangId::Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, false);
     }
     if (maLocale.Language.isEmpty())
     {
@@ -1496,7 +1496,7 @@ void LanguageTagImpl::convertLangToLocale()
         mbInitializedLangID = true;
     }
     // Resolve system here! The original is remembered as mbSystemLocale.
-    maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID );
+    maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID, false);
     mbInitializedLocale = true;
 }
 

@@ -754,6 +754,8 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs-Latn", "BA", kSAME },   // MS, though Latn is suppress-script
     { LANGUAGE_BOSNIAN_LATIN_LSO,                   "bs-Latn", ""  , LANGUAGE_BOSNIAN_LSO },   // MS, though Latn is suppress-script
     { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""  , k0    },
+    { LANGUAGE_CHINESE_SIMPLIFIED,                  "zh-Hans", "CN", kSAME },   // canonical, but prefer legacy zh-CN
+    { LANGUAGE_CHINESE_TRADITIONAL,                 "zh-Hant", "TW", kSAME },   // canonical, but prefer legacy zh-TW
     { LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN,      "emk-Latn", "GN", k0    },
     { LANGUAGE_USER_CREE_PLAINS_LATIN,             "crk-Latn", "CA", k0    },
     { LANGUAGE_USER_CREE_PLAINS_SYLLABICS,         "crk-Cans", "CA", k0    },

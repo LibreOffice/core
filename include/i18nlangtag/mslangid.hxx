@@ -292,11 +292,12 @@ public:
 
         /** Convert a LanguageType to a Locale. */
         I18NLANGTAG_DLLPRIVATE static css::lang::Locale convertLanguageToLocale(
-                LanguageType nLang );
+                LanguageType nLang, bool bIgnoreOverride );
 
         /** Used by convertLanguageToLocale(LanguageType,bool) and
             getLocale(IsoLanguageCountryEntry*) and
-            getLocale(IsoLanguageScriptCountryEntry)
+            getLocale(IsoLanguageScriptCountryEntry*) and
+            getLocale(Bcp47CountryEntry*)
 
             @param  bIgnoreOverride
                     If bIgnoreOverride==true, a matching entry is used even if

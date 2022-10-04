@@ -191,14 +191,14 @@ bool MsLangId::usesHyphenation(LanguageType nLang)
 
 // static
 css::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
-        LanguageType nLang )
+        LanguageType nLang, bool bIgnoreOverride )
 {
     css::lang::Locale aLocale;
     // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
     // but not LANGUAGE_SYSTEM or others.
     LanguageType nOrigLang = nLang;
     nLang = MsLangId::getRealLanguage(nLang);
-    convertLanguageToLocaleImpl( nLang, aLocale, true );
+    convertLanguageToLocaleImpl( nLang, aLocale, bIgnoreOverride );
     if (aLocale.Language.isEmpty() && simplifySystemLanguages(nOrigLang) == LANGUAGE_SYSTEM)
     {
         // None found but resolve requested, last resort is "en-US".
@@ -228,7 +228,7 @@ css::lang::Locale MsLangId::getFallbackLocale(
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
-        return Conversion::lookupFallbackLocale( Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM ));
+        return Conversion::lookupFallbackLocale( Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, false));
     else
         return Conversion::lookupFallbackLocale( rLocale);
 }

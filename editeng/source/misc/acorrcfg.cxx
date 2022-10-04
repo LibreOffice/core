@@ -75,20 +75,20 @@ static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
                         if (SvtLanguageTable::HasLanguageType( aLanguageTag.getLanguageType()))
                             continue;
 
-                        // Insert language-only tags only if there is no known
-                        // matching fallback locale, otherwise we'd end up with
-                        // unwanted entries where a language autocorrection
-                        // file covers several locales. We do know a few
-                        // art-x-... though so exclude those and any other
-                        // private-use tag (which should not fallback, but
-                        // avoid).
+                        // Insert language(-script)-only tags only if there is
+                        // no known matching fallback locale, otherwise we'd
+                        // end up with unwanted entries where a language
+                        // autocorrection file covers several locales. We do
+                        // know a few art-x-... though so exclude those and any
+                        // other private-use tag (which should not fallback,
+                        // but avoid).
                         if (aLanguageTag.getCountry().isEmpty()
                                 && LanguageTag::isValidBcp47( aCanonicalized, nullptr,
                                     LanguageTag::PrivateUse::DISALLOW))
                         {
                             LanguageTag aFallback( aLanguageTag);
                             aFallback.makeFallback();
-                            if (aFallback.getLanguage() == aLanguageTag.getLanguage())
+                            if (aFallback.getLanguageAndScript() == aLanguageTag.getLanguageAndScript())
                                 continue;
                         }
 
