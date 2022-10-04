@@ -37,6 +37,7 @@ SwDrawModel::SwDrawModel(SwDoc& rDoc)
     : FmFormModel(&rDoc.GetAttrPool(), rDoc.GetDocShell())
     , m_rDoc(rDoc)
 {
+    m_bThemedControls = false;
     SetScaleUnit( MapUnit::MapTwip );
     SetSwapGraphics();
 

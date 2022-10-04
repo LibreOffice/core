@@ -216,6 +216,8 @@ inline constexpr OUStringLiteral PROPERTY_HIDEINACTIVESELECTION = u"HideInactive
 inline constexpr OUStringLiteral PROPERTY_HIGHLIGHT_COLOR = u"HighlightColor";
 inline constexpr OUStringLiteral PROPERTY_HIGHLIGHT_TEXT_COLOR = u"HighlightTextColor";
 
+inline constexpr OUStringLiteral PROPERTY_STANDARD_THEME = u"StandardTheme";
+
 inline constexpr OUStringLiteral PROPERTY_SHOW_POSITION = u"ShowPosition";
 inline constexpr OUStringLiteral PROPERTY_SHOW_NAVIGATION = u"ShowNavigation";
 inline constexpr OUStringLiteral PROPERTY_SHOW_RECORDACTIONS = u"ShowRecordActions";

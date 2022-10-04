@@ -240,6 +240,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     bHyphenatorSet( false )
 {
     SetVOCInvalidationIsReliable(true);
+    m_bThemedControls = false;
 
     pGlobalDrawPersist = nullptr;          // Only use once
 

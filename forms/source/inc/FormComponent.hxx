@@ -321,6 +321,7 @@ protected:
     sal_Int16                       m_nTabIndex;                // index within the taborder
     sal_Int16                       m_nClassId;                 // type of the control
     bool                        m_bNativeLook;              // should the control use the native platform look?
+    bool                        m_bStandardTheme;           // should the default control colors be 'standard' or use the native platform theme?
     bool                        m_bGenerateVbEvents;        // should the control generate fake vba events
     //added for exporting OCX control
     sal_Int16                       m_nControlTypeinMSO;        //keep the MS office control type for exporting to MS binary file

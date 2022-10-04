@@ -1317,6 +1317,24 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
 
     xView->setGraphics( xGraphics );
 
+    // tdf#150886 if false use the same settings for widgets regardless of theme
+    // for consistency of document across platforms and in pdf/print output
+    if (xInfo->hasPropertyByName("StandardTheme"))
+    {
+        aVal = xPSet->getPropertyValue("StandardTheme");
+        bool bUseStandardTheme = false;
+        aVal >>= bUseStandardTheme;
+        if (bUseStandardTheme)
+        {
+            VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow(getPeer());
+            AllSettings aAllSettings = pVclPeer->GetSettings();
+            StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+            aStyleSettings.SetStandardStyles();
+            aAllSettings.SetStyleSettings(aStyleSettings);
+            pVclPeer->SetSettings(aAllSettings);
+        }
+    }
+
     peerCreated();
 
     mbCreatingPeer = false;

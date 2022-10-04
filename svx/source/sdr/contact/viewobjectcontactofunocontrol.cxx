@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
@@ -117,6 +118,7 @@ namespace sdr::contact {
     using ::com::sun::star::awt::XView;
     using ::com::sun::star::awt::WindowEvent;
     using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::beans::XPropertyChangeListener;
@@ -1088,6 +1090,12 @@ namespace sdr::contact {
 
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             _out_rControl = Reference<XControl>( xContext->getServiceManager()->createInstanceWithContext(sControlServiceName, xContext), UNO_QUERY_THROW );
+
+            // tdf#150886 for calc/writer/impress make forms ignore the platform theme
+            Reference<XPropertySet> xModelProperties(xControlModel, UNO_QUERY);
+            Reference<XPropertySetInfo> xInfo = xModelProperties ? xModelProperties->getPropertySetInfo() : nullptr;
+            if (xInfo && xInfo->hasPropertyByName("StandardTheme"))
+                xModelProperties->setPropertyValue("StandardTheme", Any(!_rUnoObject.getSdrModelFromSdrObject().AreControlsThemed()));
 
             // knit the model and the control
             _out_rControl.setModel( xControlModel );

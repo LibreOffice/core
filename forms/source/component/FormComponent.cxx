@@ -496,6 +496,7 @@ OControlModel::OControlModel(
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
     ,m_bNativeLook( false )
+    ,m_bStandardTheme( false )
     ,m_bGenerateVbEvents( false )
     ,m_nControlTypeinMSO(0) // 0 : default value is create from AOO
     ,m_nObjIDinMSO(INVALID_OBJ_ID_IN_MSO)
@@ -548,6 +549,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     m_nTabIndex = _pOriginal->m_nTabIndex;
     m_nClassId = _pOriginal->m_nClassId;
     m_bNativeLook = _pOriginal->m_bNativeLook;
+    m_bStandardTheme = _pOriginal->m_bStandardTheme;
     m_bGenerateVbEvents = _pOriginal->m_bGenerateVbEvents;
     m_nControlTypeinMSO = _pOriginal->m_nControlTypeinMSO;
     m_nObjIDinMSO = _pOriginal->m_nObjIDinMSO;
@@ -871,6 +873,9 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
         case PROPERTY_ID_NATIVE_LOOK:
             aReturn <<= true;
             break;
+        case PROPERTY_ID_STANDARD_THEME:
+            aReturn <<= false;
+            break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
             aReturn <<= false;
             break;
@@ -909,6 +914,9 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
         case PROPERTY_ID_NATIVE_LOOK:
             _rValue <<= m_bNativeLook;
             break;
+        case PROPERTY_ID_STANDARD_THEME:
+            _rValue <<= m_bStandardTheme;
+            break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
             _rValue <<= m_bGenerateVbEvents;
             break;
@@ -945,6 +953,9 @@ sal_Bool OControlModel::convertFastPropertyValue(
             break;
         case PROPERTY_ID_NATIVE_LOOK:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bNativeLook);
+            break;
+        case PROPERTY_ID_STANDARD_THEME:
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bStandardTheme);
             break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bGenerateVbEvents);
@@ -988,6 +999,9 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
         case PROPERTY_ID_NATIVE_LOOK:
             OSL_VERIFY( _rValue >>= m_bNativeLook );
             break;
+        case PROPERTY_ID_STANDARD_THEME:
+            OSL_VERIFY( _rValue >>= m_bStandardTheme );
+            break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
             OSL_VERIFY( _rValue >>= m_bGenerateVbEvents );
             break;
@@ -1009,11 +1023,13 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    _rProps.realloc(7);
+    _rProps.realloc(8);
     css::beans::Property* pProperties = _rProps.getArray();
     *pProperties++ = css::beans::Property(PROPERTY_CLASSID, PROPERTY_ID_CLASSID, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_NATIVE_LOOK, PROPERTY_ID_NATIVE_LOOK, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_STANDARD_THEME, PROPERTY_ID_STANDARD_THEME, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_TAG, PROPERTY_ID_TAG, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_GENERATEVBAEVENTS, PROPERTY_ID_GENERATEVBAEVENTS, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT);

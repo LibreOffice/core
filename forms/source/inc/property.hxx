@@ -57,7 +57,7 @@ namespace frm
 #define PROPERTY_ID_VERTICAL_ALIGN      (PROPERTY_ID_START + 22)
 #define PROPERTY_ID_GRAPHIC             (PROPERTY_ID_START + 23)
 #define PROPERTY_ID_GROUP_NAME          (PROPERTY_ID_START + 24)
-    // free
+#define PROPERTY_ID_STANDARD_THEME      (PROPERTY_ID_START + 25)
     // free
     // free
     // free

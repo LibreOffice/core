@@ -382,6 +382,7 @@ void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateP
     RemoveProperty( _rAggregateProps, PROPERTY_NAME );
     RemoveProperty( _rAggregateProps, PROPERTY_TAG );
     RemoveProperty( _rAggregateProps, PROPERTY_NATIVE_LOOK );
+    RemoveProperty( _rAggregateProps, PROPERTY_STANDARD_THEME );
 
 }
 

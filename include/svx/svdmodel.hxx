@@ -198,6 +198,7 @@ protected:
     std::unique_ptr<SdrUndoGroup> m_pCurrentUndoGroup;  // For multi-level
     sal_uInt16          m_nUndoLevel;                   // undo nesting
     bool                m_bIsWriter:1;        // to clean up pMyPool from 303a
+    bool                m_bThemedControls:1;  // If false UnoControls should not use theme colors
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                mbChanged:1;
     bool                m_bPagNumsDirty:1;
@@ -268,6 +269,7 @@ private:
 public:
     SVX_DLLPRIVATE virtual bool IsCreatingDataObj() const { return false; }
     bool     IsTransportContainer() const { return m_bTransportContainer; }
+    bool     AreControlsThemed() { return m_bThemedControls; }
     bool     IsPasteResize() const        { return m_bPasteResize; }
     void     SetPasteResize(bool bOn) { m_bPasteResize=bOn; }
     // If a custom Pool is put here, the class will call methods

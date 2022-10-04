@@ -106,6 +106,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     , m_pLinkManager(nullptr)
     , m_nUndoLevel(0)
     , m_bIsWriter(true)
+    , m_bThemedControls(true)
     , mbUndoEnabled(true)
     , mbChanged(false)
     , m_bPagNumsDirty(false)
