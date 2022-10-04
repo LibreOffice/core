@@ -154,6 +154,8 @@
 /// the static defaults.
 #define RPTUI_ID_METRIC     XATTR_FILL_LAST
 
+static_assert((RPTUI_ID_METRIC - RPTUI_ID_LRSPACE) == 28, "Item ids are not contiguous");
+
 using namespace ::com::sun::star;
 using namespace uno;
 using namespace io;
