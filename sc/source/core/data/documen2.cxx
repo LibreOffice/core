@@ -277,11 +277,17 @@ sal_uInt32 ScDocument::GetDocumentID() const
 void ScDocument::StartChangeTracking()
 {
     if (!pChangeTrack)
+    {
         pChangeTrack.reset( new ScChangeTrack( *this ) );
+        if (mpShell)
+            mpShell->SetModified();
+    }
 }
 
 void ScDocument::EndChangeTracking()
 {
+    if (pChangeTrack && mpShell)
+        mpShell->SetModified();
     pChangeTrack.reset();
 }
 
