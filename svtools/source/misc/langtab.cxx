@@ -23,6 +23,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 
@@ -30,6 +31,8 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
+
+#include <i18nutil/unicode.hxx>
 
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
@@ -50,6 +53,11 @@ class SvtLanguageTableImpl
 {
 private:
     std::vector<std::pair<OUString, LanguageType>> m_aStrings;
+    void            AddItem(const OUString& rLanguage, const LanguageType eType)
+    {
+        m_aStrings.emplace_back(rLanguage, eType);
+    }
+
 public:
 
     SvtLanguageTableImpl();
@@ -59,10 +67,6 @@ public:
     LanguageType    GetType( std::u16string_view rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-    void            AddItem(const OUString& rLanguage, const LanguageType eType)
-    {
-        m_aStrings.emplace_back(rLanguage, eType);
-    }
     LanguageType    GetValue(sal_uInt32 nIndex) const
     {
         return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].second : LANGUAGE_DONTKNOW;
@@ -77,6 +81,7 @@ public:
         }
         return RESARRAY_INDEX_NOTFOUND;
     }
+    void            AddEntry( const OUString& rString, const LanguageType eType);
 };
 
 struct theLanguageTable : public rtl::Static< SvtLanguageTableImpl, theLanguageTable > {};
@@ -204,7 +209,7 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
                 aLang.setScriptType(LanguageTag::ScriptType(nType));
             sal_uInt32 nPos = FindIndex(nLangType);
             if (nPos == RESARRAY_INDEX_NOTFOUND)
-                AddItem((aName.isEmpty() ? lcl_getDescription(aLang) : aName), nLangType);
+                AddEntry( (aName.isEmpty() ? lcl_getDescription(aLang) : aName), nLangType);
         }
     }
 }
@@ -241,7 +246,7 @@ OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
     // And add it to the table if it is an on-the-fly-id, which it usually is,
     // so it is available in all subsequent language boxes.
     if (LanguageTag::isOnTheFlyID( nLang))
-        const_cast<SvtLanguageTableImpl*>(this)->AddItem( sLangTag, nLang);
+        const_cast<SvtLanguageTableImpl*>(this)->AddEntry( sLangTag, nLang);
 
     return sLangTag;
 }
@@ -296,10 +301,45 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
     return theLanguageTable::get().GetTypeAtIndex( nIndex);
 }
 
+void SvtLanguageTableImpl::AddEntry( const OUString& rString, const LanguageType eType )
+{
+    if (LanguageTag::isOnTheFlyID(eType)
+            && LanguageTag::getOnTheFlyScriptType(eType) == LanguageTag::ScriptType::UNKNOWN)
+    {
+        // Classify the script type to distribute the entry into the proper
+        // language list later.
+        LanguageTag aLanguageTag(eType);
+        const sal_Int16 nScriptClass = unicode::getScriptClassFromLanguageTag( aLanguageTag);
+        LanguageTag::ScriptType eScriptType;
+        switch (nScriptClass)
+        {
+            default:
+                eScriptType = LanguageTag::ScriptType::WESTERN;
+                assert(!"unexpected ScriptType");
+            break;
+            case css::i18n::ScriptType::WEAK:
+            case css::i18n::ScriptType::LATIN:
+                eScriptType = LanguageTag::ScriptType::WESTERN;
+            break;
+            case css::i18n::ScriptType::ASIAN:
+                eScriptType = LanguageTag::ScriptType::CJK;
+            break;
+            case css::i18n::ScriptType::COMPLEX:
+                /* TODO: determine if it would be LanguageTag::ScriptType::RTL
+                 * instead; could that be done by
+                 * getScriptClassFromLanguageTag() as well by asking Unicode
+                 * properties? */
+                eScriptType = LanguageTag::ScriptType::CTL;
+            break;
+        }
+        aLanguageTag.setScriptType( eScriptType);
+    }
+    AddItem( rString, eType);
+}
 
 void SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
 {
-    theLanguageTable::get().AddItem( lcl_getDescription(rLanguageTag), rLanguageTag.getLanguageType());
+    theLanguageTable::get().AddEntry( lcl_getDescription(rLanguageTag), rLanguageTag.getLanguageType());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
