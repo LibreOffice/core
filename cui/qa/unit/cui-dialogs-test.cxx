@@ -69,7 +69,8 @@ VclPtr<VclAbstractDialog> CuiDialogsTest::createDialogByID(sal_uInt32 nID)
     {
         case 0: // "cui/ui/formatcellsdialog.ui"
         {
-            pReturnDialog = mpFact->CreateSvxFormatCellsDialog(nullptr, mxAttr.get(), *mxModel);
+            pReturnDialog
+                = mpFact->CreateSvxFormatCellsDialog(nullptr, mxAttr.get(), *mxModel, true);
             break;
         }
 

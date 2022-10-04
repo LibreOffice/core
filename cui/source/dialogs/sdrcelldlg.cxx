@@ -21,10 +21,15 @@
 #include <cuitabarea.hxx>
 #include <svx/svdmodel.hxx>
 #include <border.hxx>
+#include <paragrph.hxx>
+#include <svl/intitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svx/flagsdef.hxx>
+#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 
-SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel)
-    : SfxTabDialogController(pParent, "cui/ui/formatcellsdialog.ui", "FormatCellsDialog", pAttr)
+SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel, bool bStyle)
+    : SfxTabDialogController(pParent, "cui/ui/formatcellsdialog.ui", "FormatCellsDialog", pAttr, bStyle)
     , mrOutAttrs(*pAttr)
     , mpColorTab(rModel.GetColorList())
     , mnColorTabState ( ChangeType::NONE )
@@ -37,7 +42,29 @@ SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemS
     AddTabPage("effects", RID_SVXPAGE_CHAR_EFFECTS);
     AddTabPage("border", RID_SVXPAGE_BORDER );
     AddTabPage("area", RID_SVXPAGE_AREA);
-    AddTabPage("shadow", SvxShadowTabPage::Create, nullptr);
+
+    if (bStyle)
+    {
+        AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
+        AddTabPage("highlight", RID_SVXPAGE_BKG);
+        AddTabPage("indentspacing", RID_SVXPAGE_STD_PARAGRAPH);
+        AddTabPage("alignment", SvxParaAlignTabPage::Create, SvxParaAlignTabPage::GetSdrRanges);
+        RemoveTabPage("shadow");
+    }
+    else
+    {
+        RemoveTabPage("position");
+        RemoveTabPage("highlight");
+        RemoveTabPage("indentspacing");
+        RemoveTabPage("alignment");
+        AddTabPage("shadow", SvxShadowTabPage::Create, nullptr);
+        RemoveStandardButton();
+    }
+
+    if (bStyle && SvtCJKOptions::IsAsianTypographyEnabled())
+        AddTabPage("asian", RID_SVXPAGE_PARA_ASIAN);
+    else
+        RemoveTabPage("asian");
 }
 
 void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
@@ -61,6 +88,16 @@ void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         static_cast<SvxShadowTabPage&>(rPage).SetColorList( mpColorTab );
         static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorTabState );
+    }
+    else if (rId == "alignment")
+    {
+        static_cast<SvxParaAlignTabPage&>(rPage).EnableSdrVertAlign();
+    }
+    else if (rId == "highlight")
+    {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
+        rPage.PageCreated(aSet);
     }
     else
         SfxTabDialogController::PageCreated(rId, rPage);

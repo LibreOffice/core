@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxids.hrc>
+#include <svx/sdtaitm.hxx>
 
 #include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>
@@ -59,6 +60,13 @@ const WhichRangesContainer SvxStdParagraphTabPage::pStdRanges(
 
 const WhichRangesContainer SvxParaAlignTabPage::pAlignRanges(
     svl::Items<SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST>);  // 10027
+
+const WhichRangesContainer SvxParaAlignTabPage::pSdrAlignRanges(
+    svl::Items<
+    SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST, // 1076
+    SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST ,      // 10027
+    SID_ATTR_FRAMEDIRECTION, SID_ATTR_FRAMEDIRECTION  // 10944
+    >);
 
 const WhichRangesContainer SvxExtParagraphTabPage::pExtRanges(svl::Items<
     SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS, // 10037 - 10041
@@ -976,6 +984,7 @@ void SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 
 SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/paragalignpage.ui", "ParaAlignPage", &rSet)
+    , m_bSdrVertAlign(false)
     , m_xLeft(m_xBuilder->weld_radio_button("radioBTN_LEFTALIGN"))
     , m_xRight(m_xBuilder->weld_radio_button("radioBTN_RIGHTALIGN"))
     , m_xCenter(m_xBuilder->weld_radio_button("radioBTN_CENTERALIGN"))
@@ -989,6 +998,8 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xExampleWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aExampleWin))
     , m_xVertAlignFL(m_xBuilder->weld_widget("frameFL_VERTALIGN"))
     , m_xVertAlignLB(m_xBuilder->weld_combo_box("comboLB_VERTALIGN"))
+    , m_xVertAlign(m_xBuilder->weld_label("labelFL_VERTALIGN"))
+    , m_xVertAlignSdr(m_xBuilder->weld_label("labelST_VERTALIGN_SDR"))
     , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
@@ -1105,7 +1116,10 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     if (m_xVertAlignLB->get_value_changed_from_saved())
     {
-        rOutSet->Put(SvxParaVertAlignItem(static_cast<SvxParaVertAlignItem::Align>(m_xVertAlignLB->get_active()), GetWhich( SID_PARA_VERTALIGN )));
+        if (m_bSdrVertAlign)
+            rOutSet->Put(SdrTextVertAdjustItem(static_cast<SdrTextVertAdjust>(m_xVertAlignLB->get_active())));
+        else
+            rOutSet->Put(SvxParaVertAlignItem(static_cast<SvxParaVertAlignItem::Align>(m_xVertAlignLB->get_active()), GetWhich( SID_PARA_VERTALIGN )));
         bModified = true;
     }
 
@@ -1191,16 +1205,23 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_xSnapToGridCB->set_active(rSnap.GetValue());
     }
 
-    _nWhich = GetWhich( SID_PARA_VERTALIGN );
+    _nWhich = m_bSdrVertAlign ? SDRATTR_TEXT_VERTADJUST : GetWhich( SID_PARA_VERTALIGN );
     eItemState = rSet->GetItemState( _nWhich );
 
     if ( eItemState >= SfxItemState::DEFAULT )
     {
         m_xVertAlignFL->show();
 
-        const SvxParaVertAlignItem& rAlign = static_cast<const SvxParaVertAlignItem&>(rSet->Get( _nWhich ));
-
-        m_xVertAlignLB->set_active(static_cast<sal_Int32>(rAlign.GetValue()));
+        if (m_bSdrVertAlign)
+        {
+            const SdrTextVertAdjustItem& rAlign = static_cast<const SdrTextVertAdjustItem&>(rSet->Get( _nWhich ));
+            m_xVertAlignLB->set_active(rAlign.GetValue());
+        }
+        else
+        {
+            const SvxParaVertAlignItem& rAlign = static_cast<const SvxParaVertAlignItem&>(rSet->Get( _nWhich ));
+            m_xVertAlignLB->set_active(static_cast<sal_Int32>(rAlign.GetValue()));
+        }
     }
 
     _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
@@ -1328,6 +1349,15 @@ void SvxParaAlignTabPage::EnableJustifyExt()
     if (SvtCJKOptions::IsAsianTypographyEnabled())
         m_xSnapToGridCB->show();
 
+}
+
+void SvxParaAlignTabPage::EnableSdrVertAlign()
+{
+    m_bSdrVertAlign = true;
+
+    m_xVertAlignLB->remove_id("0");
+    m_xVertAlignLB->remove_id("1");
+    m_xVertAlign->set_label(m_xVertAlignSdr->get_label());
 }
 
 void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)

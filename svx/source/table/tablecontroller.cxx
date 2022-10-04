@@ -944,7 +944,7 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
     VclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSvxFormatCellsDialog(
         rReq.GetFrameWeld(),
         &aNewAttr,
-        rModel) );
+        rModel, false) );
 
     // Even Cancel Button is returning positive(101) value,
     xDlg->StartExecuteAsync([xDlg, this, aBoxItem, aBoxInfoItem](int nResult){

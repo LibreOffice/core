@@ -38,7 +38,7 @@ private:
     XPatternListRef     mpPatternList;
 
 public:
-    SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel);
+    SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel, bool bStyle);
 
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
