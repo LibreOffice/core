@@ -2563,18 +2563,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     tools::Rectangle aRect(aFSFA.nXaLeft, aFSFA.nYaTop, aFSFA.nXaRight, aFSFA.nYaBottom);
     SvxMSDffImportData aData( aRect );
 
-    /*
-    #i20540#
-    The SdrOle2Obj will try and manage any ole objects it finds, causing all
-    sorts of trouble later on
-    */
-    SwDocShell* pPersist = m_rDoc.GetDocShell();
-    m_rDoc.SetDocShell(nullptr);         // #i20540# Persist guard
-
     rtl::Reference<SdrObject> pObject;
     bool bOk = (m_xMSDffManager->GetShape(aFSFA.nSpId, pObject, aData) && pObject);
-
-    m_rDoc.SetDocShell(pPersist);  // #i20540# Persist guard
 
     if (!bOk)
     {
