@@ -529,12 +529,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
                 // For our purposes, a mark glyph is part of cluster as well.
                 hb_face_t* pHbFace = hb_font_get_face(pHbFont);
-                if (hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK
-                    && nCharPos != mnMinCharPos)
-                {
-                    bClusterStart = false;
+                if (hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
                     bInCluster = true;
-                }
 
                 GlyphItemFlags nGlyphFlags = GlyphItemFlags::NONE;
                 if (bRightToLeft)
