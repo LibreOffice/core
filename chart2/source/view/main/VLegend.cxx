@@ -448,7 +448,7 @@ awt::Size lcl_placeLegendEntries(
                             DrawModelWrapper::removeShape(xEntry);
                             // The intention here is to make pathological cases with extremely large labels
                             // converge a little faster
-                            if (std::abs(nRemainingSpace) > nSumHeight / 10)
+                            if (nNewLen > 10 && std::abs(nRemainingSpace) > nSumHeight / 10)
                                 nNewLen -= nNewLen / 10;
                             else
                                 --nNewLen;
