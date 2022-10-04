@@ -93,6 +93,9 @@ cmd/32/insertcurrencyfield.png cmd/32/currencyfield.png
 cmd/32/insertdatefield.png cmd/32/datefield.png
 cmd/32/insertedit.png cmd/32/edit.png
 cmd/32/insertfieldctrl.png cmd/32/insertfield.png
+cmd/32/insertfielddatevariable.png cmd/32/insertdatefieldvar.png
+cmd/32/insertfielddoctitle.png cmd/32/inserttitlefield.png
+cmd/32/insertfieldsheet.png cmd/32/name.png
 cmd/32/insertfilecontrol.png cmd/32/filecontrol.png
 cmd/32/insertfootnotesmenu.png cmd/32/insertfootnote.png
 cmd/32/insertformattedfield.png cmd/32/formattedfield.png
@@ -150,6 +153,9 @@ cmd/lc_insertcurrencyfield.png cmd/lc_currencyfield.png
 cmd/lc_insertdatefield.png cmd/lc_datefield.png
 cmd/lc_insertedit.png cmd/lc_edit.png
 cmd/lc_insertfieldctrl.png cmd/lc_insertfield.png
+cmd/lc_insertfielddatevariable.png cmd/lc_insertdatefieldvar.png
+cmd/lc_insertfielddoctitle.png cmd/lc_inserttitlefield.png
+cmd/lc_insertfieldsheet.png cmd/lc_name.png
 cmd/lc_insertfilecontrol.png cmd/lc_filecontrol.png
 cmd/lc_insertfootnotesmenu.png cmd/lc_insertfootnote.png
 cmd/lc_insertformattedfield.png cmd/lc_formattedfield.png
@@ -207,6 +213,9 @@ cmd/sc_insertcurrencyfield.png cmd/sc_currencyfield.png
 cmd/sc_insertdatefield.png cmd/sc_datefield.png
 cmd/sc_insertedit.png cmd/sc_edit.png
 cmd/sc_insertfieldctrl.png cmd/sc_insertfield.png
+cmd/sc_insertfielddatevariable.png cmd/sc_insertdatefieldvar.png
+cmd/sc_insertfielddoctitle.png cmd/sc_inserttitlefield.png
+cmd/sc_insertfieldsheet.png cmd/sc_name.png
 cmd/sc_insertfilecontrol.png cmd/sc_filecontrol.png
 cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 cmd/sc_insertformattedfield.png cmd/sc_formattedfield.png
@@ -384,7 +393,7 @@ cmd/sc_vscroll.png cmd/sc_scrollbar.png
 cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 
 # Annotations
-cmd/32/acceptchanges.png cmd/32/accepttrackedchange.png
+cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
 cmd/32/deletecomment.png cmd/32/deleteannotation.png
@@ -394,7 +403,8 @@ cmd/32/insertannotation.png cmd/32/shownote.png
 cmd/32/notevisible.png cmd/32/shownote.png
 cmd/32/showannotations.png cmd/32/showallnotes.png
 cmd/32/showchanges.png cmd/32/addwatch.png
-cmd/lc_acceptchanges.png cmd/lc_accepttrackedchange.png
+
+cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/lc_deletecomment.png cmd/lc_deleteannotation.png
@@ -404,7 +414,8 @@ cmd/lc_insertannotation.png cmd/lc_shownote.png
 cmd/lc_notevisible.png cmd/lc_shownote.png
 cmd/lc_showannotations.png cmd/lc_showallnotes.png
 cmd/lc_showchanges.png cmd/lc_addwatch.png
-cmd/sc_acceptchanges.png cmd/sc_accepttrackedchange.png
+
+cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/sc_deletecomment.png cmd/sc_deleteannotation.png
@@ -1376,14 +1387,17 @@ cmd/sc_rightpara.png cmd/sc_alignright.png
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
 cmd/32/toolbarsmenu.png cmd/32/showtoolbar.png
+cmd/32/viewbounds.png cmd/32/charfontname.png
 
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
 cmd/lc_toolbarsmenu.png cmd/lc_showtoolbar.png
+cmd/lc_viewbounds.png cmd/lc_charfontname.png
 
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
 cmd/sc_toolbarsmenu.png cmd/sc_showtoolbar.png
+cmd/sc_viewbounds.png cmd/sc_charfontname.png
 
 # Vertical Text Alignment (cellvert* is used in writer and align* is used in calc)
 cmd/32/cellvertbottom.png cmd/32/alignbottom.png
@@ -1880,6 +1894,7 @@ cmd/sc_pluginsactive.png cmd/sc_insertplugin.png
 cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
 cmd/32/starchartdialog.png cmd/32/insertobjectdialog.png
 cmd/32/tableautofitmenu.png cmd/32/setoptimalrowheight.png
+cmd/32/tableboundaries.png cmd/32/inserttable.png
 cmd/32/tabledeletemenu.png cmd/32/deletetable.png
 cmd/32/tableinsertmenu.png cmd/32/insertrowsafter.png
 cmd/32/tablemenu.png cmd/32/inserttable.png
@@ -1888,6 +1903,7 @@ cmd/32/tableselectmenu.png cmd/32/selecttable.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_starchartdialog.png cmd/lc_insertobjectdialog.png
 cmd/lc_tableautofitmenu.png cmd/lc_setoptimalrowheight.png
+cmd/lc_tableboundaries.png cmd/lc_inserttable.png
 cmd/lc_tabledeletemenu.png cmd/lc_deletetable.png
 cmd/lc_tableinsertmenu.png cmd/lc_insertrowsafter.png
 cmd/lc_tablemenu.png cmd/lc_inserttable.png
@@ -1896,6 +1912,7 @@ cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_starchartdialog.png cmd/sc_insertobjectdialog.png
 cmd/sc_tableautofitmenu.png cmd/sc_setoptimalrowheight.png
+cmd/sc_tableboundaries.png cmd/sc_inserttable.png
 cmd/sc_tabledeletemenu.png cmd/sc_deletetable.png
 cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
 cmd/sc_tablemenu.png cmd/sc_inserttable.png
@@ -1913,6 +1930,11 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 
 # Impress
 sfx2/res/symphony/sidebar-transition-large.png cmd/lc_slidechangewindow.png
+
+# Toggle graphics visibility in Writer
+cmd/32/showgraphics.png cmd/32/insertgraphic.png
+cmd/lc_showgraphics.png cmd/lc_insertgraphic.png
+cmd/sc_showgraphics.png cmd/sc_insertgraphic.png
 
 # navigator
 cmd/32/dsbdocumentdatasource.png cmd/32/sbaexecutesql.png
