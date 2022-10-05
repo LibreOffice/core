@@ -128,6 +128,9 @@ class SdtHelper final : public virtual SvRefBase
     /// <w:sdtPr>'s <w:alias w:val="...">.
     OUString m_aAlias;
 
+    /// <w:sdtPr>'s <w:tag w:val="...">.
+    OUString m_aTag;
+
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
@@ -209,6 +212,9 @@ public:
 
     void SetAlias(const OUString& rAlias);
     const OUString& GetAlias() const;
+
+    void SetTag(const OUString& rTag);
+    const OUString& GetTag() const;
 
     std::optional<OUString> getValueFromDataBinding();
 };

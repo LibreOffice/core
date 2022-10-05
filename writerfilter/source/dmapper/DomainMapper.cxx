@@ -2796,6 +2796,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_alias:
     case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
     case NS_ooxml::LN_CT_SdtPr_color:
+    case NS_ooxml::LN_CT_SdtPr_tag:
     {
         if (!m_pImpl->GetSdtStarts().empty())
         {
@@ -2812,6 +2813,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias)
             {
                 m_pImpl->m_pSdtHelper->SetAlias(sStringValue);
+                break;
+            }
+
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_tag)
+            {
+                m_pImpl->m_pSdtHelper->SetTag(sStringValue);
                 break;
             }
 
@@ -2843,6 +2850,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     pProperties->resolve(*this);
                 }
+                break;
+            }
+        }
+        else
+        {
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_tag)
+            {
+                // Tag is only handled here in case of inline SDT.
                 break;
             }
         }

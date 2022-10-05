@@ -888,6 +888,7 @@
 #define UNO_NAME_DATA_BINDING_STORE_ITEM_ID "DataBindingStoreItemID"
 #define UNO_NAME_COLOR "Color"
 #define UNO_NAME_ALIAS "Alias"
+#define UNO_NAME_TAG "Tag"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,6 +91,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
     xContentControlProps->getPropertyValue("Alias") >>= aAlias;
     // This was empty.
     CPPUNIT_ASSERT_EQUAL(OUString("myalias"), aAlias);
+    OUString aTag;
+    xContentControlProps->getPropertyValue("Tag") >>= aTag;
+    // This was empty.
+    CPPUNIT_ASSERT_EQUAL(OUString("mytag"), aTag);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)
