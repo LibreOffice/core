@@ -756,6 +756,9 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""  , k0    },
     { LANGUAGE_CHINESE_SIMPLIFIED,                  "zh-Hans", "CN", kSAME },   // canonical, but prefer legacy zh-CN
     { LANGUAGE_CHINESE_TRADITIONAL,                 "zh-Hant", "TW", kSAME },   // canonical, but prefer legacy zh-TW
+    { LANGUAGE_CHINESE_SINGAPORE,                   "zh-Hans", "SG", kSAME },   // canonical, but prefer legacy zh-SG
+    { LANGUAGE_CHINESE_HONGKONG,                    "zh-Hant", "HK", kSAME },   // canonical, but prefer legacy zh-HK
+    { LANGUAGE_CHINESE_MACAU,                       "zh-Hant", "MO", kSAME },   // canonical, but prefer legacy zh-MO
     { LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN,      "emk-Latn", "GN", k0    },
     { LANGUAGE_USER_CREE_PLAINS_LATIN,             "crk-Latn", "CA", k0    },
     { LANGUAGE_USER_CREE_PLAINS_SYLLABICS,         "crk-Cans", "CA", k0    },
