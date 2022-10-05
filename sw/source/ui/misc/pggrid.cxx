@@ -458,15 +458,18 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, weld::MetricSpinButton&, rField, v
 
 IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::Toggleable&, rButton, void)
 {
-    bool bEnable = m_xNoGridRB.get() != &rButton;
-    m_xLayoutFL->set_sensitive(bEnable);
-    m_xDisplayFL->set_sensitive(bEnable);
+    if (!rButton.get_active())
+        return;
+
+    const bool bNoGrid = m_xNoGridRB.get() == &rButton;
+    m_xLayoutFL->set_sensitive(!bNoGrid);
+    m_xDisplayFL->set_sensitive(!bNoGrid);
 
     //one special case
-    if (bEnable)
+    if (!bNoGrid)
         DisplayGridHdl(*m_xDisplayCB);
 
-    bEnable = m_xCharsGridRB.get() == &rButton;
+    bool bEnable = m_xCharsGridRB.get() == &rButton;
     m_xSnapToCharsCB->set_sensitive(bEnable);
 
     bEnable = m_xLinesGridRB.get() == &rButton;
@@ -478,6 +481,10 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::Toggleable&, rButton, void)
         m_xCharWidthFT->set_sensitive(false);
         m_xCharWidthMF->set_sensitive(false);
     }
+
+    //recalc which dependencies are sensitive
+    if (!bNoGrid)
+        TextSizeChangedHdl(*m_xTextSizeMF);
 
     GridModifyHdl();
 }
