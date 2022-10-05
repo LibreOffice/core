@@ -200,7 +200,7 @@ std::unique_ptr<weld::TreeIter> TreeListBox::GetEntryPosByName(std::u16string_vi
                 return xEntry;
             }
         }
-    } while (m_xTreeView->iter_next(*xEntry));
+    } while (m_xTreeView->iter_next_sibling(*xEntry));
 
     return nullptr;
 }
