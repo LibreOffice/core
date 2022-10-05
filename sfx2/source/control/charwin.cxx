@@ -21,6 +21,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <sfx2/charwin.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -43,9 +44,9 @@ void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetLabelFont();
     const Size aFontSize = aFont.GetFontSize();
-    aFont.SetFontSize(Size(aFontSize.Width() * 2.5, aFontSize.Height() * 2.5));
+    aFont.SetFontSize(Size(aFontSize.Width() * 2, aFontSize.Height() * 2));
     mxVirDev->Push(PUSH_ALLFONT);
-    mxVirDev->SetFont(aFont);
+    weld::SetPointFont(*mxVirDev, aFont);
     pDrawingArea->set_size_request(mxVirDev->approximate_digit_width() * 2,
                                    mxVirDev->GetTextHeight());
     mxVirDev->Pop();
