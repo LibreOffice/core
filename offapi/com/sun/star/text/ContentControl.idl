@@ -105,6 +105,12 @@ service ContentControl
         @since LibreOffice 7.5
     */
     [optional, property] string Alias;
+
+    /** The tag: just remembered.
+
+        @since LibreOffice 7.5
+    */
+    [optional, property] string Tag;
 };
 
 

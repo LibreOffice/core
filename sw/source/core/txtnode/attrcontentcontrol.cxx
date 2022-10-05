@@ -410,6 +410,7 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aColor.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("alias"),
                                       BAD_CAST(m_aAlias.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("tag"), BAD_CAST(m_aTag.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {

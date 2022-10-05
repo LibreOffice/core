@@ -515,6 +515,10 @@ void SdtHelper::SetAlias(const OUString& rAlias) { m_aAlias = rAlias; }
 
 const OUString& SdtHelper::GetAlias() const { return m_aAlias; }
 
+void SdtHelper::SetTag(const OUString& rTag) { m_aTag = rTag; }
+
+const OUString& SdtHelper::GetTag() const { return m_aTag; }
+
 } // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

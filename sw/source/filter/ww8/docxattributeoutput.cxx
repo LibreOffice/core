@@ -2367,6 +2367,12 @@ void DocxAttributeOutput::WriteContentControlStart()
                                        m_pContentControl->GetAlias());
     }
 
+    if (!m_pContentControl->GetTag().isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_tag, FSNS(XML_w, XML_val),
+                                       m_pContentControl->GetTag());
+    }
+
     if (m_pContentControl->GetShowingPlaceHolder())
     {
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);

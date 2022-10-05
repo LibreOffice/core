@@ -169,6 +169,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The alias: just remembered.
     OUString m_aAlias;
 
+    /// The tag: just remembered.
+    OUString m_aTag;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -328,6 +331,10 @@ public:
     void SetAlias(const OUString& rAlias) { m_aAlias = rAlias; }
 
     const OUString& GetAlias() const { return m_aAlias; }
+
+    void SetTag(const OUString& rTag) { m_aTag = rTag; }
+
+    const OUString& GetTag() const { return m_aTag; }
 
     void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
 

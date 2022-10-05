@@ -175,6 +175,7 @@ public:
     OUString m_aDataBindingStoreItemID;
     OUString m_aColor;
     OUString m_aAlias;
+    OUString m_aTag;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          uno::Reference<text::XText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
@@ -484,6 +485,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetDataBindingStoreItemID(m_pImpl->m_aDataBindingStoreItemID);
     pContentControl->SetColor(m_pImpl->m_aColor);
     pContentControl->SetAlias(m_pImpl->m_aAlias);
+    pContentControl->SetTag(m_pImpl->m_aTag);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -918,6 +920,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_TAG)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aTag = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetTag(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -1138,6 +1155,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetAlias();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_TAG)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aTag;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetTag();
         }
     }
     else
