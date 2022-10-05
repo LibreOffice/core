@@ -597,9 +597,7 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxAllRecentThumbnails->Show();
         mxAllRecentThumbnails->GrabFocus();
         mxRecentButton->set_active(true);
-        mxRecentButton->set_highlight_background();
         mxTemplateButton->set_active(false);
-        mxTemplateButton->set_stack_background();
         mxActions->set_sensitive(true);
     }
     else
@@ -610,9 +608,7 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxLocalView->reload();
         mxLocalView->GrabFocus();
         mxRecentButton->set_active(false);
-        mxRecentButton->set_stack_background();
         mxTemplateButton->set_active(true);
-        mxTemplateButton->set_highlight_background();
         mxActions->set_sensitive(false);
     }
     applyFilter();
