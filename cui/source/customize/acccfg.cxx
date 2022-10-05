@@ -859,16 +859,16 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , m_xResetButton(m_xBuilder->weld_button("reset"))
 {
     Size aSize(m_xEntriesBox->get_approximate_digit_width() * 40,
-               m_xEntriesBox->get_height_rows(12));
+               m_xEntriesBox->get_height_rows(10));
     m_xEntriesBox->set_size_request(aSize.Width(), aSize.Height());
     aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 19,
-                 m_xEntriesBox->get_height_rows(10));
+                 m_xEntriesBox->get_height_rows(9));
     m_xGroupLBox->set_size_request(aSize.Width(), aSize.Height());
     aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 21,
-                 m_xEntriesBox->get_height_rows(10));
+                 m_xEntriesBox->get_height_rows(9));
     m_xFunctionBox->set_size_request(aSize.Width(), aSize.Height());
     aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 20,
-                 m_xEntriesBox->get_height_rows(10));
+                 m_xEntriesBox->get_height_rows(9));
     m_xKeyBox->set_size_request(aSize.Width(), aSize.Height());
 
     // install handler functions
