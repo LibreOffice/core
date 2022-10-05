@@ -602,7 +602,7 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxTemplateButton->set_stack_background();
         mxActions->set_sensitive(true);
     }
-    else if( &rButton == mxTemplateButton.get() )
+    else
     {
         mxAllRecentThumbnails->Hide();
         initializeLocalView();
