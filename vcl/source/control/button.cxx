@@ -976,6 +976,9 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (mbPressed || mbIsActive)
         nButtonStyle |= DrawButtonFlags::Pressed;
 
+    if (GetStyle() & WB_FLATBUTTON)
+        nButtonStyle |= DrawButtonFlags::Flat;
+
     // TODO: move this to Window class or make it a member !!!
     ControlType aCtrlType = ControlType::Generic;
     switch(GetParent()->GetType())
@@ -1151,8 +1154,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (GetStyle() & WB_FLATBUTTON)
     {
         tools::Rectangle aTempRect(aInRect);
-        if (bRollOver)
-            ImplDrawPushButtonFrame(rRenderContext, aTempRect, nButtonStyle);
+        ImplDrawPushButtonFrame(rRenderContext, aTempRect, nButtonStyle);
         aInRect.AdjustLeft(2 );
         aInRect.AdjustTop(2 );
         aInRect.AdjustRight( -2 );
