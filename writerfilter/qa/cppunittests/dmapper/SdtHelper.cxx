@@ -86,6 +86,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
     xContent.set(xContentEnum->nextElement(), uno::UNO_QUERY);
     xContent->getPropertyValue("CharHeight") >>= fCharheight;
     CPPUNIT_ASSERT_EQUAL(24.f, fCharheight);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    OUString aAlias;
+    xContentControlProps->getPropertyValue("Alias") >>= aAlias;
+    // This was empty.
+    CPPUNIT_ASSERT_EQUAL(OUString("myalias"), aAlias);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)

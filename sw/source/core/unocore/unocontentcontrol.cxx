@@ -173,6 +173,7 @@ public:
     OUString m_aDataBindingXpath;
     OUString m_aDataBindingStoreItemID;
     OUString m_aColor;
+    OUString m_aAlias;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -545,6 +546,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetDataBindingXpath(m_pImpl->m_aDataBindingXpath);
     pContentControl->SetDataBindingStoreItemID(m_pImpl->m_aDataBindingStoreItemID);
     pContentControl->SetColor(m_pImpl->m_aColor);
+    pContentControl->SetAlias(m_pImpl->m_aAlias);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -964,6 +966,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_ALIAS)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aAlias = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetAlias(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -1173,6 +1190,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetColor();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_ALIAS)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aAlias;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetAlias();
         }
     }
     else

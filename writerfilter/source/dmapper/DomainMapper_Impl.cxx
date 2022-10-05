@@ -931,6 +931,12 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(m_pSdtHelper->GetColor()));
     }
 
+    if (!m_pSdtHelper->GetAlias().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("Alias",
+                                               uno::Any(m_pSdtHelper->GetAlias()));
+    }
+
     if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
     {
         xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));

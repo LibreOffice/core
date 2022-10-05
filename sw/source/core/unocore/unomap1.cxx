@@ -1044,6 +1044,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetContentControlProper
         { u"" UNO_NAME_DATA_BINDING_XPATH, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATA_BINDING_STORE_ITEM_ID, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_COLOR, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_ALIAS, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }
     };
 

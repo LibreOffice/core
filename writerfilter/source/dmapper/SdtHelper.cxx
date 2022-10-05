@@ -468,6 +468,10 @@ void SdtHelper::SetColor(const OUString& rColor) { m_aColor = rColor; }
 
 OUString SdtHelper::GetColor() const { return m_aColor; }
 
+void SdtHelper::SetAlias(const OUString& rAlias) { m_aAlias = rAlias; }
+
+const OUString& SdtHelper::GetAlias() const { return m_aAlias; }
+
 } // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
