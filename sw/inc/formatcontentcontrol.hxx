@@ -166,6 +166,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The color: just remembered.
     OUString m_aColor;
 
+    /// The alias: just remembered.
+    OUString m_aAlias;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -321,6 +324,10 @@ public:
     void SetColor(const OUString& rColor) { m_aColor = rColor; }
 
     const OUString& GetColor() const { return m_aColor; }
+
+    void SetAlias(const OUString& rAlias) { m_aAlias = rAlias; }
+
+    const OUString& GetAlias() const { return m_aAlias; }
 
     void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
 

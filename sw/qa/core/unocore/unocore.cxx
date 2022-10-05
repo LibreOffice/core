@@ -624,6 +624,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     xContentControlProps->setPropertyValue(
         "DataBindingStoreItemID", uno::Any(OUString("{241A8A02-7FFD-488D-8827-63FBE74E8BC9}")));
     xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
+    xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -647,6 +648,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT_EQUAL(OUString("{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"),
                          pContentControl->GetDataBindingStoreItemID());
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), pContentControl->GetColor());
+    CPPUNIT_ASSERT_EQUAL(OUString("myalias"), pContentControl->GetAlias());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testListIdState)

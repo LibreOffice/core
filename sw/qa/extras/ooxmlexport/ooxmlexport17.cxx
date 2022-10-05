@@ -426,6 +426,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xContentControlProps->setPropertyValue("DataBindingXpath", uno::Any(OUString("/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]")));
     xContentControlProps->setPropertyValue("DataBindingStoreItemID", uno::Any(OUString("{241A8A02-7FFD-488D-8827-63FBE74E8BC9}")));
     xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
+    xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("myalias")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -447,6 +448,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "storeItemID", "{241A8A02-7FFD-488D-8827-63FBE74E8BC9}");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:color", "val", "008000");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias", "val", "myalias");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)

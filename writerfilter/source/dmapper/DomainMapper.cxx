@@ -2827,6 +2827,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 break;
             }
 
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias)
+            {
+                m_pImpl->m_pSdtHelper->SetAlias(sStringValue);
+                break;
+            }
+
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_checkbox)
             {
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::checkBox);

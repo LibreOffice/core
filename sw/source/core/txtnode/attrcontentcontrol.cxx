@@ -408,6 +408,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aDataBindingStoreItemID.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"),
                                       BAD_CAST(m_aColor.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("alias"),
+                                      BAD_CAST(m_aAlias.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {
