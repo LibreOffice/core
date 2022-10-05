@@ -759,7 +759,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
-    // add one to rage sizes to get back to the old Rectangle and outliner measurements
+    // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
@@ -948,7 +948,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     Color aOriginalBackColor(rOutliner.GetBackgroundColor());
     setSuitableOutlinerBg(rOutliner);
 
-    // add one to rage sizes to get back to the old Rectangle and outliner measurements
+    // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
     const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsEffectivelyVertical());
@@ -1557,7 +1557,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
-    // add one to rage sizes to get back to the old Rectangle and outliner measurements
+    // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
 
