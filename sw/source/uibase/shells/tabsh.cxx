@@ -72,6 +72,7 @@
 #include <docsh.hxx>
 #include <tblsel.hxx>
 #include <viewopt.hxx>
+#include <tabfrm.hxx>
 
 #include <strings.hrc>
 #include <cmdid.h>
@@ -1363,8 +1364,17 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_INSERT_COL_AFTER:
             {
                 SfxImageItem aImageItem(nSlot);
-                if (pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_RL_TB)
-                    aImageItem.SetMirrored(true);
+                if (pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Environment)
+                {
+                    // Inherited from superordinate object (page or frame).
+                    // If the table spans multiple pages, direction is set by the first page.
+                    SwIterator<SwTabFrame, SwFrameFormat> aIterT(*pFormat);
+                    for (SwTabFrame* pFrame = aIterT.First(); pFrame;
+                        pFrame = static_cast<SwTabFrame*>(pFrame->GetPrecede()))
+                        aImageItem.SetMirrored(pFrame->IsRightToLeft());
+                }
+                else
+                    aImageItem.SetMirrored(pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_RL_TB);
                 rSet.Put(aImageItem);
                 break;
             }

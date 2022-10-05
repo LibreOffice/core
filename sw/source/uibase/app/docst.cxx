@@ -596,12 +596,14 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     }
     else
     {
-        if(SfxStyleFamily::Page == m_nFamily)
+        if(SfxStyleFamily::Page == m_nFamily || SfxStyleFamily::Frame == m_nFamily)
         {
             static const sal_uInt16 aInval[] = {
                 SID_IMAGE_ORIENTATION,
                 SID_ATTR_CHAR_FONT,
-                FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL, 0};
+                FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL,
+                FN_TABLE_INSERT_COL_BEFORE,
+                FN_TABLE_INSERT_COL_AFTER, 0};
             pView->GetViewFrame()->GetBindings().Invalidate(aInval);
         }
         SfxItemSet aTmpSet( *m_pDlg->GetOutputItemSet() );
