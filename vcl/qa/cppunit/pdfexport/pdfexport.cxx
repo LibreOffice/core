@@ -3621,10 +3621,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testBitmapScaledown)
         CPPUNIT_ASSERT_EQUAL(2616, nWidth);
     }
 }
-} // end anonymous namespace
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
 {
+#if HAVE_MORE_FONTS
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"justified-arabic-kashida.odt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
@@ -3635,20 +3635,19 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
-    // 7 or 8 objects, 4 text, others are path
+    // 7 objects, 3 text, others are path
     int nPageObjectCount = pPdfPage->getObjectCount();
-    CPPUNIT_ASSERT_GREATEREQUAL(7, nPageObjectCount);
+    CPPUNIT_ASSERT_EQUAL(7, nPageObjectCount);
 
-    // 4 text objects, "رم" (reh+mim), then "ِ" (kasreh), tatweel, and "ج" (jeh)
-    OUString sText[4];
+    // 3 text objects
+    OUString sText[3];
 
     /* With "Noto Sans Arabic" font, these are the X ranges on Linux:
-        0: ( 61.75 - 218.35)
-        1: (479.70 - 520.02)
-        2: (209.40 - 457.08)
-        3: (447.80 - 546.62)
+        0: ( 61.75 - 415.94)
+        1: (479.70 - 422.40)
+        2: (209.40 - 453.2)
     */
-    basegfx::B2DRectangle aRect[4];
+    basegfx::B2DRectangle aRect[3];
 
     std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject;
@@ -3665,47 +3664,38 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
             ++nTextObjectCount;
         }
     }
-    CPPUNIT_ASSERT_EQUAL(4, nTextObjectCount);
+    CPPUNIT_ASSERT_EQUAL(3, nTextObjectCount);
 
     // Text: جِـرم (which means "mass" in Persian)
-    // Rendered as (left to right): "reh + mim" - "tatweel" - "kasreh" - "jeh"
-    int rehmim = 0, kasreh = 1, tatweel = 2, jeh = 3;
-
-    // Bad rendering can cause tatweel enumerated before kasreh
-    // This can be the end of journey, but let's accept this for now
-    if (sText[2].equals(u"ِ"))
-    {
-        tatweel = 1;
-        kasreh = 2;
-    }
+    // Rendered as (left to right): "reh + mim" - "kasreh" - "jeh + tatweel"
+    int rehmim = 0, kasreh = 1, jehtatweel = 2;
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"رم"), sText[rehmim].trim());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"ِ"), sText[kasreh].trim());
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), sText[tatweel].trim());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"ج"), sText[jeh].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString(u""), sText[kasreh].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString(u""), sText[jehtatweel].trim());
 
     // "Kasreh" should be within "jeh" character
-    CPPUNIT_ASSERT_GREATER(aRect[jeh].getMinX(), aRect[kasreh].getMinX());
-    CPPUNIT_ASSERT_LESS(aRect[jeh].getMaxX(), aRect[kasreh].getMaxX());
+    CPPUNIT_ASSERT_GREATER(aRect[jehtatweel].getMinX(), aRect[kasreh].getMinX());
+    CPPUNIT_ASSERT_LESS(aRect[jehtatweel].getMaxX(), aRect[kasreh].getMaxX());
 
     // "Tatweel" should cover "jeh" and "reh"+"mim" to avoid gap
     // Checking right gap
-    CPPUNIT_ASSERT_GREATER(aRect[jeh].getMinX(), aRect[tatweel].getMaxX());
+    //CPPUNIT_ASSERT_GREATER(aRect[jehtatweel].getMinX(), aRect[tatweel].getMaxX());
     // Checking left gap
     // Kashida fails to reach to rehmim before the series of patches starting
     // with 3901e029bd39575f700e69a73818565d62226a23. The visible symptom is
     // a gap in the left of Kashida.
-    // CPPUNIT_ASSERT_LESS(aRect[rehmim].getMaxX(), aRect[tatweel].getMinX());
+    CPPUNIT_ASSERT_LESS(aRect[rehmim].getMaxX(), aRect[jehtatweel].getMinX());
 
     // Overlappings of Kashida and surrounding characters is ~9% of the width
     // of the "jeh" character, while using "Noto Arabic Sans" font in this
     // specific example.
     // We set the hard limit of 10% here.
-    CPPUNIT_ASSERT_LESS(0.1, fabs(aRect[jeh].getMinX() - aRect[tatweel].getMaxX())
-                                 / aRect[jeh].getWidth());
-    CPPUNIT_ASSERT_LESS(0.1, fabs(aRect[rehmim].getMaxX() - aRect[tatweel].getMinX())
-                                 / aRect[jeh].getWidth());
+    CPPUNIT_ASSERT_LESS(0.1, fabs(aRect[rehmim].getMaxX() - aRect[jehtatweel].getMinX())
+                                 / aRect[jehtatweel].getWidth());
+#endif
 }
+} // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

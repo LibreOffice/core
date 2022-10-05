@@ -445,7 +445,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             hb_buffer_add_utf16(
                 pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
                 nMinRunPos, nRunLen);
-            hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
 
             // The shapers that we want HarfBuzz to use, in the order of
             // preference.
@@ -526,11 +525,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
                         continue;
                 }
-
-                // For our purposes, a mark glyph is part of cluster as well.
-                hb_face_t* pHbFace = hb_font_get_face(pHbFont);
-                if (hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
-                    bInCluster = true;
 
                 GlyphItemFlags nGlyphFlags = GlyphItemFlags::NONE;
                 if (bRightToLeft)
