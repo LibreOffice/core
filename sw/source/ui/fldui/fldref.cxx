@@ -122,6 +122,8 @@ SwFieldRefPage::~SwFieldRefPage()
 IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl_Impl, weld::Entry&, void)
 {
     UpdateSubType(comphelper::string::strip(m_xFilterED->get_text(), ' '));
+    // tdf#135938 - refresh cross-reference name after filter selection has changed
+    SubTypeHdl();
 }
 
 // #i83479#
@@ -377,9 +379,6 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
 
     sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
-    // fill selection-ListBox
-    UpdateSubType(comphelper::string::strip(m_xFilterED->get_text(), ' '));
-
     bool bName = false;
     nFieldDlgFormatSel = 0;
 
@@ -390,6 +389,9 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
         m_xValueED->set_text(OUString());
         m_xFilterED->set_text(OUString());
     }
+
+    // fill selection-ListBox
+    UpdateSubType(comphelper::string::strip(m_xFilterED->get_text(), ' '));
 
     switch (nTypeId)
     {
