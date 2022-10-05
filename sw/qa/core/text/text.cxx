@@ -742,13 +742,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     // Then make sure that the widget in the PDF result has that custom font size:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    pPage->onAfterLoadPage(pPdfDocument.get());
     CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
     std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 24
     // - Actual  : 8
     // i.e. i.e. the font size was some default, not the 24pt specified in the model.
-    CPPUNIT_ASSERT_EQUAL(24.0f, pAnnotation->getFormFontSize(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(24.0f, pAnnotation->getFontSize(pPdfDocument.get()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)

@@ -250,7 +250,7 @@ public:
     std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex) override;
     std::vector<basegfx::B2DPoint> getLineGeometry() override;
     PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) override;
-    float getFormFontSize(PDFiumDocument* pDoc) override;
+    float getFontSize(PDFiumDocument* pDoc) override;
     OUString getFormFieldAlternateName(PDFiumDocument* pDoc) override;
     int getFormFieldFlags(PDFiumDocument* pDoc) override;
 };
@@ -388,6 +388,8 @@ public:
     bool hasTransparency() override;
 
     bool hasLinks() override;
+
+    void onAfterLoadPage(PDFiumDocument* pDoc) override;
 };
 
 /// Wrapper around FPDF_FORMHANDLE.
@@ -754,6 +756,12 @@ bool PDFiumPageImpl::hasLinks()
     int nStartPos = 0;
     FPDF_LINK pLinkAnnot = nullptr;
     return FPDFLink_Enumerate(mpPage, &nStartPos, &pLinkAnnot);
+}
+
+void PDFiumPageImpl::onAfterLoadPage(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    FORM_OnAfterLoadPage(mpPage, pDocImpl->getFormHandlePointer());
 }
 
 PDFiumPageObjectImpl::PDFiumPageObjectImpl(FPDF_PAGEOBJECT pPageObject)
@@ -1144,11 +1152,11 @@ int PDFiumAnnotationImpl::getFormFieldFlags(PDFiumDocument* pDoc)
     return FPDFAnnot_GetFormFieldFlags(pDocImpl->getFormHandlePointer(), mpAnnotation);
 }
 
-float PDFiumAnnotationImpl::getFormFontSize(PDFiumDocument* pDoc)
+float PDFiumAnnotationImpl::getFontSize(PDFiumDocument* pDoc)
 {
     auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
     float fRet{};
-    if (!FPDFAnnot_GetFormFontSize(pDocImpl->getFormHandlePointer(), mpAnnotation, &fRet))
+    if (!FPDFAnnot_GetFontSize(pDocImpl->getFormHandlePointer(), mpAnnotation, &fRet))
     {
         return 0.0f;
     }
