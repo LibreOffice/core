@@ -759,6 +759,10 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
+    // That color needs to be restored on leaving this method
+    Color aOriginalBackColor(rOutliner.GetBackgroundColor());
+    setSuitableOutlinerBg(rOutliner);
+
     // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
@@ -861,6 +865,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
 
     // cleanup outliner
+    rOutliner.SetBackgroundColor(aOriginalBackColor);
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
