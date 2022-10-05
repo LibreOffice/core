@@ -463,40 +463,73 @@ SvxLanguageBox::SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl)
     m_xControl->connect_changed(LINK(this, SvxLanguageBox, ChangeHdl));
 }
 
-sal_Int32 SvxLanguageBox::SaveEditedAsEntry()
+SvxLanguageBox* SvxLanguageBox::SaveEditedAsEntry(SvxLanguageBox* ppBoxes[3])
 {
     if (m_eEditedAndValid != EditedAndValid::Valid)
-        return -1;
+        return this;
 
     LanguageTag aLanguageTag(m_xControl->get_active_text());
     LanguageType nLang = aLanguageTag.getLanguageType();
     if (nLang == LANGUAGE_DONTKNOW)
     {
-        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: unknown tag");
-        return -1;
+        SAL_WARN( "svx.dialog", "SvxLanguageBox::SaveEditedAsEntry: unknown tag");
+        return this;
     }
 
-    int nPos = ImplTypeToPos( nLang);
-    if (nPos != -1)
-        return nPos;    // Already present but with a different string.
+    for (size_t i = 0; i < 3; ++i)
+    {
+        SvxLanguageBox* pBox = ppBoxes[i];
+        if (!pBox)
+            continue;
+
+        const int nPos = pBox->ImplTypeToPos( nLang);
+        if (nPos != -1)
+        {
+            // Already present but with a different string or in another list.
+            pBox->m_xControl->set_active(nPos);
+            return pBox;
+        }
+    }
 
     if (SvtLanguageTable::HasLanguageType( nLang))
     {
-        // In SvtLanguageTable but not in SvxLanguageComboBox. On purpose? This
-        // may be an entry with different settings or CTL instead of Western or
-        // ... all things we don't handle yet.
-        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: already in SvtLanguageTable: " <<
+        // In SvtLanguageTable but not in SvxLanguageBox. On purpose? This
+        // may be an entry with different settings.
+        SAL_WARN( "svx.dialog", "SvxLanguageBox::SaveEditedAsEntry: already in SvtLanguageTable: " <<
                 SvtLanguageTable::GetLanguageString( nLang) << ", " << nLang);
     }
     else
     {
-        // Add to both, SvtLanguageTable and SvxLanguageComboBox.
-        /* TODO: a descriptive user comment would be a nice to have here. */
+        // Add to SvtLanguageTable first. This at an on-the-fly LanguageTag
+        // also sets the ScriptType needed below.
         SvtLanguageTable::AddLanguageTag( aLanguageTag );
     }
 
-    InsertLanguage(nLang);
-    return ImplTypeToPos(nLang);
+    // Add to the proper list.
+    SvxLanguageBox* pBox = nullptr;
+    switch (MsLangId::getScriptType(nLang))
+    {
+        default:
+        case css::i18n::ScriptType::LATIN:
+            pBox = ppBoxes[0];
+        break;
+        case css::i18n::ScriptType::ASIAN:
+            pBox = ppBoxes[1];
+        break;
+        case css::i18n::ScriptType::COMPLEX:
+            pBox = ppBoxes[2];
+        break;
+    }
+    if (!pBox)
+        pBox = this;
+    pBox->InsertLanguage(nLang);
+
+    // Select it.
+    const int nPos = pBox->ImplTypeToPos(nLang);
+    if (nPos != -1)
+        pBox->m_xControl->set_active(nPos);
+
+    return pBox;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

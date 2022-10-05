@@ -84,7 +84,7 @@ public:
     void            InsertLanguage(const LanguageType nLangType);
 
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
-    sal_Int32           SaveEditedAsEntry();
+    SvxLanguageBox*     SaveEditedAsEntry( SvxLanguageBox* ppBoxes[3] /* convention: Western, Asian, Complex */ );
 
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_in(rLink); }

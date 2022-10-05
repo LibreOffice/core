@@ -1062,30 +1062,39 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         case Asian : nSlot = SID_ATTR_CHAR_CJK_LANGUAGE; break;
         case Ctl : nSlot = SID_ATTR_CHAR_CTL_LANGUAGE; break;
     }
-    nWhich = GetWhich( nSlot );
-    pOld = GetOldItem( rSet, nSlot );
 
     // For language list boxes acting as ComboBox, check for, add and select an
     // edited entry.
-    if (pLangBox == m_xWestFontLanguageLB.get())
+    switch (pLangBox->GetEditedAndValid())
     {
-        switch (pLangBox->GetEditedAndValid())
-        {
-            case SvxLanguageBox::EditedAndValid::No:
-                ;   // nothing to do
-                break;
-            case SvxLanguageBox::EditedAndValid::Valid:
+        case SvxLanguageBox::EditedAndValid::No:
+            ;   // nothing to do
+        break;
+        case SvxLanguageBox::EditedAndValid::Valid:
+            {
+                SvxLanguageBox* ppBoxes[3]
+                    = {m_xWestFontLanguageLB.get(), m_xEastFontLanguageLB.get(), m_xCTLFontLanguageLB.get()};
+                SvxLanguageBox* pBox = pLangBox->SaveEditedAsEntry(ppBoxes);
+                if (pBox != pLangBox)
                 {
-                    const int nPos = pLangBox->SaveEditedAsEntry();
-                    if (nPos != -1)
-                        pLangBox->set_active(nPos);
+                    // Get item from corresponding slot.
+                    if (pBox == m_xWestFontLanguageLB.get())
+                        nSlot = SID_ATTR_CHAR_LANGUAGE;
+                    else if (pBox == m_xEastFontLanguageLB.get())
+                        nSlot = SID_ATTR_CHAR_CJK_LANGUAGE;
+                    else if (pBox == m_xCTLFontLanguageLB.get())
+                        nSlot = SID_ATTR_CHAR_CTL_LANGUAGE;
+                    pLangBox = pBox;
                 }
-                break;
-            case SvxLanguageBox::EditedAndValid::Invalid:
-                pLangBox->set_active_id(pLangBox->get_saved_active_id());
-                break;
-        }
+            }
+        break;
+        case SvxLanguageBox::EditedAndValid::Invalid:
+            pLangBox->set_active_id(pLangBox->get_saved_active_id());
+        break;
     }
+
+    nWhich = GetWhich( nSlot );
+    pOld = GetOldItem( rSet, nSlot );
 
     int nLangPos = pLangBox->get_active();
     LanguageType eLangType = pLangBox->get_active_id();
