@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     aMediaDescriptor["OutputStream"] <<= xOut;
     xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
 
-    // Then make sure the the tab is not lost:
+    // Then make sure the tab is not lost:
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     // Without the accompanying fix in place, this test would have failed with:
