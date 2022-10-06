@@ -1361,6 +1361,10 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
 
 void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnable )
 {
+    // skip this built-in one which is Enabled by default
+    if (nControlId == ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR && bEnable)
+        return;
+
     SolarMutexGuard g;
 
     OSL_ASSERT( m_pDialog != nullptr );
