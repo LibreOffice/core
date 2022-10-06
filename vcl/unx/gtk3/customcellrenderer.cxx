@@ -215,6 +215,7 @@ bool custom_cell_renderer_get_preferred_size(GtkCellRenderer* cell, GtkOrientati
     gpointer pWidget = g_value_get_pointer(&value);
     if (pWidget)
     {
+        SolarMutexGuard aGuard;
         custom_cell_renderer_ensure_device(cellsurface, pWidget);
         aSize = custom_cell_renderer_get_size(*cellsurface->device, sId, pWidget);
     }
