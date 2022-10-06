@@ -906,7 +906,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
                 SwTextNode* pTextNd = rNd.GetTextNode();
 
                 if( !m_bFirstLine )
-                    m_pCurrentPam->GetPoint()->nContent.Assign( pTextNd, 0 );
+                    m_pCurrentPam->GetPoint()->Assign( *pTextNd, 0 );
 
                 OutHTML_SwTextNode( *this, *pTextNd );
             }
