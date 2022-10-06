@@ -18,6 +18,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
 #include <unotools/streamwrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
@@ -249,6 +253,41 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
     assertXPath(pXmlDoc, xPath + "[3]", "id", "id6");
     assertXPath(pXmlDoc, xPath + "[3]//svg:tspan[@class='TextPosition']", 0);
     assertXPath(pXmlDoc, xPath + "[4]", "id", "id7");
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
+{
+    // Given a shape with "A\tB" text:
+    getComponent() = loadFromDesktop("private:factory/simpress",
+                                     "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.TextShape"), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                               uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
+    xShapeText->setString("A\tB");
+
+    // When exporting that document to SVG:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure the the tab is not lost:
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the 2nd text portion was not positioned, which looked as if the tab is lost.
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition']", 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
