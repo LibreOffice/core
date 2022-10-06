@@ -91,7 +91,10 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
 IMPL_LINK(TipOfTheDayDialog, Terminated, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VclEventId::ObjectDying)
+    {
+        m_pParent = nullptr;
         TipOfTheDayDialog::response(RET_OK);
+    }
 }
 
 TipOfTheDayDialog::~TipOfTheDayDialog()
