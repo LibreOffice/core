@@ -221,10 +221,12 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
     switch( pSfxEventHint->GetEventId() )
     {
         case SfxEventHintId::CreateDoc:
-            xVbaEvents->processVbaEvent(AUTO_NEW, aArgs);
+            xVbaEvents->processVbaEvent(DOCUMENT_AUTO_NEW, aArgs);
+            xVbaEvents->processVbaEvent(DOCUMENT_NEW, aArgs);
         break;
         case SfxEventHintId::OpenDoc:
-            xVbaEvents->processVbaEvent(AUTO_OPEN, aArgs);
+            xVbaEvents->processVbaEvent(DOCUMENT_AUTO_OPEN, aArgs);
+            xVbaEvents->processVbaEvent(DOCUMENT_OPEN, aArgs);
         break;
         default: break;
     }
@@ -385,7 +387,8 @@ bool SwDocShell::PrepareClose( bool bUI )
         {
             using namespace com::sun::star::script::vba::VBAEventId;
             uno::Sequence< uno::Any > aNoArgs;
-            xVbaEvents->processVbaEvent(AUTO_CLOSE, aNoArgs);
+            xVbaEvents->processVbaEvent(DOCUMENT_AUTO_CLOSE, aNoArgs);
+            xVbaEvents->processVbaEvent(DOCUMENT_CLOSE, aNoArgs);
         }
     }
     return bRet;

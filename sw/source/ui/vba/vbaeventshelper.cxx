@@ -32,10 +32,13 @@ SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArg
 {
     using namespace ::com::sun::star::script::ModuleType;
     registerEventHandler( DOCUMENT_NEW,     DOCUMENT,   "Document_New" );
+    registerEventHandler(DOCUMENT_AUTO_NEW, DOCUMENT, "AutoNew");
     registerEventHandler( AUTO_NEW,         NORMAL,     "AutoNew" );
     registerEventHandler( DOCUMENT_OPEN,    DOCUMENT,   "Document_Open" );
+    registerEventHandler(DOCUMENT_AUTO_OPEN, DOCUMENT, "AutoOpen");
     registerEventHandler( AUTO_OPEN,        NORMAL,     "AutoOpen" );
     registerEventHandler( DOCUMENT_CLOSE,   DOCUMENT,   "Document_Close" );
+    registerEventHandler(DOCUMENT_AUTO_CLOSE, DOCUMENT, "AutoClose");
     registerEventHandler( AUTO_CLOSE,       NORMAL,     "AutoClose" );
 }
 
@@ -44,18 +47,22 @@ SwVbaEventsHelper::~SwVbaEventsHelper()
 }
 
 bool SwVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
-        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& /*rArgs*/ )
+        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs)
 {
     switch( rInfo.mnEventId )
     {
-        case AUTO_NEW:
-            rEventQueue.emplace_back(DOCUMENT_NEW);
+        case DOCUMENT_AUTO_NEW:
+            // Only one "AutoNew" subroutine can run. ThisDocument is highest priority.
+            if (!hasVbaEventHandler(rInfo.mnEventId, rArgs))
+                rEventQueue.emplace_back(AUTO_NEW);
         break;
-        case AUTO_OPEN:
-            rEventQueue.emplace_back(DOCUMENT_OPEN);
+        case DOCUMENT_AUTO_OPEN:
+            if (!hasVbaEventHandler(rInfo.mnEventId, rArgs))
+                rEventQueue.emplace_back(AUTO_OPEN);
         break;
-        case AUTO_CLOSE:
-            rEventQueue.emplace_back(DOCUMENT_CLOSE);
+        case DOCUMENT_AUTO_CLOSE:
+            if (!hasVbaEventHandler(rInfo.mnEventId, rArgs))
+                rEventQueue.emplace_back(AUTO_CLOSE);
         break;
     }
     return true;
