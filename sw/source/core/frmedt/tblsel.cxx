@@ -890,10 +890,10 @@ static void lcl_InsTableBox( SwTableNode* pTableNd, SwDoc* pDoc, SwTableBox* pBo
 
 bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 {
-    rPam.GetPoint()->nNode = *rBox.GetSttNd()->EndOfSectionNode();
+    rPam.GetPoint()->Assign( *rBox.GetSttNd()->EndOfSectionNode() );
     rPam.Move( fnMoveBackward, GoInContent );
     rPam.SetMark();
-    rPam.GetPoint()->nNode = *rBox.GetSttNd();
+    rPam.GetPoint()->Assign( *rBox.GetSttNd() );
     rPam.Move( fnMoveForward, GoInContent );
     bool bRet = *rPam.GetMark() == *rPam.GetPoint()
         && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->GetNodeIndex() );
@@ -1349,7 +1349,6 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     if( !aPosArr.empty() )
     {
         SwPosition aInsPos( *(*ppMergeBox)->GetSttNd() );
-        SwNodeIndex& rInsPosNd = aInsPos.nNode;
 
         SwPaM aPam( aInsPos );
 
@@ -1358,7 +1357,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             aPam.GetPoint()->Assign( *rPt.pSelBox->GetSttNd()->
                                             EndOfSectionNode(), SwNodeOffset(-1) );
             SwContentNode* pCNd = aPam.GetPointContentNode();
-            aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+            if( pCNd )
+                aPam.GetPoint()->SetContent( pCNd->Len() );
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
             // one node should be kept in the box (otherwise the
@@ -1374,12 +1374,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
             }
             SwNodeRange aRg( aSttNdIdx.GetNode(), aPam.GetPoint()->GetNode() );
-            ++rInsPosNd;
+            aInsPos.Adjust(SwNodeOffset(1));
             if( pUndo )
-                pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd.GetNode() );
+                pUndo->MoveBoxContent( *pDoc, aRg, aInsPos.GetNode() );
             else
             {
-                pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd.GetNode(),
+                pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aInsPos.GetNode(),
                     SwMoveFlags::DEFAULT );
             }
             // where is now aInsPos ??
@@ -1388,11 +1388,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 bCalcWidth = false;     // one line is ready
 
             // skip the first TextNode
-            rInsPosNd.Assign( pDoc->GetNodes(),
-                            rInsPosNd.GetNode().EndOfSectionIndex() - 2 );
-            SwTextNode* pTextNd = rInsPosNd.GetNode().GetTextNode();
+            aInsPos.Assign( *pDoc->GetNodes()[ aInsPos.GetNode().EndOfSectionIndex() - 2] );
+            SwTextNode* pTextNd = aInsPos.GetNode().GetTextNode();
             if( pTextNd )
-                aInsPos.nContent.Assign(pTextNd, pTextNd->GetText().getLength());
+                aInsPos.SetContent( pTextNd->GetText().getLength());
         }
 
         // the MergeBox should contain the complete text
