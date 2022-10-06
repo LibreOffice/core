@@ -3596,7 +3596,7 @@ VclPtr<vcl::Window> SvxFrameToolBoxControl::createVclPopupWindow( vcl::Window* p
     if ( m_aCommandURL == ".uno:LineStyle" )
     {
         mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
-            std::make_unique<SvxLineWindow_Impl>(this, pParent->GetFrameWeld()));
+            std::make_unique<SvxLineWindow_Impl>(this, pParent->GetFrameWeld()), true);
 
         mxInterimPopover->Show();
 
@@ -3606,7 +3606,7 @@ VclPtr<vcl::Window> SvxFrameToolBoxControl::createVclPopupWindow( vcl::Window* p
     }
 
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
-        std::make_unique<SvxFrameWindow_Impl>(this, pParent->GetFrameWeld()));
+        std::make_unique<SvxFrameWindow_Impl>(this, pParent->GetFrameWeld()), true);
 
     mxInterimPopover->Show();
 
