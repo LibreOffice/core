@@ -79,11 +79,11 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
     const sal_Unicode cLF          = 0x0a;
     const sal_Unicode cCR          = 0x0d;
 
-    const sal_uInt16 nStrLen = rSource.getLength();
-    sal_uInt16 nInsert = 0;         // number of inserted portions
-    sal_uInt16 nActPos = 0;         // position, where '<' was found
-    sal_uInt16 nPortStart = USHRT_MAX;  // for the TextPortion
-    sal_uInt16 nPortEnd  =  0;
+    const sal_Int32 nStrLen = rSource.getLength();
+    sal_Int32 nInsert = 0;         // number of inserted portions
+    sal_Int32 nActPos = 0;         // position, where '<' was found
+    sal_Int32 nPortStart = SAL_MAX_INT32;  // for the TextPortion
+    sal_Int32 nPortEnd  =  0;
     TextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -160,7 +160,7 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
                 bool bFound = false;
-                for(sal_uInt16 i = nPortEnd; i < nStrLen; i++)
+                for(sal_Int32 i = nPortEnd; i < nStrLen; i++)
                     if(cCloseBracket == rSource[i])
                     {
                         bFound = true;
