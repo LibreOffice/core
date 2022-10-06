@@ -1136,6 +1136,10 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         MAP_LIST_LABEL( TEMPLATE );
         MAP_LIST_LABEL( IMAGE_TEMPLATE );
         MAP_LIST_LABEL( IMAGE_ANCHOR );
+    case CommonFilePickerElementIds::LISTBOX_FILTER_LABEL:
+        // the filter list in gtk typically is not labeled, but has a build-in
+        // tooltip to indicate what it does
+        break;
     default:
         SAL_WARN( "vcl.gtk", "Handle unknown control " << nControlId);
         break;
@@ -1389,7 +1393,8 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
     {
-        SAL_WARN( "vcl.gtk", "Set label '" << rLabel << "' on unknown control " << nControlId);
+        SAL_WARN_IF(nControlId != CommonFilePickerElementIds::LISTBOX_FILTER_LABEL,
+                    "vcl.gtk", "Set label '" << rLabel << "' on unknown control " << nControlId);
         return;
     }
 
