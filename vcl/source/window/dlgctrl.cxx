@@ -941,7 +941,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 }
             }
         }
-        else
+        else if (aKeyCode.IsMod2()) // tdf#151385
         {
             sal_Unicode c = rKEvt.GetCharCode();
             if ( c )
