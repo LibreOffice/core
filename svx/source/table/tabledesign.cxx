@@ -377,7 +377,12 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
 void TableDesignStyle::disposing(std::unique_lock<std::mutex>&)
 {
     for(Reference<XStyle> & rCellStyle : maCellStyles)
+    {
+        Reference<XModifyBroadcaster> xBroadcaster(rCellStyle, UNO_QUERY);
+        if (xBroadcaster)
+            xBroadcaster->removeModifyListener(this);
         rCellStyle.clear();
+    }
 }
 
 
@@ -569,6 +574,9 @@ void SAL_CALL TableDesignFamily::removeByName( const OUString& rName )
         [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
     if (iter != maDesigns.end())
     {
+        Reference<XComponent> xComponent(*iter, UNO_QUERY);
+        if (xComponent)
+            xComponent->dispose();
         maDesigns.erase( iter );
         return;
     }
@@ -592,6 +600,9 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
         [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
     if (iter != maDesigns.end())
     {
+        Reference<XComponent> xComponent(*iter, UNO_QUERY);
+        if (xComponent)
+            xComponent->dispose();
         (*iter) = xStyle;
         xStyle->setName( rName );
         return;
