@@ -484,11 +484,11 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), getRun( getParagraph( 5 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( firstname, getRun( getParagraph( 6 ), 1 )->getString());
         // Also verify the layout.
-        CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/Special", "rText"));
+        CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
         CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), parseDump("/root/page[1]/body/txt[1]", ""));
         CPPUNIT_ASSERT_EQUAL( OUString(), parseDump("/root/page[1]/body/txt[4]", ""));
         CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), parseDump("/root/page[2]/body/txt[1]", ""));
-        CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/Special", "rText"));
+        CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
     }
 }
 
@@ -606,28 +606,19 @@ DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "b
     // check that conditions on sections and bookmarks are evaluated the same
     assertXPath(pLayout, "/root/page", 7);
     assertXPath(pLayout, "/root/page[1]/body/section", 1);
-    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/LineBreak", "Line", u"In den Bergen war es anstrengend.");
-    assertXPath(pLayout, "/root/page[1]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war #S_Berge Bookmark Startanstrengend #S_Berge Bookmark End. ");
+    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In den Bergen war es anstrengend.");
+    assertXPath(pLayout, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war anstrengend . ");
     assertXPath(pLayout, "/root/page[3]/body/section", 1);
-    assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/LineBreak", "Line", u"In Barcelona war es schön.");
-    assertXPath(pLayout, "/root/page[3]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war #S_Barcelona Bookmark Startschön #S_Barcelona Bookmark End. ");
+    assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Barcelona war es schön.");
+    assertXPath(pLayout, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war schön . ");
     assertXPath(pLayout, "/root/page[5]/body/section", 1);
-    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/LineBreak", "Line", "In Paris war es erlebnisreich.");
-    assertXPath(pLayout, "/root/page[5]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war #S_Paris Bookmark Starterlebnisreich #S_Paris Bookmark End. ");
+    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", "In Paris war es erlebnisreich.");
+    assertXPath(pLayout, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war erlebnisreich . ");
     assertXPath(pLayout, "/root/page[7]/body/section", 3);
-    assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/LineBreak", "Line", u"In den Bergen war es anstrengend.");
-    assertXPath(pLayout, "/root/page[7]/body/section[2]/txt[1]/LineBreak", "Line", u"In Barcelona war es schön.");
-    assertXPath(pLayout, "/root/page[7]/body/section[3]/txt[1]/LineBreak", "Line", u"In Paris war es erlebnisreich.");
-    OUString sMerge(getXPath(pLayout, "/root/page[7]/body/txt[5]/LineBreak", "Line"));
-    // bookmark names contain time stamps, e.g.
-    // "u"Mein Urlaub war #S_BergeMailMergeMark2022-09-15T15:55:17Z7 Bookmark Startanstrengend "
-    // "#S_BergeMailMergeMark2022-09-15T15:55:17Z7 Bookmark End#S_BarcelonaMailMergeMark2022-09-15T15:55:17Z8 Bookmark Startschön "
-    // "#S_BarcelonaMailMergeMark2022-09-15T15:55:17Z8 Bookmark End#S_ParisMailMergeMark2022-09-15T15:55:17Z9 Bookmark Starterlebnisreich "
-    // "#S_ParisMailMergeMark2022-09-15T15:55:17Z9 Bookmark End."
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sMerge.indexOf("Mein Urlaub war #S_BergeMailMergeMark"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(73), sMerge.indexOf("anstrengend "));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(201), sMerge.indexOf(u"schön "));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(323), sMerge.indexOf(u"erlebnisreich "));
+    assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In den Bergen war es anstrengend.");
+    assertXPath(pLayout, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Barcelona war es schön.");
+    assertXPath(pLayout, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Paris war es erlebnisreich.");
+    assertXPath(pLayout, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war anstrengend schön erlebnisreich . ");
 }
 
 DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-testing-addresses.ods", "testing-addresses", 5)

@@ -421,7 +421,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
-    pDoc->GetDocShell()->GetWrtShell()->GetLayout()->dumpAsXml();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout",
                 "portion", "Some text...");
 
