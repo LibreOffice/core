@@ -2685,12 +2685,12 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     {
         pText = aDeleteStart.GetNode().GetTextNode();
         if( pText )
-            aDeleteStart.nContent.Assign( pText, 0 );
+            aDeleteStart.SetContent( 0 );
     }
     SwPosition aCellEnd( *rBox.GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
     pText = aCellEnd.GetNode().GetTextNode();
     if( pText )
-        aCellEnd.nContent.Assign(pText, pText->GetText().getLength());
+        aCellEnd.SetContent(pText->GetText().getLength());
     if( aDeleteStart != aCellEnd )
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );
@@ -2706,7 +2706,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     SwPosition aCellStart( *rBox.GetSttNd(), SwNodeOffset(2) );
     pText = aCellStart.GetNode().GetTextNode();
     if( pText )
-        aCellStart.nContent.Assign( pText, 0 );
+        aCellStart.SetContent( 0 );
     if( aCellStart != aInsertEnd ) // An empty insertion will not been marked
     {
         SwPaM aTmpPam( aCellStart, aInsertEnd );
