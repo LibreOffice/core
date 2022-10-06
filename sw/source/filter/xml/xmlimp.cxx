@@ -676,7 +676,7 @@ void SwXMLImport::endDocument()
                 {
                     const sal_Int32 nCntPos =
                             pPaM->GetBound().GetContentIndex();
-                    pPaM->GetBound().nContent.Assign( pTextNode,
+                    pPaM->GetBound().SetContent(
                             pTextNode->GetText().getLength() + nCntPos );
                 }
                 if( m_oSttNdIdx->GetIndex()+1 ==
@@ -684,7 +684,7 @@ void SwXMLImport::endDocument()
                 {
                     const sal_Int32 nCntPos =
                             pPaM->GetBound( false ).GetContentIndex();
-                    pPaM->GetBound( false ).nContent.Assign( pTextNode,
+                    pPaM->GetBound( false ).SetContent(
                             pTextNode->GetText().getLength() + nCntPos );
                 }
 #endif
