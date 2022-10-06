@@ -1624,6 +1624,12 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
                 continue;
             if( sContent == "\n" )
                 mbLineBreak = true;
+            else if (sContent == "\t")
+            {
+                // Need to emit position for the next text portion after a tab, otherwise the tab
+                // would appear as if it has 0 width.
+                mbPositioningNeeded = true;
+            }
             if( sContent.match( rText, nStartPos ) )
                 bNotSync = false;
         }
