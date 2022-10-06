@@ -41,7 +41,7 @@ css::uno::Reference<css::graphic::XGraphic> Tools::GetImage(
     const OUString& rsHighContrastImageURL,
     const Reference<frame::XFrame>& rxFrame)
 {
-    if (Theme::IsHighContrastMode())
+    if (Theme::IsHighContrastMode() && !rsHighContrastImageURL.isEmpty())
         return GetImage(rsHighContrastImageURL, rxFrame);
     else
         return GetImage(rsImageURL, rxFrame);
