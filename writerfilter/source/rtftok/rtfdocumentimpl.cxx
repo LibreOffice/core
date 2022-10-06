@@ -1503,7 +1503,7 @@ void RTFDocumentImpl::text(OUString& rString)
         break;
         case Destination::DOCVAR:
         {
-            m_aStates.top().setDocVar(rString);
+            m_aStates.top().appendDocVar(rString);
         }
         break;
         case Destination::FONTTABLE:

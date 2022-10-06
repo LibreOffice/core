@@ -848,6 +848,24 @@ DECLARE_RTFEXPORT_TEST(testTdf150267, "tdf150267.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), getProperty<OUString>(xFieldMaster, "Content"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf151370, "tdf151370.rtf")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
+    // Here we try to read/write docvar having non-ascii name and value. So it is encoded in Unicode
+    OUString sFieldName(u"com.sun.star.text.fieldmaster.User."
+                        "LocalChars\u00c1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0054"
+                        "\u00fc\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070");
+    CPPUNIT_ASSERT_EQUAL(sal_True, xTextFieldMasters->hasByName(sFieldName));
+
+    auto xFieldMaster = xTextFieldMasters->getByName(sFieldName);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\u00e1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0074\u00fc"
+                 "\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"),
+        getProperty<OUString>(xFieldMaster, "Content"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf108416, "tdf108416.rtf")
 {
     uno::Reference<container::XNameAccess> xCharacterStyles(getStyles("CharacterStyles"));

@@ -524,7 +524,7 @@ public:
     RTFInternalState getInternalState() const { return m_nInternalState; }
     RTFDocumentImpl* getDocumentImpl() { return m_pDocumentImpl; }
     OUString getDocVar() { return m_aDocVar; }
-    void setDocVar(OUString& aDocVar) { m_aDocVar = aDocVar; };
+    void appendDocVar(OUString& aDocVar) { m_aDocVar += aDocVar; };
     OUString getDocVarName() { return m_aDocVarName; }
     void setDocVarName(OUString& aDocVarName) { m_aDocVarName = aDocVarName; }
     void clearDocVarName() { m_aDocVarName = ""; }
