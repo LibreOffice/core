@@ -170,6 +170,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         bool mbToggleVisibility[TOGGLE_LAST];
 
         enum {
+            OK,
+            CANCEL,
             PLAY,
             BUTTON_LAST };
 
