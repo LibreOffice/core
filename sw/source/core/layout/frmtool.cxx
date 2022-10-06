@@ -2023,9 +2023,14 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
     {
         bool bApres = *pNd < rSttIdx;
         SwNode2Layout aNode2Layout( *pNd, rSttIdx.GetIndex() );
-        SwFrame* pFrame;
         sw::FrameMode eMode = sw::FrameMode::Existing;
-        while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
+        ::std::vector<SwFrame*> frames;
+        while (SwFrame* pFrame = aNode2Layout.NextFrame())
+        {   // tdf#150500 new frames may be created that end up merged on pNd
+            // so copy the currently existing ones; they shouldn't get deleted
+            frames.push_back(pFrame);
+        }
+        for (SwFrame *const pFrame : frames)
         {
             SwLayoutFrame *pUpper = pFrame->GetUpper();
             SwFootnoteFrame* pFootnoteFrame = pUpper->FindFootnoteFrame();
