@@ -31,7 +31,13 @@
     current locale.dtd file at hand, you can download the locale.dtd file from
     https://cgit.freedesktop.org/libreoffice/core/plain/i18npool/source/localedata/data/locale.dtd
 
-    xmllint --dtdvalid locale.dtd --noout your_data.xml
+    xmllint -dtdvalid locale.dtd -noout your_data.xml
+
+    (Note that instead of one - hyphen minus two consecutive hyphen minus
+    characters should be given to start an option, but a double hyphen in a XML
+    comment technically ends a comment (though parsers look for a matching
+    closing one with > as well) and let xmllint complain already about the .dtd
+    itself. Some versions of xmllint also accept a single hyphen minus).
 
 
     Second, using a validating parser. A validating parser, for example, may be found at
