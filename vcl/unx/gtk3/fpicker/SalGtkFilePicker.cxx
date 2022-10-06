@@ -1099,6 +1099,10 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
             pWidget = m_pToggles[elem]; tType = GTK_TYPE_CHECK_BUTTON; \
             break
 #define MAP_BUTTON( elem ) \
+        case CommonFilePickerElementIds::PUSHBUTTON_##elem: \
+            pWidget = m_pButtons[elem]; tType = GTK_TYPE_BUTTON; \
+            break
+#define MAP_EXT_BUTTON( elem ) \
         case ExtendedFilePickerElementIds::PUSHBUTTON_##elem: \
             pWidget = m_pButtons[elem]; tType = GTK_TYPE_BUTTON; \
             break
@@ -1121,7 +1125,9 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         MAP_TOGGLE( LINK );
         MAP_TOGGLE( PREVIEW );
         MAP_TOGGLE( SELECTION );
-        MAP_BUTTON( PLAY );
+        MAP_BUTTON( OK );
+        MAP_BUTTON( CANCEL );
+        MAP_EXT_BUTTON( PLAY );
         MAP_LIST( VERSION );
         MAP_LIST( TEMPLATE );
         MAP_LIST( IMAGE_TEMPLATE );
@@ -1383,7 +1389,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
     {
-        SAL_WARN( "vcl.gtk", "Set label on unknown control " << nControlId);
+        SAL_WARN( "vcl.gtk", "Set label '" << rLabel << "' on unknown control " << nControlId);
         return;
     }
 
@@ -1775,18 +1781,17 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
     }
 
     gtk_file_chooser_set_action( GTK_FILE_CHOOSER( m_pDialog ), eAction);
-    gtk_dialog_add_button(GTK_DIALOG( m_pDialog ),
-                          getCancelText().getStr(),
-                          GTK_RESPONSE_CANCEL);
-    for( int nTVIndex = 0; nTVIndex < BUTTON_LAST; nTVIndex++ )
+    m_pButtons[CANCEL] = gtk_dialog_add_button(GTK_DIALOG(m_pDialog), getCancelText().getStr(), GTK_RESPONSE_CANCEL);
+    mbButtonVisibility[CANCEL] = true;
+
+    if (mbButtonVisibility[PLAY])
     {
-        if( mbButtonVisibility[nTVIndex] )
-        {
-            OString aPlay = OUStringToOString( getResString( PUSHBUTTON_PLAY ), RTL_TEXTENCODING_UTF8 );
-            m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), aPlay.getStr(), 1 );
-        }
+        OString aPlay = OUStringToOString(getResString(PUSHBUTTON_PLAY), RTL_TEXTENCODING_UTF8);
+        m_pButtons[PLAY] = gtk_dialog_add_button(GTK_DIALOG(m_pDialog), aPlay.getStr(), 1);
     }
-    gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), first_button_text, GTK_RESPONSE_ACCEPT );
+
+    m_pButtons[OK] = gtk_dialog_add_button(GTK_DIALOG(m_pDialog), first_button_text, GTK_RESPONSE_ACCEPT);
+    mbButtonVisibility[OK] = true;
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
