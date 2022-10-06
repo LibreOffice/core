@@ -1137,7 +1137,7 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         MAP_LIST_LABEL( IMAGE_TEMPLATE );
         MAP_LIST_LABEL( IMAGE_ANCHOR );
     case CommonFilePickerElementIds::LISTBOX_FILTER_LABEL:
-        // the filter list in gtk typically is not labeled, but has a build-in
+        // the filter list in gtk typically is not labeled, but has a built-in
         // tooltip to indicate what it does
         break;
     default:
