@@ -891,7 +891,8 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
 
             // make it more compatible with Aero
-            if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
+            if (ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames &&
+               !Application::GetSettings().GetStyleSettings().GetHighContrastMode())
             {
                 impl_drawAeroToolbar( hDC, rc, nPart == ControlPart::DrawBackgroundHorz );
                 return true;
@@ -922,7 +923,8 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 }
 
                 // make it more compatible with Aero
-                if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
+                if (ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames &&
+                    !Application::GetSettings().GetStyleSettings().GetHighContrastMode())
                 {
                     impl_drawAeroToolbar( hDC, rc, true );
                     return true;
