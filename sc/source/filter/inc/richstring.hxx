@@ -243,9 +243,9 @@ private:
     RichStringPhoneticRef createPhonetic();
 
     /** Create base text portions from the passed string and character formatting. */
-    void                createTextPortions( const OUString& rText, FontPortionModelList& rPortions );
+    void                createTextPortions( std::u16string_view aText, FontPortionModelList& rPortions );
     /** Create phonetic text portions from the passed string and portion data. */
-    void                createPhoneticPortions( const OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
+    void                createPhoneticPortions( std::u16string_view aText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
 
 private:
     typedef RefVector< RichStringPhonetic > PhoneticVector;

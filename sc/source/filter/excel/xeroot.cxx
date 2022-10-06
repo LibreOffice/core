@@ -307,11 +307,11 @@ bool XclExpRoot::IsDocumentEncrypted() const
     return GetEncryptionData().hasElements();
 }
 
-uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUString& aPass )
+uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( std::u16string_view aPass )
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
 
-    if ( !aPass.isEmpty() && aPass.getLength() < 16 )
+    if ( !aPass.empty() && aPass.size() < 16 )
     {
         rtlRandomPool aRandomPool = rtl_random_createPool ();
         sal_uInt8 pnDocId[16];
@@ -320,7 +320,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUS
         rtl_random_destroyPool( aRandomPool );
 
         sal_uInt16 pnPasswd[16] = {};
-        for( sal_Int32 nChar = 0; nChar < aPass.getLength(); ++nChar )
+        for( size_t nChar = 0; nChar < aPass.size(); ++nChar )
             pnPasswd[nChar] = aPass[nChar];
 
         ::msfilter::MSCodec_Std97 aCodec;

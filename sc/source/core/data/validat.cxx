@@ -490,12 +490,12 @@ struct ScValidationDataIsNumeric
     }
 };
 
-bool ScValidationData::IsDataValidTextLen( const OUString& rTest, const ScAddress& rPos,
+bool ScValidationData::IsDataValidTextLen( std::u16string_view rTest, const ScAddress& rPos,
         ScValidationDataIsNumeric* pDataNumeric ) const
 {
     sal_Int32 nLen;
     if (!pDataNumeric)
-        nLen = rTest.getLength();
+        nLen = rTest.size();
     else
     {
         if (!pDataNumeric->mpFormatter)

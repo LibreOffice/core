@@ -973,6 +973,6 @@ inline OUString ScColToAlpha( SCCOL nCol )
 }
 
 /// get column number of A..IV... string
-bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, const OUString& rStr);
+bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, std::u16string_view rStr);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

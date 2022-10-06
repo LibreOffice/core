@@ -98,23 +98,23 @@ public:
                             sal_Unicode cSeparator = ' ');
 
     static sal_Int32    IndexOf(
-                            const OUString& rString,
+                            std::u16string_view rString,
                             sal_Unicode cSearchChar,
                             sal_Int32 nOffset,
                             sal_Unicode cQuote = '\'');
 
     static sal_Int32    IndexOfDifferent(
-                            const OUString& rString,
+                            std::u16string_view rString,
                             sal_Unicode cSearchChar,
                             sal_Int32 nOffset );
 
     static sal_Int32    GetTokenCount(
-                            const OUString& rString,
+                            std::u16string_view rString,
                             sal_Unicode cSeparator = ' ');
 
     static void         GetTokenByOffset(
                             OUString& rToken,
-                            const OUString& rString,
+                            std::u16string_view rString,
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -126,7 +126,7 @@ public:
 /// String to Range core
     static bool     GetAddressFromString(
                             ScAddress& rAddress,
-                            const OUString& rAddressStr,
+                            std::u16string_view rAddressStr,
                             const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
@@ -134,7 +134,7 @@ public:
                             sal_Unicode cQuote = '\'');
     static bool     GetRangeFromString(
                             ScRange& rRange,
-                            const OUString& rRangeStr,
+                            std::u16string_view rRangeStr,
                             const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
@@ -142,7 +142,7 @@ public:
                             sal_Unicode cQuote = '\'');
     static bool     GetRangeListFromString(
                             ScRangeList& rRangeList,
-                            const OUString& rRangeListStr,
+                            std::u16string_view rRangeListStr,
                             const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
@@ -150,7 +150,7 @@ public:
 
     static bool     GetAreaFromString(
                             ScArea& rArea,
-                            const OUString& rRangeStr,
+                            std::u16string_view rRangeStr,
                             const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
@@ -159,7 +159,7 @@ public:
 /// String to Range API
     static bool     GetRangeFromString(
                             css::table::CellRangeAddress& rRange,
-                            const OUString& rRangeStr,
+                            std::u16string_view rRangeStr,
                             const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
@@ -224,7 +224,7 @@ public:
 /// XML Range to Calc Range
     static void         GetStringFromXMLRangeString(
                             OUString& rString,
-                            const OUString& rXMLRange,
+                            std::u16string_view rXMLRange,
                             const ScDocument& rDoc );
 
 /// String to RangeData core

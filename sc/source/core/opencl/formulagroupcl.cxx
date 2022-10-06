@@ -99,12 +99,12 @@ bool AllStringsAreNull(const rtl_uString* const* pStringArray, size_t nLength)
     return true;
 }
 
-OUString LimitedString( const OUString& str )
+OUString LimitedString( std::u16string_view str )
 {
-    if( str.getLength() < 20 )
-        return "\"" + str + "\"";
+    if( str.size() < 20 )
+        return OUString::Concat("\"") + str + "\"";
     else
-        return OUString::Concat("\"") + str.subView( 0, 20 ) + "\"...";
+        return OUString::Concat("\"") + str.substr( 0, 20 ) + "\"...";
 }
 
 const int MAX_PEEK_ELEMENTS = 5;

@@ -2724,9 +2724,9 @@ FontRef StylesBuffer::createFont()
     return xFont;
 }
 
-NumberFormatRef StylesBuffer::createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode )
+NumberFormatRef StylesBuffer::createNumFmt( sal_Int32 nNumFmtId, std::u16string_view aFmtCode )
 {
-    return maNumFmts.createNumFmt( nNumFmtId, rFmtCode );
+    return maNumFmts.createNumFmt( nNumFmtId, aFmtCode );
 }
 
 sal_Int32 StylesBuffer::nextFreeNumFmtId()

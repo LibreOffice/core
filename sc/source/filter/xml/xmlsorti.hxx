@@ -56,7 +56,7 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
-    void AddSortField(std::u16string_view sFieldNumber, const OUString& sDataType, std::u16string_view sOrder);
+    void AddSortField(std::u16string_view sFieldNumber, std::u16string_view sDataType, std::u16string_view sOrder);
 };
 
 class ScXMLSortByContext : public ScXMLImportContext

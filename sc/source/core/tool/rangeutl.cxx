@@ -372,12 +372,12 @@ void ScRangeStringConverter::AssignString(
 }
 
 sal_Int32 ScRangeStringConverter::IndexOf(
-        const OUString& rString,
+        std::u16string_view rString,
         sal_Unicode cSearchChar,
         sal_Int32 nOffset,
         sal_Unicode cQuote )
 {
-    sal_Int32       nLength     = rString.getLength();
+    sal_Int32       nLength     = rString.size();
     sal_Int32       nIndex      = nOffset;
     bool            bQuoted     = false;
     bool        bExitLoop   = false;
@@ -394,11 +394,11 @@ sal_Int32 ScRangeStringConverter::IndexOf(
 }
 
 sal_Int32 ScRangeStringConverter::IndexOfDifferent(
-        const OUString& rString,
+        std::u16string_view rString,
         sal_Unicode cSearchChar,
         sal_Int32 nOffset )
 {
-    sal_Int32       nLength     = rString.getLength();
+    sal_Int32       nLength     = rString.size();
     sal_Int32       nIndex      = nOffset;
     bool        bExitLoop   = false;
 
@@ -413,12 +413,12 @@ sal_Int32 ScRangeStringConverter::IndexOfDifferent(
 
 void ScRangeStringConverter::GetTokenByOffset(
         OUString& rToken,
-        const OUString& rString,
+        std::u16string_view rString,
         sal_Int32& nOffset,
         sal_Unicode cSeparator,
         sal_Unicode cQuote)
 {
-    sal_Int32 nLength = rString.getLength();
+    sal_Int32 nLength = rString.size();
     if( nOffset == -1 || nOffset >= nLength )
     {
         rToken.clear();
@@ -429,7 +429,7 @@ void ScRangeStringConverter::GetTokenByOffset(
         sal_Int32 nTokenEnd = IndexOf( rString, cSeparator, nOffset, cQuote );
         if( nTokenEnd < 0 )
             nTokenEnd = nLength;
-        rToken = rString.copy( nOffset, nTokenEnd - nOffset );
+        rToken = rString.substr( nOffset, nTokenEnd - nOffset );
 
         sal_Int32 nNextBegin = IndexOfDifferent( rString, cSeparator, nTokenEnd );
         nOffset = (nNextBegin < 0) ? nLength : nNextBegin;
@@ -444,7 +444,7 @@ void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUStrin
     rBuf.append(aQuotedTab);
 }
 
-sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Unicode cSeparator )
+sal_Int32 ScRangeStringConverter::GetTokenCount( std::u16string_view rString, sal_Unicode cSeparator )
 {
     OUString    sToken;
     sal_Int32   nCount = 0;
@@ -460,7 +460,7 @@ sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Un
 
 bool ScRangeStringConverter::GetAddressFromString(
         ScAddress& rAddress,
-        const OUString& rAddressStr,
+        std::u16string_view rAddressStr,
         const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
@@ -482,7 +482,7 @@ bool ScRangeStringConverter::GetAddressFromString(
 
 bool ScRangeStringConverter::GetRangeFromString(
         ScRange& rRange,
-        const OUString& rRangeStr,
+        std::u16string_view rRangeStr,
         const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
@@ -551,14 +551,14 @@ bool ScRangeStringConverter::GetRangeFromString(
 
 bool ScRangeStringConverter::GetRangeListFromString(
         ScRangeList& rRangeList,
-        const OUString& rRangeListStr,
+        std::u16string_view rRangeListStr,
         const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
         sal_Unicode cQuote )
 {
     bool bRet = true;
-    OSL_ENSURE( !rRangeListStr.isEmpty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    OSL_ENSURE( !rRangeListStr.empty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
@@ -578,7 +578,7 @@ bool ScRangeStringConverter::GetRangeListFromString(
 
 bool ScRangeStringConverter::GetAreaFromString(
         ScArea& rArea,
-        const OUString& rRangeStr,
+        std::u16string_view rRangeStr,
         const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
@@ -600,7 +600,7 @@ bool ScRangeStringConverter::GetAreaFromString(
 
 bool ScRangeStringConverter::GetRangeFromString(
         table::CellRangeAddress& rRange,
-        const OUString& rRangeStr,
+        std::u16string_view rRangeStr,
         const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
@@ -803,7 +803,7 @@ static void lcl_appendCellRangeAddress(
     }
 }
 
-void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, const ScDocument& rDoc )
+void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, std::u16string_view rXMLRange, const ScDocument& rDoc )
 {
     FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     const sal_Unicode cSepNew = ScCompiler::GetNativeSymbolChar(ocSep);

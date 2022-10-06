@@ -57,7 +57,7 @@ public:
     explicit            NumberFormat( const WorkbookHelper& rHelper );
 
     /** Sets the passed format code. */
-    void                setFormatCode( const OUString& rFmtCode );
+    void                setFormatCode( std::u16string_view aFmtCode );
     /** Sets the passed format code, encoded in UTF-8. */
     void                setFormatCode(
                             const css::lang::Locale& rLocale,
@@ -86,7 +86,7 @@ public:
     explicit            NumberFormatsBuffer( const WorkbookHelper& rHelper );
 
     /** Inserts a new number format. */
-    NumberFormatRef     createNumFmt( sal_uInt32 nNumFmtId, const OUString& rFmtCode );
+    NumberFormatRef     createNumFmt( sal_uInt32 nNumFmtId, std::u16string_view aFmtCode );
 
     /** Inserts a new number format code. */
     NumberFormatRef     importNumFmt( const AttributeList& rAttribs );

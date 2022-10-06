@@ -423,9 +423,9 @@ private:
     /** Sets the passed font name if it is valid. */
     void                convertFontName( const OUString& rStyle );
     /** Converts a font style given as string. */
-    void                convertFontStyle( std::u16string_view rStyle );
+    void                convertFontStyle( std::u16string_view aStyle );
     /** Converts a font color given as string. */
-    void                convertFontColor( const OUString& rColor );
+    void                convertFontColor( std::u16string_view aColor );
 
     /** Finalizes current portion: sets font attributes and updates text height data. */
     void                finalizePortion();
@@ -641,7 +641,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                         {
                             setAttributes();
                             // eat the following 6 characters
-                            convertFontColor( OUString( pcChar + 1, 6 ) );
+                            convertFontColor( std::u16string_view( pcChar + 1, 6 ) );
                             pcChar += 6;
                         }
                     break;
@@ -846,17 +846,17 @@ void HeaderFooterParser::convertFontStyle( std::u16string_view rStyle )
     }
 }
 
-void HeaderFooterParser::convertFontColor( const OUString& rColor )
+void HeaderFooterParser::convertFontColor( std::u16string_view aColor )
 {
-    OSL_ENSURE( rColor.getLength() == 6, "HeaderFooterParser::convertFontColor - invalid font color code" );
-    if( (rColor[ 2 ] == '+') || (rColor[ 2 ] == '-') )
+    OSL_ENSURE( aColor.size() == 6, "HeaderFooterParser::convertFontColor - invalid font color code" );
+    if( (aColor[ 2 ] == '+') || (aColor[ 2 ] == '-') )
         // theme color: TTSNNN (TT = decimal theme index, S = +/-, NNN = decimal tint/shade in percent)
         maFontModel.maColor.setTheme(
-            o3tl::toInt32(rColor.subView( 0, 2 )),
-            static_cast< double >( o3tl::toInt32(rColor.subView( 2 )) ) / 100.0 );
+            o3tl::toInt32(aColor.substr( 0, 2 )),
+            static_cast< double >( o3tl::toInt32(aColor.substr( 2 )) ) / 100.0 );
     else
         // RGB color: RRGGBB
-        maFontModel.maColor.setRgb( ::Color(ColorTransparency, rColor.toUInt32( 16 )) );
+        maFontModel.maColor.setRgb( ::Color(ColorTransparency, o3tl::toUInt32( aColor, 16 )) );
 }
 
 void HeaderFooterParser::finalizePortion()

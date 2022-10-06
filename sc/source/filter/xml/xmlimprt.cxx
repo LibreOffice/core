@@ -844,7 +844,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_vi
     return nKey;
 }
 
-bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrentCurrency, std::u16string_view sBankSymbol)
+bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, std::u16string_view sCurrentCurrency, std::u16string_view sBankSymbol)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
     if (xNumberFormatsSupplier.is())
@@ -869,7 +869,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                         // sCurrentCurrency is the ISO code obtained through
                         // XMLNumberFormatAttributesExportHelper::GetCellType()
                         // and sBankSymbol is the currency symbol.
-                        if (sCurrentCurrency.getLength() == 3 && sBankSymbol == sTemp)
+                        if (sCurrentCurrency.size() == 3 && sBankSymbol == sTemp)
                             return true;
                         // #i61657# This may be a legacy currency symbol that changed in the meantime.
                         if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != nullptr)
@@ -1185,14 +1185,14 @@ void SAL_CALL ScXMLImport::startDocument()
     UnlockSolarMutex();
 }
 
-sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
+sal_Int32 ScXMLImport::GetRangeType(std::u16string_view sRangeType)
 {
     sal_Int32 nRangeType(0);
     OUStringBuffer sBuffer;
-    sal_Int32 i = 0;
-    while (i <= sRangeType.getLength())
+    size_t i = 0;
+    while (i <= sRangeType.size())
     {
-        if ((i == sRangeType.getLength()) || (sRangeType[i] == ' '))
+        if ((i == sRangeType.size()) || (sRangeType[i] == ' '))
         {
             OUString sTemp = sBuffer.makeStringAndClear();
             if (sTemp == "repeat-column")
@@ -1204,7 +1204,7 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
             else if (sTemp == SC_PRINT_RANGE)
                 nRangeType |= sheet::NamedRangeFlag::PRINT_AREA;
         }
-        else if (i < sRangeType.getLength())
+        else if (i < sRangeType.size())
             sBuffer.append(sRangeType[i]);
         ++i;
     }

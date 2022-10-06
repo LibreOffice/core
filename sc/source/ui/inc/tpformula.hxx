@@ -43,7 +43,7 @@ private:
     void UpdateCustomCalcRadioButtons(bool bDefault);
     void LaunchCustomCalcSettings();
 
-    bool IsValidSeparator(const OUString& rSep, bool bArray) const;
+    bool IsValidSeparator(std::u16string_view aSep, bool bArray) const;
 
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(ToggleHdl, weld::Toggleable&, void);

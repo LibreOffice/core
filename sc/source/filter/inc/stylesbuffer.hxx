@@ -791,7 +791,7 @@ public:
     /** Creates a new empty font object. */
     FontRef             createFont();
     /** Creates a number format. */
-    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode );
+    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, std::u16string_view aFmtCode );
     sal_Int32           nextFreeNumFmtId();
     /** Creates a new empty border object. */
     BorderRef           createBorder();

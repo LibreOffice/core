@@ -642,7 +642,7 @@ public:
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */
-    SC_DLLPUBLIC static bool             IsQuoted( const OUString& rString, sal_Unicode cQuote );
+    SC_DLLPUBLIC static bool             IsQuoted( std::u16string_view rString, sal_Unicode cQuote );
 
     /** Inserts the character cQuote at beginning and end of rString.
         @param bEscapeEmbedded      If <TRUE/>, embedded quote characters are

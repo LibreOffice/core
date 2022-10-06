@@ -535,13 +535,13 @@ RichStringPhoneticRef RichString::createPhonetic()
     return xPhonetic;
 }
 
-void RichString::createTextPortions( const OUString& rText, FontPortionModelList& rPortions )
+void RichString::createTextPortions( std::u16string_view aText, FontPortionModelList& rPortions )
 {
     maTextPortions.clear();
-    if( rText.isEmpty() )
+    if( aText.empty() )
         return;
 
-    sal_Int32 nStrLen = rText.getLength();
+    sal_Int32 nStrLen = aText.size();
     // add leading and trailing string position to ease the following loop
     if( rPortions.empty() || (rPortions.front().mnPos > 0) )
         rPortions.insert( rPortions.begin(), FontPortionModel( 0 ) );
@@ -555,19 +555,19 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
         if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
         {
             RichStringPortion& rPortion = getPortion(createPortion());
-            rPortion.setText( rText.copy( aIt->mnPos, nPortionLen ) );
+            rPortion.setText( OUString(aText.substr( aIt->mnPos, nPortionLen )) );
             rPortion.setFontId( aIt->mnFontId );
         }
     }
 }
 
-void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen )
+void RichString::createPhoneticPortions( std::u16string_view aText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen )
 {
     maPhonPortions.clear();
-    if( rText.isEmpty())
+    if( aText.empty())
         return;
 
-    sal_Int32 nStrLen = rText.getLength();
+    sal_Int32 nStrLen = aText.size();
     // no portions - assign phonetic text to entire base text
     if( rPortions.empty() )
         rPortions.push_back( PhoneticPortionModel( 0, 0, nBaseLen ) );
@@ -582,7 +582,7 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
         if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
         {
             RichStringPhoneticRef xPhonetic = createPhonetic();
-            xPhonetic->setText( rText.copy( aIt->mnPos, nPortionLen ) );
+            xPhonetic->setText( OUString(aText.substr( aIt->mnPos, nPortionLen )) );
             xPhonetic->setBaseRange( aIt->mnBasePos, aIt->mnBasePos + aIt->mnBaseLen );
         }
     }

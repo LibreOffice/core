@@ -118,7 +118,7 @@ public:
      */
     static bool         parseOoxAddress2d(
                             sal_Int32& ornColumn, sal_Int32& ornRow,
-                            const OUString& rString,
+                            std::u16string_view aString,
                             sal_Int32 nStart = 0,
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
@@ -145,7 +145,7 @@ public:
     static bool         parseOoxRange2d(
                             sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
                             sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
-                            const OUString& rString,
+                            std::u16string_view aString,
                             sal_Int32 nStart = 0 );
 
     /** Returns the biggest valid cell address in the own Calc document. */
@@ -345,7 +345,7 @@ public:
      */
     static bool         convertToCellRangeUnchecked(
                             ScRange& orRange,
-                            const OUString& rString,
+                            std::u16string_view aString,
                             sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a cell range address.
@@ -356,7 +356,7 @@ public:
             bAllowOverflow is set to true, the range will be cropped to these
             limits. Example: the range string "A1:ZZ100000" may be converted to
             the range A1:IV65536.
-        @param rString  Cell range string in A1 notation.
+        @param aString  Cell range string in A1 notation.
         @param nSheet  Sheet index to be inserted into orRange (will be checked).
         @param bAllowOverflow  true = Allow ranges that start inside the
             supported sheet limits but may end outside of these limits. The
@@ -374,7 +374,7 @@ public:
      */
     bool                convertToCellRange(
                             ScRange& orRange,
-                            const OUString& rString,
+                            std::u16string_view aString,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
 
@@ -448,7 +448,7 @@ public:
      */
     void                convertToCellRangeList(
                             ScRangeList& orRanges,
-                            const OUString& rString,
+                            std::u16string_view aString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 

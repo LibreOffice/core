@@ -54,9 +54,9 @@ bool ScMyOLEFixer::IsOLE(const uno::Reference< drawing::XShape >& rShape)
 
 void ScMyOLEFixer::CreateChartListener(ScDocument& rDoc,
     const OUString& rName,
-    const OUString& rRangeList)
+    std::u16string_view rRangeList)
 {
-    if (rRangeList.isEmpty())
+    if (rRangeList.empty())
     {
         rDoc.AddOLEObjectToCollection(rName);
         return;

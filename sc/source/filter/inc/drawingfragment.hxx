@@ -167,7 +167,7 @@ public:
 
 private:
     /** Converts the passed VML textbox text color to an OLE color. */
-    sal_uInt32          convertControlTextColor( const OUString& rTextColor ) const;
+    sal_uInt32          convertControlTextColor( std::u16string_view aTextColor ) const;
     /** Converts the passed VML textbox font to an ActiveX form control font. */
     void                convertControlFontData(
                             ::oox::ole::AxFontData& rAxFontData, sal_uInt32& rnOleTextColor,

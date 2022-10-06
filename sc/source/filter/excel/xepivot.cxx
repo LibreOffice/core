@@ -455,12 +455,12 @@ void XclExpPCField::InsertOrigItem( XclExpPCItem* pNewItem )
     mnTypeFlags |= pNewItem->GetTypeFlag();
 }
 
-void XclExpPCField::InsertOrigTextItem( const OUString& rText )
+void XclExpPCField::InsertOrigTextItem( const OUString& aText )
 {
     size_t nPos = 0;
     bool bFound = false;
     // #i76047# maximum item text length in pivot cache is 255
-    OUString aShortText = rText.copy( 0, ::std::min(rText.getLength(), EXC_PC_MAXSTRLEN ) );
+    OUString aShortText = aText.copy( 0, ::std::min(aText.getLength(), EXC_PC_MAXSTRLEN ) );
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
         if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( aShortText )) )
             InsertItemArrayIndex( nPos );

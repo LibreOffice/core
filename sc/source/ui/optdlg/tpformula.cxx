@@ -130,13 +130,13 @@ void ScTpFormulaOptions::LaunchCustomCalcSettings()
     }
 }
 
-bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep, bool bArray) const
+bool ScTpFormulaOptions::IsValidSeparator(std::u16string_view aSep, bool bArray) const
 {
-    if (rSep.getLength() != 1)
+    if (aSep.size() != 1)
         // Must be one-character long.
         return false;
 
-    const sal_Unicode c = rSep[0];
+    const sal_Unicode c = aSep[0];
 
     if (c == mnDecSep)
         // decimal separator is not allowed.

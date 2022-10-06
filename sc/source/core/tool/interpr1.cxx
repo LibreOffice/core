@@ -9164,12 +9164,12 @@ static sal_Int32 lcl_getLengthB( std::u16string_view str, sal_Int32 nPos )
     }
     return length;
 }
-static sal_Int32 getLengthB(const OUString &str)
+static sal_Int32 getLengthB(std::u16string_view str)
 {
-    if(str.isEmpty())
+    if(str.empty())
         return 0;
     else
-        return lcl_getLengthB( str, str.getLength() );
+        return lcl_getLengthB( str, str.size() );
 }
 void ScInterpreter::ScLenB()
 {

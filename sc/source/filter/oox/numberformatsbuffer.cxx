@@ -33,6 +33,7 @@
 #include <officecfg/System.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
@@ -1876,26 +1877,28 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
     OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );
 }
 
-sal_Int32 lclPosToken ( const OUString& sFormat, std::u16string_view sSearch, sal_Int32 nStartPos )
+sal_Int32 lclPosToken ( std::u16string_view sFormat, std::u16string_view sSearch, sal_Int32 nStartPos )
 {
-    sal_Int32 nLength = sFormat.getLength();
+    sal_Int32 nLength = sFormat.size();
     for ( sal_Int32 i = nStartPos; i < nLength && i >= 0 ; i++ )
     {
+        size_t nFind = i;
         switch(sFormat[i])
         {
             case '\"' : // skip text
-                i = sFormat.indexOf('\"',i+1);
+                nFind = sFormat.find('\"',i+1);
                 break;
             case '['  : // skip condition
-                i = sFormat.indexOf(']',i+1);
+                nFind = sFormat.find(']',i+1);
                 break;
             default :
-                if ( sFormat.match(sSearch, i) )
+                if ( o3tl::starts_with(sFormat.substr(i), sSearch) )
                     return i;
                 break;
         }
-        if ( i < 0 )
-            i--;
+        if ( nFind == std::u16string_view::npos )
+            return -2;
+        i = nFind;
     }
     return -2;
 }
@@ -1907,27 +1910,27 @@ NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
 {
 }
 
-void NumberFormat::setFormatCode( const OUString& rFmtCode )
+void NumberFormat::setFormatCode( std::u16string_view aFmtCode )
 {
     // Special case for fraction code '\ ?/?', it is passed to us in xml, the '\' is not
     // an escape character but merely should be telling the formatter to display the next
     // char in the format ( afaics it does that anyhow )
     sal_Int32 nPosEscape = 0;
     sal_Int32 nErase = 0;
-    sal_Int32 nLastIndex = rFmtCode.getLength() - 1;
-    OUStringBuffer sFormat(rFmtCode);
+    sal_Int32 nLastIndex = sal_Int32(aFmtCode.size()) - 1;
+    OUStringBuffer sFormat(aFmtCode);
 
-    while ( ( nPosEscape = lclPosToken( rFmtCode, u"\\ ", nPosEscape ) ) > 0 )
+    while ( ( nPosEscape = lclPosToken( aFmtCode, u"\\ ", nPosEscape ) ) > 0 )
     {
         sal_Int32 nPos = nPosEscape + 2;
-        while ( nPos < nLastIndex && ( rFmtCode[nPos] == '?' || rFmtCode[nPos] == '#' || rFmtCode[nPos] == '0' ) )
+        while ( nPos < nLastIndex && ( aFmtCode[nPos] == '?' || aFmtCode[nPos] == '#' || aFmtCode[nPos] == '0' ) )
             nPos++;
-        if ( nPos < nLastIndex && rFmtCode[nPos] == '/' )
+        if ( nPos < nLastIndex && aFmtCode[nPos] == '/' )
         {
             sFormat.remove(nPosEscape - nErase, 1);
             nErase ++;
         }  // tdf#81939 preserve other escape characters
-        nPosEscape = lclPosToken( rFmtCode, u";", nPosEscape ); // skip to next format
+        nPosEscape = lclPosToken( aFmtCode, u";", nPosEscape ); // skip to next format
     }
     maModel.maFmtCode = sFormat.makeStringAndClear();
 }
@@ -1986,14 +1989,14 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
     insertBuiltinFormats();
 }
 
-NumberFormatRef NumberFormatsBuffer::createNumFmt( sal_uInt32 nNumFmtId, const OUString& rFmtCode )
+NumberFormatRef NumberFormatsBuffer::createNumFmt( sal_uInt32 nNumFmtId, std::u16string_view aFmtCode )
 {
     NumberFormatRef xNumFmt;
     xNumFmt = std::make_shared<NumberFormat>( *this );
     maNumFmts[ nNumFmtId ] = xNumFmt;
     if ( nNumFmtId > mnHighestId )
         mnHighestId = nNumFmtId;
-    xNumFmt->setFormatCode( rFmtCode );
+    xNumFmt->setFormatCode( aFmtCode );
     return xNumFmt;
 }
 

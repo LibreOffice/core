@@ -694,29 +694,29 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
 
 // private --------------------------------------------------------------------
 
-sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) const
+sal_uInt32 VmlDrawing::convertControlTextColor( std::u16string_view aTextColor ) const
 {
     // color attribute not present or 'auto' - use passed default color
-    if( rTextColor.isEmpty() || rTextColor.equalsIgnoreAsciiCase( "auto" ) )
+    if( aTextColor.empty() || o3tl::equalsIgnoreAsciiCase( aTextColor, u"auto" ) )
         return AX_SYSCOLOR_WINDOWTEXT;
 
-    if( rTextColor[ 0 ] == '#' )
+    if( aTextColor[ 0 ] == '#' )
     {
         // RGB colors in the format '#RRGGBB'
-        if( rTextColor.getLength() == 7 )
-            return OleHelper::encodeOleColor( o3tl::toUInt32(rTextColor.subView( 1 ), 16) );
+        if( aTextColor.size() == 7 )
+            return OleHelper::encodeOleColor( o3tl::toUInt32(aTextColor.substr( 1 ), 16) );
 
         // RGB colors in the format '#RGB'
-        if( rTextColor.getLength() == 4 )
+        if( aTextColor.size() == 4 )
         {
-            sal_Int32 nR = o3tl::toUInt32(rTextColor.subView( 1, 1 ), 16) * 0x11;
-            sal_Int32 nG = o3tl::toUInt32(rTextColor.subView( 2, 1 ), 16) * 0x11;
-            sal_Int32 nB = o3tl::toUInt32(rTextColor.subView( 3, 1 ), 16) * 0x11;
+            sal_Int32 nR = o3tl::toUInt32(aTextColor.substr( 1, 1 ), 16) * 0x11;
+            sal_Int32 nG = o3tl::toUInt32(aTextColor.substr( 2, 1 ), 16) * 0x11;
+            sal_Int32 nB = o3tl::toUInt32(aTextColor.substr( 3, 1 ), 16) * 0x11;
             return OleHelper::encodeOleColor( (nR << 16) | (nG << 8) | nB );
         }
 
         OSL_ENSURE( false, OStringBuffer( "VmlDrawing::convertControlTextColor - invalid color name '" ).
-            append( OUStringToOString( rTextColor, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+            append( OUStringToOString( aTextColor, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
         return AX_SYSCOLOR_WINDOWTEXT;
     }
 
@@ -724,7 +724,7 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
 
     /*  Predefined color names or system color names (resolve to RGB to detect
         valid color name). */
-    sal_Int32 nColorToken = AttributeConversion::decodeToken( rTextColor );
+    sal_Int32 nColorToken = AttributeConversion::decodeToken( aTextColor );
     ::Color nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
         nRgbValue = rGraphicHelper.getSystemColor( nColorToken );
@@ -732,7 +732,7 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
         return OleHelper::encodeOleColor( nRgbValue );
 
     // try palette color
-    return OleHelper::encodeOleColor( rGraphicHelper.getPaletteColor( rTextColor.toInt32() ) );
+    return OleHelper::encodeOleColor( rGraphicHelper.getPaletteColor( o3tl::toInt32(aTextColor) ) );
 }
 
 void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rnOleTextColor, const ::oox::vml::TextFontModel& rFontModel ) const

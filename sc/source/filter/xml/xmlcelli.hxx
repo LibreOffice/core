@@ -136,7 +136,7 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
+    void PushParagraphSpan(std::u16string_view rSpan, const OUString& rStyleName);
     void PushParagraphFieldDate(const OUString& rStyleName);
     void PushParagraphFieldSheetName(const OUString& rStyleName);
     void PushParagraphFieldDocTitle(const OUString& rStyleName);

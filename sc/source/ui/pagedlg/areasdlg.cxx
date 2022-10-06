@@ -19,6 +19,7 @@
 
 #include <rangelst.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
@@ -62,7 +63,7 @@ namespace
 
 // global functions (->at the end of the file):
 
-static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange );
+static bool lcl_CheckRepeatString( std::u16string_view aStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange );
 static void lcl_GetRepeatRangeString( std::optional<ScRange> oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr );
 
 #if 0
@@ -630,23 +631,23 @@ static bool lcl_CheckOne_XL_A1( const ScDocument& rDoc, const OUString& rStr, bo
     return lcl_CheckOne_OOO(rDoc, rStr, bIsRow, rVal);
 }
 
-static bool lcl_CheckOne_XL_R1C1( const ScDocument& rDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_R1C1( const ScDocument& rDoc, std::u16string_view aStr, bool bIsRow, SCCOLROW& rVal )
 {
-    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nLen = aStr.size();
     if (nLen <= 1)
         // There must be at least two characters.
         return false;
 
     const sal_Unicode preUpper = bIsRow ? 'R' : 'C';
     const sal_Unicode preLower = bIsRow ? 'r' : 'c';
-    if (rStr[0] != preUpper && rStr[0] != preLower)
+    if (aStr[0] != preUpper && aStr[0] != preLower)
         return false;
 
-    OUString aNumStr = rStr.copy(1);
+    std::u16string_view aNumStr = aStr.substr(1);
     if (!CharClass::isAsciiNumeric(aNumStr))
         return false;
 
-    sal_Int32 nNum = aNumStr.toInt32();
+    sal_Int32 nNum = o3tl::toInt32(aNumStr);
 
     if (nNum <= 0)
         return false;
@@ -677,7 +678,7 @@ static bool lcl_CheckRepeatOne( const ScDocument& rDoc, const OUString& rStr, fo
     return false;
 }
 
-static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange )
+static bool lcl_CheckRepeatString( std::u16string_view aStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange )
 {
     // Row: [valid row] rsep [valid row]
     // Col: [valid col] rsep [valid col]
@@ -696,11 +697,11 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc,
 
     OUString aBuf;
     SCCOLROW nVal = 0;
-    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nLen = aStr.size();
     bool bEndPos = false;
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
-        const sal_Unicode c = rStr[i];
+        const sal_Unicode c = aStr[i];
         if (c == rsep)
         {
             if (bEndPos)

@@ -114,13 +114,13 @@ public:
                             SequenceInputStream& rStrm ) const;
 
     /** Converts the passed XML formula to an OLE link target. */
-    OUString     importOleTargetLink( const OUString& rFormulaString );
+    OUString     importOleTargetLink( std::u16string_view aFormulaString );
 
     /** Imports and converts an OLE link target from the passed stream. */
     OUString     importOleTargetLink( SequenceInputStream& rStrm );
 
     /** Converts the passed formula to a macro name for a drawing shape. */
-    OUString     importMacroName( const OUString& rFormulaString );
+    OUString     importMacroName( std::u16string_view aFormulaString );
 
 private:
     ::std::unique_ptr< FormulaParserImpl > mxImpl;

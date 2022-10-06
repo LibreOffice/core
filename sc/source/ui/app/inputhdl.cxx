@@ -159,7 +159,7 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
 
 // This assumes that rResults is a sorted ring w.r.t ScTypedStrData::LessCaseInsensitive() or
 // in the reverse direction, whose origin is specified by nRingOrigin.
-sal_Int32 getLongestCommonPrefixLength(const std::vector<OUString>& rResults, const OUString& rUserEntry, sal_Int32 nRingOrigin)
+sal_Int32 getLongestCommonPrefixLength(const std::vector<OUString>& rResults, std::u16string_view aUserEntry, sal_Int32 nRingOrigin)
 {
     sal_Int32 nResults = rResults.size();
     if (!nResults)
@@ -168,7 +168,7 @@ sal_Int32 getLongestCommonPrefixLength(const std::vector<OUString>& rResults, co
     if (nResults == 1)
         return rResults[0].getLength();
 
-    sal_Int32 nMinLen = rUserEntry.getLength();
+    sal_Int32 nMinLen = aUserEntry.size();
     sal_Int32 nLastIdx = nRingOrigin ? nRingOrigin - 1 : nResults - 1;
     const OUString& rFirst = rResults[nRingOrigin];
     const OUString& rLast = rResults[nLastIdx];
@@ -3005,12 +3005,12 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
 /**
  * @return true if rString only contains digits (no autocorrect then)
  */
-static bool lcl_IsNumber(const OUString& rString)
+static bool lcl_IsNumber(std::u16string_view aString)
 {
-    sal_Int32 nLen = rString.getLength();
-    for (sal_Int32 i=0; i<nLen; i++)
+    size_t nLen = aString.size();
+    for (size_t i=0; i<nLen; i++)
     {
-        sal_Unicode c = rString[i];
+        sal_Unicode c = aString[i];
         if ( c < '0' || c > '9' )
             return false;
     }
@@ -4551,7 +4551,7 @@ void ScInputHandler::InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd )
     bModified = true;
 }
 
-void ScInputHandler::InputReplaceSelection( const OUString& rStr )
+void ScInputHandler::InputReplaceSelection( std::u16string_view aStr )
 {
     if (!pRefViewSh)
         pRefViewSh = pActiveViewSh;
@@ -4559,13 +4559,13 @@ void ScInputHandler::InputReplaceSelection( const OUString& rStr )
     OSL_ENSURE(nFormSelEnd>=nFormSelStart,"Selection broken...");
 
     sal_Int32 nOldLen = nFormSelEnd - nFormSelStart;
-    sal_Int32 nNewLen = rStr.getLength();
+    sal_Int32 nNewLen = aStr.size();
 
     OUStringBuffer aBuf(aFormText);
     if (nOldLen)
         aBuf.remove(nFormSelStart, nOldLen);
     if (nNewLen)
-        aBuf.insert(nFormSelStart, rStr);
+        aBuf.insert(nFormSelStart, aStr);
 
     aFormText = aBuf.makeStringAndClear();
 

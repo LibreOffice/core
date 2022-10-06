@@ -1458,7 +1458,7 @@ OUString ScDPObject::GetFormattedString(std::u16string_view rDimName, const doub
 
 namespace {
 
-bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, OUString& rResult )
+bool dequote( std::u16string_view rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, OUString& rResult )
 {
     // nStartPos has to point to opening quote
 
@@ -1468,7 +1468,7 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
     {
         OUStringBuffer aBuffer;
         sal_Int32 nPos = nStartPos + 1;
-        const sal_Int32 nLen = rSource.getLength();
+        const sal_Int32 nLen = rSource.size();
 
         while ( nPos < nLen )
         {
@@ -1506,7 +1506,7 @@ struct ScGetPivotDataFunctionEntry
     sal_Int16         eFunc;
 };
 
-bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sal_Int16& rFunc )
+bool parseFunction( std::u16string_view rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sal_Int16& rFunc )
 {
     static const ScGetPivotDataFunctionEntry aFunctions[] =
     {
@@ -1528,7 +1528,7 @@ bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndP
         { "StdDevp",    sheet::GeneralFunction2::STDEVP    }
     };
 
-    const sal_Int32 nListLen = rList.getLength();
+    const sal_Int32 nListLen = rList.size();
     while (nStartPos < nListLen && rList[nStartPos] == ' ')
         ++nStartPos;
 
@@ -1540,10 +1540,10 @@ bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndP
         bParsed = dequote( rList, nStartPos, nFuncEnd, aFuncStr );
     else
     {
-        nFuncEnd = rList.indexOf(']', nStartPos);
+        nFuncEnd = rList.find(']', nStartPos);
         if (nFuncEnd >= 0)
         {
-            aFuncStr = rList.copy(nStartPos, nFuncEnd - nStartPos);
+            aFuncStr = rList.substr(nStartPos, nFuncEnd - nStartPos);
             bParsed = true;
         }
     }
@@ -1570,10 +1570,10 @@ bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndP
     return bFound;
 }
 
-bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBracket, sal_Int16* pFunc,
+bool extractAtStart( std::u16string_view rList, sal_Int32& rMatched, bool bAllowBracket, sal_Int16* pFunc,
         OUString& rDequoted )
 {
-    sal_Int32 nMatchList = 0;
+    size_t nMatchList = 0;
     sal_Unicode cFirst = rList[0];
     bool bParsed = false;
     if ( cFirst == '\'' || cFirst == '[' )
@@ -1590,7 +1590,7 @@ bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBrac
             // skip spaces after the opening bracket
 
             sal_Int32 nStartPos = 1;
-            const sal_Int32 nListLen = rList.getLength();
+            const sal_Int32 nListLen = rList.size();
             while (nStartPos < nListLen && rList[nStartPos] == ' ')
                 ++nStartPos;
 
@@ -1621,11 +1621,11 @@ bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBrac
             {
                 // implicit quoting to the closing bracket
 
-                sal_Int32 nClosePos = rList.indexOf(']', nStartPos);
+                sal_Int32 nClosePos = rList.find(']', nStartPos);
                 if (nClosePos >= 0)
                 {
                     sal_Int32 nNameEnd = nClosePos;
-                    sal_Int32 nSemiPos = rList.indexOf(';', nStartPos);
+                    sal_Int32 nSemiPos = rList.find(';', nStartPos);
                     if (nSemiPos >= 0 && nSemiPos < nClosePos && pFunc)
                     {
                         sal_Int32 nFuncEnd = 0;
@@ -1633,7 +1633,7 @@ bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBrac
                             nNameEnd = nSemiPos;
                     }
 
-                    aDequoted = rList.copy(nStartPos, nNameEnd - nStartPos);
+                    aDequoted = rList.substr(nStartPos, nNameEnd - nStartPos);
                     // spaces before the closing bracket or semicolon
                     aDequoted = comphelper::string::stripEnd(aDequoted, ' ');
                     nQuoteEnd = nClosePos + 1;
@@ -1654,7 +1654,7 @@ bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBrac
         // look for following space or end of string
 
         bool bValid = false;
-        if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+        if ( nMatchList >= rList.size() )
             bValid = true;
         else
         {

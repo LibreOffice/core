@@ -1462,11 +1462,11 @@ void ScModule::InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd )
         pHdl->InputSetSelection( nStart, nEnd );
 }
 
-void ScModule::InputReplaceSelection( const OUString& rStr )
+void ScModule::InputReplaceSelection( std::u16string_view aStr )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
-        pHdl->InputReplaceSelection( rStr );
+        pHdl->InputReplaceSelection( aStr );
 }
 
 void ScModule::InputTurnOffWinEngine()

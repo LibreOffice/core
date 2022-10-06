@@ -491,20 +491,20 @@ return;
 /* ~ */     t[126]|=   ScCharFlags::Word;
 }
 
-static bool lcl_isValidQuotedText( const OUString& rFormula, sal_Int32 nSrcPos, ParseResult& rRes )
+static bool lcl_isValidQuotedText( std::u16string_view rFormula, size_t nSrcPos, ParseResult& rRes )
 {
     // Tokens that start at ' can have anything in them until a final '
     // but '' marks an escaped '
     // We've earlier guaranteed that a string containing '' will be
     // surrounded by '
-    if (nSrcPos < rFormula.getLength() && rFormula[nSrcPos] == '\'')
+    if (nSrcPos < rFormula.size() && rFormula[nSrcPos] == '\'')
     {
-        sal_Int32 nPos = nSrcPos+1;
-        while (nPos < rFormula.getLength())
+        size_t nPos = nSrcPos+1;
+        while (nPos < rFormula.size())
         {
             if (rFormula[nPos] == '\'')
             {
-                if ( (nPos+1 == rFormula.getLength()) || (rFormula[nPos+1] != '\'') )
+                if ( (nPos+1 == rFormula.size()) || (rFormula[nPos+1] != '\'') )
                 {
                     rRes.TokenType = KParseType::SINGLE_QUOTE_NAME;
                     rRes.EndPos = nPos+1;

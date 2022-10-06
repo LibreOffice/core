@@ -163,7 +163,7 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }
 
-void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, const OUString& sDataType, std::u16string_view sOrder)
+void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, std::u16string_view sDataType, std::u16string_view sOrder)
 {
     util::SortField aSortField;
     aSortField.Field = o3tl::toInt32(sFieldNumber);
@@ -171,13 +171,13 @@ void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, const OUSt
         aSortField.SortAscending = true;
     else
         aSortField.SortAscending = false;
-    if (sDataType.getLength() > 8)
+    if (sDataType.size() > 8)
     {
-        std::u16string_view sTemp = sDataType.subView(0, 8);
+        std::u16string_view sTemp = sDataType.substr(0, 8);
         if (sTemp == u"UserList")
         {
             bEnabledUserList = true;
-            sTemp = sDataType.subView(8);
+            sTemp = sDataType.substr(8);
             nUserListIndex = static_cast<sal_Int16>(o3tl::toInt32(sTemp));
         }
         else

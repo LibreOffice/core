@@ -23,6 +23,7 @@
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <convuno.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
@@ -79,14 +80,14 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
 
 bool AddressConverter::parseOoxAddress2d(
         sal_Int32& ornColumn, sal_Int32& ornRow,
-        const OUString& rString, sal_Int32 nStart, sal_Int32 nLength )
+        std::u16string_view aString, sal_Int32 nStart, sal_Int32 nLength )
 {
     ornColumn = ornRow = 0;
-    if( (nStart < 0) || (nStart >= rString.getLength()) || (nLength < 2) )
+    if( (nStart < 0) || (nStart >= sal_Int32(aString.size())) || (nLength < 2) )
         return false;
 
-    const sal_Unicode* pcChar = rString.getStr() + nStart;
-    const sal_Unicode* pcEndChar = pcChar + ::std::min( nLength, rString.getLength() - nStart );
+    const sal_Unicode* pcChar = aString.data() + nStart;
+    const sal_Unicode* pcEndChar = pcChar + ::std::min( nLength, sal_Int32(aString.size() - nStart) );
 
     enum { STATE_COL, STATE_ROW } eState = STATE_COL;
     while( pcChar < pcEndChar )
@@ -197,22 +198,22 @@ bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRo
 bool AddressConverter::parseOoxRange2d(
         sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
         sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
-        const OUString& rString, sal_Int32 nStart )
+        std::u16string_view aString, sal_Int32 nStart )
 {
     ornStartColumn = ornStartRow = ornEndColumn = ornEndRow = 0;
-    if( (nStart < 0) || (nStart >= rString.getLength()) )
+    if( (nStart < 0) || (nStart >= sal_Int32(aString.size())) )
         return false;
 
-    sal_Int32 nEnd = nStart + ( rString.getLength() - nStart );
-    sal_Int32 nColonPos = rString.indexOf( ':', nStart );
-    if( (nStart < nColonPos) && (nColonPos + 1 < nEnd) )
+    sal_Int32 nEnd = nStart + ( aString.size() - nStart );
+    size_t nColonPos = aString.find( ':', nStart );
+    if( nColonPos != std::u16string_view::npos && (nStart < sal_Int32(nColonPos)) && (sal_Int32(nColonPos + 1) < nEnd) )
     {
         return
-            parseOoxAddress2d( ornStartColumn, ornStartRow, rString, nStart, nColonPos - nStart ) &&
-            parseOoxAddress2d( ornEndColumn, ornEndRow, rString, nColonPos + 1, SAL_MAX_INT32 - nColonPos - 1 );
+            parseOoxAddress2d( ornStartColumn, ornStartRow, aString, nStart, nColonPos - nStart ) &&
+            parseOoxAddress2d( ornEndColumn, ornEndRow, aString, nColonPos + 1, SAL_MAX_INT32 - nColonPos - 1 );
     }
 
-    if( parseOoxAddress2d( ornStartColumn, ornStartRow, rString, nStart ) )
+    if( parseOoxAddress2d( ornStartColumn, ornStartRow, aString, nStart ) )
     {
         ornEndColumn = ornStartColumn;
         ornEndRow = ornStartRow;
@@ -373,7 +374,7 @@ bool AddressConverter::validateCellRange( ScRange& orRange, bool bAllowOverflow,
 }
 
 bool AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
-        const OUString& rString, sal_Int16 nSheet )
+        std::u16string_view aString, sal_Int16 nSheet )
 {
     orRange.aStart.SetTab( nSheet );
     orRange.aEnd.SetTab( nSheet );
@@ -381,7 +382,7 @@ bool AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
     sal_Int32 aStartRow = orRange.aStart.Row();
     sal_Int32 aEndCol = orRange.aEnd.Col();
     sal_Int32 aEndRow = orRange.aEnd.Row();
-    bool bReturnValue = parseOoxRange2d( aStartCol, aStartRow, aEndCol, aEndRow, rString );
+    bool bReturnValue = parseOoxRange2d( aStartCol, aStartRow, aEndCol, aEndRow, aString );
     orRange.aStart.SetCol( aStartCol );
     orRange.aStart.SetRow( aStartRow );
     orRange.aEnd.SetCol( aEndCol );
@@ -390,10 +391,10 @@ bool AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
 }
 
 bool AddressConverter::convertToCellRange( ScRange& orRange,
-        const OUString& rString, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
+        std::u16string_view aString, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
 {
     return
-        convertToCellRangeUnchecked( orRange, rString, nSheet ) &&
+        convertToCellRangeUnchecked( orRange, aString, nSheet ) &&
         validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
@@ -423,15 +424,15 @@ void AddressConverter::validateCellRangeList( ScRangeList& orRanges, bool bTrack
 }
 
 void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
-        const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
+        std::u16string_view aString, sal_Int16 nSheet, bool bTrackOverflow )
 {
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rString.getLength();
+    size_t nPos = 0;
+    size_t nLen = aString.size();
     ScRange aRange;
-    while( (0 <= nPos) && (nPos < nLen) )
+    while( nPos != std::u16string_view::npos && (nPos < nLen) )
     {
-        OUString aToken = rString.getToken( 0, ' ', nPos );
-        if( !aToken.isEmpty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
+        std::u16string_view aToken = o3tl::getToken(aString, u' ', nPos );
+        if( !aToken.empty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
             orRanges.push_back(aRange);
     }
 }

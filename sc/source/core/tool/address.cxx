@@ -2508,10 +2508,10 @@ OUString ScRefAddress::GetRefString( const ScDocument& rDoc, SCTAB nActTab,
     return aAdr.Format(nFlags, &rDoc, rDetails);
 }
 
-bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, const OUString& rStr)
+bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, std::u16string_view rStr)
 {
     SCCOL nResult = 0;
-    sal_Int32 nStop = rStr.getLength();
+    sal_Int32 nStop = rStr.size();
     sal_Int32 nPos = 0;
     sal_Unicode c;
     const SCCOL nMaxCol = rDoc.MaxCol();

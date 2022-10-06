@@ -710,9 +710,9 @@ OUString ScGlobal::addToken(std::u16string_view rTokenList, std::u16string_view 
     return aBuf.makeStringAndClear();
 }
 
-bool ScGlobal::IsQuoted( const OUString& rString, sal_Unicode cQuote )
+bool ScGlobal::IsQuoted( std::u16string_view rString, sal_Unicode cQuote )
 {
-    return (rString.getLength() >= 2) && (rString[0] == cQuote) && (rString[ rString.getLength() - 1 ] == cQuote);
+    return (rString.size() >= 2) && (rString[0] == cQuote) && (rString[ rString.size() - 1 ] == cQuote);
 }
 
 void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmbedded )

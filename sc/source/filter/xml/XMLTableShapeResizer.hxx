@@ -42,7 +42,7 @@ class ScMyOLEFixer
 
     void CreateChartListener(ScDocument& rDoc,
         const OUString& rName,
-        const OUString& rRangeList);
+        std::u16string_view rRangeList);
 public:
     explicit ScMyOLEFixer(ScXMLImport& rImport);
     ~ScMyOLEFixer();

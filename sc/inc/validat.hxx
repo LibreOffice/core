@@ -190,7 +190,7 @@ private:
                 properly initialized ScValidationDataIsNumeric struct, see
                 implementation.
      */
-    bool IsDataValidTextLen( const OUString& rTest, const ScAddress& rPos,
+    bool IsDataValidTextLen( std::u16string_view rTest, const ScAddress& rPos,
             ScValidationDataIsNumeric* pDataNumeric ) const;
 };
 

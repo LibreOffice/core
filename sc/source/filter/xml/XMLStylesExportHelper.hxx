@@ -172,7 +172,7 @@ public:
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void AddNewTable(const sal_Int32 nTable);
     bool AddStyleName(const OUString& rString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
-    sal_Int32 GetIndexOfStyleName(std::u16string_view rString, const OUString& rPrefix, bool& bIsAutoStyle);
+    sal_Int32 GetIndexOfStyleName(std::u16string_view rString, std::u16string_view rPrefix, bool& bIsAutoStyle);
     // does not delete ranges
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         bool& bIsAutoStyle) const;
@@ -197,7 +197,7 @@ public:
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) = 0;
     sal_Int32 AddStyleName(const OUString & rString);
-    sal_Int32 GetIndexOfStyleName(std::u16string_view rString, const OUString& rPrefix);
+    sal_Int32 GetIndexOfStyleName(std::u16string_view rString, std::u16string_view rPrefix);
     OUString& GetStyleNameByIndex(const sal_Int32 nIndex);
 };
 

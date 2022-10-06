@@ -82,9 +82,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
     return nullptr;
 }
 
-void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan, const OUString& rStyleName)
+void ScXMLCellTextParaContext::PushSpan(std::u16string_view aSpan, const OUString& rStyleName)
 {
-    mrParentCxt.PushParagraphSpan(rSpan, rStyleName);
+    mrParentCxt.PushParagraphSpan(aSpan, rStyleName);
 }
 
 void ScXMLCellTextParaContext::PushFieldSheetName(const OUString& rStyleName)
@@ -344,7 +344,7 @@ void ScXMLCellFieldSContext::PushSpaces()
     if (mnCount > 0)
     {
         if (mnCount == 1)
-            mrParentCxt.PushSpan(" ", maStyleName);
+            mrParentCxt.PushSpan(u" ", maStyleName);
         else
         {
             OUStringBuffer aBuf( mnCount);

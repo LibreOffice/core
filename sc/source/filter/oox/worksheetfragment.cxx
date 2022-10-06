@@ -206,12 +206,12 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
 
 namespace {
 // Convert strings like 1,"2,3",4 to form "1","2,3","4"
-OUString NormalizeOoxList(const OUString& aList)
+OUString NormalizeOoxList(std::u16string_view aList)
 {
     OUStringBuffer aResult("\"");
     bool bInsideQuotes = false;
-    const sal_Int32 nLen = aList.getLength();
-    for (sal_Int32 i = 0; i < nLen; ++i)
+    const size_t nLen = aList.size();
+    for (size_t i = 0; i < nLen; ++i)
     {
         sal_Unicode ch = aList[i];
 

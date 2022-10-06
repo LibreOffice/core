@@ -754,13 +754,13 @@ void XclImpUrlHelper::DecodeUrl(
     OSL_ENSURE( aTabName.isEmpty(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
-bool XclImpUrlHelper::DecodeLink( OUString& rApplic, OUString& rTopic, const OUString& rEncUrl )
+bool XclImpUrlHelper::DecodeLink( OUString& rApplic, OUString& rTopic, std::u16string_view aEncUrl )
 {
-    sal_Int32 nPos = rEncUrl.indexOf( EXC_DDE_DELIM );
-    if( (nPos > 0) && (nPos + 1 < rEncUrl.getLength()) )
+    size_t nPos = aEncUrl.find( EXC_DDE_DELIM );
+    if( nPos != std::u16string_view::npos && (nPos > 0) && (nPos + 1 < aEncUrl.size()) )
     {
-        rApplic = rEncUrl.copy( 0, nPos );
-        rTopic = rEncUrl.copy( nPos + 1 );
+        rApplic = aEncUrl.substr( 0, nPos );
+        rTopic = aEncUrl.substr( nPos + 1 );
         return true;
     }
     return false;

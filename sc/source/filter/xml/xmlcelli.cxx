@@ -310,10 +310,10 @@ bool cellExists( const ScDocument& rDoc, const ScAddress& rCellPos )
 
 }
 
-void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName)
+void ScXMLTableRowCellContext::PushParagraphSpan(std::u16string_view rSpan, const OUString& rStyleName)
 {
     sal_Int32 nBegin = maParagraph.getLength();
-    sal_Int32 nEnd = nBegin + rSpan.getLength();
+    sal_Int32 nEnd = nBegin + rSpan.size();
     maParagraph.append(rSpan);
 
     PushFormat(nBegin, nEnd, rStyleName);

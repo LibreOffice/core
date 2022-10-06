@@ -35,19 +35,19 @@
 
 namespace {
 
-ScAddress get_address_from_string(const ScDocument& rDoc, const OUString& rStr)
+ScAddress get_address_from_string(const ScDocument& rDoc, std::u16string_view aStr)
 {
     ScAddress aAddr;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetAddressFromString(aAddr, aStr, rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
     return aAddr;
 }
 
-ScRange get_range_from_string(const ScDocument& rDoc, const OUString& rStr)
+ScRange get_range_from_string(const ScDocument& rDoc, std::u16string_view aStr)
 {
     ScRange aRange;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetRangeFromString(aRange, rStr, rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetRangeFromString(aRange, aStr, rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
 
     return aRange;
 }

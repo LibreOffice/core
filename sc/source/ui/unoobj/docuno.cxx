@@ -4009,7 +4009,7 @@ rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByIndex_Impl(sal_In
     return nullptr;    // wrong index
 }
 
-rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByName_Impl(const OUString& aName) const
+rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByName_Impl(std::u16string_view aName) const
 {
     SCCOL nCol = 0;
     if (pDocShell && ::AlphaToCol(pDocShell->GetDocument(), nCol, aName))

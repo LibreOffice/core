@@ -23,6 +23,7 @@
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/binaryinputstream.hxx>
@@ -90,15 +91,15 @@ OUString lclGetPrefixedName( sal_Unicode cBuiltinId )
 }
 
 /** returns the built-in name identifier from a prefixed built-in name, e.g. '_xlnm.Print_Area'. */
-sal_Unicode lclGetBuiltinIdFromPrefixedName( const OUString& rModelName )
+sal_Unicode lclGetBuiltinIdFromPrefixedName( std::u16string_view aModelName )
 {
-    if( rModelName.matchIgnoreAsciiCase( spcOoxPrefix ) )
+    if( o3tl::matchIgnoreAsciiCase( aModelName, spcOoxPrefix ) )
     {
         for( sal_Unicode cBuiltinId = 0; cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ); ++cBuiltinId )
         {
             OUString aBaseName = lclGetBaseName( cBuiltinId );
             sal_Int32 nBaseNameLen = aBaseName.getLength();
-            if( (rModelName.getLength() == spcOoxPrefix.getLength() + nBaseNameLen) && rModelName.matchIgnoreAsciiCase( aBaseName, spcOoxPrefix.getLength() ) )
+            if( (sal_Int32(aModelName.size()) == spcOoxPrefix.getLength() + nBaseNameLen) && o3tl::matchIgnoreAsciiCase( aModelName, aBaseName, spcOoxPrefix.getLength() ) )
                 return cBuiltinId;
         }
     }
