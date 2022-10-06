@@ -113,8 +113,7 @@ cmd/32/insertframeinteractnocolumns.png cmd/32/insertframe.png
 cmd/32/insertframemenu.png cmd/32/insertframe.png
 cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
 cmd/32/inserthyperlinkcontrol.png cmd/32/inserthyperlink.png
-cmd/32/insertimagecontrol.png cmd/32/insertgraphic.png
-cmd/32/insertimagecontrol.png cmd/sc_insertgraphic.png
+cmd/32/insertimagecontrol.png cmd/32/imagecontrol.png
 cmd/32/insertlistbox.png cmd/32/listbox.png
 cmd/32/insertnumericfield.png cmd/32/numberformatstandard.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
@@ -173,8 +172,7 @@ cmd/lc_insertframeinteractnocolumns.png cmd/lc_insertframe.png
 cmd/lc_insertframemenu.png cmd/lc_insertframe.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
 cmd/lc_inserthyperlinkcontrol.png cmd/lc_inserthyperlink.png
-cmd/lc_insertimagecontrol.png cmd/lc_insertgraphic.png
-cmd/lc_insertimagecontrol.png cmd/sc_insertgraphic.png
+cmd/lc_insertimagecontrol.png cmd/lc_imagecontrol.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
 cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
@@ -233,7 +231,7 @@ cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/sc_inserthyperlinkcontrol.png cmd/sc_inserthyperlink.png
-cmd/sc_insertimagecontrol.png cmd/sc_insertgraphic.png
+cmd/sc_insertimagecontrol.png cmd/sc_imagecontrol.png
 cmd/sc_insertlistbox.png cmd/sc_listbox.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
@@ -2071,10 +2069,13 @@ fpicker/res/fp016.png desktop/res/shared_16.png
 
 # framework
 # ==============================================
+framework/res/addtemplate_32.png cmd/32/newdoc.png
 framework/res/arrow.png cmd/sc_nextrecord.png
 framework/res/extension.png cmd/lc_insertplugin.png
+framework/res/folder_32.png cmd/32/open.png
 framework/res/info_26.png cmd/lc_helpindex.png
-framework/res/addtemplate_32.png cmd/32/newdoc.png
+framework/res/remote-documents.png cmd/32/openremote.png
+framework/res/templates_32.png cmd/32/templatemanager.png
 
 # reportdesign
 # ==============================================
