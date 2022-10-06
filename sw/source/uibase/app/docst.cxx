@@ -1133,8 +1133,6 @@ void SwDocShell::Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidde
 SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFamily,
                                SwWrtShell* pShell, const sal_uInt16 nMode )
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
-
     SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( m_xBasePool->Find( rName, nFamily ) );
 
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
