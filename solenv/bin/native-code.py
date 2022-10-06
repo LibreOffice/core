@@ -311,7 +311,6 @@ core_constructor_list = [
     "lingucomponent_SpellChecker_get_implementation",
     "lingucomponent_LangGuess_get_implementation",
     "lingucomponent_Hyphenator_get_implementation",
-    "lingucomponent_LanguageToolGrammarChecker_get_implementation",
 # package/source/xstor/xstor.component
     "package_OStorageFactory_get_implementation",
 # package/util/package2.component
