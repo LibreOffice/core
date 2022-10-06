@@ -438,7 +438,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     const sal_Int32 nSplitPos = rPos.GetContentIndex();
     const sal_Int32 nTextLen = m_Text.getLength();
     SwTextNode* const pNode =
-        MakeNewTextNode( rPos.nNode, false, nSplitPos==nTextLen );
+        MakeNewTextNode( rPos.GetNode(), false, nSplitPos==nTextLen );
 
     // the first paragraph gets the XmlId,
     // _except_ if it is empty and the second is not empty
@@ -2974,7 +2974,7 @@ bool SwTextNode::HasMarkedLabel() const
 }
 // <- #i27615#
 
-SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
+SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
                                        bool bChgFollow )
 {
     // ignore hard PageBreak/PageDesc/ColumnBreak from Auto-Set
@@ -3052,7 +3052,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 
     SwTextFormatColl* pColl = GetTextColl();
 
-    SwTextNode *pNode = new SwTextNode( rPos.GetNode(), pColl, oNewAttrSet ? &*oNewAttrSet : nullptr );
+    SwTextNode *pNode = new SwTextNode( rPosNd, pColl, oNewAttrSet ? &*oNewAttrSet : nullptr );
 
     oNewAttrSet.reset();
 
@@ -3098,8 +3098,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
 {
     // position behind which it will be inserted
-    SwNodeIndex aIdx( rPos.GetNode(), 1 );
-    SwTextNode* pNew = MakeNewTextNode( aIdx );
+    SwTextNode* pNew = MakeNewTextNode( *rPos.GetNodes()[rPos.GetNodeIndex() + 1] );
 
     // reset list attributes at appended text node
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );

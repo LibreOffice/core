@@ -141,7 +141,7 @@ class SW_DLLPUBLIC SwTextNode final
     /// Copies the attributes at nStart to pDest.
     SAL_DLLPRIVATE void CopyAttr( SwTextNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
-    SAL_DLLPRIVATE SwTextNode* MakeNewTextNode( const SwNodeIndex&, bool bNext = true,
+    SAL_DLLPRIVATE SwTextNode* MakeNewTextNode( SwNode&, bool bNext = true,
                                 bool bChgFollow = true );
 
     SAL_DLLPRIVATE void CutImpl(
