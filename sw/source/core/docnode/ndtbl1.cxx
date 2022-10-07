@@ -647,7 +647,6 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor,
             getIDocumentContentOperations().InsertString( aPaM,
                     OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
             aPaM.SetMark();
-            aPaM.GetMark()->nContent.Assign(aPaM.GetPointContentNode(), 0);
             getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             getIDocumentContentOperations().DeleteAndJoin( aPaM );
         }
