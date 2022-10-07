@@ -763,17 +763,15 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     rDoc.TableToText( pTNd, 0x0b == m_cSeparator ? 0x09 : m_cSeparator );
 
     // join again at start?
-    SwPaM aPam(rDoc.GetNodes().GetEndOfContent());
-    SwPosition *const pPos = aPam.GetPoint();
     if( m_nSttContent )
     {
-        pPos->Assign(nTableNd);
+        SwPaM aPam(rDoc.GetNodes(), nTableNd);
         if (aPam.Move(fnMoveBackward, GoInContent))
         {
             SwNode & rIdx = aPam.GetPoint()->GetNode();
 
             // than move, relatively, the Cursor/etc. again
-            RemoveIdxRel( rIdx.GetIndex()+1, *pPos );
+            RemoveIdxRel( rIdx.GetIndex()+1, *aPam.GetPoint() );
 
             rIdx.GetContentNode()->JoinNext();
         }
@@ -782,16 +780,15 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     // join again at end?
     if( m_bSplitEnd )
     {
-        pPos->Assign( m_nEndNode );
-        SwTextNode* pTextNd = pPos->GetNode().GetTextNode();
+        SwPosition aEndPos( rDoc.GetNodes(), m_nEndNode );
+        SwTextNode* pTextNd = aEndPos.GetNode().GetTextNode();
         if( pTextNd && pTextNd->CanJoinNext() )
         {
-            aPam.GetMark()->nContent.Assign( nullptr, 0 );
-            aPam.GetPoint()->nContent.Assign( nullptr, 0 );
+            aEndPos.nContent.Assign( nullptr, 0 );
 
             // than move, relatively, the Cursor/etc. again
-            pPos->SetContent(pTextNd->GetText().getLength());
-            RemoveIdxRel( m_nEndNode + 1, *pPos );
+            aEndPos.SetContent(pTextNd->GetText().getLength());
+            RemoveIdxRel( m_nEndNode + 1, aEndPos );
 
             pTextNd->JoinNext();
         }
