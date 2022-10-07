@@ -2377,17 +2377,17 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 /**
  * Create a TableFrame for every Shell and insert before the corresponding ContentFrame.
  */
-void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
+void SwTableNode::MakeOwnFrames(SwPosition* pIdxBehind)
 {
     SwNode *pNd = GetNodes().FindPrvNxtFrameNode( *this, EndOfSectionNode() );
     if( !pNd )
     {
         if (pIdxBehind)
-            *pIdxBehind = *this;
+            pIdxBehind->Assign(*this);
         return;
     }
     if (pIdxBehind)
-        *pIdxBehind = *pNd;
+        pIdxBehind->Assign(*pNd);
 
     SwFrame *pFrame( nullptr );
     SwLayoutFrame *pUpper( nullptr );

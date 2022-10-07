@@ -289,7 +289,7 @@ namespace sw
             explicit InsertedTablesManager(const SwDoc &rDoc);
         private:
             bool mbHasRoot;
-            std::map<std::unique_ptr<InsertedTableListener>, SwNodeIndex*> maTables;
+            std::map<std::unique_ptr<InsertedTableListener>, SwPosition*> maTables;
         };
 
         void MoveAttrFieldmarkInserted(SwFltPosition& rMkPos, SwFltPosition& rPtPos, const SwPosition& rPos);

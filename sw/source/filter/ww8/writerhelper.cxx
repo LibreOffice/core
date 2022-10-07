@@ -887,7 +887,7 @@ namespace sw
 
                     if (pFrameFormat != nullptr)
                     {
-                        SwNodeIndex *pIndex = aTable.second;
+                        SwPosition *pIndex = aTable.second;
                         pTable->DelFrames();
                         pTable->MakeOwnFrames(pIndex);
                     }
@@ -899,11 +899,11 @@ namespace sw
         {
             if (!mbHasRoot)
                 return;
-            //Associate this tablenode with this after position, replace an //old
+            //Associate this tablenode with this after position, replace an old
             //node association if necessary
             maTables.emplace(
                     std::unique_ptr<InsertedTableListener>(new InsertedTableListener(rTableNode)),
-                    &(rPaM.GetPoint()->nNode));
+                    rPaM.GetPoint());
         }
     }
 
