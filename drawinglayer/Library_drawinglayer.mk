@@ -36,6 +36,11 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
 ))
 endif
 
+$(eval $(call gb_Library_use_system_win32_libs,drawinglayer,\
+    d2d1 \
+    dxguid \
+))
+
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     basegfx \
     comphelper \
@@ -50,6 +55,18 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     tl \
     vcl \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_system_win32_libs,drawinglayer,\
+	gdi32 \
+))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_exception_objects,drawinglayer,\
+    drawinglayer/source/processor2d/d2dpixelprocessor2d \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/animation/animationtiming \

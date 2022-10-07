@@ -21,42 +21,63 @@
 #include "vclpixelprocessor2d.hxx"
 #include "vclmetafileprocessor2d.hxx"
 
+#if defined(_WIN32)
+#include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
+#include <vcl/sysdata.hxx>
+#endif
 
 using namespace com::sun::star;
 
-
 namespace drawinglayer::processor2d
 {
-        std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
-            OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
+    OutputDevice& rTargetOutDev,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+{
+#if defined(_WIN32)
+    static const bool bTestSystemPrimitiveRenderer(nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
+    if(bTestSystemPrimitiveRenderer)
+    {
+        SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
+        // if mnOutOffX/mnOutOffY is set (a 'hack' to get a cheap additional offset), apply it additionally
+        if(0 != rTargetOutDev.GetOutOffXPixel() || 0 != rTargetOutDev.GetOutOffYPixel())
         {
-            // create Pixel Vcl-Processor
-            return std::make_unique<VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
+            basegfx::B2DHomMatrix aTransform(aViewInformation2D.getViewTransformation());
+            aTransform.translate(rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel());
+            aViewInformation2D.setViewTransformation(aTransform);
         }
+        std::unique_ptr<D2DPixelProcessor2D> aRetval(
+            std::make_unique<D2DPixelProcessor2D>(aViewInformation2D, aData.hDC));
+        if (aRetval->valid())
+            return aRetval;
+    }
+#endif
 
-        std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
-            OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
-        {
-            const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
-            const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+    // create Pixel Vcl-Processor
+    return std::make_unique<VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
+}
 
-            if(bOutputToRecordingMetaFile)
-            {
-                // create MetaFile Vcl-Processor and process
-                return std::make_unique<VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
-            }
-            else
-            {
-                // create Pixel Vcl-Processor
-                return createPixelProcessor2DFromOutputDevice(
-                    rTargetOutDev,
-                    rViewInformation2D);
-            }
-        }
+std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
+    OutputDevice& rTargetOutDev,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+{
+    const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
+    const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord()
+                                          && !pMetaFile->IsPause());
+
+    if (bOutputToRecordingMetaFile)
+    {
+        // create MetaFile Vcl-Processor and process
+        return std::make_unique<VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
+    }
+    else
+    {
+        // create Pixel Vcl-Processor
+        return createPixelProcessor2DFromOutputDevice(rTargetOutDev, rViewInformation2D);
+    }
+}
 
 } // end of namespace
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
