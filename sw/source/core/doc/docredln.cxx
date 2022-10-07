@@ -518,9 +518,9 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                 {
                     // We want to be before the table
                     pNew->GetPoint()->Assign(*pTab);
-                    pC = GoPreviousNds( &pNew->GetPoint()->nNode, false ); // here we are.
+                    pC = GoPreviousPos( pNew->GetPoint(), false ); // here we are.
                     if( pC )
-                        pNew->GetPoint()->nContent.Assign( pC, 0 );
+                        pNew->GetPoint()->SetContent( 0 );
                     pTab = pNew->GetPoint()->GetNode().StartOfSectionNode()->FindTableNode();
                 } while( pTab ); // If there is another table we have to repeat our step backwards
             }
@@ -534,17 +534,17 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                         if( rCurNd.IsStartNode() )
                         {
                             if( rCurNd.EndOfSectionIndex() < pEnd->GetNodeIndex() )
-                                aNewStt.nNode = *rCurNd.EndOfSectionNode();
+                                aNewStt.Assign( *rCurNd.EndOfSectionNode() );
                             else
                                 break;
                         }
                         else if( rCurNd.IsContentNode() )
                             pC = rCurNd.GetContentNode();
-                        ++aNewStt.nNode;
+                        aNewStt.Adjust(SwNodeOffset(1));
                     } while( aNewStt.GetNodeIndex() < pEnd->GetNodeIndex() );
 
                 if( aNewStt.GetNode() == pEnd->GetNode() )
-                    aNewStt.nContent = pEnd->nContent;
+                    aNewStt.SetContent(pEnd->GetContentIndex());
                 else if( pC )
                 {
                     aNewStt.Assign(*pC, pC->Len() );
@@ -911,19 +911,19 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
         // don't reject the format of the next paragraph (that is handled by the next redline)
         if (aPam.GetPoint()->GetNode() > aPam.GetMark()->GetNode())
         {
-            aPam.GetPoint()->nNode--;
+            aPam.GetPoint()->Adjust(SwNodeOffset(-1));
             SwContentNode* pNode = aPam.GetPoint()->GetNode().GetContentNode();
             if ( pNode )
-                aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
+                aPam.GetPoint()->SetContent( pNode->Len() );
             else
                 // tdf#147507 set it back to a content node to avoid of crashing
-                aPam.GetPoint()->nNode++;
+                aPam.GetPoint()->Adjust(SwNodeOffset(+1));
         }
         else if (aPam.GetPoint()->GetNode() < aPam.GetMark()->GetNode())
         {
-            aPam.GetMark()->nNode--;
+            aPam.GetMark()->Adjust(SwNodeOffset(-1));
             SwContentNode* pNode = aPam.GetMark()->GetNode().GetContentNode();
-            aPam.GetMark()->nContent.Assign( pNode, pNode->Len() );
+            aPam.GetMark()->SetContent( pNode->Len() );
         }
     }
 
@@ -1479,8 +1479,8 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
                 // at start of redlines use a 1-character length bookmark range
                 // instead of a 0-character length bookmark position to avoid its losing
                 sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
-                SwPaM aPam( rStartPos.nNode, rStartPos.GetContentIndex(),
-                                rStartPos.nNode, rStartPos.GetContentIndex() + nLen);
+                SwPaM aPam( rStartPos.GetNode(), rStartPos.GetContentIndex(),
+                                rStartPos.GetNode(), rStartPos.GetContentIndex() + nLen);
                 ::sw::mark::IMark* pMark = rDMA.makeAnnotationBookmark(
                     aPam,
                     (**iter).GetName(),
@@ -1780,9 +1780,9 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
                         SwNodeOffset( m_bDelLastPara ? -2 : -1 ) );
             SwContentNode* pCNd = aPam.GetPointContentNode();
             if( pCNd )
-                aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                aPam.GetPoint()->SetContent( pCNd->Len() );
             else
-                ++aPam.GetPoint()->nNode;
+                aPam.GetPoint()->Adjust(SwNodeOffset(+1));
 
             SwFormatColl* pColl = pCNd && pCNd->Len() && aPam.GetPoint()->GetNode() !=
                                         aPam.GetMark()->GetNode()
@@ -1794,7 +1794,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             SwPosition aPos( *GetPoint() );
             if( m_bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
             {
-                --aPos.nNode;
+                aPos.Adjust(SwNodeOffset(-1));
 
                 rDoc.getIDocumentContentOperations().AppendTextNode( aPos );
             }
@@ -1806,15 +1806,15 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
 
             SetMark();
             *GetPoint() = aPos;
-            GetMark()->nNode = aNdIdx.GetIndex() + 1;
+            GetMark()->Assign(aNdIdx.GetIndex() + 1);
             pCNd = GetMark()->GetNode().GetContentNode();
-            GetMark()->nContent.Assign( pCNd, nPos );
+            if( pCNd )
+                GetMark()->SetContent( nPos );
 
             if( m_bDelLastPara )
             {
-                ++GetPoint()->nNode;
+                GetPoint()->Adjust(SwNodeOffset(+1));
                 pCNd = GetPointContentNode();
-                GetPoint()->nContent.Assign( pCNd, 0 );
                 m_bDelLastPara = false;
             }
             else if( pColl )
