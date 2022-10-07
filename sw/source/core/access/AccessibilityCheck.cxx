@@ -551,6 +551,35 @@ public:
                 }
             }
         }
+        else if (pTextNode->HasSwAttrSet())
+        {
+            // Paragraph doesn't have hints but the entire paragraph might have char attributes
+            auto& aSwAttrSet = pTextNode->GetSwAttrSet();
+            auto nParagraphLength = pTextNode->GetText().getLength();
+            if (nParagraphLength == 0)
+                return;
+            if (aSwAttrSet.HasItem(RES_CHRATR_WEIGHT) || aSwAttrSet.HasItem(RES_CHRATR_CJK_WEIGHT)
+                || aSwAttrSet.HasItem(RES_CHRATR_CTL_WEIGHT)
+                || aSwAttrSet.HasItem(RES_CHRATR_POSTURE)
+                || aSwAttrSet.HasItem(RES_CHRATR_CJK_POSTURE)
+                || aSwAttrSet.HasItem(RES_CHRATR_CTL_POSTURE)
+                || aSwAttrSet.HasItem(RES_CHRATR_SHADOWED) || aSwAttrSet.HasItem(RES_CHRATR_COLOR)
+                || aSwAttrSet.HasItem(RES_CHRATR_EMPHASIS_MARK)
+                || aSwAttrSet.HasItem(RES_CHRATR_UNDERLINE)
+                || aSwAttrSet.HasItem(RES_CHRATR_OVERLINE)
+                || aSwAttrSet.HasItem(RES_CHRATR_CROSSEDOUT)
+                || aSwAttrSet.HasItem(RES_CHRATR_RELIEF) || aSwAttrSet.HasItem(RES_CHRATR_CONTOUR))
+            {
+                auto pIssue
+                    = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                                  sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pTextNode);
+                SwDoc& rDocument = pTextNode->GetDoc();
+                pIssue->setDoc(rDocument);
+                pIssue->setEnd(nParagraphLength);
+            }
+        }
     }
 };
 
