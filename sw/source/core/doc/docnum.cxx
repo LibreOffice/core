@@ -2190,10 +2190,10 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                         SwPaM pam(*pRedline, nullptr);
                         SwNodeOffset const nCurrentOffset(
                             nOrigIdx - aPam.Start()->GetNodeIndex());
-                        pam.GetPoint()->nNode += nCurrentOffset;
-                        pam.GetPoint()->nContent.Assign(pam.GetPoint()->GetNode().GetContentNode(), pam.GetPoint()->GetContentIndex());
-                        pam.GetMark()->nNode += nCurrentOffset;
-                        pam.GetMark()->nContent.Assign(pam.GetMark()->GetNode().GetContentNode(), pam.GetMark()->GetContentIndex());
+                        pam.GetPoint()->Assign(pam.GetPoint()->GetNodeIndex() + nCurrentOffset,
+                                               pam.GetPoint()->GetContentIndex());
+                        pam.GetMark()->Assign(pam.GetMark()->GetNodeIndex() + nCurrentOffset,
+                                              pam.GetMark()->GetContentIndex());
 
                         pNewRedline = new SwRangeRedline( RedlineType::Delete, pam );
                     }
