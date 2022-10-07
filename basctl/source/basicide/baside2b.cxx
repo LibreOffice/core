@@ -234,7 +234,7 @@ public:
     }
 
 private:
-    sal_uLong nCurState;
+    sal_uInt32 nCurState;
 };
 
 EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
