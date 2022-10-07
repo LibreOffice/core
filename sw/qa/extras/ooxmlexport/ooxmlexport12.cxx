@@ -1874,6 +1874,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
                 "false");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf136617)
+{
+    loadAndSave("tdf136617.docx");
+
+    // This was 2
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[2]/w:pPr/w:rPr/w:sz", "val",
+                "16");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
 {
     loadAndSave("tdf121597.odt");
