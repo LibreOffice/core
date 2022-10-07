@@ -22,6 +22,7 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/util/VetoException.hpp>
@@ -367,7 +368,22 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
     {
         const EventHandlerInfo& rInfo = rEventInfo.second;
         if( rInfo.mnModuleType == nModuleType )
-            rPathMap[ rInfo.mnEventId ] = resolveVBAMacro( mpShell, maLibraryName, rModuleName, rInfo.maMacroName );
+        {
+            OUString sName = resolveVBAMacro(mpShell, maLibraryName, rModuleName,
+                                             rInfo.maMacroName);
+            // Only in Word (with lowest priority), an Auto* module can execute a "Public Sub Main"
+            if (sName.isEmpty() && rModuleName.isEmpty()
+                && getImplementationName() == "SwVbaEventsHelper")
+            {
+                if (rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_NEW
+                    || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
+                    || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE)
+                {
+                    sName = resolveVBAMacro(mpShell, maLibraryName, rInfo.maMacroName, "Main");
+                }
+            }
+            rPathMap[rInfo.mnEventId] = sName;
+        }
     }
     return rPathMap;
 }
