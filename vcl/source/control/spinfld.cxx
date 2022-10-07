@@ -870,12 +870,8 @@ bool SpinField::PreNotify(NotifyEvent& rNEvt)
                 tools::Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
                 {
-                    if (IsNativeWidgetEnabled() &&
-                        IsNativeControlSupported(ControlType::Editbox, ControlPart::Entire))
-                    {
-                        ImplInvalidateOutermostBorder(this);
-                    }
-                    else
+                    if (!IsNativeWidgetEnabled() ||
+                        !IsNativeControlSupported(ControlType::Editbox, ControlPart::Entire))
                     {
                         // paint directly
                         vcl::Region aRgn( GetOutDev()->GetActiveClipRegion() );

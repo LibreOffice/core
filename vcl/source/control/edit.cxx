@@ -1913,6 +1913,28 @@ void Edit::LoseFocus()
     Control::LoseFocus();
 }
 
+bool Edit::PreNotify(NotifyEvent& rNEvt)
+{
+    if (rNEvt.GetType() == NotifyEventType::MOUSEMOVE)
+    {
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if (pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
+        {
+            // trigger redraw if mouse over state has changed
+            if (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow())
+            {
+                if (IsNativeWidgetEnabled() &&
+                    IsNativeControlSupported(ControlType::Editbox, ControlPart::Entire))
+                {
+                    ImplInvalidateOutermostBorder(this);
+                }
+            }
+        }
+    }
+
+    return Control::PreNotify(rNEvt);
+}
+
 void Edit::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )

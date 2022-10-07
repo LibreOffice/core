@@ -665,14 +665,17 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
         if (mpBorderWindow->HasFocus() || pCtrl->HasFocus() || pCtrl->HasChildPathFocus())
             nState |= ControlState::FOCUSED;
 
-        bool bMouseOver = false;
-        vcl::Window *pCtrlChild = pCtrl->GetWindow(GetWindowType::FirstChild);
-        while(pCtrlChild)
+        bool bMouseOver = pCtrl->IsMouseOver();
+        if (!bMouseOver)
         {
-            bMouseOver = pCtrlChild->IsMouseOver();
-            if (bMouseOver)
-                break;
-            pCtrlChild = pCtrlChild->GetWindow(GetWindowType::Next);
+            vcl::Window *pCtrlChild = pCtrl->GetWindow(GetWindowType::FirstChild);
+            while(pCtrlChild)
+            {
+                bMouseOver = pCtrlChild->IsMouseOver();
+                if (bMouseOver)
+                    break;
+                pCtrlChild = pCtrlChild->GetWindow(GetWindowType::Next);
+            }
         }
 
         if (bMouseOver)
