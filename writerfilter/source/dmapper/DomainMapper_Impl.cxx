@@ -2431,7 +2431,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     xParaCursor->gotoStartOfParagraph(false);
                     if (m_nTableDepth > 0)
                     {
-                        TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps, std::set<OUString>()};
+                        TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
                         getTableManager().getCurrentParagraphs()->push_back(aPending);
                     }
 
