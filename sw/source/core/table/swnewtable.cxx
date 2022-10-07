@@ -2133,6 +2133,11 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
     assert(!pSubTableBox->GetTabLines().empty());
     // are relative (%) heights possible? apparently not
     SwFormatFrameSize const outerSize(pSourceLine->GetFrameFormat()->GetFrameSize());
+    if (outerSize.GetHeightSizeType() != SwFrameSize::Variable)
+    {   // tdf#145871 clear fixed size in first row
+        pSourceLine->ClaimFrameFormat();
+        pSourceLine->GetFrameFormat()->ResetFormatAttr(RES_FRM_SIZE);
+    }
     tools::Long minHeights(0);
     {
         SwFrameFormat const& rSubLineFormat(*pSubTableBox->GetTabLines()[0]->GetFrameFormat());
@@ -2171,12 +2176,14 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
             && outerSize.GetHeightSizeType() != SwFrameSize::Variable
             && minHeights < outerSize.GetHeight())
         {
+            assert(false); // this should be impossible currently, such subtable isn't converted because layout is needed to determine how much space is taken up by variable height rows
             SwFormatFrameSize lastSize(pNewLine->GetFrameFormat()->GetFrameSize());
             lastSize.SetHeight(lastSize.GetHeight() + outerSize.GetHeight() - minHeights);
             if (lastSize.GetHeightSizeType() == SwFrameSize::Variable)
             {
                 lastSize.SetHeightSizeType(SwFrameSize::Minimum);
             }
+            pNewLine->ClaimFrameFormat();
             pNewLine->GetFrameFormat()->SetFormatAttr(lastSize);
         }
         SfxPoolItem const* pRowBrush(nullptr);
@@ -2295,6 +2302,7 @@ bool SwTable::CanConvertSubtables() const
                     return false;
                 }
                 haveSubtable = true;
+                bool haveNonFixedInnerLine(false);
                 for (SwTableLine const*const pInnerLine : pBox->GetTabLines())
                 {
                     // bitmap row background will look different
@@ -2311,11 +2319,29 @@ bool SwTable::CanConvertSubtables() const
                             return false;
                         }
                     }
+                    if (SwFormatFrameSize const* pSize = rRowFormat.GetItemIfSet(RES_FRM_SIZE))
+                    {
+                        if (pSize->GetHeightSizeType() != SwFrameSize::Fixed)
+                        {
+                            haveNonFixedInnerLine = true;
+                        }
+                    }
                     for (SwTableBox const*const pInnerBox : pInnerLine->GetTabBoxes())
                     {
                         if (!pInnerBox->GetTabLines().empty())
                         {
                             return false; // nested subtable :(
+                        }
+                    }
+                }
+                if (haveNonFixedInnerLine)
+                {
+                    if (SwFormatFrameSize const* pSize = pLine->GetFrameFormat()->GetItemIfSet(RES_FRM_SIZE))
+                    {
+                        if (pSize->GetHeightSizeType() != SwFrameSize::Variable)
+                        {
+                            // not possible to distribute fixed outer row height on rows without layout
+                            return false;
                         }
                     }
                 }
