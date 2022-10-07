@@ -662,17 +662,8 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
 
         if (!mpBorderWindow->IsEnabled())
             nState &= ~ControlState::ENABLED;
-        if (mpBorderWindow->HasFocus())
+        if (mpBorderWindow->HasFocus() || pCtrl->HasFocus() || pCtrl->HasChildPathFocus())
             nState |= ControlState::FOCUSED;
-        else if(mbNWFBorder)
-        {
-            // FIXME: this is currently only on macOS, see if other platforms can profit
-
-            // FIXME: for macOS focus rings all controls need to support GetNativeControlRegion
-            // for the dropdown style
-            if (pCtrl->HasFocus() || pCtrl->HasChildPathFocus())
-                nState |= ControlState::FOCUSED;
-        }
 
         bool bMouseOver = false;
         vcl::Window *pCtrlChild = pCtrl->GetWindow(GetWindowType::FirstChild);

@@ -721,7 +721,22 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( ( nType == ControlType::Editbox ) || ( nType == ControlType::MultilineEditbox ) )
+    if (nType == ControlType::Editbox)
+    {
+        iPart = EP_EDITBORDER_NOSCROLL;
+        if( !(nState & ControlState::ENABLED) )
+            iState = EPSN_DISABLED;
+        else if( nState & ControlState::FOCUSED )
+            iState = EPSN_FOCUSED;
+        else if( nState & ControlState::ROLLOVER )
+            iState = EPSN_HOT;
+        else
+            iState = EPSN_NORMAL;
+
+        return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+    }
+
+    if (nType == ControlType::MultilineEditbox)
     {
         iPart = EP_EDITTEXT;
         if( !(nState & ControlState::ENABLED) )

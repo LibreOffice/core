@@ -1876,11 +1876,8 @@ void Edit::GetFocus()
 
         ImplShowCursor();
 
-        // FIXME: this is currently only on macOS
-        // check for other platforms that need similar handling
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
+        if (IsNativeWidgetEnabled() &&
+            IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ))
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
@@ -1903,11 +1900,8 @@ void Edit::LoseFocus()
 {
     if ( !mpSubEdit )
     {
-        // FIXME: this is currently only on macOS
-        // check for other platforms that need similar handling
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
+        if (IsNativeWidgetEnabled() &&
+            IsNativeControlSupported(ControlType::Editbox, ControlPart::Entire))
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }

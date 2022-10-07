@@ -2769,9 +2769,8 @@ void ImplWin::Resize()
 void ImplWin::GetFocus()
 {
     ShowFocus( maFocusRect );
-    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-        IsNativeWidgetEnabled() &&
-        IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
+    if (IsNativeWidgetEnabled() &&
+        IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire))
     {
         vcl::Window* pWin = GetParent()->GetWindow( GetWindowType::Border );
         if( ! pWin )
@@ -2786,9 +2785,8 @@ void ImplWin::GetFocus()
 void ImplWin::LoseFocus()
 {
     HideFocus();
-    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-        IsNativeWidgetEnabled() &&
-        IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
+    if (IsNativeWidgetEnabled() &&
+        IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire))
     {
         vcl::Window* pWin = GetParent()->GetWindow( GetWindowType::Border );
         if( ! pWin )
