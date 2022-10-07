@@ -11,7 +11,10 @@
 
 #include <IconThemeSelector.hxx>
 
+#include <tools/color.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <config_mpl.h>
 
 #include <algorithm>
@@ -106,8 +109,11 @@ IconThemeSelector::SelectIconTheme(
         const OUString& theme) const
 {
     if (mUseHighContrastTheme) {
-        if (icon_theme_is_in_installed_themes(IconThemeInfo::HIGH_CONTRAST_ID, installedThemes)) {
-            return IconThemeInfo::HIGH_CONTRAST_ID;
+        const Color aCol(Application::GetSettings().GetStyleSettings().GetWindowColor());
+        const OUString name(aCol.IsDark() ? OUString(IconThemeInfo::HIGH_CONTRAST_ID_DARK)
+                                          : OUString(IconThemeInfo::HIGH_CONTRAST_ID_BRIGHT));
+        if (icon_theme_is_in_installed_themes(name, installedThemes)) {
+            return name;
         }
     }
 

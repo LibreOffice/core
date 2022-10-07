@@ -106,8 +106,8 @@ IconThemeSelectorTest::ThemeIsOverriddenByHighContrastMode()
     s.SetUseHighContrastTheme(true);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     OUString selected = s.SelectIconTheme(themes, "breeze");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is overridden by high contrast mode",
-            OUString("sifr"), selected);
+    bool sifr = selected.startsWith("sifr");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is overridden by high contrast mode", true, sifr);
     s.SetUseHighContrastTheme(false);
     selected = s.SelectIconTheme(themes, "breeze");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is no longer overridden by high contrast mode",
