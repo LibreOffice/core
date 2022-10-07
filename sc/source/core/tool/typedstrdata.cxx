@@ -11,6 +11,7 @@
 #include <global.hxx>
 
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <utility>
 
 bool ScTypedStrData::LessHiddenRows::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
@@ -77,8 +78,7 @@ bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left,
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    return ScGlobal::GetCaseCollator().compareString(
-        left.maStrValue, right.maStrValue) == 0;
+    return ScGlobal::GetCaseTransliteration().isEqual(left.maStrValue, right.maStrValue);
 }
 
 bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
@@ -92,8 +92,7 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    return ScGlobal::GetCollator().compareString(
-        left.maStrValue, right.maStrValue) == 0;
+    return ScGlobal::GetTransliteration().isEqual(left.maStrValue, right.maStrValue);
 }
 
 bool ScTypedStrData::operator< (const ScTypedStrData& r) const

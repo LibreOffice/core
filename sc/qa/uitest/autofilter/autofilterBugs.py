@@ -25,6 +25,54 @@ class autofilter(UITestCase):
             #autofilter still exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
+   def test_tdf123095(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            calcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = calcDoc.getChild("grid_window")
+            enter_text_to_cell(xGridWindow, "A1", "乙二醇(进口料件)")
+            enter_text_to_cell(xGridWindow, "A2", "乙二醇（进口料件）")
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
+
+            with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="no"):
+                pass
+
+            xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xTreeList = xFloatWindow.getChild("check_list_box")
+
+            # Without the fix in place, the second entry would not exist
+            self.assertEqual(2, len(xTreeList.getChildren()))
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("0"))["Text"], "乙二醇(进口料件)")
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("1"))["Text"], "乙二醇（进口料件）")
+
+   def test_tdf125363(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            calcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = calcDoc.getChild("grid_window")
+            enter_text_to_cell(xGridWindow, "A1", "guet")
+            enter_text_to_cell(xGridWindow, "A2", "guͤt")
+            enter_text_to_cell(xGridWindow, "A3", "tuon")
+            enter_text_to_cell(xGridWindow, "A4", "tuͦn")
+            enter_text_to_cell(xGridWindow, "A5", "vröude")
+            enter_text_to_cell(xGridWindow, "A6", "vröudᵉ")
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A6"}))
+
+            with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="no"):
+                pass
+
+            xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xTreeList = xFloatWindow.getChild("check_list_box")
+
+            # Without the fix in place, the entries with superscript/modifier letters would not exist
+            self.assertEqual(6, len(xTreeList.getChildren()))
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("0"))["Text"], "guet")
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("1"))["Text"], "guͤt")
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("2"))["Text"], "tuon")
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("3"))["Text"], "tuͦn")
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("4"))["Text"], "vröude")
+            self.assertEqual(get_state_as_dict(xTreeList.getChild("5"))["Text"], "vröudᵉ")
+
    def test_tdf94055(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
