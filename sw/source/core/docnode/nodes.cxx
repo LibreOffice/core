@@ -1815,10 +1815,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 aRg.aStart = pCurrentNode->EndOfSectionIndex();
 
                 if( bNewFrames && pTableNd )
-                {
-                    nStt = aInsPos;
-                    pTableNd->MakeOwnFrames(&nStt);
-                }
+                    pTableNd->MakeOwnFrames();
             }
             break;
 
