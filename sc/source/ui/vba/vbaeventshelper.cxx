@@ -659,7 +659,8 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
             rEventQueue.emplace_back(WORKBOOK_ACTIVATE );
             uno::Sequence< uno::Any > aArgs{ uno::Any(mxModel->getCurrentController()) };
             rEventQueue.emplace_back( WORKBOOK_WINDOWACTIVATE, aArgs );
-            rEventQueue.emplace_back(AUTO_OPEN );
+            if (!hasModule("Auto_Open"))
+                rEventQueue.emplace_back(AUTO_OPEN );
             // remember initial selection
             maOldSelection <<= mxModel->getCurrentSelection();
         }
@@ -779,7 +780,7 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
         case WORKBOOK_BEFORECLOSE:
             /*  Execute Auto_Close only if not cancelled by event handler, but
                 before UI asks user whether to cancel closing the document. */
-            if( !bCancel )
+            if (!bCancel && !hasModule("Auto_Close"))
                 rEventQueue.emplace_back(AUTO_CLOSE );
         break;
     }

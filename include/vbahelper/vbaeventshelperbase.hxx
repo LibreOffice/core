@@ -78,6 +78,8 @@ public:
 
     // little helpers ---------------------------------------------------------
 
+    bool hasModule(const OUString& rModuleName);
+
     /** Helper to execute event handlers without throwing any exceptions. */
     void processVbaEventNoThrow( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs );
 

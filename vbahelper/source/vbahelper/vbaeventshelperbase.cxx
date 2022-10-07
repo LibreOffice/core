@@ -320,6 +320,23 @@ void VbaEventsHelperBase::ensureVBALibrary()
     }
 }
 
+bool VbaEventsHelperBase::hasModule(const OUString& rModuleName)
+{
+    if (rModuleName.isEmpty())
+        return false;
+
+    bool bRet = false;
+    try
+    {
+        ensureVBALibrary();
+        bRet = mxModuleInfos->hasModuleInfo(rModuleName);
+    }
+    catch (uno::Exception&)
+    {}
+
+    return bRet;
+}
+
 sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName )
 {
     // make sure the VBA library exists
