@@ -1390,10 +1390,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         (RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
                         pAnchor->GetContentAnchor() &&
                         pAnchor->GetContentAnchor()->GetNode() == *this &&
-                        pAnchor->GetContentAnchor()->nContent == aIdx )
+                        pAnchor->GetContentAnchor()->GetContentIndex() == aIdx.GetIndex() )
                     {
-                        --const_cast<SwContentIndex&>(
-                            pAnchor->GetContentAnchor()->nContent);
+                        const_cast<SwPosition*>(pAnchor->GetContentAnchor())->AdjustContent(-1);
                     }
                 }
                 pFly->SetAnchor( this );
