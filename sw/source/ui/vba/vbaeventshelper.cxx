@@ -48,14 +48,14 @@ bool SwVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
 {
     switch( rInfo.mnEventId )
     {
-        case DOCUMENT_NEW:
-            rEventQueue.emplace_back(AUTO_NEW );
+        case AUTO_NEW:
+            rEventQueue.emplace_back(DOCUMENT_NEW);
         break;
-        case DOCUMENT_OPEN:
-            rEventQueue.emplace_back(AUTO_OPEN );
+        case AUTO_OPEN:
+            rEventQueue.emplace_back(DOCUMENT_OPEN);
         break;
-        case DOCUMENT_CLOSE:
-            rEventQueue.emplace_back(AUTO_CLOSE );
+        case AUTO_CLOSE:
+            rEventQueue.emplace_back(DOCUMENT_CLOSE);
         break;
     }
     return true;
