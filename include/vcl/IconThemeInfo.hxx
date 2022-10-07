@@ -29,7 +29,8 @@ class VCL_DLLPUBLIC IconThemeInfo
 {
 public:
     /** The name of the icon theme to use for high contrast mode */
-    static constexpr OUStringLiteral HIGH_CONTRAST_ID = u"sifr";
+    static constexpr OUStringLiteral HIGH_CONTRAST_ID_BRIGHT = u"sifr";
+    static constexpr OUStringLiteral HIGH_CONTRAST_ID_DARK = u"sifr_dark";
 
     /** Construct an IconThemeInfo from the URL to a file.
      * This method will throw a std::runtime_error if the URL cannot be properly parsed.
