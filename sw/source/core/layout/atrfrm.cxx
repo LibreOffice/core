@@ -3418,7 +3418,7 @@ void SwHandleAnchorNodeChg::ImplDestroy()
         *rCursor.GetPoint() = *moCommentAnchor;
         rCursor.SetMark();
         *rCursor.GetMark() = *moCommentAnchor;
-        ++rCursor.GetMark()->nContent;
+        rCursor.GetMark()->AdjustContent(+1);
     }
 
     // Set up the target of the move: the new comment anchor.
