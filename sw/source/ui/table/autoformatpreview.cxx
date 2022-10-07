@@ -432,6 +432,10 @@ void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
 {
     rRenderContext.Push(vcl::PushFlags::ALL);
 
+    const Color& rWinColor = SW_MOD()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
+    rRenderContext.SetBackground(Wallpaper(rWinColor));
+    rRenderContext.Erase();
+
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
     if (rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
         rRenderContext.SetDrawMode(DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill
@@ -441,12 +445,7 @@ void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetTransparent(true);
-
     rRenderContext.SetFont(aFont);
-    rRenderContext.SetLineColor();
-    const Color& rWinColor = SW_MOD()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
-    rRenderContext.SetBackground(Wallpaper(rWinColor));
-    rRenderContext.SetFillColor(rWinColor);
 
     // Draw the Frame
     Color oldColor = rRenderContext.GetLineColor();
