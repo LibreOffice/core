@@ -1065,7 +1065,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             {
                 if (pTextNd->GetText()[nChPos] == cCh)
                 {
-                    aCntPos.nContent = nChPos;
+                    aCntPos.SetContent(nChPos);
                     std::function<void (SwTextNode *, sw::mark::RestoreMode, bool)> restoreFunc(
                         [&](SwTextNode *const pNewNode, sw::mark::RestoreMode const eMode, bool)
                         {
@@ -1891,8 +1891,7 @@ void SwDoc::DeleteRow( const SwCursor& rCursor )
         {
             // Change the Shell's Cursor or the one passed?
             SwPaM* pPam = const_cast<SwPaM*>(static_cast<SwPaM const *>(&rCursor));
-            pPam->GetPoint()->nNode = aIdx;
-            pPam->GetPoint()->nContent.Assign( pCNd, 0 );
+            pPam->GetPoint()->Assign(aIdx);
             pPam->SetMark(); // Both want a part of it
             pPam->DeleteMark();
         }
