@@ -477,9 +477,9 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p, size_type& rP)
 
 namespace sw {
 
-std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p)
+std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p)
 {
-    std::vector<SwRangeRedline*> ret;
+    std::vector<std::unique_ptr<SwRangeRedline>> ret;
     // Create valid "sub-ranges" from the Selection
     auto [pStt, pEnd] = p->StartEnd(); // SwPosition*
     SwPosition aNewStt( *pStt );
@@ -493,91 +493,90 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
             aNewStt.Assign(rNds.GetEndOfContent());
     }
 
-    SwRangeRedline* pNew = nullptr;
 
-    if( aNewStt < *pEnd )
-        do {
-            if( !pNew )
-                pNew = new SwRangeRedline( p->GetRedlineData(), aNewStt );
-            else
+    if( aNewStt >= *pEnd )
+        return ret;
+
+    std::unique_ptr<SwRangeRedline> pNew;
+    do {
+        if( !pNew )
+            pNew.reset(new SwRangeRedline( p->GetRedlineData(), aNewStt ));
+        else
+        {
+            pNew->DeleteMark();
+            *pNew->GetPoint() = aNewStt;
+        }
+
+        pNew->SetMark();
+        GoEndSection( pNew->GetPoint() );
+        // i60396: If the redlines starts before a table but the table is the last member
+        // of the section, the GoEndSection will end inside the table.
+        // This will result in an incorrect redline, so we've to go back
+        SwNode* pTab = pNew->GetPoint()->GetNode().StartOfSectionNode()->FindTableNode();
+        // We end in a table when pTab != 0
+        if( pTab && !pNew->GetMark()->GetNode().StartOfSectionNode()->FindTableNode() )
+        { // but our Mark was outside the table => Correction
+            do
             {
-                pNew->DeleteMark();
+                // We want to be before the table
+                pNew->GetPoint()->Assign(*pTab);
+                pC = GoPreviousPos( pNew->GetPoint(), false ); // here we are.
+                if( pC )
+                    pNew->GetPoint()->SetContent( 0 );
+                pTab = pNew->GetPoint()->GetNode().StartOfSectionNode()->FindTableNode();
+            } while( pTab ); // If there is another table we have to repeat our step backwards
+        }
+
+        if( *pNew->GetPoint() > *pEnd )
+        {
+            pC = nullptr;
+            if( aNewStt.GetNode() != pEnd->GetNode() )
+                do {
+                    SwNode& rCurNd = aNewStt.GetNode();
+                    if( rCurNd.IsStartNode() )
+                    {
+                        if( rCurNd.EndOfSectionIndex() < pEnd->GetNodeIndex() )
+                            aNewStt.Assign( *rCurNd.EndOfSectionNode() );
+                        else
+                            break;
+                    }
+                    else if( rCurNd.IsContentNode() )
+                        pC = rCurNd.GetContentNode();
+                    aNewStt.Adjust(SwNodeOffset(1));
+                } while( aNewStt.GetNodeIndex() < pEnd->GetNodeIndex() );
+
+            if( aNewStt.GetNode() == pEnd->GetNode() )
+                aNewStt.SetContent(pEnd->GetContentIndex());
+            else if( pC )
+            {
+                aNewStt.Assign(*pC, pC->Len() );
+            }
+
+            if( aNewStt <= *pEnd )
                 *pNew->GetPoint() = aNewStt;
-            }
-
-            pNew->SetMark();
-            GoEndSection( pNew->GetPoint() );
-            // i60396: If the redlines starts before a table but the table is the last member
-            // of the section, the GoEndSection will end inside the table.
-            // This will result in an incorrect redline, so we've to go back
-            SwNode* pTab = pNew->GetPoint()->GetNode().StartOfSectionNode()->FindTableNode();
-            // We end in a table when pTab != 0
-            if( pTab && !pNew->GetMark()->GetNode().StartOfSectionNode()->FindTableNode() )
-            { // but our Mark was outside the table => Correction
-                do
-                {
-                    // We want to be before the table
-                    pNew->GetPoint()->Assign(*pTab);
-                    pC = GoPreviousPos( pNew->GetPoint(), false ); // here we are.
-                    if( pC )
-                        pNew->GetPoint()->SetContent( 0 );
-                    pTab = pNew->GetPoint()->GetNode().StartOfSectionNode()->FindTableNode();
-                } while( pTab ); // If there is another table we have to repeat our step backwards
-            }
-
-            if( *pNew->GetPoint() > *pEnd )
-            {
-                pC = nullptr;
-                if( aNewStt.GetNode() != pEnd->GetNode() )
-                    do {
-                        SwNode& rCurNd = aNewStt.GetNode();
-                        if( rCurNd.IsStartNode() )
-                        {
-                            if( rCurNd.EndOfSectionIndex() < pEnd->GetNodeIndex() )
-                                aNewStt.Assign( *rCurNd.EndOfSectionNode() );
-                            else
-                                break;
-                        }
-                        else if( rCurNd.IsContentNode() )
-                            pC = rCurNd.GetContentNode();
-                        aNewStt.Adjust(SwNodeOffset(1));
-                    } while( aNewStt.GetNodeIndex() < pEnd->GetNodeIndex() );
-
-                if( aNewStt.GetNode() == pEnd->GetNode() )
-                    aNewStt.SetContent(pEnd->GetContentIndex());
-                else if( pC )
-                {
-                    aNewStt.Assign(*pC, pC->Len() );
-                }
-
-                if( aNewStt <= *pEnd )
-                    *pNew->GetPoint() = aNewStt;
-            }
-            else
-                aNewStt = *pNew->GetPoint();
+        }
+        else
+            aNewStt = *pNew->GetPoint();
 #if OSL_DEBUG_LEVEL > 0
-            CheckPosition( pNew->GetPoint(), pNew->GetMark() );
+        CheckPosition( pNew->GetPoint(), pNew->GetMark() );
 #endif
 
-            if( *pNew->GetPoint() != *pNew->GetMark() &&
-                pNew->HasValidRange())
-            {
-                ret.push_back(pNew);
-                pNew = nullptr;
-            }
+        if( *pNew->GetPoint() != *pNew->GetMark() &&
+            pNew->HasValidRange())
+        {
+            ret.push_back(std::move(pNew));
+        }
 
-            if( aNewStt >= *pEnd )
-                break;
-            pC = rNds.GoNext( &aNewStt.nNode );
-            if( !pC )
-                break;
+        if( aNewStt >= *pEnd )
+            break;
+        pC = rNds.GoNext( &aNewStt.nNode );
+        if( !pC )
+            break;
 
-            aNewStt.nContent.Assign( pC, 0 );
+        aNewStt.nContent.Assign( pC, 0 );
 
-        } while( aNewStt < *pEnd );
+    } while( aNewStt < *pEnd );
 
-    delete pNew;
-    p.reset();
     return ret;
 }
 
@@ -586,15 +585,16 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
 bool SwRedlineTable::InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPos)
 {
     bool bAnyIns = false;
-    std::vector<SwRangeRedline*> const redlines(
+    std::vector<std::unique_ptr<SwRangeRedline>> redlines(
             GetAllValidRanges(std::unique_ptr<SwRangeRedline>(p)));
-    for (SwRangeRedline * pRedline : redlines)
+    for (std::unique_ptr<SwRangeRedline> & pRedline : redlines)
     {
         assert(pRedline->HasValidRange());
         size_type nInsPos;
-        if (Insert(pRedline, nInsPos))
+        auto pTmpRedline = pRedline.release();
+        if (Insert(pTmpRedline, nInsPos))
         {
-            pRedline->CallDisplayFunc(nInsPos);
+            pTmpRedline->CallDisplayFunc(nInsPos);
             bAnyIns = true;
             if (pInsPos && *pInsPos < nInsPos)
             {

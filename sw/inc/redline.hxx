@@ -338,7 +338,7 @@ class SW_DLLPUBLIC SwRedlineHint final : public SfxHint
 
 namespace sw {
 
-std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p);
+std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p);
 
 } // namespace sw
 

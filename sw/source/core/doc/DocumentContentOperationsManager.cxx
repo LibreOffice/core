@@ -4094,12 +4094,12 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam
         return false; // do not add empty redlines
     }
 
-    std::vector<SwRangeRedline*> redlines;
+    std::vector<std::unique_ptr<SwRangeRedline>> redlines;
     {
         auto pRedline(std::make_unique<SwRangeRedline>(RedlineType::Delete, rPam));
         if (pRedline->HasValidRange())
         {
-            redlines.push_back(pRedline.release());
+            redlines.push_back(std::move(pRedline));
         }
         else // sigh ... why is such a selection even possible...
         {    // split it up so we get one SwUndoRedlineDelete per inserted RL
@@ -4160,7 +4160,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam
         m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
             RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
-        for (SwRangeRedline * pRedline : redlines)
+        for (std::unique_ptr<SwRangeRedline> & pRedline : redlines)
         {
             assert(pRedline->HasValidRange());
             undos.emplace_back(std::make_unique<SwUndoRedlineDelete>(
@@ -4195,14 +4195,14 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam
         }
     }
 
-    for (SwRangeRedline *const pRedline : redlines)
+    for (std::unique_ptr<SwRangeRedline> & pRedline : redlines)
     {
         // note: 1. the pRedline can still be merged & deleted
         //       2. the impl. can even DeleteAndJoin the range => no plain PaM
         std::shared_ptr<SwUnoCursor> const pCursor(m_rDoc.CreateUnoCursor(*pRedline->GetMark()));
         pCursor->SetMark();
         *pCursor->GetPoint() = *pRedline->GetPoint();
-        m_rDoc.getIDocumentRedlineAccess().AppendRedline(pRedline, true);
+        m_rDoc.getIDocumentRedlineAccess().AppendRedline(pRedline.release(), true);
         // sw_redlinehide: 2 reasons why this is needed:
         // 1. it's the first redline in node => RedlineDelText was sent but ignored
         // 2. redline spans multiple nodes => must merge text frames
