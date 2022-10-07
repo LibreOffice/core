@@ -162,7 +162,7 @@ static bool lcl_FindAnchorPos(
                 {
                     if ( SwCursorShell::PosInsideInputField( aPos ) )
                     {
-                        aPos.nContent = SwCursorShell::StartOfInputFieldAtPos( aPos );
+                        aPos.SetContent( SwCursorShell::StartOfInputFieldAtPos( aPos ) );
                     }
                 }
             }
@@ -184,8 +184,8 @@ static bool lcl_FindAnchorPos(
 
             if( pNewAnch && &rFrame != pNewAnch && !pNewAnch->IsProtected() )
             {
-                aPos.nNode = *static_cast<const SwFlyFrame*>(pNewAnch)->GetFormat()->GetContent().
-                                GetContentIdx();
+                aPos.Assign( *static_cast<const SwFlyFrame*>(pNewAnch)->GetFormat()->GetContent().
+                                GetContentIdx() );
                 aNewAnch.SetAnchor( &aPos );
                 break;
             }
@@ -555,11 +555,9 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                 {
                     case RndStdIds::FLY_AT_PARA:
                     {
-                        SwPosition pos = *aAnch.GetContentAnchor();
-                        pos.nNode = pTextFrame->IsTextFrame()
+                        SwPosition pos(pTextFrame->IsTextFrame()
                             ? *static_cast<SwTextFrame const*>(pTextFrame)->GetTextNodeForParaProps()
-                            : *static_cast<const SwNoTextFrame*>(pTextFrame)->GetNode();
-                        pos.nContent.Assign(nullptr,0);
+                            : *static_cast<const SwNoTextFrame*>(pTextFrame)->GetNode());
                         aAnch.SetAnchor( &pos );
                         break;
                     }
