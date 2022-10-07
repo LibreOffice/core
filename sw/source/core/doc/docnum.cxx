@@ -2206,7 +2206,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             if( bDelLastPara )
             {
                 // We need to remove the last empty Node again
-                aIdx = aInsPos.nNode;
+                aIdx = aInsPos.GetNode();
                 SwContentNode* pCNd = SwNodes::GoPrevious( &aInsPos );
                 if (pCNd)
                     aInsPos.AssignEndIndex( *pCNd );
@@ -2236,10 +2236,10 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             assert(*aPam.GetMark() < *aPam.GetPoint());
             if (aPam.GetPoint()->GetNode().IsEndNode())
             {   // ensure redline ends on content node
-                --aPam.GetPoint()->nNode;
+                aPam.GetPoint()->Adjust(SwNodeOffset(-1));
                 assert(aPam.GetPoint()->GetNode().IsTextNode());
                 SwTextNode *const pNode(aPam.GetPoint()->GetNode().GetTextNode());
-                aPam.GetPoint()->nContent.Assign(pNode, pNode->Len());
+                aPam.GetPoint()->SetContent(pNode->Len());
             }
 
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
@@ -2287,10 +2287,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                         --aIdx2;
                         SwTextNode const*const pEmptyNode(aIdx2.GetNode().GetTextNode());
                         if ( pEmptyNode && pEmptyNode->Len() == 0 )
-                        {
-                            --(pRPos->nNode);
-                            pRPos->nContent.Assign( aIdx2.GetNode().GetContentNode(), 0 );
-                        }
+                            pRPos->Adjust(SwNodeOffset(-1));
                     }
                     else if ( pEmptyNode0 && pEmptyNode0->Len() == 0 )
                     {
@@ -2298,10 +2295,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                         ++aIdx2;
                         SwTextNode const*const pEmptyNode(aIdx2.GetNode().GetTextNode());
                         if (pEmptyNode)
-                        {
-                            ++(pRPos->nNode);
-                            pRPos->nContent.Assign( aIdx2.GetNode().GetContentNode(), 0 );
-                        }
+                            pRPos->Adjust(SwNodeOffset(+1));
                     }
 
                     // sort redlines, when the trimmed range results bad redline order
