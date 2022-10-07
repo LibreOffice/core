@@ -1229,11 +1229,6 @@ cmd/lc_modifypage.png cmd/lc_pagedialog.png
 cmd/sc_insertobjctrl.png cmd/sc_drawchart.png
 cmd/sc_modifypage.png cmd/sc_pagedialog.png
 
-# Link
-cmd/32/edithyperlink.png cmd/32/inserthyperlink.png
-cmd/lc_edithyperlink.png cmd/lc_inserthyperlink.png
-cmd/sc_edithyperlink.png cmd/sc_inserthyperlink.png
-
 # Outline
 cmd/32/outlinedown.png cmd/32/movedown.png
 cmd/32/outlineup.png cmd/32/moveup.png
@@ -2189,7 +2184,7 @@ res/sc10866.png cmd/sc_grafgreen.png
 res/sc10867.png cmd/sc_grafblue.png
 res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
-res/script.png cmd/sc_insertscript.png
+res/script.png cmd/sc_choosemacro.png
 res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03141.png svtools/res/folder.png
 res/sx03150.png cmd/sc_showsinglepage.png
