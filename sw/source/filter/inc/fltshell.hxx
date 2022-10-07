@@ -64,7 +64,7 @@ public:
     //operators with SwPosition, where the node is hacked to the previous one,
     //and the offset to content is de-dynamic-ified
     SwFltPosition(const SwPosition &rPos)
-        : m_nNode(rPos.nNode, -1)
+        : m_nNode(rPos.GetNode(), -1)
         , m_nContent(rPos.GetContentIndex())
     {
     }
