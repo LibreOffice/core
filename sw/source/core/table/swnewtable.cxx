@@ -2382,6 +2382,8 @@ bool SwTable::CanConvertSubtables() const
 
 void SwTable::ConvertSubtables()
 {
+    FndBox_ all(nullptr, nullptr);
+    all.DelFrames(*this); // tdf#151375 avoid UAF by frames on deleted cells
     for (size_t i = 0; i < GetTabLines().size(); ++i)
     {
         SwTableLine *const pLine(GetTabLines()[i]);
@@ -2397,6 +2399,7 @@ void SwTable::ConvertSubtables()
     }
     GCLines();
     m_bNewModel = true;
+    all.MakeFrames(*this);
 #if 0
     // note: outline nodes (and ordinary lists) are sorted by MoveNodes() itself
     //       (this could change order inside table of contents, but that's a
