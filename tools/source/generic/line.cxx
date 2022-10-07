@@ -104,13 +104,13 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
 
     if( maStart != maEnd )
     {
-        const double    fDistX = maEnd.X() - maStart.X();
-        const double    fDistY = maEnd.Y() - maStart.Y();
-        const double    fACX = maStart.X() - rPtX;
-        const double    fACY = maStart.Y() - rPtY;
-        const double    fL2 = fDistX * fDistX + fDistY * fDistY;
-        const double    fR = ( fACY * -fDistY - fACX * fDistX ) / fL2;
-        const double    fS = ( fACY * fDistX - fACX * fDistY ) / fL2;
+        const double fDistX = static_cast<double>(maEnd.X()) - maStart.X();
+        const double fDistY = static_cast<double>(maEnd.Y()) - maStart.Y();
+        const double fACX = static_cast<double>(maStart.X()) - rPtX;
+        const double fACY = static_cast<double>(maStart.Y()) - rPtY;
+        const double fL2 = fDistX * fDistX + fDistY * fDistY;
+        const double fR = ( fACY * -fDistY - fACX * fDistX ) / fL2;
+        const double fS = ( fACY * fDistX - fACX * fDistY ) / fL2;
 
         if( fR < 0.0 )
         {
