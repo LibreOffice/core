@@ -19,6 +19,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
@@ -776,6 +777,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
     // 19th bit: combo box, not dropdown.
     CPPUNIT_ASSERT(pAnnotation->getFormFieldFlags(pPdfDocument.get()) & 0x00040000);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
+{
+    // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    sal_Int32 nPlaceHolderLen = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER).getLength();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nPlaceHolderLen,
+                     /*bBasicCall=*/false);
+    pWrtShell->Insert("xxxyyy");
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pWrtShell->GetAttrPool());
+    SvxWeightItem aItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    aSet.Put(aItem);
+    pWrtShell->SetAttrSet(aSet);
+
+    // When exporting to PDF:
+    StoreToTempFile("writer_pdf_Export");
+
+    // Then make sure that a single fillable form widget is emitted:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. "xxx<b>yyy</b>" was exported as 2 widgets, not 1.
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

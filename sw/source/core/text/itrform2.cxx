@@ -930,6 +930,19 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         return false;
     }
 
+    // Check if this is the first content control portion of this content control.
+    SwTextNode* pTextNode = pContentControl->GetTextNode();
+    sal_Int32 nStart = m_pTextContentControl->GetStart();
+    sal_Int32 nEnd = *m_pTextContentControl->GetEnd();
+    TextFrameIndex nViewStart = rInf.GetTextFrame()->MapModelToView(pTextNode, nStart);
+    TextFrameIndex nViewEnd = rInf.GetTextFrame()->MapModelToView(pTextNode, nEnd);
+    // The content control portion starts 1 char after the starting dummy character.
+    if (rInf.GetIdx() != nViewStart + TextFrameIndex(1))
+    {
+        // Ignore: don't process and also don't emit plain text fallback.
+        return true;
+    }
+
     std::unique_ptr<vcl::PDFWriter::AnyWidget> pDescriptor;
     switch (pContentControl->GetType())
     {
@@ -996,10 +1009,8 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     }
 
     // Description for accessibility purposes.
-    SwTextContentControl* pTextAttr = pContentControl->GetTextAttr();
-    SwTextNode* pTextNode = pContentControl->GetTextNode();
-    SwPosition aPoint(*pTextNode, pTextAttr->GetStart());
-    SwPosition aMark(*pTextNode, *pTextAttr->GetEnd());
+    SwPosition aPoint(*pTextNode, nStart);
+    SwPosition aMark(*pTextNode, nEnd);
     SwPaM aPam(aMark, aPoint);
     OUString aDescription = aPam.GetText();
     static sal_Unicode const aForbidden[] = {
@@ -1008,8 +1019,18 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     };
     pDescriptor->Description = comphelper::string::removeAny(aDescription, aForbidden);
 
+    // Calculate the bounding rectangle of this content control, which can be one or more layout
+    // portions in one or more lines.
     SwRect aLocation;
-    rInf.CalcRect(*this, &aLocation);
+    auto pTextFrame = const_cast<SwTextFrame*>(rInf.GetTextFrame());
+    SwTextSizeInfo aInf(pTextFrame);
+    SwTextCursor aLine(pTextFrame, &aInf);
+    SwRect aStartRect;
+    aLine.GetCharRect(&aStartRect, nViewStart);
+    aLocation = aStartRect;
+    SwRect aEndRect;
+    aLine.GetCharRect(&aEndRect, nViewEnd);
+    aLocation.Union(aEndRect);
     pDescriptor->Location = aLocation.SVRect();
 
     pPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
