@@ -749,9 +749,9 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         *pEndNdIdx = aPos.GetNodeIndex();
 
     // old position
-    aPos.nNode = nTmpMvNode;
+    aPos.Assign(nTmpMvNode);
     if( pNodeIdx )
-        *pNodeIdx = aPos.nNode;
+        *pNodeIdx = aPos.GetNode();
 }
 
 void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
@@ -767,10 +767,10 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
 
     SwPaM aPaM( rInsPos );
     if( pEndNdIdx )         // than get the section from it
-        aPaM.GetPoint()->nNode.Assign( rNds, *pEndNdIdx );
+        aPaM.GetPoint()->Assign( *rNds[SwNodeOffset(0)], *pEndNdIdx );
     else
     {
-        aPaM.GetPoint()->nNode = rNds.GetEndOfExtras();
+        aPaM.GetPoint()->Assign( rNds.GetEndOfExtras() );
         GoInContent( aPaM, fnMoveBackward );
     }
 

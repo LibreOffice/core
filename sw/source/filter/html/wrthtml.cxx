@@ -488,10 +488,10 @@ ErrCode SwHTMLWriter::WriteStream()
         if( pTNd && m_bWriteAll )
         {
             // start with table node !!
-            m_pCurrentPam->GetPoint()->nNode = *pTNd;
+            m_pCurrentPam->GetPoint()->Assign(*pTNd);
 
             if( m_bWriteOnlyFirstTable )
-                m_pCurrentPam->GetMark()->nNode = *pTNd->EndOfSectionNode();
+                m_pCurrentPam->GetMark()->Assign(*pTNd->EndOfSectionNode());
         }
 
         // first node (with can contain a page break)
@@ -503,7 +503,7 @@ ErrCode SwHTMLWriter::WriteStream()
             if( m_bWriteAll )
             {
                 // start with section node !!
-                m_pCurrentPam->GetPoint()->nNode = *pSNd;
+                m_pCurrentPam->GetPoint()->Assign(*pSNd);
             }
             else
             {
@@ -862,7 +862,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         rHTMLWrt.Out_SwDoc( rHTMLWrt.m_pCurrentPam.get() );
     }
 
-    rHTMLWrt.m_pCurrentPam->GetPoint()->nNode = *rSectNd.EndOfSectionNode();
+    rHTMLWrt.m_pCurrentPam->GetPoint()->Assign(*rSectNd.EndOfSectionNode());
 
     if( bEndTag )
         lcl_html_OutSectionEndTag( rHTMLWrt );
@@ -923,7 +923,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( &rNd == &m_pDoc->GetNodes().GetEndOfContent() )
                 break;
 
-            ++m_pCurrentPam->GetPoint()->nNode;   // move
+            m_pCurrentPam->GetPoint()->Adjust(SwNodeOffset(+1));   // move
             SwNodeOffset nPos = m_pCurrentPam->GetPoint()->GetNodeIndex();
 
             if( m_bShowProgress )
@@ -1589,7 +1589,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, SwNodeOffset nStt,
     {
         const SwNode *pNd = rWrt.m_pDoc->GetNodes()[ nStt ];
         if( pNd->IsTableNode() || pNd->IsSectionNode() )
-            rWrt.m_pCurrentPam->GetMark()->nNode = nStt;
+            rWrt.m_pCurrentPam->GetMark()->Assign(*pNd);
     }
 
     rWrt.SetEndPaM( rWrt.m_pCurrentPam.get() );

@@ -294,7 +294,7 @@ SwUndoDelete::SwUndoDelete(
         rPam.Exchange();
 
     if( !pSttTextNd && !pEndTextNd )
-        --rPam.GetPoint()->nNode;
+        rPam.GetPoint()->Adjust(SwNodeOffset(-1));
     rPam.DeleteMark();          // the SPoint is in the selection
 
     if( !pEndTextNd )
@@ -941,7 +941,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                         lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
                 }
                 else
-                    ++aPos.nNode;
+                    aPos.Adjust(SwNodeOffset(+1));
             }
         }
         if( m_nSectDiff )
@@ -959,12 +959,12 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 ++nDiff;
             }
             SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
-            SwNodeRange aRg( aPos.nNode, SwNodeOffset(0) - nDiff, aPos.nNode, SwNodeOffset(1) - nDiff );
-            --aPos.nNode;
+            SwNodeRange aRg( aPos.GetNode(), SwNodeOffset(0) - nDiff, aPos.GetNode(), SwNodeOffset(1) - nDiff );
+            aPos.Adjust(SwNodeOffset(-1));
             if( !m_bJoinNext )
                 pMovedNode = &aPos.GetNode();
             rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx.GetNode());
-            ++aPos.nNode;
+            aPos.Adjust(SwNodeOffset(+1));
         }
 
         if( bNodeMove )
@@ -983,7 +983,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 if( m_bJoinNext )
                 {
                     nMoveIndex = m_nEndNode - m_nNdDiff;
-                    aPos.nNode = nMoveIndex + m_nReplaceDummy;
+                    aPos.Assign( nMoveIndex + m_nReplaceDummy );
                 }
                 else
                 {
@@ -1298,7 +1298,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         assert(!"dead code");
         // The Pam was incremented by one at Point (== end) to provide space
         // for UNDO. This now needs to be reverted!
-        --rPam.End()->nNode;
+        rPam.End()->Adjust(SwNodeOffset(-1));
         if( rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode() )
             *rPam.GetMark() = *rPam.GetPoint();
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );

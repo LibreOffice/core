@@ -905,7 +905,7 @@ void SwEditWin::FlushInBuffer()
         rSh.NormalizePam();     // make point be the first (left) one
         if (!rSh.GetCursor()->HasMark())
             rSh.GetCursor()->SetMark();
-        rSh.GetCursor()->GetMark()->nContent = 0;
+        rSh.GetCursor()->GetMark()->SetContent(0);
 
         const OUString aOldText( rSh.GetCursor()->GetText() );
         const sal_Int32 nOldLen = aOldText.getLength();

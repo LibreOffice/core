@@ -2809,7 +2809,7 @@ void MSWordExportBase::WriteText()
             if ( pTemp )
                 m_pCurrentPageDesc = pTemp;
 
-            m_pCurPam->GetPoint()->nContent.Assign( pCNd, 0 );
+            m_pCurPam->GetPoint()->SetContent( 0 );
             OutputContentNode( *pCNd );
         }
         else if ( rNd.IsTableNode() )
