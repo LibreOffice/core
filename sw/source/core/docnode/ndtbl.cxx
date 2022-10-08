@@ -2308,7 +2308,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
             }
         }
 
-        rPam.GetPoint()->nNode = *pMergeBox->GetSttNd();
+        rPam.GetPoint()->Assign( *pMergeBox->GetSttNd() );
         rPam.Move();
 
         ::ClearFEShellTabCols(*this, nullptr);
@@ -4347,7 +4347,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 }
                 return false;
             }
-            aPos.nNode -= SwNodeOffset(1); // Set to the Table's EndNode
+            aPos.Adjust(SwNodeOffset(-1)); // Set to the Table's EndNode
             pSrcTableNd = aPos.GetNode().FindTableNode();
         }
 
