@@ -171,13 +171,15 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
 // sMod can be empty ( but we really need the library to search in )
 // if sMod is empty and a macro is found then sMod is updated
 // if sMod is empty, only standard modules will be searched (no class, document, form modules)
-static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, OUString& sMod, const OUString& sMacro )
+static bool hasMacro(SfxObjectShell const* pShell, const OUString& sLibrary, OUString& sMod,
+                     const OUString& sMacro, bool bOnlyPublic)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
     (void) sLibrary;
     (void) sMod;
     (void) sMacro;
+    (void) bOnlyPublic;
 #else
     if (sLibrary.isEmpty() || sMacro.isEmpty())
         return false;
@@ -202,7 +204,7 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
         if (!pModule)
             return false;
         SbMethod* pMeth = pModule->FindMethod(sMacro, SbxClassType::Method);
-        return pMeth;
+        return pMeth && (!bOnlyPublic || !pMeth->IsSet(SbxFlagBits::Private));
     }
 
     for (auto const& rModuleRef : pBasic->GetModules())
@@ -210,6 +212,8 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
         SbMethod* pMeth = rModuleRef->FindMethod(sMacro, SbxClassType::Method);
         if (pMeth)
         {
+            if (bOnlyPublic && pMeth->IsSet(SbxFlagBits::Private))
+                continue;
             sMod = rModuleRef->GetName();
             return true;
         }
@@ -257,7 +261,9 @@ static void parseMacro( const OUString& sMacro, OUString& sContainer, OUString& 
 
 #endif
 
-OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName )
+OUString resolveVBAMacro(SfxObjectShell const* pShell, const OUString& rLibName,
+                         const OUString& rModuleName, const OUString& rMacroName,
+                         bool bOnlyPublic)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
@@ -269,7 +275,7 @@ OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibNam
     {
         OUString aLibName = rLibName.isEmpty() ?  getDefaultProjectName( pShell ) : rLibName ;
         OUString aModuleName = rModuleName;
-        if( hasMacro( pShell, aLibName, aModuleName, rMacroName ) )
+        if (hasMacro( pShell, aLibName, aModuleName, rMacroName, bOnlyPublic))
             return aLibName + "." + aModuleName + "." + rMacroName;
     }
 #endif
@@ -440,7 +446,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 
     for (auto const& search : sSearchList)
     {
-        aRes.mbFound = hasMacro( pShell, search, sModule, sProcedure );
+        aRes.mbFound = hasMacro(pShell, search, sModule, sProcedure, /*bOnlyPublic=*/false);
         if ( aRes.mbFound )
         {
             sContainer = search;

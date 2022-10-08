@@ -369,8 +369,18 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
         const EventHandlerInfo& rInfo = rEventInfo.second;
         if( rInfo.mnModuleType == nModuleType )
         {
+            // Only in Word, Auto* only runs if defined as Public, not Private.
+            const bool bOnlyPublic
+                = getImplementationName() == "SwVbaEventsHelper"
+                  && (rInfo.mnEventId == css::script::vba::VBAEventId::DOCUMENT_AUTO_NEW
+                      || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_NEW
+                      || rInfo.mnEventId == css::script::vba::VBAEventId::DOCUMENT_AUTO_OPEN
+                      || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
+                      || rInfo.mnEventId == css::script::vba::VBAEventId::DOCUMENT_AUTO_CLOSE
+                      || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE);
+
             OUString sName = resolveVBAMacro(mpShell, maLibraryName, rModuleName,
-                                             rInfo.maMacroName);
+                                             rInfo.maMacroName, bOnlyPublic);
             // Only in Word (with lowest priority), an Auto* module can execute a "Public Sub Main"
             if (sName.isEmpty() && rModuleName.isEmpty()
                 && getImplementationName() == "SwVbaEventsHelper")
@@ -379,7 +389,8 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
                     || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
                     || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE)
                 {
-                    sName = resolveVBAMacro(mpShell, maLibraryName, rInfo.maMacroName, "Main");
+                    sName = resolveVBAMacro(mpShell, maLibraryName, rInfo.maMacroName, "Main",
+                                            bOnlyPublic);
                 }
             }
             rPathMap[rInfo.mnEventId] = sName;
