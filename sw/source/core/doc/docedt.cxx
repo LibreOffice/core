@@ -520,7 +520,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                     SwRootFrame const*const pLayout,
                     SwConversionArgs *pConvArgs  ) const
 {
-    SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
+    SwPosition* const pSttPos = rPaM.Start();
+    SwPosition* const pEndPos = rPaM.End();
 
     std::unique_ptr<SwSpellArgs> pSpellArgs;
     if (pConvArgs)
@@ -600,13 +601,16 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             ( pConvArgs && pNd->GetTextNode()->Convert( *pConvArgs )))
                         {
                             // Cancel and remember position
-                            pSttPos->nNode = nCurrNd;
-                            pEndPos->nNode = nCurrNd;
-                            nCurrNd = nEndNd;
                             if( pSpellArgs )
                                 nSpellErrorPosition = pSpellArgs->pStartPos->GetContentIndex() > pSpellArgs->pEndPos->GetContentIndex() ?
                                             pSpellArgs->pEndPos->GetContentIndex() :
                                             pSpellArgs->pStartPos->GetContentIndex();
+                            if( nCurrNd != nEndNd )
+                            {
+                                pSttPos->Assign(nCurrNd);
+                                pEndPos->Assign(nCurrNd);
+                                nCurrNd = nEndNd;
+                            }
                         }
 
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck )
@@ -649,8 +653,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     //put the cursor to the current error
                                     const linguistic2::SingleProofreadingError &rError = aResult.aErrors[0];
                                     nCurrNd = pNd->GetIndex();
-                                    pSttPos->nNode = nCurrNd;
-                                    pEndPos->nNode = nCurrNd;
+                                    pSttPos->Assign(nCurrNd);
+                                    pEndPos->Assign(nCurrNd);
                                     pSpellArgs->pStartPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
                                     pSpellArgs->pEndPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
