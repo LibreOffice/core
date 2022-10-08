@@ -288,14 +288,24 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
                                  css::uno::Any & rValue )
 {
     SvMemoryStream aStrm;
+    SotClipboardFormatId fmtId = SotExchange::GetFormatIdFromMimeType(rMimeType);
+    if (fmtId == SotClipboardFormatId::STRING)
+        aStrm.SetStreamCharSet(RTL_TEXTENCODING_UNICODE);
     // mba: no BaseURL for data exchange
-    if( ExportStream( aStrm, OUString(),
-                SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
+    if (ExportStream(aStrm, OUString(), fmtId))
     {
-        aStrm.WriteUChar( 0 );
-        rValue <<= css::uno::Sequence< sal_Int8 >(
-                                        static_cast<sal_Int8 const *>(aStrm.GetData()),
-                                        aStrm.TellEnd() );
+        if (fmtId == SotClipboardFormatId::STRING)
+        {
+            assert(aStrm.TellEnd() % sizeof(sal_Unicode) == 0);
+            rValue <<= OUString(static_cast<const sal_Unicode*>(aStrm.GetData()),
+                                aStrm.TellEnd() / sizeof(sal_Unicode));
+        }
+        else
+        {
+            aStrm.WriteUChar(0);
+            rValue <<= css::uno::Sequence<sal_Int8>(static_cast<sal_Int8 const*>(aStrm.GetData()),
+                                                    aStrm.TellEnd());
+        }
         return true;
     }
     return false;

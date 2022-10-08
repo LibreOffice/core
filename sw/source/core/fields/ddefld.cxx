@@ -70,9 +70,13 @@ public:
     case SotClipboardFormatId::STRING:
         if( !IsNoDataFlag() )
         {
-            uno::Sequence< sal_Int8 > aSeq;
-            rValue >>= aSeq;
-            OUString sStr( reinterpret_cast<char const *>(aSeq.getConstArray()), aSeq.getLength(), osl_getThreadTextEncoding() );
+            OUString sStr;
+            if (!(rValue >>= sStr))
+            {
+                uno::Sequence< sal_Int8 > aSeq;
+                rValue >>= aSeq;
+                sStr = OUString(reinterpret_cast<char const*>(aSeq.getConstArray()), aSeq.getLength(), osl_getThreadTextEncoding());
+            }
 
             // remove not needed CR-LF at the end
             sal_Int32 n = sStr.getLength();
