@@ -79,7 +79,7 @@ bool SwServerObject::GetData( uno::Any & rData,
             pPam = new SwPaM( SwPosition( *m_CNTNT_TYPE.pSectNd ) );
             pPam->Move( fnMoveForward );
             pPam->SetMark();
-            pPam->GetPoint()->nNode = *m_CNTNT_TYPE.pSectNd->EndOfSectionNode();
+            pPam->GetPoint()->Assign( *m_CNTNT_TYPE.pSectNd->EndOfSectionNode() );
             pPam->Move( fnMoveBackward );
             break;
         case NONE_SERVER: break;
