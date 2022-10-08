@@ -78,7 +78,7 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
             }
             else
             {
-                aPos.Assign(rStartPos.nNode);
+                aPos.Assign(rStartPos.GetNode());
                 assert(aPos.GetNode().GetContentNode());
             }
         }
