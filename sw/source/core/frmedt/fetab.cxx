@@ -479,10 +479,10 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     pTableCursor->DeleteMark();
 
                     // set start and end of the selection
-                    pTableCursor->GetPoint()->nNode = *pEnd->GetSttNd();
+                    pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd() );
                     pTableCursor->Move( fnMoveForward, GoInContent );
                     pTableCursor->SetMark();
-                    pTableCursor->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
+                    pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
                     pTableCursor->Move( fnMoveBackward, GoInContent );
                     pWrtShell->UpdateCursor();
                 }

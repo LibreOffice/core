@@ -2005,11 +2005,11 @@ bool SwFEShell::ImpEndCreate()
             {
                 std::pair<SwTextNode const*, sal_Int32> const pos(
                     static_cast<SwTextFrame const*>(pAnch)->MapViewToModel(TextFrameIndex(0)));
-                aPos.nNode = *pos.first;
+                aPos.Assign( *pos.first );
             }
             else
             {
-                aPos.nNode = *static_cast<const SwNoTextFrame*>(pAnch)->GetNode();
+                aPos.Assign( *static_cast<const SwNoTextFrame*>(pAnch)->GetNode() );
             }
 
             // do not set in ReadnOnly-content
