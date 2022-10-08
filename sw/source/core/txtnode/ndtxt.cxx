@@ -2057,6 +2057,15 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 
 void SwTextNode::CopyText( SwTextNode *const pDest,
                       const SwContentIndex &rDestStart,
+                      const SwPosition &rStart,
+                      sal_Int32 nLen,
+                      const bool bForceCopyOfAllAttrs )
+{
+    CopyText( pDest, rDestStart, rStart.nContent, nLen, bForceCopyOfAllAttrs );
+}
+
+void SwTextNode::CopyText( SwTextNode *const pDest,
+                      const SwContentIndex &rDestStart,
                       const SwContentIndex &rStart,
                       sal_Int32 nLen,
                       const bool bForceCopyOfAllAttrs )

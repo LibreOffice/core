@@ -351,6 +351,11 @@ public:
                const SwContentIndex &rStart,
                sal_Int32 nLen,
                const bool bForceCopyOfAllAttrs = false );
+    void CopyText( SwTextNode * const pDest,
+               const SwContentIndex &rDestStart,
+               const SwPosition &rStart,
+               sal_Int32 nLen,
+               const bool bForceCopyOfAllAttrs = false );
 
     void        CutText(SwTextNode * const pDest,
                     const SwContentIndex & rStart, const sal_Int32 nLen);

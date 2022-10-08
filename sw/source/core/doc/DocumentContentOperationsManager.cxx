@@ -5042,8 +5042,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                                            ? pEnd->GetContentIndex()
                                            : pSttTextNd->GetText().getLength())
                                          - pStt->GetContentIndex();
-                    pSttTextNd->CopyText( pDestTextNd, aDestIdx,
-                                            pStt->nContent, nCpyLen );
+                    pSttTextNd->CopyText( pDestTextNd, aDestIdx, *pStt, nCpyLen );
                     if( bEndEqualIns )
                         pEnd->AdjustContent( -nCpyLen );
                 }
