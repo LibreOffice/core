@@ -49,13 +49,6 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             UINT nCode, UINT nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, ULONG_PTR, ULONG_PTR )
 {
-    DdeServices&    rAll = DdeService::GetServices();
-    DdeService*     pService;
-    DdeTopic*       pTopic;
-    DdeItem*        pItem;
-    DdeData*        pData;
-    Conversation*   pC;
-
     DdeInstData* pInst = ImpGetInstData();
     assert(pInst);
 
@@ -63,98 +56,62 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
     {
         case XTYP_WILDCONNECT:
         {
-            int nTopics = 0;
+            std::vector<HSZPAIR> aPairs;
 
-            WCHAR chTopicBuf[250];
+            WCHAR chTopicBuf[256];
             if( hText1 )
                 DdeQueryStringW( pInst->hDdeInstSvr, hText1, chTopicBuf,
                                 SAL_N_ELEMENTS(chTopicBuf), CP_WINUNICODE );
 
-            for (auto& rpService : rAll)
+            for (auto& pService : DdeService::GetServices())
             {
-                pService = rpService;
-                if ( !hText2 || ( *pService->pName == hText2 ) )
+                if (hText2 && !(*pService->pName == hText2))
+                    continue;
+
+                OUString sTopics(pService->Topics().replaceAll("\n", "").replaceAll("\r", ""));
+                if (sTopics.isEmpty())
+                    continue;
+
+                for (sal_Int32 n = 0; -1 != n;)
                 {
-                    OUString sTopics( pService->Topics() );
-                    if (!sTopics.isEmpty())
+                    OUString s(sTopics.getToken(0, '\t', n));
+                    if (hText1 && s != o3tl::toU(chTopicBuf))
+                        continue;
+
+                    DdeString aDStr(pInst->hDdeInstSvr, s);
+                    if (auto pTopic = FindTopic(*pService, aDStr.getHSZ()))
                     {
-                        if( hText1 )
-                        {
-                            sal_Int32 n = 0;
-                            while( -1 != n )
-                            {
-                                OUString s( sTopics.getToken( 0, '\t', n ));
-                                if( s == o3tl::toU(chTopicBuf) )
-                                    ++nTopics;
-                            }
-                        }
-                        else
-                            nTopics += comphelper::string::getTokenCount(sTopics, '\t');
+                        auto& pair = aPairs.emplace_back();
+                        pair.hszSvc = pService->pName->getHSZ();
+                        pair.hszTopic = pTopic->pName->getHSZ();
                     }
                 }
             }
 
-            if( !nTopics )
+            if (aPairs.empty())
                 return nullptr;
+            aPairs.emplace_back(); // trailing zero
 
-            auto pPairs = std::make_unique<HSZPAIR[]>(nTopics + 1);
-
-            HSZPAIR* q = pPairs.get();
-            for (auto& rpService : rAll)
-            {
-                pService = rpService;
-                if ( !hText2 || (*pService->pName == hText2 ) )
-                {
-                    OUString sTopics( pService->Topics() );
-                    sal_Int32 n = 0;
-                    while( -1 != n )
-                    {
-                        OUString s( sTopics.getToken( 0, '\t', n ));
-                        s = s.replaceAll("\n", "").replaceAll("\r", "");
-                        if( !hText1 || s == o3tl::toU(chTopicBuf) )
-                        {
-                            DdeString aDStr( pInst->hDdeInstSvr, s );
-                            pTopic = FindTopic( *pService, aDStr.getHSZ() );
-                            if( pTopic )
-                            {
-                                q->hszSvc   = pService->pName->getHSZ();
-                                q->hszTopic = pTopic->pName->getHSZ();
-                                q++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            q->hszSvc   = nullptr;
-            q->hszTopic = nullptr;
             HDDEDATA h = DdeCreateDataHandle(
                             pInst->hDdeInstSvr,
-                            reinterpret_cast<LPBYTE>(pPairs.get()),
-                            sizeof(HSZPAIR) * (nTopics+1),
+                            reinterpret_cast<LPBYTE>(aPairs.data()),
+                            sizeof(HSZPAIR) * aPairs.size(),
                             0, nullptr, nCbType, 0);
             return h;
         }
 
         case XTYP_CONNECT:
-            pService = FindService( hText2 );
-            if ( pService)
-                pTopic = FindTopic( *pService, hText1 );
-            else
-                pTopic = nullptr;
-            if ( pTopic )
-                return reinterpret_cast<HDDEDATA>(DDE_FACK);
-            else
-                return nullptr;
+            if (auto pService = FindService(hText2))
+                if (FindTopic(*pService, hText1))
+                    return reinterpret_cast<HDDEDATA>(DDE_FACK);
+            return nullptr;
 
         case XTYP_CONNECT_CONFIRM:
-            pService = FindService( hText2 );
-            if ( pService )
+            if (auto pService = FindService(hText2))
             {
-                pTopic = FindTopic( *pService, hText1 );
-                if ( pTopic )
+                if (auto pTopic = FindTopic(*pService, hText1))
                 {
-                    pC = new Conversation;
+                    auto pC = new Conversation;
                     pC->hConv = hConv;
                     pC->pTopic = pTopic;
                     pService->m_vConv.emplace_back( pC );
@@ -163,20 +120,22 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             return nullptr;
     }
 
-    for (auto& rpService : rAll)
+    DdeService* pService = nullptr;
+    Conversation* pC = nullptr;
+    for (auto& rpService : DdeService::GetServices())
     {
-        pService = rpService;
-        for ( size_t i = 0, n = pService->m_vConv.size(); i < n; ++i )
+        for ( size_t i = 0, n = rpService->m_vConv.size(); i < n; ++i )
         {
-            pC = pService->m_vConv[ i ].get();
+            pC = rpService->m_vConv[ i ].get();
             if ( pC->hConv == hConv )
-                goto found;
+                pService = rpService;
         }
     }
 
-    return reinterpret_cast<HDDEDATA>(DDE_FNOTPROCESSED);
+    if (!pService)
+        return reinterpret_cast<HDDEDATA>(DDE_FNOTPROCESSED);
+    assert(pC);
 
-found:
     if ( nCode == XTYP_DISCONNECT)
     {
         DisconnectTopic(*pC->pTopic, hConv);
@@ -188,14 +147,13 @@ found:
     }
 
     bool bExec = nCode == XTYP_EXECUTE;
-    pTopic = pC->pTopic;
-    if ( pTopic && !bExec )
+    DdeTopic* pTopic = pC->pTopic;
+    DdeItem* pItem;
+    if (pTopic && !bExec && pService->HasCbFormat(nCbType))
         pItem = FindItem( *pTopic, hText2 );
     else
         pItem = nullptr;
 
-    if ( !bExec && !pService->HasCbFormat( nCbType ) )
-        pItem = nullptr;
     if ( !pItem && !bExec )
         return static_cast<HDDEDATA>(DDE_FNOTPROCESSED);
     if ( pItem )
@@ -210,6 +168,7 @@ found:
     case XTYP_ADVREQ:
         {
             OUString aRes; // Must be free not until the end!
+            DdeData* pData;
             if ( pTopic->IsSystemTopic() )
             {
                 if ( pTopic->aItem == SZDDESYS_ITEM_TOPICS )
