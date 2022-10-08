@@ -179,40 +179,39 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
     (void) sMod;
     (void) sMacro;
 #else
-    if ( !sLibrary.isEmpty() && !sMacro.isEmpty() )
+    if (sLibrary.isEmpty() || sMacro.isEmpty())
+        return false;
+
+    BasicManager* pBasicMgr = pShell->GetBasicManager();
+    if (!pBasicMgr)
+        return false;
+
+    StarBASIC* pBasic = pBasicMgr->GetLib(sLibrary);
+    if (!pBasic)
     {
-        BasicManager* pBasicMgr = pShell-> GetBasicManager();
-        if ( pBasicMgr )
+        sal_uInt16 nId = pBasicMgr->GetLibId(sLibrary);
+        pBasicMgr->LoadLib(nId);
+        pBasic = pBasicMgr->GetLib(sLibrary);
+    }
+    if (!pBasic)
+        return false;
+
+    if (!sMod.isEmpty()) // we wish to find the macro is a specific module
+    {
+        SbModule* pModule = pBasic->FindModule(sMod);
+        if (!pModule)
+            return false;
+        SbMethod* pMeth = pModule->FindMethod(sMacro, SbxClassType::Method);
+        return pMeth;
+    }
+
+    for (auto const& rModuleRef : pBasic->GetModules())
+    {
+        SbMethod* pMeth = rModuleRef->FindMethod(sMacro, SbxClassType::Method);
+        if (pMeth)
         {
-            StarBASIC* pBasic = pBasicMgr->GetLib( sLibrary );
-            if ( !pBasic )
-            {
-                sal_uInt16 nId = pBasicMgr->GetLibId( sLibrary );
-                pBasicMgr->LoadLib( nId );
-                pBasic = pBasicMgr->GetLib( sLibrary );
-            }
-            if ( pBasic )
-            {
-                if ( !sMod.isEmpty() ) // we wish to find the macro is a specific module
-                {
-                    SbModule* pModule = pBasic->FindModule( sMod );
-                    if ( pModule && pModule->FindMethod( sMacro, SbxClassType::Method ))
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    for (auto const& rModuleRef : pBasic->GetModules())
-                    {
-                        if (rModuleRef && rModuleRef->FindMethod(sMacro, SbxClassType::Method))
-                        {
-                            sMod = rModuleRef->GetName();
-                            return true;
-                        }
-                    }
-                }
-            }
+            sMod = rModuleRef->GetName();
+            return true;
         }
     }
 #endif
