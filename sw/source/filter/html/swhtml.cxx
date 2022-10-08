@@ -5445,8 +5445,8 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
 HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                       HTMLAttr **ppHd, std::shared_ptr<HTMLAttrTable> xAttrTab ) :
-    m_nStartPara( rPos.nNode ),
-    m_nEndPara( rPos.nNode ),
+    m_nStartPara( rPos.GetNode() ),
+    m_nEndPara( rPos.GetNode() ),
     m_nStartContent( rPos.GetContentIndex() ),
     m_nEndContent(rPos.GetContentIndex() ),
     m_bInsAtStart( true ),

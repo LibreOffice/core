@@ -971,7 +971,7 @@ struct SwPending
 
 inline void HTMLAttr::SetStart( const SwPosition& rPos )
 {
-    m_nStartPara = rPos.nNode;
+    m_nStartPara = rPos.GetNode();
     m_nStartContent = rPos.GetContentIndex();
     m_nEndPara = m_nStartPara;
     m_nEndContent = m_nStartContent;

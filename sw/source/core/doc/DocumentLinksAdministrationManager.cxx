@@ -515,7 +515,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
                 const SwOutlineNodes& rOutlNds = m_rDoc.GetNodes().GetOutLineNds();
                 SwOutlineNodes::size_type nTmpPos;
                 (void)rOutlNds.Seek_Entry( pNd, &nTmpPos );
-                roRange.emplace( aPos.nNode, SwNodeOffset(0), aPos.nNode );
+                roRange.emplace( aPos.GetNode(), SwNodeOffset(0), aPos.GetNode() );
 
                 // look for the section's end, now
                 for( ++nTmpPos;

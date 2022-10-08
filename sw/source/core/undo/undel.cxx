@@ -533,7 +533,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
 
     if( pStt->GetNode() != pEnd->GetNode() ||
         pStt->GetContentIndex()+1 != pEnd->GetContentIndex() ||
-        pEnd->nNode != m_nSttNode )
+        pEnd->GetNodeIndex() != m_nSttNode )
         return false;
 
     // Distinguish between BackSpace and Delete because the Undo array needs to
@@ -991,7 +991,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     nMoveIndex = aPos.GetNodeIndex() + m_nReplaceDummy + 1;
                 }
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
-                SwNodeRange aRg( aPos.nNode, SwNodeOffset(0), aPos.nNode, SwNodeOffset(1) );
+                SwNodeRange aRg( aPos.GetNode(), SwNodeOffset(0), aPos.GetNode(), SwNodeOffset(1) );
                 pMovedNode = &aPos.GetNode();
                 // tdf#131684 without deleting frames
                 rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx.GetNode(), false);

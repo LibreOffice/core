@@ -94,7 +94,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 
     aBkmkNodePos.emplace( nNd, &rBkmk );
 
-    if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().nNode != nNd)
+    if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().GetNodeIndex() != nNd)
     {
         nNd = rBkmk.GetOtherMarkPos().GetNodeIndex();
         aBkmkNodePos.emplace( nNd, &rBkmk );
