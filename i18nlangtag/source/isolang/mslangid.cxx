@@ -394,15 +394,6 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
     {
             nScript = css::i18n::ScriptType::LATIN;
     }
-// currently not knowing scripttype - defaulted to LATIN:
-/*
-#define LANGUAGE_ARMENIAN                   0x042B
-#define LANGUAGE_INDONESIAN                 0x0421
-#define LANGUAGE_KAZAKH                     0x043F
-#define LANGUAGE_KONKANI                    0x0457
-#define LANGUAGE_MACEDONIAN                 0x042F
-#define LANGUAGE_TATAR                      0x0444
-*/
             // CJK catcher
     else if ( primary(nLang).anyOf(
         primary(LANGUAGE_CHINESE              ),
@@ -428,6 +419,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         primary(LANGUAGE_KANNADA             ),
         primary(LANGUAGE_KASHMIRI            ),
         primary(LANGUAGE_KHMER               ),
+        primary(LANGUAGE_KONKANI             ),
         primary(LANGUAGE_LAO                 ),
         primary(LANGUAGE_MALAYALAM           ),
         primary(LANGUAGE_MANIPURI            ),
