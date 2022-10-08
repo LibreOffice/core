@@ -364,11 +364,32 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
     sal_Int32 nModuleType = getModuleType( rModuleName );
     // search for all event handlers
     ModulePathMap& rPathMap = maEventPaths[ rModuleName ];
+
+    // Use WORKBOOK_OPEN as a way to get the codename for ThisWorkbook
+    OUString sThisWorkbook;
+    if (getImplementationName() == "ScVbaEventsHelper")
+    {
+        EventHandlerInfo& rThisWorksheetInfo
+            = maEventInfos[css::script::vba::VBAEventId::WORKBOOK_OPEN];
+        css::uno::Sequence<css::uno::Any> aNoArgs;
+        sThisWorkbook = implGetDocumentModuleName(rThisWorksheetInfo, aNoArgs);
+    }
+
     for( const auto& rEventInfo : maEventInfos )
     {
         const EventHandlerInfo& rInfo = rEventInfo.second;
         if( rInfo.mnModuleType == nModuleType )
         {
+            OUString sSkipModule;
+            // Only in Calc, ignore Auto_* in ThisWorkbook
+            if (getImplementationName() == "ScVbaEventsHelper"
+                && (rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_NEW
+                    || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
+                    || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE))
+            {
+                sSkipModule = sThisWorkbook;
+            }
+
             // Only in Word, Auto* only runs if defined as Public, not Private.
             const bool bOnlyPublic
                 = getImplementationName() == "SwVbaEventsHelper"
@@ -380,7 +401,7 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
                       || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE);
 
             OUString sName = resolveVBAMacro(mpShell, maLibraryName, rModuleName,
-                                             rInfo.maMacroName, bOnlyPublic);
+                                             rInfo.maMacroName, bOnlyPublic, sSkipModule);
             // Only in Word (with lowest priority), an Auto* module can execute a "Public Sub Main"
             if (sName.isEmpty() && rModuleName.isEmpty()
                 && getImplementationName() == "SwVbaEventsHelper")
@@ -390,7 +411,7 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
                     || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE)
                 {
                     sName = resolveVBAMacro(mpShell, maLibraryName, rInfo.maMacroName, "Main",
-                                            bOnlyPublic);
+                                            bOnlyPublic, sSkipModule);
                 }
             }
             rPathMap[rInfo.mnEventId] = sName;
