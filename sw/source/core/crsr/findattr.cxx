@@ -981,7 +981,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                 if (pAttr)
                 {
                     assert(pAttrNode);
-                    oPam->GetPoint()->nNode = *pAttrNode;
+                    oPam->GetPoint()->Assign(*pAttrNode);
                     lcl_SetAttrPam(*oPam, pAttr->GetStart(), pAttr->End(), bSrchForward);
                     bFound = true;
                     break;
