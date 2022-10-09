@@ -45,8 +45,6 @@ private:
     virtual OUString SAL_CALL getChartType() override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles() override;
-    virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
-        createCoordinateSystem( ::sal_Int32 DimensionCount ) override;
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
@@ -60,6 +58,9 @@ private:
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+
+    virtual rtl::Reference< ::chart::BaseCoordinateSystem >
+        createCoordinateSystem2( sal_Int32 DimensionCount ) override;
 };
 
 } //  namespace chart

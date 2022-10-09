@@ -32,10 +32,6 @@ public:
 protected:
     explicit NetChartType_Base( const NetChartType_Base & rOther );
 
-    // ____ XChartType ____
-    virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
-        createCoordinateSystem( ::sal_Int32 DimensionCount ) override;
-
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
@@ -44,6 +40,9 @@ protected:
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
+
+    virtual rtl::Reference< ::chart::BaseCoordinateSystem >
+        createCoordinateSystem2( sal_Int32 DimensionCount ) override;
 };
 
 class NetChartType final : public NetChartType_Base

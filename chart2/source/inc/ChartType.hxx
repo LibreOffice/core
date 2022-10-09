@@ -69,7 +69,7 @@ public:
     // still abstract ! implement !
     virtual OUString SAL_CALL getChartType() override = 0;
     virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
-        createCoordinateSystem( ::sal_Int32 DimensionCount ) override;
+        createCoordinateSystem( ::sal_Int32 DimensionCount ) final override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles() override;
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -103,8 +103,8 @@ public:
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aDataSeries );
     const std::vector< rtl::Reference< ::chart::DataSeries > > & getDataSeries2() const { return m_aDataSeries; }
 
-    static rtl::Reference< ::chart::BaseCoordinateSystem >
-        createCoordinateSystem2( ::sal_Int32 DimensionCount );
+    virtual rtl::Reference< ::chart::BaseCoordinateSystem >
+        createCoordinateSystem2( sal_Int32 DimensionCount );
 
 protected:
 

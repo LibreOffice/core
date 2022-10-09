@@ -128,8 +128,8 @@ rtl::Reference< ChartType > ScatterChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-Reference< chart2::XCoordinateSystem > SAL_CALL
-    ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
+rtl::Reference< ::chart::BaseCoordinateSystem >
+    ScatterChartType::createCoordinateSystem2( sal_Int32 DimensionCount )
 {
     rtl::Reference< CartesianCoordinateSystem > xResult =
         new CartesianCoordinateSystem( DimensionCount );
