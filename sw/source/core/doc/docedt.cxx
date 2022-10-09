@@ -652,11 +652,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     aRet <<= aResult;
                                     //put the cursor to the current error
                                     const linguistic2::SingleProofreadingError &rError = aResult.aErrors[0];
-                                    nCurrNd = pNd->GetIndex();
-                                    pSttPos->Assign(nCurrNd);
-                                    pEndPos->Assign(nCurrNd);
-                                    pSpellArgs->pStartPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
-                                    pSpellArgs->pEndPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
+                                    pSttPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
+                                    pEndPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
                                 }
                             }
