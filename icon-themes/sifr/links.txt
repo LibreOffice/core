@@ -1638,8 +1638,13 @@ cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 
 # Fontwork
+cmd/32/fontworkgalleryfloater.png cmd/32/fontwork.png
 cmd/32/fontworkshapetype.png cmd/32/fontwork.png
+
+cmd/lc_fontworkgalleryfloater.png cmd/lc_fontwork.png
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
+
+cmd/sc_fontworkgalleryfloater.png cmd/sc_fontwork.png
 cmd/sc_fontworkshapetype.png cmd/sc_fontwork.png
 
 # Ruler
@@ -2652,9 +2657,9 @@ sw/res/sr20019.png cmd/sc_remove.png
 sw/res/sr20021.png cmd/sc_insertfield.png
 sw/res/sr20022.png cmd/sc_insertfield.png
 sw/res/styfamnu.png cmd/sc_defaultbullet.png
-sw/res/sx01.png cmd/sc_dbqueryedit.png
-sw/res/sx02.png cmd/sc_freezepanesfirstrow.png
-sw/res/sx03.png cmd/sc_dbqueryedit.png
+sw/res/sx01.png cmd/sc_changedatabasefield.png
+sw/res/sx02.png cmd/sc_dbviewtables.pngs
+sw/res/sx03.png cmd/sc_dbviewqueries.png
 
 # split cells duplicates
 sw/res/zetlhor2.png svx/res/zetlhor2.png
