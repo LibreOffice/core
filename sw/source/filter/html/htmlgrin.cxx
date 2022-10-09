@@ -1515,11 +1515,11 @@ void SwHTMLParser::StripTrailingPara()
                     break;
             }
 
-            m_pPam->GetPoint()->nContent.Assign( nullptr, 0 );
+            SwNode& rDelNode = m_pPam->GetPoint()->GetNode();
+            m_pPam->Move( fnMoveBackward, GoInNode );
             m_pPam->SetMark();
             m_pPam->DeleteMark();
-            m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->GetNode() );
-            m_pPam->Move( fnMoveBackward, GoInNode );
+            m_xDoc->GetNodes().Delete( rDelNode );
         }
         else if (pCNd && pCNd->IsTextNode() && m_xTable)
         {
