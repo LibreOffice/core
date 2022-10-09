@@ -2021,10 +2021,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Delete );
         if( SwRedlineTable::npos != nRedlPos )
         {
-            SwPosition aStPos( *pStt ), aEndPos( *pEnd );
-            aStPos.nContent = 0;
             SwContentNode* pCNd = pEnd->GetNode().GetContentNode();
-            aEndPos.nContent = pCNd ? pCNd->Len() : 1;
+            SwPosition aStPos( pStt->GetNode() );
+            SwPosition aEndPos( pEnd->GetNode(), pCNd, pCNd ? pCNd->Len() : 1 );
             bool bCheckDel = true;
 
             // There is a some Redline Delete Object for the range
