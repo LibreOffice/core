@@ -187,8 +187,16 @@ TreeListBox::~TreeListBox()
 std::unique_ptr<weld::TreeIter> TreeListBox::GetEntryPosByName(std::u16string_view aName, const weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
 {
     auto xEntry(m_xTreeView->make_iterator(pStart));
-    if (!pStart && !m_xTreeView->get_iter_first(*xEntry))
-        return nullptr;
+    if (pStart)
+    {
+        if (!m_xTreeView->iter_children(*xEntry))
+            return nullptr;
+    }
+    else
+    {
+        if (!m_xTreeView->get_iter_first(*xEntry))
+            return nullptr;
+    }
 
     do
     {
