@@ -360,7 +360,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
 
             // Attention: Do not create an index on the stack, or we
             // cannot delete ContentNode in the end!
-            SwPosition aPos( aIndex );
+            std::optional<SwPosition> oPos( std::in_place, aIndex );
 
             if( pSelBoxes && !pSelBoxes->empty() )
             {
@@ -389,11 +389,11 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                         GetNodes().MakeTextNode( aRg.aStart.GetNode(),
                                     GetDfltTextFormatColl() );
 
-                    getIDocumentContentOperations().MoveNodeRange( aRg, aPos.GetNode(), SwMoveFlags::DEFAULT );
+                    getIDocumentContentOperations().MoveNodeRange( aRg, oPos->GetNode(), SwMoveFlags::DEFAULT );
                 }
                 else
                 {
-                    rTable.MakeCopy(*this, aPos, *pSelBoxes);
+                    rTable.MakeCopy(*this, *oPos, *pSelBoxes);
                     // Don't delete a part of a table with row span!!
                     // You could delete the content instead -> ToDo
                     //rTable.DeleteSel( this, *pSelBoxes, 0, 0, true, true );
@@ -403,7 +403,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                 aIndex = rContent.GetContentIdx()->GetNode().EndOfSectionIndex() - 1;
                 OSL_ENSURE( aIndex.GetNode().GetTextNode(),
                         "a TextNode should be here" );
-                aPos.nContent.Assign( nullptr, 0 );       // Deregister index!
+                oPos.reset();       // Deregister index!
                 GetNodes().Delete( aIndex );
 
                 // This is a hack: whilst FlyFrames/Headers/Footers are not undoable we delete all Undo objects
@@ -427,7 +427,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                         *rTmp.GetPoint() != *rTmp.GetMark() )
                     {
                         // aPos is the newly created fly section, so definitely outside rPam, it's pointless to check that again.
-                        getIDocumentContentOperations().CopyRange(*const_cast<SwPaM*>(&rTmp), aPos, SwCopyFlags::IsMoveToFly);
+                        getIDocumentContentOperations().CopyRange(*const_cast<SwPaM*>(&rTmp), *oPos, SwCopyFlags::IsMoveToFly);
                     }
                 }
                 getIDocumentRedlineAccess().SetRedlineMove(bOldRedlineMove);
