@@ -482,7 +482,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
     if( ! xChartType.is())
         return;
-    rtl::Reference< BaseCoordinateSystem > xCooSys = ChartType::createCoordinateSystem2( getDimension());
+    rtl::Reference< BaseCoordinateSystem > xCooSys = xChartType->createCoordinateSystem2( getDimension());
     if( ! xCooSys.is())
     {
         // chart type wants no coordinate systems

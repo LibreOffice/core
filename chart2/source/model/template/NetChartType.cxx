@@ -48,8 +48,8 @@ NetChartType_Base::NetChartType_Base( const NetChartType_Base & rOther ) :
 NetChartType_Base::~NetChartType_Base()
 {}
 
-Reference< XCoordinateSystem > SAL_CALL
-    NetChartType_Base::createCoordinateSystem( ::sal_Int32 DimensionCount )
+rtl::Reference< ::chart::BaseCoordinateSystem >
+    NetChartType_Base::createCoordinateSystem2( sal_Int32 DimensionCount )
 {
     if( DimensionCount != 2 )
         throw lang::IllegalArgumentException(

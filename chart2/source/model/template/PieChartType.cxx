@@ -122,8 +122,8 @@ OUString SAL_CALL PieChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
 }
 
-Reference< chart2::XCoordinateSystem > SAL_CALL
-    PieChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
+rtl::Reference< ::chart::BaseCoordinateSystem >
+    PieChartType::createCoordinateSystem2( sal_Int32 DimensionCount )
 {
     rtl::Reference< PolarCoordinateSystem > xResult =
         new PolarCoordinateSystem( DimensionCount );

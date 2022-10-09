@@ -201,6 +201,8 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
     if( nIndex < 0 )
         throw lang::IndexOutOfBoundsException();
 
+    assert(!xAxis || dynamic_cast<Axis*>(xAxis.get()));
+
     if( m_aAllAxis[ nDimensionIndex ].size() < o3tl::make_unsigned( nIndex+1 ))
     {
         m_aAllAxis[ nDimensionIndex ].resize( nIndex+1 );
