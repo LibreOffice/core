@@ -2271,8 +2271,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
         // access it after GetMergeSel
         {
             rPam.DeleteMark();
-            rPam.GetPoint()->nNode = *pMergeBox->GetSttNd();
-            rPam.GetPoint()->nContent.Assign( nullptr, 0 );
+            rPam.GetPoint()->Assign(*pMergeBox->GetSttNd());
             rPam.SetMark();
             rPam.DeleteMark();
 
