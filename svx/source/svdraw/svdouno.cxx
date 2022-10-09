@@ -139,6 +139,7 @@ SdrUnoObj::SdrUnoObj(
 :   SdrRectObj(rSdrModel),
     m_pImpl( new SdrUnoObjDataHolder )
 {
+    osl_atomic_increment(&m_refCount); // prevent deletion during creation
     m_bIsUnoObj = true;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
@@ -146,6 +147,7 @@ SdrUnoObj::SdrUnoObj(
     // only an owner may create independently
     if (!rModelName.isEmpty())
         CreateUnoControlModel(rModelName);
+    osl_atomic_decrement(&m_refCount);
 }
 
 SdrUnoObj::SdrUnoObj( SdrModel& rSdrModel, SdrUnoObj const & rSource)
