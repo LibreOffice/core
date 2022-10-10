@@ -644,7 +644,13 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // get a character map in the size of the table to mark
     // all the ranges to use in
     sal_Int32 nRows = pTable->GetTabLines().size();
-    sal_Int32 nCols = pTable->GetTabLines().front()->GetTabBoxes().size();
+    sal_Int32 nCols = 0;
+    // As per tdf#149718 one should know that some cells can be merged together.
+    // Therefore, the number of columns (boxes in each row) are not necessarily
+    // equal. Here, we calculate the maximum number of columns in all rows.
+    for (sal_Int32 i = 0; i < nRows; ++i)
+        nCols = std::max(nCols, static_cast<sal_Int32>(pTable->GetTabLines()[i]->GetTabBoxes().size()));
+
     std::vector<std::vector<char>> aMap(nRows);
     for (sal_Int32 i = 0; i < nRows; ++i)
         aMap[i].resize(nCols);
