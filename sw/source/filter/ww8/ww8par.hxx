@@ -548,7 +548,7 @@ namespace sw
         };
     }
 
-    auto FilterControlChars(OUString const& rString) -> OUString;
+    auto FilterControlChars(std::u16string_view aString) -> OUString;
 }
 
 class WW8FieldEntry
@@ -1449,7 +1449,7 @@ private:
         DeleteStack(std::move(m_xAnchorStck));
     }
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
-    void simpleAddTextToParagraph(const OUString& rAddString);
+    void simpleAddTextToParagraph(std::u16string_view aAddString);
     bool HandlePageBreakChar();
     bool ReadChar(tools::Long nPosCp, tools::Long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCpOfs);
@@ -1870,7 +1870,7 @@ public:     // really private, but can only be done public
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, OUString& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, OUString& );
-    SvNumFormatType GetTimeDatePara(OUString const & rStr, sal_uInt32& rFormat, LanguageType &rLang,
+    SvNumFormatType GetTimeDatePara(std::u16string_view aStr, sal_uInt32& rFormat, LanguageType &rLang,
         int nWhichDefault, bool bHijri = false);
     bool ForceFieldLanguage(SwField &rField, LanguageType nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, OUString& rStr );

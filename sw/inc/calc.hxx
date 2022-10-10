@@ -162,14 +162,14 @@ public:
     std::unique_ptr<T> const & operator[](size_t idx) const { return m_aData[idx]; }
     void resize(size_t nSize) { m_aData.resize(nSize); }
 
-    T* Find( const OUString& rStr, sal_uInt32* pPos = nullptr ) const
+    T* Find( std::u16string_view aStr, sal_uInt32* pPos = nullptr ) const
     {
         size_t nTableSize = m_aData.size();
         assert(nTableSize < SAL_MAX_UINT32);
         sal_uInt32 ii = 0;
-        for( sal_Int32 n = 0; n < rStr.getLength(); ++n )
+        for( size_t n = 0; n < aStr.size(); ++n )
         {
-            ii = ii << 1 ^ rStr[n];
+            ii = ii << 1 ^ aStr[n];
         }
         ii %= nTableSize;
 
@@ -178,7 +178,7 @@ public:
 
         for( T* pEntry = m_aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
         {
-            if( rStr == pEntry->aStr )
+            if( aStr == pEntry->aStr )
             {
                 return pEntry;
             }

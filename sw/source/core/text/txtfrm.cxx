@@ -1630,15 +1630,15 @@ void SwTextFrame::HideAndShowObjects()
  * line has to be formatted as well.
  * nFound is <= nEndLine.
  */
-TextFrameIndex SwTextFrame::FindBrk(const OUString &rText,
+TextFrameIndex SwTextFrame::FindBrk(std::u16string_view aText,
                               const TextFrameIndex nStart,
                               const TextFrameIndex nEnd)
 {
     sal_Int32 nFound = sal_Int32(nStart);
-    const sal_Int32 nEndLine = std::min(sal_Int32(nEnd), rText.getLength() - 1);
+    const sal_Int32 nEndLine = std::min(sal_Int32(nEnd), sal_Int32(aText.size()) - 1);
 
     // Skip all leading blanks.
-    while( nFound <= nEndLine && ' ' == rText[nFound] )
+    while( nFound <= nEndLine && ' ' == aText[nFound] )
     {
          nFound++;
     }
@@ -1647,7 +1647,7 @@ TextFrameIndex SwTextFrame::FindBrk(const OUString &rText,
     // "Dr.$Meyer" at the beginning of the second line. Typing a blank after that
     // doesn't result in the word moving into first line, even though that would work.
     // For this reason we don't skip the dummy char.
-    while( nFound <= nEndLine && ' ' != rText[nFound] )
+    while( nFound <= nEndLine && ' ' != aText[nFound] )
     {
         nFound++;
     }

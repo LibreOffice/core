@@ -113,7 +113,7 @@ namespace SwUnoCursorHelper
                                     css::beans::PropertyState& eState);
 
     bool    DocInsertStringSplitCR(  SwDoc &rDoc,
-                    const SwPaM &rNewCursor, const OUString &rText,
+                    const SwPaM &rNewCursor, std::u16string_view aText,
                     const bool bForceExpandHints );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
@@ -141,7 +141,7 @@ namespace SwUnoCursorHelper
     SwFormatColl * GetCurTextFormatColl(SwPaM & rPam, const bool bConditional);
 
     void SelectPam(SwPaM & rPam, const bool bExpand);
-    void SetString(SwCursor & rCursor, const OUString & rString);
+    void SetString(SwCursor & rCursor, std::u16string_view aString);
 
     css::uno::Sequence< css::beans::PropertyValue >
            CreateSortDescriptor(const bool bFromTable);

@@ -370,7 +370,7 @@ public:
     void ReplaceText( SwPosition& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
-            const OUString& rText,
+            std::u16string_view aText,
             const css::uno::Sequence<sal_Int32>& rOffsets );
 
     /// Virtual methods from ContentNode.

@@ -57,7 +57,7 @@ public:
 
     sal_uInt16  GetGlossaryCnt() const;
     OUString    GetGlossaryName(sal_uInt16);
-    OUString    GetGlossaryShortName(const OUString &rName);
+    OUString    GetGlossaryShortName(std::u16string_view aName);
     OUString    GetGlossaryShortName(sal_uInt16);
 
     bool    Rename( const OUString& rOldShortName, const OUString& rNewShortName,

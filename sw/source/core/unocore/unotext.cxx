@@ -613,12 +613,12 @@ SwXText::insertTextContent(
         uno::Reference<lang::XUnoTunnel> const xRangeTunnel(xRange, uno::UNO_QUERY);
         if (SwXTextRange *const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
         {
-            pRange->DeleteAndInsert(OUString(), ::sw::DeleteAndInsertMode::ForceReplace
+            pRange->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
         }
         else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel)))
         {
-            pCursor->DeleteAndInsert(OUString(), ::sw::DeleteAndInsertMode::ForceReplace
+            pCursor->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
         }
         else

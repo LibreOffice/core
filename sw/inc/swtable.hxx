@@ -299,7 +299,7 @@ public:
     bool IsTableComplex() const;
 
     // Returns true if table or selection is balanced.
-    bool IsTableComplexForChart( const OUString& rSel ) const;
+    bool IsTableComplexForChart( std::u16string_view aSel ) const;
 
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.

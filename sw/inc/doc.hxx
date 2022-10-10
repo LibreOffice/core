@@ -1263,7 +1263,7 @@ public:
     SwTableLineFormat* MakeTableLineFormat();
 
     // helper function: cleanup before checking number value
-    bool IsNumberFormat( const OUString& rString, sal_uInt32& F_Index, double& fOutNumber);
+    bool IsNumberFormat( std::u16string_view aString, sal_uInt32& F_Index, double& fOutNumber);
     // Check if box has numerical value. Change format of box if required.
     void ChkBoxNumFormat( SwTableBox& rCurrentBox, bool bCallUpdate );
     void SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );

@@ -87,10 +87,10 @@ protected:
 public:
     virtual ~SwImpBlocks();
 
-    static sal_uInt16 Hash( const OUString& );        /// Hashcode for Block names
+    static sal_uInt16 Hash( std::u16string_view );        /// Hashcode for Block names
     sal_uInt16 GetCount() const;                      /// Get count of Text Blocks
     sal_uInt16 GetIndex( const OUString& ) const;     /// Index for shortnames
-    sal_uInt16 GetLongIndex( const OUString& ) const; /// Index for longnames
+    sal_uInt16 GetLongIndex( std::u16string_view ) const; /// Index for longnames
     OUString GetShortName( sal_uInt16 ) const;        /// Return shortname for index
     OUString GetLongName( sal_uInt16 ) const;         /// Return longname for index
     OUString GetPackageName( sal_uInt16 ) const;      /// Return packagename for index

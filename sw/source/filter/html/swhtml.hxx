@@ -860,8 +860,8 @@ private:
     void InsertLineBreak();
     void InsertHorzRule();
 
-    void FillEndNoteInfo( const OUString& rContent );
-    void FillFootNoteInfo( const OUString& rContent );
+    void FillEndNoteInfo( std::u16string_view aContent );
+    void FillFootNoteInfo( std::u16string_view aContent );
     void InsertFootEndNote( const OUString& rName, bool bEndNote, bool bFixed );
     void FinishFootEndNote();
     void InsertFootEndNoteText();

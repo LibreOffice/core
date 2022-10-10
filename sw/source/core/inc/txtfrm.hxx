@@ -276,7 +276,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     virtual void MakePos() override;
 
     // Corrects the position from which we need to format
-    static TextFrameIndex FindBrk(const OUString &rText, TextFrameIndex nStart,
+    static TextFrameIndex FindBrk(std::u16string_view aText, TextFrameIndex nStart,
                                   TextFrameIndex nEnd);
 
     // inline branch

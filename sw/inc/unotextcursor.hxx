@@ -102,7 +102,7 @@ public:
     bool IsAtEndOfMeta() const;
     bool IsAtEndOfContentControl() const;
 
-    void DeleteAndInsert(OUString const& rText, ::sw::DeleteAndInsertMode eMode);
+    void DeleteAndInsert(std::u16string_view aText, ::sw::DeleteAndInsertMode eMode);
     // OTextCursorHelper
     virtual const SwPaM*        GetPaM() const override;
     virtual SwPaM*              GetPaM() override;

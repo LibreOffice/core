@@ -55,14 +55,14 @@ OUString lcl_FullPathName(std::u16string_view sPath, std::u16string_view sName)
 }
 
 OUString lcl_CheckFileName( const OUString& rNewFilePath,
-                          const OUString& rNewGroupName )
+                          std::u16string_view aNewGroupName )
 {
-    const sal_Int32 nLen = rNewGroupName.getLength();
+    const sal_Int32 nLen = aNewGroupName.size();
     OUStringBuffer aBuf(nLen);
     //group name should contain only A-Z and a-z and spaces
     for( sal_Int32 i=0; i < nLen; ++i )
     {
-        const sal_Unicode cChar = rNewGroupName[i];
+        const sal_Unicode cChar = aNewGroupName[i];
         if (rtl::isAsciiAlphanumeric(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
@@ -179,7 +179,7 @@ bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return false;
     const OUString sNewFilePath(m_PathArr[nNewPath]);
-    const OUString sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.getToken(0, GLOS_DELIM))
+    const OUString sNewGroup = lcl_CheckFileName(sNewFilePath, o3tl::getToken(rGroupName, 0, GLOS_DELIM))
         + OUStringChar(GLOS_DELIM) + sNewPath;
     std::unique_ptr<SwTextBlocks> pBlock = GetGlosDoc( sNewGroup );
     if(pBlock)
@@ -213,7 +213,7 @@ bool    SwGlossaries::RenameGroupDoc(
         return false;
 
     const OUString sNewFileName = lcl_CheckFileName(m_PathArr[nNewPath],
-                                                    rNewGroup.getToken(0, GLOS_DELIM));
+                                                    o3tl::getToken(rNewGroup, 0, GLOS_DELIM));
     const OUString sNewFileURL = lcl_FullPathName(m_PathArr[nNewPath], sNewFileName);
 
     if (FStatHelper::IsDocument( sNewFileURL ))

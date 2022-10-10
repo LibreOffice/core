@@ -67,7 +67,7 @@ struct TextPortion
 
 typedef std::vector<TextPortion> TextPortions;
 
-static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
+static void lcl_Highlight(std::u16string_view aSource, TextPortions& aPortionList)
 {
     const sal_Unicode cOpenBracket = '<';
     const sal_Unicode cCloseBracket= '>';
@@ -79,7 +79,7 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
     const sal_Unicode cLF          = 0x0a;
     const sal_Unicode cCR          = 0x0d;
 
-    const sal_Int32 nStrLen = rSource.getLength();
+    const sal_Int32 nStrLen = aSource.size();
     sal_Int32 nInsert = 0;         // number of inserted portions
     sal_Int32 nActPos = 0;         // position, where '<' was found
     sal_Int32 nPortStart = SAL_MAX_INT32;  // for the TextPortion
@@ -87,7 +87,7 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
     TextPortion aText;
     while(nActPos < nStrLen)
     {
-        if((nActPos < nStrLen - 2) && (rSource[nActPos] == cOpenBracket))
+        if((nActPos < nStrLen - 2) && (aSource[nActPos] == cOpenBracket))
         {
             svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
             // insert 'empty' portion
@@ -102,13 +102,13 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                 aPortionList.push_back( aText );
                 nInsert++;
             }
-            sal_Unicode cFollowFirst = rSource[nActPos + 1];
-            sal_Unicode cFollowNext = rSource[nActPos + 2];
+            sal_Unicode cFollowFirst = aSource[nActPos + 1];
+            sal_Unicode cFollowNext = aSource[nActPos + 2];
             if(cExclamation == cFollowFirst)
             {
                 // "<!" SGML or comment
                 if(cMinus == cFollowNext &&
-                    nActPos < nStrLen - 3 && cMinus == rSource[nActPos + 3])
+                    nActPos < nStrLen - 3 && cMinus == aSource[nActPos + 3])
                 {
                     eFoundType = svtools::HTMLCOMMENT;
                 }
@@ -129,7 +129,7 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                 sal_uInt16 nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
-                    sal_Unicode cNext = rSource[nSrchPos];
+                    sal_Unicode cNext = aSource[nSrchPos];
                     if( cNext == cSpace ||
                         cNext == cTab   ||
                         cNext == cLF    ||
@@ -143,7 +143,7 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                 if(nSrchPos > nActPos + 1)
                 {
                     // some string was found
-                    OUString sToken = rSource.copy(nActPos + 1, nSrchPos - nActPos - 1 );
+                    OUString sToken( aSource.substr(nActPos + 1, nSrchPos - nActPos - 1 ) );
                     sToken = sToken.toAsciiUpperCase();
                     HtmlTokenId nToken = ::GetHTMLToken(sToken);
                     if(nToken != HtmlTokenId::NONE)
@@ -161,7 +161,7 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
             {
                 bool bFound = false;
                 for(sal_Int32 i = nPortEnd; i < nStrLen; i++)
-                    if(cCloseBracket == rSource[i])
+                    if(cCloseBracket == aSource[i])
                     {
                         bFound = true;
                         nPortEnd = i;
@@ -652,10 +652,10 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 
 }
 
-void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff )
+void SwSrcEditWindow::ImpDoHighlight( std::u16string_view aSource, sal_uInt16 nLineOff )
 {
     TextPortions aPortionList;
-    lcl_Highlight(rSource, aPortionList);
+    lcl_Highlight(aSource, aPortionList);
 
     size_t nCount = aPortionList.size();
     if ( !nCount )
@@ -689,8 +689,8 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
                 r.nStart = nLastEnd;
             }
             nLastEnd = r.nEnd+1;
-            if ( ( i == (nCount-1) ) && ( r.nEnd < rSource.getLength() ) )
-                r.nEnd = rSource.getLength();
+            if ( ( i == (nCount-1) ) && ( r.nEnd < aSource.size() ) )
+                r.nEnd = aSource.size();
         }
     }
 

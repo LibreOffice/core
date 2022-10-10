@@ -35,6 +35,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1537,7 +1538,7 @@ OUString SwHiddenTextField::GetDBName(std::u16string_view rName, SwDoc& rDoc)
 }
 
 // [aFieldDefinition] value sample : " IF A == B \"TrueText\" \"FalseText\""
-void SwHiddenTextField::ParseIfFieldDefinition(const OUString& aFieldDefinition,
+void SwHiddenTextField::ParseIfFieldDefinition(std::u16string_view aFieldDefinition,
                                                OUString& rCondition,
                                                OUString& rTrue,
                                                OUString& rFalse)
@@ -1554,7 +1555,7 @@ void SwHiddenTextField::ParseIfFieldDefinition(const OUString& aFieldDefinition,
     {
         bool quoted = false;
         bool insideWord = false;
-        for (sal_Int32 i = 0; i < aFieldDefinition.getLength(); i++)
+        for (size_t i = 0; i < aFieldDefinition.size(); i++)
         {
             if (quoted)
             {
@@ -1607,14 +1608,9 @@ void SwHiddenTextField::ParseIfFieldDefinition(const OUString& aFieldDefinition,
 
     // Syntax
     // OUString::copy( sal_Int32 beginIndex, sal_Int32 count )
-    rCondition = aFieldDefinition.copy(conditionBegin, conditionLength);
-    rTrue = aFieldDefinition.copy(trueBegin, trueLength);
-    rFalse = aFieldDefinition.copy(falseBegin);
-
-    // trim
-    rCondition = rCondition.trim();
-    rTrue = rTrue.trim();
-    rFalse = rFalse.trim();
+    rCondition = o3tl::trim(aFieldDefinition.substr(conditionBegin, conditionLength));
+    rTrue = o3tl::trim(aFieldDefinition.substr(trueBegin, trueLength));
+    rFalse = o3tl::trim(aFieldDefinition.substr(falseBegin));
 
     // remove quotes
     if (rCondition.getLength() >= 2)

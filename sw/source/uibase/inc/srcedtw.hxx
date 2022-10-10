@@ -85,7 +85,7 @@ private:
     Idle            m_aSyntaxIdle;
     std::set<sal_uInt16>   m_aSyntaxLineTable;
 
-    void            ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff );
+    void            ImpDoHighlight( std::u16string_view aSource, sal_uInt16 nLineOff );
 
     void            SetFont();
 

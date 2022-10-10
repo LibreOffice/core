@@ -2277,35 +2277,35 @@ void SwView::EditLinkDlg()
 
 namespace sw {
 
-auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
+auto PrepareJumpToTOXMark(SwDoc const& rDoc, std::u16string_view aName)
     -> std::optional<std::pair<SwTOXMark, sal_Int32>>
 {
-    sal_Int32 const first(rName.indexOf(toxMarkSeparator));
-    if (first == -1)
+    size_t const first(aName.find(toxMarkSeparator));
+    if (first == std::u16string_view::npos)
     {
         SAL_WARN("sw.ui", "JumpToTOXMark: missing separator");
         return std::optional<std::pair<SwTOXMark, sal_Int32>>();
     }
-    sal_Int32 const counter(o3tl::toInt32(rName.subView(0, first)));
+    sal_Int32 const counter(o3tl::toInt32(aName.substr(0, first)));
     if (counter <= 0)
     {
         SAL_WARN("sw.ui", "JumpToTOXMark: invalid counter");
         return std::optional<std::pair<SwTOXMark, sal_Int32>>();
     }
-    sal_Int32 const second(rName.indexOf(toxMarkSeparator, first + 1));
-    if (second == -1)
+    size_t const second(aName.find(toxMarkSeparator, first + 1));
+    if (second == std::u16string_view::npos)
     {
         SAL_WARN("sw.ui", "JumpToTOXMark: missing separator");
         return std::optional<std::pair<SwTOXMark, sal_Int32>>();
     }
-    OUString const entry(rName.copy(first + 1, second - (first + 1)));
-    if (rName.getLength() < second + 2)
+    std::u16string_view const entry(aName.substr(first + 1, second - (first + 1)));
+    if (aName.size() < second + 2)
     {
         SAL_WARN("sw.ui", "JumpToTOXMark: invalid tox");
         return std::optional<std::pair<SwTOXMark, sal_Int32>>();
     }
-    sal_uInt16 const indexType(rName[second + 1]);
-    std::u16string_view const indexName(rName.subView(second + 2));
+    sal_uInt16 const indexType(aName[second + 1]);
+    std::u16string_view const indexName(aName.substr(second + 2));
     SwTOXType const* pType(nullptr);
     switch (indexType)
     {
@@ -2337,16 +2337,16 @@ auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
     }
     // type and alt text are the search keys
     SwTOXMark tmp(pType);
-    tmp.SetAlternativeText(entry);
+    tmp.SetAlternativeText(OUString(entry));
     return std::optional<std::pair<SwTOXMark, sal_Int32>>(std::pair<SwTOXMark, sal_Int32>(tmp, counter));
 }
 
 } // namespace sw
 
-static auto JumpToTOXMark(SwWrtShell & rSh, OUString const& rName) -> bool
+static auto JumpToTOXMark(SwWrtShell & rSh, std::u16string_view aName) -> bool
 {
     std::optional<std::pair<SwTOXMark, sal_Int32>> const tmp(
-        sw::PrepareJumpToTOXMark(*rSh.GetDoc(), rName));
+        sw::PrepareJumpToTOXMark(*rSh.GetDoc(), aName));
     if (!tmp)
     {
         return false;

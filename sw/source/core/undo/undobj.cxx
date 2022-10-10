@@ -1534,22 +1534,22 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
     return true;
 }
 
-OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString & rFillStr)
+OUString ShortenString(const OUString & rStr, sal_Int32 nLength, std::u16string_view aFillStr)
 {
-    assert(nLength - rFillStr.getLength() >= 2);
+    assert(nLength - aFillStr.size() >= 2);
 
     if (rStr.getLength() <= nLength)
         return rStr;
 
-    nLength -= rFillStr.getLength();
+    nLength -= aFillStr.size();
     if ( nLength < 2 )
         nLength = 2;
 
     const sal_Int32 nFrontLen = nLength - nLength / 2;
     const sal_Int32 nBackLen = nLength - nFrontLen;
 
-    return rStr.subView(0, nFrontLen)
-           + rFillStr
+    return OUString::Concat(rStr.subView(0, nFrontLen))
+           + aFillStr
            + rStr.subView(rStr.getLength() - nBackLen);
 }
 

@@ -2162,29 +2162,29 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     return rWrt;
 }
 
-void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
+void SwHTMLWriter::AddLinkTarget( std::u16string_view aURL )
 {
-    if( rURL.isEmpty() || rURL[0] != '#' )
+    if( aURL.empty() || aURL[0] != '#' )
         return;
 
     // There might be a '|' as delimiter (if the link has been inserted
     // freshly) or a '%7c' or a '%7C' if the document has been saved and
     // loaded already.
-    sal_Int32 nPos = rURL.getLength();
+    sal_Int32 nPos = aURL.size();
     bool bFound = false, bEncoded = false;
     while( !bFound && nPos > 0 )
     {
-        sal_Unicode c = rURL[ --nPos ];
+        sal_Unicode c = aURL[ --nPos ];
         switch( c )
         {
         case cMarkSeparator:
             bFound = true;
             break;
         case '%':
-            bFound = (rURL.getLength() - nPos) >=3 && rURL[ nPos+1 ] == '7';
+            bFound = (aURL.size() - nPos) >=3 && aURL[ nPos+1 ] == '7';
             if(bFound)
             {
-                c = rURL[ nPos+2 ];
+                c = aURL[ nPos+2 ];
                 bFound = (c == 'C' || c == 'c');
             }
             if( bFound )
@@ -2194,10 +2194,10 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
     if( !bFound || nPos < 2 ) // at least "#a|..."
         return;
 
-    OUString aURL( rURL.copy( 1 ) );
+    aURL = aURL.substr( 1 );
 
     // nPos-1+1/3 (-1 because of Erase)
-    OUString sCmp = aURL.copy(bEncoded ? nPos+2 : nPos).replaceAll(" ","");
+    OUString sCmp = OUString(aURL.substr(bEncoded ? nPos+2 : nPos)).replaceAll(" ","");
     if( sCmp.isEmpty() )
         return;
 
@@ -2210,17 +2210,18 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         sCmp == "table" )
     {
         // Just remember it in a sorted array
+        OUString aURL2(aURL);
         if( bEncoded )
         {
-            aURL = aURL.replaceAt( nPos - 1, 3, rtl::OUStringChar(cMarkSeparator)  );
+            aURL2 = aURL2.replaceAt( nPos - 1, 3, rtl::OUStringChar(cMarkSeparator)  );
         }
-        m_aImplicitMarks.insert( aURL );
+        m_aImplicitMarks.insert( aURL2 );
     }
     else if( sCmp == "outline" )
     {
         // Here, we need position and name. That's why we sort a
         // sal_uInt16 and a string array ourselves.
-        OUString aOutline( aURL.copy( 0, nPos-1 ) );
+        OUString aOutline( aURL.substr( 0, nPos-1 ) );
         SwPosition aPos( *m_pCurrentPam->GetPoint() );
         if( m_pDoc->GotoOutline( aPos, aOutline ) )
         {
@@ -2232,11 +2233,12 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
                 nIns++;
 
             m_aOutlineMarkPoss.insert( m_aOutlineMarkPoss.begin()+nIns, nIdx );
+            OUString aURL2(aURL);
             if( bEncoded )
             {
-                aURL = aURL.replaceAt( nPos - 1, 3, rtl::OUStringChar(cMarkSeparator) );
+                aURL2 = aURL2.replaceAt( nPos - 1, 3, rtl::OUStringChar(cMarkSeparator) );
             }
-            m_aOutlineMarks.insert( m_aOutlineMarks.begin()+nIns, aURL );
+            m_aOutlineMarks.insert( m_aOutlineMarks.begin()+nIns, aURL2 );
         }
     }
 }

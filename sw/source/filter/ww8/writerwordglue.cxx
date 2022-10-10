@@ -763,14 +763,14 @@ namespace sw
         /** Find cFind in rParams if not embedded in " double quotes.
             Will NOT find '\\' or '"'.
          */
-        static sal_Int32 findUnquoted( const OUString& rParams, sal_Unicode cFind, sal_Int32 nFromPos )
+        static sal_Int32 findUnquoted( std::u16string_view aParams, sal_Unicode cFind, sal_Int32 nFromPos )
         {
-            const sal_Int32 nLen = rParams.getLength();
+            const sal_Int32 nLen = aParams.size();
             if (nFromPos < 0 || nLen <= nFromPos)
                 return -1;
             for (sal_Int32 nI = nFromPos; nI < nLen; ++nI)
             {
-                const sal_Unicode c = rParams[nI];
+                const sal_Unicode c = aParams[nI];
                 if (c == '\\')
                     ++nI;
                 else if (c == '\"')
@@ -779,7 +779,7 @@ namespace sw
                     // While not at the end and not at an unescaped end quote
                     while (nI < nLen)
                     {
-                        if (rParams[nI] == '\"' && rParams[nI-1] != '\\')
+                        if (aParams[nI] == '\"' && aParams[nI-1] != '\\')
                             break;
                         ++nI;
                     }
@@ -796,12 +796,12 @@ namespace sw
         /** Find all rFind in rParams if not embedded in " double quotes and
             replace with rReplace. Will NOT find '\\' or '"'.
          */
-        static bool replaceUnquoted( OUString& rParams, const OUString& rFind, const OUString& rReplace )
+        static bool replaceUnquoted( OUString& rParams, std::u16string_view aFind, std::u16string_view aReplace )
         {
             bool bReplaced = false;
-            if (rFind.isEmpty())
+            if (aFind.empty())
                 return bReplaced;
-            const sal_Unicode cFirst = rFind[0];
+            const sal_Unicode cFirst = aFind[0];
 
             sal_Int32 nLen = rParams.getLength();
             for (sal_Int32 nI = 0; nI < nLen; ++nI)
@@ -822,11 +822,11 @@ namespace sw
                 }
                 else //normal unquoted section
                 {
-                    if (c == cFirst && rParams.match( rFind, nI))
+                    if (c == cFirst && rParams.match( aFind, nI))
                     {
-                        const sal_Int32 nFindLen = rFind.getLength();
-                        const sal_Int32 nDiff = rReplace.getLength() - nFindLen;
-                        rParams = rParams.replaceAt( nI, nFindLen, rReplace);
+                        const sal_Int32 nFindLen = aFind.size();
+                        const sal_Int32 nDiff = aReplace.size() - nFindLen;
+                        rParams = rParams.replaceAt( nI, nFindLen, aReplace);
                         nI += nFindLen + nDiff - 1;
                         nLen += nDiff;
                         bReplaced = true;
@@ -856,8 +856,8 @@ namespace sw
             // effectively changes from Gengou to Gregorian calendar. Legacy
             // because it wasn't supported a decade ago and now moot? Or is
             // that a Word specialty?
-            bForceJapanese |= replaceUnquoted( rParams, "ee", "yyyy");
-            bForceJapanese |= replaceUnquoted( rParams, "EE", "YYYY");
+            bForceJapanese |= replaceUnquoted( rParams, u"ee", u"yyyy");
+            bForceJapanese |= replaceUnquoted( rParams, u"EE", u"YYYY");
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'a' case here
@@ -871,8 +871,8 @@ namespace sw
             }
 
             // Force to NatNum when finding one of 'oOA'
-            bool bForceNatNum  = replaceUnquoted( rParams, "o", "m")
-                                 || replaceUnquoted( rParams, "O", "M");
+            bool bForceNatNum  = replaceUnquoted( rParams, u"o", u"m")
+                                 || replaceUnquoted( rParams, u"O", u"M");
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'A' case here

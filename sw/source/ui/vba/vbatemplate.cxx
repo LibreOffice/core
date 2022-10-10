@@ -28,13 +28,13 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static OUString lcl_CheckGroupName( const OUString& rGroupName )
+static OUString lcl_CheckGroupName( std::u16string_view aGroupName )
 {
-    OUStringBuffer sRet;
+    OUStringBuffer sRet(aGroupName.size());
     //group name should contain only A-Z and a-z and spaces
-    for( sal_Int32 i = 0; i < rGroupName.getLength(); i++ )
+    for( size_t i = 0; i < aGroupName.size(); i++ )
     {
-        sal_Unicode cChar = rGroupName[i];
+        sal_Unicode cChar = aGroupName[i];
         if (rtl::isAsciiAlphanumeric(cChar) ||
             cChar == '_' || cChar == 0x20)
         {

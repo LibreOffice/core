@@ -45,7 +45,7 @@ namespace com::sun::star::mail {
 namespace SwMailMergeHelper
 {
     SW_DLLPUBLIC OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter);
-    SW_DLLPUBLIC bool CheckMailAddress(const OUString& rMailAddress);
+    SW_DLLPUBLIC bool CheckMailAddress(std::u16string_view aMailAddress);
     SW_DLLPUBLIC css::uno::Reference<css::mail::XSmtpService> ConnectToSmtpServer(
                             SwMailMergeConfigItem const & rConfigItem,
                             css::uno::Reference<css::mail::XMailService>& xInMailService,

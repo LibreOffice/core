@@ -716,21 +716,21 @@ static OUString lcl_DenotedPortion(std::u16string_view rStr, sal_Int32 nStart, s
     return aResult;
 }
 
-OUString DenoteSpecialCharacters(const OUString & rStr, bool bQuoted)
+OUString DenoteSpecialCharacters(std::u16string_view aStr, bool bQuoted)
 {
     OUStringBuffer aResult;
 
-    if (!rStr.isEmpty())
+    if (!aStr.empty())
     {
         bool bStart = false;
         sal_Int32 nStart = 0;
         sal_Unicode cLast = 0;
 
-        for( sal_Int32 i = 0; i < rStr.getLength(); i++)
+        for( size_t i = 0; i < aStr.size(); i++)
         {
-            if (lcl_IsSpecialCharacter(rStr[i]))
+            if (lcl_IsSpecialCharacter(aStr[i]))
             {
-                if (cLast != rStr[i])
+                if (cLast != aStr[i])
                     bStart = true;
 
             }
@@ -742,16 +742,16 @@ OUString DenoteSpecialCharacters(const OUString & rStr, bool bQuoted)
 
             if (bStart)
             {
-                aResult.append(lcl_DenotedPortion(rStr, nStart, i, bQuoted));
+                aResult.append(lcl_DenotedPortion(aStr, nStart, i, bQuoted));
 
                 nStart = i;
                 bStart = false;
             }
 
-            cLast = rStr[i];
+            cLast = aStr[i];
         }
 
-        aResult.append(lcl_DenotedPortion(rStr, nStart, rStr.getLength(), bQuoted));
+        aResult.append(lcl_DenotedPortion(aStr, nStart, aStr.size(), bQuoted));
     }
     else
         aResult = SwRewriter::GetPlaceHolder(UndoArg2);

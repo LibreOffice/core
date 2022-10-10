@@ -61,18 +61,18 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
     return xRange;
 }
 
-void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange > const & rTextRange, uno::Reference< text::XText > const & rText, const OUString& rStr, bool _bAbsorb )
+void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange > const & rTextRange, uno::Reference< text::XText > const & rText, std::u16string_view aStr, bool _bAbsorb )
 {
-    sal_Int32 nlastIndex = 0;
-    sal_Int32 nIndex = 0;
+    size_t nlastIndex = 0;
+    size_t nIndex = 0;
     uno::Reference< text::XTextRange > xRange = rTextRange;
 
-    while(( nIndex = rStr.indexOf('\n', nlastIndex)) >= 0  )
+    while( ( nIndex = aStr.find('\n', nlastIndex)) != std::u16string_view::npos )
     {
         xRange = xRange->getEnd();
         if( nlastIndex < ( nIndex - 1 ) )
         {
-            rText->insertString( xRange, rStr.copy( nlastIndex, ( nIndex - 1 - nlastIndex ) ), _bAbsorb );
+            rText->insertString( xRange, OUString(aStr.substr( nlastIndex, ( nIndex - 1 - nlastIndex ) )), _bAbsorb );
             xRange = xRange->getEnd();
         }
 
@@ -80,11 +80,11 @@ void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange > const & 
         nlastIndex = nIndex + 1;
     }
 
-    if( nlastIndex < rStr.getLength() )
+    if( nlastIndex < aStr.size() )
     {
         xRange = xRange->getEnd();
 
-        OUString aWatt = rStr.copy( nlastIndex );
+        OUString aWatt( aStr.substr( nlastIndex ) );
         rText->insertString( xRange, aWatt, _bAbsorb );
     }
 }

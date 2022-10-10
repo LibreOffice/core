@@ -328,7 +328,7 @@ public:
 
     sal_uInt16 GetCount() const;                        // Get count text modules.
     sal_uInt16 GetIndex( const OUString& ) const;       // Get index of short names.
-    sal_uInt16 GetLongIndex( const OUString& ) const;   // Get index of long names.
+    sal_uInt16 GetLongIndex( std::u16string_view ) const;   // Get index of long names.
     OUString GetShortName( sal_uInt16 ) const;          // Get short name for index.
     OUString GetLongName( sal_uInt16 ) const;           // Get long name for index.
 

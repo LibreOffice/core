@@ -756,7 +756,7 @@ void MetaField::GetPrefixAndSuffix(
     }
 }
 
-sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
+sal_uInt32 MetaField::GetNumberFormat(std::u16string_view aContent) const
 {
     //TODO: this probably lacks treatment for some special cases
     sal_uInt32 nNumberFormat( m_nNumberFormat );
@@ -764,7 +764,7 @@ sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
     if (pTextNode)
     {
         double number;
-        (void) pTextNode->GetDoc().IsNumberFormat( rContent, nNumberFormat, number );
+        (void) pTextNode->GetDoc().IsNumberFormat( aContent, nNumberFormat, number );
     }
     return nNumberFormat;
 }

@@ -78,13 +78,13 @@ OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter)
                             for at least one character before the dot
                             and for at least two characters after the dot
 */
-bool CheckMailAddress( const OUString& rMailAddress )
+bool CheckMailAddress( std::u16string_view aMailAddress )
 {
-    const sal_Int32 nPosAt = rMailAddress.indexOf('@');
-    if (nPosAt<0 || rMailAddress.lastIndexOf('@')!=nPosAt)
+    const size_t nPosAt = aMailAddress.find('@');
+    if (nPosAt == std::u16string_view::npos || aMailAddress.rfind('@')!=nPosAt)
         return false;
-    const sal_Int32 nPosDot = rMailAddress.indexOf('.', nPosAt);
-    return !(nPosDot<0 || nPosDot-nPosAt<2 || rMailAddress.getLength()-nPosDot<3);
+    const size_t nPosDot = aMailAddress.find('.', nPosAt);
+    return !(nPosDot==std::u16string_view::npos || nPosDot-nPosAt<2 || aMailAddress.size()-nPosDot<3);
 }
 
 uno::Reference< mail::XSmtpService > ConnectToSmtpServer(

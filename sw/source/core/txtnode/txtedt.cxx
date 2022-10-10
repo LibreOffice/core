@@ -652,12 +652,12 @@ void SwTextNode::RstTextAttr(
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aNew));
 }
 
-static sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
+static sal_Int32 clipIndexBounds(std::u16string_view aStr, sal_Int32 nPos)
 {
     if (nPos < 0)
         return 0;
-    if (nPos > rStr.getLength())
-        return rStr.getLength();
+    if (nPos > sal_Int32(aStr.size()))
+        return aStr.size();
     return nPos;
 }
 
@@ -1975,14 +1975,14 @@ void SwTextNode::TransliterateText(
 }
 
 void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
-                                const OUString & rText,
+                                std::u16string_view aText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
-    assert(rText.getLength() - nLen <= GetSpaceLeft());
+    assert(sal_Int32(aText.size()) - nLen <= GetSpaceLeft());
 
-    m_Text = m_Text.replaceAt(nPos, nLen, rText);
+    m_Text = m_Text.replaceAt(nPos, nLen, aText);
 
-    sal_Int32 nTLen = rText.getLength();
+    sal_Int32 nTLen = aText.size();
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indices!
     sal_Int32 nMyOff = nPos;

@@ -128,7 +128,7 @@ static void testTdf43569_CheckIfFieldParse()
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition("IF A B C", paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition(u"IF A B C", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("A"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("B"), paramTrue);
@@ -140,7 +140,7 @@ static void testTdf43569_CheckIfFieldParse()
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition("  IF AAA BBB CCC  ", paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition(u"  IF AAA BBB CCC  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("AAA"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("BBB"), paramTrue);
@@ -152,7 +152,7 @@ static void testTdf43569_CheckIfFieldParse()
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition("  IF AAA \"BBB\" \"CCC\"  ", paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition(u"  IF AAA \"BBB\" \"CCC\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("AAA"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("BBB"), paramTrue);
@@ -165,7 +165,7 @@ static void testTdf43569_CheckIfFieldParse()
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition("  IF A A A \"B B B\" \"C C C\"  ", paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition(u"  IF A A A \"B B B\" \"C C C\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("A A A"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("B B B"), paramTrue);
@@ -178,7 +178,7 @@ static void testTdf43569_CheckIfFieldParse()
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition("IF A1 A2 A3 \"B1 B2 \" \" C1 C2\"  ", paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition(u"IF A1 A2 A3 \"B1 B2 \" \" C1 C2\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("A1 A2 A3"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("B1 B2 "), paramTrue);
@@ -191,7 +191,7 @@ static void testTdf43569_CheckIfFieldParse()
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition("IF condition \"\" \"\"  ", paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition(u"IF condition \"\" \"\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("condition"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString(""), paramTrue);

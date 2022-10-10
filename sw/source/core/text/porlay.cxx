@@ -2574,13 +2574,13 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
     }
 }
 
-TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
+TextFrameIndex SwScriptInfo::ThaiJustify( std::u16string_view aText, sal_Int32* pKernArray,
                                      TextFrameIndex const nStt,
                                      TextFrameIndex const nLen,
                                      TextFrameIndex nNumberOfBlanks,
                                      tools::Long nSpaceAdd )
 {
-    SAL_WARN_IF( nStt + nLen > TextFrameIndex(rText.getLength()), "sw.core", "String in ThaiJustify too small" );
+    SAL_WARN_IF( nStt + nLen > TextFrameIndex(aText.size()), "sw.core", "String in ThaiJustify too small" );
 
     SwTwips nNumOfTwipsToDistribute = nSpaceAdd * sal_Int32(nNumberOfBlanks) /
                                       SPACING_PRECISION_FACTOR;
@@ -2590,7 +2590,7 @@ TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, sal_Int32* pKer
 
     for (sal_Int32 nI = 0; nI < sal_Int32(nLen); ++nI)
     {
-        const sal_Unicode cCh = rText[sal_Int32(nStt) + nI];
+        const sal_Unicode cCh = aText[sal_Int32(nStt) + nI];
 
         // check if character is not above or below base
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&

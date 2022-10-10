@@ -130,19 +130,19 @@ SwModuleOptions::SwModuleOptions() :
 {
 }
 
-OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFromUI)
+OUString SwModuleOptions::ConvertWordDelimiter(std::u16string_view aDelim, bool bFromUI)
 {
     OUStringBuffer sReturn;
-    const sal_Int32 nDelimLen = rDelim.getLength();
+    const sal_Int32 nDelimLen = aDelim.size();
     if(bFromUI)
     {
         for (sal_Int32 i = 0; i < nDelimLen; )
         {
-            const sal_Unicode c = rDelim[i++];
+            const sal_Unicode c = aDelim[i++];
 
             if (c == '\\' && i < nDelimLen )
             {
-                switch (rDelim[i++])
+                switch (aDelim[i++])
                 {
                     case 'n':   sReturn.append("\n");    break;
                     case 't':   sReturn.append("\t");    break;
@@ -154,7 +154,7 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
                         bool bValidData = true;
                         for( sal_Int32 n = 0; n < 2 && i < nDelimLen; ++n, ++i )
                         {
-                            sal_Unicode nVal = rDelim[i];
+                            sal_Unicode nVal = aDelim[i];
                             if( (nVal >= '0') && ( nVal <= '9') )
                                 nVal -= '0';
                             else if( (nVal >= 'A') && (nVal <= 'F') )
@@ -190,7 +190,7 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
     {
         for (sal_Int32 i = 0; i < nDelimLen; ++i)
         {
-            const sal_Unicode c = rDelim[i];
+            const sal_Unicode c = aDelim[i];
 
             switch (c)
             {

@@ -61,7 +61,7 @@ private:
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
     void InitFontAndAttrHandler(
         SwTextNode const& rPropsNode, SwTextNode const& rTextNode,
-        OUString const& rText, bool const* pbVertLayout,
+        std::u16string_view aText, bool const* pbVertLayout,
         bool const* pbVertLayoutLRBT);
 
 protected:

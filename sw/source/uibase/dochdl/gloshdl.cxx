@@ -233,14 +233,14 @@ OUString SwGlossaryHdl::GetGlossaryShortName(sal_uInt16 nId)
 }
 
 // ask for short name
-OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
+OUString SwGlossaryHdl::GetGlossaryShortName(std::u16string_view aName)
 {
     OUString sReturn;
     SwTextBlocks *pTmp =
         m_pCurGrp ? m_pCurGrp.get() : m_rStatGlossaries.GetGroupDoc( m_aCurGrp ).release();
     if(pTmp)
     {
-        sal_uInt16 nIdx = pTmp->GetLongIndex( rName );
+        sal_uInt16 nIdx = pTmp->GetLongIndex( aName );
         if( nIdx != sal_uInt16(-1) )
             sReturn = pTmp->GetShortName( nIdx );
         if( !m_pCurGrp )

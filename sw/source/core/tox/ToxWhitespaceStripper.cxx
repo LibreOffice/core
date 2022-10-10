@@ -16,12 +16,12 @@
 
 namespace sw {
 
-ToxWhitespaceStripper::ToxWhitespaceStripper(const OUString& inputString)
+ToxWhitespaceStripper::ToxWhitespaceStripper(std::u16string_view inputString)
 {
     OUStringBuffer buffer;
 
     bool lastCharacterWasWhitespace = false;
-    for (sal_Int32 pos = 0; pos < inputString.getLength(); ++pos) {
+    for (size_t pos = 0; pos < inputString.size(); ++pos) {
         sal_Unicode cur = inputString[pos];
 
         if (cur == ' ' || cur == '\n' || cur == '\t') {

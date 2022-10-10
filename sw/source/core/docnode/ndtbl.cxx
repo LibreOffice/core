@@ -4011,13 +4011,13 @@ void SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     }
 }
 
-bool SwDoc::IsNumberFormat( const OUString& rString, sal_uInt32& F_Index, double& fOutNumber )
+bool SwDoc::IsNumberFormat( std::u16string_view aString, sal_uInt32& F_Index, double& fOutNumber )
 {
-    if( rString.getLength() > 308 ) // optimization matches svl:IsNumberFormat arbitrary value
+    if( aString.size() > 308 ) // optimization matches svl:IsNumberFormat arbitrary value
         return false;
 
     // remove any comment anchor marks
-    OUStringBuffer sStringBuffer(rString);
+    OUStringBuffer sStringBuffer(aString);
     sal_Int32 nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD );
     while( nCommentPosition != -1 )
     {

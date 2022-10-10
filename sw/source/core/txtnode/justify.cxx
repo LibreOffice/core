@@ -97,10 +97,11 @@ sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 n
     return nIdx;
 }
 
-void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText, sal_Int32 nStt,
-                       sal_Int32 nLen, tools::Long nSpaceAdd, tools::Long nKern, bool bNoHalfSpace)
+void SpaceDistribution(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
+                       sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd, tools::Long nKern,
+                       bool bNoHalfSpace)
 {
-    assert(nStt + nLen <= rText.getLength());
+    assert(nStt + nLen <= sal_Int32(aText.size()));
     assert(nLen <= sal_Int32(rKernArray.size()));
     // nSpaceSum contains the sum of the intermediate space distributed
     // among Spaces by the Justification.
@@ -117,7 +118,7 @@ void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText
     const tools::Long nHalfSpace = bNoHalfSpace ? 0 : nSpaceAdd / 2;
     const tools::Long nOtherHalf = nSpaceAdd - nHalfSpace;
     tools::Long nKernSum = nKern;
-    sal_Unicode cChPrev = rText[nStt];
+    sal_Unicode cChPrev = aText[nStt];
 
     if (nSpaceAdd && (cChPrev == CH_BLANK))
         nSpaceSum = nHalfSpace;
@@ -133,7 +134,7 @@ void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText
         if (i == nLen)
             break;
 
-        sal_Unicode nCh = rText[nStt + i];
+        sal_Unicode nCh = aText[nStt + i];
 
         // Apply SpaceSum
         if (cChPrev == CH_BLANK)
@@ -169,15 +170,15 @@ void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText
         rKernArray[nPrevIdx++] += nKernSum + nSpaceSum;
 }
 
-tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText, sal_Int32 nStt,
-                       sal_Int32 nLen, tools::Long nGridWidth, bool bForceLeft)
+tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
+                       sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth, bool bForceLeft)
 {
-    assert(nStt + nLen <= rText.getLength());
+    assert(nStt + nLen <= sal_Int32(aText.size()));
     assert(nLen <= sal_Int32(rKernArray.size()));
 
     tools::Long nCharWidth = rKernArray[0];
     tools::Long nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth);
-    tools::Long nDelta = lcl_OffsetFromGridEdge(nMinWidth, nCharWidth, rText[nStt], bForceLeft);
+    tools::Long nDelta = lcl_OffsetFromGridEdge(nMinWidth, nCharWidth, aText[nStt], bForceLeft);
     tools::Long nEdge = nMinWidth - nDelta;
 
     sal_Int32 nLast = 0;
@@ -190,7 +191,7 @@ tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText
         nCharWidth = rKernArray[i] - rKernArray[nLast];
         nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth);
         tools::Long nX
-            = nEdge + lcl_OffsetFromGridEdge(nMinWidth, nCharWidth, rText[nStt + i], bForceLeft);
+            = nEdge + lcl_OffsetFromGridEdge(nMinWidth, nCharWidth, aText[nStt + i], bForceLeft);
         nEdge += nMinWidth;
 
         while (nLast < i)

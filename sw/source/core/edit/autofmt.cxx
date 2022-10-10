@@ -154,8 +154,8 @@ class SwAutoFormat
 
     static OUString DelLeadingBlanks(const OUString& rStr);
     static OUString DelTrailingBlanks( const OUString& rStr );
-    static sal_Int32 GetLeadingBlanks( const OUString& rStr );
-    static sal_Int32 GetTrailingBlanks( const OUString& rStr );
+    static sal_Int32 GetLeadingBlanks( std::u16string_view aStr );
+    static sal_Int32 GetTrailingBlanks( std::u16string_view aStr );
 
     bool IsFirstCharCapital(const SwTextFrame & rNd) const;
     sal_uInt16 GetDigitLevel(const SwTextFrame& rFrame, TextFrameIndex& rPos,
@@ -707,23 +707,23 @@ OUString SwAutoFormat::DelTrailingBlanks( const OUString& rStr )
     return rStr;
 }
 
-sal_Int32 SwAutoFormat::GetLeadingBlanks( const OUString& rStr )
+sal_Int32 SwAutoFormat::GetLeadingBlanks( std::u16string_view aStr )
 {
-    sal_Int32 nL;
-    sal_Int32 n;
+    size_t nL;
+    size_t n;
 
-    for( nL = rStr.getLength(), n = 0; n < nL && IsSpace( rStr[ n ] ); ++n )
+    for( nL = aStr.size(), n = 0; n < nL && IsSpace( aStr[ n ] ); ++n )
         ;
     return n;
 }
 
-sal_Int32 SwAutoFormat::GetTrailingBlanks( const OUString& rStr )
+sal_Int32 SwAutoFormat::GetTrailingBlanks( std::u16string_view aStr )
 {
-    sal_Int32 nL = rStr.getLength(), n = nL;
+    size_t nL = aStr.size(), n = nL;
     if( !nL )
         return 0;
 
-    while( --n && IsSpace( rStr[ n ] )  )
+    while( --n && IsSpace( aStr[ n ] )  )
         ;
     return ++n;
 }

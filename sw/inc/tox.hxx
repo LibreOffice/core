@@ -68,7 +68,7 @@ namespace sw {
         CollectTextTOXMarksForLayoutHint(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout)
             : SfxHint(SfxHintId::SwCollectTextTOXMarksForLayout), m_rMarks(rMarks), m_pLayout(pLayout) {}
     };
-    SW_DLLPUBLIC auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
+    SW_DLLPUBLIC auto PrepareJumpToTOXMark(SwDoc const& rDoc, std::u16string_view aName)
         -> std::optional<std::pair<SwTOXMark, sal_Int32>>;
 }
 
@@ -300,7 +300,7 @@ public:
 
        @param rStr   string representation of the tokens
     */
-    SwFormTokensHelper(const OUString & rStr);
+    SwFormTokensHelper(std::u16string_view aStr);
 
     /**
        Returns vector of tokens.
@@ -332,7 +332,7 @@ public:
 
     // #i21237#
     void    SetPattern(sal_uInt16 nLevel, SwFormTokens&& rName);
-    void    SetPattern(sal_uInt16 nLevel, const OUString& rStr);
+    void    SetPattern(sal_uInt16 nLevel, std::u16string_view aStr);
     const SwFormTokens& GetPattern(sal_uInt16 nLevel) const;
 
     // fill tab stop positions from template to pattern- #i21237#

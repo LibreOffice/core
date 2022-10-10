@@ -6710,13 +6710,13 @@ static OUString Read(SvStream& rStream)
     return aRet;
 }
 
-static void Write(const OUString& rString, SvStream& rStream)
+static void Write(std::u16string_view aString, SvStream& rStream)
 {
     sal_uInt16 nBuf = 0;
-    nBuf |= rString.getLength(); // cch, 0..14th bits.
+    nBuf |= sal_Int32(aString.size()); // cch, 0..14th bits.
     nBuf |= 0x8000; // fAnsiString, 15th bit.
     rStream.WriteUInt16(nBuf);
-    SwWW8Writer::WriteString8(rStream, rString, false, RTL_TEXTENCODING_ASCII_US);
+    SwWW8Writer::WriteString8(rStream, aString, false, RTL_TEXTENCODING_ASCII_US);
 }
 };
 
@@ -6738,7 +6738,7 @@ void MSOFactoidType::Write(WW8Export& rExport)
     aStream.WriteUInt32(m_nId); // id
     MSOPBString::Write(m_aUri, aStream);
     MSOPBString::Write(m_aTag, aStream);
-    MSOPBString::Write("", aStream); // rgbDownloadURL
+    MSOPBString::Write(u"", aStream); // rgbDownloadURL
     rStream.WriteUInt32(aStream.Tell());
     aStream.Seek(0);
     rStream.WriteStream(aStream);

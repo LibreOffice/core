@@ -318,12 +318,12 @@ void MSWordStyles::BuildStylesTable()
     }
 }
 
-OString MSWordStyles::CreateStyleId(const OUString &rName)
+OString MSWordStyles::CreateStyleId(std::u16string_view aName)
 {
-    OStringBuffer aStyleIdBuf(rName.getLength());
-    for (int i = 0; i < rName.getLength(); ++i)
+    OStringBuffer aStyleIdBuf(aName.size());
+    for (size_t i = 0; i < aName.size(); ++i)
     {
-        sal_Unicode nChar = rName[i];
+        sal_Unicode nChar = aName[i];
         if (('0' <= nChar && nChar <= '9') ||
             ('a' <= nChar && nChar <= 'z') ||
             ('A' <= nChar && nChar <= 'Z'))

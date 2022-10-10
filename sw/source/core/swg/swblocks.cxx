@@ -36,11 +36,11 @@
 /**
  * Calculate hash code (is not guaranteed to be unique)
  */
-sal_uInt16 SwImpBlocks::Hash( const OUString& r )
+sal_uInt16 SwImpBlocks::Hash( std::u16string_view r )
 {
     sal_uInt16 n = 0;
     // std::min requires an explicit cast to sal_Int32 on 32bit platforms
-    const sal_Int32 nLen = std::min(r.getLength(), static_cast<sal_Int32>(8));
+    const sal_Int32 nLen = std::min(sal_Int32(r.size()), static_cast<sal_Int32>(8));
     for (sal_Int32 i=0; i<nLen; ++i)
     {
         n = ( n << 1 ) + r[i];
@@ -139,14 +139,14 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
     return USHRT_MAX;
 }
 
-sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
+sal_uInt16 SwImpBlocks::GetLongIndex( std::u16string_view aLong ) const
 {
-    sal_uInt16 nHash = Hash( rLong );
+    sal_uInt16 nHash = Hash( aLong );
     for( size_t i = 0; i < m_aNames.size(); i++ )
     {
         const SwBlockName* pName = m_aNames[ i ].get();
         if( pName->m_nHashL == nHash
-         && pName->m_aLong == rLong )
+         && pName->m_aLong == aLong )
             return i;
     }
     return USHRT_MAX;
@@ -263,7 +263,7 @@ sal_uInt16 SwTextBlocks::GetIndex( const OUString& r ) const
     return m_pImp ? m_pImp->GetIndex( r ) : USHRT_MAX;
 }
 
-sal_uInt16 SwTextBlocks::GetLongIndex( const OUString& r ) const
+sal_uInt16 SwTextBlocks::GetLongIndex( std::u16string_view r ) const
 {
     return m_pImp ? m_pImp->GetLongIndex( r ) : USHRT_MAX;
 }

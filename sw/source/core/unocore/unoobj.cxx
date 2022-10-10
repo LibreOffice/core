@@ -706,7 +706,7 @@ SwXTextCursor::~SwXTextCursor()
     m_pUnoCursor.reset(nullptr); // need to delete this with SolarMutex held
 }
 
-void SwXTextCursor::DeleteAndInsert(const OUString& rText,
+void SwXTextCursor::DeleteAndInsert(std::u16string_view aText,
         ::sw::DeleteAndInsertMode const eMode)
 {
     auto pUnoCursor = static_cast<SwCursor*>(m_pUnoCursor.get());
@@ -716,7 +716,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
     // Start/EndAction
     SwDoc& rDoc = pUnoCursor->GetDoc();
     UnoActionContext aAction(&rDoc);
-    const sal_Int32 nTextLen = rText.getLength();
+    const sal_Int32 nTextLen = aText.size();
     rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
     auto pCurrent = pUnoCursor;
     do
@@ -731,11 +731,11 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         {
             const bool bSuccess(
                 SwUnoCursorHelper::DocInsertStringSplitCR(
-                    rDoc, *pCurrent, rText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints)));
+                    rDoc, *pCurrent, aText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints)));
             OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
 
             SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
-            pCurrent->Left(rText.getLength());
+            pCurrent->Left(aText.size());
         }
         pCurrent = pCurrent->GetNext();
     } while (pCurrent != pUnoCursor);

@@ -798,7 +798,7 @@ static void DeleteTable(SwDoc & rDoc, SwTable& rTable)
 }
 
 void SwXTextRange::DeleteAndInsert(
-        const OUString& rText, ::sw::DeleteAndInsertMode const eMode)
+        std::u16string_view aText, ::sw::DeleteAndInsertMode const eMode)
 {
     if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
@@ -886,16 +886,16 @@ void SwXTextRange::DeleteAndInsert(
     if (aCursor.HasMark())
     {
         m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor,
-            (!rText.isEmpty() || eMode & ::sw::DeleteAndInsertMode::ForceReplace) ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
+            (!aText.empty() || eMode & ::sw::DeleteAndInsertMode::ForceReplace) ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
     }
 
-    if (!rText.isEmpty())
+    if (!aText.empty())
     {
         SwUnoCursorHelper::DocInsertStringSplitCR(
-            m_pImpl->m_rDoc, aCursor, rText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints));
+            m_pImpl->m_rDoc, aCursor, aText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints));
 
         SwUnoCursorHelper::SelectPam(aCursor, true);
-        aCursor.Left(rText.getLength());
+        aCursor.Left(aText.size());
     }
     SetPositions(aCursor);
     m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
@@ -1649,7 +1649,7 @@ uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
     return ret;
 }
 
-void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
+void SwUnoCursorHelper::SetString(SwCursor & rCursor, std::u16string_view aString)
 {
     // Start/EndAction
     SwDoc& rDoc = rCursor.GetDoc();
@@ -1659,13 +1659,13 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     {
         rDoc.getIDocumentContentOperations().DeleteAndJoin(rCursor);
     }
-    if (!rString.isEmpty())
+    if (!aString.empty())
     {
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(
-                    rDoc, rCursor, rString, false ) );
+                    rDoc, rCursor, aString, false ) );
         OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
         SwUnoCursorHelper::SelectPam(rCursor, true);
-        rCursor.Left(rString.getLength());
+        rCursor.Left(aString.size());
     }
     rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }

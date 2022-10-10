@@ -41,14 +41,14 @@ class ToxWhitespaceStripperTest : public CppUnit::TestFixture
 void ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
 {
     {
-        ToxWhitespaceStripper sut("abc\n");
+        ToxWhitespaceStripper sut(u"abc\n");
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(1));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(2));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(3));
     }
     {
-        ToxWhitespaceStripper sut("abc\n\n");
+        ToxWhitespaceStripper sut(u"abc\n\n");
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(1));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(2));
@@ -56,7 +56,7 @@ void ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(4));
     }
     {
-        ToxWhitespaceStripper sut("abc\ndef");
+        ToxWhitespaceStripper sut(u"abc\ndef");
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(1));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(2));
@@ -69,7 +69,7 @@ void ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
         //             012345 6789
         //             01234567
         //            " abc def"
-        ToxWhitespaceStripper sut("  abc \ndef");
+        ToxWhitespaceStripper sut(u"  abc \ndef");
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(1));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(2));
@@ -86,27 +86,27 @@ void ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
 void ToxWhitespaceStripperTest::StrippingWhitespacesFromVariousStringsWorks()
 {
     {
-        ToxWhitespaceStripper sut("abc\n");
+        ToxWhitespaceStripper sut(u"abc\n");
         CPPUNIT_ASSERT_EQUAL(OUString("abc"), sut.GetStrippedString());
     }
     {
-        ToxWhitespaceStripper sut("abc\n\n");
+        ToxWhitespaceStripper sut(u"abc\n\n");
         CPPUNIT_ASSERT_EQUAL(OUString("abc"), sut.GetStrippedString());
     }
     {
-        ToxWhitespaceStripper sut("abc\ndef");
+        ToxWhitespaceStripper sut(u"abc\ndef");
         CPPUNIT_ASSERT_EQUAL(OUString("abc def"), sut.GetStrippedString());
     }
     {
-        ToxWhitespaceStripper sut("  abc \ndef");
+        ToxWhitespaceStripper sut(u"  abc \ndef");
         CPPUNIT_ASSERT_EQUAL(OUString(" abc def"), sut.GetStrippedString());
     }
     {
-        ToxWhitespaceStripper sut("  ");
+        ToxWhitespaceStripper sut(u"  ");
         CPPUNIT_ASSERT_EQUAL(OUString(""), sut.GetStrippedString());
     }
     {
-        ToxWhitespaceStripper sut("d  ");
+        ToxWhitespaceStripper sut(u"d  ");
         CPPUNIT_ASSERT_EQUAL(OUString("d"), sut.GetStrippedString());
     }
 }
@@ -121,7 +121,7 @@ void ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
 
 void ToxWhitespaceStripperTest::InvalidPositionIsMappedToLastEntry()
 {
-    ToxWhitespaceStripper sut("ab  c");
+    ToxWhitespaceStripper sut(u"ab  c");
     sal_Int32 const expected = 4; // the length of the string after merging the two whitespaces
     sal_Int32 result
         = sut.GetPositionInStrippedString(40); // a value past the original string length

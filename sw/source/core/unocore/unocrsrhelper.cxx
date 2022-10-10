@@ -1168,12 +1168,12 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
 bool DocInsertStringSplitCR(
         SwDoc &rDoc,
         const SwPaM &rNewCursor,
-        const OUString &rText,
+        std::u16string_view rText,
         const bool bForceExpandHints )
 {
     bool bOK = true;
 
-    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+    for (size_t i = 0; i < rText.size(); ++i)
     {
         sal_Unicode const ch(rText[i]);
         if (linguistic::IsControlChar(ch)
@@ -1202,16 +1202,16 @@ bool DocInsertStringSplitCR(
     sal_Int32 nStartIdx = 0;
     const sal_Int32 nMaxLength = COMPLETE_STRING - pTextNd->GetText().getLength();
 
-    sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
-    if( ( nIdx == -1 && nMaxLength < rText.getLength() ) ||
-        ( nIdx != -1 && nMaxLength < nIdx ) )
+    size_t nIdx = rText.find( '\r', nStartIdx );
+    if( ( nIdx == std::u16string_view::npos && nMaxLength < sal_Int32(rText.size()) ) ||
+        ( nIdx != std::u16string_view::npos && nMaxLength < sal_Int32(nIdx) ) )
     {
         nIdx = nMaxLength;
     }
-    while (nIdx != -1 )
+    while (nIdx != std::u16string_view::npos )
     {
-        OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
-        aText = rText.copy( nStartIdx, nIdx - nStartIdx );
+        OSL_ENSURE( sal_Int32(nIdx) - nStartIdx >= 0, "index negative!" );
+        aText = rText.substr( nStartIdx, nIdx - nStartIdx );
         if (!aText.isEmpty() &&
             !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aText, nInsertFlags ))
         {
@@ -1224,9 +1224,9 @@ bool DocInsertStringSplitCR(
             bOK = false;
         }
         nStartIdx = nIdx + 1;
-        nIdx = rText.indexOf( '\r', nStartIdx );
+        nIdx = rText.find( '\r', nStartIdx );
     }
-    aText = rText.copy( nStartIdx );
+    aText = rText.substr( nStartIdx );
     if (!aText.isEmpty() &&
         !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aText, nInsertFlags ))
     {

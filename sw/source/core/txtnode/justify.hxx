@@ -20,7 +20,7 @@ SW_DLLPUBLIC sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray
                                         tools::Long nX);
 /// Distribute space between words and letters.
 /// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
-/// @param rText string used to determine where space and kern are inserted.
+/// @param aText string used to determine where space and kern are inserted.
 /// @param nStt starting index of rText.
 /// @param nLen number of elements to process in rKernArray and rText.
 /// @param nSpaceAdd amount of space to insert for each CH_BLANK.
@@ -28,7 +28,7 @@ SW_DLLPUBLIC sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray
 /// @param bNoHalfSpace whether to split the space into two halves.
 ///        Split spaces are inserted before and after CH_BLANK.
 ///        Set to true in word line mode and for Arabic text to avoid splitting.
-SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText,
+SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd,
                                     tools::Long nKern, bool bNoHalfSpace);
 
@@ -40,14 +40,14 @@ SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OU
 /// ideograph.
 /// c) Other ideographs are aligned to the center of the spanned grids.
 /// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
-/// @param rText string used to determine where space and kern are inserted.
+/// @param aText string used to determine where space and kern are inserted.
 /// @param nStt starting index of rText.
 /// @param nLen number of elements to process in rKernArray and rText.
 /// @param nGridWidth width of a text grid
 /// @param bForceLeft for align to the left edge of the grid disregard of the punctuation type.
 /// This is useful for calculate text width, line break, and conversion model position.
 /// @return the delta offset of first glyph so text origin can be updated accordingly.
-SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText,
+SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, std::u16string_view aText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth,
                                     bool bForceLeft);
 

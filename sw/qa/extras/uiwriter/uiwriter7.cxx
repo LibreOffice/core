@@ -2122,13 +2122,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnoCursorPointer)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextTableCellNames)
 {
     sal_Int32 nCol, nRow2;
-    SwXTextTable::GetCellPosition("z1", nCol, nRow2);
+    SwXTextTable::GetCellPosition(u"z1", nCol, nRow2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(51), nCol);
-    SwXTextTable::GetCellPosition("AA1", nCol, nRow2);
+    SwXTextTable::GetCellPosition(u"AA1", nCol, nRow2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(52), nCol);
-    SwXTextTable::GetCellPosition("AB1", nCol, nRow2);
+    SwXTextTable::GetCellPosition(u"AB1", nCol, nRow2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(53), nCol);
-    SwXTextTable::GetCellPosition("BB1", nCol, nRow2);
+    SwXTextTable::GetCellPosition(u"BB1", nCol, nRow2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(105), nCol);
 }
 

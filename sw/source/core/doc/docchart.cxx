@@ -36,21 +36,21 @@ void SwTable::UpdateCharts() const
     GetFrameFormat()->GetDoc()->UpdateCharts( GetFrameFormat()->GetName() );
 }
 
-bool SwTable::IsTableComplexForChart( const OUString& rSelection ) const
+bool SwTable::IsTableComplexForChart( std::u16string_view aSelection ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
-    if( 2 < rSelection.getLength() )
+    if( 2 < aSelection.size() )
     {
-        const sal_Int32 nSeparator {rSelection.indexOf( ':' )};
-        OSL_ENSURE( -1 != nSeparator, "no valid selection" );
+        const size_t nSeparator = aSelection.find( u':' );
+        OSL_ENSURE( std::u16string_view::npos != nSeparator, "no valid selection" );
 
         // Remove brackets at the beginning and from the end
-        const sal_Int32 nOffset {'<' == rSelection[0] ? 1 : 0};
-        const sal_Int32 nLength {'>' == rSelection[ rSelection.getLength()-1 ]
-            ? rSelection.getLength()-1 : rSelection.getLength()};
+        const sal_Int32 nOffset = '<' == aSelection[0] ? 1 : 0;
+        const sal_Int32 nLength = '>' == aSelection[ aSelection.size()-1 ]
+            ? aSelection.size()-1 : aSelection.size();
 
-        pSttBox = GetTableBox(rSelection.copy( nOffset, nSeparator - nOffset ));
-        pEndBox = GetTableBox(rSelection.copy( nSeparator+1, nLength - (nSeparator+1) ));
+        pSttBox = GetTableBox(OUString(aSelection.substr( nOffset, nSeparator - nOffset )));
+        pEndBox = GetTableBox(OUString(aSelection.substr( nSeparator+1, nLength - (nSeparator+1) )));
     }
     else
     {

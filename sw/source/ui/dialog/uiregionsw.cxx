@@ -73,9 +73,9 @@ OUString BuildBitmap(bool bProtect, bool bHidden)
     return bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE);
 }
 
-OUString CollapseWhiteSpaces(const OUString& sName)
+OUString CollapseWhiteSpaces(std::u16string_view sName)
 {
-    const sal_Int32 nLen = sName.getLength();
+    const sal_Int32 nLen = sName.size();
     const sal_Unicode cRef = ' ';
     OUStringBuffer aBuf(nLen);
     for (sal_Int32 i = 0; i<nLen; )

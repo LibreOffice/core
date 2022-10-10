@@ -361,7 +361,7 @@ public:
                                                             m_aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
-    static OUString ConvertWordDelimiter(const OUString& rDelim, bool bFromUI);
+    static OUString ConvertWordDelimiter(std::u16string_view aDelim, bool bFromUI);
 
     bool    IsShowIndexPreview() const {return  m_aMiscConfig.m_bShowIndexPreview;}
     void        SetShowIndexPreview(bool bSet)

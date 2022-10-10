@@ -279,7 +279,7 @@ public:
 
     SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
-    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
+    SW_DLLPUBLIC static void GetCellPosition(std::u16string_view aCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
 
     SW_DLLPUBLIC SwFrameFormat* GetFrameFormat();
 
@@ -500,17 +500,17 @@ public:
 };
 
 int sw_CompareCellRanges(
-        const OUString &rRange1StartCell, const OUString &rRange1EndCell,
-        const OUString &rRange2StartCell, const OUString &rRange2EndCell,
+        std::u16string_view aRange1StartCell, std::u16string_view aRange1EndCell,
+        std::u16string_view aRange2StartCell, std::u16string_view aRange2EndCell,
         bool bCmpColsFirst );
 
 void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
 
 OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 
-int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 );
+int sw_CompareCellsByColFirst( std::u16string_view aCellName1, std::u16string_view aCellName2 );
 
-int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 );
+int sw_CompareCellsByRowFirst( std::u16string_view aCellName1, std::u16string_view aCellName2 );
 
 #endif
 

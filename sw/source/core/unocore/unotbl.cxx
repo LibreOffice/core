@@ -349,10 +349,10 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
  * @param [IN,OUT] o_rRow (0-based)
  */
 //TODO: potential for throwing proper exceptions instead of having every caller to check for errors
-void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow)
+void SwXTextTable::GetCellPosition(std::u16string_view aCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow)
 {
     o_rColumn = o_rRow = -1;    // default return values indicating failure
-    const sal_Int32 nLen = rCellName.getLength();
+    const sal_Int32 nLen = aCellName.size();
     if(!nLen)
     {
         SAL_WARN("sw.uno", "failed to get column or row index");
@@ -361,7 +361,7 @@ void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColu
     sal_Int32 nRowPos = 0;
     while (nRowPos<nLen)
     {
-        if (rCellName[nRowPos]>='0' && rCellName[nRowPos]<='9')
+        if (aCellName[nRowPos]>='0' && aCellName[nRowPos]<='9')
         {
             break;
         }
@@ -376,7 +376,7 @@ void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColu
         nColIdx *= 52;
         if (i < nRowPos - 1)
             ++nColIdx;
-        const sal_Unicode cChar = rCellName[i];
+        const sal_Unicode cChar = aCellName[i];
         if ('A' <= cChar && cChar <= 'Z')
             nColIdx += cChar - 'A';
         else if ('a' <= cChar && cChar <= 'z')
@@ -389,7 +389,7 @@ void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColu
     }
 
     o_rColumn = nColIdx;
-    o_rRow    = o3tl::toInt32(rCellName.subView(nRowPos)) - 1; // - 1 because indices ought to be 0 based
+    o_rRow    = o3tl::toInt32(aCellName.substr(nRowPos)) - 1; // - 1 because indices ought to be 0 based
 }
 
 /** compare position of two cells (check rows first)
@@ -401,11 +401,11 @@ void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColu
  * @param rCellName2 e.g. "A1" (non-empty string with valid cell name)
  * @return -1 if cell_1 < cell_2; 0 if both cells are equal; +1 if cell_1 > cell_2
  */
-int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 )
+int sw_CompareCellsByRowFirst( std::u16string_view aCellName1, std::u16string_view aCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    SwXTextTable::GetCellPosition( rCellName1, nCol1, nRow1 );
-    SwXTextTable::GetCellPosition( rCellName2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( aCellName1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( aCellName2, nCol2, nRow2 );
 
     if (nRow1 < nRow2 || (nRow1 == nRow2 && nCol1 < nCol2))
         return -1;
@@ -424,11 +424,11 @@ int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCell
  * @param rCellName2 e.g. "A1" (non-empty string with valid cell name)
  * @return -1 if cell_1 < cell_2; 0 if both cells are equal; +1 if cell_1 > cell_2
  */
-int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 )
+int sw_CompareCellsByColFirst( std::u16string_view aCellName1, std::u16string_view aCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    SwXTextTable::GetCellPosition( rCellName1, nCol1, nRow1 );
-    SwXTextTable::GetCellPosition( rCellName2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( aCellName1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( aCellName2, nCol2, nRow2 );
 
     if (nCol1 < nCol2 || (nCol1 == nCol2 && nRow1 < nRow2))
         return -1;
@@ -452,20 +452,20 @@ int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCell
  * @return -1 if cell_range_1 < cell_range_2; 0 if both cell ranges are equal; +1 if cell_range_1 > cell_range_2
  */
 int sw_CompareCellRanges(
-        const OUString &rRange1StartCell, const OUString &rRange1EndCell,
-        const OUString &rRange2StartCell, const OUString &rRange2EndCell,
+        std::u16string_view aRange1StartCell, std::u16string_view aRange1EndCell,
+        std::u16string_view aRange2StartCell, std::u16string_view aRange2EndCell,
         bool bCmpColsFirst )
 {
-    int (*pCompareCells)( const OUString &, const OUString & ) =
+    int (*pCompareCells)( std::u16string_view, std::u16string_view ) =
             bCmpColsFirst ? &sw_CompareCellsByColFirst : &sw_CompareCellsByRowFirst;
 
-    int nCmpResStartCells = pCompareCells( rRange1StartCell, rRange2StartCell );
+    int nCmpResStartCells = pCompareCells( aRange1StartCell, aRange2StartCell );
     if ((-1 == nCmpResStartCells ) ||
          ( 0 == nCmpResStartCells &&
-          -1 == pCompareCells( rRange1EndCell, rRange2EndCell ) ))
+          -1 == pCompareCells( aRange1EndCell, aRange2EndCell ) ))
         return -1;
     else if (0 == nCmpResStartCells &&
-             0 == pCompareCells( rRange1EndCell, rRange2EndCell ))
+             0 == pCompareCells( aRange1EndCell, aRange2EndCell ))
         return 0;
     else
         return +1;

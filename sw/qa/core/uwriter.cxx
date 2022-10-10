@@ -1852,35 +1852,35 @@ void SwDocTest::testTdf92308()
 
 void SwDocTest::testTableCellComparison()
 {
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByColFirst("A1", "Z1") );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst("Z1", "A1") );
-    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellsByColFirst("A1", "A1") );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByColFirst(u"A1", u"Z1") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst(u"Z1", u"A1") );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellsByColFirst(u"A1", u"A1") );
 
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst("A2", "A1") );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst("Z3", "A2") );
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByColFirst("A3", "Z1") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst(u"A2", u"A1") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst(u"Z3", u"A2") );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByColFirst(u"A3", u"Z1") );
 
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByRowFirst("A1", "Z1") );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst("Z1", "A1") );
-    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellsByRowFirst("A1", "A1") );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByRowFirst(u"A1", u"Z1") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(u"Z1", u"A1") );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellsByRowFirst(u"A1", u"A1") );
 
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst("A2", "A1") );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst("Z3", "A2") );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst("A3", "Z1") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(u"A2", u"A1") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(u"Z3", u"A2") );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(u"A3", u"Z1") );
 
-    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges("A1", "A1", "A1", "A1", true) );
-    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges("A1", "Z1", "A1", "Z1", true) );
-    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges("A1", "Z1", "A1", "Z1", false) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges(u"A1", u"A1", u"A1", u"A1", true) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges(u"A1", u"Z1", u"A1", u"Z1", true) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges(u"A1", u"Z1", u"A1", u"Z1", false) );
 
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges("A1", "Z1", "B1", "Z1", true) );
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges("A1", "Z1", "A2", "Z2", false) );
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges("A1", "Z1", "A2", "Z2", true) );
-    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges("A1", "Z1", "A6", "Z2", true) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(u"A1", u"Z1", u"B1", u"Z1", true) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(u"A1", u"Z1", u"A2", u"Z2", false) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(u"A1", u"Z1", u"A2", u"Z2", true) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(u"A1", u"Z1", u"A6", u"Z2", true) );
 
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("B1", "Z1", "A1", "Z1", true) );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A2", "Z2", "A1", "Z1", false) );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A2", "Z2", "A1", "Z1", true) );
-    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A6", "Z2", "A1", "Z1", true) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(u"B1", u"Z1", u"A1", u"Z1", true) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(u"A2", u"Z2", u"A1", u"Z1", false) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(u"A2", u"Z2", u"A1", u"Z1", true) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(u"A6", u"Z2", u"A1", u"Z1", true) );
 
     OUString rCell1("A1");
     OUString rCell2("C5");

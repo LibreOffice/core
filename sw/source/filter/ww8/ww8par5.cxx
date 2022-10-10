@@ -302,27 +302,27 @@ static void lcl_ConvertSequenceName(OUString& rSequenceName)
 
 // FindParaStart() finds 1st Parameter that follows '\' and cToken
 // and returns start of this parameter or -1
-static sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
+static sal_Int32 FindParaStart( std::u16string_view aStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
     bool bStr = false; // ignore inside a string
 
-    for( sal_Int32 nBuf = 0; nBuf+1 < rStr.getLength(); nBuf++ )
+    for( size_t nBuf = 0; nBuf+1 < aStr.size(); nBuf++ )
     {
-        if( rStr[ nBuf ] == '"' )
+        if( aStr[ nBuf ] == '"' )
             bStr = !bStr;
 
         if(    !bStr
-            && rStr[ nBuf ] == '\\'
-            && (    rStr[ nBuf + 1 ] == cToken
-                 || rStr[ nBuf + 1 ] == cToken2 ) )
+            && aStr[ nBuf ] == '\\'
+            && (    aStr[ nBuf + 1 ] == cToken
+                 || aStr[ nBuf + 1 ] == cToken2 ) )
         {
             nBuf += 2;
             // skip spaces between cToken and its parameters
-            while(    nBuf < rStr.getLength()
-                   && rStr[ nBuf ] == ' ' )
+            while(    nBuf < aStr.size()
+                   && aStr[ nBuf ] == ' ' )
                 nBuf++;
             // return start of parameters
-            return nBuf < rStr.getLength() ? nBuf : -1;
+            return nBuf < aStr.size() ? nBuf : -1;
         }
     }
     return -1;
@@ -331,31 +331,31 @@ static sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Un
 // FindPara() finds the first parameter including '\' and cToken.
 // A new String will be allocated (has to be deallocated by the caller)
 // and everything that is part of the parameter will be returned.
-static OUString FindPara( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
+static OUString FindPara( std::u16string_view aStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
     sal_Int32 n2;                                          // end
-    sal_Int32 n = FindParaStart( rStr, cToken, cToken2 );  // start
+    sal_Int32 n = FindParaStart( aStr, cToken, cToken2 );  // start
     if( n == -1)
         return OUString();
 
-    if(    rStr[ n ] == '"'
-        || rStr[ n ] == 132 )
+    if(    aStr[ n ] == '"'
+        || aStr[ n ] == 132 )
     {                               // Quotationmark in front of parameter
         n++;                        // Skip quotationmark
         n2 = n;                     // search for the end starting from here
-        while(     n2 < rStr.getLength()
-                && rStr[ n2 ] != 147
-                && rStr[ n2 ] != '"' )
+        while(     n2 < sal_Int32(aStr.size())
+                && aStr[ n2 ] != 147
+                && aStr[ n2 ] != '"' )
             n2++;                   // search end of parameter
     }
     else
     {                           // no quotationmarks
         n2 = n;                     // search for the end starting from here
-        while(     n2 < rStr.getLength()
-                && rStr[ n2 ] != ' ' )
+        while(     n2 < sal_Int32(aStr.size())
+                && aStr[ n2 ] != ' ' )
             n2++;                   // search end of parameter
     }
-    return rStr.copy( n, n2-n );
+    return OUString(aStr.substr( n, n2-n ));
 }
 
 static SvxNumType GetNumTypeFromName(const OUString& rStr,
@@ -382,9 +382,9 @@ static SvxNumType GetNumTypeFromName(const OUString& rStr,
     return eTyp;
 }
 
-static SvxNumType GetNumberPara(const OUString& rStr, bool bAllowPageDesc = false)
+static SvxNumType GetNumberPara(std::u16string_view aStr, bool bAllowPageDesc = false)
 {
-    OUString s( FindPara( rStr, '*', '*' ) );     // Type of number
+    OUString s( FindPara( aStr, '*', '*' ) );     // Type of number
     SvxNumType aType = GetNumTypeFromName( s, bAllowPageDesc );
     return aType;
 }
@@ -430,7 +430,7 @@ static OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, Lang
     return sParams;
 }
 
-SvNumFormatType SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt32& rFormat,
+SvNumFormatType SwWW8ImplReader::GetTimeDatePara(std::u16string_view aStr, sal_uInt32& rFormat,
     LanguageType &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
@@ -446,7 +446,7 @@ SvNumFormatType SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
     SvNumberFormatter* pFormatter = m_rDoc.GetNumberFormatter();
-    OUString sParams( FindPara( rStr, '@', '@' ) );// Date/Time
+    OUString sParams( FindPara( aStr, '@', '@' ) );// Date/Time
     if (sParams.isEmpty())
     {
         bool bHasTime = false;

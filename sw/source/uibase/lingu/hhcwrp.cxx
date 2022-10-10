@@ -207,7 +207,7 @@ void SwHHCWrapper::HandleNewUnit(
 }
 
 void SwHHCWrapper::ChangeText( const OUString &rNewText,
-        const OUString& rOrigText,
+        std::u16string_view aOrigText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         SwPaM *pCursor )
 {
@@ -252,11 +252,11 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
             else
             {
                 nPos   = nConvTextLen;
-                nIndex = rOrigText.getLength();
+                nIndex = aOrigText.size();
             }
 
             if (nPos == nConvTextLen || /* end of string also terminates non-matching char sequence */
-                rOrigText[nIndex] == rNewText[nPos])
+                aOrigText[nIndex] == rNewText[nPos])
             {
                 // substring that needs to be replaced found?
                 if (nChgPos != -1 && nConvChgPos != -1)

@@ -282,7 +282,7 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
     const SwPageDesc *MakeHeader( sal_uInt16& rHeaderAtrs );
     void GetControls();
 
-    void AddLinkTarget( const OUString& rURL );
+    void AddLinkTarget( std::u16string_view aURL );
     void CollectLinkTargets();
 
     void SetupFilterOptions(std::u16string_view rFilterOptions);

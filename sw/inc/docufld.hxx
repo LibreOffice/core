@@ -345,7 +345,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
-    static void         ParseIfFieldDefinition(const OUString& aFieldDefinition,
+    static void         ParseIfFieldDefinition(std::u16string_view aFieldDefinition,
                                                OUString& rCondition,
                                                OUString& rTrue,
                                                OUString& rFalse);

@@ -31,7 +31,7 @@ namespace sw
 class ToxWhitespaceStripper
 {
 public:
-    ToxWhitespaceStripper(const OUString&);
+    ToxWhitespaceStripper(std::u16string_view);
 
     sal_Int32 GetPositionInStrippedString(sal_Int32 pos) const;
 

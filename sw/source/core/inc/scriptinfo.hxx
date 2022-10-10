@@ -350,7 +350,7 @@ public:
 
     @descr  Add some extra space for thai justification to the
             positions in the kerning array.
-    @param  rText
+    @param  aText
                 The String
     @param  pKernArray
                 The printers kerning array. Optional.
@@ -362,7 +362,7 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static TextFrameIndex ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
+    static TextFrameIndex ThaiJustify( std::u16string_view aText, sal_Int32* pKernArray,
                                   TextFrameIndex nIdx,
                                   TextFrameIndex nLen,
                                   TextFrameIndex nNumberOfBlanks = TextFrameIndex(0),

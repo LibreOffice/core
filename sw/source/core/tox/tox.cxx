@@ -799,34 +799,34 @@ static FormTokenType lcl_GetTokenType(std::u16string_view sToken,
 
    @return   the string representation of the token
 */
-static OUString
-lcl_SearchNextToken(const OUString & sPattern, sal_Int32 const nStt)
+static std::u16string_view
+lcl_SearchNextToken(std::u16string_view sPattern, sal_Int32 const nStt)
 {
-    sal_Int32 nEnd = sPattern.indexOf( '>', nStt );
-    if (nEnd >= 0)
+    size_t nEnd = sPattern.find( u'>', nStt );
+    if (nEnd != std::u16string_view::npos)
     {
         // apparently the TOX_STYLE_DELIMITER act as a bracketing for
         // TOKEN_TEXT tokens so that the user can have '>' inside the text...
-        const sal_Int32 nTextSeparatorFirst = sPattern.indexOf( TOX_STYLE_DELIMITER, nStt );
-        if (    nTextSeparatorFirst >= 0
-            &&  nTextSeparatorFirst + 1 < sPattern.getLength()
+        const size_t nTextSeparatorFirst = sPattern.find( TOX_STYLE_DELIMITER, nStt );
+        if (    nTextSeparatorFirst != std::u16string_view::npos
+            &&  nTextSeparatorFirst + 1 < sPattern.size()
             &&  nTextSeparatorFirst < nEnd)
         {
-            const sal_Int32 nTextSeparatorSecond = sPattern.indexOf( TOX_STYLE_DELIMITER,
+            const size_t nTextSeparatorSecond = sPattern.find( TOX_STYLE_DELIMITER,
                                                                      nTextSeparatorFirst + 1 );
-            // Since nEnd>=0 we don't need to check if nTextSeparatorSecond<0!
+            // Since nEnd>=0 we don't need to check if nTextSeparatorSecond==std::u16string_view::npos!
             if( nEnd < nTextSeparatorSecond )
-                nEnd = sPattern.indexOf( '>', nTextSeparatorSecond );
+                nEnd = sPattern.find( '>', nTextSeparatorSecond );
             // FIXME: No check to verify that nEnd is still >=0?
-            assert(nEnd >= 0);
+            assert(nEnd != std::u16string_view::npos);
         }
 
         ++nEnd;
 
-        return sPattern.copy( nStt, nEnd - nStt );
+        return sPattern.substr( nStt, nEnd - nStt );
     }
 
-    return OUString();
+    return std::u16string_view();
 }
 
 /**
@@ -838,15 +838,15 @@ lcl_SearchNextToken(const OUString & sPattern, sal_Int32 const nStt)
    @return the token
  */
 static std::optional<SwFormToken>
-lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
+lcl_BuildToken(std::u16string_view sPattern, size_t & nCurPatternPos)
 {
-    OUString sToken( lcl_SearchNextToken(sPattern, nCurPatternPos) );
-    nCurPatternPos += sToken.getLength();
+    std::u16string_view sToken( lcl_SearchNextToken(sPattern, nCurPatternPos) );
+    nCurPatternPos += sToken.size();
     sal_Int32 nTokenLen = 0;
     FormTokenType const eTokenType = lcl_GetTokenType(sToken, nTokenLen);
     if (TOKEN_END == eTokenType) // invalid input? skip it
     {
-        nCurPatternPos = sPattern.getLength();
+        nCurPatternPos = sPattern.size();
         return std::optional<SwFormToken>();
     }
 
@@ -855,11 +855,11 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     // the form is: CharStyleName, PoolId[, TabStopPosition|ChapterInfoFormat[, TabStopAlignment[, TabFillChar]]]
     // in text tokens the form differs from the others: CharStyleName, PoolId[,\0xffinserted text\0xff]
     SwFormToken eRet( eTokenType );
-    const OUString sAuthFieldEnum = sToken.copy( 2, 2 );
-    sToken = sToken.copy( nTokenLen, sToken.getLength() - nTokenLen - 1);
+    const std::u16string_view sAuthFieldEnum = sToken.substr( 2, 2 );
+    sToken = sToken.substr( nTokenLen, sToken.size() - nTokenLen - 1);
 
     sal_Int32 nIdx{ 0 };
-    eRet.sCharStyleName = sToken.getToken( 0, ',', nIdx );
+    eRet.sCharStyleName = o3tl::getToken(sToken, 0, ',', nIdx );
     std::u16string_view sTmp( o3tl::getToken(sToken, 0, ',', nIdx ));
     if( !sTmp.empty() )
         eRet.nPoolId = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp));
@@ -880,14 +880,14 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
 
     case TOKEN_TEXT:
         {
-            const sal_Int32 nStartText = sToken.indexOf( TOX_STYLE_DELIMITER );
-            if( nStartText>=0 && nStartText+1<sToken.getLength())
+            const size_t nStartText = sToken.find( TOX_STYLE_DELIMITER );
+            if( nStartText != std::u16string_view::npos && nStartText+1<sToken.size())
             {
-                const sal_Int32 nEndText = sToken.indexOf( TOX_STYLE_DELIMITER,
+                const size_t nEndText = sToken.find( TOX_STYLE_DELIMITER,
                                                            nStartText + 1);
-                if( nEndText>=0 )
+                if( nEndText != std::u16string_view::npos )
                 {
-                    eRet.sText = sToken.copy( nStartText + 1,
+                    eRet.sText = sToken.substr( nStartText + 1,
                                                 nEndText - nStartText - 1);
                 }
             }
@@ -913,21 +913,21 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
         break;
 
     case TOKEN_AUTHORITY:
-        eRet.nAuthorityField = o3tl::narrowing<sal_uInt16>(sAuthFieldEnum.toInt32());
+        eRet.nAuthorityField = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sAuthFieldEnum));
         break;
     default: break;
     }
     return eRet;
 }
 
-SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
+SwFormTokensHelper::SwFormTokensHelper(std::u16string_view aPattern)
 {
-    sal_Int32 nCurPatternPos = 0;
+    size_t nCurPatternPos = 0;
 
-    while (nCurPatternPos < rPattern.getLength())
+    while (nCurPatternPos < aPattern.size())
     {
         std::optional<SwFormToken> const oToken(
-                lcl_BuildToken(rPattern, nCurPatternPos));
+                lcl_BuildToken(aPattern, nCurPatternPos));
         if (oToken)
             m_Tokens.push_back(*oToken);
     }
@@ -941,11 +941,11 @@ void SwForm::SetPattern(sal_uInt16 nLevel, SwFormTokens&& rTokens)
     m_aPattern[nLevel] = std::move(rTokens);
 }
 
-void SwForm::SetPattern(sal_uInt16 nLevel, const OUString & rStr)
+void SwForm::SetPattern(sal_uInt16 nLevel, std::u16string_view aStr)
 {
     OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
 
-    SwFormTokensHelper aHelper(rStr);
+    SwFormTokensHelper aHelper(aStr);
     m_aPattern[nLevel] = aHelper.GetTokens();
 }
 

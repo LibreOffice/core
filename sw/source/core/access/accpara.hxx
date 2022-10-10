@@ -203,10 +203,10 @@ protected:
                                   const OUString& rText,
                                   sal_Int32 nPos );
     bool GetLineBoundary( css::i18n::Boundary& rBound,
-                              const OUString& rText,
+                              std::u16string_view aText,
                               sal_Int32 nPos );
     static bool GetParagraphBoundary( css::i18n::Boundary& rBound,
-                                   const OUString& rText );
+                                   std::u16string_view aText );
     bool GetAttributeBoundary( css::i18n::Boundary& rBound,
                                    sal_Int32 nPos );
     bool GetGlyphBoundary( css::i18n::Boundary& rBound,

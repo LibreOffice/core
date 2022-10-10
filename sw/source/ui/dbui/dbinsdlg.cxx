@@ -811,21 +811,22 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, HeaderHdl, weld::Toggleable&, void)
     m_xRbHeadlEmpty->set_sensitive( bEnable );
 }
 
-static void lcl_InsTextInArr( const OUString& rText, DB_Columns& rColArr )
+static void lcl_InsTextInArr( std::u16string_view aText, DB_Columns& rColArr )
 {
-    sal_Int32 nSttPos = 0, nFndPos;
-    while( -1 != ( nFndPos = rText.indexOf( '\x0A', nSttPos )) )
+    size_t nSttPos = 0;
+    size_t nFndPos;
+    while( std::u16string_view::npos != ( nFndPos = aText.find( '\x0A', nSttPos )) )
     {
         if( 1 < nFndPos )
         {
-            rColArr.push_back(std::make_unique<DB_Column>(rText.copy(nSttPos, nFndPos -1)));
+            rColArr.push_back(std::make_unique<DB_Column>(OUString(aText.substr(nSttPos, nFndPos -1))));
         }
         rColArr.push_back(std::make_unique<DB_Column>());
         nSttPos = nFndPos + 1;
     }
-    if( nSttPos < rText.getLength() )
+    if( nSttPos < aText.size() )
     {
-        rColArr.push_back(std::make_unique<DB_Column>(rText.copy(nSttPos)));
+        rColArr.push_back(std::make_unique<DB_Column>(OUString(aText.substr(nSttPos))));
     }
 }
 
@@ -858,7 +859,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
 
                 if( 1 < nSttPos )
                 {
-                    ::lcl_InsTextInArr( sText.copy( 0, nSttPos-1 ), rColArr );
+                    ::lcl_InsTextInArr( sText.subView( 0, nSttPos-1 ), rColArr );
                     sText = sText.copy( nSttPos-1 );
                 }
 

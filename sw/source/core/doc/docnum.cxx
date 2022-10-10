@@ -594,7 +594,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
 }
 
 static SwTextNode* lcl_FindOutlineName(const SwOutlineNodes& rOutlNds,
-    SwRootFrame const*const pLayout, const OUString& rName, bool const bExact)
+    SwRootFrame const*const pLayout, std::u16string_view aName, bool const bExact)
 {
     SwTextNode * pExactButDeleted(nullptr);
     SwTextNode* pSavedNode = nullptr;
@@ -602,9 +602,9 @@ static SwTextNode* lcl_FindOutlineName(const SwOutlineNodes& rOutlNds,
     {
         SwTextNode* pTextNd = pOutlNd->GetTextNode();
         const OUString sText( pTextNd->GetExpandText(pLayout) );
-        if (sText.startsWith(rName))
+        if (sText.startsWith(aName))
         {
-            if (sText.getLength() == rName.getLength())
+            if (sText.getLength() == sal_Int32(aName.size()))
             {
                 if (pLayout && !sw::IsParaPropsNode(*pLayout, *pTextNd))
                 {

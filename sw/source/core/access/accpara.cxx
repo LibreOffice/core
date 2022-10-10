@@ -587,10 +587,10 @@ bool SwAccessibleParagraph::GetSentenceBoundary(
 
 bool SwAccessibleParagraph::GetLineBoundary(
     i18n::Boundary& rBound,
-    const OUString& rText,
+    std::u16string_view aText,
     sal_Int32 nPos )
 {
-    if( rText.getLength() == nPos )
+    if( sal_Int32(aText.size()) == nPos )
         GetPortionData().GetLastLineBoundary( rBound );
     else
         GetPortionData().GetLineBoundary( rBound, nPos );
@@ -599,10 +599,10 @@ bool SwAccessibleParagraph::GetLineBoundary(
 
 bool SwAccessibleParagraph::GetParagraphBoundary(
     i18n::Boundary& rBound,
-    const OUString& rText )
+    std::u16string_view aText )
 {
     rBound.startPos = 0;
-    rBound.endPos = rText.getLength();
+    rBound.endPos = aText.size();
     return true;
 }
 
