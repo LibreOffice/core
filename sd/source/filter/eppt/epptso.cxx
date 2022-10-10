@@ -337,7 +337,7 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
 }
 
 sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const sal_uInt32 nType,
-    const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 )
+    std::u16string_view aStringVer0, std::u16string_view aStringVer1, std::u16string_view aStringVer2, std::u16string_view aStringVer3 )
 {
     sal_uInt32 nHyperId = ++mnExEmbed;
 
@@ -361,10 +361,10 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
                .WriteUInt32( 4 )
                .WriteUInt32( nHyperId );
 
-    PPTWriter::WriteCString( *mpExEmbed, rStringVer0 );
-    PPTWriter::WriteCString( *mpExEmbed, rStringVer1, 1 );
-    PPTWriter::WriteCString( *mpExEmbed, rStringVer2, 2 );
-    PPTWriter::WriteCString( *mpExEmbed, rStringVer3, 3 );
+    PPTWriter::WriteCString( *mpExEmbed, aStringVer0 );
+    PPTWriter::WriteCString( *mpExEmbed, aStringVer1, 1 );
+    PPTWriter::WriteCString( *mpExEmbed, aStringVer2, 2 );
+    PPTWriter::WriteCString( *mpExEmbed, aStringVer3, 3 );
 
     nHyperSize = mpExEmbed->Tell() - nHyperStart;
     mpExEmbed->SeekRel( - ( static_cast<sal_Int32>(nHyperSize) + 4 ) );
@@ -1119,9 +1119,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         }
                         sal_uInt32 nHyperId(0);
                         if ( !aPageUrl.isEmpty() )
-                            nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1U << 31 ), pFieldEntry->aRepresentation, "", "", aPageUrl );
+                            nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1U << 31 ), pFieldEntry->aRepresentation, u"", u"", aPageUrl );
                         else
-                            nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, "", "" );
+                            nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, u"", u"" );
 
                         rOut.WriteUInt32( ( EPP_InteractiveInfo << 16 ) | 0xf ).WriteUInt32( 24 )
                             .WriteUInt32( EPP_InteractiveInfoAtom << 16 ).WriteUInt32( 16 )
@@ -1435,7 +1435,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
                             OUString::number(nIndex + 1) +
                             ",Slide " +
                             OUString::number(nIndex + 1);
-                        nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1U << 31 ), aBookmark, "", "", aHyperString );
+                        nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1U << 31 ), aBookmark, u"", u"", aHyperString );
                     }
                     nIndex++;
                 }
@@ -1457,7 +1457,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
                     INetURLObject aUrl( aBookmark );
                     if ( INetProtocol::File == aUrl.GetProtocol() )
                         aBookmarkFile = aUrl.PathToFileName();
-                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, sal_uInt32(2 | ( 1U << 31 )), aBookmarkFile, aBookmark, "", "" );
+                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, sal_uInt32(2 | ( 1U << 31 )), aBookmarkFile, aBookmark, u"", u"" );
                 }
             }
         }
@@ -3029,15 +3029,15 @@ static sal_Int32 GetCellBottom( sal_Int32 nRow,
     return nBottom;
 }
 
-void PPTWriter::WriteCString( SvStream& rSt, const OUString& rString, sal_uInt32 nInstance )
+void PPTWriter::WriteCString( SvStream& rSt, std::u16string_view aString, sal_uInt32 nInstance )
 {
-    sal_Int32 nLen = rString.getLength();
+    sal_Int32 nLen = aString.size();
     if ( nLen )
     {
         rSt.WriteUInt32( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
            .WriteUInt32( nLen << 1 );
         for ( sal_Int32 i = 0; i < nLen; i++ )
-            rSt.WriteUInt16( rString[i] );
+            rSt.WriteUInt16( aString[i] );
     }
 }
 

@@ -33,9 +33,9 @@ using namespace css::animations;
 
 namespace {
 
-bool checkBeginWithNumber(const OUString& rStr)
+bool checkBeginWithNumber(std::u16string_view aStr)
 {
-    sal_Unicode aChar = (rStr.getLength() > 1) ? rStr[0] : '\0';
+    sal_Unicode aChar = (aStr.size() > 1) ? aStr[0] : '\0';
     return aChar == '.' || aChar == '-' || rtl::isAsciiDigit(aChar);
 }
 

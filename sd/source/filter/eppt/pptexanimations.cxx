@@ -881,17 +881,17 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
     }
 }
 
-sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId )
+sal_uInt32 AnimationExporter::GetPresetID( std::u16string_view aPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId )
 {
     sal_uInt32 nPresetId = 0;
     bPresetId = false;
 
-    if ( rPreset.match("ppt_", 0) )
+    if ( o3tl::starts_with(aPreset, u"ppt_") )
     {
-        sal_Int32 nLast = rPreset.lastIndexOf( '_' );
-        if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
+        size_t nLast = aPreset.rfind( '_' );
+        if ( ( nLast != std::u16string_view::npos ) && ( ( nLast + 1 ) < aPreset.size() ) )
         {
-            std::u16string_view aNumber( rPreset.subView( nLast + 1 ) );
+            std::u16string_view aNumber( aPreset.substr( nLast + 1 ) );
             nPresetId = o3tl::toUInt32(aNumber);
             bPresetId = true;
         }
@@ -899,7 +899,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     else
     {
         const oox::ppt::preset_mapping* p = oox::ppt::preset_mapping::getList();
-        while( p->mpStrPresetId && ((p->mnPresetClass != static_cast<sal_Int32>(nAPIPresetClass)) || !rPreset.equalsAscii( p->mpStrPresetId )) )
+        while( p->mpStrPresetId && ((p->mnPresetClass != static_cast<sal_Int32>(nAPIPresetClass)) || !o3tl::equalsAscii(aPreset, p->mpStrPresetId )) )
             p++;
 
         if( p->mpStrPresetId )
@@ -1186,11 +1186,10 @@ void AnimationExporter::exportAnimPropertyByte( SvStream& rStrm, const sal_uInt1
          .WriteUChar( nVal );
 }
 
-void AnimationExporter::writeZString( SvStream& rStrm, const OUString& rVal )
+void AnimationExporter::writeZString( SvStream& rStrm, std::u16string_view aVal )
 {
-    sal_Int32 i;
-    for ( i = 0; i < rVal.getLength(); i++ )
-        rStrm.WriteUInt16( rVal[ i ] );
+    for ( size_t i = 0; i < aVal.size(); i++ )
+        rStrm.WriteUInt16( aVal[ i ] );
     rStrm.WriteUInt16( 0 );
 }
 

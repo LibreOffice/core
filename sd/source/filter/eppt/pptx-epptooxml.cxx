@@ -1042,18 +1042,18 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     }
 }
 
-static OUString lcl_GetInitials(const OUString& sName)
+static OUString lcl_GetInitials(std::u16string_view sName)
 {
     OUStringBuffer sRet;
 
-    if (!sName.isEmpty())
+    if (!sName.empty())
     {
         sRet.append(sName[0]);
-        sal_Int32 nStart = 0, nOffset;
+        size_t nStart = 0, nOffset;
 
-        while ((nOffset = sName.indexOf(' ', nStart)) != -1)
+        while ((nOffset = sName.find(' ', nStart)) != std::u16string_view::npos)
         {
-            if (nOffset + 1 < sName.getLength())
+            if (nOffset + 1 < sName.size())
                 sRet.append(sName[ nOffset + 1 ]);
             nStart = nOffset + 1;
         }

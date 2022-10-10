@@ -598,7 +598,7 @@ public:
     SdStyleSheetPool* GetSdStyleSheetPool() const;
 
     SAL_DLLPRIVATE void UpdatePageRelativeURLs(
-        const OUString& rOldName, std::u16string_view rNewName);
+        std::u16string_view aOldName, std::u16string_view aNewName);
 
     SAL_DLLPRIVATE static void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 

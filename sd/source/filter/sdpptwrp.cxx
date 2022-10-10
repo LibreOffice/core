@@ -51,13 +51,13 @@ SdPPTFilter::~SdPPTFilter()
     delete pBas;    // deleting the compressed basic storage
 }
 
-static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& aStreamsData, const OUString& sPrefix)
+static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& aStreamsData, std::u16string_view sPrefix)
 {
     SvStorageInfoList aElements;
     pStorage->FillInfoList(&aElements);
     for (const auto & aElement : aElements)
     {
-        OUString sStreamFullName = sPrefix.getLength() ? sPrefix + "/" + aElement.GetName() : aElement.GetName();
+        OUString sStreamFullName = sPrefix.size() ? OUString::Concat(sPrefix) + "/" + aElement.GetName() : aElement.GetName();
         if (aElement.IsStorage())
         {
             tools::SvRef<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
@@ -98,7 +98,7 @@ static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const t
     }
 
     comphelper::SequenceAsHashMap aStreamsData;
-    lcl_getListOfStreams(rStorage.get(), aStreamsData, "");
+    lcl_getListOfStreams(rStorage.get(), aStreamsData, u"");
 
     try {
         Sequence<NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
