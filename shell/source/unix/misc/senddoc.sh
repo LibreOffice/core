@@ -80,7 +80,7 @@ fi
 # autodetect mail client from executable name
 case $(basename "$MAILER" | sed 's/-.*$//') in
 
-    iceape | mozilla | netscape | seamonkey | icedove | thunderbird)
+    iceape | mozilla | netscape | seamonkey | icedove | thunderbird | betterbird)
 
         while [ "$1" != "" ]; do
             case $1 in
@@ -361,7 +361,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
          ${MAILER} ${TO:+--compose} ${TO:-} ${ATTACH:+--attach} ${ATTACH:-}
         ;;
 
-    Mail | Thunderbird | *.app )
+    Mail | Thunderbird | Betterbird | *.app )
 
         while [ "$1" != "" ]; do
             case $1 in
