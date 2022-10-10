@@ -1163,7 +1163,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     Color aTextCol = rRenderContext.GetTextColor();
     Color aFillCol = rRenderContext.GetFillColor();
-    Color aLineCol = rRenderContext.GetFillColor();
+    Color aLineCol = rRenderContext.GetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Color aWindowTextColor(rStyleSettings.GetDialogTextColor());
