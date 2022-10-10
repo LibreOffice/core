@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -37,6 +38,8 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -508,6 +511,40 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
     // - Actual  : 640
     // i.e. ~25% crop from left and right should result in half width, but it was not reduced.
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(321), rBitmap.GetSizePixel().getWidth());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
+{
+    // Given a document with 2 pages, first page footer has an off-page line shape:
+    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/page-view-draw-layer-clip.docx");
+    mxComponent = loadFromDesktop(aURL);
+
+    // When saving that document to PDF:
+    utl::TempFileNamed aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure that line shape gets clipped:
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pDoc
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage1 = pDoc->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(3, pPage1->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage2 = pDoc->openPage(1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. the 2nd page had a line shape from the first page's footer.
+    CPPUNIT_ASSERT_EQUAL(2, pPage2->getObjectCount());
 }
 }
 
