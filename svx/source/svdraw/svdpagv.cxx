@@ -262,7 +262,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
         if(pKnownTarget)
         {
             // paint known target
-            pKnownTarget->RedrawLayer(&nID, pRedirector, nullptr);
+            pKnownTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
         }
         else
         {
