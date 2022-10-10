@@ -128,9 +128,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     const sal_uInt16 nSlot = rReq.GetSlot();
 
     const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
-    std::optional<SfxItemSet> pNewAttrs;
-    if (rReq.GetArgs())
-        pNewAttrs.emplace(rReq.GetArgs()->CloneAsValue());
+    std::unique_ptr<SfxItemSet> pNewAttrs(rReq.GetArgs() ? rReq.GetArgs()->Clone() : nullptr);
 
     bool bRestoreSelection = false;
     ESelection aOldSelection;
