@@ -1380,38 +1380,29 @@ auto CurlProcessor::ProcessRequest(
                             ProcessHeaders(headers.HeaderFields.back().first));
                         // X-MSDAVEXT_Error see [MS-WEBDAVE] 2.2.3.1.9
                         auto const it(headerMap.find("x-msdavext_error"));
-                        if (it == headerMap.end() || !it->second.startsWith("917656;"))
-                        {
-                            break;
-                        }
                         if (cookies.isEmpty() // retry only once - could be expired...
-                            && rSession.m_URI.GetScheme() == "https") // only encrypted
+                            && rSession.m_URI.GetScheme() == "https" // only encrypted
+                            && it != headerMap.end()
+                            && it->second.startsWith("917656;"))
                         {
-                            cookies
-                                = TryImportCookies(rSession.m_xContext, rSession.m_URI.GetHost());
+                            cookies = TryImportCookies(rSession.m_xContext, rSession.m_URI.GetHost());
                             if (!cookies.isEmpty())
                             {
-                                CURLcode rc = curl_easy_setopt(rSession.m_pCurl.get(),
-                                                               CURLOPT_COOKIEFILE, "");
+                                CURLcode rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIEFILE, "");
                                 assert(rc == CURLE_OK);
-                                rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIE,
-                                                      cookies.getStr());
+                                rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIE, cookies.getStr());
                                 assert(rc == CURLE_OK);
                                 (void)rc;
                                 isRetry = true;
-                                SAL_INFO("ucb.ucp.webdav.curl", "FedAuth cookie set");
-                                break; // try cookie once
                             }
                         }
-                        SAL_INFO("ucb.ucp.webdav.curl", "403 fallback authentication hack");
+                        break;
                     }
-                        [[fallthrough]]; // SP, no cookie, or cookie failed: try NTLM
                     case SC_UNAUTHORIZED:
                     case SC_PROXY_AUTHENTICATION_REQUIRED:
                     {
-                        auto& rnAuthRequests(statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
-                                                 ? nAuthRequests
-                                                 : nAuthRequestsProxy);
+                        auto& rnAuthRequests(statusCode == SC_UNAUTHORIZED ? nAuthRequests
+                                                                           : nAuthRequestsProxy);
                         if (rnAuthRequests == 10)
                         {
                             SAL_INFO("ucb.ucp.webdav.curl", "aborting authentication after "
@@ -1419,30 +1410,22 @@ auto CurlProcessor::ProcessRequest(
                         }
                         else if (pEnv && pEnv->m_xAuthListener)
                         {
-                            ::std::optional<OUString> const oRealm(
-                                ExtractRealm(headers, statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
-                                                          ? "WWW-Authenticate"
-                                                          : "Proxy-Authenticate"));
+                            ::std::optional<OUString> const oRealm(ExtractRealm(
+                                headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
+                                                                       : "Proxy-Authenticate"));
 
                             ::std::optional<Auth>& roAuth(
-                                statusCode != SC_PROXY_AUTHENTICATION_REQUIRED ? oAuth
-                                                                               : oAuthProxy);
+                                statusCode == SC_UNAUTHORIZED ? oAuth : oAuthProxy);
                             OUString userName(roAuth ? roAuth->UserName : OUString());
                             OUString passWord(roAuth ? roAuth->PassWord : OUString());
                             long authAvail(0);
-                            auto const rc
-                                = curl_easy_getinfo(rSession.m_pCurl.get(),
-                                                    statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
-                                                        ? CURLINFO_HTTPAUTH_AVAIL
-                                                        : CURLINFO_PROXYAUTH_AVAIL,
-                                                    &authAvail);
+                            auto const rc = curl_easy_getinfo(rSession.m_pCurl.get(),
+                                                              statusCode == SC_UNAUTHORIZED
+                                                                  ? CURLINFO_HTTPAUTH_AVAIL
+                                                                  : CURLINFO_PROXYAUTH_AVAIL,
+                                                              &authAvail);
                             assert(rc == CURLE_OK);
                             (void)rc;
-                            if (statusCode == SC_FORBIDDEN)
-                            { // SharePoint hack: try NTLM auth
-                                assert(authAvail == 0);
-                                authAvail |= CURLAUTH_NTLM | CURLAUTH_NEGOTIATE;
-                            }
                             // only allow SystemCredentials once - the
                             // PasswordContainer may have stored it in the
                             // Config (TrySystemCredentialsFirst or
@@ -1461,9 +1444,8 @@ auto CurlProcessor::ProcessRequest(
 
                             auto const ret = pEnv->m_xAuthListener->authenticate(
                                 oRealm ? *oRealm : "",
-                                statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
-                                    ? rSession.m_URI.GetHost()
-                                    : rSession.m_Proxy.aName,
+                                statusCode == SC_UNAUTHORIZED ? rSession.m_URI.GetHost()
+                                                              : rSession.m_Proxy.aName,
                                 userName, passWord, isSystemCredSupported);
 
                             if (ret == 0)
