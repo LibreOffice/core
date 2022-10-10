@@ -13,6 +13,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <tools/UnitConversion.hxx>
 
@@ -94,6 +95,39 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
     // - Actual  : second
     // i.e. the block-SDT-only string was lost.
     CPPUNIT_ASSERT_EQUAL(OUString("first-second"), xPara->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
+{
+    // Given a document with <w:listItem w:value="..."/> (no display text):
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-dropdown-no-display-text.docx";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure we create a dropdown content control, not a rich text one:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValues> aListItems;
+    xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the list item was lost on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aListItems.getLength());
 }
 }
 
