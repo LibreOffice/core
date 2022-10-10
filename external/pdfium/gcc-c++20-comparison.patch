@@ -4,7 +4,7 @@
    mutable intptr_t m_nRefCount = 0;
  };
  
-+#if __cplusplus < 202002L
++#if __cplusplus < 202002L || (defined __clang__ && __clang_major__ >= 16)
  template <typename T, typename U>
  inline bool operator==(const U* lhs, const RetainPtr<T>& rhs) {
    return rhs == lhs;
