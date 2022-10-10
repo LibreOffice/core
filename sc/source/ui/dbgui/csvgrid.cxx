@@ -250,7 +250,16 @@ void ScCsvGrid::InitColors()
     maGridColor = mpColorConfig->GetColorValue( ::svtools::CALCGRID ).nColor;
     maGridPBColor = mpColorConfig->GetColorValue( ::svtools::CALCPAGEBREAK ).nColor;
     maAppBackColor = mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor;
-    maTextColor = mpColorConfig->GetColorValue( ::svtools::FONTCOLOR ).nColor;
+    maTextColor = mpColorConfig->GetColorValue( ::svtools::FONTCOLOR, false ).nColor;
+
+    // tdf#147386 If Automatic font color is used, then check backgroud color and use Black/White as font color
+    if ( maTextColor == COL_AUTO )
+    {
+        if ( maBackColor.IsDark() )
+            maTextColor = COL_WHITE;
+        else
+            maTextColor = COL_BLACK;
+    }
 
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
     maHeaderBackColor = rSett.GetFaceColor();
