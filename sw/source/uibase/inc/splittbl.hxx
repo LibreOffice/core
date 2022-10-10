@@ -33,7 +33,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBoxAttrCopyNoParaRB;
     std::unique_ptr<weld::RadioButton> m_xBorderCopyRB;
 
-    SwWrtShell& rShell;
+    SwWrtShell& m_rShell;
     SplitTable_HeadlineOption m_nSplit;
 
     void Apply();

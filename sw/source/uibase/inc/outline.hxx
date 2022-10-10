@@ -34,13 +34,13 @@ class SwOutlineTabDialog final : public SfxTabDialogController
 {
     static     sal_uInt16    nNumLevel;
 
-    OUString            aCollNames[MAXLEVEL];
+    OUString            m_aCollNames[MAXLEVEL];
 
-    SwWrtShell&         rWrtSh;
-    std::unique_ptr<SwNumRule>  xNumRule;
-    SwChapterNumRules*  pChapterNumRules;
+    SwWrtShell&         m_rWrtSh;
+    std::unique_ptr<SwNumRule>  m_xNumRule;
+    SwChapterNumRules*  m_pChapterNumRules;
 
-    bool                bModified : 1;
+    bool                m_bModified : 1;
 
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
 
@@ -55,9 +55,9 @@ public:
     SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet, SwWrtShell &);
     virtual ~SwOutlineTabDialog() override;
 
-    SwNumRule*          GetNumRule() { return xNumRule.get(); }
+    SwNumRule*          GetNumRule() { return m_xNumRule.get(); }
     sal_uInt16          GetLevel(std::u16string_view rFormatName) const;
-    OUString*           GetCollNames() {return aCollNames;}
+    OUString*           GetCollNames() {return m_aCollNames;}
 
     static sal_uInt16   GetActNumLevel() {return nNumLevel;}
     static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}

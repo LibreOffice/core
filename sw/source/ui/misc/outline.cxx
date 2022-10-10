@@ -141,15 +141,15 @@ sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
 SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
     SwWrtShell &rSh)
     : SfxTabDialogController(pParent, "modules/swriter/ui/outlinenumbering.ui", "OutlineNumberingDialog", pSwItemSet)
-    , rWrtSh(rSh)
-    , pChapterNumRules(SW_MOD()->GetChapterNumRules())
-    , bModified(rWrtSh.IsModified())
+    , m_rWrtSh(rSh)
+    , m_pChapterNumRules(SW_MOD()->GetChapterNumRules())
+    , m_bModified(m_rWrtSh.IsModified())
     , m_xMenuButton(m_xBuilder->weld_menu_button("format"))
 {
     m_xMenuButton->connect_toggled(LINK(this, SwOutlineTabDialog, FormHdl));
     m_xMenuButton->connect_selected(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
 
-    xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
+    m_xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
     GetCancelButton().connect_clicked(LINK(this, SwOutlineTabDialog, CancelHdl));
 
     AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
@@ -161,23 +161,23 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     for( i = 0; i < MAXLEVEL; ++i )
     {
         // if the style wasn't created yet, it's still at this position
-        if( !rWrtSh.GetParaStyle( sHeadline =
+        if( !m_rWrtSh.GetParaStyle( sHeadline =
             SwStyleNameMapper::GetUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                           sHeadline )) )
-            aCollNames[i] = sHeadline;
+            m_aCollNames[i] = sHeadline;
     }
 
     // query the text templates' outlining levels
-    const sal_uInt16 nCount = rWrtSh.GetTextFormatCollCount();
+    const sal_uInt16 nCount = m_rWrtSh.GetTextFormatCollCount();
     for(i = 0; i < nCount; ++i )
     {
-        SwTextFormatColl &rTextColl = rWrtSh.GetTextFormatColl(i);
+        SwTextFormatColl &rTextColl = m_rWrtSh.GetTextFormatColl(i);
         if(!rTextColl.IsDefault())
         {
             if(rTextColl.IsAssignedToListLevelOfOutlineStyle())
             {
                 int nOutLevel = rTextColl.GetAssignedOutlineStyleLevel();
-                aCollNames[ nOutLevel ] = rTextColl.GetName();
+                m_aCollNames[ nOutLevel ] = rTextColl.GetName();
             }
         }
     }
@@ -191,19 +191,19 @@ void SwOutlineTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
 {
     if (rPageId == "position")
     {
-        static_cast<SwNumPositionTabPage&>(rPage).SetWrtShell(&rWrtSh);
+        static_cast<SwNumPositionTabPage&>(rPage).SetWrtShell(&m_rWrtSh);
         static_cast<SwNumPositionTabPage&>(rPage).SetOutlineTabDialog(this);
     }
     else if (rPageId == "numbering")
     {
-        static_cast<SwOutlineSettingsTabPage&>(rPage).SetWrtShell(&rWrtSh);
+        static_cast<SwOutlineSettingsTabPage&>(rPage).SetWrtShell(&m_rWrtSh);
     }
 }
 
 IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl, weld::Button&, void)
 {
-    if (!bModified)
-        rWrtSh.ResetModified();
+    if (!m_bModified)
+        m_rWrtSh.ResetModified();
     m_xDialog->response(RET_CANCEL);
 }
 
@@ -215,7 +215,7 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Toggleable&, void)
     // fill PopupMenu
     for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
-        const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
+        const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules(i);
         if (!pRules)
             continue;
         m_xMenuButton->set_item_label("form" + OString::number(i + 1), pRules->GetName());
@@ -250,7 +250,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
-            const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
+            const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules(i);
             if(pRules)
                 aStrArr[i] = &pRules->GetName();
             else
@@ -260,8 +260,8 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
         if (aDlg.run() == RET_OK)
         {
             const OUString aName(aDlg.GetName());
-            pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
-                    *xNumRule, aName ), aDlg.GetCurEntryPos() );
+            m_pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
+                    *m_xNumRule, aName ), aDlg.GetCurEntryPos() );
             m_xMenuButton->set_item_label("form" + OString::number(aDlg.GetCurEntryPos() + 1), aName);
         }
         return;
@@ -269,17 +269,17 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
 
     if( nLevelNo-- )
     {
-        const SwNumRulesWithName *pRules = pChapterNumRules->GetRules( nLevelNo );
+        const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules( nLevelNo );
         if( pRules )
         {
-            pRules->ResetNumRule(rWrtSh, *xNumRule);
-            xNumRule->SetRuleType( OUTLINE_RULE );
+            pRules->ResetNumRule(m_rWrtSh, *m_xNumRule);
+            m_xNumRule->SetRuleType( OUTLINE_RULE );
             SfxTabPage* pOutlinePage = GetTabPage("numbering");
             assert(pOutlinePage);
-            static_cast<SwOutlineSettingsTabPage*>(pOutlinePage)->SetNumRule(xNumRule.get());
+            static_cast<SwOutlineSettingsTabPage*>(pOutlinePage)->SetNumRule(m_xNumRule.get());
         }
         else
-            *xNumRule = *rWrtSh.GetOutlineNumRule();
+            *m_xNumRule = *m_rWrtSh.GetOutlineNumRule();
     }
 
     SfxTabPage* pPage = GetCurTabPage();
@@ -290,7 +290,7 @@ sal_uInt16  SwOutlineTabDialog::GetLevel(std::u16string_view rFormatName) const
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
-        if(aCollNames[i] == rFormatName)
+        if(m_aCollNames[i] == rFormatName)
             return i;
     }
     return MAXLEVEL;
@@ -304,14 +304,14 @@ short SwOutlineTabDialog::Ok()
 
     // encapsulate changes into an action to avoid effects on the current cursor
     // position during the changes.
-    rWrtSh.StartAction();
+    m_rWrtSh.StartAction();
 
-    const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
+    const SwNumRule * pOutlineRule = m_rWrtSh.GetOutlineNumRule();
 
-    sal_uInt16 i, nCount = rWrtSh.GetTextFormatCollCount();
+    sal_uInt16 i, nCount = m_rWrtSh.GetTextFormatCollCount();
     for( i = 0; i < nCount; ++i )
     {
-        SwTextFormatColl &rTextColl = rWrtSh.GetTextFormatColl(i);
+        SwTextFormatColl &rTextColl = m_rWrtSh.GetTextFormatColl(i);
         if( !rTextColl.IsDefault() )
         {
             const SfxPoolItem & rItem =
@@ -348,18 +348,18 @@ short SwOutlineTabDialog::Ok()
         OUString sHeadline;
         ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                          sHeadline );
-        SwTextFormatColl* pColl = rWrtSh.FindTextFormatCollByName( sHeadline );
-        if( !pColl && aCollNames[i] != sHeadline)
+        SwTextFormatColl* pColl = m_rWrtSh.FindTextFormatCollByName( sHeadline );
+        if( !pColl && m_aCollNames[i] != sHeadline)
         {
-            SwTextFormatColl* pTextColl = rWrtSh.GetTextCollFromPool(
+            SwTextFormatColl* pTextColl = m_rWrtSh.GetTextCollFromPool(
                 static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
             pTextColl->DeleteAssignmentToListLevelOfOutlineStyle();
             pTextColl->ResetFormatAttr(RES_PARATR_NUMRULE);
 
-            if( !aCollNames[i].isEmpty() )
+            if( !m_aCollNames[i].isEmpty() )
             {
-                pTextColl = rWrtSh.GetParaStyle(
-                            aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
+                pTextColl = m_rWrtSh.GetParaStyle(
+                            m_aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
                 if(pTextColl)
                 {
                     pTextColl->AssignToListLevelOfOutlineStyle(i);
@@ -370,10 +370,10 @@ short SwOutlineTabDialog::Ok()
         }
     }
 
-    rWrtSh.SetOutlineNumRule(*xNumRule);
+    m_rWrtSh.SetOutlineNumRule(*m_xNumRule);
 
     // #i30443#
-    rWrtSh.EndAction();
+    m_rWrtSh.EndAction();
 
     return RET_OK;
 }

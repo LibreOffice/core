@@ -117,15 +117,15 @@ public:
 
 class SwTOXSelectTabPage final : public SfxTabPage
 {
-    std::unique_ptr<IndexEntryResource> pIndexRes;
+    std::unique_ptr<IndexEntryResource> m_pIndexRes;
 
-    OUString        aStyleArr[MAXLEVEL];
-    OUString        sAutoMarkURL;
-    OUString        sAutoMarkType;
-    OUString        sAddStyleUser;
-    OUString        sAddStyleContent;
+    OUString        m_aStyleArr[MAXLEVEL];
+    OUString        m_sAutoMarkURL;
+    OUString        m_sAutoMarkType;
+    OUString        m_sAddStyleUser;
+    OUString        m_sAddStyleContent;
 
-    std::unique_ptr<const IndexEntrySupplierWrapper> pIndexEntryWrapper;
+    std::unique_ptr<const IndexEntrySupplierWrapper> m_pIndexEntryWrapper;
 
     bool            m_bWaitingInitialSettings;
 
@@ -304,15 +304,15 @@ private:
 
 class SwTOXEntryTabPage final : public SfxTabPage
 {
-    OUString        sDelimStr;
-    OUString        sLevelStr;
-    OUString        sAuthTypeStr;
+    OUString        m_sDelimStr;
+    OUString        m_sLevelStr;
+    OUString        m_sAuthTypeStr;
 
-    OUString        sNoCharStyle;
+    OUString        m_sNoCharStyle;
     SwForm*         m_pCurrentForm;
 
-    CurTOXType      aLastTOXType;
-    bool            bInLevelHdl;
+    CurTOXType      m_aLastTOXType;
+    bool            m_bInLevelHdl;
 
     std::unique_ptr<weld::Label> m_xTypeFT;
     std::unique_ptr<weld::Label> m_xLevelFT;

@@ -27,7 +27,7 @@ SwSplitTableDlg::SwSplitTableDlg(weld::Window* pParent, SwWrtShell& rSh)
     , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button("customheadingapplystyle"))
     , m_xBoxAttrCopyNoParaRB(m_xBuilder->weld_radio_button("customheading"))
     , m_xBorderCopyRB(m_xBuilder->weld_radio_button("noheading"))
-    , rShell(rSh)
+    , m_rShell(rSh)
     , m_nSplit(SplitTable_HeadlineOption::ContentCopy)
 {
 }
@@ -42,7 +42,7 @@ void SwSplitTableDlg::Apply()
     else if (m_xBorderCopyRB->get_active())
         m_nSplit = SplitTable_HeadlineOption::BorderCopy;
 
-    rShell.SplitTable(m_nSplit);
+    m_rShell.SplitTable(m_nSplit);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
