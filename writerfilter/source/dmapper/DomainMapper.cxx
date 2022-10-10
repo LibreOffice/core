@@ -2744,8 +2744,23 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtDropDownList_listItem:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+
+        size_t nDropDownDisplayTexts = m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().size();
+        size_t nDropDownItems = m_pImpl->m_pSdtHelper->getDropDownItems().size();
+
         if (pProperties)
             pProperties->resolve(*this);
+
+        if (m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().size() != nDropDownDisplayTexts + 1)
+        {
+            // w:displayText="..." is optional, add empty value if it was not provided.
+            m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().push_back(OUString());
+        }
+        if (m_pImpl->m_pSdtHelper->getDropDownItems().size() != nDropDownItems + 1)
+        {
+            // w:value="..." is optional, add empty value if it was not provided.
+            m_pImpl->m_pSdtHelper->getDropDownItems().push_back(OUString());
+        }
     }
     break;
     case NS_ooxml::LN_CT_SdtPr_placeholder:
