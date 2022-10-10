@@ -462,8 +462,7 @@ ColumnsWidget::ColumnsWidget(SvxColumnsToolBoxControl* pControl, weld::SpinButto
     mrSpinButton.connect_activate(LINK(this, ColumnsWidget, ActivateHdl));
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    svtools::ColorConfig aColorConfig;
-    aLineColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    aLineColor = rStyles.GetLabelTextColor();
     aHighlightLineColor = rStyles.GetHighlightTextColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
