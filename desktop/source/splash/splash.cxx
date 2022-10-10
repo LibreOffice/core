@@ -487,7 +487,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
 
     aStrBuf.append( "intro_" );
     aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aResBuf.getStr(), rBitmap))
+    if (Application::LoadBrandBitmap (aStrBuf.getStr(), rBitmap))
         return;
 
     (void)Application::LoadBrandBitmap ("intro", rBitmap);
