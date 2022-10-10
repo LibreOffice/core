@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_buildconfig.h>
 #include <config_features.h>
 
 #include <stdio.h>
@@ -6539,7 +6540,8 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
         "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
-        "\"BuildId\": \"%BUILDID\" "
+        "\"BuildId\": \"%BUILDID\", "
+        "\"BuildConfig\": \""  BUILDCONFIG  "\" "
         "}"));
 }
 

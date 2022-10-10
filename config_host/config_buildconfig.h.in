@@ -1,0 +1,8 @@
+/* Options passed to configure script */
+
+#ifndef CONFIG_BUILDCONFIG_H
+#define CONFIG_BUILDCONFIG_H
+
+#define BUILDCONFIG ""
+
+#endif
