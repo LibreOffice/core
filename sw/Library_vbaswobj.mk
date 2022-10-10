@@ -130,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/vbatableofcontents \
     sw/source/ui/vba/vbatablesofcontents \
     sw/source/ui/vba/vbavariable \
+    sw/source/ui/vba/vbawordbasic \
     sw/source/ui/vba/vbadocuments \
     sw/source/ui/vba/vbaparagraphformat \
     sw/source/ui/vba/vbaborders \
