@@ -214,6 +214,28 @@ double approxDiff( double a, double b )
     const int nExpArg = static_cast<int>(floor(log10(std::max(aa, ab)))) - 15;
     return rtl::math::round(c, -std::max(nExp, nExpArg));
 }
+
+double approxTimeDiff( double a, double b )
+{
+    // Scale to hours, round to "nanohours" (multiple nanoseconds), scale back.
+    // Get back 0.0416666666666667 instead of 0.041666666700621136 or
+    // 0.041666666664241347 (raw a-b) for one hour, or worse the approxDiff()
+    // 0.041666666659999997 value. Though there is no such correct value,
+    // IEEE-754 nearest values are
+    // 0.041666666666666664353702032030923874117434024810791015625
+    // (0x3FA5555555555555) and
+    // 0.04166666666666667129259593593815225176513195037841796875
+    // (0x3FA5555555555556).
+    // This works also for a diff of seconds, unless corner cases would be
+    // discovered, which would make it necessary to ditch the floating point
+    // and convert to/from time structure values instead.
+    return rtl::math::round((a - b) * 24, 9) / 24;
+}
+
+double approxTypedDiff( double a, double b, bool bTime )
+{
+    return bTime ? approxTimeDiff( a, b) : approxDiff( a, b);
+}
 }
 
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -399,7 +421,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         aCurrCell = GetCellValue(nColCurr, nRowCurr);
                         if (aCurrCell.getType() == CELLTYPE_VALUE)
                         {
-                            double nDiff = approxDiff(aCurrCell.getDouble(), aPrevCell.getDouble());
+                            double nDiff = approxTypedDiff(aCurrCell.getDouble(), aPrevCell.getDouble(),
+                                    (nCurrCellFormatType == SvNumFormatType::TIME ||
+                                     nCurrCellFormatType == SvNumFormatType::DATETIME));
                             if (i == 1)
                                 rInc = nDiff;
                             if (!::rtl::math::approxEqual(nDiff, rInc, 13))
@@ -516,8 +540,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         double fVal;
         sal_uInt32 nFormat = GetAttr(nCol,nRow,ATTR_VALUE_FORMAT)->GetValue();
         const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(nFormat);
-        bool bDate = (nFormatType  == SvNumFormatType::DATE );
-        bool bBooleanCell = (!bDate && nFormatType == SvNumFormatType::LOGICAL);
+        bool bDate = (nFormatType == SvNumFormatType::DATE);        // date without time
+        bool bTime = (nFormatType == SvNumFormatType::TIME || nFormatType == SvNumFormatType::DATETIME);
+        bool bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
         if (bDate)
         {
             if (nCount > 1)
@@ -622,7 +647,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 double nVal1 = aFirstCell.getDouble();
                 double nVal2 = GetValue(nCol+nAddX, nRow+nAddY);
-                rInc = approxDiff( nVal2, nVal1);
+                rInc = approxTypedDiff( nVal2, nVal1, bTime);
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                 bool bVal = true;
@@ -632,7 +657,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if (aCell.getType() == CELLTYPE_VALUE)
                     {
                         nVal2 = aCell.getDouble();
-                        double nDiff = approxDiff( nVal2, nVal1);
+                        double nDiff = approxTypedDiff( nVal2, nVal1, bTime);
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
                         else if ((nVal2 == 0.0 || nVal2 == 1.0) &&
