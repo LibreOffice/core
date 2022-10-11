@@ -23,6 +23,7 @@ enum class AccessibilityIssueID
     UNSPECIFIED, // TODO: remove - temporary
     DOCUMENT_TITLE,
     DOCUMENT_LANGUAGE,
+    DOCUMENT_BACKGROUND,
     STYLE_LANGUAGE,
     NO_ALT_OLE,
     NO_ALT_GRAPHIC,
