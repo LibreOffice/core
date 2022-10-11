@@ -233,8 +233,8 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
     m_pTableCursor->DeleteMark();
 
     // set start and end of a column
-    m_pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd() );
-    m_pTableCursor->Move( fnMoveForward, GoInContent );
+    m_pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd()->EndOfSectionNode() );
+    m_pTableCursor->Move( fnMoveBackward, GoInContent );
     m_pTableCursor->SetMark();
     m_pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
     m_pTableCursor->Move( fnMoveBackward, GoInContent );

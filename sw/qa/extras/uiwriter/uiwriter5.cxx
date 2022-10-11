@@ -1853,6 +1853,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
+{
+    // load a 1-row table, and select the row
+    createSwDoc(DATA_DIRECTORY, "select-row.fodt");
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    // nested table in the last cell
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell[2]/tab");
+
+    // select table row
+    dispatchCommand(mxComponent, ".uno:EntireRow", {});
+    Scheduler::ProcessEventsToIdle();
+    // convert selected text content to uppercase
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row/cell[2]/tab/row/cell[1]/txt", "NESTED-A1");
+    // This was "a1" (bad selection of the table row)
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row/cell[1]/txt[1]", "A1");
+    // This was "nested-b1" (bad selection of the table row)
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row/cell[2]/tab/row/cell[2]/txt", "NESTED-B1");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 {
     // load a 1-row table, and delete the row with enabled change tracking:
