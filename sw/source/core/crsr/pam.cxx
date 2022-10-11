@@ -1053,7 +1053,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                 if (i_pLayout && aPos.GetNode().IsTextNode())
                 {
                     auto const fal(sw::GetFirstAndLastNode(*pLayout, aPos.GetNode()));
-                    aPos.nNode = bSrchForward ? *fal.second : *fal.first;
+                    aPos.Assign( bSrchForward ? *fal.second : *fal.first );
                 }
 
                 pNd = bSrchForward
@@ -1092,7 +1092,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
 void GoStartDoc( SwPosition * pPos )
 {
     SwNodes& rNodes = pPos->GetNodes();
-    pPos->nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
+    pPos->Assign( *rNodes.GetEndOfContent().StartOfSectionNode() );
     // we always need to find a ContentNode!
     rNodes.GoNext( pPos );
 }
@@ -1100,8 +1100,8 @@ void GoStartDoc( SwPosition * pPos )
 void GoEndDoc( SwPosition * pPos )
 {
     SwNodes& rNodes = pPos->GetNodes();
-    pPos->nNode = rNodes.GetEndOfContent();
-    SwContentNode* pCNd = GoPreviousNds( &pPos->nNode, true );
+    pPos->Assign( rNodes.GetEndOfContent() );
+    SwContentNode* pCNd = GoPreviousPos( pPos, true );
     if( pCNd )
         pPos->AssignEndIndex(*pCNd);
 }
@@ -1208,8 +1208,7 @@ bool GoPrevPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
         SwContentNode * pNd = rPos.GetNode().GetContentNode();
-        rPos.nContent.Assign( pNd,
-                            ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
+        rPos.SetContent( ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
     }
     return false;
@@ -1226,18 +1225,17 @@ bool GoCurrPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
         // if already at beginning/end then to the next/previous
         if( nOld != nNew )
         {
-            rPos.nContent.Assign( pNd, nNew );
+            rPos.SetContent( nNew );
             return true;
         }
     }
     // move node to next/previous ContentNode
     if( ( &aPosPara==&fnParaStart && nullptr != ( pNd =
-            GoPreviousNds( &rPos.nNode, true ))) ||
+            GoPreviousPos( &rPos, true ))) ||
         ( &aPosPara==&fnParaEnd && nullptr != ( pNd =
-            GoNextNds( &rPos.nNode, true ))) )
+            GoNextPos( &rPos, true ))) )
     {
-        rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ));
+        rPos.SetContent( ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ));
         return true;
     }
     return false;
@@ -1250,8 +1248,7 @@ bool GoNextPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
         SwContentNode * pNd = rPos.GetNode().GetContentNode();
-        rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
+        rPos.SetContent( ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
     }
     return false;
@@ -1264,14 +1261,13 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
     (fnMove.fnSection)( &rPos );
     SwContentNode *pNd;
     if( nullptr == ( pNd = rPos.GetNode().GetContentNode()) &&
-        nullptr == ( pNd = (*fnMove.fnNds)( &rPos.nNode, true )) )
+        nullptr == ( pNd = (*fnMove.fnPos)( &rPos, true )) )
     {
         rPos = aSavePos; // do not change cursor
         return false;
     }
 
-    rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
+    rPos.SetContent( ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
     return aSavePos != rPos;
 }
 
