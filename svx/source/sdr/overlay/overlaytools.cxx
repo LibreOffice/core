@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
@@ -297,65 +298,42 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
             if(!aInnerRange.isEmpty() && basegfx::fTools::more(getDiscreteUnit(), 0.0) && getTransparence() <= 1.0)
             {
-                basegfx::B2DRange aOuterRange(getObjectRange());
-
-                // grow/shrink inner/outer polygons
-                aOuterRange.grow(getDiscreteUnit() * getDiscreteGrow());
-                aInnerRange.grow(getDiscreteUnit() * -getDiscreteShrink());
-
-                // convert to polygons
-                const double fFullGrow(getDiscreteGrow() + getDiscreteShrink());
-                const double fRelativeRadiusX(fFullGrow / aOuterRange.getWidth());
-                const double fRelativeRadiusY(fFullGrow / aOuterRange.getHeight());
-                basegfx::B2DPolygon aOuterPolygon(
-                    basegfx::utils::createPolygonFromRect(
-                        aOuterRange,
-                        fRelativeRadiusX,
-                        fRelativeRadiusY));
-                basegfx::B2DPolygon aInnerPolygon(
-                    basegfx::utils::createPolygonFromRect(
-                        aInnerRange));
-
-                // apply evtl. existing rotation
-                if(!basegfx::fTools::equalZero(getRotation()))
+                if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
                 {
-                    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createRotateAroundPoint(
-                        getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
+                    basegfx::B2DRange aOuterRange(aInnerRange);
+                    // grow/shrink inner/outer polygons
+                    aOuterRange.grow(getDiscreteUnit() * getDiscreteGrow());
+                    aInnerRange.grow(getDiscreteUnit() * -getDiscreteShrink());
 
-                    aOuterPolygon.transform(aTransform);
-                    aInnerPolygon.transform(aTransform);
-                }
+                    // convert to polygons
+                    const double fFullGrow(getDiscreteGrow() + getDiscreteShrink());
+                    const double fRelativeRadiusX(fFullGrow / aOuterRange.getWidth());
+                    const double fRelativeRadiusY(fFullGrow / aOuterRange.getHeight());
+                    basegfx::B2DPolygon aOuterPolygon(
+                        basegfx::utils::createPolygonFromRect(
+                            aOuterRange,
+                            fRelativeRadiusX,
+                            fRelativeRadiusY));
+                    basegfx::B2DPolygon aInnerPolygon(
+                        basegfx::utils::createPolygonFromRect(
+                            aInnerRange));
 
-                // create filled primitive
-                basegfx::B2DPolyPolygon aPolyPolygon;
+                    // apply evtl. existing rotation
+                    if(!basegfx::fTools::equalZero(getRotation()))
+                    {
+                        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createRotateAroundPoint(
+                            getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
 
-                aPolyPolygon.append(aOuterPolygon);
-                aPolyPolygon.append(aInnerPolygon);
+                        aOuterPolygon.transform(aTransform);
+                        aInnerPolygon.transform(aTransform);
+                    }
 
-                if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-                {
-                    // for high contrast, use hatch
-                    const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetFontColor().getBColor());
-                    const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
-                    const double fHatchRotation(basegfx::deg2rad(45));
-                    const double fDiscreteHatchDistance(3.0);
-                    drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
-                        drawinglayer::attribute::HatchStyle::Single,
-                        fDiscreteHatchDistance * getDiscreteUnit(),
-                        fHatchRotation - getRotation(),
-                        aHighContrastLineColor,
-                        3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                        false);
-                    const Primitive2DReference aHatch(
-                        new PolyPolygonHatchPrimitive2D(
-                            aPolyPolygon,
-                            aEmptyColor,
-                            std::move(aFillHatchAttribute)));
+                    // create filled primitive
+                    basegfx::B2DPolyPolygon aPolyPolygon;
 
-                    aRetval = Primitive2DContainer { aHatch };
-                }
-                else
-                {
+                    aPolyPolygon.append(aOuterPolygon);
+                    aPolyPolygon.append(aInnerPolygon);
+
                     // create fill primitive
                     const Primitive2DReference aFill(
                         new PolyPolygonColorPrimitive2D(
@@ -374,6 +352,29 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
                         aRetval = Primitive2DContainer { aFillTransparent };
                     }
+                }
+                else
+                {
+                    basegfx::B2DPolygon aInnerPolygon(
+                        basegfx::utils::createPolygonFromRect(
+                            aInnerRange));
+
+                    // apply evtl. existing rotation
+                    if(!basegfx::fTools::equalZero(getRotation()))
+                    {
+                        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createRotateAroundPoint(
+                            getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
+
+                        aInnerPolygon.transform(aTransform);
+                    }
+
+                    // for high contrast, use a thick stroke
+                    const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor());
+                    const attribute::LineAttribute aLineAttribute(aHighContrastLineColor, getDiscreteUnit() * getDiscreteGrow());
+
+                    const Primitive2DReference aStroke(new PolygonStrokePrimitive2D(aInnerPolygon, aLineAttribute));
+
+                    aRetval = Primitive2DContainer { aStroke };
                 }
             }
 
