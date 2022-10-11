@@ -167,10 +167,10 @@ private:
 };
 
 css::uno::Reference< css::uri::XUriReference > parseGeneric(
-    OUString const & scheme, std::u16string_view schemeSpecificPart)
+    OUString const & scheme, OUString const & schemeSpecificPart)
 {
-    size_t len = schemeSpecificPart.size();
-    size_t i = 0;
+    sal_Int32 len = schemeSpecificPart.getLength();
+    sal_Int32 i = 0;
     bool hasAuthority = false;
     OUString authority;
     if (len - i >= 2 && schemeSpecificPart[i] == '/'
@@ -183,22 +183,22 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
             ++i;
         }
         hasAuthority = true;
-        authority = schemeSpecificPart.substr(n, i - n);
+        authority = schemeSpecificPart.copy(n, i - n);
     }
     sal_Int32 n = i;
-    i = schemeSpecificPart.find('?', i);
-    if (i == std::u16string_view::npos) {
+    i = schemeSpecificPart.indexOf('?', i);
+    if (i == -1) {
         i = len;
     }
-    std::u16string_view path = schemeSpecificPart.substr(n, i - n);
+    OUString path = schemeSpecificPart.copy(n, i - n);
     bool hasQuery = false;
     OUString query;
     if (i != len) {
         hasQuery = true;
-        query = schemeSpecificPart.substr(i + 1);
+        query = schemeSpecificPart.copy(i + 1);
     }
     return new UriReference(
-        scheme, hasAuthority, authority, OUString(path), hasQuery, query);
+        scheme, hasAuthority, authority, path, hasQuery, query);
 }
 
 struct Segment {
