@@ -1712,9 +1712,8 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
             *GetMark() = *pEnd;
             DeleteMark();
 
-            aPam.GetBound().nContent.Assign( nullptr, 0 );
-            aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
             aPam.DeleteMark();
+            aPam.GetPoint()->SetContent(0);;
             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
         }
     }
