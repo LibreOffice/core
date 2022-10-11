@@ -50,6 +50,9 @@ public:
 
     ~FastSerializerHelper();
 
+    void startDocument();
+    void endDocument();
+
     /// Start an element. After the first argument there can be a number of (attribute, value) pairs.
     template<typename... Args>
     void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args &&... args)
