@@ -39,6 +39,8 @@
 #include <dmapper/PropertyIds.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include "OOXMLPropertySet.hxx"
+#include <dmapper/GraphicHelpers.hxx>
 
 const sal_Unicode uCR = 0xd;
 const sal_Unicode uFtnEdnRef = 0x2;
@@ -231,7 +233,6 @@ void OOXMLFastContextHandler::lcl_startFastElement
         inPositionV = true;
     else if( Element == (NMSP_dmlWordDr|XML_positionH) )
         inPositionV = false;
-
 }
 
 void OOXMLFastContextHandler::lcl_endFastElement
@@ -1684,6 +1685,41 @@ void OOXMLFastContextHandlerShape::lcl_startFastElement
 
     if (mrShapeContext.is())
     {
+        if (Element == DGM_TOKEN(relIds))
+        {
+            // It is a SmartArt. Make size available for generated group.
+            // Search for PropertySet in parents
+            OOXMLFastContextHandler* pHandler = getParent();
+            while (pHandler && pHandler->getId() != NS_ooxml::LN_anchor_anchor
+                   && pHandler->getId() != NS_ooxml::LN_inline_inline)
+            {
+                pHandler = pHandler->getParent();
+            }
+            // Search for extent
+            if (pHandler)
+            {
+                if (const OOXMLPropertySet::Pointer_t pPropSet = pHandler->getPropertySet())
+                {
+                    auto aIt = pPropSet->begin();
+                    auto aItEnd = pPropSet->end();
+                    while (aIt != aItEnd && (*aIt)->getId() != NS_ooxml::LN_CT_Inline_extent
+                           && (*aIt)->getId() != NS_ooxml::LN_CT_Anchor_extent)
+                    {
+                        ++aIt;
+                    }
+                    if (aIt != aItEnd)
+                    {
+                        writerfilter::Reference<Properties>::Pointer_t pProperties = (*aIt)->getProps();
+                        if (pProperties)
+                        {
+                            writerfilter::dmapper::ExtentHandler::Pointer_t pExtentHandler(new writerfilter::dmapper::ExtentHandler());
+                            pProperties->resolve(*pExtentHandler);
+                            mrShapeContext->setSize(pExtentHandler->getExtent());
+                        }
+                    }
+                }
+            }
+        }
         mrShapeContext->startFastElement(Element, Attribs);
     }
 }

@@ -63,6 +63,20 @@ private:
     sal_Int32 m_nType;
     sal_Int32 m_nSide;
 };
+
+class ExtentHandler : public Properties
+{
+    css::awt::Size m_Extent; // width and height in EMU
+
+public:
+    typedef ::tools::SvRef<ExtentHandler> Pointer_t;
+    explicit ExtentHandler();
+    virtual ~ExtentHandler() override;
+
+    virtual void attribute(Id nName, Value& rValue) override;
+    virtual void sprm(Sprm& rSprm) override;
+    css::awt::Size getExtent() const { return m_Extent; }
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

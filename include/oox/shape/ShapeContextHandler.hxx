@@ -95,6 +95,7 @@ public:
     void pushStartToken( sal_Int32 _starttoken );
 
     void setPosition(const css::awt::Point& rPosition);
+    void setSize(const css::awt::Size& rSize);
 
     const bool& getFullWPGSupport() { return m_bFullWPGSUpport; }
     void setFullWPGSupport(bool bUse) { m_bFullWPGSUpport = bUse; }
@@ -118,6 +119,7 @@ private:
     std::stack<sal_uInt32> mnStartTokenStack;
 
     css::awt::Point maPosition;
+    css::awt::Size maSize;  // from cx and cy, in EMU
     bool m_bFullWPGSUpport; // Is this DrawingML shape supposed to be processed as WPG?
 
     drawingml::ShapePtr mpShape;

@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 
@@ -405,6 +406,57 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellOfHraphics)
     bool bFollowingTextFlow = false;
     CPPUNIT_ASSERT(xShape->getPropertyValue("IsFollowingTextFlow") >>= bFollowingTextFlow);
     CPPUNIT_ASSERT(bFollowingTextFlow);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
+{
+    // Make sure SmartArt is loaded as group shape
+    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
+        pChange->commit();
+    }
+
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149840_SmartArtBackground.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
+
+    // The first shape in the group, which represents the SmartArt, corresponds to the background of
+    // the diagram. Without fix in place it has widht and height zero, which does not only result in
+    // not visible background but in wrong sizes of the diagram shapes too.
+    uno::Reference<drawing::XShape> xBackgroundShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    awt::Size aBackgroundSize = xBackgroundShape->getSize();
+    // Toleranzes are for rounding inaccuracies.
+    // The test would have failed with Expected: 9560x5036, Actual: 2x2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(9560), aBackgroundSize.Width, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(5036), aBackgroundSize.Height, 1);
+
+    uno::Reference<drawing::XShape> xShapeOne(xGroup->getByIndex(1), uno::UNO_QUERY);
+    awt::Size aShapeOneSize = xShapeOne->getSize();
+    // The test would have failed with Expected: 3282x3709, Actual: 3972x3709
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(3282), aShapeOneSize.Width, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(3709), aShapeOneSize.Height, 1);
+
+    uno::Reference<drawing::XShape> xShapeTwo(xGroup->getByIndex(2), uno::UNO_QUERY);
+    awt::Size aShapeTwoSize = xShapeTwo->getSize();
+    // The test would have failed with Expected: 2404x5226, Actual: 2910x5226
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(2404), aShapeTwoSize.Width, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(5226), aShapeTwoSize.Height, 1);
+
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
+        pChange->commit();
+    }
 }
 }
 

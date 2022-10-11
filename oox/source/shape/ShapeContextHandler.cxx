@@ -215,6 +215,7 @@ ShapeContextHandler::getDiagramShapeContext()
     {
         auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxShapeFilterBase, msRelationFragmentPath);
         mpShape = std::make_shared<Shape>();
+        mpShape->setSize(maSize);
         mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
     }
 
@@ -562,6 +563,11 @@ void ShapeContextHandler::pushStartToken( sal_Int32 _starttoken )
 void ShapeContextHandler::setPosition(const awt::Point& rPosition)
 {
     maPosition = rPosition;
+}
+
+void ShapeContextHandler::setSize(const awt::Size& rSize)
+{
+    maSize = rSize;
 }
 
 void ShapeContextHandler::setDocumentProperties(const uno::Reference<document::XDocumentProperties>& xDocProps)
