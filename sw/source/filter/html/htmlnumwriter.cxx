@@ -363,7 +363,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
         {
             HTMLOutFuncs::Out_AsciiTag(
-                rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
+                rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
                 false);
         }
     }
@@ -401,11 +401,11 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
             aTag = OOO_STRING_SVTOOLS_HTML_unorderlist;
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
         if (rWrt.mbXHTML && (nNextDepth != 0 || i != 1))
         {
             HTMLOutFuncs::Out_AsciiTag(
-                rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
+                rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
                 /*bOn=*/false);
         }
         rWrt.m_bLFPossible = true;

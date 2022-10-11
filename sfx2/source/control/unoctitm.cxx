@@ -528,7 +528,7 @@ void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::
         return;
 
     UITestLogger::getInstance().logCommand(
-        OUStringConcatenation("Send UNO Command (\"" + rURL.Complete + "\") "), rArgs);
+        Concat2View("Send UNO Command (\"" + rURL.Complete + "\") "), rArgs);
 }
 
 }

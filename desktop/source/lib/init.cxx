@@ -2659,7 +2659,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                 if (x.mOriginalFont.indexOf('/') == -1)
                                     for (const auto &j : x.mUsedFonts)
                                         if (j == x.mOriginalFont ||
-                                            j.startsWith(OUStringConcatenation(x.mOriginalFont + "/")))
+                                            j.startsWith(Concat2View(x.mOriginalFont + "/")))
                                             return true;
 
                                 return false;

@@ -2060,7 +2060,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
 
     // Load: should have a component and a data source, too.
     // Path with "#" must not cause issues
-    createSwDoc(OUStringConcatenation(DATA_DIRECTORY + OUString::Concat(u"hash%23path/")),
+    createSwDoc(Concat2View(DATA_DIRECTORY + OUString::Concat(u"hash%23path/")),
                 "embedded-data-source.odt");
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 

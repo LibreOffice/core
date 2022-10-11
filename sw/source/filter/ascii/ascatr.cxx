@@ -285,7 +285,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
         }
 
         if (!level.isEmpty() || !numString.isEmpty())
-            rWrt.Strm().WriteUnicodeOrByteText(OUStringConcatenation(level + numString + " "));
+            rWrt.Strm().WriteUnicodeOrByteText(Concat2View(level + numString + " "));
     }
 
     OUString aStr( rNd.GetText() );

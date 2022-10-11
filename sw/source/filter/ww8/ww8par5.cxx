@@ -102,7 +102,7 @@ namespace
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
     bool IsTOCBookmarkName(std::u16string_view rName)
     {
-        return o3tl::starts_with(rName, u"_Toc") || o3tl::starts_with(rName, OUStringConcatenation(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
+        return o3tl::starts_with(rName, u"_Toc") || o3tl::starts_with(rName, Concat2View(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
     }
 
     OUString EnsureTOCBookmarkName(const OUString& rName)

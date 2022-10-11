@@ -113,7 +113,7 @@ WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFacto
 OUString ImportTest::makeUrl(std::u16string_view rFile) const
 {
     return const_cast<ImportTest*>(this)->m_directories.getURLFromSrc(
-        OUStringConcatenation(OUString::Concat("/" TEST_DIR "/") + rFile));
+        Concat2View(OUString::Concat("/" TEST_DIR "/") + rFile));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportTest);

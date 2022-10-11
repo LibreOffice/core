@@ -48,7 +48,7 @@ namespace {
     }
     bool tryLoadPng( std::u16string_view rBaseDir, std::u16string_view rName, BitmapEx& rBitmap )
     {
-        return loadPng( rtl::OUStringConcatenation(OUString::Concat(rBaseDir) + "/" LIBO_ETC_FOLDER + rName), rBitmap);
+        return loadPng( rtl::Concat2View(OUString::Concat(rBaseDir) + "/" LIBO_ETC_FOLDER + rName), rBitmap);
     }
 }
 
@@ -68,11 +68,11 @@ bool Application::LoadBrandBitmap (std::u16string_view pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     for (const OUString & aFallback : aFallbacks)
     {
-        if (tryLoadPng( aBaseDir, OUStringConcatenation(aBaseName + "-" + aFallback + aPng), rBitmap))
+        if (tryLoadPng( aBaseDir, Concat2View(aBaseName + "-" + aFallback + aPng), rBitmap))
             return true;
     }
 
-    return tryLoadPng( aBaseDir, OUStringConcatenation(aBaseName + aPng), rBitmap);
+    return tryLoadPng( aBaseDir, Concat2View(aBaseName + aPng), rBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

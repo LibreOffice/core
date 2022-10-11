@@ -1111,7 +1111,7 @@ void BookmarksTabPage_Impl::DoAction(std::string_view rAction)
                 OUString sURL = m_xBookmarksBox->get_id(nPos);
                 m_xBookmarksBox->remove(nPos);
                 m_xBookmarksBox->append(sURL, aDlg.GetTitle(),
-                    SvFileInformationManager::GetImageId(INetURLObject(rtl::OUStringConcatenation(IMAGE_URL+INetURLObject(sURL).GetHost()))));
+                    SvFileInformationManager::GetImageId(INetURLObject(rtl::Concat2View(IMAGE_URL+INetURLObject(sURL).GetHost()))));
                 m_xBookmarksBox->select(m_xBookmarksBox->n_children() - 1);
             }
         }
@@ -2343,7 +2343,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, LinkParamNone*, void)
         else
             aId = aEntry;
 
-        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), OUStringConcatenation(OUString::Concat("/") + aId), aAnchor);
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), Concat2View(OUString::Concat("/") + aId), aAnchor);
     }
 
     loadHelpContent(sHelpURL);

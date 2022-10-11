@@ -613,11 +613,11 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
 
                         for (const Reference < XRegistryKey > & rSubKey2 : subKeys2)
                         {
-                            if (rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_SERVICES ) &&
-                                rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
-                                rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_ACTIVATOR ) &&
-                                rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_SINGLETONS ) &&
-                                rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_LOCATION) )
+                            if (rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_SERVICES ) &&
+                                rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
+                                rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_ACTIVATOR ) &&
+                                rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_SINGLETONS ) &&
+                                rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_LOCATION) )
                             {
                                 prepareUserKeys(xReg, xKey, rSubKey2, implName, false);
                             }
@@ -949,9 +949,9 @@ void prepareRegistry(
 
                 for (const Reference < XRegistryKey >& rSubKey2 : subKeys2)
                 {
-                    if (rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_SERVICES) &&
-                        rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
-                        rSubKey2->getKeyName() != OUStringConcatenation(xImplKey->getKeyName() + slash_UNO_slash_SINGLETONS ))
+                    if (rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_SERVICES) &&
+                        rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
+                        rSubKey2->getKeyName() != Concat2View(xImplKey->getKeyName() + slash_UNO_slash_SINGLETONS ))
                     {
                         prepareUserKeys(xDest, xKey, rSubKey2, implName, true);
                     }

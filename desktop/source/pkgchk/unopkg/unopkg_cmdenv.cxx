@@ -142,9 +142,9 @@ void CommandEnvironmentImpl::printLicense(
 
     OUString sNewLine("\n");
 
-    dp_misc::writeConsole(OUStringConcatenation(sNewLine + sNewLine + s1 + sNewLine + sNewLine));
-    dp_misc::writeConsole(OUStringConcatenation(sLicense + sNewLine + sNewLine));
-    dp_misc::writeConsole(OUStringConcatenation(s2 + sNewLine));
+    dp_misc::writeConsole(Concat2View(sNewLine + sNewLine + s1 + sNewLine + sNewLine));
+    dp_misc::writeConsole(Concat2View(sLicense + sNewLine + sNewLine));
+    dp_misc::writeConsole(Concat2View(s2 + sNewLine));
     dp_misc::writeConsole(s3);
 
     //the user may enter "yes" or "no", we compare in a case insensitive way
@@ -171,7 +171,7 @@ void CommandEnvironmentImpl::printLicense(
         }
         else
         {
-            dp_misc::writeConsole(OUStringConcatenation(sNewLine + sNewLine + s4 + sNewLine));
+            dp_misc::writeConsole(Concat2View(sNewLine + sNewLine + s4 + sNewLine));
         }
     }
     while(true);
@@ -257,7 +257,7 @@ void CommandEnvironmentImpl::handle(
     {
         OUString sMsg(DpResId(RID_STR_UNSUPPORTED_PLATFORM));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        dp_misc::writeConsole(OUStringConcatenation("\n" + sMsg + "\n\n"));
+        dp_misc::writeConsole(Concat2View("\n" + sMsg + "\n\n"));
         approve = true;
     }
     else {
@@ -275,7 +275,7 @@ void CommandEnvironmentImpl::handle(
     if (abort && m_option_verbose)
     {
         OUString msg = ::comphelper::anyToString(request);
-        dp_misc::writeConsoleError(OUStringConcatenation("\nERROR: " + msg + "\n"));
+        dp_misc::writeConsoleError(Concat2View("\nERROR: " + msg + "\n"));
     }
 
     // select:
@@ -348,9 +348,9 @@ void CommandEnvironmentImpl::update_( Any const & Status )
     }
 
     if (bUseErr)
-        dp_misc::writeConsoleError(OUStringConcatenation(msg + "\n"));
+        dp_misc::writeConsoleError(Concat2View(msg + "\n"));
     else
-        dp_misc::writeConsole(OUStringConcatenation(msg + "\n"));
+        dp_misc::writeConsole(Concat2View(msg + "\n"));
 }
 
 

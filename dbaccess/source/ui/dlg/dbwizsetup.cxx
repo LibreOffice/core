@@ -814,7 +814,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if (bFolderExists)
             {
                 i++;
-                pURL->setName(OUStringConcatenation(sLastSegmentName + OUString::number(i)));
+                pURL->setName(Concat2View(sLastSegmentName + OUString::number(i)));
             }
         }
     }
@@ -832,7 +832,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if ( bElementExists )
             {
-                aExistenceCheck.setBase( OUStringConcatenation(BaseName + OUString::number( i ) ));
+                aExistenceCheck.setBase( Concat2View(BaseName + OUString::number( i ) ));
                 ++i;
             }
         }

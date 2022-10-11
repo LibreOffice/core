@@ -1249,7 +1249,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
             uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
-            INetURLObject aObj( rtl::OUStringConcatenation("c:/" + aRecommendedName), INetProtocol::File,
+            INetURLObject aObj( rtl::Concat2View("c:/" + aRecommendedName), INetProtocol::File,
                     INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8, FSysStyle::Dos );
 
             const OUString aExtension = GetRecommendedExtension( aTypeName );

@@ -129,7 +129,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
             // Load service with name <base>_<lang>_<country>_<algorithm>
             // or <base>_<bcp47>_<algorithm> and fallbacks.
             bLoaded = createLocaleSpecificIndexEntrySupplier(
-                    OUStringConcatenation(
+                    Concat2View(
                         LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_"
                         + aSortAlgorithm));
             if (!bLoaded)
@@ -137,7 +137,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                 ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
                 for (auto const& fallback : aFallbacks)
                 {
-                    bLoaded = createLocaleSpecificIndexEntrySupplier(OUStringConcatenation(fallback + "_" + aSortAlgorithm));
+                    bLoaded = createLocaleSpecificIndexEntrySupplier(Concat2View(fallback + "_" + aSortAlgorithm));
                     if (bLoaded)
                         break;
                 }

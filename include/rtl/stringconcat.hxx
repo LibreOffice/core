@@ -355,45 +355,35 @@ int operator+( const StringConcatInvalid&, const T& )
     }
 #endif
 
-// Lightweight alternative to OString when a (temporary) object is needed to hold an OStringConcat
-// result that can then be used as a std::string_view:
-class OStringConcatenation {
+// Lightweight alternative to O(U)String when a (temporary) object is needed to hold
+// an O(U)StringConcat result that can then be used as a std::(u16)string_view:
+template <typename C> class StringConcatenation {
 public:
-    template<typename T1, typename T2>
-    explicit OStringConcatenation(OStringConcat<T1, T2> const & c):
+    template <class Concat>
+    explicit StringConcatenation(Concat const& c):
         length_(c.length()),
-        buffer_(new char[length_])
+        buffer_(new C[length_])
     {
         auto const end = c.addData(buffer_.get());
         assert(end == buffer_.get() + length_); (void)end;
     }
 
-    operator std::string_view() const { return {buffer_.get(), length_}; }
+    operator std::basic_string_view<C>() const { return {buffer_.get(), length_}; }
 
 private:
     std::size_t length_;
-    std::unique_ptr<char[]> buffer_;
+    std::unique_ptr<C[]> buffer_;
 };
 
-// Lightweight alternative to OUString when a (temporary) object is needed to hold an
-// OUStringConcat result that can then be used as a std::u16string_view:
-class OUStringConcatenation {
-public:
-    template<typename T1, typename T2>
-    explicit OUStringConcatenation(OUStringConcat<T1, T2> const & c):
-        length_(c.length()),
-        buffer_(new char16_t[length_])
-    {
-        auto const end = c.addData(buffer_.get());
-        assert(end == buffer_.get() + length_); (void)end;
-    }
+template <typename T1, typename T2> auto Concat2View(OStringConcat<T1, T2> const& c)
+{
+    return StringConcatenation<char>(c);
+}
 
-    operator std::u16string_view() const { return {buffer_.get(), length_}; }
-
-private:
-    std::size_t length_;
-    std::unique_ptr<char16_t[]> buffer_;
-};
+template <typename T1, typename T2> auto Concat2View(OUStringConcat<T1, T2> const& c)
+{
+    return StringConcatenation<char16_t>(c);
+}
 
 /**
  @internal

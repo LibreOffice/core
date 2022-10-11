@@ -787,7 +787,7 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     {
         writeLine(
             stream,
-            OUStringConcatenation("environment \"" + OUString::unacquired(&pEnvDcp) + "\" does not exist!"),
+            Concat2View("environment \"" + OUString::unacquired(&pEnvDcp) + "\" does not exist!"),
             pFilter );
     }
 }

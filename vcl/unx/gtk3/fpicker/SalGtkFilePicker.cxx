@@ -802,7 +802,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         if ( m_pFilterVector)
                             for (auto const& filter : *m_pFilterVector)
                             {
-                                if( lcl_matchFilter( filter.getFilter(), OUStringConcatenation(OUString::Concat("*.") + sExtension) ) )
+                                if( lcl_matchFilter( filter.getFilter(), Concat2View(OUString::Concat("*.") + sExtension) ) )
                                 {
                                     if( aNewFilter.isEmpty() )
                                         aNewFilter = filter.getTitle();

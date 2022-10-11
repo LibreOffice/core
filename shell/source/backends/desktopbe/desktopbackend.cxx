@@ -201,7 +201,7 @@ OUString xdg_user_dir_lookup (const char *type, bool bAllowHomeDir)
     {
         aDocumentsDirURL = aUserDirBuf.makeStringAndClear();
         if ( bAllowHomeDir ||
-             (aDocumentsDirURL != aHomeDirURL && aDocumentsDirURL != OUStringConcatenation(aHomeDirURL + "/")) )
+             (aDocumentsDirURL != aHomeDirURL && aDocumentsDirURL != Concat2View(aHomeDirURL + "/")) )
         {
             osl::Directory aDocumentsDir( aDocumentsDirURL );
             if( osl::FileBase::E_None == aDocumentsDir.open() )

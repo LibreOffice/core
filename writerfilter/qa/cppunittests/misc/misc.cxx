@@ -151,7 +151,7 @@ void WriterfilterMiscTest::testFieldParameters()
                          ";", "<", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~" })
     {
         OUString test(OUString::createFromAscii(prefix) + "PAGE");
-        result = splitFieldCommand(OUStringConcatenation(test + " "));
+        result = splitFieldCommand(Concat2View(test + " "));
         CPPUNIT_ASSERT_EQUAL(test, std::get<0>(result));
     }
     result = splitFieldCommand(u"\\PAGE ");

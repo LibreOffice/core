@@ -1441,7 +1441,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         rHTMLWrt.DecIndentLevel(); // indent the applet content
         if( aCommands.size() )
             rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet), false );
     }
     else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
@@ -1474,7 +1474,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         // and for Floating-Frames just output another </IFRAME>
 
         rHTMLWrt.Strm().WriteChar( '>' );
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe), false );
     }
 
     if( !aEndTags.isEmpty() )
@@ -1531,9 +1531,9 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 SAL_WARN_IF(aStream.GetSize()>=o3tl::make_unsigned(SAL_MAX_INT32), "sw.html", "Stream can't fit in OString");
                 OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(aStream.GetSize()));
                 // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
-                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span));
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span));
                 rWrt.Strm().WriteOString(aData);
-                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
             }
             catch ( uno::Exception& )
             {
@@ -1645,10 +1645,10 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         // Refer to this data.
         if (rHTMLWrt.m_bLFPossible)
             rHTMLWrt.OutNewLine();
-        rWrt.Strm().WriteOString(OStringConcatenation("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
-        rWrt.Strm().WriteOString(OStringConcatenation(" data=\"" + aFileName.toUtf8() + "\""));
+        rWrt.Strm().WriteOString(Concat2View("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+        rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
         if (!aFileType.isEmpty())
-            rWrt.Strm().WriteOString(OStringConcatenation(" type=\"" + aFileType.toUtf8() + "\""));
+            rWrt.Strm().WriteOString(Concat2View(" type=\"" + aFileType.toUtf8() + "\""));
         rWrt.Strm().WriteOString(">");
         bObjectOpened = true;
         rHTMLWrt.m_bLFPossible = true;
@@ -1688,7 +1688,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         {
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
             if (bObjectOpened) // Still at least close the tag.
-                rWrt.Strm().WriteOString(OStringConcatenation("</" + rHTMLWrt.GetNamespace()
+                rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace()
                     + OOO_STRING_SVTOOLS_HTML_object ">"));
             return rWrt;
         }
@@ -1709,7 +1709,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
     if (bObjectOpened)
         // Close native data.
-        rWrt.Strm().WriteOString(OStringConcatenation("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
+        rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
                                  ">"));
 
     return rWrt;

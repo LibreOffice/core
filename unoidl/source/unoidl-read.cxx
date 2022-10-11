@@ -240,7 +240,7 @@ void scanMap(
             scanMap(
                 manager,
                 static_cast<unoidl::ModuleEntity *>(ent.get())->createCursor(), modules,
-                published, OUStringConcatenation(name + "."), p, entities);
+                published, Concat2View(name + "."), p, entities);
         } else {
             auto const pub = static_cast<unoidl::PublishableEntity *>(ent.get())->isPublished();
             std::map<OUString, Entity>::iterator i(

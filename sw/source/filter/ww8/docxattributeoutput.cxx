@@ -7779,7 +7779,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
         xOutStream->closeOutput();
         OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
             oox::getRelationship(Relationship::FONT),
-            OUStringConcatenation("fonts/font" + OUString::number( m_nextFontId ) + ".odttf") ), RTL_TEXTENCODING_UTF8 );
+            Concat2View("fonts/font" + OUString::number( m_nextFontId ) + ".odttf") ), RTL_TEXTENCODING_UTF8 );
         EmbeddedFontRef ref;
         ref.relId = relId;
         ref.fontKey = fontKeyStr;
@@ -10058,16 +10058,16 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         // and so on.
         OStringBuffer aInset;
         if(!aInset.isEmpty() || fDistanceBottomInch != 0.05)
-            aInset.insert(0, OStringConcatenation("," + OString::number(fDistanceBottomInch) + "in"));
+            aInset.insert(0, Concat2View("," + OString::number(fDistanceBottomInch) + "in"));
 
         if(!aInset.isEmpty() || fDistanceRightInch != 0.1)
-            aInset.insert(0, OStringConcatenation("," + OString::number(fDistanceRightInch) + "in"));
+            aInset.insert(0, Concat2View("," + OString::number(fDistanceRightInch) + "in"));
 
         if(!aInset.isEmpty() || fDistanceTopInch != 0.05)
-            aInset.insert(0, OStringConcatenation("," + OString::number(fDistanceTopInch) + "in"));
+            aInset.insert(0, Concat2View("," + OString::number(fDistanceTopInch) + "in"));
 
         if(!aInset.isEmpty() || fDistanceLeftInch != 0.1)
-            aInset.insert(0, OStringConcatenation(OString::number(fDistanceLeftInch) + "in"));
+            aInset.insert(0, Concat2View(OString::number(fDistanceLeftInch) + "in"));
 
         if (!aInset.isEmpty())
             m_rExport.SdrExporter().getTextboxAttrList()->add(XML_inset, aInset.makeStringAndClear());

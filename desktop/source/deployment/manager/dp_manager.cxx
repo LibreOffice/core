@@ -1201,7 +1201,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
             //shared repository including the temporary name
             OUString url = makeURL(m_activePackages, elem.second.temporaryName);
             if (bShared)
-                url = makeURLAppendSysPathSegment( OUStringConcatenation(url + "_"), elem.second.fileName);
+                url = makeURLAppendSysPathSegment( Concat2View(url + "_"), elem.second.fileName);
 
             bool bRemoved = false;
             //Check if the URL to the extension is still the same
@@ -1447,7 +1447,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
             //Prepare the URL to the extension
             OUString url = makeURL(m_activePackages, elem.second.temporaryName);
             if (bShared)
-                url = makeURLAppendSysPathSegment( OUStringConcatenation(url + "_"), elem.second.fileName);
+                url = makeURLAppendSysPathSegment( Concat2View(url + "_"), elem.second.fileName);
 
             Reference<deployment::XPackage> p = m_xRegistry->bindPackage(
                 url, OUString(), false, OUString(), xCmdEnv );

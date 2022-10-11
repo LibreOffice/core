@@ -171,7 +171,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                     OString method_signature( sig_buf.makeStringAndClear() );
                     OString method_name(
                         OUStringToOString(
-                            rtl::OUStringConcatenation("get" + member_name),
+                            rtl::Concat2View("get" + member_name),
                             RTL_TEXTENCODING_JAVA_UTF8 ) );
                     m_methods[ nMethodIndex ] = jni->GetMethodID(
                         static_cast<jclass>(jo_class.get()), method_name.getStr(),
@@ -188,7 +188,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                         sig_buf.append( ")V" );
                         method_signature = sig_buf.makeStringAndClear();
                         method_name = OUStringToOString(
-                            rtl::OUStringConcatenation("set" + member_name),
+                            rtl::Concat2View("set" + member_name),
                             RTL_TEXTENCODING_JAVA_UTF8 );
                         m_methods[ nMethodIndex ] = jni->GetMethodID(
                             static_cast<jclass>(jo_class.get()), method_name.getStr(),

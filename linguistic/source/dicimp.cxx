@@ -449,7 +449,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         pStream->WriteLine("type: negative");
     if (aDicName.endsWith(EXTENSION_FOR_TITLE_TEXT))
     {
-        pStream->WriteLine(OStringConcatenation("title: " + OUStringToOString(
+        pStream->WriteLine(Concat2View("title: " + OUStringToOString(
             // strip EXTENSION_FOR_TITLE_TEXT
             aDicName.subView(0, aDicName.lastIndexOf(EXTENSION_FOR_TITLE_TEXT)), eEnc)));
     }

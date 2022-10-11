@@ -302,7 +302,7 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
                 sal_Int32 const len(SAL_N_ELEMENTS("Authorization: ") - 1);
                 tmp = tmp.replaceAt(
                     start + len, end - start - len,
-                    OStringConcatenation(OString::number(end - start - len) + " bytes redacted"));
+                    Concat2View(OString::number(end - start - len) + " bytes redacted"));
             }
             SAL_INFO("ucb.ucp.webdav.curl", "CURLINFO_HEADER_OUT: " << handle << ": " << tmp);
             return 0;

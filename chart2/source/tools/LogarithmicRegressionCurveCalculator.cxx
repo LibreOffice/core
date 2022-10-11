@@ -175,7 +175,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
 
-    if ( std::u16string_view(aBuf) == OUStringConcatenation(mYName + " = ") )
+    if ( std::u16string_view(aBuf) == Concat2View(mYName + " = ") )
         aBuf.append( "0" );
 
     return aBuf.makeStringAndClear();

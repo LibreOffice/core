@@ -268,7 +268,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
 
         // create the current subset
         OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
-        pTmpFile->WriteOString( OStringConcatenation(OString::Concat("%%BeginResource: font ")+ aGlyphSetName + "\n") );
+        pTmpFile->WriteOString( Concat2View(OString::Concat("%%BeginResource: font ")+ aGlyphSetName + "\n") );
         CreatePSUploadableFont( pTTFont, pTmpFile, aGlyphSetName.getStr(), glyph.size(),
                                 pTTGlyphMapping, pEncoding, bAllowType42 );
         pTmpFile->WriteOString("%%EndResource\n" );

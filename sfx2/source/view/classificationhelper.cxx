@@ -581,7 +581,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
                 continue;
 
             //TODO: Support abbreviated names(?)
-            if (rProperty.Name == OUStringConcatenation(aPrefix + PROP_BACNAME()))
+            if (rProperty.Name == Concat2View(aPrefix + PROP_BACNAME()))
                 m_pImpl->m_aCategory[eType].m_aName = aValue;
             else
                 m_pImpl->m_aCategory[eType].m_aLabels[rProperty.Name] = aValue;

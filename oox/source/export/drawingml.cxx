@@ -5855,25 +5855,25 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     OUString dataFileName = "diagrams/data" + OUString::number(nDiagramId) + ".xml";
     OUString dataRelId =
         mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDATA),
-                          OUStringConcatenation(sRelationCompPrefix + dataFileName));
+                          Concat2View(sRelationCompPrefix + dataFileName));
 
     // add layout relation
     OUString layoutFileName = "diagrams/layout" + OUString::number(nDiagramId) + ".xml";
     OUString layoutRelId = mpFB->addRelation(mpFS->getOutputStream(),
                                               oox::getRelationship(Relationship::DIAGRAMLAYOUT),
-                                              OUStringConcatenation(sRelationCompPrefix + layoutFileName));
+                                              Concat2View(sRelationCompPrefix + layoutFileName));
 
     // add style relation
     OUString styleFileName = "diagrams/quickStyle" + OUString::number(nDiagramId) + ".xml";
     OUString styleRelId = mpFB->addRelation(mpFS->getOutputStream(),
                                               oox::getRelationship(Relationship::DIAGRAMQUICKSTYLE),
-                                              OUStringConcatenation(sRelationCompPrefix + styleFileName));
+                                              Concat2View(sRelationCompPrefix + styleFileName));
 
     // add color relation
     OUString colorFileName = "diagrams/colors" + OUString::number(nDiagramId) + ".xml";
     OUString colorRelId = mpFB->addRelation(mpFS->getOutputStream(),
                                               oox::getRelationship(Relationship::DIAGRAMCOLORS),
-                                              OUStringConcatenation(sRelationCompPrefix + colorFileName));
+                                              Concat2View(sRelationCompPrefix + colorFileName));
 
     OUString drawingFileName;
     if (drawingDom.is())
@@ -5882,7 +5882,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         drawingFileName = "diagrams/drawing" + OUString::number(nDiagramId) + ".xml";
         OUString drawingRelId = mpFB->addRelation(
             mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDRAWING),
-            OUStringConcatenation(sRelationCompPrefix + drawingFileName));
+            Concat2View(sRelationCompPrefix + drawingFileName));
 
         // the data dom contains a reference to the drawing relation. We need to update it with the new generated
         // relation value before writing the dom to a file
@@ -6013,7 +6013,7 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
         PropertySet aProps(xOutStream);
         aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
 
-        mpFB->addRelation(xOutStream, sType, OUStringConcatenation("../" + sFragment));
+        mpFB->addRelation(xOutStream, sType, Concat2View("../" + sFragment));
 
         OUString sDir = OUString::createFromAscii(GetComponentDir());
         uno::Reference<io::XOutputStream> xBinOutStream

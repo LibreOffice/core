@@ -235,7 +235,7 @@ namespace dbaui
                 }
                 else
                     addOutputText(
-                        OUStringConcatenation(OUString::number(xMR->getUpdateCount()) + " rows updated\n"));
+                        Concat2View(OUString::number(xMR->getUpdateCount()) + " rows updated\n"));
                 for (;;)
                 {
                     hasRS = xMR->getMoreResults();
@@ -255,17 +255,17 @@ namespace dbaui
                 if (upperStatement.startsWith("UPDATE"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows updated\n"));
+                    addOutputText(Concat2View(OUString::number(resultCount) + " rows updated\n"));
                 }
                 else if (upperStatement.startsWith("INSERT"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows inserted\n"));
+                    addOutputText(Concat2View(OUString::number(resultCount) + " rows inserted\n"));
                 }
                 else if (upperStatement.startsWith("DELETE"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows deleted\n"));
+                    addOutputText(Concat2View(OUString::number(resultCount) + " rows deleted\n"));
                 }
                 else if (upperStatement.startsWith("CREATE"))
                 {
@@ -281,7 +281,7 @@ namespace dbaui
                 else
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows updated\n"));
+                    addOutputText(Concat2View(OUString::number(resultCount) + " rows updated\n"));
                 }
             }
             // successful

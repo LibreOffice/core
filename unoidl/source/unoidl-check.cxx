@@ -175,7 +175,7 @@ void checkMap(
         OUString name(prefix + id);
         if (entA->getSort() == unoidl::Entity::SORT_MODULE) {
             checkMap(
-                providerB, OUStringConcatenation(name + "."),
+                providerB, Concat2View(name + "."),
                 (static_cast<unoidl::ModuleEntity *>(entA.get())
                  ->createCursor()),
                 ignoreUnpublished);
@@ -921,7 +921,7 @@ void checkIds(
         switch (entB->getSort()) {
         case unoidl::Entity::SORT_MODULE:
             checkIds(
-                providerA, OUStringConcatenation(name + "."),
+                providerA, Concat2View(name + "."),
                 (static_cast<unoidl::ModuleEntity *>(entB.get())
                  ->createCursor()));
             break;

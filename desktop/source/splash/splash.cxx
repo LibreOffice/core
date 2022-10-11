@@ -474,10 +474,10 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     // create file name from screen resolution information
     OUString aResBuf = "_" + OUString::number(nWidth) + "x" + OUString::number(nHeight);
     if ( !_sAppName.isEmpty() )
-        if (Application::LoadBrandBitmap(OUStringConcatenation("intro_" + _sAppName + aResBuf), rBitmap))
+        if (Application::LoadBrandBitmap(Concat2View("intro_" + _sAppName + aResBuf), rBitmap))
             return;
 
-    if (Application::LoadBrandBitmap(OUStringConcatenation("intro" + aResBuf), rBitmap))
+    if (Application::LoadBrandBitmap(Concat2View("intro" + aResBuf), rBitmap))
         return;
 
     (void)Application::LoadBrandBitmap (u"intro", rBitmap);

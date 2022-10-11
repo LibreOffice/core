@@ -472,11 +472,11 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
              ( aInfo.userdata.isEmpty() ||
                aProfileName.equalsIgnoreAsciiCase(
                    utl::ConfigManager::getProductName() ) ) ) {
-            setInstallInfoIfExist(aInfo, OUStringConcatenation(aTopConfigDir + aProfileName), aVersion);
+            setInstallInfoIfExist(aInfo, Concat2View(aTopConfigDir + aProfileName), aVersion);
 #if defined UNX && ! defined MACOSX
             //try preXDG path if the new one does not exist
             if ( aInfo.userdata.isEmpty())
-                setInstallInfoIfExist(aInfo, OUStringConcatenation(aPreXDGTopConfigDir + aProfileName), aVersion);
+                setInstallInfoIfExist(aInfo, Concat2View(aPreXDGTopConfigDir + aProfileName), aVersion);
 #endif
         }
     }

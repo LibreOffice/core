@@ -109,8 +109,8 @@ std::unique_ptr<SvStream> MacrosTest::parseExportStream(const utl::TempFileNamed
 void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName)
 {
     OUString aSourceDir = rDirectories.getURLFromSrc(u"/test/signing-keys/");
-    OUString aTargetDir = rDirectories.getURLFromWorkdir(
-        OUStringConcatenation("CppunitTest/" + rTestName + ".test.user"));
+    OUString aTargetDir
+        = rDirectories.getURLFromWorkdir(Concat2View("CppunitTest/" + rTestName + ".test.user"));
 
     // Set up NSS database in workdir/CppunitTest/
     osl::File::copy(aSourceDir + "cert9.db", aTargetDir + "/cert9.db");

@@ -573,7 +573,7 @@ void VBAMacroTest::testVba()
     for (const auto& rTestInfo : testInfo)
     {
         OUString aFileName;
-        createFileURL(OUStringConcatenation(rTestInfo.sFileBaseName + "xls"), aFileName);
+        createFileURL(Concat2View(rTestInfo.sFileBaseName + "xls"), aFileName);
         mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
         // process all events such as OnLoad events etc.  otherwise they tend

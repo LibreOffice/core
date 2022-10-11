@@ -3948,7 +3948,7 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         if(!pEntry->sComment.isEmpty())
         {
             // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
-            rOutStr.WriteByteStringLine( OUStringConcatenation("#" + pEntry->sComment), RTL_TEXTENCODING_UTF8 );
+            rOutStr.WriteByteStringLine( Concat2View("#" + pEntry->sComment), RTL_TEXTENCODING_UTF8 );
         }
 
         OUString sWrite( pEntry->sSearch + ";" +

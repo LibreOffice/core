@@ -420,7 +420,7 @@ OUString firebird::escapeWith( const OUString& sText, const char aKey, const cha
         aIndex = sRet.indexOf(aKey, aIndex);
         if ( aIndex <= 0 || aIndex >= sRet.getLength())
             break;
-        sRet = sRet.replaceAt(aIndex, 1, rtl::OUStringConcatenation(OUStringChar(aEscapeChar) + OUStringChar(aKey))  );
+        sRet = sRet.replaceAt(aIndex, 1, rtl::Concat2View(OUStringChar(aEscapeChar) + OUStringChar(aKey))  );
         aIndex += 2;
     }
 

@@ -3347,13 +3347,13 @@ void operator !=(std::nullptr_t, OUString const &) = delete;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
-inline bool operator ==(OUString const & lhs, OUStringConcatenation const & rhs)
+inline bool operator ==(OUString const & lhs, StringConcatenation<char16_t> const & rhs)
 { return lhs == std::u16string_view(rhs); }
-inline bool operator !=(OUString const & lhs, OUStringConcatenation const & rhs)
+inline bool operator !=(OUString const & lhs, StringConcatenation<char16_t> const & rhs)
 { return lhs != std::u16string_view(rhs); }
-inline bool operator ==(OUStringConcatenation const & lhs, OUString const & rhs)
+inline bool operator ==(StringConcatenation<char16_t> const & lhs, OUString const & rhs)
 { return std::u16string_view(lhs) == rhs; }
-inline bool operator !=(OUStringConcatenation const & lhs, OUString const & rhs)
+inline bool operator !=(StringConcatenation<char16_t> const & lhs, OUString const & rhs)
 { return std::u16string_view(lhs) != rhs; }
 #endif
 
@@ -3525,7 +3525,7 @@ using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
 using ::rtl::OUStringChar;
-using ::rtl::OUStringConcatenation;
+using ::rtl::Concat2View;
 #endif
 
 /// @cond INTERNAL

@@ -224,8 +224,8 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
 
     tools::Long http_code = 0;
     OUString langTag(aLocale.Language + "-" + aLocale.Country);
-    OString postData(OUStringToOString(
-        OUStringConcatenation("text=" + aText + "&language=" + langTag), RTL_TEXTENCODING_UTF8));
+    OString postData(OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
+                                       RTL_TEXTENCODING_UTF8));
     const std::string response_body
         = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
 

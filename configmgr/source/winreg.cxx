@@ -238,7 +238,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                     else
                     {
                         writeAttributeValue(
-                            aFileHandle, OUStringConcatenation("/" + aNextPathPart));
+                            aFileHandle, Concat2View("/" + aNextPathPart));
                     }
                 }
                 else

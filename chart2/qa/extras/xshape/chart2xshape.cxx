@@ -89,9 +89,8 @@ void Chart2XShapeTest::compareAgainstReference(const OUString& rDump,
 {
     checkDumpAgainstFile(
         rDump,
-        OUStringConcatenation(
-            m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
-            + rReferenceFile),
+        Concat2View(m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
+                    + rReferenceFile),
         OUStringToOString(
             m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/tolerance.xml"),
             RTL_TEXTENCODING_UTF8)

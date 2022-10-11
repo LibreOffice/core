@@ -2169,13 +2169,13 @@ public:
 };
 
 #if defined LIBO_INTERNAL_ONLY
-inline bool operator ==(OString const & lhs, OStringConcatenation const & rhs)
+inline bool operator ==(OString const & lhs, StringConcatenation<char> const & rhs)
 { return lhs == std::string_view(rhs); }
-inline bool operator !=(OString const & lhs, OStringConcatenation const & rhs)
+inline bool operator !=(OString const & lhs, StringConcatenation<char> const & rhs)
 { return lhs != std::string_view(rhs); }
-inline bool operator ==(OStringConcatenation const & lhs, OString const & rhs)
+inline bool operator ==(StringConcatenation<char> const & lhs, OString const & rhs)
 { return std::string_view(lhs) == rhs; }
-inline bool operator !=(OStringConcatenation const & lhs, OString const & rhs)
+inline bool operator !=(StringConcatenation<char> const & lhs, OString const & rhs)
 { return std::string_view(lhs) != rhs; }
 #endif
 
@@ -2282,7 +2282,7 @@ typedef rtlunittest::OString OString;
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OString;
 using ::rtl::OStringChar;
-using ::rtl::OStringConcatenation;
+using ::rtl::Concat2View;
 using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 #endif

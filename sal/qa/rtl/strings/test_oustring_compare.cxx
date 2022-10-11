@@ -88,8 +88,8 @@ void test::oustring::Compare::compareTo()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), s2.compareTo(s2));
     CPPUNIT_ASSERT(s1.compareTo(s2) < 0);
     CPPUNIT_ASSERT(s2.compareTo(s1) > 0);
-    CPPUNIT_ASSERT(s1.compareTo(OUStringConcatenation(s2 + "y")) < 0);
-    CPPUNIT_ASSERT(s2.compareTo(OUStringConcatenation(s1 + "x")) > 0);
+    CPPUNIT_ASSERT(s1.compareTo(Concat2View(s2 + "y")) < 0);
+    CPPUNIT_ASSERT(s2.compareTo(Concat2View(s1 + "x")) > 0);
     CPPUNIT_ASSERT(OUString(s1 + "x").compareTo(s2) < 0);
     CPPUNIT_ASSERT(OUString(s2 + "y").compareTo(s1) > 0);
 }

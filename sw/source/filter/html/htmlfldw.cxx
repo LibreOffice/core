@@ -433,7 +433,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
     // Output the closing tag.
     if( pTypeStr )
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_sdfield), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_sdfield), false );
 
     return rWrt;
 }
@@ -572,7 +572,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
 
             if (bFieldShadings)
                 HTMLOutFuncs::Out_AsciiTag(
-                    rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
+                    rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
         }
     }
     return rWrt;

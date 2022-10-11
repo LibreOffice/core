@@ -2594,7 +2594,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     OUString const sRelId = mpFB->addRelation(
         mpFS->getOutputStream(), sRelationType,
-        OUStringConcatenation(OUString::createFromAscii(GetRelationCompPrefix()) + sFileName));
+        Concat2View(OUString::createFromAscii(GetRelationCompPrefix()) + sFileName));
 
     mpFS->startElementNS(mnXmlNamespace, XML_graphicFrame);
 

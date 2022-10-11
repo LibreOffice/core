@@ -201,21 +201,20 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
 
                     PropVariantClear(&propvar);
                 }
-                ThrowIfFailed(pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
-                              OStringConcatenation("Setting description '"
-                                                   + item.description.toUtf8() + "' failed."));
+                ThrowIfFailed(
+                    pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
+                    Concat2View("Setting description '" + item.description.toUtf8() + "' failed."));
+
+                ThrowIfFailed(pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
+                              Concat2View("Setting path '" + sofficePath.toUtf8() + "' failed."));
 
                 ThrowIfFailed(
-                    pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
-                    OStringConcatenation("Setting path '" + sofficePath.toUtf8() + "' failed."));
+                    pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
+                    Concat2View("Setting arguments '" + item.arguments.toUtf8() + "' failed."));
 
-                ThrowIfFailed(pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
-                              OStringConcatenation("Setting arguments '" + item.arguments.toUtf8()
-                                                   + "' failed."));
-
-                ThrowIfFailed(pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
-                              OStringConcatenation("Setting icon path '" + item.iconPath.toUtf8()
-                                                   + "' failed."));
+                ThrowIfFailed(
+                    pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
+                    Concat2View("Setting icon path '" + item.iconPath.toUtf8() + "' failed."));
 
                 if (lcl_isItemInArray(pShellLinkItem, m_aRemoved))
                 {
@@ -300,21 +299,20 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
 
                     PropVariantClear(&propvar);
                 }
-                ThrowIfFailed(pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
-                              OStringConcatenation("Setting description '"
-                                                   + item.description.toUtf8() + "' failed."));
+                ThrowIfFailed(
+                    pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
+                    Concat2View("Setting description '" + item.description.toUtf8() + "' failed."));
+
+                ThrowIfFailed(pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
+                              Concat2View("Setting path '" + sofficePath.toUtf8() + "' failed."));
 
                 ThrowIfFailed(
-                    pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
-                    OStringConcatenation("Setting path '" + sofficePath.toUtf8() + "' failed."));
+                    pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
+                    Concat2View("Setting arguments '" + item.arguments.toUtf8() + "' failed."));
 
-                ThrowIfFailed(pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
-                              OStringConcatenation("Setting arguments '" + item.arguments.toUtf8()
-                                                   + "' failed."));
-
-                ThrowIfFailed(pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
-                              OStringConcatenation("Setting icon path '" + item.iconPath.toUtf8()
-                                                   + "' failed."));
+                ThrowIfFailed(
+                    pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
+                    Concat2View("Setting icon path '" + item.iconPath.toUtf8() + "' failed."));
 
                 aCollection->AddObject(pShellLinkItem);
             }

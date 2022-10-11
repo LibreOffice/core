@@ -27,7 +27,7 @@ namespace test
 {
 bool getTestArgument(std::u16string_view name, OUString* value)
 {
-    return getArgument(OUStringConcatenation(OUString::Concat("testarg.") + name), value);
+    return getArgument(Concat2View(OUString::Concat("testarg.") + name), value);
 }
 }
 

@@ -634,7 +634,7 @@ bool SwCustomizeAddressBlockDialog::HasItem(sal_Int32 nUserData)
         }
     }
     //search for this entry in the content
-    return m_xDragED->GetText().indexOf(OUStringConcatenation("<" + sEntry + ">")) >= 0;
+    return m_xDragED->GetText().indexOf(Concat2View("<" + sEntry + ">")) >= 0;
 }
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, SelectionChangedIdleHdl, Timer*, void)

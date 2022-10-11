@@ -290,7 +290,7 @@ extern "C" int unopkg_main()
                     if (cmdArg[ 0 ] == '-')
                     {
                         // is option:
-                        dp_misc::writeConsoleError(OUStringConcatenation(
+                        dp_misc::writeConsoleError(Concat2View(
                                  "\nERROR: unexpected option " +
                                  cmdArg +
                                  "!\n       Use " APP_NAME " " +
@@ -497,7 +497,7 @@ extern "C" int unopkg_main()
                       vec_packages.size(), false);
 
                 dp_misc::writeConsole(
-                    OUStringConcatenation("All deployed " + repository + " extensions:\n\n"));
+                    Concat2View("All deployed " + repository + " extensions:\n\n"));
             }
             else
             {
@@ -632,7 +632,7 @@ extern "C" int unopkg_main()
     catch (const LockFileException & e)
     {
         // No logger since it requires UNO which we don't have here
-        dp_misc::writeConsoleError(OUStringConcatenation(e.Message + "\n"));
+        dp_misc::writeConsoleError(Concat2View(e.Message + "\n"));
         bShowFailedMsg = false;
     }
     catch (const css::uno::Exception & e ) {

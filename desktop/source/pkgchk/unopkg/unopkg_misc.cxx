@@ -229,7 +229,7 @@ void printf_line(
     std::u16string_view name, std::u16string_view value, sal_Int32 level )
 {
     printf_space( level );
-    dp_misc::writeConsole(OUStringConcatenation(OUString::Concat(name) + ": " + value + "\n"));
+    dp_misc::writeConsole(Concat2View(OUString::Concat(name) + ": " + value + "\n"));
 }
 
 
@@ -359,7 +359,7 @@ Reference<XComponentContext> connectToOffice(
 
     if (verbose)
     {
-        dp_misc::writeConsole(OUStringConcatenation(
+        dp_misc::writeConsole(Concat2View(
             "Raising process: " + appURL +
             "\nArguments: --nologo --nodefault " + args[2] +
             "\n"));

@@ -192,7 +192,7 @@ void PlaceEditDialog::InitDetails( )
     auto nSize = std::min(aTypesUrlsList.getLength(), aTypesNamesList.getLength());
     for ( sal_Int32 i = 0; i < nSize; ++i )
     {
-        OUString sUrl = aTypesUrlsList[i].replaceFirst("<host", OUStringConcatenation("<" + SvtResId(STR_SVT_HOST))).replaceFirst("port>",  OUStringConcatenation(SvtResId(STR_SVT_PORT) + ">"));
+        OUString sUrl = aTypesUrlsList[i].replaceFirst("<host", Concat2View("<" + SvtResId(STR_SVT_HOST))).replaceFirst("port>",  Concat2View(SvtResId(STR_SVT_PORT) + ">"));
 
         if ((sUrl == GDRIVE_BASE_URL && bSkipGDrive) ||
             (sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL) && bSkipAlfresco) ||

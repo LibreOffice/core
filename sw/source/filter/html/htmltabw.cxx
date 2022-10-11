@@ -498,7 +498,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();
     aTag = bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata;
-    HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag), false);
+    HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
     rWrt.m_bLFPossible = true;
 }
 
@@ -528,7 +528,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     }
 
     rWrt.OutNewLine();  // <TR> in new line
-    rWrt.Strm().WriteChar( '<' ).WriteOString( OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow) );
+    rWrt.Strm().WriteChar( '<' ).WriteOString( Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow) );
     if( pBrushItem )
     {
         if (!rWrt.mbXHTML)
@@ -564,7 +564,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     rWrt.DecIndentLevel(); // indent content of <TR>...</TR>
 
     rWrt.OutNewLine();  // </TR> in new line
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow), false );
 }
 
 void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
@@ -730,9 +730,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         sOutStr.append(" " OOO_STRING_SVTOOLS_HTML_O_align "=\"")
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
                .append("\"");
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + sOutStr) );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + sOutStr) );
         HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption );
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_caption), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_caption), false );
     }
 
     const SwWriteTableCols::size_type nCols = m_aCols.size();
@@ -745,7 +745,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         if( bColGroups )
         {
             rWrt.OutNewLine(); // <COLGRP> in new line
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup) );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup) );
 
             rWrt.IncIndentLevel(); // indent content of <COLGRP>
         }
@@ -773,7 +773,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             }
 
             if( bRel )
-                html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OStringConcatenation(OString::number(nWidth) + "*"));
+                html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, Concat2View(OString::number(nWidth) + "*"));
             else
                 html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OString::number(SwHTMLWriter::ToPixel(nWidth,false)));
             html.end();
@@ -782,10 +782,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             {
                 rWrt.DecIndentLevel(); // indent content of <COLGRP>
                 rWrt.OutNewLine(); // </COLGRP> in new line
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup),
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup),
                                             false );
                 rWrt.OutNewLine(); // <COLGRP> in new line
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup) );
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup) );
                 rWrt.IncIndentLevel(); // indent content of <COLGRP>
             }
         }
@@ -794,7 +794,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             rWrt.DecIndentLevel(); // indent content of <COLGRP>
 
             rWrt.OutNewLine(); // </COLGRP> in new line
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup),
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_colgroup),
                                         false );
         }
     }
@@ -819,7 +819,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         rWrt.OutNewLine(); // <THEAD>/<TDATA> in new line
         OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag));
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag));
 
         rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
     }
@@ -835,8 +835,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             for( auto nCnt = (pRow2->m_nBottomBorder / SvxBorderLineWidth::Thin) - 1; nCnt; --nCnt )
             {
                 rWrt.OutNewLine();
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow ));
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow),
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow ));
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow),
                                             false );
             }
         }
@@ -847,14 +847,14 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>
             rWrt.OutNewLine(); // </THEAD>/</TDATA> in new line
             OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
-            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag), false);
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
             rWrt.OutNewLine(); // <THEAD>/<TDATA> in new line
 
             if( bTHead && nRow==m_nHeadEndRow )
                 bTHead = false;
 
             aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
-            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag));
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag));
             rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
         }
     }
@@ -865,13 +865,13 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
         rWrt.OutNewLine(); // </THEAD>/</TDATA> in new line
         OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag), false);
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
     }
 
     rWrt.DecIndentLevel(); // indent content of <TABLE>
 
     rWrt.OutNewLine(); // </TABLE> in new line
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_table), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_table), false );
 
     rWrt.m_nDirection = nOldDirection;
 }
@@ -1021,7 +1021,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     {
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
     }
 
     // eFlyHoriOri and eTabHoriOri now only contain the values of
@@ -1078,13 +1078,13 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine();  // <CENTER> in new line
         if( text::HoriOrientation::CENTER==eDivHoriOri )
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center) );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center) );
         else
         {
             OStringLiteral sOut = OOO_STRING_SVTOOLS_HTML_division
                 " " OOO_STRING_SVTOOLS_HTML_O_align "=\""
                 OOO_STRING_SVTOOLS_HTML_AL_right "\"";
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + sOut) );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + sOut) );
         }
         rHTMLWrt.IncIndentLevel();  // indent content of <CENTER>
         rHTMLWrt.m_bLFPossible = true;
@@ -1131,7 +1131,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         OString aTag = text::HoriOrientation::CENTER == eDivHoriOri
                            ? OOO_STRING_SVTOOLS_HTML_center
                            : OOO_STRING_SVTOOLS_HTML_division;
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + aTag), false);
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aTag), false);
         rHTMLWrt.m_bLFPossible = true;
     }
 

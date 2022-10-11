@@ -1116,7 +1116,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 
             if (bHeaderIsNeeded)
             {
-                if (!lcl_hasField(xHeaderText, DocInfoServiceName, OUStringConcatenation(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER())))
+                if (!lcl_hasField(xHeaderText, DocInfoServiceName, Concat2View(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER())))
                 {
                     // Append a field to the end of the header text.
                     uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);

@@ -2500,7 +2500,7 @@ bool HtmlExport::CreateNavBarFrames()
 
         bOk = WriteHtml(
             "navbar3", true,
-            OUStringConcatenation(
+            Concat2View(
                 gaHTMLHeader + CreateMetaCharset() + "  <title>"
                 + StringToHTMLString(maPageNames[0]) + "</title>\r\n</head>\r\n" + CreateBodyTag()
                 + CreateLink(u"JavaScript:parent.ExpandOutline()", aButton)
@@ -2519,7 +2519,7 @@ bool HtmlExport::CreateNavBarFrames()
 
         bOk = WriteHtml(
             "navbar4", true,
-            OUStringConcatenation(
+            Concat2View(
                 gaHTMLHeader + CreateMetaCharset() + "  <title>"
                 + StringToHTMLString(maPageNames[0]) + "</title>\r\n</head>\r\n" + CreateBodyTag()
                 + CreateLink(u"JavaScript:parent.CollapseOutline()", aButton)

@@ -53,7 +53,7 @@ void HtmlWriter::start(const OString& aElement)
     }
 
     mrStream.WriteChar('<');
-    mrStream.WriteOString(OStringConcatenation(maNamespace + aElement));
+    mrStream.WriteOString(Concat2View(maNamespace + aElement));
     mbElementOpen = true;
 }
 
@@ -108,7 +108,7 @@ void HtmlWriter::end()
             }
         }
         mrStream.WriteCharPtr("</");
-        mrStream.WriteOString(OStringConcatenation(maNamespace + maElementStack.back()));
+        mrStream.WriteOString(Concat2View(maNamespace + maElementStack.back()));
         mrStream.WriteCharPtr(">");
         if (mbPrettyPrint)
             mrStream.WriteCharPtr("\n");

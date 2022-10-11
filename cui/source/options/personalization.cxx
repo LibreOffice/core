@@ -130,7 +130,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 
         m_vDefaultPersonaSettings.push_back(aPersonaSetting);
 
-        INetURLObject aURLObj(rtl::OUStringConcatenation(gallery + aPreviewFile));
+        INetURLObject aURLObj(rtl::Concat2View(gallery + aPreviewFile));
         aFilter.ImportGraphic(aGraphic, aURLObj);
 
         Size aSize(aGraphic.GetSizePixel());

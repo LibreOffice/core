@@ -2480,7 +2480,7 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
             OUString aUMsg(OStringToOUString(aMsg, RTL_TEXTENCODING_ASCII_US));
             aMsg.setLength(0);
             LocaleDataWrapper::outputCheckMessage(
-                xLocaleData->appendLocaleInfo(OUStringConcatenation(aUMsg + pFormatArr[0].NameID)));
+                xLocaleData->appendLocaleInfo(Concat2View(aUMsg + pFormatArr[0].NameID)));
         }
     }
     // find the default (medium preferred, then long) and reset all other defaults

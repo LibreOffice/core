@@ -278,7 +278,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
                                      aOutliner.GetParagraphCount() ) );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText );
 
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee), false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteOString( aEndTags );

@@ -707,7 +707,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
     if ( nNumeralID >= 0x02 && nNumeralID <= 0x13 )
         nNatNum = 1;
     if ( nNatNum )
-        rString.insert( nPos, OUStringConcatenation("[NatNum"+OUString::number(nNatNum)+"]"));
+        rString.insert( nPos, Concat2View("[NatNum"+OUString::number(nNatNum)+"]"));
     return sCalendar;
 }
 
@@ -5661,7 +5661,7 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
     sal_Int32 nField = -1;
     do
     {
-        nField = rNum.GetParams().indexOf(OUStringConcatenation(rKeywords[nDateKey] + "="), ++nField);
+        nField = rNum.GetParams().indexOf(Concat2View(rKeywords[nDateKey] + "="), ++nField);
     }
     while (nField != -1 && nField != 0 &&
             (rNum.GetParams()[nField - 1] != ',' &&
