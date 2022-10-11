@@ -156,7 +156,7 @@ private:
     void pushAttributeValue( sal_Int32 attribute, const char* value );
     void pushAttributeValue( sal_Int32 attribute, const OString& value );
 
-    FastSaxSerializer* mpSerializer;
+    std::unique_ptr<FastSaxSerializer> mpSerializer;
 };
 
 typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;

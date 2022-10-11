@@ -35,7 +35,6 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
 FastSerializerHelper::~FastSerializerHelper()
 {
     mpSerializer->endDocument();
-    delete mpSerializer;
 }
 
 void FastSerializerHelper::startElement(sal_Int32 elementTokenId)
