@@ -472,25 +472,15 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     }
 
     // create file name from screen resolution information
-    OStringBuffer aStrBuf( 128 );
-    aStrBuf.append( "intro_" );
+    OUString aResBuf = "_" + OUString::number(nWidth) + "x" + OUString::number(nHeight);
     if ( !_sAppName.isEmpty() )
-    {
-        aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
-        aStrBuf.append( "_" );
-    }
-    OString aResBuf = OString::number( nWidth ) + "x" + OString::number( nHeight );
+        if (Application::LoadBrandBitmap(OUStringConcatenation("intro_" + _sAppName + aResBuf), rBitmap))
+            return;
 
-    aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear().getStr(), rBitmap))
+    if (Application::LoadBrandBitmap(OUStringConcatenation("intro" + aResBuf), rBitmap))
         return;
 
-    aStrBuf.append( "intro_" );
-    aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aStrBuf.getStr(), rBitmap))
-        return;
-
-    (void)Application::LoadBrandBitmap ("intro", rBitmap);
+    (void)Application::LoadBrandBitmap (u"intro", rBitmap);
 }
 
 void SplashScreen::determineProgressRatioValues(

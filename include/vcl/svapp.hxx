@@ -926,7 +926,7 @@ public:
 
      @returns true if the PNG could be loaded, otherwise returns false.
     */
-    static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
+    static bool                 LoadBrandBitmap (std::u16string_view pName, BitmapEx &rBitmap);
 
     ///@}
 

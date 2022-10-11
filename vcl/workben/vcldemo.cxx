@@ -141,7 +141,7 @@ public:
                    , mnBounceY(1)
 #endif
     {
-        if (!Application::LoadBrandBitmap("intro", maIntro))
+        if (!Application::LoadBrandBitmap(u"intro", maIntro))
             Application::Abort("Failed to load intro image");
 
         maIntroBW = maIntro.GetBitmap();
