@@ -533,9 +533,9 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
         // Move Bookmarks
         {
             SwPosition aMvPos( aInsIdx );
-            SwContentNode* pCNd = SwNodes::GoPrevious( &aMvPos.nNode );
+            SwContentNode* pCNd = SwNodes::GoPrevious( &aMvPos );
             assert(pCNd); // keep coverity happy
-            aMvPos.nContent.Assign( pCNd, pCNd->Len() );
+            aMvPos.SetContent( pCNd->Len() );
             SwDoc::CorrAbs( aInsIdx, aEndNdIdx, aMvPos );
         }
 
