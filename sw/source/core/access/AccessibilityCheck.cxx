@@ -21,6 +21,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <unoparagraph.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
@@ -898,6 +899,46 @@ public:
     }
 };
 
+class BackgroundImageCheck : public DocumentCheck
+{
+public:
+    BackgroundImageCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : DocumentCheck(rIssueCollection)
+    {
+    }
+    void check(SwDoc* pDoc) override
+    {
+        uno::Reference<lang::XComponent> xDoc = pDoc->GetDocShell()->GetBaseModel();
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDoc, uno::UNO_QUERY);
+        if (!xStyleFamiliesSupplier.is())
+            return;
+        uno::Reference<container::XNameAccess> xStyleFamilies
+            = xStyleFamiliesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                            uno::UNO_QUERY);
+        if (!xStyleFamily.is())
+            return;
+        const uno::Sequence<OUString>& xStyleFamilyNames = xStyleFamily->getElementNames();
+        for (const OUString& rStyleFamilyName : xStyleFamilyNames)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(
+                xStyleFamily->getByName(rStyleFamilyName), uno::UNO_QUERY);
+            if (!xPropertySet.is())
+                continue;
+            auto aFillStyleContainer = xPropertySet->getPropertyValue("FillStyle");
+            if (aFillStyleContainer.has<drawing::FillStyle>())
+            {
+                drawing::FillStyle aFillStyle = aFillStyleContainer.get<drawing::FillStyle>();
+                if (aFillStyle == drawing::FillStyle_BITMAP)
+                {
+                    lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_BACKGROUND_IMAGES),
+                                sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND);
+                }
+            }
+        }
+    }
+};
+
 } // end anonymous namespace
 
 // Check Shapes, TextBox
@@ -945,6 +986,7 @@ void AccessibilityCheck::check()
     aDocumentChecks.push_back(std::make_unique<DocumentDefaultLanguageCheck>(m_aIssueCollection));
     aDocumentChecks.push_back(std::make_unique<DocumentTitleCheck>(m_aIssueCollection));
     aDocumentChecks.push_back(std::make_unique<FootnoteEndnoteCheck>(m_aIssueCollection));
+    aDocumentChecks.push_back(std::make_unique<BackgroundImageCheck>(m_aIssueCollection));
 
     for (std::unique_ptr<DocumentCheck>& rpDocumentCheck : aDocumentChecks)
     {
