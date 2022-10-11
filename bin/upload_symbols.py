@@ -14,8 +14,8 @@ import requests
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('symbols_dir')
-    parser.add_argument('config_dir')
+    parser.add_argument('symbols_zip_file')
+    parser.add_argument('credentials_file')
     parser.add_argument('version')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--system', action='store_true')
@@ -27,12 +27,12 @@ def main():
     login_url = base_url + "accounts/login/"
 
     config = configparser.ConfigParser()
-    config.read(args.config_dir)
+    config.read(args.credentials_file)
 
     user = config["CrashReport"]["User"]
     password = config["CrashReport"]["Password"]
 
-    files = {'symbols': open(args.symbols_dir, 'rb')}
+    files = {'symbols': open(args.symbols_zip_file, 'rb')}
     data = {'version': args.version,
             'system': args.system,
             'platform': platform.system() if args.platform is None else args.platform}
