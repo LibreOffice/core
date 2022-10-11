@@ -58,11 +58,6 @@ constants VBAEventId
     const long DOCUMENT_OPEN                        = 1002;
     /** Document about to be closed. No arguments. */
     const long DOCUMENT_CLOSE                       = 1003;
-    // auto* subroutines in ThisDocument have highest priority
-    const long DOCUMENT_AUTO_NEW = 1004;
-    const long DOCUMENT_AUTO_OPEN = 1005;
-    const long DOCUMENT_AUTO_CLOSE = 1006;
-
 
     // MS Excel (identifiers from 2001 to 2999)
 

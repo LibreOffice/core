@@ -375,33 +375,47 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
         sThisWorkbook = implGetDocumentModuleName(rThisWorksheetInfo, aNoArgs);
     }
 
+    // Use DOCUMENT_OPEN as a way to get the codename for ThisDocument
+    OUString sThisDocument;
+    if (getImplementationName() == "SwVbaEventsHelper")
+    {
+        EventHandlerInfo& rThisDocumentInfo
+            = maEventInfos[css::script::vba::VBAEventId::DOCUMENT_OPEN];
+        css::uno::Sequence<css::uno::Any> aNoArgs;
+        sThisDocument = implGetDocumentModuleName(rThisDocumentInfo, aNoArgs);
+    }
+
     for( const auto& rEventInfo : maEventInfos )
     {
         const EventHandlerInfo& rInfo = rEventInfo.second;
         if( rInfo.mnModuleType == nModuleType )
         {
+            OUString sName;
+            bool bOnlyPublic = false;
             OUString sSkipModule;
-            // Only in Calc, ignore Auto_* in ThisWorkbook
-            if (getImplementationName() == "ScVbaEventsHelper"
-                && (rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_NEW
-                    || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
-                    || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE))
+            if (rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_NEW
+                || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
+                || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE)
             {
-                sSkipModule = sThisWorkbook;
+                if (getImplementationName() == "ScVbaEventsHelper")
+                {
+                    // Only in Calc, ignore Auto_* in ThisWorkbook
+                    sSkipModule = sThisWorkbook;
+                }
+                else if (getImplementationName() == "SwVbaEventsHelper")
+                {
+                    // Only in Word, Auto* only runs if defined as Public, not Private.
+                    bOnlyPublic = true;
+                    // Only in Word, auto* subroutines in ThisDocument have highest priority
+                    sName = resolveVBAMacro(mpShell, maLibraryName, sThisDocument,
+                                            rInfo.maMacroName, bOnlyPublic, sSkipModule);
+                }
             }
 
-            // Only in Word, Auto* only runs if defined as Public, not Private.
-            const bool bOnlyPublic
-                = getImplementationName() == "SwVbaEventsHelper"
-                  && (rInfo.mnEventId == css::script::vba::VBAEventId::DOCUMENT_AUTO_NEW
-                      || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_NEW
-                      || rInfo.mnEventId == css::script::vba::VBAEventId::DOCUMENT_AUTO_OPEN
-                      || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
-                      || rInfo.mnEventId == css::script::vba::VBAEventId::DOCUMENT_AUTO_CLOSE
-                      || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE);
+            if (sName.isEmpty())
+                sName = resolveVBAMacro(mpShell, maLibraryName, rModuleName,
+                                        rInfo.maMacroName, bOnlyPublic, sSkipModule);
 
-            OUString sName = resolveVBAMacro(mpShell, maLibraryName, rModuleName,
-                                             rInfo.maMacroName, bOnlyPublic, sSkipModule);
             // Only in Word (with lowest priority), an Auto* module can execute a "Public Sub Main"
             if (sName.isEmpty() && rModuleName.isEmpty()
                 && getImplementationName() == "SwVbaEventsHelper")
