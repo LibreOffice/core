@@ -680,7 +680,40 @@ std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) co
             if(xStream.is())
             {
                 if (mpImpl->pContainer)
-                    mpImpl->pContainer->InsertGraphicStream(xStream,mpImpl->aPersistName,mpImpl->aMediaType);
+                {
+                    bool bInsertGraphicStream = true;
+                    uno::Reference<io::XSeekable> xSeekable(xStream, uno::UNO_QUERY);
+                    std::optional<sal_Int64> oPosition;
+                    if (xSeekable.is())
+                    {
+                        oPosition = xSeekable->getPosition();
+                    }
+                    if (bUpdate)
+                    {
+                        std::unique_ptr<SvStream> pResult = utl::UcbStreamHelper::CreateStream(xStream);
+                        if (pResult)
+                        {
+                            GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                            Graphic aGraphic;
+                            rGF.ImportGraphic(aGraphic, u"", *pResult);
+                            if (aGraphic.IsNone())
+                            {
+                                // The graphic is not something we can understand, don't overwrite a
+                                // potentially working previous graphic.
+                                SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetGraphicStream: failed to parse xStream");
+                                bInsertGraphicStream = false;
+                            }
+                        }
+                    }
+                    if (xSeekable.is() && oPosition.has_value())
+                    {
+                        xSeekable->seek(*oPosition);
+                    }
+                    if (bInsertGraphicStream)
+                    {
+                        mpImpl->pContainer->InsertGraphicStream(xStream,mpImpl->aPersistName,mpImpl->aMediaType);
+                    }
+                }
 
                 std::unique_ptr<SvStream> pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
                 if (pResult && bUpdate)
