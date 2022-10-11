@@ -10,7 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/wizard))
 
 # mimetype, content.xml, settings.xml, styles.xml, META-INF/manifest.xml and
-# Thumbnails/thumbnail.png files are automaticaly added for each template
+# Thumbnails/thumbnail.png files are automatically added for each template
 # list of meta.xml files (one per template) + other files (manifest.rdf, pictures...)
 extras_WIZARD_XMLFILES := \
 	agenda/10grey/meta.xml \
