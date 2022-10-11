@@ -53,8 +53,8 @@ OUString OResultSetMetaData::getCharacterSet( sal_Int32 nIndex )
                         "JOIN RDB$RELATION_FIELDS relfields "
                         "ON (fields.RDB$FIELD_NAME = relfields.RDB$FIELD_SOURCE) "
                         "WHERE relfields.RDB$RELATION_NAME = '"
-                   + escapeWith(sTable, '\'', '\'') + "' AND "
-                   "relfields.RDB$FIELD_NAME = '"+ escapeWith(sColumnName, '\'', '\'') +"'";
+                   + sTable.replaceAll("'", "''") + "' AND "
+                   "relfields.RDB$FIELD_NAME = '"+ sColumnName.replaceAll("'", "''") +"'";
 
         Reference<XStatement> xStmt= m_pConnection->createStatement();
 
@@ -197,8 +197,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 
     OUString sSql = "SELECT RDB$IDENTITY_TYPE FROM RDB$RELATION_FIELDS "
                "WHERE RDB$RELATION_NAME = '"
-               + escapeWith(sTable, '\'', '\'') + "' AND "
-               "RDB$FIELD_NAME = '"+ escapeWith(sColumnName, '\'', '\'') +"'";
+               + sTable.replaceAll("'", "''") + "' AND "
+               "RDB$FIELD_NAME = '"+ sColumnName.replaceAll("'", "''") +"'";
 
     Reference<XStatement> xStmt =m_pConnection ->createStatement();
 
@@ -242,9 +242,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
                 " INNER JOIN RDB$RELATION_FIELDS "
                 " ON RDB$RELATION_FIELDS.RDB$FIELD_SOURCE = RDB$FIELDS.RDB$FIELD_NAME "
                 "WHERE RDB$RELATION_FIELDS.RDB$RELATION_NAME = '"
-                + escapeWith(getTableName(column), '\'', '\'') + "' AND "
+                + getTableName(column).replaceAll("'", "''") + "' AND "
                 "RDB$RELATION_FIELDS.RDB$FIELD_NAME = '"
-                + escapeWith(sColumnName, '\'', '\'') +"'";
+                + sColumnName.replaceAll("'", "''") +"'";
     Reference<XStatement> xStmt= m_pConnection->createStatement();
 
     Reference<XResultSet> xRes =

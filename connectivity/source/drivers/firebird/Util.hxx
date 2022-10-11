@@ -119,7 +119,6 @@ public:
 
         void freeSQLVAR(XSQLDA* pSqlda);
 
-        OUString escapeWith( const OUString& sText, const char aKey, const char aEscapeChar);
         sal_Int64 pow10Integer( int nDecimalCount );
 
 }

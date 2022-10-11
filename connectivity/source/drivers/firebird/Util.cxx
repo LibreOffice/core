@@ -411,22 +411,6 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
 }
 
 
-OUString firebird::escapeWith( const OUString& sText, const char aKey, const char aEscapeChar)
-{
-    OUString sRet(sText);
-    sal_Int32 aIndex = 0;
-    for (;;)
-    {
-        aIndex = sRet.indexOf(aKey, aIndex);
-        if ( aIndex <= 0 || aIndex >= sRet.getLength())
-            break;
-        sRet = sRet.replaceAt(aIndex, 1, rtl::Concat2View(OUStringChar(aEscapeChar) + OUStringChar(aKey))  );
-        aIndex += 2;
-    }
-
-    return sRet;
-}
-
 sal_Int64 firebird::pow10Integer(int nDecimalCount)
 {
     sal_Int64 nRet = 1;
