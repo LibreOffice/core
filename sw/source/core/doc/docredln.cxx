@@ -569,12 +569,9 @@ std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<S
 
         if( aNewStt >= *pEnd )
             break;
-        pC = rNds.GoNext( &aNewStt.nNode );
+        pC = rNds.GoNext( &aNewStt );
         if( !pC )
             break;
-
-        aNewStt.nContent.Assign( pC, 0 );
-
     } while( aNewStt < *pEnd );
 
     return ret;
