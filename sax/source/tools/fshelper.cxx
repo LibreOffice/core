@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
 
@@ -29,12 +30,27 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
     mpSerializer(new FastSaxSerializer(xOutputStream))
 {
     if( bWriteHeader )
-        mpSerializer->startDocument();
+        startDocument();
+}
+
+void FastSerializerHelper::startDocument()
+{
+    mpSerializer->startDocument();
+}
+
+void FastSerializerHelper::endDocument()
+{
+    std::unique_ptr<FastSaxSerializer> xSerializer(std::move(mpSerializer));
+    xSerializer->endDocument();
 }
 
 FastSerializerHelper::~FastSerializerHelper()
 {
-    mpSerializer->endDocument();
+    if (mpSerializer)
+    {
+        assert(false && "call endDocument explicitly before dtor to avoid potential exceptions during dtor");
+        endDocument();
+    }
 }
 
 void FastSerializerHelper::startElement(sal_Int32 elementTokenId)

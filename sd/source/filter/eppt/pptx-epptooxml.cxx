@@ -499,8 +499,15 @@ bool PowerPointExport::exportDocument()
     WriteModifyVerifier();
 
     mPresentationFS->endElementNS(XML_p, XML_presentation);
+    mPresentationFS->endDocument();
     mPresentationFS.reset();
     // Free all FSHelperPtr, to flush data before committing storage
+    for (auto& serializer : mpSlidesFSArray)
+    {
+        if (!serializer)
+            continue;
+        serializer->endDocument();
+    }
     mpSlidesFSArray.clear();
 
     commitStorage();
@@ -1087,6 +1094,8 @@ void PowerPointExport::WriteAuthors()
     }
 
     pFS->endElementNS(XML_p, XML_cmAuthorLst);
+
+    pFS->endDocument();
 }
 
 sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor, sal_Int32& nLastIndex)
@@ -1178,6 +1187,8 @@ void PowerPointExport::WritePresentationProps()
     pFS->endElementNS(XML_p, XML_showPr);
 
     pFS->endElementNS(XML_p, XML_presentationPr);
+
+    pFS->endDocument();
 }
 
 bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
@@ -1228,6 +1239,8 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
             while (xAnnotationEnumeration->hasMoreElements());
 
             pFS->endElementNS(XML_p, XML_cmLst);
+
+            pFS->endDocument();
 
             return true;
         }
@@ -1454,6 +1467,8 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
                 u"../notesMasters/notesMaster1.xml");
 
     SAL_INFO("sd.eppt", "-----------------");
+
+    pFS->endDocument();
 }
 
 void PowerPointExport::AddLayoutIdAndRelation(const FSHelperPtr& pFS, sal_Int32 nLayoutFileId)
@@ -1554,6 +1569,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     pFS->endElementNS(XML_p, XML_sldMaster);
 
     SAL_INFO("sd.eppt", "----------------");
+
+    pFS->endDocument();
 }
 
 sal_Int32 PowerPointExport::GetLayoutFileId(sal_Int32 nOffset, sal_uInt32 nMasterNum)
@@ -1623,6 +1640,8 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     mnLayoutFileIdMax ++;
 
     xDrawPages->remove(xSlide);
+
+    pFS->endDocument();
 }
 
 void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType, bool bMaster)
@@ -2303,6 +2322,8 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, svx::Theme* pTheme)
 
     pFS->endElementNS(XML_a, XML_themeElements);
     pFS->endElementNS(XML_a, XML_theme);
+
+    pFS->endDocument();
 }
 
 bool PowerPointExport::ImplCreateDocument()
@@ -2381,6 +2402,8 @@ void PowerPointExport::WriteNotesMaster()
     pFS->endElementNS(XML_p, XML_notesMaster);
 
     SAL_INFO("sd.eppt", "----------------");
+
+    pFS->endDocument();
 }
 
 void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& sUrl, OUString& sRelId, OUString& sName)

@@ -401,6 +401,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
 #else
     (void)xModel;
 #endif
+    pChartFS->endDocument();
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
@@ -496,6 +497,8 @@ std::pair<OString, OString> DocxExport::WriteActiveXObject(const uno::Reference<
                                                               oox::getRelationship(Relationship::CONTROL),
                                                               sXMLFileName.subView(sBinaryFileName.indexOf("/") + 1)),
                                        RTL_TEXTENCODING_UTF8);
+
+    pActiveXFS->endDocument();
 
     return std::pair<OString, OString>(sXMLId, sName);
 }
@@ -673,6 +676,8 @@ void DocxExport::InitStyles()
 
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
+
+    pStylesFS->endDocument();
 }
 
 void DocxExport::WriteFootnotesEndnotes()
@@ -702,6 +707,8 @@ void DocxExport::WriteFootnotesEndnotes()
         m_pVMLExport->SetFS(m_pDocumentFS);
         m_pSdrExport->setSerializer( m_pDocumentFS );
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
+
+        pFootnotesFS->endDocument();
     }
 
     if ( !m_pAttrOutput->HasEndnotes() )
@@ -730,6 +737,8 @@ void DocxExport::WriteFootnotesEndnotes()
     m_pVMLExport->SetFS(m_pDocumentFS);
     m_pSdrExport->setSerializer( m_pDocumentFS );
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
+
+    pEndnotesFS->endDocument();
 }
 
 void DocxExport::WritePostitFields()
@@ -750,6 +759,7 @@ void DocxExport::WritePostitFields()
     const auto eHasResolved = m_pAttrOutput->WritePostitFields();
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     pPostitFS->endElementNS( XML_w, XML_comments );
+    pPostitFS->endDocument();
 
     if (eHasResolved != DocxAttributeOutput::hasResolved::yes)
         return;
@@ -770,6 +780,7 @@ void DocxExport::WritePostitFields()
     m_pAttrOutput->WritePostItFieldsResolved();
     m_pAttrOutput->SetSerializer(m_pDocumentFS);
     pPostitFS->endElementNS(XML_w15, XML_commentsEx);
+    pPostitFS->endDocument();
 }
 
 void DocxExport::WriteNumbering()
@@ -808,6 +819,8 @@ void DocxExport::WriteNumbering()
     // switch the serializer back
     m_pDrawingML->SetFS( m_pDocumentFS );
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
+
+    pNumberingFS->endDocument();
 }
 
 void DocxExport::WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const char* pType )
@@ -880,6 +893,8 @@ void DocxExport::WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const
     m_pDocumentFS->singleElementNS( XML_w, nReference,
             FSNS( XML_w, XML_type ), pType,
             FSNS( XML_r, XML_id ), aRelId );
+
+    pFS->endDocument();
 }
 
 void DocxExport::WriteFonts()
@@ -906,6 +921,8 @@ void DocxExport::WriteFonts()
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
 
     pFS->endElementNS( XML_w, XML_fonts );
+
+    pFS->endDocument();
 }
 
 void DocxExport::WriteProperties( )
@@ -1431,6 +1448,8 @@ void DocxExport::WriteSettings()
 
     // finish settings.xml
     pFS->endElementNS( XML_w, XML_settings );
+
+    pFS->endDocument();
 }
 
 void DocxExport::WriteTheme()
@@ -2102,6 +2121,7 @@ DocxExport::DocxExport(DocxExportFilter& rFilter, SwDoc& rDocument,
 
 DocxExport::~DocxExport()
 {
+    m_pDocumentFS->endDocument();
 }
 
 DocxSettingsData::DocxSettingsData()

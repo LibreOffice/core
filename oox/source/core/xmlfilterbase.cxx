@@ -697,6 +697,8 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     }
 
     pCoreProps->endElementNS( XML_cp, XML_coreProperties );
+
+    pCoreProps->endDocument();
 }
 
 static void
@@ -819,6 +821,8 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     }
 
     pAppProps->endElement( XML_Properties );
+
+    pAppProps->endDocument();
 }
 
 static void
@@ -937,6 +941,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
         ++nIndex;
     }
     pAppProps->endElement( XML_Properties );
+
+    pAppProps->endDocument();
 }
 
 void XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly )

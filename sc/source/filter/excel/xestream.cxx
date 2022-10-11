@@ -1113,6 +1113,12 @@ bool XclExpXmlStream::exportDocument()
 
     PopStream();
     // Free all FSHelperPtr, to flush data before committing storage
+    for (auto& entry : maOpenedStreamMap)
+    {
+        if (!entry.second.second)
+            continue;
+        entry.second.second->endDocument();
+    }
     maOpenedStreamMap.clear();
 
     commitStorage();

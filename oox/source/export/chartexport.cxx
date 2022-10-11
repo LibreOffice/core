@@ -874,6 +874,8 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     SetFS( pChart );
     ExportContent();
+    SetFS( pFS );
+    pChart->endDocument();
 }
 
 void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )
@@ -1115,6 +1117,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
                 pDrawing->endElement(FSNS(XML_cdr, XML_relSizeAnchor));
             }
             pDrawing->endElement(FSNS(XML_c, XML_userShapes));
+            pDrawing->endDocument();
         }
     }
     catch (const uno::Exception&)
