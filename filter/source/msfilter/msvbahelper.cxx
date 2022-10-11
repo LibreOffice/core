@@ -270,6 +270,7 @@ OUString resolveVBAMacro(SfxObjectShell const* pShell, const OUString& rLibName,
     (void) rLibName;
     (void) rModuleName;
     (void) rMacroName;
+    (void) bOnlyPublic;
 #else
     if( pShell )
     {
