@@ -15,6 +15,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -55,8 +56,12 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
+    if (mxComponent)
+    {
+        uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
+        xCloseable->close(false);
+        mxComponent.clear();
+    }
 
     test::BootstrapFixture::tearDown();
 }
