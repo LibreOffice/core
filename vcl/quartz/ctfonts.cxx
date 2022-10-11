@@ -252,7 +252,7 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
                 return nullptr;
 
             hb_face_t* pHbFace = hb_face_builder_create();
-            for (auto i = 0u; i < nTags; i++)
+            for (CFIndex i = 0; i < nTags; i++)
             {
                 auto nTable = reinterpret_cast<intptr_t>(CFArrayGetValueAtIndex(pTags, i));
                 assert(nTable);
