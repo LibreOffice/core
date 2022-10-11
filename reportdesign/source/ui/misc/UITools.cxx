@@ -165,6 +165,8 @@
 #define ITEMID_POSTURE_COMPLEX          TypedWhichId<SvxPostureItem>(ITEMID_FIRST + 35)
 #define ITEMID_WEIGHT_COMPLEX           TypedWhichId<SvxWeightItem>(ITEMID_FIRST + 36)
 
+static_assert((ITEMID_WEIGHT_COMPLEX - XATTR_FILL_FIRST) == 56, "Item ids are not contiguous");
+
 #define WESTERN 0
 #define ASIAN   1
 #define COMPLEX 2
