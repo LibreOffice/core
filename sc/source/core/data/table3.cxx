@@ -2905,14 +2905,6 @@ bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
          * evaluate it has header row, but that doesn't make much sense. */
         return false;
 
-    if (nStartCol == nEndCol)
-    {
-        CellType eFirstCellType = GetCellType(nStartCol, nStartRow);
-        CellType eSecondCellType = GetCellType(nStartCol, nStartRow+1);
-        return ((eFirstCellType == CELLTYPE_STRING || eFirstCellType == CELLTYPE_EDIT) &&
-                (eSecondCellType != CELLTYPE_STRING && eSecondCellType != CELLTYPE_EDIT));
-    }
-
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
         CellType eType = GetCellType( nCol, nStartRow );
@@ -2941,14 +2933,6 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
         /* XXX NOTE: previous behavior still checked this one column and could
          * evaluate it has header column, but that doesn't make much sense. */
         return false;
-
-    if (nStartRow == nEndRow)
-    {
-        CellType eFirstCellType = GetCellType(nStartCol, nStartRow);
-        CellType eSecondCellType = GetCellType(nStartCol+1, nStartRow);
-        return ((eFirstCellType == CELLTYPE_STRING || eFirstCellType == CELLTYPE_EDIT) &&
-                (eSecondCellType != CELLTYPE_STRING && eSecondCellType != CELLTYPE_EDIT));
-    }
 
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
