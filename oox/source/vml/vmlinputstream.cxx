@@ -42,7 +42,7 @@ const char* lclFindCharacter( const char* pcBeg, const char* pcEnd, char cChar )
 
 bool lclIsWhiteSpace( char cChar )
 {
-    return cChar <= 32;
+    return cChar >= 0 && cChar <= 32;
 }
 
 const char* lclFindWhiteSpace( const char* pcBeg, const char* pcEnd )
