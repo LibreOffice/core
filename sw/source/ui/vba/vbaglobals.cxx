@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaglobals.hxx"
+#include "vbawordbasic.hxx"
 #include <sal/log.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -124,6 +125,14 @@ uno::Reference<word::XSelection > SAL_CALL
 SwVbaGlobals::getSelection()
 {
     return getApplication()->getSelection();
+}
+
+uno::Reference<word::XWordBasic> SAL_CALL SwVbaGlobals::getWordBasic()
+{
+    assert(dynamic_cast<SwVbaApplication*>(getApplication().get()));
+    SwVbaApplication* pVbaApp = static_cast<SwVbaApplication*>(getApplication().get());
+    uno::Reference<word::XWordBasic> xWB(new SwWordBasic(pVbaApp));
+    return xWB;
 }
 
 float SAL_CALL SwVbaGlobals::CentimetersToPoints( float Centimeters )

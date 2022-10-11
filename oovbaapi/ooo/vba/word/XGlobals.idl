@@ -31,6 +31,7 @@ interface XGlobals : com::sun::star::uno::XInterface
     [attribute, readonly] ooo::vba::word::XSystem System;
     [attribute, readonly] ooo::vba::word::XOptions Options;
     [attribute, readonly] ooo::vba::word::XSelection Selection;
+    [attribute, readonly] ooo::vba::word::XWordBasic WordBasic;
     any CommandBars( [in] any Index );
     any Documents( [in] any Index );
     any Addins( [in] any Index );
