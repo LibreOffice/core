@@ -21,6 +21,7 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 #include "xmlstyli.hxx"
+#include "xmlstyle.hxx"
 #include <document.hxx>
 #include <docuno.hxx>
 #include <olinetab.hxx>
@@ -28,6 +29,7 @@
 #include <documentimport.hxx>
 #include <unonames.hxx>
 
+#include <comphelper/extract.hxx>
 #include <unotools/configmgr.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/families.hxx>
@@ -166,6 +168,8 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     if (!xRowProperties.is())
         return;
 
+    XMLTableStyleContext* ptmpStyle = nullptr;
+
     if (!sStyleName.isEmpty())
     {
         XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(rXMLImport.GetAutoStyles()));
@@ -183,6 +187,9 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                     pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
                     pStyle->SetLastSheet(nSheet);
                 }
+
+                // for later checking of optimal row height
+                ptmpStyle = pStyle;
             }
         }
     }
@@ -209,14 +216,32 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     any >>= bOptionalHeight;
     if (bOptionalHeight)
     {
-        // Save this row for later height update
+        // Save this row for later height update, only if we have no already optimal row heights
+        // If we have already optimal row heights, recalc only the first 200 row in case of optimal document loading
         std::vector<ScDocRowHeightUpdater::TabRanges>& rRecalcRanges = rXMLImport.GetRecalcRowRanges();
         while (static_cast<SCTAB>(rRecalcRanges.size()) <= nSheet)
         {
             rRecalcRanges.emplace_back(0, pDoc->MaxRow());
         }
         rRecalcRanges.at(nSheet).mnTab = nSheet;
-        rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
+
+        // check that, we already have valid optimal row heights
+        if (nCurrentRow > 200 && ptmpStyle && !ptmpStyle->FindProperty(CTF_SC_ROWHEIGHT))
+        {
+            XMLPropertyState* pOptimalHeight = ptmpStyle->FindProperty(CTF_SC_ROWOPTIMALHEIGHT);
+            if (pOptimalHeight && ::cppu::any2bool(pOptimalHeight->maValue))
+            {
+                rRecalcRanges.at(nSheet).maRanges.setFalse(nFirstRow, nCurrentRow);
+            }
+            else
+            {
+                rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
+            }
+        }
+        else
+        {
+            rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
+        }
     }
 }
 
