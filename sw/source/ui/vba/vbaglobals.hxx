@@ -50,6 +50,7 @@ public:
     virtual css::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
     virtual css::uno::Reference<ooo::vba::word::XOptions> SAL_CALL getOptions() override;
     virtual css::uno::Reference<ooo::vba::word::XSelection> SAL_CALL getSelection() override;
+    virtual css::uno::Reference<ooo::vba::word::XWordBasic> SAL_CALL getWordBasic() override;
     virtual css::uno::Any SAL_CALL CommandBars(const css::uno::Any& aIndex) override;
     virtual css::uno::Any SAL_CALL Documents(const css::uno::Any& aIndex) override;
     virtual css::uno::Any SAL_CALL Addins(const css::uno::Any& aIndex) override;
