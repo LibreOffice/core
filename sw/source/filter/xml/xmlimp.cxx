@@ -731,9 +731,12 @@ void SwXMLImport::endDocument()
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() )
                     {
-                        pPaM->GetBound().nContent.Assign( nullptr, 0 );
-                        pPaM->GetBound(false).nContent.Assign( nullptr, 0 );
-                        pDoc->GetNodes().Delete( pPaM->GetPoint()->GetNode() );
+                        SwNode& rDelNode = pPaM->GetPoint()->GetNode();
+                        // move so we don't have a dangling SwContentIndex to the deleted node
+                        pPaM->GetPoint()->Adjust(SwNodeOffset(+1));
+                        if (pPaM->HasMark())
+                            pPaM->GetMark()->Adjust(SwNodeOffset(+1));
+                        pDoc->GetNodes().Delete( rDelNode );
                     }
                 }
             }
@@ -768,9 +771,11 @@ void SwXMLImport::endDocument()
                 }
                 else if (pCurrNd->GetText().isEmpty())
                 {
-                    pPos->nContent.Assign( nullptr, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
-                    pDoc->GetNodes().Delete( pPos->GetNode() );
+                    SwNode& rDelNode = pPos->GetNode();
+                    // move so we don't have a dangling SwContentIndex to the deleted node
+                    pPaM->GetPoint()->Adjust(SwNodeOffset(+1));
+                    pDoc->GetNodes().Delete( rDelNode );
                     pPaM->Move( fnMoveBackward );
                 }
             }

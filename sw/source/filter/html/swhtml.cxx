@@ -842,9 +842,11 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 }
                 else if (pCurrentNd->GetText().isEmpty())
                 {
-                    pPos->nContent.Assign( nullptr, 0 );
                     m_pPam->SetMark(); m_pPam->DeleteMark();
-                    m_xDoc->GetNodes().Delete( pPos->GetNode() );
+                    SwNode& rDelNode = pPos->GetNode();
+                    // move so we don't have a dangling SwContentIndex to the deleted node
+                    m_pPam->GetPoint()->Adjust(SwNodeOffset(+1));
+                    m_xDoc->GetNodes().Delete( rDelNode );
                     m_pPam->Move( fnMoveBackward );
                 }
             }
