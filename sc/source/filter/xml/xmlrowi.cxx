@@ -21,6 +21,7 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 #include "xmlstyli.hxx"
+#include "xmlstyle.hxx"
 #include <document.hxx>
 #include <docuno.hxx>
 #include <olinetab.hxx>
@@ -28,6 +29,7 @@
 #include <documentimport.hxx>
 #include <unonames.hxx>
 
+#include <comphelper/extract.hxx>
 #include <unotools/configmgr.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/families.hxx>
@@ -166,6 +168,8 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     if (!xRowProperties.is())
         return;
 
+    bool bHasRowOptimalHeight = false;
+
     if (!sStyleName.isEmpty())
     {
         XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(rXMLImport.GetAutoStyles()));
@@ -182,6 +186,14 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                     ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
                     pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
                     pStyle->SetLastSheet(nSheet);
+                }
+
+                // check that, we already have valid optimal row heights
+                XMLPropertyState* pHeight = pStyle->FindProperty(CTF_SC_ROWHEIGHT);
+                XMLPropertyState* pOptimalHeight = pStyle->FindProperty(CTF_SC_ROWOPTIMALHEIGHT);
+                if (!pHeight && pOptimalHeight && ::cppu::any2bool(pOptimalHeight->maValue))
+                {
+                    bHasRowOptimalHeight = true;
                 }
             }
         }
@@ -209,14 +221,19 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     any >>= bOptionalHeight;
     if (bOptionalHeight)
     {
-        // Save this row for later height update
+        // Save this row for later height update, only if we have no already optimal row heights
+        // If we have already optimal row heights, recalc only the first 200 row in case of optimal document loading
         std::vector<ScDocRowHeightUpdater::TabRanges>& rRecalcRanges = rXMLImport.GetRecalcRowRanges();
         while (static_cast<SCTAB>(rRecalcRanges.size()) <= nSheet)
         {
             rRecalcRanges.emplace_back(0, pDoc->MaxRow());
         }
         rRecalcRanges.at(nSheet).mnTab = nSheet;
-        rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
+        if (bHasRowOptimalHeight && nCurrentRow > 200) {
+            rRecalcRanges.at(nSheet).maRanges.setFalse(nFirstRow, nCurrentRow);
+        } else {
+            rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
+        }
     }
 }
 
