@@ -29,6 +29,7 @@
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -786,6 +787,48 @@ namespace
 #endif
         }
 
+        void testTdf104597_textrun()
+        {
+#if HAVE_FEATURE_POPPLER
+            rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
+                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/tdf104597_textrun.pdf"),
+                    new OutputWrapString(aOutput),
+                    nullptr));
+
+            // std::cout << aOutput << std::endl;
+            xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
+
+            // Test for امُ عَلَيْكَ
+            // TODO: How to get the "عَلَيْكَ" in xpath, as shown after the <text:s> tag?
+            OString xpath = "//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 14821.9583333333 2159.23861112778)']/draw:text-box/text:p/text:span";
+            OUString sContent = getXPathContent(pXmlDoc, xpath); // u"\nا\nُ\nم\n"
+            CPPUNIT_ASSERT_EQUAL(OUString(u"اُم"), sContent.replaceAll("\n", ""));
+
+            // Test for ٱلَّسَل‬ . It appears in the 3rd frame, i.e. after the امُ عَلَيْكَ which is in the 2nd frame (from left to right)
+            // thus these two frames together appear as ٱلَّسَل امُ عَلَيْكَ in Draw‬.
+            xpath = "//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span";
+            sContent = getXPathContent(pXmlDoc, xpath);
+            CPPUNIT_ASSERT_EQUAL(OUString(u"ٱلَّسَل"), sContent.replaceAll("\n", ""));
+
+            // Test for "LibreOffice LTR"
+            // TODO: How to get the "LTR" as shown after the <text:s> tag?
+            xpath = "//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 12779.375 5121.79583335)']/draw:text-box/text:p/text:span";
+            sContent = getXPathContent(pXmlDoc, xpath);
+            CPPUNIT_ASSERT_EQUAL(OUString(u"LibreOffice"), sContent.replaceAll("\n", ""));
+
+            /* Test for Chinese characters */
+            // Use last() instead of matrix below, because the matrix may be different on different OS due to fallback of Chinese fonts.
+            xpath = "//draw:frame[last()]/draw:text-box/text:p/text:span";
+            sContent = getXPathContent(pXmlDoc, xpath);
+            CPPUNIT_ASSERT_EQUAL(OUString(u"中文测试，中文"), sContent.replaceAll("\n", ""));
+#endif
+        }
+
+
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
         CPPUNIT_TEST(testOdfWriterExport);
@@ -797,6 +840,7 @@ namespace
         CPPUNIT_TEST(testTdf78427_FontFeatures);
         CPPUNIT_TEST(testTdf78427_FontWeight_MyraidProSemibold);
         CPPUNIT_TEST(testTdf143959_nameFromFontFile);
+        CPPUNIT_TEST(testTdf104597_textrun);
         CPPUNIT_TEST_SUITE_END();
     };
 

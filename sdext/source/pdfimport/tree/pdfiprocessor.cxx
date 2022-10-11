@@ -695,24 +695,6 @@ void PDFIProcessor::sortElements(Element* pEle)
     pEle->Children.sort(lr_tb_sort);
 }
 
-// helper method: get a mirrored string
-OUString PDFIProcessor::mirrorString( const OUString& i_rString )
-{
-    const sal_Int32 nLen = i_rString.getLength();
-    OUStringBuffer aMirror( nLen );
-
-    sal_Int32 i = 0;
-    while(i < nLen)
-    {
-        // read one code point
-        const sal_uInt32 nCodePoint = i_rString.iterateCodePoints( &i );
-
-        // and append it mirrored
-        aMirror.appendUtf32( GetMirroredChar(nCodePoint) );
-    }
-    return aMirror.makeStringAndClear();
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

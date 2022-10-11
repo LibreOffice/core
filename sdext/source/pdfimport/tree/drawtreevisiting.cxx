@@ -32,6 +32,7 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <comphelper/string.hxx>
 
 #include <string.h>
 #include <string_view>
@@ -122,7 +123,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
     }
 
     if (isRTL)  // If so, reverse string
-        str = PDFIProcessor::mirrorString( str );
+        str = ::comphelper::string::reverseString(str);
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
@@ -656,15 +657,6 @@ static bool isSpaces(TextElement* pTextElem)
     return true;
 }
 
-static bool notTransformed(const GraphicsContext& GC)
-{
-    return
-        rtl::math::approxEqual(GC.Transformation.get(0,0), 100.00) &&
-        GC.Transformation.get(1,0) == 0.00 &&
-        GC.Transformation.get(0,1) == 0.00 &&
-        rtl::math::approxEqual(GC.Transformation.get(1,1), -100.00);
-}
-
 void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
 {
     if( rParent.Children.empty() ) // this should not happen
@@ -705,13 +697,12 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                 // line and space optimization; works only in strictly horizontal mode
 
                 // concatenate consecutive text elements unless there is a
-                // font or text color or matrix change, leave a new span in that case
+                // font or text color change, leave a new span in that case
                 if( (pCur->FontId == pNext->FontId || isSpaces(pNext)) &&
                     rCurGC.FillColor.Red == rNextGC.FillColor.Red &&
                     rCurGC.FillColor.Green == rNextGC.FillColor.Green &&
                     rCurGC.FillColor.Blue == rNextGC.FillColor.Blue &&
-                    rCurGC.FillColor.Alpha == rNextGC.FillColor.Alpha &&
-                    (rCurGC.Transformation == rNextGC.Transformation || notTransformed(rNextGC))
+                    rCurGC.FillColor.Alpha == rNextGC.FillColor.Alpha
                     )
                 {
                     pCur->updateGeometryWith( pNext );
