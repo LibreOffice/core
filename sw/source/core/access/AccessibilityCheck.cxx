@@ -670,6 +670,54 @@ public:
     }
 };
 
+class SpaceSpacingCheck : public NodeCheck
+{
+public:
+    SpaceSpacingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        auto nParagraphLength = pTextNode->GetText().getLength();
+        const OUString& sParagraphText = pTextNode->GetText();
+        sal_Int32 nSpaceCount = 0;
+        sal_Int32 nSpaceStart = 0;
+        bool bNonSpaceFound = false;
+        for (sal_Int32 i = 0; i < nParagraphLength; i++)
+        {
+            if (sParagraphText[i] == ' ')
+            {
+                if (bNonSpaceFound)
+                {
+                    nSpaceCount++;
+                    if (nSpaceCount == 2)
+                        nSpaceStart = i;
+                }
+            }
+            else
+            {
+                if (nSpaceCount >= 2)
+                {
+                    auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_SPACES_SPACE),
+                                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                    pIssue->setIssueObject(IssueObject::TEXT);
+                    pIssue->setNode(pTextNode);
+                    SwDoc& rDocument = pTextNode->GetDoc();
+                    pIssue->setDoc(rDocument);
+                    pIssue->setStart(nSpaceStart);
+                    pIssue->setEnd(nSpaceStart + nSpaceCount - 1);
+                }
+                bNonSpaceFound = true;
+                nSpaceCount = 0;
+            }
+        }
+    }
+};
+
 class BlinkingTextCheck : public NodeCheck
 {
 private:
@@ -1093,6 +1141,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<TableHeadingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HeadingOrderCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NewlineSpacingCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<SpaceSpacingCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
