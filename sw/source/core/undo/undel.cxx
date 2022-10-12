@@ -432,9 +432,6 @@ SwUndoDelete::SwUndoDelete(
         m_nNdDiff -= rPam.GetPoint()->GetNodeIndex();
     }
 
-    if( !rPam.GetPointNode().IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( nullptr, 0 );
-
     // is a history necessary here at all?
     if( m_pHistory && !m_pHistory->Count() )
         m_pHistory.reset();
