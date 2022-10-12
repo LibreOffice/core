@@ -546,9 +546,6 @@ public:
 
     static bool                     GetDockingFloatsSupported();
 
-    void                            SetFontColor( const Color& rColor );
-    const Color&                    GetFontColor() const;
-
     void                            SetToolbarIconSize( ToolbarIconSize nSize );
     ToolbarIconSize                 GetToolbarIconSize() const;
     Size                            GetToolbarIconSizePixel() const;

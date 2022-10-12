@@ -418,7 +418,6 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
         { "linkColor", &pStyle->maLinkColor },
         { "visitedLinkColor", &pStyle->maVisitedLinkColor },
         { "toolTextColor", &pStyle->maToolTextColor },
-        { "fontColor", &pStyle->maFontColor },
     };
 
     rWidgetDefinition.mpStyle = pStyle;

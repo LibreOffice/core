@@ -60,7 +60,7 @@ void VclDrawModeTest::testDrawModeLineColor()
         Color(cLum, cLum, cLum),
         vcl::drawmode::GetLineColor(aColor, DrawModeFlags::GrayLine, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aStyleSettings.GetFontColor(),
+        aStyleSettings.GetWindowTextColor(),
         vcl::drawmode::GetLineColor(aColor, DrawModeFlags::SettingsLine, aStyleSettings));
 
     Color aTransparentRed = COL_RED;
@@ -180,7 +180,7 @@ void VclDrawModeTest::testDrawModeHatchColor()
         Color(cLum, cLum, cLum),
         vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::GrayLine, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aStyleSettings.GetFontColor(),
+        aStyleSettings.GetWindowTextColor(),
         vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::SettingsLine, aStyleSettings));
 
     // noops
@@ -224,7 +224,7 @@ void VclDrawModeTest::testDrawModeTextColor()
         Color(cLum, cLum, cLum),
         vcl::drawmode::GetTextColor(aColor, DrawModeFlags::GrayText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aStyleSettings.GetFontColor(),
+        aStyleSettings.GetWindowTextColor(),
         vcl::drawmode::GetTextColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
 
     // noops
@@ -318,13 +318,13 @@ void VclDrawModeTest::testDrawModeFontColor()
     aFont.SetTransparent(false);
     aTestFont = vcl::drawmode::GetFont(
         aFont, DrawModeFlags::SettingsText | DrawModeFlags::SettingsFill, aStyleSettings);
-    CPPUNIT_ASSERT_EQUAL(aStyleSettings.GetFontColor(), aTestFont.GetColor());
+    CPPUNIT_ASSERT_EQUAL(aStyleSettings.GetWindowTextColor(), aTestFont.GetColor());
     CPPUNIT_ASSERT_EQUAL(aStyleSettings.GetWindowColor(), aTestFont.GetFillColor());
 
     aFont.SetTransparent(true);
     aTestFont = vcl::drawmode::GetFont(
         aFont, DrawModeFlags::SettingsText | DrawModeFlags::SettingsFill, aStyleSettings);
-    CPPUNIT_ASSERT_EQUAL(aStyleSettings.GetFontColor(), aTestFont.GetColor());
+    CPPUNIT_ASSERT_EQUAL(aStyleSettings.GetWindowTextColor(), aTestFont.GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_RED, aTestFont.GetFillColor());
 }
 

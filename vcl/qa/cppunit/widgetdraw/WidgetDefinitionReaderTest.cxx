@@ -90,7 +90,8 @@ void WidgetDefinitionReaderTest::testRead()
     CPPUNIT_ASSERT_EQUAL(OUString("ffffff"),
                          aDefinition.mpStyle->maVisitedLinkColor.AsRGBHexString());
     CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.mpStyle->maToolTextColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.mpStyle->maFontColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"),
+                         aDefinition.mpStyle->maWindowTextColor.AsRGBHexString());
 
     // Pushbutton
     {

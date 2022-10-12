@@ -108,7 +108,6 @@ struct ImplStyleData
     Color                           maFieldColor;
     Color                           maFieldTextColor;
     Color                           maFieldRolloverTextColor;
-    Color                           maFontColor;
     Color                           maGroupTextColor;
     Color                           maHelpColor;
     Color                           maHelpTextColor;
@@ -533,7 +532,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFieldColor( rData.maFieldColor ),
     maFieldTextColor( rData.maFieldTextColor ),
     maFieldRolloverTextColor( rData.maFieldRolloverTextColor ),
-    maFontColor( rData.maFontColor ),
     maGroupTextColor( rData.maGroupTextColor ),
     maHelpColor( rData.maHelpColor ),
     maHelpTextColor( rData.maHelpTextColor ),
@@ -726,7 +724,6 @@ void ImplStyleData::SetStandardStyles()
     maLinkColor                 = COL_BLUE;
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maToolTextColor             = COL_BLACK;
-    maFontColor                 = COL_BLACK;
     maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
 
     mnTitleHeight                   = 18;
@@ -2126,19 +2123,6 @@ StyleSettings::GetDockingFloatsSupported()
 }
 
 void
-StyleSettings::SetFontColor( const Color& rColor )
-{
-    CopyData();
-    mxData->maFontColor = rColor;
-}
-
-const Color&
-StyleSettings::GetFontColor() const
-{
-    return mxData->maFontColor;
-}
-
-void
 StyleSettings::SetToolbarIconSize( ToolbarIconSize nSize )
 {
     CopyData();
@@ -2581,7 +2565,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mbPreferredContextMenuShortcuts  == rSet.mxData->mbPreferredContextMenuShortcuts)&&
          (mxData->meContextMenuShortcuts    == rSet.mxData->meContextMenuShortcuts)     &&
          (mxData->mbPrimaryButtonWarpsSlider == rSet.mxData->mbPrimaryButtonWarpsSlider) &&
-         (mxData->maFontColor               == rSet.mxData->maFontColor)                &&
          (mxData->mnEdgeBlending                    == rSet.mxData->mnEdgeBlending)                     &&
          (mxData->maEdgeBlendingTopLeftColor        == rSet.mxData->maEdgeBlendingTopLeftColor)         &&
          (mxData->maEdgeBlendingBottomRightColor    == rSet.mxData->maEdgeBlendingBottomRightColor)     &&

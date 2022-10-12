@@ -50,7 +50,6 @@
         <linkColor value="#FFFFFF"/>
         <visitedLinkColor value="#FFFFFF"/>
         <toolTextColor value="#FFFFFF"/>
-        <fontColor value="#FFFFFF"/>
     </style>
     <pushbutton>
         <part value="Entire">

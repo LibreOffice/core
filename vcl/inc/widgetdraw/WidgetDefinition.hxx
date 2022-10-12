@@ -278,7 +278,6 @@ public:
     Color maLinkColor;
     Color maVisitedLinkColor;
     Color maToolTextColor;
-    Color maFontColor;
 };
 
 class VCL_DLLPUBLIC WidgetDefinition

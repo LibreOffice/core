@@ -1082,7 +1082,6 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetLinkColor(pDefinitionStyle->maLinkColor);
     aStyleSet.SetVisitedLinkColor(pDefinitionStyle->maVisitedLinkColor);
     aStyleSet.SetToolTextColor(pDefinitionStyle->maToolTextColor);
-    aStyleSet.SetFontColor(pDefinitionStyle->maFontColor);
 
     auto& pSettings = m_pWidgetDefinition->mpSettings;
 

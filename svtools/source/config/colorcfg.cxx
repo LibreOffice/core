@@ -97,8 +97,6 @@ public:
     bool GetAutoDetectSystemHC() const {return m_bAutoDetectSystemHC;}
 
     DECL_LINK( DataChangedEventListener, VclSimpleEvent&, void );
-
-    void ImplUpdateApplicationSettings();
 };
 
 namespace {
@@ -195,8 +193,6 @@ ColorConfig_Impl::ColorConfig_Impl() :
 
     if (!utl::ConfigManager::IsFuzzing())
         Load(OUString());
-
-    ImplUpdateApplicationSettings();
 
     ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 
@@ -331,8 +327,6 @@ void ColorConfig_Impl::SettingsChanged()
 {
     SolarMutexGuard aVclGuard;
 
-    ImplUpdateApplicationSettings();
-
     NotifyListeners(ConfigurationHints::NONE);
 }
 
@@ -346,32 +340,6 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
         {
             SettingsChanged();
         }
-    }
-}
-
-
-/** updates the font color in the vcl window settings */
-void ColorConfig_Impl::ImplUpdateApplicationSettings()
-{
-    Application* pApp = GetpApp();
-    if( !pApp )
-        return;
-
-    AllSettings aSettings = Application::GetSettings();
-    StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
-
-    ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
-    if(COL_AUTO == aRet.nColor)
-        aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR);
-
-    Color aFontColor(aRet.nColor);
-
-    if( aStyleSettings.GetFontColor() != aFontColor )
-    {
-        aStyleSettings.SetFontColor( aFontColor );
-
-        aSettings.SetStyleSettings( aStyleSettings );
-        Application::SetSettings( aSettings );
     }
 }
 
