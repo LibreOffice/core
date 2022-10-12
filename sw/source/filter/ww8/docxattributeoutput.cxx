@@ -2465,11 +2465,10 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     const OUString& rPrefixMapping = m_pContentControl->GetDataBindingPrefixMappings();
     const OUString& rXpath = m_pContentControl->GetDataBindingXpath();
-    if (!rXpath.isEmpty())
+    if (SwTextNode* pTextNode = !rXpath.isEmpty() ? m_pContentControl->GetTextNode() : nullptr)
     {
         // This content control has a data binding, update the data source.
         SwTextContentControl* pTextAttr = m_pContentControl->GetTextAttr();
-        SwTextNode* pTextNode = m_pContentControl->GetTextNode();
         SwPosition aPoint(*pTextNode, pTextAttr->GetStart());
         SwPosition aMark(*pTextNode, *pTextAttr->GetEnd());
         SwPaM aPam(aMark, aPoint);
