@@ -991,6 +991,20 @@ Try:
 									&amp;	&quot;%1: An identifier\n&quot; _
 									&amp;	&quot;%2: An identifier&quot; _
 					)
+	&apos;	SF_Dialog.SetPageManager
+			.AddText(	Context := &quot;PAGEMANAGER&quot; _
+						, MsgId := &quot;The Page Manager could not be setup due to inconsistent arguments.\n\n&quot; _
+									&amp; &quot; %1 : « %2 »\n&quot; _
+									&amp; &quot; %3 : « %4 »\n&quot; _
+									&amp; &quot; %5 : « %6 »&quot; _
+						, Comment :=	&quot;SF_Dialog Page Manager setting\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A list of names separated by commas\n&quot; _
+									&amp;	&quot;%3: An identifier\n&quot; _
+									&amp;	&quot;%4: A list of names separated by commas\n&quot; _
+									&amp;	&quot;%5: An identifier\n&quot; _
+									&amp;	&quot;%6: A list of names separated by commas&quot; _
+					)
 	&apos;	SF_Database.RunSql
 			.AddText(	Context := &quot;DBREADONLY&quot; _
 						, MsgId := &quot;The database has been opened in read-only mode.\n&quot; _

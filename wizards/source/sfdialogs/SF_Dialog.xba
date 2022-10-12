@@ -50,6 +50,7 @@ Option Explicit
 REM ================================================================== EXCEPTIONS
 
 Private Const DIALOGDEADERROR		=	&quot;DIALOGDEADERROR&quot;
+Private Const PAGEMANAGERERROR		=	&quot;PAGEMANAGERERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -79,13 +80,35 @@ Private _Top				As Long
 Private _Width				As Long
 Private _Height				As Long
 
+&apos;	Page management
+Type _PageManager
+	ControlName As String					&apos; Case-sensitive name of control involved in page management
+	PageMgtType As Integer					&apos; One of the PILOTCONTROL, TABCONTROL, NEXTCONTROL, BACKCONTROL constants
+	PageNumber As Long						&apos; When &gt; 0, the page to activate for tab controls
+	ListenerType As Integer					&apos; One of the ITEMSTATECHANGED, ACTIONPERFORMED constants
+End Type
+
+Private _PageManagement		As Variant		&apos; Array of _PageManager objects, one entry by involved control
+Private _ItemListener		As Object		&apos; com.sun.star.awt.XItemListener
+Private _ActionListener		As Object		&apos; com.sun.star.awt.XActionListener
+Private _LastPage			As Long			&apos; When &gt; 0, the last page in a tabbed dialog
+
 &apos;	Persistent storage for controls
 Private _ControlCache		As Variant		&apos; Array of control objects sorted like ElementNames of the Dialog model
 
 REM ============================================================ MODULE CONSTANTS
 
-Private Const OKBUTTON		= 1
-Private Const CANCELBUTTON	= 0
+&apos;	Dialog usual buttons
+Private Const OKBUTTON			= 1
+Private Const CANCELBUTTON		= 0
+
+&apos;	Page management
+Private Const PILOTCONTROL		= 1
+Private Const TABCONTROL		= 2
+Private Const BACKCONTROL		= 3
+Private Const NEXTCONTROL		= 4
+Private Const ITEMSTATECHANGED	= 1
+Private Const ACTIONPERFORMED	= 2
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -108,6 +131,10 @@ Private Sub Class_Initialize()
 	_Top = -1
 	_Width = -1
 	_Height = -1
+	_PageManagement = Array()
+	Set _ItemListener = Nothing
+	Set _ActionListener = Nothing
+	_LastPage = 0
 	_ControlCache = Array()
 End Sub		&apos;	SFDialogs.SF_Dialog Constructor
 
@@ -223,10 +250,12 @@ End Property	&apos;	SFDialogs.SF_Dialog.OnMouseReleased (get)
 
 REM -----------------------------------------------------------------------------
 Property Get Page() As Variant
-&apos;&apos;&apos;	A dialog may have several pages that can be traversed by the user step by step. The Page property of the Dialog object defines which page of the dialog is active.
+&apos;&apos;&apos;	A dialog may have several pages that can be traversed by the user step by step.
+&apos;&apos;&apos;	The Page property of the Dialog object defines which page of the dialog is active.
 &apos;&apos;&apos;	The Page property of a control defines the page of the dialog on which the control is visible.
 &apos;&apos;&apos;	For example, if a control has a page value of 1, it is only visible on page 1 of the dialog.
-&apos;&apos;&apos;	If the page value of the dialog is increased from 1 to 2, then all controls with a page value of 1 disappear and all controls with a page value of 2 become visible.
+&apos;&apos;&apos;	If the page value of the dialog is increased from 1 to 2, then all controls with a page value of 1 disappear
+&apos;&apos;&apos;	and all controls with a page value of 2 become visible.
 	Page = _PropertyGet(&quot;Page&quot;)
 End Property	&apos;	SFDialogs.SF_Dialog.Page (get)
 
@@ -703,6 +732,7 @@ Public Function Methods() As Variant
 					, &quot;Execute&quot; _
 					, &quot;GetTextsFromL10N&quot; _
 					, &quot;Resize&quot; _
+					, &quot;SetPageManager&quot; _
 					, &quot;Terminate&quot; _
 					)
 
@@ -809,6 +839,118 @@ Catch:
 End Function	&apos;	SF_Documents.SF_Dialog.Resize
 
 REM -----------------------------------------------------------------------------
+Public Function SetPageManager(Optional ByVal PilotControls As Variant _
+									, Optional ByVal TabControls As Variant _
+									, Optional ByVal WizardControls As Variant _
+									, Optional ByVal LastPage As variant _
+									) As Boolean
+&apos;&apos;&apos;	Define how the dialog displays pages. The page manager is an alternative to the
+&apos;&apos;&apos;	direct use of the Page property of the dialog and dialogcontrol objects.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	A dialog may have several pages that can be traversed by the user step by step.
+&apos;&apos;&apos;	The Page property of the Dialog object defines which page of the dialog is active.
+&apos;&apos;&apos;	The Page property of a control defines the page of the dialog on which the control is visible.
+&apos;&apos;&apos;	For example, if a control has a page value of 1, it is only visible on page 1 of the dialog.
+&apos;&apos;&apos;	If the page value of the dialog is increased from 1 to 2, then all controls with a page value of 1 disappear
+&apos;&apos;&apos;	and all controls with a page value of 2 become visible.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	The arguments define which controls are involved in the orchestration of the displayed pages.
+&apos;&apos;&apos;	Possible options:
+&apos;&apos;&apos;		- select a value in a list- or combobox
+&apos;&apos;&apos;		- select an item in a group of radio buttons
+&apos;&apos;&apos;		- select a button linked to a page - placed side-by-side the buttons can simulate a tabbed interface
+&apos;&apos;&apos;		- press a NEXT or BACK button like in many wizards
+&apos;&apos;&apos;	Those options may be combined. The control updates will be synchronized.
+&apos;&apos;&apos;	The method will set the actual page number to 1. Afterwards the Page property may be used to display any other page
+&apos;&apos;&apos;	
+&apos;&apos;&apos;	The SetPageManager() method is to be run only once and before the Execute() statement.
+&apos;&apos;&apos;	If invoked several times, subsequent calls will be ignored.
+&apos;&apos;&apos;	The method will define new listeners on the concerned controls, addressing generic routines.
+&apos;&apos;&apos;	The corresponding events will be fired during the dialog execution.
+&apos;&apos;&apos;	Preset events (in the Basic IDE) will be preserved and executed immediately AFTER the page change.
+&apos;&apos;&apos;	The listeners will be removed at dialog termination.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PilotControls: a comma-separated list of listbox, combobox or radiobutton controls
+&apos;&apos;&apos;			For radio buttons, provide the first in the group
+&apos;&apos;&apos;		TabControls: a comma-separated list of button controls in ascending order
+&apos;&apos;&apos;		WizardControls: a comma-separated list of 2 controls, a BACK button and a NEXT button
+&apos;&apos;&apos;		LastPage: the index of the last available page. Recommended when use of WizardControls
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		dialog.SetPageManager(PilotControls := &quot;aListBox,aComboBox&quot;)	&apos;	2 controls may cause page changes
+
+Dim bManager As Boolean				&apos;	Return value
+Dim vControls As Variant			&apos;	Array of involved controls
+Dim oControl As Object				&apos;	A DialogControl object
+Dim i As Long
+Const cstPrefix = &quot;_SFTAB_&quot;		&apos;	Prefix of Subs to trigger when involved controls are clicked
+Const cstComma = &quot;,&quot;
+
+Const cstThisSub = &quot;SFDialogs.Dialog.SetPageManager&quot;
+Const cstSubArgs = &quot;[PilotControls=&quot;&quot;&quot;&quot;], [TabControls=&quot;&quot;&quot;&quot;], [WizardControls=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bManager = False
+
+Check:
+	If IsMissing(PilotControls) Or IsEmpty(PilotControls) Then PilotControls = &quot;&quot;
+	If IsMissing(TabControls) Or IsEmpty(TabControls) Then TabControls = &quot;&quot;
+	If IsMissing(WizardControls) Or IsEmpty(WizardControls) Then WizardControls = &quot;&quot;
+	If IsMissing(LastPage) Or IsEmpty(LastPage) Then LastPage = 0
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(PilotControls, &quot;PilotControls&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TabControls, &quot;TabControls&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(WizardControls, &quot;WizardControls&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(LastPage, &quot;LastPage&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+	&apos;	Ignore the call if already done before
+	If UBound(_PageManagement) &gt;= 0 Then GoTo Finally
+
+Try:
+	&apos;	Common listeners to all involved controls
+	Set _ItemListener = CreateUnoListener(cstPrefix, &quot;com.sun.star.awt.XItemListener&quot;)
+	Set _ActionListener	= CreateUnoListener(cstPrefix, &quot;com.sun.star.awt.XActionListener&quot;)
+
+	&apos;	Register the arguments in the _PageManagement array, control by control
+	&apos;	Pilot controls
+	If Len(PilotControls) &gt; 0 Then
+		vControls = Split(PilotControls, cstComma)
+		For i = 0 To UBound(vControls)
+			If Not _RegisterPageListener(Trim(vControls(i)), &quot;ListBox,ComboBox,RadioButton&quot;, PILOTCONTROL, 0, ITEMSTATECHANGED) Then GoTo Catch
+		Next i
+	End If
+	&apos;	Tab controls
+	If Len(TabControls) &gt; 0 Then
+		vControls = Split(TabControls, cstComma)
+		For i = 0 To UBound(vControls)
+			If Not _RegisterPageListener(Trim(vControls(i)), &quot;Button&quot;, TABCONTROL, i + 1, ACTIONPERFORMED) Then GoTo Catch
+		Next i
+	End If
+	&apos;	Wizard controls
+	If Len(WizardControls) &gt; 0 Then
+		vControls = Split(WizardControls, cstComma)
+		For i = 0 To UBound(vControls)
+			If Not _RegisterPageListener(Trim(vControls(i)), &quot;Button&quot;, Iif(i = 0, BACKCONTROL, NEXTCONTROL), 0, ACTIONPERFORMED) Then GoTo Catch
+		Next i
+	End If
+
+	&apos;	Set the initial page to 1
+	Page = 1
+	_LastPage = LastPage
+
+Finally:
+	SetPageManager = bManager
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	ScriptForge.SF_Exception.RaiseFatal(PAGEMANAGERERROR, &quot;PilotControls&quot;, PilotControls, &quot;TabControls&quot;, TabControls _
+				, &quot;WizardControls&quot;, WizardControls)
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.SetPageManager
+
+REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
 								, Optional ByRef Value As Variant _
 								) As Boolean
@@ -867,7 +1009,9 @@ Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 	End If
+
 Try:
+	_RemovePageListeners()
 	_DialogControl.dispose()
 	Set _DialogControl = Nothing
 	SF_Register._CleanCacheEntry(_CacheIndex)
@@ -885,6 +1029,72 @@ Catch:
 End Function	&apos;	SFDialogs.SF_Dialog.Terminate
 
 REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Private Function _FindRadioSiblings(ByVal psRadioButton As String) As String
+&apos;&apos;&apos;	Given the name of the first radio button of a group, return all the names of the group
+&apos;&apos;&apos;	For dialogs, radio buttons are considered of the same group
+&apos;&apos;&apos;	when their tab indexes are contiguous.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psRadioButton: the exact name of the 1st radio button of the group
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A comma-separated list of the names of the 1st and the next radio buttons
+&apos;&apos;&apos;		belonging to the same group in their tabindex order.
+&apos;&apos;&apos;		The input argument when not a radio button
+
+
+Dim sList As String				&apos;	Return value
+Dim oRadioControl As Object		&apos;	DialogControl instance corresponding with the argument
+Dim oControl As Object			&apos;	DialogControl instance
+Dim vRadioList As Variant		&apos;	Array of all radio buttons having a tab index &gt; tab index of argument
+								&apos;	1st column = name of radio button, 2nd = its tab index
+Dim iRadioTabIndex As Integer	&apos;	Tab index of the argument
+Dim iTabIndex As Integer		&apos;	Any tab index
+Dim vControlNames As Variant	&apos;	Array of control names
+Dim sControlName As String		&apos;	A single item in vControlNames()
+Dim i As Long
+Const cstComma = &quot;,&quot;
+
+Check:
+	On Local Error GoTo Catch
+	sList = psRadioButton
+	vRadioList = Array()
+
+Try:
+	Set oRadioControl = Controls(psRadioButton)
+	If oRadioControl.ControlType &lt;&gt; &quot;RadioButton&quot; Then GoTo Finally
+	iRadioTabIndex = oRadioControl._ControlModel.Tabindex
+	vRadioList = ScriptForge.SF_Array.AppendRow(vRadioList, Array(psRadioButton, iRadioTabIndex))
+
+	&apos;	Scan all controls. Store radio buttons having tab index &gt; 1st radio button
+	vControlNames = Controls()
+	For Each sControlName In vControlNames
+		Set oControl = Controls(sControlName)
+		With oControl
+			If .Name &lt;&gt; psRadioButton Then
+				If .ControlType = &quot;RadioButton&quot; Then
+					iTabIndex = ._ControlModel.Tabindex
+					If iTabIndex &gt; iRadioTabIndex Then
+						vRadioList = ScriptForge.SF_Array.AppendRow(vRadioList, Array(.Name, iTabIndex))
+					End If
+				End If
+			End If
+		End With
+	Next sControlName
+
+	vRadioList = ScriptForge.SF_Array.SortRows(vRadioList, 1)
+	&apos;	Retain contiuous tav indexes
+	For i = 1 To UBound(vRadioList, 1)	&apos;	First row = argument
+		If vRadioList(i, 1) = iRadioTabIndex + i Then sList = sList &amp; cstComma &amp; vRadioList(i, 0)
+	Next i
+
+Finally:
+	_FindRadioSiblings = sList
+	Exit Function
+Catch:
+	sList = psRadioButton
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog._FindRadioSiblings
 
 REM -----------------------------------------------------------------------------
 Public Function _GetEventName(ByVal psProperty As String) As String
@@ -987,6 +1197,61 @@ Catch:
 End Function	&apos;	SFDialogs.SF_Dialog._IsStillAlive
 
 REM -----------------------------------------------------------------------------
+Private Sub _JumpToPage(ByVal plPage As Long)
+&apos;&apos;&apos;	Called when the Page property is set to a new value
+&apos;&apos;&apos;	The rules defined in the _pageManagement array are applied here
+
+Dim oPageManager As Object		&apos;	A single entry in _PageManagement of type _PageManager
+Dim oControl As Object			&apos;	DialogControl instance
+Dim lPage As Long				&apos;	A dialog page number
+
+Check:
+	On Local Error GoTo Finally
+&apos;	ControlName As String					&apos; Case-sensitive name of control involved in page management
+&apos;	PageMgtType As Integer					&apos; One of the PILOTCONTROL, TABCONTROL, BACKCONTROL, NEXTCONTROL constants
+&apos;	PageNumber As Long						&apos; When &gt; 0, the page to activate for tab controls
+&apos;	ListenerType As Integer					&apos; One of the ITEMSTATECHANGED, ACTIONPERFORMED constants
+
+	If plPage &lt;= 0 Or (_LastPage &gt; 0 And plPage &gt; _LastPage) Then Exit Sub
+	If UBound(_PageManagement) &lt; 0 Then Exit Sub
+
+Try:
+	&apos;	Controls listed in the array must be synchronized with the page #
+	&apos;		Listboxes and comboboxes must be set to the corresponding value
+	&apos;		The right radio button must be selected
+	&apos;		One corresponding button must be dimmed, other must be enabled
+	&apos;		The Next button must be dimmed when last page othewide enabled
+	For Each oPageManager In _PageManagement
+		With oPageManager
+		lPage = .PageNumber
+		Set oControl = Controls(.ControlName)
+			With oControl
+				Select Case .ControlType
+					Case &quot;ListBox&quot;, &quot;ComboBox&quot;
+						If plPage &lt;= .ListCount Then .ListIndex = plPage - 1	&apos;	ListIndex is zero-based
+					Case &quot;RadioButton&quot;
+						.Value = ( plPage = lPage )
+					Case &quot;Button&quot;
+						Select Case oPageManager.PageMgtType
+							Case TABCONTROL
+								.Value = ( plPage = lPage )
+							Case BACKCONTROL
+								.Enabled = ( plPage &lt;&gt; 1 )
+							Case NEXTCONTROL
+								.Enabled = ( _LastPage = 0 Or plPage &lt; _LastPage )
+							Case Else
+						End Select
+					Case Else
+				End Select
+			End With
+		End With
+	Next oPageManager
+
+Finally:
+	Exit Sub
+End Sub			&apos;	SFDialogs.SF_Dialog._JumpToPage
+
+REM -----------------------------------------------------------------------------
 Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;	Return the value of the named property
 &apos;&apos;&apos;	Args:
@@ -1079,7 +1344,11 @@ Const cstSubArgs = &quot;Value&quot;
 			If oSession.HasUNOProperty(_DialogModel, &quot;Height&quot;) Then _DialogModel.Height = pvValue
 		Case UCase(&quot;Page&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Page&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-			If oSession.HasUNOProperty(_DialogModel, &quot;Step&quot;) Then _DialogModel.Step = CLng(pvValue)
+			If oSession.HasUNOProperty(_DialogModel, &quot;Step&quot;) Then
+				_DialogModel.Step = CLng(pvValue)
+				&apos;	Execute the page manager instructions
+				_JumpToPage(pvValue)
+			End If
 		Case UCase(&quot;Visible&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Visible&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 			If oSession.HasUnoMethod(_DialogControl, &quot;setVisible&quot;) Then _DialogControl.setVisible(pvValue)
@@ -1098,6 +1367,108 @@ Catch:
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Dialog._PropertySet
 
+REM -----------------------------------------------------------------------------
+Private Function _RegisterPageListener(ByVal psControlName As String _
+											, ByVal psControlTypes As String _
+											, ByVal piMgtType As Integer _
+											, ByVal plPageNumber As Long _
+											, ByVal piListener As Integer _
+											) As Boolean
+&apos;&apos;&apos;	Insert a new entry in the _PageManagemnt array when 1st argument is a listbox, a combobox or a button
+&apos;&apos;&apos;	or insert a new entry in the _PageManagemnt array by radio button in the same group as the 1st argument
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psControlName: name of the involved control
+&apos;&apos;&apos;		psControlTypes: comma-separated list of allowad control types
+&apos;&apos;&apos;		piMgtType: one of the PILOTCONTROL, TABCONTROL, BACKCONTROL, NEXTCONTROL constants
+&apos;&apos;&apos;		plPageNumber: when &gt; 0 the page to jump to when control is clicked
+&apos;&apos;&apos;		piListener: one of the ACTIONPERFORMED, ITEMSTATECHANGED constants
+
+Dim bRegister As Boolean			&apos;	Return value
+Dim oControl As Object				&apos;	A DialogControl object
+Dim oControl2 As Object				&apos;	An alternative DialogControl object for radio buttons
+Dim vControls As Variant			&apos;	Array of involved controls - mostly 1 item, more when radio button
+Dim oPageManager As Object			&apos;	Type _PageManager
+Dim bRadio As Boolean				&apos;	True when argument is a radio button
+Dim sName As String					&apos;	Control name
+Dim i As Long
+
+Check:
+	On Local Error GoTo Catch
+	bRegister = False
+
+Try:
+	Set oControl = Controls(psControlName)
+	With oControl
+	&apos;	Check the type of control otherwise return False
+		If InStr(psControlTypes, .ControlType) = 0 Then GoTo Catch
+		&apos;	Are there siblings ? Siblings are returned as a comma-separated list of names
+		bRadio = ( .ControlType = &quot;RadioButton&quot;)
+		If bRadio Then vControls = Split(_FindRadioSiblings(.Name), &quot;,&quot;) Else vControls = Array(.Name)
+		&apos;	Several loops when radio buttons
+		For i = 0 To UBound(vControls)
+			sName = vControls(i)
+			&apos;	Prepare the next entry in the _PageManagement array
+			Set oPageManager = New _PageManager
+			With oPageManager
+				.ControlName = sName
+				.PageMgtType = piMgtType
+				.PageNumber = Iif(bRadio, i + 1, plPageNumber)
+				.ListenerType = piListener
+			End With
+			_PageManagement = ScriptForge.SF_Array.Append(_PageManagement, oPageManager)
+			&apos;	Activate the listener
+			&apos;	Use alternative control for radio buttons &gt; first
+			If i = 0 Then Set oControl2 = oControl Else Set oControl2 = Controls(sName)
+			With oControl2
+				If piListener = ACTIONPERFORMED Then
+					._ControlView.addActionListener(_ActionListener)
+				ElseIf piListener = ITEMSTATECHANGED Then
+					._ControlView.addItemListener(_ItemListener)
+				End If
+			End With
+		Next i
+	End With
+
+	bRegister = True
+			
+Finally:
+	_RegisterPageListener = bRegister
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog._RegisterPageListener
+
+REM -----------------------------------------------------------------------------
+Private Sub _RemovePageListeners()
+&apos;&apos;&apos;	Executed at dialog termination to drop at once all listeners set by the page manager
+
+Dim oPageManager As Object		&apos;	Item of _PageManagement array of _PageManager type
+Dim oControl As Object			&apos;	DialogControl instance
+Dim i As Long
+
+	On Local Error GoTo Finally		&apos;	Never interrupt
+
+Try:
+	&apos;	Scan the _PageManagement array containing the actual settings of the page manager
+	For Each oPageManager In _PageManagement
+		With oPageManager
+			If .ListenerType &gt; 0 Then
+				Set oControl = Controls(.ControlName)
+				If .ListenerType =  ACTIONPERFORMED Then
+					oControl._ControlView.removeActionListener(_ActionListener)
+				ElseIf .ListenerType = ITEMSTATECHANGED Then
+					oControl._ControlView.addItemListener(_ItemListener)
+				End If
+			End If
+		End With
+	Next oPageManager
+
+	Set _ActionListener = Nothing
+	Set _ItemListener = Nothing
+
+Finally:
+	Exit Sub	
+End Sub			&apos;	SFDialogs.SF_Dialog._RemovePageListeners
 REM -----------------------------------------------------------------------------
 Private Function _Repr() As String
 &apos;&apos;&apos;	Convert the Model instance to a readable string, typically for debugging purposes (DebugPrint ...)

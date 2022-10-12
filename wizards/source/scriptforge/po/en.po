@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2022-05-04 18:07:20\n"
+"POT-Creation-Date: 2022-10-12 15:07:35\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -924,6 +924,23 @@ msgctxt "TEXTFIELD"
 msgid  ""
 "The control '%1' in dialog '%2' is not a multiline text field.\n"
 "The requested method could not be executed."
+msgstr ""
+
+#. SF_Dialog Page Manager setting
+#. %1: An identifier
+#. %2: A list of names separated by commas
+#. %3: An identifier
+#. %4: A list of names separated by commas
+#. %5: An identifier
+#. %6: A list of names separated by commas
+#, kde-format
+msgctxt "PAGEMANAGER"
+msgid  ""
+"The Page Manager could not be setup due to inconsistent arguments.\n"
+"\n"
+" %1 : « %2 »\n"
+" %3 : « %4 »\n"
+" %5 : « %6 »"
 msgstr ""
 
 #. SF_Database when running update SQL statement

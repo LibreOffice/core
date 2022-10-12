@@ -1815,6 +1815,10 @@ class SFDialogs:
         def Resize(self, left = -1, top = -1, width = -1, height = -1):
             return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Resize', left, top, width, height)
 
+        def SetPageManager(self, pilotcontrols = '', tabcontrols = '', wizardcontrols = '', lastpage = 0):
+            return self.ExecMethod(self.vbMethod, 'SetPageManager', pilotcontrols, tabcontrols, wizardcontrols,
+                                   lastpage)
+
         def Terminate(self):
             return self.ExecMethod(self.vbMethod, 'Terminate')
 

@@ -125,6 +125,7 @@ Const DIALOGNOTFOUNDERROR		=	&quot;DIALOGNOTFOUNDERROR&quot;
 Const DIALOGDEADERROR			=	&quot;DIALOGDEADERROR&quot;
 Const CONTROLTYPEERROR			=	&quot;CONTROLTYPEERROR&quot;
 Const TEXTFIELDERROR			=	&quot;TEXTFIELDERROR&quot;
+Const PAGEMANAGERERROR			=	&quot;PAGEMANAGERERROR&quot;
 
 &apos;	SF_Database
 Const DBREADONLYERROR			=	&quot;DBREADONLYERROR&quot;
@@ -1020,6 +1021,9 @@ Try:
 			Case TEXTFIELDERROR	&apos;	SF_DialogControl.WriteLine(ControlName, DialogName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;TEXTFIELD&quot;, pvArgs(0), pvArgs(1))
+			Case PAGEMANAGERERROR	&apos;	SF_Dialog.SetPageManager(PilotsList, TabsList, WizardsList)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;PAGEMANAGER&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4), pvArgs(5))
 			Case DBREADONLYERROR	&apos;	SF_Database.RunSql()
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DBREADONLY&quot;, vLocation(2))
