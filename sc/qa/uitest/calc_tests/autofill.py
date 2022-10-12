@@ -138,18 +138,4 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 10).getString(), "10.64.127.6")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 11).getString(), "10.64.127.7")
 
-    def test_autofill_with_suffix(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            enter_text_to_cell(gridwin, "A1", "1st")
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
-            with self.ui_test.execute_dialog_through_command(".uno:FillSeries") as xDialog:
-                xautofill = xDialog.getChild("autofill")
-                xautofill.executeAction("CLICK", tuple())
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "1st")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "2nd")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "3rd")
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

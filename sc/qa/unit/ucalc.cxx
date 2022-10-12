@@ -4730,6 +4730,18 @@ void Test::testAutoFill()
     // - Actual  : 2022-10-01 19:59:59.999
     CPPUNIT_ASSERT_EQUAL( OUString("2022-10-01 20:00:00.000"), m_pDoc->GetString( 0, 20, 0 ) );
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 0, 0, "1st" );
+
+    m_pDoc->Fill( 0, 0, 0, 0, nullptr, aMarkData, 5, FILL_TO_BOTTOM, FILL_AUTO );
+
+    CPPUNIT_ASSERT_EQUAL( OUString("1st"), m_pDoc->GetString( 0, 0, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("2nd"), m_pDoc->GetString( 0, 1, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("3rd"), m_pDoc->GetString( 0, 2, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
