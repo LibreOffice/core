@@ -205,6 +205,11 @@ static bool hasMacro(SfxObjectShell const* pShell, const OUString& sLibrary, OUS
         if (!pModule)
             return false;
         SbMethod* pMeth = pModule->FindMethod(sMacro, SbxClassType::Method);
+
+        // Must be compiled before we can trust SbxFlagBits::Private
+        if (pMeth && bOnlyPublic && !pModule->IsCompiled())
+            pModule->Compile();
+
         return pMeth && (!bOnlyPublic || !pMeth->IsSet(SbxFlagBits::Private));
     }
 
@@ -213,9 +218,17 @@ static bool hasMacro(SfxObjectShell const* pShell, const OUString& sLibrary, OUS
         SbMethod* pMeth = rModuleRef->FindMethod(sMacro, SbxClassType::Method);
         if (pMeth)
         {
-            if ((bOnlyPublic && pMeth->IsSet(SbxFlagBits::Private))
-                || rModuleRef->GetName() == sSkipModule)
+            if (rModuleRef->GetName() == sSkipModule)
                 continue;
+
+            if (bOnlyPublic)
+            {
+                if (!rModuleRef->IsCompiled())
+                    rModuleRef->Compile();
+
+                if (pMeth->IsSet(SbxFlagBits::Private))
+                    continue;
+            }
             sMod = rModuleRef->GetName();
             return true;
         }
