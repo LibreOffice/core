@@ -86,6 +86,7 @@ public:
     virtual css::uno::Any SAL_CALL DocMaximize(const css::uno::Any& State) override;
     virtual void SAL_CALL AppShow(const css::uno::Any& WindowName) override;
     virtual css::uno::Any SAL_CALL AppCount() override;
+    virtual void SAL_CALL ScreenUpdating(const css::uno::Any& On) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAWORDBASIC_HXX

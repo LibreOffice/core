@@ -242,4 +242,11 @@ css::uno::Any SAL_CALL SwWordBasic::AppCount()
     return css::uno::Any(sal_Int32(2));
 }
 
+void SAL_CALL SwWordBasic::ScreenUpdating(const uno::Any& On)
+{
+    sal_Int32 nOn;
+    if (On >>= nOn)
+        mpApp->setScreenUpdating(nOn != 0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

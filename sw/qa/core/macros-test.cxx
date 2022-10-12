@@ -107,6 +107,10 @@ void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
+            OUString("testVBA.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
+        },
+        {
             OUString("testFind.docm"),
             OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
         },
