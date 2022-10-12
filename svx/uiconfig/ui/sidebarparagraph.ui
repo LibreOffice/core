@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -33,7 +33,7 @@
     <property name="can-focus">False</property>
     <child>
       <!-- n-columns=2 n-rows=4 -->
-      <object class="GtkGrid" id="grid4">
+      <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
@@ -57,6 +57,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:LeftPara">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -67,6 +68,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CenterPara">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -77,6 +79,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:RightPara">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -87,6 +90,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:JustifyPara">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -113,6 +117,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -123,6 +128,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -148,6 +154,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertTop">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -158,6 +165,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertCenter">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -168,6 +176,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertBottom">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -223,6 +232,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceIncrease">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -233,6 +243,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceDecrease">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -356,6 +367,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:LineSpacing">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -410,6 +422,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:IncrementIndent">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -421,6 +434,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:DecrementIndent">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -432,6 +446,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:HangingIndent">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -614,88 +629,77 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkToolbar" id="numberbullet">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="spacing">6</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
+            <property name="toolbar-style">icons</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
-              <object class="GtkToolbar" id="numberbullet">
+              <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="tooltip-text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
-                <property name="toolbar-style">icons</property>
-                <property name="show-arrow">False</property>
-                <property name="icon_size">2</property>
-                <child>
-                  <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
-                    <property name="visible">True</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
-                    <property name="visible">True</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id=".uno:RemoveBullets">
-                    <property name="visible">True</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
+                <property name="can-focus">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="backgroundcolor">
+              <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="tooltip-text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="toolbar-style">icons</property>
-                <property name="show-arrow">False</property>
-                <property name="icon_size">2</property>
-                <child>
-                  <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
-                    <property name="visible">True</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
+                <property name="can-focus">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">1</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id=".uno:RemoveBullets">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">1</property>
-            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="backgroundcolor">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
+            <property name="halign">end</property>
+            <property name="hexpand">True</property>
+            <property name="toolbar-style">icons</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
       </object>
@@ -704,16 +708,5 @@
         <property name="top-attach">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="aboveparaspacingbox"/>
-      <widget name="belowparaspacingbox"/>
-      <widget name="linespacing"/>
-      <widget name="beforetextindentbox"/>
-      <widget name="aftertextindentbox"/>
-      <widget name="firstlineindentbox"/>
-    </widgets>
   </object>
 </interface>
