@@ -202,6 +202,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testDropdownContentControl)
     CPPUNIT_ASSERT(pWrtShell->HasReadonlySel());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlProtectedSection)
+{
+    // Given a document with a date content control in a protected section:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DATE);
+    pWrtShell->SelAll();
+    OUString aSectionName = pWrtShell->GetUniqueSectionName();
+    SwSectionData aSection(SectionType::Content, aSectionName);
+    aSection.SetProtectFlag(true);
+    pWrtShell->InsertSection(aSection);
+
+    // When entering the content control:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // Then make sure that the cursor is read-only:
+    // Without the accompanying fix in place, this test would have failed, it was not possible to
+    // pick a date in a protected section (the new value was inserted, but the placeholder was not
+    // removed).
+    CPPUNIT_ASSERT(!pWrtShell->HasReadonlySel());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
