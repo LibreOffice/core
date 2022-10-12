@@ -531,6 +531,8 @@ TextEditFrameOverlayObject::TextEditFrameOverlayObject(
     , mrTextEditOverlayObject(rTextEditOverlayObject)
 {
     allowAntiAliase(rTextEditOverlayObject.allowsAntiAliase());
+    // allow use of selection color even in HighContrast mode
+    mbOverruleDrawModeSettings = true;
 }
 
 TextEditFrameOverlayObject::~TextEditFrameOverlayObject()

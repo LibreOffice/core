@@ -47,6 +47,12 @@ namespace sdr::overlay
 
             const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
             const bool bIsAntiAliasing(SvtOptionsDrawinglayer::IsAntiAliasing());
+            // tdf#150622 for High Contrast we typically force colors to a single pair Fore/Back,
+            // but it seems reasonable to allow overlays to use the selection color
+            // taken from the system High Contrast settings
+            const DrawModeFlags nOriginalDrawMode(rDestinationDevice.GetDrawMode());
+            const DrawModeFlags nForceSettings = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
+                                                 DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
 
             // create processor
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
@@ -75,7 +81,20 @@ namespace sdr::overlay
                                 rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::Enable);
                             }
 
+                            const bool bOverrulesDrawModeSettings = rCandidate.overrulesDrawModeSettings();
+                            if (bOverrulesDrawModeSettings)
+                            {
+                                // overrule DrawMode settings
+                                rDestinationDevice.SetDrawMode(nOriginalDrawMode & ~nForceSettings);
+                            }
+
                             pProcessor->process(rSequence);
+
+                            if (bOverrulesDrawModeSettings)
+                            {
+                                // restore DrawMode settings
+                                rDestinationDevice.SetDrawMode(nOriginalDrawMode);
+                            }
                         }
                     }
                 }

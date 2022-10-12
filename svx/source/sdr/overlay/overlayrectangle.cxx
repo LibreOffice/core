@@ -81,6 +81,8 @@ namespace sdr::overlay
 
             // set AllowsAnimation flag to mark this object as animation capable
             mbAllowsAnimation = bAnimate;
+            // allow use of selection color even in HighContrast mode
+            mbOverruleDrawModeSettings = true;
         }
 
         void OverlayRectangle::Trigger(sal_uInt32 nTime)
