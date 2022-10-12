@@ -388,6 +388,8 @@ void SdrObjEditView::ModelHasChanged()
 
 namespace
 {
+class TextEditFrameOverlayObject;
+
 /**
         Helper class to visualize the content of an active EditView as an
         OverlayObject. These objects work with Primitives and are handled
@@ -406,6 +408,7 @@ class TextEditOverlayObject : public sdr::overlay::OverlayObject
 protected:
     /// local access to associated sdr::overlay::OverlaySelection
     std::unique_ptr<sdr::overlay::OverlaySelection> mxOverlaySelection;
+    std::unique_ptr<TextEditFrameOverlayObject> mxOverlayFrame;
 
     /// local definition depends on active OutlinerView
     OutlinerView& mrOutlinerView;
@@ -418,16 +421,12 @@ protected:
     drawinglayer::primitive2d::Primitive2DContainer maTextPrimitives;
     drawinglayer::primitive2d::Primitive2DContainer maLastTextPrimitives;
 
-    /// bitfield
-    bool mbVisualizeSurroundingFrame : 1;
-
     // geometry creation for OverlayObject, can use local *Last* values
     virtual drawinglayer::primitive2d::Primitive2DContainer
     createOverlayObjectPrimitive2DSequence() override;
 
 public:
-    TextEditOverlayObject(const Color& rColor, OutlinerView& rOutlinerView,
-                          bool bVisualizeSurroundingFrame);
+    TextEditOverlayObject(const Color& rColor, OutlinerView& rOutlinerView);
     virtual ~TextEditOverlayObject() override;
 
     // data read access
@@ -437,6 +436,8 @@ public:
     }
     const OutlinerView& getOutlinerView() const { return mrOutlinerView; }
 
+    sdr::overlay::OverlayObject* getOverlayFrame();
+
     /// override to check conditions for last createOverlayObjectPrimitive2DSequence
     virtual drawinglayer::primitive2d::Primitive2DContainer
     getOverlayObjectPrimitive2DSequence() const override;
@@ -445,24 +446,36 @@ public:
     // callback that triggers detecting if something *has* changed
     void checkDataChange(const basegfx::B2DRange& rMinTextEditArea);
     void checkSelectionChange();
+
+    const basegfx::B2DRange& getRange() const { return maRange; }
 };
+
+class TextEditFrameOverlayObject : public sdr::overlay::OverlayObject
+{
+private:
+    const TextEditOverlayObject& mrTextEditOverlayObject;
+
+    // geometry creation for OverlayObject, can use local *Last* values
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createOverlayObjectPrimitive2DSequence() override;
+
+public:
+    TextEditFrameOverlayObject(const TextEditOverlayObject& rTextEditOverlayObject);
+    using sdr::overlay::OverlayObject::objectChange;
+    virtual ~TextEditFrameOverlayObject() override;
+};
+
+sdr::overlay::OverlayObject* TextEditOverlayObject::getOverlayFrame()
+{
+    if (!mxOverlayFrame)
+        mxOverlayFrame.reset(new TextEditFrameOverlayObject(*this));
+    return mxOverlayFrame.get();
+}
 
 drawinglayer::primitive2d::Primitive2DContainer
 TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
 {
     drawinglayer::primitive2d::Primitive2DContainer aRetval;
-
-    /// outer frame visualization
-    if (mbVisualizeSurroundingFrame)
-    {
-        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
-        const sal_uInt16 nPixSiz(getOutlinerView().GetInvalidateMore() - 1);
-
-        aRetval.push_back(new drawinglayer::primitive2d::OverlayRectanglePrimitive(
-            maRange, getBaseColor().getBColor(), fTransparence, std::max(6, nPixSiz - 2), // grow
-            0.0, // shrink
-            0.0));
-    }
 
     // add buffered TextPrimitives
     aRetval.append(maTextPrimitives);
@@ -470,11 +483,27 @@ TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
     return aRetval;
 }
 
-TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& rOutlinerView,
-                                             bool bVisualizeSurroundingFrame)
+drawinglayer::primitive2d::Primitive2DContainer
+TextEditFrameOverlayObject::createOverlayObjectPrimitive2DSequence()
+{
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
+
+    /// outer frame visualization
+    const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
+    const sal_uInt16 nPixSiz(mrTextEditOverlayObject.getOutlinerView().GetInvalidateMore() - 1);
+
+    aRetval.push_back(new drawinglayer::primitive2d::OverlayRectanglePrimitive(
+        mrTextEditOverlayObject.getRange(), getBaseColor().getBColor(), fTransparence,
+        std::max(6, nPixSiz - 2), // grow
+        0.0, // shrink
+        0.0));
+
+    return aRetval;
+}
+
+TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& rOutlinerView)
     : OverlayObject(rColor)
     , mrOutlinerView(rOutlinerView)
-    , mbVisualizeSurroundingFrame(bVisualizeSurroundingFrame)
 {
     // no AA for TextEdit overlay
     allowAntiAliase(false);
@@ -490,6 +519,22 @@ TextEditOverlayObject::~TextEditOverlayObject()
 {
     mxOverlaySelection.reset();
 
+    if (getOverlayManager())
+    {
+        getOverlayManager()->remove(*this);
+    }
+}
+
+TextEditFrameOverlayObject::TextEditFrameOverlayObject(
+    const TextEditOverlayObject& rTextEditOverlayObject)
+    : OverlayObject(rTextEditOverlayObject.getBaseColor())
+    , mrTextEditOverlayObject(rTextEditOverlayObject)
+{
+    allowAntiAliase(rTextEditOverlayObject.allowsAntiAliase());
+}
+
+TextEditFrameOverlayObject::~TextEditFrameOverlayObject()
+{
     if (getOverlayManager())
     {
         getOverlayManager()->remove(*this);
@@ -579,6 +624,9 @@ void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEdi
         // if there really *was* a change signal the OverlayManager to
         // refresh this object's visualization
         objectChange();
+
+        if (mxOverlayFrame)
+            mxOverlayFrame->objectChange();
 
         // on data change, always do a SelectionChange, too
         // since the selection is an integral part of text visualization
@@ -1254,10 +1302,11 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                             {
                                 std::unique_ptr<TextEditOverlayObject> pNewTextEditOverlayObject(
                                     new TextEditOverlayObject(aHilightColor,
-                                                              *mpTextEditOutlinerView,
-                                                              bVisualizeSurroundingFrame));
+                                                              *mpTextEditOutlinerView));
 
                                 xManager->add(*pNewTextEditOverlayObject);
+                                if (bVisualizeSurroundingFrame)
+                                    xManager->add(*pNewTextEditOverlayObject->getOverlayFrame());
                                 xManager->add(const_cast<sdr::overlay::OverlaySelection&>(
                                     *pNewTextEditOverlayObject->getOverlaySelection()));
 
