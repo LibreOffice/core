@@ -206,6 +206,10 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                        .Class("OUStringLiteral")
                        .Namespace("rtl")
                        .GlobalNamespace()
+                || tc.RvalueReference()
+                       .Struct("StringNumberBase")
+                       .Namespace("rtl")
+                       .GlobalNamespace()
                 || tc.RvalueReference().Struct("OStringNumber").Namespace("rtl").GlobalNamespace()
                 || tc.RvalueReference().Struct("OUStringNumber").Namespace("rtl").GlobalNamespace()
                 || tc.ClassOrStruct("basic_string_view").StdNamespace())
@@ -214,7 +218,8 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                 break;
             }
             if (tc.RvalueReference().Struct("OStringConcat").Namespace("rtl").GlobalNamespace()
-                || tc.RvalueReference().Struct("OUStringConcat").Namespace("rtl").GlobalNamespace())
+                || tc.RvalueReference().Struct("OUStringConcat").Namespace("rtl").GlobalNamespace()
+                || tc.RvalueReference().Struct("StringConcat").Namespace("rtl").GlobalNamespace())
             {
                 argType = expr->getArg(0)->IgnoreImplicit()->getType();
                 extra = ViaConcatenation;

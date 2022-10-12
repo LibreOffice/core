@@ -83,10 +83,10 @@ bool StringConcatAuto::checkDecl( const DeclaratorDecl* decl, QualType type, con
         return true;
     auto const tc = loplugin::TypeCheck( type.getNonReferenceType().getCanonicalType());
     const char* typeString = nullptr;
-    if( tc.Struct("OUStringConcat").Namespace("rtl").GlobalNamespace())
-        typeString = "OUString";
-    else if( tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace())
-        typeString = "OString";
+    if( tc.Struct("StringConcat").Namespace("rtl").GlobalNamespace())
+        typeString = "O(U)String";
+    else if( tc.Struct("StringNumber").Namespace("rtl").GlobalNamespace())
+        typeString = "O(U)String";
     else if( tc.Struct("OUStringNumber").Namespace("rtl").GlobalNamespace())
         typeString = "OUString";
     else if( tc.Struct("OStringNumber").Namespace("rtl").GlobalNamespace())

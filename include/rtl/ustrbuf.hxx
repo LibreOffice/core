@@ -242,8 +242,8 @@ public:
      @overload
      @internal
     */
-    template< typename T >
-    OUStringBuffer( OUStringNumber< T >&& n )
+    template< typename T, std::size_t N >
+    OUStringBuffer( StringNumberBase< sal_Unicode, T, N >&& n )
         : pData(NULL)
         , nCapacity( n.length + 16 )
     {
@@ -380,8 +380,8 @@ public:
     }
 
     /** @overload @internal */
-    template<typename T>
-    OUStringBuffer & operator =(OUStringNumber<T> && n)
+    template<typename T, std::size_t N>
+    OUStringBuffer & operator =(StringNumberBase<sal_Unicode, T, N> && n)
     {
         *this = OUStringBuffer( std::move( n ) );
         return *this;
@@ -722,8 +722,8 @@ public:
      @overload
      @internal
     */
-    template< typename T >
-    OUStringBuffer& append( OUStringNumber< T >&& c )
+    template< typename T, std::size_t N >
+    OUStringBuffer& append( StringNumberBase< sal_Unicode, T, N >&& c )
     {
         return append( c.buf, c.length );
     }
@@ -1767,11 +1767,8 @@ private:
 template<> struct ToStringHelper<OUStringBuffer> {
     static std::size_t length(OUStringBuffer const & s) { return s.getLength(); }
 
-    static sal_Unicode * addData(sal_Unicode * buffer, OUStringBuffer const & s) SAL_RETURNS_NONNULL
+    sal_Unicode * operator()(sal_Unicode * buffer, OUStringBuffer const & s) const SAL_RETURNS_NONNULL
     { return addDataHelper(buffer, s.getStr(), s.getLength()); }
-
-    static constexpr bool allowOStringConcat = false;
-    static constexpr bool allowOUStringConcat = true;
 };
 #endif
 

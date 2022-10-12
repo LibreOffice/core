@@ -394,8 +394,8 @@ public:
      @overload
      @internal
     */
-    template< typename T >
-    OString( OStringNumber< T >&& n )
+    template< typename T, std::size_t N >
+    OString( StringNumberBase< char, T, N >&& n )
         : OString( n.buf, n.length )
     {}
 #endif
@@ -548,12 +548,12 @@ public:
      @overload
      @internal
     */
-    template< typename T >
-    OString& operator+=( OStringNumber< T >&& n ) & {
+    template< typename T, std::size_t N >
+    OString& operator+=( StringNumberBase< char, T, N >&& n ) & {
         return operator +=(std::string_view(n.buf, n.length));
     }
-    template<typename T> void operator +=(
-        OStringNumber<T> &&) && = delete;
+    template<typename T, std::size_t N> void operator +=(
+        StringNumberBase<char, T, N> &&) && = delete;
 #endif
 
     /**
@@ -2154,16 +2154,14 @@ public:
     //
     // would not compile):
     template<typename T> [[nodiscard]] static
-    typename std::enable_if_t<
-        ToStringHelper<T>::allowOStringConcat, OStringConcat<OStringConcatMarker, T>>
+    OStringConcat<OStringConcatMarker, T>
     Concat(T const & value) { return OStringConcat<OStringConcatMarker, T>({}, value); }
 
     // This overload is needed so that an argument of type 'char const[N]' ends up as
     // 'OStringConcat<rtl::OStringConcatMarker, char const[N]>' rather than as
     // 'OStringConcat<rtl::OStringConcatMarker, char[N]>':
     template<typename T, std::size_t N> [[nodiscard]] static
-    typename std::enable_if_t<
-        ToStringHelper<T[N]>::allowOStringConcat, OStringConcat<OStringConcatMarker, T[N]>>
+    OStringConcat<OStringConcatMarker, T[N]>
     Concat(T (& value)[N]) { return OStringConcat<OStringConcatMarker, T[N]>({}, value); }
 #endif
 };
@@ -2188,24 +2186,20 @@ inline bool operator !=(StringConcatenation<char> const & lhs, OString const & r
 */
 template<>
 struct ToStringHelper< OString >
-    {
+{
     static std::size_t length( const OString& s ) { return s.getLength(); }
-    static char* addData( char* buffer, const OString& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
-    static const bool allowOStringConcat = true;
-    static const bool allowOUStringConcat = false;
-    };
+    char* operator()( char* buffer, const OString& s ) const { return addDataHelper( buffer, s.getStr(), s.getLength()); }
+};
 
 /**
  @internal
 */
 template<std::size_t N>
 struct ToStringHelper< OStringLiteral<N> >
-    {
+{
     static constexpr std::size_t length( const OStringLiteral<N>& str ) { return str.getLength(); }
-    static char* addData( char* buffer, const OStringLiteral<N>& str ) { return addDataHelper( buffer, str.getStr(), str.getLength() ); }
-    static const bool allowOStringConcat = true;
-    static const bool allowOUStringConcat = false;
-    };
+    char* operator()( char* buffer, const OStringLiteral<N>& str ) const { return addDataHelper( buffer, str.getStr(), str.getLength() ); }
+};
 
 /**
  @internal
