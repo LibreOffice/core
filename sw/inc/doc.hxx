@@ -112,7 +112,6 @@ struct SwSortOptions;
 struct SwDefTOXBase_Impl;
 class SwPrintUIOptions;
 struct SwConversionArgs;
-class IGrammarContact;
 class SwRenderData;
 class IDocumentUndoRedo;
 class IDocumentSettingAccess;
@@ -162,6 +161,7 @@ namespace sw {
     class DocumentLayoutManager;
     class DocumentStylePoolManager;
     class DocumentExternalDataManager;
+    class GrammarContact;
 }
 
 namespace com::sun::star {
@@ -282,7 +282,7 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwLayoutCache> mpLayoutCache;                /**< Layout cache to read and save with the
                                                                     document for a faster formatting */
 
-    std::unique_ptr<IGrammarContact> mpGrammarContact;             //< for grammar checking in paragraphs during editing
+    std::unique_ptr<sw::GrammarContact> mpGrammarContact; //< for grammar checking in paragraphs during editing
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
     css::uno::Reference< ooo::vba::word::XFind > mxVbaFind;
@@ -1559,7 +1559,7 @@ public:
     */
     bool ContainsHiddenChars() const;
 
-    IGrammarContact* getGrammarContact() const { return mpGrammarContact.get(); }
+    std::unique_ptr<sw::GrammarContact> const& getGrammarContact() const { return mpGrammarContact; }
 
     /** Marks/Unmarks a list level of a certain list
 

@@ -247,7 +247,7 @@ SwDoc::SwDoc()
     mpNumberFormatter( nullptr ),
     mpNumRuleTable( new SwNumRuleTable ),
     mpExtInputRing( nullptr ),
-    mpGrammarContact(createGrammarContact()),
+    mpGrammarContact(new sw::GrammarContact),
     mpCellStyles(new SwCellStyleTable),
     mReferenceCount(0),
     mbDtor(false),
@@ -808,13 +808,18 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
     SwLayoutCache::Write( rStream, *this );
 }
 
-IGrammarContact* getGrammarContact( const SwTextNode& rTextNode )
+namespace sw
+{
+
+sw::GrammarContact* getGrammarContact(const SwTextNode& rTextNode)
 {
     const SwDoc& rDoc = rTextNode.GetDoc();
     if (rDoc.IsInDtor())
         return nullptr;
-    return rDoc.getGrammarContact();
+    return rDoc.getGrammarContact().get();
 }
+
+} // end sw
 
 ::sfx2::IXmlIdRegistry&
 SwDoc::GetXmlIdRegistry()

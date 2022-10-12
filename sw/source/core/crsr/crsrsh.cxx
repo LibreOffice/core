@@ -1502,9 +1502,10 @@ void SwCursorShell::UpdateCursorPos()
                                      &aTmpState );
         pShellCursor->DeleteMark();
     }
-    IGrammarContact *pGrammarContact = GetDoc() ? GetDoc()->getGrammarContact() : nullptr;
-    if( pGrammarContact )
-        pGrammarContact->updateCursorPosition( *m_pCurrentCursor->GetPoint() );
+    auto* pDoc = GetDoc();
+    if (pDoc)
+        pDoc->getGrammarContact()->updateCursorPosition(*m_pCurrentCursor->GetPoint());
+
     --mnStartAction;
     if( aOldSz != GetDocSize() )
         SizeChgNotify();

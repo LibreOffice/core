@@ -19,29 +19,52 @@
 
 #pragma once
 
+#include <SwGrammarMarkUp.hxx>
+#include <svl/listener.hxx>
+#include <vcl/timer.hxx>
+
 struct SwPosition;
 class SwTextNode;
-class SwGrammarMarkUp;
 
-/** Organizer of the contact between SwTextNodes and grammar checker
-*/
-class IGrammarContact
+namespace sw
 {
+/**
+ * This class is responsible for the delayed display of grammar checks when a paragraph is edited
+ * It's a client of the paragraph the cursor points to.
+ * If the cursor position changes, updateCursorPosition has to be called
+ * If the grammar checker wants to set a grammar marker at a paragraph, he has to request
+ * the grammar list from this class. If the requested paragraph is not edited, it returns
+ * the normal grammar list. But if the paragraph is the active one, a proxy list will be returned and
+ * all changes are set in this proxy list. If the cursor leaves the paragraph the proxy list
+ * will replace the old list. If the grammar checker has completed the paragraph ('setChecked')
+ * then a timer is setup which replaces the old list as well.
+ */
+class GrammarContact final : public SvtListener
+{
+    Timer m_aTimer;
+    std::unique_ptr<SwGrammarMarkUp> m_pProxyList;
+    bool m_isFinished;
+    SwTextNode* m_pTextNode;
+    DECL_LINK(TimerRepaint, Timer*, void);
+
 public:
+    GrammarContact();
+    ~GrammarContact() { m_aTimer.Stop(); }
+
     /** Update cursor position reacts to a change of the current input cursor
         As long as the cursor in inside a paragraph, the grammar checking does
         not show new grammar faults. When the cursor leaves the paragraph, these
         faults are shown.
     @returns void
     */
-    virtual void updateCursorPosition(const SwPosition& rNewPos) = 0;
+    void updateCursorPosition(const SwPosition& rNewPos);
 
     /** getGrammarCheck checks if the given text node is blocked by the current cursor
         if not, the normal markup list is returned
         if blocked, it will return a markup list "proxy"
     @returns a markup list (grammar) for the given SwTextNode
     */
-    virtual SwGrammarMarkUp* getGrammarCheck(SwTextNode& rTextNode, bool bCreate) = 0;
+    SwGrammarMarkUp* getGrammarCheck(SwTextNode& rTextNode, bool bCreate);
 
     /** finishGrammarCheck() has to be called if a grammar checking has been completed
         for a text node. If this text node has not been hidden by the current proxy list
@@ -49,27 +72,22 @@ public:
         repaint will be triggered by a timer
     @returns void
     */
-    virtual void finishGrammarCheck(SwTextNode& rTextNode) = 0;
+    void finishGrammarCheck(SwTextNode& rTextNode);
 
-public:
-    virtual ~IGrammarContact() {}
+    void CheckBroadcaster();
 };
-
-/** Factory for a grammar contact
-@returns a new created grammar contact object
-*/
-IGrammarContact* createGrammarContact();
 
 /* Helper functions */
 
 /** getGrammarContact() delivers the grammar contact of the document (for a given textnode)
 @returns grammar contact
 */
-IGrammarContact* getGrammarContact(const SwTextNode&);
+GrammarContact* getGrammarContact(const SwTextNode&);
 
 /** finishGrammarCheck() calls the same function of the grammar contact of the document (for a given textnode)
 @returns void
 */
 void finishGrammarCheck(SwTextNode&);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

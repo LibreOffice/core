@@ -17,64 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/timer.hxx>
 #include <IGrammarContact.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <SwGrammarMarkUp.hxx>
 #include <txtfrm.hxx>
-#include <svl/listener.hxx>
 
-namespace {
-
-/*
- * This class is responsible for the delayed display of grammar checks when a paragraph is edited
- * It's a client of the paragraph the cursor points to.
- * If the cursor position changes, updateCursorPosition has to be called
- * If the grammar checker wants to set a grammar marker at a paragraph, he has to request
- * the grammar list from this class. If the requested paragraph is not edited, it returns
- * the normal grammar list. But if the paragraph is the active one, a proxy list will be returned and
- * all changes are set in this proxy list. If the cursor leaves the paragraph the proxy list
- * will replace the old list. If the grammar checker has completed the paragraph ('setChecked')
- * then a timer is setup which replaces the old list as well.
- */
-class SwGrammarContact final : public IGrammarContact, public SvtListener
+namespace sw
 {
-    Timer m_aTimer;
-    std::unique_ptr<SwGrammarMarkUp> m_pProxyList;
-    bool m_isFinished;
-    SwTextNode* m_pTextNode;
-    DECL_LINK( TimerRepaint, Timer *, void );
 
-public:
-    SwGrammarContact();
-    virtual ~SwGrammarContact() override { m_aTimer.Stop(); }
-
-    // (pure) virtual functions of IGrammarContact
-    virtual void updateCursorPosition( const SwPosition& rNewPos ) override;
-    virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) override;
-    virtual void finishGrammarCheck( SwTextNode& rTextNode ) override;
-    void CheckBroadcaster()
-    {
-        if(HasBroadcaster())
-            return;
-        m_pTextNode = nullptr;
-        m_pProxyList.reset();
-    }
-};
-
-}
-
-SwGrammarContact::SwGrammarContact()
+GrammarContact::GrammarContact()
   : m_aTimer( "sw::SwGrammarContact TimerRepaint" ),
     m_isFinished( false ),
     m_pTextNode(nullptr)
 {
     m_aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
-    m_aTimer.SetInvokeHandler( LINK(this, SwGrammarContact, TimerRepaint) );
+    m_aTimer.SetInvokeHandler( LINK(this, GrammarContact, TimerRepaint) );
 }
 
-IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
+void GrammarContact::CheckBroadcaster()
+{
+    if (HasBroadcaster())
+        return;
+    m_pTextNode = nullptr;
+    m_pProxyList.reset();
+}
+
+IMPL_LINK( GrammarContact, TimerRepaint, Timer *, pTimer, void )
 {
     CheckBroadcaster();
     if( pTimer )
@@ -89,7 +57,7 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
 }
 
 /* I'm always a client of the current paragraph */
-void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
+void GrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 {
     CheckBroadcaster();
     SwTextNode* pTextNode = rNewPos.GetNode().GetTextNode();
@@ -115,7 +83,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 }
 
 /* deliver a grammar check list for the given text node */
-SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bCreate )
+SwGrammarMarkUp* GrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bCreate )
 {
     SwGrammarMarkUp *pRet = nullptr;
     CheckBroadcaster();
@@ -155,7 +123,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
     return pRet;
 }
 
-void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
+void GrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
 {
     CheckBroadcaster();
     if( &rTextNode != m_pTextNode ) // not my paragraph
@@ -175,16 +143,13 @@ void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
     }
 }
 
-IGrammarContact* createGrammarContact()
-{
-    return new SwGrammarContact();
-}
-
 void finishGrammarCheck( SwTextNode& rTextNode )
 {
-    IGrammarContact* pGrammarContact = getGrammarContact( rTextNode );
-    if( pGrammarContact )
+    sw::GrammarContact* pGrammarContact = getGrammarContact( rTextNode );
+    if (pGrammarContact)
         pGrammarContact->finishGrammarCheck( rTextNode );
 }
+
+} // end sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

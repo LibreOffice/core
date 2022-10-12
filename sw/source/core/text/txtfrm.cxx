@@ -1801,7 +1801,7 @@ static void lcl_SetWrong( SwTextFrame& rFrame, SwTextNode const& rNode,
     if ( !rFrame.IsFollow() )
     {
         SwTextNode* pTextNode = const_cast<SwTextNode*>(&rNode);
-        IGrammarContact* pGrammarContact = getGrammarContact( *pTextNode );
+        sw::GrammarContact* pGrammarContact = getGrammarContact(*pTextNode);
         SwGrammarMarkUp* pWrongGrammar = pGrammarContact ?
             pGrammarContact->getGrammarCheck( *pTextNode, false ) :
             pTextNode->GetGrammarCheck();
