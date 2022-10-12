@@ -35,6 +35,7 @@ enum class AccessibilityIssueID
     HYPERLINK_SHORT,
     FAKE_FOOTNOTE,
     FAKE_CAPTION,
+    MANUAL_NUMBERING
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssue
