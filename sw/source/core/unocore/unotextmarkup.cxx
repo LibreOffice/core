@@ -160,7 +160,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     }
     else if ( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE )
     {
-        IGrammarContact *pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
+        sw::GrammarContact* pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
         if( pGrammarContact )
         {
             pWList = pGrammarContact->getGrammarCheck(*m_pImpl->m_pTextNode, true);
@@ -414,7 +414,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     // get appropriate list to use...
     SwGrammarMarkUp* pWList = nullptr;
     bool bRepaint = false;
-    IGrammarContact *pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
+    sw::GrammarContact* pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
     if( pGrammarContact )
     {
         pWList = pGrammarContact->getGrammarCheck(*m_pImpl->m_pTextNode, true);
