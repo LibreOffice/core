@@ -1,0 +1,103 @@
+From f929f2ffbfdd92aea755ca1d3fd1a0bfe9e2827a Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <miklos.vajna@collabora.com>
+Date: Fri, 16 Sep 2022 20:42:32 +0000
+Subject: [PATCH] Add FPDFAnnot_GetFormAdditionalActionJavaScript() API
+
+This is similar to FPDFAnnot_GetFormFieldType() and allows getting the
+JavaScript of a given event. Such JavaScripts are used e.g. on a text
+form which wants to accept dates.
+
+Bug: pdfium:1885
+Change-Id: Ieceb3042a309b9578e8a6751a60918c7e8d8f91d
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/97950
+Reviewed-by: Tom Sepez <tsepez@chromium.org>
+Commit-Queue: Lei Zhang <thestig@chromium.org>
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+---
+
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index 349348583..75bdf6cd4 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -1223,6 +1238,28 @@ FPDFAnnot_GetFormFieldType(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot) {
+   return pFormField ? static_cast<int>(pFormField->GetFieldType()) : -1;
+ }
+ 
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetFormAdditionalActionJavaScript(FPDF_FORMHANDLE hHandle,
++                                            FPDF_ANNOTATION annot,
++                                            int event,
++                                            FPDF_WCHAR* buffer,
++                                            unsigned long buflen) {
++  const CPDF_FormField* pFormField = GetFormField(hHandle, annot);
++  if (!pFormField)
++    return 0;
++
++  if (event < FPDF_ANNOT_AACTION_KEY_STROKE ||
++      event > FPDF_ANNOT_AACTION_CALCULATE) {
++    return 0;
++  }
++
++  auto type = static_cast<CPDF_AAction::AActionType>(event);
++  CPDF_AAction additional_action = pFormField->GetAdditionalAction();
++  CPDF_Action action = additional_action.GetAction(type);
++  return Utf16EncodeMaybeCopyAndReturnLength(action.GetJavaScript(), buffer,
++                                             buflen);
++}
++
+ FPDF_EXPORT unsigned long FPDF_CALLCONV
+ FPDFAnnot_GetFormFieldValue(FPDF_FORMHANDLE hHandle,
+                             FPDF_ANNOTATION annot,
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index ccfbb0f1c..0c0302c65 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -82,6 +82,16 @@ extern "C" {
+ #define FPDF_FORMFLAG_CHOICE_EDIT (1 << 18)
+ #define FPDF_FORMFLAG_CHOICE_MULTI_SELECT (1 << 21)
+ 
++// Additional actions type of form field:
++//   K, on key stroke, JavaScript action.
++//   F, on format, JavaScript action.
++//   V, on validate, JavaScript action.
++//   C, on calculate, JavaScript action.
++#define FPDF_ANNOT_AACTION_KEY_STROKE 12
++#define FPDF_ANNOT_AACTION_FORMAT 13
++#define FPDF_ANNOT_AACTION_VALIDATE 14
++#define FPDF_ANNOT_AACTION_CALCULATE 15
++
+ typedef enum FPDFANNOT_COLORTYPE {
+   FPDFANNOT_COLORTYPE_Color = 0,
+   FPDFANNOT_COLORTYPE_InteriorColor
+@@ -494,6 +504,31 @@ FPDFAnnot_GetBorder(FPDF_ANNOTATION annot,
+                     float* vertical_radius,
+                     float* border_width);
+ 
++// Experimental API.
++// Get the JavaScript of an event of the annotation's additional actions.
++// |buffer| is only modified if |buflen| is large enough to hold the whole
++// JavaScript string. If |buflen| is smaller, the total size of the JavaScript
++// is still returned, but nothing is copied.  If there is no JavaScript for
++// |event| in |annot|, an empty string is written to |buf| and 2 is returned,
++// denoting the size of the null terminator in the buffer.  On other errors,
++// nothing is written to |buffer| and 0 is returned.
++//
++//    hHandle     -   handle to the form fill module, returned by
++//                    FPDFDOC_InitFormFillEnvironment().
++//    annot       -   handle to an interactive form annotation.
++//    event       -   event type, one of the FPDF_ANNOT_AACTION_* values.
++//    buffer      -   buffer for holding the value string, encoded in UTF-16LE.
++//    buflen      -   length of the buffer in bytes.
++//
++// Returns the length of the string value in bytes, including the 2-byte
++// null terminator.
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetFormAdditionalActionJavaScript(FPDF_FORMHANDLE hHandle,
++                                            FPDF_ANNOTATION annot,
++                                            int event,
++                                            FPDF_WCHAR* buffer,
++                                            unsigned long buflen);
++
+ // Experimental API.
+ // Check if |annot|'s dictionary has |key| as a key.
+ //

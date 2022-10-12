@@ -28,7 +28,10 @@ pdfium_patches += include.patch
 
 pdfium_patches += abseil-trivial.patch
 
-pdfium_patches += annot-alternate-name.patch.1
+# https://pdfium-review.googlesource.com/c/pdfium/+/97950
+pdfium_patches += Add-FPDFAnnot_GetFormAdditionalActionJavaScript-API.patch.1
+# https://pdfium-review.googlesource.com/c/pdfium/+/98210
+pdfium_patches += Add-FPDFAnnot_GetFormFieldAlternateName-API.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 

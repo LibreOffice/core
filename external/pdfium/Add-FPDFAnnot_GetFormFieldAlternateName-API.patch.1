@@ -1,0 +1,70 @@
+From 786e8f65d620aa4be7cdd40576de992331f05d04 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <miklos.vajna@collabora.com>
+Date: Thu, 22 Sep 2022 14:20:17 +0000
+Subject: [PATCH] Add FPDFAnnot_GetFormFieldAlternateName() API
+
+This is similar to FPDFAnnot_GetFormFieldName() and allows getting the
+alternate name. Such names are used e.g. for accessibility purposes.
+
+Bug: pdfium:1892
+Change-Id: I95dc771af64d6091b742f1da21e50a99327e015b
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/98210
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+Commit-Queue: Miklos V <miklos.vajna@collabora.com>
+---
+
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index 28661ec00..9861b8158 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -1263,6 +1263,19 @@ FPDFAnnot_GetFormAdditionalActionJavaScript(FPDF_FORMHANDLE hHandle,
+                                              buflen);
+ }
+ 
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetFormFieldAlternateName(FPDF_FORMHANDLE hHandle,
++                                    FPDF_ANNOTATION annot,
++                                    FPDF_WCHAR* buffer,
++                                    unsigned long buflen) {
++  const CPDF_FormField* pFormField = GetFormField(hHandle, annot);
++  if (!pFormField)
++    return 0;
++
++  return Utf16EncodeMaybeCopyAndReturnLength(pFormField->GetAlternateName(),
++                                             buffer, buflen);
++}
++
+ FPDF_EXPORT unsigned long FPDF_CALLCONV
+ FPDFAnnot_GetFormFieldValue(FPDF_FORMHANDLE hHandle,
+                             FPDF_ANNOTATION annot,
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index 0c0302c65..333a6b23e 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -721,6 +721,26 @@ FPDFAnnot_GetFormFieldName(FPDF_FORMHANDLE hHandle,
+                            FPDF_WCHAR* buffer,
+                            unsigned long buflen);
+ 
++// Experimental API.
++// Gets the alternate name of |annot|, which is an interactive form annotation.
++// |buffer| is only modified if |buflen| is longer than the length of contents.
++// In case of error, nothing will be added to |buffer| and the return value will
++// be 0. Note that return value of empty string is 2 for "\0\0".
++//
++//    hHandle     -   handle to the form fill module, returned by
++//                    FPDFDOC_InitFormFillEnvironment().
++//    annot       -   handle to an interactive form annotation.
++//    buffer      -   buffer for holding the alternate name string, encoded in
++//                    UTF-16LE.
++//    buflen      -   length of the buffer in bytes.
++//
++// Returns the length of the string value in bytes.
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetFormFieldAlternateName(FPDF_FORMHANDLE hHandle,
++                                    FPDF_ANNOTATION annot,
++                                    FPDF_WCHAR* buffer,
++                                    unsigned long buflen);
++
+ // Experimental API.
+ // Gets the form field type of |annot|, which is an interactive form annotation.
+ //
