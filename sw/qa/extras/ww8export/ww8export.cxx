@@ -1523,10 +1523,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
 
     // emulate the behavior from tdf#94386 - insert an envelope to the
     // document
-    SfxItemSet aSet(pWrtShell->GetView().GetCurShell()->GetPool(), svl::Items<FN_ENVELOP, FN_ENVELOP>);
-    aSet.Put(SwEnvItem());
-    SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
-    SW_MOD()->ExecOther(aRequest);
+    {
+        SfxItemSet aSet(pWrtShell->GetView().GetCurShell()->GetPool(), svl::Items<FN_ENVELOP, FN_ENVELOP>);
+        aSet.Put(SwEnvItem());
+        SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
+        SW_MOD()->ExecOther(aRequest);
+    }
     reload(mpFilter, "tdf94386.odt");
 
     // check that the first and next page use different page styles
