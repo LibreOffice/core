@@ -4717,6 +4717,19 @@ void Test::testAutoFill()
     // - Actual  : 6.00000000000001
     CPPUNIT_ASSERT_EQUAL( OUString("6"), m_pDoc->GetString( 0, 50, 0 ) );
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 0, 0, "2022-10-01 00:00:00.000" );
+    m_pDoc->SetString( 0, 1, 0, "2022-10-01 01:00:00.000" );
+    m_pDoc->Fill( 0, 0, 0, 1, nullptr, aMarkData, 25, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#151460: Without the fix in place, this test would have failed with
+    // - Expected: 2022-10-01 20:00:00.000
+    // - Actual  : 2022-10-01 19:59:59.999
+    CPPUNIT_ASSERT_EQUAL( OUString("2022-10-01 20:00:00.000"), m_pDoc->GetString( 0, 20, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
