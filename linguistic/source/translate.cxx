@@ -1,7 +1,6 @@
 #include <linguistic/translate.hxx>
 #include <sal/log.hxx>
 #include <curl/curl.h>
-#include <sal/log.hxx>
 #include <rtl/string.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
