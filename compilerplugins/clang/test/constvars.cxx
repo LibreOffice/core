@@ -22,8 +22,8 @@ namespace test1
 {
 int const aFormalArgs[] = { 1, 2 };
 // expected-error@+1 {{var can be const [loplugin:constvars]}}
-static std::size_t const nMediaArgsCount = std::size(aFormalArgs);
-std::size_t foo()
+static sal_uInt16 nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
+sal_uInt16 foo()
 {
     (void)aFormalArgs;
     return nMediaArgsCount;
