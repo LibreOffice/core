@@ -136,6 +136,7 @@ public:
     void testCondFormatXLSB();
     void testPageScalingXLSX();
     void testActiveXCheckboxXLSX();
+    void testTdf60673();
     void testtdf120301_xmlSpaceParsingXLSX();
     void testUnicodeFileNameGnumeric();
     void testCondFormatFormulaListenerXLSX();
@@ -252,6 +253,7 @@ public:
     CPPUNIT_TEST(testCondFormatXLSB);
     CPPUNIT_TEST(testPageScalingXLSX);
     CPPUNIT_TEST(testActiveXCheckboxXLSX);
+    CPPUNIT_TEST(testTdf60673);
     CPPUNIT_TEST(testtdf120301_xmlSpaceParsingXLSX);
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
     CPPUNIT_TEST(testMergedCellsXLSXML);
@@ -2181,6 +2183,30 @@ void ScFiltersTest2::testActiveXCheckboxXLSX()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf60673()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf60673.", FORMAT_XLSX);
+    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
+                                                                 UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA_DrawPage(xDrawPageSupplier->getDrawPage(),
+                                                         UNO_QUERY_THROW);
+    uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(0),
+                                                         UNO_QUERY_THROW);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+
+    OUString sLabel;
+    xPropertySet->getPropertyValue("Label") >>= sLabel;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: PL: ĄŚŻŹĆŃŁÓĘ
+    // - Actual  : PL:
+    CPPUNIT_ASSERT_EQUAL(OUString(u"PL: ĄŚŻŹĆŃŁÓĘ"), sLabel);
 }
 
 void ScFiltersTest2::testtdf120301_xmlSpaceParsingXLSX()
