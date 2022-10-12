@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustmentColNumber">
@@ -27,7 +27,7 @@
         <property name="hexpand">True</property>
         <property name="border-width">6</property>
         <property name="row-spacing">3</property>
-        <property name="column-spacing">12</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="labelColNumber">
             <property name="visible">True</property>
