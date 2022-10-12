@@ -42,6 +42,26 @@ namespace sw
 {
 namespace
 {
+SwTextNode* lclSearchNextTextNode(SwNode* pCurrent)
+{
+    SwTextNode* pTextNode = nullptr;
+
+    auto nIndex = pCurrent->GetIndex();
+    auto nCount = pCurrent->GetNodes().Count();
+
+    nIndex++; // go to next node
+
+    while (pTextNode == nullptr && nIndex < nCount)
+    {
+        auto pNode = pCurrent->GetNodes()[nIndex];
+        if (pNode->IsTextNode())
+            pTextNode = pNode->GetTextNode();
+        nIndex++;
+    }
+
+    return pTextNode;
+}
+
 std::shared_ptr<sw::AccessibilityIssue>
 lclAddIssue(sfx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
             sfx::AccessibilityIssueID eIssue = sfx::AccessibilityIssueID::UNSPECIFIED)
@@ -214,8 +234,6 @@ public:
 class NumberingCheck : public NodeCheck
 {
 private:
-    SwTextNode* m_pPreviousTextNode;
-
     const std::vector<std::pair<OUString, OUString>> m_aNumberingCombinations{
         { "1.", "2." }, { "(1)", "(2)" }, { "1)", "2)" },   { "a.", "b." }, { "(a)", "(b)" },
         { "a)", "b)" }, { "A.", "B." },   { "(A)", "(B)" }, { "A)", "B)" }
@@ -224,7 +242,6 @@ private:
 public:
     NumberingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
-        , m_pPreviousTextNode(nullptr)
     {
     }
 
@@ -233,21 +250,24 @@ public:
         if (!pCurrent->IsTextNode())
             return;
 
-        if (m_pPreviousTextNode)
+        SwTextNode* pCurrentTextNode = pCurrent->GetTextNode();
+        SwTextNode* pNextTextNode = lclSearchNextTextNode(pCurrent);
+
+        if (!pNextTextNode)
+            return;
+
+        for (auto& rPair : m_aNumberingCombinations)
         {
-            for (auto& rPair : m_aNumberingCombinations)
+            if (pCurrentTextNode->GetText().startsWith(rPair.first)
+                && pNextTextNode->GetText().startsWith(rPair.second))
             {
-                if (pCurrent->GetTextNode()->GetText().startsWith(rPair.second)
-                    && m_pPreviousTextNode->GetText().startsWith(rPair.first))
-                {
-                    OUString sNumbering = rPair.first + " " + rPair.second + "...";
-                    OUString sIssueText
-                        = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
-                    lclAddIssue(m_rIssueCollection, sIssueText);
-                }
+                OUString sNumbering = rPair.first + " " + rPair.second + "...";
+                OUString sIssueText
+                    = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
+                lclAddIssue(m_rIssueCollection, sIssueText,
+                            sfx::AccessibilityIssueID::MANUAL_NUMBERING);
             }
         }
-        m_pPreviousTextNode = pCurrent->GetTextNode();
     }
 };
 
@@ -474,7 +494,6 @@ public:
 
 class TextFormattingCheck : public NodeCheck
 {
-private:
 public:
     TextFormattingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
@@ -566,6 +585,7 @@ public:
         pIssue->setStart(pTextAttr->GetStart());
         pIssue->setEnd(pTextAttr->GetAnyEnd());
     }
+
     void check(SwNode* pCurrent) override
     {
         if (!pCurrent->IsTextNode())
