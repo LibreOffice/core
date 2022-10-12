@@ -693,14 +693,14 @@ void Test::testTdf114406()
 void Test::testTdf93951()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
-    m_pDoc->SetString(ScAddress(0,0,0), "=2*" + OUStringChar(u'\x00A7') + "*2");
+    m_pDoc->SetString(ScAddress(0,0,0), u"=2*§*2");
 
     OUString aFormula = m_pDoc->GetFormula(0,0,0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: =2*§*2
     // - Actual  : =2*
-    CPPUNIT_ASSERT_EQUAL(OUString("=2*" + OUStringChar(u'\x00A7') + "*2"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"=2*§*2"), aFormula);
 
     m_pDoc->DeleteTab(0);
 }

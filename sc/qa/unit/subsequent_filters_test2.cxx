@@ -2323,8 +2323,7 @@ void ScFiltersTest2::testTdf70455()
     // Without the fix in place, this test would have failed with
     // - Expected: €780.00
     // - Actual  : Err:509
-    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(u'\x20AC') + "780.00"),
-                         rDoc.GetString(ScAddress(7, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"€780.00"), rDoc.GetString(ScAddress(7, 7, 0)));
     xDocSh->DoClose();
 }
 
