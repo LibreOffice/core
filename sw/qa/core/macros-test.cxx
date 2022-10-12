@@ -109,6 +109,10 @@ void SwMacrosTest::testVba()
         {
             OUString("testVba.doc"),
             OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
+        },
+        {
+            OUString("testVBA.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
         }
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
