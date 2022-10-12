@@ -53,7 +53,7 @@ Color GetLineColor(Color const& rColor, DrawModeFlags nDrawMode,
             }
             else if (nDrawMode & DrawModeFlags::SettingsLine)
             {
-                aColor = rStyleSettings.GetFontColor();
+                aColor = rStyleSettings.GetWindowTextColor();
             }
         }
     }
@@ -119,7 +119,7 @@ Color GetHatchColor(Color const& rColor, DrawModeFlags nDrawMode,
     }
     else if (nDrawMode & DrawModeFlags::SettingsLine)
     {
-        aColor = rStyleSettings.GetFontColor();
+        aColor = rStyleSettings.GetWindowTextColor();
     }
 
     return aColor;
@@ -149,7 +149,7 @@ Color GetTextColor(Color const& rColor, DrawModeFlags nDrawMode,
         }
         else if (nDrawMode & DrawModeFlags::SettingsText)
         {
-            aColor = rStyleSettings.GetFontColor();
+            aColor = rStyleSettings.GetWindowTextColor();
         }
     }
 
@@ -183,7 +183,7 @@ vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
         }
         else if (nDrawMode & DrawModeFlags::SettingsText)
         {
-            aTextColor = rStyleSettings.GetFontColor();
+            aTextColor = rStyleSettings.GetWindowTextColor();
         }
 
         aFont.SetColor(aTextColor);
