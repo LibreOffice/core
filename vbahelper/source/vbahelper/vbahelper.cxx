@@ -746,6 +746,27 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
     pProp[ nLength ].Value = aValue;
 }
 
+bool executeRunTimeLibrary(const std::u16string_view& rSbRtl_command, SbxArray* pParameters)
+{
+    StarBASIC* pBasic = dynamic_cast< StarBASIC* >(StarBASIC::GetActiveModule()->GetParent());
+    if (!pBasic)
+        return false;
+
+    SbxObject* pRunTimeLibrary = pBasic->GetRtl();
+    if (!pRunTimeLibrary)
+        return false;
+
+    SbxVariable* pFound = pRunTimeLibrary->Find(OUString(rSbRtl_command), SbxClassType::Method);
+    SbxMethod* pMethod = dynamic_cast<SbxMethod*>(pFound);
+    if (!pMethod)
+        return false;
+
+    pMethod->SetParameters(pParameters);
+    // Believe it or not, this actually runs the command
+    pMethod->Broadcast(SfxHintId::BasicDataWanted);
+    return true;
+}
+
 // ====UserFormGeomentryHelper====
 
 UserFormGeometryHelper::UserFormGeometryHelper(

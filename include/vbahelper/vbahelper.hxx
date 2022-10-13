@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <basic/sbxmeth.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/color.hxx>
@@ -130,6 +131,9 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC css::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
         VBAHELPER_DLLPUBLIC bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
         VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
+
+        VBAHELPER_DLLPUBLIC bool executeRunTimeLibrary(const std::u16string_view& rSbRtl_command,
+                                                       SbxArray* pParameters);
 
 class VBAHELPER_DLLPUBLIC Millimeter
 {

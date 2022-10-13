@@ -42,6 +42,7 @@ interface XWordBasic
     any DocMaximize( [in] any State );
     void AppShow( [in] any WindowName );
     any AppCount();
+    void MsgBox( [in] string Prompt );
     void ScreenUpdating( [in] /*optional*/ any On );
 };
 
