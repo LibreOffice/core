@@ -21,9 +21,10 @@
 class Chart2XShapeTest : public ChartTest
 {
 public:
-    void testFdo75075();
     void testTdf150832();
     void testTdf149204();
+    void testTdf151424();
+    void testFdo75075();
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
     void testPieChartLabels2();
@@ -36,6 +37,7 @@ public:
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testTdf150832);
     CPPUNIT_TEST(testTdf149204);
+    CPPUNIT_TEST(testTdf151424);
     CPPUNIT_TEST(testFdo75075);
     CPPUNIT_TEST(testPropertyMappingBarChart);
     CPPUNIT_TEST(testPieChartLabels1);
@@ -128,6 +130,23 @@ void Chart2XShapeTest::testTdf149204()
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     compareAgainstReference(xDumper->dump(), u"tdf149204.xml");
 }
+
+void Chart2XShapeTest::testTdf151424()
+{
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3717
+    // - Actual  : 3530
+    // - Node: /XShapes/XShape[2]/XShapes/XShape[1]
+    // - Attr: positionX
+    load(u"chart2/qa/extras/xshape/data/ods/", u"tdf151424.ods");
+    compareAgainstReference(getXShapeDumpString(), u"tdf151424.xml");
+}
+
 void Chart2XShapeTest::testFdo75075()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
