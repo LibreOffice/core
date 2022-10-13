@@ -34,8 +34,7 @@
 #include <ndtxt.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <TextCursorHelper.hxx>
-
-#include <IGrammarContact.hxx>
+#include <GrammarContact.hxx>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XTextRange.hpp>

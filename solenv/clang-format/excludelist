@@ -12734,7 +12734,7 @@ sw/source/core/tox/ToxWhitespaceStripper.cxx
 sw/source/core/tox/tox.cxx
 sw/source/core/tox/toxhlp.cxx
 sw/source/core/tox/txmsrt.cxx
-sw/source/core/txtnode/SwGrammarContact.cxx
+sw/source/core/txtnode/GrammarContact.cxx
 sw/source/core/txtnode/atrfld.cxx
 sw/source/core/txtnode/atrflyin.cxx
 sw/source/core/txtnode/atrftn.cxx

@@ -42,7 +42,7 @@
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
-#include <IGrammarContact.hxx>
+#include <GrammarContact.hxx>
 #include <viewopt.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>

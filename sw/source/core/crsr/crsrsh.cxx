@@ -55,7 +55,7 @@
 #include <unotextrange.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <IGrammarContact.hxx>
+#include <GrammarContact.hxx>
 #include <comphelper/flagguard.hxx>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
