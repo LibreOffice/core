@@ -291,7 +291,6 @@ SalData::SalData()
     mbObjClassInit = false;     // is SALOBJECTCLASS initialised
     mbInPalChange = false;      // is in WM_QUERYNEWPALETTE
     mnAppThreadId = 0;          // Id from Application-Thread
-    mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
     mpFirstIcon = nullptr;      // icon cache, points to first icon, NULL if none
     mpSharedTempFontItem = nullptr;
     mpOtherTempFontItem = nullptr;

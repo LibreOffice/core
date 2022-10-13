@@ -1887,20 +1887,15 @@ void WinSalFrame::StartPresentation( bool bStart )
 
     mbPresentation = bStart;
 
-    SalData* pSalData = GetSalData();
     if ( bStart )
     {
-        // turn off screen-saver when in Presentation mode
-        SystemParametersInfoW( SPI_GETSCREENSAVEACTIVE, 0,
-                              &(pSalData->mbScrSvrEnabled), 0 );
-        if ( pSalData->mbScrSvrEnabled )
-            SystemParametersInfoW( SPI_SETSCREENSAVEACTIVE, FALSE, nullptr, 0 );
+        // turn off screen-saver / power saving when in Presentation mode
+        SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
     }
     else
     {
-        // turn on screen-saver
-        if ( pSalData->mbScrSvrEnabled )
-            SystemParametersInfoW( SPI_SETSCREENSAVEACTIVE, pSalData->mbScrSvrEnabled, nullptr, 0 );
+        // turn on screen-saver / power saving back
+        SetThreadExecutionState(ES_CONTINUOUS);
     }
 }
 
