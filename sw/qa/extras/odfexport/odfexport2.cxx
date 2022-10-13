@@ -342,6 +342,20 @@ CPPUNIT_TEST_FIXTURE(Test, tdf99631)
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1355");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf145871)
+{
+    loadAndReload("tdf145871.odt");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3150
+    // - Actual  : 5851
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3150) , getProperty<sal_Int64>(xTableRows->getByIndex(0), "Height"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, tdf128504)
 {
     loadAndReload("tdf128504.docx");
