@@ -75,12 +75,11 @@ enum class SwCopyFlags
     CopyAll         = (1<<0), ///< copy break attributes even when source is single node
     CheckPosInFly   = (1<<1), ///< check if target position is in fly anchored at source range
     IsMoveToFly     = (1<<2), ///< MakeFlyAndMove
-    SkipBookmarks   = (1<<3), ///< skip bookmarks, but not other kind of marks
     // TODO: mbCopyIsMove? mbIsRedlineMove?
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SwCopyFlags> : is_typed_flags<SwCopyFlags, 0x0f> {};
+    template<> struct typed_flags<SwCopyFlags> : is_typed_flags<SwCopyFlags, 0x07> {};
 }
 
 enum class SwDeleteFlags
