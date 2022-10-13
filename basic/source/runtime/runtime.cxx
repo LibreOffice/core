@@ -3022,6 +3022,14 @@ bool SbiRuntime::EvaluateTopOfStackAsBool()
     {
         return false;
     }
+
+    // tdf#151503 - do not evaluate a missing optional variable to a boolean
+    if (tos->GetType() == SbxERROR && IsMissing(tos.get(), 1))
+    {
+        Error(ERRCODE_BASIC_NOT_OPTIONAL);
+        return false;
+    }
+
     if ( tos->IsObject() )
     {
         //GetBool applied to an Object attempts to dereference and evaluate
