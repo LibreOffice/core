@@ -78,7 +78,7 @@
 #include <mvsave.hxx>
 #include <istyleaccess.hxx>
 #include "swstylemanager.hxx"
-#include <IGrammarContact.hxx>
+#include <GrammarContact.hxx>
 #include <tblafmt.hxx>
 #include <MarkManager.hxx>
 #include <UndoManager.hxx>

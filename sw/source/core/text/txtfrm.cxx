@@ -66,7 +66,7 @@
 #include <fmtflcnt.hxx>
 #include <fmtcntnt.hxx>
 #include <numrule.hxx>
-#include <IGrammarContact.hxx>
+#include <GrammarContact.hxx>
 #include <calbck.hxx>
 #include <ftnidx.hxx>
 #include <ftnfrm.hxx>
