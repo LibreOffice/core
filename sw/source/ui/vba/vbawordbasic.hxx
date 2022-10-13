@@ -21,6 +21,18 @@
 
 class SwVbaApplication;
 
+/**
+ * This is a representation of the WordBasic statements and functions
+ * that were available in Word version 6.0 and Word for Windows 95.
+ *
+ * It can be specified as "Application.WordBasic." or "WordBasic.".
+ *
+ * Starting with Word 2000, old macros were automatically converted
+ * into Visual Basic modules, and the WordBasic prefix was added where
+ * no VBA methods precisely corresponded.
+ *
+ * In other words, it is a compatibility shim.
+ */
 class SwWordBasic : public cppu::WeakImplHelper<ooo::vba::word::XWordBasic>
 {
 private:
