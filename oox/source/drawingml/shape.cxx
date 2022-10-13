@@ -971,14 +971,14 @@ Reference< XShape > const & Shape::createAndInsert(
             // It depends on the object rotation angle whether scaling is applied to switched
             // width and height. MSO acts strange in that case (as of May 2021).
             const sal_Int32 nDeg(mnRotation / 60000);
-            const bool bNeedsMSOWidhtHeightToggle
+            const bool bNeedsMSOWidthHeightToggle
                 = (nDeg >= 45 && nDeg < 135) || (nDeg >= 225 && nDeg < 315);
-            if (bNeedsMSOWidhtHeightToggle)
+            if (bNeedsMSOWidthHeightToggle)
                 lcl_doSpecialMSOWidthHeightToggle(aTransformation);
 
             aTransformation.scale(fFactorX, fFactorY);
 
-            if (bNeedsMSOWidhtHeightToggle)
+            if (bNeedsMSOWidthHeightToggle)
             {
                 lcl_doSpecialMSOWidthHeightToggle(aTransformation);
                 // In case of flip the special case needs an additional 180deg rotation.
