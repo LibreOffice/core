@@ -273,7 +273,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
 
             if(pValues[nProp].hasValue())
             {
-                //to have a contiuous switch an offset is added
+                //to have a continuous switch an offset is added
                 if(nProp == 17 && !m_bIsLabel)
                     nProperty += 3;
                 if(nProperty >= 20)
@@ -398,7 +398,7 @@ void SwLabCfgItem::ImplCommit()
 
     for(int nProp = 0, nProperty = 0; nProp < aNames.getLength(); nProp++, nProperty++)
     {
-        //to have a contiuous switch an offset is added
+        //to have a continuous switch an offset is added
         if(nProp == 17 && !m_bIsLabel)
             nProperty += 3;
         switch(nProperty)

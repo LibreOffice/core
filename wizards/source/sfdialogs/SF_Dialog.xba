@@ -1083,7 +1083,7 @@ Try:
 	Next sControlName
 
 	vRadioList = ScriptForge.SF_Array.SortRows(vRadioList, 1)
-	&apos;	Retain contiuous tav indexes
+	&apos;	Retain continuous tav indexes
 	For i = 1 To UBound(vRadioList, 1)	&apos;	First row = argument
 		If vRadioList(i, 1) = iRadioTabIndex + i Then sList = sList &amp; cstComma &amp; vRadioList(i, 0)
 	Next i
