@@ -127,6 +127,12 @@ Sub verify_testOptionalsCompatible()
     ' - Actual  : 448 (Actual value of the variable)
     TestUtil.AssertEqual(TestObjectError, 449, "TestObjectError")
 
+    ' tdf#151503 - error handling of missing optional parameters (boolean operations)
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 449 (ERRCODE_BASIC_NOT_OPTIONAL - Argument not optional)
+    ' - Actual  : 0 (No error code since a missing parameter evaluates to true)
+    TestUtil.AssertEqual(TestBooleanOperations, 449, "TestBooleanOperations")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testOptionalsCompatible", Err, Error$, Erl)
@@ -229,6 +235,15 @@ On Error GoTo errorHandler
     TestObjectError = optInt
 errorHandler:
     TestObjectError = Err()
+End Function
+
+Function TestBooleanOperations(Optional optBool As Boolean)
+On Error GoTo errorHandler
+    if optBool then
+        TestBooleanOperations = 0
+    end if
+errorHandler:
+    TestBooleanOperations = Err()
 End Function
 
 Function CollectionSum(C)
