@@ -269,7 +269,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
            "instead of an %0%select{| constructed from a %2}1, pass a"
            " '%select{std::string_view|std::u16string_view}3'"
            "%select{| (or an '%select{rtl::OStringChar|rtl::OUStringChar}3')|"
-           " via '%select{rtl::Concat2View|rtl::Concat2View}3'}4",
+           " via 'rtl::Concat2View'}4",
            expr->getExprLoc())
         << expr->getType() << (argType.isNull() ? 0 : 1) << argType
         << (loplugin::TypeCheck(expr->getType()).Class("OString").Namespace("rtl").GlobalNamespace()
