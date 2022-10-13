@@ -224,7 +224,11 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
 
     Application::ImplCallEventListeners( aEvent );
 
-    if ( xWindow->isDisposed() )
+    // if we have ObjectDying, then the bIsDisposed flag has already been set,
+    // but we still need to let listeners know.
+    const bool bIgnoreDisposed = nEvent == VclEventId::ObjectDying;
+
+    if ( !bIgnoreDisposed && xWindow->isDisposed() )
         return;
 
     // If maEventListeners is empty, the XVCLWindow has not yet been initialized.
@@ -240,9 +244,9 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
         mpWindowImpl->mnEventListenersIteratingCount++;
         auto& rWindowImpl = *mpWindowImpl;
         comphelper::ScopeGuard aGuard(
-            [&rWindowImpl, &xWindow]()
+            [&rWindowImpl, &xWindow, &bIgnoreDisposed]()
             {
-                if (!xWindow->isDisposed())
+                if (bIgnoreDisposed || !xWindow->isDisposed())
                 {
                     rWindowImpl.mnEventListenersIteratingCount--;
                     if (rWindowImpl.mnEventListenersIteratingCount == 0)
@@ -252,7 +256,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
         );
         for ( const Link<VclWindowEvent&,void>& rLink : aCopy )
         {
-            if (xWindow->isDisposed()) break;
+            if (!bIgnoreDisposed && xWindow->isDisposed()) break;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( rWindowImpl.maEventListenersDeleted.find(rLink) == rWindowImpl.maEventListenersDeleted.end() )
                 rLink.Call( aEvent );
@@ -262,7 +266,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
     while ( xWindow )
     {
 
-        if ( xWindow->isDisposed() )
+        if ( !bIgnoreDisposed && xWindow->isDisposed() )
             return;
 
         auto& rWindowImpl = *xWindow->mpWindowImpl;
@@ -273,9 +277,9 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
             // we use an iterating counter/flag and a set of deleted Link's to avoid O(n^2) behaviour
             rWindowImpl.mnChildEventListenersIteratingCount++;
             comphelper::ScopeGuard aGuard(
-                [&rWindowImpl, &xWindow]()
+                [&rWindowImpl, &xWindow, &bIgnoreDisposed]()
                 {
-                    if (!xWindow->isDisposed())
+                    if (bIgnoreDisposed || !xWindow->isDisposed())
                     {
                         rWindowImpl.mnChildEventListenersIteratingCount--;
                         if (rWindowImpl.mnChildEventListenersIteratingCount == 0)
@@ -285,7 +289,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
             );
             for ( const Link<VclWindowEvent&,void>& rLink : aCopy )
             {
-                if (xWindow->isDisposed())
+                if (!bIgnoreDisposed && xWindow->isDisposed())
                     return;
                 // Check this hasn't been removed in some re-enterancy scenario fdo#47368.
                 if( rWindowImpl.maChildEventListenersDeleted.find(rLink) == rWindowImpl.maChildEventListenersDeleted.end() )
@@ -293,7 +297,7 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
             }
         }
 
-        if ( xWindow->isDisposed() )
+        if ( !bIgnoreDisposed && xWindow->isDisposed() )
             return;
 
         xWindow = xWindow->GetParent();
