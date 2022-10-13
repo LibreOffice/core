@@ -1880,6 +1880,76 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
     assertXPathContent(pXmlDoc, "//page[1]//body/tab/row/cell[2]/tab/row/cell[2]/txt", "NESTED-B1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_row)
+{
+    // load a 2-row table, and select row 2 by clicking before it
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-column.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower()->GetNext();
+    SwFrame* pRow2 = pTable->GetLower()->GetNext();
+    const SwRect& rRow2Rect = pRow2->getFrameArea();
+    Point ptRow(rRow2Rect.Left(), rRow2Rect.Top() + rRow2Rect.Height() / 2);
+
+    pWrtShell->SelectTableRowCol(ptRow);
+
+    // convert selected text content to uppercase
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[1]/cell[1]/txt[1]", "a1");
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[1]/cell[2]/txt[1]", "b1");
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[2]/cell[2]/tab/row/cell[1]/txt",
+                       "NESTED-A1");
+    // This was "a2" (bad selection of the table row)
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[2]/cell[1]/txt[1]", "A2");
+    // This was "nested-b1" (bad selection of the table row)
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[2]/cell[2]/tab/row/cell[2]/txt",
+                       "NESTED-B1");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_column)
+{
+    // load a 2-row table, and select column B by clicking before them
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-column.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // select table column by using the middle point of the top border of column B
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower()->GetNext();
+    SwFrame* pRow1 = pTable->GetLower();
+    SwFrame* pCellB1 = pRow1->GetLower()->GetNext();
+    const SwRect& rCellB1Rect = pCellB1->getFrameArea();
+    Point ptColumn(rCellB1Rect.Left() + rCellB1Rect.Width() / 2, rCellB1Rect.Top() - 5);
+
+    pWrtShell->SelectTableRowCol(ptColumn);
+
+    // convert selected text content to uppercase
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[1]/cell[1]/txt[1]", "a1");
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[2]/cell[1]/txt[1]", "a2");
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[2]/cell[2]/tab/row/cell[1]/txt",
+                       "NESTED-A1");
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[2]/cell[2]/tab/row/cell[2]/txt",
+                       "NESTED-B1");
+    // This was "b1" (bad selection of the table column)
+    assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[1]/cell[2]/txt[1]", "B1");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 {
     // load a 1-row table, and delete the row with enabled change tracking:
