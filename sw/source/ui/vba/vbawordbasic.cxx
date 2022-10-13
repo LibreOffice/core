@@ -22,6 +22,8 @@
 #include "vbamailmerge.hxx"
 #include "vbawordbasic.hxx"
 
+#include <basic/sbx.hxx>
+#include <basic/sbxvar.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <osl/file.hxx>
@@ -240,6 +242,17 @@ css::uno::Any SAL_CALL SwWordBasic::AppCount()
 
     // FIXME: Implement if necessary. Return a random number for now.
     return css::uno::Any(sal_Int32(2));
+}
+
+void SAL_CALL SwWordBasic::MsgBox(const OUString& sPrompt)
+{
+    SbxArrayRef pArgs = new SbxArray;
+    SbxVariable* pVar = new SbxVariable();
+    pVar->PutString(sPrompt);
+    pArgs->Put(pVar, 1);
+
+    if (!executeRunTimeLibrary(u"MsgBox", pArgs.get()))
+        SAL_WARN("sw.vba", "failed to execute runtime library function MsgBox (" << sPrompt << ")");
 }
 
 void SAL_CALL SwWordBasic::ScreenUpdating(const uno::Any& On)
