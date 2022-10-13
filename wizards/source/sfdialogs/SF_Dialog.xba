@@ -1220,7 +1220,7 @@ Try:
 	&apos;		Listboxes and comboboxes must be set to the corresponding value
 	&apos;		The right radio button must be selected
 	&apos;		One corresponding button must be dimmed, other must be enabled
-	&apos;		The Next button must be dimmed when last page othewide enabled
+	&apos;		The Next button must be dimmed when last page otherwise enabled
 	For Each oPageManager In _PageManagement
 		With oPageManager
 		lPage = .PageNumber
