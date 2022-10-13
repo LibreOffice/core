@@ -874,18 +874,7 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< bea
         if ( xPrevStyle.is() )
             xPrevTxt.set( xPrevStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
 
-        uno::Reference<beans::XPropertySet> xTxtProps(xTxt, uno::UNO_QUERY);
-        if (xTxtProps.is())
-        {
-            // Skip copying bookmarks, so the number of bookmarks in the source document and in the
-            // resulting doc model match.
-            xTxtProps->setPropertyValue("CopySkipsBookmarks", uno::Any(true));
-        }
         xTxt->copyText( xPrevTxt );
-        if (xTxtProps.is())
-        {
-            xTxtProps->setPropertyValue("CopySkipsBookmarks", uno::Any(false));
-        }
     }
     catch ( const uno::Exception& )
     {

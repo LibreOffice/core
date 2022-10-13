@@ -256,19 +256,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
     CPPUNIT_ASSERT_EQUAL(OUString("\x0001test\x0001"), pTextNode->GetText());
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyFlagSkipBookmarks)
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
 {
     // Given a document with a bookmark in a header that is linked later:
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "copy-flag-skip-bookmarks.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "copy-bookmarks.docx");
 
-    // When checking the # of bookmarks in the resulting doc model:
-    sal_Int32 nActual = pDoc->getIDocumentMarkAccess()->getAllMarksCount();
+    // When checking the # of non-copy bookmarks in the resulting doc model:
+    sal_Int32 nActual = 0;
+    for (auto it = pDoc->getIDocumentMarkAccess()->getBookmarksBegin();
+         it != pDoc->getIDocumentMarkAccess()->getBookmarksEnd(); ++it)
+    {
+        if ((*it)->GetName().indexOf("Copy") == -1)
+        {
+            ++nActual;
+        }
+    }
 
-    // Then make sure we have a single bookmark, with no duplications:
+    // Then make sure we have a single non-copy bookmark, with no duplications:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 2
-    // i.e. the 2nd header had a duplicated bookmark.
+    // i.e. the 2nd header had a duplicated bookmark without "Copy" in its name.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
 }
 

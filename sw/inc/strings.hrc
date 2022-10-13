@@ -1446,6 +1446,8 @@
 // in order to change %PRODUCTNAME at runtime is expensive, so limit doing that as much as possible.
 #define STR_A11Y_DESC_AUTO                  NC_("insertcaption|extended_tip|auto", "Opens the Caption dialog. It has the same information as the dialog you get by menu %PRODUCTNAME Writer - AutoCaption in the Options dialog box.")
 
+#define STR_MARK_COPY NC_("STR_MARK_COPY", "%1 Copy ")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

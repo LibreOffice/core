@@ -48,6 +48,7 @@
 #include <libxml/xmlstring.h>
 #include <libxml/xmlwriter.h>
 #include <comphelper/lok.hxx>
+#include <strings.hrc>
 
 constexpr OUStringLiteral S_ANNOTATION_BOOKMARK = u"____";
 
@@ -1717,9 +1718,10 @@ namespace sw::mark
         sal_Int32 nCnt = 1;
         MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
         if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
+        OUString aPrefix = SwResId(STR_MARK_COPY).replaceFirst("%1", rName);
         while(nCnt < SAL_MAX_INT32)
         {
-            sTmp = rName + OUString::number(nCnt);
+            sTmp = aPrefix + OUString::number(nCnt);
             nCnt++;
             if (lcl_FindMarkByName(sTmp, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
             {
