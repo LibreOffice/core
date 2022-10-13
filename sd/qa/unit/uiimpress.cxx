@@ -899,6 +899,31 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
     CPPUNIT_ASSERT_EQUAL(OUString(u"°"), xShape->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Edit", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
 {
     // To check if selecting unfilled rectangle produces unfilled rectangle
