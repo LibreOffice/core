@@ -1374,8 +1374,8 @@ Private Function _RegisterPageListener(ByVal psControlName As String _
 											, ByVal plPageNumber As Long _
 											, ByVal piListener As Integer _
 											) As Boolean
-&apos;&apos;&apos;	Insert a new entry in the _PageManagemnt array when 1st argument is a listbox, a combobox or a button
-&apos;&apos;&apos;	or insert a new entry in the _PageManagemnt array by radio button in the same group as the 1st argument
+&apos;&apos;&apos;	Insert a new entry in the _PageManagement array when 1st argument is a listbox, a combobox or a button
+&apos;&apos;&apos;	or insert a new entry in the _PageManagement array by radio button in the same group as the 1st argument
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psControlName: name of the involved control
 &apos;&apos;&apos;		psControlTypes: comma-separated list of allowad control types
