@@ -433,7 +433,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
     // not visible background but in wrong sizes of the diagram shapes too.
     uno::Reference<drawing::XShape> xBackgroundShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     awt::Size aBackgroundSize = xBackgroundShape->getSize();
-    // Toleranzes are for rounding inaccuracies.
+    // Tolerances are for rounding inaccuracies.
     // The test would have failed with Expected: 9560x5036, Actual: 2x2
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(9560), aBackgroundSize.Width, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(5036), aBackgroundSize.Height, 1);
