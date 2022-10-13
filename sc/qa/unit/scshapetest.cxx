@@ -42,8 +42,7 @@ class ScShapeTest : public CalcUnoApiTest
 {
 public:
     ScShapeTest();
-    void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                       const OUString& rFilter);
+    void saveAndReload(const OUString& rFilter);
     void testTdf143619_validation_circle_pos();
     void testTdf140252_DragCreateFormControl();
     void testTdf134355_DragCreateCustomShape();
@@ -97,6 +96,9 @@ public:
     CPPUNIT_TEST(testTdf144242_OpenBezier_noSwapWH);
     CPPUNIT_TEST(testLargeAnchorOffset);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScShapeTest::ScShapeTest()
@@ -104,19 +106,18 @@ ScShapeTest::ScShapeTest()
 {
 }
 
-void ScShapeTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                                const OUString& rFilter)
+void ScShapeTest::saveAndReload(const OUString& rFilter)
 {
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
     css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName",
                                                             rFilter) }; // e.g. "calc8"
-    css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
 
-    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
@@ -209,11 +210,11 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
     // swapped, because they report a rotation. (Rotation was introduced to align text with curve.)
 
     // Create a spreadsheet document with default row height and col width
-    uno::Reference<lang::XComponent> xComponent
+    mxComponent
         = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
 
     // Get ScDocShell
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
 
     // Insert default open Bezier curve
     ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
@@ -232,8 +233,8 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
     tools::Rectangle aExpectRect(pObj->GetSnapRect());
 
     // Save, reload and compare
-    saveAndReload(xComponent, "Calc Office Open XML");
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    saveAndReload("Calc Office Open XML");
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
@@ -249,11 +250,11 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
     // swapped, because they report a rotation. (Rotation was introduced to align text with line.)
 
     // Create a spreadsheet document with default row height and col width
-    uno::Reference<lang::XComponent> xComponent
+    mxComponent
         = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
 
     // Get ScDocShell
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
 
     // Insert default line
     ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
@@ -272,8 +273,8 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
     tools::Rectangle aExpectRect(pObj->GetSnapRect());
 
     // Save, reload and compare
-    saveAndReload(xComponent, "Calc Office Open XML");
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    saveAndReload("Calc Office Open XML");
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
@@ -289,10 +290,10 @@ void ScShapeTest::testTdf143619_validation_circle_pos()
 
     OUString aFileURL;
     createFileURL(u"tdf143619_validationCirclePos.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Get shape. That is the validation circle.
@@ -303,10 +304,10 @@ void ScShapeTest::testTdf143619_validation_circle_pos()
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
     };
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
-    dispatchCommand(xComponent, ".uno:DeleteRows", {});
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
-    dispatchCommand(xComponent, ".uno:DeleteColumns", {});
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
 
     // Without fix in place the position was (2007, 833)
     Point aPos = pObj->GetSnapRect().TopLeft();
@@ -322,10 +323,10 @@ void ScShapeTest::testTdf140252_DragCreateFormControl()
     // Load an empty document.
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get ScTabViewShell
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
 
     // drag-create a push button as example of form control
@@ -373,10 +374,10 @@ void ScShapeTest::testTdf134355_DragCreateCustomShape()
     // Load an empty document.
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get ScTabView
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
 
@@ -384,7 +385,7 @@ void ScShapeTest::testTdf134355_DragCreateCustomShape()
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue("SymbolShapes", OUString("smiley")),
     };
-    dispatchCommand(xComponent, ".uno:SymbolShapes", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:SymbolShapes", aPropertyValues);
     // above includes creation of FuConstCustomShape and call of its Activate() method
     FuConstCustomShape* pFuConstCS = static_cast<FuConstCustomShape*>(pTabView->GetDrawFuncPtr());
     CPPUNIT_ASSERT(pFuConstCS);
@@ -417,10 +418,10 @@ void ScShapeTest::testTdf140252_LayerOfControl()
     // Load an empty document.
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get ScDocShell
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
 
     // Create default push button
     SfxUInt16Item aIdentifierItem(SID_FM_CONTROL_IDENTIFIER,
@@ -453,10 +454,10 @@ void ScShapeTest::testTdf137082_LTR_to_RTL()
 
     OUString aFileURL;
     createFileURL(u"tdf137082_LTR_arrow_image.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Get objects and their transformation angles
@@ -487,10 +488,10 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
     // reloading. The file contains one custom shape with "resize" and another one without.
     OUString aFileURL;
     createFileURL(u"tdf137082_RTL_cell_anchored.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Expected values.
@@ -507,11 +508,11 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
     lcl_AssertRectEqualWithTolerance("load shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
 
     // Save and reload.
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
 
     // And test again
@@ -529,10 +530,10 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     // contains measure line, polyline and transformed custom shape.
     OUString aFileURL;
     createFileURL(u"tdf137081_RTL_page_anchored.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Expected values.
@@ -564,11 +565,11 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
                                       pObjCS->GetLogicRect().TopLeft(), 1);
 
     // Save and reload.
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
 
     // And test again
@@ -595,10 +596,10 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     // Load an empty document.
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and draw page
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrPage* pPage = lcl_getSdrPageWithAssert(rDoc);
 
@@ -617,11 +618,11 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     pObj.clear();
 
     // Save and reload.
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and object
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = static_cast<SdrRectObj*>(lcl_getSdrObjectWithAssert(rDoc2, 0));
 
@@ -636,10 +637,10 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     // if such shape was anchored "resize with cell", then after save and reload it was distorted.
     OUString aFileURL;
     createFileURL(u"tdf137033_FlipHoriRotCustomShape.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
@@ -650,11 +651,11 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
 
     // Save and reload.
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and shape
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc2, 0));
 
@@ -674,10 +675,10 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     // Load a document, which has a rotated and sheared shape, anchored to cell with resize.
     OUString aFileURL;
     createFileURL(u"tdf137033_RotShearResizeAnchor.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Hide rows 4 and 5 (UI number), which are inside the shape and thus change shape geometry
@@ -703,11 +704,11 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     lcl_AssertRectEqualWithTolerance("Load: wrong pos or size", aExpectRect, aSnapRect, 1);
 
     // Save and reload.
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and shape
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
@@ -733,10 +734,10 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     // Load a document, which has a rotated and sheared shape, anchored to cell, without resize.
     OUString aFileURL;
     createFileURL(u"tdf137033_RotShearCellAnchor.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Hide column C, which is left from logic rect, but right from left edge of snap rect
@@ -744,11 +745,11 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     rDoc.SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
 
     // Save and reload.
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and shape
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
@@ -772,10 +773,10 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     // Load an empty document.
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get ScDocShell
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
 
     // Create default measureline by SfxRequest that corresponds to Ctrl+Click
     ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
@@ -796,17 +797,17 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
     };
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
-    dispatchCommand(xComponent, ".uno:HideColumn", {});
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:HideColumn", {});
 
     // Get current position. I will not use absolute values for comparison, because document is loaded
     // in full screen mode of unknown size and default object is placed in center of window.
     Point aOldPos = pObj->GetRelativePos();
 
     // Save and reload, get ScDocShell
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
 
     // Get document and object
     ScDocument& rDoc2 = pDocSh->GetDocument();
@@ -827,10 +828,10 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     // Load an empty document
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and draw page
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrPage* pPage = lcl_getSdrPageWithAssert(rDoc);
 
@@ -864,10 +865,10 @@ void ScShapeTest::testMeasurelineHideColSave()
     // position were lost.
     OUString aFileURL;
     createFileURL(u"measurelineHideColSave.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
@@ -887,11 +888,11 @@ void ScShapeTest::testMeasurelineHideColSave()
     lcl_AssertPointEqualWithTolerance("Hide col A: ", aEndPoint, pObj->GetPoint(1), 1);
 
     // save and reload
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and shape
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
@@ -910,10 +911,10 @@ void ScShapeTest::testHideColsShow()
 
     OUString aFileURL;
     createFileURL(u"hideColsShow.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
@@ -924,7 +925,7 @@ void ScShapeTest::testHideColsShow()
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue("ToPoint", OUString("$C$1:$D$1")),
     };
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
 
     ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_HIDE);
@@ -936,7 +937,7 @@ void ScShapeTest::testHideColsShow()
     aPropertyValues = {
         comphelper::makePropertyValue("ToPoint", OUString("$C$1:$D$1")),
     };
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_SHOW);
 
     // Check object is visible and has old size
@@ -954,10 +955,10 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     // after column B, save and reload. The shape was not correctly moved to column F.
     OUString aFileURL;
     createFileURL(u"tdf138138_MoveCellWithRotatedShape.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
@@ -970,7 +971,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue("ToPoint", OUString("$A$1:$B$1")),
     };
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
 
     ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_INS_COLUMNS_AFTER);
@@ -980,11 +981,11 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
                                      aSnapRect, 1);
 
     // Save and reload
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and shape
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
@@ -1002,10 +1003,10 @@ void ScShapeTest::testLoadVerticalFlip()
     // flip was lost on loading.
     OUString aFileURL;
     createFileURL(u"loadVerticalFlip.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
@@ -1022,10 +1023,10 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // After the fix for 'resize with cell', the custom shape had wrong position and size too.
     OUString aFileURL;
     createFileURL(u"tdf117948_CollapseBeforeShape.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and objects
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObject* pObj0 = lcl_getSdrObjectWithAssert(rDoc, 0);
     SdrObject* pObj1 = lcl_getSdrObjectWithAssert(rDoc, 1);
@@ -1046,11 +1047,11 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     lcl_AssertRectEqualWithTolerance("Collapse: Line", aExpectedRect1, aSnapRect1Collapse, 1);
 
     // Save and reload
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and objects
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj0 = lcl_getSdrObjectWithAssert(rDoc2, 0);
     pObj1 = lcl_getSdrObjectWithAssert(rDoc2, 1);
@@ -1075,10 +1076,10 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     // Actually it was not lost but hidden.
     OUString aFileURL;
     createFileURL(u"tdf137355_UndoHideRows.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
@@ -1090,7 +1091,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue("ToPoint", OUString("$A$3:$A$6")),
     };
-    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
     ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_ROW_HIDE);
 
@@ -1118,10 +1119,10 @@ void ScShapeTest::testTdf115655_HideDetail()
     // was "lost". Actually is was resized to zero height.
     OUString aFileURL;
     createFileURL(u"tdf115655_HideDetail.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and image
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
@@ -1136,11 +1137,11 @@ void ScShapeTest::testTdf115655_HideDetail()
     CPPUNIT_ASSERT_MESSAGE("Collapse: Image should not be visible", !pObj->IsVisible());
 
     // Save and reload
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
+    saveAndReload("calc8");
+    CPPUNIT_ASSERT(mxComponent);
 
     // Get document and image
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
@@ -1167,10 +1168,10 @@ void ScShapeTest::testFitToCellSize()
     // that it fits into its anchor cell. That did not happened.
     OUString aFileURL;
     createFileURL(u"tdf119191_FitToCellSize.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
@@ -1200,10 +1201,10 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     // loading.
     OUString aFileURL;
     createFileURL(u"tdf119191_transformedShape.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get document and shape
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
     SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
@@ -1233,18 +1234,18 @@ void ScShapeTest::testLargeAnchorOffset()
     // next cell below.
     OUString aFileURL;
     createFileURL(u"LargeAnchorOffset.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
-    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     SdrObject* pObj = lcl_getSdrObjectWithAssert(pDocSh->GetDocument(), 0);
 
     const Point aOldPos = pObj->GetRelativePos();
     // Just to check that it imports correctly
     lcl_AssertPointEqualWithTolerance("before reload", { 9504, 9089 }, aOldPos, 1);
 
-    saveAndReload(xComponent, "calc8");
+    saveAndReload("calc8");
 
-    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     pObj = lcl_getSdrObjectWithAssert(pDocSh->GetDocument(), 0);
 
     // Without the fix, this would fail:
