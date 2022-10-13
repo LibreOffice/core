@@ -1193,6 +1193,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), sString);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf151375)
+{
+    // Create a new document.
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<document::XDocumentInsertable> xCursor(xText->createTextCursorByRange(xText->getStart()), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have crashed here
+    xCursor->insertDocumentFromURL(m_directories.getURLFromSrc(mpTestDocumentPath) + "tdf151375.ott", {});
+
+    uno::Reference<text::XTextFramesSupplier> const xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> const xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
 {
     // Create a new document.
