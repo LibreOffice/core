@@ -88,9 +88,6 @@ public:
     CPPUNIT_TEST(testSplit);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScTabViewObj::ScTabViewObj()

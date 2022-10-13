@@ -64,9 +64,6 @@ public:
     CPPUNIT_TEST(testSupportsService);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScTableRowObj::ScTableRowObj()
@@ -111,7 +108,7 @@ ScTableRowObj::ScTableRowObj()
 
 uno::Reference<uno::XInterface> ScTableRowObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
 
@@ -128,12 +125,12 @@ void ScTableRowObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScTableRowObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

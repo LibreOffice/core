@@ -154,9 +154,6 @@ public:
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScCellCursorObj::ScCellCursorObj():

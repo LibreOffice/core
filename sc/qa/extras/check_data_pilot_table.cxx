@@ -62,7 +62,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<uno::XInterface> mxObject;
     static constexpr int MAX_FIELD_INDEX = 6;
 };

@@ -108,9 +108,6 @@ public:
     virtual uno::Reference<lang::XComponent> getComponent() override;
     virtual void createFileURL(const OUString& rFileBase, OUString& rFileURL) override;
     virtual uno::Reference<lang::XComponent> loadFromDesktop(const OUString& rString) override;
-
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScTableSheetsObj::ScTableSheetsObj()

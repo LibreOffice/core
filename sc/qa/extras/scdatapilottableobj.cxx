@@ -68,9 +68,6 @@ public:
     CPPUNIT_TEST(testSetName);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScDataPilotTableObj::ScDataPilotTableObj()

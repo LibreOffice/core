@@ -33,9 +33,6 @@ public:
     CPPUNIT_TEST(testSetRecordChanges);
     CPPUNIT_TEST(testCheckRecordChangesProtection);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void ScRecordChangesTest::tearDown()

@@ -74,9 +74,6 @@ public:
     CPPUNIT_TEST(testVisibleRange);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScViewPaneObj::ScViewPaneObj()

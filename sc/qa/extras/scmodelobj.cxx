@@ -74,7 +74,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<lang::XComponent> mxComponent;
     uno::Sequence<uno::Reference<table::XCell>> m_xCells;
 };
 

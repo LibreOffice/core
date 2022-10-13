@@ -43,9 +43,6 @@ public:
     CPPUNIT_TEST(testDatabaseImportDescriptorProperties);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScImportDescriptorBaseObj::ScImportDescriptorBaseObj()

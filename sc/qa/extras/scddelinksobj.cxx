@@ -78,9 +78,6 @@ public:
     CPPUNIT_TEST(testSupportsService);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScDDELinksObj::ScDDELinksObj()
@@ -97,7 +94,7 @@ ScDDELinksObj::ScDDELinksObj()
 
 uno::Reference<uno::XInterface> ScDDELinksObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
@@ -125,12 +122,12 @@ void ScDDELinksObj::setUp()
     Application::SetAppName("soffice"); // Enable DDE
     CalcUnoApiTest::setUp();
     // create a calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScDDELinksObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

@@ -49,9 +49,6 @@ public:
     CPPUNIT_TEST(testSetInsertLinks);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScConsolidationDescriptorObj::ScConsolidationDescriptorObj()

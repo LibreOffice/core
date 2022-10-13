@@ -65,10 +65,6 @@ public:
     CPPUNIT_TEST(testRemoveByIndex);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 

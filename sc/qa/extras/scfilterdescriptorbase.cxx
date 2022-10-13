@@ -72,9 +72,6 @@ public:
     CPPUNIT_TEST(testGetSetFilterFields3);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScFilterDescriptorBase::ScFilterDescriptorBase()

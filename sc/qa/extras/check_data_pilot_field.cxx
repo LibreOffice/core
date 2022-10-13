@@ -58,7 +58,6 @@ protected:
     virtual bool isPropertyIgnored(const OUString& rName) override;
 
 private:
-    uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<uno::XInterface> mxObject;
     int mMaxFieldIndex = 6;
 };

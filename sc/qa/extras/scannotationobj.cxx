@@ -79,9 +79,6 @@ public:
     CPPUNIT_TEST(testGetText);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScAnnontationObj::ScAnnontationObj()

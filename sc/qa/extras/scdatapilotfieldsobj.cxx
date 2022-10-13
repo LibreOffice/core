@@ -70,9 +70,6 @@ public:
     CPPUNIT_TEST(testSupportsService);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScDataPilotFieldsObj::ScDataPilotFieldsObj()
@@ -86,7 +83,7 @@ ScDataPilotFieldsObj::ScDataPilotFieldsObj()
 
 uno::Reference<uno::XInterface> ScDataPilotFieldsObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
 
@@ -121,12 +118,12 @@ void ScDataPilotFieldsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScDataPilotFieldsObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

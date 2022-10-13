@@ -41,9 +41,6 @@ public:
     CPPUNIT_TEST(testSheetSortDescriptor2Properties);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScSortDescriptorBaseObj::ScSortDescriptorBaseObj()

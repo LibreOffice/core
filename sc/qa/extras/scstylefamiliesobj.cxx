@@ -76,7 +76,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<lang::XComponent> m_xComponent;
     uno::Reference<lang::XComponent> m_xSrcComponent;
 };
 
@@ -91,7 +90,7 @@ ScStyleFamiliesObj::ScStyleFamiliesObj()
 
 uno::Reference<uno::XInterface> ScStyleFamiliesObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
@@ -102,7 +101,7 @@ uno::Reference<uno::XInterface> ScStyleFamiliesObj::init()
 
 uno::Reference<sheet::XSpreadsheetDocument> ScStyleFamiliesObj::getTargetDoc()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     return xDoc;
@@ -124,14 +123,14 @@ void ScStyleFamiliesObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
     m_xSrcComponent = loadFromDesktop(getTestURL());
 }
 
 void ScStyleFamiliesObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     closeDocument(m_xSrcComponent);
     CalcUnoApiTest::tearDown();
 }

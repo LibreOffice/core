@@ -55,9 +55,6 @@ public:
     CPPUNIT_TEST(testVetoableChangeListener);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScStyleObj::ScStyleObj()
@@ -77,7 +74,7 @@ ScStyleObj::ScStyleObj()
 
 uno::Reference<uno::XInterface> ScStyleObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA_StyleFamilies(xSFS->getStyleFamilies(),
@@ -110,12 +107,12 @@ void ScStyleObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScStyleObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

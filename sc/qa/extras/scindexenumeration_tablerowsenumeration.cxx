@@ -44,9 +44,6 @@ public:
     CPPUNIT_TEST(testNextElement);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScIndexEnumeration_TableRowsEnumeration::ScIndexEnumeration_TableRowsEnumeration()
@@ -56,7 +53,7 @@ ScIndexEnumeration_TableRowsEnumeration::ScIndexEnumeration_TableRowsEnumeration
 
 uno::Reference<uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
@@ -77,12 +74,12 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
 void ScIndexEnumeration_TableRowsEnumeration::setUp()
 {
     CalcUnoApiTest::setUp();
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScIndexEnumeration_TableRowsEnumeration::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

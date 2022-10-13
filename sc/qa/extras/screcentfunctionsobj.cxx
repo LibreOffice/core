@@ -40,9 +40,6 @@ public:
     CPPUNIT_TEST(testGetMaxRecentFunctions);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScRecentFunctionsObj::ScRecentFunctionsObj()

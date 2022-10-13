@@ -54,7 +54,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference< sheet::XNamedRanges > init_impl();
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScNamedRangeObj::ScNamedRangeObj():

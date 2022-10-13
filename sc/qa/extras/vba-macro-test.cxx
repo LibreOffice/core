@@ -87,9 +87,6 @@ public:
     CPPUNIT_TEST(testTdf149531);
     CPPUNIT_TEST(testTdf118247);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void VBAMacroTest::tearDown()

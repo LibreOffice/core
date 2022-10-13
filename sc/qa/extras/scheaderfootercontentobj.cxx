@@ -44,9 +44,6 @@ public:
     CPPUNIT_TEST(testGetRightText);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj()

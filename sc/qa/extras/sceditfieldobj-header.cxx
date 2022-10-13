@@ -79,7 +79,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<lang::XComponent> mxComponent;
     static uno::Reference<text::XTextField> mxField;
     static uno::Reference<text::XText> mxRightText;
 };

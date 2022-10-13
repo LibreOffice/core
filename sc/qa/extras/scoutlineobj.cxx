@@ -41,9 +41,6 @@ public:
     CPPUNIT_TEST(testClearOutline);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScOutlineObj::ScOutlineObj()

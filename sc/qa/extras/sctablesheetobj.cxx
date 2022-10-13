@@ -244,7 +244,6 @@ public:
 
 private:
     OUString maFileURL;
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScTableSheetObj::ScTableSheetObj():

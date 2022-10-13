@@ -96,9 +96,6 @@ public:
     CPPUNIT_TEST(testTdf144242_OpenBezier_noSwapWH);
     CPPUNIT_TEST(testLargeAnchorOffset);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScShapeTest::ScShapeTest()

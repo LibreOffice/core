@@ -43,9 +43,6 @@ public:
     CPPUNIT_TEST(testNextElement);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScIndexEnumeration_LabelRangesEnumeration::ScIndexEnumeration_LabelRangesEnumeration()
@@ -55,7 +52,7 @@ ScIndexEnumeration_LabelRangesEnumeration::ScIndexEnumeration_LabelRangesEnumera
 
 uno::Reference<uno::XInterface> ScIndexEnumeration_LabelRangesEnumeration::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDoc, uno::UNO_QUERY_THROW);
@@ -72,12 +69,12 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_LabelRangesEnumeration::init(
 void ScIndexEnumeration_LabelRangesEnumeration::setUp()
 {
     CalcUnoApiTest::setUp();
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScIndexEnumeration_LabelRangesEnumeration::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

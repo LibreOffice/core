@@ -22,6 +22,10 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+protected:
+    // reference to document component that we are testing
+    css::uno::Reference<css::lang::XComponent> mxComponent;
+
 private:
     css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 };

@@ -52,9 +52,6 @@ public:
     CPPUNIT_TEST(testCreateEnumeration);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScCellsObj::ScCellsObj()
@@ -65,7 +62,7 @@ ScCellsObj::ScCellsObj()
 
 uno::Reference<uno::XInterface> ScCellsObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
@@ -92,12 +89,12 @@ uno::Reference<uno::XInterface> ScCellsObj::init()
 void ScCellsObj::setUp()
 {
     CalcUnoApiTest::setUp();
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScCellsObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

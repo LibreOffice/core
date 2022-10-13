@@ -87,7 +87,6 @@ public:
 
 private:
     static const int m_nMaxFieldIndex = 6;
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj()
@@ -105,7 +104,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupObj::init()
     table::CellRangeAddress aCellRangeAddress(0, 1, 0, m_nMaxFieldIndex - 1, m_nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);
 
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     xSheets->insertNewByName("Some Sheet", 0);
@@ -199,12 +198,12 @@ void ScDataPilotFieldGroupObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScDataPilotFieldGroupObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

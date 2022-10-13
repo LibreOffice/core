@@ -80,9 +80,6 @@ public:
     CPPUNIT_TEST(testSupportsService);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScAutoFormatsObj::ScAutoFormatsObj()
@@ -98,7 +95,7 @@ ScAutoFormatsObj::ScAutoFormatsObj()
 
 uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
 {
-    uno::Reference<lang::XMultiServiceFactory> xMSF(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xTAF(
         xMSF->createInstance("com.sun.star.sheet.TableAutoFormats"), uno::UNO_SET_THROW);
 
@@ -121,12 +118,12 @@ void ScAutoFormatsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScAutoFormatsObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

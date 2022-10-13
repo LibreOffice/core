@@ -58,9 +58,6 @@ public:
     CPPUNIT_TEST(testTdf130556);
     CPPUNIT_TEST(testTdf134161);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScAnchorTest::ScAnchorTest()

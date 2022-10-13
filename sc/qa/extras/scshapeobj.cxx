@@ -70,9 +70,6 @@ public:
     CPPUNIT_TEST(testGetShapeType);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScShapeObj::ScShapeObj()

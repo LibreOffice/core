@@ -175,9 +175,6 @@ public:
     CPPUNIT_TEST(testSortOOB);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScCellRangeObj::ScCellRangeObj()

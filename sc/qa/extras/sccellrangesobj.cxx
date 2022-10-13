@@ -78,9 +78,6 @@ public:
     CPPUNIT_TEST(testClearContents);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScCellRangesObj::ScCellRangesObj()

@@ -22,7 +22,6 @@ namespace
 {
 class SwarmSolverTest : public CalcUnoApiTest
 {
-    uno::Reference<lang::XComponent> mxComponent;
     void testUnconstrained();
     void testVariableBounded();
     void testVariableConstrained();

@@ -34,9 +34,6 @@ public:
     CPPUNIT_TEST_SUITE(ScCondFormatMergeTest);
     CPPUNIT_TEST(testCondFormatMerge);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScCondFormatMergeTest::ScCondFormatMergeTest()

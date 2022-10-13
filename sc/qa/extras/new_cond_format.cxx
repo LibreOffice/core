@@ -55,9 +55,6 @@ public:
     CPPUNIT_TEST(testDataBarProperties);
     CPPUNIT_TEST(testColorScaleProperties);
     CPPUNIT_TEST_SUITE_END();
-private:
-
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScConditionalFormatTest::ScConditionalFormatTest()

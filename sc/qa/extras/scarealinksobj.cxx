@@ -61,9 +61,6 @@ public:
     CPPUNIT_TEST(testGetCount);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScAreaLinksObj::ScAreaLinksObj()
@@ -75,7 +72,7 @@ ScAreaLinksObj::ScAreaLinksObj()
 
 uno::Reference<uno::XInterface> ScAreaLinksObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, uno::UNO_QUERY_THROW);
@@ -90,12 +87,12 @@ uno::Reference<uno::XInterface> ScAreaLinksObj::init()
 void ScAreaLinksObj::setUp()
 {
     CalcUnoApiTest::setUp();
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScAreaLinksObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

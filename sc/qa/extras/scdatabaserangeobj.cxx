@@ -65,8 +65,6 @@ public:
     CPPUNIT_TEST(testRefresh);
 
     CPPUNIT_TEST_SUITE_END();
-private:
-    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScDatabaseRangeObj::ScDatabaseRangeObj()

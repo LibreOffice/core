@@ -86,9 +86,6 @@ public:
     CPPUNIT_TEST(testRefreshListener);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScDDELinkObj::ScDDELinkObj()

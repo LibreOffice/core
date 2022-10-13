@@ -45,9 +45,6 @@ public:
     CPPUNIT_TEST(testVetoableChangeListener);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()

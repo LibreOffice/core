@@ -39,9 +39,6 @@ public:
     CPPUNIT_TEST(testDocumentSettingsProperties);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScDocumentConfigurationObj::ScDocumentConfigurationObj()

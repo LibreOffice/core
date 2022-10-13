@@ -78,9 +78,6 @@ public:
     CPPUNIT_TEST(testSupportsService);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 /* TODO: this c/should be derived/defined from the real style count, default
@@ -100,14 +97,14 @@ ScStyleFamilyObj::ScStyleFamilyObj()
 
 uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xNA, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA_SF(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<lang::XMultiServiceFactory> xMSF(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xCS(xMSF->createInstance("com.sun.star.style.CellStyle"),
                                         uno::UNO_SET_THROW);
     // XNameContainer
@@ -125,12 +122,12 @@ void ScStyleFamilyObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create calc document
-    m_xComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScStyleFamilyObj::tearDown()
 {
-    closeDocument(m_xComponent);
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

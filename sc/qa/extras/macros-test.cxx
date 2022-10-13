@@ -112,8 +112,6 @@ public:
     CPPUNIT_TEST(testFunctionAccessIndirect);
 
     CPPUNIT_TEST_SUITE_END();
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
