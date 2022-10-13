@@ -133,7 +133,7 @@ void ScTabViewShell::Activate(bool bMDI)
                 ScInputWindow* pWin = static_cast<ScInputWindow*>(pChild->GetWindow());
                 if (pWin && pWin->IsVisible())
                 {
-
+                    pWin->NumLinesChanged(); // tdf#150664
                     ScInputHandler* pOldHdl=pWin->GetInputHandler();
 
                     SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
