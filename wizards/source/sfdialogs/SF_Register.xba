@@ -291,7 +291,8 @@ Try:
 					Loop
 				Else
 					bFound = True
-					vWindow = oUi._IdentifyWindow(StarDesktop.CurrentComponent)
+					Set oComp = StarDesktop.CurrentComponent
+					vWindow = oUi._IdentifyWindow(oComp)
 				End If
 			Case V_OBJECT	&apos;	com.sun.star.lang.XComponent
 				bFound = True
