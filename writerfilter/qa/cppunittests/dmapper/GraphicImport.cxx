@@ -429,7 +429,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
 
     // The first shape in the group, which represents the SmartArt, corresponds to the background of
-    // the diagram. Without fix in place it has widht and height zero, which does not only result in
+    // the diagram. Without fix in place it has width and height zero, which does not only result in
     // not visible background but in wrong sizes of the diagram shapes too.
     uno::Reference<drawing::XShape> xBackgroundShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     awt::Size aBackgroundSize = xBackgroundShape->getSize();
