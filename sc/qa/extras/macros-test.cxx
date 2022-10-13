@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/svdpage.hxx>
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public UnoApiTest, public XmlTestTools
+class ScMacrosTest : public CalcUnoApiTest, public XmlTestTools
 {
 protected:
     void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
@@ -138,7 +138,7 @@ void ScMacrosTest::saveAndReload(const OUString& rFilter)
 void ScMacrosTest::tearDown()
 {
     closeDocument(mxComponent);
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 // I suppose you could say this test doesn't really belong here, OTOH
@@ -1260,7 +1260,7 @@ void ScMacrosTest::testFunctionAccessIndirect()
 }
 
 ScMacrosTest::ScMacrosTest()
-      : UnoApiTest("/sc/qa/extras/testdocuments")
+      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 

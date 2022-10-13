@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <vcl/scheduler.hxx>
@@ -34,11 +34,11 @@
 using namespace css;
 using namespace ooo::vba;
 
-class VBAMacroTest : public UnoApiTest
+class VBAMacroTest : public CalcUnoApiTest
 {
 public:
     VBAMacroTest()
-        : UnoApiTest("/sc/qa/extras/testdocuments")
+        : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     {
     }
 
@@ -95,7 +95,7 @@ private:
 void VBAMacroTest::tearDown()
 {
     closeDocument(mxComponent);
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 void VBAMacroTest::testSimpleCopyAndPaste()
