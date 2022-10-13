@@ -733,6 +733,8 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
             SwPosition aPos( *pNd );
             pNd = GetBodyTextNode( pNd->GetDoc(), aPos, *pFrame );
             OSL_ENSURE( pNd, "Where's the paragraph?" );
+            // tdf#151462 - search for outline node containing the current node
+            return pNd->FindOutlineNodeOfLevel(pNd->GetSectionLevel() - 1, pLayout);
         }
     }
     return pNd ? pNd->FindOutlineNodeOfLevel(nLvl, pLayout) : nullptr;
