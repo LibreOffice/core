@@ -528,9 +528,12 @@ void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBi
     cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, aSurface.getSurface(), -rTR.mnSrcX, -rTR.mnSrcY);
 
-    //tdf#133716 borders of upscaled images should not be blurred
-    cairo_pattern_t* sourcepattern = cairo_get_source(cr);
-    cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
+    if (cairo_status(cr) == CAIRO_STATUS_SUCCESS)
+    {
+        //tdf#133716 borders of upscaled images should not be blurred
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
+    }
 
     cairo_paint(cr);
 
