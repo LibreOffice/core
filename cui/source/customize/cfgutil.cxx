@@ -1023,23 +1023,16 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
 #if HAVE_FEATURE_SCRIPTING
 void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 {
-    SelectMacro( pItem->GetBasicManager()->GetName(),
-                 pItem->GetQualifiedName() );
-}
-
-void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
-         std::u16string_view rMacro )
-{
-    const OUString aBasicName(OUString::Concat(rBasic) + " " + xImp->m_sMacros);
-    size_t nIdx {rMacro.rfind('.')};
-    const std::u16string_view aMethod( rMacro.substr(nIdx == std::u16string_view::npos ? 0 : nIdx + 1) );
+    auto const rMacro = pItem->GetQualifiedName();
+    sal_Int32 nIdx {rMacro.lastIndexOf('.')};
+    const std::u16string_view aMethod( rMacro.subView(nIdx + 1) );
     std::u16string_view aLib;
     std::u16string_view aModule;
-    if ( nIdx>0 && nIdx != std::u16string_view::npos )
+    if ( nIdx>0 )
     {
         // string contains at least 2 tokens
-        nIdx = rMacro.rfind('.', nIdx - 1);
-        if (nIdx != std::u16string_view::npos)
+        nIdx = rMacro.lastIndexOf('.', nIdx);
+        if (nIdx != -1)
         {
             // string contains at least 3 tokens
             aLib = o3tl::getToken(rMacro, 0, '.' );
@@ -1055,45 +1048,61 @@ void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
     do
     {
         OUString aEntryBas = m_xTreeView->get_text(*xIter);
-        if (aEntryBas == aBasicName)
+        if (aEntryBas == xImp->m_sDlgMacros)
         {
             m_xTreeView->expand_row(*xIter);
-            std::unique_ptr<weld::TreeIter> xLibIter = m_xTreeView->make_iterator(xIter.get());
-            if (m_xTreeView->get_iter_first(*xLibIter))
+            std::unique_ptr<weld::TreeIter> xLocationIter = m_xTreeView->make_iterator(xIter.get());
+            if (m_xTreeView->iter_children(*xLocationIter))
             {
                 do
                 {
-                    OUString aEntryLib = m_xTreeView->get_text(*xLibIter);
-                    if (aEntryLib == aLib)
+                    m_xTreeView->expand_row(*xLocationIter);
+                    std::unique_ptr<weld::TreeIter> xLibIter = m_xTreeView->make_iterator(xLocationIter.get());
+                    if (m_xTreeView->iter_children(*xLibIter))
                     {
-                        m_xTreeView->expand_row(*xLibIter);
-                        std::unique_ptr<weld::TreeIter> xModIter = m_xTreeView->make_iterator(xLibIter.get());
-                        if (m_xTreeView->get_iter_first(*xModIter))
+                        do
                         {
-                            do
+                            OUString aEntryLib = m_xTreeView->get_text(*xLibIter);
+                            if (aEntryLib == aLib)
                             {
-                                OUString aEntryMod = m_xTreeView->get_text(*xModIter);
-                                if ( aEntryMod == aModule )
+                                m_xTreeView->expand_row(*xLibIter);
+                                std::unique_ptr<weld::TreeIter> xModIter = m_xTreeView->make_iterator(xLibIter.get());
+                                if (m_xTreeView->iter_children(*xModIter))
                                 {
-                                    m_xTreeView->expand_row(*xModIter);
-                                    m_xTreeView->scroll_to_row(*xModIter);
-                                    m_xTreeView->select(*xModIter);
-                                    for (int i = 0, nCount = m_pFunctionListBox->n_children(); i < nCount; ++i)
+                                    do
                                     {
-                                        OUString aEntryMethod = m_pFunctionListBox->get_text(i);
-                                        if (aEntryMethod == aMethod)
+                                        OUString aEntryMod = m_xTreeView->get_text(*xModIter);
+                                        if ( aEntryMod == aModule )
                                         {
-                                            m_pFunctionListBox->select(i);
-                                            m_pFunctionListBox->scroll_to_row(i);
-                                            return;
+                                            m_xTreeView->expand_row(*xModIter);
+                                            m_xTreeView->scroll_to_row(*xModIter);
+                                            m_xTreeView->select(*xModIter);
+                                            GroupSelected();
+                                            for (int i = 0, nCount = m_pFunctionListBox->n_children(); i < nCount; ++i)
+                                            {
+                                                OUString aEntryMethod = m_pFunctionListBox->get_text(i);
+                                                if (aEntryMethod == aMethod)
+                                                {
+                                                    m_pFunctionListBox->select(i);
+                                                    m_pFunctionListBox->scroll_to_row(i);
+                                                    return;
+                                                }
+                                            }
+                                            m_xTreeView->collapse_row(*xModIter);
                                         }
-                                    }
+                                    } while (m_xTreeView->iter_next_sibling(*xModIter));
                                 }
-                            } while (m_xTreeView->iter_next_sibling(*xModIter));
-                        }
+                                m_xTreeView->collapse_row(*xLibIter);
+                            }
+                        } while (m_xTreeView->iter_next_sibling(*xLibIter));
                     }
-                } while (m_xTreeView->iter_next_sibling(*xLibIter));
+                    m_xTreeView->collapse_row(*xLocationIter);
+                } while (m_xTreeView->iter_next_sibling(*xLocationIter));
             }
+            // If the macro can't be located, preselect the "Application Macros" category:
+            m_xTreeView->scroll_to_row(*xIter);
+            m_xTreeView->select(*xIter);
+            return;
         }
     } while (m_xTreeView->iter_next_sibling(*xIter));
 }

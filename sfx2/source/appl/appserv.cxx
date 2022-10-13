@@ -77,6 +77,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/minfitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -400,12 +401,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
 
-            SfxItemSetFixed<SID_CONFIG, SID_CONFIG> aSet( GetPool() );
+            SfxItemSetFixed<SID_CONFIG, SID_CONFIG, SID_MACROINFO, SID_MACROINFO> aSet( GetPool() );
 
             if ( pStringItem )
             {
                 aSet.Put( SfxStringItem(
                     SID_CONFIG, pStringItem->GetValue() ) );
+            }
+            // Preselect a macro:
+            if (auto const item = rReq.GetArg<SfxMacroInfoItem>(SID_MACROINFO)) {
+                aSet.Put(*item);
             }
 
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
