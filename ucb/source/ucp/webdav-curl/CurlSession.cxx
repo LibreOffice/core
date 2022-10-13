@@ -1442,8 +1442,8 @@ auto CurlProcessor::ProcessRequest(
                             { // SharePoint hack: try NTLM auth
                                 assert(authAvail == 0);
                                 // note: this must be a single value!
-                                // would need 2 iterations to try CURLAUTH_NEGOTIATE too
-                                authAvail = CURLAUTH_NTLM;
+                                // would need 2 iterations to try CURLAUTH_NTLM too
+                                authAvail = CURLAUTH_NEGOTIATE;
                             }
                             // only allow SystemCredentials once - the
                             // PasswordContainer may have stored it in the
