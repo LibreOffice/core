@@ -1378,7 +1378,7 @@ Private Function _RegisterPageListener(ByVal psControlName As String _
 &apos;&apos;&apos;	or insert a new entry in the _PageManagement array by radio button in the same group as the 1st argument
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psControlName: name of the involved control
-&apos;&apos;&apos;		psControlTypes: comma-separated list of allowad control types
+&apos;&apos;&apos;		psControlTypes: comma-separated list of allowed control types
 &apos;&apos;&apos;		piMgtType: one of the PILOTCONTROL, TABCONTROL, BACKCONTROL, NEXTCONTROL constants
 &apos;&apos;&apos;		plPageNumber: when &gt; 0 the page to jump to when control is clicked
 &apos;&apos;&apos;		piListener: one of the ACTIONPERFORMED, ITEMSTATECHANGED constants
