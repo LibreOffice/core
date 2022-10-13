@@ -53,6 +53,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <oox/export/utils.hxx>
 
@@ -2414,24 +2415,31 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
         return;
 
     uno::Reference<io::XInputStream> xAudioStream;
-    if (sUrl.startsWith("vnd.sun.star.Package:"))
+    try
     {
-        uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(getModel(), uno::UNO_QUERY);
-        if (!xStorageBasedDocument.is())
-            return;
+        if (sUrl.startsWith("vnd.sun.star.Package:"))
+        {
+            uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(getModel(), uno::UNO_QUERY);
+            if (!xStorageBasedDocument.is())
+                return;
 
-        uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
-        if (!xDocumentStorage.is())
-            return;
+            uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
+            if (!xDocumentStorage.is())
+                return;
 
-        uno::Reference<io::XStream> xStream = comphelper::OStorageHelper::GetStreamAtPackageURL(xDocumentStorage, sUrl,
-                                                    css::embed::ElementModes::READ, aProxy);
+            uno::Reference<io::XStream> xStream = comphelper::OStorageHelper::GetStreamAtPackageURL(xDocumentStorage, sUrl,
+                                                        css::embed::ElementModes::READ, aProxy);
 
-        if (xStream.is())
-            xAudioStream = xStream->getInputStream();
+            if (xStream.is())
+                xAudioStream = xStream->getInputStream();
+        }
+        else
+            xAudioStream = comphelper::OStorageHelper::GetInputStreamFromURL(sUrl, getComponentContext());
     }
-    else
-        xAudioStream = comphelper::OStorageHelper::GetInputStreamFromURL(sUrl, getComponentContext());
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sd", "PowerPointExport::embedEffectAudio");
+    }
 
     if (!xAudioStream.is())
         return;
