@@ -304,10 +304,6 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maNotifyLink.IsSet())
         {
-            std::vector<std::unique_ptr<AnimationData>> aDataItems;
-            for (auto const& i : maRenderers)
-                aDataItems.emplace_back(i->createAnimationData());
-
             maNotifyLink.Call(this);
 
             // set view state from AnimationData structure
