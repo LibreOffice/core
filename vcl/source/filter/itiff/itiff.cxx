@@ -25,6 +25,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
+#include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -265,6 +266,25 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                         break;
                 }
             }
+
+            MapMode aMapMode;
+            uint16_t ResolutionUnit = RESUNIT_NONE;
+            if (TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &ResolutionUnit) == 1 && ResolutionUnit != RESUNIT_NONE)
+            {
+                float xres = 0, yres = 0;
+
+                if (TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) == 1 &&
+                    TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) == 1 &&
+                    xres != 0 && yres != 0)
+                {
+                    if (ResolutionUnit == RESUNIT_INCH)
+                        aMapMode =  MapMode(MapUnit::MapInch, Point(0,0), Fraction(1/xres), Fraction(1/yres));
+                    else if (ResolutionUnit == RESUNIT_CENTIMETER)
+                        aMapMode =  MapMode(MapUnit::MapCM, Point(0,0), Fraction(1/xres), Fraction(1/yres));
+                }
+            }
+            aBitmapEx.SetPrefMapMode(aMapMode);
+            aBitmapEx.SetPrefSize(Size(w, h));
 
             AnimationFrame aAnimationFrame(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
