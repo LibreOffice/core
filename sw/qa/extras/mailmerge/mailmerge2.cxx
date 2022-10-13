@@ -357,14 +357,14 @@ DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addr
     // All header paragraphs should have numbering.
 
     // check first page
-    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
 
     // check some other pages
-    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[3]/body/txt[6]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[5]/body/txt[8]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[7]/body/txt[10]/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
 }
 
 
@@ -374,9 +374,9 @@ DECLARE_FILE_MAILMERGE_TEST(testTd78611_file, "tdf78611.odt", "10-testing-addres
     for (int doc = 0; doc < 10; ++doc)
     {
         loadMailMergeDocument( doc );
-        CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/Special", "rText"));
-        CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/Special", "rText"));
-        CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/Special", "rText"));
+        CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+        CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+        CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
     }
 }
 
