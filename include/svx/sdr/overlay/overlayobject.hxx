@@ -109,10 +109,11 @@ namespace sdr::overlay
             // it is switched to false
             bool                                            mbAllowsAntiAliase : 1;
 
-            // Flag to control if this OverlayObject is allowed to ignore the
-            // DrawMode settings which force use of colors to High Contrast fg/bg
+            // In High Contrast mode all fg and bg and forced to the a pair of normal
+            // high contrast colors. If this flag is set, then in High Contrast mode
+            // the colors are instead forced to the high contrast selection fg/bg pair.
             // Default is false.
-            bool                                            mbOverruleDrawModeSettings : 1;
+            bool                                            mbHighContrastSelection : 1;
 
             // set changed flag. Call after change, since the old range is invalidated
             // and then the new one is calculated and invalidated, too. This will only
@@ -148,7 +149,7 @@ namespace sdr::overlay
             bool allowsAntiAliase() const { return mbAllowsAntiAliase; }
 
             // read access to DrawModeSettings flag
-            bool overrulesDrawModeSettings() const { return mbOverruleDrawModeSettings; }
+            bool isHighContrastSelection() const { return mbHighContrastSelection; }
 
             // read access to baseRange. This may trigger createBaseRange() if
             // object is changed.

@@ -45,8 +45,11 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <editeng/outliner.hxx>
 #include <sal/log.hxx>
 #include <sdr/overlay/overlaytools.hxx>
@@ -389,6 +392,7 @@ void SdrObjEditView::ModelHasChanged()
 namespace
 {
 class TextEditFrameOverlayObject;
+class TextEditHighContrastOverlaySelection;
 
 /**
         Helper class to visualize the content of an active EditView as an
@@ -407,7 +411,8 @@ class TextEditOverlayObject : public sdr::overlay::OverlayObject
 {
 protected:
     /// local access to associated sdr::overlay::OverlaySelection
-    std::unique_ptr<sdr::overlay::OverlaySelection> mxOverlaySelection;
+    std::unique_ptr<sdr::overlay::OverlaySelection> mxOverlayTransparentSelection;
+    std::unique_ptr<TextEditHighContrastOverlaySelection> mxOverlayHighContrastSelection;
     std::unique_ptr<TextEditFrameOverlayObject> mxOverlayFrame;
 
     /// local definition depends on active OutlinerView
@@ -429,14 +434,10 @@ public:
     TextEditOverlayObject(const Color& rColor, OutlinerView& rOutlinerView);
     virtual ~TextEditOverlayObject() override;
 
-    // data read access
-    const sdr::overlay::OverlaySelection* getOverlaySelection() const
-    {
-        return mxOverlaySelection.get();
-    }
-    const OutlinerView& getOutlinerView() const { return mrOutlinerView; }
-
+    sdr::overlay::OverlayObject* getOverlaySelection();
     sdr::overlay::OverlayObject* getOverlayFrame();
+
+    const OutlinerView& getOutlinerView() const { return mrOutlinerView; }
 
     /// override to check conditions for last createOverlayObjectPrimitive2DSequence
     virtual drawinglayer::primitive2d::Primitive2DContainer
@@ -448,6 +449,10 @@ public:
     void checkSelectionChange();
 
     const basegfx::B2DRange& getRange() const { return maRange; }
+    const drawinglayer::primitive2d::Primitive2DContainer& getTextPrimitives() const
+    {
+        return maTextPrimitives;
+    }
 };
 
 class TextEditFrameOverlayObject : public sdr::overlay::OverlayObject
@@ -464,6 +469,88 @@ public:
     using sdr::overlay::OverlayObject::objectChange;
     virtual ~TextEditFrameOverlayObject() override;
 };
+
+class TextEditHighContrastOverlaySelection : public sdr::overlay::OverlayObject
+{
+private:
+    const TextEditOverlayObject& mrTextEditOverlayObject;
+    std::vector<basegfx::B2DRange> maRanges;
+
+    // geometry creation for OverlayObject, can use local *Last* values
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createOverlayObjectPrimitive2DSequence() override;
+
+public:
+    TextEditHighContrastOverlaySelection(const TextEditOverlayObject& rTextEditOverlayObject);
+    void setRanges(std::vector<basegfx::B2DRange>&& rNew);
+    virtual ~TextEditHighContrastOverlaySelection() override;
+};
+
+TextEditHighContrastOverlaySelection::TextEditHighContrastOverlaySelection(
+    const TextEditOverlayObject& rTextEditOverlayObject)
+    : OverlayObject(rTextEditOverlayObject.getBaseColor())
+    , mrTextEditOverlayObject(rTextEditOverlayObject)
+{
+    allowAntiAliase(rTextEditOverlayObject.allowsAntiAliase());
+    // use selection colors in HighContrast mode
+    mbHighContrastSelection = true;
+}
+
+void TextEditHighContrastOverlaySelection::setRanges(std::vector<basegfx::B2DRange>&& rNew)
+{
+    if (rNew != maRanges)
+    {
+        maRanges = std::move(rNew);
+        objectChange();
+    }
+}
+
+drawinglayer::primitive2d::Primitive2DContainer
+TextEditHighContrastOverlaySelection::createOverlayObjectPrimitive2DSequence()
+{
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
+
+    size_t nCount = maRanges.size();
+
+    if (nCount)
+    {
+        basegfx::B2DPolyPolygon aClipPolyPolygon;
+
+        basegfx::BColor aRGBColor(getBaseColor().getBColor());
+
+        for (size_t a = 0; a < nCount; ++a)
+            aClipPolyPolygon.append(basegfx::utils::createPolygonFromRect(maRanges[a]));
+
+        // This is used in high contrast mode, we will render the selection
+        // with the bg forced to the selection Highlight color and the fg color
+        // forced to the HighlightText color
+        aRetval.append(drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                basegfx::B2DPolyPolygon(
+                    basegfx::utils::createPolygonFromRect(aClipPolyPolygon.getB2DRange())),
+                aRGBColor)));
+        aRetval.append(mrTextEditOverlayObject.getTextPrimitives());
+        aRetval.append(drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::MaskPrimitive2D(aClipPolyPolygon, std::move(aRetval))));
+    }
+
+    return aRetval;
+}
+
+TextEditHighContrastOverlaySelection::~TextEditHighContrastOverlaySelection()
+{
+    if (getOverlayManager())
+    {
+        getOverlayManager()->remove(*this);
+    }
+}
+
+sdr::overlay::OverlayObject* TextEditOverlayObject::getOverlaySelection()
+{
+    if (mxOverlayTransparentSelection)
+        return mxOverlayTransparentSelection.get();
+    return mxOverlayHighContrastSelection.get();
+}
 
 sdr::overlay::OverlayObject* TextEditOverlayObject::getOverlayFrame()
 {
@@ -510,14 +597,22 @@ TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& 
 
     // create local OverlaySelection - this is an integral part of EditText
     // visualization
-    std::vector<basegfx::B2DRange> aEmptySelection{};
-    mxOverlaySelection.reset(new sdr::overlay::OverlaySelection(
-        sdr::overlay::OverlayType::Transparent, rColor, std::move(aEmptySelection), true));
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+    {
+        mxOverlayHighContrastSelection.reset(new TextEditHighContrastOverlaySelection(*this));
+    }
+    else
+    {
+        std::vector<basegfx::B2DRange> aEmptySelection{};
+        mxOverlayTransparentSelection.reset(new sdr::overlay::OverlaySelection(
+            sdr::overlay::OverlayType::Transparent, rColor, std::move(aEmptySelection), true));
+    }
 }
 
 TextEditOverlayObject::~TextEditOverlayObject()
 {
-    mxOverlaySelection.reset();
+    mxOverlayTransparentSelection.reset();
+    mxOverlayHighContrastSelection.reset();
 
     if (getOverlayManager())
     {
@@ -531,8 +626,8 @@ TextEditFrameOverlayObject::TextEditFrameOverlayObject(
     , mrTextEditOverlayObject(rTextEditOverlayObject)
 {
     allowAntiAliase(rTextEditOverlayObject.allowsAntiAliase());
-    // allow use of selection color even in HighContrast mode
-    mbOverruleDrawModeSettings = true;
+    // use selection colors in HighContrast mode
+    mbHighContrastSelection = true;
 }
 
 TextEditFrameOverlayObject::~TextEditFrameOverlayObject()
@@ -658,7 +753,10 @@ void TextEditOverlayObject::checkSelectionChange()
             aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height());
     }
 
-    mxOverlaySelection->setRanges(std::move(aLogicRanges));
+    if (mxOverlayTransparentSelection)
+        mxOverlayTransparentSelection->setRanges(std::move(aLogicRanges));
+    else
+        mxOverlayHighContrastSelection->setRanges(std::move(aLogicRanges));
 }
 } // end of anonymous namespace
 
@@ -1309,8 +1407,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                                 xManager->add(*pNewTextEditOverlayObject);
                                 if (bVisualizeSurroundingFrame)
                                     xManager->add(*pNewTextEditOverlayObject->getOverlayFrame());
-                                xManager->add(const_cast<sdr::overlay::OverlaySelection&>(
-                                    *pNewTextEditOverlayObject->getOverlaySelection()));
+                                xManager->add(*pNewTextEditOverlayObject->getOverlaySelection());
 
                                 maTEOverlayGroup.append(std::move(pNewTextEditOverlayObject));
                             }

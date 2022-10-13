@@ -53,7 +53,10 @@ Color GetLineColor(Color const& rColor, DrawModeFlags nDrawMode,
             }
             else if (nDrawMode & DrawModeFlags::SettingsLine)
             {
-                aColor = rStyleSettings.GetWindowTextColor();
+                if (nDrawMode & DrawModeFlags::SettingsForSelection)
+                    aColor = rStyleSettings.GetHighlightColor();
+                else
+                    aColor = rStyleSettings.GetWindowTextColor();
             }
         }
     }
@@ -91,7 +94,10 @@ Color GetFillColor(Color const& rColor, DrawModeFlags nDrawMode,
             }
             else if (nDrawMode & DrawModeFlags::SettingsFill)
             {
-                aColor = rStyleSettings.GetWindowColor();
+                if (nDrawMode & DrawModeFlags::SettingsForSelection)
+                    aColor = rStyleSettings.GetHighlightColor();
+                else
+                    aColor = rStyleSettings.GetWindowColor();
             }
         }
     }
@@ -119,7 +125,10 @@ Color GetHatchColor(Color const& rColor, DrawModeFlags nDrawMode,
     }
     else if (nDrawMode & DrawModeFlags::SettingsLine)
     {
-        aColor = rStyleSettings.GetWindowTextColor();
+        if (nDrawMode & DrawModeFlags::SettingsForSelection)
+            aColor = rStyleSettings.GetHighlightColor();
+        else
+            aColor = rStyleSettings.GetWindowTextColor();
     }
 
     return aColor;
@@ -149,7 +158,10 @@ Color GetTextColor(Color const& rColor, DrawModeFlags nDrawMode,
         }
         else if (nDrawMode & DrawModeFlags::SettingsText)
         {
-            aColor = rStyleSettings.GetWindowTextColor();
+            if (nDrawMode & DrawModeFlags::SettingsForSelection)
+                aColor = rStyleSettings.GetHighlightTextColor();
+            else
+                aColor = rStyleSettings.GetWindowTextColor();
         }
     }
 
@@ -183,7 +195,10 @@ vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
         }
         else if (nDrawMode & DrawModeFlags::SettingsText)
         {
-            aTextColor = rStyleSettings.GetWindowTextColor();
+            if (nDrawMode & DrawModeFlags::SettingsForSelection)
+                aTextColor = rStyleSettings.GetHighlightTextColor();
+            else
+                aTextColor = rStyleSettings.GetWindowTextColor();
         }
 
         aFont.SetColor(aTextColor);
@@ -207,7 +222,10 @@ vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
             }
             else if (nDrawMode & DrawModeFlags::SettingsFill)
             {
-                aTextFillColor = rStyleSettings.GetWindowColor();
+                if (nDrawMode & DrawModeFlags::SettingsForSelection)
+                    aTextFillColor = rStyleSettings.GetHighlightColor();
+                else
+                    aTextFillColor = rStyleSettings.GetWindowColor();
             }
             else if (nDrawMode & DrawModeFlags::NoFill)
             {

@@ -45,11 +45,12 @@ enum class DrawModeFlags : sal_uInt32
     SettingsFill = 0x00020000,
     SettingsText = 0x00040000,
     SettingsGradient = 0x00080000,
-    NoTransparency = 0x00100000,
+    SettingsForSelection = 0x00100000,
+    NoTransparency = 0x00200000,
 };
 namespace o3tl
 {
-template <> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x1fffff>
+template <> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x3fffff>
 {
 };
 }

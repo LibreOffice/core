@@ -617,7 +617,12 @@ Color OutputDevice::GetSingleColorGradientFill()
     else if ( mnDrawMode & DrawModeFlags::WhiteGradient )
         aColor = COL_WHITE;
     else if ( mnDrawMode & DrawModeFlags::SettingsGradient )
-        aColor = GetSettings().GetStyleSettings().GetWindowColor();
+    {
+        if (mnDrawMode & DrawModeFlags::SettingsForSelection)
+            aColor = GetSettings().GetStyleSettings().GetHighlightColor();
+        else
+            aColor = GetSettings().GetStyleSettings().GetWindowColor();
+    }
 
     return aColor;
 }

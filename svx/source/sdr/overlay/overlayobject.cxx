@@ -91,7 +91,7 @@ namespace sdr::overlay
             mbIsHittable(true),
             mbAllowsAnimation(false),
             mbAllowsAntiAliase(true),
-            mbOverruleDrawModeSettings(false)
+            mbHighContrastSelection(false)
         {
         }
 
