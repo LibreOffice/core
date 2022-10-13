@@ -109,7 +109,7 @@ namespace sdr::overlay
             // it is switched to false
             bool                                            mbAllowsAntiAliase : 1;
 
-            // In High Contrast mode all fg and bg and forced to the a pair of normal
+            // In High Contrast mode all fg and bg are forced to a pair of normal
             // high contrast colors. If this flag is set, then in High Contrast mode
             // the colors are instead forced to the high contrast selection fg/bg pair.
             // Default is false.
