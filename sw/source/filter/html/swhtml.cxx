@@ -826,9 +826,12 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                             pCursorSh->SetMark();
                             pCursorSh->ClearMark();
                         }
-                        m_pPam->GetBound().nContent.Assign( nullptr, 0 );
-                        m_pPam->GetBound(false).nContent.Assign( nullptr, 0 );
-                        m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->GetNode() );
+                        SwNode& rDelNode = m_pPam->GetPoint()->GetNode();
+                        // move so we don't have a dangling SwContentIndex to the deleted node
+                        m_pPam->GetPoint()->Adjust(SwNodeOffset(1));
+                        if (m_pPam->HasMark())
+                            m_pPam->GetMark()->Adjust(SwNodeOffset(1));
+                        m_xDoc->GetNodes().Delete( rDelNode );
                     }
                 }
             }
