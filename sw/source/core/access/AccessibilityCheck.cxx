@@ -254,7 +254,8 @@ public:
 class HyperlinkCheck : public NodeCheck
 {
 private:
-    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange)
+    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange, SwTextNode* pTextNode,
+                        sal_Int32 nStart)
     {
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
         if (!xProperties->getPropertySetInfo()->hasPropertyByName("HyperLinkURL"))
@@ -269,7 +270,19 @@ private:
             {
                 OUString sIssueText
                     = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
-                lclAddIssue(m_rIssueCollection, sIssueText);
+                lclAddIssue(m_rIssueCollection, sIssueText,
+                            sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT);
+            }
+            else if (sText.getLength() <= 5)
+            {
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_TEXT_IS_SHORT),
+                                          sfx::AccessibilityIssueID::HYPERLINK_SHORT);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pTextNode);
+                SwDoc& rDocument = pTextNode->GetDoc();
+                pIssue->setDoc(rDocument);
+                pIssue->setStart(nStart);
+                pIssue->setEnd(nStart + sText.getLength());
             }
         }
     }
@@ -293,12 +306,14 @@ public:
 
         uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        sal_Int32 nStart = 0;
         while (xRunEnum->hasMoreElements())
         {
             uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
             if (xRun.is())
             {
-                checkTextRange(xRun);
+                checkTextRange(xRun, pTextNode, nStart);
+                nStart += xRun->getString().getLength();
             }
         }
     }

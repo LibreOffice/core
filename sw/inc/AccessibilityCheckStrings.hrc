@@ -17,6 +17,7 @@
 #define STR_TABLE_MERGE_SPLIT           NC_("STR_TABLE_MERGE_SPLIT", "Table '%OBJECT_NAME%' contains merges or splits")
 #define STR_FAKE_NUMBERING              NC_("STR_FAKE_NUMBERING", "Fake numbering '%NUMBERING%'")
 #define STR_HYPERLINK_TEXT_IS_LINK      NC_("STR_HYPERLINK_TEXT_IS_LINK", "Hyperlink text is the same as the link address '%LINK%'")
+#define STR_HYPERLINK_TEXT_IS_SHORT     NC_("STR_HYPERLINK_TEXT_IS_SHORT", "Hyperlink text is too short.")
 #define STR_TEXT_CONTRAST               NC_("STR_TEXT_CONTRAST", "Text contrast is too low.")
 #define STR_TEXT_BLINKING               NC_("STR_TEXT_BLINKING", "Blinking text.")
 #define STR_AVOID_FOOTNOTES             NC_("STR_AVOID_FOOTNOTES", "Avoid footnotes.")

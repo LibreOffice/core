@@ -29,6 +29,8 @@ enum class AccessibilityIssueID
     NO_ALT_SHAPE,
     TABLE_MERGE_SPLIT,
     TEXT_FORMATTING,
+    HYPERLINK_IS_TEXT,
+    HYPERLINK_SHORT,
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssue
