@@ -67,7 +67,7 @@ file != FILENAME {
     {
         formatelement = 0
         split( $0, a, /<|>/ )
-        split( a[3], b, /[0-9A-Za-z\[\~\]]+/ )
+        split( a[3], b, /[0-9A-Za-z\[~\]]+/ )
         datesep = b[2]
         dateformat = a[3]
     }
