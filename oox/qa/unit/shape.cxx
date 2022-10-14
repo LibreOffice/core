@@ -20,6 +20,8 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <officecfg/Office/Common.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdoashp.hxx>
 
@@ -230,6 +232,58 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
         CPPUNIT_ASSERT(xShape->getPropertyValue("TextVerticalAdjust") >>= eVert);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].eAnchorHori, eHori);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].eAnchorVert, eVert);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
+{
+    // Make sure SmartArt is loaded as group shape
+    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
+        pChange->commit();
+    }
+
+    // The document contains SmartArt with shapes with not default text area. Without fix the
+    // text was shifted up because of wrong values in TextLowerDistance and TextUpperDistance.
+    load(u"tdf151518_SmartArtTextLocation.docx");
+
+    struct TextDistance
+    {
+        OUString sShapeName;
+        sal_Int16 nSubShapeIndex;
+        sal_Int32 nLowerDistance;
+        sal_Int32 nUpperDistance;
+    };
+    TextDistance aExpected[4] = { { u"Diagram Target List", 2, 2979, 201 },
+                                  { u"Diagram Nested Target", 1, 3203, 127 },
+                                  { u"Diagram Stacked Venn", 1, 3112, -302 },
+                                  { u"Diagram Grouped List", 1, 4106, 196 } };
+    // without the fix the observed distances were
+    // {4434, -464}, {4674, -751}, {4620, -1399}, {6152, -744}
+    for (size_t i = 0; i < 4; ++i)
+    {
+        uno::Reference<drawing::XShapes> xDiagramShape(getShapeByName(aExpected[i].sShapeName),
+                                                       uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(
+            xDiagramShape->getByIndex(aExpected[i].nSubShapeIndex), uno::UNO_QUERY);
+        sal_Int32 nLower;
+        sal_Int32 nUpper;
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("TextLowerDistance") >>= nLower);
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("TextUpperDistance") >>= nUpper);
+        CPPUNIT_ASSERT_EQUAL(aExpected[i].nLowerDistance, nLower);
+        CPPUNIT_ASSERT_EQUAL(aExpected[i].nUpperDistance, nUpper);
+    }
+
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
+        pChange->commit();
     }
 }
 

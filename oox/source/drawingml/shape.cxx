@@ -99,6 +99,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
@@ -1892,9 +1893,15 @@ Reference< XShape > const & Shape::createAndInsert(
         finalizeXShape( rFilterBase, rxShapes );
 
         if (mpTextBody)
-            mpTextBody->getTextProperties().readjustTextDistances(mxShape);
+        {
+            // tdf#151518. The method readjustTextDistances is fix for tdf#148321, but conflicts with
+            // text position in some of the SmartArt types in Writer. So exclude Writer here.
+            OUString sDocumentService;
+            rFilterBase.getMediaDescriptor()[utl::MediaDescriptor::PROP_DOCUMENTSERVICE] >>= sDocumentService;
+            if (sDocumentService != u"com.sun.star.text.TextDocument")
+                mpTextBody->getTextProperties().readjustTextDistances(mxShape);
+        }
     }
-
     return mxShape;
 }
 
