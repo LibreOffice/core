@@ -2465,20 +2465,24 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     const OUString& rPrefixMapping = m_pContentControl->GetDataBindingPrefixMappings();
     const OUString& rXpath = m_pContentControl->GetDataBindingXpath();
-    if (SwTextNode* pTextNode = !rXpath.isEmpty() ? m_pContentControl->GetTextNode() : nullptr)
+    if (!rXpath.isEmpty())
     {
         // This content control has a data binding, update the data source.
         SwTextContentControl* pTextAttr = m_pContentControl->GetTextAttr();
-        SwPosition aPoint(*pTextNode, pTextAttr->GetStart());
-        SwPosition aMark(*pTextNode, *pTextAttr->GetEnd());
-        SwPaM aPam(aMark, aPoint);
-        OUString aSnippet = aPam.GetText();
-        static sal_Unicode const aForbidden[] = {
-            CH_TXTATR_BREAKWORD,
-            0
-        };
-        aSnippet = comphelper::string::removeAny(aSnippet, aForbidden);
-        m_rExport.AddSdtData(rPrefixMapping, rXpath, aSnippet);
+        SwTextNode* pTextNode = m_pContentControl->GetTextNode();
+        if (pTextNode && pTextAttr)
+        {
+            SwPosition aPoint(*pTextNode, pTextAttr->GetStart());
+            SwPosition aMark(*pTextNode, *pTextAttr->GetEnd());
+            SwPaM aPam(aMark, aPoint);
+            OUString aSnippet = aPam.GetText();
+            static sal_Unicode const aForbidden[] = {
+                CH_TXTATR_BREAKWORD,
+                0
+            };
+            aSnippet = comphelper::string::removeAny(aSnippet, aForbidden);
+            m_rExport.AddSdtData(rPrefixMapping, rXpath, aSnippet);
+        }
     }
 
     m_pContentControl = nullptr;
