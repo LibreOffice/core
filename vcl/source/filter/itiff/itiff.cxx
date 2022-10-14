@@ -158,8 +158,9 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
         if (bOk && bFuzzing)
         {
-            const uint64_t MAX_SIZE = 150000000;
-            if (TIFFTileSize64(tif) > MAX_SIZE || nPixelsRequired > MAX_SIZE)
+            const uint64_t MAX_PIXEL_SIZE = 150000000;
+            const uint64_t MAX_TILE_SIZE = 100000000;
+            if (TIFFTileSize64(tif) > MAX_TILE_SIZE || nPixelsRequired > MAX_PIXEL_SIZE)
             {
                 SAL_WARN("filter.tiff", "skipping large tiffs");
                 break;
@@ -177,7 +178,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                             TIFFGetField(tif, TIFFTAG_TILELENGTH, &th) == 1)
                         {
                             uint32_t nLogLBufferRequired;
-                            bOk = !o3tl::checked_multiply(tw, th, nLogLBufferRequired) && nLogLBufferRequired < MAX_SIZE;
+                            bOk = !o3tl::checked_multiply(tw, th, nLogLBufferRequired) && nLogLBufferRequired < MAX_PIXEL_SIZE;
                             SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile " << tw << " x " << th);
                         }
                     }
