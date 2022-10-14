@@ -3241,7 +3241,7 @@ bool SwTextFrame::TestFormat( const SwFrame* pPrv, SwTwips &rMaxHeight, bool &bS
 
     SwTestFormat aSave( this, pPrv, rMaxHeight );
 
-    return SwTextFrame::WouldFit( rMaxHeight, bSplit, true );
+    return SwTextFrame::WouldFit(rMaxHeight, bSplit, true, false);
 }
 
 /**
@@ -3256,7 +3256,7 @@ bool SwTextFrame::TestFormat( const SwFrame* pPrv, SwTwips &rMaxHeight, bool &bS
  *
  * @returns true if I can split
  */
-bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
+bool SwTextFrame::WouldFit(SwTwips &rMaxHeight, bool &bSplit, bool bTst, bool bMoveBwd)
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::WouldFit with swapped frame" );
@@ -3339,7 +3339,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     // is breaking necessary?
     bSplit = !aFrameBreak.IsInside( aLine );
     if ( bSplit )
-        bRet = !aFrameBreak.IsKeepAlways() && aFrameBreak.WouldFit( aLine, rMaxHeight, bTst );
+        bRet = !aFrameBreak.IsKeepAlways() && aFrameBreak.WouldFit(aLine, rMaxHeight, bTst, bMoveBwd);
     else
     {
         // we need the total height including the current line
@@ -3770,7 +3770,42 @@ sal_uInt16 SwTextFrame::FirstLineHeight() const
     if ( !pPara )
         return USHRT_MAX;
 
-    return pPara->Height();
+    // tdf#146500 Lines with only fly overlap cannot be "moved", so the idea
+    // here is to continue until there's some text.
+    // FIXME ideally we want to count a fly to the line in which it is anchored
+    // - it may even be anchored in some other paragraph! SwFlyPortion doesn't
+    // have a pointer sadly so no way to find out.
+    sal_uInt16 nHeight(0);
+    for (SwLineLayout const* pLine = pPara; pLine; pLine = pLine->GetNext())
+    {
+        nHeight += pLine->Height();
+        bool hasNonFly(false);
+        for (SwLinePortion const* pPortion = pLine->GetFirstPortion();
+                pPortion; pPortion = pPortion->GetNextPortion())
+        {
+            switch (pPortion->GetWhichPor())
+            {
+                case PortionType::Fly:
+                case PortionType::Glue:
+                case PortionType::Margin:
+                    break;
+                default:
+                {
+                    hasNonFly = true;
+                    break;
+                }
+            }
+            if (hasNonFly)
+            {
+                break;
+            }
+        }
+        if (hasNonFly)
+        {
+            break;
+        }
+    }
+    return nHeight;
 }
 
 sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)

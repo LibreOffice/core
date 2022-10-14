@@ -485,7 +485,7 @@ public:
      * bSplit indicates, that the paragraph has to be split
      * bTst indicates, that we are currently doing a test formatting
      */
-    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst ) override;
+    virtual bool WouldFit(SwTwips &nMaxHeight, bool &bSplit, bool bTst, bool bMoveBwd) override;
 
     /**
      * The WouldFit equivalent for temporarily rewired TextFrames

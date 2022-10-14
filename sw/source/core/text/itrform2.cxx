@@ -45,6 +45,8 @@
 #include "porhyph.hxx"
 #include "pordrop.hxx"
 #include "redlnitr.hxx"
+#include <sortedobjs.hxx>
+#include <fmtanchr.hxx>
 #include <pagefrm.hxx>
 #include <tgrditem.hxx>
 #include <doc.hxx>
@@ -404,7 +406,38 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             rInf.SetFull(true);
     }
 
-    SwLinePortion *pPor = NewPortion( rInf );
+    ::std::optional<TextFrameIndex> oMovedFlyIndex;
+    if (SwTextFrame const*const pFollow = GetTextFrame()->GetFollow())
+    {
+        // flys are always on master!
+        if (GetTextFrame()->GetDrawObjs() && pFollow->GetUpper() != GetTextFrame()->GetUpper())
+        {
+            for (SwAnchoredObject const*const pAnchoredObj : *GetTextFrame()->GetDrawObjs())
+            {
+                // tdf#146500 try to stop where a fly is anchored in the follow
+                // that has recently been moved (presumably by splitting this
+                // frame); similar to check in SwFlowFrame::MoveBwd()
+                if (pAnchoredObj->RestartLayoutProcess()
+                    && !pAnchoredObj->IsTmpConsiderWrapInfluence())
+                {
+                    SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());
+                    assert(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA);
+                    TextFrameIndex const nAnchor(GetTextFrame()->MapModelToViewPos(*rAnchor.GetContentAnchor()));
+                    if (pFollow->GetOffset() <= nAnchor
+                        && (pFollow->GetFollow() == nullptr
+                            || nAnchor < pFollow->GetFollow()->GetOffset()))
+                    {
+                        if (!oMovedFlyIndex || nAnchor < *oMovedFlyIndex)
+                        {
+                            oMovedFlyIndex.emplace(nAnchor);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    SwLinePortion *pPor = NewPortion(rInf, oMovedFlyIndex);
 
     // Asian grid stuff
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
@@ -726,7 +759,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         {
             (void) rInf.CheckCurrentPosBookmark(); // bookmark was already created inside MultiPortion!
         }
-        pPor = NewPortion( rInf );
+        pPor = NewPortion(rInf, oMovedFlyIndex);
     }
 
     if( !rInf.IsStop() )
@@ -1503,8 +1536,16 @@ static bool lcl_OldFieldRest( const SwLineLayout* pCurr )
  *    -> CalcFlyWidth emulates the width and return portion, if needed
  */
 
-SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
+SwLinePortion *SwTextFormatter::NewPortion(SwTextFormatInfo &rInf,
+        ::std::optional<TextFrameIndex> const oMovedFlyIndex)
 {
+    if (oMovedFlyIndex && *oMovedFlyIndex <= rInf.GetIdx())
+    {
+        SAL_WARN_IF(*oMovedFlyIndex != rInf.GetIdx(), "sw.core", "stopping too late, no portion break at fly anchor?");
+        rInf.SetStop(true);
+        return nullptr;
+    }
+
     // Underflow takes precedence
     rInf.SetStopUnderflow( false );
     if( rInf.GetUnderflow() )

@@ -45,7 +45,7 @@ class SwTextFormatter : public SwTextPainter
     std::unique_ptr<sw::MergedAttrIterByEnd> m_pByEndIter; // HACK for TryNewNoLengthPortion
     SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion building)
 
-    SwLinePortion *NewPortion( SwTextFormatInfo &rInf );
+    SwLinePortion *NewPortion(SwTextFormatInfo &rInf, ::std::optional<TextFrameIndex>);
     SwTextPortion  *NewTextPortion( SwTextFormatInfo &rInf );
     SwLinePortion *NewExtraPortion( SwTextFormatInfo &rInf );
     SwTabPortion *NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const;

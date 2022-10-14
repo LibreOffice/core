@@ -525,7 +525,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     return true;
 }
 
-bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTst )
+bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTst, bool bMoveBwd )
 {
     // Here it does not matter, if pFrame is swapped or not.
     // IsInside() takes care of itself
@@ -542,11 +542,34 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
     rLine.Top();
     SwTwips nLineSum = rLine.GetLineHeight();
 
-    while( nMinLines > rLine.GetLineNr() )
+    // tdf#146500 for MoveBwd(), want at least 1 line with non-fly
+    bool hasNonFly(!bMoveBwd);
+    while (nMinLines > rLine.GetLineNr() || !hasNonFly)
     {
         if( !rLine.NextLine() )
-            return false;
+        {
+            if (nMinLines > rLine.GetLineNr())
+                return false;
+            else
+                break;
+        }
         nLineSum += rLine.GetLineHeight();
+        for (SwLinePortion const* pPortion = rLine.GetCurr()->GetFirstPortion();
+                !hasNonFly && pPortion; pPortion = pPortion->GetNextPortion())
+        {
+            switch (pPortion->GetWhichPor())
+            {
+                case PortionType::Fly:
+                case PortionType::Glue:
+                case PortionType::Margin:
+                    break;
+                default:
+                {
+                    hasNonFly = true;
+                    break;
+                }
+            }
+        }
     }
 
     // We do not fit

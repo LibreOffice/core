@@ -32,7 +32,7 @@ void SwFrame::PaintSwFrame(vcl::RenderContext&, SwRect const&, SwPrintData const
     OSL_FAIL( "PaintSwFrame() of the base class called." );
 }
 
-bool SwContentFrame::WouldFit( SwTwips &, bool&, bool )
+bool SwContentFrame::WouldFit(SwTwips &, bool&, bool, bool)
 {
     OSL_FAIL( "WouldFit of ContentFrame called." );
     return false;
