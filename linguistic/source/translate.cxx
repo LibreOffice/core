@@ -16,27 +16,27 @@ OString Translate(const OString& rTargetLang, const OString& rAPIUrl, const OStr
 
     std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
                                                            [](CURL* p) { curl_easy_cleanup(p); });
-    curl_easy_setopt(curl.get(), CURLOPT_URL, rAPIUrl.getStr());
-    curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
-    curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_URL, rAPIUrl.getStr());
+    (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
 
     std::string response_body;
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION,
-                     +[](void* buffer, size_t size, size_t nmemb, void* userp) -> size_t {
-                         if (!userp)
-                             return 0;
-                         std::string* response = static_cast<std::string*>(userp);
-                         size_t real_size = size * nmemb;
-                         response->append(static_cast<char*>(buffer), real_size);
-                         return real_size;
-                     });
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION,
+                           +[](void* buffer, size_t size, size_t nmemb, void* userp) -> size_t {
+                               if (!userp)
+                                   return 0;
+                               std::string* response = static_cast<std::string*>(userp);
+                               size_t real_size = size * nmemb;
+                               response->append(static_cast<char*>(buffer), real_size);
+                               return real_size;
+                           });
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
     OString aLang(curl_easy_escape(curl.get(), rTargetLang.getStr(), rTargetLang.getLength()));
     OString aAuthKey(curl_easy_escape(curl.get(), rAuthKey.getStr(), rAuthKey.getLength()));
     OString aData(curl_easy_escape(curl.get(), rData.getStr(), rData.getLength()));
     OString aPostData("auth_key=" + aAuthKey + "&target_lang=" + aLang + "&text=" + aData);
 
-    curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
+    (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
     CURLcode cc = curl_easy_perform(curl.get());
     if (cc != CURLE_OK)
     {
