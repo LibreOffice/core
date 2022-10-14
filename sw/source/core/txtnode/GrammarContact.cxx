@@ -18,6 +18,7 @@
  */
 
 #include <GrammarContact.hxx>
+#include <doc.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
@@ -143,11 +144,21 @@ void GrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
     }
 }
 
-void finishGrammarCheck( SwTextNode& rTextNode )
+sw::GrammarContact* getGrammarContactFor(const SwTextNode& rTextNode)
 {
-    sw::GrammarContact* pGrammarContact = getGrammarContact( rTextNode );
+    const SwDoc& rDoc = rTextNode.GetDoc();
+    if (rDoc.IsInDtor())
+        return nullptr;
+    return rDoc.getGrammarContact().get();
+}
+
+void finishGrammarCheckFor(SwTextNode& rTextNode)
+{
+    sw::GrammarContact* pGrammarContact = getGrammarContactFor(rTextNode);
     if (pGrammarContact)
-        pGrammarContact->finishGrammarCheck( rTextNode );
+    {
+        pGrammarContact->finishGrammarCheck(rTextNode);
+    }
 }
 
 } // end sw

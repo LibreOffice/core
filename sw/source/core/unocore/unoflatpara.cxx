@@ -190,7 +190,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal )
     {
         GetTextNode()->SetGrammarCheckDirty( !bVal );
         if( bVal )
-            sw::finishGrammarCheck( *GetTextNode() );
+            sw::finishGrammarCheckFor(*GetTextNode());
     }
 }
 

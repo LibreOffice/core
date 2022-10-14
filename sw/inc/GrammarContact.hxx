@@ -82,12 +82,13 @@ public:
 /** getGrammarContact() delivers the grammar contact of the document (for a given textnode)
 @returns grammar contact
 */
-GrammarContact* getGrammarContact(const SwTextNode&);
+GrammarContact* getGrammarContactFor(const SwTextNode&);
 
 /** finishGrammarCheck() calls the same function of the grammar contact of the document (for a given textnode)
 @returns void
 */
-void finishGrammarCheck(SwTextNode&);
-}
+void finishGrammarCheckFor(SwTextNode&);
+
+} // end sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
