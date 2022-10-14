@@ -24,7 +24,7 @@
 
 IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
 {
-    bool bInvalidState = !m_xOpenReadonlyCB->get_active() &&
+    bool bInvalidState = !m_xOpenReadonlyCB->get_active() && !m_bAllowEmpty &&
             m_xPasswdToOpenED->get_text().isEmpty() &&
             m_xPasswdToModifyED->get_text().isEmpty();
     if (bInvalidState)
@@ -44,7 +44,7 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
             m_xErrorBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
-            m_xErrorBox->runAsync(m_xErrorBox, [this, bToOpenMatch, bToModifyMatch, nMismatch](sal_Int32 /*nResult*/)
+            m_xErrorBox->runAsync(m_xErrorBox, [this, bToOpenMatch, nMismatch](sal_Int32 /*nResult*/)
             {
                 weld::Entry* pEdit = !bToOpenMatch ? m_xPasswdToOpenED.get() : m_xPasswdToModifyED.get();
                 weld::Entry* pRepeatEdit = !bToOpenMatch? m_xReenterPasswdToOpenED.get() : m_xReenterPasswdToModifyED.get();
@@ -107,6 +107,7 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
     , m_nMaxPasswdLen(nMaxPasswdLen)
     , m_bIsPasswordToModify( bIsPasswordToModify )
+    , m_bAllowEmpty( false )
 {
     m_xOk->connect_clicked(LINK(this, PasswordToOpenModifyDialog, OkBtnClickHdl));
 
@@ -143,6 +144,11 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
     {
         m_xErrorBox->response(RET_CANCEL);
     }
+}
+
+void PasswordToOpenModifyDialog::AllowEmpty()
+{
+    m_bAllowEmpty = true;
 }
 
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const

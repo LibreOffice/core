@@ -100,6 +100,7 @@ public:
     virtual OUString    GetPasswordToModify() const = 0;
     virtual bool        IsRecommendToOpenReadonly() const = 0;
     virtual void        Response(sal_Int32) = 0;
+    virtual void        AllowEmpty() = 0;
 };
 
 class VCL_DLLPUBLIC AbstractScreenshotAnnotationDlg : public VclAbstractDialog
