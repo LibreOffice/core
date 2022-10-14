@@ -38,9 +38,6 @@
 
 #include <vcl/svapp.hxx>
 
-#include <unicode/ubidi.h>
-#include <unicode/uchar.h>
-
 #include <algorithm>
 #include <memory>
 
@@ -50,12 +47,6 @@
 #define GF_FONTMASK  0xF0000000
 #define GF_FONTSHIFT 28
 
-
-sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
-{
-    nChar = u_charMirror( nChar );
-    return nChar;
-}
 
 sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
