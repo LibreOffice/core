@@ -56,6 +56,8 @@
 #include <swabstdlg.hxx>
 #include <swwrtshitem.hxx>
 
+#include <sfx2/dispatch.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
@@ -255,22 +257,32 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 
     // Elements - interpret Item
-    bool bFlag = true;
+    bool bReFoldOutlineFolding = false;
     if( const SwElemItem* pElemItem = rSet.GetItemIfSet( FN_PARAM_ELEM, false ) )
     {
         pElemItem->FillViewOptions( aViewOpt );
 
+        // Outline-folding options
         SwWrtShell* pWrtShell = GetActiveWrtShell();
-        bFlag = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
+        bool bIsOutlineFoldingOn = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
         bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
                 != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
-        if (bFlag && (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
+        if (bIsOutlineFoldingOn &&
+                (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
         {
-            // outline mode options have change which require to show all content
-            pWrtShell->MakeAllFoldedOutlineContentVisible();
-
+            // Outline-folding options have change which require to show all content.
+            // Either outline-folding is being switched off or outline-folding is currently on
+            // and the treat subs option has changed.
+            pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
             if (bTreatSubsChanged)
-                bFlag = false; // folding method changed, set bFlag false to refold below
+                bReFoldOutlineFolding = true; // folding method changed, set flag to refold below
+        }
+        else
+        {
+            // Refold needs to be done when outline-folding is being turned on or off
+            bReFoldOutlineFolding =
+                    pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton() !=
+                    aViewOpt.IsShowOutlineContentVisibilityButton();
         }
     }
 
@@ -386,8 +398,11 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if (SfxItemState::SET != rSet.GetItemState(FN_PARAM_ELEM, false))
         return;
 
-    if (!bFlag)
-        GetActiveWrtShell()->MakeAllFoldedOutlineContentVisible(false);
+    if (bReFoldOutlineFolding)
+    {
+        GetActiveWrtShell()->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+        GetActiveWrtShell()->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+    }
 }
 
 std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
