@@ -518,29 +518,16 @@ bool isdigitAsciiString(std::u16string_view rString)
         [](sal_Unicode c){ return rtl::isAsciiDigit(c); });
 }
 
-namespace
-{
-    template <typename T, typename I, typename O> T tmpl_reverseString(I rIn)
-    {
-        if (rIn.empty())
-            return T();
-
-        typename I::size_type i = rIn.size();
-        O sBuf(static_cast<sal_Int32>(i));
-        while (i)
-            sBuf.append(rIn[--i]);
-        return sBuf.makeStringAndClear();
-    }
-}
-
 OUString reverseString(std::u16string_view rStr)
 {
-    return tmpl_reverseString<OUString, std::u16string_view, OUStringBuffer>(rStr);
-}
+    if (rStr.empty())
+        return OUString();
 
-OString reverseString(std::string_view rStr)
-{
-    return tmpl_reverseString<OString, std::string_view, OStringBuffer>(rStr);
+    std::size_t i = rStr.size();
+    OUStringBuffer sBuf(static_cast<sal_Int32>(i));
+    while (i)
+        sBuf.append(rStr[--i]);
+    return sBuf.makeStringAndClear();
 }
 
 sal_Int32 indexOfAny(std::u16string_view rIn,

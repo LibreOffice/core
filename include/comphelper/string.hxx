@@ -157,13 +157,6 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicod
 */
 COMPHELPER_DLLPUBLIC OUString reverseString(std::u16string_view rStr);
 
-/** Reverse an OString
-
-  @param    rIn     the input OString
-  @return   the reversed input
-*/
-COMPHELPER_DLLPUBLIC OString reverseString(std::string_view rStr);
-
 
 namespace detail
 {

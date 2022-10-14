@@ -178,9 +178,9 @@ void TestString::testTokenCount()
 
 void TestString::testReverseString()
 {
-    OString aOut = ::comphelper::string::reverseString("ABC");
+    OUString aOut = ::comphelper::string::reverseString(u"ABC");
 
-    CPPUNIT_ASSERT_EQUAL(OString("CBA"), aOut);
+    CPPUNIT_ASSERT_EQUAL(OUString("CBA"), aOut);
 }
 
 void TestString::testSplit()
