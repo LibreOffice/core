@@ -45,6 +45,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
 
     int                         m_nMaxPasswdLen;
     bool                        m_bIsPasswordToModify;
+    bool                        m_bAllowEmpty;
 
 
     DECL_LINK(OkBtnClickHdl, weld::Button&, void);
@@ -64,6 +65,7 @@ public:
     OUString  GetPasswordToOpen() const;
     OUString  GetPasswordToModify() const;
     bool    IsRecommendToOpenReadonly() const;
+    void    AllowEmpty();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

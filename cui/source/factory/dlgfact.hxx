@@ -388,6 +388,7 @@ DECL_ABSTDLG_CLASS_SHARED_ASYNC(AbstractPasswordToOpenModifyDialog,AbstractPassw
     virtual OUString  GetPasswordToModify() const override;
     virtual bool      IsRecommendToOpenReadonly() const override;
     virtual void      Response(sal_Int32) override;
+    virtual void      AllowEmpty() override;
 };
 
 // AbstractSvxCharacterMapDialog_Impl

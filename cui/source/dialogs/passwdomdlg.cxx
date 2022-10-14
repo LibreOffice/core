@@ -24,7 +24,7 @@
 
 IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
 {
-    bool bInvalidState = !m_xOpenReadonlyCB->get_active() &&
+    bool bInvalidState = !m_xOpenReadonlyCB->get_active() && !m_bAllowEmpty &&
             m_xPasswdToOpenED->get_text().isEmpty() &&
             m_xPasswdToModifyED->get_text().isEmpty();
     if (bInvalidState)
@@ -107,6 +107,7 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     , m_aInvalidStateForOkButton_v2( CuiResId( RID_CUISTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
     , m_nMaxPasswdLen(nMaxPasswdLen)
     , m_bIsPasswordToModify( bIsPasswordToModify )
+    , m_bAllowEmpty( false )
 {
     m_xOk->connect_clicked(LINK(this, PasswordToOpenModifyDialog, OkBtnClickHdl));
 
@@ -143,6 +144,11 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
     {
         m_xErrorBox->response(RET_CANCEL);
     }
+}
+
+void PasswordToOpenModifyDialog::AllowEmpty()
+{
+    m_bAllowEmpty = true;
 }
 
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const

@@ -785,11 +785,13 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
             // handle the pwd dialog asynchronously
             VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
             m_xPasswordDialog = pFact->CreatePasswordToOpenModifyDialog(GetFrameWeld(), maxPwdLen, false);
+            m_xPasswordDialog->AllowEmpty(); // needed to remove password
             m_xPasswordDialog->StartExecuteAsync([this, pFilter, pMedSet, pShell](sal_Int32 nResult)
             {
                 if (nResult == RET_OK)
                 {
-                    sfx2::SetPassword(pFilter, pMedSet, m_xPasswordDialog->GetPasswordToOpen(), m_xPasswordDialog->GetPasswordToOpen());
+                    sfx2::SetPassword(pFilter, pMedSet, m_xPasswordDialog->GetPasswordToOpen(),
+                                      m_xPasswordDialog->GetPasswordToOpen(), true);
                     pShell->SetModified();
                 }
                 m_xPasswordDialog->disposeOnce();

@@ -2878,7 +2878,9 @@ bool IsOOXML(const std::shared_ptr<const SfxFilter>& pCurrentFilter)
     return IsMSType(pCurrentFilter) && lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName());
 }
 
-ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet, const OUString& rPasswordToOpen, std::u16string_view rPasswordToModify)
+ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet,
+                    const OUString& rPasswordToOpen, std::u16string_view rPasswordToModify,
+                    bool bAllowPasswordReset)
 {
     const bool bMSType = IsMSType(pCurrentFilter);
     const bool bOOXML = IsOOXML(pCurrentFilter);
@@ -2923,6 +2925,17 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
             uno::Any(comphelper::concatSequences(
                 aEncryptionData, comphelper::OStorageHelper::CreatePackageEncryptionData(
                                     rPasswordToOpen)))));
+    }
+    else if (bAllowPasswordReset)
+    {
+        // Remove password
+
+        if (pSet->HasItem(SID_ENCRYPTIONDATA))
+            pSet->ClearItem(SID_MODIFYPASSWORDINFO);
+        if (pSet->HasItem(SID_ENCRYPTIONDATA))
+            pSet->ClearItem(SID_ENCRYPTIONDATA);
+
+        return ERRCODE_NONE;
     }
 
     if ( bMSType )

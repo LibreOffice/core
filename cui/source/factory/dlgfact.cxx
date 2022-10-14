@@ -809,6 +809,11 @@ void AbstractPasswordToOpenModifyDialog_Impl::Response(sal_Int32 nResult)
      m_xDlg->response(nResult);
 }
 
+void AbstractPasswordToOpenModifyDialog_Impl::AllowEmpty()
+{
+     m_xDlg->AllowEmpty();
+}
+
 // Create dialogs with simplest interface
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Window* pParent, sal_uInt32 nResId)
 {
