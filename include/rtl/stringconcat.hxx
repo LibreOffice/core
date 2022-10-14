@@ -334,7 +334,7 @@ template <typename C, typename Number, std::size_t nBufSize> struct StringNumber
     // so implement that one also here, to avoid having to explicitly convert
     // to O(U)String in all such places
     const C* getStr() const SAL_RETURNS_NONNULL { return buf; }
-    StringNumberBase&& toAsciiUpperCase()
+    StringNumberBase&& toAsciiUpperCase() &&
     {
         if constexpr (sizeof(C) == sizeof(char))
             rtl_str_toAsciiUpperCase_WithLength(buf, length);
