@@ -67,7 +67,7 @@ public:
 class SFX2_DLLPUBLIC LokStarMathHelper
 {
 public:
-    LokStarMathHelper(SfxViewShell* pViewShell)
+    LokStarMathHelper(const SfxViewShell* pViewShell)
         : mpViewShell(pViewShell)
     {
     }
@@ -84,7 +84,7 @@ private:
     css::uno::Reference<css::frame::XController>& GetXController();
     tools::Rectangle GetBoundingBox();
 
-    SfxViewShell* mpViewShell;
+    const SfxViewShell* mpViewShell;
     css::uno::Reference<css::frame::XController> mxController;
     VclPtr<vcl::Window> mpGraphicWindow;
     VclPtr<vcl::Window> mpWidgetWindow;
