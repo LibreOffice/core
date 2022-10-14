@@ -56,7 +56,6 @@ public:
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScUniqueCellFormatsEnumeration);
 
@@ -103,12 +102,6 @@ void ScUniqueCellFormatsEnumeration::setUp()
 {
     CalcUnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScUniqueCellFormatsEnumeration::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 void ScUniqueCellFormatsEnumeration::changeColor(const uno::Reference<sheet::XSpreadsheet>& xSheet,

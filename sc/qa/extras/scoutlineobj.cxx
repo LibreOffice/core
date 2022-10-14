@@ -25,7 +25,6 @@ public:
     ScOutlineObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual uno::Reference<uno::XInterface> init() override;
 
@@ -66,12 +65,6 @@ void ScOutlineObj::setUp()
     OUString aFileURL;
     createFileURL(u"ScOutlineObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
-}
-
-void ScOutlineObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScOutlineObj);

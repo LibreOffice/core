@@ -108,7 +108,6 @@ void ScHeaderFieldsObj::tearDown()
 {
     m_xText.clear();
 
-    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

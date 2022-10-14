@@ -53,7 +53,6 @@ public:
     virtual uno::Reference<uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0) override;
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTabViewObj);
 
@@ -123,12 +122,6 @@ void ScTabViewObj::setUp()
 {
     CalcUnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScTabViewObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTabViewObj);

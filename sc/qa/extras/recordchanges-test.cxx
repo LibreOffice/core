@@ -24,8 +24,6 @@ class ScRecordChangesTest : public CalcUnoApiTest
 public:
     ScRecordChangesTest();
 
-    virtual void tearDown() override;
-
     void testSetRecordChanges();
     void testCheckRecordChangesProtection();
 
@@ -34,12 +32,6 @@ public:
     CPPUNIT_TEST(testCheckRecordChangesProtection);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void ScRecordChangesTest::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
-}
 
 void ScRecordChangesTest::testSetRecordChanges()
 {

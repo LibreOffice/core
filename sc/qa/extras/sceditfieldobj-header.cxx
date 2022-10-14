@@ -106,7 +106,6 @@ void ScEditFieldObj_Header::tearDown()
     // Clear these before the component is destroyed.  This is important!
     mxField.clear();
     mxRightText.clear();
-    closeDocument(mxComponent);
 
     CalcUnoApiTest::tearDown();
 }

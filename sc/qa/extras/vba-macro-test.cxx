@@ -42,8 +42,6 @@ public:
     {
     }
 
-    virtual void tearDown() override;
-
     void testSimpleCopyAndPaste();
     void testMultiDocumentCopyAndPaste();
     void testSheetAndColumnSelectAndHide();
@@ -88,12 +86,6 @@ public:
     CPPUNIT_TEST(testTdf118247);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void VBAMacroTest::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
-}
 
 void VBAMacroTest::testSimpleCopyAndPaste()
 {

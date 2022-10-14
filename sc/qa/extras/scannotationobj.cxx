@@ -41,7 +41,6 @@ public:
     ScAnnontationObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) override;
@@ -127,12 +126,6 @@ void ScAnnontationObj::setUp()
     OUString aFileURL;
     createFileURL(u"ScAnnotationObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
-}
-
-void ScAnnontationObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnnontationObj);

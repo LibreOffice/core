@@ -95,7 +95,6 @@ public:
     ScTableSheetObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual OUString getFileURL() override;
 
@@ -357,12 +356,6 @@ void ScTableSheetObj::setUp()
     CalcUnoApiTest::setUp();
     createFileURL(u"ScTableSheetObj.ods", maFileURL);
     mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScTableSheetObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetObj);

@@ -38,7 +38,6 @@ public:
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScAreaLinkObj);
 
@@ -95,12 +94,6 @@ void ScAreaLinkObj::setUp()
 {
     CalcUnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScAreaLinkObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAreaLinkObj);

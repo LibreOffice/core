@@ -107,8 +107,6 @@ void ScAnnotationShapeObj::setUp()
 void ScAnnotationShapeObj::tearDown()
 {
     m_xField.clear();
-    closeDocument(mxComponent);
-
     CalcUnoApiTest::tearDown();
 }
 

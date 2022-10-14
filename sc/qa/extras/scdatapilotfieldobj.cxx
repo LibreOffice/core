@@ -39,7 +39,6 @@ class ScDataPilotFieldObj : public CalcUnoApiTest,
 {
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
     virtual uno::Reference<uno::XInterface> init() override;
 
     ScDataPilotFieldObj();
@@ -114,12 +113,6 @@ void ScDataPilotFieldObj::setUp()
     OUString aFileURL;
     createFileURL(u"scdatapilotfieldobj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScDataPilotFieldObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldObj);

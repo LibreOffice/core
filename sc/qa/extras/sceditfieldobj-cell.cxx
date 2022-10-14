@@ -107,7 +107,6 @@ void ScEditFieldObj_Cell::setUp()
 void ScEditFieldObj_Cell::tearDown()
 {
     mxField.clear();
-    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

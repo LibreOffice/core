@@ -43,8 +43,6 @@ public:
     ScMacrosTest();
     void saveAndReload(const OUString& rFilter);
 
-    virtual void tearDown() override;
-
     void testStarBasic();
     void testMSP();
     void testPasswordProtectedStarBasic();
@@ -131,12 +129,6 @@ void ScMacrosTest::saveAndReload(const OUString& rFilter)
     xCloseable->close(true);
 
     mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScMacrosTest::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 // I suppose you could say this test doesn't really belong here, OTOH

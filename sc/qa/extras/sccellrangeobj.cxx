@@ -76,7 +76,6 @@ public:
     ScCellRangeObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<uno::XInterface> getXCellRangeData() override;
     virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
@@ -249,12 +248,6 @@ void ScCellRangeObj::setUp()
     OUString aFileURL;
     createFileURL(u"xcellrangesquery.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScCellRangeObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangeObj);

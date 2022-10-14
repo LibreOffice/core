@@ -27,7 +27,6 @@ public:
     CheckXCellRangesQuery();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init();
     void checkEmptyCell();
@@ -169,13 +168,6 @@ void CheckXCellRangesQuery::setUp()
 {
     CalcUnoApiTest::setUp();
     init();
-}
-
-void CheckXCellRangesQuery::tearDown()
-{
-    closeDocument(mxComponent);
-    mxComponent.clear();
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CheckXCellRangesQuery);

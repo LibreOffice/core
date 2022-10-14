@@ -55,7 +55,6 @@ public:
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Sequence<beans::PropertyValue> createCondition(const sal_Int32 nr) override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableConditionalFormat);
 
@@ -137,12 +136,6 @@ void ScTableConditionalFormat::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScTableConditionalFormat::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableConditionalFormat);

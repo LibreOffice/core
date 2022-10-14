@@ -35,7 +35,6 @@ public:
     ScConditionalFormatTest();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init(sal_Int32 nIndex = 0);
     void testRequestCondFormatListFromSheet();
@@ -444,12 +443,6 @@ void ScConditionalFormatTest::setUp()
     OUString aFileURL;
     createFileURL(u"new_cond_format_api.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
-}
-
-void ScConditionalFormatTest::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScConditionalFormatTest);

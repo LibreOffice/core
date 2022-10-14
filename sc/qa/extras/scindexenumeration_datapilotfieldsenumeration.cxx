@@ -38,7 +38,6 @@ public:
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_DataPilotFieldsEnumeration);
 
@@ -90,12 +89,6 @@ void ScIndexEnumeration_DataPilotFieldsEnumeration::setUp()
 {
     CalcUnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScIndexEnumeration_DataPilotFieldsEnumeration::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_DataPilotFieldsEnumeration);

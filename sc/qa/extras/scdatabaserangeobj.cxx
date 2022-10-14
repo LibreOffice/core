@@ -31,7 +31,6 @@ class ScDatabaseRangeObj : public CalcUnoApiTest,
 {
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< uno::XInterface > init( const OUString& rDBName ) override;
@@ -102,12 +101,6 @@ void ScDatabaseRangeObj::setUp()
     createFileURL(u"ScDatabaseRangeObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 
-}
-
-void ScDatabaseRangeObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDatabaseRangeObj);

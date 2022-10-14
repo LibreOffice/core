@@ -37,7 +37,6 @@ public:
     CheckDataPilotTable();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init() override;
 
@@ -171,13 +170,6 @@ void CheckDataPilotTable::setUp()
 {
     CalcUnoApiTest::setUp();
     init();
-}
-
-void CheckDataPilotTable::tearDown()
-{
-    closeDocument(mxComponent);
-    mxComponent.clear();
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CheckDataPilotTable);

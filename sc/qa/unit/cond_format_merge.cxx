@@ -27,8 +27,6 @@ class ScCondFormatMergeTest : public CalcUnoApiTest
 public:
     ScCondFormatMergeTest();
 
-    virtual void tearDown() override;
-
     void testCondFormatMerge();
 
     CPPUNIT_TEST_SUITE(ScCondFormatMergeTest);
@@ -39,12 +37,6 @@ public:
 ScCondFormatMergeTest::ScCondFormatMergeTest()
     : CalcUnoApiTest("sc/qa/extras/testdocuments/")
 {
-}
-
-void ScCondFormatMergeTest::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 void ScCondFormatMergeTest::testCondFormatMerge()

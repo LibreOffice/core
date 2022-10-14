@@ -58,8 +58,6 @@ public:
 
     ScPerfObj();
 
-    virtual void tearDown() override;
-
     uno::Reference< uno::XInterface > init(std::u16string_view aFileName);
 
     CPPUNIT_TEST_SUITE(ScPerfObj);
@@ -116,16 +114,6 @@ uno::Reference< uno::XInterface > ScPerfObj::init(std::u16string_view aFileName)
     mxComponent = loadFromDesktop(aFileURL);
 
     return mxComponent;
-}
-
-void ScPerfObj::tearDown()
-{
-    if (mxComponent.is())
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-    CalcUnoApiTest::tearDown();
 }
 
 void ScPerfObj::testSheetFindAll()

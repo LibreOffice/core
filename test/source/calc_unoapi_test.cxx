@@ -30,6 +30,7 @@ void CalcUnoApiTest::setUp()
 
 void CalcUnoApiTest::tearDown()
 {
+    closeDocument(mxComponent);
     uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
     UnoApiTest::tearDown();
 }

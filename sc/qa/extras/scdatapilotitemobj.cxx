@@ -37,7 +37,6 @@ class ScDataPilotItemObj : public CalcUnoApiTest,
 {
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
     virtual uno::Reference<uno::XInterface> init() override;
 
     ScDataPilotItemObj();
@@ -122,12 +121,6 @@ void ScDataPilotItemObj::setUp()
     CalcUnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScDataPilotItemObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotItemObj);

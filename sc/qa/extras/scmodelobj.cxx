@@ -40,7 +40,6 @@ class ScModelObj : public CalcUnoApiTest,
 {
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<uno::XInterface> getXMSF() override;
@@ -112,12 +111,6 @@ void ScModelObj::setUp()
     OUString aFileURL;
     createFileURL(u"ScModelObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScModelObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScModelObj);

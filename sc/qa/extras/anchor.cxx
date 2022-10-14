@@ -35,8 +35,6 @@ class ScAnchorTest : public CalcUnoApiTest
 public:
     ScAnchorTest();
 
-    virtual void tearDown() override;
-
     void testUndoAnchor();
     void testTdf76183();
     void testODFAnchorTypes();
@@ -63,12 +61,6 @@ public:
 ScAnchorTest::ScAnchorTest()
     : CalcUnoApiTest("sc/qa/unit/data/ods")
 {
-}
-
-void ScAnchorTest::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 void ScAnchorTest::testUndoAnchor()

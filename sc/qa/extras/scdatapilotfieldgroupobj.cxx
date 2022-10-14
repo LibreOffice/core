@@ -54,7 +54,6 @@ public:
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupObj);
 
@@ -199,12 +198,6 @@ void ScDataPilotFieldGroupObj::setUp()
     CalcUnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScDataPilotFieldGroupObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldGroupObj);

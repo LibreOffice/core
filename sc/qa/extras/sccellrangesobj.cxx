@@ -43,7 +43,6 @@ public:
     ScCellRangesObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
     virtual uno::Reference<uno::XInterface> init() override;
@@ -136,12 +135,6 @@ void ScCellRangesObj::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScCellRangesObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangesObj);

@@ -29,7 +29,6 @@ public:
     ScNamedRangeObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< sheet::XNamedRange > getNamedRange(const OUString& rRangeName) override;
@@ -96,12 +95,6 @@ void ScNamedRangeObj::setUp()
     OUString aFileURL;
     createFileURL(u"ScNamedRangeObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScNamedRangeObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangeObj);

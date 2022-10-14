@@ -44,7 +44,6 @@ public:
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScAutoFormatsObj);
 
@@ -119,12 +118,6 @@ void ScAutoFormatsObj::setUp()
     CalcUnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScAutoFormatsObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAutoFormatsObj);

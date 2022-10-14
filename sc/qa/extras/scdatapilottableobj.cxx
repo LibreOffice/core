@@ -35,7 +35,6 @@ public:
     ScDataPilotTableObj();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< uno::XInterface > initDP2() override;
     virtual uno::Reference< uno::XInterface > getSheets() override;
@@ -135,12 +134,6 @@ void ScDataPilotTableObj::setUp()
     OUString aFileURL;
     createFileURL(u"ScDataPilotTableObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-}
-
-void ScDataPilotTableObj::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotTableObj);

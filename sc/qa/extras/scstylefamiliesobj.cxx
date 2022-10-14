@@ -130,7 +130,6 @@ void ScStyleFamiliesObj::setUp()
 
 void ScStyleFamiliesObj::tearDown()
 {
-    closeDocument(mxComponent);
     closeDocument(m_xSrcComponent);
     CalcUnoApiTest::tearDown();
 }

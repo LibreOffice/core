@@ -37,7 +37,6 @@ public:
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_SheetLinksEnumeration);
 
@@ -79,12 +78,6 @@ void ScIndexEnumeration_SheetLinksEnumeration::setUp()
 {
     CalcUnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
-}
-
-void ScIndexEnumeration_SheetLinksEnumeration::tearDown()
-{
-    closeDocument(mxComponent);
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_SheetLinksEnumeration);
