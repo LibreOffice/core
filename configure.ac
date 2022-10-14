@@ -13541,25 +13541,6 @@ AC_SUBST(CAIRO_LIBS)
 AC_SUBST(ENABLE_CAIRO_CANVAS)
 AC_SUBST(SYSTEM_CAIRO)
 
-if test -z "$with_system_cairo"; then
-    with_system_cairo=yes
-fi
-
-case "$_os" in
-    Linux)
-        AC_MSG_CHECKING([for compatibility of system/bundled font-related libraries])
-        if test "$with_system_harfbuzz" != "$with_system_fontconfig" ||
-           test "$with_system_fontconfig" != "$with_system_freetype" ||
-           test "$with_system_freetype" != "$with_system_cairo" ||
-           test "$with_system_cairo" != "$with_system_graphite"; then
-           AC_MSG_RESULT([no])
-           AC_MSG_ERROR([cairo, fontconfig, freetype, graphite, and harfbuzz must all be either used from the system or bundled])
-        else
-           AC_MSG_RESULT([yes])
-        fi
-        ;;
-esac
-
 dnl ===================================================================
 dnl Test whether to use avahi
 dnl ===================================================================
