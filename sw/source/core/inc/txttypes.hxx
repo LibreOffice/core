@@ -80,7 +80,8 @@ enum class PortionType
     Fix         = 0x06c0,
     Fly         = 0x06c1,
 
-    Table       = 0x0750,
+    // Tabulator, not table
+    Tab         = 0x0750,
 
     TabRight    = 0x07d0,
     TabCenter   = 0x07d1,

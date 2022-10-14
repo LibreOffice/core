@@ -1429,7 +1429,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
-        case PortionType::Table :
+        case PortionType::Tab :
         case PortionType::TabRight :
         case PortionType::TabCenter :
         case PortionType::TabDecimal :
