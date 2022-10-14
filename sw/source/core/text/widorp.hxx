@@ -63,7 +63,7 @@ public:
     void ClrOrphLines(){ m_nOrphLines = 0; }
 
     bool FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine, bool bHasToFit );
-    bool WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTest );
+    bool WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTest, bool bMoveBwd );
     // i#16128 - This method is named this way to avoid confusion with
     // base class method <SwTextFrameBreak::IsBreakNow>, which isn't virtual.
     bool IsBreakNowWidAndOrp( SwTextMargin &rLine )

@@ -1761,7 +1761,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 SwTwips nTmp = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea()) -
                                aRectFnSet.GetTop(getFramePrintArea());
                 bool bSplit = !IsFwdMoveAllowed();
-                if ( nTmp > 0 && WouldFit( nTmp, bSplit, false ) )
+                if (nTmp > 0 && WouldFit(nTmp, bSplit, false, false))
                 {
                     Prepare( PrepareHint::WidowsOrphans, nullptr, false );
                     setFrameAreaSizeValid(false);
@@ -2046,7 +2046,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                 bRet = static_cast<SwTextFrame*>(pFrame)->TestFormat( pTmpPrev, nSpace, bSplit );
             }
             else
-                bRet = pFrame->WouldFit( nSpace, bSplit, false );
+                bRet = pFrame->WouldFit(nSpace, bSplit, false, true);
 
             pTmpFrame->RemoveFromLayout();
             pTmpFrame->InsertBefore( pUp, pOldNext );
@@ -2054,7 +2054,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
         }
         else
         {
-            bRet = pFrame->WouldFit( nSpace, bSplit, false );
+            bRet = pFrame->WouldFit(nSpace, bSplit, false, true);
             nSecondCheck = !bSplit ? 1 : 0;
         }
 
@@ -2123,7 +2123,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     // We do a second check with the original remaining space
                     // reduced by the required upper space:
                     nOldSpace -= nSecondCheck;
-                    const bool bSecondRet = nOldSpace >= 0 && pFrame->WouldFit( nOldSpace, bOldSplit, false );
+                    const bool bSecondRet = nOldSpace >= 0 && pFrame->WouldFit(nOldSpace, bOldSplit, false, true);
                     if ( bSecondRet && bOldSplit && nOldSpace >= 0 )
                     {
                         bRet = true;

@@ -106,7 +106,7 @@ public:
     // nMaxHeight is the required height
     // bSplit indicates that the paragraph has to be split
     // bTst indicates that we are currently doing a test formatting
-    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
+    virtual bool WouldFit(SwTwips &nMaxHeight, bool &bSplit, bool bTst, bool);
 
     bool MoveFootnoteCntFwd( bool, SwFootnoteBossFrame* ); // called by MoveFwd if content
 
