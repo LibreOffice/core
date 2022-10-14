@@ -708,12 +708,26 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
     constexpr int MaxNormalLineWidth = 128;
-    if (bObjectToDeviceIsIdentity && fLineWidth > MaxNormalLineWidth)
+    if (fLineWidth > MaxNormalLineWidth)
     {
-        SAL_WARN("vcl.gdi", "drawPolyLine, suspicious line width of: " << fLineWidth);
-        static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
-        if (bFuzzing)
-            fLineWidth = MaxNormalLineWidth;
+        const double fLineWidthPixel
+            = bObjectToDeviceIsIdentity
+                  ? fLineWidth
+                  : (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
+        if (fLineWidthPixel > MaxNormalLineWidth)
+        {
+            SAL_WARN("vcl.gdi", "drawPolyLine, suspicious input line width of: "
+                                    << fLineWidth << ", will be " << fLineWidthPixel
+                                    << " pixels thick");
+            static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+            if (bFuzzing)
+            {
+                basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+                aObjectToDeviceInv.invert();
+                fLineWidth
+                    = (aObjectToDeviceInv * basegfx::B2DVector(MaxNormalLineWidth, 0)).getLength();
+            }
+        }
     }
     cairo_set_line_width(cr, fLineWidth);
     cairo_set_miter_limit(cr, fMiterLimit);
