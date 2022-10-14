@@ -684,7 +684,7 @@ public:
     SwDBData const & GetDBData();
 
     // Some helper functions
-    OUString GetUniqueGrfName() const;
+    OUString GetUniqueGrfName(std::u16string_view rPrefix = std::u16string_view()) const;
     OUString GetUniqueOLEName() const;
     OUString GetUniqueFrameName() const;
     OUString GetUniqueShapeName() const;

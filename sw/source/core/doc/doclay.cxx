@@ -1320,7 +1320,7 @@ namespace
     }
 }
 
-static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, sal_uInt16 eType)
+static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, sal_uInt16 eType, std::u16string_view rPrefix = std::u16string_view(), SwNodeType nNdTyp = SwNodeType::NONE)
 {
     assert(eType >= RES_FMT_BEGIN && eType < RES_FMT_END);
     if (rDoc.IsInMailMerge())
@@ -1329,6 +1329,26 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
             + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
             + OUString::number( rDoc.GetSpzFrameFormats()->size() + 1 );
         return newName;
+    }
+
+    if (!rPrefix.empty())
+    {
+        // Generate a name that makes it possible to know this is a copy of which original name,
+        // e.g. 'Picture 1 Copy 1'.
+        assert(nNdTyp != SwNodeType::NONE);
+        sal_Int32 nCnt = 1;
+        OUString aPrefix = SwResId(STR_MARK_COPY).replaceFirst("%1", rPrefix);
+        OUString aTmp;
+        while(nCnt < SAL_MAX_INT32)
+        {
+            aTmp = aPrefix + OUString::number(nCnt);
+            ++nCnt;
+            if (!rDoc.FindFlyByName(aTmp, nNdTyp))
+            {
+                break;
+            }
+        }
+        return aTmp;
     }
 
     OUString aName(SwResId(pDefStrId));
@@ -1360,9 +1380,9 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
     return aName + OUString::number(nNum);
 }
 
-OUString SwDoc::GetUniqueGrfName() const
+OUString SwDoc::GetUniqueGrfName(std::u16string_view rPrefix) const
 {
-    return lcl_GetUniqueFlyName(*this, STR_GRAPHIC_DEFNAME, RES_FLYFRMFMT);
+    return lcl_GetUniqueFlyName(*this, STR_GRAPHIC_DEFNAME, RES_FLYFRMFMT, rPrefix, SwNodeType::Grf);
 }
 
 OUString SwDoc::GetUniqueOLEName() const

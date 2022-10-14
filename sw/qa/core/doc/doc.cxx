@@ -278,6 +278,24 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
     // - Actual  : 2
     // i.e. the 2nd header had a duplicated bookmark without "Copy" in its name.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
+
+    // Also, when checking the # of non-copy images in the resulting doc model:
+    nActual = 0;
+    SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
+    for (size_t i = 0; i < rFrameFormats.size(); ++i)
+    {
+        if (rFrameFormats[i]->GetName().indexOf("Copy") == -1)
+        {
+            ++nActual;
+        }
+    }
+
+    // Then make sure we have a single non-copy image, with no duplications:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the 2nd header had a duplicated image without "Copy" in its name.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
