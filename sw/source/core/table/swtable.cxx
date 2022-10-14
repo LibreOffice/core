@@ -1672,7 +1672,10 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
                         {
                             // plain text between the delete redlines
                             if ( pPreviousDeleteRedline &&
-                                *pPreviousDeleteRedline->End() < *pRedline->Start() )
+                                *pPreviousDeleteRedline->End() < *pRedline->Start() &&
+                                // in the same section, i.e. not in a nested table
+                                pPreviousDeleteRedline->End()->nNode.GetNode().StartOfSectionNode() ==
+                                    pRedline->Start()->nNode.GetNode().StartOfSectionNode() )
                             {
                                 bPlainTextInLine = true;
                             }
@@ -1698,6 +1701,9 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
 
             // there is text content outside of redlines: not a deletion
             if ( !bInsertion && ( !bHasRedlineInBox || ( pPreviousDeleteRedline &&
+                 // in the same cell, i.e. not in a nested table
+                 pPreviousDeleteRedline->End()->nNode.GetNode().StartOfSectionNode() ==
+                      aCellEnd.GetNode().StartOfSectionNode()  &&
                  ( pPreviousDeleteRedline->End()->GetNode() < aCellEnd.GetNode() ||
                    pPreviousDeleteRedline->End()->GetContentIndex() <
                            aCellEnd.GetNode().GetContentNode()->Len() ) ) ) )
