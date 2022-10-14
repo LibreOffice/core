@@ -957,6 +957,9 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
 
 void SwNumRule::SetInvalidRule(bool bFlag)
 {
+    if (mbInvalidRuleFlag == bFlag)
+        return;
+
     if (bFlag)
     {
         o3tl::sorted_vector< SwList* > aLists;
