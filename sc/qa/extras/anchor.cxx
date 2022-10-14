@@ -35,6 +35,8 @@ class ScAnchorTest : public CalcUnoApiTest
 public:
     ScAnchorTest();
 
+    virtual void tearDown() override;
+
     void testUndoAnchor();
     void testTdf76183();
     void testODFAnchorTypes();
@@ -56,6 +58,9 @@ public:
     CPPUNIT_TEST(testTdf130556);
     CPPUNIT_TEST(testTdf134161);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScAnchorTest::ScAnchorTest()
@@ -63,15 +68,21 @@ ScAnchorTest::ScAnchorTest()
 {
 }
 
+void ScAnchorTest::tearDown()
+{
+    closeDocument(mxComponent);
+    CalcUnoApiTest::tearDown();
+}
+
 void ScAnchorTest::testUndoAnchor()
 {
     OUString aFileURL;
     createFileURL(u"document_with_linked_graphic.ods", aFileURL);
     // open the document with graphic included
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
@@ -159,13 +170,13 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
 
-    xComponent->dispose();
+    pDocSh->DoClose();
 }
 
 void ScAnchorTest::testTdf76183()
 {
-    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -182,7 +193,7 @@ void ScAnchorTest::testTdf76183()
     // Set word wrap to true
     rDoc.ApplyAttr(0, 0, 0, ScLineBreakCell(true));
     // Add multi-line text to cell to initiate optimal height change
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<text::XText> xText(xSheet->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
@@ -200,10 +211,10 @@ void ScAnchorTest::testODFAnchorTypes()
     OUString aFileURL;
     createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
@@ -244,10 +255,10 @@ void ScAnchorTest::testCopyColumnWithImages()
     OUString aFileURL;
     createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
@@ -315,10 +326,10 @@ void ScAnchorTest::testCutWithImages()
     OUString aFileURL;
     createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
@@ -372,52 +383,44 @@ void ScAnchorTest::testTdf121963()
 {
     OUString aFileURL;
     createFileURL(u"tdf121963.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
     Scheduler::ProcessEventsToIdle();
-
-    xComponent->dispose();
 }
 
 void ScAnchorTest::testTdf129552()
 {
     OUString aFileURL;
     createFileURL(u"tdf129552.fods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
     Scheduler::ProcessEventsToIdle();
-
-    xComponent->dispose();
 }
 
 void ScAnchorTest::testTdf130556()
 {
     OUString aFileURL;
     createFileURL(u"tdf130556.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
     Scheduler::ProcessEventsToIdle();
-
-    xComponent->dispose();
 }
 
 void ScAnchorTest::testTdf134161()
 {
     OUString aFileURL;
     createFileURL(u"tdf134161.ods", aFileURL);
-    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop
     Scheduler::ProcessEventsToIdle();
-
-    xComponent->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnchorTest);

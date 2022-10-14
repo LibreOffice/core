@@ -27,11 +27,16 @@ class ScCondFormatMergeTest : public CalcUnoApiTest
 public:
     ScCondFormatMergeTest();
 
+    virtual void tearDown() override;
+
     void testCondFormatMerge();
 
     CPPUNIT_TEST_SUITE(ScCondFormatMergeTest);
     CPPUNIT_TEST(testCondFormatMerge);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScCondFormatMergeTest::ScCondFormatMergeTest()
@@ -39,11 +44,17 @@ ScCondFormatMergeTest::ScCondFormatMergeTest()
 {
 }
 
+void ScCondFormatMergeTest::tearDown()
+{
+    closeDocument(mxComponent);
+    CalcUnoApiTest::tearDown();
+}
+
 void ScCondFormatMergeTest::testCondFormatMerge()
 {
     OUString aFileURL;
     createFileURL(u"cond_format_merge.ods", aFileURL);
-    uno::Reference<lang::XComponent> mxComponent = loadFromDesktop(aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // get the first sheet
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -140,9 +151,6 @@ void ScCondFormatMergeTest::testCondFormatMerge()
     }
 
     CPPUNIT_ASSERT_EQUAL(5, nRanges);
-
-    closeDocument(mxComponent);
-    mxComponent.clear();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCondFormatMergeTest);
