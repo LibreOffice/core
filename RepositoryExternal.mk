@@ -3060,9 +3060,11 @@ endef
 else # !SYSTEM_POSTGRESQL
 
 ifeq ($(OS),WNT)
+ifeq ($(BUILD_POSTGRESQL_SDBC),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 	postgresql \
 ))
+endif # BUILD_POSTGRESQL_SDBC
 endif # WNT
 
 define gb_LinkTarget__use_postgresql

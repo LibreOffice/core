@@ -375,6 +375,7 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+#if ! defined MPL_SUBSET
 File gid_File_Extension_Dictionary_De
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-de.filelist";
@@ -382,14 +383,17 @@ File gid_File_Extension_Dictionary_De
 	TXT_FILE_BODY;
 End
 #endif
+#endif
 
 #if defined WITH_MYSPELL_DICTS
+#if ! defined MPL_SUBSET
 File gid_File_Extension_Dictionary_En
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-en.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
+#endif
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -519,12 +523,14 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+#if ! defined MPL_SUBSET
 File gid_File_Extension_Dictionary_It
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-it.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
+#endif
 #endif
 
 #if defined WITH_MYSPELL_DICTS

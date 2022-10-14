@@ -9,9 +9,9 @@
 
 #include "macros.inc"
 
-#include "AutoInstall/postgresqlsdbc"
-
 #if defined WITH_POSTGRESQL_SDBC
+
+#include "AutoInstall/postgresqlsdbc"
 
 Module gid_Module_Optional_PostgresqlSdbc
     PackageInfo = "packinfo_office.txt";

@@ -27,6 +27,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_HSQLDB \
 	SYSTEM_LIBXSLT \
 	SYSTEM_REDLAND \
+	MPL_SUBSET \
 	WITH_GALLERY_BUILD \
 	WITH_MYSPELL_DICTS \
 ))
