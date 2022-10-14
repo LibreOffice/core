@@ -127,7 +127,7 @@ private:
     sal_uInt8 m_nDocPowerType;
 
     void RegisterTimeField(const LwpFieldMark* pFieldMark);
-    void RegisterDateTimeStyle(const OUString& sFormula);
+    void RegisterDateTimeStyle(std::u16string_view sFormula);
     void RegisterTotalTimeStyle();
     void CheckFieldType(LwpFieldMark* pFieldMark);
     void ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark);

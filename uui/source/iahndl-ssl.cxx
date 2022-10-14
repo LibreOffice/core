@@ -31,6 +31,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/resmgr.hxx>
@@ -80,21 +81,21 @@ getContentPart( std::u16string_view _rRawString )
 
 bool
 isDomainMatch(
-              const OUString& hostName, const uno::Sequence< OUString >& certHostNames)
+              std::u16string_view hostName, const uno::Sequence< OUString >& certHostNames)
 {
     for ( const OUString& element : certHostNames){
        if (element.isEmpty())
            continue;
 
-       if (hostName.equalsIgnoreAsciiCase( element ))
+       if (o3tl::equalsIgnoreAsciiCase( hostName, element ))
            return true;
 
        if (element.startsWith("*") &&
-           hostName.getLength() >= element.getLength()  )
+           sal_Int32(hostName.size()) >= element.getLength()  )
        {
            OUString cmpStr = element.copy( 1 );
-           if ( hostName.matchIgnoreAsciiCase(
-                    cmpStr, hostName.getLength() - cmpStr.getLength()) )
+           if ( o3tl::matchIgnoreAsciiCase(hostName,
+                    cmpStr, hostName.size() - cmpStr.getLength()) )
                return true;
        }
     }

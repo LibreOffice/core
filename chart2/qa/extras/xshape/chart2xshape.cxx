@@ -51,22 +51,22 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void compareAgainstReference(const OUString& rDump, std::u16string_view rReferenceFile);
+    void compareAgainstReference(std::u16string_view rDump, std::u16string_view rReferenceFile);
     OUString getXShapeDumpString();
     xmlDocUniquePtr getXShapeDumpXmlDoc();
 };
 
 namespace
 {
-bool checkDumpAgainstFile(const OUString& rDump, std::u16string_view aFilePath,
+bool checkDumpAgainstFile(std::u16string_view rDump, std::u16string_view aFilePath,
                           char const* toleranceFile)
 {
     OString aOFile = OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
 
-    CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.empty());
 
     OString aDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    return doXMLDiff(aOFile.getStr(), aDump.getStr(), static_cast<int>(rDump.getLength()),
+    return doXMLDiff(aOFile.getStr(), aDump.getStr(), static_cast<int>(rDump.size()),
                      toleranceFile);
 }
 }
@@ -86,7 +86,7 @@ xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
     return xmlDocUniquePtr(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 }
 
-void Chart2XShapeTest::compareAgainstReference(const OUString& rDump,
+void Chart2XShapeTest::compareAgainstReference(std::u16string_view rDump,
                                                std::u16string_view rReferenceFile)
 {
     checkDumpAgainstFile(

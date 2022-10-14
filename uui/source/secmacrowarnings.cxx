@@ -38,14 +38,14 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    std::u16string_view GetContentPart( std::u16string_view _rRawString, const OUString& _rPartId )
+    std::u16string_view GetContentPart( std::u16string_view _rRawString, std::u16string_view _rPartId )
     {
         std::u16string_view      s;
 
         size_t  nContStart = _rRawString.find( _rPartId );
         if( nContStart != std::u16string_view::npos )
         {
-            nContStart = nContStart + _rPartId.getLength();
+            nContStart = nContStart + _rPartId.size();
             ++nContStart;                   // now its start of content, directly after Id
 
             size_t  nContEnd = _rRawString.find( ',', nContStart );
@@ -195,7 +195,7 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        OUString s( GetContentPart( mxCert->getSubjectName(), "CN" ) );
+        OUString s( GetContentPart( mxCert->getSubjectName(), u"CN" ) );
         mxSignsFI->set_label(s);
         mxViewSignsBtn->set_sensitive(true);
     }

@@ -375,7 +375,7 @@ void LwpFribField::RegisterTimeField(const LwpFieldMark* pFieldMark)
 
         std::u16string_view tag = sFormula.subView(0, index);
         if (tag == u"Now()" || tag == u"CreateDate" || tag == u"EditDate")
-            RegisterDateTimeStyle(sFormula.copy(index + 1));
+            RegisterDateTimeStyle(sFormula.subView(index + 1));
     }
 }
 
@@ -388,24 +388,24 @@ void LwpFribField::RegisterTotalTimeStyle()
     m_TimeStyle = pXFStyleManager->AddStyle(std::move(pTimeStyle)).m_pStyle->GetStyleName();
 }
 
-void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
+void LwpFribField::RegisterDateTimeStyle(std::u16string_view sFormula)
 {
     std::unique_ptr<XFDateStyle> pDateStyle;
     std::unique_ptr<XFTimeStyle> pTimeStyle;
     //DATE
-    if (sFormula.getLength() < 2)
+    if (sFormula.size() < 2)
         return;
     if (sFormula[1] == 'F')
     {
-        if (sFormula == "%FLSystemShortDate")
+        if (sFormula == u"%FLSystemShortDate")
         {
             pDateStyle = LwpTools::GetSystemDateStyle(false);
         }
-        else if (sFormula == "%FLSystemLongDate")
+        else if (sFormula == u"%FLSystemLongDate")
         {
             pDateStyle = LwpTools::GetSystemDateStyle(true);
         }
-        else if (sFormula == "%FLISODate1" || sFormula == "%FLYYYY/MM/DD")
+        else if (sFormula == u"%FLISODate1" || sFormula == u"%FLYYYY/MM/DD")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
@@ -414,7 +414,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("/");
             pDateStyle->AddMonthDay();
         }
-        else if (sFormula == "%FLISODate2" || sFormula == "%FLYYYY/MM/DD HH:mm:SS")
+        else if (sFormula == u"%FLISODate2" || sFormula == u"%FLYYYY/MM/DD HH:mm:SS")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
@@ -429,7 +429,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(":");
             pDateStyle->AddSecond();
         }
-        else if (sFormula == "%FLM/D/YY")
+        else if (sFormula == u"%FLM/D/YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
@@ -438,7 +438,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("/");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLMonth D, YYYY")
+        else if (sFormula == u"%FLMonth D, YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(true, true);
@@ -447,7 +447,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLWeekday, Month D, YYYY")
+        else if (sFormula == u"%FLWeekday, Month D, YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -458,7 +458,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLMn D, YYYY")
+        else if (sFormula == u"%FLMn D, YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false, true);
@@ -467,7 +467,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLWday, Mn D, YYYY")
+        else if (sFormula == u"%FLWday, Mn D, YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay(false);
@@ -478,14 +478,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLMn D")
+        else if (sFormula == u"%FLMn D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false, true);
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLWeekday, Mn D")
+        else if (sFormula == u"%FLWeekday, Mn D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -494,7 +494,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLMn D, YY")
+        else if (sFormula == u"%FLMn D, YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false, true);
@@ -503,69 +503,69 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLM/D")
+        else if (sFormula == u"%FLM/D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
             pDateStyle->AddText("/");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLM/YY")
+        else if (sFormula == u"%FLM/YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
             pDateStyle->AddText("/");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLMn YY")
+        else if (sFormula == u"%FLMn YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false, true);
             pDateStyle->AddText(" ");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLWeekday")
+        else if (sFormula == u"%FLWeekday")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
         }
-        else if (sFormula == "%FLWday")
+        else if (sFormula == u"%FLWday")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay(false);
         }
-        else if (sFormula == "%FLMonth")
+        else if (sFormula == u"%FLMonth")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(true, true);
         }
-        else if (sFormula == "%FLMn")
+        else if (sFormula == u"%FLMn")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false, true);
         }
-        else if (sFormula == "%FLD")
+        else if (sFormula == u"%FLD")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLM")
+        else if (sFormula == u"%FLM")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
         }
-        else if (sFormula == "%FLYYYY")
+        else if (sFormula == u"%FLYYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLYY")
+        else if (sFormula == u"%FLYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear(false);
         }
         //chinese version begin
-        else if (sFormula == "%FLYY/M/D")
+        else if (sFormula == u"%FLYY/M/D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear(false);
@@ -574,7 +574,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("-");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLYYYY Month D")
+        else if (sFormula == u"%FLYYYY Month D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
@@ -583,7 +583,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLWeekday, YYYY Month D")
+        else if (sFormula == u"%FLWeekday, YYYY Month D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -594,7 +594,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLYYYY Mn D")
+        else if (sFormula == u"%FLYYYY Mn D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
@@ -603,7 +603,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLWday, YYYY Mn D")
+        else if (sFormula == u"%FLWday, YYYY Mn D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay(false);
@@ -615,7 +615,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddMonthDay(false);
         }
         //next 2 are the same with english version
-        else if (sFormula == "%FLYY Mn D")
+        else if (sFormula == u"%FLYY Mn D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear(false);
@@ -624,21 +624,21 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLYY/M")
+        else if (sFormula == u"%FLYY/M")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
             pDateStyle->AddText("-");
             pDateStyle->AddMonth(false);
         }
-        else if (sFormula == "%FLYY Mn")
+        else if (sFormula == u"%FLYY Mn")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
             pDateStyle->AddText(" ");
             pDateStyle->AddMonth(false, true);
         }
-        else if (sFormula == "%FLeeeeoa" || sFormula == "%FLffffooaa" || sFormula == "%FLEEEEOA")
+        else if (sFormula == u"%FLeeeeoa" || sFormula == u"%FLffffooaa" || sFormula == u"%FLEEEEOA")
         {
             pDateStyle.reset(new XFDateStyle);
             OUString sText;
@@ -652,7 +652,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             sText = OUString(u'\x65e5');
             pDateStyle->AddText(sText);
         }
-        else if (sFormula == "%FLoa" || sFormula == "%FLooaa" || sFormula == "%FLOA")
+        else if (sFormula == u"%FLoa" || sFormula == u"%FLooaa" || sFormula == u"%FLOA")
         {
             pDateStyle.reset(new XFDateStyle);
             OUString sText;
@@ -663,7 +663,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             sText = OUString(u'\x65e5');
             pDateStyle->AddText(sText);
         }
-        else if (sFormula == "%FLYYYY/M/D" || sFormula == "%FLGGGG/od/ad")
+        else if (sFormula == u"%FLYYYY/M/D" || sFormula == u"%FLGGGG/od/ad")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
@@ -672,7 +672,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("-");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%FLYY.M.D")
+        else if (sFormula == u"%FLYY.M.D")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear(false);
@@ -683,7 +683,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
         }
         //chinese version end
         //other version begin
-        else if (sFormula == "%FLWeekday, Month DD, YYYY")
+        else if (sFormula == u"%FLWeekday, Month DD, YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -694,7 +694,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLYYYY/MM/DD")
+        else if (sFormula == u"%FLYYYY/MM/DD")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -705,7 +705,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLD/M/YY")
+        else if (sFormula == u"%FLD/M/YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
@@ -714,7 +714,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("/");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLD Month YYYY")
+        else if (sFormula == u"%FLD Month YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
@@ -723,7 +723,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLDD Month YYYY")
+        else if (sFormula == u"%FLDD Month YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay();
@@ -732,7 +732,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLWeekday, D Month YYYY")
+        else if (sFormula == u"%FLWeekday, D Month YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -743,7 +743,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLWeekday, DD Month YYYY")
+        else if (sFormula == u"%FLWeekday, DD Month YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -754,7 +754,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLD Mn YYYY")
+        else if (sFormula == u"%FLD Mn YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
@@ -763,7 +763,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLWday, D Mn YYYY")
+        else if (sFormula == u"%FLWday, D Mn YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay(false);
@@ -774,7 +774,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLWday, DD Mn YYYY")
+        else if (sFormula == u"%FLWday, DD Mn YYYY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay(false);
@@ -785,21 +785,21 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%FLD Mn")
+        else if (sFormula == u"%FLD Mn")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
             pDateStyle->AddText(" ");
             pDateStyle->AddMonth(false, true);
         }
-        else if (sFormula == "%FLDD Mn")
+        else if (sFormula == u"%FLDD Mn")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay();
             pDateStyle->AddText(" ");
             pDateStyle->AddMonth(false, true);
         }
-        else if (sFormula == "%FLWeekday, D Mn")
+        else if (sFormula == u"%FLWeekday, D Mn")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -808,7 +808,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonth(false, true);
         }
-        else if (sFormula == "%FLWeekday, DD Mn")
+        else if (sFormula == u"%FLWeekday, DD Mn")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -817,7 +817,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonth(false, true);
         }
-        else if (sFormula == "%FLD Mn YY")
+        else if (sFormula == u"%FLD Mn YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
@@ -826,7 +826,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLDD Mn YY")
+        else if (sFormula == u"%FLDD Mn YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay();
@@ -835,21 +835,21 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLD/M")
+        else if (sFormula == u"%FLD/M")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
             pDateStyle->AddText("/");
             pDateStyle->AddMonth(false);
         }
-        else if (sFormula == "%FLDD/MM")
+        else if (sFormula == u"%FLDD/MM")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay();
             pDateStyle->AddText("/");
             pDateStyle->AddMonth();
         }
-        else if (sFormula == "%FLDD/MM/YY")
+        else if (sFormula == u"%FLDD/MM/YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay();
@@ -858,7 +858,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("/");
             pDateStyle->AddYear(false);
         }
-        else if (sFormula == "%FLMM/YY")
+        else if (sFormula == u"%FLMM/YY")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth();
@@ -867,11 +867,11 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
         }
         //other version end
         //TIME
-        else if (sFormula == "%FLSystemTime")
+        else if (sFormula == u"%FLSystemTime")
         {
             pTimeStyle = LwpTools::GetSystemTimeStyle();
         }
-        else if (sFormula == "%FLISOTime1" || sFormula == "%FLH:mm:SS")
+        else if (sFormula == u"%FLISOTime1" || sFormula == u"%FLH:mm:SS")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
@@ -880,7 +880,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddSecond();
         }
-        else if (sFormula == "%FLH:mm ampm")
+        else if (sFormula == u"%FLH:mm ampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
@@ -889,14 +889,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%FLH:mm")
+        else if (sFormula == u"%FLH:mm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == "%FLH:mm:SS ampm")
+        else if (sFormula == u"%FLH:mm:SS ampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
@@ -907,7 +907,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%FLH:mm:SS")
+        else if (sFormula == u"%FLH:mm:SS")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
@@ -916,36 +916,36 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->AddSecond();
         }
-        else if (sFormula == "%FLH ampm")
+        else if (sFormula == u"%FLH ampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%FLH")
+        else if (sFormula == u"%FLH")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
         }
-        else if (sFormula == "%FLmm")
+        else if (sFormula == u"%FLmm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == "%FLSS")
+        else if (sFormula == u"%FLSS")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddSecond();
         }
-        else if (sFormula == "%FLampm")
+        else if (sFormula == u"%FLampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->SetAmPm(true);
         }
         //chinese version begin
-        else if (sFormula == "%FLjF" || sFormula == "%FLJFF" || sFormula == "%FLjjF"
-                 || sFormula == "%FLJJFF ")
+        else if (sFormula == u"%FLjF" || sFormula == u"%FLJFF" || sFormula == u"%FLjjF"
+                 || sFormula == u"%FLJJFF ")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
@@ -956,7 +956,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             sText = OUString(u'\x5206');
             pTimeStyle->AddText(sText);
         }
-        else if (sFormula == "%FLjjjF" || sFormula == "%FLJJJFF")
+        else if (sFormula == u"%FLjjjF" || sFormula == u"%FLJJJFF")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->SetAmPm(true);
@@ -970,7 +970,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
         }
         //chinese version end
         //other version begin
-        else if (sFormula == "%FLHH:mm ampm")
+        else if (sFormula == u"%FLHH:mm ampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
@@ -979,14 +979,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%FLHH ampm")
+        else if (sFormula == u"%FLHH ampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%FLHH:mm:SS ampm")
+        else if (sFormula == u"%FLHH:mm:SS ampm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
@@ -997,14 +997,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%FLHH:mm")
+        else if (sFormula == u"%FLHH:mm")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == "%FLHH:mm:SS")
+        else if (sFormula == u"%FLHH:mm:SS")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
@@ -1017,11 +1017,11 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     }
     else if (sFormula[1] == 'D')
     {
-        if (sFormula == "%Da")
+        if (sFormula == u"%Da")
         {
             pDateStyle = LwpTools::GetSystemDateStyle(false);
         }
-        else if (sFormula == "%DB" || sFormula == "%Db")
+        else if (sFormula == u"%DB" || sFormula == u"%Db")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(true, true);
@@ -1030,7 +1030,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%Dc" || sFormula == "%DC")
+        else if (sFormula == u"%Dc" || sFormula == u"%DC")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
@@ -1039,7 +1039,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%Dd" || sFormula == "%DD")
+        else if (sFormula == u"%Dd" || sFormula == u"%DD")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -1050,14 +1050,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%DE" || sFormula == "%De")
+        else if (sFormula == u"%DE" || sFormula == u"%De")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(true, true);
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%Df" || sFormula == "%DF")
+        else if (sFormula == u"%Df" || sFormula == u"%DF")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddWeekDay();
@@ -1066,14 +1066,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%Dg")
+        else if (sFormula == u"%Dg")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
             pDateStyle->AddText("/");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%Dh")
+        else if (sFormula == u"%Dh")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(false);
@@ -1082,14 +1082,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText("/");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%Di" || sFormula == "%DI")
+        else if (sFormula == u"%Di" || sFormula == u"%DI")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
             pDateStyle->AddText(".");
             pDateStyle->AddMonth(true, true);
         }
-        else if (sFormula == "%Dj" || sFormula == "%DJ")
+        else if (sFormula == u"%Dj" || sFormula == u"%DJ")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay(false);
@@ -1098,7 +1098,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%Dk" || sFormula == "%DK")
+        else if (sFormula == u"%Dk" || sFormula == u"%DK")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddYear();
@@ -1107,14 +1107,14 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(false);
         }
-        else if (sFormula == "%DL" || sFormula == "%Dl")
+        else if (sFormula == u"%DL" || sFormula == u"%Dl")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonth(true, true);
             pDateStyle->AddText(",");
             pDateStyle->AddYear();
         }
-        else if (sFormula == "%Dm")
+        else if (sFormula == u"%Dm")
         {
             pDateStyle.reset(new XFDateStyle);
             pDateStyle->AddMonthDay();
@@ -1126,14 +1126,15 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     }
     else if (sFormula[1] == 'T')
     {
-        if (sFormula == "%T1")
+        if (sFormula == u"%T1")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();
             pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == "%T2" || sFormula == "%T6" || sFormula == "%T4" || sFormula == "%T8")
+        else if (sFormula == u"%T2" || sFormula == u"%T6" || sFormula == u"%T4"
+                 || sFormula == u"%T8")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour(false);
@@ -1142,7 +1143,8 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
             pTimeStyle->AddText(":");
             pTimeStyle->SetAmPm(true);
         }
-        else if (sFormula == "%T3" || sFormula == "%T7" || sFormula == "%T5" || sFormula == "%T9")
+        else if (sFormula == u"%T3" || sFormula == u"%T7" || sFormula == u"%T5"
+                 || sFormula == u"%T9")
         {
             pTimeStyle.reset(new XFTimeStyle);
             pTimeStyle->AddHour();

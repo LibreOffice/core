@@ -57,7 +57,7 @@ namespace rptui
                 <TRUE/> if and only if the expression string could be successfully matched to
                 the pattern.
         */
-        bool                matchExpression( const OUString& _rExpression, const std::u16string_view _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const;
+        bool                matchExpression( std::u16string_view _rExpression, const std::u16string_view _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const;
     };
 
 

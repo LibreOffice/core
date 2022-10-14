@@ -33,6 +33,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
@@ -1437,17 +1438,17 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 
 // Private helper methods
 
-static bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
+static bool checkNamingSceme( std::u16string_view aName, std::u16string_view aNameBase,
                        Locale& aLocale )
 {
     bool bSuccess = false;
 
-    sal_Int32 nNameLen = aName.getLength();
-    sal_Int32 nNameBaseLen = aNameBase.getLength();
+    size_t nNameLen = aName.size();
+    size_t nNameBaseLen = aNameBase.size();
 
     // Name has to start with NameBase followed
     // by a '_' and at least one more character
-    if( aName.startsWith( aNameBase ) && nNameBaseLen < nNameLen-1 &&
+    if( o3tl::starts_with(aName, aNameBase) && nNameBaseLen < nNameLen-1 &&
         aName[nNameBaseLen] == '_' )
     {
         bSuccess = true;
@@ -1457,23 +1458,23 @@ static bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
          * violate the naming scheme in use. */
 
         sal_Int32 iStart = nNameBaseLen + 1;
-        sal_Int32 iNext_ = aName.indexOf( '_', iStart );
-        if( iNext_ != -1 && iNext_ < nNameLen-1 )
+        size_t iNext_ = aName.find( '_', iStart );
+        if( iNext_ != std::u16string_view::npos && iNext_ < nNameLen-1 )
         {
-            aLocale.Language = aName.copy( iStart, iNext_ - iStart );
+            aLocale.Language = aName.substr( iStart, iNext_ - iStart );
 
             iStart = iNext_ + 1;
-            iNext_ = aName.indexOf( '_', iStart );
-            if( iNext_ != -1 && iNext_ < nNameLen-1 )
+            iNext_ = aName.find( '_', iStart );
+            if( iNext_ != std::u16string_view::npos && iNext_ < nNameLen-1 )
             {
-                aLocale.Country = aName.copy( iStart, iNext_ - iStart );
-                aLocale.Variant = aName.copy( iNext_ + 1 );
+                aLocale.Country = aName.substr( iStart, iNext_ - iStart );
+                aLocale.Variant = aName.substr( iNext_ + 1 );
             }
             else
-                aLocale.Country = aName.copy( iStart );
+                aLocale.Country = aName.substr( iStart );
         }
         else
-            aLocale.Language = aName.copy( iStart );
+            aLocale.Language = aName.substr( iStart );
     }
     return bSuccess;
 }

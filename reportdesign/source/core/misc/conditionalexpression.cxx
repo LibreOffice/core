@@ -64,7 +64,7 @@ namespace rptui
     }
 
 
-    bool ConditionalExpression::matchExpression( const OUString& _rExpression, const std::u16string_view _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
+    bool ConditionalExpression::matchExpression( std::u16string_view _rExpression, const std::u16string_view _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
     {
         // if we had regular expression, the matching would be pretty easy ...
         // just replace $1 and $2 in the pattern with (.*), and then get them with \1 resp. \2.
@@ -90,9 +90,9 @@ namespace rptui
 
         // up to the occurrence of the LHS (which must exist, see above), the two expressions
         // must be identical
-        if ( _rExpression.getLength() < nLHSIndex )
+        if ( sal_Int32(_rExpression.size()) < nLHSIndex )
             return false;
-        const std::u16string_view sExprPart1( _rExpression.subView( 0, nLHSIndex ) );
+        const std::u16string_view sExprPart1( _rExpression.substr( 0, nLHSIndex ) );
         const std::u16string_view sMatchExprPart1( sMatchExpression.subView( 0, nLHSIndex ) );
         if ( sExprPart1 != sMatchExprPart1 )
             // the left-most expression parts do not match
@@ -103,10 +103,10 @@ namespace rptui
         bool bHaveRHS( nRHSIndex != -1 );
         sal_Int32 nRightMostIndex( bHaveRHS ? nRHSIndex : nLHSIndex );
         const std::u16string_view sMatchExprPart3( sMatchExpression.subView( nRightMostIndex + 2 ) );
-        if ( o3tl::make_unsigned(_rExpression.getLength()) < sMatchExprPart3.size() )
+        if ( _rExpression.size() < sMatchExprPart3.size() )
             // the expression is not even long enough to hold the right-most part of the match expression
             return false;
-        const std::u16string_view sExprPart3( _rExpression.subView( _rExpression.getLength() - sMatchExprPart3.size() ) );
+        const std::u16string_view sExprPart3( _rExpression.substr( _rExpression.size() - sMatchExprPart3.size() ) );
         if ( sExprPart3 != sMatchExprPart3 )
             // the right-most expression parts do not match
             return false;
@@ -114,7 +114,7 @@ namespace rptui
         // if we don't have an RHS, we're done
         if ( !bHaveRHS )
         {
-            _out_rLHS = _rExpression.copy( sExprPart1.size(), _rExpression.getLength() - sExprPart1.size() - sExprPart3.size() );
+            _out_rLHS = _rExpression.substr( sExprPart1.size(), _rExpression.size() - sExprPart1.size() - sExprPart3.size() );
             return true;
         }
 
@@ -125,9 +125,9 @@ namespace rptui
             sMatchExpression.getLength() - nMatchExprPart2Start - sMatchExprPart3.size() - 2
         );
         // strip the expression by its left-most and right-most part
-        const std::u16string_view sExpression( _rExpression.subView(
+        const std::u16string_view sExpression( _rExpression.substr(
             sExprPart1.size(),
-            _rExpression.getLength() - sExprPart1.size() - sExprPart3.size()
+            _rExpression.size() - sExprPart1.size() - sExprPart3.size()
         ) );
 
         size_t nPart2Index = sExpression.find( sMatchExprPart2 );

@@ -140,7 +140,7 @@ enum PPPOptimizerTokenEnum
     TK_NotFound
 };
 
-PPPOptimizerTokenEnum TKGet(const OUString&);
+PPPOptimizerTokenEnum TKGet(std::u16string_view);
 OUString TKGet(const PPPOptimizerTokenEnum);
 
 #endif

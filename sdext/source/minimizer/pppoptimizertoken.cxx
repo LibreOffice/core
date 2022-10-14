@@ -163,7 +163,7 @@ const TokenTable pTokenTableArray[] =
     { "NotFound",           TK_NotFound }
 };
 
-PPPOptimizerTokenEnum TKGet( const OUString& rToken )
+PPPOptimizerTokenEnum TKGet( std::u16string_view rToken )
 {
     if ( !pHashMap )
     {   // init hash map
@@ -179,7 +179,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
         }
     }
     PPPOptimizerTokenEnum eRetValue = TK_NotFound;
-    int i, nLen = rToken.getLength();
+    size_t i, nLen = rToken.size();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = static_cast<char>(rToken[ i ]);

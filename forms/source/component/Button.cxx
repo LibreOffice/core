@@ -30,6 +30,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -652,10 +653,11 @@ void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent
 
 namespace
 {
-    bool isFormControllerURL( const OUString& _rURL )
+    bool isFormControllerURL( std::u16string_view _rURL )
     {
-        return  ( _rURL.getLength() > RTL_CONSTASCII_LENGTH( ".uno:FormController/" ) )
-            &&  ( _rURL.startsWith( ".uno:FormController/" ) );
+        static constexpr std::u16string_view PREFIX = u".uno:FormController/";
+        return  ( _rURL.size() > PREFIX.size() )
+            &&  ( o3tl::starts_with(_rURL, PREFIX ) );
     }
 }
 

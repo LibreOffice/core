@@ -32,16 +32,16 @@
 
 namespace xmlscript
 {
-inline sal_Int32 toInt32( OUString const & rStr )
+inline sal_Int32 toInt32( std::u16string_view rStr )
 {
     sal_Int32 nVal;
-    if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
+    if (rStr.size() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
     {
-        nVal = o3tl::toUInt32(rStr.subView( 2 ),  16);
+        nVal = o3tl::toUInt32(rStr.substr( 2 ),  16);
     }
     else
     {
-        nVal = rStr.toInt32();
+        nVal = o3tl::toInt32(rStr);
     }
     return nVal;
 }

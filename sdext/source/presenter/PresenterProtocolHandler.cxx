@@ -197,7 +197,7 @@ public:
 
     void SAL_CALL disposing() override;
     static Command* CreateCommand (
-        const OUString& rsURLPath,
+        std::u16string_view rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
 
     // XDispatch
@@ -363,41 +363,41 @@ PresenterProtocolHandler::Dispatch::Dispatch (
 }
 
 Command* PresenterProtocolHandler::Dispatch::CreateCommand (
-    const OUString& rsURLPath,
+    std::u16string_view rsURLPath,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
-    if (rsURLPath.getLength() <= 5)
+    if (rsURLPath.size() <= 5)
         return nullptr;
 
-    if (rsURLPath == "CloseNotes")
+    if (rsURLPath == u"CloseNotes")
         return new SetNotesViewCommand(false, rpPresenterController);
-    if (rsURLPath == "CloseSlideSorter")
+    if (rsURLPath == u"CloseSlideSorter")
         return new SetSlideSorterCommand(false, rpPresenterController);
-    if (rsURLPath == "CloseHelp")
+    if (rsURLPath == u"CloseHelp")
         return new SetHelpViewCommand(false, rpPresenterController);
-    if (rsURLPath == "GrowNotesFont")
+    if (rsURLPath == u"GrowNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, +1);
-    if (rsURLPath == "NextEffect")
+    if (rsURLPath == u"NextEffect")
         return new GotoNextEffectCommand(rpPresenterController);
-    if (rsURLPath == "NextSlide")
+    if (rsURLPath == u"NextSlide")
         return new GotoNextSlideCommand(rpPresenterController);
-    if (rsURLPath == "PrevSlide")
+    if (rsURLPath == u"PrevSlide")
         return new GotoPreviousSlideCommand(rpPresenterController);
-    if (rsURLPath == "SwitchMonitor")
+    if (rsURLPath == u"SwitchMonitor")
         return new SwitchMonitorCommand(rpPresenterController);
-    if (rsURLPath == "PauseResumeTimer")
+    if (rsURLPath == u"PauseResumeTimer")
         return new PauseResumeCommand(rpPresenterController);
-    if (rsURLPath == "RestartTimer")
+    if (rsURLPath == u"RestartTimer")
         return new RestartTimerCommand(rpPresenterController);
-    if (rsURLPath == "ShowNotes")
+    if (rsURLPath == u"ShowNotes")
         return new SetNotesViewCommand(true, rpPresenterController);
-    if (rsURLPath == "ShowSlideSorter")
+    if (rsURLPath == u"ShowSlideSorter")
         return new SetSlideSorterCommand(true, rpPresenterController);
-    if (rsURLPath == "ShowHelp")
+    if (rsURLPath == u"ShowHelp")
         return new SetHelpViewCommand(true, rpPresenterController);
-    if (rsURLPath == "ShrinkNotesFont")
+    if (rsURLPath == u"ShrinkNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, -1);
-    if (rsURLPath == "ExitPresenter")
+    if (rsURLPath == u"ExitPresenter")
         return new ExitPresenterCommand(rpPresenterController);
 
     return nullptr;

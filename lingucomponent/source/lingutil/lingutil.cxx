@@ -63,7 +63,7 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
 // find old style dictionaries in system directories
 static void GetOldStyleDicsInDir(
     OUString const & aSystemDir, OUString const & aFormatName,
-    OUString const & aSystemSuffix, OUString const & aSystemPrefix,
+    std::u16string_view aSystemSuffix, std::u16string_view aSystemPrefix,
     std::set< OUString >& aDicLangInUse,
     std::vector< SvtLinguConfigDictionaryEntry >& aRes )
 {
@@ -82,9 +82,9 @@ static void GetOldStyleDicsInDir(
             sal_Int32 nStartIndex = sPath.lastIndexOf('/') + 1;
             if (!sPath.match(aSystemPrefix, nStartIndex))
                 continue;
-            OUString sChunk = sPath.copy(nStartIndex + aSystemPrefix.getLength(),
-                sPath.getLength() - aSystemSuffix.getLength() -
-                nStartIndex - aSystemPrefix.getLength());
+            OUString sChunk = sPath.copy(nStartIndex + aSystemPrefix.size(),
+                sPath.getLength() - aSystemSuffix.size() -
+                nStartIndex - aSystemPrefix.size());
             if (sChunk.isEmpty())
                 continue;
 
