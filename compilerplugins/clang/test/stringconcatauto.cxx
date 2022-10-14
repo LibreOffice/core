@@ -26,11 +26,15 @@ void foo()
     auto str5 = OUString::number(50);
     // expected-error-re@-1 {{creating a variable of type '{{(rtl::)?}}OUStringNumber<{{.*}}>' will make it reference temporaries}}
     // expected-note@-2 {{use OUString instead}}
+    auto str6 = OUString::number(50).toAsciiUpperCase();
+    // expected-error-re@-1 {{creating a variable of type '{{(rtl::)?}}StringNumberBase<{{.*}}>' will make it reference temporaries}}
+    // expected-note@-2 {{use O(U)String instead}}
     (void)str1;
     (void)str2;
     (void)str3;
     (void)str4;
     (void)str5;
+    (void)str6;
 }
 
 struct A
@@ -46,6 +50,12 @@ struct A
     // expected-note@-2 {{use OString instead}}
     {
         return OString::number(120);
+    }
+    auto baz2()
+    // expected-error-re@-1 {{returning a variable of type '{{(rtl::)?}}StringNumberBase<{{.*}}>' will make it reference temporaries}}
+    // expected-note@-2 {{use O(U)String instead}}
+    {
+        return OString::number(120).toAsciiUpperCase();
     }
 };
 
