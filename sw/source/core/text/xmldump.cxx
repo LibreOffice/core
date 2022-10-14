@@ -139,8 +139,8 @@ const char* sw::PortionTypeToString(PortionType nType)
         case PortionType::Fly:
             return "PortionType::Fly";
 
-        case PortionType::Table:
-            return "PortionType::Table";
+        case PortionType::Tab:
+            return "PortionType::Tab";
 
         case PortionType::TabRight:
             return "PortionType::TabRight";

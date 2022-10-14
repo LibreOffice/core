@@ -1344,7 +1344,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             bDraw = true;
         }
         break;
-    case PortionType::Table:
+    case PortionType::Tab:
         if ( GetOpt().IsTab() )     bDraw = true;
         break;
     case PortionType::SoftHyphen:

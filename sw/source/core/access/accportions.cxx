@@ -262,7 +262,7 @@ bool SwAccessiblePortionData::IsGrayPortionType( PortionType nType ) const
             bGray = !m_pViewOptions->IsPagePreview() &&
                 !m_pViewOptions->IsReadonly() && SwViewOption::IsFieldShadings();
             break;
-        case PortionType::Table:       bGray = m_pViewOptions->IsTab();          break;
+        case PortionType::Tab:       bGray = m_pViewOptions->IsTab();          break;
         case PortionType::SoftHyphen:  bGray = m_pViewOptions->IsSoftHyph();     break;
         case PortionType::Blank:     bGray = m_pViewOptions->IsHardBlank();    break;
         default:
