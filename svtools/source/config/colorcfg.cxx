@@ -66,7 +66,6 @@ class ColorConfig_Impl : public utl::ConfigItem
 {
     ColorConfigValue m_aConfigValues[ColorConfigEntryCount];
     OUString         m_sLoadedScheme;
-    bool             m_bAutoDetectSystemHC;
 
     virtual void                    ImplCommit() override;
 
@@ -94,7 +93,6 @@ public:
     using ConfigItem::SetModified;
     using ConfigItem::ClearModified;
     void                            SettingsChanged();
-    bool GetAutoDetectSystemHC() const {return m_bAutoDetectSystemHC;}
 
     DECL_LINK( DataChangedEventListener, VclSimpleEvent&, void );
 };
@@ -184,8 +182,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 }
 
 ColorConfig_Impl::ColorConfig_Impl() :
-    ConfigItem("Office.UI/ColorScheme"),
-    m_bAutoDetectSystemHC(true)
+    ConfigItem("Office.UI/ColorScheme")
 {
     //try to register on the root node - if possible
     uno::Sequence < OUString > aNames(1);
@@ -236,15 +233,6 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         //test for visibility property
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
              m_aConfigValues[i].bIsVisible = Any2Bool(pColors[nIndex++]);
-    }
-    // fdo#71511: check if we are running in a11y autodetect
-    {
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(comphelper::getProcessComponentContext(),"org.openoffice.Office.Common/Accessibility" );
-        if(aNode.isValid())
-        {
-            uno::Any aValue = aNode.getNodeValue(OUString("AutoDetectSystemHC"));
-            aValue >>= m_bAutoDetectSystemHC;
-        }
     }
 }
 
@@ -445,8 +433,8 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         default:
             aRet = aAutoColors[eEntry];
     }
-    // fdo#71511: if in autodetected a11y HC mode, do pull background color from theme
-    if(m_pImpl &&  m_pImpl->GetAutoDetectSystemHC())
+    // fdo#71511: if in a11y HC mode, do pull background color from theme
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         switch(eEntry)
         {

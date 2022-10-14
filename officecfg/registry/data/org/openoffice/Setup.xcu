@@ -863,7 +863,6 @@
                 <it>/org.openoffice.Office.Paths</it>
                 <it>/org.openoffice.Office.Recovery</it>
                 <it>/org.openoffice.Office.Common/Accessibility</it>
-                <it>/org.openoffice.Office.Common/Accessibility/AutoDetectSystemHC</it>
                 <it>/org.openoffice.Office.Common/AsianLayout</it>
                 <it>/org.openoffice.Office.Common/AutoCorrect</it>
                 <it>/org.openoffice.Office.Common/Cache</it>

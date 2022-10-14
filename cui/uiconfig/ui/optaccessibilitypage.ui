@@ -136,26 +136,6 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkCheckButton" id="autodetecthc">
-                <property name="label" translatable="yes" context="optaccessibilitypage|autodetecthc">Automatically _detect high contrast mode of operating system</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="autodetecthc-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autodetecthc">Switches the office suite into high contrast mode when the system background color is very dark.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="autofontcolor">
                 <property name="label" translatable="yes" context="optaccessibilitypage|autofontcolor">Use automatic font _color for screen display</property>
                 <property name="visible">True</property>
@@ -172,7 +152,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -192,7 +172,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>

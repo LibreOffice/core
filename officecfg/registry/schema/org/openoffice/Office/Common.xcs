@@ -6188,16 +6188,6 @@
       <info>
         <desc>Specifies settings for the accessibility options.</desc>
       </info>
-      <prop oor:name="AutoDetectSystemHC" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Enables the automatic detection of a high contrast mode set for
-          your desktop. Some OS' do not provide this option explicitly, but
-          allow the user to choose a color scheme that is HC-compliant
-          implicitly, which is recognized if the option is set.</desc>
-          <label>detect system's high contrast</label>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="IsForPagePreviews" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables the use of high contrast colors, instead of displaying
