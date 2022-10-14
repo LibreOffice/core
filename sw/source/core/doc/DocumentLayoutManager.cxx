@@ -336,15 +336,16 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     //                     2) anchored in a header/footer
     //                     3) anchored (to paragraph?)
     bool bMayNotCopy = false;
+    const auto pCAnchor = rNewAnchor.GetContentAnchor();
+    bool bInHeaderFooter = pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->nNode);
     if(bDraw)
     {
-        const auto pCAnchor = rNewAnchor.GetContentAnchor();
         bool bCheckControlLayer = false;
         rSource.CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));
         bMayNotCopy =
             bCheckControlLayer &&
             ((RndStdIds::FLY_AT_PARA == rNewAnchor.GetAnchorId()) || (RndStdIds::FLY_AT_FLY  == rNewAnchor.GetAnchorId()) || (RndStdIds::FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
-            pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->nNode);
+            bInHeaderFooter;
     }
 
     // just return if we can't copy this
@@ -395,7 +396,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
         if( !m_rDoc.IsCopyIsMove() || &m_rDoc != pSrcDoc )
         {
-            if( m_rDoc.IsInReading() || m_rDoc.IsInMailMerge() )
+            if( (m_rDoc.IsInReading() && !bInHeaderFooter) || m_rDoc.IsInMailMerge() )
                 pDest->SetName( OUString() );
             else
             {
@@ -407,7 +408,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
                 if( m_rDoc.FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
-                    case SwNodeType::Grf:    sOld = m_rDoc.GetUniqueGrfName();      break;
+                    case SwNodeType::Grf:    sOld = m_rDoc.GetUniqueGrfName(sOld);  break;
                     case SwNodeType::Ole:    sOld = m_rDoc.GetUniqueOLEName();      break;
                     default:                 sOld = m_rDoc.GetUniqueFrameName();    break;
                     }
