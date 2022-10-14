@@ -231,9 +231,7 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
     if (operatorCall->getOperator() != OO_Plus)
         return true;
     auto tc = loplugin::TypeCheck(operatorCall->getType()->getUnqualifiedDesugaredType());
-    if (!tc.Struct("OUStringConcat").Namespace("rtl").GlobalNamespace()
-        && !tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace()
-        && !tc.Struct("StringConcat").Namespace("rtl").GlobalNamespace()
+    if (!tc.Struct("StringConcat").Namespace("rtl").GlobalNamespace()
         && !tc.Class("OUString").Namespace("rtl").GlobalNamespace()
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
         return true;
