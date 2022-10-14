@@ -159,7 +159,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     }
     else if ( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE )
     {
-        sw::GrammarContact* pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
+        sw::GrammarContact* pGrammarContact = sw::getGrammarContactFor(*m_pImpl->m_pTextNode);
         if( pGrammarContact )
         {
             pWList = pGrammarContact->getGrammarCheck(*m_pImpl->m_pTextNode, true);
@@ -283,7 +283,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     }
 
     if( bRepaint )
-        finishGrammarCheck(*m_pImpl->m_pTextNode);
+        sw::finishGrammarCheckFor(*m_pImpl->m_pTextNode);
 }
 
 static void lcl_commitGrammarMarkUp(
@@ -413,7 +413,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     // get appropriate list to use...
     SwGrammarMarkUp* pWList = nullptr;
     bool bRepaint = false;
-    sw::GrammarContact* pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
+    sw::GrammarContact* pGrammarContact = sw::getGrammarContactFor(*m_pImpl->m_pTextNode);
     if( pGrammarContact )
     {
         pWList = pGrammarContact->getGrammarCheck(*m_pImpl->m_pTextNode, true);
@@ -458,7 +458,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     }
 
     if( bRepaint )
-        finishGrammarCheck(*m_pImpl->m_pTextNode);
+        sw::finishGrammarCheckFor(*m_pImpl->m_pTextNode);
 }
 
 void SwXTextMarkup::Impl::Notify(const SfxHint& rHint)

@@ -808,19 +808,6 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
     SwLayoutCache::Write( rStream, *this );
 }
 
-namespace sw
-{
-
-sw::GrammarContact* getGrammarContact(const SwTextNode& rTextNode)
-{
-    const SwDoc& rDoc = rTextNode.GetDoc();
-    if (rDoc.IsInDtor())
-        return nullptr;
-    return rDoc.getGrammarContact().get();
-}
-
-} // end sw
-
 ::sfx2::IXmlIdRegistry&
 SwDoc::GetXmlIdRegistry()
 {
