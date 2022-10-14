@@ -217,9 +217,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                 argType = expr->getArg(0)->IgnoreImplicit()->getType();
                 break;
             }
-            if (tc.RvalueReference().Struct("OStringConcat").Namespace("rtl").GlobalNamespace()
-                || tc.RvalueReference().Struct("OUStringConcat").Namespace("rtl").GlobalNamespace()
-                || tc.RvalueReference().Struct("StringConcat").Namespace("rtl").GlobalNamespace())
+            if (tc.RvalueReference().Struct("StringConcat").Namespace("rtl").GlobalNamespace())
             {
                 argType = expr->getArg(0)->IgnoreImplicit()->getType();
                 extra = ViaConcatenation;
