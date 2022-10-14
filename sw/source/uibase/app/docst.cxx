@@ -1157,6 +1157,11 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
         }
         case SfxStyleFamily::Para:
         {
+            // When outline-folding is enabled, MakeAllOutlineContentTemporarilyVisible makes
+            // application of a paragraph style that has an outline-level greater than the previous
+            // outline node become folded content of the previous outline node if the previous
+            // outline node's content is folded.
+            MakeAllOutlineContentTemporarilyVisible a(GetDoc());
             // #i62675#
             // clear also list attributes at affected text nodes, if paragraph
             // style has the list style attribute set.

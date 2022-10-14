@@ -2491,30 +2491,6 @@ void SwWrtShell::InvalidateOutlineContentVisibility()
 
 void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
 {
-    // deselect any drawing or frame and leave editing mode
-    SdrView* pSdrView = GetDrawView();
-    if (pSdrView && pSdrView->IsTextEdit() )
-    {
-        bool bLockView = IsViewLocked();
-        LockView(true);
-        EndTextEdit();
-        LockView(bLockView);
-    }
-
-    if (IsSelFrameMode() || IsObjSelected())
-    {
-        UnSelectFrame();
-        LeaveSelFrameMode();
-        GetView().LeaveDrawCreate();
-        EnterStdMode();
-        DrawSelChanged();
-        GetView().StopShellTimer();
-    }
-    else
-        EnterStdMode();
-
-    SwOutlineNodes::size_type nPos = GetOutlinePos();
-
     if (bMakeVisible)
     {
         // make all content visible
@@ -2548,17 +2524,43 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
     }
     else
     {
+        if (SdrView* pSdrView = GetDrawView(); pSdrView && pSdrView->IsTextEdit() )
+        {
+            bool bLockView = IsViewLocked();
+            LockView(true);
+            EndTextEdit();
+            LockView(bLockView);
+        }
+        if (IsSelFrameMode() || IsObjSelected())
+        {
+            UnSelectFrame();
+            LeaveSelFrameMode();
+            GetView().LeaveDrawCreate();
+            EnterStdMode();
+        }
+
+        // Get current frame in which the cursor is positioned for use in placing the cursor.
+        const SwFrame* pCurrFrame = GetCurrFrame(false);
+
+        SwOutlineNodes::size_type nPos = GetOutlinePos();
+
         StartAction();
         InvalidateOutlineContentVisibility();
         EndAction();
 
-        // If needed, find visible outline node to place cursor.
-        if (nPos != SwOutlineNodes::npos && !IsOutlineContentVisible(nPos))
+        // If needed, find visible outline node frame to place cursor.
+        if (!pCurrFrame || !pCurrFrame->isFrameAreaDefinitionValid() || pCurrFrame->IsInDtor() ||
+                (nPos != SwOutlineNodes::npos &&
+                 !GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr)))
         {
-            while (nPos != SwOutlineNodes::npos && !GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr))
+            while (nPos != SwOutlineNodes::npos &&
+                   !GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr))
                 --nPos;
             if (nPos != SwOutlineNodes::npos)
+            {
+                EnterStdMode();
                 GotoOutline(nPos);
+            }
         }
     }
     GetView().GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
