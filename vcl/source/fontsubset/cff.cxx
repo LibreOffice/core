@@ -163,6 +163,55 @@ static const char* pDictEscs[] = {
     "nFDArray",             "nFDSelect",        "sFontName"
 };
 
+static const char* pStandardEncoding[] = {
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", "space", "exclam", "quotedbl",
+    "numbersign", "dollar", "percent", "ampersand",
+    "quoteright", "parenleft", "parenright", "asterisk", "plus",
+    "comma", "hyphen", "period", "slash", "zero", "one", "two",
+    "three", "four", "five", "six", "seven", "eight", "nine",
+    "colon", "semicolon", "less", "equal", "greater",
+    "question", "at", "A", "B", "C", "D", "E", "F", "G", "H",
+    "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+    "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash",
+    "bracketright", "asciicircum", "underscore", "quoteleft",
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+    "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
+    "y", "z", "braceleft", "bar", "braceright", "asciitilde",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", "exclamdown",
+    "cent", "sterling", "fraction", "yen", "florin", "section",
+    "currency", "quotesingle", "quotedblleft", "guillemotleft",
+    "guilsinglleft", "guilsinglright", "fi", "fl", ".notdef",
+    "endash", "dagger", "daggerdbl", "periodcentered",
+    ".notdef", "paragraph", "bullet", "quotesinglbase",
+    "quotedblbase", "quotedblright", "guillemotright",
+    "ellipsis", "perthousand", ".notdef", "questiondown",
+    ".notdef", "grave", "acute", "circumflex", "tilde",
+    "macron", "breve", "dotaccent", "dieresis", ".notdef",
+    "ring", "cedilla", ".notdef", "hungarumlaut", "ogonek",
+    "caron", "emdash", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
+    ".notdef", ".notdef", ".notdef", "AE", ".notdef",
+    "ordfeminine", ".notdef", ".notdef", ".notdef", ".notdef",
+    "Lslash", "Oslash", "OE", "ordmasculine", ".notdef",
+    ".notdef", ".notdef", ".notdef", ".notdef", "ae", ".notdef",
+    ".notdef", ".notdef", "dotlessi", ".notdef", ".notdef",
+    "lslash", "oslash", "oe", "germandbls", ".notdef",
+    ".notdef", ".notdef", ".notdef"
+};
+
 namespace {
 
 namespace TYPE1OP
@@ -262,6 +311,16 @@ struct CffLocal
     bool        mbForceBold;
 };
 
+const int MAX_T1OPS_SIZE = 81920; // TODO: use dynamic value
+
+struct CharString
+{
+    int nLen;
+    U8 aOps[MAX_T1OPS_SIZE];
+    int nCffGlyphId;
+};
+
+
 class CffSubsetterContext
 :   private CffGlobal
 {
@@ -278,6 +337,8 @@ public:
                 int nGlyphCount, FontSubsetInfo& );
 
 private:
+    void    convertCharStrings(const sal_GlyphId* pGlyphIds, int nGlyphCount,
+                std::vector<CharString>& rCharStrings);
     int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
     void    convertOneTypeOp();
     void    convertOneTypeEsc();
@@ -307,6 +368,7 @@ private:
     int         getFDSelect( int nGlyphIndex) const;
     int         getGlyphSID( int nGlyphIndex) const;
     const char* getGlyphName( int nGlyphIndex);
+    bool        getBaseAccent(ValType aBase, ValType aAccent, int* nBase, int* nAccent);
 
     void    read2push();
     void    writeType1Val( ValType);
@@ -343,6 +405,9 @@ private:
     ValType mnHintStack[ NMAXHINTS];
 
     ValType maCharWidth;
+
+    bool    mbDoSeac;
+    std::vector<sal_GlyphId> maExtraGlyphIds;
 };
 
 }
@@ -363,6 +428,7 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     , mnHorzHintSize(0)
     , mnHintStack{}
     , maCharWidth(-1)
+    , mbDoSeac(true)
 {
 //  setCharStringType( 1);
     // TODO: new CffLocal[ mnFDAryCount];
@@ -889,6 +955,27 @@ void CffSubsetterContext::convertOneTypeOp()
         clear();
         break;
     case TYPE2OP::ENDCHAR:
+        if (size() >= 4 && mbDoSeac)
+        {
+            // Deprecated seac-like use of endchar (Adobe Technical Note #5177,
+            // Appendix C).
+            auto achar = popVal();
+            auto bchar = popVal();
+            auto ady = popVal();
+            auto adx = popVal();
+            int nBase, nAccent;
+            if (getBaseAccent(bchar, achar, &nBase, &nAccent))
+            {
+                maExtraGlyphIds.push_back(nBase);
+                maExtraGlyphIds.push_back(nAccent);
+                writeType1Val(0); // TODO accent sb
+                writeType1Val(adx);
+                writeType1Val(ady);
+                writeType1Val(bchar);
+                writeType1Val(achar);
+                writeTypeEsc(TYPE1OP::SEAC);
+            }
+        }
         if( mbNeedClose)
             writeTypeOp( TYPE1OP::CLOSEPATH);
         else
@@ -1106,8 +1193,6 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     mpReadPtr = pOldReadPtr;
     mpReadEnd = pOldReadEnd;
 }
-
-const int MAX_T1OPS_SIZE = 81920; // TODO: use dynamic value
 
 int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len, U8* const pT1Ops)
 {
@@ -1606,6 +1691,28 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
     return pGlyphName;
 }
 
+bool CffSubsetterContext::getBaseAccent(ValType aBase, ValType aAccent, int* nBase, int* nAccent)
+{
+    bool bBase = false, bAccent = false;
+    for (int i = 0; i < mnCharStrCount; i++)
+    {
+        const char* pGlyphName = getGlyphName(i);
+        if (pGlyphName == pStandardEncoding[int(aBase)])
+        {
+            *nBase = i;
+            bBase = true;
+        }
+        if (pGlyphName == pStandardEncoding[int(aAccent)])
+        {
+            *nAccent = i;
+            bAccent = true;
+        }
+        if (bBase && bAccent)
+            return true;
+    }
+    return false;
+}
+
 namespace {
 
 class Type1Emitter
@@ -1771,6 +1878,46 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
     mpPtr += sprintf( mpPtr, "%s", pLineTail);
+}
+
+void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int nGlyphCount,
+                                             std::vector<CharString>& rCharStrings)
+{
+    // If we are doing extra glyphs used for seac operator, check for already
+    // converted glyphs.
+    bool bCheckDuplicates = !rCharStrings.empty();
+    rCharStrings.reserve(rCharStrings.size() + nGlyphCount);
+    for (int i = 0; i < nGlyphCount; ++i)
+    {
+        const int nCffGlyphId = pGlyphIds[i];
+        assert((nCffGlyphId >= 0) && (nCffGlyphId < mnCharStrCount));
+
+        if (!bCheckDuplicates)
+        {
+            const auto& it
+                = std::find_if(rCharStrings.begin(), rCharStrings.end(),
+                               [&](const CharString& c) { return c.nCffGlyphId == nCffGlyphId; });
+            if (it != rCharStrings.end())
+                continue;
+        }
+
+        // get privdict context matching to the glyph
+        const int nFDSelect = getFDSelect(nCffGlyphId);
+        if (nFDSelect < 0)
+            continue;
+        mpCffLocal = &maCffLocal[nFDSelect];
+
+        // convert the Type2op charstring to its Type1op counterpart
+        const int nT2Len = seekIndexData(mnCharStrBase, nCffGlyphId);
+        assert(nT2Len > 0);
+
+        CharString aCharString;
+        const int nT1Len = convert2Type1Ops(mpCffLocal, mpReadPtr, nT2Len, aCharString.aOps);
+        aCharString.nLen = nT1Len;
+        aCharString.nCffGlyphId = nCffGlyphId;
+
+        rCharStrings.push_back(aCharString);
+    }
 }
 
 void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
@@ -1987,28 +2134,28 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // TODO: emit used LocalSubr charstrings?
 
     // emit the CharStrings for the requested glyphs
+    std::vector<CharString> aCharStrings;
+    mbDoSeac = true;
+    convertCharStrings(pReqGlyphIds, nGlyphCount, aCharStrings);
+
+    // The previous convertCharStrings might collect extra glyphs used in seac
+    // operator, convert them as well
+    if (!maExtraGlyphIds.empty())
+    {
+        mbDoSeac = false;
+        convertCharStrings(maExtraGlyphIds.data(), maExtraGlyphIds.size(), aCharStrings);
+    }
     pOut += sprintf( pOut,
-        "2 index /CharStrings %d dict dup begin\n", nGlyphCount);
+        "2 index /CharStrings %zu dict dup begin\n", aCharStrings.size());
     rEmitter.emitAllCrypted();
-    for( int i = 0; i < nGlyphCount; ++i) {
-        const int nCffGlyphId = pReqGlyphIds[i];
-        assert( (nCffGlyphId >= 0) && (nCffGlyphId < mnCharStrCount));
-        // get privdict context matching to the glyph
-        const int nFDSelect = getFDSelect( nCffGlyphId);
-        if( nFDSelect < 0)
-            continue;
-        mpCffLocal = &maCffLocal[ nFDSelect];
-        // convert the Type2op charstring to its Type1op counterpart
-        const int nT2Len = seekIndexData( mnCharStrBase, nCffGlyphId);
-        assert( nT2Len > 0);
-        U8 aType1Ops[ MAX_T1OPS_SIZE]; // TODO: dynamic allocation
-        const int nT1Len = convert2Type1Ops( mpCffLocal, mpReadPtr, nT2Len, aType1Ops);
+    for (const auto& rCharString : aCharStrings)
+    {
         // get the glyph name
-        const char* pGlyphName = getGlyphName( nCffGlyphId);
+        const char* pGlyphName = getGlyphName(rCharString.nCffGlyphId);
         // emit the encrypted Type1op charstring
-        pOut += sprintf( pOut, "/%s %d RD ", pGlyphName, nT1Len);
-        memcpy( pOut, aType1Ops, nT1Len);
-        pOut += nT1Len;
+        pOut += sprintf( pOut, "/%s %d RD ", pGlyphName, rCharString.nLen);
+        memcpy( pOut, rCharString.aOps, rCharString.nLen);
+        pOut += rCharString.nLen;
         pOut += sprintf( pOut, " ND\n");
         rEmitter.emitAllCrypted();
         // provide individual glyphwidths if requested
