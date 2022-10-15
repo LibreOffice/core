@@ -408,10 +408,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 aSet.Put( SfxStringItem(
                     SID_CONFIG, pStringItem->GetValue() ) );
             }
+
+#if HAVE_FEATURE_SCRIPTING
             // Preselect a macro:
             if (auto const item = rReq.GetArg<SfxMacroInfoItem>(SID_MACROINFO)) {
                 aSet.Put(*item);
             }
+#endif
 
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(rReq.GetFrameWeld(),
