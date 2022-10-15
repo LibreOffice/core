@@ -259,7 +259,7 @@ namespace sw::mark {
             , public NonTextFieldmark
         {
         public:
-            CheckboxFieldmark(const SwPaM& rPaM);
+            CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName);
             bool IsChecked() const override;
             void SetChecked(bool checked) override;
         };
@@ -284,7 +284,7 @@ namespace sw::mark {
             : public FieldmarkWithDropDownButton
         {
         public:
-            DropDownFieldmark(const SwPaM& rPaM);
+            DropDownFieldmark(const SwPaM& rPaM, const OUString& rName);
             virtual ~DropDownFieldmark() override;
 
             virtual void ShowButton(SwEditWin* pEditWin) override;

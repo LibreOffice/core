@@ -619,10 +619,10 @@ namespace sw::mark
                 pMark = std::make_unique<TextFieldmark>(rPaM, rName);
                 break;
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
-                pMark = std::make_unique<CheckboxFieldmark>(rPaM);
+                pMark = std::make_unique<CheckboxFieldmark>(rPaM, rName);
                 break;
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
-                pMark = std::make_unique<DropDownFieldmark>(rPaM);
+                pMark = std::make_unique<DropDownFieldmark>(rPaM, rName);
                 break;
             case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
                 pMark = std::make_unique<DateFieldmark>(rPaM);

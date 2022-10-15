@@ -617,9 +617,12 @@ namespace sw::mark
     }
 
 
-    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)
+    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName)
         : NonTextFieldmark(rPaM)
-    { }
+    {
+        if (!rName.isEmpty())
+            m_aName = rName;
+    }
 
     void CheckboxFieldmark::SetChecked(bool checked)
     {
@@ -658,9 +661,11 @@ namespace sw::mark
             m_pButton.disposeAndClear();
     }
 
-    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM)
+    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM, const OUString& rName)
         : FieldmarkWithDropDownButton(rPaM)
     {
+        if (!rName.isEmpty())
+            m_aName = rName;
     }
 
     DropDownFieldmark::~DropDownFieldmark()
