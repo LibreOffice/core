@@ -25,6 +25,8 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 
@@ -219,16 +221,21 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) c
     aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetGroupFont( aFont );
 
-    rSettings.SetStyleSettings( aStyleSettings );
-
     static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
     const bool bForceHCMode = pEnvHC && *pEnvHC;
-    if( bForceHCMode )
-    {
-        aStyleSettings = rSettings.GetStyleSettings();
+    if (bForceHCMode)
         aStyleSettings.SetHighContrastMode( true );
-        rSettings.SetStyleSettings( aStyleSettings );
+    else
+    {
+        short nHighContrastMode = officecfg::Office::Common::Accessibility::HighContrast::get();
+        if (nHighContrastMode != 0) // 0 Automatic, 1 Disable, 2 Enable
+        {
+            const bool bEnable = nHighContrastMode == 2;
+            aStyleSettings.SetHighContrastMode(bEnable);
+        }
     }
+
+    rSettings.SetStyleSettings( aStyleSettings );
 
     if ( bCallHdl )
         GetpApp()->OverrideSystemSettings( rSettings );

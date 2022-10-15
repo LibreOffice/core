@@ -6188,6 +6188,31 @@
       <info>
         <desc>Specifies settings for the accessibility options.</desc>
       </info>
+      <prop oor:name="HighContrast" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: Tools  Options - Accessibility Options -->
+        <info>
+          <desc>Indicates whether High Contrast accessibility mode should be active.</desc>
+          <label>High Contrast</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Use the default setting for the current platform.</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Disable</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Enable</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
+      </prop>
       <prop oor:name="IsForPagePreviews" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables the use of high contrast colors, instead of displaying

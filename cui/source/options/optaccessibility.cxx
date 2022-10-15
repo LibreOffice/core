@@ -29,6 +29,7 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button("textselinreadonly"))
     , m_xAnimatedGraphics(m_xBuilder->weld_check_button("animatedgraphics"))
     , m_xAnimatedTexts(m_xBuilder->weld_check_button("animatedtext"))
+    , m_xHighContrast(m_xBuilder->weld_combo_box("highcontrast"))
     , m_xAutomaticFontColor(m_xBuilder->weld_check_button("autofontcolor"))
     , m_xPagePreviews(m_xBuilder->weld_check_button("systempagepreviewcolor"))
 {
@@ -60,6 +61,8 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::Accessibility::IsAutomaticFontColor::set(m_xAutomaticFontColor->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
         officecfg::Office::Common::Accessibility::IsSelectionInReadonly::set(m_xTextSelectionInReadonly->get_active(), batch);
+    if ( !officecfg::Office::Common::Accessibility::HighContrast::isReadOnly() )
+        officecfg::Office::Common::Accessibility::HighContrast::set(m_xHighContrast->get_active(), batch);
     batch->commit();
 
     AllSettings aAllSettings = Application::GetSettings();
@@ -95,6 +98,10 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
     m_xTextSelectionInReadonly->set_active( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get() );
     if( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
         m_xTextSelectionInReadonly->set_sensitive(false);
+
+    m_xHighContrast->set_active( officecfg::Office::Common::Accessibility::HighContrast::get() );
+    if( officecfg::Office::Common::Accessibility::HighContrast::isReadOnly() )
+        m_xHighContrast->set_sensitive(false);
 
     AllSettings aAllSettings = Application::GetSettings();
     const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();

@@ -136,6 +136,56 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
+              <!-- n-columns=2 n-rows=1 -->
+              <object class="GtkGrid" id="highcontrastbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label13">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|label13">High Contrast:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">highcontrast</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="highcontrast">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="optaccessibilitypage|highcontrast">Automatic</item>
+                      <item translatable="yes" context="optaccessibilitypage|highcontrast">Disable</item>
+                      <item translatable="yes" context="optaccessibilitypage|highcontrast">Enable</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="highcontrast-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|highcontrast">Controls if high contrast mode is used. Select from "Automatic", "Disable" and "Enable". "Automatic" uses high contrast according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkCheckButton" id="autofontcolor">
                 <property name="label" translatable="yes" context="optaccessibilitypage|autofontcolor">Use automatic font _color for screen display</property>
                 <property name="visible">True</property>
@@ -152,7 +202,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -172,7 +222,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
