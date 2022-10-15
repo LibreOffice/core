@@ -31,11 +31,27 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::uno;
 
 namespace pdfi
 {
+
+const Reference< XCharacterClassification >& WriterXmlEmitter::GetCharacterClassification()
+{
+    if ( !mxCharClass.is() )
+    {
+        Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
+        mxCharClass = CharacterClassification::create(xContext);
+    }
+    return mxCharClass;
+}
 
 void WriterXmlEmitter::visit( HyperlinkElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&   )
 {
@@ -72,8 +88,31 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< std::unique_pt
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 
+    OUString str(elem.Text.toString());
+
+    // Check for RTL
+    bool isRTL = false;
+    Reference< i18n::XCharacterClassification > xCC( GetCharacterClassification() );
+    if( xCC.is() )
+    {
+        for(int i=1; i< elem.Text.getLength(); i++)
+        {
+            i18n::DirectionProperty nType = static_cast<i18n::DirectionProperty>(xCC->getCharacterDirection( str, i ));
+            if ( nType == i18n::DirectionProperty_RIGHT_TO_LEFT           ||
+                 nType == i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC    ||
+                 nType == i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING ||
+                 nType == i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE
+                )
+                isRTL = true;
+        }
+    }
+
+    if (isRTL)  // If so, reverse string
+        str = ::comphelper::string::reverseString(str);
+
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
-    m_rEmitContext.rEmitter.write( elem.Text.makeStringAndClear() );
+    // TODO: reserve continuous spaces, see DrawXmlEmitter::visit( TextElement& elem...)
+    m_rEmitContext.rEmitter.write(str);
     auto this_it = elem.Children.begin();
     while( this_it != elem.Children.end() && this_it->get() != &elem )
     {
@@ -797,13 +836,12 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     }
                 }
                 // concatenate consecutive text elements unless there is a
-                // font or text color or matrix change, leave a new span in that case
+                // font or text color change, leave a new span in that case
                 if( pCur->FontId == pNext->FontId &&
                     rCurGC.FillColor.Red == rNextGC.FillColor.Red &&
                     rCurGC.FillColor.Green == rNextGC.FillColor.Green &&
                     rCurGC.FillColor.Blue == rNextGC.FillColor.Blue &&
-                    rCurGC.FillColor.Alpha == rNextGC.FillColor.Alpha &&
-                    rCurGC.Transformation == rNextGC.Transformation
+                    rCurGC.FillColor.Alpha == rNextGC.FillColor.Alpha
                     )
                 {
                     pCur->updateGeometryWith( pNext );
