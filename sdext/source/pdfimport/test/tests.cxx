@@ -799,35 +799,53 @@ namespace
                     new OutputWrapString(aOutput),
                     nullptr));
 
-            // std::cout << aOutput << std::endl;
             xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
 
             // Test for امُ عَلَيْكَ
             // TODO: How to get the "عَلَيْكَ" in xpath, as shown after the <text:s> tag?
             OString xpath = "//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 14821.9583333333 2159.23861112778)']/draw:text-box/text:p/text:span";
             OUString sContent = getXPathContent(pXmlDoc, xpath); // u"\nا\nُ\nم\n"
-            CPPUNIT_ASSERT_EQUAL(OUString(u"اُم"), sContent.replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"اُم"), sContent.replaceAll("\n", ""));
 
             // Test for ٱلَّسَل‬ . It appears in the 3rd frame, i.e. after the امُ عَلَيْكَ which is in the 2nd frame (from left to right)
             // thus these two frames together appear as ٱلَّسَل امُ عَلَيْكَ in Draw‬.
             xpath = "//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL(OUString(u"ٱلَّسَل"), sContent.replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"ٱلَّسَل"), sContent.replaceAll("\n", ""));
 
             // Test for "LibreOffice LTR"
             // TODO: How to get the "LTR" as shown after the <text:s> tag?
             xpath = "//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 12779.375 5121.79583335)']/draw:text-box/text:p/text:span";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL(OUString(u"LibreOffice"), sContent.replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"LibreOffice"), sContent.replaceAll("\n", ""));
 
             /* Test for Chinese characters */
             // Use last() instead of matrix below, because the matrix may be different on different OS due to fallback of Chinese fonts.
             xpath = "//draw:frame[last()]/draw:text-box/text:p/text:span";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL(OUString(u"中文测试，中文"), sContent.replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"中文测试，中文"), sContent.replaceAll("\n", ""));
+
+            // Test pdf text run in the Writer PDF import filter
+            xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
+            OString aOutput2;
+            xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/tdf104597_textrun.pdf"),
+                    new OutputWrapString(aOutput2),
+                    nullptr);
+            // FIXME: the same draw:frame is duplicated in the xml output,
+            // e.g. there are two draw:frame with draw:z-index="3" with the same content.
+            xmlDocUniquePtr pXmlDoc2(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput2.getStr())));
+            xpath = "//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span";
+            sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n", "");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"ٱلَّسَل"), sContent);
+            xpath = "//draw:frame[@draw:z-index='2'][1]/draw:text-box/text:p/text:span";
+            sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n", "");
+            // need to use اُم rather than اُم َعَلْيَك here, because this node may be different on different systems
+            CPPUNIT_ASSERT_EQUAL(true, sContent.match(u"اُم"));
+            xpath = "//draw:frame[last()]/draw:text-box/text:p/text:span";
+            sContent = getXPathContent(pXmlDoc2, xpath);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"中文测试，中文"), sContent.replaceAll("\n", ""));
 #endif
         }
-
 
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
