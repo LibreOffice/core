@@ -500,7 +500,7 @@ $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 # this target is provided primarily for consistency with the other ide-integrations
 vscode-ide-integration: $(BUILDDIR)/vs-code.code-workspace vim-ide-integration
 
-# ToDo: there probably is a way to have it at least create the compile-commnands.json file
+# ToDo: there probably is a way to have it at least create the compile-commands.json file
 # for the vim/vs-code integration without building the registry stuff
 gbuildtojson: Rdb
 

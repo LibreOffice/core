@@ -10,7 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/presnt))
 
 # # for OTP templates: mimetype, content.xml, styles.xml, META-INF/manifest.xml and
-# Thumbnails/thumbnail.png files are automaticaly added for each template
+# Thumbnails/thumbnail.png files are automatically added for each template
 # list of meta.xml files (one per template) + other files (content.xml, manifest.rdf, settings.xml, pictures...)
 extras_PRESENTATIONS_XMLFILES := \
 	Beehive/meta.xml  \
