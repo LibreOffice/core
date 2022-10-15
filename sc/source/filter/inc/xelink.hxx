@@ -186,27 +186,22 @@ public:
     void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
-        @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the add-in function name.
-        @param rnExtName  (out-param) Returns the 1-based EXTERNNAME record index.
-        @return  true = add-in function inserted; false = error (i.e. not supported in current BIFF). */
-    bool                InsertAddIn(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName );
+        rnExtName Returns the 1-based EXTERNNAME record index.
+        sc/source/filter/inc/xelink.hxx
+        @return  [rnExtSheet, rnExtName] as an optional pair. If empty, it's not supported in current BIFF.*/
+    std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertAddIn(const OUString& rName);
     /** InsertEuroTool */
-    bool                InsertEuroTool(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName );
+    std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertEuroTool(const OUString& rName);
     /** Finds or inserts an EXTERNNAME record for DDE links.
-        @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the DDE link.
-        @param rnExtName  (out-param) Returns the 1-based EXTERNNAME record index.
-        @return  true = DDE link inserted; false = error (i.e. not supported in current BIFF). */
-    bool                InsertDde(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
+        rnExtSheet Returns the index of the EXTSHEET structure for the DDE link.
+        rnExtName Returns the 1-based EXTERNNAME record index.
+        @return  [rnExtSheet, rnExtName] as an optional pair. If empty, it's not supported in current BIFF. */
+    std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertDde(const OUString& rApplic, const OUString& rTopic, const OUString& rItem);
 
-    bool                InsertExtName(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
+    std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertExtName(const OUString& rUrl, const OUString& rName,
+                      const ScExternalRefCache::TokenArrayRef& rArray);
 
     /** Writes the entire Link table. */
     virtual void        Save( XclExpStream& rStrm ) override;

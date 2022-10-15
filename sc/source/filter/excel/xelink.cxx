@@ -413,25 +413,24 @@ public:
     void                StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
-        @param rnSupbook  Returns the index of the SUPBOOK record which contains the add-in function name.
-        @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    bool                InsertAddIn(
-                            sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
-                            const OUString& rName );
+     * @return an optional pair, containing [rnSupbook, rnExtName]
+       rnSupbook  Returns the index of the SUPBOOK record which contains the DDE link.
+       rnExtName  Returns the 1-based EXTERNNAME record index.
+    */
+    std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertAddIn(const OUString& rName);
     /** InsertEuroTool */
-    bool                InsertEuroTool(
-                             sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
-                             const OUString& rName );
+    std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertEuroTool(const OUString& rName);
     /** Finds or inserts an EXTERNNAME record for DDE links.
-        @param rnSupbook  Returns the index of the SUPBOOK record which contains the DDE link.
-        @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    bool                InsertDde(
-                            sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
+     * @return an optional pair, containing [rnSupbook, rnExtName]
+     * rnSupbook  Returns the index of the SUPBOOK record which contains the DDE link.
+       rnExtName  Returns the 1-based EXTERNNAME record index.
+    */
+    std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertDde(const OUString& rApplic, const OUString& rTopic, const OUString& rItem);
 
-    bool                InsertExtName(
-                            sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
+    std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertExtName(const OUString& rUrl, const OUString& rName,
+                      const ScExternalRefCache::TokenArrayRef& rArray);
 
     XclExpXti           GetXti( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                 XclExpRefLogEntry* pRefLogEntry );
@@ -460,16 +459,15 @@ private:
 private:
     /** Searches for the SUPBOOK record containing the passed document URL.
         @param rxSupbook  (out-param) Returns a reference to the SUPBOOK record, or 0.
-        @param rnIndex  (out-param) Returns the list index, if the SUPBOOK exists.
-        @return  True, if the SUPBOOK record exists (out-parameters are valid). */
-    bool                GetSupbookUrl( XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex,
-                            std::u16string_view rUrl ) const;
+        @return  List index, if the SUPBOOK record exists (out-parameters are valid). */
+    std::optional<sal_uInt16> GetSupbookUrl(XclExpSupbookRef& rxSupbook,
+                                            std::u16string_view rUrl) const;
     /** Searches for the SUPBOOK record containing the passed DDE link.
         @param rxSupbook  (out-param) Returns a reference to the SUPBOOK record, or 0.
-        @param rnIndex  (out-param) Returns the list index, if the SUPBOOK exists.
-        @return  True, if the SUPBOOK record exists (out-parameters are valid). */
-    bool                GetSupbookDde( XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex,
-                            std::u16string_view rApplic, std::u16string_view rTopic ) const;
+        @return  List index, if the SUPBOOK record exists (out-parameters are valid). */
+    std::optional<sal_uInt16> GetSupbookDde(XclExpSupbookRef& rxSupbook,
+                                            std::u16string_view rApplic,
+                                            std::u16string_view rTopic) const;
 
     /** Appends a new SUPBOOK to the list.
         @return  The list index of the SUPBOOK record. */
@@ -510,22 +508,19 @@ public:
     virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange ) = 0;
 
     /** Derived classes find or insert an EXTERNNAME record for an add-in function name. */
-    virtual bool        InsertAddIn(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName ) = 0;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertAddIn(const OUString& rName) = 0;
     /** InsertEuroTool */
-    virtual bool        InsertEuroTool(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName ) = 0;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertEuroTool(const OUString& rName)
+        = 0;
 
     /** Derived classes find or insert an EXTERNNAME record for DDE links. */
-    virtual bool        InsertDde(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem ) = 0;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertDde(const OUString& rApplic, const OUString& rTopic, const OUString& rItem) = 0;
 
-    virtual bool        InsertExtName(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) = 0;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertExtName(const OUString& rUrl, const OUString& rName,
+                      const ScExternalRefCache::TokenArrayRef& rArray)
+        = 0;
 
     /** Derived classes write the entire link table to the passed stream. */
     virtual void        Save( XclExpStream& rStrm ) = 0;
@@ -560,22 +555,19 @@ public:
     virtual void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos ) override;
     virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange ) override;
 
-    virtual bool        InsertAddIn(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+    InsertAddIn(const OUString& rName) override;
 
     /** InsertEuroTool */
-    virtual bool        InsertEuroTool(
-                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                             const OUString& rName ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+    InsertEuroTool(const OUString& rName) override;
 
-    virtual bool        InsertDde(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertDde(const OUString& rApplic, const OUString& rTopic, const OUString& rItem) override;
 
-    virtual bool        InsertExtName(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertExtName(const OUString& rUrl, const OUString& rName,
+                      const ScExternalRefCache::TokenArrayRef& rArray) override;
 
     virtual void        Save( XclExpStream& rStrm ) override;
 
@@ -630,21 +622,18 @@ public:
     virtual void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos ) override;
     virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange ) override;
 
-    virtual bool        InsertAddIn(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+    InsertAddIn(const OUString& rName) override;
     /** InsertEuroTool */
-    virtual bool        InsertEuroTool(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+    InsertEuroTool(const OUString& rName) override;
 
-    virtual bool        InsertDde(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertDde(const OUString& rApplic, const OUString& rTopic, const OUString& rItem) override;
 
-    virtual bool        InsertExtName(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) override;
+    virtual std::optional<std::pair<sal_uInt16, sal_uInt16>>
+        InsertExtName(const OUString& rUrl, const OUString& rName,
+                      const ScExternalRefCache::TokenArrayRef& rArray) override;
 
     virtual void        Save( XclExpStream& rStrm ) override;
 
@@ -1887,8 +1876,8 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         return;
 
     XclExpSupbookRef xSupbook;
-    sal_uInt16 nSupbookId;
-    if (!GetSupbookUrl(xSupbook, nSupbookId, *pUrl))
+    auto nSupbookId = GetSupbookUrl(xSupbook, *pUrl);
+    if (!nSupbookId)
     {
         xSupbook = new XclExpSupbook(GetRoot(), *pUrl);
         nSupbookId = Append(xSupbook);
@@ -1899,12 +1888,12 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         // specified table name not found in this SUPBOOK.
         return;
 
-    FindSBIndexEntry f(nSupbookId, nSheetId);
+    FindSBIndexEntry f(*nSupbookId, nSheetId);
     if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
     {
         maSBIndexVec.emplace_back();
         XclExpSBIndex& r = maSBIndexVec.back();
-        r.mnSupbook = nSupbookId;
+        r.mnSupbook = *nSupbookId;
         r.mnSBTab   = nSheetId;
     }
 
@@ -1919,8 +1908,8 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
         return;
 
     XclExpSupbookRef xSupbook;
-    sal_uInt16 nSupbookId;
-    if (!GetSupbookUrl(xSupbook, nSupbookId, *pUrl))
+    auto nSupbookId = GetSupbookUrl(xSupbook, *pUrl);
+    if (!nSupbookId)
     {
         xSupbook = new XclExpSupbook(GetRoot(), *pUrl);
         nSupbookId = Append(xSupbook);
@@ -1963,12 +1952,12 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
     {
         sal_uInt16 nSheetId = nFirstSheetId + static_cast<sal_uInt16>(nTab);
-        FindSBIndexEntry f(nSupbookId, nSheetId);
+        FindSBIndexEntry f(*nSupbookId, nSheetId);
         if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
             maSBIndexVec.emplace_back();
             XclExpSBIndex& r = maSBIndexVec.back();
-            r.mnSupbook = nSupbookId;
+            r.mnSupbook = *nSupbookId;
             r.mnSBTab   = nSheetId;
         }
 
@@ -1976,8 +1965,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     }
 }
 
-bool XclExpSupbookBuffer::InsertAddIn(
-        sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertAddIn(const OUString& rName )
 {
     XclExpSupbookRef xSupbook;
     if( mnAddInSB == SAL_MAX_UINT16 )
@@ -1988,51 +1976,71 @@ bool XclExpSupbookBuffer::InsertAddIn(
     else
         xSupbook = maSupbookList.GetRecord( mnAddInSB );
     OSL_ENSURE( xSupbook, "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
-    rnSupbook = mnAddInSB;
-    rnExtName = xSupbook->InsertAddIn( rName );
-    return rnExtName > 0;
+
+    auto nExtName = xSupbook->InsertAddIn( rName );
+    if( nExtName > 0)
+    {
+        return std::make_pair(mnAddInSB, nExtName);
+    }
+    return {};
 }
 
-bool XclExpSupbookBuffer::InsertEuroTool(
-        sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertEuroTool( const OUString& rName )
 {
     XclExpSupbookRef xSupbook;
     OUString aUrl( u"\001\010EUROTOOL.XLA"_ustr );
-    if( !GetSupbookUrl( xSupbook, rnSupbook, aUrl ) )
+    const auto& nSupbookId = GetSupbookUrl(xSupbook, aUrl);
+    sal_uInt16 nSupbook;
+    if( !nSupbookId )
     {
         xSupbook = new XclExpSupbook( GetRoot(), aUrl, XclSupbookType::Eurotool );
-        rnSupbook = Append( xSupbook );
+        nSupbook = Append( xSupbook );
     }
-    rnExtName = xSupbook->InsertEuroTool( rName );
-    return rnExtName > 0;
+
+    auto nExtName = xSupbook->InsertEuroTool( rName );
+    if( nExtName > 0)
+    {
+        return std::make_pair(nSupbook, nExtName);
+    }
+    return {};
 }
 
-bool XclExpSupbookBuffer::InsertDde(
-        sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertDde(
         const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
 {
     XclExpSupbookRef xSupbook;
-    if( !GetSupbookDde( xSupbook, rnSupbook, rApplic, rTopic ) )
+    auto nSupbookDde = GetSupbookDde( xSupbook, rApplic, rTopic );
+    sal_uInt16 nSupbook;
+    if( !nSupbookDde )
     {
         xSupbook = new XclExpSupbook( GetRoot(), rApplic, rTopic );
-        rnSupbook = Append( xSupbook );
+        nSupbook = Append(xSupbook);
     }
-    rnExtName = xSupbook->InsertDde( rItem );
-    return rnExtName > 0;
+    auto nExtName = xSupbook->InsertDde( rItem );
+    if (nExtName > 0)
+    {
+        return std::make_pair(nSupbook, nExtName);
+    }
+    return {};
 }
 
-bool XclExpSupbookBuffer::InsertExtName(
-        sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rUrl,
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertExtName( const OUString& rUrl,
         const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
 {
     XclExpSupbookRef xSupbook;
-    if (!GetSupbookUrl(xSupbook, rnSupbook, rUrl))
-    {
+    const auto& nSupbookId = GetSupbookUrl(xSupbook, rUrl);
+    sal_uInt16 nSupbook;
+    if (!nSupbookId) {
         xSupbook = new XclExpSupbook(GetRoot(), rUrl);
-        rnSupbook = Append(xSupbook);
+        nSupbook = Append(xSupbook);
     }
-    rnExtName = xSupbook->InsertExtName(rName, rArray);
-    return rnExtName > 0;
+
+    auto nExtName = xSupbook->InsertExtName(rName, rArray);
+    if (nExtName > 0)
+    {
+        return std::make_pair(nSupbook, nExtName);
+    }
+    return {};
 }
 
 XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
@@ -2045,13 +2053,13 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabN
         return aXti;
 
     XclExpSupbookRef xSupbook;
-    sal_uInt16 nSupbookId;
-    if (!GetSupbookUrl(xSupbook, nSupbookId, *pUrl))
+    auto nSupbookId = GetSupbookUrl(xSupbook, *pUrl);
+    if (!nSupbookId)
     {
         xSupbook = new XclExpSupbook(GetRoot(), *pUrl);
         nSupbookId = Append(xSupbook);
     }
-    aXti.mnSupbook = nSupbookId;
+    aXti.mnSupbook = *nSupbookId;
 
     sal_uInt16 nFirstSheetId = xSupbook->GetTabIndex(rTabName);
     if (nFirstSheetId == EXC_NOTAB)
@@ -2066,12 +2074,12 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabN
         if (nSheetId >= nSheetCount)
             return aXti;
 
-        FindSBIndexEntry f(nSupbookId, nSheetId);
+        FindSBIndexEntry f(*nSupbookId, nSheetId);
         if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
             maSBIndexVec.emplace_back();
             XclExpSBIndex& r = maSBIndexVec.back();
-            r.mnSupbook = nSupbookId;
+            r.mnSupbook = *nSupbookId;
             r.mnSBTab   = nSheetId;
         }
         if (i == 0)
@@ -2162,34 +2170,32 @@ bool XclExpSupbookBuffer::HasExternalReferences() const
     return false;
 }
 
-bool XclExpSupbookBuffer::GetSupbookUrl(
-        XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex, std::u16string_view rUrl ) const
+std::optional<sal_uInt16> XclExpSupbookBuffer::GetSupbookUrl(
+        XclExpSupbookRef& rxSupbook, std::u16string_view rUrl ) const
 {
     for( size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos )
     {
         rxSupbook = maSupbookList.GetRecord( nPos );
         if( rxSupbook->IsUrlLink( rUrl ) )
         {
-            rnIndex = ulimit_cast< sal_uInt16 >( nPos );
-            return true;
+           return ulimit_cast< sal_uInt16 >( nPos );
         }
     }
-    return false;
+    return {};
 }
 
-bool XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
-        sal_uInt16& rnIndex, std::u16string_view rApplic, std::u16string_view rTopic ) const
+std::optional<sal_uInt16> XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
+        std::u16string_view rApplic, std::u16string_view rTopic ) const
 {
     for( size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos )
     {
         rxSupbook = maSupbookList.GetRecord( nPos );
         if( rxSupbook->IsDdeLink( rApplic, rTopic ) )
         {
-            rnIndex = ulimit_cast< sal_uInt16 >( nPos );
-            return true;
+            return ulimit_cast< sal_uInt16 >( nPos );
         }
     }
-    return false;
+    return {};
 }
 
 sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef const & xSupbook )
@@ -2258,38 +2264,38 @@ void XclExpLinkManagerImpl5::StoreCellRange( sal_uInt16 /*nFileId*/, const OUStr
     // not implemented
 }
 
-bool XclExpLinkManagerImpl5::InsertAddIn(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl5::InsertAddIn( const OUString& rName )
 {
-    XclExpExtSheetRef xExtSheet = FindInternal( rnExtSheet, EXC_EXTSH_ADDIN );
+    sal_uInt16 nExtSheet, nExtName;
+    XclExpExtSheetRef xExtSheet = FindInternal( nExtSheet, EXC_EXTSH_ADDIN );
     if( xExtSheet )
     {
-        rnExtName = xExtSheet->InsertAddIn( rName );
-        return rnExtName > 0;
+        nExtName = xExtSheet->InsertAddIn( rName );
+        if(nExtName > 0)
+        {
+            return std::make_pair(nExtSheet, nExtName);
+        }
     }
-    return false;
+    return {};
 }
 
-bool XclExpLinkManagerImpl5::InsertEuroTool(
-         sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/, const OUString& /*rName*/ )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl5::InsertEuroTool( const OUString& /*rName*/ )
 {
-     return false;
+     return {};
 }
 
-bool XclExpLinkManagerImpl5::InsertDde(
-        sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/,
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl5::InsertDde(
         const OUString& /*rApplic*/, const OUString& /*rTopic*/, const OUString& /*rItem*/ )
 {
     // not implemented
-    return false;
+    return {};
 }
 
-bool XclExpLinkManagerImpl5::InsertExtName(
-        sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/, const OUString& /*rUrl*/,
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl5::InsertExtName( const OUString& /*rUrl*/,
         const OUString& /*rName*/, const ScExternalRefCache::TokenArrayRef& /*rArray*/ )
 {
     // not implemented
-    return false;
+    return {};
 }
 
 void XclExpLinkManagerImpl5::Save( XclExpStream& rStrm )
@@ -2457,53 +2463,46 @@ void XclExpLinkManagerImpl8::StoreCellRange( sal_uInt16 nFileId, const OUString&
     maSBBuffer.StoreCellRange(nFileId, rTabName, rRange);
 }
 
-bool XclExpLinkManagerImpl8::InsertAddIn(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertAddIn( const OUString& rName )
 {
-    sal_uInt16 nSupbook;
-    if( maSBBuffer.InsertAddIn( nSupbook, rnExtName, rName ) )
+    sal_uInt16 nSupbook(0);
+    if( maSBBuffer.InsertAddIn( rName ) )
     {
-        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
-        return true;
+       return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
     }
-    return false;
+    return {};
 }
 
-bool XclExpLinkManagerImpl8::InsertEuroTool(
-         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertEuroTool( const OUString& rName )
 {
-    sal_uInt16 nSupbook;
-    if( maSBBuffer.InsertEuroTool( nSupbook, rnExtName, rName ) )
+    sal_uInt16 nSupbook(0);
+    if( maSBBuffer.InsertEuroTool( rName ) )
     {
-        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
-        return true;
+        return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
     }
-    return false;
+    return {};
 }
 
-bool XclExpLinkManagerImpl8::InsertDde(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertDde(
+     const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
 {
-    sal_uInt16 nSupbook;
-    if( maSBBuffer.InsertDde( nSupbook, rnExtName, rApplic, rTopic, rItem ) )
+    sal_uInt16 nSupbook(0);
+    if( maSBBuffer.InsertDde( rApplic, rTopic, rItem ) )
     {
-        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
-        return true;
+       return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
     }
-    return false;
+    return {};
 }
 
-bool XclExpLinkManagerImpl8::InsertExtName( sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const OUString& rUrl, const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertExtName( const OUString& rUrl, const OUString& rName,
+const ScExternalRefCache::TokenArrayRef& rArray )
 {
-    sal_uInt16 nSupbook;
-    if( maSBBuffer.InsertExtName( nSupbook, rnExtName, rUrl, rName, rArray ) )
+    sal_uInt16 nSupbook(0);
+    if( maSBBuffer.InsertExtName( rUrl, rName, rArray ) )
     {
-        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
-        return true;
+        return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
     }
-    return false;
+    return {};
 }
 
 void XclExpLinkManagerImpl8::Save( XclExpStream& rStrm )
@@ -2622,30 +2621,26 @@ void XclExpLinkManager::StoreCellRange( sal_uInt16 nFileId, const OUString& rTab
     mxImpl->StoreCellRange(nFileId, rTabName, rRange);
 }
 
-bool XclExpLinkManager::InsertAddIn(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManager::InsertAddIn( const OUString& rName )
 {
-    return mxImpl->InsertAddIn( rnExtSheet, rnExtName, rName );
+    return mxImpl->InsertAddIn( rName );
 }
 
-bool XclExpLinkManager::InsertEuroTool(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManager::InsertEuroTool( const OUString& rName )
 {
-    return mxImpl->InsertEuroTool( rnExtSheet, rnExtName, rName );
+    return mxImpl->InsertEuroTool( rName );
 }
 
-bool XclExpLinkManager::InsertDde(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManager::InsertDde(
+    const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
 {
-    return mxImpl->InsertDde( rnExtSheet, rnExtName, rApplic, rTopic, rItem );
+    return mxImpl->InsertDde( rApplic, rTopic, rItem );
 }
 
-bool XclExpLinkManager::InsertExtName(
-    sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl, const OUString& rName,
+std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManager::InsertExtName( const OUString& rUrl, const OUString& rName,
     const ScExternalRefCache::TokenArrayRef& rArray )
 {
-    return mxImpl->InsertExtName(rnExtSheet, rnExtName, rUrl, rName, rArray);
+    return mxImpl->InsertExtName( rUrl, rName, rArray);
 }
 
 void XclExpLinkManager::Save( XclExpStream& rStrm )
