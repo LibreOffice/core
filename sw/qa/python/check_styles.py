@@ -103,21 +103,21 @@ class CheckStyle(unittest.TestCase):
         xFamily.removeByName(xRightStyle2.Name)
 
         with self.assertRaises(NoSuchElementException):
-            nope = xFamily.getByName("RightStyleOld")
+            xFamily.getByName("RightStyleOld")
         with self.assertRaises(NoSuchElementException):
-            nope = xFamily.getByName("RightStyle")
+            xFamily.getByName("RightStyle")
 
         with self.assertRaises(NoSuchElementException):
-            nope = xFamily.getByName("RightStyle2Old")
+            xFamily.getByName("RightStyle2Old")
 
         with self.assertRaises(NoSuchElementException):
-            nope = xFamily.getByName("RightStyle2")
+            xFamily.getByName("RightStyle2")
 
         with self.assertRaises(IllegalArgumentException):
             xFamily.insertByName("WrongStyle", xWrongStyle)
 
         with self.assertRaises(NoSuchElementException):
-            nope = xFamily.getByName("WrongStyle")
+            xFamily.getByName("WrongStyle")
 
     def test_CharacterFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()

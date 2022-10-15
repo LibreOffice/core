@@ -3271,7 +3271,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         try:
             if i_comp:
                 i_comp.close(True)
-        except Exception as e:
+        except Exception:
             pass
 
     def test_load_store(self):

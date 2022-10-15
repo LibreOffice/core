@@ -7,8 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from libreoffice.uno.propertyvalue import mkPropertyValues
-
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
 

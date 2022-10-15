@@ -10,8 +10,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import time
-
 
 class tdf150457(UITestCase):
 

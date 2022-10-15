@@ -8,8 +8,6 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from org.libreoffice.unotest import systemPathToFileUrl
-from uitest.uihelper.common import select_by_text
 from tempfile import TemporaryDirectory
 import os.path
 

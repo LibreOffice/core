@@ -122,7 +122,7 @@ class bookmarkDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(x1stListEntry)["Text"], "1\tBookmark 1\tfubar\tNo\t")
 
     def test_bookmark_dialog_hidden_from_DOCX_import(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf95495.docx")) as XDoc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf95495.docx")):
 
             # check Hidden field of the imported hidden bookmarks
             with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="close") as xBookDlg:

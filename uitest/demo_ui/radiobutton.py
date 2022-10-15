@@ -7,21 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from libreoffice.uno.propertyvalue import mkPropertyValues
-
 from uitest.framework import UITestCase
-
-import time
-
-try:
-    import pyuno
-    import uno
-    import unohelper
-except ImportError:
-    print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
-    print("PYTHONPATH=/installation/opt/program")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
-    raise
 
 class RadioButtonTest(UITestCase):
 

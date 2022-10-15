@@ -14,9 +14,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text, select_pos
 
-import unittest
-import platform
-
 class SimpleMathTest(UITestCase):
 
     def test_math_unoCommand(self):
@@ -39,7 +36,6 @@ class SimpleMathTest(UITestCase):
             xEditView = xMathDoc.getChild("editview")
 
             type_text(xEditView, "E=mc^2")
-            xMathEdit = xMathDoc.getChild("editview")
 
             self.assertEqual("E=mc^2", get_state_as_dict(xEditView)["Text"])
 

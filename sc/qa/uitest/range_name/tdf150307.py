@@ -44,7 +44,6 @@ class tdf150307(UITestCase):
         with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = xCalcDoc.getChild("grid_window")
-            xPosWindow = xCalcDoc.getChild('pos_window')
 
             self.xUITest.executeCommand(".uno:Sidebar")
 

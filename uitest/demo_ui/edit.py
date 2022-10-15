@@ -12,8 +12,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text, get_state_as_dict, select_text
 
-import time
-
 class EditTest(UITestCase):
 
     def test_type_text(self):

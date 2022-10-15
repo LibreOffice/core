@@ -14,7 +14,6 @@ import os
 try:
     import pyuno
     import uno
-    import unohelper
 except ImportError:
     print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
     print("PYTHONPATH=/installation/opt/program")

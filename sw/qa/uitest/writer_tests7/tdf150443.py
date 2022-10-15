@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf150443(UITestCase):
 
     def test_tdf150443(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf150443.docx")) as document:
+        with self.ui_test.load_file(get_url_for_data_file("tdf150443.docx")):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')

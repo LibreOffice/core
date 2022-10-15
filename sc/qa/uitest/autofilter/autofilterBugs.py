@@ -26,7 +26,7 @@ class autofilter(UITestCase):
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
    def test_tdf123095(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
             enter_text_to_cell(xGridWindow, "A1", "乙二醇(进口料件)")
@@ -46,7 +46,7 @@ class autofilter(UITestCase):
             self.assertEqual(get_state_as_dict(xTreeList.getChild("1"))["Text"], "乙二醇（进口料件）")
 
    def test_tdf125363(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
             enter_text_to_cell(xGridWindow, "A1", "guet")

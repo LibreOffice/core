@@ -17,7 +17,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # test all dialog items - trend Line dialog
 class tdf93506(UITestCase):
    def test_tdf93506_chart_trendline_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf93506.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf93506.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

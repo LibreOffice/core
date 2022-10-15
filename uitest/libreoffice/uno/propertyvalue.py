@@ -6,7 +6,6 @@
 #
 
 try:
-    import pyuno
     import uno
 except ImportError:
     print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
