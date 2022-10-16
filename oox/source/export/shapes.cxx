@@ -1643,8 +1643,7 @@ static sal_Int32 lcl_GetGluePointId(const Reference<XShape>& xShape, sal_Int32& 
     uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);
     uno::Reference<container::XIdentifierAccess> xGluePoints(xSupplier->getGluePoints(),
                                                              uno::UNO_QUERY);
-    sal_uInt32 nCount = xGluePoints->getIdentifiers().size();
-    if (nCount > 4)
+    if (nGluePointId > 3)
         nGluePointId -= 4;
     else
     {
