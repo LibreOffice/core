@@ -362,13 +362,10 @@ void SvStream::SetError( ErrCode nErrorCode )
 void SvStream::SetEndian( SvStreamEndian nNewFormat )
 {
     m_nEndian = nNewFormat;
-    m_isSwap = false;
 #ifdef OSL_BIGENDIAN
-    if (m_nEndian == SvStreamEndian::LITTLE)
-        m_isSwap = true;
+    m_isSwap = m_nEndian == SvStreamEndian::LITTLE;
 #else
-    if (m_nEndian == SvStreamEndian::BIG)
-        m_isSwap = true;
+    m_isSwap = m_nEndian == SvStreamEndian::BIG;
 #endif
 }
 
