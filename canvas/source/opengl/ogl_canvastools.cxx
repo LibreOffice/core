@@ -35,9 +35,9 @@ namespace oglcanvas
         const ::basegfx::triangulator::B2DTriangleVector rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(aPolyPoly));
 
-        for( size_t i=0; i<rTriangulatedPolygon.size(); i++ )
+        for( auto const& rTriangulatedPolygonItem : rTriangulatedPolygon )
         {
-            const::basegfx::triangulator::B2DTriangle& rCandidate(rTriangulatedPolygon[i]);
+            const::basegfx::triangulator::B2DTriangle& rCandidate(rTriangulatedPolygonItem);
             glTexCoord2f(
                 rCandidate.getA().getX()/nWidth,
                 rCandidate.getA().getY()/nHeight);

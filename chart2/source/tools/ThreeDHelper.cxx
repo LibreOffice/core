@@ -1394,10 +1394,9 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
 
     std::vector< rtl::Reference< DataSeries > > aSeriesList =
         DiagramHelper::getDataSeriesFromDiagram( xDiagram );
-    sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
-    for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )
+    for( auto const&  aSeriesListItem : aSeriesList)
     {
-        rtl::Reference< DataSeries > xSeries( aSeriesList[nS] );
+        rtl::Reference< DataSeries > xSeries( aSeriesListItem );
 
         if( nRoundedEdges>=0 && nRoundedEdges<=100 )
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "PercentDiagonal", aARoundedEdges );
