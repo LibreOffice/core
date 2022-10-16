@@ -41,10 +41,15 @@ public class XInputStreamImpl implements XInputStream {
         try {
             int bytesRead;
 
-            while ((bytesRead = is.read(aData[ 0 ], totalBytesRead, nBytesToRead)) > 0
-                   && (totalBytesRead < nBytesToRead)) {
+            while (( nBytesToRead > 0 ) && (bytesRead = is.read(aData[ 0 ], totalBytesRead, nBytesToRead)) > 0) {
                 totalBytesRead += bytesRead;
                 nBytesToRead -= bytesRead;
+            }
+            if ( totalBytesRead < aData[ 0 ].length )
+            {
+                byte[] out = new byte[ totalBytesRead ];
+                System.arraycopy( aData[ 0 ], 0, out, 0, totalBytesRead );
+                aData[ 0 ] = out;
             }
         } catch (IOException e) {
             throw new com.sun.star.io.IOException(e);
@@ -62,7 +67,8 @@ public class XInputStreamImpl implements XInputStream {
         int bytesToRead = nMaxBytesToRead;
         int availableBytes = available();
 
-        if (availableBytes < nMaxBytesToRead) {
+        if (0 < availableBytes && availableBytes < nMaxBytesToRead)
+        {
             bytesToRead = availableBytes;
         }
 
