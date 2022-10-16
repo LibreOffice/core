@@ -728,6 +728,10 @@ class SFScriptForge:
             return cls.SIMPLEEXEC(cls.module + '.PyCreateUnoService', servicename)
 
         @classmethod
+        def CreateUnoStruct(cls, unostructure):
+            return uno.createUnoStruct(unostructure)
+
+        @classmethod
         def DateAdd(cls, interval, number, date):
             if isinstance(date, datetime.datetime):
                 date = cls.CDateToUnoDateTime(date)
