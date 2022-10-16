@@ -70,6 +70,7 @@ static void assertMotionPath(std::u16string_view rStr1, std::u16string_view rStr
 class SdOOXMLExportTest2 : public SdModelTestBaseXML
 {
 public:
+    void testTdf151492();
     void testTdf149697();
     void testTdf149126();
     void testTdf131905();
@@ -139,6 +140,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
+    CPPUNIT_TEST(testTdf151492);
     CPPUNIT_TEST(testTdf149697);
     CPPUNIT_TEST(testTdf149126);
     CPPUNIT_TEST(testTdf131905);
@@ -213,6 +215,20 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest2::testTdf151492()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf151492.odp"), ODP);
+    utl::TempFileNamed tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn",
+                "idx", "0");
+
+    xDocShRef->DoClose();
+}
 
 void SdOOXMLExportTest2::testTdf149697()
 {
