@@ -1187,9 +1187,8 @@ bool SdPageObjsTLV::SelectEntry( std::u16string_view rName )
     return bFound;
 }
 
-bool SdPageObjsTLV::SelectEntry(const SdrObject *pObj)
+void SdPageObjsTLV::SelectEntry(const SdrObject *pObj)
 {
-    bool bFound = false;
     if (pObj)
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
@@ -1199,20 +1198,16 @@ bool SdPageObjsTLV::SelectEntry(const SdrObject *pObj)
             {
                 if (weld::fromId<SdrObject*>(m_xTreeView->get_id(*xEntry)) == pObj)
                 {
-                    m_xTreeView->set_cursor(*xEntry);
-                    bFound = true;
+                    // only scroll to row of the first selected
+                    if (m_xTreeView->get_selected_rows().empty())
+                        m_xTreeView->scroll_to_row(*xEntry);
+                    m_xTreeView->select(*xEntry);
                     break;
                 }
             }
             while (m_xTreeView->iter_next(*xEntry));
         }
     }
-    if (!bFound)
-    {
-        m_xTreeView->unselect_all();
-        m_xTreeView->set_cursor(-1);
-    }
-    return bFound;
 }
 
 SdPageObjsTLV::~SdPageObjsTLV()

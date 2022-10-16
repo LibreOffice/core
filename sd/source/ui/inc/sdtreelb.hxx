@@ -218,7 +218,7 @@ public:
 
     bool HasSelectedChildren(std::u16string_view rName);
     bool SelectEntry(std::u16string_view rName);
-    bool SelectEntry(const SdrObject* pObj);
+    void SelectEntry(const SdrObject* pObj);
 
     OUString get_selected_text() const
     {

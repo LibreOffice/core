@@ -66,7 +66,7 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
     mxTlbObjects->connect_row_activated(LINK(this, SdNavigatorWin, ClickObjectHdl));
-    mxTlbObjects->set_selection_mode(SelectionMode::Single);
+    mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
 
     mxToolbox->connect_clicked(LINK(this, SdNavigatorWin, SelectToolboxHdl));
     mxToolbox->connect_menu_toggled(LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl));
@@ -131,11 +131,14 @@ static void lcl_select_marked_object(const sd::ViewShell* pViewShell, SdPageObjs
     if (const SdrView* pView = pViewShell->GetDrawView())
     {
         auto vMarkedObjects = pView->GetMarkedObjects();
-        // tree is only single selection so select first in vMarkedObjects if there is one
         if (vMarkedObjects.size())
-            pTlbObjects->SelectEntry(vMarkedObjects[0]);
+        {
+            pTlbObjects->unselect_all();
+            for (auto rMarkedObject: vMarkedObjects)
+                pTlbObjects->SelectEntry(rMarkedObject);
+        }
         else
-            pTlbObjects->SelectEntry(nullptr);
+            pTlbObjects->SelectEntry(pViewShell->GetName());
     }
 }
 
@@ -740,10 +743,21 @@ void SdPageNameControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
     if( !(pInfo && pInfo->IsActive()) )
         return;
 
+    // Without a test for marked objects the page name entry is not selected when there are no
+    // marked objects. The HasSelectedChildren test is required when in 'Named Shapes' mode in
+    // order to select the page name when none of the marked objects have a name.
+    bool bDrawViewHasMarkedObjects = false;
+    if (pInfo->GetDrawDocShell() && pInfo->GetDrawDocShell()->GetViewShell())
+    {
+        const SdrView* pDrawView = pInfo->GetDrawDocShell()->GetViewShell()->GetDrawView();
+        if (pDrawView && pDrawView->GetMarkedObjectCount())
+            bDrawViewHasMarkedObjects = true;
+    }
+
     const SfxStringItem& rStateItem = dynamic_cast<const SfxStringItem&>(*pItem);
     const OUString& aPageName = rStateItem.GetValue();
 
-    if( !pNavigatorWin->mxTlbObjects->HasSelectedChildren( aPageName ) )
+    if (!bDrawViewHasMarkedObjects || !pNavigatorWin->mxTlbObjects->HasSelectedChildren(aPageName))
     {
         if (pNavigatorWin->mxTlbObjects->get_selection_mode() == SelectionMode::Multiple)
         {
