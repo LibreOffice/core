@@ -152,6 +152,16 @@ inline bool isOrdinary(clang::StringLiteral const * expr) {
 #endif
 }
 
+inline clang::TemplateTypeParmDecl const * getReplacedParameter(
+    clang::SubstTemplateTypeParmType const * type)
+{
+#if CLANG_VERSION >= 160000
+    return type->getReplacedParameter();
+#else
+    return type->getReplacedParameter()->getDecl();
+#endif
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

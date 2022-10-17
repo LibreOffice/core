@@ -63,7 +63,7 @@ QualType reconstructTemplateArgumentType(
     SubstTemplateTypeParmType const * parmType)
 {
     TemplateParameterList const * ps = decl->getTemplateParameters();
-    auto i = std::find(ps->begin(), ps->end(), parmType->getReplacedParameter()->getDecl());
+    auto i = std::find(ps->begin(), ps->end(), compat::getReplacedParameter(parmType));
     if (i == ps->end()) {
         return {};
     }
@@ -844,7 +844,7 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
                             = td->getTemplateParameters();
                         auto k = std::find(
                             ps->begin(), ps->end(),
-                            t2->getReplacedParameter()->getDecl());
+                            compat::getReplacedParameter(t2));
                         if (k != ps->end()) {
                             if (ps->size() == t1->getNumArgs()) { //TODO
                                 TemplateArgument const & arg = t1->getArg(
