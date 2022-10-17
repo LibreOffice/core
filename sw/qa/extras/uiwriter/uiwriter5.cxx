@@ -1898,6 +1898,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
     CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRow());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
+{
+    // load a 1-row table, and delete the row with hidden track changes
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-row.fodt");
+
+    // turn on red-lining and hide changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("redlines should be invisible",
+                           !IDocumentRedlineAccess::IsShowChanges(
+                               pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    // nested table in the last cell
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell[2]/tab");
+
+    // delete table row with enabled change tracking
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // deleted text content
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // This was 1 before fixing tdf#151478 (testSelectRowWithNestedTable)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower();
+    CPPUNIT_ASSERT(pTable->IsTabFrame());
+
+    SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pTable);
+
+    // This was false (not deleted row)
+    CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRow());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
 {
     // load a 1-row table, and select the row
