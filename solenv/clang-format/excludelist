@@ -8437,7 +8437,6 @@ sc/source/filter/inc/rtfexp.hxx
 sc/source/filter/inc/rtfparse.hxx
 sc/source/filter/inc/scenariobuffer.hxx
 sc/source/filter/inc/scenariocontext.hxx
-sc/source/filter/inc/scfobj.hxx
 sc/source/filter/inc/sharedstringsbuffer.hxx
 sc/source/filter/inc/sharedstringsfragment.hxx
 sc/source/filter/inc/sheetdatabuffer.hxx
