@@ -243,7 +243,7 @@ const CountryEntry pTable[] =
     { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK_LATIN,                   false   }
 };
 
-const CountryEntry * const pEnd = pTable + SAL_N_ELEMENTS( pTable );
+const CountryEntry * const pEnd = pTable +  std::size( pTable );
 
 /** Predicate comparing a country ID with the member of a CountryEntry. */
 struct CountryEntryPred_Country

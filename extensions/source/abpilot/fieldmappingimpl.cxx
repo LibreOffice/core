@@ -162,10 +162,10 @@ namespace abp
                     _rxContext, sDriverAliasesNodeName, -1, OConfigurationTreeRoot::CM_READONLY);
 
                 // loop through all programmatic pairs
-                DBG_ASSERT( 0 == SAL_N_ELEMENTS( pMappingProgrammatics ) % 2,
+                DBG_ASSERT( 0 == std::size( pMappingProgrammatics ) % 2,
                     "fieldmapping::defaultMapping: invalid programmatic map!" );
                 // number of pairs
-                sal_Int32 const nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
+                sal_Int32 const nIntersectedProgrammatics =  std::size( pMappingProgrammatics ) / 2;
 
                 const char** pProgrammatic = pMappingProgrammatics;
                 OUString sAddressProgrammatic;
