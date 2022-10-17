@@ -1217,7 +1217,7 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 SwTableTabDlg::SwTableTabDlg(weld::Window* pParent, const SfxItemSet* pItemSet, SwWrtShell* pSh)
     : SfxTabDialogController(pParent, "modules/swriter/ui/tableproperties.ui", "TablePropertiesDialog", pItemSet)
-    , pShell(pSh)
+    , m_pShell(pSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     AddTabPage("table", &SwFormatTablePage::Create, nullptr);
@@ -1243,8 +1243,8 @@ void  SwTableTabDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
     }
     else if (rId == "textflow")
     {
-        static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
-        const FrameTypeFlags eType = pShell->GetFrameType(nullptr,true);
+        static_cast<SwTextFlowPage&>(rPage).SetShell(m_pShell);
+        const FrameTypeFlags eType = m_pShell->GetFrameType(nullptr,true);
         if( !(FrameTypeFlags::BODY & eType) )
             static_cast<SwTextFlowPage&>(rPage).DisablePageBreak();
     }

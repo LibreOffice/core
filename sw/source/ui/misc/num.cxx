@@ -863,12 +863,12 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh)
     : SfxTabDialogController(pParent, "modules/swriter/ui/bulletsandnumbering.ui", "BulletsAndNumberingDialog",
         pSwItemSet)
-    , rWrtSh(rSh)
+    , m_rWrtSh(rSh)
     , m_xDummyCombo(m_xBuilder->weld_combo_box("dummycombo"))
 {
     weld::Button* pButton = GetUserButton();
     pButton->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
-    pButton->set_sensitive(rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
+    pButton->set_sensitive(m_rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
     AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM );
     AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
     AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );
@@ -918,7 +918,7 @@ void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rP
         // collect char styles
         m_xDummyCombo->clear();
         m_xDummyCombo->append_text(SwViewShell::GetShellRes()->aStrNone);
-        SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
+        SwDocShell* pDocShell = m_rWrtSh.GetView().GetDocShell();
         ::FillCharStyleListBox(*m_xDummyCombo,  pDocShell);
 
         std::vector<OUString> aList;
@@ -934,7 +934,7 @@ void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rP
     }
     else if (rPageId == "position")
     {
-        SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
+        SwDocShell* pDocShell = m_rWrtSh.GetView().GetDocShell();
         FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)) );

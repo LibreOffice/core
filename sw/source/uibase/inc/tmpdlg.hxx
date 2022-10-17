@@ -29,10 +29,10 @@ class SwWrtShell;
 class SwTemplateDlgController final : public SfxStyleDialogController
 {
 
-    SfxStyleFamily  nType;
-    sal_uInt16      nHtmlMode;
-    SwWrtShell*     pWrtShell;
-    bool            bNewStyle;
+    SfxStyleFamily  m_nType;
+    sal_uInt16      m_nHtmlMode;
+    SwWrtShell*     m_pWrtShell;
+    bool            m_bNewStyle;
 
 public:
     /// @param sPage

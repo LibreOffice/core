@@ -77,7 +77,7 @@ class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper
     view::XSelectionChangeListener
     >
 {
-    SwMailMergeDlg& rParent;
+    SwMailMergeDlg& m_rParent;
 public:
     explicit SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg);
 
@@ -86,23 +86,23 @@ public:
 };
 
 SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
-    rParent(rParentDlg)
+    m_rParent(rParentDlg)
 {}
 
 void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  )
 {
     //call the parent to enable selection mode
     Sequence <Any> aSelection;
-    if(rParent.m_pImpl->xSelSupp.is())
-        rParent.m_pImpl->xSelSupp->getSelection() >>= aSelection;
+    if(m_rParent.m_pImpl->xSelSupp.is())
+        m_rParent.m_pImpl->xSelSupp->getSelection() >>= aSelection;
 
     bool bEnable = aSelection.hasElements();
-    rParent.m_xMarkedRB->set_sensitive(bEnable);
+    m_rParent.m_xMarkedRB->set_sensitive(bEnable);
     if(bEnable)
-        rParent.m_xMarkedRB->set_active(true);
-    else if(rParent.m_xMarkedRB->get_active()) {
-        rParent.m_xAllRB->set_active(true);
-        rParent.m_aSelection.realloc(0);
+        m_rParent.m_xMarkedRB->set_active(true);
+    else if(m_rParent.m_xMarkedRB->get_active()) {
+        m_rParent.m_xAllRB->set_active(true);
+        m_rParent.m_aSelection.realloc(0);
     }
 }
 

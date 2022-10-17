@@ -71,11 +71,11 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                                    OUString::number(static_cast<sal_uInt16>(nRegion)) + ".ui",
                                "TemplateDialog" + OString::number(static_cast<sal_uInt16>(nRegion)),
                                rBase)
-    , nType(nRegion)
-    , pWrtShell(pActShell)
-    , bNewStyle(bNew)
+    , m_nType(nRegion)
+    , m_pWrtShell(pActShell)
+    , m_bNewStyle(bNew)
 {
-    nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
+    m_nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     GetStandardButton()->set_label(SwResId(STR_STANDARD_LABEL));
@@ -102,7 +102,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ));
             AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
             AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
-            if(nHtmlMode & HTMLMODE_ON || !SvtCJKOptions::IsDoubleLinesEnabled())
+            if(m_nHtmlMode & HTMLMODE_ON || !SvtCJKOptions::IsDoubleLinesEnabled())
                 RemoveTabPage("asianlayout");
         }
         break;
@@ -140,11 +140,11 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
 
             AddTabPage("condition", SwCondCollPage::Create,
                                         SwCondCollPage::GetRanges );
-            if( (!bNewStyle && RES_CONDTXTFMTCOLL != static_cast<SwDocStyleSheet&>(rBase).GetCollection()->Which())
-            || nHtmlMode & HTMLMODE_ON )
+            if( (!m_bNewStyle && RES_CONDTXTFMTCOLL != static_cast<SwDocStyleSheet&>(rBase).GetCollection()->Which())
+            || m_nHtmlMode & HTMLMODE_ON )
                 RemoveTabPage("condition");
 
-            if(nHtmlMode & HTMLMODE_ON)
+            if(m_nHtmlMode & HTMLMODE_ON)
             {
                 if (!SvxHtmlOptions::IsPrintLayoutExtension())
                     RemoveTabPage("textflow");
@@ -152,7 +152,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                 RemoveTabPage("tabs");
                 RemoveTabPage("outline");
                 RemoveTabPage("asianlayout");
-                if(!(nHtmlMode & HTMLMODE_FULL_STYLES))
+                if(!(m_nHtmlMode & HTMLMODE_FULL_STYLES))
                 {
                     RemoveTabPage("background");
                     RemoveTabPage("dropcaps");
@@ -176,7 +176,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             AddTabPage("header",  SvxHeaderPage::Create, SvxHeaderPage::GetRanges);
             AddTabPage("footer", SvxFooterPage::Create, SvxFooterPage::GetRanges);
             AddTabPage("page", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), pFact->GetTabPageRangesFunc(RID_SVXPAGE_PAGE));
-            if (0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
+            if (0 == ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell()))
             {
                 AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
                 AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
@@ -284,9 +284,9 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
 
         aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         sal_uInt32 nFlags = 0;
-        if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
+        if(rPage.GetItemSet().GetParent() && 0 == (m_nHtmlMode & HTMLMODE_ON ))
             nFlags = SVX_RELATIVE_MODE;
-        if( SfxStyleFamily::Char == nType )
+        if( SfxStyleFamily::Char == m_nType )
             nFlags = nFlags|SVX_PREVIEW_CHARACTER;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
         rPage.PageCreated(aSet);
@@ -294,19 +294,19 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     else if (rId == "fonteffect")
     {
         sal_uInt32 nFlags = SVX_ENABLE_CHAR_TRANSPARENCY;
-        if( SfxStyleFamily::Char == nType )
+        if( SfxStyleFamily::Char == m_nType )
             nFlags = nFlags|SVX_PREVIEW_CHARACTER;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
         rPage.PageCreated(aSet);
     }
     else if (rId == "position")
     {
-        if( SfxStyleFamily::Char == nType )
+        if( SfxStyleFamily::Char == m_nType )
         {
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
             rPage.PageCreated(aSet);
         }
-        else if (SfxStyleFamily::Pseudo == nType)
+        else if (SfxStyleFamily::Pseudo == m_nType)
         {
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
@@ -317,7 +317,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "columns")
     {
-        if( nType == SfxStyleFamily::Frame )
+        if( m_nType == SfxStyleFamily::Frame )
             static_cast<SwColumnPage&>(rPage).SetFrameMode(true);
         static_cast<SwColumnPage&>(rPage).SetFormatUsed( true );
     }
@@ -326,7 +326,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     else if (rId == "background" || rId == "highlighting")
     {
         SvxBackgroundTabFlags nFlagType = SvxBackgroundTabFlags::NONE;
-        if( SfxStyleFamily::Char == nType || SfxStyleFamily::Para == nType )
+        if( SfxStyleFamily::Char == m_nType || SfxStyleFamily::Para == m_nType )
             nFlagType |= SvxBackgroundTabFlags::SHOW_HIGHLIGHTING;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
@@ -338,15 +338,15 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "page")
     {
-        if(0 == (nHtmlMode & HTMLMODE_ON ))
+        if(0 == (m_nHtmlMode & HTMLMODE_ON ))
         {
             std::vector<OUString> aList;
             OUString aNew;
             SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
             aList.push_back( aNew );
-            if( pWrtShell )
+            if( m_pWrtShell )
             {
-                SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
+                SfxStyleSheetBasePool* pStyleSheetPool = m_pWrtShell->
                             GetView().GetDocShell()->GetStyleSheetPool();
                 SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First(SfxStyleFamily::Para);
                 while(pFirstStyle)
@@ -363,7 +363,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "header")
     {
-        if(0 == (nHtmlMode & HTMLMODE_ON ))
+        if(0 == (m_nHtmlMode & HTMLMODE_ON ))
         {
             static_cast<SvxHeaderPage&>(rPage).EnableDynamicSpacing();
         }
@@ -374,7 +374,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "footer")
     {
-        if(0 == (nHtmlMode & HTMLMODE_ON ))
+        if(0 == (m_nHtmlMode & HTMLMODE_ON ))
         {
             static_cast<SvxFooterPage&>(rPage).EnableDynamicSpacing();
         }
@@ -385,11 +385,11 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "border")
     {
-        if( SfxStyleFamily::Para == nType )
+        if( SfxStyleFamily::Para == m_nType )
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::PARA)));
         }
-        else if( SfxStyleFamily::Frame == nType )
+        else if( SfxStyleFamily::Frame == m_nType )
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::FRAME)));
         }
@@ -397,11 +397,11 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "borders")
     {
-        if( SfxStyleFamily::Para == nType )
+        if( SfxStyleFamily::Para == m_nType )
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::PARA)));
         }
-        else if( SfxStyleFamily::Frame == nType )
+        else if( SfxStyleFamily::Frame == m_nType )
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::FRAME)));
         }
@@ -433,23 +433,23 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "outline")
     {
-        if (SfxStyleFamily::Pseudo == nType)
+        if (SfxStyleFamily::Pseudo == m_nType)
         {
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
             rPage.PageCreated(aSet);
         }
-        else if (SfxStyleFamily::Para == nType)
+        else if (SfxStyleFamily::Para == m_nType)
         {
             //  handle if the current paragraph style is assigned to a list level of outline style,
-            SwTextFormatColl* pTmpColl = pWrtShell->FindTextFormatCollByName( GetStyleSheet().GetName() );
+            SwTextFormatColl* pTmpColl = m_pWrtShell->FindTextFormatCollByName( GetStyleSheet().GetName() );
             if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
             {
                 static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
                 static_cast<SwParagraphNumTabPage&>(rPage).DisableNumbering();
             }//<-end
             weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
-            SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
+            SfxStyleSheetBasePool* pPool = m_pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
             const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Pseudo);
             std::set<OUString> aNames;
             while(pBase)
@@ -502,7 +502,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "asianlayout")
     {
-        if( SfxStyleFamily::Char == nType )
+        if( SfxStyleFamily::Char == m_nType )
         {
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
             rPage.PageCreated(aSet);
@@ -526,8 +526,8 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     {
         SfxAllItemSet aNewSet(*aSet.GetPool());
         aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
-        if ( pWrtShell )
-            rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
+        if ( m_pWrtShell )
+            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
     }
 }

@@ -27,7 +27,7 @@ struct TColumn;
 // table dialog
 class SwTableTabDlg final : public SfxTabDialogController
 {
-    SwWrtShell* pShell;
+    SwWrtShell* m_pShell;
 
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 

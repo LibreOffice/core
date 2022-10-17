@@ -119,7 +119,7 @@ public:
 
 class SwSvxNumBulletTabDialog final : public SfxTabDialogController
 {
-    SwWrtShell&         rWrtSh;
+    SwWrtShell&         m_rWrtSh;
 
     virtual short   Ok() override;
     virtual void    PageCreated(const OString& rPageId, SfxTabPage& rPage) override;
