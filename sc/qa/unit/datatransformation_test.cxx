@@ -16,7 +16,7 @@
 #include <svl/numformat.hxx>
 #include <tools/time.hxx>
 
-class ScDataTransformationTest : public ScBootstrapFixture
+class ScDataTransformationTest : public test::BootstrapFixture
 {
 public:
 
@@ -1001,14 +1001,13 @@ void ScDataTransformationTest::testGetSecond()
 }
 
 ScDataTransformationTest::ScDataTransformationTest() :
-    ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
     m_pDoc(nullptr)
 {
 }
 
 void ScDataTransformationTest::setUp()
 {
-    ScBootstrapFixture::setUp();
+    BootstrapFixture::setUp();
 
     ScDLL::Init();
     m_xDocShell = new ScDocShell(
@@ -1026,7 +1025,7 @@ void ScDataTransformationTest::tearDown()
 {
     m_xDocShell->DoClose();
     m_xDocShell.clear();
-    ScBootstrapFixture::tearDown();
+    BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataTransformationTest);
