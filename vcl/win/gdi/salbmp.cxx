@@ -170,7 +170,7 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
 
     // try to access buffered data
     std::shared_ptr<SystemDependentData_GdiPlusBitmap> pSystemDependentData_GdiPlusBitmap(
-        getSystemDependentData<SystemDependentData_GdiPlusBitmap>());
+        getSystemDependentDataT<SystemDependentData_GdiPlusBitmap>());
 
     if(pSystemDependentData_GdiPlusBitmap)
     {
@@ -208,7 +208,7 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
         }
 
         // add to buffering mechanism
-        addOrReplaceSystemDependentData<SystemDependentData_GdiPlusBitmap>(
+        addOrReplaceSystemDependentDataT<SystemDependentData_GdiPlusBitmap>(
             ImplGetSystemDependentDataManager(),
             aRetval,
             pAssociatedAlpha);
@@ -912,6 +912,11 @@ bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, 
 bool WinSalBitmap::Replace( const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/, sal_uInt8 /*nTol*/ )
 {
     return false;
+}
+
+const basegfx::SystemDependentDataHolder* WinSalBitmap::accessSystemDependentDataHolder() const
+{
+    return this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

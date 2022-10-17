@@ -268,4 +268,9 @@ bool SvpSalBitmap::Replace( const ::Color& /*rSearchColor*/, const ::Color& /*rR
     return false;
 }
 
+const basegfx::SystemDependentDataHolder* SvpSalBitmap::accessSystemDependentDataHolder() const
+{
+    return this;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

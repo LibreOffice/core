@@ -27,6 +27,7 @@
 #include <vcl/BitmapBuffer.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <basegfx/utils/systemdependentdata.hxx>
 
 struct BitmapBuffer;
 class Color;
@@ -127,6 +128,39 @@ protected:
     static std::unique_ptr< sal_uInt8[] > convertDataBitCount( const sal_uInt8* src,
         int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette,
         BitConvert type );
+
+    // access to SystemDependentDataHolder, to support overload in derived class(es)
+    virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
+
+public:
+    // exclusive management op's for SystemDependentData at SalBitmap
+    template<class T>
+    std::shared_ptr<T> getSystemDependentDataT() const
+    {
+        const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
+        if(pDataHolder)
+            return std::static_pointer_cast<T>(pDataHolder->getSystemDependentData(typeid(T).hash_code()));
+        return std::shared_ptr<T>();
+    }
+
+    template<class T, class... Args>
+    std::shared_ptr<T> addOrReplaceSystemDependentDataT(basegfx::SystemDependentDataManager& manager, Args&&... args) const
+    {
+        const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
+        if(!pDataHolder)
+            return std::shared_ptr<T>();
+
+        std::shared_ptr<T> r = std::make_shared<T>(manager, std::forward<Args>(args)...);
+
+        // tdf#129845 only add to buffer if a relevant buffer time is estimated
+        if(r->calculateCombinedHoldCyclesInSeconds() > 0)
+        {
+            basegfx::SystemDependentData_SharedPtr r2(r);
+            const_cast< basegfx::SystemDependentDataHolder* >(pDataHolder)->addOrReplaceSystemDependentData(r2);
+        }
+
+        return r;
+    }
 };
 
 #endif

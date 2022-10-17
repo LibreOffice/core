@@ -331,4 +331,10 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
     return data;
 }
 
+const basegfx::SystemDependentDataHolder* SalBitmap::accessSystemDependentDataHolder() const
+{
+    // default has no support, returns nullptr
+    return nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
