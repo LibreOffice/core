@@ -584,6 +584,92 @@ public:
     }
 };
 
+class NewlineSpacingCheck : public NodeCheck
+{
+private:
+    static SwTextNode* getNextTextNode(SwNode* pCurrent)
+    {
+        SwTextNode* pTextNode = nullptr;
+
+        auto nIndex = pCurrent->GetIndex();
+        auto nCount = pCurrent->GetNodes().Count();
+
+        nIndex++; // go to next node
+
+        while (pTextNode == nullptr && nIndex < nCount)
+        {
+            auto pNode = pCurrent->GetNodes()[nIndex];
+            if (pNode->IsTextNode())
+                pTextNode = pNode->GetTextNode();
+            nIndex++;
+        }
+
+        return pTextNode;
+    }
+
+public:
+    NewlineSpacingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        auto nParagraphLength = pTextNode->GetText().getLength();
+        if (nParagraphLength == 0)
+        {
+            SwTextNode* pNextTextNode = getNextTextNode(pCurrent);
+            if (!pNextTextNode)
+                return;
+            if (pNextTextNode->GetText().getLength() == 0)
+            {
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
+                                          sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pNextTextNode);
+                SwDoc& rDocument = pNextTextNode->GetDoc();
+                pIssue->setDoc(rDocument);
+            }
+        }
+        else
+        {
+            // Check for excess lines inside this paragraph
+            const OUString& sParagraphText = pTextNode->GetText();
+            int nLineCount = 0;
+            for (sal_Int32 i = 0; i < nParagraphLength; i++)
+            {
+                auto aChar = sParagraphText[i];
+                if (aChar == '\n')
+                {
+                    nLineCount++;
+                    // Looking for 2 newline characters and above as one can be part of the line
+                    // break after a sentence
+                    if (nLineCount > 2)
+                    {
+                        auto pIssue
+                            = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
+                                          sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                        pIssue->setIssueObject(IssueObject::TEXT);
+                        pIssue->setNode(pTextNode);
+                        SwDoc& rDocument = pTextNode->GetDoc();
+                        pIssue->setDoc(rDocument);
+                        pIssue->setStart(i);
+                        pIssue->setEnd(i);
+                    }
+                }
+                // Don't count carriage return as normal character
+                else if (aChar != '\r')
+                {
+                    nLineCount = 0;
+                }
+            }
+        }
+    }
+};
+
 class BlinkingTextCheck : public NodeCheck
 {
 private:
@@ -1006,6 +1092,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TableHeadingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HeadingOrderCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<NewlineSpacingCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
