@@ -1032,7 +1032,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
         {
             // Check, if the list style of the paragraph will change.
             bool bChangeOfListStyleAtParagraph( true );
-            SwTextNode& rTNd(dynamic_cast<SwTextNode&>(*pCNd));
+            SwTextNode& rTNd(*pCNd->GetTextNode());
             {
                 SwNumRule* pNumRuleAtParagraph(rTNd.GetNumRule());
                 if ( pNumRuleAtParagraph )

@@ -1588,10 +1588,9 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
     // anchor only to paragraphs, or start nodes in case of RndStdIds::FLY_AT_FLY
     // also allow table node, this is used when a table is selected and is converted to a frame by the UI
     assert(!pPos
-            || ((RndStdIds::FLY_AT_FLY == m_eAnchorId) &&
-                    dynamic_cast<SwStartNode*>(&pPos->GetNode()))
-            || (RndStdIds::FLY_AT_PARA == m_eAnchorId && dynamic_cast<SwTableNode*>(&pPos->GetNode()))
-            || dynamic_cast<SwTextNode*>(&pPos->GetNode()));
+            || (RndStdIds::FLY_AT_FLY == m_eAnchorId && pPos->GetNode().GetStartNode())
+            || (RndStdIds::FLY_AT_PARA == m_eAnchorId && pPos->GetNode().GetTableNode())
+            || pPos->GetNode().GetTextNode());
     if (pPos)
         m_oContentAnchor.emplace(*pPos);
     else

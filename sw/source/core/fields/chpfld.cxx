@@ -136,7 +136,7 @@ void SwChapterField::ChangeExpansion(const SwFrame & rFrame,
 {
     SwDoc& rDoc = const_cast<SwDoc&>(pContentNode->GetDoc());
 
-    const SwTextNode* pTextNode = dynamic_cast<const SwTextNode*>(pContentNode);
+    const SwTextNode* pTextNode = pContentNode->GetTextNode();
     if (!pTextNode || !rFrame.IsInDocBody())
     {
         SwPosition aDummyPos( rDoc.GetNodes().GetEndOfContent() );

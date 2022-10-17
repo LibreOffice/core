@@ -2113,7 +2113,7 @@ void SwFEShell::AlignAllFormulasToBaseline()
     while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
-        SwOLENode *pOleNode = dynamic_cast< SwOLENode * >( &aIdx.GetNode() );
+        SwOLENode *pOleNode = aIdx.GetNode().GetOLENode();
         if ( pOleNode )
         {
             const uno::Reference < embed::XEmbeddedObject > & xObj( pOleNode->GetOLEObj().GetOleRef() );

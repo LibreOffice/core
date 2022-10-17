@@ -464,7 +464,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
             ++mnCurrentNode;
 
-            pRet = dynamic_cast<SwTextNode*>(pNd);
+            pRet = pNd->GetTextNode();
             if ( pRet )
                 break;
 
@@ -521,7 +521,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     for( SwNodeOffset nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
-        pNextTextNode = dynamic_cast<SwTextNode*>(pNd);
+        pNextTextNode = pNd->GetTextNode();
         if ( pNextTextNode )
             break;
     }
@@ -567,7 +567,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     for( SwNodeOffset nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > SwNodeOffset(0); --nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
-        pPrevTextNode = dynamic_cast<SwTextNode*>(pNd);
+        pPrevTextNode = pNd->GetTextNode();
         if ( pPrevTextNode )
             break;
     }

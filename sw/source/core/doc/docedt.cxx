@@ -580,7 +580,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             // if grammar checking starts inside of a sentence the start position has to be adjusted
                             if( nBeginGrammarCheck )
                             {
-                                SwContentIndex aStartIndex( dynamic_cast< SwTextNode* >( pNd ), nBeginGrammarCheck );
+                                SwContentIndex aStartIndex( pNd->GetTextNode(), nBeginGrammarCheck );
                                 SwPosition aStart( *pNd, aStartIndex );
                                 SwCursor aCursor(aStart, nullptr);
                                 SwPosition aOrigPos = *aCursor.GetPoint();

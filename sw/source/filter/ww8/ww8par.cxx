@@ -5454,7 +5454,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
                                                          ? &(pNdIdx->GetNodes())
                                                          : nullptr;
                             const SwGrfNode *pGrf = (pNodesArray != nullptr)
-                                                    ? dynamic_cast<const SwGrfNode*>((*pNodesArray)[pNdIdx->GetIndex() + 1])
+                                                    ? (*pNodesArray)[pNdIdx->GetIndex() + 1]->GetGrfNode()
                                                     : nullptr;
                             vecBulletGrf.push_back(pGrf);
                         }

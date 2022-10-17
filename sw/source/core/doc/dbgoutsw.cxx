@@ -593,7 +593,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
     {
         aTmpStr += "<start end=\"";
 
-        const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
+        const SwStartNode * pStartNode = rNode.GetStartNode();
         if (pStartNode != nullptr)
             aTmpStr += OUString::number(sal_Int32(pStartNode->EndOfSectionNode()->GetIndex()));
 

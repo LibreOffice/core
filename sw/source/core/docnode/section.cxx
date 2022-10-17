@@ -87,7 +87,7 @@ namespace {
         SwSectionNode* GetSectNode()
         {
             const SwNode* pSectNd( GetAnchor() );
-            return const_cast<SwSectionNode*>( dynamic_cast<const SwSectionNode*>( pSectNd ) );
+            return const_cast<SwSectionNode*>( pSectNd->GetSectionNode() );
         }
     };
 }
