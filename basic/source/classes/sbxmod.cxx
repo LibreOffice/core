@@ -916,8 +916,8 @@ static void SendHint( SbxObject* pObj, SfxHintId nId, SbMethod* p )
     SendHint_( pObj, nId, p );
 }
 
-// #57841 Clear Uno-Objects, which were helt in RTL functions,
-// at the end of the program, so that nothing were helt.
+// #57841 Clear Uno-Objects, which were held in RTL functions,
+// at the end of the program, so that nothing is held
 static void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
@@ -1179,8 +1179,8 @@ void SbModule::Run( SbMethod* pMeth )
 
             if( bDelInst )
             {
-                // #57841 Clear Uno-Objects, which were helt in RTL functions,
-                // at the end of the program, so that nothing were helt.
+                // #57841 Clear Uno-Objects, which were held in RTL functions,
+                // at the end of the program, so that nothing is held.
                 ClearUnoObjectsInRTL_Impl( xBasic.get() );
 
                 clearNativeObjectWrapperVector();
@@ -1224,8 +1224,8 @@ void SbModule::Run( SbMethod* pMeth )
     StarBASIC* pBasic = dynamic_cast<StarBASIC*>( GetParent() );
     if( bDelInst )
     {
-       // #57841 Clear Uno-Objects, which were helt in RTL functions,
-       // the end of the program, so that nothing were helt.
+        // #57841 Clear Uno-Objects, which were held in RTL functions,
+        // the end of the program, so that nothing is held.
         ClearUnoObjectsInRTL_Impl( xBasic.get() );
 
         delete pSbData->pInst;
