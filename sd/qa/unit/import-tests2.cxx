@@ -176,6 +176,7 @@ public:
     void testDefaultTabStop();
     void testCropToZero();
     void testTdf144092TableHeight();
+    void testTdf151547TransparentWhiteText();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -244,6 +245,7 @@ public:
     CPPUNIT_TEST(testDefaultTabStop);
     CPPUNIT_TEST(testCropToZero);
     CPPUNIT_TEST(testTdf144092TableHeight);
+    CPPUNIT_TEST(testTdf151547TransparentWhiteText);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2014,6 +2016,27 @@ void SdImportTest2::testTdf144092TableHeight()
     // - Actual  : 4595
     // i.e. the table height wasn't corrected by expanding less than minimum sized rows.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7208), xTableShape->getSize().Height);
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf151547TransparentWhiteText()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf151547-transparent-white-text.pptx"),
+        PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Color: R:255 G:255 B:254 A:255
+    // - Actual  : Color: R:255 G:255 B:255 A:255
+    // i.e. fully transparent white text color was interpreted as COL_AUTO
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFE), nCharColor);
     xDocShRef->DoClose();
 }
 
