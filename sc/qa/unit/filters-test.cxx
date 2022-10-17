@@ -918,9 +918,6 @@ void ScFiltersTest::setUp()
 
 void ScFiltersTest::tearDown()
 {
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
-
     // one test sets this configuration option; make sure we return it back
     ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
     if (mbUpdateReferenceOnSort != aInputOption.GetSortRefUpdate())
@@ -928,6 +925,8 @@ void ScFiltersTest::tearDown()
         aInputOption.SetSortRefUpdate(mbUpdateReferenceOnSort);
         SC_MOD()->SetInputOptions(aInputOption);
     }
+
+    ScBootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);

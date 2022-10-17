@@ -67,7 +67,6 @@ public:
     ScExportTest();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     void test();
     void testDefaultFontHeight();
@@ -3791,12 +3790,6 @@ void ScExportTest::setUp()
     m_xCalcComponent
         = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
-void ScExportTest::tearDown()
-{
-    uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 void ScExportTest::testSupBookVirtualPathXLS()

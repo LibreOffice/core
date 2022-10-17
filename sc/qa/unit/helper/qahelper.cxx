@@ -911,6 +911,12 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
     }
 }
 
+void ScBootstrapFixture::tearDown()
+{
+    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
+    test::BootstrapFixture::tearDown();
+}
+
 std::string to_std_string(const OUString& rStr)
 {
     return std::string(rStr.toUtf8().getStr());

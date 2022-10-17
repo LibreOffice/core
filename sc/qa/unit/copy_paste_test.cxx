@@ -38,7 +38,6 @@ public:
     ScCopyPasteTest();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     void testCopyPasteXLS();
     void testTdf84411();
@@ -839,12 +838,6 @@ void ScCopyPasteTest::setUp()
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
-void ScCopyPasteTest::tearDown()
-{
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCopyPasteTest);

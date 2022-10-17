@@ -70,7 +70,6 @@ public:
     ScFiltersTest2();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     void testMiscRowHeights();
     void testOptimalHeightReset();
@@ -322,12 +321,6 @@ void ScFiltersTest2::setUp()
     m_xCalcComponent
         = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
-void ScFiltersTest2::tearDown()
-{
-    uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 void ScFiltersTest2::testMiscRowHeights()

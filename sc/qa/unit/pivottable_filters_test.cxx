@@ -45,7 +45,6 @@ public:
     ScPivotTableFiltersTest();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     // Import
     void testPivotTableBasicODS();
@@ -172,12 +171,6 @@ void ScPivotTableFiltersTest::setUp()
     m_xCalcComponent
         = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
-void ScPivotTableFiltersTest::tearDown()
-{
-    uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 void ScPivotTableFiltersTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)

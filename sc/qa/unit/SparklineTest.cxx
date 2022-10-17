@@ -40,12 +40,6 @@ public:
         CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
     }
 
-    virtual void tearDown() override
-    {
-        uno::Reference<lang::XComponent>(m_xCalcComponent, uno::UNO_QUERY_THROW)->dispose();
-        test::BootstrapFixture::tearDown();
-    }
-
     void testAddSparkline();
     void testClearContentSprkline();
     void testCopyPasteSparkline();

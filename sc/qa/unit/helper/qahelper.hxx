@@ -230,6 +230,8 @@ public:
     std::shared_ptr<utl::TempFileNamed> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
 
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
+
+    virtual void tearDown() override;
 };
 
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \

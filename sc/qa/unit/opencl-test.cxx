@@ -4737,9 +4737,7 @@ void ScOpenCLTest::tearDown()
         xDocShRes.clear();
     }
 
-    uno::Reference< lang::XComponent >
-        ( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
+    ScBootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScOpenCLTest);

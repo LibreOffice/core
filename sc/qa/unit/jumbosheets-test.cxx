@@ -400,12 +400,11 @@ void ScJumboSheetsTest::setUp()
 
 void ScJumboSheetsTest::tearDown()
 {
-    uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
-    test::BootstrapFixture::tearDown();
-
     ScDefaultsOptions aDefaultsOption = SC_MOD()->GetDefaultsOptions();
     aDefaultsOption.SetInitJumboSheets(false);
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
+
+    ScBootstrapFixture::tearDown();
 }
 
 void ScJumboSheetsTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
