@@ -19,60 +19,6 @@
 #include <rangeutl.hxx>
 #include <refupdatecontext.hxx>
 
-class ScAddressTest : public test::BootstrapFixture
-{
-public:
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-    CPPUNIT_TEST_SUITE(ScAddressTest);
-    CPPUNIT_TEST(testAddressParsing);
-    CPPUNIT_TEST(testTdf147451);
-    CPPUNIT_TEST_SUITE_END();
-
-    void testAddressParsing();
-    void testTdf147451();
-
-private:
-    ScDocShellRef m_xDocShRef;
-};
-
-void ScAddressTest::testAddressParsing()
-{
-    ScAddress aAddr;
-    ScDocument& rDoc = m_xDocShRef->GetDocument();
-    ScRefFlags nRes = aAddr.Parse("1", rDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
-}
-
-void ScAddressTest::testTdf147451()
-{
-    ScAddress aAddr;
-    ScDocument& rDoc = m_xDocShRef->GetDocument();
-    // "Sheet1" is technically a valid address like "XF1", but it should overflow.
-    ScRefFlags nRes = aAddr.Parse("Sheet1", rDoc, formula::FormulaGrammar::CONV_OOO);
-    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
-}
-
-void ScAddressTest::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-    m_xDocShRef = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-}
-
-void ScAddressTest::tearDown()
-{
-    m_xDocShRef->DoClose();
-    m_xDocShRef.clear();
-    BootstrapFixture::tearDown();
-}
-
 class ScRangeTest : public test::BootstrapFixture
 {
 public:
@@ -82,10 +28,14 @@ public:
     CPPUNIT_TEST_SUITE(ScRangeTest);
     CPPUNIT_TEST(testOverlap);
     CPPUNIT_TEST(testRangeParsing);
+    CPPUNIT_TEST(testAddressParsing);
+    CPPUNIT_TEST(testTdf147451);
     CPPUNIT_TEST_SUITE_END();
 
     void testOverlap();
     void testRangeParsing();
+    void testAddressParsing();
+    void testTdf147451();
 
 private:
     ScDocShellRef m_xDocShRef;
@@ -115,6 +65,23 @@ void ScRangeTest::testRangeParsing()
     ScRange aRange;
     ScDocument& rDoc = m_xDocShRef->GetDocument();
     ScRefFlags nRes = aRange.Parse(":1", rDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
+}
+
+void ScRangeTest::testAddressParsing()
+{
+    ScAddress aAddr;
+    ScDocument& rDoc = m_xDocShRef->GetDocument();
+    ScRefFlags nRes = aAddr.Parse("1", rDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
+}
+
+void ScRangeTest::testTdf147451()
+{
+    ScAddress aAddr;
+    ScDocument& rDoc = m_xDocShRef->GetDocument();
+    // "Sheet1" is technically a valid address like "XF1", but it should overflow.
+    ScRefFlags nRes = aAddr.Parse("Sheet1", rDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
@@ -241,7 +208,6 @@ void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScAddressTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeUpdaterTest);
 
