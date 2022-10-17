@@ -356,8 +356,8 @@ class TextContrastCheck : public NodeCheck
 {
 private:
     void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange,
-                        uno::Reference<text::XTextContent> const& xParagraph,
-                        const SwTextNode* pTextNode)
+                        uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode,
+                        sal_Int32 nTextStart)
     {
         Color nParaBackColor(COL_AUTO);
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
@@ -378,9 +378,6 @@ private:
             SAL_WARN("sw.a11y", "CharColor void");
             return;
         }
-        Color aForegroundColor(ColorTransparency, nCharColor);
-        if (aForegroundColor == COL_AUTO)
-            return;
 
         const SwPageDesc* pPageDescription = pTextNode->FindPageDesc();
         const SwFrameFormat& rPageFormat = pPageDescription->GetMaster();
@@ -411,6 +408,22 @@ private:
         // If not character background color, try paragraph background color
         if (aBackgroundColor == COL_AUTO)
             aBackgroundColor = nParaBackColor;
+        else
+        {
+            auto pIssue
+                = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setNode(pTextNode);
+            SwDoc& rDocument = pTextNode->GetDoc();
+            pIssue->setDoc(rDocument);
+            pIssue->setStart(nTextStart);
+            pIssue->setEnd(nTextStart + xTextRange->getString().getLength());
+        }
+
+        Color aForegroundColor(ColorTransparency, nCharColor);
+        if (aForegroundColor == COL_AUTO)
+            return;
 
         // If not paragraph background color, try page color
         if (aBackgroundColor == COL_AUTO)
@@ -446,11 +459,15 @@ public:
 
         uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        sal_Int32 nStart = 0;
         while (xRunEnum->hasMoreElements())
         {
             uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
             if (xRun.is())
-                checkTextRange(xRun, xParagraph, pTextNode);
+            {
+                checkTextRange(xRun, xParagraph, pTextNode, nStart);
+                nStart += xRun->getString().getLength();
+            }
         }
     }
 };
