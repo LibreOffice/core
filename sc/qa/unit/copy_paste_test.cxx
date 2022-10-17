@@ -76,7 +76,6 @@ public:
 
 private:
     void addToUserList(const OUString& rStr);
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 // tdf#83366

@@ -117,7 +117,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
     bool mbUpdateReferenceOnSort; ///< Remember the configuration option so that we can set it back.
 };
 

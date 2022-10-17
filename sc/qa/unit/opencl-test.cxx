@@ -504,8 +504,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-
     // Test env variables and methods
     ScDocShellRef xDocSh;
     ScDocShellRef xDocShRes;

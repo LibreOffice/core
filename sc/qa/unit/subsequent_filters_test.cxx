@@ -287,8 +287,6 @@ public:
 private:
     void testImportCrash(std::u16string_view rFileName, sal_Int32 nFormat);
     void testPassword_Impl(std::u16string_view rFileNameBase);
-
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 namespace {

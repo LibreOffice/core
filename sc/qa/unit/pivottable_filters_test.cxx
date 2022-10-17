@@ -156,9 +156,6 @@ public:
     CPPUNIT_TEST(testTdf73845);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 ScPivotTableFiltersTest::ScPivotTableFiltersTest()

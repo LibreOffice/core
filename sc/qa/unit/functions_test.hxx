@@ -30,9 +30,6 @@ public:
         SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion) override;
-
-private:
-    css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

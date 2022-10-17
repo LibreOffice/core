@@ -207,6 +207,8 @@ protected:
     ScDocShellRef loadDoc(
         std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite = false, bool bCheckErrorCode = true );
 
+    // reference to document interface that we are testing
+    css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
 public:
     static const FileFormat* getFileFormats() { return aFileFormats; }
 

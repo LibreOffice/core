@@ -320,9 +320,6 @@ public:
     CPPUNIT_TEST(testEmbeddedTextInDecimal);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 ScExportTest2::ScExportTest2()

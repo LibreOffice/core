@@ -36,9 +36,6 @@ public:
     CPPUNIT_TEST_SUITE(ScChart2DataProviderTest);
     CPPUNIT_TEST(testHeaderExpansion);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cellRange,

@@ -297,8 +297,6 @@ public:
 
 private:
     void testExcelCellBorders(sal_uLong nFormatType);
-
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)

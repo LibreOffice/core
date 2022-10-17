@@ -91,9 +91,6 @@ public:
     CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
     CPPUNIT_TEST(testTdf108188_pagestyle);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,

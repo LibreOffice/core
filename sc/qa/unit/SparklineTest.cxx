@@ -23,9 +23,6 @@ using namespace css;
 /** Test operation for sparklines, sparkline groups and attributes */
 class SparklineTest : public ScBootstrapFixture
 {
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-
 public:
     SparklineTest()
         : ScBootstrapFixture("sc/qa/unit/data")

@@ -20,9 +20,6 @@ using namespace css;
 /** Test import, export or roundtrip of sparklines for ODF and OOXML */
 class SparklineImportExportTest : public ScBootstrapFixture, public XmlTestTools
 {
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-
 public:
     SparklineImportExportTest()
         : ScBootstrapFixture("sc/qa/unit/data")

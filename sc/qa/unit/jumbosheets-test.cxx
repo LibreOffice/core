@@ -72,7 +72,6 @@ protected:
 
 private:
     void testRoundtripColumn2000(std::u16string_view name, int format);
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 void ScJumboSheetsTest::testRoundtripColumn2000Ods()

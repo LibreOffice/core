@@ -306,9 +306,6 @@ public:
     CPPUNIT_TEST(testTooManyColsRows);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 ScFiltersTest2::ScFiltersTest2()
