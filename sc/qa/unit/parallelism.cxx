@@ -22,7 +22,7 @@
 using namespace css;
 using namespace css::uno;
 
-class ScParallelismTest : public ScBootstrapFixture
+class ScParallelismTest : public test::BootstrapFixture
 {
 public:
     ScParallelismTest();
@@ -85,7 +85,6 @@ private:
 };
 
 ScParallelismTest::ScParallelismTest()
-      : ScBootstrapFixture( "sc/qa/unit/data" )
 {
 }
 
@@ -169,6 +168,7 @@ void ScParallelismTest::tearDown()
 
     m_xDocShell->DoClose();
     m_xDocShell.clear();
+
     test::BootstrapFixture::tearDown();
 }
 
