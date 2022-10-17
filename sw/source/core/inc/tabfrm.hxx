@@ -43,7 +43,7 @@ namespace o3tl {
 }
 
 /// SwTabFrame is one table in the document layout, containing rows (which contain cells).
-class SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
+class SAL_DLLPUBLIC_RTTI SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
 {
     friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl );
 
