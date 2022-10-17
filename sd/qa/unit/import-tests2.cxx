@@ -175,6 +175,7 @@ public:
     void testTdf112209();
     void testDefaultTabStop();
     void testCropToZero();
+    void testTdf151547TransparentWhiteText();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -242,6 +243,7 @@ public:
     CPPUNIT_TEST(testTdf112209);
     CPPUNIT_TEST(testDefaultTabStop);
     CPPUNIT_TEST(testCropToZero);
+    CPPUNIT_TEST(testTdf151547TransparentWhiteText);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1998,6 +2000,27 @@ void SdImportTest2::testCropToZero()
     // Must not crash because of division by zero
     // Also must not fail assertions because of passing negative value to CropQuotientsFromSrcRect
     loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/croppedTo0.pptx"), PPTX);
+}
+
+void SdImportTest2::testTdf151547TransparentWhiteText()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf151547-transparent-white-text.pptx"),
+        PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Color: R:255 G:255 B:254 A:255
+    // - Actual  : Color: R:255 G:255 B:255 A:255
+    // i.e. fully transparent white text color was interpreted as COL_AUTO
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFE), nCharColor);
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
