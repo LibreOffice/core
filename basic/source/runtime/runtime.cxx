@@ -4422,7 +4422,7 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 
     // 16.10.96: #31460 new concept for StepInto/Over/Out
-    // see explanation at _ImplGetBreakCallLevel
+    // see explanation at SbiInstance::CalcBreakCallLevel
     if( pInst->nCallLvl <= pInst->nBreakCallLvl )
     {
         StarBASIC* pStepBasic = GetCurrentBasic( &rBasic );
