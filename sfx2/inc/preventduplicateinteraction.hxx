@@ -72,7 +72,7 @@ private:
         if (!m_xWin)
             return;
         SolarMutexGuard aSolarGuard;
-        closedialogs(dynamic_cast<SystemWindow&>(*m_xWin), false);
+        closedialogs(*m_xWin, false);
     }
 
 public:

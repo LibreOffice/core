@@ -362,6 +362,7 @@ void testDynamicCast() {
     (void) dynamic_cast<S3 *>(s2);
     (void) dynamic_cast<const S2 *>(s2); // expected-error {{redundant dynamic cast from 'S2 *' to 'const S2 *' [loplugin:redundantcast]}}
     (void) dynamic_cast<S1 *>(s3); // expected-error {{redundant dynamic upcast from 'S3 *' to 'S1 *' [loplugin:redundantcast]}}
+    (void) dynamic_cast<S1&>(*s3); // expected-error {{redundant dynamic upcast from 'S3' to 'S1 &' [loplugin:redundantcast]}}
 }
 
 void overload(int);

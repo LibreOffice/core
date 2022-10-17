@@ -110,7 +110,7 @@ void VCartesianCoordinateSystem::createVAxisList(
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VCartesianAxis due to cyclic reference
     uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
-        dynamic_cast<ChartModel&>(*xChartDoc).getNumberFormatsSupplier());
+        xChartDoc->getNumberFormatsSupplier());
 
     m_aAxisMap.clear();
 

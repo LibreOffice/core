@@ -897,6 +897,27 @@ bool RedundantCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
             return true;
         }
     }
+    else if (qt1->isReferenceType() && qt2->isRecordType())
+    {
+        // casting from 'T&' to 'const T&' is redundant, so compare without the qualifiers
+        qt1 = qt1->getPointeeType().getUnqualifiedType();
+        if (qt1 == qt2)
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant dynamic cast from %0 to %1", expr->getExprLoc())
+                << t2 << t1 << expr->getSourceRange();
+            return true;
+        }
+        if (qt1->getAsCXXRecordDecl() && qt2->getAsCXXRecordDecl()->isDerivedFrom(qt1->getAsCXXRecordDecl()))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant dynamic upcast from %0 to %1", expr->getExprLoc())
+                << t2 << t1 << expr->getSourceRange();
+            return true;
+        }
+    }
     return true;
 }
 

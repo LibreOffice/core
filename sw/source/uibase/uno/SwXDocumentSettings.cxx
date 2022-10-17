@@ -307,14 +307,14 @@ Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
 {
         return ::cppu::queryInterface(rType,
                                       // OWeakObject interfaces
-                                      &dynamic_cast<XInterface&>(dynamic_cast<OWeakObject&>(*this)),
-                                      &dynamic_cast<XWeak&>(*this),
+                                      static_cast<XInterface*>(static_cast<OWeakObject*>(this)),
+                                      static_cast<XWeak*>(this),
                                       // my own interfaces
-                                      &dynamic_cast<XPropertySet&>(*this),
-                                      &dynamic_cast<XPropertyState&>(*this),
-                                      &dynamic_cast<XMultiPropertySet&>(*this),
-                                      &dynamic_cast<XServiceInfo&>(*this),
-                                      &dynamic_cast<XTypeProvider&>(*this));
+                                      static_cast<XPropertySet*>(this),
+                                      static_cast<XPropertyState*>(this),
+                                      static_cast<XMultiPropertySet*>(this),
+                                      static_cast<XServiceInfo*>(this),
+                                      static_cast<XTypeProvider*>(this));
 }
 void SwXDocumentSettings::acquire ()
     noexcept
