@@ -216,6 +216,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_sw_ui_fmtui \
 	UITest_sw_ui_index \
 	UITest_sw_ui_misc \
+	UITest_sw_uibase_docvw \
 	UITest_sw_uibase_shells \
 	UITest_classification \
 	UITest_writer_macro_tests \

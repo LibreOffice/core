@@ -132,6 +132,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/combobox \
 	sw/uiconfig/swriter/ui/comboboxfragment \
 	sw/uiconfig/swriter/ui/conditionpage \
+	sw/uiconfig/swriter/ui/contentcontrolaliasbutton \
 	sw/uiconfig/swriter/ui/contentcontrolcalendar \
 	sw/uiconfig/swriter/ui/contentcontroldlg \
 	sw/uiconfig/swriter/ui/contentcontroldropdown \

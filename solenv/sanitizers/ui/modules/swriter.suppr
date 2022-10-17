@@ -176,6 +176,7 @@ sw/uiconfig/swriter/ui/tokenwidget.ui://GtkButton[@id='right'] button-no-label
 sw/uiconfig/swriter/ui/toxbuttonwidget.ui://GtkToggleButton[@id='button'] button-no-label
 sw/uiconfig/swriter/ui/toxentrywidget.ui://GtkEntry[@id='entry'] no-labelled-by
 sw/uiconfig/swriter/ui/unfloatbutton.ui://GtkButton[@id='button'] button-no-label
+sw/uiconfig/swriter/ui/contentcontrolaliasbutton.ui://GtkButton[@id='button'] button-no-label
 sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkLabel[@id='TextLabel'] orphan-label
 sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkLabel[@id='FontLabel'] orphan-label
 sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkLabel[@id='AngleLabel'] orphan-label

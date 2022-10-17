@@ -64,6 +64,7 @@
 #include <textcontentcontrol.hxx>
 #include <dropdowncontentcontrolbutton.hxx>
 #include <datecontentcontrolbutton.hxx>
+#include <FrameControlsManager.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCursor the same size does not have to be
@@ -634,6 +635,7 @@ void SwSelPaintRects::HighlightContentControl()
 {
     std::vector<basegfx::B2DRange> aContentControlRanges;
     std::vector<OString> aLOKRectangles;
+    SwRect aFirstPortionPaintArea;
     SwRect aLastPortionPaintArea;
     std::shared_ptr<SwContentControl> pContentControl;
 
@@ -677,12 +679,14 @@ void SwSelPaintRects::HighlightContentControl()
 
             if (!pRects->empty())
             {
+                aFirstPortionPaintArea = (*pRects)[0];
                 aLastPortionPaintArea = (*pRects)[pRects->size() - 1];
             }
             pContentControl = pCurContentControlAtCursor->GetContentControl().GetContentControl();
         }
     }
 
+    auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
     if (!aContentControlRanges.empty())
     {
         if (comphelper::LibreOfficeKit::isActive())
@@ -734,7 +738,6 @@ void SwSelPaintRects::HighlightContentControl()
 
         if (pContentControl && pContentControl->HasListItems())
         {
-            auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
             if (pWrtShell)
             {
                 auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
@@ -754,7 +757,6 @@ void SwSelPaintRects::HighlightContentControl()
         }
         if (pContentControl && pContentControl->GetDate())
         {
-            auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
             if (pWrtShell)
             {
                 auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
@@ -772,6 +774,21 @@ void SwSelPaintRects::HighlightContentControl()
                 m_pContentControlButton->Show();
             }
         }
+
+        if (pWrtShell)
+        {
+            auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
+            SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+            if (pContentControl && !pContentControl->GetAlias().isEmpty())
+            {
+                Point aTopLeftPixel = rEditWin.LogicToPixel(aFirstPortionPaintArea.TopLeft());
+                rMngr.SetContentControlAliasButton(pContentControl.get(), aTopLeftPixel);
+            }
+            else
+            {
+                rMngr.HideControls(FrameControlType::ContentControl);
+            }
+        }
     }
     else
     {
@@ -787,6 +804,13 @@ void SwSelPaintRects::HighlightContentControl()
         if (m_pContentControlButton)
         {
             m_pContentControlButton.disposeAndClear();
+        }
+
+        if (pWrtShell)
+        {
+            auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
+            SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+            rMngr.HideControls(FrameControlType::ContentControl);
         }
     }
 }

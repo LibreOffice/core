@@ -642,6 +642,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/docvw/SidebarTxtControl \
     sw/source/uibase/docvw/HeaderFooterWin \
     sw/source/uibase/docvw/OutlineContentVisibilityWin \
+    sw/source/uibase/docvw/contentcontrolaliasbutton \
     sw/source/uibase/docvw/edtdd \
     sw/source/uibase/docvw/edtwin \
     sw/source/uibase/docvw/edtwin2 \
