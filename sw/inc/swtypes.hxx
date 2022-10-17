@@ -237,6 +237,7 @@ enum class FrameControlType
     Header,
     Footer,
     FloatingTable,
+    ContentControl,
     Outline
 };
 
