@@ -19,6 +19,9 @@
 
 #include <memory>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 class ScDataProvidersTest : public ScBootstrapFixture
 {
 public:
@@ -40,86 +43,98 @@ public:
     CPPUNIT_TEST(testXMLImport);
     // CPPUNIT_TEST(testBaseImport);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
 
 void ScDataProvidersTest::testCSVImport()
 {
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    ScDocument& rDoc = xDocSh->GetDocument();
     bool bInserted
-        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
     createFileURL(u"test1.", u"csv", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", &rDoc);
     aDataSource.setDBData(pDBData->GetName());
 
-    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(&rDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), m_pDoc->GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), m_pDoc->GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test3"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test3"), rDoc.GetString(2, 1, 0));
+
+    xDocSh->DoClose();
 }
 
 void ScDataProvidersTest::testDataLargerThanDB()
 {
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
+    ScDocument& rDoc = xDocSh->GetDocument();
     bool bInserted
-        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
     createFileURL(u"test1.", u"csv", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", &rDoc);
     aDataSource.setDBData(pDBData->GetName());
 
-    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(&rDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), m_pDoc->GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), m_pDoc->GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(2, 1, 0));
+
+    xDocSh->DoClose();
 }
 
 void ScDataProvidersTest::testHTMLImport()
 {
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    ScDocument& rDoc = xDocSh->GetDocument();
     bool bInserted
-        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
     createFileURL(u"test1.", u"html", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", m_pDoc);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", &rDoc);
     aDataSource.setID("//table");
     aDataSource.setDBData(pDBData->GetName());
 
-    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(&rDoc, true);
     Scheduler::ProcessEventsToIdle();
 
     std::vector<OUString> aCarManufacturers = { "Audi", "GM", "Nissan", "Ferrari", "Peugeot" };
@@ -129,25 +144,31 @@ void ScDataProvidersTest::testHTMLImport()
         2, 2.1, 40179, 2, 2,
     }; // 40179 is equal to 2010-1-1
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), m_pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), m_pDoc->GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Col3"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Col4"), m_pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), rDoc.GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col3"), rDoc.GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col4"), rDoc.GetString(3, 0, 0));
 
     for (SCROW nRow = 0; nRow <= 4; ++nRow)
     {
-        ASSERT_DOUBLES_EQUAL(aFirstCol[nRow], m_pDoc->GetValue(0, nRow + 1, 0));
-        ASSERT_DOUBLES_EQUAL(aSecondCol[nRow], m_pDoc->GetValue(1, nRow + 1, 0));
-        CPPUNIT_ASSERT_EQUAL(aCarManufacturers[nRow], m_pDoc->GetString(2, nRow + 1, 0));
-        CPPUNIT_ASSERT_EQUAL(aCities[nRow], m_pDoc->GetString(3, nRow + 1, 0));
+        ASSERT_DOUBLES_EQUAL(aFirstCol[nRow], rDoc.GetValue(0, nRow + 1, 0));
+        ASSERT_DOUBLES_EQUAL(aSecondCol[nRow], rDoc.GetValue(1, nRow + 1, 0));
+        CPPUNIT_ASSERT_EQUAL(aCarManufacturers[nRow], rDoc.GetString(2, nRow + 1, 0));
+        CPPUNIT_ASSERT_EQUAL(aCities[nRow], rDoc.GetString(3, nRow + 1, 0));
     }
+
+    xDocSh->DoClose();
 }
 
 void ScDataProvidersTest::testXMLImport()
 {
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    ScDocument& rDoc = xDocSh->GetDocument();
     bool bInserted
-        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+        = rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
@@ -161,56 +182,63 @@ void ScDataProvidersTest::testXMLImport()
     aParam.maRangeLinks.push_back(aRangeLink);
 
     createFileURL(u"test1.", u"xml", aFileURL);
-    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", m_pDoc);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", &rDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setXMLImportParam(aParam);
 
-    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(&rDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("title"), m_pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("author"), m_pDoc->GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test1"), m_pDoc->GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test2"), m_pDoc->GetString(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0, 3, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test3"), m_pDoc->GetString(1, 3, 0));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(0, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("test4"), m_pDoc->GetString(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("title"), rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("author"), rDoc.GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), rDoc.GetString(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(0, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test3"), rDoc.GetString(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test4"), rDoc.GetString(1, 4, 0));
+
+    xDocSh->DoClose();
 }
 
 /*
 void ScDataProvidersTest::testBaseImport()
 {
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    bool bInserted = rDoc.GetDBCollection()->getNamedDBs().insert(pDBData);
     CPPUNIT_ASSERT(bInserted);
 
-    sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", m_pDoc);
+    sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", &rDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setID("biblio@Bibliography");
 
 
-    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
-    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    rDoc.GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = rDoc.GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(&rDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), m_pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), m_pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), rDoc.GetString(1, 1, 0));
+
+    xDocSh->DoClose();
 }
 */
 
 ScDataProvidersTest::ScDataProvidersTest()
     : ScBootstrapFixture("sc/qa/unit/data/dataprovider")
-    , m_pDoc(nullptr)
 {
 }
 
@@ -218,22 +246,17 @@ void ScDataProvidersTest::setUp()
 {
     ScBootstrapFixture::setUp();
 
-    ScDLL::Init();
-    m_xDocShell
-        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
-                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-    m_pDoc = &m_xDocShell->GetDocument();
-    m_pDoc->InsertTab(0, "Tab");
+    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
+    // which is a private symbol to us, gets called
+    m_xCalcComponent
+        = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
+    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 void ScDataProvidersTest::tearDown()
 {
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-    ScBootstrapFixture::tearDown();
+    uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
+    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataProvidersTest);
