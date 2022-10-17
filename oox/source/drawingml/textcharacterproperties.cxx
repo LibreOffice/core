@@ -142,7 +142,13 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
         if (aColor.hasTransparency())
         {
-            rPropMap.setProperty(PROP_CharTransparence, aColor.getTransparency());
+            const auto nTransparency = aColor.getTransparency();
+            rPropMap.setProperty(PROP_CharTransparence, nTransparency);
+
+            // WORKAROUND: Fully transparent white has the same value as COL_AUTO, avoid collision
+            if (nTransparency == 100
+                && aColor.getColor(rFilter.getGraphicHelper()).GetRGBColor() == COL_AUTO.GetRGBColor())
+                rPropMap.setProperty(PROP_CharColor, ::Color(ColorTransparency, 0xFFFFFFFE));
         }
     }
 
