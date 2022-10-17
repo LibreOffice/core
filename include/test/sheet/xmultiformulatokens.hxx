@@ -22,8 +22,6 @@ class OOO_DLLPUBLIC_TEST XMultiFormulaTokens
 {
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual void setUp() = 0;
-    virtual void tearDown() = 0;
 
     void testGetCount();
     void testGetSetTokens();
