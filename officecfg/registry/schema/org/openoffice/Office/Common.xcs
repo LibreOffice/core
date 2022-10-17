@@ -6188,7 +6188,7 @@
       <info>
         <desc>Specifies settings for the accessibility options.</desc>
       </info>
-      <prop oor:name="HighContrast" oor:type="xs:short" oor:nillable="false">
+      <prop oor:name="HighContrast" oor:type="xs:int" oor:nillable="false">
         <!-- UIHints: Tools  Options - Accessibility Options -->
         <info>
           <desc>Indicates whether High Contrast accessibility mode should be active.</desc>

@@ -227,7 +227,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) c
         aStyleSettings.SetHighContrastMode( true );
     else
     {
-        short nHighContrastMode = officecfg::Office::Common::Accessibility::HighContrast::get();
+        sal_Int32 nHighContrastMode = officecfg::Office::Common::Accessibility::HighContrast::get();
         if (nHighContrastMode != 0) // 0 Automatic, 1 Disable, 2 Enable
         {
             const bool bEnable = nHighContrastMode == 2;
