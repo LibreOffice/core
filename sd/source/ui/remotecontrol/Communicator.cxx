@@ -130,7 +130,6 @@ void Communicator::informListenerDestroyed()
     if ( pTransmitter )
         pTransmitter->addMessage( "slideshow_finished\n\n",
                                   Transmitter::PRIORITY_HIGH );
-    mListener.clear();
 }
 
 void Communicator::presentationStarted( const css::uno::Reference<
