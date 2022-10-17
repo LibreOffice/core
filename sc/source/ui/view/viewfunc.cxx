@@ -1171,6 +1171,34 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     StartFormatArea();
 }
 
+static void ShrinkToDataArea(ScMarkData& rFuncMark, ScDocument& rDoc)
+{
+    // tdf#147842 if the marked area is the entire sheet, then shrink it to the data area.
+    // Otherwise ctrl-A, perform-action, will take a very long time as it tries to modify
+    // cells then we are not using.
+    if (rFuncMark.IsMultiMarked())
+        return;
+    ScRange aMarkArea = rFuncMark.GetMarkArea();
+    const ScSheetLimits& rLimits = rDoc.GetSheetLimits();
+    if (aMarkArea.aStart.Row() != 0 || aMarkArea.aStart.Col() != 0)
+        return;
+    if (aMarkArea.aEnd.Row() != rLimits.MaxRow() || aMarkArea.aEnd.Col() != rLimits.MaxCol())
+        return;
+    if (aMarkArea.aStart.Tab() != aMarkArea.aEnd.Tab())
+        return;
+    SCCOL nStartCol = aMarkArea.aStart.Col();
+    SCROW nStartRow = aMarkArea.aStart.Row();
+    SCCOL nEndCol = aMarkArea.aEnd.Col();
+    SCROW nEndRow = aMarkArea.aEnd.Row();
+    rDoc.ShrinkToDataArea(aMarkArea.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow);
+    aMarkArea.aStart.SetCol(nStartCol);
+    aMarkArea.aStart.SetRow(nStartRow);
+    aMarkArea.aEnd.SetCol(nEndCol);
+    aMarkArea.aEnd.SetRow(nEndRow);
+    rFuncMark.ResetMark();
+    rFuncMark.SetMarkArea(aMarkArea);
+}
+
 //  pattern only
 
 void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursorOnly )
@@ -1179,6 +1207,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
     ScDocShell* pDocSh      = rViewData.GetDocShell();
     ScDocument& rDoc        = pDocSh->GetDocument();
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
+    ShrinkToDataArea( aFuncMark, rDoc );
     ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
 
     bool bRecord = true;
