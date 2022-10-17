@@ -320,9 +320,6 @@ SmModel::~SmModel() noexcept
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
-                                    // OWeakObject interfaces
-                                    &dynamic_cast<XInterface&>(static_cast<XUnoTunnel&>(*this)),
-                                    static_cast< XWeak* > ( this ),
                                     // PropertySetHelper interfaces
                                     static_cast< XPropertySet* > ( this ),
                                     static_cast< XMultiPropertySet* > ( this ),
