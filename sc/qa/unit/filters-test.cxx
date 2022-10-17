@@ -902,13 +902,7 @@ ScFiltersTest::ScFiltersTest()
 
 void ScFiltersTest::setUp()
 {
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
+    ScBootstrapFixture::setUp();
 
     // one test sets this configuration option; make sure we remember the
     // original value

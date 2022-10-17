@@ -70,8 +70,6 @@ class ScFiltersTest : public ScBootstrapFixture
 public:
     ScFiltersTest();
 
-    virtual void setUp() override;
-
     //ods, xls, xlsx filter tests
     void testCondFormatOperatorsSameRangeXLSX();
     void testTdf150452();
@@ -3083,17 +3081,6 @@ void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
 {
-}
-
-void ScFiltersTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);

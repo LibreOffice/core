@@ -21,8 +21,6 @@ public:
 
     FunctionsTest(const OUString& rPath);
 
-    virtual void setUp() override;
-
     virtual bool load(
         const OUString &rFilter,
         const OUString &rURL,

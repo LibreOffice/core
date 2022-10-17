@@ -231,6 +231,7 @@ public:
 
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
 
+    virtual void setUp() override;
     virtual void tearDown() override;
 };
 

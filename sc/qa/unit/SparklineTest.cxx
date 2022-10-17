@@ -29,17 +29,6 @@ public:
     {
     }
 
-    virtual void setUp() override
-    {
-        test::BootstrapFixture::setUp();
-
-        // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-        // which is a private symbol to us, gets called
-        m_xCalcComponent = getMultiServiceFactory()->createInstance(
-            "com.sun.star.comp.Calc.SpreadsheetDocument");
-        CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-    }
-
     void testAddSparkline();
     void testClearContentSprkline();
     void testCopyPasteSparkline();

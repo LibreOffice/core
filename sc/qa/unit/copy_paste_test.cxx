@@ -37,8 +37,6 @@ class ScCopyPasteTest : public ScBootstrapFixture
 public:
     ScCopyPasteTest();
 
-    virtual void setUp() override;
-
     void testCopyPasteXLS();
     void testTdf84411();
     void testTdf124565();
@@ -827,17 +825,6 @@ void ScCopyPasteTest::tdf137624_autofillMergedMixed()
 ScCopyPasteTest::ScCopyPasteTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
 {
-}
-
-void ScCopyPasteTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCopyPasteTest);

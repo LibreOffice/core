@@ -35,7 +35,6 @@ public:
     void enableOpenCL();
     void disableOpenCL();
 
-    virtual void setUp() override;
     virtual void tearDown() override;
 
     void testSystematic();
@@ -4710,17 +4709,6 @@ void ScOpenCLTest::testStatisticalFormulaStDevPA1()
 ScOpenCLTest::ScOpenCLTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
 {
-}
-
-void ScOpenCLTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->
-            createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 void ScOpenCLTest::tearDown()

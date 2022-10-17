@@ -28,8 +28,6 @@ class ScChart2DataProviderTest : public ScBootstrapFixture
 public:
     ScChart2DataProviderTest();
 
-    virtual void setUp() override;
-
     void testHeaderExpansion();
 
     CPPUNIT_TEST_SUITE(ScChart2DataProviderTest);
@@ -90,17 +88,6 @@ void ScChart2DataProviderTest::testHeaderExpansion()
 ScChart2DataProviderTest::ScChart2DataProviderTest()
     : ScBootstrapFixture("sc/qa/unit/data")
 {
-}
-
-void ScChart2DataProviderTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent
-        = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScChart2DataProviderTest);

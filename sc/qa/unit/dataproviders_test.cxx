@@ -27,8 +27,6 @@ class ScDataProvidersTest : public ScBootstrapFixture
 public:
     ScDataProvidersTest();
 
-    virtual void setUp() override;
-
     void testCSVImport();
     void testDataLargerThanDB();
     void testHTMLImport();
@@ -239,17 +237,6 @@ void ScDataProvidersTest::testBaseImport()
 ScDataProvidersTest::ScDataProvidersTest()
     : ScBootstrapFixture("sc/qa/unit/data/dataprovider")
 {
-}
-
-void ScDataProvidersTest::setUp()
-{
-    ScBootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent
-        = getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataProvidersTest);
