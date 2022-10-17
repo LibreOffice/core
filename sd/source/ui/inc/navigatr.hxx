@@ -158,6 +158,7 @@ private:
                                 DECL_DLLPRIVATE_LINK( MenuSelectHdl, const OString&, void );
                                 DECL_DLLPRIVATE_LINK( ShapeFilterCallback, const OString&, void );
                                 DECL_DLLPRIVATE_LINK( KeyInputHdl, const KeyEvent&, bool );
+    DECL_DLLPRIVATE_STATIC_LINK(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool);
 
     void                        SetDragImage();
 

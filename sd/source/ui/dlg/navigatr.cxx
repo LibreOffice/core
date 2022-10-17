@@ -67,6 +67,7 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
 
     mxTlbObjects->connect_row_activated(LINK(this, SdNavigatorWin, ClickObjectHdl));
     mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
+    mxTlbObjects->connect_mouse_release(LINK(this, SdNavigatorWin, MouseReleaseHdl));
 
     mxToolbox->connect_clicked(LINK(this, SdNavigatorWin, SelectToolboxHdl));
     mxToolbox->connect_menu_toggled(LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl));
@@ -232,6 +233,11 @@ SdPageObjsTLV& SdNavigatorWin::GetObjects()
     return *mxTlbObjects;
 }
 
+IMPL_STATIC_LINK_NOARG(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool)
+{
+    return true;
+}
+
 IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OString&, rCommand, void)
 {
     PageJump ePage = PAGE_NONE;
@@ -291,14 +297,80 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
         // if it is the active window, we jump to the page
         if( pInfo && pInfo->IsActive() )
         {
-            OUString aStr(mxTlbObjects->get_selected_text());
+            OUString aStr(mxTlbObjects->get_cursor_text());
 
             if( !aStr.isEmpty() )
             {
-                SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
-                mpBindings->GetDispatcher()->ExecuteList(
-                    SID_NAVIGATOR_OBJECT,
-                    SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
+                if (!pDocShell)
+                    return false;
+                sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+                if (!pViewShell)
+                    return false;
+                SdrView* pDrawView = pViewShell->GetDrawView();
+                if (!pDrawView)
+                    return false;
+
+                // Save the selected tree entries re-mark the objects in the view after navigation.
+                auto vSelectedEntryIds = mxTlbObjects->GetSelectedEntryIds();
+
+                // Page entries in the tree have id value 1. Object entries have id value of
+                // the address of the pointer to the object.
+                const auto& rCursorEntryId = mxTlbObjects->get_cursor_id();
+                auto nCursorEntryId = rCursorEntryId.toInt64();
+                SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(rCursorEntryId);
+
+                bool bIsCursorEntrySelected(std::find(vSelectedEntryIds.begin(),
+                                                      vSelectedEntryIds.end(),
+                                                      rCursorEntryId) != vSelectedEntryIds.end());
+
+                if (bIsCursorEntrySelected)
+                {
+                    // Set a temporary name, if need be, so the object can be navigated to.
+                    bool bCursorEntryObjectHasEmptyName = false;
+                    if (nCursorEntryId != 1 && pCursorEntryObject
+                            && pCursorEntryObject->GetName().isEmpty())
+                    {
+                        bCursorEntryObjectHasEmptyName = true;
+                        bool bUndo = pCursorEntryObject->getSdrModelFromSdrObject().IsUndoEnabled();
+                        pCursorEntryObject->getSdrModelFromSdrObject().EnableUndo(false);
+                        pCursorEntryObject->SetName(aStr, false);
+                        pCursorEntryObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
+                    }
+
+                    // All objects are unmarked when navigating to an object.
+                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, aStr);
+                    mpBindings->GetDispatcher()->ExecuteList(SID_NAVIGATOR_OBJECT,
+                                            SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+
+                    if (bCursorEntryObjectHasEmptyName)
+                    {
+                        bool bUndo = pCursorEntryObject->getSdrModelFromSdrObject().IsUndoEnabled();
+                        pCursorEntryObject->getSdrModelFromSdrObject().EnableUndo(false);
+                        pCursorEntryObject->SetName(OUString(), false);
+                        pCursorEntryObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
+                    }
+
+                    // re-mark the objects
+                    if (bIsCursorEntrySelected)
+                    {
+                        // Mark the objects in the view that are selected in the Navigator tree.
+                        for (auto& rEntryId: vSelectedEntryIds)
+                        {
+                            if (rEntryId != "1")
+                            {
+                                SdrObject* pEntryObject = weld::fromId<SdrObject*>(rEntryId);
+                                if (pEntryObject)
+                                    pDrawView->MarkObj(pEntryObject, pDrawView->GetSdrPageView());
+                            }
+                        }
+                    }
+                }
+                else if (nCursorEntryId != 1 && pCursorEntryObject)
+                {
+                    // unmark
+                    pDrawView->MarkObj(pCursorEntryObject, pDrawView->GetSdrPageView(), true);
+                }
 
                 // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the
@@ -316,17 +388,9 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
                 // still the slide sorter. Explicitly try to grab the draw
                 // shell focus, so follow-up operations work with the object
                 // and not with the whole slide.
-                sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
-                if (pDocShell)
-                {
-                    sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-                    if (pViewShell)
-                    {
-                        vcl::Window* pWindow = pViewShell->GetActiveWindow();
-                        if (pWindow)
-                            pWindow->GrabFocus();
-                    }
-                }
+                vcl::Window* pWindow = pViewShell->GetActiveWindow();
+                if (pWindow)
+                    pWindow->GrabFocus();
 
                 if (!mxTlbObjects->IsNavigationGrabsFocus())
                     // This is the case when keyboard navigation inside the

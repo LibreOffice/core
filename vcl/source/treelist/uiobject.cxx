@@ -157,7 +157,7 @@ void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*
     }
     else if (rAction == "DOUBLECLICK")
     {
-        mxTreeList->Select(mpEntry);
+        mxTreeList->SetCurEntry(mpEntry);
         mxTreeList->DoubleClickHdl();
     }
 }

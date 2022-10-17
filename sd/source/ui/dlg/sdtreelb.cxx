@@ -304,7 +304,9 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             else
                 m_xTreeView->expand_row(*xCursor);
         }
+        m_bNavigationGrabsFocus = true;
         m_aRowActivatedHdl.Call(*m_xTreeView);
+        m_bNavigationGrabsFocus = false;
         return true;
     }
     return m_aKeyPressHdl.Call(rKEvt);
@@ -319,6 +321,9 @@ IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 
 IMPL_LINK_NOARG(SdPageObjsTLV, MouseReleaseHdl, const MouseEvent&, bool)
 {
+    if (m_aMouseReleaseHdl.IsSet() && m_aMouseReleaseHdl.Call(MouseEvent()))
+        return false;
+
     m_bSelectionHandlerNavigates = false;
     m_bNavigationGrabsFocus = true;
     return false;
@@ -666,7 +671,7 @@ IMPL_LINK_NOARG(SdPageObjsTLV, RowActivatedHdl, weld::TreeView&, bool)
         Application::RemoveUserEvent(m_nRowActivateEventId);
     // post the event to process row activate after mouse press event
     m_nRowActivateEventId = Application::PostUserEvent(LINK(this, SdPageObjsTLV, AsyncRowActivatedHdl));
-    return true;
+    return false;
 }
 
 IMPL_LINK_NOARG(SdPageObjsTLV, AsyncSelectHdl, void*, void)
@@ -689,30 +694,7 @@ void SdPageObjsTLV::Select()
     m_aChangeHdl.Call(*m_xTreeView);
 
     if (m_bSelectionHandlerNavigates)
-    {
-        // Page items in the tree are given user data value 1.
-        // Drawing object items are given user data value of the object pointer they represent.
-        sal_Int64 nUserData = m_xTreeView->get_selected_id().toInt64();
-        if (nUserData != 1)
-        {
-            SdrObject* pObject = reinterpret_cast<SdrObject*>(nUserData);
-            if (pObject && pObject->GetName().isEmpty())
-            {
-                const bool bUndo = pObject->getSdrModelFromSdrObject().IsUndoEnabled();
-                pObject->getSdrModelFromSdrObject().EnableUndo(false);
-                pObject->SetName(m_xTreeView->get_selected_text(), false);
-                pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
-                m_aRowActivatedHdl.Call(*m_xTreeView);
-                pObject->getSdrModelFromSdrObject().EnableUndo(false);
-                pObject->SetName(OUString(), false);
-                pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
-            }
-            else
-                m_aRowActivatedHdl.Call(*m_xTreeView);
-        }
-        else
-            m_aRowActivatedHdl.Call(*m_xTreeView);
-    }
+        m_aRowActivatedHdl.Call(*m_xTreeView);
 
     if (!m_pNavigator)
     {
@@ -724,7 +706,7 @@ void SdPageObjsTLV::Select()
     OUString aURL = INetURLObject(pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File).GetMainURL(INetURLObject::DecodeMechanism::NONE);
     NavigatorDragType eDragType = m_pNavigator->GetNavigatorDragType();
 
-    OUString sSelectedEntry = m_xTreeView->get_selected_text();
+    OUString sSelectedEntry = get_cursor_text(); // what about multiple selections?
     aURL += "#" + sSelectedEntry;
 
     INetBookmark aBookmark(aURL, sSelectedEntry);
@@ -789,6 +771,18 @@ std::vector<OUString> SdPageObjsTLV::GetSelectEntryList(const int nDepth) const
     });
 
     return aEntries;
+}
+
+std::vector<OUString> SdPageObjsTLV::GetSelectedEntryIds() const
+{
+    std::vector<OUString> vEntryIds;
+
+    m_xTreeView->selected_foreach([this, &vEntryIds](weld::TreeIter& rEntry){
+        vEntryIds.push_back(m_xTreeView->get_id(rEntry));
+        return false;
+    });
+
+    return vEntryIds;
 }
 
 /**

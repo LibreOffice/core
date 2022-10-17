@@ -105,6 +105,7 @@ private:
     Link<weld::TreeView&, void> m_aChangeHdl;
     Link<weld::TreeView&, bool> m_aRowActivatedHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
+    Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
 
     /** Return the name of the object.  When the object has no user supplied
         name and the bCreate flag is <TRUE/> then a name is created
@@ -216,6 +217,11 @@ public:
         m_aKeyPressHdl = rLink;
     }
 
+    void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink)
+    {
+        m_aMouseReleaseHdl = rLink;
+    }
+
     bool HasSelectedChildren(std::u16string_view rName);
     bool SelectEntry(std::u16string_view rName);
     void SelectEntry(const SdrObject* pObj);
@@ -263,6 +269,22 @@ public:
     void unselect_all()
     {
         m_xTreeView->unselect_all();
+    }
+
+    OUString get_cursor_text() const
+    {
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_cursor(xIter.get()))
+            return m_xTreeView->get_text(*xIter);
+        return OUString();
+    }
+
+    OUString get_cursor_id() const
+    {
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_cursor(xIter.get()))
+            return m_xTreeView->get_id(*xIter);
+        return OUString();
     }
 
     void SetViewFrame(const SfxViewFrame* pViewFrame);
@@ -323,6 +345,8 @@ public:
           nDepth == 1 -> objects  */
 
     std::vector<OUString> GetSelectEntryList(const int nDepth) const;
+
+    std::vector<OUString> GetSelectedEntryIds() const;
 
     SdDrawDocument* GetBookmarkDoc(SfxMedium* pMedium = nullptr);
 
