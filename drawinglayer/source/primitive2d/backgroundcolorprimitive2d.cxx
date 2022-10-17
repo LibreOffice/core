@@ -21,6 +21,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
@@ -32,11 +33,29 @@ namespace drawinglayer::primitive2d
 {
         void BackgroundColorPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(!rViewInformation.getViewport().isEmpty())
+            // transparency invalid or completely transparent, done
+            if(getTransparency() < 0.0 || getTransparency() >= 1.0)
+                return;
+
+            // no viewport, not visible, done
+            if(rViewInformation.getViewport().isEmpty())
+                return;
+
+            // create decompose geometry
+            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rViewInformation.getViewport()));
+            Primitive2DReference aDecompose(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), getBColor()));
+
+            if(getTransparency() != 0.0)
             {
-                const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rViewInformation.getViewport()));
-                rContainer.push_back(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), getBColor()));
+                // if used, embed decompose geometry to unified transparency
+                Primitive2DContainer aContent { aDecompose };
+                aDecompose = Primitive2DReference(
+                    new UnifiedTransparencePrimitive2D(
+                        std::move(aContent),
+                        getTransparency()));
             }
+
+            rContainer.push_back(aDecompose);
         }
 
         BackgroundColorPrimitive2D::BackgroundColorPrimitive2D(
