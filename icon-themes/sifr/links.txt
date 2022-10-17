@@ -1689,10 +1689,7 @@ cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 
 cmd/sc_rulerrows.png cmd/sc_extrusiontiltleft.png
 cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
-svx/res/3dgeo.png cmd/lc_diagramaxisxyz.png
-svx/res/3drepres.png cmd/lc_fillshadow.png
-svx/res/3dtextur.png cmd/lc_graphicfilterpopart.png
-svx/res/3dlight.png cmd/lc_graphicfiltersolarize.png
+
 
 # Style
 cmd/32/editstyled.png cmd/32/editstyle.png
@@ -2343,8 +2340,10 @@ svtools/res/template.png cmd/lc_newdoc.png
 
 # svx
 # ==============================================
-svx/res/3dgeo.png cmd/sc_window3d.png
+svx/res/3dgeo.png cmd/sc_diagramaxisxyz.png
 svx/res/3dlight.png svx/res/lighton.png
+svx/res/3drepres.png cmd/sc_fillshadow.png
+svx/res/3dtextur.png cmd/sc_graphicfilterpopart.png
 svx/res/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
@@ -2409,7 +2408,6 @@ svx/res/id06.png cmd/sc_ellipse.png
 svx/res/id07.png cmd/sc_polygon.png
 svx/res/lngcheck.png cmd/sc_spelling.png
 svx/res/luminanc.png cmd/sc_graphicfilterinvert.png
-svx/res/modula3d.png cmd/sc_sphere.png
 svx/res/notcertificate_16.png xmlsecurity/res/notcertificate_16.png
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png cmd/sc_cancel.png
@@ -2417,12 +2415,11 @@ svx/res/nu03.png cmd/sc_addwatch.png
 svx/res/objects.png cmd/sc_insertdraw.png
 svx/res/ole.png cmd/sc_insertobject.png
 svx/res/parallel_16.png cmd/sc_extrusiondepthfloater.png
-svx/res/persp3d.png cmd/lc_extrusiondirectionfloater.png
-svx/res/perspective_16.png cmd/lc_extrusiondirectionfloater.png
+svx/res/persp3d.png cmd/sc_extrusiondirectionfloater.png
+svx/res/perspective_16.png cmd/sc_extrusiondirectionfloater.png
 svx/res/reloads.png cmd/sc_reload.png
-svx/res/rotate3d.png cmd/sc_convertinto3dlathe.png
+svx/res/rotate3d.png cmd/sc_convertinto3dlathefast.png
 svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
-svx/res/sphere3d.png cmd/sc_sphere.png
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
