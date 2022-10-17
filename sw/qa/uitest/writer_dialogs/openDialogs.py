@@ -50,7 +50,8 @@ dialogs = [
         # dialog opens but is not recognised by execute_dialog_through_command
     # {"command": ".uno:InsertBookmark", "closeButton": "close"},
         # tested in sw/qa/uitest/writer_tests2/bookmark.py
-    {"command": ".uno:InsertReferenceField", "closeButton": "cancel"},
+    # {"command": ".uno:InsertReferenceField", "closeButton": "cancel"},
+        # Tested in sw/qa/uitest/writer_tests7/tdf135938.py
     # {"command": ".uno:InsertSymbol", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests3/specialCharacter.py
     # {"command": ".uno:InsertFootnoteDialog", "closeButton": "cancel"},
