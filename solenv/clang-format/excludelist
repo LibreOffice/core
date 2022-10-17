@@ -9190,7 +9190,6 @@ sc/source/ui/unoobj/viewuno.cxx
 sc/source/ui/unoobj/warnpassword.cxx
 sc/source/ui/vba/excelvbahelper.cxx
 sc/source/ui/vba/excelvbahelper.hxx
-sc/source/ui/vba/helperdecl.hxx
 sc/source/ui/vba/vbaapplication.cxx
 sc/source/ui/vba/vbaapplication.hxx
 sc/source/ui/vba/vbaassistant.cxx
