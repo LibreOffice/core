@@ -224,13 +224,13 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
 
     if (xMozillaBootstrap.is())
     {
-        for (std::size_t i=0; i<SAL_N_ELEMENTS(productTypes); ++i)
+        for (auto const productTypeIter : productTypes)
         {
-            OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+            OUString profile = xMozillaBootstrap->getDefaultProfile(productTypeIter);
 
             if (!profile.isEmpty())
             {
-                OUString sProfilePath = xMozillaBootstrap->getProfilePath(productTypes[i], profile);
+                OUString sProfilePath = xMozillaBootstrap->getProfilePath(productTypeIter, profile);
                 if (m_sNSSPath.isEmpty())
                 {
                     SAL_INFO("xmlsecurity.xmlsec", "Using Mozilla profile " << sProfilePath);
@@ -264,12 +264,12 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
 
     if (xMozillaBootstrap.is())
     {
-        for (std::size_t i=0; i<SAL_N_ELEMENTS(productTypes); ++i)
+        for (auto const productTypeIter : productTypes)
         {
             uno::Sequence<OUString> aProductProfileList;
-            xMozillaBootstrap->getProfileList(productTypes[i], aProductProfileList);
+            xMozillaBootstrap->getProfileList(productTypeIter, aProductProfileList);
             for (const auto& sProfile : std::as_const(aProductProfileList))
-                aProfileList.push_back({sProfile, xMozillaBootstrap->getProfilePath(productTypes[i], sProfile), productTypes[i]});
+                aProfileList.push_back({sProfile, xMozillaBootstrap->getProfilePath(productTypeIter, sProfile), productTypeIter});
         }
     }
 

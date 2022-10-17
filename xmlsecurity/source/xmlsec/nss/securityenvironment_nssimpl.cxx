@@ -641,7 +641,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     arUsages[3] = UsageDescription( certificateUsageEmailSigner, "certificateUsageEmailSigner" );
     arUsages[4] = UsageDescription( certificateUsageEmailRecipient, "certificateUsageEmailRecipient" );
 
-    int numUsages = SAL_N_ELEMENTS(arUsages);
+    int numUsages = std::size(arUsages);
     for (int i = 0; i < numUsages; i++)
     {
         SAL_INFO("xmlsecurity.xmlsec", "Testing usage " << i+1 <<
