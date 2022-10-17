@@ -64,7 +64,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			ac_cv_lib_z_inflateEnd=yes \
 			ac_cv_lib_jpeg_jpeg_read_scanlines=yes \
 			ac_cv_lib_webp_WebPDecode=yes \
-			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& cd libtiff && $(MAKE) libtiff.la \
 	)
 	$(call gb_Trace_EndRange,libtiff,EXTERNAL)
