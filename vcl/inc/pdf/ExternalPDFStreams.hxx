@@ -42,7 +42,7 @@ struct VCL_DLLPUBLIC ExternalPDFStream
             aPDFStream.WriteBytes(maDataContainer.getData(), maDataContainer.getSize());
             aPDFStream.Seek(0);
             auto pPDFDocument = std::make_shared<filter::PDFDocument>();
-            if (!pPDFDocument->Read(aPDFStream))
+            if (!pPDFDocument->ReadWithPossibleFixup(aPDFStream))
             {
                 SAL_WARN("vcl.pdfwriter",
                          "PDFWriterImpl::writeReferenceXObject: reading the PDF document failed");

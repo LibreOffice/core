@@ -576,6 +576,8 @@ public:
     //@{
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
+    /// Calls Read() first and if it fails it tries to fixup and then retry.
+    bool ReadWithPossibleFixup(SvStream& rStream);
     void SetSignatureLine(std::vector<sal_Int8>&& rSignatureLine);
     void SetSignaturePage(size_t nPage);
     /// Sign the read document with xCertificate in the edit buffer.
