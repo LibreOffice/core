@@ -728,7 +728,7 @@ private:
     rtl::Reference<SfxItemPool> pItemPool;
     Link<LinkParamNone*,void>      aModifyHdl;
 
-    SvxFont         aDefFont;           //faster than ever from the pool!!
+    SvxFont         maDefFont;           //faster than ever from the pool!!
     sal_uInt16      nDefTab;
     bool            bIsVertical:1;
     TextRotation    mnRotation;
@@ -755,7 +755,7 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
 
     void            CreateDefFont( bool bUseStyles );
-    const SvxFont&  GetDefFont() const { return aDefFont; }
+    const SvxFont&  GetDefFont() const { return maDefFont; }
 
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
     sal_uInt16      GetDefTab() const           { return nDefTab; }
