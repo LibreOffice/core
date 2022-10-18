@@ -25,11 +25,14 @@ done
 
 APP_BUNDLE="$1"
 entitlements=
+application_identifier=
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     # In a sandboxed build executables need the entitlements
     entitlements="--entitlements $BUILDDIR/lo.xcent"
+    application_identifier=`/usr/libexec/PlistBuddy -c "print com.apple.application-identifier"  $BUILDDIR/lo.xcent`
+    # remove the key from the entitlement - only use it when signing the whole bundle in the final step
+    /usr/libexec/PlistBuddy -c "delete com.apple.application-identifier"  $BUILDDIR/lo.xcent
     # All data files are in Resources and included in the app bundle signature
-    # through that. I think.
     other_files=''
     # HACK: remove donate menu entries, need to support apple-pay and be verified
     # as non profit as a bare minimum to allow asking....
@@ -120,14 +123,13 @@ done
 # CFBundleExecutable from Info.plist, i.e. soffice, plus the contents
 # of the Resources tree.
 #
-# At this stage we also attach the entitlements in the sandboxing case
-#
-# Also omit some files from the Bundle's seal via the resource-rules
-# (bootstraprc and similar that the user might adjust and image files)
 # See also https://developer.apple.com/library/mac/technotes/tn2206/
 
-id=`echo ${PRODUCTNAME} | tr ' ' '-'`
-
+if test -n "$ENABLE_MACOSX_SANDBOX" && test -n "$application_identifier"; then
+    # add back the application-identifier to the entitlements
+    # testflight/beta-testing won't work if that key is used when signing the other executables
+    /usr/libexec/PlistBuddy -c "add com.apple.application-identifier string $application_identifier"  $BUILDDIR/lo.xcent
+fi
 codesign --force --options=runtime --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
 
 exit 0
