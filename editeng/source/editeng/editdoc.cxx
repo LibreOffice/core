@@ -2037,14 +2037,14 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
 void EditDoc::CreateDefFont( bool bUseStyles )
 {
     SfxItemSet aTmpSet( GetItemPool(), svl::Items<EE_PARA_START, EE_CHAR_END>{} );
-    CreateFont( aDefFont, aTmpSet );
-    aDefFont.SetVertical( IsVertical() );
-    aDefFont.SetOrientation( IsVertical() ? (IsTopToBottom() ? 2700 : 900) : 0 );
+    CreateFont( maDefFont, aTmpSet );
+    maDefFont.SetVertical( IsVertical() );
+    maDefFont.SetOrientation( IsVertical() ? (IsTopToBottom() ? 2700 : 900) : 0 );
 
     for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
     {
         ContentNode* pNode = GetObject( nNode );
-        pNode->GetCharAttribs().GetDefFont() = aDefFont;
+        pNode->GetCharAttribs().GetDefFont() = maDefFont;
         if ( bUseStyles )
             pNode->CreateDefFont();
     }
