@@ -3428,7 +3428,7 @@ if test $_os = Darwin; then
     fi
 
     AC_MSG_RESULT([macOS SDK $macosx_sdk at $MACOSX_SDK_PATH])
-
+    MACOSX_SDK_BUILD_VERSION=$(xcodebuild -version -sdk "$MACOSX_SDK_PATH" ProductBuildVersion) 
     case $macosx_sdk in
     10.13)
         MACOSX_SDK_VERSION=101300
@@ -3490,6 +3490,9 @@ if test $_os = Darwin; then
     else
         AC_MSG_ERROR(["$my_xcode_ver1" is too old or unrecognized, must be at least Xcode 12.5])
     fi
+
+    my_xcode_ver1=$(xcrun xcodebuild -version | tail -n 1)
+    MACOSX_XCODE_BUILD_VERSION=${my_xcode_ver1#Build version }
 
     case "$with_macosx_version_min_required" in
     10.14)
@@ -3661,6 +3664,8 @@ AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
 AC_SUBST(MACOSX_PROVISIONING_INFO)
 AC_SUBST(MACOSX_PROVISIONING_PROFILE)
+AC_SUBST(MACOSX_SDK_BUILD_VERSION)
+AC_SUBST(MACOSX_XCODE_BUILD_VERSION)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler
