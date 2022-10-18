@@ -129,13 +129,13 @@ protected:
         int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette,
         BitConvert type );
 
+public:
     // access to SystemDependentDataHolder, to support overload in derived class(es)
     virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
 
-public:
     // exclusive management op's for SystemDependentData at SalBitmap
     template<class T>
-    std::shared_ptr<T> getSystemDependentDataT() const
+    std::shared_ptr<T> getSystemDependentData() const
     {
         const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
         if(pDataHolder)
@@ -144,13 +144,13 @@ public:
     }
 
     template<class T, class... Args>
-    std::shared_ptr<T> addOrReplaceSystemDependentDataT(basegfx::SystemDependentDataManager& manager, Args&&... args) const
+    std::shared_ptr<T> addOrReplaceSystemDependentData(Args&&... args) const
     {
         const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
         if(!pDataHolder)
             return std::shared_ptr<T>();
 
-        std::shared_ptr<T> r = std::make_shared<T>(manager, std::forward<Args>(args)...);
+        std::shared_ptr<T> r = std::make_shared<T>(std::forward<Args>(args)...);
 
         // tdf#129845 only add to buffer if a relevant buffer time is estimated
         if(r->calculateCombinedHoldCyclesInSeconds() > 0)

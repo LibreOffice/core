@@ -1993,7 +1993,6 @@ private:
 
 public:
     SystemDependentData_GraphicsPath(
-        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
         std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
         bool bNoLineJoin,
         const std::vector< double >* pStroke); // MM01
@@ -2009,11 +2008,10 @@ public:
 }
 
 SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
-    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
     std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
     bool bNoLineJoin,
     const std::vector< double >* pStroke)
-:   basegfx::SystemDependentData(rSystemDependentDataManager),
+:   basegfx::SystemDependentData(Application::GetSystemDependentDataManager()),
     mpGraphicsPath(rpGraphicsPath),
     mbNoLineJoin(bNoLineJoin),
     maStroke()
@@ -2143,7 +2141,6 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
 
         // add to buffering mechanism
         rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            ImplGetSystemDependentDataManager(),
             pGraphicsPath,
             false,
             nullptr);
@@ -2462,7 +2459,6 @@ bool WinSalGraphicsImpl::drawPolyLine(
         if (!bPixelSnapHairline /*tdf#124700*/)
         {
             rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-                ImplGetSystemDependentDataManager(),
                 pGraphicsPath,
                 bNoLineJoin,
                 pStroke);

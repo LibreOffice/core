@@ -1168,6 +1168,11 @@ OutputDevice* Application::GetDefaultDevice()
     return ImplGetDefaultWindow()->GetOutDev();
 }
 
+basegfx::SystemDependentDataManager& Application::GetSystemDependentDataManager()
+{
+    return ImplGetSystemDependentDataManager();
+}
+
 vcl::Window* Application::GetFirstTopLevelWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();

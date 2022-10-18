@@ -1717,4 +1717,11 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
+const basegfx::SystemDependentDataHolder* Bitmap::accessSystemDependentDataHolder() const
+{
+    if(!mxSalBmp)
+        return nullptr;
+    return mxSalBmp->accessSystemDependentDataHolder();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

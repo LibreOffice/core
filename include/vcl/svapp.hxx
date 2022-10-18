@@ -66,6 +66,7 @@ class MouseEvent;
 class GestureEventPan;
 struct ImplSVEvent;
 struct ConvertData;
+namespace basegfx { class SystemDependentDataManager; }
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -827,6 +828,12 @@ public:
      @see GetFocusWindow
     */
     static OutputDevice*        GetDefaultDevice();
+
+    /** access the DataManager for buffering system-dependent data
+
+     @returns the global instance of the SystemDependentDataManager
+    */
+    static basegfx::SystemDependentDataManager& GetSystemDependentDataManager();
 
     /** Get the first top-level window of the application.
 

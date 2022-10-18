@@ -1601,7 +1601,6 @@ private:
 
 public:
     SystemDependentData_Triangulation(
-        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
         basegfx::triangulator::B2DTriangleVector&& rTriangles,
         double fLineWidth,
         basegfx::B2DLineJoin eJoin,
@@ -1623,14 +1622,13 @@ public:
 }
 
 SystemDependentData_Triangulation::SystemDependentData_Triangulation(
-    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
     basegfx::triangulator::B2DTriangleVector&& rTriangles,
     double fLineWidth,
     basegfx::B2DLineJoin eJoin,
     css::drawing::LineCap eCap,
     double fMiterMinimumAngle,
     const std::vector< double >* pStroke)
-:   basegfx::SystemDependentData(rSystemDependentDataManager),
+:   basegfx::SystemDependentData(Application::GetSystemDependentDataManager()),
     maTriangles(std::move(rTriangles)),
     mfLineWidth(fLineWidth),
     meJoin(eJoin),
@@ -1823,7 +1821,6 @@ bool X11SalGraphicsImpl::drawPolyLine(
             // Add all values the triangulation is based off, too, to check for
             // validity (see above)
             pSystemDependentData_Triangulation = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_Triangulation>(
-                ImplGetSystemDependentDataManager(),
                 std::move(aTriangles),
                 fLineWidth,
                 eLineJoin,

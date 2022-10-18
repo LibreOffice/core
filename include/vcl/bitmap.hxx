@@ -87,6 +87,8 @@ class   AlphaMask;
 class   OutputDevice;
 class   SalBitmap;
 
+namespace basegfx { class SystemDependentDataHolder; }
+
 struct BitmapSystemData
 {
     #if defined(_WIN32)
@@ -496,6 +498,9 @@ public:
                                 double fGamma = 1.0,
                                 bool bInvert = false,
                                 bool msoBrightness = false );
+
+    // access to SystemDependentDataHolder, to support overload in derived class(es)
+    const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
 
 public:
     /** ReassignWithSize and recalculate bitmap.

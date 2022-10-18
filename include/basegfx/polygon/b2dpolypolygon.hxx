@@ -128,9 +128,9 @@ namespace basegfx
         }
 
         template<class T, class... Args>
-        std::shared_ptr<T> addOrReplaceSystemDependentData(SystemDependentDataManager& manager, Args&&... args) const
+        std::shared_ptr<T> addOrReplaceSystemDependentData(Args&&... args) const
         {
-            std::shared_ptr<T> r = std::make_shared<T>(manager, std::forward<Args>(args)...);
+            std::shared_ptr<T> r = std::make_shared<T>(std::forward<Args>(args)...);
 
             // tdf#129845 only add to buffer if a relevant buffer time is estimated
             if(r->calculateCombinedHoldCyclesInSeconds() > 0)

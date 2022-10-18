@@ -306,10 +306,10 @@ basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
     return rPolygon.getB2DPoint(nIndex);
 }
 
-SystemDependentData_CairoPath::SystemDependentData_CairoPath(
-    basegfx::SystemDependentDataManager& rSystemDependentDataManager, size_t nSizeMeasure,
-    cairo_t* cr, bool bNoJoin, bool bAntiAlias, const std::vector<double>* pStroke)
-    : basegfx::SystemDependentData(rSystemDependentDataManager)
+SystemDependentData_CairoPath::SystemDependentData_CairoPath(size_t nSizeMeasure, cairo_t* cr,
+                                                             bool bNoJoin, bool bAntiAlias,
+                                                             const std::vector<double>* pStroke)
+    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
     , mpCairoPath(nullptr)
     , mbNoJoin(bNoJoin)
     , mbAntiAlias(bAntiAlias)
@@ -385,7 +385,7 @@ void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon,
         // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
         pSystemDependentData_CairoPath
             = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-                ImplGetSystemDependentDataManager(), nSizeMeasure, cr, false, false, nullptr);
+                nSizeMeasure, cr, false, false, nullptr);
     }
 }
 
@@ -856,8 +856,7 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
         {
             pSystemDependentData_CairoPath
                 = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-                    ImplGetSystemDependentDataManager(), nSizeMeasure, cr, bNoJoin, bAntiAlias,
-                    pStroke);
+                    nSizeMeasure, cr, bNoJoin, bAntiAlias, pStroke);
         }
     }
 

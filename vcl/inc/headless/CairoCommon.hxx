@@ -96,8 +96,7 @@ private:
     std::vector<double> maStroke;
 
 public:
-    SystemDependentData_CairoPath(basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-                                  size_t nSizeMeasure, cairo_t* cr, bool bNoJoin, bool bAntiAlias,
+    SystemDependentData_CairoPath(size_t nSizeMeasure, cairo_t* cr, bool bNoJoin, bool bAntiAlias,
                                   const std::vector<double>* pStroke); // MM01
     virtual ~SystemDependentData_CairoPath() override;
 
