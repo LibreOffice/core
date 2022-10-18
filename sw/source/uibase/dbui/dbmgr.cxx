@@ -1170,6 +1170,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         }
     }
     const bool bIsPDFexport = pStoreToFilter && pStoreToFilter->GetFilterName() == "writer_pdf_Export";
+    const bool bIsMultiFile = bMT_FILE && !bCreateSingleFile;
 
     m_aMergeStatus = MergeStatus::Ok;
 
@@ -1362,7 +1363,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 // Create a copy of the source document and work with that one instead of the source.
                 // If we're not in the single file mode (which requires modifying the document for the merging),
                 // it is enough to do this just once. Currently PDF also has to be treated special.
-                if( !bWorkDocInitialized || bCreateSingleFile || bIsPDFexport )
+                if( !bWorkDocInitialized || bCreateSingleFile || bIsPDFexport || bIsMultiFile )
                 {
                     assert( !xWorkDocSh.Is());
                     pWorkDocOrigDBManager = this;
@@ -1459,6 +1460,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     assert( bNeedsTempFiles );
                     assert( pWorkShell->IsExpFieldsLocked() );
 
+                    if (bIsMultiFile && pWorkDoc->HasInvisibleContent())
+                    {
+                        pWorkDoc->RemoveInvisibleContent();
+                        pWorkShell->CalcLayout();
+                        pWorkShell->ConvertFieldsToText();
+                    }
+
                     // fields are locked, so it's fine to
                     // restore the old / empty DB manager for save
                     pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
@@ -1500,7 +1508,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         }
                     }
                 }
-                if( bCreateSingleFile || bIsPDFexport )
+                if( bCreateSingleFile || bIsPDFexport || bIsMultiFile)
                 {
                     pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
                     xWorkDocSh->DoClose();
@@ -1536,7 +1544,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             if( !bIsPDFexport )
             {
                 pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
-                xWorkDocSh->DoClose();
+                if (xWorkDocSh.Is())
+                    xWorkDocSh->DoClose();
             }
         }
         else if( IsMergeOk() ) // && bCreateSingleFile
