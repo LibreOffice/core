@@ -361,11 +361,19 @@ void SvStream::SetError( ErrCode nErrorCode )
 
 void SvStream::SetEndian( SvStreamEndian nNewFormat )
 {
-    m_nEndian = nNewFormat;
 #ifdef OSL_BIGENDIAN
-    m_isSwap = m_nEndian == SvStreamEndian::LITTLE;
+    m_isSwap = nNewFormat == SvStreamEndian::LITTLE;
 #else
-    m_isSwap = m_nEndian == SvStreamEndian::BIG;
+    m_isSwap = nNewFormat == SvStreamEndian::BIG;
+#endif
+}
+
+SvStreamEndian SvStream::GetEndian() const
+{
+#ifdef OSL_BIGENDIAN
+    return m_isSwap ? SvStreamEndian::LITTLE : SvStreamEndian::BIG;
+#else
+    return m_isSwap ? SvStreamEndian::BIG : SvStreamEndian::LITTLE;
 #endif
 }
 
@@ -709,10 +717,11 @@ bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet
 
 void SvStream::StartWritingUnicodeText()
 {
+    m_isSwap = false; // Switch to no endian swapping
     // BOM, Byte Order Mark, U+FEFF, see
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
-    writeNumberWithoutSwap(sal_uInt16(0xfeff)); // write native format
+    WriteUInt16(0xfeff);
 }
 
 void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )

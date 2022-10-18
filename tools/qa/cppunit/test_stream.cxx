@@ -12,6 +12,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 #include <sstream>
 
 //Tests for eofbit/badbit/goodbit/failbit
@@ -27,6 +28,7 @@ namespace
         void test_read_cstring();
         void test_read_pstring();
         void test_readline();
+        void test_write_unicode();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_stdstream);
@@ -34,6 +36,7 @@ namespace
         CPPUNIT_TEST(test_read_cstring);
         CPPUNIT_TEST(test_read_pstring);
         CPPUNIT_TEST(test_readline);
+        CPPUNIT_TEST(test_write_unicode);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -273,6 +276,43 @@ namespace
         std::getline(issB, sStr, '\n');
         CPPUNIT_ASSERT_EQUAL(std::string("foo"), sStr);
         CPPUNIT_ASSERT(issB.eof());         //<-- diff A
+    }
+
+    void Test::test_write_unicode()
+    {
+        const OUString write("abc");
+        utl::TempFile aTempFile(u"test_write_unicode");
+        aTempFile.EnableKillingFile();
+        {
+            SvStream& s = *aTempFile.GetStream(StreamMode::WRITE);
+            s.SetEndian(SvStreamEndian::BIG);
+            if (!s.IsEndianSwap())
+                s.SetEndian(SvStreamEndian::LITTLE);
+            CPPUNIT_ASSERT(s.IsEndianSwap());
+            // StartWritingUnicodeText must switch to no endian swapping and write 0xfeff
+            s.StartWritingUnicodeText();
+            // Without the fix in place, this would fail
+            CPPUNIT_ASSERT(!s.IsEndianSwap());
+            s.WriteUnicodeOrByteText(write, RTL_TEXTENCODING_UNICODE);
+            aTempFile.CloseStream();
+        }
+        {
+            SvStream& s = *aTempFile.GetStream(StreamMode::READ);
+            s.SetEndian(SvStreamEndian::BIG);
+            if (!s.IsEndianSwap())
+                s.SetEndian(SvStreamEndian::LITTLE);
+            CPPUNIT_ASSERT(s.IsEndianSwap());
+            s.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
+            CPPUNIT_ASSERT(!s.IsEndianSwap());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(2), s.Tell()); // after BOM
+            OUString read;
+            CPPUNIT_ASSERT(s.ReadUniOrByteStringLine(read, RTL_TEXTENCODING_UNICODE));
+            // Without the fix in place, this would fail with
+            // - Expected: abc
+            // - Actual  : 愀戀挀
+            CPPUNIT_ASSERT_EQUAL(write, read);
+            aTempFile.CloseStream();
+        }
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
