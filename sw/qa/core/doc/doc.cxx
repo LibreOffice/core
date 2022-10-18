@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
@@ -325,6 +327,90 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
         comphelper::makePropertyValue("FilterName", OUString("writer8")),
     };
     xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
+}
+
+namespace
+{
+/// This selection listener calls getAnchor() on selection change, which creates UNO cursors and is
+/// invoked in the middle of a bookmark deletion.
+struct SelectionChangeListener : public cppu::WeakImplHelper<view::XSelectionChangeListener>
+{
+    uno::Reference<container::XNameAccess> m_xBookmarks;
+    std::vector<uno::Reference<text::XTextRange>> m_aAnchors;
+
+public:
+    SelectionChangeListener(const uno::Reference<container::XNameAccess>& xBookmarks);
+    // view::XSelectionChangeListener
+    void SAL_CALL selectionChanged(const lang::EventObject& rEvent) override;
+
+    // lang::XEventListener
+    void SAL_CALL disposing(const lang::EventObject& rSource) override;
+};
+}
+
+SelectionChangeListener::SelectionChangeListener(
+    const uno::Reference<container::XNameAccess>& xBookmarks)
+    : m_xBookmarks(xBookmarks)
+{
+}
+
+void SelectionChangeListener::selectionChanged(const lang::EventObject& /*rEvent*/)
+{
+    uno::Sequence<OUString> aElementNames = m_xBookmarks->getElementNames();
+    for (const auto& rName : aElementNames)
+    {
+        uno::Reference<text::XTextContent> xTextContent(m_xBookmarks->getByName(rName),
+                                                        uno::UNO_QUERY);
+        m_aAnchors.push_back(xTextContent->getAnchor());
+    }
+}
+
+void SelectionChangeListener::disposing(const lang::EventObject& /*rSource*/) {}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteListeners)
+{
+    // Given a document with 2 bookmarks:
+    createSwDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    {
+        xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+        xCursor->gotoStart(/*bExpand=*/false);
+        xCursor->gotoEnd(/*bExpand=*/true);
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xBookmark(
+            xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xBookmarkNamed(xBookmark, uno::UNO_QUERY);
+        xBookmarkNamed->setName("mybookmark");
+        xText->insertTextContent(xCursor, xBookmark, /*bAbsorb=*/true);
+    }
+    {
+        xCursor->gotoEnd(/*bExpand=*/false);
+        xText->insertString(xCursor, "test2", /*bAbsorb=*/false);
+        xCursor->goLeft(4, /*bExpand=*/true);
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xBookmark(
+            xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xBookmarkNamed(xBookmark, uno::UNO_QUERY);
+        xBookmarkNamed->setName("mybookmark2");
+        xText->insertTextContent(xCursor, xBookmark, /*bAbsorb=*/true);
+    }
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarks = xBookmarksSupplier->getBookmarks();
+
+    // When registering a selection listener that creates uno marks:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
+                                                         uno::UNO_QUERY);
+    xController->addSelectionChangeListener(new SelectionChangeListener(xBookmarks));
+
+    // Then make sure that deleting a bookmark doesn't crash:
+    uno::Reference<lang::XComponent> xBookmark(xBookmarks->getByName("mybookmark2"),
+                                               uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have crashed, an invalidated iterator
+    // was used with erase().
+    xBookmark->dispose();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

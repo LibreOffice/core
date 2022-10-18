@@ -1285,13 +1285,28 @@ namespace sw::mark
                 // no special marks container
                 break;
         }
-        DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(pMark);
-        if (pDdeBookmark)
-            pDdeBookmark->DeregisterFromDoc(m_rDoc);
         //Effective STL Item 27, get a non-const iterator aI at the same
         //position as const iterator ppMark was
         auto aI = m_vAllMarks.begin();
         std::advance(aI, std::distance<container_t::const_iterator>(aI, ppMark.get()));
+        DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(pMark);
+        if (pDdeBookmark)
+        {
+            pDdeBookmark->DeregisterFromDoc(m_rDoc);
+
+            // Update aI, possibly a selection listener invalidated the iterators of m_vAllMarks.
+            auto [it, endIt] = equal_range(m_vAllMarks.begin(), m_vAllMarks.end(),
+                                           pMark->GetMarkStart(), CompareIMarkStartsBefore());
+            for (; it != endIt; ++it)
+            {
+                if (*it == pMark)
+                {
+                    aI = m_vAllMarks.begin();
+                    std::advance(aI, std::distance<container_t::const_iterator>(aI, it));
+                    break;
+                }
+            }
+        }
 
         m_vAllMarks.erase(aI);
         // If we don't have a lazy deleter
