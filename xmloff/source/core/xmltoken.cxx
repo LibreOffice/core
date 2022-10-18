@@ -3511,6 +3511,8 @@ namespace xmloff::token {
         TOKEN("date-format", XML_DATE_FORMAT),
         TOKEN("date-rfc-language-tag", XML_DATE_RFC_LANGUAGE_TAG),
         TOKEN("plain-text", XML_PLAIN_TEXT),
+        TOKEN("alias", XML_ALIAS),
+        TOKEN("tag", XML_TAG),
 
         TOKEN("fill-use-slide-background", XML_FILL_USE_SLIDE_BACKGROUND),
 

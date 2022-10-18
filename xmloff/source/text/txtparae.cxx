@@ -4036,6 +4036,20 @@ void XMLTextParagraphExport::ExportContentControl(
             sax::Converter::convertBool(aBuffer, bComboBox);
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_COMBOBOX, aBuffer.makeStringAndClear());
         }
+
+        OUString aAlias;
+        xPropertySet->getPropertyValue("Alias") >>= aAlias;
+        if (!aAlias.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_ALIAS, aAlias);
+        }
+
+        OUString aTag;
+        xPropertySet->getPropertyValue("Tag") >>= aTag;
+        if (!aTag.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_TAG, aTag);
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
