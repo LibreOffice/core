@@ -417,6 +417,7 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
 
 void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nStart, tools::Long nTop, tools::Long nBottom)
 {
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     double nCenter = nTop + ((nBottom - nTop) / 2);
 
     tools::Long nTickLength3 = (nBottom - nTop) * 0.5;
@@ -523,7 +524,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
     }
     else
     {
-        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
     }
 
     if (bNoTicks)
@@ -576,6 +577,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
             double aStep = nTick / nTick4;
             double aRest = std::abs(aStep - std::floor(aStep));
             double nAcceptanceDelta = 0.0001;
+            rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
 
             if (aRest < nAcceptanceDelta)
             {
