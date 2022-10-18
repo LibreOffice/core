@@ -2007,6 +2007,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
     if (ePos == StackPosition::Bottom)
     {
         uno::Reference<drawing::XShapes2> xTarget2(static_cast<cppu::OWeakObject*>(xTarget.get()), uno::UNO_QUERY);
+        assert(xTarget2);
         if (xTarget2.is())
             xTarget2->addBottom(xShape);
     }
