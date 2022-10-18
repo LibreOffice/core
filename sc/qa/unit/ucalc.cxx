@@ -454,30 +454,14 @@ void Test::testSharedStringPool()
     CPPUNIT_ASSERT_EQUAL(5+extraCount, rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
-    // Clear A1 and purge again.
+    // Clear A1
     clearRange(m_pDoc, ScAddress(0,0,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(5+extraCount, rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
-
-    // Clear A2 and purge again.
+    // Clear A2
     clearRange(m_pDoc, ScAddress(0,1,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(4+extraCount, rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
-
-    // Clear A3 and purge again.
+    // Clear A3
     clearRange(m_pDoc, ScAddress(0,2,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(3+extraCount, rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
-
-    // Clear A4 and purge again.
+    // Clear A4
     clearRange(m_pDoc, ScAddress(0,3,0));
-    rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(1+extraCount, rPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(1+extraCountIgnoreCase, rPool.getCountIgnoreCase());
-
     // Clear A5 and the pool should be completely empty.
     clearRange(m_pDoc, ScAddress(0,4,0));
     rPool.purge();
