@@ -881,11 +881,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
         case SID_MAIL_PREPAREEXPORT:
         {
+            const SfxPoolItem* pNoUpdate;
+
             //pWrtShell is not set in page preview
             if (m_pWrtShell)
                 m_pWrtShell->StartAllAction();
-            m_xDoc->getIDocumentFieldsAccess().UpdateFields( false );
-            m_xDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+
+            if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1, &pNoUpdate)))
+            {
+                m_xDoc->getIDocumentFieldsAccess().UpdateFields( false );
+                m_xDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+            }
+
             m_IsRemovedInvisibleContent
                 = officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get();
             if (m_IsRemovedInvisibleContent)

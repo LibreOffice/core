@@ -11770,7 +11770,7 @@ SfxVoidItem InsertRowsAfter SID_TABLE_INSERT_ROW_AFTER
 ]
 
 SfxBoolItem PrepareMailExport SID_MAIL_PREPAREEXPORT
-()
+(SfxBoolItem On FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
