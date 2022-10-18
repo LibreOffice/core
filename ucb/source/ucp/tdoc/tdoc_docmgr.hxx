@@ -29,10 +29,12 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 
 #include <map>
 #include <mutex>
+#include <unordered_map>
 #include <utility>
 
 namespace tdoc_ucp {
@@ -44,6 +46,7 @@ namespace tdoc_ucp {
         OUString aTitle;
         css::uno::Reference< css::embed::XStorage > xStorage;
         css::uno::Reference< css::frame::XModel >   xModel;
+        std::unordered_map<OUString, css::util::DateTime> streamDateModified;
 
         StorageInfo() {}; // needed for STL map only.
 
@@ -118,6 +121,10 @@ namespace tdoc_ucp {
 
         OUString
         queryStorageTitle( const OUString & rDocId );
+
+        css::util::DateTime queryStreamDateModified(OUString const & uri);
+
+        void updateStreamDateModified(OUString const & uri);
 
     private:
         void buildDocumentsList();

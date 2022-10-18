@@ -316,7 +316,7 @@ StorageElementFactory::createStream( const OUString & rUri,
     }
 
     return uno::Reference< io::XStream >(
-        new Stream( m_xContext, rUri, xParentStorage, xStream ) );
+        new Stream( m_xContext, m_xDocsMgr, rUri, xParentStorage, xStream ) );
 }
 
 

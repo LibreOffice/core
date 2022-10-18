@@ -39,6 +39,10 @@ namespace com::sun::star::frame {
     class XModel;
 }
 
+namespace com::sun::star::util {
+    struct DateTime;
+}
+
 namespace tdoc_ucp {
 
 
@@ -129,6 +133,8 @@ public:
 
     css::uno::Reference< css::frame::XModel >
     queryDocumentModel( const OUString & rUri ) const;
+
+    css::util::DateTime queryStreamDateModified(OUString const & uri) const;
 
     // interface OfficeDocumentsEventListener
     void notifyDocumentOpened( std::u16string_view rDocId );

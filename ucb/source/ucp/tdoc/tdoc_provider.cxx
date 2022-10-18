@@ -602,4 +602,9 @@ ContentProvider::queryDocumentModel( const OUString & rUri ) const
     return xModel;
 }
 
+
+css::util::DateTime ContentProvider::queryStreamDateModified(OUString const & uri) const {
+    return m_xDocsMgr->queryStreamDateModified(uri);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

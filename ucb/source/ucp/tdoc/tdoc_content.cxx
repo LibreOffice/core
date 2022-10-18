@@ -895,6 +895,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendObject(
                     rProp, uno::Any( rData.getCreatableContentsInfo() ) );
             }
+            else if ( rProp.Name == "DateModified" )
+            {
+                // DateModified is only supported by streams.
+                ContentType eType = rData.getType();
+                if ( eType == STREAM )
+                {
+                    xRow->appendObject(
+                        rProp,
+                        uno::Any(
+                            pProvider->queryStreamDateModified( rContentId ) ) );
+                }
+                else
+                    xRow->appendVoid( rProp );
+            }
             else if ( rProp.Name == "Storage" )
             {
                 // Storage is only supported by folders.
@@ -994,6 +1008,18 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             uno::Any( rData.getCreatableContentsInfo() ) );
+
+        // DateModified is only supported by streams.
+        if ( eType == STREAM )
+        {
+            xRow->appendObject(
+                beans::Property( "DateModified",
+                          -1,
+                          cppu::UnoType<css::util::DateTime>::get(),
+                          beans::PropertyAttribute::BOUND
+                            | beans::PropertyAttribute::READONLY ),
+                uno::Any( pProvider->queryStreamDateModified( rContentId ) ) );
+        }
 
         // Storage is only supported by folders.
         if ( eType == FOLDER )

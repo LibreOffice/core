@@ -20,6 +20,8 @@
 
 #include <rtl/ref.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <sal/log.hxx>
+#include <tools/datetime.hxx>
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -526,6 +528,30 @@ OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
         return OUString();
 
     return (*it).second.aTitle;
+}
+
+
+css::util::DateTime OfficeDocumentsManager::queryStreamDateModified(OUString const & uri) {
+    std::scoped_lock g(m_aMtx);
+    auto const i1 = m_aDocs.find(Uri(uri).getDocumentId());
+    if (i1 != m_aDocs.end()) {
+        auto const i2 = i1->second.streamDateModified.find(uri);
+        if (i2 != i1->second.streamDateModified.end()) {
+            return i2->second;
+        }
+    }
+    return {};
+}
+
+
+void OfficeDocumentsManager::updateStreamDateModified(OUString const & uri) {
+    std::scoped_lock g(m_aMtx);
+    auto const i = m_aDocs.find(Uri(uri).getDocumentId());
+    if (i == m_aDocs.end()) {
+        SAL_WARN("ucb.ucp.tdoc", "No document info for <" << uri << ">");
+        return;
+    }
+    i->second.streamDateModified[uri] = DateTime(DateTime::SYSTEM).GetUNODateTime();
 }
 
 

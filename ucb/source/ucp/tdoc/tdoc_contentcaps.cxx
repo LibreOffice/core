@@ -34,6 +34,7 @@
     IsFolder            r       r       r       r       r       r
     Title               r       r       w       w       w       w
     CreatableContentsInfo r     r       r       r       r       r
+    DateModified        -       -       -       -       r       r
     Storage             -       -       r       r       -       -
     DocumentModel       -       r       -       -       -       -
 
@@ -58,6 +59,7 @@
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include "tdoc_content.hxx"
@@ -136,6 +138,13 @@ uno::Sequence< beans::Property > Content::getProperties(
                 "CreatableContentsInfo",
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
+            ),
+            beans::Property(
+                "DateModified",
+                -1,
+                cppu::UnoType<css::util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             )

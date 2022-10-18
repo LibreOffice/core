@@ -37,6 +37,8 @@
 
 namespace tdoc_ucp {
 
+class OfficeDocumentsManager;
+
 class ParentStorageHolder
 {
 public:
@@ -246,6 +248,7 @@ class Stream : public StreamUNOBase, public ParentStorageHolder
 public:
     Stream(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        rtl::Reference<OfficeDocumentsManager> const & docsMgr,
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
         const css::uno::Reference< css::io::XStream > & xStreamToWrap );
@@ -315,6 +318,8 @@ private:
     /// @throws css::io::IOException
     void commitChanges();
 
+    rtl::Reference<OfficeDocumentsManager> m_docsMgr;
+    OUString m_uri;
     css::uno::Reference<
         css::uno::XAggregation >     m_xAggProxy;
     css::uno::Reference<
