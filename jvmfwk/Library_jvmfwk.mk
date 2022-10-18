@@ -58,9 +58,11 @@ $(eval $(call gb_Library_add_cxxflags,jvmfwk,\
     $(gb_OBJCXXFLAGS) \
 ))
 
+ifeq ($(CPUNAME),X86_64)
 $(eval $(call gb_Library_add_objcxxobjects,jvmfwk,\
     jvmfwk/plugins/sunmajor/pluginlib/util_cocoa \
 ))
+endif
 
 $(eval $(call gb_Library_add_libs,jvmfwk,\
     -framework Foundation \

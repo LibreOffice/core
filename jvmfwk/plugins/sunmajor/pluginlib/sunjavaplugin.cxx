@@ -72,7 +72,7 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
-#ifdef MACOSX
+#if defined MACOSX && defined __x86_64__
 #include "util_cocoa.hxx"
 #endif
 
@@ -625,7 +625,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         return javaPluginError::VmCreationFailed;
 #endif
     OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-#ifdef MACOSX
+#if defined MACOSX && defined __x86_64__
     if ( !JvmfwkUtil_isLoadableJVM( sRuntimeLib ) )
         return javaPluginError::VmCreationFailed;
 #endif
