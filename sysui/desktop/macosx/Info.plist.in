@@ -1961,6 +1961,10 @@
     <true/>
     <key>NSContactsUsageDescription</key>
     <string>You can add your contacts as a data source for mail merge or similar operations.</string>
+    <key>DTXcodeBuild</key>
+    <string>@MACOSX_XCODE_BUILD_VERSION@</string>
+    <key>DTSDKBuild</key>
+    <string>@MACOSX_SDK_BUILD_VERSION@</string>
 </dict>
 </plist>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab: -->
