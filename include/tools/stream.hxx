@@ -161,7 +161,6 @@ private:
     bool            m_isSwap;
     bool            m_isEof;
     ErrCode         m_nError;
-    SvStreamEndian  m_nEndian;
     SvStreamCompressFlags m_nCompressMode;
     LineEnd         m_eLineDelimiter;
     rtl_TextEncoding m_eStreamCharSet;
@@ -207,7 +206,7 @@ public:
     virtual void    ResetError();
 
     void            SetEndian( SvStreamEndian SvStreamEndian );
-    SvStreamEndian  GetEndian() const { return m_nEndian; }
+    SvStreamEndian  GetEndian() const;
     /// returns status of endian swap flag
     bool            IsEndianSwap() const { return m_isSwap; }
 

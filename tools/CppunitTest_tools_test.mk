@@ -63,6 +63,7 @@ $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
     tl \
     test \
     unotest \
+    utl \
     vcl \
 ))
 
