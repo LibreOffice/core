@@ -70,6 +70,7 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <editeng/acorrcfg.hxx>
+#include <bookmark.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <edtdd.hxx>
 #include <edtwin.hxx>
@@ -1888,6 +1889,13 @@ KEYINPUT_CHECKTABLE:
                     bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
                     if(!bMod1)
                     {
+                        ::sw::mark::IFieldmark* pMark = rSh.GetCurrentFieldmark();
+                        if (auto pDropDown = dynamic_cast<FieldmarkWithDropDownButton*>(pMark))
+                        {
+                            pDropDown->LaunchPopup();
+                            eKeyState = SwKeyState::End;
+                            break;
+                        }
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_DOWN_BIG;
                     }

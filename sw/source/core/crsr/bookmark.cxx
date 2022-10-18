@@ -661,6 +661,15 @@ namespace sw::mark
             m_pButton.disposeAndClear();
     }
 
+    void FieldmarkWithDropDownButton::LaunchPopup()
+    {
+        if (!m_pButton)
+            return
+
+        m_pButton->Invalidate();
+        m_pButton->LaunchPopup();
+    }
+
     DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM, const OUString& rName)
         : FieldmarkWithDropDownButton(rPaM)
     {
