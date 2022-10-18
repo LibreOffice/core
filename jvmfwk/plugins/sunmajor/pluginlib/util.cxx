@@ -47,7 +47,7 @@
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
 #include "diagnostics.h"
-#ifdef MACOSX
+#if defined MACOSX && defined __x86_64__
 #include "util_cocoa.hxx"
 #endif
 
@@ -376,8 +376,10 @@ bool getJavaProps(const OUString & exePath,
     }
 
 #ifdef MACOSX
+#if defined __x86_64__
     if (!JvmfwkUtil_isLoadableJVM(exePath))
         return false;
+#endif
     if (sClassPath.endsWith("/"))
         sClassPath += "../Resources/java/";
     else
