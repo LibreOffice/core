@@ -3,7 +3,6 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <scdll.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
 #include "helper/qahelper.hxx"
@@ -22,11 +21,9 @@
 using namespace css;
 using namespace css::uno;
 
-class ScParallelismTest : public test::BootstrapFixture
+class ScParallelismTest : public ScSimpleBootstrapFixture
 {
 public:
-    ScParallelismTest();
-
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -78,15 +75,8 @@ private:
     static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
     static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
 
-    ScDocument *m_pDoc;
-
-    ScDocShellRef m_xDocShell;
     bool m_bThreadingFlagCfg;
 };
-
-ScParallelismTest::ScParallelismTest()
-{
-}
 
 bool ScParallelismTest::getThreadingFlag() const
 {
@@ -143,15 +133,7 @@ void ScParallelismTest::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDest
 
 void ScParallelismTest::setUp()
 {
-    test::BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_pDoc = &m_xDocShell->GetDocument();
+    ScSimpleBootstrapFixture::setUp();
 
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
 
@@ -166,10 +148,7 @@ void ScParallelismTest::tearDown()
     if (!m_bThreadingFlagCfg)
         setThreadingFlag(false);
 
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
+    ScSimpleBootstrapFixture::tearDown();
 }
 
 void ScParallelismTest::testSUMIFS()

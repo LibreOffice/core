@@ -12,7 +12,6 @@
 
 #include <svl/asiancfg.hxx>
 
-#include <scdll.hxx>
 #include <simpleformulacalc.hxx>
 #include <stringutil.hxx>
 #include <scmatrix.hxx>
@@ -68,20 +67,13 @@
 class ScUndoPaste;
 class ScUndoCut;
 
-class Test : public test::BootstrapFixture
+class Test : public ScSimpleBootstrapFixture
 {
 public:
-    Test();
-
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
 
     /** Get a separate new ScDocShell with ScDocument that suits unit test needs. */
     void getNewDocShell(ScDocShellRef& rDocShellRef);
-    /** Close such new ScDocShell. */
-    void closeDocShell(ScDocShellRef& rDocShellRef);
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
 
     void testCollator();
     void testSharedStringPool();
@@ -330,15 +322,7 @@ public:
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
     CPPUNIT_TEST(testInsertColumnsWithFormulaCells);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
-
-Test::Test()
-{
-}
 
 void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
 {
@@ -349,28 +333,6 @@ void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
 
     rDocShellRef->SetIsInUcalc();
     rDocShellRef->DoInitUnitTest();
-}
-
-void Test::closeDocShell( ScDocShellRef& rDocShellRef )
-{
-    rDocShellRef->DoClose();
-    rDocShellRef.clear();
-}
-
-void Test::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    getNewDocShell(m_xDocShell);
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void Test::tearDown()
-{
-    closeDocShell(m_xDocShell);
-    BootstrapFixture::tearDown();
 }
 
 void Test::testCollator()
@@ -1127,7 +1089,8 @@ void Test::testCopyToDocument()
             m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(), pDestDoc->GetNote(ScAddress(0, 0, 0))->GetText());
 
     pDestDoc->DeleteTab(0);
-    closeDocShell(xDocSh2);
+    xDocSh2->DoClose();
+    xDocSh2.clear();
 
     m_pDoc->DeleteTab(0);
 }
@@ -5261,7 +5224,8 @@ void Test::testNoteLifeCycle()
         aClipDoc2.ClosingClipboardSource();
 
         pDoc2->DeleteTab(0);
-        closeDocShell(xDocSh2);
+        xDocSh2->DoClose();
+        xDocSh2.clear();
 
         pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash... tdf#104967
         ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);

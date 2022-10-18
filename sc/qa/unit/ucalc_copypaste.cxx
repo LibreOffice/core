@@ -25,23 +25,16 @@
 #include <postit.hxx>
 #include <queryparam.hxx>
 #include <refundo.hxx>
-#include <scdll.hxx>
 #include <scitems.hxx>
 #include <scopetools.hxx>
 
-#include <test/bootstrapfixture.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <memory>
 
-class TestCopyPaste : public test::BootstrapFixture
+class TestCopyPaste : public ScSimpleBootstrapFixture
 {
 public:
-    TestCopyPaste();
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
@@ -250,9 +243,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
-
     enum CalcMode
     {
         NoCalc,
@@ -325,31 +315,6 @@ private:
     ScAddress setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString noteText);
     OUString getNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
 };
-
-TestCopyPaste::TestCopyPaste() {}
-
-void TestCopyPaste::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell
-        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
-                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void TestCopyPaste::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
-}
 
 static ScMF lcl_getMergeFlagOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {

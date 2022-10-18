@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include <clipparam.hxx>
@@ -24,7 +23,6 @@
 #include <docpool.hxx>
 #include <docoptio.hxx>
 #include <externalrefmgr.hxx>
-#include <scdll.hxx>
 #include <scmod.hxx>
 #include <undomanager.hxx>
 
@@ -188,14 +186,9 @@ public:
 
 }
 
-class TestFormula : public test::BootstrapFixture
+class TestFormula : public ScSimpleBootstrapFixture
 {
 public:
-    TestFormula();
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testFormulaCreateStringFromTokens();
     void testFormulaParseReference();
     void testFetchVectorRefArray();
@@ -437,39 +430,7 @@ public:
     CPPUNIT_TEST(testFuncJumpMatrixArrayOFFSET);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
-
-TestFormula::TestFormula()
-{
-}
-
-void TestFormula::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void TestFormula::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void TestFormula::testFormulaCreateStringFromTokens()
 {

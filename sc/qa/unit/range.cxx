@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include "helper/qahelper.hxx"
 #include <unotools/configmgr.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
@@ -19,12 +19,9 @@
 #include <rangeutl.hxx>
 #include <refupdatecontext.hxx>
 
-class ScRangeTest : public test::BootstrapFixture
+class ScRangeTest : public ScSimpleBootstrapFixture
 {
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     CPPUNIT_TEST_SUITE(ScRangeTest);
     CPPUNIT_TEST(testOverlap);
     CPPUNIT_TEST(testRangeParsing);
@@ -36,9 +33,6 @@ public:
     void testRangeParsing();
     void testAddressParsing();
     void testTdf147451();
-
-private:
-    ScDocShellRef m_xDocShRef;
 };
 
 void ScRangeTest::testOverlap()
@@ -63,44 +57,23 @@ void ScRangeTest::testOverlap()
 void ScRangeTest::testRangeParsing()
 {
     ScRange aRange;
-    ScDocument& rDoc = m_xDocShRef->GetDocument();
-    ScRefFlags nRes = aRange.Parse(":1", rDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aRange.Parse(":1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
 void ScRangeTest::testAddressParsing()
 {
     ScAddress aAddr;
-    ScDocument& rDoc = m_xDocShRef->GetDocument();
-    ScRefFlags nRes = aAddr.Parse("1", rDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aAddr.Parse("1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
 void ScRangeTest::testTdf147451()
 {
     ScAddress aAddr;
-    ScDocument& rDoc = m_xDocShRef->GetDocument();
     // "Sheet1" is technically a valid address like "XF1", but it should overflow.
-    ScRefFlags nRes = aAddr.Parse("Sheet1", rDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aAddr.Parse("Sheet1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
-}
-
-void ScRangeTest::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-    m_xDocShRef = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-}
-
-void ScRangeTest::tearDown()
-{
-    m_xDocShRef->DoClose();
-    m_xDocShRef.clear();
-    BootstrapFixture::tearDown();
 }
 
 class ScRangeUpdaterTest : public CppUnit::TestFixture

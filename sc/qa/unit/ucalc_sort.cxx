@@ -11,7 +11,6 @@
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
-#include <scdll.hxx>
 #include <postit.hxx>
 #include <sortparam.hxx>
 #include <dbdata.hxx>
@@ -32,14 +31,9 @@
 #include <svx/svdpage.hxx>
 #include <rtl/math.hxx>
 
-class TestSort : public test::BootstrapFixture
+class TestSort : public ScSimpleBootstrapFixture
 {
 public:
-    TestSort();
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testSort();
     void testSortHorizontal();
     void testSortHorizontalWholeColumn();
@@ -86,40 +80,7 @@ public:
     CPPUNIT_TEST(testQueryBinarySearch);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
-
-
-TestSort::TestSort()
-{
-}
-
-void TestSort::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void TestSort::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void TestSort::testSort()
 {

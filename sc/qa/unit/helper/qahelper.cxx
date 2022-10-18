@@ -40,6 +40,7 @@
 #include <sfx2/frame.hxx>
 #include <undoblk.hxx>
 #include <unotools/tempfile.hxx>
+#include <scdll.hxx>
 #include <scitems.hxx>
 #include <stringutil.hxx>
 #include <tokenarray.hxx>
@@ -925,6 +926,29 @@ void ScBootstrapFixture::setUp()
 void ScBootstrapFixture::tearDown()
 {
     uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
+    test::BootstrapFixture::tearDown();
+}
+
+void ScSimpleBootstrapFixture::setUp()
+{
+    BootstrapFixture::setUp();
+
+    ScDLL::Init();
+
+    m_xDocShell
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell->SetIsInUcalc();
+    m_xDocShell->DoInitUnitTest();
+
+    m_pDoc = &m_xDocShell->GetDocument();
+}
+
+void ScSimpleBootstrapFixture::tearDown()
+{
+    m_xDocShell->DoClose();
+    m_xDocShell.clear();
+
     test::BootstrapFixture::tearDown();
 }
 

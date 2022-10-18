@@ -8,7 +8,6 @@
  */
 
 #include <rtl/math.hxx>
-#include <scdll.hxx>
 #include "helper/qahelper.hxx"
 #include <dpshttab.hxx>
 #include <dpobject.hxx>
@@ -191,14 +190,9 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 
 }
 
-class TestPivottable : public test::BootstrapFixture
+class TestPivottable : public ScSimpleBootstrapFixture
 {
 public:
-    TestPivottable();
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     /**
      * Basic test for pivot tables.
      */
@@ -310,39 +304,7 @@ public:
     CPPUNIT_TEST(testPivotTableMedianFunc);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
-
-TestPivottable::TestPivottable()
-{
-}
-
-void TestPivottable::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void TestPivottable::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void TestPivottable::testPivotTable()
 {

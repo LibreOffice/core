@@ -19,23 +19,16 @@
 #include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <bcaslot.hxx>
-#include <scdll.hxx>
 #include <undomanager.hxx>
 
 #include <sfx2/docfile.hxx>
-#include <test/bootstrapfixture.hxx>
 
 #include <memory>
 #include <string_view>
 
-class TestSharedFormula : public test::BootstrapFixture
+class TestSharedFormula : public ScSimpleBootstrapFixture
 {
 public:
-    TestSharedFormula();
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testSharedFormulas();
     void testSharedFormulasRefUpdate();
     void testSharedFormulasRefUpdateMove();
@@ -95,40 +88,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaInsertShift);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
-
-
-TestSharedFormula::TestSharedFormula()
-{
-}
-
-void TestSharedFormula::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void TestSharedFormula::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void TestSharedFormula::testSharedFormulas()
 {

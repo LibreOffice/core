@@ -15,7 +15,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <docfunc.hxx>
-#include <scdll.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <fillinfo.hxx>
@@ -87,14 +86,9 @@ sal_uInt32 addSingleCellCondFormat(ScDocument* pDoc, const ScAddress& rAddr, sal
 }
 
 
-class TestCondformat : public test::BootstrapFixture
+class TestCondformat : public ScSimpleBootstrapFixture
 {
 public:
-    TestCondformat();
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testCondFormatINSDEL();
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
@@ -176,39 +170,7 @@ public:
     CPPUNIT_TEST(testFormulaListenerUpdateDeleteTab);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument* m_pDoc;
 };
-
-TestCondformat::TestCondformat()
-{
-}
-
-void TestCondformat::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-
-    m_pDoc = &m_xDocShell->GetDocument();
-}
-
-void TestCondformat::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void TestCondformat::testCondFormatINSDEL()
 {

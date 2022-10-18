@@ -12,18 +12,14 @@
 #include "helper/qahelper.hxx"
 #include <document.hxx>
 #include <datatransformation.hxx>
-#include <scdll.hxx>
 #include <svl/numformat.hxx>
 #include <tools/time.hxx>
 
-class ScDataTransformationTest : public test::BootstrapFixture
+class ScDataTransformationTest : public ScSimpleBootstrapFixture
 {
 public:
 
-    ScDataTransformationTest();
-
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     void testColumnRemove();
     void testColumnSplit();
@@ -112,10 +108,6 @@ public:
     CPPUNIT_TEST(testGetMinute);
     CPPUNIT_TEST(testGetSecond);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocShellRef m_xDocShell;
-    ScDocument *m_pDoc;
 };
 
 void ScDataTransformationTest::testColumnRemove()
@@ -1000,32 +992,10 @@ void ScDataTransformationTest::testGetSecond()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(49, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-ScDataTransformationTest::ScDataTransformationTest() :
-    m_pDoc(nullptr)
-{
-}
-
 void ScDataTransformationTest::setUp()
 {
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-    m_xDocShell->SetIsInUcalc();
-    m_xDocShell->DoInitUnitTest();
-    m_pDoc = &m_xDocShell->GetDocument();
+    ScSimpleBootstrapFixture::setUp();
     m_pDoc->InsertTab(0, "Tab");
-}
-
-void ScDataTransformationTest::tearDown()
-{
-    m_xDocShell->DoClose();
-    m_xDocShell.clear();
-    BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataTransformationTest);

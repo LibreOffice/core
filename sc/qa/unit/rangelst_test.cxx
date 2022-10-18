@@ -8,23 +8,14 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include "helper/qahelper.hxx"
 #include <docsh.hxx>
-#include <scdll.hxx>
 
 #include <rangelst.hxx>
 
-class Test : public test::BootstrapFixture
+class Test : public ScSimpleBootstrapFixture
 {
 public:
-    Test()
-        : m_pDoc(nullptr)
-    {
-    }
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void testDeleteArea_4Ranges();
     void testDeleteArea_3Ranges();
     void testDeleteArea_3Ranges_Case2();
@@ -84,31 +75,7 @@ public:
     CPPUNIT_TEST(testInsertRow);
     CPPUNIT_TEST(testInsertCol);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    ScDocument *m_pDoc;
-    ScDocShellRef m_xDocShRef;
 };
-
-void Test::setUp()
-{
-    BootstrapFixture::setUp();
-
-    ScDLL::Init();
-    m_xDocShRef = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-    m_pDoc = &m_xDocShRef->GetDocument();
-}
-
-void Test::tearDown()
-{
-    m_xDocShRef->DoClose();
-    m_xDocShRef.clear();
-    BootstrapFixture::tearDown();
-}
 
 void Test::testDeleteArea_4Ranges()
 {

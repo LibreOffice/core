@@ -236,6 +236,17 @@ public:
     virtual void tearDown() override;
 };
 
+class SCQAHELPER_DLLPUBLIC ScSimpleBootstrapFixture : public test::BootstrapFixture
+{
+public:
+    virtual void setUp() override;
+    virtual void tearDown() override;
+
+protected:
+    ScDocShellRef m_xDocShell;
+    ScDocument* m_pDoc;
+};
+
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \
     CPPUNIT_ASSERT_DOUBLES_EQUAL( (expected), (result), 1e-14 )
 
