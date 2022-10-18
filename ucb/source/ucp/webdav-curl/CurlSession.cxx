@@ -1404,6 +1404,13 @@ auto CurlProcessor::ProcessRequest(
                             }
                         }
                         SAL_INFO("ucb.ucp.webdav.curl", "403 fallback authentication hack");
+                        // disable 302 redirect
+                        pRequestHeaderList.reset(curl_slist_append(
+                            pRequestHeaderList.release(), "X-FORMS_BASED_AUTH_ACCEPTED: f"));
+                        if (!pRequestHeaderList)
+                        {
+                            throw uno::RuntimeException("curl_slist_append failed");
+                        }
                     }
                         [[fallthrough]]; // SP, no cookie, or cookie failed: try NTLM
                     case SC_UNAUTHORIZED:
