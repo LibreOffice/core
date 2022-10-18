@@ -205,6 +205,7 @@ public:
             ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence() override;
+    ScChart2DataSequence(ScDocument* pDoc, const ScChart2DataSequence&);
     ScChart2DataSequence(const ScChart2DataSequence&) = delete;
     ScChart2DataSequence& operator=(const ScChart2DataSequence&) = delete;
 
@@ -324,8 +325,6 @@ private:
 
     void StopListeningToAllExternalRefs();
 
-    void CopyData(const ScChart2DataSequence& r);
-
 private:
 
     // data array
@@ -350,8 +349,10 @@ private:
         ScChart2DataSequence& mrParent;
     };
 
-    /** This vector contains the cached data which was calculated with BuildDataCache(). */
-    std::vector<Item>           m_aDataArray;
+    /** This vector contains the cached data which was calculated with BuildDataCache().
+        We use a shared_ptr because chart likes to Clone this class, which is very
+        expensive when we have lots of data. */
+    std::shared_ptr<std::vector<Item>> m_xDataArray;
 
     /**
      * Cached data for getData.  We may also need to cache data for the

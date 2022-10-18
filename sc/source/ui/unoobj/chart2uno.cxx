@@ -2409,7 +2409,8 @@ void ScChart2DataSequence::HiddenRangeListener::notify()
 ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
         vector<ScTokenRef>&& rTokens,
         bool bIncludeHiddenCells )
-    : m_bIncludeHiddenCells( bIncludeHiddenCells)
+    : m_xDataArray(new std::vector<Item>)
+    , m_bIncludeHiddenCells( bIncludeHiddenCells)
     , m_nObjectId( 0 )
     , m_pDocument( pDoc)
     , m_aTokens(std::move(rTokens))
@@ -2437,6 +2438,54 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
 //      m_aIdentifier = "ID_";
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += OUString::valueOf( ++nID);
+}
+
+/** called from Clone() */
+ScChart2DataSequence::ScChart2DataSequence(ScDocument* pDoc, const ScChart2DataSequence& r)
+    : m_xDataArray(r.m_xDataArray)
+    , m_aHiddenValues(r.m_aHiddenValues)
+    , m_aRole(r.m_aRole)
+    , m_bIncludeHiddenCells( r.m_bIncludeHiddenCells)
+    , m_nObjectId( 0 )
+    , m_pDocument( pDoc)
+    , m_aPropSet(lcl_GetDataSequencePropertyMap())
+    , m_bGotDataChangedHint(false)
+    , m_bExtDataRebuildQueued(false)
+    , mbTimeBased(false)
+    , mnTimeBasedStart(0)
+    , mnTimeBasedEnd(0)
+    , mnCurrentTab(0)
+{
+    assert(pDoc);
+
+    // Clone tokens.
+    m_aTokens.reserve(r.m_aTokens.size());
+    for (const auto& rxToken : m_aTokens)
+    {
+        ScTokenRef p(rxToken->Clone());
+        m_aTokens.push_back(p);
+    }
+
+    m_pDocument->AddUnoObject( *this);
+    m_nObjectId = m_pDocument->GetNewUnoId();
+
+    if (r.m_oRangeIndices)
+        m_oRangeIndices = *r.m_oRangeIndices;
+
+    if (!r.m_pExtRefListener)
+        return;
+
+    // Re-register all external files that the old instance was
+    // listening to.
+
+    ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
+    m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
+    const std::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
+    for (const auto& rFileId : rFileIds)
+    {
+        pRefMgr->addLinkListener(rFileId, m_pExtRefListener.get());
+        m_pExtRefListener->addFileId(rFileId);
+    }
 }
 
 ScChart2DataSequence::~ScChart2DataSequence()
@@ -2492,7 +2541,7 @@ void ScChart2DataSequence::BuildDataCache()
 {
     m_bExtDataRebuildQueued = false;
 
-    if (!m_aDataArray.empty())
+    if (!m_xDataArray->empty())
         return;
 
     StopListeningToAllExternalRefs();
@@ -2569,7 +2618,7 @@ void ScChart2DataSequence::BuildDataCache()
 
                         aItem.mAddress = ScAddress(nCol, nRow, nTab);
 
-                        m_aDataArray.push_back(std::move(aItem));
+                        m_xDataArray->push_back(std::move(aItem));
                         ++nDataCount;
                     }
                 }
@@ -2590,7 +2639,7 @@ void ScChart2DataSequence::RebuildDataCache()
 {
     if (!m_bExtDataRebuildQueued)
     {
-        m_aDataArray.clear();
+        m_xDataArray.reset(new std::vector<Item>);
         m_pDocument->BroadcastUno(ScHint(SfxHintId::ScDataChanged, ScAddress()));
         m_bExtDataRebuildQueued = true;
         m_bGotDataChangedHint = true;
@@ -2616,6 +2665,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
     pRefMgr->addLinkListener(nFileId, pExtRefListener);
     pExtRefListener->addFileId(nFileId);
 
+    m_xDataArray.reset(new std::vector<Item>);
     ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false);
     sal_Int32 nDataCount = 0;
     FormulaTokenArrayPlainIterator aIter(*pArray);
@@ -2662,7 +2712,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                         pFormatter->GetOutputString(fVal, nFmt, aItem.maString, &pColor);
                     }
 
-                    m_aDataArray.push_back(aItem);
+                    m_xDataArray->push_back(std::move(aItem));
                     ++nDataCount;
                 }
                 else if (pMat->IsStringOrEmpty(nC, nR))
@@ -2672,7 +2722,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     aItem.mbIsValue = false;
                     aItem.maString = pMat->GetString(nC, nR).getString();
 
-                    m_aDataArray.emplace_back(aItem);
+                    m_xDataArray->push_back(std::move(aItem));
                     ++nDataCount;
                 }
             }
@@ -2724,38 +2774,6 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
     m_pExtRefListener.reset();
 }
 
-void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
-{
-    if (!m_pDocument)
-    {
-        OSL_FAIL("document instance is nullptr!?");
-        return;
-    }
-
-    std::vector<Item> aDataArray(r.m_aDataArray);
-    m_aDataArray.swap(aDataArray);
-
-    m_aHiddenValues = r.m_aHiddenValues;
-    m_aRole = r.m_aRole;
-
-    if (r.m_oRangeIndices)
-        m_oRangeIndices = *r.m_oRangeIndices;
-
-    if (!r.m_pExtRefListener)
-        return;
-
-    // Re-register all external files that the old instance was
-    // listening to.
-
-    ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
-    m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
-    const std::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
-    for (const auto& rFileId : rFileIds)
-    {
-        pRefMgr->addLinkListener(rFileId, m_pExtRefListener.get());
-        m_pExtRefListener->addFileId(rFileId);
-    }
-}
 
 void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
@@ -2845,7 +2863,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
             if ( m_bGotDataChangedHint && m_pDocument )
             {
-                m_aDataArray.clear();
+                m_xDataArray.reset(new std::vector<Item>);
                 lang::EventObject aEvent;
                 aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
 
@@ -2869,7 +2887,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         else if (nId == SfxHintId::ScClearCache)
         {
             // necessary after import
-            m_aDataArray.clear();
+            m_xDataArray.reset(new std::vector<Item>);
         }
     }
 }
@@ -2940,10 +2958,10 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
     {
         // Build a cache for the 1st time...
 
-        sal_Int32 nCount = m_aDataArray.size();
+        sal_Int32 nCount = m_xDataArray->size();
         m_aMixedDataCache.realloc(nCount);
         uno::Any* pArr = m_aMixedDataCache.getArray();
-        for (const Item &rItem : m_aDataArray)
+        for (const Item &rItem : *m_xDataArray)
         {
             if (rItem.mbIsValue)
                 *pArr <<= rItem.mfValue;
@@ -2973,10 +2991,10 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 
     BuildDataCache();
 
-    sal_Int32 nCount = m_aDataArray.size();
+    sal_Int32 nCount = m_xDataArray->size();
     uno::Sequence<double> aSeq(nCount);
     double* pArr = aSeq.getArray();
-    for (const Item& rItem : m_aDataArray)
+    for (const Item& rItem : *m_xDataArray)
     {
         *pArr = rItem.mbIsValue ? rItem.mfValue : std::numeric_limits<double>::quiet_NaN();
         ++pArr;
@@ -2996,12 +3014,12 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
 
     BuildDataCache();
 
-    sal_Int32 nCount = m_aDataArray.size();
+    sal_Int32 nCount = m_xDataArray->size();
     if ( nCount > 0 )
     {
         aSeq =  uno::Sequence<OUString>(nCount);
         OUString* pArr = aSeq.getArray();
-        for (const Item& rItem : m_aDataArray)
+        for (const Item& rItem : *m_xDataArray)
         {
             *pArr = rItem.maString;
             ++pArr;
@@ -3182,7 +3200,7 @@ sal_uInt32 getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
     {
         // return format of first non-empty cell
         // TODO: use nicer heuristic
-        for (const Item& rItem : m_aDataArray)
+        for (const Item& rItem : *m_xDataArray)
         {
             ScRefCellValue aCell(*m_pDocument, rItem.mAddress);
             if (!aCell.isEmpty() && aCell.hasNumeric())
@@ -3195,13 +3213,13 @@ sal_uInt32 getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
         return 0;
     }
 
-    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= m_aDataArray.size())
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= m_xDataArray->size())
     {
         SAL_WARN("sc.ui", "Passed invalid index to getNumberFormatKeyByIndex(). Will return default value '0'.");
         return 0;
     }
 
-    return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, m_aDataArray.at(nIndex).mAddress));
+    return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, m_xDataArray->at(nIndex).mAddress));
 }
 
 // XCloneable ================================================================
@@ -3210,17 +3228,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
 {
     SolarMutexGuard aGuard;
 
-    // Clone tokens.
-    vector<ScTokenRef> aTokensNew;
-    aTokensNew.reserve(m_aTokens.size());
-    for (const auto& rxToken : m_aTokens)
-    {
-        ScTokenRef p(rxToken->Clone());
-        aTokensNew.push_back(p);
-    }
-
-    rtl::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, std::move(aTokensNew), m_bIncludeHiddenCells));
-    p->CopyData(*this);
+    rtl::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, *this));
     return p;
 }
 
@@ -3327,7 +3335,7 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
         if ( !(rValue >>= m_bIncludeHiddenCells))
             throw lang::IllegalArgumentException();
         if( bOldValue != m_bIncludeHiddenCells )
-            m_aDataArray.clear();//data array is dirty now
+            m_xDataArray.reset(new std::vector<Item>);//data array is dirty now
     }
     else if( rPropertyName == "TimeBased" )
     {
