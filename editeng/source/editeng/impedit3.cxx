@@ -749,7 +749,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     ImplInitLayoutMode( GetRefDevice(), nPara, nIndex );
 
-    std::unique_ptr<long[]> pBuf(new long[ pNode->Len() ]);
+    std::unique_ptr<long[]> pCharPositionArray(new long[ pNode->Len() ]);
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1146,7 +1146,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if (bContinueLastPortion)
                 {
                      Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() ));
+                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pCharPositionArray.get() ));
                      pPortion->adjustSize(aSize.Width(), 0);
                      if (pPortion->GetSize().Height() < aSize.Height())
                          pPortion->setHeight(aSize.Height());
@@ -1154,7 +1154,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 else
                 {
                     auto aSize = aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() );
+                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pCharPositionArray.get() );
                     pPortion->SetSize(aSize);
                 }
 
@@ -1169,7 +1169,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // => Always simply quick inserts.
                 size_t nPos = nTmpPos - pLine->GetStart();
                 EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                rArray.insert( rArray.begin() + nPos, pBuf.get(), pBuf.get() + nPortionLen);
+                rArray.insert( rArray.begin() + nPos, pCharPositionArray.get(), pCharPositionArray.get() + nPortionLen);
 
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
@@ -1652,7 +1652,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     if ( bLineBreak )
         CreateAndInsertEmptyLine( pParaPortion );
 
-    pBuf.reset();
+    pCharPositionArray.reset();
 
     bool bHeightChanged = FinishCreateLines( pParaPortion );
 
