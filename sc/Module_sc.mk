@@ -70,6 +70,7 @@ endif
 endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
+	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_cond_format_merge \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_html_export_test \
@@ -121,7 +122,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_4 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
-	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_annotationobj \
 	CppunitTest_sc_annotationshapeobj \
 	CppunitTest_sc_annotationsobj \
