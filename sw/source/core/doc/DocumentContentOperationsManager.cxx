@@ -2199,7 +2199,9 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
 
         SwContentNode *pTmpNode = rPam.GetPoint()->GetNode().GetContentNode();
         bool bGoNext = (nullptr == pTmpNode);
-        rPam.GetMark()->SetContent( 0 );
+
+        if (rPam.GetMark()->GetContentNode())
+            rPam.GetMark()->SetContent( 0 );
 
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
 
