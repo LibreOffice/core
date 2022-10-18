@@ -3501,6 +3501,8 @@ namespace xmloff::token {
         XML_DATE_FORMAT,
         XML_DATE_RFC_LANGUAGE_TAG,
         XML_PLAIN_TEXT,
+        XML_ALIAS,
+        XML_TAG,
 
         XML_TOKEN_END
     };

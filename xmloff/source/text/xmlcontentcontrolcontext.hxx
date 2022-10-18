@@ -50,6 +50,8 @@ class XMLContentControlContext : public SvXMLImportContext
     OUString m_aCurrentDate;
     bool m_bPlainText = false;
     bool m_bComboBox = false;
+    OUString m_aAlias;
+    OUString m_aTag;
 
 public:
     XMLContentControlContext(SvXMLImport& rImport, sal_Int32 nElement, XMLHints_Impl& rHints,
