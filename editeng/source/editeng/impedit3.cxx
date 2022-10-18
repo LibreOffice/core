@@ -838,7 +838,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     EditLine aSaveLine( *pLine );
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
-    std::vector<sal_Int32> aBuf( pNode->Len() );
+    std::vector<sal_Int32> aCharPositionArray(pNode->Len());
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1234,14 +1234,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if (bContinueLastPortion)
                 {
                      Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf ));
+                            pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, &aCharPositionArray ));
                      pPortion->adjustSize(aSize.Width(), 0);
                      if (pPortion->GetSize().Height() < aSize.Height())
                          pPortion->setHeight(aSize.Height());
                 }
                 else
                 {
-                    auto aSize = aTmpFont.QuickGetTextSize(GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf);
+                    auto aSize = aTmpFont.QuickGetTextSize(GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, &aCharPositionArray);
                     pPortion->SetSize(aSize);
                 }
 
@@ -1256,7 +1256,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // => Always simply quick inserts.
                 size_t nPos = nTmpPos - pLine->GetStart();
                 EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                rArray.insert( rArray.begin() + nPos, aBuf.data(), aBuf.data() + nPortionLen);
+                rArray.insert( rArray.begin() + nPos, aCharPositionArray.data(), aCharPositionArray.data() + nPortionLen);
 
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
