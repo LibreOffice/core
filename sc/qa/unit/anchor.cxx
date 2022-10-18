@@ -10,7 +10,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
-#include <test/calc_unoapi_test.hxx>
+#include "helper/qahelper.hxx"
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -28,9 +28,7 @@
 
 using namespace css;
 
-namespace sc_apitest
-{
-class ScAnchorTest : public CalcUnoApiTest
+class ScAnchorTest : public ScBootstrapFixture
 {
 public:
     ScAnchorTest();
@@ -59,26 +57,17 @@ public:
 };
 
 ScAnchorTest::ScAnchorTest()
-    : CalcUnoApiTest("sc/qa/unit/data/ods")
+    : ScBootstrapFixture("sc/qa/unit/data")
 {
 }
 
 void ScAnchorTest::testUndoAnchor()
 {
-    OUString aFileURL;
-    createFileURL(u"document_with_linked_graphic.ods", aFileURL);
-    // open the document with graphic included
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh
+        = loadDocAndSetupModelViewController(u"document_with_linked_graphic.", FORMAT_ODS);
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
+    ScDocument& rDoc = xDocSh->GetDocument();
     // Check whether graphic imported well
-    ScDocument& rDoc = pDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
@@ -94,7 +83,7 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
 
     // Get the document controller
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell);
 
     // Get the draw view of the document
@@ -159,15 +148,13 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
 
-    pDocSh->DoClose();
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testTdf76183()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
 
@@ -182,7 +169,8 @@ void ScAnchorTest::testTdf76183()
     // Set word wrap to true
     rDoc.ApplyAttr(0, 0, 0, ScLineBreakCell(true));
     // Add multi-line text to cell to initiate optimal height change
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<text::XText> xText(xSheet->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
@@ -192,25 +180,15 @@ void ScAnchorTest::testTdf76183()
     CPPUNIT_ASSERT(aOrigRect.Top() < rNewRect.Top());
 
     pObj.clear();
-    pDocSh->DoClose();
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testODFAnchorTypes()
 {
-    OUString aFileURL;
-    createFileURL(u"3AnchorTypes.ods", aFileURL);
-    // open the document with graphic included
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDoc(u"3AnchorTypes.", FORMAT_ODS);
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
+    ScDocument& rDoc = xDocSh->GetDocument();
     // Check whether graphic imported well
-    ScDocument& rDoc = pDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
@@ -235,30 +213,20 @@ void ScAnchorTest::testODFAnchorTypes()
     anchorType = ScDrawLayer::GetAnchorType(*pObject);
     CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
 
-    pDocSh->DoClose();
+    xDocSh->DoClose();
 }
 
 /// Test that copying a column with an image anchored to it also copies the image
 void ScAnchorTest::testCopyColumnWithImages()
 {
-    OUString aFileURL;
-    createFileURL(u"3AnchorTypes.ods", aFileURL);
-    // open the document with graphic included
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"3AnchorTypes.", FORMAT_ODS);
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    ScDocument* pDoc = &(pDocSh->GetDocument());
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
     // Get the document controller
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -267,13 +235,13 @@ void ScAnchorTest::testCopyColumnWithImages()
     {
         // 1. Copy source range
         ScRange aSrcRange;
-        aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A1:A11", rDoc, rDoc.GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
         // 2. Paste to target range
         ScRange aDstRange;
-        aDstRange.Parse("D1:D11", *pDoc, pDoc->GetAddressConvention());
+        aDstRange.Parse("D1:D11", rDoc, rDoc.GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
         pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
@@ -290,13 +258,13 @@ void ScAnchorTest::testCopyColumnWithImages()
     {
         // 1. Copy source cells
         ScRange aSrcRange;
-        aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A3:B3", rDoc, rDoc.GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
         // 2. Paste to target cells
         ScRange aDstRange;
-        aDstRange.Parse("G3:H3", *pDoc, pDoc->GetAddressConvention());
+        aDstRange.Parse("G3:H3", rDoc, rDoc.GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
         pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
@@ -307,36 +275,26 @@ void ScAnchorTest::testCopyColumnWithImages()
                                      static_cast<int>(aRowObjects[2].size()));
     }
 
-    pDocSh->DoClose();
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testCutWithImages()
 {
-    OUString aFileURL;
-    createFileURL(u"3AnchorTypes.ods", aFileURL);
-    // open the document with graphic included
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"3AnchorTypes.", FORMAT_ODS);
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    ScDocument* pDoc = &(pDocSh->GetDocument());
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
     // Get the document controller
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
     // Cut whole column
     {
         // Cut source range
         ScRange aSrcRange;
-        aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A1:A11", rDoc, rDoc.GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CutToClip();
 
@@ -354,7 +312,7 @@ void ScAnchorTest::testCutWithImages()
     {
         // Cut source cells
         ScRange aSrcRange;
-        aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A3:B3", rDoc, rDoc.GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CutToClip();
 
@@ -365,55 +323,54 @@ void ScAnchorTest::testCutWithImages()
                                      static_cast<int>(aRowObjects[2].size()));
     }
 
-    pDocSh->DoClose();
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testTdf121963()
 {
-    OUString aFileURL;
-    createFileURL(u"tdf121963.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDoc(u"tdf121963.", FORMAT_ODS);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
     Scheduler::ProcessEventsToIdle();
+
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testTdf129552()
 {
-    OUString aFileURL;
-    createFileURL(u"tdf129552.fods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDoc(u"tdf129552.", FORMAT_FODS);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
     Scheduler::ProcessEventsToIdle();
+
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testTdf130556()
 {
-    OUString aFileURL;
-    createFileURL(u"tdf130556.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDoc(u"tdf130556.", FORMAT_ODS);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
     Scheduler::ProcessEventsToIdle();
+
+    xDocSh->DoClose();
 }
 
 void ScAnchorTest::testTdf134161()
 {
-    OUString aFileURL;
-    createFileURL(u"tdf134161.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    ScDocShellRef xDocSh = loadDoc(u"tdf134161.", FORMAT_ODS);
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop
     Scheduler::ProcessEventsToIdle();
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnchorTest);
-}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
