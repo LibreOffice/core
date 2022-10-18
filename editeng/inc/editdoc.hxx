@@ -409,7 +409,29 @@ public:
     sal_Int32      GetLen() const              { return nLen; }
     void           SetLen( sal_Int32 nL )         { nLen = nL; }
 
-    Size&          GetSize()                   { return aOutSz; }
+    void setWidth(tools::Long nWidth)
+    {
+        aOutSz.setWidth(nWidth);
+    }
+
+    void setHeight(tools::Long nHeight)
+    {
+        aOutSz.setHeight(nHeight);
+    }
+
+    void adjustSize(tools::Long nDeltaX, tools::Long nDeltaY)
+    {
+        if (nDeltaX != 0)
+            aOutSz.AdjustWidth(nDeltaX);
+        if (nDeltaY != 0)
+            aOutSz.AdjustHeight(nDeltaY);
+    }
+
+    void SetSize(const Size& rSize)
+    {
+        aOutSz = rSize;
+    }
+
     const Size&    GetSize() const             { return aOutSz; }
 
     void           SetKind(PortionKind n)      { nKind = n; }
