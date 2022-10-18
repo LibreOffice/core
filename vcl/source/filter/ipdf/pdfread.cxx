@@ -8,8 +8,7 @@
  */
 
 #include <vcl/pdfread.hxx>
-
-#include <tools/UnitConversion.hxx>
+#include <pdf/pdfcompat.hxx>
 
 #include <pdf/PdfConfig.hxx>
 #include <vcl/graph.hxx>
@@ -22,99 +21,6 @@
 #include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
-
-namespace
-{
-/// Convert to inch, then assume 96 DPI.
-inline double pointToPixel(const double fPoint, const double fResolutionDPI)
-{
-    return o3tl::convert(fPoint, o3tl::Length::pt, o3tl::Length::in) * fResolutionDPI;
-}
-
-/// Decide if PDF data is old enough to be compatible.
-bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
-{
-    if (nSize < 8)
-        return false;
-
-    // %PDF-x.y
-    sal_uInt8 aFirstBytes[8];
-    rInStream.Seek(nPos);
-    sal_uLong nRead = rInStream.ReadBytes(aFirstBytes, 8);
-    if (nRead < 8)
-        return false;
-
-    if (aFirstBytes[0] != '%' || aFirstBytes[1] != 'P' || aFirstBytes[2] != 'D'
-        || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-')
-        return false;
-
-    sal_Int32 nMajor = o3tl::toInt32(std::string_view(reinterpret_cast<char*>(&aFirstBytes[5]), 1));
-    sal_Int32 nMinor = o3tl::toInt32(std::string_view(reinterpret_cast<char*>(&aFirstBytes[7]), 1));
-    return !(nMajor > 1 || (nMajor == 1 && nMinor > 6));
-}
-
-/// Takes care of transparently downgrading the version of the PDF stream in
-/// case it's too new for our PDF export.
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
-{
-    sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
-    sal_uInt64 nSize = STREAM_SEEK_TO_END;
-    bool bCompatible = isCompatible(rInStream, nPos, nSize);
-    rInStream.Seek(nPos);
-    if (bCompatible)
-        // Not converting.
-        rOutStream.WriteStream(rInStream, nSize);
-    else
-    {
-        // Downconvert to PDF-1.6.
-        auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-        if (!pPdfium)
-            return false;
-
-        // Read input into a buffer.
-        SvMemoryStream aInBuffer;
-        aInBuffer.WriteStream(rInStream, nSize);
-
-        SvMemoryStream aSaved;
-        {
-            // Load the buffer using pdfium.
-            std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-                = pPdfium->openDocument(aInBuffer.GetData(), aInBuffer.GetSize(), OString());
-            if (!pPdfDocument)
-                return false;
-
-            // 16 means PDF-1.6.
-            if (!pPdfDocument->saveWithVersion(aSaved, 16))
-                return false;
-        }
-
-        aSaved.Seek(STREAM_SEEK_TO_BEGIN);
-        rOutStream.WriteStream(aSaved);
-    }
-
-    return rOutStream.good();
-}
-
-BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
-{
-    // Save the original PDF stream for later use.
-    SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream))
-        return {};
-
-    const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
-
-    auto aPdfData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
-
-    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(aPdfData->data(), aPdfData->size());
-    if (aMemoryStream.GetError())
-        return {};
-
-    return { std::move(aPdfData) };
-}
-
-} // end anonymous namespace
 
 namespace vcl
 {
@@ -160,10 +66,12 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 
         // Returned unit is points, convert that to pixel.
 
-        const size_t nPageWidth = std::round(pointToPixel(nPageWidthPoints, fResolutionDPI)
-                                             * PDF_INSERT_MAGIC_SCALE_FACTOR);
-        const size_t nPageHeight = std::round(pointToPixel(nPageHeightPoints, fResolutionDPI)
-                                              * PDF_INSERT_MAGIC_SCALE_FACTOR);
+        const size_t nPageWidth
+            = std::round(vcl::pdf::pointToPixel(nPageWidthPoints, fResolutionDPI)
+                         * PDF_INSERT_MAGIC_SCALE_FACTOR);
+        const size_t nPageHeight
+            = std::round(vcl::pdf::pointToPixel(nPageHeightPoints, fResolutionDPI)
+                         * PDF_INSERT_MAGIC_SCALE_FACTOR);
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
             = pPdfium->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
         if (!pPdfBitmap)
@@ -222,7 +130,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 bool importPdfVectorGraphicData(SvStream& rStream,
                                 std::shared_ptr<VectorGraphicData>& rVectorGraphicData)
 {
-    BinaryDataContainer aDataContainer = createBinaryDataContainer(rStream);
+    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(rStream);
     if (aDataContainer.isEmpty())
     {
         SAL_WARN("vcl.filter", "ImportPDF: empty PDF data array");
@@ -433,7 +341,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
     // Save the original PDF stream for later use.
-    BinaryDataContainer aDataContainer = createBinaryDataContainer(*xStream);
+    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(*xStream);
     if (aDataContainer.isEmpty())
         return 0;
 
