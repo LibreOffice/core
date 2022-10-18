@@ -38,14 +38,8 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97") {}
-
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".doc");
-    }
-
 };
+
 DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("Section 1, odd."),  parseDump("/root/page[1]/header/txt/text()"));
@@ -55,8 +49,9 @@ DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 {
+    loadAndReload("tdf41542_borderlessPadding.odt");
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
@@ -93,8 +88,9 @@ DECLARE_WW8EXPORT_TEST(testTdf128700_relativeTableWidth, "tdf128700_relativeTabl
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Floated table can't use relative width", sal_Int16(0), getProperty<sal_Int16>(xTable, "RelativeWidth"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)
 {
+    loadAndReload("tdf116436_tableBackground.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -129,8 +125,9 @@ DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNum
     CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/Special[@nType='PortionType::Number']", "rText") );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
+    loadAndReload("tdf55427_footnote2endnote.odt");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty< Color >(xPageStyle, "CharColor"));
     xPageStyle.set(getStyles("ParagraphStyles")->getByName("Endnote"), uno::UNO_QUERY);
@@ -241,8 +238,9 @@ DECLARE_WW8EXPORT_TEST(testTdf112517_maxSprms, "tdf112517_maxSprms.doc")
     CPPUNIT_ASSERT_EQUAL( sal_Int32(28), xTable->getRows()->getCount() );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108448_endNote)
 {
+    loadAndReload("tdf108448_endNote.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
@@ -252,8 +250,9 @@ DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in Endnote i", 1, getParagraphs(xEndnote) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106062_nonHangingFootnote)
 {
+    loadAndReload("tdf106062_nonHangingFootnote.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -262,8 +261,9 @@ DECLARE_WW8EXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFo
     CPPUNIT_ASSERT_MESSAGE( "Footnote starts with a tab", xTextRange->getString().startsWith("\t") );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf116570_exportFootnote, "tdf116570_exportFootnote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf116570_exportFootnote)
 {
+    loadAndReload("tdf116570_exportFootnote.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -361,8 +361,9 @@ DECLARE_WW8EXPORT_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(3), "ParaAdjust")) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106174_rtlParaAlign)
 {
+    loadAndReload("tdf106174_rtlParaAlign.docx");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), "ParaAdjust"));
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Another paragraph aligned to right"), uno::UNO_QUERY);
@@ -471,8 +472,9 @@ DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")
     CPPUNIT_ASSERT(xText->getSize().Width  > 11000);
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf70838)
 {
+    loadAndReload("tdf70838.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -483,8 +485,9 @@ DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
     CPPUNIT_ASSERT(aRect.GetHeight() > aRect.GetWidth());
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotation.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf70838b_verticalRotation)
 {
+    loadAndReload("tdf70838b_verticalRotation.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -498,15 +501,17 @@ DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotati
     CPPUNIT_ASSERT_MESSAGE("Line is taller, not wider", aLine.GetHeight() > aLine.GetWidth());
 }
 
-DECLARE_WW8EXPORT_TEST( testTdf129247, "tdf129247.docx" )
+CPPUNIT_TEST_FIXTURE(Test, testTdf129247)
 {
+    loadAndReload("tdf129247.docx");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Without the fix in place, the checkbox wouldn't be exported
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
-DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
+CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
 {
+    loadAndReload("checkbox_control.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box anchored as a floating object
@@ -736,8 +741,9 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nIndex);
 }
 
-DECLARE_OOXMLEXPORT_TEST( testTableCrossReferenceCustomFormat, "table_cross_reference_custom_format.odt" )
+CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 {
+    loadAndReload("table_cross_reference_custom_format.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
@@ -1028,8 +1034,9 @@ DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
     }
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf117503, "tdf117503.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf117503)
 {
+    loadAndReload("tdf117503.docx");
     // This was 3, first page + standard page styles were not merged together
     // on export.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -1054,8 +1061,9 @@ DECLARE_WW8EXPORT_TEST(testTdf117885, "tdf117885.doc")
     CPPUNIT_ASSERT_EQUAL(nParaA_Top, nParaB_Top);
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf118133, "tdf118133.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118133)
 {
+    loadAndReload("tdf118133.docx");
     // This was 0, doc import + doc export resulted in lost image due to broken
     // lazy-loading of tiff images.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), getShape(1)->getSize().Width);
