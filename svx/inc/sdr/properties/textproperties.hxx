@@ -79,6 +79,7 @@ namespace sdr::properties
 
             // #i101556# versioning support
             virtual sal_uInt32 getVersion() const override;
+            void increaseVersion() { maVersion++; }
         };
 } // end of namespace sdr::properties
 

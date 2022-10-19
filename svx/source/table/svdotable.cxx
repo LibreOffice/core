@@ -666,8 +666,11 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 // XModifyListener
 
 
-void SAL_CALL SdrTableObjImpl::modified( const css::lang::EventObject& /*aEvent*/ )
+void SAL_CALL SdrTableObjImpl::modified( const css::lang::EventObject& aEvent )
 {
+    if (aEvent.Source == mxTableStyle && mpTableObj)
+        static_cast<TextProperties&>(mpTableObj->GetProperties()).increaseVersion();
+
     update();
 }
 
