@@ -37,6 +37,8 @@ class SwContentControlDlg final : public SfxDialogController
     std::vector<SwContentControlListItem> m_aSavedListItems;
 
     std::unique_ptr<weld::CheckButton> m_xShowingPlaceHolderCB;
+    std::unique_ptr<weld::Entry> m_xAlias;
+    std::unique_ptr<weld::Entry> m_xTag;
     std::unique_ptr<weld::Frame> m_xCheckboxFrame;
     std::unique_ptr<weld::Entry> m_xCheckedState;
     std::unique_ptr<weld::Button> m_xCheckedStateBtn;

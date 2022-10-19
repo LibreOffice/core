@@ -10,6 +10,7 @@
 """Covers sw/source/ui/misc/ fixes."""
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import type_text
 
 
@@ -23,6 +24,8 @@ class TestTmpdlg(UITestCase):
             portions = paragraph.createEnumeration()
             portion = portions.nextElement()
             contentControl = portion.ContentControl
+            contentControl.Alias = "my alias"
+            contentControl.Tag = "my tag"
             listItems = contentControl.ListItems
             self.assertEqual(len(listItems), 1)
             self.assertEqual(listItems[0][0].Name, "DisplayText")
@@ -32,6 +35,12 @@ class TestTmpdlg(UITestCase):
 
             # Append a new list item.
             with self.ui_test.execute_dialog_through_command(".uno:ContentControlProperties") as xDialog:
+                xAlias = xDialog.getChild("aliasentry")
+                self.assertEqual(get_state_as_dict(xAlias)['Text'], "my alias")
+                type_text(xAlias, "new alias ")
+                xTag = xDialog.getChild("tagentry")
+                self.assertEqual(get_state_as_dict(xTag)['Text'], "my tag")
+                type_text(xTag, "new tag ")
                 xAdd = xDialog.getChild("add")
                 with self.ui_test.execute_blocking_action(xAdd.executeAction, args=('CLICK', ())) as xSubDialog:
                     xDisplayName = xSubDialog.getChild("displayname")
@@ -46,6 +55,8 @@ class TestTmpdlg(UITestCase):
             self.assertEqual(listItems[1][0].Value, "Foo Bar")
             self.assertEqual(listItems[1][1].Name, "Value")
             self.assertEqual(listItems[1][1].Value, "foo-bar")
+            self.assertEqual(contentControl.Alias, "new alias my alias")
+            self.assertEqual(contentControl.Tag, "new tag my tag")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
