@@ -52,6 +52,7 @@ public:
     void testEmfProblem();
     void testEmfLineStyles();
     void testWorldTransformFontSize();
+    void testBigPPI();
     void testTdf93750();
     void testTdf99402();
     void testTdf39894();
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(testEmfProblem);
     CPPUNIT_TEST(testEmfLineStyles);
     CPPUNIT_TEST(testWorldTransformFontSize);
+    CPPUNIT_TEST(testBigPPI);
     CPPUNIT_TEST(testTdf93750);
     CPPUNIT_TEST(testTdf99402);
     CPPUNIT_TEST(testTdf39894);
@@ -308,6 +310,27 @@ void WmfTest::testWorldTransformFontSize()
     assertXPath(pDoc, "/metafile/font[4]", "height", "530");
     assertXPath(pDoc, "/metafile/font[4]", "orientation", "900");
     assertXPath(pDoc, "/metafile/font[4]", "weight", "normal");
+}
+
+void WmfTest::testBigPPI()
+{
+    // Test that PPI is reduced from 2540 to 96 (width from META_SETWINDOWEXT) to make the graphic
+    // bigger
+    SvFileStream aFileStream(getFullUrl(u"TestBigPPI.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    dumper.filterAllActionTypes();
+    dumper.filterActionType(MetaActionType::FONT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+
+    CPPUNIT_ASSERT(pDoc);
+
+    // If the PPI was not reduced the width and height would be <100 which is too small
+    // Related: tdf#150888
+    assertXPath(pDoc, "/metafile", "width", "2540");
+    assertXPath(pDoc, "/metafile", "height", "2143");
 }
 
 void WmfTest::testTdf93750()
