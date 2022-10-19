@@ -2414,9 +2414,7 @@ svx/res/nu02.png cmd/sc_cancel.png
 svx/res/nu03.png cmd/sc_addwatch.png
 svx/res/objects.png cmd/sc_insertdraw.png
 svx/res/ole.png cmd/sc_insertobject.png
-svx/res/parallel_16.png cmd/sc_extrusiondepthfloater.png
-svx/res/persp3d.png cmd/sc_extrusiondirectionfloater.png
-svx/res/perspective_16.png cmd/sc_extrusiondirectionfloater.png
+svx/res/persp3d.png svx/res/perspective_16.png
 svx/res/reloads.png cmd/sc_reload.png
 svx/res/rotate3d.png cmd/sc_convertinto3dlathefast.png
 svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
