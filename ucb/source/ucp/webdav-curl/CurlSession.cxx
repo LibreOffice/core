@@ -1384,6 +1384,10 @@ auto CurlProcessor::ProcessRequest(
                         {
                             break;
                         }
+                        // both fallbacks need cookie engine enabled
+                        CURLcode rc
+                            = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIEFILE, "");
+                        assert(rc == CURLE_OK);
                         if (cookies.isEmpty() // retry only once - could be expired...
                             && rSession.m_URI.GetScheme() == "https") // only encrypted
                         {
@@ -1391,9 +1395,6 @@ auto CurlProcessor::ProcessRequest(
                                 = TryImportCookies(rSession.m_xContext, rSession.m_URI.GetHost());
                             if (!cookies.isEmpty())
                             {
-                                CURLcode rc = curl_easy_setopt(rSession.m_pCurl.get(),
-                                                               CURLOPT_COOKIEFILE, "");
-                                assert(rc == CURLE_OK);
                                 rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIE,
                                                       cookies.getStr());
                                 assert(rc == CURLE_OK);
