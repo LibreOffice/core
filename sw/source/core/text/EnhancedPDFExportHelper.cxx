@@ -969,7 +969,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
     // Lowers of NonStructureElements should not be considered:
 
-    if ( lcl_IsInNonStructEnv( *pFrame ) )
+    if (lcl_IsInNonStructEnv(*pFrame) && !pFrame->IsFlyFrame())
         return;
 
     // Check if we have to reopen an existing structure element.
@@ -1258,7 +1258,11 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // fly in content or fly at page
             {
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pFrame);
-                if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
+                if (pFly->GetAnchorFrame()->FindFooterOrHeader() != nullptr)
+                {
+                    nPDFType = vcl::PDFWriter::NonStructElement;
+                }
+                else if (pFly->Lower() && pFly->Lower()->IsNoTextFrame())
                 {
                     bool bFormula = false;
 
