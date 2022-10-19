@@ -193,32 +193,6 @@ void test::AccessibleTestBase::dumpA11YTree(
     }
 }
 
-/* see OAccessibleMenuItemComponent::GetAccessibleName() */
-static bool accessibleNameMatches(const uno::Reference<accessibility::XAccessibleContext>& xContext,
-                                  std::u16string_view name)
-{
-    const OUString actualName = xContext->getAccessibleName();
-
-    if (actualName == name)
-        return true;
-
-#if defined(_WIN32)
-    /* on Win32, ignore a \tSHORTCUT suffix on a menu item */
-    switch (xContext->getAccessibleRole())
-    {
-        case accessibility::AccessibleRole::MENU_ITEM:
-        case accessibility::AccessibleRole::RADIO_MENU_ITEM:
-        case accessibility::AccessibleRole::CHECK_MENU_ITEM:
-            return actualName.startsWith(name) && actualName[name.length()] == '\t';
-
-        default:
-            break;
-    }
-#endif
-
-    return false;
-}
-
 /** Gets a child by name (usually in a menu) */
 uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getItemFromName(
     const uno::Reference<accessibility::XAccessibleContext>& xMenuCtx, std::u16string_view name)
@@ -230,7 +204,7 @@ uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getI
     for (sal_Int64 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
     {
         auto item = xMenuCtx->getAccessibleChild(i)->getAccessibleContext();
-        if (accessibleNameMatches(item, name))
+        if (AccessibilityTools::nameEquals(item, name))
         {
             std::cout << "-> found " << AccessibilityTools::debugString(item) << std::endl;
             return item;

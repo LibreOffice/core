@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
 	sal \
 	sfx \
 	test \
+	tk \
 	tl \
 	utl \
 	unotest \

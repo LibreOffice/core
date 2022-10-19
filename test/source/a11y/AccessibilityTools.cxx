@@ -27,8 +27,10 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #include <sal/log.hxx>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/window.hxx>
 
 using namespace css;
 
@@ -134,6 +136,45 @@ bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleC
     }
 
     return equals(xctx1->getAccessibleParent(), xctx2->getAccessibleParent());
+}
+
+bool AccessibilityTools::nameEquals(const uno::Reference<accessibility::XAccessibleContext>& xCtx,
+                                    const std::u16string_view name)
+{
+    auto ctxName = xCtx->getAccessibleName();
+    OUString rest;
+
+    if (!ctxName.startsWith(name, &rest))
+        return false;
+    if (rest == u"")
+        return true;
+
+#if defined(_WIN32)
+    // see OAccessibleMenuItemComponent::GetAccessibleName():
+    // on Win32, ignore a \tSHORTCUT suffix on a menu item
+    switch (xCtx->getAccessibleRole())
+    {
+        case accessibility::AccessibleRole::MENU_ITEM:
+        case accessibility::AccessibleRole::RADIO_MENU_ITEM:
+        case accessibility::AccessibleRole::CHECK_MENU_ITEM:
+            return rest[0] == '\t';
+
+        default:
+            break;
+    }
+#endif
+
+#if OSL_DEBUG_LEVEL > 0
+    // see VCLXAccessibleComponent::getAccessibleName()
+    auto pVCLXAccessibleComponent = dynamic_cast<VCLXAccessibleComponent*>(xCtx.get());
+    if (pVCLXAccessibleComponent)
+    {
+        auto windowType = pVCLXAccessibleComponent->GetWindow()->GetType();
+        if (rest == u" (Type = " + OUString::number(static_cast<sal_Int32>(windowType)) + ")")
+            return true;
+    }
+#endif
+    return false;
 }
 
 static OUString unknownName(const sal_Int64 value)

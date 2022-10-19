@@ -58,6 +58,25 @@ public:
     static bool equals(const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx1,
                        const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx2);
 
+    /**
+     * @brief Compares the accessible name against a string
+     * @param xCtx A XAccessibleContext on which compare the name
+     * @param name The string to compare to
+     * @returns @c true if @p xCtx name matches @p name.
+     *
+     * This is conceptually equivalent to @code xCtx->getAccessibleName() == name @endcode, but
+     * handles the case OSL debugging is active and inserts a type suffix.  Unless you know for
+     * sure the accessible you are comparing is not subject to those suffixes under debugging,
+     * always use this function instead of direct comparison.
+     */
+    static bool nameEquals(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+                           const std::u16string_view name);
+    static bool nameEquals(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+                           const std::u16string_view name)
+    {
+        return nameEquals(xAcc->getAccessibleContext(), name);
+    }
+
     static OUString getRoleName(const sal_Int16 role);
     static OUString getStateName(const sal_Int16 state);
     static OUString getEventIdName(const sal_Int16 event_id);
