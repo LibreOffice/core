@@ -81,7 +81,11 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< std::unique_pt
     if( elem.Text.isEmpty() )
         return;
 
-    PropertyMap aProps;
+    PropertyMap aProps = {};
+    const sal_Unicode strSpace = 0x0020;
+    const sal_Unicode strNbSpace = 0x00A0;
+    const sal_Unicode tabSpace = 0x0009;
+
     if( elem.StyleId != -1 )
     {
         aProps[ OUString( "text:style-name" ) ] =
@@ -111,8 +115,26 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< std::unique_pt
         str = ::comphelper::string::reverseString(str);
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
-    // TODO: reserve continuous spaces, see DrawXmlEmitter::visit( TextElement& elem...)
-    m_rEmitContext.rEmitter.write(str);
+
+    sal_Unicode strToken;
+    for (int i = 0; i < elem.Text.getLength(); i++)
+    {
+        strToken = str[i];
+        if (strToken == strSpace || strToken == strNbSpace)
+        {
+            aProps["text:c"] = "1";
+            m_rEmitContext.rEmitter.beginTag("text:s", aProps);
+            m_rEmitContext.rEmitter.endTag("text:s");
+        }
+        else if (strToken == tabSpace)
+        {
+            m_rEmitContext.rEmitter.beginTag("text:tab", aProps);
+            m_rEmitContext.rEmitter.endTag("text:tab");
+        }
+        else
+            m_rEmitContext.rEmitter.write(OUString(strToken));
+    }
+
     auto this_it = elem.Children.begin();
     while( this_it != elem.Children.end() && this_it->get() != &elem )
     {

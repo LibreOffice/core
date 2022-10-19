@@ -841,6 +841,43 @@ namespace
 #endif
         }
 
+        void testSpaces()
+        {
+#if HAVE_FEATURE_POPPLER
+            rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
+
+            OString aOutput;
+            xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testSpace.pdf"),
+                    new OutputWrapString(aOutput),
+                    nullptr);
+            xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
+
+            // Space test: there are 10 spaces, each space is expressed as a <text:s text:c="1" ...>,
+            // thus the 10th text:s should exist and the attribute "text:c" should be "1".
+            OString xpath = "//draw:frame[@draw:z-index='1'][1]/draw:text-box/text:p/text:span/text:s[10]";
+            OUString  sContent = getXPath(pXmlDoc, xpath, "c");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("1"), sContent);
+
+            // Tab test: there are 10 tabs. Text before and after the tabs are shown in different draw frames.
+            // With the Liberation Serif font, the horizontal position of the first frame is 20.03mm and the
+            // second frame is 94.12mm.
+            xpath = "//draw:frame[@draw:z-index='2'][1]";
+            sContent = getXPath(pXmlDoc, xpath, "transform");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("translate( 20.03mm 25.05mm )"), sContent);
+            xpath = "//draw:frame[@draw:z-index='3'][1]";
+            sContent = getXPath(pXmlDoc, xpath, "transform");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("translate( 94.12mm 25.05mm )"), sContent);
+
+            // Non-breaking space test: there are 10 NBSpaces, which are treated as the same as normal space in PDF,
+            // thus each is expressed as a <text:s text:c="1" ...>.
+            // The 10th text:s should exist and the attribute "text:c" should be "1".
+            xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span/text:s[10]";
+            sContent = getXPath(pXmlDoc, xpath, "c");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString("1"), sContent);
+#endif
+        }
+
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
         CPPUNIT_TEST(testOdfWriterExport);
@@ -853,6 +890,7 @@ namespace
         CPPUNIT_TEST(testTdf78427_FontWeight_MyraidProSemibold);
         CPPUNIT_TEST(testTdf143959_nameFromFontFile);
         CPPUNIT_TEST(testTdf104597_textrun);
+        CPPUNIT_TEST(testSpaces);
         CPPUNIT_TEST_SUITE_END();
     };
 
