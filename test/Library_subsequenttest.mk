@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
 	cppuhelper \
 	i18nlangtag \
 	sal \
+	sfx \
 	test \
 	tl \
 	utl \

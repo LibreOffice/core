@@ -22,6 +22,9 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    css::uno::Any executeMacro(const OUString& rScriptURL,
+                               const css::uno::Sequence<css::uno::Any>& rParams = {});
+
 protected:
     // reference to document component that we are testing
     css::uno::Reference<css::lang::XComponent> mxComponent;

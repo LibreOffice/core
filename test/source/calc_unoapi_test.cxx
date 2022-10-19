@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <sfx2/objsh.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -35,4 +36,17 @@ void CalcUnoApiTest::tearDown()
     UnoApiTest::tearDown();
 }
 
+uno::Any CalcUnoApiTest::executeMacro(const OUString& rScriptURL, const uno::Sequence<uno::Any>& rParams)
+{
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+
+    ErrCode result = SfxObjectShell::CallXScript(
+        mxComponent, rScriptURL,
+        rParams, aRet, aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    return aRet;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -144,15 +144,7 @@ void ScMacrosTest::testMSP()
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document");
     OUString sResult;
     aRet >>= sResult;
 
@@ -169,11 +161,6 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     createFileURL(u"testTypePassword.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -182,30 +169,21 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
     // User defined types
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.LoadAndExecuteTest?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.LoadAndExecuteTest?language=Basic&location=document");
 
     OUString aValue = rDoc.GetString(0,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("User defined types script did not change the value of Sheet1.A1", OUString("success"), aValue);
 
     // Big Module
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:MyLibrary.BigModule.bigMethod?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:MyLibrary.BigModule.bigMethod?language=Basic&location=document");
 
     aValue = rDoc.GetString(1,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Big module script did not change the value of Sheet1.B1", OUString("success"), aValue);
 
     // far big method tdf#94617
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document");
 
     aValue = rDoc.GetString(2,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1", OUString("success"), aValue);
@@ -219,21 +197,13 @@ void ScMacrosTest::testStarBasic()
     createFileURL(u"StarBasic.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
     double aValue = rDoc.GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
     pDocSh->DoClose();
@@ -245,29 +215,18 @@ void ScMacrosTest::testRowColumn()
     createFileURL(u"StarBasic.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.Macro_RowHeight?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.Macro_RowHeight?language=Basic&location=document");
 
     sal_uInt16 nHeight = o3tl::convert(rDoc.GetRowHeight(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.Macro_ColumnWidth?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.Macro_ColumnWidth?language=Basic&location=document");
     sal_uInt16 nWidth  = o3tl::convert(rDoc.GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 
@@ -337,15 +296,7 @@ void ScMacrosTest::testTdf104902()
     createFileURL(u"tdf104902.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence<sal_Int16> aOutParamIndex;
-    Sequence<Any> aOutParam;
-    Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document");
 
     // Export to ODS
     saveAndReload("calc8");
@@ -384,26 +335,15 @@ void ScMacrosTest::testTdf64639()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
-    Any aRet;
-    Sequence<sal_Int16> aOutParamIndex;
-    Sequence<Any> aOutParam;
-    Sequence<uno::Any> aParams;
-
     // Add and delete the chart a few times
     // Without the fix in place, this test would have crashed here
     for (size_t i = 0; i < 5; ++i)
     {
-        SfxObjectShell::CallXScript(
-            mxComponent,
-            "vnd.sun.Star.script:Standard.Module1.DrawGraph?language=Basic&location=document",
-            aParams, aRet, aOutParamIndex, aOutParam);
+        executeMacro("vnd.sun.Star.script:Standard.Module1.DrawGraph?language=Basic&location=document");
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
-        SfxObjectShell::CallXScript(
-            mxComponent,
-            "vnd.sun.Star.script:Standard.Module1.DeleteGraph?language=Basic&location=document",
-            aParams, aRet, aOutParamIndex, aOutParam);
+        executeMacro("vnd.sun.Star.script:Standard.Module1.DeleteGraph?language=Basic&location=document");
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
     }
@@ -417,15 +357,7 @@ void ScMacrosTest::testTdf142033()
     createFileURL(u"tdf142033.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document");
 
     // Export to ODS
     saveAndReload("calc8");
@@ -462,13 +394,7 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
 
     // Check that loading password-protected macro image correctly loads Unicode strings
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
-        SfxObjectShell::CallXScript(mxComponent, sMacroURL, aParams, aRet, aOutParamIndex,
-                                    aOutParam);
+        Any aRet = executeMacro(sMacroURL);
 
         OUString aReturnValue;
         aRet >>= aReturnValue;
@@ -490,13 +416,7 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
     saveAndReload("calc8");
 
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
-        SfxObjectShell::CallXScript(mxComponent, sMacroURL, aParams, aRet, aOutParamIndex,
-                                    aOutParam);
+        Any aRet = executeMacro(sMacroURL);
 
         OUString aReturnValue;
         aRet >>= aReturnValue;
@@ -519,13 +439,7 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
 
     // Check that loading password-protected macro image correctly loads array bounds
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
-        SfxObjectShell::CallXScript(mxComponent, sMacroURL, aParams, aRet, aOutParamIndex,
-            aOutParam);
+        Any aRet = executeMacro(sMacroURL);
 
         sal_Int16 nReturnValue;
         aRet >>= nReturnValue;
@@ -547,13 +461,7 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
     saveAndReload("calc8");
 
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
-        SfxObjectShell::CallXScript(mxComponent, sMacroURL, aParams, aRet, aOutParamIndex,
-            aOutParam);
+        Any aRet = executeMacro(sMacroURL);
 
         sal_Int16 nReturnValue;
         aRet >>= nReturnValue;
@@ -570,11 +478,6 @@ void ScMacrosTest::testTdf114427()
     createFileURL(u"tdf114427.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -588,10 +491,7 @@ void ScMacrosTest::testTdf114427()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDraws->getCount());
 
     // Without the fix in place, it would have crashed here
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.DeletingFrame?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.DeletingFrame?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDraws->getCount());
 
@@ -613,17 +513,10 @@ void ScMacrosTest::testTdf131296_legacy()
     createFileURL(u"tdf131296_legacy.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
         for (auto& [sTestName, sExpected] : aTests)
         {
-            SfxObjectShell::CallXScript(mxComponent,
-                                        "vnd.sun.Star.script:Protected.Module1." + sTestName
-                                            + "?language=Basic&location=document",
-                                        aParams, aRet, aOutParamIndex, aOutParam);
+            Any aRet = executeMacro("vnd.sun.Star.script:Protected.Module1." + sTestName
+                                            + "?language=Basic&location=document");
 
             OUString aReturnValue;
             aRet >>= aReturnValue;
@@ -651,17 +544,10 @@ void ScMacrosTest::testTdf131296_new()
     createFileURL(u"tdf131296_new.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
         for (auto& [sTestName, sExpected] : aTests)
         {
-            SfxObjectShell::CallXScript(mxComponent,
-                                        "vnd.sun.Star.script:Protected.Module1." + sTestName
-                                            + "?language=Basic&location=document",
-                                        aParams, aRet, aOutParamIndex, aOutParam);
+            Any aRet = executeMacro("vnd.sun.Star.script:Protected.Module1." + sTestName
+                                            + "?language=Basic&location=document");
 
             OUString aReturnValue;
             aRet >>= aReturnValue;
@@ -679,21 +565,13 @@ void ScMacrosTest::testTdf46119()
     createFileURL(u"tdf46119.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(OUString("0.074"), rDoc.GetString(ScAddress(2, 24, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("0.067"), rDoc.GetString(ScAddress(2, 25, 0)));
@@ -719,15 +597,7 @@ void ScMacrosTest::testTdf128218()
     createFileURL(u"tdf128218.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.TestRAND?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestRAND?language=Basic&location=document");
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
@@ -895,15 +765,7 @@ void ScMacrosTest::testTdf143582()
     createFileURL(u"tdf143582.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    css::uno::Any aRet;
-    css::uno::Sequence<css::uno::Any> aParams;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document");
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
@@ -923,15 +785,7 @@ void ScMacrosTest::testTdf144085()
     createFileURL(u"tdf144085.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    css::uno::Any aRet;
-    css::uno::Sequence<css::uno::Any> aParams;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document");
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
@@ -951,11 +805,6 @@ void ScMacrosTest::testTdf125800()
     createFileURL(u"tdf125800.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    css::uno::Any aRet;
-    css::uno::Sequence<css::uno::Any> aParams;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -968,10 +817,7 @@ void ScMacrosTest::testTdf125800()
     // Without the fix in place, this test would have failed with
     // - Expression: false
     // - Unexpected dialog:  Error: Inadmissible value or data type. Index out of defined range.
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.cf.doItForThisSheetindexThisRange?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:Standard.cf.doItForThisSheetindexThisRange?language=Basic&location=document");
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
@@ -995,15 +841,7 @@ void ScMacrosTest::testTdf130307()
     createFileURL(u"tdf130307.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    css::uno::Any aRet;
-    css::uno::Sequence<css::uno::Any> aParams;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.ForEachSheets?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.ForEachSheets?language=Basic&location=document");
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
@@ -1020,11 +858,6 @@ void ScMacrosTest::testTdf144970()
     OUString aFileName;
     createFileURL(u"tdf144970.ods", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -1045,10 +878,7 @@ void ScMacrosTest::testTdf144970()
     // - Unexpected dialog:  Error: BASIC runtime error.
     // An exception occurred
     // Type: com.sun.star.lang.IllegalArgumentException
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
@@ -1079,17 +909,10 @@ void ScMacrosTest::testTdf138646()
     });
 
     {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
         for (auto& [sTestName, sExpected] : aTests)
         {
-            SfxObjectShell::CallXScript(mxComponent,
-                                        "vnd.sun.Star.script:Standard.Module1." + sTestName
-                                            + "?language=Basic&location=document",
-                                        aParams, aRet, aOutParamIndex, aOutParam);
+            Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1." + sTestName
+                                            + "?language=Basic&location=document");
 
             OUString aReturnValue;
             aRet >>= aReturnValue;
@@ -1137,19 +960,12 @@ void ScMacrosTest::testTdf107572()
                      "  thisComponent.Sheets(0).getCellRangeByName(\"A1:F14\").autoformat(\"Default\")\n"
                      "End Function\n")));
 
-    Any aRet;
-    Sequence<sal_Int16> aOutParamIndex;
-    Sequence<Any> aOutParam;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(pDocSh);
 
     // Without the fix in place, this test would have crashed
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:TestLibrary.TestModule.Main?language=Basic&location=document",
-        {}, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.Main?language=Basic&location=document");
 
     ScDocument& rDoc = pDocSh->GetDocument();
 
@@ -1208,14 +1024,7 @@ void ScMacrosTest::testShapeLayerId()
                      "  TestLayerID = origID & \" Expected runtime error happened\"\n"
                      "End Function\n")));
 
-    Any aRet;
-    Sequence<sal_Int16> aOutParamIndex;
-    Sequence<Any> aOutParam;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:TestLibrary.TestModule.TestLayerID?language=Basic&location=document",
-        {}, aRet, aOutParamIndex, aOutParam);
+    Any aRet = executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestLayerID?language=Basic&location=document");
     // Without the fix in place, this test would have failed in non-debug builds with
     // - Expected : <Any: (string) 0 Expected runtime error happened>
     // - Actual   : <Any: (string) 0 1>

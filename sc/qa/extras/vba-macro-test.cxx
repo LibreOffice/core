@@ -99,11 +99,6 @@ void VBAMacroTest::testSimpleCopyAndPaste()
     createFileURL(u"SimpleCopyPaste.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -119,9 +114,7 @@ void VBAMacroTest::testSimpleCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 4, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 5, 0)));
 
-    SfxObjectShell::CallXScript(
-        mxComponent, "vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document");
 
     // Copy from C4-C6
     CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(2, 3, 0)));
@@ -156,11 +149,6 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
     createFileURL(u"MultiDocumentCopyPaste.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -171,9 +159,7 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
 
-    SfxObjectShell::CallXScript(
-        mxComponent, "vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(ScAddress(1, 2, 0)));
@@ -210,15 +196,8 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     CPPUNIT_ASSERT(!rDoc.ColHidden(3, 2));
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testHide?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro(
+        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testHide?language=Basic&location=document");
 
     CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
     CPPUNIT_ASSERT(rDoc.ColHidden(1, 1));
@@ -234,10 +213,8 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro(
+        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document");
 
     CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
     CPPUNIT_ASSERT(!rDoc.ColHidden(1, 1));
@@ -275,15 +252,8 @@ void VBAMacroTest::testPrintArea()
         CPPUNIT_ASSERT_EQUAL(false, aSequence.hasElements());
     }
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(mxComponent,
-                                "vnd.sun.Star.script:VBAProject.ThisWorkbook.testPrintArea?"
-                                "language=Basic&location=document",
-                                aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testPrintArea?language=Basic&"
+                 "location=document");
 
     {
         const uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
@@ -312,15 +282,8 @@ void VBAMacroTest::testSelectAllChaged()
     auto const& pViewData = pView->GetViewData();
     CPPUNIT_ASSERT_EQUAL(ScRange(), pViewData.GetMarkData().GetMarkArea());
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(mxComponent,
-                                "vnd.sun.Star.script:VBAProject.ThisWorkbook.testSelectAll?"
-                                "language=Basic&location=document",
-                                aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testSelectAll?language=Basic&"
+                 "location=document");
 
     // A1:E1048576
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, MAXROW, 0), pViewData.GetMarkData().GetMarkArea());
@@ -346,15 +309,8 @@ void VBAMacroTest::testRangeSelect()
     auto const& pViewData = pView->GetViewData();
     CPPUNIT_ASSERT_EQUAL(ScRange(), pViewData.GetMarkData().GetMarkArea());
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(mxComponent,
-                                "vnd.sun.Star.script:VBAProject.ThisWorkbook.testRangeSelect?"
-                                "language=Basic&location=document",
-                                aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testRangeSelect?language=Basic&"
+                 "location=document");
 
     // B2:E5
     CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 4, 1, 0), pViewData.GetMarkData().GetMarkArea());
@@ -372,15 +328,8 @@ void VBAMacroTest::testWindowState()
     createFileURL(u"VariousTestMacros.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(mxComponent,
-                                "vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?"
-                                "language=Basic&location=document",
-                                aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?language=Basic&"
+                 "location=document");
 
     css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
@@ -407,15 +356,8 @@ void VBAMacroTest::testScroll()
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), rViewData.GetPosX(ScHSplitPos::SC_SPLIT_LEFT));
     CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData.GetPosY(ScVSplitPos::SC_SPLIT_BOTTOM));
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testScroll?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro(
+        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testScroll?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(ScSplitPos::SC_SPLIT_BOTTOMLEFT, rViewData.GetActivePart());
     CPPUNIT_ASSERT_EQUAL(SCCOL(29), rViewData.GetPosX(ScHSplitPos::SC_SPLIT_LEFT));
@@ -579,9 +521,6 @@ void VBAMacroTest::testVba()
         // methods.
         Scheduler::ProcessEventsToIdle();
 
-        uno::Any aRet;
-        uno::Sequence<sal_Int16> aOutParamIndex;
-        uno::Sequence<uno::Any> aOutParam;
         bool bWorkbooksHandling = rTestInfo.sFileBaseName == "Workbooks." && !sTempDir.isEmpty();
 
         if (bWorkbooksHandling)
@@ -592,10 +531,10 @@ void VBAMacroTest::testVba()
         SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url "
                                                          << rTestInfo.sMacroUrl);
 
-        SfxObjectShell::CallXScript(mxComponent, rTestInfo.sMacroUrl, aParams, aRet, aOutParamIndex,
-                                    aOutParam);
+        uno::Any aRet = executeMacro(rTestInfo.sMacroUrl, aParams);
         OUString aStringRes;
         aRet >>= aStringRes;
+
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OUString("script reported failure in file " + rTestInfo.sFileBaseName + "xls")
                 .toUtf8()
@@ -630,10 +569,6 @@ void VBAMacroTest::testTdf149579()
                                              "Range(\"A1\").Sort Key1:=Range(\"A1\")\n"
                                              "End Sub\n")));
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(pDocSh);
@@ -644,12 +579,8 @@ void VBAMacroTest::testTdf149579()
     rDoc.SetValue(ScAddress(0, 2, 0), 1.0);
 
     // Without the fix in place, this call would have crashed in debug builds with failed assertion
-    ErrCode result = SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:TestLibrary.TestModule.TestTdf149579?language=Basic&location=document",
-        {}, aRet, aOutParamIndex, aOutParam);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
-
+    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestTdf149579?language=Basic&location="
+                 "document");
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : 5
@@ -674,10 +605,6 @@ void VBAMacroTest::testVbaRangeSort()
                                              "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
                                              "End Sub\n")));
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(pDocSh);
@@ -688,11 +615,8 @@ void VBAMacroTest::testVbaRangeSort()
     rDoc.SetValue(ScAddress(0, 2, 0), 2.0);
 
     // Without the fix in place, this call would have crashed in debug builds with failed assertion
-    ErrCode result = SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location=document",
-        {}, aRet, aOutParamIndex, aOutParam);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
+                 "document");
 
     CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
@@ -704,11 +628,8 @@ void VBAMacroTest::testVbaRangeSort()
     aParam.maKeyState[0].bAscending = false;
     rDoc.SetSortParam(aParam, 0);
 
-    result = SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location=document",
-        {}, aRet, aOutParamIndex, aOutParam);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
+                 "document");
 
     // Without the fix in place, this test would have failed in non-debug builds with
     // - Expected: 2
@@ -726,11 +647,6 @@ void VBAMacroTest::testTdf107885()
     createFileURL(u"tdf107885.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -743,10 +659,8 @@ void VBAMacroTest::testTdf107885()
     CPPUNIT_ASSERT(!rDoc.RowHidden(4, 0));
 
     // Call auto filter macro using a string condition
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.Module1.AFString?language=Basic&location=document", aParams,
-        aRet, aOutParamIndex, aOutParam);
+    executeMacro(
+        "vnd.sun.Star.script:VBAProject.Module1.AFString?language=Basic&location=document");
 
     //Without the fix in place, all rows in autofilter would have been hidden
     CPPUNIT_ASSERT(rDoc.RowHidden(1, 0));
@@ -755,10 +669,8 @@ void VBAMacroTest::testTdf107885()
     CPPUNIT_ASSERT(!rDoc.RowHidden(4, 0));
 
     // Call auto filter macro using a numeric condition without any locale
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.Module1.AFNumeric?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro(
+        "vnd.sun.Star.script:VBAProject.Module1.AFNumeric?language=Basic&location=document");
 
     CPPUNIT_ASSERT(rDoc.RowHidden(1, 0));
     CPPUNIT_ASSERT(rDoc.RowHidden(2, 0));
@@ -774,11 +686,6 @@ void VBAMacroTest::testTdf131562()
     createFileURL(u"tdf131562.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -788,10 +695,8 @@ void VBAMacroTest::testTdf131562()
     CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(0, 3, 0)));
 
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.Munka1.numberconcat?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro(
+        "vnd.sun.Star.script:VBAProject.Munka1.numberconcat?language=Basic&location=document");
 
     //Without the fix in place, the macro wouldn't have concatenated 1 and " ."
     CPPUNIT_ASSERT_EQUAL(OUString("1 ."), rDoc.GetString(ScAddress(0, 2, 0)));
@@ -806,11 +711,6 @@ void VBAMacroTest::testTdf52602()
     createFileURL(u"tdf52602.xls", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -818,10 +718,8 @@ void VBAMacroTest::testTdf52602()
     ScDocument& rDoc = pDocSh->GetDocument();
 
     //Without the fix in place, it would have failed with 'Unexpected dialog:  Error: BASIC runtime error.'
-    SfxObjectShell::CallXScript(mxComponent,
-                                "vnd.sun.Star.script:VBAProject.Modul1.Test_NumberFormat_DateTime?"
-                                "language=Basic&location=document",
-                                aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.Modul1.Test_NumberFormat_DateTime?language=Basic&"
+                 "location=document");
 
     CPPUNIT_ASSERT_EQUAL(OUString("15:20"), rDoc.GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("15:20"), rDoc.GetString(ScAddress(0, 1, 0)));
@@ -844,11 +742,6 @@ void VBAMacroTest::testTdf107902()
     createFileURL(u"tdf107902.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -856,9 +749,7 @@ void VBAMacroTest::testTdf107902()
     ScDocument& rDoc = pDocSh->GetDocument();
 
     //Without the fix in place, it would have failed with 'Unexpected dialog:  Error: BASIC runtime error.'
-    SfxObjectShell::CallXScript(
-        mxComponent, "vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    executeMacro("vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document");
 
     //Check the autofilter was created
     const ScPatternAttr* pPattern = rDoc.GetPattern(0, 0, 0);
@@ -883,17 +774,10 @@ void VBAMacroTest::testTdf90278()
     createFileURL(u"tdf90278.xls", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     // Without the fix in place, changing the border weight
     // would cause a Basic exception/error in the following script.
-    SfxObjectShell::CallXScript(
-        mxComponent,
-        "vnd.sun.Star.script:VBAProject.Module1.BorderWeight?language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+    uno::Any aRet = executeMacro(
+        "vnd.sun.Star.script:VBAProject.Module1.BorderWeight?language=Basic&location=document");
 
     // Check the border weight of the corresponding cell in the test document
     sal_Int32 aReturnValue;
@@ -916,19 +800,12 @@ void VBAMacroTest::testTdf149531()
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
     for (sal_Int32 i = 0; i < 5; ++i)
     {
         // Without the fix in place, this test would have crashed
         // also check the test doesn't crash when the macro is executed a few times in a row
-        SfxObjectShell::CallXScript(mxComponent,
-                                    "vnd.sun.Star.script:VBAProject.Module1.SetColumnWidth?"
-                                    "language=Basic&location=document",
-                                    aParams, aRet, aOutParamIndex, aOutParam);
+        executeMacro("vnd.sun.Star.script:VBAProject.Module1.SetColumnWidth?language=Basic&"
+                     "location=document");
     }
 
     sal_uInt16 nWidth
@@ -944,16 +821,9 @@ void VBAMacroTest::testTdf118247()
     createFileURL(u"tdf118247.xlsm", aFileName);
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
-    uno::Sequence<uno::Any> aParams;
-
-    SfxObjectShell::CallXScript(
-        mxComponent,
+    uno::Any aRet = executeMacro(
         "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"
-        "language=Basic&location=document",
-        aParams, aRet, aOutParamIndex, aOutParam);
+        "language=Basic&location=document");
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
@@ -967,12 +837,11 @@ void VBAMacroTest::testTdf118247()
 
     for (auto & [ nXlSpecialCellsValue, sRange ] : aTestParams)
     {
-        aParams = { uno::Any(nXlSpecialCellsValue) };
-        SfxObjectShell::CallXScript(
-            mxComponent,
+        uno::Sequence<uno::Any> aParams = { uno::Any(nXlSpecialCellsValue) };
+        aRet = executeMacro(
             "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstants?"
             "language=Basic&location=document",
-            aParams, aRet, aOutParamIndex, aOutParam);
+            aParams);
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sRange, aReturnValue);
     }
