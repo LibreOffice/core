@@ -33,6 +33,7 @@ namespace emfio
     private:
         sal_uInt16      mnUnitsPerInch;
         sal_uInt32      mnRecSize;
+        bool            mbPlaceable;
 
         // embedded EMF data
         std::optional<std::vector<sal_uInt8>> mpEMFStream;
