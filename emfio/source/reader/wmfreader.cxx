@@ -1412,11 +1412,11 @@ namespace emfio
 
         tools::Rectangle aPlaceableBound;
 
-        bool bPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
+        mbPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
 
-        SAL_INFO("emfio", "Placeable: \"" << (bPlaceable ? "yes" : "no") << "\"");
+        SAL_INFO("emfio", "Placeable: \"" << (mbPlaceable ? "yes" : "no") << "\"");
 
-        if (bPlaceable)
+        if (mbPlaceable)
         {
             //TODO do some real error handling here
             sal_Int16 nVal(0);
@@ -1669,9 +1669,10 @@ namespace emfio
         Point aViewportOrg(0,0);
         std::optional<Size>  aViewportExt;
 
+        sal_Int16 nMapMode = MM_ANISOTROPIC;
+
         if (nEnd - nPos)
         {
-            sal_Int16 nMapMode = MM_ANISOTROPIC;
             sal_uInt16 nFunction;
             sal_uInt32 nRSize;
 
@@ -2001,6 +2002,21 @@ namespace emfio
         if (aWinExt)
         {
             rPlaceableBound = tools::Rectangle(aWinOrg, *aWinExt);
+            if (mbPlaceable && nMapMode == MM_ANISOTROPIC)
+            {
+                // It seems that (in MM_ANISOTROPIC WMFs) the "inch" field (PPI) in META_PLACEABLE is
+                // ignored and instead competitor office suites decide what it should be arbitrarily
+                // Could have to do with MM_ANISOTROPICs definition:
+                // Logical units are mapped to arbitrary units with arbitrarily scaled axes.
+                // The issue is that when PPI is bigger than the window size, the image appears
+                // tiny (smaller than an inch squared).
+                // A solution is to scale PPI down in such images to an arbitrary amount that makes
+                // the image visible:
+                auto nWidth = rPlaceableBound.GetWidth();
+                auto nHeight = rPlaceableBound.GetHeight();
+                if (mnUnitsPerInch > nWidth && mnUnitsPerInch > nHeight)
+                    mnUnitsPerInch = std::max(nWidth, nHeight);
+            }
             SAL_INFO("emfio", "Window dimension "
                        " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
                     << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());
@@ -2035,6 +2051,7 @@ namespace emfio
         : MtfTools(rGDIMetaFile, rStreamWMF)
         , mnUnitsPerInch(96)
         , mnRecSize(0)
+        , mbPlaceable(false)
         , mnEMFRecCount(0)
         , mnEMFRec(0)
         , mnEMFSize(0)
