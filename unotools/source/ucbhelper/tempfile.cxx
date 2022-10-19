@@ -368,6 +368,7 @@ TempFileFast::TempFileFast(TempFileFast && other) noexcept :
 
 TempFileFast::~TempFileFast()
 {
+    CloseStream();
 }
 
 SvStream* TempFileFast::GetStream( StreamMode eMode )
@@ -382,7 +383,13 @@ SvStream* TempFileFast::GetStream( StreamMode eMode )
 
 void TempFileFast::CloseStream()
 {
-    mxStream.reset();
+    if (mxStream)
+    {
+        OUString aName = mxStream->GetFileName();
+        mxStream.reset();
+        if (!aName.isEmpty() && (osl::FileBase::getFileURLFromSystemPath(aName, aName) == osl::FileBase::E_None))
+            File::remove(aName);
+    }
 }
 
 OUString CreateTempURL( const OUString* pParent, bool bDirectory )
