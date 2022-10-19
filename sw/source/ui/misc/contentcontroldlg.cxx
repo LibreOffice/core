@@ -38,6 +38,8 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
                           "ContentControlDialog")
     , m_rWrtShell(rWrtShell)
     , m_xShowingPlaceHolderCB(m_xBuilder->weld_check_button("showing_place_holder"))
+    , m_xAlias(m_xBuilder->weld_entry("aliasentry"))
+    , m_xTag(m_xBuilder->weld_entry("tagentry"))
     , m_xCheckboxFrame(m_xBuilder->weld_frame("checkboxframe"))
     , m_xCheckedState(m_xBuilder->weld_entry("checkboxcheckedentry"))
     , m_xCheckedStateBtn(m_xBuilder->weld_button("btncheckboxchecked"))
@@ -93,6 +95,18 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     TriState eShowingPlaceHolder = bShowingPlaceHolder ? TRISTATE_TRUE : TRISTATE_FALSE;
     m_xShowingPlaceHolderCB->set_state(eShowingPlaceHolder);
     m_xShowingPlaceHolderCB->save_state();
+
+    if (!m_pContentControl->GetAlias().isEmpty())
+    {
+        m_xAlias->set_text(m_pContentControl->GetAlias());
+        m_xAlias->save_value();
+    }
+
+    if (!m_pContentControl->GetTag().isEmpty())
+    {
+        m_xTag->set_text(m_pContentControl->GetTag());
+        m_xTag->save_value();
+    }
 
     if (m_pContentControl->GetCheckbox())
     {
@@ -173,6 +187,18 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
     {
         bool bShowingPlaceHolder = m_xShowingPlaceHolderCB->get_state() == TRISTATE_TRUE;
         m_pContentControl->SetShowingPlaceHolder(bShowingPlaceHolder);
+        bChanged = true;
+    }
+
+    if (m_xAlias->get_value_changed_from_saved())
+    {
+        m_pContentControl->SetAlias(m_xAlias->get_text());
+        bChanged = true;
+    }
+
+    if (m_xTag->get_value_changed_from_saved())
+    {
+        m_pContentControl->SetTag(m_xTag->get_text());
         bChanged = true;
     }
 
