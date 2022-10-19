@@ -3119,6 +3119,92 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfUaMetadata)
     CPPUNIT_ASSERT_EQUAL(OString("1"), aPdfUaPart);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139736)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"tdf139736-1.odt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    enum
+    {
+        Default,
+        Artifact,
+        Tagged
+    } state
+        = Default;
+
+    auto nLine(0);
+    auto nTagged(0);
+    auto nArtifacts(0);
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n";
+            if (line == "/Artifact BMC")
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Artifact;
+                ++nArtifacts;
+            }
+            else if (line == "/Standard<</MCID 0>>BDC")
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Tagged;
+                ++nTagged;
+            }
+            else if (line == "EMC")
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected end", state != Default);
+                state = Default;
+            }
+            else if (nLine > 1) // first line is expected "0.1 w"
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected content outside MCS", state != Default);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(1), nTagged); // text in body
+    // 1 image and 1 frame and 1 header text; arbitrary number of aux stuff like borders
+    CPPUNIT_ASSERT(nArtifacts >= 3);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "master.odm";
