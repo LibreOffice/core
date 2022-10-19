@@ -36,6 +36,7 @@ endef
 
 # $(call gb_CObject__compiler,flags,source,compiler)
 define gb_CObject__compiler
+	VSLANG=1033 \
 	$(if $(filter YES,$(LIBRARY_X64)), $(CXX_X64_BINARY), \
 		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
 			$(if $(filter %.c,$(2)), \
@@ -291,7 +292,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest \
 			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/$(2))) \
 		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)) \
-		| LC_ALL=C $(GBUILDDIR)/platform/filter-creatingLibrary.awk; RC=$${PIPESTATUS[0]}; rm $${RESPONSEFILE} \
+		| $(GBUILDDIR)/platform/filter-creatingLibrary.awk; RC=$${PIPESTATUS[0]}; rm $${RESPONSEFILE} \
 	$(if $(filter Library,$(TARGETTYPE)),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1); exit 42; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;2 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest $(ILIBTARGET); fi) \
 	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;1 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest; fi) \

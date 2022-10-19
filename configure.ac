@@ -4469,7 +4469,7 @@ if test "$_os" = WINNT; then
     dnl localized
     AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
     echo "#include <stdlib.h>" > conftest.c
-    SHOWINCLUDES_PREFIX=`$CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
+    SHOWINCLUDES_PREFIX=`VSLANG=1033 $CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
         grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
     rm -f conftest.c conftest.obj
     if test -z "$SHOWINCLUDES_PREFIX"; then
@@ -12240,7 +12240,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
 
             AC_MSG_CHECKING([the dependency generation prefix (clang.exe -showIncludes)])
             echo "#include <stdlib.h>" > conftest.c
-            LO_CLANG_SHOWINCLUDES_PREFIX=`$LO_CLANG_CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
+            LO_CLANG_SHOWINCLUDES_PREFIX=`VSLANG=1033 $LO_CLANG_CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
                 grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
             rm -f conftest.c conftest.obj
             if test -z "$LO_CLANG_SHOWINCLUDES_PREFIX"; then
