@@ -340,7 +340,6 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
         {
             // unlike IN, this is all headers in one call
             OString tmp(data, size);
-#if 0
             sal_Int32 const start(tmp.indexOf("Authorization: "));
             if (start != -1)
             {
@@ -350,7 +349,6 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
                 tmp = tmp.replaceAt(start + len, end - start - len,
                                     OString::number(end - start - len) + " bytes redacted");
             }
-#endif
             SAL_INFO("ucb.ucp.webdav.curl", "CURLINFO_HEADER_OUT: " << handle << ": " << tmp);
             return 0;
         }
@@ -1427,7 +1425,7 @@ auto CurlProcessor::ProcessRequest(
                             ProcessHeaders(headers.HeaderFields.back().first));
                         // X-MSDAVEXT_Error see [MS-WEBDAVE] 2.2.3.1.9
                         auto const it(headerMap.find("x-msdavext_error"));
-                        if (false && (it == headerMap.end() || !it->second.startsWith("917656;")))
+                        if (it == headerMap.end() || !it->second.startsWith("917656;"))
                         {
                             break;
                         }
@@ -1491,7 +1489,6 @@ auto CurlProcessor::ProcessRequest(
                                                         ? CURLINFO_HTTPAUTH_AVAIL
                                                         : CURLINFO_PROXYAUTH_AVAIL,
                                                     &authAvail);
-                            authAvail = 0;
                             assert(rc == CURLE_OK);
                             (void)rc;
                             if (statusCode == SC_FORBIDDEN)
