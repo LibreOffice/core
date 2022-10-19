@@ -94,6 +94,13 @@ struct Init
             assert(!"curl_share_setopt failed");
             ::std::abort(); // can't handle error here
         }
+        sh = curl_share_setopt(pShare.get(), CURLSHOPT_SHARE, CURL_LOCK_DATA_DNS);
+        // might fail but this is just a perf improvement
+        SAL_WARN_IF(sh != CURLSHE_OK, "ucb.ucp.webdav.curl", "curl_share_setopt failed");
+        sh = curl_share_setopt(pShare.get(), CURLSHOPT_SHARE, CURL_LOCK_DATA_SSL_SESSION);
+        // might fail but this is just a perf improvement
+        SAL_WARN_IF(sh != CURLSHE_OK, "ucb.ucp.webdav.curl", "curl_share_setopt failed");
+        // note: CURL_LOCK_DATA_CONNECT isn't safe in a multi threaded program.
     }
     // do not call curl_global_cleanup() - this is not the only client of curl
 };
