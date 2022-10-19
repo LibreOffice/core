@@ -75,6 +75,10 @@ struct Init
         assert(sh == CURLSHE_OK); // might fail but can't handle error here
         sh = curl_share_setopt(pShare.get(), CURLSHOPT_SHARE, CURL_LOCK_DATA_COOKIE);
         assert(sh == CURLSHE_OK); // might fail but can't handle error here
+        sh = curl_share_setopt(pShare.get(), CURLSHOPT_SHARE, CURL_LOCK_DATA_DNS);
+        assert(sh == CURLSHE_OK); // might fail but can't handle error here
+        sh = curl_share_setopt(pShare.get(), CURLSHOPT_SHARE, CURL_LOCK_DATA_SSL_SESSION);
+        assert(sh == CURLSHE_OK); // might fail but can't handle error here
     }
     // do not call curl_global_cleanup() - this is not the only client of curl
 };
