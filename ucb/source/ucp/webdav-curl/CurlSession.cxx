@@ -44,6 +44,9 @@ using namespace ::com::sun::star;
 
 namespace
 {
+static void lock_cb(CURL*, curl_lock_data, curl_lock_access, void*);
+static void unlock_cb(CURL*, curl_lock_data, curl_lock_access, void*);
+
 /// globals container
 struct Init
 {
@@ -51,16 +54,54 @@ struct Init
     ///       so don't call LockStore with m_Mutex held to prevent deadlock.
     ::http_dav_ucp::SerfLockStore LockStore;
 
+    /// libcurl shared data - to store cookies beyond one connection
+    ::std::mutex ShareLock[CURL_LOCK_DATA_LAST];
+    ::std::unique_ptr<CURLSH, http_dav_ucp::deleter_from_fn<CURLSH, curl_share_cleanup>> pShare;
+
     Init()
     {
         if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK)
         {
             assert(!"curl_global_init failed");
         }
+        pShare.reset(curl_share_init());
+        if (!pShare)
+        {
+            assert(!"curl_share_init failed");
+        }
+        CURLSHcode sh = curl_share_setopt(pShare.get(), CURLSHOPT_LOCKFUNC, lock_cb);
+        assert(sh == CURLSHE_OK); // might fail but can't handle error here
+        sh = curl_share_setopt(pShare.get(), CURLSHOPT_UNLOCKFUNC, unlock_cb);
+        assert(sh == CURLSHE_OK); // might fail but can't handle error here
+        sh = curl_share_setopt(pShare.get(), CURLSHOPT_SHARE, CURL_LOCK_DATA_COOKIE);
+        assert(sh == CURLSHE_OK); // might fail but can't handle error here
     }
     // do not call curl_global_cleanup() - this is not the only client of curl
 };
 Init g_Init;
+
+// global callbacks
+
+static void lock_cb(CURL* /*handle*/, curl_lock_data const data, curl_lock_access /*access*/,
+                    void* /*userptr*/)
+{
+    assert(0 <= data && data < CURL_LOCK_DATA_LAST);
+    try
+    {
+        g_Init.ShareLock[data].lock();
+    }
+    catch (std::exception const&)
+    {
+        ::std::abort();
+    }
+}
+
+static void unlock_cb(CURL* /*handle*/, curl_lock_data const data, curl_lock_access /*access*/,
+                      void* /*userptr*/)
+{
+    assert(0 <= data && data < CURL_LOCK_DATA_LAST);
+    g_Init.ShareLock[data].unlock();
+}
 
 struct ResponseHeaders
 {
