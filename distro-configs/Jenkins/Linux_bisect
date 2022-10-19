@@ -1,0 +1,6 @@
+CC=/opt/rh/devtoolset-7/root/usr/bin/gcc
+CXX=/opt/rh/devtoolset-7/root/usr/bin/g++
+--disable-werror
+--disable-odk
+--with-jdk-home=/etc/alternatives/java_sdk_11
+--enable-kf5

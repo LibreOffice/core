@@ -1,0 +1,6 @@
+--host=x86_64-apple-darwin
+--build=x86_64-apple-darwin
+--disable-werror
+--disable-odk
+--with-package-format=dmg
+--disable-online-update
