@@ -57,6 +57,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Executable_fftester \
         Executable_svptest \
         Executable_listfonts \
+        Executable_listglyphs \
         Executable_svpclient) \
 ))
 
