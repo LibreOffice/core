@@ -162,7 +162,14 @@ def parse_details_and_get_info(url, gitRepo):
         #multiline
         codeLine = "\"" + codeLine + "\""
 
-    return reason, stack, codeLine
+    metadata = soup.find("div", {"id": "metadata"}).tbody
+    tr_list = metadata.find_all("tr")
+    unoCommands = ""
+    for tr in tr_list:
+        if tr.th.text.strip() == "Last-4-Uno-Commands":
+            unoCommands = tr.td.text.strip()
+
+    return reason, stack, codeLine, unoCommands
 
 
 if __name__ == '__main__':
@@ -195,7 +202,7 @@ if __name__ == '__main__':
     with open(fileName, "a") as f:
         if bInsertHeader:
             line = '\t'.join(["Name", "Count", "First report", "Last Report",
-                "ID", "Version", "Reason", "OS", "Stack", "Code Lines" '\n'])
+                "ID", "Version", "Reason", "OS", "Stack", "Code Lines", "Last 4 UNO Commands", '\n'])
             f.write(line)
             f.flush()
 
@@ -205,10 +212,10 @@ if __name__ == '__main__':
                 try:
                     crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
                             "https://crashreport.libreoffice.org/stats/signature/" + urllib.parse.quote(k))
-                    crashReason, crashStack, codeLine = parse_details_and_get_info(
+                    crashReason, crashStack, codeLine, unoCommands = parse_details_and_get_info(
                             "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository)
                     line = '\t'.join([k, str(crashCount), lDate[1], lDate[2],
-                            crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
+                            crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, unoCommands, '\n'])
                     f.write(line)
                     f.flush()
                 except (requests.exceptions.Timeout, AttributeError):
