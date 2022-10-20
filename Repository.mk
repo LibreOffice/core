@@ -77,6 +77,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mtfdemo \
     visualbackendtest \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
+	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), gtktiledviewer) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
@@ -605,6 +606,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	i18nutil \
 	index_data \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), libreofficekitgtk) \
+	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), libreofficekitgtk) \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
@@ -821,6 +823,7 @@ $(eval $(call gb_Helper_register_packages_for_install,calc,\
 
 $(eval $(call gb_Helper_register_packages_for_install,libreofficekit,\
 	$(if $(filter LINUX %BSD SOLARIS, $(OS)),libreofficekit_selectionhandles) \
+	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), libreofficekit_selectionhandles) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
