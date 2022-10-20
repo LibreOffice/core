@@ -1298,12 +1298,20 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     NSOperatingSystemVersion aOSVersion = { .majorVersion = 10, .minorVersion = 16, .patchVersion = 0 };
     Color aControlTextColor(getColor([NSColor controlTextColor], COL_BLACK, mpNSWindow));
+    Color aFaceColor(getColor([NSColor unemphasizedSelectedTextBackgroundColor], COL_LIGHTGRAY, mpNSWindow));
+    Color aControlBackgroundColor(getColor([NSColor controlBackgroundColor], COL_WHITE, mpNSWindow));
+    Color aWindowBackgroundColor(getColor([NSColor windowBackgroundColor], COL_WHITE, mpNSWindow));
     Color aSelectedControlTextColor(getColor([NSColor selectedControlTextColor], COL_BLACK, mpNSWindow));
     Color aAlternateSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
+    aStyleSettings.SetWindowColor(aWindowBackgroundColor);
+    aStyleSettings.SetListBoxWindowBackgroundColor(aWindowBackgroundColor);
+    aStyleSettings.SetFaceColor(aFaceColor);
     aStyleSettings.SetButtonTextColor(aControlTextColor);
     aStyleSettings.SetLabelTextColor(aControlTextColor);
     aStyleSettings.SetRadioCheckTextColor(aControlTextColor);
     aStyleSettings.SetFieldTextColor(aControlTextColor);
+    aStyleSettings.SetFieldRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetFieldColor(aControlBackgroundColor);
     aStyleSettings.SetDefaultActionButtonTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetActionButtonTextColor(aControlTextColor);
     aStyleSettings.SetFlatButtonTextColor(aControlTextColor);
