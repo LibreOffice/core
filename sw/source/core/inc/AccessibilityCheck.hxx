@@ -8,18 +8,39 @@
  *
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
+#pragma once
 
 #include <sfx2/AccessibilityCheck.hxx>
 #include <doc.hxx>
+#include <node.hxx>
 
 namespace sw
 {
+/** Base class for accessibility checks */
+class BaseCheck
+{
+protected:
+    sfx::AccessibilityIssueCollection& m_rIssueCollection;
+
+public:
+    BaseCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : m_rIssueCollection(rIssueCollection)
+    {
+    }
+    virtual ~BaseCheck() {}
+};
+
 class SW_DLLPUBLIC AccessibilityCheck final : public sfx::AccessibilityCheck
 {
 private:
     SwDoc* m_pDoc;
+
+    std::vector<std::shared_ptr<BaseCheck>> m_aDocumentChecks;
+    std::vector<std::shared_ptr<BaseCheck>> m_aNodeChecks;
+
+    AccessibilityCheck() = delete;
+
+    void init();
 
 public:
     AccessibilityCheck(SwDoc* pDoc)
@@ -29,10 +50,9 @@ public:
 
     void check() override;
     void checkObject(SdrObject* pObject);
+    void checkNode(SwNode* pNode);
 };
 
 } // end sw namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
