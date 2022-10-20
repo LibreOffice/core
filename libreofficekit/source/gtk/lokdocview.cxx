@@ -127,6 +127,8 @@ struct LOKDocViewPrivateImpl
     std::vector<GdkRectangle> m_aTextSelectionRectangles;
     /// Rectangles of the current content control.
     std::vector<GdkRectangle> m_aContentControlRectangles;
+    /// Alias/title of the current content control.
+    std::string m_aContentControlAlias;
     /// Rectangles of view selections. The current view can only see
     /// them, can't modify them. Key is the view id.
     std::map<int, ViewRectangles> m_aTextViewSelectionRectangles;
@@ -1406,10 +1408,21 @@ callback (gpointer pData)
         {
             auto aRectangles = aTree.get<std::string>("rectangles");
             priv->m_aContentControlRectangles = payloadToRectangles(pDocView, aRectangles.c_str());
+
+            auto it = aTree.find("alias");
+            if (it == aTree.not_found())
+            {
+                priv->m_aContentControlAlias.clear();
+            }
+            else
+            {
+                priv->m_aContentControlAlias = it->second.get_value<std::string>();
+            }
         }
         else if (aAction == "hide")
         {
             priv->m_aContentControlRectangles.clear();
+            priv->m_aContentControlAlias.clear();
         }
         else if (aAction == "change-picture")
         {
@@ -1870,6 +1883,27 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                             twipToPixel(rRectangle.y, priv->m_fZoom),
                             twipToPixel(rRectangle.width, priv->m_fZoom),
                             twipToPixel(rRectangle.height, priv->m_fZoom));
+            cairo_fill(pCairo);
+        }
+
+        if (!priv->m_aContentControlAlias.empty())
+        {
+            cairo_text_extents_t aExtents;
+            cairo_text_extents(pCairo, priv->m_aContentControlAlias.c_str(), &aExtents);
+            // Blue with 75% transparency.
+            cairo_set_source_rgba(pCairo, 0, 0, 1, 0.25);
+            cairo_rectangle(pCairo,
+                            twipToPixel(priv->m_aContentControlRectangles[0].x, priv->m_fZoom) + aExtents.x_bearing,
+                            twipToPixel(priv->m_aContentControlRectangles[0].y, priv->m_fZoom) + aExtents.y_bearing,
+                            aExtents.width,
+                            aExtents.height);
+            cairo_fill(pCairo);
+
+            cairo_move_to(pCairo,
+                    twipToPixel(priv->m_aContentControlRectangles[0].x, priv->m_fZoom),
+                    twipToPixel(priv->m_aContentControlRectangles[0].y, priv->m_fZoom));
+            cairo_set_source_rgb(pCairo, 0, 0, 0);
+            cairo_show_text(pCairo, priv->m_aContentControlAlias.c_str());
             cairo_fill(pCairo);
         }
     }

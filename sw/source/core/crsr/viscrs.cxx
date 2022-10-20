@@ -710,6 +710,11 @@ void SwSelPaintRects::HighlightContentControl()
                 aJson.put("date", "true");
             }
 
+            if (pContentControl && !pContentControl->GetAlias().isEmpty())
+            {
+                aJson.put("alias", pContentControl->GetAlias());
+            }
+
             std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
             GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson.get());
         }

@@ -3505,7 +3505,17 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlinePortions)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
 {
     // Given a document with a content control:
-    SwXTextDocument* pXTextDocument = createDoc("content-control.odt");
+    SwXTextDocument* pXTextDocument = createDoc();
+    uno::Reference<text::XText> xText = pXTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        pXTextDocument->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Alias", uno::Any(OUString("my alias")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -3525,6 +3535,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
         CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
         OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
+        // Without the accompanying fix in place, this test would have failed width:
+        // uncaught exception of type std::exception (or derived).
+        // - No such node (alias)
+        OString sAlias = aTree.get_child("alias").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("my alias"), sAlias);
     }
 
     // And when leaving that content control:
