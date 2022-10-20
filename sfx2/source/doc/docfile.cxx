@@ -52,6 +52,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
@@ -1243,6 +1244,37 @@ namespace
     }
 }
 
+namespace
+{
+
+// for LOCK request, suppress dialog on 403, typically indicates read-only
+// document and there's a 2nd dialog prompting to open a copy anyway
+class LockInteractionHandler : public ::cppu::WeakImplHelper<task::XInteractionHandler>
+{
+private:
+    uno::Reference<task::XInteractionHandler> m_xHandler;
+
+public:
+    explicit LockInteractionHandler(uno::Reference<task::XInteractionHandler> const& xHandler)
+        : m_xHandler(xHandler)
+    {
+    }
+
+    virtual void SAL_CALL handle(uno::Reference<task::XInteractionRequest> const& xRequest) override
+    {
+        ucb::InteractiveNetworkWriteException readException;
+        ucb::InteractiveNetworkReadException writeException;
+        if ((xRequest->getRequest() >>= readException)
+            || (xRequest->getRequest() >>= writeException))
+        {
+            return; // 403 gets reported as one of these; ignore to avoid dialog
+        }
+        m_xHandler->handle(xRequest);
+    }
+};
+
+} // namespace
+
 #endif // HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
 // sets SID_DOC_READONLY if the document cannot be opened for editing
@@ -1289,6 +1321,13 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     if( !bResult )
                     {
                         uno::Reference< task::XInteractionHandler > xCHandler = GetInteractionHandler( true );
+                        // Dialog with error is superfluous:
+                        // on loading, will result in read-only with infobar.
+                        // bNoUI case for Reload failing, will open dialog later.
+                        if (bLoading || bNoUI)
+                        {
+                            xCHandler = new LockInteractionHandler(xCHandler);
+                        }
                         Reference< css::ucb::XCommandEnvironment > xComEnv = new ::ucbhelper::CommandEnvironment(
                             xCHandler, Reference< css::ucb::XProgressHandler >() );
 
