@@ -215,6 +215,12 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     }
 
     int nRatio = nWidth * 10 / nHeight;
+    if (nRatio >= 5120)
+    {
+        // as seen with freetype 2.12.1, so cairo surface status is "fail"
+        SAL_WARN("vcl", "rendering text would fail with stretch of: " << nRatio / 10.0);
+        return;
+    }
 
     /*
      * It might be ideal to cache surface and cairo context between calls and
