@@ -6492,6 +6492,17 @@
           <value>0</value>
         </prop>
       </group>
+      <group oor:name="HTML">
+        <info>
+          <desc>Contains settings for the HTML filter.</desc>
+        </info>
+        <prop oor:name="IncludeHiddenText" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Whether hidden text (sections, etc) is included in the output.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+      </group>
     </group>
     <group oor:name="Wizards">
       <info>

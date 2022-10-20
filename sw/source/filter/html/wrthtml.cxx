@@ -83,6 +83,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -881,6 +882,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 {
     bool bSaveWriteAll = m_bWriteAll;     // save
+    bool bIncludeHidden = officecfg::Office::Writer::FilterFlags::HTML::IncludeHiddenText::get();
 
     // search next text::Bookmark position from text::Bookmark table
     m_nBkmkTabPos = m_bWriteAll ? FindPos_Bkmk( *m_pCurrentPam->GetPoint() ) : -1;
@@ -901,14 +903,17 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 
             OSL_ENSURE( !(rNd.IsGrfNode() || rNd.IsOLENode()),
                     "Unexpected Grf- or OLE-Node here" );
+
             if( rNd.IsTextNode() )
             {
                 SwTextNode* pTextNd = rNd.GetTextNode();
+                if (!pTextNd->IsHidden() || bIncludeHidden)
+                {
+                    if (!m_bFirstLine)
+                        m_pCurrentPam->GetPoint()->Assign(*pTextNd, 0);
 
-                if( !m_bFirstLine )
-                    m_pCurrentPam->GetPoint()->Assign( *pTextNd, 0 );
-
-                OutHTML_SwTextNode( *this, *pTextNd );
+                    OutHTML_SwTextNode(*this, *pTextNd);
+                }
             }
             else if( rNd.IsTableNode() )
             {
@@ -917,8 +922,12 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             }
             else if( rNd.IsSectionNode() )
             {
-                OutHTML_Section( *this, *rNd.GetSectionNode() );
-                m_nBkmkTabPos = m_bWriteAll ? FindPos_Bkmk( *m_pCurrentPam->GetPoint() ) : -1;
+                SwSectionNode* pSectionNode = rNd.GetSectionNode();
+                if (!pSectionNode->GetSection().IsHiddenFlag() || bIncludeHidden)
+                {
+                    OutHTML_Section( *this, *pSectionNode );
+                    m_nBkmkTabPos = m_bWriteAll ? FindPos_Bkmk( *m_pCurrentPam->GetPoint() ) : -1;
+                }
             }
             else if( &rNd == &m_pDoc->GetNodes().GetEndOfContent() )
                 break;
