@@ -803,6 +803,7 @@ typedef enum
      * Entered a rich text content control:
      * {
      *     "action": "show",
+     *     "alias": "my alias", // omitted if empty
      *     "rectangles": "1418, 1694, 720, 551; 10291, 1418, 1099, 275"
      * }
      *
