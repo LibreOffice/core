@@ -1301,6 +1301,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     Color aSelectedControlTextColor(getColor([NSColor selectedControlTextColor], COL_BLACK, mpNSWindow));
     Color aAlternateSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
     aStyleSettings.SetButtonTextColor(aControlTextColor);
+    aStyleSettings.SetLabelTextColor(aControlTextColor);
+    aStyleSettings.SetRadioCheckTextColor(aControlTextColor);
+    aStyleSettings.SetFieldTextColor(aControlTextColor);
     aStyleSettings.SetDefaultActionButtonTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetActionButtonTextColor(aControlTextColor);
     aStyleSettings.SetFlatButtonTextColor(aControlTextColor);
