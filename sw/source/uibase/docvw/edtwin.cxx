@@ -6654,13 +6654,14 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     if (rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit())
         return rSh.GetDrawView()->GetTextEditOutlinerView()->GetSurroundingTextSelection();
 
+    Selection aSel(0, 0);
     if( rSh.HasSelection() )
     {
         OUString sReturn;
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
-        return Selection( 0, sReturn.getLength() );
+        aSel = Selection( 0, sReturn.getLength() );
     }
-    else
+    else if (rSh.GetCursor()->GetPoint()->GetNode().GetTextNode())
     {
         bool bUnLockView = !rSh.IsViewLocked();
         rSh.LockView(true);
@@ -6688,8 +6689,10 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         if (bUnLockView)
             rSh.LockView(false);
 
-        return Selection(sal_Int32(nPos - nStartPos), sal_Int32(nPos - nStartPos));
+        aSel = Selection(sal_Int32(nPos - nStartPos), sal_Int32(nPos - nStartPos));
     }
+
+    return aSel;
 }
 
 bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
