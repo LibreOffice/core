@@ -37,6 +37,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <sfx2/AccessibilityIssue.hxx>
 
 class SfxHint;
 class SwNumRule;
@@ -101,6 +102,12 @@ struct ParagraphIdleData
     bool bAutoComplDirty = true;               ///< auto complete list dirty
 };
 
+struct AccessibilityCheckStatus
+{
+    std::unique_ptr<sfx::AccessibilityIssueCollection> pCollection;
+    bool bDirty = true;
+};
+
 } // end namespace sw
 
 /// SwTextNode is a paragraph in the document model.
@@ -128,6 +135,7 @@ class SW_DLLPUBLIC SwTextNode final
     OUString m_Text;
 
     mutable sw::ParagraphIdleData m_aParagraphIdleData;
+    mutable sw::AccessibilityCheckStatus m_aAccessibilityCheckStatus;
 
     /** Some of the chars this para are hidden. Paragraph has to be reformatted
        on changing the view to print preview. */
@@ -234,6 +242,10 @@ public:
 
     /// End: Data collected during idle time
 
+    sw::AccessibilityCheckStatus& getAccessibilityCheckStatus()
+    {
+        return m_aAccessibilityCheckStatus;
+    }
 
 public:
     using SwContentNode::GetAttr;

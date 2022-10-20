@@ -163,6 +163,7 @@ namespace sw {
     class DocumentStylePoolManager;
     class DocumentExternalDataManager;
     class GrammarContact;
+    class OnlineAccessibilityCheck;
 }
 
 namespace com::sun::star {
@@ -285,6 +286,7 @@ class SW_DLLPUBLIC SwDoc final
                                                                     document for a faster formatting */
 
     std::unique_ptr<sw::GrammarContact> mpGrammarContact; //< for grammar checking in paragraphs during editing
+    std::unique_ptr<sw::OnlineAccessibilityCheck> mpOnlineAccessibilityCheck;
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
     css::uno::Reference< ooo::vba::word::XFind > mxVbaFind;
@@ -1562,6 +1564,10 @@ public:
     bool ContainsHiddenChars() const;
 
     std::unique_ptr<sw::GrammarContact> const& getGrammarContact() const { return mpGrammarContact; }
+    std::unique_ptr<sw::OnlineAccessibilityCheck> const& getOnlineAccessibilityCheck() const
+    {
+        return mpOnlineAccessibilityCheck;
+    }
 
     /** Marks/Unmarks a list level of a certain list
 
