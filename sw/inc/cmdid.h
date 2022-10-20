@@ -851,6 +851,7 @@ class SwUINumRuleItem;
 #define FN_STAT_SELMODE             (FN_STAT + 5)
 #define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* For Popup Bookmarks*/
 #define FN_STAT_WORDCOUNT           (FN_STAT + 9)
+#define FN_STAT_ACCESSIBILITY_CHECK (FN_STAT + 10)
 
 // Region: Page preview
 #define FN_SHOW_TWO_PAGES           (FN_PGPREVIEW + 1)

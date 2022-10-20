@@ -464,6 +464,11 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    FN_STAT_ACCESSIBILITY_CHECK // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_JUMP_TO_SPECIFIC_PAGE // status()
     [
         ExecMethod = Execute ;
@@ -477,4 +482,3 @@ shell SwPagePreview
 {
     import TextPrintPreview;
 }
-
