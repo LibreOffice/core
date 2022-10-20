@@ -6497,11 +6497,22 @@
           <desc>Contains settings for the HTML filter.</desc>
         </info>
         <prop oor:name="IncludeHiddenText" oor:type="xs:boolean" oor:nillable="false">
-            <info>
-              <desc>Whether hidden text (sections, etc) is included in the output.</desc>
-            </info>
-            <value>false</value>
-          </prop>
+          <info>
+            <desc>Whether hidden text (sections, etc) is included in the output.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="ASCII">
+        <info>
+          <desc>Contains settings for the ASCII filter.</desc>
+        </info>
+        <prop oor:name="IncludeHiddenText" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Whether hidden text (sections, etc) is included in the output.</desc>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
     </group>
     <group oor:name="Wizards">

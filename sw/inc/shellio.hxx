@@ -84,15 +84,8 @@ public:
     bool GetIncludeHidden() const { return m_bIncludeHidden; }
     void SetIncludeHidden( bool bVal ) { m_bIncludeHidden = bVal; }
 
-    void Reset()
-    {
-        m_sFont.clear();
-        m_eCRLF_Flag = GetSystemLineEnd();
-        m_eCharSet = ::osl_getThreadTextEncoding();
-        m_nLanguage = LANGUAGE_SYSTEM;
-        m_bIncludeBOM = true;
-        m_bIncludeHidden = true;
-    }
+    void Reset();
+
     // for the automatic conversion (mail/news/...)
     void ReadUserData( std::u16string_view );
     void WriteUserData( OUString& ) const;
