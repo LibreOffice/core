@@ -1320,7 +1320,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
-        xTempFile = io::TempFile::create(m_xContext);
+        xTempFile = new utl::TempFileFastService;
     else
         xTempFile = xTargetStream;
 

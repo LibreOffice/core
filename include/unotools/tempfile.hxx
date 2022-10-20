@@ -19,8 +19,16 @@
 #pragma once
 
 #include <unotools/unotoolsdllapi.h>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <tools/stream.hxx>
 #include <memory>
+#include <mutex>
+#include <optional>
 
 namespace utl
 {
@@ -181,6 +189,51 @@ public:
                     { bKillingFileEnabled = bEnable; }
 
 };
+
+
+typedef ::cppu::WeakImplHelper<
+     css::io::XStream
+    , css::io::XSeekable
+    , css::io::XInputStream
+    , css::io::XOutputStream
+    , css::io::XTruncate> TempFileFastService_Base;
+class UNOTOOLS_DLLPUBLIC TempFileFastService : public TempFileFastService_Base
+{
+    std::optional<utl::TempFileFast> mpTempFile;
+    std::mutex maMutex;
+    SvStream* mpStream;
+    bool mbInClosed;
+    bool mbOutClosed;
+
+    void checkError () const;
+    void checkConnected ();
+
+public:
+    explicit TempFileFastService ();
+    virtual ~TempFileFastService () override;
+
+    // XInputStream
+    virtual ::sal_Int32 SAL_CALL readBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    virtual ::sal_Int32 SAL_CALL available(  ) override;
+    virtual void SAL_CALL closeInput(  ) override;
+    // XOutputStream
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual void SAL_CALL flush(  ) override;
+    virtual void SAL_CALL closeOutput(  ) override;
+    // XSeekable
+    virtual void SAL_CALL seek( sal_Int64 location ) override;
+    virtual sal_Int64 SAL_CALL getPosition(  ) override;
+    virtual sal_Int64 SAL_CALL getLength(  ) override;
+    // XStream
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
+    // XTruncate
+    virtual void SAL_CALL truncate() override;
+
+};
+
 
 }
 

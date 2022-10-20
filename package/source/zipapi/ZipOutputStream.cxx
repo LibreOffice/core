@@ -178,7 +178,6 @@ void ZipOutputStream::finish()
         delete p;
     }
     writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
-    m_xStream->flush();
     m_aZipList.clear();
 
     if (m_aDeflateException)

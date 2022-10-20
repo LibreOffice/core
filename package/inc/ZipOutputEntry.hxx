@@ -28,6 +28,7 @@
 
 #include <package/Deflater.hxx>
 #include <comphelper/threadpool.hxx>
+#include <unotools/tempfile.hxx>
 #include "CRC32.hxx"
 #include <atomic>
 
@@ -110,7 +111,7 @@ protected:
 class ZipOutputEntryInThread final : public ZipOutputEntry
 {
     class Task;
-    css::uno::Reference<css::io::XTempFile> m_xTempFile;
+    rtl::Reference<utl::TempFileFastService> m_xTempFile;
     std::exception_ptr m_aParallelDeflateException;
     std::atomic<bool>   m_bFinished;
 

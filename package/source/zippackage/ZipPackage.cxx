@@ -61,6 +61,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <unotools/tempfile.hxx>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 
 #include <string_view>
@@ -1196,9 +1197,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     if( bUseTemp )
     {
         // create temporary file
-        uno::Reference < io::XTempFile > xTempFile( io::TempFile::create(m_xContext) );
-        xTempOut.set( xTempFile->getOutputStream(), UNO_SET_THROW );
-        xTempIn.set( xTempFile->getInputStream(), UNO_SET_THROW );
+        rtl::Reference < utl::TempFileFastService > xTempFile( new utl::TempFileFastService );
+        xTempOut.set( xTempFile );
+        xTempIn.set( xTempFile );
     }
 
     // Hand it to the ZipOutputStream:

@@ -250,9 +250,7 @@ void ZipOutputEntryInThread::createBufferFile()
 {
     assert(!m_xOutStream && !m_xTempFile &&
            "should only be called in the threaded mode where there is no existing stream yet");
-    m_xTempFile.set(
-            io::TempFile::create(m_xContext),
-            uno::UNO_SET_THROW );
+    m_xTempFile = new utl::TempFileFastService;
     m_xOutStream = m_xTempFile->getOutputStream();
 }
 

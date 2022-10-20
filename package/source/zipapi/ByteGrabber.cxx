@@ -70,9 +70,6 @@ void ByteGrabber::seek( sal_Int64 location )
     if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
 
-    sal_Int64 nLen = xSeek->getLength();
-    if ( location < 0 || location > nLen )
-        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
     xSeek->seek( location );
 }
 

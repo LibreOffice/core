@@ -49,6 +49,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <rtl/random.h>
 #include <sal/log.hxx>
@@ -173,15 +174,13 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
                     m_xBaseEncryptionData->m_aSalt.getLength() + m_xBaseEncryptionData->m_aDigest.getLength() );
 
     // create temporary stream
-    uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_xContext);
-    uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+    rtl::Reference < utl::TempFileFastService > xTempFile = new utl::TempFileFastService;
     uno::Reference < io::XInputStream > xTempIn = xTempFile->getInputStream();
-    uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
 
     // copy the raw stream to the temporary file starting from the current position
-    ::comphelper::OStorageHelper::CopyInputToOutput( GetOwnSeekStream(), xTempOut );
-    xTempOut->closeOutput();
-    xTempSeek->seek( 0 );
+    ::comphelper::OStorageHelper::CopyInputToOutput( GetOwnSeekStream(), xTempFile );
+    xTempFile->closeOutput();
+    xTempFile->seek( 0 );
 
     return xTempIn;
 }
@@ -276,9 +275,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     try
     {
         // create temporary file
-        uno::Reference < io::XStream > xTempStream(
-                            io::TempFile::create(m_xContext),
-                            uno::UNO_QUERY_THROW );
+        uno::Reference < io::XStream > xTempStream(new utl::TempFileFastService);
 
         // create a package based on it
         rtl::Reference<ZipPackage> pPackage = new ZipPackage( m_xContext );
@@ -322,16 +319,13 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
             xInRaw = xNewPackStream->getPlainRawStream();
 
         // create another temporary file
-        uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(m_xContext),
-                            uno::UNO_QUERY_THROW );
-        uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
-        uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
+        rtl::Reference < utl::TempFileFastService > xTempOut = new utl::TempFileFastService;
+        uno::Reference < io::XInputStream > xTempIn( xTempOut );
 
         // copy the raw stream to the temporary file
         ::comphelper::OStorageHelper::CopyInputToOutput( xInRaw, xTempOut );
         xTempOut->closeOutput();
-        xTempSeek->seek( 0 );
+        xTempOut->seek( 0 );
 
         // close raw stream, package stream and folder
         xInRaw.clear();

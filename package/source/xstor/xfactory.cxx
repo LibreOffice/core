@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
+#include <unotools/tempfile.hxx>
 
 #include "xfactory.hxx"
 #include "xstorage.hxx"
@@ -71,9 +72,7 @@ static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
-    uno::Reference < io::XStream > xTempStream(
-                        io::TempFile::create(m_xContext),
-                        uno::UNO_QUERY_THROW );
+    uno::Reference < io::XStream > xTempStream(new utl::TempFileFastService);
 
     return static_cast<OWeakObject*>(new OStorage(xTempStream, embed::ElementModes::READWRITE,
                                                   uno::Sequence<beans::PropertyValue>(), m_xContext,

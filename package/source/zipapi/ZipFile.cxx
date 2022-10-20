@@ -820,16 +820,9 @@ void ZipFile::readLOC( ZipEntry &rEntry )
 
     try
     {
-        sal_Int16 nPathLenToRead = nPathLen;
-        const sal_Int64 nBytesAvailable = aGrabber.getLength() - aGrabber.getPosition();
-        if (nPathLenToRead > nBytesAvailable)
-            nPathLenToRead = nBytesAvailable;
-        else if (nPathLenToRead < 0)
-            nPathLenToRead = 0;
-
         // read always in UTF8, some tools seem not to set UTF8 bit
-        uno::Sequence<sal_Int8> aNameBuffer(nPathLenToRead);
-        sal_Int32 nRead = aGrabber.readBytes(aNameBuffer, nPathLenToRead);
+        uno::Sequence<sal_Int8> aNameBuffer(nPathLen);
+        sal_Int32 nRead = aGrabber.readBytes(aNameBuffer, nPathLen);
         if (nRead < aNameBuffer.getLength())
             aNameBuffer.realloc(nRead);
 

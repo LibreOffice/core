@@ -112,10 +112,9 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
             xDestProps->setPropertyValue( rPropName, xSourceProps->getPropertyValue( rPropName ) );
 }
 
-static uno::Reference< io::XInputStream > GetSeekableTempCopy( const uno::Reference< io::XInputStream >& xInStream,
-                                                        const uno::Reference< uno::XComponentContext >& xContext )
+static uno::Reference< io::XInputStream > GetSeekableTempCopy( const uno::Reference< io::XInputStream >& xInStream )
 {
-    uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(xContext);
+    rtl::Reference < utl::TempFileFastService > xTempFile = new utl::TempFileFastService;
     uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
     uno::Reference < io::XInputStream > xTempIn = xTempFile->getInputStream();
 
@@ -1318,7 +1317,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
 
     uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
     uno::Reference< io::XInputStream > xInStrToInsert = xSeek.is() ? xInStream :
-                                                                     GetSeekableTempCopy( xInStream, m_xContext );
+                                                                     GetSeekableTempCopy( xInStream );
 
     uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
@@ -3299,18 +3298,17 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
-        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create( m_pImpl->m_xContext );
+        rtl::Reference < utl::TempFileFastService > xTempFile = new utl::TempFileFastService;
         uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
         xTempIn = xTempFile->getInputStream();
-        uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
 
-        if ( !xTempOut.is() || !xTempIn.is() || !xSeek.is() )
+        if ( !xTempOut.is() || !xTempIn.is() )
             throw io::IOException( THROW_WHERE );
 
         // Copy temporary file to a new one
         ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempOut );
         xTempOut->closeOutput();
-        xSeek->seek( 0 );
+        xTempFile->seek( 0 );
     }
     catch( const embed::InvalidStorageException& )
     {
@@ -3393,18 +3391,17 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
-        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_pImpl->m_xContext);
-        uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
-        xTempIn = xTempFile->getInputStream();
-        uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
+        rtl::Reference < utl::TempFileFastService > xTempFile = new utl::TempFileFastService;
+        uno::Reference < io::XOutputStream > xTempOut = xTempFile;
+        xTempIn = xTempFile;
 
-        if ( !xTempOut.is() || !xTempIn.is() || !xSeek.is() )
+        if ( !xTempFile )
             throw io::IOException( THROW_WHERE );
 
         // Copy temporary file to a new one
         ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempOut );
-        xTempOut->closeOutput();
-        xSeek->seek( 0 );
+        xTempFile->closeOutput();
+        xTempFile->seek( 0 );
 
     }
     catch( const embed::InvalidStorageException& )

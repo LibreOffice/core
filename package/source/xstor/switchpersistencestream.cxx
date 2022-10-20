@@ -22,6 +22,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <unotools/tempfile.hxx>
 #include <utility>
 #include "switchpersistencestream.hxx"
 
@@ -157,7 +158,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
 
     if ( !xTargetStream.is() )
     {
-        xTargetStream.set( io::TempFile::create(m_xContext), uno::UNO_QUERY_THROW );
+        xTargetStream.set( new utl::TempFileFastService );
         xTargetSeek.set( xTargetStream, uno::UNO_QUERY_THROW );
     }
     else
