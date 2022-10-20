@@ -46,19 +46,31 @@ FilterLibs()
     # Return value: $filteredlibs
 
     filteredlibs=
-    for f in $1; do
-        case "$f" in
-            # let's start with Fedora's paths for now
-            -L/lib|-L/lib/|-L/lib64|-L/lib64/|-L/usr/lib|-L/usr/lib/|-L/usr/lib64|-L/usr/lib64/)
-                # ignore it: on UNIXoids it is searched by default anyway
-                # but if it's given explicitly then it may override other paths
-                # (on macOS it would be an error to use it instead of SDK)
-                ;;
-            *)
+    if test "$COM" = "MSC"; then
+        for f in $1; do
+            if test "x$f" != "x${f#-L}"; then
+                filteredlibs="$filteredlibs -LIBPATH:${f:2}"
+            elif test "x$f" != "x${f#-l}"; then
+                filteredlibs="$filteredlibs ${f:2}.lib"
+            else
                 filteredlibs="$filteredlibs $f"
-                ;;
-        esac
-    done
+            fi
+        done
+    else
+        for f in $1; do
+            case "$f" in
+                # let's start with Fedora's paths for now
+                -L/lib|-L/lib/|-L/lib64|-L/lib64/|-L/usr/lib|-L/usr/lib/|-L/usr/lib64|-L/usr/lib64/)
+                    # ignore it: on UNIXoids it is searched by default anyway
+                    # but if it's given explicitly then it may override other paths
+                    # (on macOS it would be an error to use it instead of SDK)
+                    ;;
+                *)
+                    filteredlibs="$filteredlibs $f"
+                    ;;
+            esac
+        done
+    fi
 }
 
 PathFormat()
@@ -2680,6 +2692,11 @@ libo_FUZZ_ARG_WITH(latest-c++,
         [Try to enable the latest features of the C++ compiler, even if they are not yet part of a
          published standard.]),,
         [with_latest_c__=no])
+
+AC_ARG_WITH(gtk3-build,
+    AS_HELP_STRING([--with-gtk3-build=<absolute path to GTK3 build>],
+        [(Windows-only) In order to build GtkTiledViewer on Windows, pass the path
+         to a GTK3 build, like '--with-gtk3-build=C:/gtk-build/gtk/x64/release'.]))
 
 dnl ===================================================================
 dnl Branding
@@ -11748,6 +11765,7 @@ dnl ===================================================================
 
 GTK3_CFLAGS=""
 GTK3_LIBS=""
+ENABLE_GTKTILEDVIEWER=""
 if test "$test_gtk3" = yes -a "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" = "xyes"; then
     if test "$with_system_cairo" = no; then
         add_warning 'Non-system cairo combined with gtk3 is assumed to cause trouble; proceed at your own risk.'
@@ -11765,9 +11783,23 @@ if test "$test_gtk3" = yes -a "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" =
         AC_CHECK_HEADER(EGL/eglplatform.h, [],
                         [AC_MSG_ERROR(EGL headers not found. install mesa-libEGL-devel)], [])
     fi
+elif test -n "$with_gtk3_build" -a "$OS" = "WNT"; then
+    PathFormat "${with_gtk3_build}/lib/pkgconfig"
+    if test "$build_os" = "cygwin"; then
+        dnl cygwin's pkg-config does not recognize "C:/..."-style paths, only "/cygdrive/c/..."
+        formatted_path_unix=`cygpath -au "$formatted_path_unix"`
+    fi
+
+    PKG_CONFIG_PATH="$formatted_path_unix"; export PKG_CONFIG_PATH
+    PKG_CHECK_MODULES(GTK3, cairo gdk-3.0 gio-2.0 glib-2.0 gobject-2.0 gtk+-3.0)
+    GTK3_CFLAGS="$GTK3_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+    FilterLibs "${GTK3_LIBS}"
+    GTK3_LIBS="${filteredlibs}"
+    ENABLE_GTKTILEDVIEWER="yes"
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
+AC_SUBST(ENABLE_GTKTILEDVIEWER)
 
 GTK4_CFLAGS=""
 GTK4_LIBS=""

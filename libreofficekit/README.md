@@ -97,6 +97,19 @@ To debug with `gdb`:
 
 before `bin/run`, this will run gtktiledviewer in the debugger instead.
 
+### Building and running gtktiledviewer on Windows
+
+A pre-requisite is pre-built GTK3 libraries. See [official GTK documentation](https://www.gtk.org/docs/installations/windows/).
+Building of gtktiledviewer on Windows is enabled by passing
+
+    --with-gtk3-build=<path/to/GTK3/build/directory>
+
+to configure.
+
+Running the compiled executable requires GTK's bin in PATH:
+
+    PATH=${PATH}:/cygdrive/c/gtk-build/gtk/x64/release/bin bin/run gtktiledviewer --lo-path=$(cygpath -am $PWD/instdir/program) ../test.odt
+
 ## LibreOfficeKitGtk
 
 Currently consists of only a very basic GTK document viewer widget.

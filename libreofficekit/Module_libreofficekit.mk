@@ -33,6 +33,16 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
     UIConfig_libreofficekit \
 ))
 
+else ifeq ($(OS),WNT)
+
+ifneq ($(ENABLE_GTKTILEDVIEWER),)
+$(eval $(call gb_Module_add_targets,libreofficekit,\
+    Library_libreofficekitgtk \
+    Executable_gtktiledviewer \
+    Package_selectionhandles \
+))
+endif
+
 endif
 
 # vim: set ts=4 sw=4 et:

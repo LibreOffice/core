@@ -15,6 +15,13 @@
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
+ // Avoid "error C2375: 'foo': redefinition; different linkage" on MSVC
+#if defined LOK_DOC_VIEW_IMPLEMENTATION
+#define LOK_DOC_VIEW_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define LOK_DOC_VIEW_DLLPUBLIC
+#endif
+
 G_BEGIN_DECLS
 
 #define LOK_TYPE_DOC_VIEW            (lok_doc_view_get_type())
@@ -38,7 +45,7 @@ struct _LOKDocViewClass
     GtkDrawingAreaClass parent_class;
 };
 
-GType                          lok_doc_view_get_type               (void) G_GNUC_CONST;
+LOK_DOC_VIEW_DLLPUBLIC GType   lok_doc_view_get_type               (void) G_GNUC_CONST;
 
 /**
  * lok_doc_view_new:
@@ -50,7 +57,7 @@ GType                          lok_doc_view_get_type               (void) G_GNUC
  *
  * Returns: (transfer none): The #LOKDocView widget instance.
  */
-GtkWidget*                     lok_doc_view_new                    (const gchar* pPath,
+LOK_DOC_VIEW_DLLPUBLIC GtkWidget* lok_doc_view_new                 (const gchar* pPath,
                                                                     GCancellable *cancellable,
                                                                     GError **error);
 
@@ -67,7 +74,7 @@ GtkWidget*                     lok_doc_view_new                    (const gchar*
  *
  * Returns: (transfer none): The #LOKDocView widget instance.
  */
-GtkWidget*                     lok_doc_view_new_from_user_profile  (const gchar* pPath,
+LOK_DOC_VIEW_DLLPUBLIC GtkWidget* lok_doc_view_new_from_user_profile (const gchar* pPath,
                                                                     const gchar* pUserProfile,
                                                                     GCancellable *cancellable,
                                                                     GError **error);
@@ -79,7 +86,7 @@ GtkWidget*                     lok_doc_view_new_from_user_profile  (const gchar*
  *
  * Returns: (transfer none): The #LOKDocView widget instance.
  */
-GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC GtkWidget* lok_doc_view_new_from_widget     (LOKDocView* pDocView,
                                                                     const gchar* pRenderingArguments);
 
 /**
@@ -91,7 +98,7 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  * @callback:
  * @userdata:
  */
-void                           lok_doc_view_open_document          (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     const gchar* pPath,
                                                                     const gchar* pRenderingArguments,
                                                                     GCancellable* cancellable,
@@ -106,7 +113,7 @@ void                           lok_doc_view_open_document          (LOKDocView* 
  *
  * Returns: %TRUE if the document is loaded successfully, %FALSE otherwise
  */
-gboolean                       lok_doc_view_open_document_finish   (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gboolean lok_doc_view_open_document_finish  (LOKDocView* pDocView,
                                                                     GAsyncResult* res,
                                                                     GError** error);
 
@@ -118,7 +125,7 @@ gboolean                       lok_doc_view_open_document_finish   (LOKDocView* 
  *
  * Returns: The #LibreOfficeKitDocument instance the widget is currently showing
  */
-LibreOfficeKitDocument*        lok_doc_view_get_document           (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC LibreOfficeKitDocument* lok_doc_view_get_document (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_set_zoom:
@@ -129,7 +136,7 @@ LibreOfficeKitDocument*        lok_doc_view_get_document           (LOKDocView* 
  * existing zoom level. Values outside the range [0.25, 5.0] are clamped into
  * the nearest allowed value in the interval.
  */
-void                           lok_doc_view_set_zoom               (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_zoom               (LOKDocView* pDocView,
                                                                     float fZoom);
 /**
  * lok_doc_view_set_visible_area:
@@ -140,7 +147,7 @@ void                           lok_doc_view_set_zoom               (LOKDocView* 
  * to jump the correct length, which depends on the amount of visible height of
  * the document.
  */
-void                           lok_doc_view_set_visible_area       (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_visible_area       (LOKDocView* pDocView,
                                                                     GdkRectangle* pVisibleArea);
 
 /**
@@ -149,7 +156,7 @@ void                           lok_doc_view_set_visible_area       (LOKDocView* 
  *
  * Returns: The current zoom factor value in float for pDocView
  */
-gfloat                         lok_doc_view_get_zoom               (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC gfloat  lok_doc_view_get_zoom               (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_get_parts:
@@ -158,7 +165,7 @@ gfloat                         lok_doc_view_get_zoom               (LOKDocView* 
  * Returns: Part refers to either individual sheets in a Calc, or slides in Impress,
  * and has no relevance for Writer. Returns -1 if no document is set currently.
  */
-gint                           lok_doc_view_get_parts              (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC gint    lok_doc_view_get_parts              (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_get_part:
@@ -166,14 +173,14 @@ gint                           lok_doc_view_get_parts              (LOKDocView* 
  *
  * Returns: Current part number of the document. Returns -1 if no document is set currently.
  */
-gint                           lok_doc_view_get_part               (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC gint    lok_doc_view_get_part               (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_set_part:
  * @pDocView: The #LOKDocView instance
  * @nPart:
  */
-void                           lok_doc_view_set_part               (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_part               (LOKDocView* pDocView,
                                                                     int nPart);
 
 /**
@@ -184,7 +191,7 @@ void                           lok_doc_view_set_part               (LOKDocView* 
  * Returns: Get current part name of loaded document. Returns null if no
  * document is set, or document has been destroyed using lok_doc_view_destroy_document.
  */
-gchar*                         lok_doc_view_get_part_name          (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gchar*  lok_doc_view_get_part_name          (LOKDocView* pDocView,
                                                                     int nPart);
 
 /**
@@ -192,14 +199,14 @@ gchar*                         lok_doc_view_get_part_name          (LOKDocView* 
  * @pDocView: The #LOKDocView instance
  * @nPartMode:
  */
-void                           lok_doc_view_set_partmode           (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_partmode           (LOKDocView* pDocView,
                                                                     int nPartMode);
 
 /**
  * lok_doc_view_reset_view:
  * @pDocView: The #LOKDocView instance
  */
-void                           lok_doc_view_reset_view             (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_reset_view             (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_set_edit:
@@ -208,7 +215,7 @@ void                           lok_doc_view_reset_view             (LOKDocView* 
  *
  * Sets if the viewer is actually an editor or not.
  */
-void                           lok_doc_view_set_edit               (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_edit               (LOKDocView* pDocView,
                                                                     gboolean bEdit);
 
 /**
@@ -219,7 +226,7 @@ void                           lok_doc_view_set_edit               (LOKDocView* 
  *
  * Returns: %TRUE if the given pDocView is in edit mode.
  */
-gboolean                       lok_doc_view_get_edit               (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC gboolean lok_doc_view_get_edit              (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_post_command:
@@ -230,7 +237,7 @@ gboolean                       lok_doc_view_get_edit               (LOKDocView* 
  *
  * Posts the .uno: command to the LibreOfficeKit.
  */
-void                           lok_doc_view_post_command           (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_post_command           (LOKDocView* pDocView,
                                                                     const gchar* pCommand,
                                                                     const gchar* pArguments,
                                                                     gboolean bNotifyWhenFinished);
@@ -245,7 +252,7 @@ void                           lok_doc_view_post_command           (LOKDocView* 
  *
  * Returns: A json mapping of the possible values for the given command
  */
-gchar *                        lok_doc_view_get_command_values     (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gchar * lok_doc_view_get_command_values     (LOKDocView* pDocView,
                                                                     const gchar* pCommand);
 
 /**
@@ -257,7 +264,7 @@ gchar *                        lok_doc_view_get_command_values     (LOKDocView* 
  * Highlights the next matching text in the view. `search-not-found` signal will
  * be emitted when no search is found
  */
-void                           lok_doc_view_find_next              (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_find_next              (LOKDocView* pDocView,
                                                                     const gchar* pText,
                                                                     gboolean bHighlightAll);
 
@@ -270,7 +277,7 @@ void                           lok_doc_view_find_next              (LOKDocView* 
  * Highlights the previous matching text in the view. `search-not-found` signal
  * will be emitted when no search is found
  */
-void                           lok_doc_view_find_prev              (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_find_prev              (LOKDocView* pDocView,
                                                                     const gchar* pText,
                                                                     gboolean bHighlightAll);
 
@@ -282,7 +289,7 @@ void                           lok_doc_view_find_prev              (LOKDocView* 
  * Highlights all matching texts in the view. `search-not-found` signal
  * will be emitted when no search is found
  */
-void                           lok_doc_view_highlight_all          (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_highlight_all          (LOKDocView* pDocView,
                                                                     const gchar* pText);
 
 /**
@@ -295,7 +302,7 @@ void                           lok_doc_view_highlight_all          (LOKDocView* 
  * Returns: Selected text. The caller must free the returned buffer after
  * use. Returns null if no document is set.
  */
-gchar*                          lok_doc_view_copy_selection        (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gchar*   lok_doc_view_copy_selection        (LOKDocView* pDocView,
                                                                     const gchar* pMimeType,
                                                                     gchar** pUsedMimeType);
 
@@ -310,7 +317,7 @@ gchar*                          lok_doc_view_copy_selection        (LOKDocView* 
  *
  * Returns: if pData was pasted successfully.
  */
-gboolean                        lok_doc_view_paste                 (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gboolean lok_doc_view_paste                 (LOKDocView* pDocView,
                                                                     const gchar* pMimeType,
                                                                     const gchar* pData,
                                                                     gsize nSize);
@@ -323,7 +330,7 @@ gboolean                        lok_doc_view_paste                 (LOKDocView* 
  *
  * Set the password for password protected documents
  */
-void                            lok_doc_view_set_document_password (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC void     lok_doc_view_set_document_password (LOKDocView* pDocView,
                                                                     const gchar* pURL,
                                                                     const gchar* pPassword);
 
@@ -341,7 +348,7 @@ void                            lok_doc_view_set_document_password (LOKDocView* 
  * "ProductExtension": ".0.0.alpha0",
  * "BuildId": "<full 40 char git hash>"}
  */
-gchar*                         lok_doc_view_get_version_info       (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC gchar*   lok_doc_view_get_version_info       (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_pixel_to_twip:
@@ -352,7 +359,7 @@ gchar*                         lok_doc_view_get_version_info       (LOKDocView* 
  *
  * Returns: The corresponding value in twips
  */
-gfloat                         lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gfloat  lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
                                                                     float fInput);
 
 /**
@@ -364,7 +371,7 @@ gfloat                         lok_doc_view_pixel_to_twip          (LOKDocView* 
  *
  * Returns: The corresponding value in pixels
  */
-gfloat                         lok_doc_view_twip_to_pixel          (LOKDocView* pDocView,
+LOK_DOC_VIEW_DLLPUBLIC gfloat  lok_doc_view_twip_to_pixel          (LOKDocView* pDocView,
                                                                     float fInput);
 
 /**
@@ -372,7 +379,7 @@ gfloat                         lok_doc_view_twip_to_pixel          (LOKDocView* 
  * @pDocView: The #LOKDocView instance
  * @pArguments: (nullable) (allow-none): see lok::Document::sendContentControlEvent() for the details.
  */
-void lok_doc_view_send_content_control_event(LOKDocView* pDocView, const gchar* pArguments);
+LOK_DOC_VIEW_DLLPUBLIC void lok_doc_view_send_content_control_event(LOKDocView* pDocView, const gchar* pArguments);
 
 G_END_DECLS
 

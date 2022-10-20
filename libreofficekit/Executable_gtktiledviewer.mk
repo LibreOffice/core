@@ -29,12 +29,17 @@ $(eval $(call gb_Executable_add_cxxflags,gtktiledviewer,\
 
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     $(GTK3_LIBS) \
+))
+
+ifneq ($(OS), WNT)
+$(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lX11 \
     -lXext \
     -lXrender \
     -lSM \
     -lICE \
 ))
+endif
 
 $(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
     libreofficekitgtk \
