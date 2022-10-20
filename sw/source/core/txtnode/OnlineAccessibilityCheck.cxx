@@ -21,6 +21,10 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <txtfrm.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <docsh.hxx>
+#include <cmdid.h>
 #include <officecfg/Office/Common.hxx>
 
 namespace sw
@@ -63,6 +67,12 @@ void OnlineAccessibilityCheck::runCheck(SwTextNode* pTextNode)
                 m_nAccessibilityIssues += rStatus.pCollection->getIssues().size();
         }
     }
+
+    SfxBindings* pBindings = m_rDocument.GetDocShell() && m_rDocument.GetDocShell()->GetDispatcher()
+                                 ? m_rDocument.GetDocShell()->GetDispatcher()->GetBindings()
+                                 : nullptr;
+    if (pBindings)
+        pBindings->Invalidate(FN_STAT_ACCESSIBILITY_CHECK);
 }
 
 void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
