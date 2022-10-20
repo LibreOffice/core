@@ -24,6 +24,8 @@ std::vector<std::shared_ptr<AccessibilityIssue>>& AccessibilityIssueCollection::
     return m_aIssues;
 }
 
+void AccessibilityIssueCollection::clear() { m_aIssues.clear(); }
+
 } // end sfx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,6 +55,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <GrammarContact.hxx>
+#include <OnlineAccessibilityCheck.hxx>
 #include <comphelper/flagguard.hxx>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
@@ -1504,7 +1505,10 @@ void SwCursorShell::UpdateCursorPos()
     }
     auto* pDoc = GetDoc();
     if (pDoc)
+    {
         pDoc->getGrammarContact()->updateCursorPosition(*m_pCurrentCursor->GetPoint());
+        pDoc->getOnlineAccessibilityCheck()->update(*m_pCurrentCursor->GetPoint());
+    }
 
     --mnStartAction;
     if( aOldSz != GetDocSize() )

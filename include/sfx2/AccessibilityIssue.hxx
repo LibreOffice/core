@@ -60,6 +60,8 @@ public:
     AccessibilityIssueCollection() = default;
 
     std::vector<std::shared_ptr<AccessibilityIssue>>& getIssues();
+
+    void clear();
 };
 
 } // end sfx namespace
