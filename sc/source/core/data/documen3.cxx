@@ -83,7 +83,7 @@ void sortAndRemoveDuplicates(std::vector<ScTypedStrData>& rStrings, bool bCaseSe
 {
     if (bCaseSens)
     {
-        std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseSensitive());
+        std::stable_sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseSensitive());
         std::vector<ScTypedStrData>::iterator it =
             std::unique(rStrings.begin(), rStrings.end(), ScTypedStrData::EqualCaseSensitive());
         rStrings.erase(it, rStrings.end());
@@ -94,7 +94,7 @@ void sortAndRemoveDuplicates(std::vector<ScTypedStrData>& rStrings, bool bCaseSe
     }
     else
     {
-        std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseInsensitive());
+        std::stable_sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseInsensitive());
         std::vector<ScTypedStrData>::iterator it =
             std::unique(rStrings.begin(), rStrings.end(), ScTypedStrData::EqualCaseInsensitive());
         rStrings.erase(it, rStrings.end());
