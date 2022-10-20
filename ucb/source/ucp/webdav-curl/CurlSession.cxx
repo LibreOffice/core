@@ -722,6 +722,8 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_READFUNCTION, &read_callback);
     assert(rc == CURLE_OK);
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERFUNCTION, &header_callback);
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SHARE, g_Init.pShare.get());
+    assert(rc == CURLE_OK);
     // set this initially, may be overwritten during authentication
     assert(rc == CURLE_OK);
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPAUTH, CURLAUTH_ANY);
