@@ -784,6 +784,28 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     // Build a new numbering font basing on the current paragraph font:
                     std::unique_ptr<SwFont> pNumFnt(new SwFont( &rInf.GetCharAttr(), pIDSA ));
 
+                    const SwTextNode& rTextNode = *rInf.GetTextFrame()->GetTextNodeForParaProps();
+                    if (const SwpHints* pHints = rTextNode.GetpSwpHints())
+                    {
+                        // Also look for a character hint that cover the entire current paragraph:
+                        for (size_t i = 0; i < pHints->Count(); ++i)
+                        {
+                            const SwTextAttr* pHint = pHints->Get(i);
+                            if (pHint->Which() == RES_TXTATR_AUTOFMT && pHint->GetStart() == 0
+                                && pHint->GetEnd()
+                                && *pHint->GetEnd() == rTextNode.GetText().getLength())
+                            {
+                                std::shared_ptr<SfxItemSet> pSet
+                                    = pHint->GetAutoFormat().GetStyleHandle();
+                                if (pSet)
+                                {
+                                    pNumFnt->SetDiffFnt(pSet.get(), pIDSA);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     // #i53199#
                     if ( !pIDSA->get(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                     {

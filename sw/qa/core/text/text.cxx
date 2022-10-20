@@ -810,6 +810,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionFormat)
+{
+    // Given a document with a single paragraph, direct formatting asks 24pt font size for the
+    // numbering and the text portion:
+    createSwDoc(DATA_DIRECTORY, "number-portion-format.odt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure that the numbering portion has the correct font size:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 480
+    // - Actual  : 240
+    // i.e. the numbering portion font size was 12pt, not 24pt (but only when the doc had a
+    // bookmark).
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']",
+                "font-height", "480");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
