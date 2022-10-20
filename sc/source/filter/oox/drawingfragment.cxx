@@ -39,6 +39,7 @@
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/shape/ShapeDrawingFragmentHandler.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
@@ -50,6 +51,7 @@
 #include <stylesbuffer.hxx>
 #include <themebuffer.hxx>
 #include <worksheetbuffer.hxx>
+
 namespace oox::xls {
 
 using namespace ::com::sun::star::beans;
@@ -302,6 +304,26 @@ void DrawingFragment::onEndElement()
                     // Make sure to set the position and size *before* calling addShape().
                     mxShape->setPosition(Point(aShapeRectEmu32.X, aShapeRectEmu32.Y));
                     mxShape->setSize(Size(aShapeRectEmu32.Width, aShapeRectEmu32.Height));
+
+                    // tdf#83671. Because Excel saves a diagram with zero size in xdr:xfm, the
+                    // initial diagram import produces a background shape with zero size and no
+                    // diagram shapes at all. Here the size has been determined from the anchor and
+                    // thus repeating the import of diagram.xml gives the diagram shapes.
+                    if (mxShape->getDiagramDoms().getLength() > 0
+                        && mxShape->getChildren().size() == 1
+                        && mxShape->getExtDrawings().size() == 1)
+                    {
+                        mxShape->getChildren()[0]->setSize(mxShape->getSize());
+                        OUString sFragmentPath(
+                            getFragmentPathFromRelId(mxShape->getExtDrawings()[0]));
+                        // Don't know why importFragment looses shape name and id. Rescue them.
+                        OUString sBackupName(mxShape->getName());
+                        OUString sBackupId(mxShape->getId());
+                        getOoxFilter().importFragment(new oox::shape::ShapeDrawingFragmentHandler(
+                            getOoxFilter(), sFragmentPath, mxShape));
+                        mxShape->setName(sBackupName);
+                        mxShape->setId(sBackupId);
+                    }
 
                     basegfx::B2DHomMatrix aTransformation;
                     if ( !bIsShapeVisible)

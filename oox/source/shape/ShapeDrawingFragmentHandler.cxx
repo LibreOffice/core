@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ShapeDrawingFragmentHandler.hxx"
+#include <oox/shape/ShapeDrawingFragmentHandler.hxx>
 
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/token/namespaces.hxx>

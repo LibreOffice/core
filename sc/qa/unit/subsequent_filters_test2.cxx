@@ -60,6 +60,7 @@
 #include <tools/UnitConversion.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -185,6 +186,7 @@ public:
     void testAutofilterNamedRangesXLSX();
     void testInvalidBareBiff5();
     void testTooManyColsRows();
+    void testTdf83671_SmartArt_import();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -301,6 +303,7 @@ public:
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
     CPPUNIT_TEST(testInvalidBareBiff5);
     CPPUNIT_TEST(testTooManyColsRows);
+    CPPUNIT_TEST(testTdf83671_SmartArt_import);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3039,6 +3042,50 @@ void ScFiltersTest2::testTooManyColsRows()
                      /*bCheckErrorCode*/ false);
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf83671_SmartArt_import()
+{
+    // The example doc contains a diagram (SmartArt). Such should be imported as group object.
+    // Error was, that the background shape had size zero and the diagram shapes where missing.
+
+    // Make sure SmartArt is loaded as group shape
+    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
+        pChange->commit();
+    }
+
+    // Get document and shape
+    ScDocShellRef xDocSh = loadDoc(u"tdf83671_SmartArt_import.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    SdrObject* pObj = pPage->GetObj(0);
+
+    // Check that it is a group shape with 4 children
+    CPPUNIT_ASSERT(pObj->IsGroupObject());
+    SdrObjList* pChildren = pObj->getChildrenOfSdrObject();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), pChildren->GetObjCount());
+
+    // The background shape should have about 60mm x 42mm size.
+    // Without fix its size was zero.
+    tools::Rectangle aBackground = pChildren->GetObj(0)->GetLogicRect();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6000), aBackground.getOpenWidth(), 10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4200), aBackground.getOpenHeight(), 10);
+
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
+        pChange->commit();
+    }
+
     xDocSh->DoClose();
 }
 

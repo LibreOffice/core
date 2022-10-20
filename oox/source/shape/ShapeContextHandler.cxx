@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
 #include <oox/shape/ShapeContextHandler.hxx>
-#include "ShapeDrawingFragmentHandler.hxx"
+#include <oox/shape/ShapeDrawingFragmentHandler.hxx>
 #include "LockedCanvasContext.hxx"
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
