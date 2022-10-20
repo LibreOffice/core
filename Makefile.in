@@ -200,7 +200,7 @@ include $(SRCDIR)/compilerplugins/Makefile.mk
 #
 # Distclean
 #
-distclean : clean compilerplugins-clean
+distclean : clean compilerplugins-clean mac-app-store-package.clean
 	rm -fr \
         $(BUILDDIR)/Makefile \
         $(BUILDDIR)/aclocal.m4 \
@@ -398,15 +398,55 @@ endif
 endif
 	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
 
-mac-app-store-package: test-install
+# target to bypass the packaging steps/to only assemble the package
+mac-app-store-package.prepare: $(BUILDDIR)/$(PLATFORMID)/done
+
+# shorthand target to build a complete package for the currently building architecture
+mac-app-store-package: mac-app-store-package.$(PLATFORMID)
+
+# recipe/targets to do the actual packaging
+# the symbolication switch to productbuild unforunately is undocumented, but that is what XCode
+# uses when it creates a package with symbols for uploading to the appstore
+mac-app-store-package.$(PLATFORMID) mac-app-store-package.universal: mac-app-store-package.%: $(BUILDDIR)/%/done
 ifneq ($(MACOSX_PACKAGE_SIGNING_IDENTITY),)
-	rm -rf "$(PRODUCTNAME).app"
-	mv "$(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app" "$(PRODUCTNAME).app"
-	productbuild --component "$(PRODUCTNAME).app" /Applications --sign $(MACOSX_PACKAGE_SIGNING_IDENTITY) $(PRODUCTNAME_WITHOUT_SPACES).pkg
+	$(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $*/"$(PRODUCTNAME)".app
+	productbuild $(if $(ENABLE_SYMBOLS_FOR),--symbolication $*/Symbols) --component $*/"$(PRODUCTNAME)".app /Applications --sign $(MACOSX_PACKAGE_SIGNING_IDENTITY) $(PRODUCTNAME_WITHOUT_SPACES).pkg
 else
 	@echo You did not provide an installer signing identity with --enable-macosx-package-signing
 	@exit 1
 endif
+
+# the builds need to persist a standard "make clean" to be able to combine them into an universal
+# binary, so provide an additional target that can be used standalone or via make distclean
+mac-app-store-package.clean:
+	rm -rf \
+	    $(BUILDDIR)/macosx_x86_64 \
+	    $(BUILDDIR)/macosx_aarch64 \
+	    $(BUILDDIR)/universal \
+	    $(BUILDDIR)/$(PRODUCTNAME_WITHOUT_SPACES).pkg
+
+# used by the mac-app-store targets
+$(BUILDDIR)/$(PLATFORMID)/done: test-install
+	rm -rf   $(PLATFORMID)
+	mkdir -p $(PLATFORMID)/Symbols
+	mv $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app $(PLATFORMID)/"$(PRODUCTNAME)".app
+ifneq ($(ENABLE_SYMBOLS_FOR),)
+	symbols -arch all -symbolsPackageDir $(PLATFORMID)/Symbols $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^L]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
+	strip -S                                                   $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^L]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
+endif
+	touch $@
+
+# build one arch using the mac-app-store-package.prepare target, make clean and change the autogen.input
+# to buid for the other target, then use mac-app-store-package.universal to build for the other arch and
+# combine the two into a universal binary
+$(BUILDDIR)/universal/done: $(BUILDDIR)/macosx_x86_64/done $(BUILDDIR)/macosx_aarch64/done
+	rm -rf universal
+	mkdir -p universal/Symbols
+ifneq ($(ENABLE_SYMBOLS_FOR),)
+	cp -a macosx_x86_64/Symbols/* macosx_aarch64/Symbols/* universal/Symbols/
+endif
+	$(SRCDIR)/bin/merge-app-bundles macosx_x86_64/"$(PRODUCTNAME)".app macosx_aarch64/"$(PRODUCTNAME)".app universal/"$(PRODUCTNAME)".app
+	touch $@
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
