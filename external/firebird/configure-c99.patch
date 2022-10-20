@@ -1,6 +1,28 @@
 --- configure
 +++ configure
-@@ -21478,8 +21478,9 @@
+@@ -20518,8 +20518,9 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ #include <semaphore.h>
+-	main () {
++	int main () {
+ 		sem_t s;
+ 		exit(sem_init(&s,0,0));
+ 		}
+@@ -21263,8 +21264,9 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ #include <unistd.h>
+-    main () {
++    int main () {
+     exit(!(sizeof(off_t) == 8));
+   }
+ _ACEOF
+@@ -21478,8 +21480,9 @@
  else
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
@@ -11,7 +33,7 @@
    struct s {
      char a;
      union { long long x; sem_t y; } b;
-@@ -21514,7 +21515,8 @@
+@@ -21514,7 +21517,8 @@
  else
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
