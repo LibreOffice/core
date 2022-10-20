@@ -11,6 +11,7 @@
 #define INCLUDED_TEST_CALC_UNOAPI_TEST_HXX
 
 #include <test/unoapi_test.hxx>
+#include <unotools/tempfile.hxx>
 
 // basic uno api test class for calc
 
@@ -24,6 +25,9 @@ public:
 
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
+
+    utl::TempFileNamed save(const OUString& rFilter);
+    void saveAndReload(const OUString& rFilter);
 
 protected:
     // reference to document component that we are testing

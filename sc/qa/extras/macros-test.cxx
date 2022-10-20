@@ -41,7 +41,6 @@ protected:
     void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     ScMacrosTest();
-    void saveAndReload(const OUString& rFilter);
 
     void testStarBasic();
     void testMSP();
@@ -116,19 +115,6 @@ void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-}
-
-void ScMacrosTest::saveAndReload(const OUString& rFilter)
-{
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
-    css::uno::Reference<css::frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
-
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 // I suppose you could say this test doesn't really belong here, OTOH
@@ -267,13 +253,7 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     // When exporting to XLSM:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Calc MS Excel 2007 VBA XML");
-    auto pTempFile = std::make_shared<utl::TempFileNamed>();
-    pTempFile->EnableKillingFile();
-    xStorable->storeToURL(pTempFile->GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    mxComponent->dispose();
+    auto pTempFile = std::make_shared<utl::TempFileNamed>(save("Calc MS Excel 2007 VBA XML"));
 
     // Then make sure that the macro is associated with the control:
     xmlDocUniquePtr pSheetDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/worksheets/sheet1.xml");

@@ -10,6 +10,10 @@
 #include <test/calc_unoapi_test.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <comphelper/propertyvalue.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -49,4 +53,25 @@ uno::Any CalcUnoApiTest::executeMacro(const OUString& rScriptURL, const uno::Seq
 
     return aRet;
 }
+
+utl::TempFileNamed CalcUnoApiTest::save(const OUString& rFilter)
+{
+    utl::TempFileNamed aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
+    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
+    css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+
+    return aTempFile;
+}
+
+void CalcUnoApiTest::saveAndReload(const OUString& rFilter)
+{
+    utl::TempFileNamed aTempFile = save(rFilter);
+
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

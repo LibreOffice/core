@@ -11,13 +11,11 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -26,7 +24,6 @@
 #include <conditio.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
-#include <docuno.hxx>
 #include <docsh.hxx>
 #include <dpobject.hxx>
 #include <drwlayer.hxx>
@@ -44,10 +41,6 @@ class ScUiCalcTest : public CalcUnoApiTest
 public:
     ScUiCalcTest();
     ScModelObj* createDoc(const char* pName = nullptr);
-    utl::TempFileNamed save(css::uno::Reference<css::lang::XComponent>& xComponent,
-                            const OUString& rFilter);
-    ScModelObj* saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                              const OUString& rFilter);
     void goToCell(const OUString& rCell);
     void typeString(ScModelObj& rModelObj, const std::u16string_view& rStr);
     void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
@@ -157,32 +150,6 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     return pModelObj;
 }
 
-utl::TempFileNamed ScUiCalcTest::save(css::uno::Reference<css::lang::XComponent>& xComponent,
-                                      const OUString& rFilter)
-{
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
-    css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
-
-    return aTempFile;
-}
-
-ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                                        const OUString& rFilter)
-{
-    utl::TempFileNamed aTempFile = save(xComponent, rFilter);
-
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
-
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
-    return pModelObj;
-}
-
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
 {
     ScModelObj* pModelObj = createDoc();
@@ -190,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
     CPPUNIT_ASSERT(pDoc);
 
     // Save the document
-    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -223,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     insertStringToCell(*pModelObj, "D3", u"FISHY");
 
     // Save the document
-    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -329,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     insertStringToCell(*pModelObj, "B1", u"2");
 
     // Save the document
-    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -371,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     insertStringToCell(*pModelObj, "A1", u"50");
 
     // Save the document
-    utl::TempFileNamed aTempFile = save(mxComponent, "calc8");
+    utl::TempFileNamed aTempFile = save("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -797,7 +764,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
     dispatchCommand(mxComponent, ".uno:Strikeout", {});
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj = saveAndReload(mxComponent, "Calc Office Open XML");
+    saveAndReload("Calc Office Open XML");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -967,7 +936,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143896)
 
     CPPUNIT_ASSERT_EQUAL(OUString("Test"), pDoc->GetString(ScAddress(0, 1999, 0)));
 
-    pModelObj = saveAndReload(mxComponent, "Calc Office Open XML");
+    saveAndReload("Calc Office Open XML");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1029,7 +1000,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
     CPPUNIT_ASSERT_EQUAL(OUString("x"), pDoc->GetString(ScAddress(0, 0, 0)));
 
     // Without the fix in place, this test would have crashed
-    pModelObj = saveAndReload(mxComponent, "calc8");
+    saveAndReload("calc8");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1060,7 +1033,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    pModelObj = saveAndReload(mxComponent, "MS Excel 97");
+    saveAndReload("MS Excel 97");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 

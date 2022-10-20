@@ -42,7 +42,6 @@ class ScShapeTest : public CalcUnoApiTest
 {
 public:
     ScShapeTest();
-    void saveAndReload(const OUString& rFilter);
     void testTdf143619_validation_circle_pos();
     void testTdf140252_DragCreateFormControl();
     void testTdf134355_DragCreateCustomShape();
@@ -101,20 +100,6 @@ public:
 ScShapeTest::ScShapeTest()
     : CalcUnoApiTest("sc/qa/unit/data/ods")
 {
-}
-
-void ScShapeTest::saveAndReload(const OUString& rFilter)
-{
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName",
-                                                            rFilter) }; // e.g. "calc8"
-    css::uno::Reference<css::frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
-
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
