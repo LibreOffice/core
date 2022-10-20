@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc, \
     sal \
     sc \
     sfx \
+    subsequenttest \
     svl \
     svl \
     svx \

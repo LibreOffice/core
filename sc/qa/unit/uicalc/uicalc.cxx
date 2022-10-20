@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -40,13 +39,10 @@
 
 using namespace ::com::sun::star;
 
-class ScUiCalcTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ScUiCalcTest : public CalcUnoApiTest
 {
 public:
-    virtual void setUp() override;
-
-    virtual void tearDown() override;
-
+    ScUiCalcTest();
     ScModelObj* createDoc(const char* pName = nullptr);
     utl::TempFileNamed save(css::uno::Reference<css::lang::XComponent>& xComponent,
                             const OUString& rFilter);
@@ -59,24 +55,11 @@ public:
     void insertArrayToCell(ScModelObj& rModelObj, const OUString& rCell,
                            const std::u16string_view& rStr);
     void insertNewSheet(ScDocument& rDoc);
-
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
-void ScUiCalcTest::setUp()
+ScUiCalcTest::ScUiCalcTest()
+    : CalcUnoApiTest("sc/qa/unit/uicalc/data")
 {
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void ScUiCalcTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 static void lcl_AssertCurrentCursorPosition(const ScDocument& rDoc, std::u16string_view rStr)
@@ -158,19 +141,16 @@ void ScUiCalcTest::insertNewSheet(ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
 }
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
-
 ScModelObj* ScUiCalcTest::createDoc(const char* pName)
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
     if (!pName)
         mxComponent = loadFromDesktop("private:factory/scalc");
     else
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                          + OUString::createFromAscii(pName),
-                                      "com.sun.star.sheet.SpreadsheetDocument");
+    {
+        OUString aFileURL;
+        createFileURL(OUString::createFromAscii(pName), aFileURL);
+        mxComponent = loadFromDesktop(aFileURL);
+    }
 
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
@@ -1204,9 +1184,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     pMod->SetInputOptions(aInputOption);
 }
 
+#if !defined(MACOSX) && !defined(_WIN32) //FIXME
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
 {
-#if !defined(MACOSX) && !defined(_WIN32) //FIXME
     ScModelObj* pModelObj = createDoc("tdf140151.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
@@ -1218,8 +1198,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
 
     // Without the fix in place, the current cursor position wouldn't have changed
     lcl_AssertCurrentCursorPosition(*pDoc, u"B111");
-#endif
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
 {
