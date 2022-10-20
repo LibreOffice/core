@@ -556,32 +556,26 @@ namespace
 #endif
         }
 
-        void testTdf141709()
+        void testTdf141709_chinesechar()
         {
 // this test crashes on the windows jenkins boxes, but no-one can catch it locally
-#if HAVE_FEATURE_POPPLER && !defined(_WIN32)
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testTdf141709.pdf"),
+                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testTdf141709_chinesechar.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr));
-            std::cout << aOutput << std::endl;
+            xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
             // This ensures that the imported text contains all of the characters
-            CPPUNIT_ASSERT(aOutput.indexOf("敏") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("捷") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("的") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("狐") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("狸") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("跨") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("过") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("慵") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("懒") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("的") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("狗") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("。") != -1);
+            OString xpath = "//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span[1]";
+            OUString  sContent = getXPathContent(pXmlDoc, xpath).replaceAll("\n", "");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"敏捷的狐狸跨过慵懒的"), sContent);
+            xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span[1]";
+            sContent = getXPathContent(pXmlDoc, xpath).replaceAll("\n", "");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"狗。"), sContent);
 #endif
         }
 
@@ -854,7 +848,7 @@ namespace
         CPPUNIT_TEST(testTdf96993);
         CPPUNIT_TEST(testTdf98421);
         CPPUNIT_TEST(testTdf105536);
-        CPPUNIT_TEST(testTdf141709);
+        CPPUNIT_TEST(testTdf141709_chinesechar);
         CPPUNIT_TEST(testTdf78427_FontFeatures);
         CPPUNIT_TEST(testTdf78427_FontWeight_MyraidProSemibold);
         CPPUNIT_TEST(testTdf143959_nameFromFontFile);
