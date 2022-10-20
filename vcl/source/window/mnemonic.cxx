@@ -37,6 +37,9 @@ MnemonicGenerator::MnemonicGenerator(sal_Unicode cMnemonic)
     memset( maMnemonics, 1, sizeof( maMnemonics ) );
 }
 
+MnemonicGenerator& MnemonicGenerator::operator=(MnemonicGenerator const &) = default; //MSVC2022 workaround
+MnemonicGenerator::MnemonicGenerator(MnemonicGenerator const&) = default; //MSVC2022 workaround
+
 sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 {
     static sal_uInt16 const aImplMnemonicRangeTab[MNEMONIC_RANGES*2] =

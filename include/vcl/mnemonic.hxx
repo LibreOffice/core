@@ -64,6 +64,9 @@ class VCL_DLLPUBLIC MnemonicGenerator
 public:
                         MnemonicGenerator(sal_Unicode cMnemonic = MNEMONIC_CHAR);
 
+    MnemonicGenerator& operator=(MnemonicGenerator const &); //MSVC2022 workaround
+    MnemonicGenerator(MnemonicGenerator const&); //MSVC2022 workaround
+
     void                RegisterMnemonic( const OUString& rKey );
     [[nodiscard]] OUString CreateMnemonic(const OUString& rKey);
     css::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
