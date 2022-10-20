@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_pdf_export, \
     sax \
     sc \
     sfx \
+    subsequenttest \
     svl \
     test \
     tl \

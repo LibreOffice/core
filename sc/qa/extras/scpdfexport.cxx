@@ -10,6 +10,8 @@
 #include <sal/config.h>
 #include <config_oox.h>
 
+#include <test/calc_unoapi_test.hxx>
+
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -17,9 +19,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <test/bootstrapfixture.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotest/macros_test.hxx>
 #include <docsh.hxx>
 #include <editutil.hxx>
 #include <editeng/eeitem.hxx>
@@ -38,16 +38,11 @@ using namespace css::lang;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScPDFExportTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ScPDFExportTest : public CalcUnoApiTest
 {
-    Reference<XComponent> mxComponent;
-
 public:
-    ScPDFExportTest() {}
+    ScPDFExportTest();
     ~ScPDFExportTest();
-
-    virtual void setUp() override final;
-    virtual void tearDown() override final;
 
     // helpers
 private:
@@ -85,29 +80,16 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/extras/testdocuments/";
+ScPDFExportTest::ScPDFExportTest()
+    : CalcUnoApiTest("sc/qa/extras/testdocuments/")
+{
+}
 
 ScPDFExportTest::~ScPDFExportTest()
 {
 #if USE_TLS_NSS
     NSS_Shutdown();
 #endif
-}
-
-void ScPDFExportTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(
-        css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-}
-
-void ScPDFExportTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 bool ScPDFExportTest::hasTextInPdf(const std::shared_ptr<utl::TempFileNamed>& pPDFFile,
@@ -387,8 +369,9 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
 
 void ScPDFExportTest::testUnoCommands_Tdf120161()
 {
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf120161.ods",
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileURL;
+    createFileURL(u"tdf120161.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // A1:G1
     {
@@ -417,9 +400,10 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
 void ScPDFExportTest::testTdf64703_hiddenPageBreak()
 {
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                      + "tdf64703_hiddenPageBreak.ods",
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileURL;
+    createFileURL(u"tdf64703_hiddenPageBreak.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
+
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:A11: 4-page export
@@ -440,8 +424,9 @@ void ScPDFExportTest::testTdf143978()
         return;
     }
 
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf143978.ods",
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileURL;
+    createFileURL(u"tdf143978.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:A2
@@ -487,8 +472,9 @@ void ScPDFExportTest::testTdf84012()
         return;
     }
 
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf84012.ods",
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileURL;
+    createFileURL(u"tdf84012.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1
@@ -528,8 +514,9 @@ void ScPDFExportTest::testTdf78897()
         return;
     }
 
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf78897.xls",
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileURL;
+    createFileURL(u"tdf78897.xls", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // C3:D3
@@ -564,8 +551,9 @@ void ScPDFExportTest::testTdf78897()
 // just needs to not crash on export to pdf
 void ScPDFExportTest::testForcepoint97()
 {
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "forcepoint97.xlsx",
-                                  "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileURL;
+    createFileURL(u"forcepoint97.xlsx", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:H81
