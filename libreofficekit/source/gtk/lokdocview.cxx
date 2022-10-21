@@ -2349,7 +2349,13 @@ openDocumentInThread (gpointer data)
     }
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
-    priv->m_pDocument = priv->m_pOffice->pClass->documentLoadWithOptions( priv->m_pOffice, priv->m_aDocPath.c_str(), "en-US" );
+    std::string url = priv->m_aDocPath;
+    if (gchar* pURL = g_filename_to_uri(url.c_str(), nullptr, nullptr))
+    {
+        url = pURL;
+        g_free(pURL);
+    }
+    priv->m_pDocument = priv->m_pOffice->pClass->documentLoadWithOptions( priv->m_pOffice, url.c_str(), "en-US" );
     if ( !priv->m_pDocument )
     {
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
