@@ -1967,7 +1967,7 @@ std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString>>
     // mark order: ] | [
     // color order: [c1 [c2 [c3 ... c3] c2] c1]
     sort(aColors.begin(), aColors.end(),
-                 [](std::tuple<MarkKind, Color, OUString>(a), std::tuple<MarkKind, Color, OUString>(b)) {
+                 [](std::tuple<MarkKind, Color, OUString> const a, std::tuple<MarkKind, Color, OUString> const b) {
          return (MarkKind::End == std::get<0>(a) && MarkKind::End != std::get<0>(b)) ||
              (MarkKind::Point == std::get<0>(a) && MarkKind::Start == std::get<0>(b)) ||
              // if both are end or start, order by color
