@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filter_eppt, \
     cppu \
     sd \
     sal \
+    subsequenttest \
     test \
     unotest \
     utl \

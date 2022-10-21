@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -27,56 +26,33 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers sd/source/filter/eppt/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class Test : public UnoApiTest, public XmlTestTools
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
+    Test();
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
 }
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sd/qa/filter/eppt/data/";
+Test::Test()
+    : UnoApiTest("/sd/qa/filter/eppt/data/")
+{
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 {
     // Save the bugdoc to PPT.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "custom-shape-bitmap-fill.pptx";
-    getComponent() = loadFromDesktop(aURL);
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("MS PowerPoint 97");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    getComponent()->dispose();
-    getComponent() = loadFromDesktop(aTempFile.GetURL());
+    OUString aFileURL;
+    createFileURL(u"custom-shape-bitmap-fill.pptx", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
+    saveAndReload("MS PowerPoint 97");
 
     // Check if the bitmap shape was lost.
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -91,8 +67,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 {
     // Given a document with a master slide and a theme, lt1 is set to 0x000002:
-    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/simpress");
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/simpress");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
@@ -106,12 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // When exporting to PPTX:
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
     validate(aTempFile.GetFileName(), test::OOXML);
 
     // Then verify that this color is not lost:
@@ -123,22 +94,17 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     // - Actual  : 0
     // - XPath '//a:clrScheme/a:lt1/a:srgbClr' number of nodes is incorrect
     // i.e. the RGB color was lost on export.
-    xComponent->dispose();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
 {
     // Given a media shape that has an animation that specifies looping for the video:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "video-loop.pptx";
-    getComponent() = loadFromDesktop(aURL);
+    OUString aFileURL;
+    createFileURL(u"video-loop.pptx", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 
     // When exporting that to PPTX:
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
     validate(aTempFile.GetFileName(), test::OOXML);
 
     // Then make sure that the "infinite" repeat count is written:
