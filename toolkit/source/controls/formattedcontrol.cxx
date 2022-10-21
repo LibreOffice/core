@@ -201,8 +201,7 @@ namespace toolkit
                 }
             }
 
-            Reference< XPropertySet > xThis( *this, UNO_QUERY );
-            xThis->setPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), Any( sStringValue ) );
+            setPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), Any( sStringValue ) );
         }
         catch( const Exception& )
         {

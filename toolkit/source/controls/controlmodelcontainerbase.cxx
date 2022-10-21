@@ -736,30 +736,26 @@ void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArgum
 sal_Bool SAL_CALL ControlModelContainerBase::getEnabled()
 {
     SolarMutexGuard aGuard;
-    Reference<XPropertySet> xThis(*this, UNO_QUERY);
     bool bEnabled = false;
-    xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)) >>= bEnabled;
+    getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)) >>= bEnabled;
     return bEnabled;
 }
 void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled )
 {
     SolarMutexGuard aGuard;
-    Reference<XPropertySet> xThis(*this, UNO_QUERY);
-    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), Any(_enabled));
+    setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), Any(_enabled));
 }
 OUString SAL_CALL ControlModelContainerBase::getTitle()
 {
     SolarMutexGuard aGuard;
-    Reference<XPropertySet> xThis(*this,UNO_QUERY);
     OUString sTitle;
-    xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
+    getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
     return sTitle;
 }
 void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title )
 {
     SolarMutexGuard aGuard;
-    Reference<XPropertySet> xThis(*this,UNO_QUERY);
-    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),Any(_title));
+    setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),Any(_title));
 }
 OUString SAL_CALL ControlModelContainerBase::getImageURL()
 {
@@ -769,9 +765,7 @@ void SAL_CALL ControlModelContainerBase::setImageURL( const OUString& _imageurl 
 {
     m_sImageURL = _imageurl;
     SolarMutexGuard aGuard;
-    Reference<XPropertySet> xThis(*this, UNO_QUERY);
-    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL), Any(_imageurl));
-
+    setPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL), Any(_imageurl));
 }
 OUString SAL_CALL ControlModelContainerBase::getToolTip()
 {

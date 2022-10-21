@@ -735,13 +735,12 @@ void SAL_CALL SlideShow::end()
                     pDrawViewShell->SwitchPage( static_cast<sal_uInt16>(xController->getRestoreSlide()) );
                 else
                 {
-                    Reference<XDrawView> xDrawView (
-                        Reference<XWeak>(&mpCurrentViewShellBase->GetDrawController()), UNO_QUERY);
-                    if (xDrawView.is())
-                        xDrawView->setCurrentPage(
-                            Reference<XDrawPage>(
-                                mpDoc->GetSdPage(xController->getRestoreSlide(), PageKind::Standard)->getUnoPage(),
-                                UNO_QUERY));
+                    DrawController& rDrawController =
+                        mpCurrentViewShellBase->GetDrawController();
+                    rDrawController.setCurrentPage(
+                        Reference<XDrawPage>(
+                            mpDoc->GetSdPage(xController->getRestoreSlide(), PageKind::Standard)->getUnoPage(),
+                            UNO_QUERY));
                 }
             }
 

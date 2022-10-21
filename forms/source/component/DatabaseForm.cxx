@@ -1328,7 +1328,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
 
 Reference< XMultiPropertySet > ODatabaseForm::getPropertiesInterface()
 {
-    return Reference< XMultiPropertySet >( *this, UNO_QUERY );
+    return this;
 }
 
 

@@ -741,12 +741,12 @@ sal_Int64 SAL_CALL TempFileFastService::getLength()
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL TempFileFastService::getInputStream()
 {
-    return css::uno::Reference< css::io::XInputStream >( *this, css::uno::UNO_QUERY );
+    return this;
 }
 
 css::uno::Reference< css::io::XOutputStream > SAL_CALL TempFileFastService::getOutputStream()
 {
-    return css::uno::Reference< css::io::XOutputStream >( this );
+    return this;
 }
 
 // XTruncate

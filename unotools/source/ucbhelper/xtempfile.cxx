@@ -290,14 +290,14 @@ sal_Int64 SAL_CALL OTempFileService::getLength(  )
 // XStream
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL OTempFileService::getInputStream()
-    {
-    return css::uno::Reference< css::io::XInputStream >( *this, css::uno::UNO_QUERY );
+{
+    return this;
 }
 
 css::uno::Reference< css::io::XOutputStream > SAL_CALL OTempFileService::getOutputStream()
-    {
-    return css::uno::Reference< css::io::XOutputStream >( *this, css::uno::UNO_QUERY );
-    }
+{
+    return this;
+}
 
 // XTruncate
 

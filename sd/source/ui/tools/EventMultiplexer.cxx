@@ -211,13 +211,10 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
         StartListening (*mpDocument);
 
     // Listen for configuration changes.
-    Reference<XControllerManager> xControllerManager (
-        Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY);
-    if (!xControllerManager.is())
-        return;
+    DrawController& rDrawController = mrBase.GetDrawController();
 
     Reference<XConfigurationController> xConfigurationController (
-        xControllerManager->getConfigurationController());
+        rDrawController.getConfigurationController());
     mxConfigurationControllerWeak = xConfigurationController;
     if (!xConfigurationController.is())
         return;

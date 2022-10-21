@@ -151,7 +151,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     {
         if (auto castExpr = dyn_cast<CastExpr>(constructorArg0))
         {
-            constructorArg0 = castExpr->getSubExpr();
+            constructorArg0 = castExpr->getSubExprAsWritten();
             continue;
         }
         if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(constructorArg0))
@@ -173,6 +173,15 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
         {
             constructorArg0 = parenExpr->getSubExpr();
             continue;
+        }
+        // for the "uno::Reference<X>(*this, UNO_QUERY)" case
+        if (auto unaryOper = dyn_cast<UnaryOperator>(constructorArg0))
+        {
+            if (unaryOper->getOpcode() == UO_Deref)
+            {
+                constructorArg0 = unaryOper->getSubExpr();
+                continue;
+            }
         }
         argType = constructorArg0->getType();
         break;

@@ -1061,7 +1061,7 @@ void OControlModel::describeFixedAndAggregateProperties( Sequence< Property >& _
 
 Reference< XMultiPropertySet > OControlModel::getPropertiesInterface()
 {
-    return Reference< XMultiPropertySet >( *this, UNO_QUERY );
+    return this;
 }
 
 Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo()

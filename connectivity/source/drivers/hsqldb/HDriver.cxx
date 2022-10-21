@@ -358,8 +358,7 @@ namespace connectivity
                     Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
                     if ( xBroad.is() )
                     {
-                        Reference<XTransactionListener> xListener(*this,UNO_QUERY);
-                        xBroad->addTransactionListener(xListener);
+                        xBroad->addTransactionListener(Reference<XTransactionListener>(this));
                     }
                 }
             }

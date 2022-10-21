@@ -206,6 +206,11 @@ class Foo : public cppu::WeakImplHelper<css::lang::XComponent, css::io::XInputSt
         return css::uno::Reference<css::io::XInputStream>(static_cast<css::io::XInputStream*>(this),
                                                           css::uno::UNO_QUERY);
     }
+    css::uno::Reference<css::io::XInputStream> bar3()
+    {
+        // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+        return css::uno::Reference<css::io::XInputStream>(*this, css::uno::UNO_QUERY);
+    }
 };
 }
 

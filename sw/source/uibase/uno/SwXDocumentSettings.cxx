@@ -1124,8 +1124,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
     {
         case HANDLE_FORBIDDEN_CHARS:
         {
-            Reference<XForbiddenCharacters> xRet(*mpModel->GetPropertyHelper(), UNO_QUERY);
-            rValue <<= xRet;
+            rValue <<= Reference<XForbiddenCharacters>(mpModel->GetPropertyHelper());
         }
         break;
         case HANDLE_LINK_UPDATE_MODE:
