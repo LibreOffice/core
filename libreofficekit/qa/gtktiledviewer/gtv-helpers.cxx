@@ -9,8 +9,6 @@
 
 #include <gtk/gtk.h>
 
-#include <pwd.h>
-
 #include <cstring>
 
 #include "gtv-helpers.hxx"
@@ -94,8 +92,7 @@ void GtvHelpers::clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelecti
 std::string GtvHelpers::getNextAuthor()
 {
     static int nCounter = 0;
-    struct passwd* pPasswd = getpwuid(getuid());
-    return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
+    return std::string(g_get_user_name()) + " #" + std::to_string(++nCounter);
 }
 
 GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComment)
