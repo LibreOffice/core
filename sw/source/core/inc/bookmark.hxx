@@ -274,7 +274,7 @@ namespace sw::mark {
 
             virtual void ShowButton(SwEditWin* pEditWin) = 0;
             virtual void RemoveButton();
-            virtual void LaunchPopup();
+            void LaunchPopup();
 
         protected:
             VclPtr<FormFieldButton> m_pButton;

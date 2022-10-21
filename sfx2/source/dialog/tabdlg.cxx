@@ -553,7 +553,7 @@ IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool
     return DeactivatePage(rPage);
 }
 
-bool SfxTabDialogController::DeactivatePage(const OString& rPage)
+bool SfxTabDialogController::DeactivatePage(std::string_view aPage)
 /*  [Description]
 
     Handler that is called by StarView before leaving a page.
@@ -565,7 +565,7 @@ bool SfxTabDialogController::DeactivatePage(const OString& rPage)
 
 {
     assert(!m_pImpl->aData.empty() && "no Pages registered");
-    Data_Impl* pDataObject = Find(m_pImpl->aData, rPage);
+    Data_Impl* pDataObject = Find(m_pImpl->aData, aPage);
     if (!pDataObject)
     {
         SAL_WARN("sfx.dialog", "Tab Page ID not known, this is pretty serious and needs investigation");

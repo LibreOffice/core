@@ -54,6 +54,8 @@ for clazz in (definitionSet - overridingSet):
 
     # ignore external code
     if loc.startswith("external/"): continue
+    if loc.startswith("workdir/"): continue
+    if loc.startswith("64-linux-gnu/"): continue
     # there is a bunch of Windows specific code that we don't see
     if loc.startswith("include/canvas/"): continue
     # not sure what the problem is here
@@ -73,6 +75,8 @@ for clazz in (definitionSet - nonEmptySet):
 
     # ignore external code
     if loc.startswith("external/"): continue
+    if loc.startswith("workdir/"): continue
+    if loc.startswith("64-linux-gnu/"): continue
 
     deadSet.add( (clazz,loc) )
 

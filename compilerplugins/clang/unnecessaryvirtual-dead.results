@@ -1,7 +1,3 @@
-64-linux-gnu/../../../include/c++/11/bits/locale_facets_nonio.h:1964
-    void std::messages::do_close(int,)const
-64-linux-gnu/../../../include/c++/11/streambuf:581
-    void std::basic_streambuf::imbue(const class std::locale &,)
 basic/source/comp/codegen.cxx:478
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:105
@@ -12,8 +8,8 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
-sc/source/core/opencl/formulagroupcl.cxx:1075
-    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
+sc/source/core/opencl/opbase.hxx:447
+    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
 slideshow/source/engine/animationfactory.cxx:617
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 vcl/inc/salframe.hxx:145
@@ -24,109 +20,3 @@ vcl/inc/salinst.hxx:213
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
-workdir/UnpackedTarball/boost/boost/date_time/date_names_put.hpp:137
-    void boost::date_time::date_names_put::do_put_weekday_short(type-parameter-0-2 &,typename type-parameter-0-0::weekday_enum,)const
-workdir/UnpackedTarball/boost/boost/date_time/date_names_put.hpp:140
-    void boost::date_time::date_names_put::do_put_weekday_long(type-parameter-0-2 &,typename type-parameter-0-0::weekday_enum,)const
-workdir/UnpackedTarball/clucene/src/core/CLucene/analysis/AnalysisHeader.h:239
-    void lucene::analysis::TokenStream::reset()
-workdir/UnpackedTarball/clucene/src/core/CLucene/index/_TermVector.h:287
-    void lucene::index::TermVectorMapper::setDocumentNumber(const int,)
-workdir/UnpackedTarball/clucene/src/core/CLucene/index/IndexReader.h:95
-    void lucene::index::IndexReader::ensureOpen()
-workdir/UnpackedTarball/clucene/src/core/CLucene/index/IndexWriter.h:1269
-    void lucene::index::IndexWriter::doAfterFlush()
-workdir/UnpackedTarball/cppunit/include/cppunit/extensions/ExceptionTestCaseDecorator.h:95
-    void CppUnit::ExceptionTestCaseDecorator::checkException(type-parameter-0-0 &,)
-workdir/UnpackedTarball/cppunit/include/cppunit/SynchronizedObject.h:33
-    void CppUnit::SynchronizedObject::SynchronizationObject::lock()
-workdir/UnpackedTarball/cppunit/include/cppunit/SynchronizedObject.h:34
-    void CppUnit::SynchronizedObject::SynchronizationObject::unlock()
-workdir/UnpackedTarball/cppunit/include/cppunit/TestListener.h:114
-    void CppUnit::TestListener::startSuite(class CppUnit::Test *,)
-workdir/UnpackedTarball/cppunit/include/cppunit/TestListener.h:118
-    void CppUnit::TestListener::endSuite(class CppUnit::Test *,)
-workdir/UnpackedTarball/cppunit/include/cppunit/TestListener.h:128
-    void CppUnit::TestListener::startTestRun(class CppUnit::Test *,class CppUnit::TestResult *,)
-workdir/UnpackedTarball/cppunit/include/cppunit/TestListener.h:139
-    void CppUnit::TestListener::endTestRun(class CppUnit::Test *,class CppUnit::TestResult *,)
-workdir/UnpackedTarball/icu/source/common/unicode/errorcode.h:137
-    void icu_71::ErrorCode::handleFailure()const
-workdir/UnpackedTarball/pdfium/core/fxge/renderdevicedriver_iface.h:48
-    void RenderDeviceDriverIface::SetBaseClip(const struct FX_RECT &,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:136
-    void OutputDev::dump()
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:138
-    void OutputDev::initGfxState(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:198
-    void OutputDev::updateStrokeAdjust(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:199
-    void OutputDev::updateAlphaIsShape(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:200
-    void OutputDev::updateTextKnockout(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:205
-    void OutputDev::updateBlendMode(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:208
-    void OutputDev::updatePatternOpacity(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:209
-    void OutputDev::clearPatternOpacity(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:214
-    void OutputDev::updateFillColorStop(class GfxState *,double,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:268
-    void OutputDev::endStringOp(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:269
-    void OutputDev::beginString(class GfxState *,const class GooString *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:270
-    void OutputDev::endString(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:284
-    void OutputDev::endType3Char(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:285
-    void OutputDev::beginTextObject(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:309
-    void OutputDev::markPoint(const char *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:310
-    void OutputDev::markPoint(const char *,class Dict *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:338
-    void OutputDev::endTransparencyGroup(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:341
-    void OutputDev::clearSoftMask(class GfxState *,)
-workdir/UnpackedTarball/poppler/poppler/OutputDev.h:348
-    void OutputDev::setVectorAntialias(_Bool,)
-workdir/UnpackedTarball/poppler/poppler/Stream.h:239
-    void Stream::getImageParams(int *,enum StreamColorSpaceMode *,)
-workdir/UnpackedTarball/skia/include/core/SkDrawable.h:72
-    void SkDrawable::GpuDrawHandler::draw(const class GrBackendDrawableInfo &,)
-workdir/UnpackedTarball/skia/include/core/SkTraceMemoryDump.h:53
-    void SkTraceMemoryDump::dumpStringValue(const char *,const char *,const char *,)
-workdir/UnpackedTarball/skia/include/core/SkTraceMemoryDump.h:90
-    void SkTraceMemoryDump::dumpWrappedState(const char *,_Bool,)
-workdir/UnpackedTarball/skia/include/gpu/vk/GrVkMemoryAllocator.h:115
-    void GrVkMemoryAllocator::flushMappedMemory(const long &,unsigned long,unsigned long,)
-workdir/UnpackedTarball/skia/include/gpu/vk/GrVkMemoryAllocator.h:121
-    void GrVkMemoryAllocator::invalidateMappedMemory(const long &,unsigned long,unsigned long,)
-workdir/UnpackedTarball/skia/include/private/chromium/SkChromeRemoteGlyphCache.h:120
-    void SkStrikeClient::DiscardableHandleManager::notifyReadFailure(const struct SkStrikeClient::DiscardableHandleManager::ReadFailureData &,)
-workdir/UnpackedTarball/skia/include/private/SkWeakRefCnt.h:151
-    void SkWeakRefCnt::weak_dispose()const
-workdir/UnpackedTarball/skia/src/core/SkDevice.h:299
-    void SkBaseDevice::drawAnnotation(const struct SkRect &,const char *,class SkData *,)
-workdir/UnpackedTarball/skia/src/effects/Sk2DPathEffect.cpp:30
-    void Sk2DPathEffect::begin(const struct SkIRect &,class SkPath *,)const
-workdir/UnpackedTarball/skia/src/effects/Sk2DPathEffect.cpp:32
-    void Sk2DPathEffect::end(class SkPath *,)const
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrCaps.h:607
-    void GrCaps::onApplyOptionsOverrides(const struct GrContextOptions &,)
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrCaps.h:608
-    void GrCaps::onDumpJSON(class SkJSONWriter *,)const
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrGpu.h:689
-    void GrGpu::onResetContext(unsigned int,)
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrGpu.h:692
-    void GrGpu::onResetTextureBindings()
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrGpu.h:796
-    void GrGpu::onReportSubmitHistograms()
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrGpu.h:799
-    void GrGpu::onDumpJSON(class SkJSONWriter *,)const
-workdir/UnpackedTarball/skia/src/gpu/ganesh/GrGpuResource.h:244
-    void GrGpuResource::setMemoryBacking(class SkTraceMemoryDump *,const class SkString &,)const
-workdir/UnpackedTarball/skia/tools/sk_app/WindowContext.h:41
-    void sk_app::WindowContext::activate(_Bool,)

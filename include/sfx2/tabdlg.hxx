@@ -95,7 +95,7 @@ protected:
     virtual void                PageCreated(const OString &rName, SfxTabPage &rPage);
 
     virtual void ActivatePage(const OString& rPage);
-    virtual bool DeactivatePage(const OString& rPage);
+    bool DeactivatePage(std::string_view aPage);
 
     std::unique_ptr<SfxItemSet> m_xExampleSet;
     SfxItemSet*     GetInputSetImpl();
