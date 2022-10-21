@@ -1339,6 +1339,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     // Set text colors for tabs according to OS settings
 
     aStyleSettings.SetTabTextColor(aControlTextColor);
+    aStyleSettings.SetTabRolloverTextColor(aControlTextColor);
     if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion: aOSVersion])
         aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
     else
