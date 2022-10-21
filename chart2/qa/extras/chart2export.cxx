@@ -352,6 +352,8 @@ void Chart2ExportTest::testErrorBarPropXLSX()
 // in an export -> import cycle using different file formats - ODS, XLS and XLSX.
 void Chart2ExportTest::testTrendline()
 {
+    // Validation fails with
+    // Error: tag name "chart:symbol-image" is not allowed. Possible tag names are: <label-separator>
     mbSkipValidation = true;
     load(u"/chart2/qa/extras/data/ods/", u"trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
@@ -369,7 +371,6 @@ void Chart2ExportTest::testTrendlineOOXML()
 
 void Chart2ExportTest::testTrendlineXLS()
 {
-    mbSkipValidation = true;
     load(u"/chart2/qa/extras/data/ods/", u"trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("MS Excel 97");
@@ -378,7 +379,6 @@ void Chart2ExportTest::testTrendlineXLS()
 
 void Chart2ExportTest::testMovingAverage()
 {
-    mbSkipValidation = true;
     load(u"/chart2/qa/extras/data/ods/", u"moving-type.ods");
     reload("calc8");
 
