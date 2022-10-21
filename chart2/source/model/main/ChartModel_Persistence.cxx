@@ -56,6 +56,7 @@
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/tempfile.hxx>
 #include <utility>
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/processfactory.hxx>
@@ -303,8 +304,7 @@ void SAL_CALL ChartModel::storeToURL(
         {
             if( m_xContext.is() && aMediaDescriptorHelper.ISSET_OutputStream )
             {
-                Reference< io::XStream > xStream(
-                    io::TempFile::create(m_xContext), uno::UNO_QUERY_THROW );
+                rtl::Reference< utl::TempFileFastService > xStream = new utl::TempFileFastService;
                 Reference< io::XInputStream > xInputStream( xStream->getInputStream());
 
                 Reference< embed::XStorage > xStorage(
@@ -313,8 +313,7 @@ void SAL_CALL ChartModel::storeToURL(
                 {
                     impl_store( aReducedMediaDescriptor, xStorage );
 
-                    Reference< io::XSeekable > xSeekable( xStream, uno::UNO_QUERY_THROW );
-                    xSeekable->seek( 0 );
+                    xStream->seek( 0 );
                     ::comphelper::OStorageHelper::CopyInputToOutput( xInputStream, aMediaDescriptorHelper.OutputStream );
                 }
             }
