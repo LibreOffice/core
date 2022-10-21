@@ -94,7 +94,6 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     bool                m_bIsInUndo:1;
     bool                m_bDocumentModifiedPending:1;
     bool                m_bUpdateEnabled:1;
-    bool                m_bUcalcTest:1; // avoid loading the styles in the ucalc test
     bool                m_bAreasChangedNeedBroadcast:1;
     sal_uInt16          m_nDocumentLock;
     sal_Int16           m_nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
@@ -428,8 +427,6 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void SnapVisArea( tools::Rectangle& rRect ) const;
-
-    void SetIsInUcalc();
 
     void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
 };

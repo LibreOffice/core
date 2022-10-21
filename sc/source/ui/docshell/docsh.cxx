@@ -602,23 +602,20 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             m_pDocument->GetStyleSheetPool()->CreateStandardStyles();
             m_pDocument->UpdStlShtPtrsFrmNms();
 
-            if (!m_bUcalcTest)
+            /* Create styles that are imported through Orcus */
+
+            OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+            rtl::Bootstrap::expandMacros(aURL);
+
+            OUString aPath;
+            osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+
+            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+
+            if (pOrcus)
             {
-                /* Create styles that are imported through Orcus */
-
-                OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
-                rtl::Bootstrap::expandMacros(aURL);
-
-                OUString aPath;
-                osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
-
-                ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-
-                if (pOrcus)
-                {
-                    pOrcus->importODS_Styles(*m_pDocument, aPath);
-                    m_pDocument->GetStyleSheetPool()->setAllParaStandard();
-                }
+                pOrcus->importODS_Styles(*m_pDocument, aPath);
+                m_pDocument->GetStyleSheetPool()->setAllParaStandard();
             }
 
             bRet = LoadXML( &rMedium, nullptr );
@@ -2884,7 +2881,6 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shar
     m_bIsInUndo       ( false ),
     m_bDocumentModifiedPending( false ),
     m_bUpdateEnabled  ( true ),
-    m_bUcalcTest     ( false ),
     m_bAreasChangedNeedBroadcast( false ),
     m_nDocumentLock   ( 0 ),
     m_nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG)
@@ -3397,11 +3393,6 @@ bool ScDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
         bRes = true;
     }
     return bRes;
-}
-
-void ScDocShell::SetIsInUcalc()
-{
-    m_bUcalcTest = true;
 }
 
 void ScDocShell::RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook)

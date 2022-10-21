@@ -63,22 +63,19 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         pStyleSheetPool->CreateStandardStyles();
         m_pDocument->UpdStlShtPtrsFrmNms();
 
-        if (!m_bUcalcTest)
+        /* Create styles that are imported through Orcus */
+
+        OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+        rtl::Bootstrap::expandMacros(aURL);
+
+        OUString aPath;
+        osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+
+        ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+        if (pOrcus)
         {
-            /* Create styles that are imported through Orcus */
-
-            OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
-            rtl::Bootstrap::expandMacros(aURL);
-
-            OUString aPath;
-            osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
-
-            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-            if (pOrcus)
-            {
-                pOrcus->importODS_Styles(*m_pDocument, aPath);
-                pStyleSheetPool->setAllParaStandard();
-            }
+            pOrcus->importODS_Styles(*m_pDocument, aPath);
+            pStyleSheetPool->setAllParaStandard();
         }
     }
 

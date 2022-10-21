@@ -10131,7 +10131,6 @@ void TestCopyPaste::testCopyPasteFormulasExternalDoc()
     m_xDocShell->DoLoad(pMedium);
 
     ScDocShellRef xExtDocSh = new ScDocShell;
-    xExtDocSh->SetIsInUcalc();
     OUString const aExtDocName("file:///extdata.fake");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);
@@ -10189,7 +10188,6 @@ void TestCopyPaste::testCopyPasteReferencesExternalDoc()
     m_xDocShell->DoLoad(pMedium);
 
     ScDocShellRef xExtDocSh = new ScDocShell;
-    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);

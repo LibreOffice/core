@@ -6814,7 +6814,6 @@ void TestFormula::testFormulaMatrixResultUpdate()
 void TestFormula::testExternalRef()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     OUString aExtSh1Name("Data1");
     OUString aExtSh2Name("Data2");
@@ -6989,7 +6988,6 @@ void TestFormula::testExternalRef()
 void TestFormula::testExternalRangeName()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    xExtDocSh->SetIsInUcalc();
     OUString const aExtDocName("file:///extdata.fake");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);
@@ -7101,7 +7099,6 @@ static void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
 void TestFormula::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);

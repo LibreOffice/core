@@ -843,7 +843,6 @@ void TestSharedFormula::testSharedFormulasRefUpdateExternal()
 
     // Launch an external document shell.
     ScDocShellRef xExtDocSh = new ScDocShell;
-    xExtDocSh->SetIsInUcalc();
 
     SfxMedium* pMed = new SfxMedium("file:///extdata.fake", StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);

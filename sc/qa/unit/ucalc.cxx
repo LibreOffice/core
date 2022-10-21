@@ -331,7 +331,6 @@ void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
-    rDocShellRef->SetIsInUcalc();
     rDocShellRef->DoInitUnitTest();
 }
 

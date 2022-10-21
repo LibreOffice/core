@@ -938,7 +938,6 @@ void ScSimpleBootstrapFixture::setUp()
     m_xDocShell
         = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
                          | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShell->SetIsInUcalc();
     m_xDocShell->DoInitUnitTest();
 
     m_pDoc = &m_xDocShell->GetDocument();
