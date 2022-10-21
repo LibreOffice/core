@@ -2919,6 +2919,9 @@ void Edit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     if (!maPlaceholderText.isEmpty())
         rJsonWriter.put("placeholder", maPlaceholderText);
+
+    if (IsPassword())
+        rJsonWriter.put("password", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
