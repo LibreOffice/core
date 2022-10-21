@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_java.h>
 #include <dsntypes.hxx>
 #include <unotools/confignode.hxx>
 #include <o3tl/safeint.hxx>
@@ -288,7 +289,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( std::u16string_view _sURL )
 
 OUString ODsnTypeCollection::getEmbeddedDatabase()
 {
-    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+    if (!HAVE_FEATURE_JAVA || officecfg::Office::Common::Misc::ExperimentalMode::get())
         return "sdbc:embedded:firebird";
     else
         return "sdbc:embedded:hsqldb";
