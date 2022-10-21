@@ -59,6 +59,7 @@
 #include <comphelper/bytereader.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/tempfile.hxx>
 #include <mutex>
 #include <utility>
 
@@ -1017,11 +1018,11 @@ bool UcbLockBytes::setInputStream( const Reference<XInputStream> &rxInputStream,
             if( !m_xSeekable.is() && rxInputStream.is() )
             {
                 Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                Reference< XOutputStream > rxTempOut( css::io::TempFile::create(xContext), UNO_QUERY_THROW );
+                rtl::Reference< utl::TempFileFastService > rxTempOut( new utl::TempFileFastService );
 
                 ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
-                m_xInputStream.set( rxTempOut, UNO_QUERY );
-                m_xSeekable.set( rxTempOut, UNO_QUERY );
+                m_xInputStream.set( rxTempOut );
+                m_xSeekable.set( rxTempOut );
             }
         }
 
