@@ -1204,7 +1204,10 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     if( !bResult )
                     {
                         uno::Reference< task::XInteractionHandler > xCHandler = GetInteractionHandler( true );
-                        if (bNoUI)
+                        // Dialog with error is superfluous:
+                        // on loading, will result in read-only with infobar.
+                        // bNoUI case for Reload failing, will open dialog later.
+                        if (bLoading || bNoUI)
                         {
                             xCHandler = new LockInteractionHandler(xCHandler);
                         }
