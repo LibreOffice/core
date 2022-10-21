@@ -25,6 +25,7 @@ $(eval $(call gb_Library_use_libraries,stringresource,\
 	cppu \
 	cppuhelper \
 	sal \
+	utl \
 	tl \
 	i18nlangtag \
 ))

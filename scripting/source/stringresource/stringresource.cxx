@@ -34,9 +34,11 @@
 
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/tempfile.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
 
@@ -1046,12 +1048,11 @@ void StringResourcePersistenceImpl::implStoreAtLocation
 
 class BinaryOutput
 {
-    Reference< XComponentContext >          m_xContext;
-    Reference< XInterface >                 m_xTempFile;
+    rtl::Reference< utl::TempFileFastService > m_xTempFile;
     Reference< io::XOutputStream >          m_xOutputStream;
 
 public:
-    explicit BinaryOutput( Reference< XComponentContext > const & xContext );
+    explicit BinaryOutput();
 
     const Reference< io::XOutputStream >& getOutputStream() const
         { return m_xOutputStream; }
@@ -1069,11 +1070,10 @@ public:
     void writeString( const OUString& aStr );
 };
 
-BinaryOutput::BinaryOutput( Reference< XComponentContext > const & xContext )
-        : m_xContext( xContext )
+BinaryOutput::BinaryOutput()
 {
-    m_xTempFile = io::TempFile::create( m_xContext );
-    m_xOutputStream.set( m_xTempFile, UNO_QUERY_THROW );
+    m_xTempFile = new utl::TempFileFastService;
+    m_xOutputStream = m_xTempFile;
 }
 
 template< class T >
@@ -1128,18 +1128,10 @@ Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 
     m_xOutputStream->closeOutput();
 
-    Reference< io::XSeekable> xSeekable( m_xTempFile, UNO_QUERY );
-    if( !xSeekable.is() )
-        return aRetSeq;
+    sal_Int32 nSize = static_cast<sal_Int32>(m_xTempFile->getPosition());
 
-    sal_Int32 nSize = static_cast<sal_Int32>(xSeekable->getPosition());
-
-    Reference< io::XInputStream> xInputStream( m_xTempFile, UNO_QUERY );
-    if( !xInputStream.is() )
-        return aRetSeq;
-
-    xSeekable->seek( 0 );
-    sal_Int32 nRead = xInputStream->readBytes( aRetSeq, nSize );
+    m_xTempFile->seek( 0 );
+    sal_Int32 nRead = m_xTempFile->readBytes( aRetSeq, nSize );
     OSL_ENSURE( nRead == nSize, "BinaryOutput::closeAndGetData: nRead != nSize" );
 
     return aRetSeq;
@@ -1175,7 +1167,7 @@ Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 
 Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
 {
-    BinaryOutput aOut( m_xContext );
+    BinaryOutput aOut;
 
     sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
     std::vector<Sequence< sal_Int8 >> aLocaleDataSeq(nLocaleCount);
@@ -1189,7 +1181,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
             if( m_pDefaultLocaleItem == pLocaleItem.get() )
                 iDefault = iLocale;
 
-            BinaryOutput aLocaleOut( m_xContext );
+            BinaryOutput aLocaleOut;
             implWriteLocaleBinary( pLocaleItem.get(), aLocaleOut );
 
             aLocaleDataSeq[iLocale] = aLocaleOut.closeAndGetData();
@@ -1291,15 +1283,11 @@ Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 n
     Reference< io::XInputStream > xIn;
     if( m_nCurPos + nSize <= m_nSize )
     {
-        Reference< io::XOutputStream > xTempOut( io::TempFile::create(m_xContext), UNO_QUERY_THROW );
+        rtl::Reference< utl::TempFileFastService > xTempOut = new utl::TempFileFastService;
         Sequence< sal_Int8 > aSection( m_pData + m_nCurPos, nSize );
         xTempOut->writeBytes( aSection );
-
-        Reference< io::XSeekable> xSeekable( xTempOut, UNO_QUERY );
-        if( xSeekable.is() )
-            xSeekable->seek( 0 );
-
-        xIn.set( xTempOut, UNO_QUERY );
+        xTempOut->seek( 0 );
+        xIn = xTempOut;
     }
     else
         OSL_FAIL( "BinaryInput::getInputStreamForSection(): Read past end" );
