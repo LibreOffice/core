@@ -237,7 +237,7 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
         if (nStreamOpenMode & embed::ElementModes::TRUNCATE)
         {
             //We write always into a new temporary stream.
-            mxTempSignatureStream.set(io::TempFile::create(mxContext), uno::UNO_QUERY_THROW);
+            mxTempSignatureStream = new utl::TempFileFastService;
             if (aHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
                 aHelper.xSignatureStream = mxTempSignatureStream;
             else
