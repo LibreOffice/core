@@ -1336,6 +1336,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         aStyleSettings.SetDefaultButtonTextColor(aSelectedControlTextColor);
     }
 
+    aStyleSettings.SetDialogColor(aWindowBackgroundColor);
+    aStyleSettings.SetDialogTextColor(aControlTextColor);
+
     // Set text colors for tabs according to OS settings
 
     aStyleSettings.SetTabTextColor(aControlTextColor);
