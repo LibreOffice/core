@@ -125,8 +125,6 @@ void VBAMacroTest::testSimpleCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(1, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(ScAddress(1, 4, 0)));
     CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(1, 5, 0)));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testMultiDocumentCopyAndPaste()
@@ -164,8 +162,6 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(ScAddress(1, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testSheetAndColumnSelectAndHide()
@@ -229,8 +225,6 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testPrintArea()
@@ -259,9 +253,6 @@ void VBAMacroTest::testPrintArea()
         const uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
         CPPUNIT_ASSERT_EQUAL(true, aSequence.hasElements());
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void VBAMacroTest::testSelectAllChaged()
@@ -287,8 +278,6 @@ void VBAMacroTest::testSelectAllChaged()
 
     // A1:E1048576
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, MAXROW, 0), pViewData.GetMarkData().GetMarkArea());
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testRangeSelect()
@@ -314,8 +303,6 @@ void VBAMacroTest::testRangeSelect()
 
     // B2:E5
     CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 4, 1, 0), pViewData.GetMarkData().GetMarkArea());
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testWindowState()
@@ -330,9 +317,6 @@ void VBAMacroTest::testWindowState()
 
     executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?language=Basic&"
                  "location=document");
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void VBAMacroTest::testScroll()
@@ -362,8 +346,6 @@ void VBAMacroTest::testScroll()
     CPPUNIT_ASSERT_EQUAL(ScSplitPos::SC_SPLIT_BOTTOMLEFT, rViewData.GetActivePart());
     CPPUNIT_ASSERT_EQUAL(SCCOL(29), rViewData.GetPosX(ScHSplitPos::SC_SPLIT_LEFT));
     CPPUNIT_ASSERT_EQUAL(SCROW(99), rViewData.GetPosY(ScVSplitPos::SC_SPLIT_BOTTOM));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testMacroKeyBinding()
@@ -402,9 +384,6 @@ void VBAMacroTest::testMacroKeyBinding()
         OUString(
             "vnd.sun.star.script:VBAProject.ThisWorkbook.key_T?language=Basic&location=document"),
         xAccelerator->getCommandByKeyEvent(aCtrlT));
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void VBAMacroTest::testVba()
@@ -541,9 +520,8 @@ void VBAMacroTest::testVba()
                 .getStr(),
             OUString("OK"), aStringRes);
 
-        css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent,
-                                                              css::uno::UNO_QUERY_THROW);
-        xCloseable->close(true);
+        mxComponent->dispose();
+        mxComponent.clear();
 
         if (bWorkbooksHandling)
         {
@@ -587,8 +565,6 @@ void VBAMacroTest::testTdf149579()
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(0, 2, 0)));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testVbaRangeSort()
@@ -637,8 +613,6 @@ void VBAMacroTest::testVbaRangeSort()
     CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 2, 0)));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testTdf107885()
@@ -676,8 +650,6 @@ void VBAMacroTest::testTdf107885()
     CPPUNIT_ASSERT(rDoc.RowHidden(2, 0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(3, 0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(4, 0));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testTdf131562()
@@ -701,8 +673,6 @@ void VBAMacroTest::testTdf131562()
     //Without the fix in place, the macro wouldn't have concatenated 1 and " ."
     CPPUNIT_ASSERT_EQUAL(OUString("1 ."), rDoc.GetString(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("1 .cat"), rDoc.GetString(ScAddress(0, 3, 0)));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testTdf52602()
@@ -733,8 +703,6 @@ void VBAMacroTest::testTdf52602()
     CPPUNIT_ASSERT_EQUAL(OUString("1/ March 2012"), rDoc.GetString(ScAddress(4, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("1/ Mar 2012"), rDoc.GetString(ScAddress(5, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("1/ Mar 2012"), rDoc.GetString(ScAddress(5, 1, 0)));
-
-    pDocSh->DoClose();
 }
 void VBAMacroTest::testTdf107902()
 {
@@ -764,8 +732,6 @@ void VBAMacroTest::testTdf107902()
     CPPUNIT_ASSERT(!rDoc.RowHidden(2, 0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(3, 0));
     CPPUNIT_ASSERT(rDoc.RowHidden(4, 0));
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testTdf90278()
@@ -783,9 +749,6 @@ void VBAMacroTest::testTdf90278()
     sal_Int32 aReturnValue;
     aRet >>= aReturnValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void VBAMacroTest::testTdf149531()
@@ -811,8 +774,6 @@ void VBAMacroTest::testTdf149531()
     sal_uInt16 nWidth
         = o3tl::convert(rDoc.GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(25749), nWidth);
-
-    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testTdf118247()
@@ -845,8 +806,6 @@ void VBAMacroTest::testTdf118247()
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sRange, aReturnValue);
     }
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 

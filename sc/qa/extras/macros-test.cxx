@@ -136,9 +136,6 @@ void ScMacrosTest::testMSP()
 
     SAL_INFO("sc.qa", "Result is " << sResult );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TestMSP ( for fdo#67547) failed", OUString("OK"), sResult);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testPasswordProtectedStarBasic()
@@ -173,8 +170,6 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
     aValue = rDoc.GetString(2,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1", OUString("success"), aValue);
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testStarBasic()
@@ -192,7 +187,6 @@ void ScMacrosTest::testStarBasic()
     executeMacro("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
     double aValue = rDoc.GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testRowColumn()
@@ -215,8 +209,6 @@ void ScMacrosTest::testRowColumn()
     executeMacro("vnd.sun.Star.script:Standard.Module1.Macro_ColumnWidth?language=Basic&location=document");
     sal_uInt16 nWidth  = o3tl::convert(rDoc.GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf146742()
@@ -241,8 +233,6 @@ void ScMacrosTest::testTdf146742()
     // - Expected: FALSE
     // - Actual  : TRUE
     CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), rDoc.GetString(ScAddress(1,1,0)));
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testMacroButtonFormControlXlsxExport()
@@ -294,8 +284,6 @@ void ScMacrosTest::testTdf104902()
     // newlines
     // - Actual  : string withnewlines
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(0, 1, 0)));
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf64639()
@@ -327,8 +315,6 @@ void ScMacrosTest::testTdf64639()
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
     }
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf142033()
@@ -357,8 +343,6 @@ void ScMacrosTest::testTdf142033()
     // - Actual  : string withnewlines
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testPasswordProtectedUnicodeString()
@@ -402,9 +386,6 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sCorrectString, aReturnValue);
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testPasswordProtectedArrayInUserType()
@@ -447,9 +428,6 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
         aRet >>= nReturnValue;
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nReturnValue);
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf114427()
@@ -474,8 +452,6 @@ void ScMacrosTest::testTdf114427()
     executeMacro("vnd.sun.Star.script:Standard.Module1.DeletingFrame?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDraws->getCount());
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf131296_legacy()
@@ -503,9 +479,6 @@ void ScMacrosTest::testTdf131296_legacy()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
         }
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf131296_new()
@@ -534,9 +507,6 @@ void ScMacrosTest::testTdf131296_new()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
         }
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf46119()
@@ -567,8 +537,6 @@ void ScMacrosTest::testTdf46119()
     CPPUNIT_ASSERT_EQUAL(OUString("0.134"), rDoc.GetString(ScAddress(4, 25, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("0.386"), rDoc.GetString(ScAddress(4, 26, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("0.366"), rDoc.GetString(ScAddress(4, 27, 0)));
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf128218()
@@ -587,9 +555,6 @@ void ScMacrosTest::testTdf128218()
     // - Actual  : Object()
 
     CPPUNIT_ASSERT_EQUAL(OUString("Double"), aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf71271()
@@ -616,9 +581,6 @@ void ScMacrosTest::testTdf71271()
         xProps->getPropertyValue("CodeName") >>= sCodeName;
         CPPUNIT_ASSERT_EQUAL(OUString("NewCodeName"), sCodeName);
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf43003()
@@ -639,9 +601,6 @@ void ScMacrosTest::testTdf43003()
     rDoc.SetValue(ScAddress(0, 0, 0), 2);
     CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(2, 0, 0)));
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 
@@ -676,9 +635,6 @@ void ScMacrosTest::testTdf75263()
         // - Actual  : ?????
         CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), rDoc.GetString(ScAddress(0, 0, 0)));
     }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf133887()
@@ -705,9 +661,6 @@ void ScMacrosTest::testTdf133887()
     // - Actual  : 7
 
     CPPUNIT_ASSERT_EQUAL(6.75, aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf133889()
@@ -734,9 +687,6 @@ void ScMacrosTest::testTdf133889()
     // - Actual  : 0
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf143582()
@@ -754,9 +704,6 @@ void ScMacrosTest::testTdf143582()
     // - Expected: Test6
     // - Actual  : TeTest8
     CPPUNIT_ASSERT_EQUAL(OUString("Test6"), aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf144085()
@@ -774,9 +721,6 @@ void ScMacrosTest::testTdf144085()
     // - Expected: $Sheet1.$B$5:$E$17
     // - Actual  : $Sheet1.$B$5:$C$10
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$B$5:$E$17"), aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf125800()
@@ -811,8 +755,6 @@ void ScMacrosTest::testTdf125800()
 
     const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Direct, pCondition->GetOperation());
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf130307()
@@ -828,9 +770,6 @@ void ScMacrosTest::testTdf130307()
 
     // Without the fix in place, this test would have crashed here
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1Sheet2"), aReturnValue);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf144970()
@@ -861,8 +800,6 @@ void ScMacrosTest::testTdf144970()
     executeMacro("vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf138646()
@@ -899,8 +836,6 @@ void ScMacrosTest::testTdf138646()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
         }
     }
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf105558()
@@ -920,9 +855,6 @@ void ScMacrosTest::testTdf105558()
     // - Expected: 5.5
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(5.5, rDoc.GetValue(ScAddress(0, 0, 0)));
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf107572()
@@ -976,8 +908,6 @@ void ScMacrosTest::testTdf107572()
 
         CPPUNIT_ASSERT_EQUAL(Color(0xcc, 0xcc, 0xcc), rColor2);
     }
-
-    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testShapeLayerId()
@@ -1012,9 +942,6 @@ void ScMacrosTest::testShapeLayerId()
     // The LayerID property of com.sun.star.drawing.Shape service has 'short' IDL type.
     // The expected run-time error is because there are only 5 layers there.
     CPPUNIT_ASSERT_EQUAL(Any(OUString("0 Expected runtime error happened")), aRet);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 void ScMacrosTest::testFunctionAccessIndirect()
@@ -1033,9 +960,6 @@ void ScMacrosTest::testFunctionAccessIndirect()
     // because of disallowed external link update (needed to obtain the cell value).
     css::uno::Any aResult = xFunc->callFunction("INDIRECT", {css::uno::Any(aReference)});
     CPPUNIT_ASSERT_EQUAL(css::uno::Any(OUString("a1")), aResult);
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 ScMacrosTest::ScMacrosTest()

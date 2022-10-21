@@ -1401,6 +1401,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -1486,6 +1487,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
     Scheduler::ProcessEventsToIdle();
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -1529,6 +1531,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -1578,6 +1581,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -2292,6 +2296,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -2511,6 +2516,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
     Scheduler::ProcessEventsToIdle();
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");

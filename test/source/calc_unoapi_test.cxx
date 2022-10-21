@@ -11,7 +11,6 @@
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/propertyvalue.hxx>
 
 using namespace css;
@@ -22,22 +21,15 @@ CalcUnoApiTest::CalcUnoApiTest(const OUString& path)
 {
 }
 
-void CalcUnoApiTest::setUp()
-{
-    UnoApiTest::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
 void CalcUnoApiTest::tearDown()
 {
-    closeDocument(mxComponent);
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    UnoApiTest::tearDown();
+    if (mxComponent.is())
+    {
+        mxComponent->dispose();
+        mxComponent.clear();
+    }
+
+    test::BootstrapFixture::tearDown();
 }
 
 uno::Any CalcUnoApiTest::executeMacro(const OUString& rScriptURL, const uno::Sequence<uno::Any>& rParams)
@@ -61,8 +53,8 @@ utl::TempFileNamed CalcUnoApiTest::save(const OUString& rFilter)
     uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
-    css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
+    mxComponent->dispose();
+    mxComponent.clear();
 
     return aTempFile;
 }
