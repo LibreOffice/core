@@ -734,10 +734,10 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
             pNd = GetBodyTextNode( pNd->GetDoc(), aPos, *pFrame );
             OSL_ENSURE( pNd, "Where's the paragraph?" );
             // tdf#151462 - search for outline node containing the current node
-            return pNd->FindOutlineNodeOfLevel(pNd->GetSectionLevel() - 1, pLayout);
+            return pNd ? pNd->FindOutlineNodeOfLevel(pNd->GetSectionLevel() - 1, pLayout) : nullptr;
         }
     }
-    return pNd ? pNd->FindOutlineNodeOfLevel(nLvl, pLayout) : nullptr;
+    return pNd->FindOutlineNodeOfLevel(nLvl, pLayout);
 }
 
 static bool IsHeadingContained(const SwTextNode* pChptrNd, const SwNode& rNd)
