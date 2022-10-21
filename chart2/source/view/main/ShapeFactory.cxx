@@ -58,6 +58,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 
 using namespace ::com::sun::star;
@@ -1322,7 +1323,7 @@ static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::P
         }
         case Symbol_Circle:
         {
-            double fOmega = 1.5707963267948966192 / (nQuarterCount + 1.0);
+            double fOmega = M_PI_2 / (nQuarterCount + 1.0);
             // one point in the middle of each edge to get full size bounding rectangle
             *pInnerSequence++ = toPoint( fX + fWidthH, fY );
             // 0 to PI/2

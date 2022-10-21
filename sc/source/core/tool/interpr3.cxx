@@ -199,7 +199,7 @@ double ScInterpreter::phi(double x)
 
 double ScInterpreter::integralPhi(double x)
 { // Using gauss(x)+0.5 has severe cancellation errors for x<-4
-    return 0.5 * std::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
+    return 0.5 * std::erfc(-x * M_SQRT1_2);
 }
 
 double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)

@@ -29,6 +29,7 @@
 #include <com/sun/star/reflection/FieldAccessMode.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 
+#include <cmath>
 #include <float.h>
 #include <stdio.h>
 
@@ -465,12 +466,12 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= OUString("+.7071067811865");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
-    aVal <<= (float)( .7071067811865 );
+    aVal <<= (float)( M_SQRT1_2 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= OUString("3.14159265359");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
-    aVal <<= (float)( 3.14159265359 );
+    aVal <<= (float)( M_PI );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (float)( 5 );

@@ -26,7 +26,9 @@
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <algorithm>
+#include <cmath>
 #include <memory>
+
 #include "analysisdefs.hxx"
 #include "analysishelper.hxx"
 #include <analysis.hrc>
@@ -1719,7 +1721,7 @@ void Complex::Power( double fPower )
 
 void Complex::Sqrt()
 {
-    static const double fMultConst = 0.7071067811865475;    // ...2440084436210485 = 1/sqrt(2)
+    static const double fMultConst = M_SQRT1_2;
     double  p = Abs();
     double  i_ = sqrt( p - r ) * fMultConst;
 
@@ -1811,14 +1813,14 @@ void Complex::Ln()
 void Complex::Log10()
 {
     Ln();
-    Mult( 0.434294481903251828 );   // * log10( e )
+    Mult( M_LOG10E );
 }
 
 
 void Complex::Log2()
 {
     Ln();
-    Mult( 1.442695040888963407 );   // * log2( e )
+    Mult( M_LOG2E );
 }
 
 
