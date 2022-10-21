@@ -47,6 +47,8 @@
 #include <hints.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
+#include <algorithm>
+#include <limits>
 #include <utility>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -1045,16 +1047,24 @@ SwRedlineData::~SwRedlineData()
     delete m_pNext;
 }
 
+// Check whether the absolute difference between the two dates is no larger than one minute (can
+// give inaccurate results if at least one of the dates is not valid/normalized):
+static bool deltaOneMinute(DateTime const & t1, DateTime const & t2) {
+    auto const & [min, max] = std::minmax(t1, t2);
+    // Avoid overflow of `min + tools::Time(0, 1)` below when min is close to the maximum valid
+    // DateTime:
+    if (min >= DateTime({31, 12, std::numeric_limits<sal_Int16>::max()}, {23, 59})) {
+        return true;
+    }
+    return max <= min + tools::Time(0, 1);
+}
+
 bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
 {
-    DateTime aTime = GetTimeStamp();
-    aTime.SetSec(0);
-    DateTime aCompareTime = rCmp.GetTimeStamp();
-    aCompareTime.SetSec(0);
     return m_nAuthor == rCmp.m_nAuthor &&
             m_eType == rCmp.m_eType &&
             m_sComment == rCmp.m_sComment &&
-            aTime == aCompareTime &&
+            deltaOneMinute(GetTimeStamp(), rCmp.GetTimeStamp()) &&
             m_bMoved == rCmp.m_bMoved &&
             (( !m_pNext && !rCmp.m_pNext ) ||
                 ( m_pNext && rCmp.m_pNext &&

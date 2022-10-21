@@ -200,7 +200,7 @@ class trackedchanges(UITestCase):
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
-                self.assertEqual(147, len(changesList.getChildren()))
+                self.assertEqual(111, len(changesList.getChildren()))
 
                 # Without the fix in place, it would have crashed here
                 xAccBtn = xTrackDlg.getChild("acceptall")
@@ -211,7 +211,7 @@ class trackedchanges(UITestCase):
                 xUndoBtn = xTrackDlg.getChild("undo")
                 xUndoBtn.executeAction("CLICK", tuple())
 
-                self.assertEqual(147, len(changesList.getChildren()))
+                self.assertEqual(111, len(changesList.getChildren()))
 
 
             # Check the changes are shown after opening the Manage Tracked Changes dialog
