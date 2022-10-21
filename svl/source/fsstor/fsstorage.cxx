@@ -48,6 +48,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
 
 #include "fsstorage.hxx"
@@ -472,12 +473,9 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
         ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
-        xTempResult = io::TempFile::create(m_xContext);
+        xTempResult = new utl::TempFileFastService;
         uno::Reference < io::XOutputStream > xTempOut = xTempResult->getOutputStream();
         uno::Reference < io::XInputStream > xTempIn = xTempResult->getInputStream();
-
-        if ( !xTempOut.is() || !xTempIn.is() )
-            throw io::IOException();
 
         ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOut );
         xTempOut->closeOutput();
