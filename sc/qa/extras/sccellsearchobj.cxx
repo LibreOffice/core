@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/util/searchdescriptor.hxx>
@@ -28,7 +28,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScCellSearchObj : public CalcUnoApiTest,
+class ScCellSearchObj : public UnoApiTest,
                         public apitest::SearchDescriptor,
                         public apitest::XPropertySet,
                         public apitest::XReplaceDescriptor,
@@ -68,7 +68,7 @@ public:
 };
 
 ScCellSearchObj::ScCellSearchObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XServiceInfo("ScCellSearchObj",
                    { "com.sun.star.util.ReplaceDescriptor", "com.sun.star.util.SearchDescriptor" })
 {
@@ -87,7 +87,7 @@ uno::Reference<uno::XInterface> ScCellSearchObj::init()
 
 void ScCellSearchObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

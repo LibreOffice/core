@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/drawing/xdrawpages.hxx>
@@ -29,7 +29,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScDrawPagesObj : public CalcUnoApiTest,
+class ScDrawPagesObj : public UnoApiTest,
                        public apitest::XDrawPages,
                        public apitest::XElementAccess,
                        public apitest::XIndexAccess,
@@ -64,7 +64,7 @@ public:
 };
 
 ScDrawPagesObj::ScDrawPagesObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<drawing::XDrawPage>::get())
     , XIndexAccess(3)
     , XServiceInfo("ScDrawPagesObj", "com.sun.star.drawing.DrawPages")
@@ -86,7 +86,7 @@ uno::Reference<uno::XInterface> ScDrawPagesObj::init()
 
 void ScDrawPagesObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/sheet/cellarealink.hxx>
 #include <test/sheet/xarealink.hxx>
@@ -27,7 +27,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScAreaLinkObj : public CalcUnoApiTest,
+class ScAreaLinkObj : public UnoApiTest,
                       public apitest::CellAreaLink,
                       public apitest::XAreaLink,
                       public apitest::XPropertySet,
@@ -68,7 +68,7 @@ public:
 };
 
 ScAreaLinkObj::ScAreaLinkObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , CellAreaLink(m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/scarealinkobj.ods"))
 {
 }
@@ -92,7 +92,7 @@ uno::Reference<uno::XInterface> ScAreaLinkObj::init()
 
 void ScAreaLinkObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 

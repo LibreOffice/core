@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/datapilotitem.hxx>
 
@@ -31,9 +31,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScDataPilotItemObj : public CalcUnoApiTest,
-                           public apitest::DataPilotItem,
-                           public apitest::XNamed
+class ScDataPilotItemObj : public UnoApiTest, public apitest::DataPilotItem, public apitest::XNamed
 {
 public:
     virtual void setUp() override;
@@ -56,7 +54,7 @@ private:
 };
 
 ScDataPilotItemObj::ScDataPilotItemObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed("2")
 {
 }
@@ -118,7 +116,7 @@ uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
 
 void ScDataPilotItemObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

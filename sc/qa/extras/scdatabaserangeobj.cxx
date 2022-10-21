@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/databaserange.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
 #include <test/sheet/xdatabaserange.hxx>
@@ -24,7 +24,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScDatabaseRangeObj : public CalcUnoApiTest,
+class ScDatabaseRangeObj : public UnoApiTest,
                            public apitest::DatabaseRange,
                            public apitest::XCellRangeReferrer,
                            public apitest::XDatabaseRange
@@ -67,7 +67,7 @@ public:
 };
 
 ScDatabaseRangeObj::ScDatabaseRangeObj()
-      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+      : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -95,7 +95,7 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBN
 
 void ScDatabaseRangeObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
 
     OUString aFileURL;
     createFileURL(u"ScDatabaseRangeObj.ods", aFileURL);

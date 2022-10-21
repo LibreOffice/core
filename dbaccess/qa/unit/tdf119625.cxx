@@ -106,7 +106,6 @@ void Tdf119625Test::testTime()
     }
     CPPUNIT_ASSERT(!xRes->next());
 
-    closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
     if (!oldValue)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> xChanges(

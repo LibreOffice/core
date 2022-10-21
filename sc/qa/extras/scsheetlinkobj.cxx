@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/sheetlink.hxx>
 #include <test/util/xrefreshable.hxx>
@@ -29,7 +29,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScSheetLinkObj : public CalcUnoApiTest,
+class ScSheetLinkObj : public UnoApiTest,
                        public apitest::SheetLink,
                        public apitest::XNamed,
                        public apitest::XRefreshable
@@ -57,7 +57,7 @@ public:
 };
 
 ScSheetLinkObj::ScSheetLinkObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed(m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/ScSheetLinkObj.ods"))
 {
 }
@@ -87,7 +87,7 @@ uno::Reference<uno::XInterface> ScSheetLinkObj::init()
 
 void ScSheetLinkObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
 #include <test/sheet/xviewpane.hxx>
@@ -35,7 +35,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScViewPaneObj : public CalcUnoApiTest,
+class ScViewPaneObj : public UnoApiTest,
                       public apitest::XCellRangeReferrer,
                       public apitest::XControlAccess,
                       public apitest::XFormLayerAccess,
@@ -76,7 +76,7 @@ public:
 };
 
 ScViewPaneObj::ScViewPaneObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XServiceInfo("ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane")
 {
 }
@@ -116,7 +116,7 @@ uno::Reference<uno::XInterface> ScViewPaneObj::init()
 
 void ScViewPaneObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

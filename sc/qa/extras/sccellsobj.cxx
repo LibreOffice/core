@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 
@@ -31,7 +31,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScCellsObj : public CalcUnoApiTest,
+class ScCellsObj : public UnoApiTest,
                    public apitest::XElementAccess,
                    public apitest::XEnumerationAccess
 {
@@ -54,7 +54,7 @@ public:
 };
 
 ScCellsObj::ScCellsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XCell>::get())
 {
 }
@@ -87,7 +87,7 @@ uno::Reference<uno::XInterface> ScCellsObj::init()
 
 void ScCellsObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 

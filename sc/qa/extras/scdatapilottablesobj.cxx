@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -38,7 +38,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDataPilotTablesObj : public CalcUnoApiTest,
+class ScDataPilotTablesObj : public UnoApiTest,
                              public apitest::XDataPilotTables,
                              public apitest::XElementAccess,
                              public apitest::XEnumerationAccess,
@@ -83,7 +83,7 @@ public:
 };
 
 ScDataPilotTablesObj::ScDataPilotTablesObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XDataPilotTable2>::get())
     , XIndexAccess(1)
     , XNameAccess("DataPilotTable")
@@ -128,7 +128,7 @@ uno::Reference<uno::XInterface> ScDataPilotTablesObj::getXSpreadsheet()
 
 void ScDataPilotTablesObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

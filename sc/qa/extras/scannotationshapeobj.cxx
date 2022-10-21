@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/drawing/captionshape.hxx>
 #include <test/drawing/xgluepointssupplier.hxx>
 #include <test/drawing/xshape.hxx>
@@ -37,7 +37,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScAnnotationShapeObj : public CalcUnoApiTest,
+class ScAnnotationShapeObj : public UnoApiTest,
                              public apitest::CaptionShape,
                              public apitest::XGluePointsSupplier,
                              public apitest::XShape,
@@ -93,21 +93,21 @@ private:
 uno::Reference<text::XTextContent> ScAnnotationShapeObj::m_xField;
 
 ScAnnotationShapeObj::ScAnnotationShapeObj()
-    : CalcUnoApiTest("sc/qa/extras/testdocuments")
+    : UnoApiTest("sc/qa/extras/testdocuments")
     , XShapeDescriptor("com.sun.star.drawing.CaptionShape")
 {
 }
 
 void ScAnnotationShapeObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScAnnotationShapeObj::tearDown()
 {
     m_xField.clear();
-    CalcUnoApiTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()

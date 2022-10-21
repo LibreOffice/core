@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/xrecentfunctions.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -23,7 +23,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScRecentFunctionsObj : public CalcUnoApiTest, public apitest::XRecentFunctions
+class ScRecentFunctionsObj : public UnoApiTest, public apitest::XRecentFunctions
 {
 public:
     ScRecentFunctionsObj();
@@ -42,7 +42,7 @@ public:
 };
 
 ScRecentFunctionsObj::ScRecentFunctionsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -55,7 +55,7 @@ uno::Reference<uno::XInterface> ScRecentFunctionsObj::init()
 
 void ScRecentFunctionsObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

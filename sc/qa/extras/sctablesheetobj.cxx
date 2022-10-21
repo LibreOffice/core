@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/scenario.hxx>
 #include <test/sheet/sheetcellrange.hxx>
 #include <test/sheet/spreadsheet.hxx>
@@ -56,7 +56,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
+class ScTableSheetObj : public UnoApiTest, public apitest::Scenario,
                                                public apitest::SheetCellRange,
                                                public apitest::Spreadsheet,
                                                public apitest::XArrayFormulaRange,
@@ -246,7 +246,7 @@ private:
 };
 
 ScTableSheetObj::ScTableSheetObj():
-    CalcUnoApiTest("/sc/qa/extras/testdocuments"),
+    UnoApiTest("/sc/qa/extras/testdocuments"),
     apitest::XCellSeries(1, 0),
     apitest::XFormulaQuery(
         table::CellRangeAddress(0, 0, 0, ScSheetLimits::CreateDefault().MaxCol(), ScSheetLimits::CreateDefault().MaxRow()),
@@ -353,7 +353,7 @@ OUString ScTableSheetObj::getFileURL()
 
 void ScTableSheetObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     createFileURL(u"ScTableSheetObj.ods", maFileURL);
     mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }

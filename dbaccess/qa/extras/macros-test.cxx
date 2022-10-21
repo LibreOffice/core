@@ -37,9 +37,7 @@ void DBAccessTest::test()
 {
     OUString aFileName;
     createFileURL(u"testdb.odb", aFileName);
-    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName);
-    uno::Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
-    xDocCloseable->close(false);
+    mxComponent = loadFromDesktop(aFileName);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBAccessTest);

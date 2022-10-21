@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/xddelink.hxx>
 #include <test/util/xrefreshable.hxx>
@@ -58,7 +58,7 @@ struct TempFileBase
 };
 }
 
-class ScDDELinkObj : public CalcUnoApiTest,
+class ScDDELinkObj : public UnoApiTest,
                      public TempFileBase,
                      public apitest::XDDELink,
                      public apitest::XNamed,
@@ -88,7 +88,7 @@ public:
 };
 
 ScDDELinkObj::ScDDELinkObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , TempFileBase(m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
     , XDDELink(m_TempFile.GetURL())
     , XNamed("soffice|" + m_TempFile.GetURL() + "!Sheet1.A1")
@@ -121,7 +121,7 @@ uno::Reference<uno::XInterface> ScDDELinkObj::init()
 void ScDDELinkObj::setUp()
 {
     Application::SetAppName("soffice"); // Enable DDE
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/document/xlinktargetsupplier.hxx>
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 #include <test/sheet/xcalculatable.hxx>
@@ -30,7 +30,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScModelObj : public CalcUnoApiTest,
+class ScModelObj : public UnoApiTest,
                    public apitest::SpreadsheetDocumentSettings,
                    public apitest::XCalculatable,
                    public apitest::XConsolidatable,
@@ -76,7 +76,7 @@ private:
 };
 
 ScModelObj::ScModelObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -103,7 +103,7 @@ uno::Sequence<uno::Reference<table::XCell>> ScModelObj::getXCells() { return m_x
 
 void ScModelObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     OUString aFileURL;
     createFileURL(u"ScModelObj.ods", aFileURL);

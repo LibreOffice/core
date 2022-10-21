@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
@@ -31,7 +31,7 @@ using namespace css::lang;
 
 namespace sc_apitest {
 
-class CheckDataPilotTable : public CalcUnoApiTest, public apitest::XNamed, public apitest::XDataPilotTable, public apitest::XPropertySet, public apitest::XDataPilotDescriptor
+class CheckDataPilotTable : public UnoApiTest, public apitest::XNamed, public apitest::XDataPilotTable, public apitest::XPropertySet, public apitest::XDataPilotDescriptor
 {
 public:
     CheckDataPilotTable();
@@ -66,7 +66,7 @@ private:
 };
 
 CheckDataPilotTable::CheckDataPilotTable()
-     : CalcUnoApiTest("/sc/qa/extras/testdocuments"),
+     : UnoApiTest("/sc/qa/extras/testdocuments"),
        apitest::XNamed("DataPilotTable")
 {
 }
@@ -168,7 +168,7 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
 
 void CheckDataPilotTable::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     init();
 }
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/sheetsortdescriptor2.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -26,7 +26,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScSortDescriptorBaseObj : public CalcUnoApiTest, public apitest::SheetSortDescriptor2
+class ScSortDescriptorBaseObj : public UnoApiTest, public apitest::SheetSortDescriptor2
 {
 public:
     ScSortDescriptorBaseObj();
@@ -43,7 +43,7 @@ public:
 };
 
 ScSortDescriptorBaseObj::ScSortDescriptorBaseObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -60,7 +60,7 @@ uno::Reference<uno::XInterface> ScSortDescriptorBaseObj::init()
 
 void ScSortDescriptorBaseObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

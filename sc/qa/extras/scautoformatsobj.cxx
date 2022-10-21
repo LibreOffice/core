@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -30,7 +30,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScAutoFormatsObj : public CalcUnoApiTest,
+class ScAutoFormatsObj : public UnoApiTest,
                          public apitest::XElementAccess,
                          public apitest::XEnumerationAccess,
                          public apitest::XIndexAccess,
@@ -82,7 +82,7 @@ public:
 };
 
 ScAutoFormatsObj::ScAutoFormatsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<container::XNamed>::get())
     , XIndexAccess(2)
     , XNameAccess("Default")
@@ -115,7 +115,7 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
 
 void ScAutoFormatsObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

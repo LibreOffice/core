@@ -50,8 +50,8 @@ void RowSetClones::test()
 {
     const OUString sFilePath(m_directories.getURLFromWorkdir(u"CppunitTest/RowSetClones.odb"));
 
-    uno::Reference< lang::XComponent > xComponent (loadFromDesktop(sFilePath));
-    uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY_THROW);
+    mxComponent = loadFromDesktop(sFilePath);
+    uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
@@ -122,8 +122,6 @@ void RowSetClones::test()
     CPPUNIT_ASSERT(xResultSetClone->isLast());
     CPPUNIT_ASSERT(xResultSet->isFirst());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRow->getInt(1));
-
-    closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RowSetClones);

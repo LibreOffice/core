@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/drawing/xgluepointssupplier.hxx>
 #include <test/drawing/xshape.hxx>
 #include <test/drawing/xshapedescriptor.hxx>
@@ -32,7 +32,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScShapeObj : public CalcUnoApiTest,
+class ScShapeObj : public UnoApiTest,
                    public apitest::Shape,
                    public apitest::XComponent,
                    public apitest::XGluePointsSupplier,
@@ -72,7 +72,7 @@ public:
 };
 
 ScShapeObj::ScShapeObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XShapeDescriptor("com.sun.star.drawing.RectangleShape")
 {
 }
@@ -111,7 +111,7 @@ uno::Reference<uno::XInterface> ScShapeObj::getXSheetDocument()
 
 void ScShapeObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

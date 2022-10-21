@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/xheaderfootercontent.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -27,7 +27,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScHeaderFooterContentObj : public CalcUnoApiTest, public apitest::XHeaderFooterContent
+class ScHeaderFooterContentObj : public UnoApiTest, public apitest::XHeaderFooterContent
 {
 public:
     ScHeaderFooterContentObj();
@@ -46,7 +46,7 @@ public:
 };
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -80,7 +80,7 @@ uno::Reference<uno::XInterface> ScHeaderFooterContentObj::init()
 
 void ScHeaderFooterContentObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

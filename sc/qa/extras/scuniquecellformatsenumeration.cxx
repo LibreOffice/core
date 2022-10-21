@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -49,7 +49,7 @@ struct RGBColor
 };
 }
 
-class ScUniqueCellFormatsEnumeration : public CalcUnoApiTest, public apitest::XEnumeration
+class ScUniqueCellFormatsEnumeration : public UnoApiTest, public apitest::XEnumeration
 {
 public:
     ScUniqueCellFormatsEnumeration();
@@ -71,7 +71,7 @@ private:
 };
 
 ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -100,7 +100,7 @@ uno::Reference<uno::XInterface> ScUniqueCellFormatsEnumeration::init()
 
 void ScUniqueCellFormatsEnumeration::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 

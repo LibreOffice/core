@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 
 namespace com::sun::star::lang
 {
@@ -22,7 +22,7 @@ class XComponent;
 
 using namespace css;
 
-class ScCondFormatMergeTest : public CalcUnoApiTest
+class ScCondFormatMergeTest : public UnoApiTest
 {
 public:
     ScCondFormatMergeTest();
@@ -35,7 +35,7 @@ public:
 };
 
 ScCondFormatMergeTest::ScCondFormatMergeTest()
-    : CalcUnoApiTest("sc/qa/extras/testdocuments/")
+    : UnoApiTest("sc/qa/extras/testdocuments/")
 {
 }
 

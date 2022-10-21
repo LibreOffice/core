@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/util/xrefreshable.hxx>
@@ -32,7 +32,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScHeaderFieldsObj : public CalcUnoApiTest,
+class ScHeaderFieldsObj : public UnoApiTest,
                           public apitest::XElementAccess,
                           public apitest::XEnumerationAccess,
                           public apitest::XRefreshable
@@ -68,7 +68,7 @@ private:
 uno::Reference<text::XText> ScHeaderFieldsObj::m_xText;
 
 ScHeaderFieldsObj::ScHeaderFieldsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , ::apitest::XElementAccess(cppu::UnoType<text::XTextField>::get())
 {
 }
@@ -99,7 +99,7 @@ uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
 
 void ScHeaderFieldsObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
@@ -108,7 +108,7 @@ void ScHeaderFieldsObj::tearDown()
 {
     m_xText.clear();
 
-    CalcUnoApiTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScHeaderFieldsObj);

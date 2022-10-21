@@ -49,9 +49,9 @@ public:
     {
     }
 
-    uno::Reference<lang::XComponent> init(uno::Reference<css::accessibility::XAccessible>& para1,
-                                          uno::Reference<css::accessibility::XAccessible>& para2,
-                                          uno::Reference<css::accessibility::XAccessible>& para3);
+    void init(uno::Reference<css::accessibility::XAccessible>& para1,
+              uno::Reference<css::accessibility::XAccessible>& para2,
+              uno::Reference<css::accessibility::XAccessible>& para3);
     void contents_flows_to_and_from();
 
     CPPUNIT_TEST_SUITE(AccessibleRelationSet);
@@ -59,14 +59,12 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-uno::Reference<lang::XComponent>
-AccessibleRelationSet::init(uno::Reference<css::accessibility::XAccessible>& para1,
-                            uno::Reference<css::accessibility::XAccessible>& para2,
-                            uno::Reference<css::accessibility::XAccessible>& para3)
+void AccessibleRelationSet::init(uno::Reference<css::accessibility::XAccessible>& para1,
+                                 uno::Reference<css::accessibility::XAccessible>& para2,
+                                 uno::Reference<css::accessibility::XAccessible>& para3)
 {
-    uno::Reference<css::lang::XComponent> xComponent
-        = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    uno::Reference<text::XTextDocument> xTextDoc(xComponent, uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY);
 
     css::uno::Reference<text::XText> oText(xTextDoc->getText(), uno::UNO_SET_THROW);
 
@@ -91,7 +89,6 @@ AccessibleRelationSet::init(uno::Reference<css::accessibility::XAccessible>& par
     para1 = ctx->getAccessibleChild(0);
     para2 = ctx->getAccessibleChild(1);
     para3 = ctx->getAccessibleChild(2);
-    return xComponent;
 }
 
 void AccessibleRelationSet::contents_flows_to_and_from()
@@ -102,7 +99,7 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     css::uno::Reference<css::accessibility::XAccessible> para2;
     css::uno::Reference<css::accessibility::XAccessible> para3;
 
-    uno::Reference<lang::XComponent> xComponent(init(para1, para2, para3));
+    init(para1, para2, para3);
     css::uno::Reference<css::accessibility::XAccessibleContext> oObj(para1, uno::UNO_QUERY_THROW);
     css::uno::Reference<css::accessibility::XAccessibleRelationSet> set
         = oObj->getAccessibleRelationSet();
@@ -198,8 +195,6 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     css::uno::Reference<css::accessibility::XAccessibleText> paraText3(para3, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct target paragraph", atargets[1]->getText(),
                                  paraText3->getText());
-
-    closeDocument(xComponent);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AccessibleRelationSet);

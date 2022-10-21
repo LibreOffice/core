@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 
@@ -21,7 +21,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScSpreadsheetSettingsObj : public CalcUnoApiTest,
+class ScSpreadsheetSettingsObj : public UnoApiTest,
                                  public apitest::SpreadsheetDocumentSettings,
                                  public apitest::XPropertySet
 {
@@ -47,7 +47,7 @@ public:
 };
 
 ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XPropertySet({
           "AreaLinks",
           "CharLocale",
@@ -74,7 +74,7 @@ uno::Reference<uno::XInterface> ScSpreadsheetSettingsObj::init()
 
 void ScSpreadsheetSettingsObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

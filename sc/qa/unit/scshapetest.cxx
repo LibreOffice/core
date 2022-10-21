@@ -11,7 +11,7 @@
 
 #include <string_view>
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/dispatch.hxx>
@@ -38,7 +38,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScShapeTest : public CalcUnoApiTest
+class ScShapeTest : public UnoApiTest
 {
 public:
     ScShapeTest();
@@ -98,7 +98,7 @@ public:
 };
 
 ScShapeTest::ScShapeTest()
-    : CalcUnoApiTest("sc/qa/unit/data/ods")
+    : UnoApiTest("sc/qa/unit/data/ods")
 {
 }
 

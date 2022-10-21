@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/sheetcellrange.hxx>
 #include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
@@ -39,7 +39,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
+class ScCellCursorObj : public UnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XArrayFormulaRange,
                                                public apitest::XCellCursor,
                                                public apitest::XCellFormatRangesSupplier,
@@ -156,7 +156,7 @@ public:
 };
 
 ScCellCursorObj::ScCellCursorObj():
-    CalcUnoApiTest("/sc/qa/extras/testdocuments"),
+    UnoApiTest("/sc/qa/extras/testdocuments"),
     apitest::XCellSeries(0, 0),
     apitest::XFormulaQuery(table::CellRangeAddress(0, 15, 15, 15, 15), table::CellRangeAddress(0, 0, 15, 0, 15))
 {
@@ -200,7 +200,7 @@ uno::Reference< uno::XInterface > ScCellCursorObj::getXSpreadsheet()
 
 void ScCellCursorObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
 
     OUString aFileURL;
     createFileURL(u"ScCellCursorObj.ods", aFileURL);

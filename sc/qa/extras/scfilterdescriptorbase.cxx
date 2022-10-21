@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/sheetfilterdescriptor.hxx>
@@ -29,7 +29,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScFilterDescriptorBase : public CalcUnoApiTest,
+class ScFilterDescriptorBase : public UnoApiTest,
                                public apitest::SheetFilterDescriptor,
                                public apitest::XPropertySet,
                                public apitest::XServiceInfo,
@@ -74,7 +74,7 @@ public:
 };
 
 ScFilterDescriptorBase::ScFilterDescriptorBase()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XPropertySet({ "Orientation", "OutputPosition" })
     , XServiceInfo("ScFilterDescriptorBase", "com.sun.star.sheet.SheetFilterDescriptor")
 {
@@ -98,7 +98,7 @@ uno::Reference<uno::XInterface> ScFilterDescriptorBase::init()
 
 void ScFilterDescriptorBase::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

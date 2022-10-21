@@ -11,7 +11,7 @@
 
 #include <string_view>
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <rtl/ustring.hxx>
 #include <cppunit/extensions/HelperMacros.h>
@@ -52,7 +52,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScPerfObj : public CalcUnoApiTest
+class ScPerfObj : public UnoApiTest
 {
 public:
 
@@ -102,7 +102,7 @@ private:
 };
 
 ScPerfObj::ScPerfObj()
-    : CalcUnoApiTest("sc/qa/perf/testdocuments/")
+    : UnoApiTest("sc/qa/perf/testdocuments/")
 {
 }
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -41,7 +41,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScTableConditionalFormat : public CalcUnoApiTest,
+class ScTableConditionalFormat : public UnoApiTest,
                                  public apitest::XElementAccess,
                                  public apitest::XEnumerationAccess,
                                  public apitest::XIndexAccess,
@@ -88,7 +88,7 @@ public:
 };
 
 ScTableConditionalFormat::ScTableConditionalFormat()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XSheetConditionalEntry>::get())
     , XIndexAccess(2)
     , XNameAccess("Entry1")
@@ -133,7 +133,7 @@ uno::Sequence<beans::PropertyValue> ScTableConditionalFormat::createCondition(co
 
 void ScTableConditionalFormat::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -35,7 +35,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScTabViewObj : public CalcUnoApiTest,
+class ScTabViewObj : public UnoApiTest,
                      public apitest::SpreadsheetViewSettings,
                      public apitest::XActivationBroadcaster,
                      public apitest::XCellRangeReferrer,
@@ -90,7 +90,7 @@ public:
 };
 
 ScTabViewObj::ScTabViewObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XViewPane>::get())
     , XIndexAccess(1)
 {
@@ -120,7 +120,7 @@ uno::Reference<uno::XInterface> ScTabViewObj::getXSpreadsheet(const sal_Int16 nN
 
 void ScTabViewObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 

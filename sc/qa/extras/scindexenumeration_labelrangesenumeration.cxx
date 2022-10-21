@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -26,8 +26,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScIndexEnumeration_LabelRangesEnumeration : public CalcUnoApiTest,
-                                                  public apitest::XEnumeration
+class ScIndexEnumeration_LabelRangesEnumeration : public UnoApiTest, public apitest::XEnumeration
 {
 public:
     ScIndexEnumeration_LabelRangesEnumeration();
@@ -45,7 +44,7 @@ public:
 };
 
 ScIndexEnumeration_LabelRangesEnumeration::ScIndexEnumeration_LabelRangesEnumeration()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -67,7 +66,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_LabelRangesEnumeration::init(
 
 void ScIndexEnumeration_LabelRangesEnumeration::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 

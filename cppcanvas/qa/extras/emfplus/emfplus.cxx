@@ -29,24 +29,6 @@ public:
     {
     }
 
-    virtual void setUp() override
-    {
-        UnoApiTest::setUp();
-        mxDesktop.set(
-            frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-        SfxApplication::GetOrCreate();
-    };
-
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-        {
-            closeDocument(mxComponent);
-            mxComponent->dispose();
-        }
-        UnoApiTest::tearDown();
-    };
-
     Bitmap load(const char* pName)
     {
         OUString aFileURL;
@@ -69,8 +51,6 @@ public:
 
         return aResultBitmap.GetBitmap();
     }
-
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo77229)

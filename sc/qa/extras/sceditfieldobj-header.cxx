@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/text/textcontent.hxx>
@@ -34,7 +34,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScEditFieldObj_Header : public CalcUnoApiTest,
+class ScEditFieldObj_Header : public UnoApiTest,
                               public apitest::TextContent,
                               public apitest::XComponent,
                               public apitest::XPropertySet,
@@ -87,7 +87,7 @@ uno::Reference<text::XTextField> ScEditFieldObj_Header::mxField;
 uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
 ScEditFieldObj_Header::ScEditFieldObj_Header()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , TextContent(text::TextContentAnchorType_AS_CHARACTER,
                   text::TextContentAnchorType_AS_CHARACTER, text::WrapTextMode_NONE,
                   text::WrapTextMode_NONE)
@@ -96,7 +96,7 @@ ScEditFieldObj_Header::ScEditFieldObj_Header()
 
 void ScEditFieldObj_Header::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // Load an empty document.
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
@@ -107,7 +107,7 @@ void ScEditFieldObj_Header::tearDown()
     mxField.clear();
     mxRightText.clear();
 
-    CalcUnoApiTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()

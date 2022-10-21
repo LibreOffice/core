@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -34,7 +34,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScIndexEnumeration_TableConditionalEntryEnumeration : public CalcUnoApiTest,
+class ScIndexEnumeration_TableConditionalEntryEnumeration : public UnoApiTest,
                                                             public apitest::XEnumeration
 {
 public:
@@ -54,7 +54,7 @@ public:
 
 ScIndexEnumeration_TableConditionalEntryEnumeration::
     ScIndexEnumeration_TableConditionalEntryEnumeration()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -95,7 +95,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
 
 void ScIndexEnumeration_TableConditionalEntryEnumeration::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 

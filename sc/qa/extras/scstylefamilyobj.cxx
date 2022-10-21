@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
@@ -32,7 +32,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScStyleFamilyObj : public CalcUnoApiTest,
+class ScStyleFamilyObj : public UnoApiTest,
                          public apitest::XElementAccess,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
@@ -84,7 +84,7 @@ public:
 constexpr sal_Int32 kScStyleFamilyObjCount = 20;
 
 ScStyleFamilyObj::ScStyleFamilyObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
     , XIndexAccess(kScStyleFamilyObjCount)
     , XNameAccess("ScStyleFamilyObj")
@@ -119,7 +119,7 @@ uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
 
 void ScStyleFamilyObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

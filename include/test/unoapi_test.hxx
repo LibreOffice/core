@@ -18,6 +18,7 @@
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/file.hxx>
+#include <unotools/tempfile.hxx>
 
 // basic uno api test class
 
@@ -29,9 +30,17 @@ public:
     void createFileURL(std::u16string_view aFileBase, OUString& rFilePath);
 
     virtual void setUp() override;
+    virtual void tearDown() override;
+
+    css::uno::Any executeMacro(const OUString& rScriptURL,
+                               const css::uno::Sequence<css::uno::Any>& rParams = {});
+
+    utl::TempFileNamed save(const OUString& rFilter);
+    void saveAndReload(const OUString& rFilter);
 
 protected:
-    void closeDocument(css::uno::Reference<css::lang::XComponent> const& xDocument);
+    // reference to document component that we are testing
+    css::uno::Reference<css::lang::XComponent> mxComponent;
 
 private:
     OUString m_aBaseString;

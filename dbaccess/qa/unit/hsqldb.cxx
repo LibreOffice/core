@@ -36,8 +36,6 @@ void HSQLDBTest::testEmptyDBConnection()
     uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(file.GetURL());
 
     getConnectionForDocument(xDocument);
-
-    css::uno::Reference<css::lang::XComponent>(xDocument, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HSQLDBTest);

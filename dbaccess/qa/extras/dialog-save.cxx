@@ -51,9 +51,9 @@ void DialogSaveTest::test()
 {
     const OUString aFileName(m_directories.getURLFromWorkdir(u"CppunitTest/testDialogSave.odb"));
     {
-        uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
-        uno::Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
-        uno::Reference< document::XEmbeddedScripts > xDocScr(xComponent, UNO_QUERY_THROW);
+        mxComponent = loadFromDesktop(aFileName);
+        uno::Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
+        uno::Reference< document::XEmbeddedScripts > xDocScr(mxComponent, UNO_QUERY_THROW);
         uno::Reference< script::XStorageBasedLibraryContainer > xStorBasLib(xDocScr->getBasicLibraries());
         CPPUNIT_ASSERT(xStorBasLib.is());
         uno::Reference< script::XLibraryContainer > xBasLib(xStorBasLib, UNO_QUERY_THROW);
@@ -68,20 +68,16 @@ void DialogSaveTest::test()
         CPPUNIT_ASSERT(!xDlgLib->isLibraryLoaded(sStandard));
 
         // make some change to enable a save
-        // uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSuppl(xComponent, UNO_QUERY_THROW);
+        // uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSuppl(mxComponent, UNO_QUERY_THROW);
         // uno::Reference< document::XDocumentPropertiesSupplier > xDocProps(xDocPropSuppl->getDocumentProperties());
         // CPPUNIT_ASSERT(xDocProps.is());
         // xDocProps.setTitle(xDocProps.getTitle() + " suffix");
-        uno::Reference< util::XModifiable > xDocMod(xComponent, UNO_QUERY_THROW);
+        uno::Reference< util::XModifiable > xDocMod(mxComponent, UNO_QUERY_THROW);
         xDocMod->setModified(true);
 
         // now save; the code path to exercise in this test is the "store to same location"
         //           do *not* change to store(As|To|URL)!
         xDocStorable->store();
-
-        // close
-        uno::Reference< util::XCloseable > xDocCloseable(xComponent, UNO_QUERY_THROW);
-        xDocCloseable->close(false);
 
         // All our uno::References are (should?) be invalid now -> let them go out of scope
     }

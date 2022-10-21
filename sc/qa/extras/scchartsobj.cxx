@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -37,7 +37,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScChartsObj : public CalcUnoApiTest,
+class ScChartsObj : public UnoApiTest,
                     public apitest::XEnumerationAccess,
                     public apitest::XElementAccess,
                     public apitest::XIndexAccess,
@@ -81,7 +81,7 @@ public:
 };
 
 ScChartsObj::ScChartsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XTableChart>::get())
     , XIndexAccess(1)
     , XNameAccess("ScChartsObj")
@@ -170,7 +170,7 @@ uno::Reference<uno::XInterface> ScChartsObj::init()
 
 void ScChartsObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

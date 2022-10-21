@@ -86,7 +86,6 @@ void HsqlBinaryImportTest::testBinaryImport()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16{ 2 }, date.Month);
     CPPUNIT_ASSERT_EQUAL(sal_Int16{ 1998 }, date.Year);
 
-    closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
     if (!oldValue)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> xChanges(

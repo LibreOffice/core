@@ -21,6 +21,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
@@ -117,28 +118,27 @@ public:
         comphelper::LibreOfficeKit::setActive(true);
 
         UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-        SfxApplication::GetOrCreate();
     }
 
     virtual void tearDown() override
     {
         closeDoc();
 
-        UnoApiTest::tearDown();
+        // documents are already closed, no need to call UnoApiTest::tearDown
+        test::BootstrapFixture::tearDown();
 
         comphelper::LibreOfficeKit::setActive(false);
     }
 
-    std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+    std::unique_ptr<LibLODocument_Impl>
     loadDocImpl(const char* pName, LibreOfficeKitDocumentType eType);
 
 private:
-    std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+    std::unique_ptr<LibLODocument_Impl>
     loadDocImpl(const char* pName);
 
 public:
-    std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+    std::unique_ptr<LibLODocument_Impl>
     loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentType eType);
 
     LibLODocument_Impl* loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType);
@@ -148,9 +148,8 @@ public:
         return loadDoc(pName, getDocumentTypeFromName(pName));
     }
 
-    void closeDoc(std::unique_ptr<LibLODocument_Impl>& loDocument,
-                  uno::Reference<lang::XComponent>& xComponent);
-    void closeDoc() { closeDoc(m_pDocument, mxComponent); }
+    void closeDoc(std::unique_ptr<LibLODocument_Impl>& loDocument);
+    void closeDoc() { closeDoc(m_pDocument); }
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
 
@@ -292,7 +291,6 @@ public:
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
-    uno::Reference<lang::XComponent> mxComponent;
     OString m_aTextSelection;
     OString m_aTextSelectionStart;
     OString m_aTextSelectionEnd;
@@ -341,7 +339,7 @@ static Control* GetFocusControl(vcl::Window const * pParent)
     return nullptr;
 }
 
-std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+std::unique_ptr<LibLODocument_Impl>
 DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
 {
     OUString aService;
@@ -363,15 +361,15 @@ DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentT
 
     static int nDocumentIdCounter = 0;
     SfxViewShell::SetCurrentDocId(ViewShellDocId(nDocumentIdCounter));
-    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(rFileURL, aService);
+    mxComponent = loadFromDesktop(rFileURL, aService);
 
-    std::unique_ptr<LibLODocument_Impl> pDocument(new LibLODocument_Impl(xComponent, nDocumentIdCounter));
+    std::unique_ptr<LibLODocument_Impl> pDocument(new LibLODocument_Impl(mxComponent, nDocumentIdCounter));
     ++nDocumentIdCounter;
 
-    return std::make_pair(std::move(pDocument), xComponent);
+    return pDocument;
 }
 
-std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+std::unique_ptr<LibLODocument_Impl>
 DesktopLOKTest::loadDocImpl(const char* pName, LibreOfficeKitDocumentType eType)
 {
     OUString aFileURL;
@@ -379,7 +377,7 @@ DesktopLOKTest::loadDocImpl(const char* pName, LibreOfficeKitDocumentType eType)
     return loadDocUrlImpl(aFileURL, eType);
 }
 
-std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+std::unique_ptr<LibLODocument_Impl>
 DesktopLOKTest::loadDocImpl(const char* pName)
 {
     return loadDocImpl(pName, getDocumentTypeFromName(pName));
@@ -387,18 +385,17 @@ DesktopLOKTest::loadDocImpl(const char* pName)
 
 LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
 {
-    std::tie(m_pDocument, mxComponent) = loadDocUrlImpl(rFileURL, eType);
+    m_pDocument = loadDocUrlImpl(rFileURL, eType);
     return m_pDocument.get();
 }
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
 {
-    std::tie(m_pDocument, mxComponent) = loadDocImpl(pName, eType);
+    m_pDocument = loadDocImpl(pName, eType);
     return m_pDocument.get();
 }
 
-void DesktopLOKTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument,
-                              uno::Reference<lang::XComponent>& xComponent)
+void DesktopLOKTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument)
 {
     if (pDocument)
     {
@@ -406,10 +403,11 @@ void DesktopLOKTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument,
         pDocument.reset();
     }
 
-    if (xComponent.is())
+    if (mxComponent.is())
     {
-        closeDocument(xComponent);
-        xComponent.clear();
+        css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
+        xCloseable->close(false);
+        mxComponent.clear();
     }
 }
 
@@ -2048,7 +2046,6 @@ void DesktopLOKTest::testBinaryCallback()
 
 void DesktopLOKTest::testDialogInput()
 {
-    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
@@ -3094,8 +3091,6 @@ void DesktopLOKTest::testComplexSelection()
 
 void DesktopLOKTest::testCalcSaveAs()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     CPPUNIT_ASSERT(pDocument);
 
@@ -3181,9 +3176,7 @@ void DesktopLOKTest::testMultiDocuments()
     for (int i = 0; i < 3; i++)
     {
         // Load a document.
-        uno::Reference<lang::XComponent> xComponent1;
-        std::unique_ptr<LibLODocument_Impl> document1;
-        std::tie(document1, xComponent1) = loadDocImpl("blank_text.odt");
+        std::unique_ptr<LibLODocument_Impl> document1 = loadDocImpl("blank_text.odt");
         LibLODocument_Impl* pDocument1 = document1.get();
         CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
         const int nDocId1 = pDocument1->mnDocumentId;
@@ -3212,9 +3205,7 @@ void DesktopLOKTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
         // Load another document.
-        uno::Reference<lang::XComponent> xComponent2;
-        std::unique_ptr<LibLODocument_Impl> document2;
-        std::tie(document2, xComponent2) = loadDocImpl("blank_presentation.odp");
+        std::unique_ptr<LibLODocument_Impl> document2 = loadDocImpl("blank_presentation.odp");
         LibLODocument_Impl* pDocument2 = document2.get();
         CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
         const int nDocId2 = pDocument2->mnDocumentId;
@@ -3266,9 +3257,9 @@ void DesktopLOKTest::testMultiDocuments()
         pDocument2->m_pDocumentClass->destroyView(pDocument2, nDoc2View1);
         CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 
-        closeDoc(document2, xComponent2);
+        closeDoc(document2);
 
-        closeDoc(document1, xComponent1);
+        closeDoc(document1);
     }
 }
 
@@ -3463,7 +3454,6 @@ static void lcl_repeatKeyStroke(LibLODocument_Impl *pDocument, int nCharCode, in
 
 void DesktopLOKTest::testNoDuplicateTableSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
 
     // Create view 1.
@@ -3497,7 +3487,6 @@ void DesktopLOKTest::testNoDuplicateTableSelection()
 
 void DesktopLOKTest::testMultiViewTableSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
 
     // Create view 1.

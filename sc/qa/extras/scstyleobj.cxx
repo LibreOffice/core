@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
 
@@ -31,7 +31,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScStyleObj : public CalcUnoApiTest, public apitest::XNamed, public apitest::XPropertySet
+class ScStyleObj : public UnoApiTest, public apitest::XNamed, public apitest::XPropertySet
 {
 public:
     ScStyleObj();
@@ -57,7 +57,7 @@ public:
 };
 
 ScStyleObj::ScStyleObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed("ScStyleObj")
     , XPropertySet({
           "BottomBorder",          "BottomBorder2",     "CellProtection", "CharLocale",
@@ -104,7 +104,7 @@ uno::Reference<uno::XInterface> ScStyleObj::init()
 
 void ScStyleObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

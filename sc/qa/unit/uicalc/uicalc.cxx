@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-class ScUiCalcTest : public CalcUnoApiTest
+class ScUiCalcTest : public UnoApiTest
 {
 public:
     ScUiCalcTest();
@@ -51,7 +51,7 @@ public:
 };
 
 ScUiCalcTest::ScUiCalcTest()
-    : CalcUnoApiTest("sc/qa/unit/uicalc/data")
+    : UnoApiTest("sc/qa/unit/uicalc/data")
 {
 }
 

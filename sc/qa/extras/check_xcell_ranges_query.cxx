@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
@@ -21,7 +21,7 @@ using namespace css::lang;
 
 namespace sc_apitest {
 
-class CheckXCellRangesQuery : public CalcUnoApiTest
+class CheckXCellRangesQuery : public UnoApiTest
 {
 public:
     CheckXCellRangesQuery();
@@ -47,7 +47,7 @@ private:
 };
 
 CheckXCellRangesQuery::CheckXCellRangesQuery()
-     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+     : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -166,7 +166,7 @@ void CheckXCellRangesQuery::_queryRowDifferences(const OUString& expected) {
 
 void CheckXCellRangesQuery::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     init();
 }
 

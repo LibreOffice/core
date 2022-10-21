@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/lang/xserviceinfo.hxx>
@@ -29,7 +29,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScTableColumnObj : public CalcUnoApiTest,
+class ScTableColumnObj : public UnoApiTest,
                          public apitest::TableColumn,
                          public apitest::XCellRange,
                          public apitest::XNamed,
@@ -73,7 +73,7 @@ public:
 };
 
 ScTableColumnObj::ScTableColumnObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XCellRange("K1:K1")
     , XNamed("K")
     , XPropertySet({
@@ -133,7 +133,7 @@ uno::Reference<uno::XInterface> ScTableColumnObj::init()
 
 void ScTableColumnObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

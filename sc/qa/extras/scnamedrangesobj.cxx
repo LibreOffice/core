@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
@@ -32,7 +32,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScNamedRangesObj : public CalcUnoApiTest,
+class ScNamedRangesObj : public UnoApiTest,
                          public apitest::XActionLockable,
                          public apitest::XElementAccess,
                          public apitest::XEnumerationAccess,
@@ -94,7 +94,7 @@ public:
 };
 
 ScNamedRangesObj::ScNamedRangesObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XNamedRange>::get())
     , XIndexAccess(4)
     , XNameAccess("initial1")
@@ -132,7 +132,7 @@ uno::Reference<uno::XInterface> ScNamedRangesObj::getXNamedRanges(sal_Int32 nShe
 
 void ScNamedRangesObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     OUString aFileURL;
     createFileURL(u"ScNamedRangeObj.ods", aFileURL);

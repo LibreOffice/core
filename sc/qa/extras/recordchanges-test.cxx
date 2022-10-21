@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -19,7 +19,7 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of calc Record Changes test */
 
-class ScRecordChangesTest : public CalcUnoApiTest
+class ScRecordChangesTest : public UnoApiTest
 {
 public:
     ScRecordChangesTest();
@@ -94,7 +94,7 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
 }
 
 ScRecordChangesTest::ScRecordChangesTest()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 

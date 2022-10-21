@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/xnamedrange.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
@@ -20,7 +20,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScNamedRangeObj : public CalcUnoApiTest,
+class ScNamedRangeObj : public UnoApiTest,
                         public apitest::XCellRangeReferrer,
                         public apitest::XNamed,
                         public apitest::XNamedRange
@@ -56,7 +56,7 @@ private:
 };
 
 ScNamedRangeObj::ScNamedRangeObj():
-        CalcUnoApiTest("/sc/qa/extras/testdocuments"),
+        UnoApiTest("/sc/qa/extras/testdocuments"),
         apitest::XNamed("NamedRange")
 {
 }
@@ -90,7 +90,7 @@ uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 
 void ScNamedRangeObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     OUString aFileURL;
     createFileURL(u"ScNamedRangeObj.ods", aFileURL);

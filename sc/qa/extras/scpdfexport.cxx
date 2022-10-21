@@ -10,7 +10,7 @@
 #include <sal/config.h>
 #include <config_oox.h>
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -38,7 +38,7 @@ using namespace css::lang;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScPDFExportTest : public CalcUnoApiTest
+class ScPDFExportTest : public UnoApiTest
 {
 public:
     ScPDFExportTest();
@@ -81,7 +81,7 @@ public:
 };
 
 ScPDFExportTest::ScPDFExportTest()
-    : CalcUnoApiTest("sc/qa/extras/testdocuments/")
+    : UnoApiTest("sc/qa/extras/testdocuments/")
 {
 }
 

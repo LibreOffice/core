@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDDELinksObj : public CalcUnoApiTest,
+class ScDDELinksObj : public UnoApiTest,
                       public apitest::XDDELinks,
                       public apitest::XElementAccess,
                       public apitest::XEnumerationAccess,
@@ -80,7 +80,7 @@ public:
 };
 
 ScDDELinksObj::ScDDELinksObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XDDELinks(m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
     , XElementAccess(cppu::UnoType<sheet::XDDELink>::get())
     , XIndexAccess(1)
@@ -119,7 +119,7 @@ uno::Reference<uno::XInterface> ScDDELinksObj::init()
 void ScDDELinksObj::setUp()
 {
     Application::SetAppName("soffice"); // Enable DDE
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

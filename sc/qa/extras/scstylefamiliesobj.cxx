@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
@@ -30,7 +30,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScStyleFamiliesObj : public CalcUnoApiTest,
+class ScStyleFamiliesObj : public UnoApiTest,
                            public apitest::XElementAccess,
                            public apitest::XIndexAccess,
                            public apitest::XNameAccess,
@@ -80,7 +80,7 @@ private:
 };
 
 ScStyleFamiliesObj::ScStyleFamiliesObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<container::XNameContainer>::get())
     , XIndexAccess(2)
     , XNameAccess("CellStyles")
@@ -121,7 +121,7 @@ OUString ScStyleFamiliesObj::getTestURL()
 
 void ScStyleFamiliesObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 
@@ -130,8 +130,10 @@ void ScStyleFamiliesObj::setUp()
 
 void ScStyleFamiliesObj::tearDown()
 {
-    closeDocument(m_xSrcComponent);
-    CalcUnoApiTest::tearDown();
+    m_xSrcComponent->dispose();
+    m_xSrcComponent.clear();
+
+    UnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScStyleFamiliesObj);

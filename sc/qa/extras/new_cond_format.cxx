@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
@@ -29,7 +29,7 @@ static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 
 namespace sc_apitest {
 
-class ScConditionalFormatTest : public CalcUnoApiTest
+class ScConditionalFormatTest : public UnoApiTest
 {
 public:
     ScConditionalFormatTest();
@@ -57,7 +57,7 @@ public:
 };
 
 ScConditionalFormatTest::ScConditionalFormatTest()
-    : CalcUnoApiTest("sc/qa/extras/testdocuments/")
+    : UnoApiTest("sc/qa/extras/testdocuments/")
 {
 }
 
@@ -438,7 +438,7 @@ void ScConditionalFormatTest::testColorScaleProperties()
 
 void ScConditionalFormatTest::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // get the test file
     OUString aFileURL;
     createFileURL(u"new_cond_format_api.ods", aFileURL);

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/sheet/xlabelrange.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -26,7 +26,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScLabelRangeObj : public CalcUnoApiTest, public apitest::XLabelRange
+class ScLabelRangeObj : public UnoApiTest, public apitest::XLabelRange
 {
 public:
     ScLabelRangeObj();
@@ -44,7 +44,7 @@ public:
 };
 
 ScLabelRangeObj::ScLabelRangeObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -67,7 +67,7 @@ uno::Reference<uno::XInterface> ScLabelRangeObj::init()
 
 void ScLabelRangeObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

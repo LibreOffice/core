@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDatabaseRangesObj : public CalcUnoApiTest,
+class ScDatabaseRangesObj : public UnoApiTest,
                             public apitest::XDatabaseRanges,
                             public apitest::XElementAccess,
                             public apitest::XEnumerationAccess,
@@ -77,7 +77,7 @@ public:
 };
 
 ScDatabaseRangesObj::ScDatabaseRangesObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XDatabaseRange>::get())
     , XIndexAccess(1)
     , XNameAccess("DbRange")
@@ -101,7 +101,7 @@ uno::Reference<uno::XInterface> ScDatabaseRangesObj::init()
 
 void ScDatabaseRangesObj::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }

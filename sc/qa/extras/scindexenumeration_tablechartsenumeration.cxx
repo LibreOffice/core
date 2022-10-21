@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/calc_unoapi_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -31,8 +31,7 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScIndexEnumeration_TableChartsEnumeration : public CalcUnoApiTest,
-                                                  public apitest::XEnumeration
+class ScIndexEnumeration_TableChartsEnumeration : public UnoApiTest, public apitest::XEnumeration
 {
 public:
     ScIndexEnumeration_TableChartsEnumeration();
@@ -50,7 +49,7 @@ public:
 };
 
 ScIndexEnumeration_TableChartsEnumeration::ScIndexEnumeration_TableChartsEnumeration()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -139,7 +138,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableChartsEnumeration::init(
 
 void ScIndexEnumeration_TableChartsEnumeration::setUp()
 {
-    CalcUnoApiTest::setUp();
+    UnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
