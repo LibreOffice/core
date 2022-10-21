@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <core_resource.hxx>
 #include "dsnItem.hxx"
 #include "generalpage.hxx"
@@ -154,9 +155,11 @@ namespace dbaui
                 if (m_xEmbeddedDBType->find_text(sDisplayName) == -1 &&
                     dbaccess::ODsnTypeCollection::isEmbeddedDatabase(sURLPrefix))
                 {
+#if !HAVE_FEATURE_MACOSX_SANDBOX
                     if( !officecfg::Office::Common::Misc::ExperimentalMode::get()
                         && sURLPrefix.startsWith("sdbc:embedded:firebird") )
                         continue;
+#endif
                     aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                     m_bIsDisplayedTypesEmpty = false;
                 }
