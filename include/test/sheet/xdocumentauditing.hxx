@@ -25,7 +25,6 @@ class OOO_DLLPUBLIC_TEST XDocumentAuditing
 {
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<css::uno::XInterface> getXMSF() = 0;
 
     void testRefreshArrows();
 

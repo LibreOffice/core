@@ -42,7 +42,6 @@ public:
     virtual void setUp() override;
 
     virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXMSF() override;
     virtual uno::Sequence<uno::Reference<table::XCell>> getXCells() override;
 
     ScModelObj();
@@ -99,8 +98,6 @@ uno::Reference<uno::XInterface> ScModelObj::init()
 
     return xModel;
 }
-
-uno::Reference<uno::XInterface> ScModelObj::getXMSF() { return getMultiServiceFactory(); }
 
 uno::Sequence<uno::Reference<table::XCell>> ScModelObj::getXCells() { return m_xCells; }
 
