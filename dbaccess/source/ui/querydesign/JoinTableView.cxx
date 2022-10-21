@@ -236,7 +236,7 @@ void OJoinTableView::Resize()
     }
 }
 
-sal_uInt32 OJoinTableView::GetTabWinCount() const
+sal_Int64 OJoinTableView::GetTabWinCount() const
 {
     return m_aTableMap.size();
 }

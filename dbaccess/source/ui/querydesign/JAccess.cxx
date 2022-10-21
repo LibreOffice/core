@@ -64,7 +64,7 @@ namespace dbaui
         if(i < 0 || i >= getAccessibleChildCount() || !m_pTableView)
             throw IndexOutOfBoundsException();
         // check if we should return a table window or a connection
-        sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
+        sal_Int64 nTableWindowCount = m_pTableView->GetTabWinCount();
         if( i < nTableWindowCount )
         {
             OJoinTableView::OTableWindowMap::const_iterator aIter = std::next(m_pTableView->GetTabWinMap().begin(), i);
