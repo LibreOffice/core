@@ -43,7 +43,6 @@ class SmElementsControl
     int           mnCurrentSetIndex;
     sal_uInt16    m_nSmSyntaxVersion;
 
-    bool          mbVerticalMode;
     std::vector<std::unique_ptr<ElementData>> maItemDatas;
     std::unique_ptr<weld::IconView> mpIconView;
 
@@ -67,8 +66,6 @@ public:
 
     static const std::vector<TranslateId>& categories();
     void setElementSetIndex(int nSetIndex);
-
-    void setVerticalMode(bool bVertical);
 
     void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
 

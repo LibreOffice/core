@@ -79,8 +79,6 @@ namespace pdfi
 
         static void sortElements( Element* pElement );
 
-        static OUString mirrorString( const OUString& i_rInString );
-
     private:
         void processGlyphLine();
 

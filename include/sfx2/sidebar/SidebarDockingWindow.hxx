@@ -45,7 +45,6 @@ public:
     /// Force generation of all panels by completion.
     void SyncUpdate();
 
-    auto& GetSidebarController() const { return mpSidebarController; }
     rtl::Reference<sfx2::sidebar::SidebarController>& GetOrCreateSidebarController();
     using SfxDockingWindow::Close;
 

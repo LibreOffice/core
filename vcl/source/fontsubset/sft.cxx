@@ -2177,49 +2177,6 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     return SFErrCodes::Ok;
 }
 
-std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
-{
-    const sal_uInt8* pTable;
-    sal_uInt32 n;
-    sal_uInt32 nTableSize;
-
-    if (!vertical)
-    {
-        n = ttf->horzMetricCount();
-        pTable = ttf->table(O_hmtx, nTableSize);
-    }
-    else
-    {
-        n = ttf->vertMetricCount();
-        pTable = ttf->table(O_vmtx, nTableSize);
-    }
-
-    if (!nGlyphs || !glyphArray) return nullptr;        /* invalid parameters */
-    if (!n || !pTable) return nullptr;                  /* the font does not contain the requested metrics */
-
-    std::unique_ptr<sal_uInt16[]> res(new sal_uInt16[nGlyphs]);
-
-    const int UPEm = ttf->unitsPerEm();
-    for( int i = 0; i < nGlyphs; ++i) {
-        sal_uInt32 nAdvOffset;
-        sal_uInt16 glyphID = glyphArray[i];
-
-        if (glyphID < n) {
-            nAdvOffset = 4 * glyphID;
-        } else {
-            nAdvOffset = 4 * (n - 1);
-        }
-
-        if (nAdvOffset >= nTableSize || UPEm == 0)
-            res[i] = 0; /* better than a crash for buggy fonts */
-        else
-            res[i] = static_cast<sal_uInt16>(
-                XUnits( UPEm, GetUInt16( pTable, nAdvOffset) ) );
-    }
-
-    return res;
-}
-
 bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
 {
     sal_uInt32 table_size;

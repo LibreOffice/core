@@ -32,6 +32,8 @@ include/basegfx/vector/b3dvector.hxx:144
     basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:169
     basegfx::B3DVector & basegfx::B3DVector::normalize()
+include/basic/sbstar.hxx:62
+    _Bool StarBASIC::RTError(ErrCode,const rtl::OUString &,int,int,int)
 include/comphelper/backupfilehelper.hxx:205
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(std::basic_string_view<char16_t>)
 include/editeng/editview.hxx:263
@@ -112,13 +114,13 @@ include/oox/ole/olehelper.hxx:176
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
 include/oox/ole/olehelper.hxx:187
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const tools::SvRef<SotStorageStream> &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:136
+include/sax/fshelper.hxx:139
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:137
-    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:138
-    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
 include/sax/fshelper.hxx:140
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+include/sax/fshelper.hxx:141
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
+include/sax/fshelper.hxx:143
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:65
     _Bool sfx2::LinkManager::InsertLink(sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const rtl::OUString *)
@@ -170,7 +172,7 @@ include/vcl/filter/SvmWriter.hxx:37
     SvStream & SvmWriter::Write(const GDIMetaFile &)
 include/vcl/formatter.hxx:218
     _Bool Formatter::SetFormat(const rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
-include/vcl/graphicfilter.hxx:256
+include/vcl/graphicfilter.hxx:257
     ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/GraphicNativeMetadata.hxx:34
     _Bool GraphicNativeMetadata::read(SvStream &)
@@ -204,10 +206,10 @@ sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(ScDocument &,rtl::OUString &) const
 sc/inc/scabstdlg.hxx:55
     _Bool ScAsyncTabController::StartExecuteAsync(struct VclAbstractDialog::AsyncContext &)
-sc/source/core/opencl/formulagroupcl.cxx:1096
-    unsigned long sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenReductionLoopHeader(std::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1367
-    unsigned long sc::opencl::(anonymous namespace)::ParallelReductionVectorRef::GenReductionLoopHeader(std::basic_stringstream<char> &,int,_Bool &)
+sc/source/core/opencl/opbase.hxx:451
+    unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(sc::opencl::outputstream &,_Bool &)
+sc/source/core/opencl/opbase.hxx:483
+    unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(sc::opencl::outputstream &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:262
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const rtl::Reference<oox::core::FragmentHandler> &,oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:174
@@ -258,7 +260,7 @@ sc/source/ui/vba/vbaformat.hxx:145
     com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:132
+sd/source/filter/eppt/pptx-epptooxml.cxx:133
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/inc/DrawViewShell.hxx:252
     _Bool sd::DrawViewShell::SelectPage(unsigned short,unsigned short)
@@ -292,13 +294,15 @@ sw/inc/IDocumentUndoRedo.hxx:100
     _Bool IDocumentUndoRedo::Undo()
 sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(sw::RepeatContext &,const unsigned short)
+sw/inc/node.hxx:418
+    _Bool SwContentNode::GoNext(struct SwPosition *,enum SwCursorSkipMode) const
 sw/inc/tblafmt.hxx:267
     _Bool SwTableAutoFormatTable::Load(SvStream &)
-sw/qa/inc/swmodeltestbase.hxx:386
+sw/qa/inc/swmodeltestbase.hxx:394
     SwDoc * SwModelTestBase::createSwWebDoc(std::basic_string_view<char16_t>,const char *)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const SwDoc &) const
-sw/source/core/inc/scriptinfo.hxx:237
+sw/source/core/inc/scriptinfo.hxx:239
     _Bool SwScriptInfo::GetBoundsOfHiddenRange(struct o3tl::strong_int<int, struct Tag_TextFrameIndex>,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &) const
 sw/source/filter/ww8/ww8toolbar.hxx:337
     _Bool Tcg::ImportCustomToolBar(SfxObjectShell &)
@@ -308,8 +312,6 @@ sw/source/uibase/inc/fldmgr.hxx:118
     const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
-sw/source/uibase/inc/numpara.hxx:61
-    _Bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(unsigned short,const rtl::OUString &,enum SfxStyleFamily)
 sw/source/uibase/inc/wrtsh.hxx:431
     _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
@@ -318,16 +320,12 @@ vcl/inc/font/FeatureCollector.hxx:45
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/impgraph.hxx:186
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1265
+vcl/inc/pdf/pdfwriter_impl.hxx:1299
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1266
+vcl/inc/pdf/pdfwriter_impl.hxx:1300
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1267
+vcl/inc/pdf/pdfwriter_impl.hxx:1301
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
-vcl/inc/qt5/QtAccessibleWidget.hxx:48
-    QString QtAccessibleWidget::tr(const char *,const char *,int)
-vcl/inc/qt5/QtAccessibleWidget.hxx:48
-    QString QtAccessibleWidget::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtClipboard.hxx:36
     QString QtClipboard::tr(const char *,const char *,int)
 vcl/inc/qt5/QtClipboard.hxx:36
@@ -360,22 +358,26 @@ vcl/inc/qt5/QtTimer.hxx:27
     QString QtTimer::tr(const char *,const char *,int)
 vcl/inc/qt5/QtTimer.hxx:27
     QString QtTimer::trUtf8(const char *,const char *,int)
-vcl/inc/salgdi.hxx:414
+vcl/inc/salgdi.hxx:362
     _Bool SalGraphics::UpdateSettings(AllSettings &)
-vcl/inc/salgdi.hxx:416
+vcl/inc/salgdi.hxx:364
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const SalBitmap &,const OutputDevice &)
-vcl/inc/salgdi.hxx:525
+vcl/inc/salgdi.hxx:481
     _Bool SalGraphics::implDrawGradient(const basegfx::B2DPolyPolygon &,const struct SalGradient &)
 vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
 vcl/inc/salprn.hxx:113
     _Bool SalPrinter::EndJob()
-vcl/inc/salvtables.hxx:1621
+vcl/inc/salvtables.hxx:1625
     _Bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter &,int) const
 vcl/inc/unx/gtk/gtkdata.hxx:335
     int GtkSalDisplay::CaptureMouse(SalFrame *)
 vcl/inc/unx/salframe.h:168
     _Bool X11SalFrame::Dispatch(union _XEvent *)
+vcl/source/fontsubset/sft.cxx:122
+    _Bool vcl::(anonymous namespace)::HexFmt::Flush()
+vcl/source/fontsubset/ttcr.hxx:111
+    int vcl::TrueTypeTable::GetRawData(struct vcl::TableEntry *)
 workdir/../vcl/inc/qt5/QtWidget.hxx:36
     QString QtWidget::tr(const char *,const char *,int)
 workdir/../vcl/inc/qt5/QtWidget.hxx:36

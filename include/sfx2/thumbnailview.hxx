@@ -189,8 +189,6 @@ public:
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
-    sal_uInt16 getNextItemId () const;
-
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
     bool isDrawMnemonic() const { return mbDrawMnemonics; }

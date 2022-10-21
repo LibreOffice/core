@@ -136,8 +136,6 @@ public:
      */
     sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
 
-    int                 GetGlyphIndex( sal_UCS4 ) const;
-
     bool isSymbolic() const;
 
 private:

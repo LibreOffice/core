@@ -400,9 +400,6 @@ public:
     // Font metric attribute "External Leading" should be considered.
     void SetAddExtLeading( bool bNew );
 
-    // Formatting by virtual device or printer.
-    void SetUseVirDev( bool bNew );
-
     // Adding paragraph and table spacing at bottom
     // of table cells.
     void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );

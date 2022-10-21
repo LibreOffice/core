@@ -911,18 +911,6 @@ void SwViewShell::SetAddExtLeading( bool bNew )
     }
 }
 
-void SwViewShell::SetUseVirDev( bool bNewVirtual )
-{
-    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
-    if ( rIDSA.get(DocumentSettingId::USE_VIRTUAL_DEVICE) != bNewVirtual )
-    {
-        SwWait aWait( *GetDoc()->GetDocShell(), true );
-        // this sets the flag at the document and calls PrtDataChanged
-        IDocumentDeviceAccess& rIDDA = getIDocumentDeviceAccess();
-        rIDDA.setReferenceDeviceType( bNewVirtual, true );
-    }
-}
-
 /** Sets if paragraph and table spacing is added at bottom of table cells.
  * #106629#
  * @param[in] (bool) setting of the new value

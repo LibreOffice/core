@@ -890,9 +890,4 @@ bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2
     return true;
 }
 
-const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLength) const
-{
-    return mxFontInfo->GetTable( pName, pLength );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

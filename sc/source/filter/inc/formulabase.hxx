@@ -651,15 +651,6 @@ public:
                             const BinAddress& rAddress,
                             bool bAbsolute );
 
-    /** Generates a string in Calc formula notation from the passed string.
-
-        @param rString  The string value.
-
-        @return  The string enclosed in double quotes, where all contained
-            quote characters are doubled.
-     */
-    static OUString generateApiString( const OUString& rString );
-
     /** Generates an array string in Calc formula notation from the passed
         matrix with Any's containing double values or strings.
 

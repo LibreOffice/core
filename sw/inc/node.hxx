@@ -411,9 +411,6 @@ public:
     bool CanJoinNext( SwPosition* pIdx ) const;
     bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
 
-    void MakeStartIndex( SwContentIndex * pIdx )   { pIdx->Assign( this, 0 ); }
-    void MakeEndIndex( SwContentIndex * pIdx )     { pIdx->Assign( this, Len() ); }
-
     bool GoNext(SwContentIndex *, SwCursorSkipMode nMode ) const;
     bool GoNext(SwPosition*, SwCursorSkipMode nMode ) const;
     bool GoPrevious(SwContentIndex *, SwCursorSkipMode nMode ) const;

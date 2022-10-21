@@ -226,29 +226,6 @@ SFErrCodes TrueTypeCreator::StreamToMemory(std::vector<sal_uInt8>& rOutBuffer)
     return SFErrCodes::Ok;
 }
 
-SFErrCodes TrueTypeCreator::StreamToFile(const char* fname)
-{
-    SFErrCodes r;
-    std::vector<sal_uInt8> aOutBuffer;
-
-    if ((r = StreamToMemory(aOutBuffer)) != SFErrCodes::Ok) return r;
-    r = SFErrCodes::BadFile;
-    if (fname)
-    {
-        FILE* fd = fopen(fname, "wb");
-        if (fd)
-        {
-            if (fwrite(aOutBuffer.data(), 1, aOutBuffer.size(), fd) != aOutBuffer.size()) {
-                r = SFErrCodes::FileIo;
-            } else {
-                r = SFErrCodes::Ok;
-            }
-            fclose(fd);
-        }
-    }
-    return r;
-}
-
 /*
  * TrueTypeTable private methods
  */
@@ -748,16 +725,6 @@ TrueTypeTableCmap::TrueTypeTableCmap()
     m_cmap->n = 0;
     m_cmap->m = CMAP_SUBTABLE_INIT;
     m_cmap->s.reset(new CmapSubTable[CMAP_SUBTABLE_INIT]);
-}
-
-TrueTypeTableName::TrueTypeTableName(int n, NameRecord const *nr)
-    : TrueTypeTable(T_name)
-{
-    m_list.resize(n);
-    for (int i = 0; i < n; i++) {
-        const NameRecord* p = nr + i;
-        m_list[i] = *p;
-    }
 }
 
 TrueTypeTableName::TrueTypeTableName(std::vector<NameRecord> nr)

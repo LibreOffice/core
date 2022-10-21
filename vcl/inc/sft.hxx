@@ -651,18 +651,6 @@ class TrueTypeFont;
                                int            nGlyphs);
 
 /**
- * Queries glyph metrics. Allocates an array of advance width/height values and returns it.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf
- * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @param vertical    writing mode: false - horizontal, true - vertical
- * @ingroup sft
- *
- */
-    VCL_DLLPUBLIC std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
-
-/**
  * Returns global font information about the TrueType font.
  * @see TTGlobalFontInfo
  *

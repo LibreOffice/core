@@ -124,8 +124,6 @@ public:
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
     void                    GetFontMetric(ImplFontMetricDataRef const &) const;
-    const unsigned char*    GetTable( const char* pName, sal_uLong* pLength ) const;
-    bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
     bool                    GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
