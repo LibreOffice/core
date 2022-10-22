@@ -34,7 +34,9 @@ class SwFieldDokInfPage : public SwFieldPage
     sal_uLong               nOldFormat;
     OUString                m_sOldCustomFieldName;
 
-    std::unique_ptr<weld::TreeView> m_xTypeTLB;
+    std::unique_ptr<weld::TreeView> m_xTypeList;
+    std::unique_ptr<weld::TreeView> m_xTypeTree;
+    weld::TreeView* m_pTypeView;
     std::unique_ptr<weld::Widget> m_xSelection;
     std::unique_ptr<weld::TreeView> m_xSelectionLB;
     std::unique_ptr<weld::Widget> m_xFormat;

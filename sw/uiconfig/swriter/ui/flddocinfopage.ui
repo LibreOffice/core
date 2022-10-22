@@ -26,6 +26,14 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkTreeStore" id="liststore4">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="FieldDocInfoPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -41,42 +49,97 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="margin-top">6</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow-type">in</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkTreeView" id="type">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="margin-top">6</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="model">liststore1</property>
-                <property name="headers-visible">False</property>
-                <property name="headers-clickable">False</property>
-                <property name="search-column">0</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                </child>
+                <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                  <object class="GtkTreeView" id="type-list">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers-visible">False</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="search-column">0</property>
+                    <property name="show-expanders">False</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-list-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
+                      </object>
                     </child>
                   </object>
                 </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="type-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-top">6</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="type-tree">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore4</property>
+                    <property name="headers-visible">False</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="search-column">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext4"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-tree-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -272,7 +335,8 @@
     <property name="mode">both</property>
     <property name="ignore-hidden">True</property>
     <widgets>
-      <widget name="type"/>
+      <widget name="type-list"/>
+      <widget name="type-tree"/>
       <widget name="select"/>
       <widget name="format"/>
     </widgets>

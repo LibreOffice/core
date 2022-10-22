@@ -54,19 +54,26 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     :  SwFieldPage(pPage, pController, "modules/swriter/ui/flddocinfopage.ui", "FieldDocInfoPage", pCoreSet)
     , nOldSel(0)
     , nOldFormat(0)
-    , m_xTypeTLB(m_xBuilder->weld_tree_view("type"))
+    , m_xTypeList(m_xBuilder->weld_tree_view("type-list"))
+    , m_xTypeTree(m_xBuilder->weld_tree_view("type-tree"))
+    // tdf#104278 have two tree views, one with expander and one without, the one with is only used
+    // when there are custom properties which use the expander, so the common case of no custom
+    // properties doesn't have an 'unexplained' expander margin
+    , m_pTypeView(m_xTypeTree.get())
     , m_xSelection(m_xBuilder->weld_widget("selectframe"))
     , m_xSelectionLB(m_xBuilder->weld_tree_view("select"))
     , m_xFormat(m_xBuilder->weld_widget("formatframe"))
     , m_xFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("format")))
     , m_xFixedCB(m_xBuilder->weld_check_button("fixed"))
 {
-    m_xTypeTLB->make_sorted();
+    m_xTypeList->make_sorted();
+    m_xTypeTree->make_sorted();
     FillFieldSelect(*m_xSelectionLB);
 
-    auto nWidth = m_xTypeTLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
-    auto nHeight = m_xTypeTLB->get_height_rows(10);
-    m_xTypeTLB->set_size_request(nWidth, nHeight);
+    auto nWidth = m_pTypeView->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
+    auto nHeight = m_pTypeView->get_height_rows(10);
+    m_xTypeTree->set_size_request(nWidth, nHeight);
+    m_xTypeList->set_size_request(nWidth, nHeight);
     m_xFormatLB->get_widget().set_size_request(nWidth * 2, nHeight);
     m_xSelectionLB->set_size_request(nWidth, nHeight);
 
@@ -80,7 +87,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
         pItem->GetValue() >>= xCustomPropertySet;
 
     // uitests
-    m_xTypeTLB->set_buildable_name(m_xTypeTLB->get_buildable_name() + "-docinf");
+    m_pTypeView->set_buildable_name("type-docinf");
     m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-docinf");
     m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-docinf");
 }
@@ -93,9 +100,33 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 {
     Init(); // general initialisation
 
+    uno::Sequence<beans::Property> aCustomProperties;
+    if (xCustomPropertySet.is())
+    {
+        uno::Reference<beans::XPropertySetInfo> xSetInfo = xCustomPropertySet->getPropertySetInfo();
+        aCustomProperties = xSetInfo->getProperties();
+    }
+
+    if (aCustomProperties.hasElements())
+    {
+        m_xTypeList->hide();
+        m_xTypeList->set_buildable_name("type-list");
+        m_xTypeTree->show();
+        m_pTypeView = m_xTypeTree.get();
+    }
+    else
+    {
+        m_xTypeTree->hide();
+        m_xTypeTree->set_buildable_name("type-tree");
+        m_xTypeList->show();
+        m_pTypeView = m_xTypeList.get();
+    }
+
+    m_pTypeView->set_buildable_name("type-docinf");
+
     // initialise TypeListBox
-    m_xTypeTLB->freeze();
-    m_xTypeTLB->clear();
+    m_pTypeView->freeze();
+    m_pTypeView->clear();
     m_xSelEntry.reset();
 
     // display SubTypes in TypeLB
@@ -131,7 +162,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 
     std::vector<OUString> aLst;
     GetFieldMgr().GetSubTypes(SwFieldTypesEnum::DocumentInfo, aLst);
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTypeTLB->make_iterator());
+    std::unique_ptr<weld::TreeIter> xEntry(m_pTypeView->make_iterator());
     std::unique_ptr<weld::TreeIter> xExpandEntry;
     for(size_t i = 0; i < aLst.size(); ++i)
     {
@@ -142,27 +173,24 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
             {
                 if(xCustomPropertySet.is() )
                 {
-                    uno::Reference< beans::XPropertySetInfo > xSetInfo = xCustomPropertySet->getPropertySetInfo();
-                    const uno::Sequence< beans::Property > rProperties = xSetInfo->getProperties();
-
-                    if( rProperties.hasElements() )
+                    if (aCustomProperties.hasElements())
                     {
-                        std::unique_ptr<weld::TreeIter> xInfo(m_xTypeTLB->make_iterator());
+                        std::unique_ptr<weld::TreeIter> xInfo(m_pTypeView->make_iterator());
 
                         OUString sText(SwResId(STR_CUSTOM_FIELD));
                         OUString sEntryId(OUString::number(USHRT_MAX));
-                        m_xTypeTLB->insert(nullptr, -1, &sText, &sEntryId, nullptr,
-                                           nullptr, false, xInfo.get());
-                        for (const auto& rProperty : rProperties)
+                        m_pTypeView->insert(nullptr, -1, &sText, &sEntryId, nullptr,
+                                            nullptr, false, xInfo.get());
+                        for (const auto& rProperty : aCustomProperties)
                         {
                             const OUString sEntry = rProperty.Name;
 
-                            m_xTypeTLB->insert(xInfo.get(), -1, &sEntry, &sId,
+                            m_pTypeView->insert(xInfo.get(), -1, &sEntry, &sId,
                                                nullptr, nullptr, false, xEntry.get());
                             if (m_sOldCustomFieldName == sEntry)
                             {
-                                m_xSelEntry = m_xTypeTLB->make_iterator(xEntry.get());
-                                xExpandEntry = m_xTypeTLB->make_iterator(xInfo.get());
+                                m_xSelEntry = m_pTypeView->make_iterator(xEntry.get());
+                                xExpandEntry = m_pTypeView->make_iterator(xInfo.get());
                             }
                         }
                     }
@@ -172,8 +200,8 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
             {
                 if (!(IsFieldDlgHtmlMode() && (i == DI_EDIT || i == DI_SUBJECT || i == DI_PRINT)))
                 {
-                    m_xTypeTLB->insert(nullptr, -1, &aLst[i], &sId,
-                                       nullptr, nullptr, false, xEntry.get());
+                    m_pTypeView->insert(nullptr, -1, &aLst[i], &sId,
+                                        nullptr, nullptr, false, xEntry.get());
                 }
             }
             if (static_cast<size_t>(nSelEntryData) == i)
@@ -181,32 +209,32 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
         }
     }
 
-    m_xTypeTLB->thaw();
+    m_pTypeView->thaw();
 
     if (xExpandEntry)
-        m_xTypeTLB->expand_row(*xExpandEntry);
+        m_pTypeView->expand_row(*xExpandEntry);
 
     // select old Pos
     if (m_xSelEntry)
     {
-        m_xTypeTLB->select(*m_xSelEntry);
-        nSubType = m_xTypeTLB->get_id(*m_xSelEntry).toUInt32();
+        m_pTypeView->select(*m_xSelEntry);
+        nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
     }
     else
     {
-        m_xSelEntry = m_xTypeTLB->make_iterator();
-        if (m_xTypeTLB->get_iter_first(*m_xSelEntry))
-            nSubType = m_xTypeTLB->get_id(*m_xSelEntry).toUInt32();
+        m_xSelEntry = m_pTypeView->make_iterator();
+        if (m_pTypeView->get_iter_first(*m_xSelEntry))
+            nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
         else
             m_xSelEntry.reset();
     }
 
     FillSelectionLB(nSubType);
     if (m_xSelEntry)
-        TypeHdl(*m_xTypeTLB);
+        TypeHdl(*m_pTypeView);
 
-    m_xTypeTLB->connect_changed(LINK(this, SwFieldDokInfPage, TypeHdl));
-    m_xTypeTLB->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
+    m_pTypeView->connect_changed(LINK(this, SwFieldDokInfPage, TypeHdl));
+    m_pTypeView->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
     m_xSelectionLB->connect_changed(LINK(this, SwFieldDokInfPage, SubTypeHdl));
     m_xSelectionLB->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
@@ -222,18 +250,18 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 IMPL_LINK_NOARG(SwFieldDokInfPage, TypeHdl, weld::TreeView&, void)
 {
     // current ListBoxPos
-    if (!m_xTypeTLB->get_selected(m_xSelEntry.get()) &&
-        m_xTypeTLB->get_iter_first(*m_xSelEntry))
+    if (!m_pTypeView->get_selected(m_xSelEntry.get()) &&
+        m_pTypeView->get_iter_first(*m_xSelEntry))
     {
-        m_xTypeTLB->select(*m_xSelEntry);
+        m_pTypeView->select(*m_xSelEntry);
     }
-    FillSelectionLB(m_xTypeTLB->get_id(*m_xSelEntry).toUInt32());
+    FillSelectionLB(m_pTypeView->get_id(*m_xSelEntry).toUInt32());
     SubTypeHdl(*m_xSelectionLB);
 }
 
 IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
 {
-    sal_uInt16 nSubType = m_xTypeTLB->get_id(*m_xSelEntry).toUInt32();
+    sal_uInt16 nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
     sal_Int32 nPos = m_xSelectionLB->get_selected_index();
     sal_uInt16 nExtSubType;
     SvNumFormatType nNewType = SvNumFormatType::ALL;
@@ -249,7 +277,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
                 if( nSubType == DI_CUSTOM )
                 {
                     //find out which type the custom field has - for a start set to DATE format
-                    const OUString sName = m_xTypeTLB->get_text(*m_xSelEntry);
+                    const OUString sName = m_pTypeView->get_text(*m_xSelEntry);
                     try
                     {
                         uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
@@ -429,7 +457,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     if (!m_xSelEntry)
         return false;
 
-    sal_uInt16 nSubType = m_xTypeTLB->get_id(*m_xSelEntry).toUInt32();
+    sal_uInt16 nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
     if (nSubType == USHRT_MAX)
         return false;
 
@@ -439,7 +467,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
 
     OUString aName;
     if (DI_CUSTOM == nSubType)
-        aName = m_xTypeTLB->get_text(*m_xSelEntry);
+        aName = m_pTypeView->get_text(*m_xSelEntry);
 
     if (nPos != -1)
         nSubType |= m_xSelectionLB->get_id(nPos).toUInt32();
@@ -475,8 +503,8 @@ sal_uInt16 SwFieldDokInfPage::GetGroup()
 
 void SwFieldDokInfPage::FillUserData()
 {
-    int nEntry = m_xTypeTLB->get_selected_index();
-    sal_uInt16 nTypeSel = nEntry != -1 ? m_xTypeTLB->get_id(nEntry).toUInt32() : USHRT_MAX;
+    int nEntry = m_pTypeView->get_selected_index();
+    sal_uInt16 nTypeSel = nEntry != -1 ? m_pTypeView->get_id(nEntry).toUInt32() : USHRT_MAX;
     SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
