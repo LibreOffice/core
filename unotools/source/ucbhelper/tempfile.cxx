@@ -33,6 +33,7 @@
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
+#include <tools/Guid.hxx>
 #include <comphelper/DirectoryHelper.hxx>
 
 #ifdef UNX
@@ -350,6 +351,34 @@ static OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool b
                            false, false);
 }
 
+static OUString CreateTempNameFast()
+{
+    OUString aEyeCatcher = "lu";
+#ifdef UNX
+#ifdef DBG_UTIL
+    const char* eye = getenv("LO_TESTNAME");
+    if(eye)
+    {
+        aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
+    }
+#else
+    static const pid_t pid = getpid();
+    static const OUString aPidString = OUString::number(pid);
+    aEyeCatcher += aPidString;
+#endif
+#elif defined(_WIN32)
+    static const int pid = _getpid();
+    static const OUString aPidString = OUString::number(pid);
+    aEyeCatcher += aPidString;
+#endif
+
+    OUString aName = ConstructTempDir_Impl( /*pParent*/nullptr, /*bCreateParentDirs*/false ) + aEyeCatcher;
+
+    tools::Guid aGuid(tools::Guid::Generate);
+
+    return aName + aGuid.getOUString() + ".tmp" ;
+}
+
 OUString CreateTempName()
 {
     OUString aName(CreateTempName_Impl( nullptr, false ));
@@ -379,7 +408,7 @@ SvStream* TempFileFast::GetStream( StreamMode eMode )
 {
     if (!mxStream)
     {
-        OUString aName = CreateTempName_Impl( /*pParent*/nullptr, /*bKeep*/true, /*bDirectory*/false );
+        OUString aName = CreateTempNameFast();
         mxStream.reset(new SvFileStream(aName, eMode | StreamMode::TEMPORARY));
     }
     return mxStream.get();
