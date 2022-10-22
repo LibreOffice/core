@@ -13472,6 +13472,21 @@ public:
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
+
+    virtual void show() override
+    {
+        GtkInstanceEditable::show();
+        if (m_pPlaceHolderReplacement)
+            gtk_widget_show(GTK_WIDGET(m_pPlaceHolderReplacement));
+    }
+
+    virtual void hide() override
+    {
+        if (m_pPlaceHolderReplacement)
+            gtk_widget_hide(GTK_WIDGET(m_pPlaceHolderReplacement));
+        GtkInstanceEditable::hide();
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         if (m_nUpdatePlaceholderReplacementIdle)
