@@ -2460,7 +2460,7 @@ ScChart2DataSequence::ScChart2DataSequence(ScDocument* pDoc, const ScChart2DataS
 
     // Clone tokens.
     m_aTokens.reserve(r.m_aTokens.size());
-    for (const auto& rxToken : m_aTokens)
+    for (const auto& rxToken : r.m_aTokens)
     {
         ScTokenRef p(rxToken->Clone());
         m_aTokens.push_back(p);
