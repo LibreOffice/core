@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_UNKNOWN_APPLICATION                 NC_("STR_UNKNOWN_APPLICATION", "Unknown")
@@ -72,5 +75,14 @@
 #define STR_WARN_TRANSP_CONVERTED_SHORT         NC_("STR_WARN_TRANSP_CONVERTED_SHORT", "Transparencies removed")
 #define STR_ERR_SIGNATURE_FAILED                NC_("STR_ERR_SIGNATURE_FAILED", "Signature generation failed")
 #define STR_ERR_PDF_EXPORT_ABORTED              NC_("STR_ERR_PDF_EXPORT_ABORTED", "PDF export aborted")
+
+// Progress bar status indicator when importing or exporting
+#define STR_FILTER_DOC_LOADING                  NC_("STR_FILTER_DOC_LOADING", "Loading: ")
+#define STR_FILTER_DOC_SAVING                   NC_("STR_FILTER_DOC_SAVING", "Saving: ")
+
+static inline OUString FilterResId(TranslateId aId)
+{
+    return Translate::get(aId, Translate::Create("flt"));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,6 +43,8 @@
 #include <unotools/pathoptions.hxx>
 #include <xmloff/xmlimp.hxx>
 
+#include <strings.hrc>
+
 using namespace comphelper;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -67,7 +69,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is()){
-        xStatusIndicator->start( "Loading :", 4);
+        xStatusIndicator->start(FilterResId(STR_FILTER_DOC_LOADING), 4);
     }
 
     OUString aBaseURI;
@@ -233,7 +235,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
         utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is())
-       xStatusIndicator->start( "Saving :", 3);
+       xStatusIndicator->start(FilterResId(STR_FILTER_DOC_SAVING), 3);
 
     // Set up converter bridge.
     Reference< css::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
