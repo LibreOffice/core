@@ -32,6 +32,8 @@ private:
     OUString maSuccessMsg;
 
     DECL_LINK(BtnHdl, weld::Button&, void);
+    DECL_STATIC_LINK(CrashReportDialog, InstallLOKNotifierHdl, void*,
+                     vcl::ILibreOfficeKitNotifier*);
 };
 
 #endif

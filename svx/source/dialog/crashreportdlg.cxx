@@ -15,9 +15,16 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/configmgr.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+
+IMPL_STATIC_LINK_NOARG(CrashReportDialog, InstallLOKNotifierHdl, void*,
+                       vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
+}
 
 CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "svx/ui/crashreportdlg.ui", "CrashReportDialog")
@@ -45,6 +52,8 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
         officecfg::Office::Common::Menus::PrivacyPolicyURL::get()
         + "?type=crashreport&LOvers=" + utl::ConfigManager::getProductVersion()
         + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
+
+    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, CrashReportDialog, InstallLOKNotifierHdl));
 }
 
 CrashReportDialog::~CrashReportDialog() {}
