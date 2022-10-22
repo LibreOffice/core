@@ -4290,7 +4290,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     Validate();
 
     {
-        SwTaggedPDFHelper tag(nullptr, nullptr, nullptr, *pShell->GetOut());
+        SwTaggedPDFHelper tag(nullptr, nullptr, nullptr, rRenderContext);
         // first paint lines added by fly frame paint
         // and then unlock other lines.
         gProp.pSLines->PaintLines( &rRenderContext, gProp );
