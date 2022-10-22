@@ -88,6 +88,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentOutlineNodes.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <basesh.hxx>
@@ -155,6 +156,8 @@
 #include <svx/srchdlg.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <strings.hrc>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -168,6 +171,62 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
+
+namespace {
+
+class SwNumberInputDlg : public SfxDialogController
+{
+private:
+    std::unique_ptr<weld::Label> m_xLabel1;
+    std::unique_ptr<weld::SpinButton> m_xSpinButton;
+    std::unique_ptr<weld::Label> m_xLabel2;
+    std::unique_ptr<weld::Button> m_xOKButton;
+
+    DECL_LINK(InputModifiedHdl, weld::Entry&, void);
+public:
+    SwNumberInputDlg(weld::Window* pParent, const OUString& rTitle,
+        const OUString& rLabel1, const sal_Int64 nValue, const sal_Int64 min, const sal_Int64 max,
+        OUString rLabel2 = OUString())
+        : SfxDialogController(pParent, "modules/swriter/ui/numberinput.ui", "NumberInputDialog")
+        , m_xLabel1(m_xBuilder->weld_label("label1"))
+        , m_xSpinButton(m_xBuilder->weld_spin_button("spinbutton"))
+        , m_xLabel2(m_xBuilder->weld_label("label2"))
+        , m_xOKButton(m_xBuilder->weld_button("ok"))
+    {
+        m_xDialog->set_title(rTitle);
+        m_xLabel1->set_label(rLabel1);
+        m_xSpinButton->set_value(nValue);
+        m_xSpinButton->set_range(min, max);
+        m_xSpinButton->set_position(-1);
+        m_xSpinButton->select_region(0, -1);
+        m_xSpinButton->connect_changed(LINK(this, SwNumberInputDlg, InputModifiedHdl));
+        rLabel2.isEmpty() ? m_xLabel2->hide() : m_xLabel2->set_label(rLabel2);
+    }
+
+    auto GetNumber()
+    {
+        return m_xSpinButton->get_text().toInt32();
+    }
+};
+
+IMPL_LINK_NOARG(SwNumberInputDlg, InputModifiedHdl, weld::Entry&, void)
+{
+    m_xOKButton->set_sensitive(!m_xSpinButton->get_text().isEmpty());
+    if (!m_xOKButton->get_sensitive())
+        return;
+
+    auto nValue = m_xSpinButton->get_text().toInt32();
+    if (nValue <= m_xSpinButton->get_min())
+        m_xSpinButton->set_value(m_xSpinButton->get_min());
+    else if (nValue > m_xSpinButton->get_max())
+        m_xSpinButton->set_value(m_xSpinButton->get_max());
+    else
+        m_xSpinButton->set_value(nValue);
+
+    m_xSpinButton->set_position(-1);
+}
+
+}
 
 static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhichId )
 {
@@ -1269,6 +1328,21 @@ void SwView::Execute(SfxRequest &rReq)
         {
             m_pWrtShell->SetDefault( *pItem );
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
+        }
+        break;
+        case FN_OUTLINE_LEVELS_SHOWN:
+        {
+            SwWrtShell& rSh = GetWrtShell();
+            int nOutlineLevel = -1;
+            auto nOutlinePos = rSh.GetOutlinePos();
+            if (nOutlinePos != SwOutlineNodes::npos)
+                nOutlineLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos);
+            SwNumberInputDlg aDlg(GetViewFrame()->GetFrameWeld(),
+                                  SwResId(STR_OUTLINE_LEVELS_SHOWN_TITLE),
+                                  SwResId(STR_OUTLINE_LEVELS_SHOWN_SPIN_LABEL),
+                                  nOutlineLevel + 1, 1, 10);
+            if (aDlg.run() == RET_OK)
+                rSh.MakeOutlineLevelsVisible(aDlg.GetNumber());
         }
         break;
         case FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY:

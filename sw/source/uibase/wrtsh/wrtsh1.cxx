@@ -2358,6 +2358,60 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
     return true;
 }
 
+void SwWrtShell::MakeOutlineLevelsVisible(const int nLevel)
+{
+    m_rView.SetMaxOutlineLevelShown(nLevel);
+
+    bool bDocChanged = false;
+
+    const SwNodes& rNodes = GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+    StartAction();
+    for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+    {
+        SwNode* pNode = rOutlineNodes[nPos];
+        auto nOutlineLevel = pNode->GetTextNode()->GetAttrOutlineLevel();
+        if ( nOutlineLevel > nLevel)
+        {
+            // MakeOutlineContentVisible(nPos, false) sets the outline node outline content
+            // visible attribute false so it needs restored to true if it was true.
+            bool bOutlineContentVisible = false;
+            pNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisible);
+            MakeOutlineContentVisible(nPos, false);
+            pNode->GetTextNode()->DelFrames(GetLayout());
+            if (bOutlineContentVisible)
+                pNode->GetTextNode()->SetAttrOutlineContentVisible(true);
+            bDocChanged = true;
+        }
+        else
+        {
+            if (!pNode->GetTextNode()->getLayoutFrame(GetLayout()))
+            {
+                SwNodeIndex aIdx(*pNode, +1);
+                {
+                    // MakeAllOutlineContentTemporarilyVisible in this scope! Don't place at the
+                    // start of the function. Placed there will restore content to what it was
+                    // was at that point when the function exits.
+                    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+                    MakeFrames(GetDoc(), *pNode, aIdx.GetNode());
+                }
+                bool bVisible = true;
+                if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
+                    pNode->GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+                if (bVisible)
+                    MakeOutlineContentVisible(nPos, true);
+                bDocChanged = true;
+            }
+        }
+    }
+    EndAction();
+
+    // Broadcast DocChanged if document layout has changed so the Navigator will be updated.
+    if (bDocChanged)
+        GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
+}
+
 void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible)
 {
     const SwNodes& rNodes = GetNodes();
@@ -2374,9 +2428,11 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible)
     {
         // get the last outline node to include (iPos)
         int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
+        int nMaxOutlineLevelShown = m_rView.GetMaxOutlineLevelShown();
         SwOutlineNodes::size_type iPos = nPos;
         while (++iPos < rOutlineNodes.size() &&
-               rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel);
+               rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel &&
+               rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() <= nMaxOutlineLevelShown);
 
         // get the correct end node
         // the outline node may be in frames, headers, footers special section of doc model

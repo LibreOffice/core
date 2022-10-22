@@ -265,6 +265,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwTwips         m_nLOKPageUpDownOffset;
 
     SelectCycle m_aSelectCycle;
+
+    int m_nMaxOutlineLevelShown = 10;
+
     // methods for searching
     // set search context
     SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi);
@@ -643,6 +646,9 @@ public:
     void SelectShellForDrop();
 
     void UpdateDocStats();
+
+    void SetMaxOutlineLevelShown(int nLevel) {m_nMaxOutlineLevelShown = nLevel;}
+    int GetMaxOutlineLevelShown() const {return m_nMaxOutlineLevelShown;}
 
     // methods for printing
     SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( bool bCreate = false ) override;
