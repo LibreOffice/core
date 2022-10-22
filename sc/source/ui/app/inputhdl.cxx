@@ -2562,7 +2562,9 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             }
             else
                 aStr = GetEditText(mpEditEngine.get());
-            mbEditingExistingContent = !aStr.isEmpty();
+
+            // cTyped!=0 is overtyping, not editing.
+            mbEditingExistingContent = !cTyped && !aStr.isEmpty();
 
             if (aStr.startsWith("{=") && aStr.endsWith("}") )  // Matrix formula?
             {
