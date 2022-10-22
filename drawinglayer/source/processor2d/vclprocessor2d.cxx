@@ -293,7 +293,6 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             // set parameters and paint text snippet
             const basegfx::BColor aRGBFontColor(
                 maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
-            const Point aStartPoint(aTextTranslate.getX(), aTextTranslate.getY());
             const vcl::text::ComplexTextLayoutFlags nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
             if (rTextCandidate.getFontAttribute().getRTL())
@@ -343,13 +342,18 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 getTransformFromMapMode(mpOutputDevice->GetMapMode()) * maCurrentTransformation);
 
             basegfx::B2DVector aCurrentScaling, aCurrentTranslate;
-            aCombinedTransform.decompose(aCurrentScaling, aCurrentTranslate, fIgnoreRotate,
+            double fCurrentRotate;
+            aCombinedTransform.decompose(aCurrentScaling, aCurrentTranslate, fCurrentRotate,
                                          fIgnoreShearX);
 
             const Point aOrigin(basegfx::fround(aCurrentTranslate.getX() / aCurrentScaling.getX()),
                                 basegfx::fround(aCurrentTranslate.getY() / aCurrentScaling.getY()));
             MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin,
                              Fraction(aCurrentScaling.getX()), Fraction(aCurrentScaling.getY()));
+
+            if (fCurrentRotate)
+                aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
+            const Point aStartPoint(aTextTranslate.getX(), aTextTranslate.getY());
 
             const bool bChangeMapMode(aMapMode != mpOutputDevice->GetMapMode());
             if (bChangeMapMode)
