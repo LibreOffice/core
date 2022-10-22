@@ -92,7 +92,9 @@ void GtvHelpers::clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelecti
 std::string GtvHelpers::getNextAuthor()
 {
     static int nCounter = 0;
-    return std::string(g_get_user_name()) + " #" + std::to_string(++nCounter);
+    const gchar* pname = g_get_real_name();
+    std::string name = pname ? std::string(pname) : std::string();
+    return name + " #" + std::to_string(++nCounter);
 }
 
 GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComment)
