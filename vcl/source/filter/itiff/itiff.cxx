@@ -267,6 +267,8 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
             aAnimation.Insert(aAnimationBitmap);
         }
+        else
+            break;
     } while (TIFFReadDirectory(tif));
 
     TIFFClose(tif);
