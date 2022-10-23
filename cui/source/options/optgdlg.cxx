@@ -1508,10 +1508,17 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     {
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
         aDatePatternsString = lcl_getDatePatternsConfigString( rLocaleWrapper);
+        // Let's assume patterns are valid at this point.
+        m_bDatePatternsValid = true;
     }
-    // Let's assume patterns are valid at this point.
-    m_bDatePatternsValid = true;
+    else
+    {
+        bool bModified = false;
+        m_bDatePatternsValid = validateDatePatterns( bModified, aDatePatternsString);
+    }
     m_xDatePatternsED->set_text(aDatePatternsString);
+    m_xDatePatternsED->set_message_type( m_bDatePatternsValid ?
+            weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::DatePatterns);
     m_xDatePatternsED->set_sensitive(!bReadonly);
     m_xDatePatternsFT->set_sensitive(!bReadonly);
@@ -1691,6 +1698,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     OUString aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
     m_bDatePatternsValid = true;
     m_xDatePatternsED->set_text( aDatePatternsString);
+    m_xDatePatternsED->set_message_type(weld::EntryMessageType::Normal);
 }
 
 IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
