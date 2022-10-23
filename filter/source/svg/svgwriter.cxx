@@ -38,6 +38,7 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/string_view.hxx>
+#include <svx/svdomedia.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -2997,12 +2998,49 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aSz.Width() ) );
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aSz.Height() ) );
 
-    // the image must be scaled to aSz in a non-uniform way
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", "none" );
+    // If we have a media object (a video), export the video.
+    // Also, use the image generated above as the video poster (thumbnail).
+    SdrMediaObj* pMediaObj
+        = pShape ? dynamic_cast<SdrMediaObj*>(SdrObject::getSdrObjectFromXShape(*pShape)) : nullptr;
+    const bool embedVideo = (pMediaObj && !pMediaObj->getTempURL().isEmpty());
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
+    if (!embedVideo)
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "image", true, true );
+        // the image must be scaled to aSz in a non-uniform way
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "preserveAspectRatio", "none");
+
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear());
+
+        SvXMLElementExport aElem(mrExport, XML_NAMESPACE_NONE, "image", true, true);
+    }
+    else
+    {
+        // <foreignObject xmlns="http://www.w3.org/2000/svg" overflow="visible" width="499.6" height="374.33333333333337" x="705" y="333">
+        //     <body xmlns="http://www.w3.org/1999/xhtml">
+        //         <video controls="controls" width="499.6" height="374.33333333333337">
+        //             <source src="file:///tmp/abcdef.mp4" type="video/mp4">
+        //         </video>
+        //     </body>
+        // </foreignObject>
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "xmlns", "http://www.w3.org/2000/svg");
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "overflow", "visible");
+        SvXMLElementExport aForeignObject(mrExport, XML_NAMESPACE_NONE, "foreignObject", true,
+                                          true);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "xmlns", "http://www.w3.org/1999/xhtml");
+        SvXMLElementExport aBody(mrExport, XML_NAMESPACE_NONE, "body", true, true);
+
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number(aSz.Width()));
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number(aSz.Height()));
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "autoplay", "autoplay");
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "controls", "controls");
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "loop", "loop");
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "preload", "auto");
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "poster", aBuffer.makeStringAndClear());
+        SvXMLElementExport aVideo(mrExport, XML_NAMESPACE_NONE, "video", true, true);
+
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "src", pMediaObj->getTempURL());
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "type", "video/mp4"); //FIXME: set mime type.
+        SvXMLElementExport aSource(mrExport, XML_NAMESPACE_NONE, "source", true, true);
     }
 }
 

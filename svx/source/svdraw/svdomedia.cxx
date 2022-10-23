@@ -277,6 +277,16 @@ const OUString& SdrMediaObj::getURL() const
 #endif
 }
 
+const OUString& SdrMediaObj::getTempURL() const
+{
+#if HAVE_FEATURE_AVMEDIA
+    return m_xImpl->m_MediaProperties.getTempURL();
+#else
+static OUString ret;
+    return ret;
+#endif
+}
+
 void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
 {
     mediaPropertiesChanged( rState );

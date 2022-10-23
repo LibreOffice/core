@@ -61,6 +61,9 @@ public:
         void                        setURL( const OUString& rURL, const OUString& rReferer, const OUString& rMimeType = OUString() );
         const OUString&      getURL() const;
 
+        /// Returns the URL to the temporary extracted media file.
+        const OUString&      getTempURL() const;
+
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;
 
