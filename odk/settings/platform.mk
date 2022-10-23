@@ -25,48 +25,28 @@
 # only make version 3.81 or later accepts the multiple else conditions
 ifeq "$(UNOPKG_PLATFORM)" "FreeBSD_x86"
     EXTENSION_PLATFORM=freebsd_x86
-else
-    ifeq "$(UNOPKG_PLATFORM)" "FreeBSD_x86_64"
-        EXTENSION_PLATFORM=freebsd_x86_64
+else ifeq "$(UNOPKG_PLATFORM)" "FreeBSD_x86_64"
+    EXTENSION_PLATFORM=freebsd_x86_64
+else ifeq "$(UNOPKG_PLATFORM)" "Linux_PowerPC"
+    EXTENSION_PLATFORM=linux_powerpc
+else ifeq "$(UNOPKG_PLATFORM)" "Linux_x86"
+    EXTENSION_PLATFORM=linux_x86
+else ifeq "$(UNOPKG_PLATFORM)" "Linux_x86_64"
+    EXTENSION_PLATFORM=linux_x86_64
+else ifeq "$(UNOPKG_PLATFORM)" "MacOSX_PowerPC"
+    EXTENSION_PLATFORM=macosx_powerpc
+else ifeq "$(UNOPKG_PLATFORM)" "MacOSX_x86"
+    EXTENSION_PLATFORM=macosx_x86
+else ifeq "$(UNOPKG_PLATFORM)" "MacOSX_x86_64"
+    EXTENSION_PLATFORM=macosx_x86_64
+else ifeq "$(UNOPKG_PLATFORM)" "Solaris_SPARC"
+    EXTENSION_PLATFORM=solaris_sparc
+else ifeq "$(UNOPKG_PLATFORM)" "Solaris_x86"
+    EXTENSION_PLATFORM=solaris_x86
+else ifeq "$(UNOPKG_PLATFORM)" "Windows"
+    ifeq "$(PROCTYPE)" "x86_64"
+        EXTENSION_PLATFORM=windows_x86_64
     else
-    ifeq "$(UNOPKG_PLATFORM)" "Linux_PowerPC"
-        EXTENSION_PLATFORM=linux_powerpc
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "Linux_x86"
-        EXTENSION_PLATFORM=linux_x86
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "Linux_x86_64"
-        EXTENSION_PLATFORM=linux_x86_64
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "MacOSX_PowerPC"
-        EXTENSION_PLATFORM=macosx_powerpc
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "MacOSX_x86"
-        EXTENSION_PLATFORM=macosx_x86
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "MacOSX_x86_64"
-        EXTENSION_PLATFORM=macosx_x86_64
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "Solaris_SPARC"
-        EXTENSION_PLATFORM=solaris_sparc
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "Solaris_x86"
-        EXTENSION_PLATFORM=solaris_x86
-    else
-    ifeq "$(UNOPKG_PLATFORM)" "Windows"
-        ifeq "$(PROCTYPE)" "x86_64"
-            EXTENSION_PLATFORM=windows_x86_64
-        else
-            EXTENSION_PLATFORM=windows_x86
-        endif
-    endif
-    endif
-    endif
-    endif
-    endif
-    endif
-    endif
-    endif
-    endif
+        EXTENSION_PLATFORM=windows_x86
     endif
 endif
