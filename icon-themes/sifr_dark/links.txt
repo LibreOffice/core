@@ -1848,7 +1848,6 @@ cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/lc_helperdialog.png cmd/lc_helpindex.png
 cmd/lc_questionanswers.png cmd/lc_browseview.png
 
-cmd/sc_about.png cmd/sc_adddirect.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
 cmd/sc_helperdialog.png cmd/sc_helpindex.png
 cmd/sc_questionanswers.png cmd/sc_browseview.png
@@ -2695,7 +2694,7 @@ vcl/res/index.png cmd/sc_insertmultiindex.png
 # xmlsecurity
 # ==============================================
 xmlsecurity/res/key_12.png dbaccess/res/pkey.png
-xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
+xmlsecurity/res/signet_11x16.png xmlsecurity/res/certificate_16.png
 cmd/32/cellprotection.png cmd/32/protect.png
 cmd/32/toolprotectiondocument.png cmd/32/protect.png
 
