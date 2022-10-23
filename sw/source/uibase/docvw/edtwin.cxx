@@ -6740,12 +6740,8 @@ void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
-
     MouseButtonDown(rMouseEvent);
-
-    SetPointerPosPixel(aPoint);
 }
 
 void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
@@ -6753,12 +6749,8 @@ void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
-
     MouseButtonUp(rMouseEvent);
-
-    SetPointerPosPixel(aPoint);
 }
 
 void SwEditWin::LogicMouseMove(const MouseEvent& rMouseEvent)
@@ -6766,12 +6758,8 @@ void SwEditWin::LogicMouseMove(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
-
     MouseMove(rMouseEvent);
-
-    SetPointerPosPixel(aPoint);
 }
 
 void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark)
