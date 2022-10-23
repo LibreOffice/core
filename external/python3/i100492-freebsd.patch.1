@@ -2,7 +2,7 @@ FreeBSD porting fixes, patch by maho@openoffice.org
 
 --- Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:00:41.097955124 +0000
 +++ Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:01:13.018329351 +0000
-@@ -186,6 +189,9 @@
+@@ -238,6 +238,9 @@
  {
      pthread_t th;
      int status;
@@ -12,7 +12,7 @@ FreeBSD porting fixes, patch by maho@openoffice.org
  #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
      pthread_attr_t attrs;
  #endif
-@@ -214,6 +220,10 @@
+@@ -277,6 +280,10 @@
      callback->func = func;
      callback->arg = arg;
  
@@ -23,7 +23,7 @@ FreeBSD porting fixes, patch by maho@openoffice.org
      status = pthread_create(&th,
  #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
                               &attrs,
-@@ -225,6 +234,9 @@
+@@ -285,6 +292,9 @@
  #endif
                               pythread_wrapper, callback);
  
