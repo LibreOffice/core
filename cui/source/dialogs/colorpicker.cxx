@@ -201,6 +201,7 @@ class ColorFieldControl : public weld::CustomWidgetController
 public:
     ColorFieldControl()
         : meMode( DefaultMode )
+        , mnBaseValue(USHRT_MAX)
         , mdX( -1.0 )
         , mdY( -1.0 )
         , mbMouseCaptured(false)
@@ -230,7 +231,7 @@ public:
     void UpdatePosition();
     void Modify();
 
-    void SetValues(Color aColor, ColorMode eMode, double x, double y);
+    void SetValues(sal_uInt16 nBaseValue, ColorMode eMode, double x, double y);
     double GetX() const { return mdX;}
     double GetY() const { return mdY;}
 
@@ -238,7 +239,7 @@ public:
 
 private:
     ColorMode meMode;
-    Color maColor;
+    sal_uInt16 mnBaseValue;
     double mdX;
     double mdY;
     bool mbMouseCaptured;
@@ -307,11 +308,6 @@ void ColorFieldControl::UpdateBitmap()
     sal_uInt8* pRGB_Vert = maRGB_Vert.data();
     sal_uInt16* pPercent_Vert = maPercent_Vert.data();
 
-    Color aBitmapColor(maColor);
-
-    sal_uInt16 nHue, nSat, nBri;
-    maColor.RGBtoHSB(nHue, nSat, nBri);
-
         // this has been unlooped for performance reason, please do not merge back!
 
     sal_uInt16 y = nHeight,x;
@@ -321,40 +317,43 @@ void ColorFieldControl::UpdateBitmap()
         case HUE:
             while (y--)
             {
-                nBri = pPercent_Vert[y];
+                sal_uInt16 nBri = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
-                    nSat = pPercent_Horiz[x];
-                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, nBri));
+                    sal_uInt16 nSat = pPercent_Horiz[x];
+                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(mnBaseValue, nSat, nBri));
                 }
             }
             break;
         case SATURATION:
             while (y--)
             {
-                nBri = pPercent_Vert[y];
+                sal_uInt16 nBri = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
-                    nHue = pGrad_Horiz[x];
-                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, nBri));
+                    sal_uInt16 nHue = pGrad_Horiz[x];
+                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, mnBaseValue, nBri));
                 }
             }
             break;
         case BRIGHTNESS:
             while (y--)
             {
-                nSat = pPercent_Vert[y];
+                sal_uInt16 nSat = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
-                    nHue = pGrad_Horiz[x];
-                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, nBri));
+                    sal_uInt16 nHue = pGrad_Horiz[x];
+                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, mnBaseValue));
                 }
             }
             break;
         case RED:
+        {
+            Color aBitmapColor;
+            aBitmapColor.SetRed(mnBaseValue);
             while (y--)
             {
                 aBitmapColor.SetGreen(pRGB_Vert[y]);
@@ -366,7 +365,11 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
+        }
         case GREEN:
+        {
+            Color aBitmapColor;
+            aBitmapColor.SetGreen(mnBaseValue);
             while (y--)
             {
                 aBitmapColor.SetRed(pRGB_Vert[y]);
@@ -378,7 +381,11 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
+        }
         case BLUE:
+        {
+            Color aBitmapColor;
+            aBitmapColor.SetBlue(mnBaseValue);
             while (y--)
             {
                 aBitmapColor.SetGreen(pRGB_Vert[y]);
@@ -390,8 +397,11 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
+        }
     }
 }
+
+constexpr int nCenterOffset = 5;
 
 void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 {
@@ -419,8 +429,8 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         nY = aSize.Height() - 1;
 
     Point aPos = maPosition;
-    maPosition.setX( nX - 5 );
-    maPosition.setY( nY - 5 );
+    maPosition.setX( nX - nCenterOffset );
+    maPosition.setY( nY - nCenterOffset );
     Invalidate(tools::Rectangle(aPos, Size(11, 11)));
     Invalidate(tools::Rectangle(maPosition, Size(11, 11)));
 
@@ -428,8 +438,6 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     {
         mdX = double(nX) / double(aSize.Width() - 1.0);
         mdY = double(aSize.Height() - 1.0 - nY) / double(aSize.Height() - 1.0);
-
-        maColor = mxBitmap->GetPixel(Point(nX, nY));
     }
 }
 
@@ -464,20 +472,21 @@ void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const tools::R
     if (!mxBitmap)
         UpdateBitmap();
 
-    if (mxBitmap)
-    {
-        Size aSize(GetOutputSizePixel());
-        rRenderContext.DrawOutDev(Point(0, 0), aSize, Point(0, 0), aSize, *mxBitmap);
-    }
+    if (!mxBitmap)
+        return;
+
+    Size aSize(GetOutputSizePixel());
+    rRenderContext.DrawOutDev(Point(0, 0), aSize, Point(0, 0), aSize, *mxBitmap);
 
     // draw circle around current color
-    if (maColor.IsDark())
-        rRenderContext.SetLineColor( COL_WHITE );
+    Point aPos(maPosition.X() + nCenterOffset, maPosition.Y() + nCenterOffset);
+    Color aColor = mxBitmap->GetPixel(aPos);
+    if (aColor.IsDark())
+        rRenderContext.SetLineColor(COL_WHITE);
     else
-        rRenderContext.SetLineColor( COL_BLACK );
+        rRenderContext.SetLineColor(COL_BLACK);
 
     rRenderContext.SetFillColor();
-
     rRenderContext.DrawEllipse(::tools::Rectangle(maPosition, Size(11, 11)));
 }
 
@@ -493,13 +502,13 @@ void ColorFieldControl::Modify()
     maModifyHdl.Call( *this );
 }
 
-void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, double y )
+void ColorFieldControl::SetValues(sal_uInt16 nBaseValue, ColorMode eMode, double x, double y)
 {
-    bool bUpdateBitmap = (maColor!= aColor) || (meMode != eMode);
-    if( !(bUpdateBitmap || (mdX != x) || (mdY != y)) )
+    bool bUpdateBitmap = (mnBaseValue != nBaseValue) || (meMode != eMode);
+    if (!bUpdateBitmap && mdX == x && mdY == y)
         return;
 
-    maColor = aColor;
+    mnBaseValue = nBaseValue;
     meMode = eMode;
     mdX = x;
     mdY = y;
@@ -887,7 +896,9 @@ void ColorPickerDialog::update_color( UpdateFlags n )
     sal_uInt8 nGreen = toInt(mdGreen,255.0);
     sal_uInt8 nBlue = toInt(mdBlue,255.0);
 
-    Color aColor(nRed, nGreen, nBlue);
+    sal_uInt16 nHue = toInt(mdHue, 1.0);
+    sal_uInt16 nSat = toInt(mdSat, 100.0);
+    sal_uInt16 nBri = toInt(mdBri, 100.0);
 
     if (n & UpdateFlags::RGB) // update RGB
     {
@@ -906,9 +917,9 @@ void ColorPickerDialog::update_color( UpdateFlags n )
 
     if (n & UpdateFlags::HSB ) // update HSB
     {
-        m_xMFHue->set_value(toInt(mdHue, 1.0), FieldUnit::DEGREE);
-        m_xMFSaturation->set_value(toInt( mdSat, 100.0), FieldUnit::PERCENT);
-        m_xMFBrightness->set_value(toInt( mdBri, 100.0), FieldUnit::PERCENT);
+        m_xMFHue->set_value(nHue, FieldUnit::DEGREE);
+        m_xMFSaturation->set_value(nSat, FieldUnit::PERCENT);
+        m_xMFBrightness->set_value(nBri, FieldUnit::PERCENT);
     }
 
     if (n & UpdateFlags::ColorChooser ) // update Color Chooser 1
@@ -916,25 +927,27 @@ void ColorPickerDialog::update_color( UpdateFlags n )
         switch( meMode )
         {
         case HUE:
-            m_aColorField.SetValues(aColor, meMode, mdSat, mdBri);
+            m_aColorField.SetValues(nHue, meMode, mdSat, mdBri);
             break;
         case SATURATION:
-            m_aColorField.SetValues(aColor, meMode, mdHue / 360.0, mdBri);
+            m_aColorField.SetValues(nSat, meMode, mdHue / 360.0, mdBri);
             break;
         case BRIGHTNESS:
-            m_aColorField.SetValues(aColor, meMode, mdHue / 360.0, mdSat);
+            m_aColorField.SetValues(nBri, meMode, mdHue / 360.0, mdSat);
             break;
         case RED:
-            m_aColorField.SetValues(aColor, meMode, mdBlue, mdGreen);
+            m_aColorField.SetValues(nRed, meMode, mdBlue, mdGreen);
             break;
         case GREEN:
-            m_aColorField.SetValues(aColor, meMode, mdBlue, mdRed);
+            m_aColorField.SetValues(nGreen, meMode, mdBlue, mdRed);
             break;
         case BLUE:
-            m_aColorField.SetValues(aColor, meMode, mdRed, mdGreen);
+            m_aColorField.SetValues(nBlue, meMode, mdRed, mdGreen);
             break;
         }
     }
+
+    Color aColor(nRed, nGreen, nBlue);
 
     if (n & UpdateFlags::ColorSlider) // update Color Chooser 2
     {
