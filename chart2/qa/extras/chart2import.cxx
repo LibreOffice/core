@@ -801,7 +801,7 @@ void Chart2ImportTest::testBnc889755()
     awt::Gradient aTransparence;
     xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
     CPPUNIT_ASSERT(aTransparence.StartColor != aTransparence.EndColor);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), aTransparence.StartColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aTransparence.StartColor));
 }
 
 void Chart2ImportTest::testBnc882383()

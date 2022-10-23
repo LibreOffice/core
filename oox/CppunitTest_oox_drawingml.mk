@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_drawingml, \
     sal \
     subsequenttest \
     test \
+    tl \
     unotest \
     utl \
 ))

@@ -183,11 +183,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 16777215 (0xffffff)
+    // - Expected: 16777215 (COL_WHITE)
     // - Actual  : 3487029 (0x353535)
     // i.e. the end transparency was not 100%, but was 21%, leading to an unexpected visible line on
     // the right of this shape.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), aTransparence.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aTransparence.EndColor));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
