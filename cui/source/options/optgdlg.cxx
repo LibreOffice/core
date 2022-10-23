@@ -1719,6 +1719,18 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
                 bool bY, bM, bD;
                 bY = bM = bD = false;
                 bool bSep = true;
+                if (aPat.getLength() == 3)
+                {
+                    // Disallow a pattern that would match a numeric input with
+                    // decimal separator, like M.D
+                    const LanguageType eLang = m_xLocaleSettingLB->get_active_id();
+                    const LocaleDataWrapper aLocaleWrapper(( LanguageTag(eLang)));
+                    if (    aPat[1] == aLocaleWrapper.getNumDecimalSep().toChar()
+                         || aPat[1] == aLocaleWrapper.getNumDecimalSepAlt().toChar())
+                    {
+                        bValid = false;
+                    }
+                }
                 for (sal_Int32 i = 0; i < aPat.getLength() && bValid; /*nop*/)
                 {
                     const sal_Int32 j = i;
