@@ -1385,7 +1385,9 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
                 const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
                 const SdrTextObj* pText = GetTextEditObject();
-                const bool bVisualizeSurroundingFrame(pText != nullptr);
+                // show for cases like tdf#94223 but not for table cells like tdf#151311
+                const bool bVisualizeSurroundingFrame(
+                    pText && pText->GetObjIdentifier() != SdrObjKind::Table);
                 SdrPageView* pPageView = GetSdrPageView();
 
                 if (pPageView)
