@@ -3,7 +3,7 @@ Disable some stuff LO does not need, especially stuff with external dependencies
 diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
 --- python3.orig/PCbuild/pcbuild.sln	2017-08-10 00:04:44.359879894 +0200
 +++ python3/PCbuild/pcbuild.sln	2017-08-10 00:13:51.179873748 +0200
-@@ -12,8 +12,6 @@
+@@ -15,8 +15,6 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore", "pythoncore.vcxproj", "{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}"
  EndProject
@@ -12,7 +12,7 @@ diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winsound", "winsound.vcxproj", "{28B5D777-DDF2-4B6B-B34F-31D938813856}"
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_decimal", "_decimal.vcxproj", "{0E9791DB-593A-465F-98BC-681011311617}"
-@@ -28,34 +26,20 @@
+@@ -31,34 +29,20 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_socket", "_socket.vcxproj", "{86937F53-C189-40EF-8CE8-8759D8E7D480}"
  EndProject
@@ -47,7 +47,7 @@ diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_multiprocessing", "_multiprocessing.vcxproj", "{9E48B300-37D1-11DD-8C41-005056C00008}"
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "python3dll", "python3dll.vcxproj", "{885D4898-D08D-4091-9C40-C700CFE3FC5A}"
-@@ -75,8 +75,6 @@
+@@ -93,8 +77,6 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_queue", "_queue.vcxproj", "{78D80A15-BD8C-44E2-B49E-1F05B0A0A687}"
  EndProject
