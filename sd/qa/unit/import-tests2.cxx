@@ -143,6 +143,7 @@ public:
     void testTdf144092TableHeight();
     void testTdf89928BlackWhiteThreshold();
     void testTdf151547TransparentWhiteText();
+    void testTdf149961AutofitIndentation();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -219,6 +220,7 @@ public:
     CPPUNIT_TEST(testTdf144092TableHeight);
     CPPUNIT_TEST(testTdf89928BlackWhiteThreshold);
     CPPUNIT_TEST(testTdf151547TransparentWhiteText);
+    CPPUNIT_TEST(testTdf149961AutofitIndentation);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2187,6 +2189,44 @@ void SdImportTest2::testTdf151547TransparentWhiteText()
     // i.e. fully transparent white text color was interpreted as COL_AUTO
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFE), nCharColor);
     xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf149961AutofitIndentation()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf149961-autofitIndentation.pptx"),
+        PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+
+    {
+        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+        CPPUNIT_ASSERT(pNumFmt);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3175), pNumFmt->GetNumRule().GetLevel(0).GetAbsLSpace());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-3175),
+                             pNumFmt->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    }
+
+    {
+        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+        CPPUNIT_ASSERT(pNumFmt);
+
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 12700
+        // - Actual  : 3175
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(12700), pNumFmt->GetNumRule().GetLevel(0).GetAbsLSpace());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-12700),
+                             pNumFmt->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
