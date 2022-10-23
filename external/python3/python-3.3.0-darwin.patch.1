@@ -5,7 +5,7 @@ LO needs to build both against MacOSX SDK and not produce universal binaries.
 diff -ru python3.orig/configure python3/configure
 --- python3.orig/configure	2015-07-26 17:36:11.808497783 +0200
 +++ python3/configure	2015-07-26 17:38:49.016508337 +0200
-@@ -6794,7 +6794,20 @@
+@@ -7385,7 +7385,20 @@
          then
              case "$UNIVERSAL_ARCHS" in
              32-bit)
@@ -30,7 +30,7 @@ diff -ru python3.orig/configure python3/configure
 diff -ru python3.orig/Mac/Makefile.in python3/Mac/Makefile.in
 --- python3.orig/Mac/Makefile.in	2015-07-05 18:50:07.000000000 +0200
 +++ python3/Mac/Makefile.in	2015-07-26 17:40:14.860514100 +0200
-@@ -43,7 +43,7 @@
+@@ -44,7 +44,7 @@
  INSTALL_SCRIPT= @INSTALL_SCRIPT@
  INSTALL_DATA=@INSTALL_DATA@
  LN=@LN@
