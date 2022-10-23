@@ -1262,7 +1262,7 @@ cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_pageup.png cmd/sc_prevrecord.png
 cmd/sc_previouspage.png cmd/sc_prevrecord.png
-cmd/sc_previoustrackedchange.png cmd/sc_prevrecord.png
+
 # >
 cmd/32/navigateforward.png cmd/32/nextrecord.png
 cmd/32/nextpage.png cmd/32/nextrecord.png
@@ -1272,7 +1272,6 @@ cmd/lc_nextpage.png cmd/lc_nextrecord.png
 cmd/lc_pagedown.png cmd/lc_nextrecord.png
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
 cmd/sc_nextpage.png cmd/sc_nextrecord.png
-cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
 # >|
 cmd/32/gotoend.png cmd/32/lastrecord.png
