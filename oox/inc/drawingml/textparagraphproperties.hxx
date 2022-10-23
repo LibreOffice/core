@@ -103,6 +103,7 @@ public:
                                                 const BulletList* pMasterBuList,
                                                 bool bApplyBulletList,
                                                 float fFontSize,
+                                                sal_Int32 nAutofitFontScale = 100000,
                                                 bool bPushDefaultValues = false ) const;
 
     /** Returns the largest character size of this paragraph. If possible the

@@ -87,7 +87,8 @@ void TextParagraph::insertAt(
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextStyleProperties,
         const TextListStyle& rMasterTextListStyle,
-        const TextListStyle& rTextListStyle, bool bFirst, float nDefaultCharHeight) const
+        const TextListStyle& rTextListStyle, bool bFirst,
+        float nDefaultCharHeight, sal_Int32 nAutofitFontScale) const
 {
     try {
         sal_Int32 nParagraphSize = 0;
@@ -175,7 +176,7 @@ void TextParagraph::insertAt(
             }
 
             float fCharacterSize = nCharHeight > 0 ? GetFontHeight ( nCharHeight ) : pTextParagraphStyle->getCharHeightPoints( 12 );
-            aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), true, fCharacterSize, true );
+            aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), true, fCharacterSize, nAutofitFontScale, true );
         }
 
         // empty paragraphs do not have bullets in ppt

@@ -405,7 +405,7 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
     const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, bool bApplyBulletMap, float fCharacterSize,
-    bool bPushDefaultValues ) const
+    sal_Int32 nAutofitFontScale, bool bPushDefaultValues ) const
 {
     PropertySet aPropSet( xPropSet );
     aPropSet.setProperties( maTextParagraphPropertyMap );
@@ -430,6 +430,14 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
 
     std::optional< sal_Int32 > noParaLeftMargin( moParaLeftMargin );
     std::optional< sal_Int32 > noFirstLineIndentation( moFirstLineIndentation );
+
+    // tdf#149961 Impress scales the indents when text is autofitted while Powerpoint doesn't
+    // Try to counteract this by multiplying indents by the inverse of the autofit font scale.
+    if ( nAutofitFontScale )
+    {
+        if ( noParaLeftMargin ) noParaLeftMargin = *noParaLeftMargin * MAX_PERCENT / nAutofitFontScale;
+        if ( noFirstLineIndentation ) noFirstLineIndentation = *noFirstLineIndentation * MAX_PERCENT / nAutofitFontScale;
+    }
 
     if ( nNumberingType != NumberingType::NUMBER_NONE )
     {

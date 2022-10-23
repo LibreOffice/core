@@ -77,7 +77,8 @@ public:
                                     const TextListStyle& rMasterTextListStyle,
                                     const TextListStyle& rTextListStyle,
                                     bool bFirst,
-                                    float nDefaultCharHeight) const;
+                                    float nDefaultCharHeight,
+                                    sal_Int32 nAutofitFontScale) const;
 
     bool HasMathXml() const
     {
