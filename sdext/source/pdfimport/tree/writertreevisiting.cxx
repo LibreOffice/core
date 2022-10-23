@@ -382,7 +382,7 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< std::uniqu
     // only DrawElement types
     for( auto it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
-        if( dynamic_cast<DrawElement*>(it->get()) == nullptr )
+        if( dynamic_cast<DrawElement*>(it->get()) != nullptr )
             (*it)->visitedBy( *this, it );
     }
 
