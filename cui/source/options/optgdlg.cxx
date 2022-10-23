@@ -1695,16 +1695,34 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
 
 IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
 {
-    const OUString aPatterns(rEd.get_text());
-    OUStringBuffer aBuf( aPatterns);
-    sal_Int32 nChar = 0;
-    bool bValid = true;
+    OUString aPatterns(rEd.get_text());
     bool bModified = false;
-    if (!aPatterns.isEmpty())
+    const bool bValid = validateDatePatterns( bModified, aPatterns);
+    if (bModified)
     {
+        // gtk3 keeps the cursor position on equal length set_text() but at
+        // least the 'gen' backend does not and resets to 0.
+        const int nCursorPos = rEd.get_position();
+        rEd.set_text(aPatterns);
+        rEd.set_position(nCursorPos);
+    }
+    if (bValid)
+        rEd.set_message_type(weld::EntryMessageType::Normal);
+    else
+        rEd.set_message_type(weld::EntryMessageType::Error);
+    m_bDatePatternsValid = bValid;
+}
+
+bool OfaLanguagesTabPage::validateDatePatterns( bool& rbModified, OUString& rPatterns )
+{
+    bool bValid = true;
+    if (!rPatterns.isEmpty())
+    {
+        OUStringBuffer aBuf( rPatterns);
+        sal_Int32 nChar = 0;
         for (sal_Int32 nIndex=0; nIndex >= 0 && bValid; ++nChar)
         {
-            const OUString aPat( aPatterns.getToken( 0, ';', nIndex));
+            const OUString aPat( rPatterns.getToken( 0, ';', nIndex));
             if (aPat.isEmpty() && nIndex < 0)
             {
                 // Indicating failure when about to append a pattern is too
@@ -1745,7 +1763,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
                             else if (c == 'y')
                             {
                                 aBuf[nChar] = 'Y';
-                                bModified = true;
+                                rbModified = true;
                             }
                             bY = true;
                             bSep = false;
@@ -1757,7 +1775,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
                             else if (c == 'm')
                             {
                                 aBuf[nChar] = 'M';
-                                bModified = true;
+                                rbModified = true;
                             }
                             bM = true;
                             bSep = false;
@@ -1769,7 +1787,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
                             else if (c == 'd')
                             {
                                 aBuf[nChar] = 'D';
-                                bModified = true;
+                                rbModified = true;
                             }
                             bD = true;
                             bSep = false;
@@ -1787,20 +1805,10 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
                 bValid &= (bY || bM || bD);
             }
         }
+        if (rbModified)
+            rPatterns = aBuf.makeStringAndClear();
     }
-    if (bModified)
-    {
-        // gtk3 keeps the cursor position on equal length set_text() but at
-        // least the 'gen' backend does not and resets to 0.
-        const int nCursorPos = rEd.get_position();
-        rEd.set_text(aBuf.makeStringAndClear());
-        rEd.set_position(nCursorPos);
-    }
-    if (bValid)
-        rEd.set_message_type(weld::EntryMessageType::Normal);
-    else
-        rEd.set_message_type(weld::EntryMessageType::Error);
-    m_bDatePatternsValid = bValid;
+    return bValid;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

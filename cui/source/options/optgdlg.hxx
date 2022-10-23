@@ -168,6 +168,8 @@ class OfaLanguagesTabPage : public SfxTabPage
     DECL_LINK(LocaleSettingHdl, weld::ComboBox&, void);
     DECL_LINK(DatePatternsHdl, weld::Entry&, void);
 
+    bool validateDatePatterns( bool& rbModified, OUString& rPatterns );
+
 public:
     OfaLanguagesTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~OfaLanguagesTabPage() override;
