@@ -1357,10 +1357,22 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 
     for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
     {
+        const OUString& rPat = sDateAcceptancePatterns[nPattern];
+        if (rPat.getLength() == 3)
+        {
+            // Ignore a pattern that would match numeric input with decimal
+            // separator. It may had been read from configuration or resulted
+            // from the locales' patterns concatenation above.
+            if (    rPat[1] == pFormatter->GetLocaleData()->getNumDecimalSep().toChar()
+                 || rPat[1] == pFormatter->GetLocaleData()->getNumDecimalSepAlt().toChar())
+            {
+                SAL_WARN("svl.numbers", "ignoring date acceptance pattern with decimal separator ambiguity: " << rPat);
+                continue;   // for, next pattern
+            }
+        }
         sal_uInt16 nNext = nDatePatternStart;
         nDatePatternNumbers = 0;
         bool bOk = true;
-        const OUString& rPat = sDateAcceptancePatterns[nPattern];
         sal_Int32 nPat = 0;
         for ( ; nPat < rPat.getLength() && bOk && nNext < nStringsCnt; ++nPat, ++nNext)
         {
