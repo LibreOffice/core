@@ -26,11 +26,11 @@ class OnlineAccessibilityCheck : public SvtListener
 private:
     SwDoc& m_rDocument;
     sw::AccessibilityCheck m_aAccessibilityCheck;
-    SwTextNode* m_pCurrentTextNode;
-    SwNodeOffset m_aCurrentNodeIndex;
+    SwContentNode* m_pPreviousNode;
+    SwNodeOffset m_nPreviousNodeIndex;
     sal_Int32 m_nAccessibilityIssues;
 
-    void runCheck(SwTextNode* pTextNode);
+    void runCheck(SwContentNode* pNode);
 
 public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
