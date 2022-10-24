@@ -3953,21 +3953,24 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
-    sal_Int32 nCntPost;
+    sal_Int32 nCntPost, nFirstRounding;
+    // Round at 7 decimals (+5 of 86400 == 12 significant digits).
+    constexpr sal_Int32 kSignificantRound = 7;
     if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
-         0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
+         0 < rInfo.nCntPost && rInfo.nCntPost < kSignificantRound )
     {
-        // round at 7 decimals (+5 of 86400 == 12 significant digits)
         bInputLine = true;
-        nCntPost = 7;
+        nCntPost = nFirstRounding = kSignificantRound;
     }
     else
     {
         bInputLine = false;
         nCntPost = rInfo.nCntPost;
+        // For clock format (not []) do not round up to seconds and thus days.
+        nFirstRounding = (rInfo.bThousand ? nCntPost : kSignificantRound);
     }
     double fTime = (fNumber - floor( fNumber )) * 86400.0;
-    fTime = ::rtl::math::round( fTime, int(nCntPost) );
+    fTime = ::rtl::math::round( fTime, int(nFirstRounding) );
     if (fTime >= 86400.0)
     {
         // result of fNumber==x.999999999... rounded up, use correct date/time
