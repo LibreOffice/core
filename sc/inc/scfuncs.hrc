@@ -3748,7 +3748,7 @@ const TranslateId SC_OPCODE_FIXED_ARY[] =
     NC_("SC_OPCODE_FIXED", "Number"),
     NC_("SC_OPCODE_FIXED", "The number to be formatted."),
     NC_("SC_OPCODE_FIXED", "Decimals"),
-    NC_("SC_OPCODE_FIXED", "Decimal places. The number of fixed decimal places that are to be displayed."),
+    NC_("SC_OPCODE_FIXED", "Decimal places. The number of fixed decimal places that are to be displayed. Default 2."),
     NC_("SC_OPCODE_FIXED", "No thousands separators"),
     NC_("SC_OPCODE_FIXED", "Thousands separator. If 0 or omitted the locale group separator is used else the separator is suppressed.")
 };
