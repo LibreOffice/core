@@ -405,7 +405,7 @@ mac-app-store-package.prepare: $(BUILDDIR)/$(PLATFORMID)/done
 mac-app-store-package: mac-app-store-package.$(PLATFORMID)
 
 # recipe/targets to do the actual packaging
-# the symbolication switch to productbuild unforunately is undocumented, but that is what XCode
+# the symbolication switch to productbuild unfortunately is undocumented, but that is what XCode
 # uses when it creates a package with symbols for uploading to the appstore
 mac-app-store-package.$(PLATFORMID) mac-app-store-package.universal: mac-app-store-package.%: $(BUILDDIR)/%/done
 ifneq ($(MACOSX_PACKAGE_SIGNING_IDENTITY),)
@@ -437,7 +437,7 @@ endif
 	touch $@
 
 # build one arch using the mac-app-store-package.prepare target, make clean and change the autogen.input
-# to buid for the other target, then use mac-app-store-package.universal to build for the other arch and
+# to build for the other target, then use mac-app-store-package.universal to build for the other arch and
 # combine the two into a universal binary
 $(BUILDDIR)/universal/done: $(BUILDDIR)/macosx_x86_64/done $(BUILDDIR)/macosx_aarch64/done
 	rm -rf universal
