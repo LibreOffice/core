@@ -1295,6 +1295,7 @@ namespace sw::mark
             pDdeBookmark->DeregisterFromDoc(m_rDoc);
 
             // Update aI, possibly a selection listener invalidated the iterators of m_vAllMarks.
+            assureSortedMarkContainers();
             auto [it, endIt] = equal_range(m_vAllMarks.begin(), m_vAllMarks.end(),
                                            pMark->GetMarkStart(), CompareIMarkStartsBefore());
             for (; it != endIt; ++it)

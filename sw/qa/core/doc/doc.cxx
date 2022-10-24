@@ -34,6 +34,7 @@
 #include <cmdid.h>
 #include <unotxdoc.hxx>
 #include <UndoManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/doc/data/";
 
@@ -411,6 +412,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteListeners)
     // Without the accompanying fix in place, this test would have crashed, an invalidated iterator
     // was used with erase().
     xBookmark->dispose();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteRedline)
+{
+    // Given a document with redlines, a mark (annotation mark) inside a redline:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "bookmark-delete-redline.doc");
+
+    // When hiding deletions / showing only inserts, make sure we don't crash:
+    // Without the accompanying fix in place, this test would have crashed, equal_range() was used
+    // on an unsorted container.
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
