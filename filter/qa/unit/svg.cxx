@@ -11,8 +11,7 @@
 
 #include <string_view>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -28,41 +27,17 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/filter/qa/unit/data/";
-
 /// SVG filter tests.
-class SvgFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SvgFilterTest : public UnoApiTest, public XmlTestTools
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
+    SvgFilterTest();
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(std::u16string_view rURL);
 };
 
-void SvgFilterTest::setUp()
+SvgFilterTest::SvgFilterTest()
+    : UnoApiTest("/filter/qa/unit/data/")
 {
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void SvgFilterTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-void SvgFilterTest::load(std::u16string_view rFileName)
-{
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
-    mxComponent = loadFromDesktop(aURL);
 }
 
 void SvgFilterTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
@@ -74,13 +49,13 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 {
 #if !defined(MACOSX)
     // Load a document with a jpeg image in it.
-    load(u"preserve-jpg.odt");
+    loadFromURL(u"preserve-jpg.odt");
 
     // Select the image.
-    dispatchCommand(getComponent(), ".uno:JumpToNextFrame", {});
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
 
     // Export the selection to SVG.
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
     utl::MediaDescriptor aMediaDescriptor;
@@ -105,10 +80,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
 {
     // Load a document with a semi-transparent line shape.
-    load(u"semi-transparent-line.odg");
+    loadFromURL(u"semi-transparent-line.odg");
 
     // Export it to SVG.
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
     utl::MediaDescriptor aMediaDescriptor;
@@ -136,10 +111,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     // correct transparency factor applied for the first shape.
 
     // Load draw document with transparent text in one box
-    load(u"TransparentText.odg");
+    loadFromURL(u"TransparentText.odg");
 
     // Export to SVG.
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
@@ -170,10 +145,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
 {
     // Load a document containing a 3D shape.
-    load(u"shape-nographic.odp");
+    loadFromURL(u"shape-nographic.odp");
 
     // Export to SVG.
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
     utl::MediaDescriptor aMediaDescriptor;
@@ -189,10 +164,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
 {
     // Given a presentation with a custom bullet:
-    load(u"custom-bullet.fodp");
+    loadFromURL(u"custom-bullet.fodp");
 
     // When exporting that to SVG:
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
     utl::MediaDescriptor aMediaDescriptor;
@@ -216,10 +191,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
 {
     // Load document containing empty paragraphs with ids.
-    load(u"attributeRedefinedTest.odp");
+    loadFromURL(u"attributeRedefinedTest.odp");
 
     // Export to SVG.
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
     utl::MediaDescriptor aMediaDescriptor;
@@ -258,12 +233,12 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
 {
     // Given a shape with "A\tB" text:
-    getComponent() = loadFromDesktop("private:factory/simpress",
-                                     "com.sun.star.presentation.PresentationDocument");
-    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.TextShape"), uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                uno::UNO_QUERY);
     xDrawPage->add(xShape);
@@ -272,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     xShapeText->setString("A\tB");
 
     // When exporting that document to SVG:
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
     utl::MediaDescriptor aMediaDescriptor;

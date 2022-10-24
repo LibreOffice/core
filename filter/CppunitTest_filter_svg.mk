@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_svg, \
     cppu \
     cppuhelper \
     sal \
+    subsequenttest \
     test \
     unotest \
     utl \
