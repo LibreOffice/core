@@ -83,7 +83,6 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
 >
 {
     LanguageTag maLocale;
-    std::locale maResLocale;
     static bool OptionsDlg();
 
     virtual ~T602ImportFilterDialog() override;

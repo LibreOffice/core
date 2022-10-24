@@ -858,7 +858,6 @@ Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
 
 T602ImportFilterDialog::T602ImportFilterDialog()
     : maLocale(SvtSysLocale().GetUILanguageTag())
-    , maResLocale(Translate::Create("flt"))
 {
 }
 
@@ -872,10 +871,7 @@ void SAL_CALL T602ImportFilterDialog::setLocale(const Locale& rLocale)
 {
     LanguageTag aLocale(rLocale);
     if (maLocale != aLocale)
-    {
         maLocale = aLocale;
-        maResLocale = Translate::Create("flt", maLocale);
-    }
 }
 
 Locale SAL_CALL T602ImportFilterDialog::getLocale()
