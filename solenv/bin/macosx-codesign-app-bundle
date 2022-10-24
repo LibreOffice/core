@@ -126,7 +126,7 @@ done
 # See also https://developer.apple.com/library/mac/technotes/tn2206/
 
 if test -n "$ENABLE_MACOSX_SANDBOX" && test -n "$application_identifier"; then
-    # add back the application-identfier to the entitlements
+    # add back the application-identifier to the entitlements
     # testflight/beta-testing won't work if that key is used when signing the other executables
     /usr/libexec/PlistBuddy -c "add com.apple.application-identifier string $application_identifier"  $BUILDDIR/lo.xcent
 fi
