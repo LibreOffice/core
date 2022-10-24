@@ -62,6 +62,8 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
                                             // also sal/rtl/math.cxx
                                             // doubleToString()
 
+constexpr sal_Int32 kTimeSignificantRound = 7;  // Round (date+)time at 7 decimals
+                                                // (+5 of 86400 == 12 significant digits).
 } // namespace
 
 const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
@@ -3069,10 +3071,10 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     bool bInputLine;
     sal_Int32 nCntPost;
     if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
-         0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
-    {   // round at 7 decimals (+5 of 86400 == 12 significant digits)
+         0 < rInfo.nCntPost && rInfo.nCntPost < kTimeSignificantRound )
+    {
         bInputLine = true;
-        nCntPost = 7;
+        nCntPost = kTimeSignificantRound;
     }
     else
     {
@@ -3954,20 +3956,18 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
     sal_Int32 nCntPost, nFirstRounding;
-    // Round at 7 decimals (+5 of 86400 == 12 significant digits).
-    constexpr sal_Int32 kSignificantRound = 7;
     if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
-         0 < rInfo.nCntPost && rInfo.nCntPost < kSignificantRound )
+         0 < rInfo.nCntPost && rInfo.nCntPost < kTimeSignificantRound )
     {
         bInputLine = true;
-        nCntPost = nFirstRounding = kSignificantRound;
+        nCntPost = nFirstRounding = kTimeSignificantRound;
     }
     else
     {
         bInputLine = false;
         nCntPost = rInfo.nCntPost;
         // For clock format (not []) do not round up to seconds and thus days.
-        nFirstRounding = (rInfo.bThousand ? nCntPost : kSignificantRound);
+        nFirstRounding = (rInfo.bThousand ? nCntPost : kTimeSignificantRound);
     }
     double fTime = (fNumber - floor( fNumber )) * 86400.0;
     fTime = ::rtl::math::round( fTime, int(nFirstRounding) );
