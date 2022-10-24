@@ -11,8 +11,7 @@
 
 #include <string_view>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -32,38 +31,17 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
-
 /// Covers xmloff/source/style/ fixes.
-class XmloffStyleTest : public test::BootstrapFixture,
-                        public unotest::MacrosTest,
-                        public XmlTestTools
+class XmloffStyleTest : public UnoApiTest, public XmlTestTools
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
+    XmloffStyleTest();
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(std::u16string_view rURL);
-    void save(const OUString& rFilterName, utl::TempFileNamed& rTempFile);
 };
 
-void XmloffStyleTest::setUp()
+XmloffStyleTest::XmloffStyleTest()
+    : UnoApiTest("/xmloff/qa/unit/data/")
 {
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void XmloffStyleTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 void XmloffStyleTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
@@ -71,27 +49,11 @@ void XmloffStyleTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
-void XmloffStyleTest::load(std::u16string_view rFileName)
-{
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
-    mxComponent = loadFromDesktop(aURL);
-}
-
-void XmloffStyleTest::save(const OUString& rFilterName, utl::TempFileNamed& rTempFile)
-{
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= rFilterName;
-    rTempFile.EnableKillingFile();
-    xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    validate(rTempFile.GetFileName(), test::ODF);
-}
-
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFillImageBase64)
 {
     // Load a flat ODG that has base64-encoded bitmap as a fill style.
-    load(u"fill-image-base64.fodg");
-    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"fill-image-base64.fodg");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xBitmaps(
         xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
 
@@ -122,16 +84,10 @@ struct XmlFont
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
 {
     // Given an empty document with default fonts (Liberation Sans, Lucida Sans, etc):
-    getComponent() = loadFromDesktop("private:factory/swriter");
+    mxComponent = loadFromDesktop("private:factory/swriter");
 
     // When saving that document to ODT:
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer8")) },
-    });
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure <style:font-face> elements are sorted (by style:name="..."):
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -193,10 +149,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
 {
     // Given a document with a gutter margin and an RTL writing mode:
     // When loading that document from ODF:
-    load(u"rtl-gutter.fodt");
+    loadFromURL(u"rtl-gutter.fodt");
 
     // Then make sure the page style's RtlGutter property is true.
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -216,9 +172,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
     // Load document. It has a frame style with writing-mode bt-lr.
     // In ODF 1.3 extended it is written as loext:writing-mode="bt-lr".
     // In ODF 1.3 strict, there must not be an attribute at all.
-    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                         + "tdf150407_WritingModeBTLR_style.odt",
-                                     "com.sun.star.text.TextDocument");
+    loadFromURL(u"tdf150407_WritingModeBTLR_style.odt");
 
     Resetter _([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -234,8 +188,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        utl::TempFileNamed aTempFile = save("writer8");
+        validate(aTempFile.GetFileName(), test::ODF);
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
         std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
@@ -248,14 +202,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
                     "style:graphic-properties",
                     "writing-mode", "bt-lr");
     }
+
+    loadFromURL(u"tdf150407_WritingModeBTLR_style.odt");
     // Save to ODF 1.3 strict.
     {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        utl::TempFileNamed aTempFile = save("writer8");
+        validate(aTempFile.GetFileName(), test::ODF);
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
         // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -273,9 +229,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
     // Load document. It has a frame position with vertical position relative to bottom margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-bottom".
     // In ODF 1.3 strict, there must not be an attribute at all.
-    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                         + "tdf150407_PosRelBottomMargin.docx",
-                                     "com.sun.star.text.TextDocument");
+    loadFromURL(u"tdf150407_PosRelBottomMargin.docx");
 
     Resetter _([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -291,8 +245,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        utl::TempFileNamed aTempFile = save("writer8");
+        validate(aTempFile.GetFileName(), test::ODF);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
         // written.
@@ -308,14 +262,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             "style:graphic-properties",
             "vertical-rel", "page-content-bottom");
     }
+
+    loadFromURL(u"tdf150407_PosRelBottomMargin.docx");
     // Save to ODF 1.3 strict.
     {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        utl::TempFileNamed aTempFile = save("writer8");
+        validate(aTempFile.GetFileName(), test::ODF);
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -333,9 +289,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
     // Load document. It has a frame position with vertical position relative to top margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-top".
     // In ODF 1.3 strict, there must not be an attribute at all.
-    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                         + "tdf150407_PosRelTopMargin.docx",
-                                     "com.sun.star.text.TextDocument");
+    loadFromURL(u"tdf150407_PosRelTopMargin.docx");
 
     Resetter _([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -351,8 +305,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        utl::TempFileNamed aTempFile = save("writer8");
+        validate(aTempFile.GetFileName(), test::ODF);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
         // written.
@@ -368,14 +322,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             "style:graphic-properties",
             "vertical-rel", "page-content-top");
     }
+
+    loadFromURL(u"tdf150407_PosRelTopMargin.docx");
     // Save to ODF 1.3 strict.
     {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        utl::TempFileNamed aTempFile = save("writer8");
+        validate(aTempFile.GetFileName(), test::ODF);
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
