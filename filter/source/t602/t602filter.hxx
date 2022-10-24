@@ -25,14 +25,12 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/attrlist.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ref.hxx>
 
 namespace T602ImportFilter {
@@ -77,12 +75,10 @@ struct inistruct
 
 class T602ImportFilterDialog : public cppu::WeakImplHelper <
         css::ui::dialogs::XExecutableDialog,
-        css::lang::XLocalizable,
         css::lang::XServiceInfo,
         css::beans::XPropertyAccess
 >
 {
-    LanguageTag maLocale;
     static bool OptionsDlg();
 
     virtual ~T602ImportFilterDialog() override;
@@ -90,10 +86,6 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
     // XExecutableDialog
        virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
        virtual sal_Int16 SAL_CALL execute() override;
-
-    // XLocalizable
-        virtual void SAL_CALL setLocale( const css::lang::Locale& eLocale ) override;
-        virtual css::lang::Locale SAL_CALL getLocale() override;
 
     // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;

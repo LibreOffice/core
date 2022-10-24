@@ -857,26 +857,11 @@ Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
 }
 
 T602ImportFilterDialog::T602ImportFilterDialog()
-    : maLocale(SvtSysLocale().GetUILanguageTag())
 {
 }
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
 {
-}
-
-// XLocalizable
-
-void SAL_CALL T602ImportFilterDialog::setLocale(const Locale& rLocale)
-{
-    LanguageTag aLocale(rLocale);
-    if (maLocale != aLocale)
-        maLocale = aLocale;
-}
-
-Locale SAL_CALL T602ImportFilterDialog::getLocale()
-{
-    return maLocale.getLocale(false);
 }
 
 bool T602ImportFilterDialog::OptionsDlg()
