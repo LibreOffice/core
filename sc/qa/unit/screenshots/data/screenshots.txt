@@ -163,3 +163,5 @@ modules/scalc/ui/sidebarnumberformat.ui
 modules/scalc/ui/randomnumbergenerator.ui
 modules/scalc/ui/printeroptions.ui
 modules/scalc/ui/xmlsourcedialog.ui
+modules/scalc/ui/sparklinedialog.ui
+modules/scalc/ui/sparklinedatarangedialog.ui
