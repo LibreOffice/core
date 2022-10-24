@@ -10796,7 +10796,7 @@ fi
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
-ICU_MAJOR=71
+ICU_MAJOR=72
 ICU_MINOR=1
 ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
 ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"

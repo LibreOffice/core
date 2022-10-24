@@ -1786,6 +1786,13 @@
 #define RID_SUBSETSTR_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A  NC_("RID_SUBSETMAP", "Canadian Aboriginal Syllabics Extended-A")
 #define RID_SUBSETSTR_VITHKUQI                              NC_("RID_SUBSETMAP", "Vithkuqi")
 #define RID_SUBSETSTR_ZNAMENNY_MUSICAL_NOTATION             NC_("RID_SUBSETMAP", "Znamenny Musical Notation")
+#define RID_SUBSETSTR_ARABIC_EXTENDED_C                     NC_("RID_SUBSETMAP", "Arabic Extended-C")
+#define RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H    NC_("RID_SUBSETMAP", "CJK Unified Ideographs Extension H")
+#define RID_SUBSETSTR_CYRILLIC_EXTENDED_D                   NC_("RID_SUBSETMAP", "Cyrillic Extended-D")
+#define RID_SUBSETSTR_DEVANAGARI_EXTENDED_A                 NC_("RID_SUBSETMAP", "Devanagari Extended-A")
+#define RID_SUBSETSTR_KAKTOVIK_NUMERALS                     NC_("RID_SUBSETMAP", "Kaktovik Numerals")
+#define RID_SUBSETSTR_KAWI                                  NC_("RID_SUBSETMAP", "Kawi")
+#define RID_SUBSETSTR_NAG_MUNDARI                           NC_("RID_SUBSETMAP", "Nag Mundari")
 
 #define RID_SVXSTR_FRAMEDIR_LTR                             NC_("RID_SVXSTR_FRAMEDIR_LTR", "Left-to-right (LTR)")
 #define RID_SVXSTR_FRAMEDIR_RTL                             NC_("RID_SVXSTR_FRAMEDIR_RTL", "Right-to-left (RTL)")

@@ -1894,7 +1894,29 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x1CF00, 0x1CFCF, SvxResId(RID_SUBSETSTR_ZNAMENNY_MUSICAL_NOTATION) );
                     break;
 #endif
-
+#if (U_ICU_VERSION_MAJOR_NUM >= 72)
+                case UBLOCK_ARABIC_EXTENDED_C:
+                    aAllSubsets.emplace_back( 0x10EC0, 0x10EFF, SvxResId(RID_SUBSETSTR_ARABIC_EXTENDED_C) );
+                    break;
+                case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H:
+                    aAllSubsets.emplace_back( 0x31350, 0x323AF, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H) );
+                    break;
+                case UBLOCK_CYRILLIC_EXTENDED_D:
+                    aAllSubsets.emplace_back( 0x1E030, 0x1E08F, SvxResId(RID_SUBSETSTR_CYRILLIC_EXTENDED_D) );
+                    break;
+                case UBLOCK_DEVANAGARI_EXTENDED_A:
+                    aAllSubsets.emplace_back( 0x11B00, 0x11B5F, SvxResId(RID_SUBSETSTR_DEVANAGARI_EXTENDED_A) );
+                    break;
+                case UBLOCK_KAKTOVIK_NUMERALS:
+                    aAllSubsets.emplace_back( 0x1D2C0, 0x1D2DF, SvxResId(RID_SUBSETSTR_KAKTOVIK_NUMERALS) );
+                    break;
+                case UBLOCK_KAWI:
+                    aAllSubsets.emplace_back( 0x11F00, 0x11F5F, SvxResId(RID_SUBSETSTR_KAWI) );
+                    break;
+                case UBLOCK_NAG_MUNDARI:
+                    aAllSubsets.emplace_back( 0x1E4D0, 0x1E4FF, SvxResId(RID_SUBSETSTR_NAG_MUNDARI) );
+                    break;
+#endif
             }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG

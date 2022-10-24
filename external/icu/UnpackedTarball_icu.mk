@@ -36,11 +36,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/c++20-comparison.patch.1 \
 	external/icu/ubsan.patch.1 \
 	external/icu/Wdeprecated-copy-dtor.patch \
-	external/icu/strict_ansi.patch \
 	external/icu/icu4c-windows-cygwin-cross.patch.1 \
 	external/icu/icu4c-emscripten-cross.patch.1 \
 	external/icu/icu4c-use-pkgdata-single-ccode-file-mode.patch.1 \
-	external/icu/do-not-reset-useful-cache-to-empty-in-populateNear.patch.2 \
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \

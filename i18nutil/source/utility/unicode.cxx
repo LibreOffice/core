@@ -829,6 +829,14 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "sq-Vith";   // macrolanguage code
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 72)
+        case USCRIPT_KAWI:
+            sRet = "mis-Kawi";  // Uncoded with script
+            break;
+        case USCRIPT_NAG_MUNDARI:
+            sRet = "unr-Nagm";
+            break;
+#endif
     }
     return sRet;
 }
