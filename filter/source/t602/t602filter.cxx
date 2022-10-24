@@ -35,7 +35,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <utility>
 
@@ -900,7 +899,7 @@ bool T602ImportFilterDialog::OptionsDlg()
     any <<= OUString(_val);\
     _prop->setPropertyValue(_nam, any);
 #define propStringFromResId_(_prop,_nam,_val) \
-    any <<= getResStr(_val);\
+    any <<= FilterResId(_val);\
     _prop->setPropertyValue(_nam, any);
 #define propGet_(_prop,_nam) \
     _prop->getPropertyValue(_nam);
@@ -953,10 +952,10 @@ bool T602ImportFilterDialog::OptionsDlg()
 
     Sequence< OUString > ous
     {
-        getResStr(T602FILTER_STR_ENCODING_AUTO),
-        getResStr(T602FILTER_STR_ENCODING_CP852),
-        getResStr(T602FILTER_STR_ENCODING_CP895),
-        getResStr(T602FILTER_STR_ENCODING_KOI8CS2)
+        FilterResId(T602FILTER_STR_ENCODING_AUTO),
+        FilterResId(T602FILTER_STR_ENCODING_CP852),
+        FilterResId(T602FILTER_STR_ENCODING_CP895),
+        FilterResId(T602FILTER_STR_ENCODING_KOI8CS2)
     };
     any <<= ous;
     xPSetCodeLB->setPropertyValue("StringItemList", any);
@@ -1076,11 +1075,6 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
         return css::ui::dialogs::ExecutableDialogResults::OK;
     else
         return css::ui::dialogs::ExecutableDialogResults::CANCEL;
-}
-
-OUString T602ImportFilterDialog::getResStr(TranslateId resid)
-{
-    return Translate::get(resid, maResLocale);
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues()

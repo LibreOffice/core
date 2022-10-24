@@ -30,7 +30,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
@@ -61,11 +60,6 @@ using namespace com::sun::star::util;
 
 using ::rtl::Uri;
 
-OUString XsltResId(TranslateId aId)
-{
-    return Translate::get(aId, Translate::Create("flt"));
-}
-
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     : GenericDialogController(pParent, "filter/ui/xmlfiltersettings.ui", "XMLFilterSettingsDialog")
@@ -88,7 +82,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
 
     m_xFilterListBox->connect_changed( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     m_xFilterListBox->connect_row_activated( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
-    m_xFilterListBox->set_accessible_name(XsltResId(STR_XML_FILTER_LISTBOX));
+    m_xFilterListBox->set_accessible_name(FilterResId(STR_XML_FILTER_LISTBOX));
 
     m_xPBNew->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
     m_xPBEdit->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
@@ -209,13 +203,13 @@ void XMLFilterSettingsDialog::onNew()
     filter_info_impl aTempInfo;
 
     // create a unique filter name
-    aTempInfo.maFilterName = createUniqueFilterName(XsltResId(STR_DEFAULT_FILTER_NAME));
+    aTempInfo.maFilterName = createUniqueFilterName(FilterResId(STR_DEFAULT_FILTER_NAME));
 
     // init default extension
     aTempInfo.maExtension = STR_DEFAULT_EXTENSION;
 
     // set default ui name
-    aTempInfo.maInterfaceName = createUniqueInterfaceName(XsltResId(STR_DEFAULT_UI_NAME));
+    aTempInfo.maInterfaceName = createUniqueInterfaceName(FilterResId(STR_DEFAULT_UI_NAME));
 
     // set default application
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
@@ -730,7 +724,7 @@ void XMLFilterSettingsDialog::onDelete()
     filter_info_impl* pInfo = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_id(nIndex));
     if (pInfo)
     {
-        OUString aMessage(XsltResId(STR_WARN_DELETE));
+        OUString aMessage(FilterResId(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( "%s", pInfo->maFilterName );
 
         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
@@ -835,7 +829,7 @@ void XMLFilterSettingsDialog::onSave()
     aDlg.SetContext(sfx2::FileDialogHelper::XMLFilterSettings);
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName = XsltResId(STR_FILTER_PACKAGE) +
+    OUString aFilterName = FilterResId(STR_FILTER_PACKAGE) +
         " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
@@ -853,13 +847,13 @@ void XMLFilterSettingsDialog::onSave()
     OUString aMsg;
     if( nFilters > 0 )
     {
-        aMsg = XsltResId(STR_FILTERS_HAVE_BEEN_SAVED);
+        aMsg = FilterResId(STR_FILTERS_HAVE_BEEN_SAVED);
         aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
     }
     else
     {
-        aMsg = XsltResId(STR_FILTER_HAS_BEEN_SAVED);
+        aMsg = FilterResId(STR_FILTER_HAS_BEEN_SAVED);
         aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
         aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
     }
@@ -881,7 +875,7 @@ void XMLFilterSettingsDialog::onOpen()
     aDlg.SetContext(sfx2::FileDialogHelper::XMLFilterSettings);
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName = XsltResId(STR_FILTER_PACKAGE) +
+    OUString aFilterName = FilterResId(STR_FILTER_PACKAGE) +
         " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
@@ -914,18 +908,18 @@ void XMLFilterSettingsDialog::onOpen()
     if( nFilters == 0 )
     {
         INetURLObject aURLObj( aURL );
-        aMsg = XsltResId(STR_NO_FILTERS_FOUND);
+        aMsg = FilterResId(STR_NO_FILTERS_FOUND);
         aMsg = aMsg.replaceFirst(sPlaceholder, aURLObj.GetLastName());
     }
     else if( nFilters == 1 )
     {
-        aMsg = XsltResId(STR_FILTER_INSTALLED);
+        aMsg = FilterResId(STR_FILTER_INSTALLED);
         aMsg = aMsg.replaceFirst( sPlaceholder, aFilterName );
 
     }
     else
     {
-        aMsg = XsltResId(STR_FILTERS_INSTALLED);
+        aMsg = FilterResId(STR_FILTERS_INSTALLED);
         aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
     }
 
@@ -1197,7 +1191,7 @@ OUString getApplicationUIName( std::u16string_view rServiceName )
     }
     else
     {
-        OUString aRet = XsltResId(STR_UNKNOWN_APPLICATION);
+        OUString aRet = FilterResId(STR_UNKNOWN_APPLICATION);
         if( !rServiceName.empty() )
         {
             aRet += OUString::Concat(" (") + rServiceName + ")";
@@ -1243,20 +1237,20 @@ OUString XMLFilterSettingsDialog::getEntryString( const filter_info_impl* pInfo 
     {
         if( pInfo->maFlags & 2 )
         {
-            aEntryStr += XsltResId(STR_IMPORT_EXPORT);
+            aEntryStr += FilterResId(STR_IMPORT_EXPORT);
         }
         else
         {
-            aEntryStr += XsltResId(STR_IMPORT_ONLY);
+            aEntryStr += FilterResId(STR_IMPORT_ONLY);
         }
     }
     else if( pInfo->maFlags & 2 )
     {
-        aEntryStr += XsltResId(STR_EXPORT_ONLY);
+        aEntryStr += FilterResId(STR_EXPORT_ONLY);
     }
     else
     {
-        aEntryStr += XsltResId(STR_UNDEFINED_FILTER);
+        aEntryStr += FilterResId(STR_UNDEFINED_FILTER);
     }
 
     return aEntryStr;

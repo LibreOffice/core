@@ -23,7 +23,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/resmgr.hxx>
 #include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
@@ -981,11 +980,10 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 if ( mxStatusIndicator.is() )
                 {
-                    std::locale loc(Translate::Create("flt"));
                     sal_Int32 nTotalPageCount = aRangeEnum.size();
                     if ( bExportPages && bExportNotesPages )
                         nTotalPageCount *= 2;
-                    mxStatusIndicator->start(Translate::get(PDF_PROGRESS_BAR, loc), nTotalPageCount);
+                    mxStatusIndicator->start(FilterResId(PDF_PROGRESS_BAR), nTotalPageCount);
                 }
 
                 bRet = nPageCount > 0;

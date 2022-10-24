@@ -34,7 +34,6 @@
 #include <xmloff/attrlist.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ref.hxx>
-#include <unotools/resmgr.hxx>
 
 namespace T602ImportFilter {
 
@@ -85,8 +84,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
 {
     LanguageTag maLocale;
     std::locale maResLocale;
-    bool OptionsDlg();
-    OUString getResStr(TranslateId resid);
+    static bool OptionsDlg();
 
     virtual ~T602ImportFilterDialog() override;
 
