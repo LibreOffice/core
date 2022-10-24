@@ -137,6 +137,9 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dialoghelper.hxx>
+#ifdef _WIN32
+#include <vcl/BitmapReadAccess.hxx>
+#endif
 #include <unicode/uchar.h>
 #include <unotools/securityoptions.hxx>
 #include <unotools/confignode.hxx>
@@ -3618,7 +3621,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         return;
     }
 
-#if defined(UNX) && !defined(MACOSX)
+#if defined(UNX) && !defined(MACOSX) || defined(_WIN32)
 
     // Painting of zoomed or HiDPI spreadsheets is special, we actually draw everything at 100%,
     // and only set cairo's (or CoreGraphic's, in the iOS case) scale factor accordingly, so that
@@ -3655,6 +3658,36 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         pDevice->DrawRect(aRect);
         pDevice->Pop();
     }
+
+#ifdef _WIN32
+    // pBuffer was not used there
+    tools::Rectangle r(pDevice->PixelToLogic({ Point(0, 0), Size(nCanvasWidth + 1, nCanvasHeight + 1) }));
+    BitmapEx aBmpEx = pDevice->GetBitmapEx(r.TopLeft(), r.GetSize());
+    Bitmap aBmp = aBmpEx.GetBitmap();
+    Bitmap aAlpha = aBmpEx.GetAlpha();
+    Bitmap::ScopedReadAccess sraBmp(aBmp);
+    Bitmap::ScopedReadAccess sraAlpha(aAlpha);
+
+    assert(sraBmp->Height() == nCanvasHeight);
+    assert(sraBmp->Width() == nCanvasWidth);
+    assert(!sraAlpha || sraBmp->Height() == sraAlpha->Height());
+    assert(!sraAlpha || sraBmp->Width() == sraAlpha->Width());
+    auto p = pBuffer;
+    for (tools::Long y = 0; y < sraBmp->Height(); ++y)
+    {
+        Scanline dataBmp = sraBmp->GetScanline(y);
+        Scanline dataAlpha = sraAlpha ? sraAlpha->GetScanline(y) : nullptr;
+        for (tools::Long x = 0; x < sraBmp->Width(); ++x)
+        {
+            BitmapColor color = sraBmp->GetPixelFromData(dataBmp, x);
+            sal_uInt8 alpha = dataAlpha ? sraAlpha->GetPixelFromData(dataAlpha, x).GetBlue() : 255;
+            *p++ = color.GetBlue();
+            *p++ = color.GetGreen();
+            *p++ = color.GetRed();
+            *p++ = alpha;
+        }
+    }
+#endif
 #endif
 
 #else
