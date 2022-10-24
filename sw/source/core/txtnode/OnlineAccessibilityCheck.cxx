@@ -32,17 +32,19 @@ namespace sw
 OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     : m_rDocument(rDocument)
     , m_aAccessibilityCheck(&m_rDocument)
-    , m_pCurrentTextNode(nullptr)
-    , m_aCurrentNodeIndex(-1)
+    , m_pPreviousNode(nullptr)
+    , m_nPreviousNodeIndex(-1)
     , m_nAccessibilityIssues(0)
 {
 }
 
-void OnlineAccessibilityCheck::runCheck(SwTextNode* pTextNode)
+void OnlineAccessibilityCheck::runCheck(SwContentNode* pContentNode)
 {
-    m_aAccessibilityCheck.checkNode(pTextNode);
+    m_aAccessibilityCheck.getIssueCollection().clear();
 
-    for (SwFrameFormat* const& pFrameFormat : pTextNode->GetAnchoredFlys())
+    m_aAccessibilityCheck.checkNode(pContentNode);
+
+    for (SwFrameFormat* const& pFrameFormat : pContentNode->GetAnchoredFlys())
     {
         SdrObject* pObject = pFrameFormat->FindSdrObject();
         if (pObject)
@@ -51,17 +53,17 @@ void OnlineAccessibilityCheck::runCheck(SwTextNode* pTextNode)
 
     auto aCollection = m_aAccessibilityCheck.getIssueCollection();
 
-    pTextNode->getAccessibilityCheckStatus().pCollection
+    pContentNode->getAccessibilityCheckStatus().pCollection
         = std::make_unique<sfx::AccessibilityIssueCollection>(aCollection);
 
     m_nAccessibilityIssues = 0;
     auto const& pNodes = m_rDocument.GetNodes();
     for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
     {
-        SwNode* pNode = pNodes[n];
-        if (pNode && pNode->IsTextNode())
+        SwNode* pCurrent = pNodes[n];
+        if (pCurrent && pCurrent->IsTextNode())
         {
-            auto* pCurrentTextNode = pNode->GetTextNode();
+            auto* pCurrentTextNode = pCurrent->GetTextNode();
             auto& rStatus = pCurrentTextNode->getAccessibilityCheckStatus();
             if (rStatus.pCollection)
                 m_nAccessibilityIssues += rStatus.pCollection->getIssues().size();
@@ -83,49 +85,56 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
     if (!bOnlineCheckStatus)
         return;
 
+    auto nCurrenNodeIndex = rNewPos.GetNodeIndex();
+    if (!rNewPos.GetNode().IsContentNode())
+        return;
+
+    auto* pCurrentNode = rNewPos.GetNode().GetContentNode();
+
+    // Check if previous node was deleted
     if (!HasBroadcaster())
     {
-        m_pCurrentTextNode = nullptr;
-        m_aCurrentNodeIndex = SwNodeOffset(-1);
-    }
-
-    auto aNodeIndex = rNewPos.GetNodeIndex();
-
-    m_aAccessibilityCheck.getIssueCollection().clear();
-
-    SwTextNode* pTextNode = rNewPos.GetNode().GetTextNode();
-    if (!pTextNode)
-    {
-        m_pCurrentTextNode = nullptr;
-        m_aCurrentNodeIndex = SwNodeOffset(-1);
+        EndListeningAll();
+        StartListening(pCurrentNode->GetNotifier());
+        m_pPreviousNode = pCurrentNode;
+        m_nPreviousNodeIndex = nCurrenNodeIndex;
         return;
     }
 
-    if (pTextNode == m_pCurrentTextNode)
-    {
-        if (m_aCurrentNodeIndex != aNodeIndex && m_aCurrentNodeIndex >= SwNodeOffset(0)
-            && m_aCurrentNodeIndex < pTextNode->GetNodes().Count())
-        {
-            pTextNode = pTextNode->GetNodes()[m_aCurrentNodeIndex]->GetTextNode();
+    // Check if node index changed
+    if (nCurrenNodeIndex == m_nPreviousNodeIndex)
+        return;
 
-            if (pTextNode)
-            {
-                runCheck(pTextNode);
-            }
-        }
-    }
-    else if (m_pCurrentTextNode)
-    {
-        runCheck(m_pCurrentTextNode);
-    }
-
-    m_aCurrentNodeIndex = aNodeIndex;
-
-    if (pTextNode && m_pCurrentTextNode != pTextNode)
+    // Check previous node is valid
+    if (m_nPreviousNodeIndex < SwNodeOffset(0)
+        || m_nPreviousNodeIndex >= rNewPos.GetNode().GetNodes().Count())
     {
         EndListeningAll();
-        StartListening(pTextNode->GetNotifier());
-        m_pCurrentTextNode = pTextNode;
+        StartListening(pCurrentNode->GetNotifier());
+        m_pPreviousNode = pCurrentNode;
+        m_nPreviousNodeIndex = nCurrenNodeIndex;
+        return;
+    }
+
+    // Get the real previous node from index
+    SwNode* pNode = rNewPos.GetNode().GetNodes()[m_nPreviousNodeIndex];
+
+    if (pNode && pNode->IsContentNode())
+    {
+        auto* pContentNode = pNode->GetContentNode();
+
+        runCheck(pContentNode);
+
+        // Assign previous node and index
+        EndListeningAll();
+        StartListening(pCurrentNode->GetNotifier());
+        m_pPreviousNode = pCurrentNode;
+        m_nPreviousNodeIndex = nCurrenNodeIndex;
+    }
+    else
+    {
+        m_pPreviousNode = nullptr;
+        m_nPreviousNodeIndex = SwNodeOffset(-1);
     }
 }
 

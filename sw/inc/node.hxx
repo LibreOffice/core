@@ -30,6 +30,8 @@
 #include "fmtcol.hxx"
 #include "nodeoffset.hxx"
 
+#include <sfx2/AccessibilityIssue.hxx>
+
 #include <memory>
 #include <vector>
 
@@ -355,6 +357,18 @@ class SwEndNode final : public SwNode
     SwEndNode & operator= ( const SwEndNode & rNode ) = delete;
 };
 
+// Accessibiity check
+
+namespace sw
+{
+struct AccessibilityCheckStatus
+{
+    std::unique_ptr<sfx::AccessibilityIssueCollection> pCollection;
+    bool bDirty = true;
+};
+
+}
+
 // SwContentNode
 
 class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, public SwIndexReg
@@ -363,6 +377,8 @@ class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, 
     sw::WriterMultiListener m_aCondCollListener;
     SwFormatColl* m_pCondColl;
     mutable bool mbSetModifyAtAttr;
+
+    mutable sw::AccessibilityCheckStatus m_aAccessibilityCheckStatus;
 
 protected:
     SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNodeType,
@@ -479,6 +495,11 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
     void UpdateAttr(const SwUpdateAttr&);
+
+    sw::AccessibilityCheckStatus& getAccessibilityCheckStatus()
+    {
+        return m_aAccessibilityCheckStatus;
+    }
 
 private:
     SwContentNode( const SwContentNode & rNode ) = delete;
