@@ -119,6 +119,7 @@ public:
     void testTdf109169_DiamondBevel();
     void testTdf144092_emptyShapeTextProps();
     void testTdf94122_autoColor();
+    void testAutofittedTextboxIndent();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testTdf109169_DiamondBevel);
     CPPUNIT_TEST(testTdf144092_emptyShapeTextProps);
     CPPUNIT_TEST(testTdf94122_autoColor);
+    CPPUNIT_TEST(testAutofittedTextboxIndent);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2175,6 +2177,26 @@ void SdOOXMLExportTest3::testTdf94122_autoColor()
     assertXPath(pXmlDocContent3,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
                 "val", "000000");
+}
+
+void SdOOXMLExportTest3::testAutofittedTextboxIndent()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/autofitted-textbox-indent.odp"), ODP);
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Without the accompanying fix in place, these tests would have failed with:
+    // - Expected: 691200
+    // - Actual  : 1080000
+    // i.e. paragraph indent wasn't scaled proportionally to autofitted textbox
+    // font scale on export
+
+    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
+                "691200");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
