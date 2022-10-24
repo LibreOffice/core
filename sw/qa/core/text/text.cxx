@@ -37,6 +37,9 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <formatcontentcontrol.hxx>
 #include <strings.hrc>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
+#include <textcontentcontrol.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/text/data/";
 
@@ -630,7 +633,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     sal_Int32 nPlaceHolderLen = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER).getLength();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nPlaceHolderLen,
                      /*bBasicCall=*/false);
-    pWrtShell->Insert("mydesc");
+    pWrtShell->Insert("mycontent");
+    const SwPosition* pStart = pWrtShell->GetCursor()->Start();
+    SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
+    sal_Int32 nIndex = pStart->GetContentIndex();
+    SwTextAttr* pAttr
+        = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, sw::GetTextAttrMode::Parent);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    // Alias/title, to be mapped to PDF's description.
+    pContentControl->SetAlias("mydesc");
 
     // When exporting to PDF:
     StoreToTempFile("writer_pdf_Export");
