@@ -29,6 +29,32 @@
 
 namespace sw
 {
+WeakContentNodeContainer::WeakContentNodeContainer(SwContentNode* pNode)
+    : m_pNode(pNode)
+{
+    if (m_pNode)
+    {
+        EndListeningAll();
+        StartListening(m_pNode->GetNotifier());
+    }
+}
+
+WeakContentNodeContainer::~WeakContentNodeContainer() { EndListeningAll(); }
+
+bool WeakContentNodeContainer::isAlive()
+{
+    if (!HasBroadcaster())
+        m_pNode = nullptr;
+    return m_pNode;
+}
+
+SwContentNode* WeakContentNodeContainer::getNode()
+{
+    if (isAlive())
+        return m_pNode;
+    return nullptr;
+}
+
 OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     : m_rDocument(rDocument)
     , m_aAccessibilityCheck(&m_rDocument)
@@ -36,6 +62,48 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     , m_nPreviousNodeIndex(-1)
     , m_nAccessibilityIssues(0)
 {
+}
+
+void OnlineAccessibilityCheck::updateNodeStatus(SwContentNode* pContentNode)
+{
+    m_nAccessibilityIssues = 0;
+
+    auto it = m_aNodes.find(pContentNode);
+    if (it == m_aNodes.end())
+    {
+        m_aNodes.emplace(pContentNode, std::make_unique<WeakContentNodeContainer>(pContentNode));
+    }
+
+    for (auto iterator = m_aNodes.begin(); iterator != m_aNodes.end();)
+    {
+        auto& pWeakContentNode = iterator->second;
+        if (pWeakContentNode->isAlive())
+        {
+            auto& rStatus = pWeakContentNode->getNode()->getAccessibilityCheckStatus();
+            if (rStatus.pCollection)
+            {
+                m_nAccessibilityIssues += rStatus.pCollection->getIssues().size();
+                ++iterator;
+            }
+            else
+            {
+                iterator = m_aNodes.erase(iterator);
+            }
+        }
+        else
+        {
+            iterator = m_aNodes.erase(iterator);
+        }
+    }
+}
+
+void OnlineAccessibilityCheck::updateStatusbar()
+{
+    SfxBindings* pBindings = m_rDocument.GetDocShell() && m_rDocument.GetDocShell()->GetDispatcher()
+                                 ? m_rDocument.GetDocShell()->GetDispatcher()->GetBindings()
+                                 : nullptr;
+    if (pBindings)
+        pBindings->Invalidate(FN_STAT_ACCESSIBILITY_CHECK);
 }
 
 void OnlineAccessibilityCheck::runCheck(SwContentNode* pContentNode)
@@ -56,25 +124,8 @@ void OnlineAccessibilityCheck::runCheck(SwContentNode* pContentNode)
     pContentNode->getAccessibilityCheckStatus().pCollection
         = std::make_unique<sfx::AccessibilityIssueCollection>(aCollection);
 
-    m_nAccessibilityIssues = 0;
-    auto const& pNodes = m_rDocument.GetNodes();
-    for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
-    {
-        SwNode* pCurrent = pNodes[n];
-        if (pCurrent && pCurrent->IsTextNode())
-        {
-            auto* pCurrentTextNode = pCurrent->GetTextNode();
-            auto& rStatus = pCurrentTextNode->getAccessibilityCheckStatus();
-            if (rStatus.pCollection)
-                m_nAccessibilityIssues += rStatus.pCollection->getIssues().size();
-        }
-    }
-
-    SfxBindings* pBindings = m_rDocument.GetDocShell() && m_rDocument.GetDocShell()->GetDispatcher()
-                                 ? m_rDocument.GetDocShell()->GetDispatcher()->GetBindings()
-                                 : nullptr;
-    if (pBindings)
-        pBindings->Invalidate(FN_STAT_ACCESSIBILITY_CHECK);
+    updateNodeStatus(pContentNode);
+    updateStatusbar();
 }
 
 void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
