@@ -29,13 +29,17 @@
 
 namespace sw
 {
-WeakContentNodeContainer::WeakContentNodeContainer(SwContentNode* pNode)
+WeakContentNodeContainer::WeakContentNodeContainer(SwNode* pNode)
     : m_pNode(pNode)
 {
     if (m_pNode)
     {
-        EndListeningAll();
-        StartListening(m_pNode->GetNotifier());
+        auto* pBroadcast = dynamic_cast<sw::BroadcastingModify*>(pNode);
+        if (pBroadcast)
+        {
+            EndListeningAll();
+            StartListening(pBroadcast->GetNotifier());
+        }
     }
 }
 
@@ -48,7 +52,7 @@ bool WeakContentNodeContainer::isAlive()
     return m_pNode;
 }
 
-SwContentNode* WeakContentNodeContainer::getNode()
+SwNode* WeakContentNodeContainer::getNode()
 {
     if (isAlive())
         return m_pNode;
@@ -65,14 +69,17 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
 {
 }
 
-void OnlineAccessibilityCheck::updateNodeStatus(SwContentNode* pContentNode)
+void OnlineAccessibilityCheck::updateNodeStatus(SwNode* pNode)
 {
+    if (!pNode->IsContentNode() && !pNode->IsTableNode())
+        return;
+
     m_nAccessibilityIssues = 0;
 
-    auto it = m_aNodes.find(pContentNode);
+    auto it = m_aNodes.find(pNode);
     if (it == m_aNodes.end())
     {
-        m_aNodes.emplace(pContentNode, std::make_unique<WeakContentNodeContainer>(pContentNode));
+        m_aNodes.emplace(pNode, std::make_unique<WeakContentNodeContainer>(pNode));
     }
 
     for (auto iterator = m_aNodes.begin(); iterator != m_aNodes.end();)
@@ -107,13 +114,13 @@ void OnlineAccessibilityCheck::updateStatusbar()
         pBindings->Invalidate(FN_STAT_ACCESSIBILITY_CHECK);
 }
 
-void OnlineAccessibilityCheck::runAccessibilityCheck(SwContentNode* pContentNode)
+void OnlineAccessibilityCheck::runAccessibilityCheck(SwNode* pNode)
 {
     m_aAccessibilityCheck.getIssueCollection().clear();
 
-    m_aAccessibilityCheck.checkNode(pContentNode);
+    m_aAccessibilityCheck.checkNode(pNode);
 
-    for (SwFrameFormat* const& pFrameFormat : pContentNode->GetAnchoredFlys())
+    for (SwFrameFormat* const& pFrameFormat : pNode->GetAnchoredFlys())
     {
         SdrObject* pObject = pFrameFormat->FindSdrObject();
         if (pObject)
@@ -122,7 +129,7 @@ void OnlineAccessibilityCheck::runAccessibilityCheck(SwContentNode* pContentNode
 
     auto aCollection = m_aAccessibilityCheck.getIssueCollection();
 
-    pContentNode->getAccessibilityCheckStatus().pCollection
+    pNode->getAccessibilityCheckStatus().pCollection
         = std::make_unique<sfx::AccessibilityIssueCollection>(aCollection);
 }
 
@@ -135,11 +142,10 @@ void OnlineAccessibilityCheck::initialCheck()
     for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
     {
         SwNode* pNode = pNodes[n];
-        if (pNode && pNode->IsContentNode())
+        if (pNode)
         {
-            auto* pCurrent = pNode->GetContentNode();
-            runAccessibilityCheck(pCurrent);
-            updateNodeStatus(pCurrent);
+            runAccessibilityCheck(pNode);
+            updateNodeStatus(pNode);
         }
     }
 
@@ -157,16 +163,20 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
         return;
 
     auto nCurrenNodeIndex = rNewPos.GetNodeIndex();
-    if (!rNewPos.GetNode().IsContentNode())
+    auto* pCurrentNode = &rNewPos.GetNode();
+
+    if (!pCurrentNode->IsContentNode() && !pCurrentNode->IsTableNode())
         return;
 
-    auto* pCurrentNode = rNewPos.GetNode().GetContentNode();
+    auto* pCurrentBroadcast = dynamic_cast<sw::BroadcastingModify*>(pCurrentNode);
+    if (!pCurrentBroadcast)
+        return;
 
     // Check if previous node was deleted
     if (!HasBroadcaster())
     {
         EndListeningAll();
-        StartListening(pCurrentNode->GetNotifier());
+        StartListening(pCurrentBroadcast->GetNotifier());
         m_pPreviousNode = pCurrentNode;
         m_nPreviousNodeIndex = nCurrenNodeIndex;
         return;
@@ -176,31 +186,29 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
     if (nCurrenNodeIndex == m_nPreviousNodeIndex)
         return;
 
-    // Check previous node is valid
+    // Check if previous node is valid
     if (m_nPreviousNodeIndex < SwNodeOffset(0)
-        || m_nPreviousNodeIndex >= rNewPos.GetNode().GetNodes().Count())
+        || m_nPreviousNodeIndex >= pCurrentNode->GetNodes().Count())
     {
         EndListeningAll();
-        StartListening(pCurrentNode->GetNotifier());
+        StartListening(pCurrentBroadcast->GetNotifier());
         m_pPreviousNode = pCurrentNode;
         m_nPreviousNodeIndex = nCurrenNodeIndex;
         return;
     }
 
     // Get the real previous node from index
-    SwNode* pNode = rNewPos.GetNode().GetNodes()[m_nPreviousNodeIndex];
+    SwNode* pNode = pCurrentNode->GetNodes()[m_nPreviousNodeIndex];
 
-    if (pNode && pNode->IsContentNode())
+    if (pNode && (pNode->IsContentNode() || pNode->IsTableNode()))
     {
-        auto* pContentNode = pNode->GetContentNode();
-
-        runAccessibilityCheck(pContentNode);
-        updateNodeStatus(pContentNode);
+        runAccessibilityCheck(pNode);
+        updateNodeStatus(pNode);
         updateStatusbar();
 
         // Assign previous node and index
         EndListeningAll();
-        StartListening(pCurrentNode->GetNotifier());
+        StartListening(pCurrentBroadcast->GetNotifier());
         m_pPreviousNode = pCurrentNode;
         m_nPreviousNodeIndex = nCurrenNodeIndex;
     }
