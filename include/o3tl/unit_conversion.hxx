@@ -98,11 +98,20 @@ constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d, bool& bOverflow, sal_I
 template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
 constexpr sal_Int64 MulDivSaturate(I n, sal_Int64 m, sal_Int64 d)
 {
-    if (!isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m))
+    if (sal_Int64 d_2 = d / 2; !isBetween(n, (SAL_MIN_INT64 + d_2) / m, (SAL_MAX_INT64 - d_2) / m))
     {
-        if (m > d && !isBetween(n, SAL_MIN_INT64 / m * d + d / 2, SAL_MAX_INT64 / m * d - d / 2))
-            return n > 0 ? SAL_MAX_INT64 : SAL_MIN_INT64; // saturate
-        return (n >= 0 ? n + d / 2 : n - d / 2) / d * m; // divide before multiplication
+        if (n >= 0)
+        {
+            if (m > d && std::make_unsigned_t<I>(n) > sal_uInt64(SAL_MAX_INT64 / m * d - d_2))
+                return SAL_MAX_INT64; // saturate
+            return saturating_add<sal_uInt64>(n, d_2) / d * m; // divide before multiplication
+        }
+        else if constexpr (std::is_signed_v<I>) // n < 0; don't compile for unsigned n
+        {
+            if (m > d && n < SAL_MIN_INT64 / m * d + d_2)
+                return SAL_MIN_INT64; // saturate
+            return saturating_sub<sal_Int64>(n, d_2) / d * m; // divide before multiplication
+        }
     }
     return MulDiv(n, m, d);
 }

@@ -878,4 +878,6 @@ static_assert(o3tl::toTwips(20, o3tl::Length::mm) == 1134);
 // 847 100thmm used to represent 24pt
 static_assert(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100) == 847);
 
+static_assert(o3tl::convertSaturate(SAL_MAX_INT64, 72, 127) == 5228998320106644552); // no overflow
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
