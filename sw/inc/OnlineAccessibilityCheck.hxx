@@ -51,10 +51,12 @@ private:
     SwContentNode* m_pPreviousNode;
     SwNodeOffset m_nPreviousNodeIndex;
     sal_Int32 m_nAccessibilityIssues;
+    bool m_bInitialCheck;
 
-    void runCheck(SwContentNode* pNode);
+    void runAccessibilityCheck(SwContentNode* pNode);
     void updateStatusbar();
     void updateNodeStatus(SwContentNode* pContentNode);
+    void initialCheck();
 
 public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
