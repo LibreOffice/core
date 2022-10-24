@@ -3021,7 +3021,7 @@ void DrawingML::WriteLinespacing(const LineSpacing& rSpacing, float fFirstCharHe
     }
 }
 
-bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph, float fFirstCharHeight, sal_Int32 nElement)
+bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagraph, const Reference<XPropertySet>& rXShapePropSet, float fFirstCharHeight, sal_Int32 nElement)
 {
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rParagraph, UNO_QUERY );
@@ -3111,6 +3111,24 @@ bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
             return false;
     }
 
+    // for autofitted textboxes, scale the indents
+    if (GetProperty(rXShapePropSet, "TextFitToSize") && mAny.get<TextFitToSizeType>() == TextFitToSizeType_AUTOFIT)
+    {
+        SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXShapePropSet.get());
+        if (pTextShape)
+        {
+            SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
+            if (pTextObject)
+            {
+                const auto nFontScaleY = pTextObject->GetFontScaleY();
+                nLeftMargin = nLeftMargin * nFontScaleY / 100;
+                nLineIndentation = nLineIndentation * nFontScaleY / 100;
+                nParaLeftMargin = nParaLeftMargin * nFontScaleY / 100;
+                nParaFirstLineIndent = nParaFirstLineIndent * nFontScaleY / 100;
+            }
+        }
+    }
+
     if (nParaLeftMargin) // For Paragraph
         mpFS->startElementNS( XML_a, nElement,
                            XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
@@ -3198,7 +3216,7 @@ void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent
             fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
 
         mpFS->startElementNS(XML_a, XML_lstStyle);
-        if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_lvl1pPr) )
+        if( !WriteParagraphProperties(rParagraph, rXShapePropSet, fFirstCharHeight, XML_lvl1pPr) )
             mpFS->startElementNS(XML_a, XML_lvl1pPr);
         WriteRunProperties(xFirstRunPropSet, false, XML_defRPr, true, rbOverridingCharHeight,
                            rnCharHeight, GetScriptType(rRun->getString()), rXShapePropSet);
@@ -3240,7 +3258,7 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                     rnCharHeight = 100 * fFirstCharHeight;
                     rbOverridingCharHeight = true;
                 }
-                WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_pPr);
+                WriteParagraphProperties(rParagraph, rXShapePropSet, fFirstCharHeight, XML_pPr);
                 bPropertiesWritten = true;
             }
             WriteRun( run, rbOverridingCharHeight, rnCharHeight, rXShapePropSet);
@@ -3848,7 +3866,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         if( aAny >>= xParagraph )
         {
             mpFS->startElementNS(XML_a, XML_p);
-            WriteParagraphProperties(xParagraph, nCharHeight, XML_pPr);
+            WriteParagraphProperties(xParagraph, rXPropSet, nCharHeight, XML_pPr);
             sal_Int16 nDummy = -1;
             WriteRunProperties(rXPropSet, false, XML_endParaRPr, false,
                                bOverridingCharHeight, nCharHeight, nDummy, rXPropSet);

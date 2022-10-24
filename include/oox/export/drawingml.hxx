@@ -303,7 +303,7 @@ public:
 
         @returns true if any paragraph properties were written
     */
-    bool WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight, sal_Int32 nElement);
+    bool WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet, float fFirstCharHeight, sal_Int32 nElement);
     void WriteParagraphNumbering(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
                                   sal_Int16 nLevel );
     void WriteParagraphTabStops(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
