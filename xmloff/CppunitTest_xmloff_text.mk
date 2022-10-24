@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_text, \
     cppu \
     embobj \
     sal \
+    subsequenttest \
     test \
     unotest \
     utl \
