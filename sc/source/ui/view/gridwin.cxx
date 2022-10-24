@@ -1833,49 +1833,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     if ( !nButtonDown || !bDouble )             // single (first) click is always valid
         nButtonDown = rMEvt.GetButtons();       // set nButtonDown first, so StopMarking works
 
-    // special handling of empty cells with tiled rendering
-    if (bIsTiledRendering)
-    {
-        Point aPos(rMEvt.GetPosPixel());
-        SCCOL nPosX, nNonEmptyX(0);
-        SCROW nPosY;
-        SCTAB nTab = mrViewData.GetTabNo();
-        mrViewData.GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
-
-        ScRefCellValue aCell(rDoc, ScAddress(nPosX, nPosY, nTab));
-        bool bIsEmpty = aCell.isEmpty();
-        bool bIsCoveredByText = bIsEmpty && IsCellCoveredByText(nPosX, nPosY, nTab, nNonEmptyX);
-
-        if (bIsCoveredByText)
-        {
-            // if there's any text flowing to this cell, activate the
-            // editengine, so that the text actually gets the events
-            if (bDouble)
-            {
-                ScViewFunc* pView = mrViewData.GetView();
-
-                pView->SetCursor(nNonEmptyX, nPosY);
-                SC_MOD()->SetInputMode(SC_INPUT_TABLE);
-
-                bEditMode = mrViewData.HasEditView(eWhich);
-                assert(bEditMode);
-
-                // synthesize the 1st click
-                EditView* pEditView = mrViewData.GetEditView(eWhich);
-                MouseEvent aEditEvt(rMEvt.GetPosPixel(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0);
-                pEditView->MouseButtonDown(aEditEvt);
-                pEditView->MouseButtonUp(aEditEvt);
-            }
-        }
-        else if (bIsEmpty && bEditMode && bDouble)
-        {
-            // double-click in an empty cell: the entire cell is selected
-            SetCellSelectionPixel(LOK_SETTEXTSELECTION_START, aPos.X(), aPos.Y());
-            SetCellSelectionPixel(LOK_SETTEXTSELECTION_END, aPos.X(), aPos.Y());
-            return;
-        }
-    }
-
     if ( ( bEditMode && mrViewData.GetActivePart() == eWhich ) || !bFormulaMode )
         GrabFocus();
 
@@ -2406,14 +2363,11 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     ScDPObject* pDPObj  = rDoc.GetDPAtCursor( nPosX, nPosY, nTab );
 
-    bool bInDataPilotTable = (pDPObj != nullptr);
-
     // double click (only left button)
-    // in the tiled rendering case, single click works this way too
 
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
-    if ((bDouble || (bIsTiledRendering && !bInDataPilotTable))
+    if ( bDouble
             && !bRefMode
             && (nMouseStatus == SC_GM_DBLDOWN || (bIsTiledRendering && nMouseStatus != SC_GM_URLDOWN))
             && !pScMod->IsRefDialogOpen())
@@ -2473,19 +2427,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 bEditAllowed = false;
         }
 
-        // We don't want to activate the edit view for a single click in tiled rendering
-        // (but we should probably keep the same behaviour for double clicks).
-        if ( bEditAllowed && (!bIsTiledRendering || bDouble) )
+        if ( bEditAllowed )
         {
-            // don't forward the event to an empty cell, causes deselection in
-            // case we used the double-click to select the empty cell
-            if (bIsTiledRendering && bDouble)
-            {
-                ScRefCellValue aCell(mrViewData.GetDocument(), ScAddress(nPosX, nPosY, nTab));
-                if (aCell.isEmpty())
-                    return;
-            }
-
             //  edit cell contents
             mrViewData.GetViewShell()->UpdateInputHandler();
             pScMod->SetInputMode( SC_INPUT_TABLE );
