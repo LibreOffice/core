@@ -43,6 +43,7 @@
 #include <dbmgr.hxx>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
+#include <wrong.hxx>
 
 namespace
 {
@@ -1336,6 +1337,57 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
+
+// missing spelling dictionary on Windows test platform?
+#if !defined(_WIN32)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    uno::Sequence<beans::PropertyValue> params
+        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+
+    // Automatic Spell Checking is enabled
+
+    CPPUNIT_ASSERT(pOpt->IsOnlineSpell());
+
+    // Type a correct word
+
+    SwXTextDocument& rXTextDocument = getSwXTextDocument();
+    emulateTyping(rXTextDocument, u"the ");
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
+    // no bad word
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwWrongList*>(nullptr), pNode->GetWrong());
+
+    // Create a bad word from the good: "the" -> "thex"
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    emulateTyping(rXTextDocument, u"x");
+    CPPUNIT_ASSERT(pNode->GetWrong());
+    // tdf#92036 pending spell checking
+    bool bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
+    CPPUNIT_ASSERT(bPending);
+
+    // Move right, leave the bad word
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT(pNode->GetWrong());
+    // tdf#92036 still pending spell checking
+    bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
+    CPPUNIT_ASSERT(bPending);
+
+    // Move down to trigger spell checking
+
+    pWrtShell->Down(/*bSelect=*/false, 1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pNode->GetWrong());
+    // This was 0 (pending spell checking)
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
+}
+#endif
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 {

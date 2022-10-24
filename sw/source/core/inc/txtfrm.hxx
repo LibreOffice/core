@@ -344,7 +344,7 @@ public:
      */
     void Init();
 
-    /// Is called by DoIdleJob_() and ExecSpellPopup()
+    /// Is called by DoIdleJob_(), ExecSpellPopup() and UpDown()
     SwRect AutoSpell_(SwTextNode &, sal_Int32);
 
     /// Is called by DoIdleJob_()
