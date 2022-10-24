@@ -2730,6 +2730,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
 
+    aStyleSettings.SetWorkspaceColor(aStyleSettings.GetFaceColor());
     aStyleSettings.SetDialogColor(aStyleSettings.GetFaceColor());
     aStyleSettings.SetDialogTextColor(aControlTextColor);
 
