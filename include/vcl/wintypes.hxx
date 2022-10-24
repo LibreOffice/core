@@ -183,8 +183,7 @@ WinBits const WB_NOLIGHTBORDER =        0x20000000;
 WinBits const WB_RECTSTYLE =            0x08000000;
 WinBits const WB_SMALLSTYLE =           0x04000000;
 WinBits const WB_TOGGLE =               SAL_CONST_INT64(0x1000000000);
-WinBits const WB_BEVELBUTTON =          SAL_CONST_INT64(0x2000000000);
-WinBits const WB_FLATBUTTON =           SAL_CONST_INT64(0x4000000000);
+WinBits const WB_FLATBUTTON =           SAL_CONST_INT64(0x2000000000);
 
 // Window-Bits for FixedText
 WinBits const WB_PATHELLIPSIS =         0x00100000;

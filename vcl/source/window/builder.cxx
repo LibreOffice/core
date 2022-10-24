@@ -1033,9 +1033,8 @@ namespace
         VclBuilder::stringmap::iterator aFind = rMap.find(OString("relief"));
         if (aFind != rMap.end())
         {
-            if (aFind->second == "half")
-                nBits = WB_FLATBUTTON | WB_BEVELBUTTON;
-            else if (aFind->second == "none")
+            assert(aFind->second != "half" && "relief of 'half' unsupported");
+            if (aFind->second == "none")
                 nBits = WB_FLATBUTTON;
             rMap.erase(aFind);
         }

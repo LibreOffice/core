@@ -461,11 +461,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 PushButtonValue const *pPBVal = aValue.getType() == ControlType::Pushbutton ?
                                                 static_cast<PushButtonValue const *>(&aValue) : nullptr;
                 int nPaintHeight = static_cast<int>(rc.size.height);
-                if (pPBVal && pPBVal->mbBevelButton)
-                {
-                    aPushInfo.kind = kThemeRoundedBevelButton;
-                }
-                else if (rc.size.height <= PUSH_BUTTON_NORMAL_HEIGHT)
+                if (rc.size.height <= PUSH_BUTTON_NORMAL_HEIGHT)
                 {
                     aPushInfo.kind = kThemePushButtonMini;
                     nPaintHeight = PUSH_BUTTON_SMALL_HEIGHT;

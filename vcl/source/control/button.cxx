@@ -1105,8 +1105,6 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 
         if (GetStyle() & WB_FLATBUTTON)
             aControlValue.m_bFlatButton = true;
-        if (GetStyle() & WB_BEVELBUTTON)
-            aControlValue.mbBevelButton = true;
 
         // draw frame into invisible window to have aInRect modified correctly
         // but do not shift the inner rect for pressed buttons (ie remove DrawButtonFlags::Pressed)

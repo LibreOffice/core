@@ -494,7 +494,6 @@ class VCL_DLLPUBLIC PushButtonValue final : public ImplControlValue
 public:
     PushButtonValue()
         : ImplControlValue( ControlType::Pushbutton, 0 )
-        , mbBevelButton(false)
         , mbSingleLine(true)
         , mbIsAction(false)
         , m_bFlatButton(false)
@@ -508,7 +507,6 @@ public:
     PushButtonValue & operator =(PushButtonValue const &) = delete; // due to ImplControlValue
     PushButtonValue & operator =(PushButtonValue &&) = delete; // due to ImplControlValue
 
-    bool mbBevelButton:1; // only used on OSX
     bool mbSingleLine:1;  // only used on OSX
     bool mbIsAction:1;
     bool m_bFlatButton:1;
