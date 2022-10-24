@@ -409,7 +409,11 @@ SvStream* TempFileFast::GetStream( StreamMode eMode )
     if (!mxStream)
     {
         OUString aName = CreateTempNameFast();
+#ifdef _WIN32
+        mxStream.reset(new SvFileStream(aName, eMode | StreamMode::TEMPORARY | StreamMode::DELETE_ON_CLOSE));
+#else
         mxStream.reset(new SvFileStream(aName, eMode | StreamMode::TEMPORARY));
+#endif
     }
     return mxStream.get();
 }
@@ -420,8 +424,13 @@ void TempFileFast::CloseStream()
     {
         OUString aName = mxStream->GetFileName();
         mxStream.reset();
+#ifdef _WIN32
+        // On Windows, the file is opened with FILE_FLAG_DELETE_ON_CLOSE, so it will delete as soon as the handle closes.
+        // On other platforms, we need to explicitly delete it.
+#else
         if (!aName.isEmpty() && (osl::FileBase::getFileURLFromSystemPath(aName, aName) == osl::FileBase::E_None))
             File::remove(aName);
+#endif
     }
 }
 

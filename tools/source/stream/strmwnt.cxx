@@ -304,6 +304,8 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
 
     if ( nMode & StreamMode::TEMPORARY )
         nAttributes |= FILE_ATTRIBUTE_TEMPORARY;
+    if ( nMode & StreamMode::DELETE_ON_CLOSE )
+        nAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
 
     pInstanceData->hFile = CreateFileW(
         o3tl::toW(aFilename.getStr()),
