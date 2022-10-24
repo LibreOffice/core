@@ -54,6 +54,8 @@
     #define SEPARATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
 
+    #undef DELETE
+
 #endif
 
 #ifdef __cplusplus
