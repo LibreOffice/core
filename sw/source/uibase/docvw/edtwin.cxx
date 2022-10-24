@@ -6735,33 +6735,6 @@ void SwEditWin::LogicInvalidate(const tools::Rectangle* pRectangle)
     SfxLokHelper::notifyInvalidation(&m_rView, pRectangle);
 }
 
-void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    SetLastMousePos(rMouseEvent.GetPosPixel());
-    MouseButtonDown(rMouseEvent);
-}
-
-void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    SetLastMousePos(rMouseEvent.GetPosPixel());
-    MouseButtonUp(rMouseEvent);
-}
-
-void SwEditWin::LogicMouseMove(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    SetLastMousePos(rMouseEvent.GetPosPixel());
-    MouseMove(rMouseEvent);
-}
-
 void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     if (SdrView* pSdrView = m_rView.GetWrtShell().GetDrawView())

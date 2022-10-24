@@ -1120,13 +1120,6 @@ public:
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual void DumpAsPropertyTree(tools::JsonWriter&);
 
-    /// Same as MouseButtonDown(), but coordinates are in logic unit. used for LOK
-    virtual void LogicMouseButtonDown(const MouseEvent&) {};
-    /// Same as MouseButtonUp(), but coordinates are in logic unit. used for LOK
-    virtual void LogicMouseButtonUp(const MouseEvent&) {};
-    /// Same as MouseMove(), but coordinates are in logic unit. used for LOK
-    virtual void LogicMouseMove(const MouseEvent&) {};
-
     /** @name Accessibility
      */
     ///@{

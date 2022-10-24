@@ -1672,21 +1672,6 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     return bNewPointer;
 }
 
-void ScGridWindow::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    MouseButtonDown(rMouseEvent);
-}
-
-void ScGridWindow::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    MouseButtonUp(rMouseEvent);
-}
-
-void ScGridWindow::LogicMouseMove(const MouseEvent& rMouseEvent)
-{
-    MouseMove(rMouseEvent);
-}
-
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (SfxLokHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)

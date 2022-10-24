@@ -232,21 +232,6 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
         vcl::Window::RequestHelp( rHEvt );
 }
 
-void ChartWindow::LogicMouseButtonDown(const MouseEvent& rEvent)
-{
-    MouseButtonDown(rEvent);
-}
-
-void ChartWindow::LogicMouseButtonUp(const MouseEvent& rEvent)
-{
-    MouseButtonUp(rEvent);
-}
-
-void ChartWindow::LogicMouseMove(const MouseEvent& rEvent)
-{
-    MouseMove(rEvent);
-}
-
 void ChartWindow::adjustHighContrastMode()
 {
     static const DrawModeFlags nContrastMode =

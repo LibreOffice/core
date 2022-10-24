@@ -730,7 +730,8 @@ namespace
                 pFocusWindow->KeyUp(pLOKEv->maKeyEvent);
             break;
         case VclEventId::WindowMouseButtonDown:
-            pLOKEv->mpWindow->LogicMouseButtonDown(pLOKEv->maMouseEvent);
+            pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
+            pLOKEv->mpWindow->MouseButtonDown(pLOKEv->maMouseEvent);
             // Invoke the context menu
             if (pLOKEv->maMouseEvent.GetButtons() & MOUSE_RIGHT)
             {
@@ -739,7 +740,8 @@ namespace
             }
             break;
         case VclEventId::WindowMouseButtonUp:
-            pLOKEv->mpWindow->LogicMouseButtonUp(pLOKEv->maMouseEvent);
+            pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
+            pLOKEv->mpWindow->MouseButtonUp(pLOKEv->maMouseEvent);
 
             // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
             // will not take care of releasing that with tiled rendering
@@ -748,7 +750,8 @@ namespace
 
             break;
         case VclEventId::WindowMouseMove:
-            pLOKEv->mpWindow->LogicMouseMove(pLOKEv->maMouseEvent);
+            pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
+            pLOKEv->mpWindow->MouseMove(pLOKEv->maMouseEvent);
             break;
         case VclEventId::ExtTextInput:
         case VclEventId::EndExtTextInput:
