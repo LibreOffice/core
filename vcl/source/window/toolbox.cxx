@@ -3108,6 +3108,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 {
                     if ( (item.meType == ToolBoxItemType::BUTTON) && item.mbEnabled )
                     {
+                        // if ((nTempPos == 25) || (nTempPos == 26)){
+                        //     return this->MouseButtonDown2(rMEvt);
+                        // }
+                        return this->MouseButtonDown2(rMEvt);
+
                         bClearHigh = false;
                         if ( mnHighItemId != item.mnId )
                         {
@@ -3179,6 +3184,197 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
     // only trigger toolbox for left mouse button and when
     // we're not in normal operation
     if ( rMEvt.IsLeft() && !mbDrag && (mnCurPos == ITEM_NOTFOUND) )
+    {
+        // call activate already here, as items could
+        // be exchanged
+        Activate();
+
+        // update ToolBox here, such that user knows it
+        if ( mbFormat )
+        {
+            ImplFormat();
+            PaintImmediately();
+        }
+
+        Point  aMousePos = rMEvt.GetPosPixel();
+        ImplToolItems::size_type i = 0;
+        ImplToolItems::size_type nNewPos = ITEM_NOTFOUND;
+
+        // search for item that was clicked
+        for (auto const& item : mpData->m_aItems)
+        {
+            // is this the item?
+            if ( item.maRect.Contains( aMousePos ) )
+            {
+                // do nothing if it is a separator or
+                // if the item has been disabled
+                if ( (item.meType == ToolBoxItemType::BUTTON) &&
+                     !item.mbShowWindow )
+                    nNewPos = i;
+
+                break;
+            }
+
+            i++;
+        }
+
+        // item found
+        if ( nNewPos != ITEM_NOTFOUND )
+        {
+            if ( !mpData->m_aItems[nNewPos].mbEnabled )
+            {
+                Deactivate();
+                return;
+            }
+
+            // update actual data
+            StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
+            mnCurPos         = i;
+            mnCurItemId      = mpData->m_aItems[nNewPos].mnId;
+            mnDownItemId     = mnCurItemId;
+            mnMouseModifier  = rMEvt.GetModifier();
+            if ( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::REPEAT )
+                nTrackFlags |= StartTrackingFlags::ButtonRepeat;
+
+            // update bDrag here, as it is evaluated in the EndSelection
+            mbDrag = true;
+
+            // on double-click: only call the handler, but do so before the button
+            // is hit, as in the handler dragging
+            // can be terminated
+            if ( rMEvt.GetClicks() == 2 )
+                DoubleClick();
+
+            if ( mbDrag )
+            {
+                InvalidateItem(mnCurPos);
+                Highlight();
+            }
+
+            // was dropdown arrow pressed
+            if( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWN )
+            {
+                if( ( (mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
+                    || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz ).Contains( aMousePos ))
+                {
+                    // dropdownonly always triggers the dropdown handler, over the whole button area
+
+                    // the drop down arrow should not trigger the item action
+                    mpData->mbDropDownByKeyboard = false;
+                    mpData->maDropdownClickHdl.Call( this );
+
+                    // do not reset data if the dropdown handler opened a floating window
+                    // see ImplFloatControl()
+                    if( !mpFloatWin )
+                    {
+                        // no floater was opened
+                        Deactivate();
+                        InvalidateItem(mnCurPos);
+
+                        mnCurPos         = ITEM_NOTFOUND;
+                        mnCurItemId      = ToolBoxItemId(0);
+                        mnDownItemId     = ToolBoxItemId(0);
+                        mnMouseModifier  = 0;
+                        mnHighItemId     = ToolBoxItemId(0);
+                    }
+                    return;
+                }
+                else // activate long click timer
+                    mpData->maDropdownTimer.Start();
+            }
+
+            // call Click handler
+            if ( rMEvt.GetClicks() != 2 )
+                Click();
+
+            // also call Select handler at repeat
+            if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
+                Select();
+
+            // if the actions was not aborted in Click handler
+            if ( mbDrag )
+                StartTracking( nTrackFlags );
+
+            // if mouse was clicked over an item we
+            // can abort here
+            return;
+        }
+
+        Deactivate();
+
+        // menu button hit ?
+        if( mpData->maMenubuttonItem.maRect.Contains( aMousePos ) && ImplHasClippedItems() )
+        {
+            if ( maMenuButtonHdl.IsSet() )
+                maMenuButtonHdl.Call( this );
+            else
+                ExecuteCustomMenu( mpData->maMenubuttonItem.maRect );
+            return;
+        }
+
+        // check scroll- and next-buttons here
+        if ( maUpperRect.Contains( aMousePos ) )
+        {
+            if ( mnCurLine > 1 )
+            {
+                StartTracking();
+                mbUpper = true;
+                mbIn    = true;
+                InvalidateSpin(true, false);
+            }
+            return;
+        }
+        if ( maLowerRect.Contains( aMousePos ) )
+        {
+            if ( mnCurLine+mnVisLines-1 < mnCurLines )
+            {
+                StartTracking();
+                mbLower = true;
+                mbIn    = true;
+                InvalidateSpin(false);
+            }
+            return;
+        }
+
+        // Linesizing testen
+        if ( (mnWinStyle & TB_WBLINESIZING) == TB_WBLINESIZING )
+        {
+            sal_uInt16 nLineMode = ImplTestLineSize( aMousePos );
+            if ( nLineMode )
+            {
+                ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
+
+                // call handler, such that we can set the
+                // dock rectangles
+                StartDocking();
+
+                Point aPos  = GetParent()->OutputToScreenPixel( GetPosPixel() );
+                Size  aSize = GetSizePixel();
+                aPos = ScreenToOutputPixel( aPos );
+
+                // start dragging
+                pMgr->StartDragging( this, aMousePos, tools::Rectangle( aPos, aSize ),
+                                     nLineMode );
+                return;
+            }
+        }
+
+        // no item, then only click or double click
+        if ( rMEvt.GetClicks() == 2 )
+            DoubleClick();
+        else
+            Click();
+    }
+
+    if ( !mbDrag && (mnCurPos == ITEM_NOTFOUND) )
+        DockingWindow::MouseButtonDown( rMEvt );
+}
+
+void ToolBox::MouseButtonDown2( const MouseEvent& rMEvt )
+{
+    // only trigger toolbox for left mouse button and when
+    // we're not in normal operation
+    if (!mbDrag && (mnCurPos == ITEM_NOTFOUND) )
     {
         // call activate already here, as items could
         // be exchanged
