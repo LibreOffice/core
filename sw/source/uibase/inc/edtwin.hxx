@@ -281,12 +281,6 @@ public:
 
     /// @see Window::LogicInvalidate().
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
-    /// Same as MouseButtonDown(), but coordinates are in logic unit.
-    virtual void LogicMouseButtonDown(const MouseEvent& rMouseEvent) override;
-    /// Same as MouseButtonUp(), but coordinates are in logic unit.
-    virtual void LogicMouseButtonUp(const MouseEvent& rMouseEvent) override;
-    /// Same as MouseMove(), but coordinates are in logic unit.
-    virtual void LogicMouseMove(const MouseEvent& rMouseEvent) override;
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Allows starting or ending a graphic move or resize action.
