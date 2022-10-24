@@ -202,9 +202,7 @@ void ScCellCursorObj::setUp()
 {
     UnoApiTest::setUp();
 
-    OUString aFileURL;
-    createFileURL(u"ScCellCursorObj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"ScCellCursorObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellCursorObj);

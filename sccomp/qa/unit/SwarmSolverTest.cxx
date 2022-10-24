@@ -45,9 +45,7 @@ public:
 
 void SwarmSolverTest::testUnconstrained()
 {
-    OUString aFileURL;
-    createFileURL(u"Simple.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"Simple.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -90,9 +88,7 @@ void SwarmSolverTest::testUnconstrained()
 
 void SwarmSolverTest::testVariableBounded()
 {
-    OUString aFileURL;
-    createFileURL(u"Simple.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"Simple.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -137,9 +133,7 @@ void SwarmSolverTest::testVariableBounded()
 
 void SwarmSolverTest::testVariableConstrained()
 {
-    OUString aFileURL;
-    createFileURL(u"Simple.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"Simple.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -187,9 +181,7 @@ void SwarmSolverTest::testVariableConstrained()
 
 void SwarmSolverTest::testTwoVariables()
 {
-    OUString aFileURL;
-    createFileURL(u"TwoVariables.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"TwoVariables.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -241,9 +233,7 @@ void SwarmSolverTest::testTwoVariables()
 
 void SwarmSolverTest::testMultipleVariables()
 {
-    OUString aFileURL;
-    createFileURL(u"MultiVariable.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"MultiVariable.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);

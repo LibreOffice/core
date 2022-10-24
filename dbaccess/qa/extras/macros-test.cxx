@@ -33,12 +33,7 @@ DBAccessTest::DBAccessTest()
 {
 }
 
-void DBAccessTest::test()
-{
-    OUString aFileName;
-    createFileURL(u"testdb.odb", aFileName);
-    mxComponent = loadFromDesktop(aFileName);
-}
+void DBAccessTest::test() { loadFromURL(u"testdb.odb"); }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBAccessTest);
 

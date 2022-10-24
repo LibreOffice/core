@@ -47,9 +47,16 @@ void UnoApiTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void UnoApiTest::createFileURL(std::u16string_view aFileBase, OUString& rFilePath)
+OUString UnoApiTest::createFileURL(std::u16string_view aFileBase)
 {
-    rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
+    return m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
+}
+
+OUString UnoApiTest::loadFromURL(std::u16string_view aFileBase)
+{
+    OUString aFileName = createFileURL(aFileBase);
+    mxComponent = loadFromDesktop(aFileName);
+    return aFileName;
 }
 
 uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,

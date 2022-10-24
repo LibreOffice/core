@@ -110,9 +110,7 @@ void ScDataPilotFieldObj::setUp()
 {
     UnoApiTest::setUp();
 
-    OUString aFileURL;
-    createFileURL(u"scdatapilotfieldobj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"scdatapilotfieldobj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldObj);

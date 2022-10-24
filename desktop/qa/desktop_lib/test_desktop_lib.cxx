@@ -372,8 +372,7 @@ DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentT
 std::unique_ptr<LibLODocument_Impl>
 DesktopLOKTest::loadDocImpl(const char* pName, LibreOfficeKitDocumentType eType)
 {
-    OUString aFileURL;
-    createFileURL(OUString::createFromAscii(pName), aFileURL);
+    OUString aFileURL = createFileURL(OUString::createFromAscii(pName));
     return loadDocUrlImpl(aFileURL, eType);
 }
 
@@ -758,8 +757,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
-    OUString aFileURL;
-    createFileURL(u"paste.jpg", aFileURL);
+    OUString aFileURL = createFileURL(u"paste.jpg");
     std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
     std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
 
@@ -2675,8 +2673,7 @@ void DesktopLOKTest::testExtractParameter()
 void DesktopLOKTest::readFileIntoByteVector(std::u16string_view sFilename, std::vector<unsigned char> & rByteVector)
 {
     rByteVector.clear();
-    OUString aURL;
-    createFileURL(sFilename, aURL);
+    OUString aURL = createFileURL(sFilename);
     SvFileStream aStream(aURL, StreamMode::READ);
     rByteVector.resize(aStream.remainingSize());
     aStream.ReadBytes(rByteVector.data(), aStream.remainingSize());
@@ -3053,8 +3050,7 @@ void DesktopLOKTest::testComplexSelection()
                                                                  "", nullptr, nullptr));
 
     // Paste an image.
-    OUString aFileURL;
-    createFileURL(u"paste.jpg", aFileURL);
+    OUString aFileURL = createFileURL(u"paste.jpg");
     std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
     std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));

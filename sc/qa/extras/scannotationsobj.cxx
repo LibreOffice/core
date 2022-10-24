@@ -99,9 +99,7 @@ void ScAnnontationsObj::setUp()
     UnoApiTest::setUp();
 
     // get the test file
-    OUString aFileURL;
-    createFileURL(u"ScAnnotationObj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ScAnnotationObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnnontationsObj);

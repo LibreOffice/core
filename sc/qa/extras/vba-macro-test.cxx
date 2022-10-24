@@ -94,10 +94,7 @@ void VBAMacroTest::testSimpleCopyAndPaste()
     // Range(Cells(4, 3), Cells(6, 3)).Copy
     // Cells(4, 2).Activate
     // ActiveCell.PasteSpecial xlValues
-
-    OUString aFileName;
-    createFileURL(u"SimpleCopyPaste.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"SimpleCopyPaste.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -142,10 +139,7 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
     // Cells(2, 2).Activate
     // ActiveCell.PasteSpecial xlValues
     // ...
-
-    OUString aFileName;
-    createFileURL(u"MultiDocumentCopyPaste.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"MultiDocumentCopyPaste.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -166,9 +160,7 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
 
 void VBAMacroTest::testSheetAndColumnSelectAndHide()
 {
-    OUString aFileName;
-    createFileURL(u"SheetAndColumnSelectAndHide.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"SheetAndColumnSelectAndHide.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -231,10 +223,7 @@ void VBAMacroTest::testPrintArea()
 {
     // Sets the print area to A1:B5
     // ActiveSheet.PageSetup.PrintArea = "$A$1:$B$5"
-
-    OUString aFileName;
-    createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"VariousTestMacros.xlsm");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
@@ -259,10 +248,7 @@ void VBAMacroTest::testSelectAllChaged()
 {
     // Columns("A:A").Select
     // Range(Selection, Selection.End(xlToRight)).Select
-
-    OUString aFileName;
-    createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -284,10 +270,7 @@ void VBAMacroTest::testRangeSelect()
 {
     // Range("B2").Select
     // Range(Selection, Selection.End(xlToRight)).Select
-
-    OUString aFileName;
-    createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -310,10 +293,7 @@ void VBAMacroTest::testWindowState()
     // Application.WindowState = xlMinimized
     // Application.WindowState = xlMaximized
     // Application.WindowState = xlNormal
-
-    OUString aFileName;
-    createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"VariousTestMacros.xlsm");
 
     executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?language=Basic&"
                  "location=document");
@@ -324,9 +304,7 @@ void VBAMacroTest::testScroll()
     // ActiveWindow.ScrollColumn = 30
     // ActiveWindow.ScrollRow = 100
 
-    OUString aFileName;
-    createFileURL(u"VariousTestMacros.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -352,10 +330,7 @@ void VBAMacroTest::testMacroKeyBinding()
 {
     // key_U() -> CTRL+U
     // key_T() -> CTRL+T
-
-    OUString aFileName;
-    createFileURL(u"KeyShortcut.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"KeyShortcut.xlsm");
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
@@ -491,9 +466,7 @@ void VBAMacroTest::testVba()
     uno::Sequence<uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
-        OUString aFileName;
-        createFileURL(Concat2View(rTestInfo.sFileBaseName + "xls"), aFileName);
-        mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+        OUString aFileName = loadFromURL(Concat2View(rTestInfo.sFileBaseName + "xls"));
 
         // process all events such as OnLoad events etc.  otherwise they tend
         // to arrive later at a random time - while processing other StarBasic
@@ -617,9 +590,7 @@ void VBAMacroTest::testVbaRangeSort()
 
 void VBAMacroTest::testTdf107885()
 {
-    OUString aFileName;
-    createFileURL(u"tdf107885.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf107885.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -654,9 +625,7 @@ void VBAMacroTest::testTdf107885()
 
 void VBAMacroTest::testTdf131562()
 {
-    OUString aFileName;
-    createFileURL(u"tdf131562.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf131562.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -677,9 +646,7 @@ void VBAMacroTest::testTdf131562()
 
 void VBAMacroTest::testTdf52602()
 {
-    OUString aFileName;
-    createFileURL(u"tdf52602.xls", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf52602.xls");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -706,9 +673,7 @@ void VBAMacroTest::testTdf52602()
 }
 void VBAMacroTest::testTdf107902()
 {
-    OUString aFileName;
-    createFileURL(u"tdf107902.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf107902.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -736,9 +701,7 @@ void VBAMacroTest::testTdf107902()
 
 void VBAMacroTest::testTdf90278()
 {
-    OUString aFileName;
-    createFileURL(u"tdf90278.xls", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf90278.xls");
 
     // Without the fix in place, changing the border weight
     // would cause a Basic exception/error in the following script.
@@ -753,9 +716,7 @@ void VBAMacroTest::testTdf90278()
 
 void VBAMacroTest::testTdf149531()
 {
-    OUString aFileName;
-    createFileURL(u"tdf149531.xls", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf149531.xls");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -778,9 +739,7 @@ void VBAMacroTest::testTdf149531()
 
 void VBAMacroTest::testTdf118247()
 {
-    OUString aFileName;
-    createFileURL(u"tdf118247.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf118247.xlsm");
 
     uno::Any aRet = executeMacro(
         "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"

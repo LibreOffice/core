@@ -105,9 +105,7 @@ void ScModelObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    OUString aFileURL;
-    createFileURL(u"ScModelObj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"ScModelObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScModelObj);

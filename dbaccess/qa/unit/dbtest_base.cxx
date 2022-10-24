@@ -32,9 +32,6 @@ public:
 
     utl::TempFileNamed createTempCopy(std::u16string_view pathname);
 
-    uno::Reference< XOfficeDatabaseDocument >
-        getDocumentForFileName(std::u16string_view sFileName);
-
     uno::Reference<XOfficeDatabaseDocument> getDocumentForUrl(OUString const & url);
 
     uno::Reference< XConnection >
@@ -43,8 +40,7 @@ public:
 };
 
 utl::TempFileNamed DBTestBase::createTempCopy(std::u16string_view pathname) {
-    OUString url;
-    createFileURL(pathname, url);
+    OUString url = createFileURL(pathname);
     utl::TempFileNamed tmp;
     tmp.EnableKillingFile();
     auto const e = osl::File::copy(url, tmp.GetURL());
@@ -55,14 +51,6 @@ utl::TempFileNamed DBTestBase::createTempCopy(std::u16string_view pathname) {
          .getStr()),
         osl::FileBase::E_None, e);
     return tmp;
-}
-
-uno::Reference< XOfficeDatabaseDocument >
-    DBTestBase::getDocumentForFileName(std::u16string_view sFileName)
-{
-    OUString sFilePath;
-    createFileURL(sFileName, sFilePath);
-    return getDocumentForUrl(sFilePath);
 }
 
 uno::Reference<XOfficeDatabaseDocument> DBTestBase::getDocumentForUrl(OUString const & url) {

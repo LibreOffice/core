@@ -440,9 +440,7 @@ void ScConditionalFormatTest::setUp()
 {
     UnoApiTest::setUp();
     // get the test file
-    OUString aFileURL;
-    createFileURL(u"new_cond_format_api.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"new_cond_format_api.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScConditionalFormatTest);

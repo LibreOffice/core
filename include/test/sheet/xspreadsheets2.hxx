@@ -38,10 +38,8 @@ public:
     void testImportCellStyle();
     void testLastAfterInsertCopy();
 
-    virtual css::uno::Reference< css::lang::XComponent > getComponent() = 0;
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
     virtual css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString&) = 0;
-    virtual void createFileURL(const OUString&, OUString&) = 0;
 
 protected:
     css::uno::Reference< css::sheet::XSpreadsheetDocument> xDocument;

@@ -265,10 +265,7 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
 void ScShapeTest::testTdf143619_validation_circle_pos()
 {
     // Load a document, which has validation circle around cell E6.
-
-    OUString aFileURL;
-    createFileURL(u"tdf143619_validationCirclePos.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf143619_validationCirclePos.ods");
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -297,9 +294,7 @@ void ScShapeTest::testTdf140252_DragCreateFormControl()
     // Error was, that drag-created form controls were initially not on layer 'controls' and thus
     // other shapes could be placed in front of form controls.
     // Load an empty document.
-    OUString aFileURL;
-    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ManualColWidthRowHeight.ods");
 
     // Get ScTabViewShell
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -346,9 +341,7 @@ void ScShapeTest::testTdf134355_DragCreateCustomShape()
     // layer is exclusively for form controls. Effect was, that other shapes could not be brought in
     // front of custom shapes.
     // Load an empty document.
-    OUString aFileURL;
-    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ManualColWidthRowHeight.ods");
 
     // Get ScTabView
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -388,9 +381,7 @@ void ScShapeTest::testTdf140252_LayerOfControl()
     // Error was, that a newly inserted control shape was put on layer
     // "vorne" instead of layer "control".
     // Load an empty document.
-    OUString aFileURL;
-    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ManualColWidthRowHeight.ods");
 
     // Get ScDocShell
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -422,9 +413,7 @@ void ScShapeTest::testTdf137082_LTR_to_RTL()
     // mirrored. Graphics are still not mirrored but shifted. This test makes sure a shape is mirrored
     // and an image is not mirrored.
 
-    OUString aFileURL;
-    createFileURL(u"tdf137082_LTR_arrow_image.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137082_LTR_arrow_image.ods");
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -454,9 +443,7 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
 {
     // Error was, that cell anchored custom shapes wrote wrong offsets to file and thus were wrong on
     // reloading. The file contains one custom shape with "resize" and another one without.
-    OUString aFileURL;
-    createFileURL(u"tdf137082_RTL_cell_anchored.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137082_RTL_cell_anchored.ods");
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -494,9 +481,7 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
 {
     // Error was, that page anchored lines and custom shapes were mirrored on opening. The document
     // contains measure line, polyline and transformed custom shape.
-    OUString aFileURL;
-    createFileURL(u"tdf137081_RTL_page_anchored.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137081_RTL_page_anchored.ods");
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -558,9 +543,7 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
 void ScShapeTest::testTdf139583_Rotate180deg()
 {
     // Load an empty document.
-    OUString aFileURL;
-    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ManualColWidthRowHeight.ods");
 
     // Get document and draw page
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -599,9 +582,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
 {
     // Load a document, which has a rotated custom shape, which is horizontal flipped. Error was, that
     // if such shape was anchored "resize with cell", then after save and reload it was distorted.
-    OUString aFileURL;
-    createFileURL(u"tdf137033_FlipHoriRotCustomShape.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137033_FlipHoriRotCustomShape.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -635,9 +616,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     // of the full sized shape were written to file but the changed one.
 
     // Load a document, which has a rotated and sheared shape, anchored to cell with resize.
-    OUString aFileURL;
-    createFileURL(u"tdf137033_RotShearResizeAnchor.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137033_RotShearResizeAnchor.ods");
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -692,9 +671,7 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     // makes a difference.
 
     // Load a document, which has a rotated and sheared shape, anchored to cell, without resize.
-    OUString aFileURL;
-    createFileURL(u"tdf137033_RotShearCellAnchor.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137033_RotShearCellAnchor.ods");
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -729,9 +706,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     // resulted in zeros in NonRotatedAnchor and a wrong position when reloading.
 
     // Load an empty document.
-    OUString aFileURL;
-    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ManualColWidthRowHeight.ods");
 
     // Get ScDocShell
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -782,9 +757,7 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     // NonRotatedAnchor. As a result the position was wrong when reloading.
 
     // Load an empty document
-    OUString aFileURL;
-    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ManualColWidthRowHeight.ods");
 
     // Get document and draw page
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -818,9 +791,7 @@ void ScShapeTest::testMeasurelineHideColSave()
     // The document contains a SdrMeasureObj anchored "To Cell (resize with cell)" with start in cell
     // D11 and end in cell I5. Error was, that after hiding col A and saving, start and end point
     // position were lost.
-    OUString aFileURL;
-    createFileURL(u"measurelineHideColSave.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"measurelineHideColSave.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -862,9 +833,7 @@ void ScShapeTest::testHideColsShow()
     //ends in cell D5. Error was, that hiding cols C and D and then show them again extends the shape
     // to column E
 
-    OUString aFileURL;
-    createFileURL(u"hideColsShow.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"hideColsShow.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -904,9 +873,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
 {
     // The document contains a 90deg rotated, cell-anchored rectangle in column D. Insert 2 columns
     // after column B, save and reload. The shape was not correctly moved to column F.
-    OUString aFileURL;
-    createFileURL(u"tdf138138_MoveCellWithRotatedShape.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf138138_MoveCellWithRotatedShape.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -950,9 +917,7 @@ void ScShapeTest::testLoadVerticalFlip()
 {
     // The document has a cell anchored custom shape with vertical flip. Error was, that the
     // flip was lost on loading.
-    OUString aFileURL;
-    createFileURL(u"loadVerticalFlip.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"loadVerticalFlip.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -968,9 +933,7 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // The document contains a column group left from the image. The group is expanded. Collapse the
     // group, save and reload. The original error was, that the line was on wrong position after reload.
     // After the fix for 'resize with cell', the custom shape had wrong position and size too.
-    OUString aFileURL;
-    createFileURL(u"tdf117948_CollapseBeforeShape.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf117948_CollapseBeforeShape.ods");
 
     // Get document and objects
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -1019,9 +982,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     // The document contains a shape anchored "To Cell" with start in cell C3 and end in cell D6.
     // Error was, that hiding rows 3 to 6 and undo that action "lost" the shape.
     // Actually it was not lost but hidden.
-    OUString aFileURL;
-    createFileURL(u"tdf137355_UndoHideRows.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf137355_UndoHideRows.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -1060,9 +1021,7 @@ void ScShapeTest::testTdf115655_HideDetail()
     // belongs to a group. On loading the group is expanded.
     // Error was, that after collapsing the group, save and reload, and expanding the group, the image
     // was "lost". Actually is was resized to zero height.
-    OUString aFileURL;
-    createFileURL(u"tdf115655_HideDetail.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf115655_HideDetail.ods");
 
     // Get document and image
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -1107,9 +1066,7 @@ void ScShapeTest::testFitToCellSize()
     // The document has a cell anchored custom shape. Applying
     // FitToCellSize should resize and position the shape so,
     // that it fits into its anchor cell. That did not happened.
-    OUString aFileURL;
-    createFileURL(u"tdf119191_FitToCellSize.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf119191_FitToCellSize.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -1138,9 +1095,7 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     // The example doc contains a cell anchored custom shape that is rotated
     // and sheared. Error was, that the shape lost position and size on
     // loading.
-    OUString aFileURL;
-    createFileURL(u"tdf119191_transformedShape.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"tdf119191_transformedShape.ods");
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
@@ -1169,9 +1124,7 @@ void ScShapeTest::testLargeAnchorOffset()
     // The example doc contains a resize-with-cell-anchored measure line
     // with a large vertical offset that shifts the start point onto the
     // next cell below.
-    OUString aFileURL;
-    createFileURL(u"LargeAnchorOffset.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"LargeAnchorOffset.ods");
 
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(mxComponent);
     SdrObject* pObj = lcl_getSdrObjectWithAssert(pDocSh->GetDocument(), 0);

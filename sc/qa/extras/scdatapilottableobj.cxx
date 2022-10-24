@@ -131,9 +131,7 @@ void ScDataPilotTableObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    OUString aFileURL;
-    createFileURL(u"ScDataPilotTableObj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"ScDataPilotTableObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotTableObj);

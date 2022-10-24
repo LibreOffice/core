@@ -319,10 +319,7 @@ void XSpreadsheets2::testLastAfterInsertCopy()
 
 uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUString& aFileBase)
 {
-    OUString aFileURL;
-    createFileURL(aFileBase, aFileURL);
-
-    uno::Reference< lang::XComponent > xComp = loadFromDesktop(aFileURL);
+    uno::Reference< lang::XComponent > xComp = loadFromDesktop(aFileBase);
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComp, UNO_QUERY_THROW);
     return xDoc;
 }

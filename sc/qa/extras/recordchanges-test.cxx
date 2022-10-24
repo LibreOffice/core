@@ -62,9 +62,7 @@ void ScRecordChangesTest::testSetRecordChanges()
 void ScRecordChangesTest::testCheckRecordChangesProtection()
 {
     // test with protected changes
-    OUString aFileName;
-    createFileURL(u"RecordChangesProtected.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName);
+    loadFromURL(u"RecordChangesProtected.ods");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xDocSettingsPropSet(xDoc, UNO_QUERY_THROW);

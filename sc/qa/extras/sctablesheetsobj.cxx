@@ -104,9 +104,7 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 
-    virtual uno::Reference<lang::XComponent> getComponent() override;
-    virtual void createFileURL(const OUString& rFileBase, OUString& rFileURL) override;
-    virtual uno::Reference<lang::XComponent> loadFromDesktop(const OUString& rString) override;
+    virtual uno::Reference<lang::XComponent> loadFromDesktop(const OUString& rFileBase) override;
 };
 
 ScTableSheetsObj::ScTableSheetsObj()
@@ -120,16 +118,10 @@ ScTableSheetsObj::ScTableSheetsObj()
 {
 }
 
-uno::Reference<lang::XComponent> ScTableSheetsObj::getComponent() { return mxComponent; }
-
-void ScTableSheetsObj::createFileURL(const OUString& rFileBase, OUString& rFileURL)
+uno::Reference<lang::XComponent> ScTableSheetsObj::loadFromDesktop(const OUString& rFileBase)
 {
-    UnoApiTest::createFileURL(rFileBase, rFileURL);
-}
-
-uno::Reference<lang::XComponent> ScTableSheetsObj::loadFromDesktop(const OUString& rString)
-{
-    return UnoApiTest::loadFromDesktop(rString);
+    OUString aString = createFileURL(rFileBase);
+    return UnoApiTest::loadFromDesktop(aString);
 }
 
 uno::Reference<uno::XInterface> ScTableSheetsObj::init()
@@ -149,9 +141,7 @@ void ScTableSheetsObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    OUString aFileURL;
-    createFileURL("rangenamessrc.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"rangenamessrc.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetsObj);

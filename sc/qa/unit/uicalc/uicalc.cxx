@@ -139,11 +139,7 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     if (!pName)
         mxComponent = loadFromDesktop("private:factory/scalc");
     else
-    {
-        OUString aFileURL;
-        createFileURL(OUString::createFromAscii(pName), aFileURL);
-        mxComponent = loadFromDesktop(aFileURL);
-    }
+        loadFromURL(OUString::createFromAscii(pName));
 
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);

@@ -46,9 +46,7 @@ Test::Test()
 CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 {
     // Save the bugdoc to PPT.
-    OUString aFileURL;
-    createFileURL(u"custom-shape-bitmap-fill.pptx", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"custom-shape-bitmap-fill.pptx");
     saveAndReload("MS PowerPoint 97");
 
     // Check if the bitmap shape was lost.
@@ -99,9 +97,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
 {
     // Given a media shape that has an animation that specifies looping for the video:
-    OUString aFileURL;
-    createFileURL(u"video-loop.pptx", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"video-loop.pptx");
 
     // When exporting that to PPTX:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");

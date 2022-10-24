@@ -58,8 +58,6 @@ public:
 
     ScPerfObj();
 
-    uno::Reference< uno::XInterface > init(std::u16string_view aFileName);
-
     CPPUNIT_TEST_SUITE(ScPerfObj);
     CPPUNIT_TEST(testSheetFindAll);
     CPPUNIT_TEST(testFixedSum);
@@ -106,20 +104,10 @@ ScPerfObj::ScPerfObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScPerfObj::init(std::u16string_view aFileName)
-{
-    OUString aFileURL;
-    createFileURL(aFileName, aFileURL);
-
-    mxComponent = loadFromDesktop(aFileURL);
-
-    return mxComponent;
-}
-
 void ScPerfObj::testSheetFindAll()
 {
-
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scBigFile.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scBigFile.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     // get sheet
     uno::Reference< container::XIndexAccess > xSheetIndex (xDoc->getSheets(), UNO_QUERY_THROW);
@@ -172,11 +160,11 @@ void ScPerfObj::testSheetFindAll()
 void ScPerfObj::testSheetNamedRanges()
 {
 
-    uno::Reference< lang::XComponent > xComponent (init(u"scBigFile.ods"), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
+    loadFromURL(u"scBigFile.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     // get NamedRanges
-    uno::Reference< beans::XPropertySet > xPropSet (xComponent, UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
     uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue("NamedRanges"), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndexNamedRanges(xNamedRanges, UNO_QUERY_THROW);
 
@@ -214,8 +202,8 @@ void ScPerfObj::testSheetNamedRanges()
 
 void ScPerfObj::testSheets()
 {
-
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scBigFile.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scBigFile.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
@@ -240,7 +228,8 @@ void ScPerfObj::testSheets()
 
 void ScPerfObj::testSum()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -278,7 +267,8 @@ void ScPerfObj::testSum()
 
 void ScPerfObj::testFTest()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -301,7 +291,8 @@ void ScPerfObj::testFTest()
 
 void ScPerfObj::testChiTest()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -324,7 +315,8 @@ void ScPerfObj::testChiTest()
 
 void ScPerfObj::testSumX2PY2Test()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions2.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions2.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -347,7 +339,8 @@ void ScPerfObj::testSumX2PY2Test()
 
 void ScPerfObj::testTTest()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions2.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions2.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -370,7 +363,8 @@ void ScPerfObj::testTTest()
 
 void ScPerfObj::testLcm()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions2.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions2.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -393,7 +387,8 @@ void ScPerfObj::testLcm()
 
 void ScPerfObj::testGcd()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions2.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions2.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -416,7 +411,8 @@ void ScPerfObj::testGcd()
 
 void ScPerfObj::testPearson()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions2.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions2.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -439,7 +435,8 @@ void ScPerfObj::testPearson()
 
 void ScPerfObj::testSubTotalWithFormulas()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scBigSingleSheet200.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scBigSingleSheet200.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -470,7 +467,8 @@ void ScPerfObj::testSubTotalWithFormulas()
 
 void ScPerfObj::testSubTotalWithoutFormulas()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scBigSingleSheet200.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scBigSingleSheet200.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -502,7 +500,8 @@ void ScPerfObj::testSubTotalWithoutFormulas()
 void ScPerfObj::testLoadingFileWithSingleBigSheet()
 {
     callgrindStart();
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc1(init(u"scBigSingleSheet2000.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scBigSingleSheet2000.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc1(mxComponent, UNO_QUERY_THROW);
     uno::Reference< sheet::XCalculatable > xCalculatable1(xDoc1, UNO_QUERY_THROW);
     callgrindDump("sc:loadingFileWithSingleBigSheetdoSubTotal_2000lines");
 }
@@ -535,7 +534,8 @@ namespace {
 
 void ScPerfObj::testFixedSum()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"scMathFunctions3.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"scMathFunctions3.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -558,7 +558,8 @@ void ScPerfObj::testFixedSum()
 
 void ScPerfObj::testMatConcatSmall()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"empty.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"empty.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
@@ -585,7 +586,8 @@ void ScPerfObj::testMatConcatSmall()
 
 void ScPerfObj::testMatConcatLarge()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(u"empty.ods"), UNO_QUERY_THROW);
+    loadFromURL(u"empty.ods");
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 

@@ -62,9 +62,7 @@ void ScOutlineObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    OUString aFileURL;
-    createFileURL(u"ScOutlineObj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL);
+    loadFromURL(u"ScOutlineObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScOutlineObj);

@@ -27,7 +27,8 @@ class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unot
 public:
     UnoApiTest(OUString path);
 
-    void createFileURL(std::u16string_view aFileBase, OUString& rFilePath);
+    OUString createFileURL(std::u16string_view aFileBase);
+    OUString loadFromURL(std::u16string_view aFileBase);
 
     virtual void setUp() override;
     virtual void tearDown() override;

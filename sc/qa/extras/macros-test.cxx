@@ -125,10 +125,7 @@ void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 // module, we could move the test there then ) - relates to fdo#67547
 void ScMacrosTest::testMSP()
 {
-    OUString aFileName;
-    createFileURL(u"MasterScriptProviderProblem.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
+    loadFromURL(u"MasterScriptProviderProblem.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document");
     OUString sResult;
@@ -140,9 +137,7 @@ void ScMacrosTest::testMSP()
 
 void ScMacrosTest::testPasswordProtectedStarBasic()
 {
-    OUString aFileName;
-    createFileURL(u"testTypePassword.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"testTypePassword.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -174,9 +169,7 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
 void ScMacrosTest::testStarBasic()
 {
-    OUString aFileName;
-    createFileURL(u"StarBasic.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"StarBasic.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -191,9 +184,7 @@ void ScMacrosTest::testStarBasic()
 
 void ScMacrosTest::testRowColumn()
 {
-    OUString aFileName;
-    createFileURL(u"StarBasic.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"StarBasic.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -213,9 +204,7 @@ void ScMacrosTest::testRowColumn()
 
 void ScMacrosTest::testTdf146742()
 {
-    OUString aFileName;
-    createFileURL(u"tdf146742.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf146742.ods");
 
     // Export to ODS and reload the file
     saveAndReload("calc8");
@@ -238,9 +227,7 @@ void ScMacrosTest::testTdf146742()
 void ScMacrosTest::testMacroButtonFormControlXlsxExport()
 {
     // Given a button form control with an associated macro:
-    OUString aFileName;
-    createFileURL(u"macro-button-form-control.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"macro-button-form-control.xlsm");
 
     // When exporting to XLSM:
     auto pTempFile = std::make_shared<utl::TempFileNamed>(save("Calc MS Excel 2007 VBA XML"));
@@ -262,9 +249,7 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
 
 void ScMacrosTest::testTdf104902()
 {
-    OUString aFileName;
-    createFileURL(u"tdf104902.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf104902.ods");
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document");
 
@@ -288,9 +273,7 @@ void ScMacrosTest::testTdf104902()
 
 void ScMacrosTest::testTdf64639()
 {
-    OUString aFileName;
-    createFileURL(u"tdf64639.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf64639.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -319,9 +302,7 @@ void ScMacrosTest::testTdf64639()
 
 void ScMacrosTest::testTdf142033()
 {
-    OUString aFileName;
-    createFileURL(u"tdf142033.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf142033.ods");
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document");
 
@@ -352,9 +333,7 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
         u"vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
     static const OUStringLiteral sLibName(u"Protected");
 
-    OUString aFileName;
-    createFileURL(u"tdf57113.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf57113.ods");
 
     // Check that loading password-protected macro image correctly loads Unicode strings
     {
@@ -394,9 +373,7 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
         u"vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
     static const OUStringLiteral sLibName(u"Protected");
 
-    OUString aFileName;
-    createFileURL(u"ProtectedArrayInCustomType.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"ProtectedArrayInCustomType.ods");
 
     // Check that loading password-protected macro image correctly loads array bounds
     {
@@ -432,9 +409,7 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
 
 void ScMacrosTest::testTdf114427()
 {
-    OUString aFileName;
-    createFileURL(u"tdf114427.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf114427.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -465,9 +440,7 @@ void ScMacrosTest::testTdf131296_legacy()
         { "TestDoubleConst", "Double: 123" },
     });
 
-    OUString aFileName;
-    createFileURL(u"tdf131296_legacy.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf131296_legacy.ods");
     {
         for (auto& [sTestName, sExpected] : aTests)
         {
@@ -493,9 +466,7 @@ void ScMacrosTest::testTdf131296_new()
         { "TestCurrencyConst", "Currency: 123.0000" },
     });
 
-    OUString aFileName;
-    createFileURL(u"tdf131296_new.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf131296_new.ods");
     {
         for (auto& [sTestName, sExpected] : aTests)
         {
@@ -511,9 +482,7 @@ void ScMacrosTest::testTdf131296_new()
 
 void ScMacrosTest::testTdf46119()
 {
-    OUString aFileName;
-    createFileURL(u"tdf46119.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf46119.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -541,9 +510,7 @@ void ScMacrosTest::testTdf46119()
 
 void ScMacrosTest::testTdf128218()
 {
-    OUString aFileName;
-    createFileURL(u"tdf128218.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf128218.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestRAND?language=Basic&location=document");
 
@@ -585,9 +552,7 @@ void ScMacrosTest::testTdf71271()
 
 void ScMacrosTest::testTdf43003()
 {
-    OUString aFileName;
-    createFileURL(u"tdf43003.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf43003.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT(pFoundShell);
@@ -606,9 +571,7 @@ void ScMacrosTest::testTdf43003()
 
 void ScMacrosTest::testTdf75263()
 {
-    OUString aFileName;
-    createFileURL(u"tdf75263.xlsm", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf75263.xlsm");
 
     {
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -639,9 +602,7 @@ void ScMacrosTest::testTdf75263()
 
 void ScMacrosTest::testTdf133887()
 {
-    OUString aFileName;
-    createFileURL(u"tdf133887.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf133887.ods");
 
     css::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
@@ -665,9 +626,7 @@ void ScMacrosTest::testTdf133887()
 
 void ScMacrosTest::testTdf133889()
 {
-    OUString aFileName;
-    createFileURL(u"tdf133889.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf133889.ods");
 
     css::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
@@ -691,9 +650,7 @@ void ScMacrosTest::testTdf133889()
 
 void ScMacrosTest::testTdf143582()
 {
-    OUString aFileName;
-    createFileURL(u"tdf143582.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf143582.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document");
 
@@ -708,9 +665,7 @@ void ScMacrosTest::testTdf143582()
 
 void ScMacrosTest::testTdf144085()
 {
-    OUString aFileName;
-    createFileURL(u"tdf144085.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf144085.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document");
 
@@ -725,9 +680,7 @@ void ScMacrosTest::testTdf144085()
 
 void ScMacrosTest::testTdf125800()
 {
-    OUString aFileName;
-    createFileURL(u"tdf125800.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf125800.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -759,9 +712,7 @@ void ScMacrosTest::testTdf125800()
 
 void ScMacrosTest::testTdf130307()
 {
-    OUString aFileName;
-    createFileURL(u"tdf130307.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf130307.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.ForEachSheets?language=Basic&location=document");
 
@@ -774,9 +725,7 @@ void ScMacrosTest::testTdf130307()
 
 void ScMacrosTest::testTdf144970()
 {
-    OUString aFileName;
-    createFileURL(u"tdf144970.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf144970.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
 
@@ -804,9 +753,7 @@ void ScMacrosTest::testTdf144970()
 
 void ScMacrosTest::testTdf138646()
 {
-    OUString aFileName;
-    createFileURL(u"tdf138646.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf138646.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -840,9 +787,7 @@ void ScMacrosTest::testTdf138646()
 
 void ScMacrosTest::testTdf105558()
 {
-    OUString aFileName;
-    createFileURL(u"tdf105558.ods", aFileName);
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"tdf105558.ods");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT(pFoundShell);
@@ -946,9 +891,8 @@ void ScMacrosTest::testShapeLayerId()
 
 void ScMacrosTest::testFunctionAccessIndirect()
 {
-    OUString aFileName;
-    createFileURL(u"tdf120161.ods", aFileName); // just some document with known values in cells
-    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    OUString aFileName = loadFromURL(u"tdf120161.ods"); // just some document with known values in cells
+
     const OUString aReference = "'" + aFileName + "'#$Sheet1.A1";
 
     css::uno::Reference<css::sheet::XFunctionAccess> xFunc(

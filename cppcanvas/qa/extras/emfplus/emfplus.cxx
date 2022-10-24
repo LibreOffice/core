@@ -31,9 +31,7 @@ public:
 
     Bitmap load(const char* pName)
     {
-        OUString aFileURL;
-        createFileURL(OUString::createFromAscii(pName), aFileURL);
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.drawing.DrawingDocument");
+        loadFromURL(OUString::createFromAscii(pName));
         SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();

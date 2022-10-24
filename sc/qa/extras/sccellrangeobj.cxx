@@ -245,9 +245,7 @@ void ScCellRangeObj::setUp()
 {
     UnoApiTest::setUp();
 
-    OUString aFileURL;
-    createFileURL(u"xcellrangesquery.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"xcellrangesquery.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangeObj);

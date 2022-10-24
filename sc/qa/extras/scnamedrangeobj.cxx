@@ -92,9 +92,7 @@ void ScNamedRangeObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    OUString aFileURL;
-    createFileURL(u"ScNamedRangeObj.ods", aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    loadFromURL(u"ScNamedRangeObj.ods");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangeObj);
