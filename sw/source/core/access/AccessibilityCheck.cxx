@@ -791,33 +791,63 @@ public:
         const OUString& sParagraphText = pTextNode->GetText();
         sal_Int32 nSpaceCount = 0;
         sal_Int32 nSpaceStart = 0;
+        sal_Int32 nTabCount = 0;
         bool bNonSpaceFound = false;
+        bool bPreviousWasChar = false;
         for (sal_Int32 i = 0; i < nParagraphLength; i++)
         {
-            if (sParagraphText[i] == ' ')
+            switch (sParagraphText[i])
             {
-                if (bNonSpaceFound)
+                case ' ':
                 {
-                    nSpaceCount++;
-                    if (nSpaceCount == 2)
-                        nSpaceStart = i;
+                    if (bNonSpaceFound)
+                    {
+                        nSpaceCount++;
+                        if (nSpaceCount == 2)
+                            nSpaceStart = i;
+                    }
+                    break;
                 }
-            }
-            else
-            {
-                if (nSpaceCount >= 2)
+                case '\t':
                 {
-                    auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_SPACES_SPACE),
-                                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
-                    pIssue->setIssueObject(IssueObject::TEXT);
-                    pIssue->setNode(pTextNode);
-                    SwDoc& rDocument = pTextNode->GetDoc();
-                    pIssue->setDoc(rDocument);
-                    pIssue->setStart(nSpaceStart);
-                    pIssue->setEnd(nSpaceStart + nSpaceCount - 1);
+                    if (bPreviousWasChar)
+                    {
+                        ++nTabCount;
+                        bPreviousWasChar = false;
+                        if (nTabCount == 2)
+                        {
+                            auto pIssue = lclAddIssue(m_rIssueCollection,
+                                                      SwResId(STR_AVOID_TABS_FORMATTING),
+                                                      sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                            pIssue->setIssueObject(IssueObject::TEXT);
+                            pIssue->setNode(pTextNode);
+                            SwDoc& rDocument = pTextNode->GetDoc();
+                            pIssue->setDoc(rDocument);
+                            pIssue->setStart(0);
+                            pIssue->setEnd(nParagraphLength);
+                        }
+                    }
+                    break;
                 }
-                bNonSpaceFound = true;
-                nSpaceCount = 0;
+                default:
+                {
+                    if (nSpaceCount >= 2)
+                    {
+                        auto pIssue
+                            = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_SPACES_SPACE),
+                                          sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                        pIssue->setIssueObject(IssueObject::TEXT);
+                        pIssue->setNode(pTextNode);
+                        SwDoc& rDocument = pTextNode->GetDoc();
+                        pIssue->setDoc(rDocument);
+                        pIssue->setStart(nSpaceStart);
+                        pIssue->setEnd(nSpaceStart + nSpaceCount - 1);
+                    }
+                    bNonSpaceFound = true;
+                    bPreviousWasChar = true;
+                    nSpaceCount = 0;
+                    break;
+                }
             }
         }
     }
