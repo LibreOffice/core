@@ -15,15 +15,37 @@
 #include <svl/listener.hxx>
 #include <vcl/timer.hxx>
 #include <AccessibilityCheck.hxx>
+#include <map>
 
 struct SwPosition;
 class SwTextNode;
 
 namespace sw
 {
+/// Contains the content node and tracks if the node
+/// gets deleted.
+class WeakContentNodeContainer : public SvtListener
+{
+private:
+    SwContentNode* m_pNode;
+
+public:
+    WeakContentNodeContainer(SwContentNode* pNode);
+    ~WeakContentNodeContainer();
+
+    /// Is the node still alive or it was deleted?
+    bool isAlive();
+
+    /// Returns the pointer of the content node or nullptr if the node
+    /// got deleted.
+    SwContentNode* getNode();
+};
+
 class OnlineAccessibilityCheck : public SvtListener
 {
 private:
+    std::map<SwContentNode*, std::unique_ptr<WeakContentNodeContainer>> m_aNodes;
+
     SwDoc& m_rDocument;
     sw::AccessibilityCheck m_aAccessibilityCheck;
     SwContentNode* m_pPreviousNode;
@@ -31,6 +53,8 @@ private:
     sal_Int32 m_nAccessibilityIssues;
 
     void runCheck(SwContentNode* pNode);
+    void updateStatusbar();
+    void updateNodeStatus(SwContentNode* pContentNode);
 
 public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
