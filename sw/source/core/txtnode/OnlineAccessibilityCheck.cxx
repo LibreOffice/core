@@ -61,6 +61,7 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     , m_pPreviousNode(nullptr)
     , m_nPreviousNodeIndex(-1)
     , m_nAccessibilityIssues(0)
+    , m_bInitialCheck(false)
 {
 }
 
@@ -106,7 +107,7 @@ void OnlineAccessibilityCheck::updateStatusbar()
         pBindings->Invalidate(FN_STAT_ACCESSIBILITY_CHECK);
 }
 
-void OnlineAccessibilityCheck::runCheck(SwContentNode* pContentNode)
+void OnlineAccessibilityCheck::runAccessibilityCheck(SwContentNode* pContentNode)
 {
     m_aAccessibilityCheck.getIssueCollection().clear();
 
@@ -123,9 +124,28 @@ void OnlineAccessibilityCheck::runCheck(SwContentNode* pContentNode)
 
     pContentNode->getAccessibilityCheckStatus().pCollection
         = std::make_unique<sfx::AccessibilityIssueCollection>(aCollection);
+}
 
-    updateNodeStatus(pContentNode);
+void OnlineAccessibilityCheck::initialCheck()
+{
+    if (m_bInitialCheck)
+        return;
+
+    auto const& pNodes = m_rDocument.GetNodes();
+    for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
+    {
+        SwNode* pNode = pNodes[n];
+        if (pNode && pNode->IsContentNode())
+        {
+            auto* pCurrent = pNode->GetContentNode();
+            runAccessibilityCheck(pCurrent);
+            updateNodeStatus(pCurrent);
+        }
+    }
+
     updateStatusbar();
+
+    m_bInitialCheck = true;
 }
 
 void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
@@ -174,7 +194,9 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
     {
         auto* pContentNode = pNode->GetContentNode();
 
-        runCheck(pContentNode);
+        runAccessibilityCheck(pContentNode);
+        updateNodeStatus(pContentNode);
+        updateStatusbar();
 
         // Assign previous node and index
         EndListeningAll();
@@ -187,6 +209,8 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
         m_pPreviousNode = nullptr;
         m_nPreviousNodeIndex = SwNodeOffset(-1);
     }
+
+    initialCheck();
 }
 
 } // end sw
