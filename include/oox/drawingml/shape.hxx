@@ -136,6 +136,7 @@ public:
 
     CustomShapePropertiesPtr&       getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
+    OUString&                       getConnectorName() { return msConnectorName; }
     ConnectorShapePropertiesList&   getConnectorShapeProperties() { return maConnectorShapePropertiesList; }
     void                            setConnectorShape(bool bConnector) { mbConnector = bConnector; }
     bool                            isConnectorShape() const { return mbConnector; }
@@ -160,6 +161,8 @@ public:
     sal_Int32                       getRotation() const { return mnRotation; }
     void                            setDiagramRotation( sal_Int32 nRotation ) { mnDiagramRotation = nRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
+    bool                            getFlipH() const { return mbFlipH; }
+    bool                            getFlipV() const { return mbFlipV; }
     void                            addChild( const ShapePtr& rChildPtr ) { maChildren.push_back( rChildPtr ); }
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
@@ -344,6 +347,7 @@ protected:
     css::uno::Reference< css::drawing::XShape > mxShape;
     ConnectorShapePropertiesList maConnectorShapePropertiesList;
 
+    OUString                    msConnectorName;
     OUString                    msServiceName;
     OUString                    msName;
     OUString                    msInternalName; // used by diagram; not displayed in UI

@@ -1682,6 +1682,13 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if (bIsConnectorShape)
         {
+            OUString sConnectorShapePresetTypeName(
+                reinterpret_cast<const char*>(
+                    mpCustomShapePropertiesPtr->getShapePresetTypeName().getConstArray()),
+                mpCustomShapePropertiesPtr->getShapePresetTypeName().getLength(),
+                RTL_TEXTENCODING_UTF8);
+            msConnectorName = sConnectorShapePresetTypeName;
+
             sal_Int32 nType = mpCustomShapePropertiesPtr->getShapePresetType();
             switch (nType)
             {

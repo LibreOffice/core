@@ -44,6 +44,7 @@
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
+#include <com/sun/star/drawing/ConnectorType.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -349,6 +350,70 @@ Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) co
     return aResult;
 }
 
+static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
+                                 oox::drawingml::ShapePtr& rShapePtr)
+{
+    sal_Int32 nEdge = 0;
+    awt::Point aStartPt, aEndPt;
+    uno::Reference<drawing::XShape> xStartSp, xEndSp;
+    uno::Reference<beans::XPropertySet> xPropSet(rXConnector, uno::UNO_QUERY);
+    xPropSet->getPropertyValue("EdgeStartPoint") >>= aStartPt;
+    xPropSet->getPropertyValue("EdgeEndPoint") >>= aEndPt;
+    xPropSet->getPropertyValue("StartShape") >>= xStartSp;
+    xPropSet->getPropertyValue("EndShape") >>= xEndSp;
+    xPropSet->setPropertyValue("EdgeNode1HorzDist", Any(sal_Int32(0)));
+    xPropSet->setPropertyValue("EdgeNode1VertDist", Any(sal_Int32(0)));
+    xPropSet->setPropertyValue("EdgeNode2HorzDist", Any(sal_Int32(0)));
+    xPropSet->setPropertyValue("EdgeNode2VertDist", Any(sal_Int32(0)));
+
+    const OUString sConnectorName = rShapePtr->getConnectorName();
+    if (sConnectorName == "bentConnector2")
+    {
+        awt::Size aConnSize = rXConnector->getSize();
+        if (xStartSp.is() || xEndSp.is())
+        {
+            if (aConnSize.Height < aConnSize.Width)
+            {
+                if (xStartSp.is())
+                    nEdge = (aStartPt.Y > aEndPt.Y) ? -aConnSize.Height : aConnSize.Height;
+                else
+                    nEdge = (aStartPt.Y > aEndPt.Y) ? aConnSize.Height : -aConnSize.Height;
+            }
+            else
+            {
+                if (xStartSp.is())
+                    nEdge = (aStartPt.X > aEndPt.X) ? -aConnSize.Width : aConnSize.Width;
+                else
+                    nEdge = (aStartPt.X > aEndPt.X) ? aConnSize.Width : -aConnSize.Width;
+            }
+        }
+        else
+        {
+            bool bFlipH = rShapePtr->getFlipH();
+            bool bFlipV = rShapePtr->getFlipV();
+            sal_Int32 nConnectorAngle = rShapePtr->getRotation() / 60000;
+            if (aConnSize.Height < aConnSize.Width)
+            {
+                if ((nConnectorAngle == 90 && bFlipH && bFlipV) || (nConnectorAngle == 180)
+                    || (nConnectorAngle == 180 && bFlipV) || (nConnectorAngle == 270 && bFlipH))
+                    nEdge -= aConnSize.Width;
+                else
+                    nEdge += aConnSize.Width;
+            }
+            else
+            {
+                if ((nConnectorAngle == 180 && bFlipV) || (nConnectorAngle == 270 && bFlipV)
+                    || (nConnectorAngle == 90 && bFlipH && bFlipV)
+                    || (nConnectorAngle == 0 && !bFlipV))
+                    nEdge -= aConnSize.Height;
+                else
+                    nEdge += aConnSize.Height;
+            }
+        }
+        xPropSet->setPropertyValue("EdgeLine1Delta", Any(nEdge / 2));
+    }
+}
+
 // create connection between two shape with a connector shape.
 void SlidePersist::createConnectorShapeConnection()
 {
@@ -407,6 +472,10 @@ void SlidePersist::createConnectorShapeConnection()
                     }
                 }
             }
+            ConnectorType aConnectorType;
+            xPropertySet->getPropertyValue("EdgeKind") >>= aConnectorType;
+            if (aConnectorType == ConnectorType_STANDARD)
+                lcl_SetEdgeLineValue(xConnector, pIt->second);
         }
     }
     maConnectorShapeId.clear();

@@ -61,6 +61,7 @@
 #include <comphelper/lok.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 using namespace ::com::sun::star;
 
@@ -83,6 +84,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testConnectors();
     void testTdf150719();
     void testTdf149314();
     void testTdf149124();
@@ -155,6 +157,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testConnectors);
     CPPUNIT_TEST(testTdf150719);
     CPPUNIT_TEST(testTdf149314);
     CPPUNIT_TEST(testTdf149124);
@@ -303,6 +306,21 @@ void SdImportTest::testDocumentLayout()
                 Concat2View(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testConnectors()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/connectors.pptx"), PPTX);
+
+    sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476, 1357, -1357, 1604, -1540 };
+    for (size_t i = 1; i < 9; i++)
+    {
+        uno::Reference<beans::XPropertySet> xConnector(getShapeFromPage(i, 0, xDocShRef));
+        sal_Int32 nEdgeLine = xConnector->getPropertyValue("EdgeLine1Delta").get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(aEdgeValue[i-1], nEdgeLine);
+    }
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf150719()
