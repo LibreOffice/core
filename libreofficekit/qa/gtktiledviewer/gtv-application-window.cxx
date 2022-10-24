@@ -148,16 +148,21 @@ static void initWindow(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
 
-#ifdef __GNUC__
+#if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined _WIN32
+#pragma warning(push)
+#pragma warning(disable:4996)
 #endif
     GList *focusChain = nullptr;
     focusChain = g_list_append( focusChain, window->lokdocview );
 
     gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
-#ifdef __GNUC__
+#if defined __GNUC__
 #pragma GCC diagnostic pop
+#elif defined _WIN32
+#pragma warning(pop)
 #endif
 
     // TODO: Implement progressbar in statusbar
