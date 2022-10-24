@@ -416,7 +416,7 @@ else
 	@exit 1
 endif
 
-# the builds need to persist a standard "make clean" to be able to combine them into an universal
+# the builds need to persist a standard "make clean" to be able to combine them into a universal
 # binary, so provide an additional target that can be used standalone or via make distclean
 mac-app-store-package.clean:
 	rm -rf \
