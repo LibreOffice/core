@@ -79,7 +79,7 @@ utl::TempFileNamed UnoApiTest::save(const OUString& rFilter)
     aTempFile.EnableKillingFile();
     uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
+    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent->dispose();
     mxComponent.clear();
 

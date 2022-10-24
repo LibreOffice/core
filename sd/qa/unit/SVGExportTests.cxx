@@ -10,12 +10,10 @@
 #include <sal/config.h>
 
 #include <string_view>
-
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <sal/macros.h>
 #include <test/xmltesttools.hxx>
-#include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -70,7 +68,7 @@ bool isValidTiledBackgroundId(const OUString& sId)
 
 }
 
-class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SdSVGFilterTest : public UnoApiTest, public XmlTestTools
 {
     class Resetter
     {
@@ -95,68 +93,21 @@ class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTes
         }
     };
 
-    uno::Reference<lang::XComponent> mxComponent;
-    utl::TempFileNamed maTempFile;
-
-protected:
-    void load(std::u16string_view pDir, const char* pName)
-    {
-        return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
-    }
-
-    void loadURL(OUString const& rURL, const char* pName)
-    {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
-        if (pName)
-            std::cout << pName << ",";
-        mxComponent = loadFromDesktop(rURL);
-    }
-
-    void save()
-    {
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
-        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    }
-
 public:
     SdSVGFilterTest()
+        : UnoApiTest("/sd/qa/unit/data/odp/")
     {
-        maTempFile.EnableKillingFile();
-    }
-
-    virtual void setUp() override
-    {
-        test::BootstrapFixture::setUp();
-
-        mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-    }
-
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        test::BootstrapFixture::tearDown();
-    }
-
-    void executeExport(const char* pName)
-    {
-        load( u"/sd/qa/unit/data/odp/", pName );
-        save();
     }
 
     void testSVGExportTextDecorations()
     {
-        executeExport( "svg-export-text-decorations.odp" );
+        loadFromURL(u"svg-export-text-decorations.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
+        svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(aTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG ), 1);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class", "SlideGroup");
@@ -173,9 +124,10 @@ public:
 
     void testSVGExportJavascriptURL()
     {
-        executeExport("textbox-link-javascript.odp");
+        loadFromURL(u"textbox-link-javascript.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         // There should be only one child (no link to javascript url)
@@ -187,9 +139,10 @@ public:
 
     void testSVGExportSlideCustomBackground()
     {
-        executeExport("slide-custom-background.odp");
+        loadFromURL(u"slide-custom-background.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
@@ -197,9 +150,10 @@ public:
 
     void testSVGExportTextFieldsInMasterPage()
     {
-        executeExport("text-fields.odp");
+        loadFromURL(u"text-fields.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class", "Master_Slide");
@@ -224,9 +178,10 @@ public:
 
     void testSVGExportSlideBitmapBackground()
     {
-        executeExport("slide-bitmap-background.odp");
+        loadFromURL(u"slide-bitmap-background.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class", "BackgroundBitmaps");
@@ -252,9 +207,10 @@ public:
 
     void testSVGExportSlideTileBitmapBackground()
     {
-        executeExport("slide-tile-background.odp");
+        loadFromURL(u"slide-tile-background.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         // check the bitmap
@@ -316,9 +272,10 @@ public:
         aSettings.SetLanguageTag(aLangISO, true);
         Application::SetSettings(aSettings);
 
-        executeExport("text-fields.odp");
+        loadFromURL(u"text-fields.odp");
+        utl::TempFileNamed aTempFile = save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class", "Master_Slide");
