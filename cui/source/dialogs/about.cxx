@@ -17,9 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <about.hxx>
 
 #include <osl/process.h>     //osl_getProcessLocale
+#include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>       //SAL_WARN
 #include <vcl/settings.hxx>  //GetSettings
 #include <vcl/svapp.hxx>     //Application::
@@ -148,11 +153,10 @@ bool AboutDialog::IsStringValidGitHash(std::u16string_view hash) {
 OUString AboutDialog::GetVersionString() {
   OUString sVersion = CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX"));
 
-#ifdef _WIN64
-  sVersion += " (x64)";
-#elif defined(_WIN32)
-  sVersion += " (x86)";
-#endif
+  OUString arch;
+  auto const ok = rtl::Bootstrap::get("_ARCH", arch);
+  assert(ok); (void) ok;
+  sVersion += " (" + arch + ")";
 
 #if HAVE_FEATURE_COMMUNITY_FLAVOR
   sVersion += " / LibreOffice Community";
