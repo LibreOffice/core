@@ -52,7 +52,7 @@ public:
     std::optional<SwLanguageListItem> GetSelectedLanguage();
 
 private:
-    SwWrtShell& rWrtSh;
+    SwWrtShell& m_rWrtSh;
     std::unique_ptr<weld::ComboBox> m_xLanguageListBox;
     std::unique_ptr<weld::Button> m_xBtnCancel;
     std::unique_ptr<weld::Button> m_xBtnTranslate;

@@ -34,8 +34,8 @@
 SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
     : SwFieldPage(pPage, pController, "modules/swriter/ui/flddocumentpage.ui",
                   "FieldDocumentPage", pCoreSet)
-    , nOldSel(0)
-    , nOldFormat(0)
+    , m_nOldSel(0)
+    , m_nOldFormat(0)
     , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
     , m_xSelection(m_xBuilder->weld_widget("selectframe"))
     , m_xSelectionLB(m_xBuilder->weld_tree_view("select"))
@@ -174,8 +174,8 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
 
     if (IsFieldEdit())
     {
-        nOldSel = m_xSelectionLB->get_selected_index();
-        nOldFormat = GetCurField()->GetFormat();
+        m_nOldSel = m_xSelectionLB->get_selected_index();
+        m_nOldFormat = GetCurField()->GetFormat();
         m_xFixedCB->save_state();
         m_xValueED->save_value();
         m_xLevelED->save_value();
@@ -606,8 +606,8 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
     }
 
     if (!IsFieldEdit() ||
-        nOldSel != m_xSelectionLB->get_selected_index() ||
-        nOldFormat != nFormat ||
+        m_nOldSel != m_xSelectionLB->get_selected_index() ||
+        m_nOldFormat != nFormat ||
         m_xFixedCB->get_state_changed_from_saved() ||
         m_xValueED->get_value_changed_from_saved() ||
         m_xLevelED->get_value_changed_from_saved() ||

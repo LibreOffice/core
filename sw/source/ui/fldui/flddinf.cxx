@@ -52,8 +52,8 @@ void FillFieldSelect(weld::TreeView& rListBox)
 
 SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
     :  SwFieldPage(pPage, pController, "modules/swriter/ui/flddocinfopage.ui", "FieldDocInfoPage", pCoreSet)
-    , nOldSel(0)
-    , nOldFormat(0)
+    , m_nOldSel(0)
+    , m_nOldFormat(0)
     , m_xTypeList(m_xBuilder->weld_tree_view("type-list"))
     , m_xTypeTree(m_xBuilder->weld_tree_view("type-tree"))
     // tdf#104278 have two tree views, one with expander and one without, the one with is only used
@@ -84,7 +84,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
         ? pCoreSet->GetItem(FN_FIELD_DIALOG_DOC_PROPS, false)
         : nullptr;
     if ( pItem )
-        pItem->GetValue() >>= xCustomPropertySet;
+        pItem->GetValue() >>= m_xCustomPropertySet;
 
     // uitests
     m_pTypeView->set_buildable_name("type-docinf");
@@ -101,9 +101,9 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     Init(); // general initialisation
 
     uno::Sequence<beans::Property> aCustomProperties;
-    if (xCustomPropertySet.is())
+    if (m_xCustomPropertySet.is())
     {
-        uno::Reference<beans::XPropertySetInfo> xSetInfo = xCustomPropertySet->getPropertySetInfo();
+        uno::Reference<beans::XPropertySetInfo> xSetInfo = m_xCustomPropertySet->getPropertySetInfo();
         aCustomProperties = xSetInfo->getProperties();
     }
 
@@ -171,7 +171,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
             const OUString sId(OUString::number(i));
             if (DI_CUSTOM == i)
             {
-                if(xCustomPropertySet.is() )
+                if(m_xCustomPropertySet.is() )
                 {
                     if (aCustomProperties.hasElements())
                     {
@@ -241,8 +241,8 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 
     if (IsFieldEdit())
     {
-        nOldSel = m_xSelectionLB->get_selected_index();
-        nOldFormat = GetCurField()->GetFormat();
+        m_nOldSel = m_xSelectionLB->get_selected_index();
+        m_nOldFormat = GetCurField()->GetFormat();
         m_xFixedCB->save_state();
     }
 }
@@ -280,7 +280,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
                     const OUString sName = m_pTypeView->get_text(*m_xSelEntry);
                     try
                     {
-                        uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
+                        uno::Any aVal = m_xCustomPropertySet->getPropertyValue( sName );
                         const uno::Type& rValueType = aVal.getValueType();
                         if( rValueType == ::cppu::UnoType<util::DateTime>::get())
                         {
@@ -479,8 +479,8 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     if(nPos != -1)
         nFormat = m_xFormatLB->GetFormat();
 
-    if (!IsFieldEdit() || nOldSel != m_xSelectionLB->get_selected_index() ||
-        nOldFormat != nFormat || m_xFixedCB->get_state_changed_from_saved()
+    if (!IsFieldEdit() || m_nOldSel != m_xSelectionLB->get_selected_index() ||
+        m_nOldFormat != nFormat || m_xFixedCB->get_state_changed_from_saved()
         || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
     {
         InsertField(SwFieldTypesEnum::DocumentInfo, nSubType, aName, OUString(), nFormat,

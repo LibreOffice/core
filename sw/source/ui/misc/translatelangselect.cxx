@@ -43,7 +43,7 @@ int SwTranslateLangSelectDlg::selectedLangIdx = -1;
 SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell& rSh)
     : GenericDialogController(pParent, "modules/swriter/ui/translationdialog.ui",
                               "LanguageSelectDialog")
-    , rWrtSh(rSh)
+    , m_rWrtSh(rSh)
     , m_xLanguageListBox(m_xBuilder->weld_combo_box("combobox1"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xBtnTranslate(m_xBuilder->weld_button("translate"))
@@ -146,7 +146,7 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
     m_bTranslationStarted = true;
 
     SwTranslateHelper::TranslateAPIConfig aConfig({ aAPIUrl, aAuthKey, aTargetLang });
-    SwTranslateHelper::TranslateDocumentCancellable(rWrtSh, aConfig, m_bCancelTranslation);
+    SwTranslateHelper::TranslateDocumentCancellable(m_rWrtSh, aConfig, m_bCancelTranslation);
     m_xDialog->response(RET_OK);
 }
 

@@ -26,8 +26,8 @@
 
 class SwFieldDokPage : public SwFieldPage
 {
-    sal_Int32               nOldSel;
-    sal_uLong               nOldFormat;
+    sal_Int32               m_nOldSel;
+    sal_uLong               m_nOldFormat;
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;
     std::unique_ptr<weld::Widget> m_xSelection;
