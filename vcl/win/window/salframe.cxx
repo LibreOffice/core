@@ -2712,6 +2712,13 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aHighlightButtonTextColor = aStyleSettings.GetHighContrastMode() ?
         aHighlightTextColor : aControlTextColor;
 
+    if (aStyleSettings.GetHighContrastMode())
+    {
+        Color aLinkColor(ImplWinColorToSal(GetSysColor(COLOR_HOTLIGHT)));
+        aStyleSettings.SetLinkColor(aLinkColor);
+        aStyleSettings.SetVisitedLinkColor(aLinkColor);
+    }
+
     aStyleSettings.SetDefaultButtonTextColor(aHighlightButtonTextColor);
     aStyleSettings.SetButtonTextColor(aControlTextColor);
     aStyleSettings.SetDefaultActionButtonTextColor(aHighlightButtonTextColor);
