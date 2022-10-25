@@ -37,14 +37,6 @@
 #include <dbnamdlg.hxx>
 #include <dbdocfun.hxx>
 
-namespace {
-
-class DBSaveData;
-
-}
-
-static std::unique_ptr<DBSaveData> xSaveObj;
-
 namespace
 {
     void ERRORBOX(weld::Window* pParent, const OUString& rString)
@@ -126,6 +118,7 @@ void DBSaveData::Restore()
     }
 }
 
+static std::unique_ptr<DBSaveData> xSaveObj;
 
 ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
     ScViewData& rViewData)
