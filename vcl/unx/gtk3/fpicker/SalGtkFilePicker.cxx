@@ -66,6 +66,46 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
+struct FilterEntry
+{
+protected:
+    OUString     m_sTitle;
+    OUString     m_sFilter;
+
+    css::uno::Sequence< css::beans::StringPair >       m_aSubFilters;
+
+public:
+    FilterEntry( OUString _aTitle, OUString _aFilter )
+        :m_sTitle(std::move( _aTitle ))
+        ,m_sFilter(std::move( _aFilter ))
+    {
+    }
+
+    const OUString& getTitle() const { return m_sTitle; }
+    const OUString& getFilter() const { return m_sFilter; }
+
+    /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
+    bool        hasSubFilters( ) const;
+
+    /** retrieves the filters belonging to the entry
+    */
+    void       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
+
+    // helpers for iterating the sub filters
+    const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.begin(); }
+    const css::beans::StringPair*   endSubFilters() const { return m_aSubFilters.end(); }
+};
+
+bool FilterEntry::hasSubFilters() const
+{
+    return m_aSubFilters.hasElements();
+}
+
+void FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
+{
+    _rSubFilterList = m_aSubFilters;
+}
+
 void SalGtkFilePicker::dialog_mapped_cb(GtkWidget *, SalGtkFilePicker *pobjFP)
 {
     pobjFP->InitialMapping();
@@ -357,46 +397,6 @@ void SalGtkFilePicker::impl_directoryChanged( const FilePickerEvent& aEvent )
 void SalGtkFilePicker::impl_controlStateChanged( const FilePickerEvent& aEvent )
 {
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
-}
-
-struct FilterEntry
-{
-protected:
-    OUString     m_sTitle;
-    OUString     m_sFilter;
-
-    css::uno::Sequence< css::beans::StringPair >       m_aSubFilters;
-
-public:
-    FilterEntry( OUString _aTitle, OUString _aFilter )
-        :m_sTitle(std::move( _aTitle ))
-        ,m_sFilter(std::move( _aFilter ))
-    {
-    }
-
-    const OUString& getTitle() const { return m_sTitle; }
-    const OUString& getFilter() const { return m_sFilter; }
-
-    /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
-    bool        hasSubFilters( ) const;
-
-    /** retrieves the filters belonging to the entry
-    */
-    void       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
-
-    // helpers for iterating the sub filters
-    const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.begin(); }
-    const css::beans::StringPair*   endSubFilters() const { return m_aSubFilters.end(); }
-};
-
-bool FilterEntry::hasSubFilters() const
-{
-    return m_aSubFilters.hasElements();
-}
-
-void FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
-{
-    _rSubFilterList = m_aSubFilters;
 }
 
 static bool
