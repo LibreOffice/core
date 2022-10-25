@@ -11,8 +11,7 @@
 
 #include <string_view>
 
-#include <unotest/macros_test.hxx>
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -27,7 +26,6 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
@@ -59,15 +57,10 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
+class SwMacrosTest : public UnoApiTest
 {
 public:
     SwMacrosTest();
-
-    void createFileURL(std::u16string_view aFile, OUString& rFilePath);
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
 
     void testVba();
     void testBookmarkDeleteAndJoin();
@@ -88,20 +81,7 @@ public:
     CPPUNIT_TEST(testFdo87530);
     CPPUNIT_TEST(testFindReplace);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xWriterComponent;
-    OUString m_aBaseString;
 };
-
-void SwMacrosTest::createFileURL(std::u16string_view aFile, OUString& rFilePath)
-{
-    auto i = aFile.find_last_of('.');
-    CPPUNIT_ASSERT_MESSAGE("Missing Extension", i != std::string_view::npos);
-    std::u16string_view aFileExtension = aFile.substr(i+1);
-
-    rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileExtension + "/" + aFile;
-}
 
 void SwMacrosTest::testVba()
 {
@@ -149,23 +129,16 @@ void SwMacrosTest::testVba()
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
-        OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName, aFileName);
-        uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-        OUString sUrl = testInfo[i].sMacroUrl;
-        Any aRet;
-        Sequence< sal_Int16 > aOutParamIndex;
-        Sequence< Any > aOutParam;
-        Sequence< uno::Any > aParams;
+        OUString sFileName("docm/" + testInfo[i].sFileBaseName);
+        loadFromURL(sFileName);
 
-        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-
-        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, SfxObjectShell::CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam));
+        uno::Any aRet = executeMacro(testInfo[i].sMacroUrl);
         OUString aStringRes;
         CPPUNIT_ASSERT(aRet >>= aStringRes);
         CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
-        pFoundShell->DoClose();
+
+        mxComponent->dispose();
+        mxComponent.clear();
     }
 }
 
@@ -241,12 +214,9 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
 
 void SwMacrosTest::testControlShapeGrouping()
 {
-    OUString aFileName;
-    createFileURL(u"testControlShapeGrouping.odt", aFileName);
-    Reference< css::lang::XComponent > xComponent(
-        loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
+    loadFromURL(u"odt/testControlShapeGrouping.odt");
 
-    uno::Reference<frame::XModel> const xModel(xComponent, UNO_QUERY);
+    uno::Reference<frame::XModel> const xModel(mxComponent, UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
@@ -340,10 +310,6 @@ void SwMacrosTest::testControlShapeGrouping()
         CPPUNIT_ASSERT_EQUAL(xTS->getControl(), xTimeControlModel);
     }
 #endif
-
-    // close
-    Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
-    xDocCloseable->close(false);
 }
 
 void SwMacrosTest::testFdo55289()
@@ -381,26 +347,13 @@ void SwMacrosTest::testFdo55289()
 
 void SwMacrosTest::testFdo68983()
 {
-    OUString aFileName;
-    createFileURL(u"fdo68983.odt", aFileName);
-    Reference< css::lang::XComponent > xComponent =
-        loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-    Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
+    loadFromURL(u"odt/fdo68983.odt");
+    Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    Sequence<beans::PropertyValue> desc( comphelper::InitPropertySequence({
-            { "FilterName", Any(OUString("writer8")) }
-        }));
-    xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
-
-    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
-
-    // re-load
-    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    saveAndReload("writer8");
 
     // check that password-protected library survived store and re-load
-    Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
     Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
@@ -408,27 +361,15 @@ void SwMacrosTest::testFdo68983()
     CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("Library1", "foo"));
     xBasLib->loadLibrary("Library1");
     CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("Library1"));
-
-    // close
-    Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
-    xDocCloseable->close(false);
 }
 
 void SwMacrosTest::testFdo87530()
 {
-    Reference<css::lang::XComponent> xComponent =
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
-    Sequence<beans::PropertyValue> desc( comphelper::InitPropertySequence({
-            { "FilterName", Any(OUString("writer8")) }
-        }));
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
     {
         // insert initial password protected library
-        Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+        Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
@@ -436,19 +377,13 @@ void SwMacrosTest::testFdo87530()
         xLibrary->insertByName("BarModule",
                 uno::Any(OUString("Sub Main\nEnd Sub\n")));
         xBasLibPwd->changeLibraryPassword("BarLibrary", "", "foo");
-
-        Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
-        xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
     }
 
-    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
-
-    // re-load
-    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    saveAndReload("writer8");
 
     {
         // check that password-protected library survived store and re-load
-        Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+        Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
@@ -465,19 +400,12 @@ void SwMacrosTest::testFdo87530()
         xFooLib->insertByName("FooModule",
                 uno::Any(OUString("Sub Main\nEnd Sub\n")));
         xBasLibPwd->changeLibraryPassword("FooLibrary", "", "foo");
-
-        // store again
-        Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
-        xDocStorable->store();
     }
 
-    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
-
-    // re-load
-    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    saveAndReload("writer8");
 
     // check that password-protected library survived store and re-load
-    Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
     Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
@@ -488,22 +416,16 @@ void SwMacrosTest::testFdo87530()
     Reference<container::XNameContainer> xLibrary(xBasLib->getByName("FooLibrary"), UNO_QUERY);
     Any module(xLibrary->getByName("FooModule"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sub Main\nEnd Sub\n"), module.get<OUString>());
-
-    // close
-    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
 }
 
 
 void SwMacrosTest::testFindReplace()
 {
     // we need a full document with view and layout etc. because ::GetNode()
-    Reference<lang::XComponent> const xComponent =
+    mxComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
-    const ::comphelper::ScopeGuard aComponentScopeGuard(
-        [&xComponent]() { xComponent->dispose(); } );
-
-    SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+    SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
@@ -564,26 +486,8 @@ void SwMacrosTest::testFindReplace()
 }
 
 SwMacrosTest::SwMacrosTest()
-      : m_aBaseString("/sw/qa/core/data")
+      : UnoApiTest("/sw/qa/core/data/")
 {
-}
-
-void SwMacrosTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xWriterComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Writer.TextDocument");
-    CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
-    mxDesktop = css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
-}
-
-void SwMacrosTest::tearDown()
-{
-    uno::Reference< lang::XComponent >( m_xWriterComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwMacrosTest);

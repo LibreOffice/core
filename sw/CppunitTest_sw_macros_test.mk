@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_macros_test, \
     sw \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \
