@@ -474,6 +474,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
 
 void SdrMediaObj::notifyPropertiesForLOKit()
 {
+#if HAVE_FEATURE_AVMEDIA
     if (!m_xImpl->m_MediaProperties.getTempURL().isEmpty())
     {
         const auto mediaId = reinterpret_cast<std::size_t>(this);
@@ -491,6 +492,7 @@ void SdrMediaObj::notifyPropertiesForLOKit()
 
         SfxLokHelper::notifyMediaUpdate(json);
     }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
