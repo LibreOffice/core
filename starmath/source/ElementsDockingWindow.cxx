@@ -452,6 +452,17 @@ const std::vector<TranslateId>& SmElementsControl::categories()
     return s_a5Categories;
 }
 
+struct ElementData
+{
+    OUString maElementSource;
+    OUString maHelpText;
+    ElementData(const OUString& aElementSource, const OUString& aHelpText)
+        : maElementSource(aElementSource)
+        , maHelpText(aHelpText)
+    {
+    }
+};
+
 SmElementsControl::SmElementsControl(std::unique_ptr<weld::IconView> pIconView)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , mnCurrentSetIndex(-1)
@@ -481,17 +492,6 @@ Color SmElementsControl::GetControlBackground()
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     return rStyleSettings.GetFieldColor();
 }
-
-struct ElementData
-{
-    OUString maElementSource;
-    OUString maHelpText;
-    ElementData(const OUString& aElementSource, const OUString& aHelpText)
-        : maElementSource(aElementSource)
-        , maHelpText(aHelpText)
-    {
-    }
-};
 
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
