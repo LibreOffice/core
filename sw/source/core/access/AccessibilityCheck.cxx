@@ -23,6 +23,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <unoparagraph.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
 #include <charatr.hxx>
@@ -770,6 +771,76 @@ public:
     }
 };
 
+class FakeFootnoteCheck : public NodeCheck
+{
+private:
+    void checkAutoFormat(SwTextNode* pTextNode, const SwTextAttr* pTextAttr)
+    {
+        const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
+        SfxItemIter aItemIter(*rAutoFormat.GetStyleHandle());
+        const SfxPoolItem* pItem = aItemIter.GetCurItem();
+        while (pItem)
+        {
+            if (pItem->Which() == RES_CHRATR_ESCAPEMENT)
+            {
+                auto pEscapementItem = static_cast<const SvxEscapementItem*>(pItem);
+                if (pEscapementItem->GetEscapement() == SvxEscapement::Superscript
+                    && pTextAttr->GetStart() == 0 && pTextAttr->GetAnyEnd() == 1)
+                {
+                    auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FAKE_FOOTNOTES),
+                                              sfx::AccessibilityIssueID::FAKE_FOOTNOTE);
+                    pIssue->setIssueObject(IssueObject::TEXT);
+                    pIssue->setNode(pTextNode);
+                    SwDoc& rDocument = pTextNode->GetDoc();
+                    pIssue->setDoc(rDocument);
+                    pIssue->setStart(0);
+                    pIssue->setEnd(pTextNode->GetText().getLength());
+                    break;
+                }
+            }
+            pItem = aItemIter.NextItem();
+        }
+    }
+
+public:
+    FakeFootnoteCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        if (pTextNode->GetText().getLength() == 0)
+            return;
+
+        if (pTextNode->GetText()[0] == '*')
+        {
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FAKE_FOOTNOTES),
+                                      sfx::AccessibilityIssueID::FAKE_FOOTNOTE);
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setNode(pTextNode);
+            SwDoc& rDocument = pTextNode->GetDoc();
+            pIssue->setDoc(rDocument);
+            pIssue->setStart(0);
+            pIssue->setEnd(pTextNode->GetText().getLength());
+        }
+        else if (pTextNode->HasHints())
+        {
+            SwpHints& rHints = pTextNode->GetSwpHints();
+            for (size_t i = 0; i < rHints.Count(); ++i)
+            {
+                const SwTextAttr* pTextAttr = rHints.Get(i);
+                if (pTextAttr->Which() == RES_TXTATR_AUTOFMT)
+                {
+                    checkAutoFormat(pTextNode, pTextAttr);
+                }
+            }
+        }
+    }
+};
+
 class BlinkingTextCheck : public NodeCheck
 {
 private:
@@ -1194,6 +1265,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<HeadingOrderCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NewlineSpacingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<SpaceSpacingCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<FakeFootnoteCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
