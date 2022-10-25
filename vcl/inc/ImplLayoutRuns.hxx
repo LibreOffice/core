@@ -20,22 +20,17 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-
-#include <vector>
+#include <boost/container/small_vector.hpp>
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class VCL_DLLPUBLIC ImplLayoutRuns
 {
 private:
     int mnRunIndex;
-    std::vector<int> maRuns;
+    boost::container::small_vector<int, 8> maRuns;
 
 public:
-    ImplLayoutRuns()
-    {
-        mnRunIndex = 0;
-        maRuns.reserve(8);
-    }
+    ImplLayoutRuns() { mnRunIndex = 0; }
 
     void Clear() { maRuns.clear(); }
     void AddPos(int nCharPos, bool bRTL);

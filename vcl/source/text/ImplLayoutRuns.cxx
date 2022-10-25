@@ -18,6 +18,7 @@
  */
 
 #include <ImplLayoutRuns.hxx>
+#include <algorithm>
 
 void ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
