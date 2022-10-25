@@ -1776,7 +1776,8 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                             sFormulaBuf.append( aToken );
                             if (nStringIx<0)
                                 break;
-                            mxString1->Append(u"\0");
+                            sal_Unicode cUnicodeChar = 0;
+                            mxString1->Append( std::u16string_view(&cUnicodeChar, 1) );
                             sFormulaBuf.append( ',' );
                             sListBuf.append( ',' );
                         }

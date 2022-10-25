@@ -148,7 +148,8 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 {
     if( !cChar )
     {
-        BuildAppend( "\0" );
+        char cByteChar = 0;
+        BuildAppend( std::string_view(&cByteChar, 1) );
     }
     else
     {
