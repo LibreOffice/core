@@ -85,6 +85,25 @@ enum RecursiveMode
     PREVENT_CALL
 };
 
+class SbiExprList final {            // class for parameters and dims
+    std::vector<std::unique_ptr<SbiExpression>> aData;
+    short nDim;
+    bool  bError;
+    bool  bBracket;
+public:
+    SbiExprList();
+    ~SbiExprList();
+    static SbiExprListPtr ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
+    static SbiExprListPtr ParseDimList( SbiParser* );
+    bool  IsBracket() const         { return bBracket;        }
+    bool  IsValid() const           { return !bError; }
+    short GetSize() const           { return aData.size();    }
+    short GetDims() const           { return nDim;            }
+    SbiExpression* Get( size_t );
+    void  Gen( SbiCodeGen& rGen);                    // code generation
+    void addExpression( std::unique_ptr<SbiExpression>&& pExpr  );
+};
+
 class SbiExprNode final {           // operators (and operands)
     friend class SbiExpression;
     friend class SbiConstExpression;
@@ -203,25 +222,6 @@ public:                             // numeric constant
     const OUString& GetString() const { return aVal; }
     double GetValue() const { return nVal; }
     short GetShortValue();
-};
-
-class SbiExprList final {            // class for parameters and dims
-    std::vector<std::unique_ptr<SbiExpression>> aData;
-    short nDim;
-    bool  bError;
-    bool  bBracket;
-public:
-    SbiExprList();
-    ~SbiExprList();
-    static SbiExprListPtr ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
-    static SbiExprListPtr ParseDimList( SbiParser* );
-    bool  IsBracket() const         { return bBracket;        }
-    bool  IsValid() const           { return !bError; }
-    short GetSize() const           { return aData.size();    }
-    short GetDims() const           { return nDim;            }
-    SbiExpression* Get( size_t );
-    void  Gen( SbiCodeGen& rGen);                    // code generation
-    void addExpression( std::unique_ptr<SbiExpression>&& pExpr  );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
