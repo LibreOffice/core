@@ -241,6 +241,73 @@ void SalMenu::ApplyPersona() {}
 
 SalMenuItem::~SalMenuItem() {}
 
+class SalFlashAttention
+{
+private:
+    VclPtr<vcl::Window> m_xWidget;
+    Timer m_aFlashTimer;
+    Color m_aOrigControlBackground;
+    Wallpaper m_aOrigBackground;
+    bool m_bOrigControlBackground;
+    int m_nFlashCount;
+
+    void SetFlash()
+    {
+        Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        m_xWidget->SetControlBackground(aColor);
+    }
+
+    void ClearFlash()
+    {
+        if (m_bOrigControlBackground)
+            m_xWidget->SetControlBackground(m_aOrigControlBackground);
+        else
+            m_xWidget->SetControlBackground();
+    }
+
+    void Flash()
+    {
+        constexpr int FlashesWanted = 1;
+
+        if (m_nFlashCount % 2 == 0)
+            ClearFlash();
+        else
+            SetFlash();
+
+        if (m_nFlashCount == FlashesWanted * 2)
+            return;
+
+        ++m_nFlashCount;
+
+        m_aFlashTimer.Start();
+    }
+
+    DECL_LINK(FlashTimeout, Timer*, void);
+
+public:
+    SalFlashAttention(VclPtr<vcl::Window> xWidget)
+        : m_xWidget(std::move(xWidget))
+        , m_aFlashTimer("SalFlashAttention")
+        , m_bOrigControlBackground(false)
+        , m_nFlashCount(1)
+    {
+        m_aFlashTimer.SetTimeout(150);
+        m_aFlashTimer.SetInvokeHandler(LINK(this, SalFlashAttention, FlashTimeout));
+    }
+
+    void Start()
+    {
+        m_bOrigControlBackground = m_xWidget->IsControlBackground();
+        if (m_bOrigControlBackground)
+            m_aOrigControlBackground = m_xWidget->GetControlBackground();
+        m_aFlashTimer.Start();
+    }
+
+    ~SalFlashAttention() { ClearFlash(); }
+};
+
+IMPL_LINK_NOARG(SalFlashAttention, FlashTimeout, Timer*, void) { Flash(); }
+
 void SalInstanceWidget::ensure_event_listener()
 {
     if (!m_bEventListener)
@@ -598,73 +665,6 @@ VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
     return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT,
                                          DeviceFormat::DEFAULT);
 }
-
-class SalFlashAttention
-{
-private:
-    VclPtr<vcl::Window> m_xWidget;
-    Timer m_aFlashTimer;
-    Color m_aOrigControlBackground;
-    Wallpaper m_aOrigBackground;
-    bool m_bOrigControlBackground;
-    int m_nFlashCount;
-
-    void SetFlash()
-    {
-        Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
-        m_xWidget->SetControlBackground(aColor);
-    }
-
-    void ClearFlash()
-    {
-        if (m_bOrigControlBackground)
-            m_xWidget->SetControlBackground(m_aOrigControlBackground);
-        else
-            m_xWidget->SetControlBackground();
-    }
-
-    void Flash()
-    {
-        constexpr int FlashesWanted = 1;
-
-        if (m_nFlashCount % 2 == 0)
-            ClearFlash();
-        else
-            SetFlash();
-
-        if (m_nFlashCount == FlashesWanted * 2)
-            return;
-
-        ++m_nFlashCount;
-
-        m_aFlashTimer.Start();
-    }
-
-    DECL_LINK(FlashTimeout, Timer*, void);
-
-public:
-    SalFlashAttention(VclPtr<vcl::Window> xWidget)
-        : m_xWidget(std::move(xWidget))
-        , m_aFlashTimer("SalFlashAttention")
-        , m_bOrigControlBackground(false)
-        , m_nFlashCount(1)
-    {
-        m_aFlashTimer.SetTimeout(150);
-        m_aFlashTimer.SetInvokeHandler(LINK(this, SalFlashAttention, FlashTimeout));
-    }
-
-    void Start()
-    {
-        m_bOrigControlBackground = m_xWidget->IsControlBackground();
-        if (m_bOrigControlBackground)
-            m_aOrigControlBackground = m_xWidget->GetControlBackground();
-        m_aFlashTimer.Start();
-    }
-
-    ~SalFlashAttention() { ClearFlash(); }
-};
-
-IMPL_LINK_NOARG(SalFlashAttention, FlashTimeout, Timer*, void) { Flash(); }
 
 void SalInstanceWidget::call_attention_to()
 {
