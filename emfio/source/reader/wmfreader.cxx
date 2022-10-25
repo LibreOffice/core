@@ -2051,6 +2051,7 @@ namespace emfio
         : MtfTools(rGDIMetaFile, rStreamWMF)
         , mnUnitsPerInch(96)
         , mnRecSize(0)
+        , mbPlaceable(false)
         , mnEMFRecCount(0)
         , mnEMFRec(0)
         , mnEMFSize(0)
