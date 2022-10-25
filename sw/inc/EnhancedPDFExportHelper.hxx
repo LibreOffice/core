@@ -228,7 +228,8 @@ class SwEnhancedPDFExportHelper
 
     void MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                 const SwTextNode& rTNd, const SwRect& rLinkRect,
-                                sal_Int32 nDestId, const OUString& rURL, bool bIntern ) const;
+                                sal_Int32 nDestId, const OUString& rURL,
+                                bool bIntern, OUString const& rContent) const;
 
     public:
 

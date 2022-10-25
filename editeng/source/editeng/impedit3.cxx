@@ -3684,7 +3684,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                                         tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
-                                                        aBookmark.nLinkId = pPDFExtOutDevData->CreateLink( aRect );
+                                                        aBookmark.nLinkId = pPDFExtOutDevData->CreateLink(aRect, pUrlField->GetRepresentation());
                                                         aBookmark.aBookmark = pUrlField->GetURL();
                                                         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
                                                         rBookmarks.push_back( aBookmark );

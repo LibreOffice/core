@@ -1651,6 +1651,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     SwRects aTmp;
                     aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
+                    OUString const altText(mrSh.GetSelText());
 
                     const SwPageFrame* pSelectionPage =
                         static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
@@ -1704,7 +1705,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 // Link Export
                                 tools::Rectangle aRect(SwRectToPDFRect(pSelectionPage, rLinkRect.SVRect()));
                                 const sal_Int32 nLinkId =
-                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
+                                    pPDFExtOutDevData->CreateLink(aRect, altText, aLinkPageNum);
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -1718,7 +1719,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                                 // #i44368# Links in Header/Footer
                                 if ( bHeaderFooter )
-                                    MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bIntern );
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bIntern, altText);
                             }
                         }
                     }
@@ -1778,7 +1779,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 {
                     Point aNullPt;
                     const SwRect aLinkRect = pFrameFormat->FindLayoutRect( false, &aNullPt );
-
+                    OUString const formatName(pFrameFormat->GetName());
                     // Link PageNums
                     std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
@@ -1787,7 +1788,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     {
                         tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
+                            pPDFExtOutDevData->CreateLink(aRect, formatName, aLinkPageNum);
 
                         // Connect Link and Destination:
                         if ( bIntern )
@@ -1804,7 +1805,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             {
                                 const SwTextNode* pTNd = pPosition->nNode.GetNode().GetTextNode();
                                 if ( pTNd )
-                                    MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern );
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern, formatName);
                             }
                         }
                     }
@@ -1894,6 +1895,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // #i44368# Links in Header/Footer
                     const SwPosition aPos( *pTNd );
                     const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
+                    OUString const content(pField->ExpandField(true, mrSh.GetLayout()));
 
                     // Create links for all selected rectangles:
                     const size_t nNumOfRects = aTmp.size();
@@ -1910,7 +1912,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             // Link Export
                             aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
                             const sal_Int32 nLinkId =
-                                pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
+                                pPDFExtOutDevData->CreateLink(aRect, content, aLinkPageNum);
 
                             // Store link info for tagged pdf output:
                             const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -1922,7 +1924,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             // #i44368# Links in Header/Footer
                             if ( bHeaderFooter )
                             {
-                                MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, "", true );
+                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, "", true, content);
                             }
                         }
                     }
@@ -2004,8 +2006,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     }
                     tools::Rectangle aFootnoteSymbolRect = SwRectToPDFRect(pCurrPage, fnSymbolRect.SVRect());
 
+                    OUString const numStrSymbol(pTextFootnote->GetFootnote().GetViewNumStr(*pDoc, mrSh.GetLayout(), true));
+                    OUString const numStrRef(pTextFootnote->GetFootnote().GetViewNumStr(*pDoc, mrSh.GetLayout(), false));
+
                     // Export back link
-                    const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, nDestPageNum);
+                    const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, numStrSymbol, nDestPageNum);
                     // Destination Export
                     const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
                     mrSh.GotoFootnoteAnchor();
@@ -2014,7 +2019,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
                     // Link Export
                     aRect = SwRectToPDFRect(pCurrPage, aLinkRect.SVRect());
-                    const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
+                    const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, numStrRef, aLinkPageNum);
                     // Back link destination Export
                     const sal_Int32 nBackDestId = pPDFExtOutDevData->CreateDest(aRect, aLinkPageNum);
                     // Store link info for tagged pdf output:
@@ -2229,6 +2234,8 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             continue;
         }
 
+        OUString const content(rAuthorityField.ExpandField(true, mrSh.GetLayout()));
+
         // Select the field.
         mrSh.SwCursorShell::SetMark();
         mrSh.SwCursorShell::Right(1, CRSR_SKIP_CHARS);
@@ -2239,7 +2246,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
             {
                 tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
-                sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, rLinkPageNum);
+                sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
                 IdMapEntry aLinkEntry(rLinkRect, nLinkId);
                 s_aLinkIdMap.push_back(aLinkEntry);
                 pPDFExtOutDevData->SetLinkURL(nLinkId, rURL);
@@ -2323,7 +2330,8 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                                                        const SwRect& rLinkRect,
                                                        sal_Int32 nDestId,
                                                        const OUString& rURL,
-                                                       bool bIntern ) const
+                                                       bool bIntern,
+                                                       OUString const& rContent) const
 {
     // We assume, that the primary link has just been exported. Therefore
     // the offset of the link rectangle calculates as follows:
@@ -2350,7 +2358,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                 // Link Export
                 tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, aHFLinkRect.SVRect()));
                 const sal_Int32 nHFLinkId =
-                    rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNum);
+                    rPDFExtOutDevData.CreateLink(aRect, rContent, aHFLinkPageNum);
 
                 // Connect Link and Destination:
                 if ( bIntern )

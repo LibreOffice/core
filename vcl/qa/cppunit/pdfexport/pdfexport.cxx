@@ -3465,6 +3465,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
         CPPUNIT_ASSERT_EQUAL(
             OString("Annot"),
             static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+        CPPUNIT_ASSERT_EQUAL(
+            OString("Link"),
+            static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"))->GetValue());
         auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
         CPPUNIT_ASSERT(pAction);
         auto pURIElem
@@ -3472,6 +3475,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
         CPPUNIT_ASSERT(pURIElem);
         // Check it matches
         CPPUNIT_ASSERT_EQUAL(URIs[i].out, pURIElem->GetValue());
+        // tdf#148934 check a11y
+        CPPUNIT_ASSERT_EQUAL(
+            OUString("Test pdf"),
+            ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                *dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"))));
     }
 }
 
