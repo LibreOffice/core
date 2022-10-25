@@ -297,7 +297,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     // small correctors
     if (maGeo.nRotationAngle>=9000_deg100 && maGeo.nRotationAngle<27000_deg100)
     {
-        maRect.Move(maRect.Left()-maRect.Right(),maRect.Top()-maRect.Bottom());
+        moveRectangle(getRectangle().Left() - getRectangle().Right(), getRectangle().Top() - getRectangle().Bottom());
     }
 
     maGeo.nRotationAngle  = 0_deg100;

@@ -57,8 +57,8 @@ void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     {
         // No rotation or shear.
 
-        maRect = rRect;
-        ImpJustifyRect(maRect);
+        setRectangle(rRect);
+        ImpJustifyRect(maRectangle);
 
         AdaptTextMinSize();
 
@@ -69,13 +69,13 @@ void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 
 const tools::Rectangle& SdrTextObj::GetLogicRect() const
 {
-    return maRect;
+    return getRectangle();
 }
 
 void SdrTextObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
-    maRect = rRect;
-    ImpJustifyRect(maRect);
+    setRectangle(rRect);
+    ImpJustifyRect(maRectangle);
 
     AdaptTextMinSize();
 
@@ -94,7 +94,7 @@ Degree100 SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 
 void SdrTextObj::NbcMove(const Size& rSize)
 {
-    maRect.Move(rSize);
+    moveRectangle(rSize.Width(), rSize.Height());
     moveOutRectangle(rSize.Width(), rSize.Height());
     maSnapRect.Move(rSize);
     SetBoundAndSnapRectsDirty(true);
@@ -121,17 +121,20 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     if (maGeo.nRotationAngle==0_deg100 && maGeo.nShearAngle==0_deg100) {
-        ResizeRect(maRect,rRef,xFact,yFact);
-        if (bYMirr) {
-            maRect.Normalize();
-            maRect.Move(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top());
+        auto aRectangle = getRectangle();
+        ResizeRect(aRectangle, rRef, xFact, yFact);
+        setRectangle(aRectangle);
+        if (bYMirr)
+        {
+            maRectangle.Normalize();
+            moveRectangle(aRectangle.Right() - aRectangle.Left(), aRectangle.Bottom() - aRectangle.Top());
             maGeo.nRotationAngle=18000_deg100;
             maGeo.RecalcSinCos();
         }
     }
     else
     {
-        tools::Polygon aPol(Rect2Poly(maRect,maGeo));
+        tools::Polygon aPol(Rect2Poly(getRectangle(), maGeo));
 
         for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
         {
@@ -149,8 +152,9 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aPol[3] = aPol0[2];
             aPol[4] = aPol0[1];
         }
-
-        Poly2Rect(aPol, maRect, maGeo);
+        tools::Rectangle aRectangle(getRectangle());
+        Poly2Rect(aPol, aRectangle, maGeo);
+        setRectangle(aRectangle);
     }
 
     if (bRotate90) {
@@ -171,7 +175,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         }
     }
 
-    ImpJustifyRect(maRect);
+    ImpJustifyRect(maRectangle);
 
     AdaptTextMinSize();
 
@@ -187,14 +191,14 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrTextObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    tools::Long dx=maRect.Right()-maRect.Left();
-    tools::Long dy=maRect.Bottom()-maRect.Top();
-    Point aP(maRect.TopLeft());
-    RotatePoint(aP,rRef,sn,cs);
-    maRect.SetLeft(aP.X() );
-    maRect.SetTop(aP.Y() );
-    maRect.SetRight(maRect.Left()+dx );
-    maRect.SetBottom(maRect.Top()+dy );
+    tools::Long dx = getRectangle().Right() - getRectangle().Left();
+    tools::Long dy = getRectangle().Bottom() - getRectangle().Top();
+    Point aPoint1(getRectangle().TopLeft());
+    RotatePoint(aPoint1, rRef, sn, cs);
+    Point aPoint2(aPoint1.X() + dx, aPoint1.Y() + dy);
+    tools::Rectangle aRectangle(aPoint1, aPoint2);
+    setRectangle(aRectangle);
+
     if (maGeo.nRotationAngle==0_deg100) {
         maGeo.nRotationAngle=NormAngle36000(nAngle);
         maGeo.mfSinRotationAngle=sn;
@@ -213,14 +217,17 @@ void SdrTextObj::NbcShear(const Point& rRef, Degree100 /*nAngle*/, double tn, bo
     SetGlueReallyAbsolute(true);
 
     // when this is a SdrPathObj, aRect may be uninitialized
-    tools::Polygon aPol(Rect2Poly(maRect.IsEmpty() ? GetSnapRect() : maRect, maGeo));
+    tools::Polygon aPol(Rect2Poly(getRectangle().IsEmpty() ? GetSnapRect() : getRectangle(), maGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
     for (sal_uInt16 i=0; i<nPointCount; i++) {
          ShearPoint(aPol[i],rRef,tn,bVShear);
     }
-    Poly2Rect(aPol,maRect,maGeo);
-    ImpJustifyRect(maRect);
+    auto aRectangle = getRectangle();
+    Poly2Rect(aPol, aRectangle, maGeo);
+    setRectangle(aRectangle);
+    ImpJustifyRect(maRectangle);
+
     if (mbTextFrame) {
         NbcAdjustTextFrameWidthAndHeight();
     }
@@ -240,7 +247,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
         bRotate90=maGeo.nRotationAngle.get() % 9000 ==0;
     }
-    tools::Polygon aPol(Rect2Poly(maRect,maGeo));
+    tools::Polygon aPol(Rect2Poly(getRectangle(),maGeo));
     sal_uInt16 i;
     sal_uInt16 nPointCount=aPol.GetSize();
     for (i=0; i<nPointCount; i++) {
@@ -253,7 +260,9 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     aPol[2]=aPol0[3];
     aPol[3]=aPol0[2];
     aPol[4]=aPol0[1];
-    Poly2Rect(aPol,maRect,maGeo);
+    tools::Rectangle aRectangle = getRectangle();
+    Poly2Rect(aPol, aRectangle, maGeo);
+    setRectangle(aRectangle);
 
     if (bRotate90) {
         bool bRota90=maGeo.nRotationAngle.get() % 9000 ==0;
@@ -273,7 +282,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         maGeo.RecalcTan();
     }
 
-    ImpJustifyRect(maRect);
+    ImpJustifyRect(maRectangle);
     if (mbTextFrame) {
         NbcAdjustTextFrameWidthAndHeight();
     }

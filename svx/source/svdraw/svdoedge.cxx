@@ -1725,7 +1725,7 @@ void SdrEdgeObj::SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly )
 
         // #i110629# also set aRect and maSnapeRect depending on pEdgeTrack
         const tools::Rectangle aPolygonBounds(pEdgeTrack->GetBoundRect());
-        maRect = aPolygonBounds;
+        setRectangle(aPolygonBounds);
         maSnapRect = aPolygonBounds;
     }
 }
@@ -2280,11 +2280,11 @@ void SdrEdgeObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     if(aOld == rRect)
         return;
 
-    if (maRect.IsEmpty() && 0 == pEdgeTrack->GetPointCount())
+    if (getRectangle().IsEmpty() && 0 == pEdgeTrack->GetPointCount())
     {
         // #i110629# When initializing, do not scale on empty Rectangle; this
         // will mirror the underlying text object (!)
-        maRect = rRect;
+        setRectangle(rRect);
         maSnapRect = rRect;
     }
     else

@@ -101,7 +101,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
 
-    maRect = rSource.maRect;
+    maRectangle = rSource.maRectangle;
     maGeo = rSource.maGeo;
     maTextSize = rSource.maTextSize;
 
@@ -135,7 +135,6 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel, const tools::Rectangle& rNewRect)
     : SdrAttrObj(rSdrModel)
-    , maRect(rNewRect)
     , mpEditingOutliner(nullptr)
     , meTextKind(SdrObjKind::Text)
     , maTextEditOffset(Point(0, 0))
@@ -147,7 +146,9 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, const tools::Rectangle& rNewRect)
     , mbTextAnimationAllowed(true)
     , mbInDownScale(false)
 {
-    ImpJustifyRect(maRect);
+    tools::Rectangle aRectangle(rNewRect);
+    ImpJustifyRect(aRectangle);
+    setRectangle(aRectangle);
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -173,7 +174,6 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind)
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind,
                        const tools::Rectangle& rNewRect)
     : SdrAttrObj(rSdrModel)
-    , maRect(rNewRect)
     , mpEditingOutliner(nullptr)
     , meTextKind(eNewTextKind)
     , maTextEditOffset(Point(0, 0))
@@ -185,7 +185,9 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind,
     , mbTextAnimationAllowed(true)
     , mbInDownScale(false)
 {
-    ImpJustifyRect(maRect);
+    tools::Rectangle aRectangle(rNewRect);
+    ImpJustifyRect(aRectangle);
+    setRectangle(aRectangle);
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -199,14 +201,14 @@ SdrTextObj::~SdrTextObj()
 
 void SdrTextObj::FitFrameToTextSize()
 {
-    ImpJustifyRect(maRect);
+    ImpJustifyRect(maRectangle);
 
     SdrText* pText = getActiveText();
     if(pText==nullptr || !pText->GetOutlinerParaObject())
         return;
 
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
-    rOutliner.SetPaperSize(Size(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top()));
+    rOutliner.SetPaperSize(Size(getRectangle().Right() - getRectangle().Left(), getRectangle().Bottom() - getRectangle().Top()));
     rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(*pText->GetOutlinerParaObject());
     Size aNewSize(rOutliner.CalcTextSize());
@@ -214,12 +216,12 @@ void SdrTextObj::FitFrameToTextSize()
     aNewSize.AdjustWidth( 1 ); // because of possible rounding errors
     aNewSize.AdjustWidth(GetTextLeftDistance()+GetTextRightDistance() );
     aNewSize.AdjustHeight(GetTextUpperDistance()+GetTextLowerDistance() );
-    tools::Rectangle aNewRect(maRect);
+    tools::Rectangle aNewRect(getRectangle());
     aNewRect.SetSize(aNewSize);
     ImpJustifyRect(aNewRect);
-    if (aNewRect!=maRect) {
+
+    if (aNewRect != getRectangle())
         SetLogicRect(aNewRect);
-    }
 }
 
 void SdrTextObj::NbcSetText(const OUString& rStr)
@@ -523,7 +525,7 @@ void SdrTextObj::AdaptTextMinSize()
     {
         // Set minimum width.
         const tools::Long nDist = GetTextLeftDistance() + GetTextRightDistance();
-        const tools::Long nW = std::max<tools::Long>(0, maRect.GetWidth() - 1 - nDist); // text width without margins
+        const tools::Long nW = std::max<tools::Long>(0, getRectangle().GetWidth() - 1 - nDist); // text width without margins
 
         aSet.Put(makeSdrTextMinFrameWidthItem(nW));
 
@@ -538,7 +540,7 @@ void SdrTextObj::AdaptTextMinSize()
     {
         // Set Minimum height.
         const tools::Long nDist = GetTextUpperDistance() + GetTextLowerDistance();
-        const tools::Long nH = std::max<tools::Long>(0, maRect.GetHeight() - 1 - nDist); // text height without margins
+        const tools::Long nH = std::max<tools::Long>(0, getRectangle().GetHeight() - 1 - nDist); // text height without margins
 
         aSet.Put(makeSdrTextMinFrameHeightItem(nH));
 
@@ -610,7 +612,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
 
 void SdrTextObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
-    rRect=maRect;
+    rRect = getRectangle();
 }
 
 // See also: <unnamed>::getTextAnchorRange in svx/source/sdr/primitive2d/sdrdecompositiontools.cxx
@@ -649,7 +651,7 @@ void SdrTextObj::AdjustRectToTextDistance(tools::Rectangle& rAnchorRect) const
 
 void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
-    tools::Rectangle aAnkRect(maRect); // the rectangle in which we anchor
+    tools::Rectangle aAnkRect(getRectangle()); // the rectangle in which we anchor
     bool bFrame=IsTextFrame();
     if (!bFrame) {
         TakeUnrotatedSnapRect(aAnkRect);
@@ -1090,9 +1092,11 @@ rtl::Reference<SdrObject> SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) con
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
-    tools::Polygon aPol(maRect);
-    if (maGeo.nShearAngle) ShearPoly(aPol,maRect.TopLeft(),maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle) RotatePoly(aPol,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+    tools::Polygon aPol(getRectangle());
+    if (maGeo.nShearAngle)
+        ShearPoly(aPol, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle)
+        RotatePoly(aPol, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
     basegfx::B2DPolyPolygon aRetval;
     aRetval.append(aPol.getB2DPolygon());
@@ -1130,9 +1134,9 @@ void SdrTextObj::RecalcSnapRect()
 {
     if (maGeo.nRotationAngle || maGeo.nShearAngle)
     {
-        maSnapRect = Rect2Poly(maRect, maGeo).GetBoundRect();
+        maSnapRect = Rect2Poly(getRectangle(), maGeo).GetBoundRect();
     } else {
-        maSnapRect = maRect;
+        maSnapRect = getRectangle();
     }
 }
 
@@ -1144,15 +1148,18 @@ sal_uInt32 SdrTextObj::GetSnapPointCount() const
 Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
 {
     Point aP;
+    auto aRectangle = getRectangle();
     switch (i) {
-        case 0: aP=maRect.TopLeft(); break;
-        case 1: aP=maRect.TopRight(); break;
-        case 2: aP=maRect.BottomLeft(); break;
-        case 3: aP=maRect.BottomRight(); break;
-        default: aP=maRect.Center(); break;
+        case 0: aP = aRectangle.TopLeft(); break;
+        case 1: aP = aRectangle.TopRight(); break;
+        case 2: aP = aRectangle.BottomLeft(); break;
+        case 3: aP = aRectangle.BottomRight(); break;
+        default: aP = aRectangle.Center(); break;
     }
-    if (maGeo.nShearAngle) ShearPoint(aP,maRect.TopLeft(),maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle) RotatePoint(aP,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle)
+        ShearPoint(aP, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle)
+        RotatePoint(aP, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     return aP;
 }
 
@@ -1428,7 +1435,7 @@ void SdrTextObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrAttrObj::SaveGeoData(rGeo);
     SdrTextObjGeoData& rTGeo=static_cast<SdrTextObjGeoData&>(rGeo);
-    rTGeo.maRect = maRect;
+    rTGeo.maRect = getRectangle();
     rTGeo.maGeo = maGeo;
 }
 
@@ -1453,7 +1460,7 @@ drawing::TextFitToSizeType SdrTextObj::GetFitToSize() const
 
 const tools::Rectangle& SdrTextObj::GetGeoRect() const
 {
-    return maRect;
+    return getRectangle();
 }
 
 void SdrTextObj::ForceOutlinerParaObject()
@@ -1586,7 +1593,7 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     double fShearX = toRadians(maGeo.nShearAngle);
 
     // get aRect, this is the unrotated snaprect
-    tools::Rectangle aRectangle(maRect);
+    tools::Rectangle aRectangle(getRectangle());
 
     // fill other values
     basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());

@@ -308,7 +308,7 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
                 return false;
 
             rDrag.SetNoSnap();
-            rDrag.SetActionRect(maRect);
+            rDrag.SetActionRect(getRectangle());
 
             Point aHit(rDrag.GetStart());
 
@@ -341,15 +341,15 @@ bool SdrCaptionObj::applySpecialDrag(SdrDragStat& rDrag)
     }
     else
     {
-        Point aDelt(rDrag.GetNow()-rDrag.GetStart());
+        Point aDelta(rDrag.GetNow()-rDrag.GetStart());
 
         if(!pHdl)
         {
-            maRect.Move(aDelt.X(),aDelt.Y());
+            moveRectangle(aDelta.X(), aDelta.Y());
         }
         else
         {
-            aTailPoly[0] += aDelt;
+            aTailPoly[0] += aDelta;
         }
 
         ImpRecalcTail();
@@ -408,7 +408,7 @@ void SdrCaptionObj::ImpRecalcTail()
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    ImpCalcTail(aPara, aTailPoly, maRect);
+    ImpCalcTail(aPara, aTailPoly, getRectangle());
     SetBoundAndSnapRectsDirty();
     SetXPolyDirty();
 }
@@ -511,14 +511,15 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPol
 
 bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
-    if (maRect.IsEmpty()) return false; // Create currently only works with the given Rect
+    if (getRectangle().IsEmpty())
+        return false; // Create currently only works with the given Rect
 
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    maRect.SetPos(rStat.GetNow());
+    moveRectanglePosition(rStat.GetNow().X(), rStat.GetNow().Y());
     aTailPoly[0]=rStat.GetStart();
-    ImpCalcTail(aPara,aTailPoly,maRect);
-    rStat.SetActionRect(maRect);
+    ImpCalcTail(aPara,aTailPoly, getRectangle());
+    rStat.SetActionRect(getRectangle());
     return true;
 }
 
@@ -526,9 +527,9 @@ bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    maRect.SetPos(rStat.GetNow());
-    ImpCalcTail(aPara,aTailPoly,maRect);
-    rStat.SetActionRect(maRect);
+    moveRectanglePosition(rStat.GetNow().X(), rStat.GetNow().Y());
+    ImpCalcTail(aPara,aTailPoly, getRectangle());
+    rStat.SetActionRect(getRectangle());
     SetBoundRectDirty();
     m_bSnapRectDirty=true;
     return true;
@@ -538,8 +539,8 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    maRect.SetPos(rStat.GetNow());
-    ImpCalcTail(aPara,aTailPoly,maRect);
+    moveRectanglePosition(rStat.GetNow().X(), rStat.GetNow().Y());
+    ImpCalcTail(aPara,aTailPoly, getRectangle());
     SetBoundAndSnapRectsDirty();
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
@@ -556,7 +557,7 @@ void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)
 basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange =vcl::unotools::b2DRectangleFromRectangle(maRect);
+    const basegfx::B2DRange aRange =vcl::unotools::b2DRectangleFromRectangle(getRectangle());
     aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     aRetval.append(aTailPoly.getB2DPolygon());
     return aRetval;
@@ -598,7 +599,7 @@ Point SdrCaptionObj::GetRelativePos() const
 
 const tools::Rectangle& SdrCaptionObj::GetLogicRect() const
 {
-    return maRect;
+    return getRectangle();
 }
 
 void SdrCaptionObj::NbcSetLogicRect(const tools::Rectangle& rRect)

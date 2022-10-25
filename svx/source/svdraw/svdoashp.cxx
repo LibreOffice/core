@@ -1397,7 +1397,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
 
     // check if we need to change anything before creating an SfxItemSet, because that is expensive
     const bool bResizeShapeToFitText(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue());
-    tools::Rectangle aTextBound(maRect);
+    tools::Rectangle aTextBound(getRectangle());
     bool bChanged(false);
     if(bResizeShapeToFitText)
         bChanged = true;
@@ -1432,10 +1432,11 @@ void SdrObjCustomShape::AdaptTextMinSize()
     SetObjectItemSet(aSet);
 }
 
-void SdrObjCustomShape::NbcSetSnapRect( const tools::Rectangle& rRect )
+void SdrObjCustomShape::NbcSetSnapRect(const tools::Rectangle& rRectangle)
 {
-    maRect = rRect;
-    ImpJustifyRect(maRect);
+    tools::Rectangle aRectangle(rRectangle);
+    ImpJustifyRect(aRectangle);
+    setRectangle(aRectangle);
     InvalidateRenderGeometry();
 
     AdaptTextMinSize();
@@ -1455,10 +1456,11 @@ void SdrObjCustomShape::SetSnapRect( const tools::Rectangle& rRect )
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObjCustomShape::NbcSetLogicRect( const tools::Rectangle& rRect )
+void SdrObjCustomShape::NbcSetLogicRect(const tools::Rectangle& rRectangle)
 {
-    maRect = rRect;
-    ImpJustifyRect(maRect);
+    tools::Rectangle aRectangle(rRectangle);
+    ImpJustifyRect(aRectangle);
+    setRectangle(aRectangle);
     InvalidateRenderGeometry();
 
     AdaptTextMinSize();
@@ -1515,7 +1517,7 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )
 {
     // taking care of handles that should not been changed
-    tools::Rectangle aOld( maRect );
+    tools::Rectangle aOld(getRectangle());
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
     SdrTextObj::NbcResize( rRef, rxFact, ryFact );
@@ -1543,17 +1545,17 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
                 rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
             if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
             {
-                sal_Int32 nX = ( rInteraction.aPosition.X - aOld.Left() ) + maRect.Left();
+                sal_Int32 nX = ( rInteraction.aPosition.X - aOld.Left() ) + getRectangle().Left();
                 rInteraction.xInteraction->setControllerPosition(awt::Point(nX, rInteraction.xInteraction->getPosition().Y));
             }
             else if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
             {
-                sal_Int32 nX = maRect.Right() - (aOld.Right() - rInteraction.aPosition.X);
+                sal_Int32 nX = getRectangle().Right() - (aOld.Right() - rInteraction.aPosition.X);
                 rInteraction.xInteraction->setControllerPosition(awt::Point(nX, rInteraction.xInteraction->getPosition().Y));
             }
             if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
-                sal_Int32 nY = ( rInteraction.aPosition.Y - aOld.Top() ) + maRect.Top();
+                sal_Int32 nY = ( rInteraction.aPosition.Y - aOld.Top() ) + getRectangle().Top();
                 rInteraction.xInteraction->setControllerPosition(awt::Point(rInteraction.xInteraction->getPosition().X, nY));
             }
         }
@@ -1598,7 +1600,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
 
     // the rotation angle for ashapes is stored in fObjectRotation, this rotation
     // has to be applied to the text object (which is internally using maGeo.nAngle).
-    SdrTextObj::NbcRotate( maRect.TopLeft(), -maGeo.nRotationAngle,        // retrieving the unrotated text object
+    SdrTextObj::NbcRotate( getRectangle().TopLeft(), -maGeo.nRotationAngle,        // retrieving the unrotated text object
                             -maGeo.mfSinRotationAngle,
                             maGeo.mfCosRotationAngle );
     maGeo.nRotationAngle = 0_deg100;                                             // resetting aGeo data
@@ -1612,7 +1614,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
     nW = nW % 36000_deg100;
     if ( nW < 0_deg100 )
         nW = 36000_deg100 + nW;
-    SdrTextObj::NbcRotate( maRect.TopLeft(), nW,                     // applying text rotation
+    SdrTextObj::NbcRotate( getRectangle().TopLeft(), nW,                     // applying text rotation
                             sin( toRadians(nW) ),
                             cos( toRadians(nW) ) );
 
@@ -1723,14 +1725,18 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
     }
 
     Point aPt;
-    switch (nPosNum) {
-        case 0: aPt=maRect.TopCenter();    aPt.AdjustY( -nWdt ); break;
-        case 1: aPt=maRect.RightCenter();  aPt.AdjustX(nWdt ); break;
-        case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
-        case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
+    auto aRectangle = getRectangle();
+    switch (nPosNum)
+    {
+        case 0: aPt = aRectangle.TopCenter();    aPt.AdjustY( -nWdt ); break;
+        case 1: aPt = aRectangle.RightCenter();  aPt.AdjustX(nWdt ); break;
+        case 2: aPt = aRectangle.BottomCenter(); aPt.AdjustY(nWdt ); break;
+        case 3: aPt = aRectangle.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (maGeo.nShearAngle != 0_deg100) ShearPoint(aPt, maRect.TopLeft(), maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle != 0_deg100) RotatePoint(aPt, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle != 0_deg100)
+        ShearPoint(aPt, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle != 0_deg100)
+        RotatePoint(aPt, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -1779,19 +1785,19 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
 
     if (maGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY)
     {
-        tools::Polygon aPoly( maRect );
+        tools::Polygon aPoly(getRectangle());
         if( nShearAngle )
         {
             sal_uInt16 nPointCount=aPoly.GetSize();
             for (sal_uInt16 i=0; i<nPointCount; i++)
-                ShearPoint(aPoly[i],maRect.Center(), fTan );
+                ShearPoint(aPoly[i], getRectangle().Center(), fTan );
         }
         if (maGeo.nRotationAngle)
-            aPoly.Rotate( maRect.Center(), to<Degree10>(maGeo.nRotationAngle) );
+            aPoly.Rotate( getRectangle().Center(), to<Degree10>(maGeo.nRotationAngle) );
 
         tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
-        sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
-        sal_Int32 nYDiff = aBoundRect.Top() - maRect.Top();
+        sal_Int32 nXDiff = aBoundRect.Left() - getRectangle().Left();
+        sal_Int32 nYDiff = aBoundRect.Top() - getRectangle().Top();
 
         if (nShearAngle && bMirroredX != bMirroredY)
         {
@@ -1799,7 +1805,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
             fTan = -fTan;
         }
 
-        Point aRef( maRect.GetWidth() / 2, maRect.GetHeight() / 2 );
+        Point aRef( getRectangle().GetWidth() / 2, getRectangle().GetHeight() / 2 );
         for ( a = 0; a < aNewList.GetCount(); a++ )
         {
             SdrGluePoint& rPoint = aNewList[ a ];
@@ -1810,9 +1816,9 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
             RotatePoint(aGlue, aRef, sin(basegfx::deg2rad(fObjectRotation)),
                         cos(basegfx::deg2rad(fObjectRotation)));
             if ( bMirroredX )
-                aGlue.setX( maRect.GetWidth() - aGlue.X() );
+                aGlue.setX( getRectangle().GetWidth() - aGlue.X() );
             if ( bMirroredY )
-                aGlue.setY( maRect.GetHeight() - aGlue.Y() );
+                aGlue.setY( getRectangle().GetHeight() - aGlue.Y() );
             aGlue.AdjustX( -nXDiff );
             aGlue.AdjustY( -nYDiff );
             rPoint.SetPos( aGlue );
@@ -1937,7 +1943,7 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
 
 void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect )
 {
-    tools::Rectangle   aOld( maRect );
+    tools::Rectangle aOld(getRectangle());
     bool    bOldMirroredX( IsMirroredX() );
     bool    bOldMirroredY( IsMirroredY() );
 
@@ -1947,7 +1953,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
     GeoStat aGeoStat( GetGeoStat() );
-    if ( aNewRect.TopLeft()!= maRect.TopLeft() &&
+    if ( aNewRect.TopLeft() != getRectangle().TopLeft() &&
         ( maGeo.nRotationAngle || maGeo.nShearAngle ) )
     {
         Point aNewPos( aNewRect.TopLeft() );
@@ -1955,7 +1961,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
         if ( maGeo.nRotationAngle )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle );
         aNewRect.SetPos( aNewPos );
     }
-    if ( aNewRect == maRect )
+    if (aNewRect == getRectangle())
         return;
 
     SetLogicRect( aNewRect );
@@ -1991,17 +1997,17 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                 {
                     nX = ( rInteraction.aPosition.X - aOld.Right() );
                     if ( rNewRect.Left() > rNewRect.Right() )
-                        nX = maRect.Left() - nX;
+                        nX = getRectangle().Left() - nX;
                     else
-                        nX += maRect.Right();
+                        nX += getRectangle().Right();
                 }
                 else
                 {
                     nX = ( rInteraction.aPosition.X - aOld.Left() );
                     if ( rNewRect.Left() > rNewRect.Right() )
-                        nX = maRect.Right() - nX;
+                        nX = getRectangle().Right() - nX;
                     else
-                        nX += maRect.Left();
+                        nX += getRectangle().Left();
                 }
                 rInteraction.xInteraction->setControllerPosition(awt::Point(nX, rInteraction.xInteraction->getPosition().Y));
             }
@@ -2012,17 +2018,17 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                 {
                     nY = ( rInteraction.aPosition.Y - aOld.Bottom() );
                     if ( rNewRect.Top() > rNewRect.Bottom() )
-                        nY = maRect.Top() - nY;
+                        nY = getRectangle().Top() - nY;
                     else
-                        nY += maRect.Bottom();
+                        nY += getRectangle().Bottom();
                 }
                 else
                 {
                     nY = ( rInteraction.aPosition.Y - aOld.Top() );
                     if ( rNewRect.Top() > rNewRect.Bottom() )
-                        nY = maRect.Bottom() - nY;
+                        nY = getRectangle().Bottom() - nY;
                     else
-                        nY += maRect.Top();
+                        nY += getRectangle().Top();
                 }
                 rInteraction.xInteraction->setControllerPosition(awt::Point(rInteraction.xInteraction->getPosition().X, nY));
             }
@@ -2052,7 +2058,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
             sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
             sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
 
-            maRect.Move( nXDiff, nYDiff );
+            moveRectangle(nXDiff, nYDiff);
             moveOutRectangle(nXDiff, nYDiff);
             maSnapRect.Move( nXDiff, nYDiff );
             SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
@@ -2134,12 +2140,12 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
         if ( !aInteractionHandles.empty() )
         {
             sal_Int32 nHandlePos = aInteractionHandles[ aInteractionHandles.size() - 1 ].xInteraction->getPosition().X;
-            aRect1.Move( maRect.Left() - nHandlePos, 0 );
+            aRect1.Move(getRectangle().Left() - nHandlePos, 0);
         }
     }
     ImpJustifyRect( aRect1 );
     rStat.SetActionRect( aRect1 );
-    maRect = aRect1;
+    setRectangle(aRect1);
     SetBoundAndSnapRectsDirty();
 
     for (const auto& rInteraction : aInteractionHandles)
@@ -2446,9 +2452,9 @@ tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, cons
 {
     tools::Rectangle aReturnValue;
 
-    tools::Rectangle aOldTextRect( maRect );        // <- initial text rectangle
+    tools::Rectangle aOldTextRect(getRectangle());        // <- initial text rectangle
 
-    tools::Rectangle aNewTextRect( maRect );        // <- new text rectangle returned from the custom shape renderer,
+    tools::Rectangle aNewTextRect(getRectangle());        // <- new text rectangle returned from the custom shape renderer,
     GetTextBounds( aNewTextRect );          //    it depends to the current logical shape size
 
     tools::Rectangle aAdjustedTextRect( aNewTextRect );                            // <- new text rectangle is being tested by AdjustTextFrameWidthAndHeight to ensure
@@ -2457,7 +2463,7 @@ tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, cons
         if (aAdjustedTextRect != aNewTextRect && aOldTextRect != aAdjustedTextRect &&
             aNewTextRect.GetWidth() && aNewTextRect.GetHeight())
         {
-            aReturnValue = maRect;
+            aReturnValue = getRectangle();
             double fXScale = static_cast<double>(aOldTextRect.GetWidth()) / static_cast<double>(aNewTextRect.GetWidth());
             double fYScale = static_cast<double>(aOldTextRect.GetHeight()) / static_cast<double>(aNewTextRect.GetHeight());
             double fRightDiff = static_cast<double>( aAdjustedTextRect.Right() - aNewTextRect.Right() ) * fXScale;
@@ -2476,7 +2482,7 @@ tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, cons
 bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     tools::Rectangle aNewTextRect = ImpCalculateTextFrame(bHgt, bWdt);
-    const bool bRet = !aNewTextRect.IsEmpty() && aNewTextRect != maRect;
+    const bool bRet = !aNewTextRect.IsEmpty() && aNewTextRect != getRectangle();
     if (bRet && !mbAdjustingTextFrameWidthAndHeight)
     {
         mbAdjustingTextFrameWidthAndHeight = true;
@@ -2484,7 +2490,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         // taking care of handles that should not been changed
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
-        maRect = aNewTextRect;
+        setRectangle(aNewTextRect);
         SetBoundAndSnapRectsDirty();
         SetChanged();
 
@@ -2509,7 +2515,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
 {
     tools::Rectangle aNewTextRect = ImpCalculateTextFrame( true/*bHgt*/, true/*bWdt*/ );
-    bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != maRect );
+    bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != getRectangle());
     if ( bRet )
     {
         tools::Rectangle aBoundRect0;
@@ -2519,7 +2525,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
         // taking care of handles that should not been changed
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
-        maRect = aNewTextRect;
+        setRectangle(aNewTextRect);
         SetBoundAndSnapRectsDirty();
 
         for (const auto& rInteraction : aInteractionHandles)
@@ -2887,8 +2893,8 @@ void SdrObjCustomShape::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
         // invalidating rectangles by SetRectsDirty is not sufficient,
         // AdjustTextFrameWidthAndHeight() also has to be made, both
         // actions are done by NbcSetSnapRect
-        tools::Rectangle aTmp( maRect );    //creating temporary rectangle #i61108#
-        NbcSetSnapRect( aTmp );
+        tools::Rectangle aRectangle(getRectangle());    //creating temporary rectangle #i61108#
+        NbcSetSnapRect(aRectangle);
     }
 }
 
@@ -3109,8 +3115,8 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     double fRotate = basegfx::deg2rad(fObjectRotation);
     double fShearX = toRadians(maGeo.nShearAngle);
 
-    // get aRect, this is the unrotated snaprect
-    tools::Rectangle aRectangle(maRect);
+    // get aRectangle, this is the unrotated snaprect
+    tools::Rectangle aRectangle(getRectangle());
 
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
@@ -3122,7 +3128,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         if ( bMirroredX )
         {
             fShearX = -fShearX;
-            tools::Polygon aPol = Rect2Poly(maRect, aNewGeo);
+            tools::Polygon aPol = Rect2Poly(getRectangle(), aNewGeo);
             tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
             Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
@@ -3163,7 +3169,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
             aPol[2]=aPol0[3]; // it was *not* wrong even when the reordering
             aPol[3]=aPol0[2]; // *seems* to be specific for X-Mirrorings. Oh
             aPol[4]=aPol0[1]; // will I be happy when this old stuff is |gone| with aw080 (!)
-            Poly2Rect(aPol,aRectangle,aNewGeo);
+            Poly2Rect(aPol, aRectangle, aNewGeo);
         }
     }
 

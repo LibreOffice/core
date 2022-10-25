@@ -44,18 +44,21 @@ void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
     {
         Point aPnt;
         SdrHdlKind eKind = SdrHdlKind::UpperLeft;
+        auto aRectangle = getRectangle();
         switch (nHdlNum) {
-            case 0: aPnt=maRect.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
-            case 1: aPnt=maRect.TopCenter();    eKind=SdrHdlKind::Upper; break;
-            case 2: aPnt=maRect.TopRight();     eKind=SdrHdlKind::UpperRight; break;
-            case 3: aPnt=maRect.LeftCenter();   eKind=SdrHdlKind::Left ; break;
-            case 4: aPnt=maRect.RightCenter();  eKind=SdrHdlKind::Right; break;
-            case 5: aPnt=maRect.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
-            case 6: aPnt=maRect.BottomCenter(); eKind=SdrHdlKind::Lower; break;
-            case 7: aPnt=maRect.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
+            case 0: aPnt = aRectangle.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
+            case 1: aPnt = aRectangle.TopCenter();    eKind=SdrHdlKind::Upper; break;
+            case 2: aPnt = aRectangle.TopRight();     eKind=SdrHdlKind::UpperRight; break;
+            case 3: aPnt = aRectangle.LeftCenter();   eKind=SdrHdlKind::Left ; break;
+            case 4: aPnt = aRectangle.RightCenter();  eKind=SdrHdlKind::Right; break;
+            case 5: aPnt = aRectangle.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
+            case 6: aPnt = aRectangle.BottomCenter(); eKind=SdrHdlKind::Lower; break;
+            case 7: aPnt = aRectangle.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
         }
-        if (maGeo.nShearAngle) ShearPoint(aPnt,maRect.TopLeft(),maGeo.mfTanShearAngle);
-        if (maGeo.nRotationAngle) RotatePoint(aPnt,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+        if (maGeo.nShearAngle)
+            ShearPoint(aPnt, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
+        if (maGeo.nRotationAngle)
+            RotatePoint(aPnt, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrTextObj*>(this));
         pH->SetRotationAngle(maGeo.nRotationAngle);
@@ -71,7 +74,7 @@ bool SdrTextObj::hasSpecialDrag() const
 
 tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
-    tools::Rectangle aTmpRect(maRect);
+    tools::Rectangle aTmpRect(getRectangle());
     const SdrHdl* pHdl=rDrag.GetHdl();
     SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
     bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
@@ -92,8 +95,8 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     if (bTop) aTmpRect.SetTop(aPos.Y() );
     if (bBtm) aTmpRect.SetBottom(aPos.Y() );
     if (bOrtho) { // Ortho
-        tools::Long nWdt0=maRect.Right() -maRect.Left();
-        tools::Long nHgt0=maRect.Bottom()-maRect.Top();
+        tools::Long nWdt0=getRectangle().Right() - getRectangle().Left();
+        tools::Long nHgt0=getRectangle().Bottom() - getRectangle().Top();
         tools::Long nXMul=aTmpRect.Right() -aTmpRect.Left();
         tools::Long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
         tools::Long nXDiv=nWdt0;
@@ -125,13 +128,13 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
-                tools::Long nHgt0b=maRect.Bottom()-maRect.Top();
+                tools::Long nHgt0b=getRectangle().Bottom() - getRectangle().Top();
                 tools::Long nNeed=tools::Long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
                 aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
                 aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             }
             if ((bTop || bBtm) && nYDiv!=0) {
-                tools::Long nWdt0b=maRect.Right()-maRect.Left();
+                tools::Long nWdt0b=getRectangle().Right() - getRectangle().Left();
                 tools::Long nNeed=tools::Long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
                 aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
                 aTmpRect.SetRight(aTmpRect.Left()+nNeed );
@@ -150,20 +153,20 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     tools::Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-    if(aNewRect.TopLeft() != maRect.TopLeft() && (maGeo.nRotationAngle || maGeo.nShearAngle))
+    if(aNewRect.TopLeft() != getRectangle().TopLeft() && (maGeo.nRotationAngle || maGeo.nShearAngle))
     {
         Point aNewPos(aNewRect.TopLeft());
 
         if (maGeo.nShearAngle)
-            ShearPoint(aNewPos,maRect.TopLeft(),maGeo.mfTanShearAngle);
+            ShearPoint(aNewPos, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
 
         if (maGeo.nRotationAngle)
-            RotatePoint(aNewPos,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+            RotatePoint(aNewPos, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
         aNewRect.SetPos(aNewPos);
     }
 
-    if (aNewRect != maRect)
+    if (aNewRect != getRectangle())
     {
         NbcSetLogicRect(aNewRect);
     }
@@ -185,7 +188,7 @@ bool SdrTextObj::BegCreate(SdrDragStat& rStat)
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Normalize();
     rStat.SetActionRect(aRect1);
-    maRect = aRect1;
+    setRectangle(aRect1);
     return true;
 }
 
@@ -195,7 +198,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
-    maRect = aRect1; // for ObjName
+    setRectangle(aRect1); // for ObjName
     SetBoundRectDirty();
     m_bSnapRectDirty=true;
     if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) {
@@ -206,8 +209,10 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
 
 bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    rStat.TakeCreateRect(maRect);
-    ImpJustifyRect(maRect);
+    tools::Rectangle aRectangle(getRectangle());
+    rStat.TakeCreateRect(aRectangle);
+    ImpJustifyRect(aRectangle);
+    setRectangle(aRectangle);
 
     AdaptTextMinSize();
 

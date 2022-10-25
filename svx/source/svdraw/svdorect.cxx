@@ -122,14 +122,14 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
     aXPoly=aNewPoly;
 
     // these angles always relate to the top left corner of aRect
-    if (maGeo.nShearAngle) ShearXPoly(aXPoly,maRect.TopLeft(),maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle) RotateXPoly(aXPoly,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle) ShearXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle) RotateXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     return aXPoly;
 }
 
 void SdrRectObj::RecalcXPoly()
 {
-    mpXPoly = ImpCalcXPoly(maRect,GetEckenradius());
+    mpXPoly = ImpCalcXPoly(getRectangle(), GetEckenradius());
 }
 
 const XPolygon& SdrRectObj::GetXPoly() const
@@ -177,11 +177,11 @@ SdrObjKind SdrRectObj::GetObjIdentifier() const
 
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
-    rRect = maRect;
+    rRect = getRectangle();
     if (maGeo.nShearAngle==0_deg100)
         return;
 
-    tools::Long nDst=FRound((maRect.Bottom()-maRect.Top()) * maGeo.mfTanShearAngle);
+    tools::Long nDst=FRound((getRectangle().Bottom()-getRectangle().Top()) * maGeo.mfTanShearAngle);
     if (maGeo.nShearAngle>0_deg100)
     {
         Point aRef(rRect.TopLeft());
@@ -210,7 +210,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
     {
         pResId = bRounded ? STR_ObjNameSingulPARALRND : STR_ObjNameSingulPARAL;  // parallelogram or, maybe, rhombus
     }
-    else if (maRect.GetWidth() == maRect.GetHeight())
+    else if (getRectangle().GetWidth() == getRectangle().GetHeight())
     {
         pResId = bRounded ? STR_ObjNameSingulQUADRND : STR_ObjNameSingulQUAD; // square
     }
@@ -236,7 +236,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
     {
         pResId = bRounded ? STR_ObjNamePluralPARALRND : STR_ObjNamePluralPARAL;  // parallelogram or rhombus
     }
-    else if (maRect.GetWidth() == maRect.GetHeight())
+    else if (getRectangle().GetWidth() == getRectangle().GetHeight())
     {
         pResId = bRounded ? STR_ObjNamePluralQUADRND : STR_ObjNamePluralQUAD; // square
     }
@@ -252,7 +252,7 @@ rtl::Reference<SdrObject> SdrRectObj::CloneSdrObject(SdrModel& rTargetModel) con
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 {
     XPolyPolygon aXPP;
-    aXPP.Insert(ImpCalcXPoly(maRect,GetEckenradius()));
+    aXPP.Insert(ImpCalcXPoly(getRectangle(), GetEckenradius()));
     return aXPP.getB2DPolyPolygon();
 }
 
@@ -289,7 +289,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
     if(IsTextFrame())
     {
         OSL_ENSURE(!IsTextEditActive(), "Do not use an ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
-        std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(maRect));
+        std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(getRectangle()));
         pH->SetObj(const_cast<SdrRectObj*>(this));
         pH->SetRotationAngle(maGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
@@ -299,37 +299,37 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
     {
         Point aPnt;
         SdrHdlKind eKind = SdrHdlKind::Move;
-
+        auto const& rRectangle = getRectangle();
         switch(nHdlNum)
         {
             case 1: // Handle for changing the corner radius
             {
                 tools::Long a = GetEckenradius();
-                tools::Long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
+                tools::Long b = std::max(rRectangle.GetWidth(), rRectangle.GetHeight())/2; // rounded up, because GetWidth() adds 1
                 if (a>b) a=b;
                 if (a<0) a=0;
-                aPnt=maRect.TopLeft();
+                aPnt = rRectangle.TopLeft();
                 aPnt.AdjustX(a );
                 eKind = SdrHdlKind::Circle;
                 break;
             }
-            case 2: aPnt=maRect.TopLeft();      eKind = SdrHdlKind::UpperLeft; break;
-            case 3: aPnt=maRect.TopCenter();    eKind = SdrHdlKind::Upper; break;
-            case 4: aPnt=maRect.TopRight();     eKind = SdrHdlKind::UpperRight; break;
-            case 5: aPnt=maRect.LeftCenter();   eKind = SdrHdlKind::Left ; break;
-            case 6: aPnt=maRect.RightCenter();  eKind = SdrHdlKind::Right; break;
-            case 7: aPnt=maRect.BottomLeft();   eKind = SdrHdlKind::LowerLeft; break;
-            case 8: aPnt=maRect.BottomCenter(); eKind = SdrHdlKind::Lower; break;
-            case 9: aPnt=maRect.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
+            case 2: aPnt = rRectangle.TopLeft();      eKind = SdrHdlKind::UpperLeft; break;
+            case 3: aPnt = rRectangle.TopCenter();    eKind = SdrHdlKind::Upper; break;
+            case 4: aPnt = rRectangle.TopRight();     eKind = SdrHdlKind::UpperRight; break;
+            case 5: aPnt = rRectangle.LeftCenter();   eKind = SdrHdlKind::Left ; break;
+            case 6: aPnt = rRectangle.RightCenter();  eKind = SdrHdlKind::Right; break;
+            case 7: aPnt = rRectangle.BottomLeft();   eKind = SdrHdlKind::LowerLeft; break;
+            case 8: aPnt = rRectangle.BottomCenter(); eKind = SdrHdlKind::Lower; break;
+            case 9: aPnt = rRectangle.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
         }
 
         if (maGeo.nShearAngle)
         {
-            ShearPoint(aPnt,maRect.TopLeft(),maGeo.mfTanShearAngle);
+            ShearPoint(aPnt,rRectangle.TopLeft(),maGeo.mfTanShearAngle);
         }
         if (maGeo.nRotationAngle)
         {
-            RotatePoint(aPnt,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+            RotatePoint(aPnt,rRectangle.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         }
 
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
@@ -367,9 +367,9 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
         Point aPt(rDrag.GetNow());
 
         if (maGeo.nRotationAngle)
-            RotatePoint(aPt, maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+            RotatePoint(aPt, getRectangle().TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
-        sal_Int32 nRad(aPt.X() - maRect.Left());
+        sal_Int32 nRad(aPt.X() - getRectangle().Left());
 
         if (nRad < 0)
             nRad = 0;
@@ -405,9 +405,9 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
             // -sin for reversal
             if (maGeo.nRotationAngle)
-                RotatePoint(aPt, maRect.TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+                RotatePoint(aPt, getRectangle().TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
-            sal_Int32 nRad(aPt.X() - maRect.Left());
+            sal_Int32 nRad(aPt.X() - getRectangle().Left());
 
             if(nRad < 0)
                 nRad = 0;
@@ -484,14 +484,17 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
     }
 
     Point aPt;
+    auto const& rRectangle = getRectangle();
     switch (nPosNum) {
-        case 0: aPt=maRect.TopCenter();    aPt.AdjustY( -nWdt ); break;
-        case 1: aPt=maRect.RightCenter();  aPt.AdjustX(nWdt ); break;
-        case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
-        case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
+        case 0: aPt = rRectangle.TopCenter();    aPt.AdjustY( -nWdt ); break;
+        case 1: aPt = rRectangle.RightCenter();  aPt.AdjustX(nWdt ); break;
+        case 2: aPt = rRectangle.BottomCenter(); aPt.AdjustY(nWdt ); break;
+        case 3: aPt = rRectangle.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (maGeo.nShearAngle) ShearPoint(aPt, maRect.TopLeft(), maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle) RotatePoint(aPt, maRect.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle)
+        ShearPoint(aPt, rRectangle.TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle)
+        RotatePoint(aPt, rRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -510,14 +513,17 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
     }
 
     Point aPt;
+    auto const& rRectangle = getRectangle();
     switch (nPosNum) {
-        case 0: aPt=maRect.TopLeft();     aPt.AdjustX( -nWdt ); aPt.AdjustY( -nWdt ); break;
-        case 1: aPt=maRect.TopRight();    aPt.AdjustX(nWdt ); aPt.AdjustY( -nWdt ); break;
-        case 2: aPt=maRect.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
-        case 3: aPt=maRect.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
+        case 0: aPt = rRectangle.TopLeft();     aPt.AdjustX( -nWdt ); aPt.AdjustY( -nWdt ); break;
+        case 1: aPt = rRectangle.TopRight();    aPt.AdjustX(nWdt ); aPt.AdjustY( -nWdt ); break;
+        case 2: aPt = rRectangle.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
+        case 3: aPt = rRectangle.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
     }
-    if (maGeo.nShearAngle) ShearPoint(aPt,maRect.TopLeft(),maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle) RotatePoint(aPt,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+    if (maGeo.nShearAngle)
+        ShearPoint(aPt, rRectangle.TopLeft(),maGeo.mfTanShearAngle);
+    if (maGeo.nRotationAngle)
+        RotatePoint(aPt, rRectangle.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -526,7 +532,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 
 rtl::Reference<SdrObject> SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    XPolygon aXP(ImpCalcXPoly(maRect,GetEckenradius()));
+    XPolygon aXP(ImpCalcXPoly(getRectangle(), GetEckenradius()));
     { // TODO: this is only for the moment, until we have the new TakeContour()
         aXP.Remove(0,1);
         aXP[aXP.GetPointCount()-1]=aXP[0];

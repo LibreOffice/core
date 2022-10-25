@@ -245,7 +245,7 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
     }
 
     if( bShrinkOnly )
-        aPos = maRect.TopLeft();
+        aPos = getRectangle().TopLeft();
 
     aPos.AdjustX( -(aSize.Width() / 2) );
     aPos.AdjustY( -(aSize.Height() / 2) );
@@ -484,7 +484,7 @@ void SdrMediaObj::notifyPropertiesForLOKit()
         json.put("id", mediaId);
         json.put("url", m_xImpl->m_MediaProperties.getTempURL());
 
-        const tools::Rectangle aRect = o3tl::convert(maRect, o3tl::Length::mm100, o3tl::Length::twip);
+        const tools::Rectangle aRect = o3tl::convert(getRectangle(), o3tl::Length::mm100, o3tl::Length::twip);
         json.put("x", aRect.getX());
         json.put("y", aRect.getY());
         json.put("w", aRect.getOpenWidth());

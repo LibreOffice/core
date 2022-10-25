@@ -698,7 +698,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     aTextSize2.AdjustWidth( 1 ); aTextSize2.AdjustHeight( 1 ); // because of the Rect-Ctor's odd behavior
     rRect=tools::Rectangle(aTextPos,aTextSize2);
     rRect.Normalize();
-    const_cast<SdrMeasureObj*>(this)->maRect=rRect;
+    const_cast<SdrMeasureObj*>(this)->setRectangle(rRect);
 
     if (aMPol.nTextAngle != maGeo.nRotationAngle) {
         const_cast<SdrMeasureObj*>(this)->maGeo.nRotationAngle=aMPol.nTextAngle;

@@ -1682,7 +1682,7 @@ void SdrPathObj::ImpForceLineAngle()
     maGeo.RecalcTan();
 
     // for SdrTextObj, keep aRect up to date
-    maRect = tools::Rectangle::Normalize(aPoint0, aPoint1);
+    setRectangle(tools::Rectangle::Normalize(aPoint0, aPoint1));
 }
 
 void SdrPathObj::ImpForceKind()
@@ -1746,7 +1746,7 @@ void SdrPathObj::ImpForceKind()
         // #i10659# for SdrTextObj, keep aRect up to date
         if(GetPathPoly().count())
         {
-            maRect = lcl_ImpGetBoundRect(GetPathPoly());
+            setRectangle(lcl_ImpGetBoundRect(GetPathPoly()));
         }
     }
 
@@ -2469,7 +2469,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
         if(GetPathPoly().count())
         {
             // #i10659# for SdrTextObj, keep aRect up to date
-            maRect = lcl_ImpGetBoundRect(GetPathPoly());
+            setRectangle(lcl_ImpGetBoundRect(GetPathPoly()));
         }
     }
 

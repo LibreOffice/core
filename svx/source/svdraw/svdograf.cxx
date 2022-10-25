@@ -913,7 +913,7 @@ rtl::Reference<SdrObject> SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAdd
             ImpSdrGDIMetaFileImport aFilter(
                 getSdrModelFromSdrObject(),
                 GetLayer(),
-                maRect);
+                getRectangle());
             rtl::Reference<SdrObjGroup> pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
 
             if(aFilter.DoImport(aMtf, *pGrp->GetSubList(), 0))
@@ -925,13 +925,13 @@ rtl::Reference<SdrObject> SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAdd
                     if(aGeoStat.nShearAngle)
                     {
                         aGeoStat.RecalcTan();
-                        pGrp->NbcShear(maRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
+                        pGrp->NbcShear(getRectangle().TopLeft(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
                     }
 
                     if(aGeoStat.nRotationAngle)
                     {
                         aGeoStat.RecalcSinCos();
-                        pGrp->NbcRotate(maRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
+                        pGrp->NbcRotate(getRectangle().TopLeft(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
                     }
                 }
 
@@ -1097,7 +1097,7 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
     }
 
     if( bShrinkOnly )
-        aPos = maRect.TopLeft();
+        aPos = getRectangle().TopLeft();
 
     aPos.AdjustX( -(aSize.Width() / 2) );
     aPos.AdjustY( -(aSize.Height() / 2) );
