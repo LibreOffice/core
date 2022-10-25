@@ -25,6 +25,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 
+#include <tools/gen.hxx>
+
 class B2DRangeTest : public CppUnit::TestFixture
 {
     void testCreation()
@@ -78,11 +80,55 @@ class B2DRangeTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 2.0, 2.0), aRange);
     }
 
+    void testShift()
+    {
+        basegfx::B2DRange aRange(1.0, 1.0, 4.0, 4.0);
+        aRange.shift(0.0, 0.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 4.0, 4.0), aRange);
+        aRange.shift(1.0, 2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(2.0, 3.0, 5.0, 6.0), aRange);
+        aRange.shift(-1.0, -2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 4.0, 4.0), aRange);
+    }
+
+    void testSetSize()
+    {
+        basegfx::B2DRange aRange(1.0, 1.0, 4.0, 4.0);
+        aRange.setSize(0.0, 0.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 1.0, 1.0), aRange);
+        aRange.setSize(1.0, 2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 2.0, 3.0), aRange);
+        aRange.setSize(-1.0, -2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(), aRange);
+    }
+
+    void testSetPosition()
+    {
+        basegfx::B2DRange aRange(1.0, 1.0, 4.0, 3.0);
+        aRange.setPosition(4.0, 2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(4.0, 2.0, 7.0, 4.0), aRange);
+        CPPUNIT_ASSERT_EQUAL(3.0, aRange.getWidth());
+        CPPUNIT_ASSERT_EQUAL(2.0, aRange.getHeight());
+
+        aRange.setPosition(1.0, 2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 2.0, 4.0, 4.0), aRange);
+        CPPUNIT_ASSERT_EQUAL(3.0, aRange.getWidth());
+        CPPUNIT_ASSERT_EQUAL(2.0, aRange.getHeight());
+
+        aRange.setPosition(-1.0, -3.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(-1.0, -3.0, 2.0, -1.0), aRange);
+        CPPUNIT_ASSERT_EQUAL(3.0, aRange.getWidth());
+        CPPUNIT_ASSERT_EQUAL(2.0, aRange.getHeight());
+    }
+
     CPPUNIT_TEST_SUITE(B2DRangeTest);
     CPPUNIT_TEST(testCreation);
     CPPUNIT_TEST(testRound);
     CPPUNIT_TEST(testCenter);
     CPPUNIT_TEST(testIntersect);
+    CPPUNIT_TEST(testShift);
+    CPPUNIT_TEST(testSetSize);
+    CPPUNIT_TEST(testSetPosition);
     CPPUNIT_TEST_SUITE_END();
 };
 

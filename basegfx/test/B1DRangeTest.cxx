@@ -89,10 +89,46 @@ public:
         CPPUNIT_ASSERT_MESSAGE("range intersection is yielding nonempty range!", aRange.isEmpty());
     }
 
+    void checkShift()
+    {
+        B1DRange aRange(1.0, 3.0);
+        aRange.shift(2.0);
+        CPPUNIT_ASSERT_EQUAL(B1DRange(3.0, 5.0), aRange);
+
+        B1DRange aRange2(-1.0, -3.0);
+        aRange2.shift(2.0);
+        CPPUNIT_ASSERT_EQUAL(B1DRange(1.0, -1.0), aRange2);
+    }
+
+    void checkSetSize()
+    {
+        B1DRange aRange(1.0, 3.0);
+        aRange.setSize(5.0);
+        CPPUNIT_ASSERT_EQUAL(B1DRange(1.0, 6.0), aRange);
+
+        B1DRange aRange2(-1.0, -3.0);
+        aRange2.setSize(3.0);
+        CPPUNIT_ASSERT_EQUAL(B1DRange(-3.0, 0.0), aRange2);
+    }
+
+    void checkSetPosition()
+    {
+        B1DRange aRange(1.0, 3.0);
+        aRange.setPosition(7.0);
+        CPPUNIT_ASSERT_EQUAL(B1DRange(7.0, 9.0), aRange);
+
+        B1DRange aRange2(-1.0, -3.0);
+        aRange2.setPosition(-1.0);
+        CPPUNIT_ASSERT_EQUAL(B1DRange(-1.0, 1.0), aRange2);
+    }
+
     CPPUNIT_TEST_SUITE(B1DRangeTest);
     CPPUNIT_TEST(checkIntervalAxioms);
     CPPUNIT_TEST(checkOverlap);
     CPPUNIT_TEST(checkIntersect);
+    CPPUNIT_TEST(checkShift);
+    CPPUNIT_TEST(checkSetSize);
+    CPPUNIT_TEST(checkSetPosition);
     CPPUNIT_TEST_SUITE_END();
 };
 
