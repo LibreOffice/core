@@ -67,6 +67,29 @@ using namespace css::beans;
 using namespace css::frame;
 using namespace css::uno;
 
+class TreeViewDropTarget final : public DropTargetHelper
+{
+private:
+    StyleList& m_rParent;
+
+public:
+    TreeViewDropTarget(StyleList& rStyleList, weld::TreeView& rTreeView)
+        : DropTargetHelper(rTreeView.get_drop_target())
+        , m_rParent(rStyleList)
+    {
+    }
+
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override
+    {
+        return m_rParent.AcceptDrop(rEvt, *this);
+    }
+
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override
+    {
+        return m_rParent.ExecuteDrop(rEvt);
+    }
+};
+
 // Constructor
 
 StyleList::StyleList(weld::Builder* pBuilder, SfxBindings* pBindings,
@@ -243,29 +266,6 @@ void StyleList::EnableNewByExample(bool newByExampleDisabled)
 {
     m_bNewByExampleDisabled = newByExampleDisabled;
 }
-
-class TreeViewDropTarget final : public DropTargetHelper
-{
-private:
-    StyleList& m_rParent;
-
-public:
-    TreeViewDropTarget(StyleList& rStyleList, weld::TreeView& rTreeView)
-        : DropTargetHelper(rTreeView.get_drop_target())
-        , m_rParent(rStyleList)
-    {
-    }
-
-    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override
-    {
-        return m_rParent.AcceptDrop(rEvt, *this);
-    }
-
-    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override
-    {
-        return m_rParent.ExecuteDrop(rEvt);
-    }
-};
 
 void StyleList::FilterSelect(sal_uInt16 nActFilter, bool bsetFilter)
 {
