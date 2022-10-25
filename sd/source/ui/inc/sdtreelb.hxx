@@ -95,6 +95,8 @@ private:
      */
     bool m_bNavigationGrabsFocus;
 
+    bool m_bEditing = false;
+
     SelectionMode m_eSelectionMode;
 
     ImplSVEvent* m_nSelectEventId;
@@ -106,6 +108,7 @@ private:
     Link<weld::TreeView&, bool> m_aRowActivatedHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
+    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
 
     /** Return the name of the object.  When the object has no user supplied
         name and the bCreate flag is <TRUE/> then a name is created
@@ -134,6 +137,13 @@ private:
     DECL_DLLPRIVATE_LINK(DragBeginHdl, bool&, bool);
     DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
 
+    DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+    typedef std::pair<const weld::TreeIter&, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, const IterString&, bool);
+    DECL_LINK(EditEntryAgain, void*, void);
+
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+
     /** Determine whether the specified page belongs to the current show
         which is either the standard show or a custom show.
         @param pPage
@@ -155,6 +165,17 @@ public:
 
     SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeview);
     ~SdPageObjsTLV();
+
+    bool IsEditingActive() const {return m_bEditing;}
+
+    void start_editing()
+    {
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_cursor(xIter.get()))
+        {
+            m_xTreeView->start_editing(*xIter);
+        }
+    }
 
     void set_sensitive(bool bSensitive)
     {
@@ -222,6 +243,11 @@ public:
         m_aMouseReleaseHdl = rLink;
     }
 
+    void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink)
+    {
+        m_aPopupMenuHdl = rLink;
+    }
+
     bool HasSelectedChildren(std::u16string_view rName);
     bool SelectEntry(std::u16string_view rName);
     void SelectEntry(const SdrObject* pObj);
@@ -254,6 +280,11 @@ public:
     bool get_iter_first(weld::TreeIter& rIter) const
     {
         return m_xTreeView->get_iter_first(rIter);
+    }
+
+    weld::TreeView& get_treeview()
+    {
+        return *m_xTreeView;
     }
 
     std::unique_ptr<weld::TreeIter> make_iterator()

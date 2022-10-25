@@ -53,6 +53,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <svx/svditer.hxx>
+#include <vcl/commandevent.hxx>
 
 using namespace com::sun::star;
 
@@ -286,16 +288,44 @@ bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
     return !xEntry;
 }
 
+IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (IsEditingActive())
+        return false;
+
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        m_xTreeView->grab_focus();
+
+        // select clicked entry
+        if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+                rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
+                    rCEvt.GetMousePosPixel(), xEntry.get(), false))
+        {
+            m_bSelectionHandlerNavigates = true;
+            m_bNavigationGrabsFocus = false;
+            m_xTreeView->set_cursor(*xEntry);
+            Select();
+        }
+
+        return m_aPopupMenuHdl.Call(rCEvt);
+    }
+
+    return false;
+}
+
 IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if (m_xAccel->execute(rKeyCode))
     {
+        m_bEditing = false;
         // the accelerator consumed the event
         return true;
     }
     if (rKeyCode.GetCode() == KEY_RETURN)
     {
+        m_bEditing = false;
         std::unique_ptr<weld::TreeIter> xCursor(m_xTreeView->make_iterator());
         if (m_xTreeView->get_cursor(xCursor.get()) && m_xTreeView->iter_has_child(*xCursor))
         {
@@ -309,11 +339,16 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         m_bNavigationGrabsFocus = false;
         return true;
     }
-    return m_aKeyPressHdl.Call(rKEvt);
+    bool bRet = m_aKeyPressHdl.Call(rKEvt);
+    // m_bEditing needs to be set after key press handler call back or x11 won't end editing on
+    // Esc key press. See SdNavigatorWin::KeyInputHdl.
+    m_bEditing = false;
+    return bRet;
 }
 
 IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
+    m_bEditing = false;
     m_bSelectionHandlerNavigates = rMEvt.GetClicks() == 1;
     m_bNavigationGrabsFocus = rMEvt.GetClicks() != 1;
     return false;
@@ -652,9 +687,83 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     m_xTreeView->connect_key_press(LINK(this, SdPageObjsTLV, KeyInputHdl));
     m_xTreeView->connect_mouse_press(LINK(this, SdPageObjsTLV, MousePressHdl));
     m_xTreeView->connect_mouse_release(LINK(this, SdPageObjsTLV, MouseReleaseHdl));
+    m_xTreeView->connect_editing(LINK(this, SdPageObjsTLV, EditingEntryHdl),
+                                 LINK(this, SdPageObjsTLV, EditedEntryHdl));
+    m_xTreeView->connect_popup_menu(LINK(this, SdPageObjsTLV, CommandHdl));
 
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 28,
                                   m_xTreeView->get_text_height() * 8);
+}
+
+IMPL_LINK(SdPageObjsTLV, EditEntryAgain, void*, p, void)
+{
+    m_xTreeView->grab_focus();
+    std::unique_ptr<weld::TreeIter> xEntry(static_cast<weld::TreeIter*>(p));
+    m_xTreeView->start_editing(*xEntry);
+    m_bEditing = true;
+}
+
+IMPL_LINK_NOARG(SdPageObjsTLV, EditingEntryHdl, const weld::TreeIter&, bool)
+{
+    m_bEditing = true;
+    return true;
+}
+
+IMPL_LINK(SdPageObjsTLV, EditedEntryHdl, const IterString&, rIterString, bool)
+{
+    m_bEditing = false;
+
+    // Did the name change?
+    if (m_xTreeView->get_text(rIterString.first) == rIterString.second)
+        return true;
+
+    // If the new name is empty or not unique, start editing again.
+    bool bUniqueName = true;
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (!rIterString.second.isEmpty())
+    {
+        if (m_xTreeView->get_iter_first(*xEntry))
+        {
+            do
+            {
+                // skip self!
+                if (m_xTreeView->iter_compare(*xEntry, rIterString.first) != 0 &&
+                        m_xTreeView->get_text(*xEntry) == rIterString.second)
+                {
+                    bUniqueName = false;
+                    break;
+                }
+            } while(m_xTreeView->iter_next(*xEntry));
+        }
+    }
+    if (rIterString.second.isEmpty() || !bUniqueName)
+    {
+        m_xTreeView->copy_iterator(rIterString.first, *xEntry);
+        Application::PostUserEvent(LINK(this, SdPageObjsTLV, EditEntryAgain), xEntry.release());
+        return false;
+    }
+
+    // set the new name
+    const auto& rEntryId = m_xTreeView->get_id(rIterString.first);
+    if (rEntryId.toInt64() == 1)
+    {
+        // page name
+        if (::sd::DrawDocShell* pDocShell = m_pDoc->GetDocSh())
+        {
+            if (::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell))
+            {
+                SdPage* pPage = pViewShell->GetActualPage();
+                pPage->SetName(rIterString.second);
+            }
+        }
+    }
+    else if (SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(rEntryId))
+    {
+        // object name
+        pCursorEntryObject->SetName(rIterString.second);
+    }
+
+    return true;
 }
 
 IMPL_LINK_NOARG(SdPageObjsTLV, SelectHdl, weld::TreeView&, void)
@@ -682,6 +791,9 @@ IMPL_LINK_NOARG(SdPageObjsTLV, AsyncSelectHdl, void*, void)
 void SdPageObjsTLV::Select()
 {
     m_nSelectEventId = nullptr;
+
+    if (IsEditingActive())
+        return;
 
     m_bLinkableSelected = true;
 

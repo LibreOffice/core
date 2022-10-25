@@ -159,8 +159,11 @@ private:
                                 DECL_DLLPRIVATE_LINK( ShapeFilterCallback, const OString&, void );
                                 DECL_DLLPRIVATE_LINK( KeyInputHdl, const KeyEvent&, bool );
     DECL_DLLPRIVATE_STATIC_LINK(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
 
     void                        SetDragImage();
+
+    void ExecuteContextMenuAction(std::string_view rSelectedPopupEntry);
 
 public:
     //when object is marked , fresh the corresponding entry tree .

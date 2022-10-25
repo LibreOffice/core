@@ -47,6 +47,8 @@
 #include <DrawViewShell.hxx>
 #include <utility>
 
+#include <vcl/commandevent.hxx>
+
 /**
  * SdNavigatorWin - FloatingWindow
  */
@@ -68,6 +70,7 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxTlbObjects->connect_row_activated(LINK(this, SdNavigatorWin, ClickObjectHdl));
     mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
     mxTlbObjects->connect_mouse_release(LINK(this, SdNavigatorWin, MouseReleaseHdl));
+    mxTlbObjects->connect_popup_menu(LINK(this, SdNavigatorWin, CommandHdl));
 
     mxToolbox->connect_clicked(LINK(this, SdNavigatorWin, SelectToolboxHdl));
     mxToolbox->connect_menu_toggled(LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl));
@@ -238,6 +241,27 @@ IMPL_STATIC_LINK_NOARG(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool)
     return true;
 }
 
+IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+    weld::TreeView& rTreeView = GetObjects().get_treeview();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rTreeView,
+                                            "modules/sdraw/ui/navigatorcontextmenu.ui"));
+    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("navmenu");
+    OString sCommand = xPop->popup_at_rect(&rTreeView,
+                                           tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    if (!sCommand.isEmpty())
+        ExecuteContextMenuAction(sCommand);
+    return true;
+}
+
+void SdNavigatorWin::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry)
+{
+    if (rSelectedPopupEntry == "rename")
+        GetObjects().start_editing();
+}
+
 IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OString&, rCommand, void)
 {
     PageJump ePage = PAGE_NONE;
@@ -393,9 +417,13 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
                     pWindow->GrabFocus();
 
                 if (!mxTlbObjects->IsNavigationGrabsFocus())
+                {
                     // This is the case when keyboard navigation inside the
                     // navigator should continue to work.
+                    if (mxNavigatorDlg)
+                        mxNavigatorDlg->GrabFocus();
                     mxTlbObjects->grab_focus();
+                }
             }
         }
     }
@@ -687,7 +715,7 @@ IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
     {
         // during drag'n'drop we just stop the drag but do not close the navigator
-        if (!SdPageObjsTLV::IsInDrag())
+        if (!SdPageObjsTLV::IsInDrag() && !GetObjects().IsEditingActive())
         {
             ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
             if (pBase)
