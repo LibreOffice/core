@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_dump, \
     sd \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

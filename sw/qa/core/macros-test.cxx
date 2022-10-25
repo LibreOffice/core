@@ -136,9 +136,6 @@ void SwMacrosTest::testVba()
         OUString aStringRes;
         CPPUNIT_ASSERT(aRet >>= aStringRes);
         CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
-
-        mxComponent->dispose();
-        mxComponent.clear();
     }
 }
 

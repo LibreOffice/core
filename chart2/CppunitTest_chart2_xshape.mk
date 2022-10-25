@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_xshape, \
     sd \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

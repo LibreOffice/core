@@ -34,7 +34,8 @@ namespace com::sun::star::util { class XNumberFormats; }
 class PivotChartTest : public ChartTest
 {
 public:
-    PivotChartTest() : ChartTest()
+    PivotChartTest()
+        : ChartTest("/chart2/qa/extras/data/")
     {}
 
     void testRoundtrip();
@@ -316,7 +317,7 @@ void PivotChartTest::testRoundtrip()
 
     std::vector<double> aReference2 { 101879.458079, 178636.929704, 314626.484864 };
 
-    load(u"/chart2/qa/extras/data/ods/", u"PivotChartRoundTrip.ods");
+    loadFromURL(u"ods/PivotChartRoundTrip.ods");
 
     xChartDoc = getPivotChartDocFromSheet(1, mxComponent);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -351,7 +352,7 @@ void PivotChartTest::testRoundtrip()
         CPPUNIT_ASSERT_EQUAL(OUString("Total"), lclGetLabel(xChartDoc, 0));
     }
 
-    reload("calc8");
+    saveAndReload("calc8");
 
     xChartDoc = getPivotChartDocFromSheet(1, mxComponent);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -371,7 +372,7 @@ void PivotChartTest::testChangePivotTable()
     uno::Sequence<uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
-    load(u"/chart2/qa/extras/data/ods/", u"PivotTableExample.ods");
+    loadFromURL(u"ods/PivotTableExample.ods");
 
     // Check we have the Pivot Table
     OUString sPivotTableName("DataPilot1");
@@ -528,8 +529,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
 
     // SETUP DATA and PIVOT TABLE
 
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -610,8 +610,7 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
     // SETUP DATA and PIVOT TABLE
 
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -670,8 +669,7 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
 {
     // SETUP DATA and PIVOT TABLE
 
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -778,8 +776,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
 {
     // SETUP DATA and PIVOT TABLE
 
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -908,8 +905,7 @@ void PivotChartTest::testPivotChartWithDateRowField()
 {
     // SETUP DATA and PIVOT TABLE
 
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 

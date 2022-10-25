@@ -88,6 +88,7 @@ class Chart2DumpTest : public ChartTest
 {
 protected:
     Chart2DumpTest(bool bDumpMode)
+        : ChartTest("/chart2/qa/extras/chart2dump/data/")
     {
         m_bDumpMode = bDumpMode;
     }
@@ -107,7 +108,6 @@ protected:
 
     virtual OUString getTestName() { return OUString(); }
     OUString const & getTestFileName() const { return m_sTestFileName; }
-    OUString getTestFileDirName() const { return "/chart2/qa/extras/chart2dump/data/"; }
     OUString getReferenceDirName()
     {
         return "/chart2/qa/extras/chart2dump/reference/" + getTestName().toAsciiLowerCase() + "/";
@@ -269,7 +269,7 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
     for (const OUString& aTestFile : aTestFiles)
     {
         setTestFileName(aTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc (getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
 
         // Check title
@@ -382,7 +382,7 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
     for (const OUString& aTestFile : aTestFiles)
     {
         setTestFileName(aTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_SET_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -476,7 +476,7 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -548,7 +548,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_SET_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -621,7 +621,7 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_SET_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -704,7 +704,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -774,7 +774,7 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_SET_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -822,7 +822,6 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
         sal_Int32 nChartWallLineWidth = 0;
         xPropSet->getPropertyValue("LineWidth") >>= nChartWallLineWidth;
         CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nChartWallLineWidth);
-
     }
 }
 
@@ -840,7 +839,7 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -913,7 +912,7 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -986,7 +985,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
-        load(getTestFileDirName(), getTestFileName());
+        loadFromURL(getTestFileName());
         uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -1078,7 +1077,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
 DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
 {
     setTestFileName( "pivotchart_data_button.ods" );
-    load( getTestFileDirName(), getTestFileName() );
+    loadFromURL(getTestFileName());
 
     // Check that we have pivot chart in the document
     uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet( 1, mxComponent );

@@ -24,6 +24,10 @@ constexpr sal_Int32 SHEET_EXPONENTIAL2 = 5;
 class Chart2TrendCalculators : public ChartTest
 {
 public:
+    Chart2TrendCalculators()
+        : ChartTest("/chart2/qa/extras/data/")
+    {}
+
     void setUp() override;
     void tearDown() override;
 
@@ -44,7 +48,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-
     Reference<chart2::XRegressionCurve> m_xCurve;
     Reference< chart2::XRegressionCurveCalculator > m_xRegressionCurveCalculator;
 
@@ -52,13 +55,12 @@ private:
     void checkCalculator(
         const Sequence< double >& xValues, const Sequence< double >& yValues,
         const OUString& sExpectedFormula );
-
 };
 
 void Chart2TrendCalculators::setUp()
 {
     ChartTest::setUp();
-    load(u"/chart2/qa/extras/data/ods/", u"trend_calculators.ods");
+    loadFromURL(u"ods/trend_calculators.ods");
 }
 
 void Chart2TrendCalculators::tearDown()

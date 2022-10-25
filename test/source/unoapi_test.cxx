@@ -55,6 +55,12 @@ OUString UnoApiTest::createFileURL(std::u16string_view aFileBase)
 
 OUString UnoApiTest::loadFromURL(std::u16string_view aFileBase)
 {
+    if (mxComponent.is())
+    {
+        mxComponent->dispose();
+        mxComponent.clear();
+    }
+
     OUString aFileName = createFileURL(aFileBase);
     mxComponent = loadFromDesktop(aFileName);
     return aFileName;

@@ -21,6 +21,11 @@
 class Chart2XShapeTest : public ChartTest
 {
 public:
+    Chart2XShapeTest()
+        : ChartTest("/chart2/qa/extras/xshape/data/")
+    {
+    }
+
     void testTdf150832();
     void testTdf149204();
     void testTdf151424();
@@ -109,7 +114,7 @@ void Chart2XShapeTest::testTdf150832()
     // Without the fix in place, this test would have failed with
     // - Expected: 319
     // - Actual  : 0
-    load(u"chart2/qa/extras/xshape/data/xls/", u"tdf150832.xls");
+    loadFromURL(u"xls/tdf150832.xls");
     compareAgainstReference(getXShapeDumpString(), u"tdf150832.xml");
 }
 
@@ -125,7 +130,7 @@ void Chart2XShapeTest::testTdf149204()
     // - Actual  : 12940
     // - Node: /XShapes/XShape[2]
     // - Attr: sizeX
-    load(u"chart2/qa/extras/xshape/data/pptx/", u"tdf149204.pptx");
+    loadFromURL(u"pptx/tdf149204.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 0);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     compareAgainstReference(xDumper->dump(), u"tdf149204.xml");
@@ -143,7 +148,7 @@ void Chart2XShapeTest::testTdf151424()
     // - Actual  : 3530
     // - Node: /XShapes/XShape[2]/XShapes/XShape[1]
     // - Attr: positionX
-    load(u"chart2/qa/extras/xshape/data/ods/", u"tdf151424.ods");
+    loadFromURL(u"ods/tdf151424.ods");
     compareAgainstReference(getXShapeDumpString(), u"tdf151424.xml");
 }
 
@@ -154,7 +159,7 @@ void Chart2XShapeTest::testFdo75075()
     if (!IsDefaultDPI())
         return;
 
-    load(u"chart2/qa/extras/xshape/data/ods/", u"fdo75075.ods");
+    loadFromURL(u"ods/fdo75075.ods");
     compareAgainstReference(getXShapeDumpString(), u"fdo75075.xml");
 }
 
@@ -165,7 +170,7 @@ void Chart2XShapeTest::testPropertyMappingBarChart()
     if (!IsDefaultDPI())
         return;
 
-    load(u"chart2/qa/extras/xshape/data/ods/", u"property-mapping-bar.ods");
+    loadFromURL(u"ods/property-mapping-bar.ods");
     compareAgainstReference(getXShapeDumpString(), u"property-mapping-bar.xml");
 }
 
@@ -177,7 +182,7 @@ void Chart2XShapeTest::testPieChartLabels1()
         return;
 
     // inside placement for the best fit case
-    load(u"chart2/qa/extras/xshape/data/xlsx/", u"tdf90839-1.xlsx");
+    loadFromURL(u"xlsx/tdf90839-1.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-1.xml");
 }
 
@@ -189,7 +194,7 @@ void Chart2XShapeTest::testPieChartLabels2()
         return;
 
     // text wrap: wrap all text labels except one
-    load(u"chart2/qa/extras/xshape/data/xlsx/", u"tdf90839-2.xlsx");
+    loadFromURL(u"xlsx/tdf90839-2.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-2.xml");
 }
 
@@ -201,7 +206,7 @@ void Chart2XShapeTest::testPieChartLabels3()
         return;
 
     // text wrap: wrap no text label except one
-    load(u"chart2/qa/extras/xshape/data/xlsx/", u"tdf90839-3.xlsx");
+    loadFromURL(u"xlsx/tdf90839-3.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-3.xml");
 }
 
@@ -213,7 +218,7 @@ void Chart2XShapeTest::testPieChartLabels4()
         return;
 
     // data value and percent value are centered horizontally
-    load(u"chart2/qa/extras/xshape/data/ods/", u"tdf90839-4.ods");
+    loadFromURL(u"ods/tdf90839-4.ods");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-4.xml");
 }
 
@@ -224,7 +229,7 @@ void Chart2XShapeTest::testChart()
     if (!IsDefaultDPI())
         return;
 
-    load(u"chart2/qa/extras/xshape/data/ods/", u"testChart.ods");
+    loadFromURL(u"ods/testChart.ods");
     compareAgainstReference(getXShapeDumpString(), u"testChart.xml");
 }
 
@@ -233,7 +238,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
     // This bug prevents that the trendline (regression curve) is drawn
     // if the first cell is empty. See tdf#76649 for details.
 
-    load(u"chart2/qa/extras/xshape/data/ods/", u"tdf76649_TrendLineBug.ods");
+    loadFromURL(u"ods/tdf76649_TrendLineBug.ods");
 
     xmlDocUniquePtr pXmlDoc = getXShapeDumpXmlDoc();
 
@@ -244,7 +249,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
-    load(u"chart2/qa/extras/xshape/data/pptx/", u"tdf88154_LabelRotatedLayout.pptx");
+    loadFromURL(u"pptx/tdf88154_LabelRotatedLayout.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 5);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     OUString rDump = xDumper->dump();

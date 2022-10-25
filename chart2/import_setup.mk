@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import$(1), \
     sd \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

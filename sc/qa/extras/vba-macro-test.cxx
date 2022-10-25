@@ -493,9 +493,6 @@ void VBAMacroTest::testVba()
                 .getStr(),
             OUString("OK"), aStringRes);
 
-        mxComponent->dispose();
-        mxComponent.clear();
-
         if (bWorkbooksHandling)
         {
             OUString sFileUrl;

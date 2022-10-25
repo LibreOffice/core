@@ -30,7 +30,7 @@ protected:
 
 public:
     Chart2GeometryTest()
-        : ChartTest()
+        : ChartTest("/chart2/qa/extras/data/")
     {
     }
     // Mostly tests for line and fill properties
@@ -84,7 +84,7 @@ static OString OU2O(std::u16string_view sOUSource)
 void Chart2GeometryTest::testTdf135184RoundLineCap()
 {
     // It tests chart area, data series line and regression-curve line.
-    load(u"/chart2/qa/extras/data/xlsx/", u"tdf135184RoundLineCap.xlsx");
+    loadFromURL(u"xlsx/tdf135184RoundLineCap.xlsx");
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "calc8");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -111,7 +111,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap()
 void Chart2GeometryTest::testTdf135184RoundLineCap2()
 {
     // It tests legend, data series sector and title.
-    load(u"/chart2/qa/extras/data/xlsx/", u"tdf135184RoundLineCap2.xlsx");
+    loadFromURL(u"xlsx/tdf135184RoundLineCap2.xlsx");
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "calc8");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -140,7 +140,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap2()
 void Chart2GeometryTest::testTdf135184RoundLineCap3()
 {
     // It tests chart area, data series line and regression-curve line.
-    load(u"/chart2/qa/extras/data/xlsx/", u"tdf135184RoundLineCap.xlsx");
+    loadFromURL(u"xlsx/tdf135184RoundLineCap.xlsx");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -157,7 +157,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap3()
 void Chart2GeometryTest::testTdf135184RoundLineCap4()
 {
     // It tests legend, data series sector and title.
-    load(u"/chart2/qa/extras/data/xlsx/", u"tdf135184RoundLineCap2.xlsx");
+    loadFromURL(u"xlsx/tdf135184RoundLineCap2.xlsx");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -173,7 +173,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
 {
     // chart area with color gradient and solid transparency
     // Without the patch the transparency was lost in saved pptx file.
-    load(u"/chart2/qa/extras/data/odp/", u"tdf128345_ChartArea_CG_TS.odp");
+    loadFromURL(u"odp/tdf128345_ChartArea_CG_TS.odp");
 
     // Make sure the chart area has a transparency in gradient stops in saved pptx file.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
@@ -192,7 +192,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     // Make sure chart area has transparency when pptx document is opened and resaved as odp.
     // As of Aug 2020, the import generates a transparency gradient. When import is changed to
     // generate solid transparency, the test needs to be adapted.
-    load(u"/chart2/qa/extras/data/pptx/", u"tdf128345_ChartArea_CG_TS.pptx");
+    loadFromURL(u"pptx/tdf128345_ChartArea_CG_TS.pptx");
 
     // Find transparency gradient name
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
@@ -209,6 +209,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify the content of the opacity definition
+    loadFromURL(u"pptx/tdf128345_ChartArea_CG_TS.pptx");
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -225,7 +226,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
 {
     // chart wall with solid color and transparency gradient
     // Without the patch the transparency was lost.
-    load(u"/chart2/qa/extras/data/odp/", u"tdf128345_ChartWall_CS_TG.odp");
+    loadFromURL(u"odp/tdf128345_ChartWall_CS_TG.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
@@ -243,7 +244,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
 {
     // This works on the file, which was exported from file tdf128345_ChartWall_CS_TG.odp to pptx.
     // Make sure chart wall has transparency when pptx document is resaved as odp.
-    load(u"/chart2/qa/extras/data/pptx/", u"tdf128345_ChartWall_CS_TG.pptx");
+    loadFromURL(u"pptx/tdf128345_ChartWall_CS_TG.pptx");
 
     // Find transparency gradient name
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
@@ -260,6 +261,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
+    loadFromURL(u"pptx/tdf128345_ChartWall_CS_TG.pptx");
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -274,7 +276,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
 {
     // legend with solid color and transparency gradient
     // Without the patch the transparency was lost.
-    load(u"/chart2/qa/extras/data/odp/", u"tdf128345_Legend_CS_TG_axial.odp");
+    loadFromURL(u"odp/tdf128345_Legend_CS_TG_axial.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
@@ -294,7 +296,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
 {
     // This works on the file, which was exported from file tdf128345_Legend_CS_TG_axial.odp to pptx.
     // Error was, that in case of axial not the middle value was taken but start and end value.
-    load(u"/chart2/qa/extras/data/pptx/", u"tdf128345_Legend_CS_TG_axial.pptx");
+    loadFromURL(u"pptx/tdf128345_Legend_CS_TG_axial.pptx");
 
     // Find transparency gradient name
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
@@ -310,6 +312,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     const OUString sOUOpacityName
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
+    loadFromURL(u"pptx/tdf128345_Legend_CS_TG_axial.pptx");
     // Verify content of the opacity definition
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
@@ -325,7 +328,7 @@ void Chart2GeometryTest::testTdf135366LabelOnSeries()
 {
     // Error was, that the fill and line properties of a <chart:data-label> were not
     // imported at all. Here they should be at the series.
-    load(u"/chart2/qa/extras/data/ods/", u"tdf135366_data_label_series.ods");
+    loadFromURL(u"ods/tdf135366_data_label_series.ods");
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
@@ -363,7 +366,7 @@ void Chart2GeometryTest::testTdf135366LabelOnPoint()
 {
     // Error was, that the fill and line properties of a <chart:data-label> were not
     // imported at all. Here they should be at point 2.
-    load(u"/chart2/qa/extras/data/odt/", u"tdf135366_data_label_point.odt");
+    loadFromURL(u"odt/tdf135366_data_label_point.odt");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
@@ -410,7 +413,11 @@ void Chart2GeometryTest::testTdf135366LabelExport()
     // Error was, that line and fill properties were not exported as
     // graphic-properties of a <chart:data-label> element, but only
     // as loext chart-properties of the <chart:data-point> element.
-    load(u"/chart2/qa/extras/data/odt/", u"tdf135366_data_label_export.odt");
+    loadFromURL(u"odt/tdf135366_data_label_export.odt");
+
+    // FIXME: Error: unexpected attribute "loext:label-stroke-color"
+    mbSkipValidation = true;
+
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "writer8");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -437,7 +444,7 @@ void Chart2GeometryTest::testTdf135366_CustomLabelText()
     // although the used <chart:data-label> element exists since ODF 1.2.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_012);
-    load(u"/chart2/qa/extras/data/pptx/", u"tdf135366_CustomLabelText.pptx");
+    loadFromURL(u"pptx/tdf135366_CustomLabelText.pptx");
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc);
 
