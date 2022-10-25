@@ -33,6 +33,8 @@ pdfium_patches += Add-FPDFAnnot_GetFormAdditionalActionJavaScript-API.patch.1
 # https://pdfium-review.googlesource.com/c/pdfium/+/98210
 pdfium_patches += Add-FPDFAnnot_GetFormFieldAlternateName-API.patch.1
 
+pdfium_patches += constexpr-template.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
