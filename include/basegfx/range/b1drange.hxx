@@ -144,6 +144,21 @@ namespace basegfx
         {
             return maRange.clamp(fValue);
         }
+
+        void shift(double fDeltaX)
+        {
+            maRange.shift(fDeltaX);
+        }
+
+        void setSize(double fSize)
+        {
+            maRange.setSize(fSize);
+        }
+
+        void setPosition(double fPosition)
+        {
+            maRange.setPosition(fPosition);
+        }
     };
 
     /** Write to char stream */
