@@ -653,6 +653,24 @@ private:
     const tools::Long mnTileDevOriginX;
 };
 
+namespace
+{
+int lcl_GetMultiLineHeight(EditEngine* pEditEngine)
+{
+    int nHeight = 0;
+    int nParagraphs = pEditEngine->GetParagraphCount();
+    if (nParagraphs > 1 || (nParagraphs > 0 && pEditEngine->GetLineCount(0) > 1))
+    {
+        for (int nPara = 0; nPara < nParagraphs; nPara++)
+        {
+            nHeight += pEditEngine->GetLineCount(nPara) * pEditEngine->GetLineHeight(nPara);
+        }
+    }
+
+    return nHeight;
+}
+}
+
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
         bool bLogicText)
 {
@@ -1072,7 +1090,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    // paint in-place editing on other views
+    // paint in-place editing
     if (bIsTiledRendering)
     {
         ScTabViewShell* pThisViewShell = mrViewData.GetViewShell();
@@ -1080,7 +1098,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         while (pViewShell)
         {
-            if (pViewShell != pThisViewShell && pViewShell->GetDocId() == pThisViewShell->GetDocId())
+            bool bEnterLoop = bIsTiledRendering || pViewShell != pThisViewShell;
+            if (bEnterLoop && pViewShell->GetDocId() == pThisViewShell->GetDocId())
             {
                 ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
                 if (pTabViewShell)
@@ -1107,6 +1126,13 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             rDevice.SetFillColor(pOtherEditView->GetBackgroundColor());
                             Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
                             Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
+
+                            if (bIsTiledRendering)
+                            {
+                                EditEngine* pEditEngine = pOtherEditView->GetEditEngine();
+                                if (pEditEngine)
+                                    aEnd.AdjustY(lcl_GetMultiLineHeight(pEditEngine));
+                            }
 
                             if (bLokRTL)
                             {
@@ -1147,6 +1173,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             // paint the background
                             rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
+                            tools::Rectangle aBGAbs(aBackground);
 
                             tools::Rectangle aEditRect(aBackground);
                             tools::Long nOffsetX = 0, nOffsetY = 0;
@@ -1169,12 +1196,42 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             SuppressEditViewMessagesGuard aGuard(*pOtherEditView);
 
                             aEditRect = rDevice.PixelToLogic(aEditRect);
-                            aEditRect.Intersection(pOtherEditView->GetOutputArea());
+                            if (bIsTiledRendering)
+                                pOtherEditView->SetOutputArea(aEditRect);
+                            else
+                                aEditRect.Intersection(pOtherEditView->GetOutputArea());
                             pOtherEditView->Paint(aEditRect, &rDevice);
+
+                            // EditView will do the cursor notifications correctly if we're in
+                            // print-twips messaging mode.
+                            if (bIsTiledRendering && !comphelper::LibreOfficeKit::isCompatFlagSet(
+                                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+                            {
+                                // Now we need to get relative cursor position within the editview.
+                                // This is for sending the pixel-aligned twips position of the cursor to the specific views with
+                                // the same given zoom level.
+                                tools::Rectangle aCursorRect = pOtherEditView->GetEditCursor();
+                                Point aCursPos = OutputDevice::LogicToLogic(aCursorRect.TopLeft(),
+                                        MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+
+                                const MapMode& rDevMM = rDevice.GetMapMode();
+                                MapMode aMM(MapUnit::MapTwip);
+                                aMM.SetScaleX(rDevMM.GetScaleX());
+                                aMM.SetScaleY(rDevMM.GetScaleY());
+
+                                aBGAbs.AdjustLeft(1);
+                                aBGAbs.AdjustTop(1);
+                                aCursorRect = GetOutDev()->PixelToLogic(aBGAbs, aMM);
+                                aCursorRect.setWidth(0);
+                                aCursorRect.Move(aCursPos.getX(), 0);
+                                // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
+                                InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
+                            }
 
                             // Rollback the mapmode and 'output area'.
                             rOtherWin.SetMapMode(aOrigMapMode);
-                            pOtherEditView->SetOutputArea(aOrigOutputArea);
+                            if (!bIsTiledRendering)
+                                pOtherEditView->SetOutputArea(aOrigOutputArea);
                             rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
                         }
                     }
@@ -1252,14 +1309,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             rDevice.SetMapMode(aNew);
         }
 
-        // paint the background
-        tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
-        //tdf#100925, rhbz#1283420, Draw some text here, to get
-        //X11CairoTextRender::getCairoContext called, so that the forced read
-        //from the underlying X Drawable gets it to sync.
-        rDevice.DrawText(aLogicRect.BottomLeft(), " ");
-        rDevice.DrawRect(aLogicRect);
-
         // paint the editeng text
         if (bIsTiledRendering)
         {
@@ -1281,10 +1330,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             // to be tweaked temporarily to match other view's zoom. (This does not affect the manual
             // cursor-messaging done in the non print-twips mode)
             SuppressEditViewMessagesGuard aGuard(*pEditView);
-
-            aEditRect = rDevice.PixelToLogic(aEditRect);
-            aEditRect.Intersection(pEditView->GetOutputArea());
-            pEditView->Paint(aEditRect, &rDevice);
 
             // EditView will do the cursor notifications correctly if we're in
             // print-twips messaging mode.
@@ -1316,6 +1361,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
         else
         {
+            // paint the background
+            tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
+            //tdf#100925, rhbz#1283420, Draw some text here, to get
+            //X11CairoTextRender::getCairoContext called, so that the forced read
+            //from the underlying X Drawable gets it to sync.
+            rDevice.DrawText(aLogicRect.BottomLeft(), " ");
+            rDevice.DrawRect(aLogicRect);
+
             tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
             pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
         }
