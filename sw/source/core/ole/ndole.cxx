@@ -773,7 +773,8 @@ private:
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     m_pOLENode( nullptr ),
-    m_xOLERef( xObj )
+    m_xOLERef( xObj ),
+    m_nGraphicVersion( 0 )
 {
     m_xOLERef.Lock();
     if ( xObj.is() )
@@ -785,7 +786,8 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
 
 SwOLEObj::SwOLEObj( OUString aString, sal_Int64 nAspect ) :
     m_pOLENode( nullptr ),
-    m_aName( std::move(aString) )
+    m_aName( std::move(aString) ),
+    m_nGraphicVersion( 0 )
 {
     m_xOLERef.Lock();
     m_xOLERef.SetViewAspect( nAspect );
@@ -1099,8 +1101,24 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
             // copy the result data and cleanup
             m_aPrimitive2DSequence = m_pDeflateData->getSequence();
             m_aRange = m_pDeflateData->getRange();
+            m_nGraphicVersion = GetObject().getGraphicVersion();
             m_pDeflateData.reset();
         }
+    }
+
+    if(!m_aPrimitive2DSequence.empty() && !m_aRange.isEmpty()
+       && m_nGraphicVersion != GetObject().getGraphicVersion())
+    {
+        // tdf#149189 use getGraphicVersion() from EmbeddedObjectRef
+        // to decide when to reset bufferd data. It gets incremented
+        // at all occasions where the graphic changes. An alternative
+        // would be to extend SwOLEListener_Impl with a XModifyListener
+        // as it is done in EmbedEventListener_Impl, that would
+        // require all the (add|remove)ModifyListener calls and
+        // managing these, plus having a 2nd listener to these when
+        // EmbeddedObjectRef already provides that. Tried that this
+        // works also if an alternative would be needed.
+        resetBufferedData();
     }
 
     if(m_aPrimitive2DSequence.empty() && m_aRange.isEmpty() && m_xOLERef.is() && m_xOLERef.IsChart())
@@ -1139,6 +1157,9 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
     {
         // when we have data, also copy the buffered Range data as output
         rRange = m_aRange;
+
+        // tdf#149189 ..and the GraphicVersion number to identify changes
+        m_nGraphicVersion = GetObject().getGraphicVersion();
     }
 
     return m_aPrimitive2DSequence;
