@@ -57,6 +57,12 @@ public:
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr);
     void clear();
 
+    /// Normally, we cannot cache glyphs when doing font fallback, because the font fallbacks
+    /// can cache during the lifetime of the cache, and they are not included in the cache key.
+    /// But during some processes, we can turn this on, as long as we remember to turn it off
+    /// at the end.
+    void SetCacheGlyphsWhenDoingFallbackFonts(bool bOK);
+
     static SalLayoutGlyphsCache* self();
     SalLayoutGlyphsCache(int size) // needs to be public for vcl::DeleteOnDeinit
         : mCachedGlyphs(size)
@@ -102,6 +108,7 @@ private:
     SalLayoutGlyphs mLastTemporaryGlyphs;
     // If set, info about the last call which wanted a substring of the full text.
     std::optional<CachedGlyphsKey> mLastSubstringKey;
+    bool mbCacheGlyphsWhenDoingFallbackFonts = false;
 
     SalLayoutGlyphsCache(const SalLayoutGlyphsCache&) = delete;
     SalLayoutGlyphsCache& operator=(const SalLayoutGlyphsCache&) = delete;

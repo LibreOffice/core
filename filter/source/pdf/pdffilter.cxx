@@ -26,6 +26,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <vcl/glyphitemcache.hxx>
 #include <memory>
 
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -245,7 +246,11 @@ sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     FocusWindowWaitCursor aCur;
 
+    SalLayoutGlyphsCache::self()->SetCacheGlyphsWhenDoingFallbackFonts(true);
+
     const bool bRet = implExport( rDescriptor );
+
+    SalLayoutGlyphsCache::self()->SetCacheGlyphsWhenDoingFallbackFonts(false);
 
     return bRet;
 }

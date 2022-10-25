@@ -452,7 +452,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         {
             // TODO: Fallbacks do not work reliably (fallback font not included in the key),
             // so do not cache (but still return once, using the temporary without a key set).
-            if (glyphs.Impl(1) != nullptr)
+            if (!mbCacheGlyphsWhenDoingFallbackFonts && glyphs.Impl(1) != nullptr)
             {
                 mLastTemporaryGlyphs = std::move(glyphs);
                 mLastTemporaryKey.reset();
@@ -467,6 +467,13 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     // Failure, cache it too as invalid glyphs.
     mCachedGlyphs.insert(std::make_pair(key, SalLayoutGlyphs()));
     return nullptr;
+}
+
+void SalLayoutGlyphsCache::SetCacheGlyphsWhenDoingFallbackFonts(bool bOK)
+{
+    mbCacheGlyphsWhenDoingFallbackFonts = bOK;
+    if (!bOK)
+        clear();
 }
 
 SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
