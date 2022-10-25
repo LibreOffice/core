@@ -32,21 +32,6 @@ class SfxItemSet;
 // Create-Function
 typedef std::unique_ptr<IconChoicePage> (*CreatePage)(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pAttrSet);
 
-/// Data-structure for pages in dialog
-struct IconChoicePageData
-{
-    OString sId;
-    std::unique_ptr<IconChoicePage> xPage;      ///< the TabPage itself
-    bool bRefresh;          ///< Flag: page has to be newly initialized
-
-    // constructor
-    IconChoicePageData(OString aId, std::unique_ptr<IconChoicePage> xInPage)
-        : sId(std::move(aId))
-        , xPage(std::move(xInPage))
-        , bRefresh(false)
-    {}
-};
-
 class IconChoicePage
 {
 protected:
@@ -77,6 +62,21 @@ public:
     virtual void        ActivatePage( const SfxItemSet& );
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet );
     virtual bool        QueryClose();
+};
+
+/// Data-structure for pages in dialog
+struct IconChoicePageData
+{
+    OString sId;
+    std::unique_ptr<IconChoicePage> xPage;      ///< the TabPage itself
+    bool bRefresh;          ///< Flag: page has to be newly initialized
+
+    // constructor
+    IconChoicePageData(OString aId, std::unique_ptr<IconChoicePage> xInPage)
+        : sId(std::move(aId))
+        , xPage(std::move(xInPage))
+        , bRefresh(false)
+    {}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
