@@ -662,24 +662,6 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
     }
 }
 
-SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
-    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow->get_container(), pDlgWindow->get_builder())
-    , m_xActionTbL(pDlgWindow->get_builder()->weld_toolbar("left"))
-    , m_xActionTbR(pDlgWindow->get_builder()->weld_toolbar("right"))
-    , m_xToolMenu(pDlgWindow->get_builder()->weld_menu("toolmenu"))
-    , m_nActionTbLVisible(0)
-{
-    m_xActionTbR->set_item_help_id("watercan", HID_TEMPLDLG_WATERCAN);
-    // shown/hidden in SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
-    m_xActionTbR->set_item_help_id("new", HID_TEMPLDLG_NEWBYEXAMPLE);
-    m_xActionTbR->set_item_help_id("newmenu", HID_TEMPLDLG_NEWBYEXAMPLE);
-    m_xActionTbR->set_item_menu("newmenu", m_xToolMenu.get());
-    m_xToolMenu->connect_activate(LINK(this, SfxTemplateDialog_Impl, ToolMenuSelectHdl));
-    m_xActionTbR->set_item_help_id("update", HID_TEMPLDLG_UPDATEBYEXAMPLE);
-
-    Initialize();
-}
-
 class ToolbarDropTarget final : public DropTargetHelper
 {
 private:
@@ -702,6 +684,24 @@ public:
         return m_rParent.ExecuteDrop(rEvt);
     }
 };
+
+SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
+    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow->get_container(), pDlgWindow->get_builder())
+    , m_xActionTbL(pDlgWindow->get_builder()->weld_toolbar("left"))
+    , m_xActionTbR(pDlgWindow->get_builder()->weld_toolbar("right"))
+    , m_xToolMenu(pDlgWindow->get_builder()->weld_menu("toolmenu"))
+    , m_nActionTbLVisible(0)
+{
+    m_xActionTbR->set_item_help_id("watercan", HID_TEMPLDLG_WATERCAN);
+    // shown/hidden in SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
+    m_xActionTbR->set_item_help_id("new", HID_TEMPLDLG_NEWBYEXAMPLE);
+    m_xActionTbR->set_item_help_id("newmenu", HID_TEMPLDLG_NEWBYEXAMPLE);
+    m_xActionTbR->set_item_menu("newmenu", m_xToolMenu.get());
+    m_xToolMenu->connect_activate(LINK(this, SfxTemplateDialog_Impl, ToolMenuSelectHdl));
+    m_xActionTbR->set_item_help_id("update", HID_TEMPLDLG_UPDATEBYEXAMPLE);
+
+    Initialize();
+}
 
 void SfxTemplateDialog_Impl::Initialize()
 {
