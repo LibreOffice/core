@@ -18,6 +18,8 @@ pdfium_patches += msvc2017.patch.1
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
 
+pdfium_patches += constexpr-template.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
