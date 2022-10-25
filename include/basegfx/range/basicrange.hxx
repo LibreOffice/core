@@ -223,6 +223,15 @@ namespace basegfx
             }
         }
 
+        void shift(T nValue)
+        {
+            if (isEmpty())
+                expand(Traits::neutral());
+
+            mnMinimum += nValue;
+            mnMaximum += nValue;
+        }
+
         void grow(T nValue)
         {
             if(isEmpty())
@@ -266,6 +275,34 @@ namespace basegfx
                 }
 
                 return nValue;
+            }
+        }
+
+        void setSize(T nSize)
+        {
+            if (isEmpty())
+                expand(Traits::neutral());
+
+            if (nSize >= Traits::neutral())
+                mnMaximum = mnMinimum + nSize;
+            else
+                reset();
+        }
+
+        void setPosition(T nPosition)
+        {
+            if (isEmpty())
+                expand(Traits::neutral());
+
+            if (mnMinimum == mnMaximum)
+            {
+                mnMinimum = nPosition;
+                mnMaximum = nPosition;
+            }
+            else
+            {
+                mnMaximum = nPosition + (mnMaximum - mnMinimum);
+                mnMinimum = nPosition;
             }
         }
 
