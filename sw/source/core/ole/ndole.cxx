@@ -1110,7 +1110,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
        && m_nGraphicVersion != GetObject().getGraphicVersion())
     {
         // tdf#149189 use getGraphicVersion() from EmbeddedObjectRef
-        // to decide when to reset bufferd data. It gets incremented
+        // to decide when to reset buffered data. It gets incremented
         // at all occasions where the graphic changes. An alternative
         // would be to extend SwOLEListener_Impl with a XModifyListener
         // as it is done in EmbedEventListener_Impl, that would
