@@ -151,12 +151,10 @@ bool AboutDialog::IsStringValidGitHash(std::u16string_view hash) {
 }
 
 OUString AboutDialog::GetVersionString() {
-  OUString sVersion = CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX"));
-
   OUString arch;
   auto const ok = rtl::Bootstrap::get("_ARCH", arch);
   assert(ok); (void) ok;
-  sVersion += " (" + arch + ")";
+  OUString sVersion = CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX")) + " (" + arch + ")";
 
 #if HAVE_FEATURE_COMMUNITY_FLAVOR
   sVersion += " / LibreOffice Community";
