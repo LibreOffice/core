@@ -32,6 +32,7 @@
 #define OOO_STRING_SVTOOLS_HTML_base "base"
 #define OOO_STRING_SVTOOLS_HTML_comment "!--"
 #define OOO_STRING_SVTOOLS_HTML_doctype "!DOCTYPE"
+#define OOO_STRING_SVTOOLS_HTML_cdata "![cdata["
 #define OOO_STRING_SVTOOLS_HTML_embed "embed"
 #define OOO_STRING_SVTOOLS_HTML_horzrule "hr"
 #define OOO_STRING_SVTOOLS_HTML_image "img"
