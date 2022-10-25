@@ -458,7 +458,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                 mLastTemporaryKey.reset();
                 return &mLastTemporaryGlyphs;
             }
-            mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));
+            mCachedGlyphs.insert(std::make_pair(key, std::move(glyphs)));
             assert(mCachedGlyphs.find(key)
                    == mCachedGlyphs.begin()); // newly inserted item is first
             return &mCachedGlyphs.begin()->second;
