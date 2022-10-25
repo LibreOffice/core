@@ -21,6 +21,7 @@
 #define STR_TEXT_CONTRAST               NC_("STR_TEXT_CONTRAST", "Text contrast is too low.")
 #define STR_TEXT_BLINKING               NC_("STR_TEXT_BLINKING", "Blinking text.")
 #define STR_AVOID_FOOTNOTES             NC_("STR_AVOID_FOOTNOTES", "Avoid footnotes.")
+#define STR_AVOID_FAKE_FOOTNOTES        NC_("STR_AVOID_FAKE_FOOTNOTES", "Avoid fake footnotes.")
 #define STR_AVOID_ENDNOTES              NC_("STR_AVOID_ENDNOTES", "Avoid endnotes.")
 #define STR_AVOID_BACKGROUND_IMAGES     NC_("STR_AVOID_BACKGROUND_IMAGES", "Avoid background images.")
 #define STR_AVOID_NEWLINES_SPACE        NC_("STR_AVOID_NEWLINES_SPACE", "Avoid newlines to create space.")

@@ -32,6 +32,7 @@ enum class AccessibilityIssueID
     TEXT_FORMATTING,
     HYPERLINK_IS_TEXT,
     HYPERLINK_SHORT,
+    FAKE_FOOTNOTE,
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssue

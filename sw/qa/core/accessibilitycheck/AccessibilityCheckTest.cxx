@@ -118,6 +118,18 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckHighlightedText)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeFootnote)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "FakeFootnoteTest.odt");
+    CPPUNIT_ASSERT(pDoc);
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::FAKE_FOOTNOTE, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::FAKE_FOOTNOTE, aIssues[1]->m_eIssueID);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
