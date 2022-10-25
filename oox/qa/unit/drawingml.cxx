@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -56,58 +55,21 @@ uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XSha
 }
 
 /// oox drawingml tests.
-class OoxDrawingmlTest : public test::BootstrapFixture, public unotest::MacrosTest
+class OoxDrawingmlTest : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(const OUString& rURL);
-    void loadAndReload(const OUString& rURL, const OUString& rFilterName);
+    OoxDrawingmlTest()
+        : UnoApiTest("/oox/qa/unit/data/")
+    {
+    }
 };
-
-void OoxDrawingmlTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void OoxDrawingmlTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-void OoxDrawingmlTest::load(const OUString& rURL) { mxComponent = loadFromDesktop(rURL); }
-
-void OoxDrawingmlTest::loadAndReload(const OUString& rURL, const OUString& rFilterName)
-{
-    load(rURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= rFilterName;
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    mxComponent->dispose();
-    validate(aTempFile.GetFileName(), test::OOXML);
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/oox/qa/unit/data/";
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "transparent-text.pptx";
-    loadAndReload(aURL, "Impress Office Open XML");
+    loadFromURL(u"transparent-text.pptx");
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -128,10 +90,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf131082.pptx";
-    loadAndReload(aURL, "Impress Office Open XML");
+    loadFromURL(u"tdf131082.pptx");
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
@@ -149,11 +111,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "preset-adjust-value.pptx";
+    loadFromURL(u"preset-adjust-value.pptx");
 
-    load(aURL);
-
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -173,11 +133,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
 {
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart-data-label-char-color.docx";
-    load(aURL);
+    loadFromURL(u"chart-data-label-char-color.docx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -212,12 +170,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
 {
     // Load a document with a multi-step gradient.
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "gradient-multistep-transparency.pptx";
-    load(aURL);
+    loadFromURL(u"gradient-multistep-transparency.pptx");
 
     // Check the end transparency of the gradient.
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
@@ -236,10 +192,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "shape-text-alignment.pptx";
-    load(aURL);
+    loadFromURL(u"shape-text-alignment.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -255,10 +210,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "shape-text-adjust-left.pptx";
-    load(aURL);
+    loadFromURL(u"shape-text-adjust-left.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -273,10 +227,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution.docx";
-    load(aURL);
+    loadFromURL(u"camera-rotation-revolution.docx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -298,11 +251,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf146534_CameraRotationRevolutionNonWpsShapes)
 {
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution-nonwps.pptx";
-    load(aURL);
+    loadFromURL(u"camera-rotation-revolution-nonwps.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -337,36 +288,25 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
         CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nColor);
     };
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-shadow.pptx";
-    load(aURL);
+    loadFromURL(u"table-shadow.pptx");
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
     // was lost on import.
-    verify(getComponent());
+    verify(mxComponent);
 
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    getComponent()->dispose();
-    validate(aTempFile.GetFileName(), test::OOXML);
-    getComponent() = loadFromDesktop(aTempFile.GetURL());
+    saveAndReload("Impress Office Open XML");
+
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
     // was lost on export.
-    verify(getComponent());
+    verify(mxComponent);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGroupShapeSmartArt)
 {
     // Given a file with a smartart inside a group shape:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "smartart-groupshape.pptx";
-
-    // When loading that file:
-    load(aURL);
+    loadFromURL(u"smartart-groupshape.pptx");
 
     // Then make sure that the smartart is not just an empty group shape:
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -381,10 +321,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     // The document contains a Bezier curve, where the control points are outside the bounding
     // rectangle of the shape. Error was, that the export uses a path size which included the
     // control points.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142605_CurveSize.odp";
-    loadAndReload(aURL, "Impress Office Open XML");
+    loadFromURL(u"tdf142605_CurveSize.odp");
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -402,13 +342,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
 {
     // Given a document with 2 slides, slide1 has a chart with a theme override and slide2 has a
     // shape:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart-theme-override.pptx";
-
-    // When loading that document:
-    load(aURL);
+    loadFromURL(u"chart-theme-override.pptx");
 
     // Then make sure that the slide 2 shape's text color is blue, not red:
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
                                                  uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -429,14 +366,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
 {
     // Given a PPTX file with a slide -> master slide -> theme:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "theme.pptx";
-
-    // When importing the document:
-    load(aURL);
+    loadFromURL(u"theme.pptx");
 
     // Then make sure the theme + referring to that theme is imported:
     // Check the imported theme of the master page:
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
@@ -485,12 +419,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
 {
     // slide with date, footer, slide number with custom shapes
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "testTdf132557_footerCustomShapes.pptx";
-    // When importing the document:
-    load(aURL);
+    loadFromURL(u"testTdf132557_footerCustomShapes.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
@@ -514,14 +445,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
 {
     // Given a document with a table style, using theme color with tinting in the A2 cell:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "theme-tint.pptx";
-
-    // When loading that document:
-    load(aURL);
+    loadFromURL(u"theme-tint.pptx");
 
     // Then make sure that we only import theming info to the doc model if the effects are limited
     // to lum mod / off that we can handle (i.e. no tint/shade):
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -547,11 +475,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
     // tdf##149551. The document contains a shape with attributes 'rot="720000"' and 'vert="vert270"'
     // of the <bodyPr> element. Without the fix the simulation of vert270 had overwritten the text
     // rotation angle and thus 'rot'="720000" was lost.
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149551_vert270AndTextRot.pptx";
-    load(aURL);
+    loadFromURL(u"tdf149551_vert270AndTextRot.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -574,10 +500,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
     // tdf#149551 The document contains a shape with attribute 'rot="720000"' of the <bodyPr> element.
     // Without fix, the text rotation angle was saved in "TextPreRotateAngle" instead of
     // "TextRotateAngle". That resulted in unrotated but sheared text.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149551_TextRot.pptx";
-    load(aURL);
+    loadFromURL(u"tdf149551_TextRot.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
