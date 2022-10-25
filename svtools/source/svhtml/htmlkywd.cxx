@@ -25,6 +25,9 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
+// If this is odd, then getOnToken() breaks.
+static_assert(static_cast<sal_Int16>(HtmlTokenId::ABBREVIATION_ON) % 2 == 0);
+
 namespace {
 
 template<typename T>
@@ -62,6 +65,7 @@ using HTML_TokenEntry = TokenEntry<HtmlTokenId>;
 static HTML_TokenEntry const aHTMLTokenTab[] = {
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_comment),         HtmlTokenId::COMMENT},
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_doctype),         HtmlTokenId::DOCTYPE},
+    {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_cdata),           HtmlTokenId::CDATA},
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_anchor),          HtmlTokenId::ANCHOR_ON},
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_abbreviation),    HtmlTokenId::ABBREVIATION_ON},  // HTML 3.0
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_acronym),         HtmlTokenId::ACRONYM_ON},   // HTML 3.0

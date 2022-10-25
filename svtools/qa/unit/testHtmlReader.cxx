@@ -27,6 +27,7 @@ public:
 
     OUString m_aDocument;
     int m_nLineBreakCount = 0;
+    OUString m_aCdata;
 };
 
 TestHTMLParser::TestHTMLParser(SvStream& rStream)
@@ -40,6 +41,8 @@ void TestHTMLParser::NextToken(HtmlTokenId nToken)
         m_aDocument += aToken;
     else if (nToken == HtmlTokenId::LINEBREAK)
         ++m_nLineBreakCount;
+    else if (nToken == HtmlTokenId::CDATA)
+        m_aCdata = aToken;
 }
 
 /// Tests HTMLParser.
@@ -75,6 +78,26 @@ CPPUNIT_TEST_FIXTURE(Test, testLineBreak)
 
     // This was 2, <br></br> was interpreted as 2 line breaks in XHTML mode.
     CPPUNIT_ASSERT_EQUAL(1, xParser->m_nLineBreakCount);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCdata)
+{
+    // Given a document with CDATA:
+    SvMemoryStream aStream;
+    OString aDocument("A<![CDATA[B &uuml; &lt;]]>C");
+    aStream.WriteBytes(aDocument.getStr(), aDocument.getLength());
+    aStream.Seek(0);
+
+    // When parsing that HTML:
+    tools::SvRef<TestHTMLParser> xParser = new TestHTMLParser(aStream);
+    xParser->CallParser();
+
+    // Then make sure that we get a cdata token with the correct content:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: B &uuml; &lt;
+    // - Actual  :
+    // i.e. the content inside CDATA was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("B &uuml; &lt;"), xParser->m_aCdata);
 }
 }
 

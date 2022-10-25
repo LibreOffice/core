@@ -1057,6 +1057,10 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     do {
                         sTmpBuffer.appendUtf32( nNextCh );
                         nNextCh = GetNextChar();
+                        if (sTmpBuffer.toString() == "![CDATA[")
+                        {
+                            break;
+                        }
                     } while( '>' != nNextCh && '/' != nNextCh && !rtl::isAsciiWhiteSpace( nNextCh ) &&
                              IsParserWorking() && !rInput.eof() );
 
@@ -1150,6 +1154,41 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             aToken = aToken.copy(0, nCStrLen);
                             nNextCh = '>';
                         }
+                    }
+                    else if (nRet == HtmlTokenId::CDATA)
+                    {
+                        // Read until the closing ]]>.
+                        bool bDone = false;
+                        while (!bDone && !rInput.eof() && IsParserWorking())
+                        {
+                            if (nNextCh == '>')
+                            {
+                                if (sTmpBuffer.getLength() >= 2)
+                                {
+                                    bDone = sTmpBuffer[sTmpBuffer.getLength() - 2] == ']'
+                                            && sTmpBuffer[sTmpBuffer.getLength() - 1] == ']';
+                                    if (bDone)
+                                    {
+                                        // Ignore ]] at the end.
+                                        sTmpBuffer.setLength(sTmpBuffer.getLength() - 2);
+                                    }
+                                }
+                                if (!bDone)
+                                {
+                                    sTmpBuffer.appendUtf32(nNextCh);
+                                }
+                            }
+                            else if (!linguistic::IsControlChar(nNextCh))
+                            {
+                                sTmpBuffer.appendUtf32(nNextCh);
+                            }
+                            if (!bDone)
+                            {
+                                nNextCh = GetNextChar();
+                            }
+                        }
+                        aToken = sTmpBuffer.toString();
+                        sTmpBuffer.setLength(0);
                     }
                     else
                     {

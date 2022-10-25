@@ -58,6 +58,8 @@ enum class HtmlTokenId : sal_Int16
     AREA, // Netscape 2.0
     BASE, // HTML 3.0
     COMMENT,
+    CDATA,
+    DUMMY, // so ONOFF_START is even
     DOCTYPE,
     EMBED, // Netscape 2.0            ignore </EMBED>
     HORZRULE,                      // ignore </HR>
