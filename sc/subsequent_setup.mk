@@ -104,6 +104,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_$(1),\
     svl/util/svl \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+    svx/util/svxcore \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

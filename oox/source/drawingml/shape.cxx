@@ -1966,9 +1966,16 @@ void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
         // from them
         Reference<XShape> xShape(renderDiagramToGraphic(rFilterBase));
         Reference<XShapes> xShapes(mxShape, UNO_QUERY_THROW);
+        tools::Rectangle aBackgroundRect
+            = SdrObject::getSdrObjectFromXShape(
+                  Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW))
+                  ->GetLogicRect();
         while (xShapes->hasElements())
             xShapes->remove(Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW));
         xShapes->add(xShape);
+        SdrObject::getSdrObjectFromXShape(
+            Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW))
+            ->NbcSetLogicRect(aBackgroundRect);
     }
     catch (const Exception&)
     {

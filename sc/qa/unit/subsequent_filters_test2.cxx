@@ -187,6 +187,7 @@ public:
     void testInvalidBareBiff5();
     void testTooManyColsRows();
     void testTdf83671_SmartArt_import();
+    void testTdf83671_SmartArt_import2();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -304,6 +305,7 @@ public:
     CPPUNIT_TEST(testInvalidBareBiff5);
     CPPUNIT_TEST(testTooManyColsRows);
     CPPUNIT_TEST(testTdf83671_SmartArt_import);
+    CPPUNIT_TEST(testTdf83671_SmartArt_import2);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3083,6 +3085,52 @@ void ScFiltersTest2::testTdf83671_SmartArt_import()
         std::shared_ptr<comphelper::ConfigurationChanges> pChange(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
+        pChange->commit();
+    }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf83671_SmartArt_import2()
+{
+    // The example doc contains a diagram (SmartArt). Such should be imported as group object.
+    // With conversion enabled, the group contains only a graphic. Error was, that the shape
+    // had size 100x100 Hmm and position 0|0.
+
+    // Make sure SmartArt is loaded with converting to metafile
+    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
+    if (bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
+        pChange->commit();
+    }
+
+    // Get document and shape
+    ScDocShellRef xDocSh = loadDoc(u"tdf83671_SmartArt_import.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    SdrObject* pObj = pPage->GetObj(0);
+
+    // Check that it is a group shape with 1 child
+    CPPUNIT_ASSERT(pObj->IsGroupObject());
+    SdrObjList* pChildren = pObj->getChildrenOfSdrObject();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pChildren->GetObjCount());
+
+    // The child shape should have about 60mm x 42mm size and position 1164|1270.
+    // Without fix its size was 100x100 and position 0|0.
+    tools::Rectangle aBackground = pChildren->GetObj(0)->GetLogicRect();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6000), aBackground.getOpenWidth(), 10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4200), aBackground.getOpenHeight(), 10);
+    CPPUNIT_ASSERT_EQUAL(Point(1164, 1270), aBackground.GetPos());
+
+    if (bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
         pChange->commit();
     }
 
