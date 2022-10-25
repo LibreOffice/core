@@ -664,7 +664,7 @@ namespace sw::mark
     void FieldmarkWithDropDownButton::LaunchPopup()
     {
         if (!m_pButton)
-            return
+            return;
 
         m_pButton->Invalidate();
         m_pButton->LaunchPopup();
