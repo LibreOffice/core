@@ -798,25 +798,4 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
     return aStr;
 }
 
-TranslateId SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
-{
-    switch( eCA )
-    {
-        case presentation::ClickAction_NONE:             return STR_CLICK_ACTION_NONE;
-        case presentation::ClickAction_PREVPAGE:         return STR_CLICK_ACTION_PREVPAGE;
-        case presentation::ClickAction_NEXTPAGE:         return STR_CLICK_ACTION_NEXTPAGE;
-        case presentation::ClickAction_FIRSTPAGE:        return STR_CLICK_ACTION_FIRSTPAGE;
-        case presentation::ClickAction_LASTPAGE:         return STR_CLICK_ACTION_LASTPAGE;
-        case presentation::ClickAction_BOOKMARK:         return STR_CLICK_ACTION_BOOKMARK;
-        case presentation::ClickAction_DOCUMENT:         return STR_CLICK_ACTION_DOCUMENT;
-        case presentation::ClickAction_PROGRAM:          return STR_CLICK_ACTION_PROGRAM;
-        case presentation::ClickAction_MACRO:            return STR_CLICK_ACTION_MACRO;
-        case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
-        case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
-        case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
-        default: OSL_FAIL( "No StringResource for ClickAction available!" );
-    }
-    return {};
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -862,10 +862,10 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
     OUString aURL;
+    OUString aCellText;
     if (rCell.getType() == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = rCell.getFormula();
-        OUString aCellText;
         if ( pFCell->IsHyperLinkCell() )
             pFCell->GetURLResult( aURL, aCellText );
     }
@@ -873,7 +873,7 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
     if ( !aURL.isEmpty() && pPDFData )
     {
         vcl::PDFExtOutDevBookmarkEntry aBookmark;
-        aBookmark.nLinkId = pPDFData->CreateLink( rRect );
+        aBookmark.nLinkId = pPDFData->CreateLink(rRect, aCellText);
         aBookmark.aBookmark = aURL;
         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
         rBookmarks.push_back( aBookmark );

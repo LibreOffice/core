@@ -917,7 +917,7 @@ The following structure describes the permissions used in PDF security
     the link id (to be used in SetLinkDest, SetLinkURL) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr );
+    sal_Int32 CreateLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
 
     /// Creates a screen annotation.
     sal_Int32 CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr);

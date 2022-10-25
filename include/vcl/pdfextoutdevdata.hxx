@@ -252,11 +252,14 @@ public:
     number of page the link is on (as returned by NewPage)
     or -1 in which case the current page is used
 
+    @param rAltText
+    Alt text for the link
+
     @returns
     the link id (to be used in SetLinkDest, SetLinkURL) or
     -1 if page id does not exist
     */
-    sal_Int32 CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr = -1 );
+    sal_Int32 CreateLink(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr = -1);
 
     /// Create a Screen annotation.
     sal_Int32 CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr);

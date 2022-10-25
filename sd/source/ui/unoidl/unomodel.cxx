@@ -44,6 +44,7 @@
 #include <sal/log.hxx>
 #include <editeng/unofield.hxx>
 #include <notifydocumentevent.hxx>
+#include <tpaction.hxx>
 #include <unomodel.hxx>
 #include "unopool.hxx"
 #include <sfx2/lokhelper.hxx>
@@ -134,6 +135,27 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::sd;
+
+TranslateId SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
+{
+    switch( eCA )
+    {
+        case presentation::ClickAction_NONE:             return STR_CLICK_ACTION_NONE;
+        case presentation::ClickAction_PREVPAGE:         return STR_CLICK_ACTION_PREVPAGE;
+        case presentation::ClickAction_NEXTPAGE:         return STR_CLICK_ACTION_NEXTPAGE;
+        case presentation::ClickAction_FIRSTPAGE:        return STR_CLICK_ACTION_FIRSTPAGE;
+        case presentation::ClickAction_LASTPAGE:         return STR_CLICK_ACTION_LASTPAGE;
+        case presentation::ClickAction_BOOKMARK:         return STR_CLICK_ACTION_BOOKMARK;
+        case presentation::ClickAction_DOCUMENT:         return STR_CLICK_ACTION_DOCUMENT;
+        case presentation::ClickAction_PROGRAM:          return STR_CLICK_ACTION_PROGRAM;
+        case presentation::ClickAction_MACRO:            return STR_CLICK_ACTION_MACRO;
+        case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
+        case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
+        case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
+        default: OSL_FAIL( "No StringResource for ClickAction available!" );
+    }
+    return {};
+}
 
 namespace {
 
@@ -1644,20 +1666,21 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             uno::Any aAny( xShapePropSet->getPropertyValue( "OnClick" ) );
             if ( aAny >>= eCa )
             {
+                OUString const actionName(SdResId(SdTPAction::GetClickActionSdResId(eCa)));
                 switch ( eCa )
                 {
                     case presentation::ClickAction_LASTPAGE :
                     {
                         sal_Int32 nCount = rDoc.GetSdPageCount( PageKind::Standard );
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
                     case presentation::ClickAction_FIRSTPAGE :
                     {
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -1667,7 +1690,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         if ( nDestPage )
                             nDestPage--;
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -1678,7 +1701,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         if ( nDestPage > nLastPage )
                             nDestPage = nLastPage;
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -1696,7 +1719,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                                 case presentation::ClickAction_DOCUMENT :
                                 case presentation::ClickAction_PROGRAM :
                                 {
-                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
+                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                                     rPDFExtOutDevData.SetLinkURL( nLinkId, aBookmark );
                                 }
                                 break;
@@ -1706,7 +1729,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                                     if ( nPage != -1 )
                                     {
                                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
-                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
+                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                                     }
                                 }

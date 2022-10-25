@@ -422,10 +422,12 @@ struct PDFLink : public PDFAnnotation
     sal_Int32                   m_nDest; // set to -1 for URL, to a dest else
     OUString               m_aURL;
     sal_Int32                   m_nStructParent; // struct parent entry
+    OUString m_AltText;
 
-    PDFLink()
+    PDFLink(OUString const& rAltText)
             : m_nDest( -1 ),
               m_nStructParent( -1 )
+            , m_AltText(rAltText)
     {}
 };
 
@@ -1273,7 +1275,7 @@ public:
     sal_Int32   emitDocumentMetadata();
 
     // links
-    sal_Int32 createLink( const tools::Rectangle& rRect, sal_Int32 nPageNr );
+    sal_Int32 createLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
     sal_Int32 createDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     sal_Int32 registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );

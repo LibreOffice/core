@@ -330,9 +330,9 @@ void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, bool bIsTrueColor, const S
     xImplementation->drawJPGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rAlphaMask, rGraphic );
 }
 
-sal_Int32 PDFWriter::CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFWriter::CreateLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText)
 {
-    return xImplementation->createLink( rRect, nPageNr );
+    return xImplementation->createLink(rRect, nPageNr, rAltText);
 }
 
 sal_Int32 PDFWriter::CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr)

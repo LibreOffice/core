@@ -1254,7 +1254,8 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
                                       static_cast<sal_Int32>(ceil(aViewRange.getMaxX())),
                                       static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
     vcl::PDFExtOutDevBookmarkEntry aBookmark;
-    aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
+    OUString const content(rFieldPrimitive.getValue("Representation"));
+    aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic, content);
     aBookmark.aBookmark = aURL;
     std::vector<vcl::PDFExtOutDevBookmarkEntry>& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
     rBookmarks.push_back(aBookmark);

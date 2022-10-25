@@ -181,11 +181,12 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
                 mParaMapModes.pop_front();
-                mParaIds.push_back( rWriter.CreateLink( mParaRects.front(), mParaInts.front() ) );
+                mParaIds.push_back( rWriter.CreateLink(mParaRects.front(), mParaInts.front(), mParaOUStrings.front()) );
                 // resolve LinkAnnotation structural attribute
                 rWriter.SetLinkPropertyID( mParaIds.back(), sal_Int32(mParaIds.size()-1) );
                 mParaRects.pop_front();
                 mParaInts.pop_front();
+                mParaOUStrings.pop_front();
                 rWriter.Pop();
             }
             break;
@@ -659,12 +660,13 @@ sal_Int32 PDFExtOutDevData::CreateDest( const tools::Rectangle& rRect, sal_Int32
     mpGlobalSyncData->mParaDestAreaTypes.push_back( eType );
     return mpGlobalSyncData->mCurId++;
 }
-sal_Int32 PDFExtOutDevData::CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFExtOutDevData::CreateLink(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr)
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateLink );
     mpGlobalSyncData->mParaRects.push_back( rRect );
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
+    mpGlobalSyncData->mParaOUStrings.push_back(rAltText);
     return mpGlobalSyncData->mCurId++;
 }
 

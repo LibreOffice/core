@@ -737,6 +737,12 @@ bool PDFPage::emit(sal_Int32 nParentObject )
             aLine.append( ((i+1)%15) ? " " : "\n" );
         }
         aLine.append( "]\n" );
+        if (m_pWriter->m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
+            && PDFWriter::PDFVersion::PDF_1_5 <= m_pWriter->m_aContext.Version)
+        {
+            // ISO 14289-1:2014, Clause: 7.18.3
+            aLine.append( "/Tabs(S)\n" );
+        }
     }
     if( !m_aMCIDParents.empty() )
     {
@@ -3520,6 +3526,9 @@ bool PDFWriterImpl::emitLinkAnnotations()
         aLine.append( ' ' );
         appendFixedInt( rLink.m_aRect.Bottom(), aLine );
         aLine.append( "]" );
+        // ISO 14289-1:2014, Clause: 7.18.5
+        aLine.append("/Contents");
+        appendUnicodeTextStringEncrypt(rLink.m_AltText, rLink.m_nObject, aLine);
         if( rLink.m_nDest >= 0 )
         {
             aLine.append( "/Dest" );
@@ -10158,7 +10167,7 @@ void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rN
     m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_aPopUpAnnotation.m_nObject);
 }
 
-sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFWriterImpl::createLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText)
 {
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
@@ -10168,7 +10177,7 @@ sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nP
 
     sal_Int32 nRet = m_aLinks.size();
 
-    m_aLinks.emplace_back( );
+    m_aLinks.emplace_back(rAltText);
     m_aLinks.back().m_nObject   = createObject();
     m_aLinks.back().m_nPage     = nPageNr;
     m_aLinks.back().m_aRect     = rRect;
