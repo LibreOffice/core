@@ -167,8 +167,7 @@ class FndBox_
     FndBox_& operator=(FndBox_ const&) = delete;
 
 public:
-    FndBox_( SwTableBox* pB, FndLine_* pFL ) :
-        m_pBox(pB), m_pUpper(pFL), m_pLineBefore( nullptr ), m_pLineBehind( nullptr ) {}
+    inline FndBox_( SwTableBox* pB, FndLine_* pFL );
 
     const FndLines_t&   GetLines() const    { return m_Lines; }
         FndLines_t&     GetLines()          { return m_Lines; }
@@ -209,6 +208,9 @@ public:
 
     void SetUpper( FndBox_* pUp ) { m_pUpper = pUp; }
 };
+
+FndBox_::FndBox_( SwTableBox* pB, FndLine_* pFL ) :
+    m_pBox(pB), m_pUpper(pFL), m_pLineBefore( nullptr ), m_pLineBehind( nullptr ) {}
 
 struct FndPara
 {
