@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -34,27 +33,21 @@ using namespace com::sun::star;
 namespace
 {
 /// Test class for PlainTextFilterDetect.
-class TextFilterDetectTest : public test::BootstrapFixture, public unotest::MacrosTest
+class TextFilterDetectTest : public UnoApiTest
 {
 public:
-    void setUp() override;
+    TextFilterDetectTest()
+        : UnoApiTest("/filter/qa/unit/data/")
+    {
+    }
 };
-
-void TextFilterDetectTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/filter/qa/unit/data/";
 
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 {
     uno::Reference<document::XExtendedFilterDetection> xDetect(
         getMultiServiceFactory()->createInstance("com.sun.star.comp.filters.PlainTextFilterDetect"),
         uno::UNO_QUERY);
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf114428.xhtml";
+    OUString aURL = createFileURL(u"tdf114428.xhtml");
     SvFileStream aStream(aURL, StreamMode::READ);
     uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor
@@ -71,47 +64,42 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
 {
-    const OUString sDataDirectory = m_directories.getURLFromSrc(DATA_DIRECTORY);
     auto supportsService = [](const uno::Reference<lang::XComponent>& x, const OUString& s) {
         return uno::Reference<lang::XServiceInfo>(x, uno::UNO_QUERY_THROW)->supportsService(s);
     };
 
     // Given an empty file, with a pptx extension
     // When loading the file
-    auto xComponent = loadFromDesktop(sDataDirectory + "empty.pptx");
+    loadFromURL(u"empty.pptx");
 
     // Then make sure it is opened in Impress.
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
-    CPPUNIT_ASSERT(supportsService(xComponent, "com.sun.star.presentation.PresentationDocument"));
-    xComponent->dispose();
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
 
     // Now also test ODT
-    xComponent = loadFromDesktop(sDataDirectory + "empty.odt");
+    loadFromURL(u"empty.odt");
     // Make sure it opens in Writer.
-    CPPUNIT_ASSERT(supportsService(xComponent, "com.sun.star.text.TextDocument"));
-    xComponent->dispose();
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
 
     // ... and ODS
-    xComponent = loadFromDesktop(sDataDirectory + "empty.ods");
+    loadFromURL(u"empty.ods");
     // Make sure it opens in Calc.
-    CPPUNIT_ASSERT(supportsService(xComponent, "com.sun.star.sheet.SpreadsheetDocument"));
-    xComponent->dispose();
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
 
     // ... and ODP
-    xComponent = loadFromDesktop(sDataDirectory + "empty.odp");
+    loadFromURL(u"empty.odp");
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
-    CPPUNIT_ASSERT(supportsService(xComponent, "com.sun.star.presentation.PresentationDocument"));
-    xComponent->dispose();
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
 
     // ... and DOC
     // Without the accompanying fix in place, this test would have failed, the import filter aborted
     // loading.
-    xComponent = loadFromDesktop(sDataDirectory + "empty.doc");
-    CPPUNIT_ASSERT(supportsService(xComponent, "com.sun.star.text.TextDocument"));
+    loadFromURL(u"empty.doc");
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
     {
-        uno::Reference<frame::XModel> xModel(xComponent, uno::UNO_QUERY);
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aArgs = xModel->getArgs();
         comphelper::SequenceAsHashMap aMap(aArgs);
         OUString aFilterName;
@@ -122,20 +110,19 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // i.e. opening worked, but saving back failed instead of producing a WW8 binary file.
         CPPUNIT_ASSERT_EQUAL(OUString("MS Word 97"), aFilterName);
     }
-    xComponent->dispose();
 
     // Now test with default templates set
 
     SfxObjectFactory::SetStandardTemplate("com.sun.star.presentation.PresentationDocument",
-                                          sDataDirectory + "impress.otp");
+                                          createFileURL(u"impress.otp"));
     SfxObjectFactory::SetStandardTemplate("com.sun.star.text.TextDocument",
-                                          sDataDirectory + "writer.ott");
+                                          createFileURL(u"writer.ott"));
     SfxObjectFactory::SetStandardTemplate("com.sun.star.sheet.SpreadsheetDocument",
-                                          sDataDirectory + "calc.ots");
+                                          createFileURL(u"calc.ots"));
 
-    xComponent = loadFromDesktop(sDataDirectory + "empty.pptx");
+    loadFromURL(u"empty.pptx");
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages(xDoc->getDrawPages(), uno::UNO_SET_THROW);
         uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextRange> xBox(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -143,11 +130,10 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(OUString("Title of Impress template"), xBox->getString());
     }
-    xComponent->dispose();
 
-    xComponent = loadFromDesktop(sDataDirectory + "empty.odt");
+    loadFromURL(u"empty.odt");
     {
-        uno::Reference<text::XTextDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumerationAccess> xEA(xDoc->getText(), uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumeration> xEnum(xEA->createEnumeration(), uno::UNO_SET_THROW);
         uno::Reference<text::XTextRange> xParagraph(xEnum->nextElement(), uno::UNO_QUERY_THROW);
@@ -155,22 +141,20 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(OUString(u"Writer template’s first line"), xParagraph->getString());
     }
-    xComponent->dispose();
 
-    xComponent = loadFromDesktop(sDataDirectory + "empty.ods");
+    loadFromURL(u"empty.ods");
     {
-        uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<sheet::XCellRangesAccess> xRA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextRange> xC(xRA->getCellByPosition(0, 0, 0), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(OUString(u"Calc template’s first cell"), xC->getString());
     }
-    xComponent->dispose();
 
-    xComponent = loadFromDesktop(sDataDirectory + "empty.odp");
+    loadFromURL(u"empty.odp");
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages(xDoc->getDrawPages(), uno::UNO_SET_THROW);
         uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextRange> xBox(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -178,11 +162,9 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(OUString("Title of Impress template"), xBox->getString());
     }
-    xComponent->dispose();
-
-    xComponent = loadFromDesktop(sDataDirectory + "empty.doc");
+    loadFromURL(u"empty.doc");
     {
-        uno::Reference<text::XTextDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumerationAccess> xEA(xDoc->getText(), uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumeration> xEnum(xEA->createEnumeration(), uno::UNO_SET_THROW);
         uno::Reference<text::XTextRange> xParagraph(xEnum->nextElement(), uno::UNO_QUERY_THROW);
@@ -190,7 +172,6 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(OUString(u"Writer template’s first line"), xParagraph->getString());
     }
-    xComponent->dispose();
 }
 }
 
