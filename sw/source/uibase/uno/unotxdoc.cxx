@@ -3179,10 +3179,7 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
     // This value is used in postMouseEvent and setGraphicSelection methods
     // for in place chart editing. We assume that x and y scale is roughly
     // the same.
-    const SwView* pView = m_pDocShell->GetView();
-    if (!pView)
-        return;
-    SfxInPlaceClient* pIPClient = pView->GetIPClient();
+    SfxInPlaceClient* pIPClient = m_pDocShell->GetView()->GetIPClient();
     if (!pIPClient)
         return;
 
