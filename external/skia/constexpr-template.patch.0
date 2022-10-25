@@ -1,0 +1,72 @@
+--- include/sksl/DSLFunction.h
++++ include/sksl/DSLFunction.h
+@@ -93,17 +93,20 @@
+     DSLExpression call(ExpressionArray args, Position pos = {});
+ 
+ private:
++    static void push_back(ExpressionArray& args, DSLExpression& expr);
++
+     void collectArgs(ExpressionArray& args) {}
+ 
+     template<class... RemainingArgs>
+     void collectArgs(ExpressionArray& args, DSLVar& var, RemainingArgs&&... remaining) {
+-        args.push_back(DSLExpression(var).release());
++        DSLExpression expr(var);
++        push_back(args, expr);
+         collectArgs(args, std::forward<RemainingArgs>(remaining)...);
+     }
+ 
+     template<class... RemainingArgs>
+     void collectArgs(ExpressionArray& args, DSLExpression expr, RemainingArgs&&... remaining) {
+-        args.push_back(expr.release());
++        push_back(args, expr);
+         collectArgs(args, std::forward<RemainingArgs>(remaining)...);
+     }
+ 
+--- include/sksl/DSLVar.h
++++ include/sksl/DSLVar.h
+@@ -35,7 +35,7 @@
+     /**
+      * Creates an empty, unpopulated var. Can be replaced with a real var later via `swap`.
+      */
+-    DSLVarBase() : fType(kVoid_Type), fDeclared(true) {}
++    DSLVarBase();
+ 
+     /**
+      * Constructs a new variable with the specified type and name. The name is used (in mangled
+--- src/gpu/ganesh/effects/GrBlendFragmentProcessor.h
++++ src/gpu/ganesh/effects/GrBlendFragmentProcessor.h
+@@ -10,8 +10,7 @@
+ 
+ #include "include/core/SkBlendMode.h"
+ #include "include/core/SkRefCnt.h"
+-
+-class GrFragmentProcessor;
++#include "src/gpu/ganesh/GrFragmentProcessor.h"
+ 
+ namespace GrBlendFragmentProcessor {
+ 
+--- src/sksl/dsl/DSLFunction.cpp
++++ src/sksl/dsl/DSLFunction.cpp
+@@ -34,6 +34,10 @@
+ 
+ namespace dsl {
+ 
++void DSLFunction::push_back(ExpressionArray& args, DSLExpression& expr) {
++    args.push_back(expr.release());
++}
++
+ void DSLFunction::init(DSLModifiers modifiers, const DSLType& returnType, std::string_view name,
+                        SkTArray<DSLParameter*> params, Position pos) {
+     fPosition = pos;
+--- src/sksl/dsl/DSLVar.cpp
++++ src/sksl/dsl/DSLVar.cpp
+@@ -46,6 +46,8 @@
+ 
+ namespace dsl {
+ 
++DSLVarBase::DSLVarBase() : fType(kVoid_Type), fDeclared(true) {}
++
+ DSLVarBase::DSLVarBase(DSLType type, std::string_view name, DSLExpression initialValue,
+                        Position pos, Position namePos)
+     : DSLVarBase(DSLModifiers(), std::move(type), name, std::move(initialValue), pos, namePos) {}
