@@ -22,7 +22,8 @@ using namespace css;
 using namespace css::uno;
 
 UnoApiTest::UnoApiTest(OUString path)
-    : m_aBaseString(std::move(path))
+    : mbSkipValidation(false)
+    , m_aBaseString(std::move(path))
 {
 }
 
@@ -82,6 +83,32 @@ utl::TempFileNamed UnoApiTest::save(const OUString& rFilter)
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent->dispose();
     mxComponent.clear();
+
+    if (!mbSkipValidation)
+    {
+        if (rFilter == "Office Open XML Text")
+            validate(aTempFile.GetFileName(), test::OOXML);
+        else if (rFilter == "Calc Office Open XML")
+            validate(aTempFile.GetFileName(), test::OOXML);
+        else if (rFilter == "Impress Office Open XML")
+            validate(aTempFile.GetFileName(), test::OOXML);
+        else if (rFilter == "writer8")
+            validate(aTempFile.GetFileName(), test::ODF);
+        else if (rFilter == "calc8")
+            validate(aTempFile.GetFileName(), test::ODF);
+        else if (rFilter == "impress8")
+            validate(aTempFile.GetFileName(), test::ODF);
+        else if (rFilter == "draw8")
+            validate(aTempFile.GetFileName(), test::ODF);
+        else if (rFilter == "OpenDocument Text Flat XML")
+            validate(aTempFile.GetFileName(), test::ODF);
+        else if (rFilter == "MS Word 97")
+            validate(aTempFile.GetFileName(), test::MSBINARY);
+        else if (rFilter == "MS Excel 97")
+            validate(aTempFile.GetFileName(), test::MSBINARY);
+        else if (rFilter == "MS PowerPoint 97")
+            validate(aTempFile.GetFileName(), test::MSBINARY);
+    }
 
     return aTempFile;
 }

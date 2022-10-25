@@ -189,7 +189,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
         utl::TempFileNamed aTempFile = save("writer8");
-        validate(aTempFile.GetFileName(), test::ODF);
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
         std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
@@ -211,7 +210,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
         utl::TempFileNamed aTempFile = save("writer8");
-        validate(aTempFile.GetFileName(), test::ODF);
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
         // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -246,7 +244,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
         utl::TempFileNamed aTempFile = save("writer8");
-        validate(aTempFile.GetFileName(), test::ODF);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
         // written.
@@ -271,7 +268,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
         utl::TempFileNamed aTempFile = save("writer8");
-        validate(aTempFile.GetFileName(), test::ODF);
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -306,7 +302,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
         utl::TempFileNamed aTempFile = save("writer8");
-        validate(aTempFile.GetFileName(), test::ODF);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
         // written.
@@ -331,7 +326,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
         utl::TempFileNamed aTempFile = save("writer8");
-        validate(aTempFile.GetFileName(), test::ODF);
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().

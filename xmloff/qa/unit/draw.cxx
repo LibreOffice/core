@@ -71,9 +71,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 {
     // Load a document that has a shape with a textbox in it. Save it to ODF and reload.
     loadFromURL(u"textbox-loss.docx");
-    utl::TempFileNamed aTempFile = save("impress8");
-    validate(aTempFile.GetFileName(), test::ODF);
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
+    saveAndReload("impress8");
 
     // Make sure that the shape is still a textbox.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -94,7 +92,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
 
     // Prepare use of XPath
     utl::TempFileNamed aTempFile = save("draw8");
-    validate(aTempFile.GetFileName(), test::ODF);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("content.xml"),
@@ -126,7 +123,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
 
     // Export to ODP:
     utl::TempFileNamed aTempFile = save("impress8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Check if the 12 colors are written in the XML:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
@@ -167,7 +163,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
 
     // Execute ODP export:
     utl::TempFileNamed aTempFile = save("impress8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
@@ -210,7 +205,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
     // Given a document that refers to a theme color:
     loadFromURL(u"refer-to-theme.odp");
     utl::TempFileNamed aTempFile = save("impress8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Make sure the export result has the theme reference:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -322,7 +316,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // assert XML.
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -347,7 +340,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // assert XML.
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -387,7 +379,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // assert XML.
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -412,7 +403,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     SetODFDefaultVersion(nCurrentODFVersion);
 }
@@ -511,10 +501,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     // draw:text-rotate-angle was written twice, one from TextPreRotateAngle and the other from
     // TextRotateAngle.
     // This should already catch the format error, but does not, see tdf#149567
-    utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
     // But reload catches it.
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
+    saveAndReload("writer8");
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 

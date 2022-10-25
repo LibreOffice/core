@@ -109,11 +109,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When invoking ODT export + import on it:
-    utl::TempFileNamed aTempFile = save("writer8");
+    saveAndReload("writer8");
     // Without the accompanying fix in place, this test would have resulted in an assertion failure,
     // as LocalURL was mapped to XML_TOKEN_INVALID.
-    validate(aTempFile.GetFileName(), test::ODF);
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
 
     // Then make sure that LocalURL is preserved:
     xTextDocument.set(mxComponent, uno::UNO_QUERY);
@@ -244,7 +242,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -387,7 +384,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -451,7 +447,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -539,7 +534,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -625,7 +619,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -685,7 +678,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -753,7 +745,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -810,7 +801,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
@@ -841,7 +831,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
 
     // When exporting to ODT:
     utl::TempFileNamed aTempFile = save("writer8");
-    validate(aTempFile.GetFileName(), test::ODF);
 
     // Then make sure the expected markup is used:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");

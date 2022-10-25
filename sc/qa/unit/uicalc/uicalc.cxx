@@ -995,6 +995,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
 
     CPPUNIT_ASSERT_EQUAL(OUString("x"), pDoc->GetString(ScAddress(0, 0, 0)));
 
+    // FIXME: validation fails with
+    // Error: unexpected attribute "drawooo:display"
+    mbSkipValidation = true;
+
     // Without the fix in place, this test would have crashed
     saveAndReload("calc8");
     pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());

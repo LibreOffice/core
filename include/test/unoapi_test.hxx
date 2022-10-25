@@ -43,6 +43,8 @@ protected:
     // reference to document component that we are testing
     css::uno::Reference<css::lang::XComponent> mxComponent;
 
+    bool mbSkipValidation; // if you set this flag for a new test I'm going to haunt you!
+
 private:
     OUString m_aBaseString;
 };

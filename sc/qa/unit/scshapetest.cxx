@@ -1038,6 +1038,10 @@ void ScShapeTest::testTdf115655_HideDetail()
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
     CPPUNIT_ASSERT_MESSAGE("Collapse: Image should not be visible", !pObj->IsVisible());
 
+    // FIXME: validation fails with
+    // Error: unexpected attribute "drawooo:display"
+    mbSkipValidation = true;
+
     // Save and reload
     saveAndReload("calc8");
     CPPUNIT_ASSERT(mxComponent);

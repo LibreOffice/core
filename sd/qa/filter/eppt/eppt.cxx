@@ -81,7 +81,6 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 
     // When exporting to PPTX:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    validate(aTempFile.GetFileName(), test::OOXML);
 
     // Then verify that this color is not lost:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "ppt/theme/theme1.xml");
@@ -101,7 +100,6 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
 
     // When exporting that to PPTX:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    validate(aTempFile.GetFileName(), test::OOXML);
 
     // Then make sure that the "infinite" repeat count is written:
     std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "ppt/slides/slide1.xml");
