@@ -259,7 +259,7 @@ private:
 
 };
 
-class SwWrongList
+class SAL_DLLPUBLIC_RTTI SwWrongList
 {
     std::vector<SwWrongArea> maList;
     WrongListType            meType;
