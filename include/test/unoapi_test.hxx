@@ -38,7 +38,7 @@ public:
 
     utl::TempFileNamed save(const OUString& rFilter);
     utl::TempFileNamed saveAndClose(const OUString& rFilter);
-    void saveAndReload(const OUString& rFilter);
+    utl::TempFileNamed saveAndReload(const OUString& rFilter);
 
 protected:
     // reference to document component that we are testing

@@ -32,10 +32,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_jumbosheets_test, \
     sc \
     scqahelper \
     sfx \
+    subsequenttest \
     svxcore \
     test \
     tl \
     unotest \
+    utl \
     vcl \
 ))
 

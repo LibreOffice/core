@@ -127,11 +127,13 @@ utl::TempFileNamed UnoApiTest::saveAndClose(const OUString& rFilter)
     return aTempFile;
 }
 
-void UnoApiTest::saveAndReload(const OUString& rFilter)
+utl::TempFileNamed UnoApiTest::saveAndReload(const OUString& rFilter)
 {
     utl::TempFileNamed aTempFile = saveAndClose(rFilter);
 
     mxComponent = loadFromDesktop(aTempFile.GetURL());
+
+    return aTempFile;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
