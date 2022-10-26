@@ -318,6 +318,29 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     // SwLineBreakClear::ALL
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), eClear);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlDateDataBinding)
+{
+    // Given a document with date content control and data binding, data binding date is 2012,
+    // in-document date is 2022:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-date-data-binding.docx";
+
+    // When loading that file:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the date is from the data binding, not from document.xml:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4/26/2012
+    // - Actual  : 4/26/2022
+    // i.e. the date was from document.xml, which is considered outdated.
+    CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), xParagraph->getString());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

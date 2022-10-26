@@ -1168,6 +1168,13 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
             aRet <<= m_pImpl->m_pContentControl->GetTag();
         }
     }
+    else if (rPropertyName == UNO_NAME_DATE_STRING)
+    {
+        if (!m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetDateString();
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();

@@ -1011,6 +1011,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetContentCo
         { u"" UNO_NAME_COLOR, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_ALIAS, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_TAG, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_DATE_STRING, 0, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0 },
     };
 
     return aContentControlMap_Impl;
