@@ -23,10 +23,13 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <svx/drawitem.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <cmdid.h>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include "envfmt.hxx"
@@ -220,6 +223,13 @@ void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
 
         // set BoxInfo
         ::PrepareBoxInfo( aTmpSet, *pSh );
+
+        SwDrawModel* pDrawModel = pSh->GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+        aTmpSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
+        aTmpSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
+        aTmpSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
+        aTmpSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
+        aTmpSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
         const OUString sFormatStr = pColl->GetName();
         SwParaDlg aDlg(GetFrameWeld(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
