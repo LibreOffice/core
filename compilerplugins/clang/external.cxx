@@ -77,7 +77,8 @@ bool mentions(QualType type1, QualType type2)
     }
     if (auto const t2 = t1->getAs<TemplateSpecializationType>())
     {
-        for (auto a = t2->begin(); a != t2->end(); ++a)
+        auto const args = t2->template_arguments();
+        for (auto a = args.begin(); a != args.end(); ++a)
         {
             if (a->getKind() != TemplateArgument::Type)
             {

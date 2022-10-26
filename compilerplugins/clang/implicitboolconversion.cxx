@@ -67,10 +67,11 @@ QualType reconstructTemplateArgumentType(
     if (i == ps->end()) {
         return {};
     }
-    if (ps->size() != specializationType->getNumArgs()) { //TODO
+    auto const args = specializationType->template_arguments();
+    if (ps->size() != args.size()) { //TODO
         return {};
     }
-    TemplateArgument const & arg = specializationType->getArg(i - ps->begin());
+    TemplateArgument const & arg = args[i - ps->begin()];
     if (arg.getKind() != TemplateArgument::Type) {
         return {};
     }
@@ -183,16 +184,17 @@ bool isBoolExpr(Expr const * expr) {
                     break;
                 }
                 auto const dc = loplugin::DeclCheck(d->getTemplatedDecl());
-                if (dc.ClassOrStruct("array").StdNamespace() && t->getNumArgs() >= 2
-                           && t->getArg(0).getKind() == TemplateArgument::Type)
+                auto const args = t->template_arguments();
+                if (dc.ClassOrStruct("array").StdNamespace() && args.size() >= 2
+                           && args[0].getKind() == TemplateArgument::Type)
                 {
-                    ty = t->getArg(0).getAsType();
+                    ty = args[0].getAsType();
                 } else if (dc.Class("Sequence").Namespace("uno").Namespace("star").Namespace("sun")
                                .Namespace("com").GlobalNamespace()
-                           && t->getNumArgs() == 1
-                           && t->getArg(0).getKind() == TemplateArgument::Type)
+                           && args.size() == 1
+                           && args[0].getKind() == TemplateArgument::Type)
                 {
-                    ty = t->getArg(0).getAsType();
+                    ty = args[0].getAsType();
                 } else {
                     break;
                 }
@@ -412,9 +414,10 @@ bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
                         = ct->getTemplateName().getAsTemplateDecl();
                     if (td != nullptr) {
                         //TODO: fix this superficial nonsense check:
-                        if (ct->getNumArgs() >= 1
-                            && ct->getArg(0).getKind() == TemplateArgument::Type
-                            && (loplugin::TypeCheck(ct->getArg(0).getAsType())
+                        auto const args = ct->template_arguments();
+                        if (args.size() >= 1
+                            && args[0].getKind() == TemplateArgument::Type
+                            && (loplugin::TypeCheck(args[0].getAsType())
                                 .AnyBoolean()))
                         {
                             continue;
@@ -846,9 +849,10 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
                             ps->begin(), ps->end(),
                             compat::getReplacedParameter(t2));
                         if (k != ps->end()) {
-                            if (ps->size() == t1->getNumArgs()) { //TODO
-                                TemplateArgument const & arg = t1->getArg(
-                                    k - ps->begin());
+                            auto const args = t1->template_arguments();
+                            if (ps->size() == args.size()) { //TODO
+                                TemplateArgument const & arg = args[
+                                    k - ps->begin()];
                                 if (arg.getKind() == TemplateArgument::Type
                                     && (loplugin::TypeCheck(arg.getAsType())
                                         .AnyBoolean()))
@@ -870,8 +874,9 @@ void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
         if (expr->getCastKind() == CK_ConstructorConversion) {
             auto const t1 = expr->getType();
             if (auto const t2 = t1->getAs<TemplateSpecializationType>()) {
-                assert(t2->getNumArgs() >= 1);
-                auto const a = t2->getArg(0);
+                auto const args = t2->template_arguments();
+                assert(args.size() >= 1);
+                auto const a = args[0];
                 if (a.getKind() == TemplateArgument::Type && a.getAsType()->isBooleanType()
                     && (loplugin::TypeCheck(t1).TemplateSpecializationClass()
                         .ClassOrStruct("atomic").StdNamespace()))

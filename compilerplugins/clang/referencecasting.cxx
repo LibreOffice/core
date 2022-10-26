@@ -518,9 +518,10 @@ static const RecordType* extractTemplateType(QualType cceType)
     auto cceTST = dyn_cast<TemplateSpecializationType>(cceType);
     if (!cceTST)
         return NULL;
-    if (cceTST->getNumArgs() != 1)
+    auto const args = cceTST->template_arguments();
+    if (args.size() != 1)
         return NULL;
-    const TemplateArgument& cceTA = cceTST->getArg(0);
+    const TemplateArgument& cceTA = args[0];
     QualType templateParamType = cceTA.getAsType();
     if (auto elaboratedType = dyn_cast<ElaboratedType>(templateParamType))
         templateParamType = elaboratedType->desugar();

@@ -230,18 +230,19 @@ public:
             {
                 return false;
             }
-            if (t2->getNumArgs() != 1)
+            auto const args = t2->template_arguments();
+            if (args.size() != 1)
             {
                 if (isDebugMode())
                 {
                     report(DiagnosticsEngine::Fatal,
                            "TODO: unexpected std::function with %0 template arguments",
                            expr->getExprLoc())
-                        << t2->getNumArgs() << expr->getSourceRange();
+                        << compat::diagnosticSize(args.size()) << expr->getSourceRange();
                 }
                 return false;
             }
-            if (t2->getArg(0).getKind() != TemplateArgument::Type)
+            if (args[0].getKind() != TemplateArgument::Type)
             {
                 if (isDebugMode())
                 {
@@ -252,7 +253,7 @@ public:
                 }
                 return false;
             }
-            target = t2->getArg(0).getAsType();
+            target = args[0].getAsType();
         }
         else
         {

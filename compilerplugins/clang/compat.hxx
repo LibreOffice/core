@@ -162,6 +162,19 @@ inline clang::TemplateTypeParmDecl const * getReplacedParameter(
 #endif
 }
 
+// Printing `std::size_t n` via `report(...) << n` is ambiguous prior to
+// <https://github.com/llvm/llvm-project/commit/afdac5fbcb6a375245d435e4427086a376de59ff> "[clang]
+// Allow printing 64 bit ints in diagnostics" (in Clang 14.x) and its follow-up
+// <https://github.com/llvm/llvm-project/commit/ac7a9ef0ae3a5c63dc4e641f9912d8b659ebd720> "Resolve
+// overload ambiguity on Mac OS when printing size_t in diagnostics" (in Clang 15.x):
+inline
+#if CLANG_VERSION >= 150000
+std::size_t
+#else
+unsigned
+#endif
+diagnosticSize(std::size_t n) { return n; }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
