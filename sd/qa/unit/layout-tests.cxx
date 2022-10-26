@@ -6,22 +6,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include "sdmodeltestbase.hxx"
+#include <test/unoapi_test.hxx>
+#include <test/xmltesttools.hxx>
 
-class SdLayoutTest : public SdModelTestBaseXML
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+
+class SdLayoutTest : public UnoApiTest, public XmlTestTools
 {
+public:
+    SdLayoutTest()
+        : UnoApiTest("/sd/qa/unit/data/")
+    {
+    }
+
+    xmlDocUniquePtr load(const char* pName)
+    {
+        loadFromURL(OUString::createFromAscii(pName));
+        SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+        CPPUNIT_ASSERT(pModel);
+        SfxObjectShell* pShell = pModel->GetObjectShell();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+        MetafileXmlDump dumper;
+
+        xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        return pXmlDoc;
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf104722.pptx"), PPTX);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("pptx/tdf104722.pptx");
 
     // Without the fix in place, this would have failed with
     // - Expected: 2093
@@ -29,20 +46,11 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", "2093");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "9273");
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843.pptx"), PPTX);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("pptx/tdf135843.pptx");
 
     // Without the fix, the test fails with:
     // - Expected: 21165
@@ -52,20 +60,11 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", "21165");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", "5956");
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf146876.odp"), ODP);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("odp/tdf146876.odp");
 
     // Check the shape is inside the (5000,8500) - (11500,12500) area
     for (size_t i = 2; i < 4; ++i)
@@ -87,48 +86,28 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
             CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(12500), nY);
         }
     }
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf136949)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf136949.odp"), ODP);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("odp/tdf136949.odp");
 
     // Without the fix in place, this test would have failed with
     // - Expected: 13687
     // - Actual  : 2832
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[1]", "x", "13687");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[2]", "x", "24759");
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf128212.pptx"), PPTX);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("pptx/tdf128212.pptx");
 
     // Without the fix in place, this test would have failed with
     // - Expected: 7797
     // - Actual  : 12068
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "x", "4525");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7797");
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
@@ -209,14 +188,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
         { 2, 608, 30, 10725, 6739 },
     };
 
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/two_columns.odg"), ODG);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("odg/two_columns.odg");
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
     {
@@ -228,8 +200,6 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
         assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
         assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
     }
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
@@ -260,14 +230,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
         { 1, 40, 3, 3213, 9600 },
     };
 
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/tb-rl-textbox.odg"), ODG);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("odg/tb-rl-textbox.odg");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", SAL_N_ELEMENTS(strings));
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", SAL_N_ELEMENTS(strings));
@@ -289,20 +252,11 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
         assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
         assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
     }
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf146731.pptx"), PPTX);
-
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = load("pptx/tdf146731.pptx");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]", "width", "187");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]", "width", "187");
@@ -313,46 +267,30 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
     // - Actual  : 187
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]", "width", "30");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline[1]", "width", "187");
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843_insideH.pptx"), PPTX);
+    xmlDocUniquePtr pXmlDoc = load("pptx/tdf135843_insideH.pptx");
 
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
     // Without the fix, the test fails with:
     //- Expected: 34
     //- Actual  : 36
     // We shouldn't see two vertical borders inside the table on ui.
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push", 34);
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBnc480256)
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/bnc480256-2.pptx"), PPTX);
+    xmlDocUniquePtr pXmlDoc = load("pptx/bnc480256-2.pptx");
 
-    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
     // Without the fix, the test fails with:
     //- Expected: #ff0000
     //- Actual  : #ffffff
     // We should see the red vertical border inside the table.
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[8]/linecolor[1]", "color", "#ff0000");
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

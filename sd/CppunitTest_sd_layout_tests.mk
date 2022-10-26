@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_layout_tests, \
     sd \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \
