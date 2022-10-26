@@ -433,7 +433,7 @@
       <node oor:name="${PRODUCTNAME} Dark" oor:op="replace">
         <node oor:name="DocColor">
           <prop oor:name="Color">
-            <value>3355443</value>
+            <value>1842204</value>
           </prop>
         </node>
         <node oor:name="DocBoundaries">
@@ -446,7 +446,7 @@
         </node>
         <node oor:name="AppBackground">
           <prop oor:name="Color">
-            <value>1842204</value>
+            <value>3355443</value>
           </prop>
         </node>
         <node oor:name="ObjectBoundaries">
