@@ -2607,7 +2607,7 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2019/2022>],
+    AS_HELP_STRING([--with-visual-studio=<2019/2022/2022preview>],
         [Specify which Visual Studio version to use in case several are
          installed. Currently 2019 (default) and 2022 are supported.]),
 ,)
@@ -4021,6 +4021,8 @@ map_vs_year_to_version()
         vsversion=16;;
     2022)
         vsversion=17;;
+    2022preview)
+        vsversion=17.4;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -4115,14 +4117,14 @@ find_msvc()
     PathFormat "$vswhere"
     vswhere=$formatted_path_unix
     for ver in $vsversions; do
-        vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+        vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         if test -z "$vswhereoutput"; then
-            vswhereoutput=`$vswhere -prerelease -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+            vswhereoutput=`$vswhere -prerelease -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         fi
         # Fall back to all MS products (this includes VC++ Build Tools)
         if ! test -n "$vswhereoutput"; then
             AC_MSG_CHECKING([VC++ Build Tools and similar])
-            vswhereoutput=`$vswhere -products \* -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+            vswhereoutput=`$vswhere -products \* -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         fi
         if test -n "$vswhereoutput"; then
             PathFormat "$vswhereoutput"
@@ -4132,13 +4134,16 @@ find_msvc()
     done
 
     if test -n "$vctest"; then
-        vcnumwithdot="$ver.0"
+        vcnumwithdot="$ver"
+        if test "${vcnumwithdot%%.*}" = "$vcnumwithdot"; then
+            vcnumwithdot=$vcnumwithdot.0
+        fi
         case "$vcnumwithdot" in
         16.0)
             vcyear=2019
             vctoolset=v142
             ;;
-        17.0)
+        17.0 | 17.4)
             vcyear=2022
             vctoolset=v143
             ;;
@@ -4310,7 +4315,7 @@ if test "$_os" = "WINNT"; then
         # are always "better", we list them in reverse chronological order.
 
         case "$vcnumwithdot" in
-        16.0 | 17.0)
+        16.0 | 17.0 | 17.4)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
@@ -6681,7 +6686,7 @@ find_msms()
     dnl the result will be the highest MSM version found in the highest directory.
 
     case "$VCVER" in
-        16.0 | 17.0)
+        16.0 | 17.0 | 17.4)
         my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm Microsoft_VC143_CRT_x86.msm ${my_msm_files}"
         ;;
     esac
@@ -6691,7 +6696,7 @@ find_msms()
 
     msmdir=
     case "$VCVER" in
-    16.0 | 17.0)
+    16.0 | 17.0 | 17.4)
         for f in ${my_msm_files}; do
             for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
                 my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
@@ -6729,7 +6734,7 @@ find_msvc_x64_dlls()
 
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
-    16.0 | 17.0)
+    16.0 | 17.0 | 17.4)
         for crtver in 141 142 143; do
             for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
                 echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT" >&5
