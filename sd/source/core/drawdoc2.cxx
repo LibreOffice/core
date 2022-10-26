@@ -566,7 +566,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         return;
 
     // #i57181# Paper size depends on Language, like in Writer
-    Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
+    gfx::Size2DLWrap aDefaultSize = SvxPaperInfo::getDefaultPaperSize();
 
     // Insert handout page
     rtl::Reference<SdPage> pHandoutPage = AllocSdPage(false);
@@ -583,8 +583,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     }
     else
     {
-        pHandoutPage->setToolsSize(aDefSize);
-        pHandoutPage->SetBorder(0, 0, 0, 0);
+        pHandoutPage->setSize(aDefaultSize);
+        pHandoutPage->setBorder(svx::Border());
     }
 
     pHandoutPage->SetPageKind(PageKind::Handout);
@@ -620,7 +620,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         else if (meDocType == DocumentType::Draw)
         {
             // Draw: always use default size with margins
-            pPage->setToolsSize(aDefSize);
+            pPage->setSize(aDefaultSize);
 
             SfxPrinter* pPrinter = mpDocSh->GetPrinter(false);
             if (pPrinter && pPrinter->IsValid())
@@ -630,12 +630,12 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
                 aPageOffset -= pPrinter->PixelToLogic( Point() );
                 ::tools::Long nOffset = !aPageOffset.X() && !aPageOffset.Y() ? 0 : PRINT_OFFSET;
 
-                sal_uLong nTop    = aPageOffset.Y();
-                sal_uLong nLeft   = aPageOffset.X();
-                sal_uLong nBottom = std::max(::tools::Long(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), ::tools::Long(0));
-                sal_uLong nRight  = std::max(::tools::Long(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), ::tools::Long(0));
+                gfx::Length nTop    = gfx::Length::hmm(aPageOffset.Y());
+                gfx::Length nLeft   = gfx::Length::hmm(aPageOffset.X());
+                gfx::Length nBottom = gfx::Length::hmm(std::max(::tools::Long(aDefaultSize.getHeight().as_hmm() - aOutSize.Height() - aPageOffset.Y() + nOffset), tools::Long(0)));
+                gfx::Length nRight  = gfx::Length::hmm(std::max(::tools::Long(aDefaultSize.getWidth().as_hmm() - aOutSize.Width() - aPageOffset.X() + nOffset), tools::Long(0)));
 
-                pPage->SetBorder(nLeft, nTop, nRight, nBottom);
+                pPage->setBorder(svx::Border(nLeft, nTop, nRight, nBottom));
             }
             else
             {
@@ -644,14 +644,14 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
                 // This has to be kept synchronized with the border
                 // width set in the
                 // SvxPageDescPage::PaperSizeSelect_Impl callback.
-                pPage->SetBorder(1000, 1000, 1000, 1000);
+                pPage->setBorder(svx::Border(1000_hmm, 1000_hmm, 1000_hmm, 1000_hmm));
             }
         }
         else
         {
             // Impress: always use screen format, landscape.
-            Size aSize = SvxPaperInfo::GetPaperSize(PAPER_SCREEN_16_9, MapUnit::Map100thMM);
-            pPage->setToolsSize(Size(aSize.Height(), aSize.Width()));
+            gfx::Size2DLWrap aSize = SvxPaperInfo::getPaperSize(PAPER_SCREEN_16_9);
+            pPage->setSize({ aSize.getHeight(), aSize.getWidth() });
             pPage->setBorder(svx::Border());
         }
 
@@ -686,16 +686,16 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     else
     {
         // Always use portrait format
-        if (aDefSize.Height() >= aDefSize.Width())
+        if (aDefaultSize.getHeight() >= aDefaultSize.getWidth())
         {
-            pNotesPage->setToolsSize(aDefSize);
+            pNotesPage->setSize(aDefaultSize);
         }
         else
         {
-            pNotesPage->setToolsSize(Size(aDefSize.Height(), aDefSize.Width()));
+            pNotesPage->setSize({ aDefaultSize.getHeight(), aDefaultSize.getWidth() });
         }
 
-        pNotesPage->SetBorder(0, 0, 0, 0);
+        pNotesPage->setBorder(svx::Border());
     }
     pNotesPage->SetPageKind(PageKind::Notes);
     InsertPage(pNotesPage.get(), 2);
