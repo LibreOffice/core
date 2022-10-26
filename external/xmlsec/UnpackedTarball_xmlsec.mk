@@ -8,6 +8,8 @@
 #
 
 xmlsec_patches :=
+xmlsec_patches += remove-unnecessary-macro-417.patch.1
+xmlsec_patches += fix-size_max-412.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 

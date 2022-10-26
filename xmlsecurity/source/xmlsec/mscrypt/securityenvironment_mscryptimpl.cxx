@@ -706,7 +706,8 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
 
     xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
 
-    xmlSecSize certSize = xmlSecBase64Decode( chCert, chCert, xmlStrlen( chCert ) ) ;
+    xmlSecSize certSize;
+    xmlSecBase64Decode_ex( chCert, chCert, xmlStrlen( chCert ), &certSize ) ;
 
     uno::Sequence< sal_Int8 > rawCert( certSize ) ;
     auto rawCertRange = asNonConstRange(rawCert);

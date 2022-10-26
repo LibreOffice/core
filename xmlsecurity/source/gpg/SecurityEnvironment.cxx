@@ -162,7 +162,9 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
     //xmlChar* pSignatureValue=xmlNodeGetContent(cur);
     OString ostr = OUStringToOString( keyId , RTL_TEXTENCODING_UTF8 );
     const xmlChar* strKeyId = reinterpret_cast<const xmlChar*>(ostr.getStr());
-    if(xmlSecBase64Decode(strKeyId, const_cast<xmlSecByte*>(strKeyId), xmlStrlen(strKeyId)) < 0)
+    xmlSecSize nWritten;
+    int nRet = xmlSecBase64Decode_ex(strKeyId, const_cast<xmlSecByte*>(strKeyId), xmlStrlen(strKeyId), &nWritten);
+    if(nRet < 0)
         throw RuntimeException("Base64 decode failed");
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);

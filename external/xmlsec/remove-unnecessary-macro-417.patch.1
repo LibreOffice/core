@@ -1,0 +1,24 @@
+From 3da1d53fce229d8a72d41b68aacbc115574012e0 Mon Sep 17 00:00:00 2001
+From: lsh123 <aleksey@aleksey.com>
+Date: Tue, 25 Oct 2022 05:47:51 -0700
+Subject: [PATCH] remove unnecessary macro (#417)
+
+---
+ configure.ac | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 67c8e50b..bb5d3e4b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -65,7 +65,6 @@ AM_CONDITIONAL(HAS_XSLTPROC, [test x"$XSLTPROC" != x])
+ 
+ dnl Checks for header files.
+ AC_HEADER_DIRENT
+-AC_CHECK_INCLUDES_DEFAULT
+ 
+ 
+ dnl ==========================================================================
+-- 
+2.38.0.rc2
+
