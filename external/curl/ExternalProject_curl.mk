@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter iOS MACOSX,$(OS)),\
 				--with-secure-transport,\
 				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out") --with-nss-deprecated,--without-nss)) \
-			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
+			--without-openssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
 			--enable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
 			--without-libssh2 --without-metalink --without-nghttp2 \
