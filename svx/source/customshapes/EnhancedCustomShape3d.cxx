@@ -26,6 +26,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svl/itemset.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xsflclit.hxx>
@@ -274,6 +275,49 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
         Point aCenter( aSnapRect.Center() );
 
         SfxItemSet aSet( rSdrObjCustomShape.GetMergedItemSet() );
+
+        // tdf#146360 If the ItemSet of the source SdrObject has a parent
+        // (which means it has a StyleSheet), we need to do some old-style
+        // 'BurnInStyleSheetAttributes' action.
+        // That means to set all Items which are set in the StyleSheet
+        // directly in the ItemSet.
+        // This is okay here since the 3D SdrObjects created are
+        // placeholders that get rendered, but never reach the
+        // surface/the user. If attributes for the source SdrObject
+        // change, these will be recreated.
+        // The problem is that while "aSet" still has a ptr to the style's
+        // ItemSet, this gets lost at the ItemSet of the SdrObject when
+        // an ItemSet gets set at the 3D SdrObject, like in diverse
+        // SetMergedItemSet calls below. This leads to fetching the wrong
+        // (default) FillBitmap in the calls p3DObj->GetMergedItem below
+        // (which is 32x32 white, that's what you see without the fix).
+        // This could also be fixed (tried it) by either
+        // - using rSdrObjCustomShape.GetMergedItem
+        // - setting the StyleSheet at 3D SdrObjects ASAP (done at caller)
+        // but both solutions contain the risk to not find all places, so
+        // it's just more safe to merge the StyleSheet attributes to the
+        // ItemSet used for the whole creation.
+        if(nullptr != aSet.GetParent())
+        {
+            SfxWhichIter aIter(aSet);
+            sal_uInt16 nWhich(aIter.FirstWhich());
+            const SfxPoolItem *pItem(nullptr);
+
+            while(nWhich)
+            {
+                // this may look at 1st look like doing nothing, but it converts
+                // items set in parent/style to SfxItemState::SET items in the
+                // ItemSet (see AttributeProperties::ForceStyleToHardAttributes())
+                if(SfxItemState::SET == aSet.GetItemState(nWhich, true, &pItem))
+                {
+                    aSet.Put(*pItem);
+                }
+
+                nWhich = aIter.NextWhich();
+            }
+
+            aSet.SetParent(nullptr);
+        }
 
         //SJ: vertical writing is not required, by removing this item no outliner is created
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );
