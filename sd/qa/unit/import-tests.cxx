@@ -153,6 +153,7 @@ public:
     void testTdf62255();
     void testTdf89927();
     void testTdf103800();
+    void testTdf151767();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -226,6 +227,7 @@ public:
     CPPUNIT_TEST(testTdf62255);
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf103800);
+    CPPUNIT_TEST(testTdf151767);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1958,6 +1960,34 @@ void SdImportTest::testTdf103800()
     Color nCharColor;
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xC00000), nCharColor);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf151767()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf151767.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    uno::Reference<table::XCellRange> xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+
+    table::BorderLine2 aLeft;
+    xCell->getPropertyValue("LeftBorder") >>= aLeft;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The left border is missing!", true, aLeft.LineWidth > 0);
+
+    table::BorderLine2 aRight;
+    xCell->getPropertyValue("RightBorder") >>= aRight;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The right border is missing!", true, aRight.LineWidth > 0);
+
+    table::BorderLine2 aTop;
+    xCell->getPropertyValue("TopBorder") >>= aTop;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The top border is missing!", true, aTop.LineWidth > 0);
+
+    table::BorderLine2 aBottom;
+    xCell->getPropertyValue("BottomBorder") >>= aBottom;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The bottom border is missing!", true, aBottom.LineWidth > 0);
 
     xDocShRef->DoClose();
 }

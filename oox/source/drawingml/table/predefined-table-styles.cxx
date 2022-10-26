@@ -884,6 +884,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     // End to handle all style groups.
 
     // Create a TableStyle from handled properties.
+    pTableStyle->getStyleId() = styleId;
+    pTableStyle->getStyleName() = style_name;
 
     pTableStyle->getWholeTbl().getTextColor() = wholeTblTextColor;
     pTableStyle->getFirstRow().getTextColor() = firstRowTextColor;

@@ -61,26 +61,41 @@ TableCell::TableCell()
 {
 }
 
-static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
-        Reference< XPropertySet > const & rxPropSet, oox::drawingml::LineProperties const & rLineProperties,
-        sal_Int32 nPropId )
+static void applyLineAttributes(const ::oox::core::XmlFilterBase& rFilterBase,
+                                Reference<XPropertySet> const& rxPropSet,
+                                oox::drawingml::table::TableStyle const& rTableStyle,
+                                oox::drawingml::LineProperties const& rLineProperties,
+                                sal_Int32 nPropId)
 {
     BorderLine2 aBorderLine;
-    if ( rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.value() != XML_noFill )
+    TableStyle& rTable(const_cast<TableStyle&>(rTableStyle));
+    if (!rTable.getStyleId().isEmpty())
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
-        aBorderLine.Color = sal_Int32(aColor.getColor( rFilterBase.getGraphicHelper() ));
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
-        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
-        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 2 );
+        aBorderLine.Color = sal_Int32(aColor.getColor(rFilterBase.getGraphicHelper()));
+        aBorderLine.OuterLineWidth = static_cast<sal_Int16>(GetCoordinate(rLineProperties.moLineWidth.value_or(0)) / 4);
+        aBorderLine.InnerLineWidth = static_cast<sal_Int16>(GetCoordinate(rLineProperties.moLineWidth.value_or(0)) / 4);
+        aBorderLine.LineWidth = static_cast<sal_Int16>(GetCoordinate(rLineProperties.moLineWidth.value_or(0)) / 2);
         aBorderLine.LineDistance = 0;
     }
     else
     {
-        aBorderLine.Color = sal_Int32( COL_AUTO );
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
-        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
-        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 2 );
+        if (rLineProperties.maLineFill.moFillType.has_value())
+        {
+            if (rLineProperties.maLineFill.moFillType.value() != XML_noFill)
+            {
+                Color aColor = rLineProperties.maLineFill.getBestSolidColor();
+                aBorderLine.Color = sal_Int32(aColor.getColor(rFilterBase.getGraphicHelper()));
+            }
+            else
+                aBorderLine.Color = sal_Int32(COL_AUTO);
+        }
+        else
+            aBorderLine.Color = sal_Int32(COL_BLACK);
+
+        aBorderLine.OuterLineWidth = static_cast<sal_Int16>(GetCoordinate(rLineProperties.moLineWidth.value_or(12700)) / 4);
+        aBorderLine.InnerLineWidth = static_cast<sal_Int16>(GetCoordinate(rLineProperties.moLineWidth.value_or(12700)) / 4);
+        aBorderLine.LineWidth = static_cast<sal_Int16>(GetCoordinate(rLineProperties.moLineWidth.value_or(12700)) / 2);
         aBorderLine.LineDistance = 0;
     }
 
@@ -475,33 +490,33 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     aLinePropertiesTopLeftToBottomRight.assignUsed( maLinePropertiesTopLeftToBottomRight );
     aLinePropertiesBottomLeftToTopRight.assignUsed( maLinePropertiesBottomLeftToTopRight );
 
-    applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesLeft, PROP_LeftBorder );
-    applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesRight, PROP_RightBorder );
-    applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTop, PROP_TopBorder );
-    applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottom, PROP_BottomBorder );
-    applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTopLeftToBottomRight, PROP_DiagonalTLBR );
-    applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottomLeftToTopRight, PROP_DiagonalBLTR );
+    applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesLeft, PROP_LeftBorder );
+    applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesRight, PROP_RightBorder );
+    applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesTop, PROP_TopBorder );
+    applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesBottom, PROP_BottomBorder );
+    applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesTopLeftToBottomRight, PROP_DiagonalTLBR );
+    applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesBottomLeftToTopRight, PROP_DiagonalBLTR );
 
     // Convert insideH to Top and Bottom, InsideV to Left and Right. Exclude the outer borders.
     if(nRow != 0)
     {
         aLinePropertiesInsideH.assignUsed( aLinePropertiesTop );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideH, PROP_TopBorder );
+        applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesInsideH, PROP_TopBorder );
     }
     if(nRow != nMaxRow)
     {
         aLinePropertiesInsideH.assignUsed( aLinePropertiesBottom );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideH, PROP_BottomBorder );
+        applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesInsideH, PROP_BottomBorder );
     }
     if(nColumn != 0)
     {
         aLinePropertiesInsideV.assignUsed( aLinePropertiesLeft );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideV, PROP_LeftBorder );
+        applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesInsideV, PROP_LeftBorder );
     }
     if(nColumn != nMaxColumn)
     {
         aLinePropertiesInsideV.assignUsed( aLinePropertiesRight );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideV, PROP_RightBorder );
+        applyLineAttributes( rFilterBase, xPropSet, rTable, aLinePropertiesInsideV, PROP_RightBorder );
     }
 
     if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() &&
