@@ -53,4 +53,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sc_uicalc,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_uicalc))
 
+$(eval $(call gb_CppunitTest_add_arguments,sc_uicalc, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

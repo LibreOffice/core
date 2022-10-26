@@ -134,6 +134,10 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,chart2_geometry, \
 
 $(eval $(call gb_CppunitTest_use_configuration,chart2_geometry))
 
+$(eval $(call gb_CppunitTest_add_arguments,chart2_geometry, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 $(call gb_CppunitTest_get_target,chart2_geometry): $(call gb_Package_get_target,postprocess_images)
 
 # vim: set noet sw=4 ts=4:
