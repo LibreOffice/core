@@ -11,8 +11,7 @@
 
 #include <string_view>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -45,42 +44,16 @@ uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XSha
 }
 }
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/oox/qa/unit/data/";
-
 /// oox shape tests.
-class OoxShapeTest : public test::BootstrapFixture, public unotest::MacrosTest
+class OoxShapeTest : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(std::u16string_view rURL);
+    OoxShapeTest()
+        : UnoApiTest("/oox/qa/unit/data/")
+    {
+    }
     uno::Reference<drawing::XShape> getShapeByName(std::u16string_view aName);
 };
-
-void OoxShapeTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void OoxShapeTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-void OoxShapeTest::load(std::u16string_view rFileName)
-{
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
-    mxComponent = loadFromDesktop(aURL);
-}
 
 uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view aName)
 {
@@ -104,9 +77,9 @@ uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
 {
-    load(u"tdf141463_GroupTransform.pptx");
+    loadFromURL(u"tdf141463_GroupTransform.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -139,9 +112,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
 {
-    load(u"multiple-group-shapes.docx");
+    loadFromURL(u"multiple-group-shapes.docx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
@@ -153,9 +126,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
 {
-    load(u"customshape-position.docx");
+    loadFromURL(u"customshape-position.docx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -176,9 +149,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
     // The document contains a shape with a:prstTxWarp="textCircle" with two paragraphs.
     // PowerPoint aligns the bottom of the text with the path, LO had aligned the middle of the
     // text with the path, which resulted in smaller text.
-    load(u"tdf125582_TextOnCircle.pptx");
+    loadFromURL(u"tdf125582_TextOnCircle.pptx");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -204,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
     // The document contains shapes with all six kind of anchor positions in pptx. The text in the
     // shapes is larger than the shape and has no word wrap. That way anchor position is visible
     // in case you inspect the file manually.
-    load(u"tdf151008_eaVertAnchor.pptx");
+    loadFromURL(u"tdf151008_eaVertAnchor.pptx");
 
     struct anchorDesc
     {
@@ -249,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
 
     // The document contains SmartArt with shapes with not default text area. Without fix the
     // text was shifted up because of wrong values in TextLowerDistance and TextUpperDistance.
-    load(u"tdf151518_SmartArtTextLocation.docx");
+    loadFromURL(u"tdf151518_SmartArtTextLocation.docx");
 
     struct TextDistance
     {
