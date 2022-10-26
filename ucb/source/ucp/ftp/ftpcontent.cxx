@@ -62,6 +62,7 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
@@ -225,6 +226,7 @@ enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
               THROWACCESSDENIED,
               THROWINTERACTIVECONNECT,
+              THROWMALFORMED,
               THROWRESOLVENAME,
               THROWQUOTE,
               THROWNOFILE,
@@ -338,6 +340,15 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                     InteractiveNetworkConnectException excep;
                     excep.Server = m_aFTPURL.host();
                     aRet <<= excep;
+                    ucbhelper::cancelCommandExecution(
+                        aRet,
+                        Environment);
+                    break;
+                }
+            case THROWMALFORMED:
+                {
+                    IllegalIdentifierException ex;
+                    aRet <<= ex;
                     ucbhelper::cancelCommandExecution(
                         aRet,
                         Environment);
@@ -537,6 +548,10 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
         {
             if(e.code() == CURLE_COULDNT_CONNECT)
                 action = THROWINTERACTIVECONNECT;
+            else if (e.code() == CURLE_URL_MALFORMAT)
+            {
+                action = THROWMALFORMED;
+            }
             else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
                 action = THROWRESOLVENAME;
             else if(e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
