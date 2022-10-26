@@ -888,7 +888,7 @@ void DomainMapper_Impl::PopSdt()
     xCursor->gotoRange(xEnd, /*bExpand=*/true);
 
     std::optional<OUString> oData = m_pSdtHelper->getValueFromDataBinding();
-    if (oData.has_value() && m_pSdtHelper->getControlType() != SdtControlType::datePicker)
+    if (oData.has_value())
     {
         // Data binding has a value for us, prefer that over the in-document value.
         xCursor->setString(*oData);
@@ -986,6 +986,7 @@ void DomainMapper_Impl::PopSdt()
         xContentControlProps->setPropertyValue("Picture", uno::Any(true));
     }
 
+    bool bDateFromDataBinding = false;
     if (m_pSdtHelper->getControlType() == SdtControlType::datePicker)
     {
         xContentControlProps->setPropertyValue("Date", uno::Any(true));
@@ -994,8 +995,14 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(aDateFormat.replaceAll("'", "\"")));
         xContentControlProps->setPropertyValue("DateLanguage",
                                                uno::Any(m_pSdtHelper->getLocale().makeStringAndClear()));
+        OUString aCurrentDate = m_pSdtHelper->getDate().makeStringAndClear();
+        if (oData.has_value())
+        {
+            aCurrentDate = *oData;
+            bDateFromDataBinding = true;
+        }
         xContentControlProps->setPropertyValue("CurrentDate",
-                                               uno::Any(m_pSdtHelper->getDate().makeStringAndClear()));
+                                               uno::Any(aCurrentDate));
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::plainText)
@@ -1004,6 +1011,13 @@ void DomainMapper_Impl::PopSdt()
     }
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    if (bDateFromDataBinding)
+    {
+        OUString aDateString;
+        xContentControlProps->getPropertyValue("DateString") >>= aDateString;
+        xCursor->setString(aDateString);
+    }
 
     m_pSdtHelper->clear();
 }

@@ -100,17 +100,23 @@ service ContentControl
     */
     [optional, property] boolean ComboBox;
 
-    /** The alias: just remembered.
+    /** The alias: kind of a human-readable title / description, show up on the UI.
 
         @since LibreOffice 7.5
     */
     [optional, property] string Alias;
 
-    /** The tag: just remembered.
+    /** The tag: similar to Alias, but is meant to be machine-readable.
 
         @since LibreOffice 7.5
     */
     [optional, property] string Tag;
+
+    /** The formatted date string, based on DateFormat, DateLanguage and CurrentDate.
+
+        @since LibreOffice 7.5
+    */
+    [optional, property, readonly] string DateString;
 };
 
 

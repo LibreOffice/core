@@ -234,9 +234,14 @@ OUString SwContentControl::GetDateString() const
 
     const Color* pColor = nullptr;
     OUString aFormatted;
-    if (!m_oSelectedDate)
+    double fSelectedDate = 0;
+    if (m_oSelectedDate)
     {
-        return OUString();
+        fSelectedDate = *m_oSelectedDate;
+    }
+    else
+    {
+        fSelectedDate = GetCurrentDateValue();
     }
 
     if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
@@ -244,7 +249,7 @@ OUString SwContentControl::GetDateString() const
         return OUString();
     }
 
-    pNumberFormatter->GetOutputString(*m_oSelectedDate, nFormat, aFormatted, &pColor, false);
+    pNumberFormatter->GetOutputString(fSelectedDate, nFormat, aFormatted, &pColor, false);
     return aFormatted;
 }
 
