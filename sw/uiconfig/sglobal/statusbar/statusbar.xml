@@ -20,7 +20,7 @@
 <statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <statusbar:statusbaritem xlink:href=".uno:StatePageNumber" statusbar:align="left" statusbar:autosize="true" statusbar:mandatory="true" statusbar:width="54"/>
  <statusbar:statusbaritem xlink:href=".uno:StateWordCount" statusbar:align="left" statusbar:autosize="true"/>
- <statusbar:statusbaritem xlink:href=".uno:StateAccessibilityCheck" statusbar:align="left" statusbar:width="50"/>
+ <statusbar:statusbaritem xlink:href=".uno:StateAccessibilityCheck" statusbar:align="left" statusbar:ownerdraw="true" statusbar:width="32"/>
  <statusbar:statusbaritem xlink:href=".uno:PageStyleName" statusbar:align="left" statusbar:autosize="true" statusbar:width="79"/>
  <statusbar:statusbaritem xlink:href=".uno:LanguageStatus" statusbar:align="center" statusbar:autosize="true" statusbar:mandatory="false" statusbar:width="100"/>
  <statusbar:statusbaritem xlink:href=".uno:InsertMode" statusbar:align="center" statusbar:mandatory="false" statusbar:width="55"/>

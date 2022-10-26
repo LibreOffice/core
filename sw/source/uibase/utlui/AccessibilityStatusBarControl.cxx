@@ -10,16 +10,18 @@
 #include <swtypes.hxx>
 #include <strings.hrc>
 #include <AccessibilityStatusBarControl.hxx>
-#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/status.hxx>
+#include <vcl/event.hxx>
 
-SFX_IMPL_STATUSBAR_CONTROL(sw::AccessibilityStatusBarControl, SfxStringItem);
+SFX_IMPL_STATUSBAR_CONTROL(sw::AccessibilityStatusBarControl, SfxInt32Item);
 
 namespace sw
 {
 AccessibilityStatusBarControl::AccessibilityStatusBarControl(sal_uInt16 _nSlotId, sal_uInt16 _nId,
                                                              StatusBar& rStb)
     : SfxStatusBarControl(_nSlotId, _nId, rStb)
+    , mnIssues(0)
 {
 }
 
@@ -29,16 +31,49 @@ void AccessibilityStatusBarControl::StateChangedAtStatusBarControl(sal_uInt16 /*
                                                                    SfxItemState eState,
                                                                    const SfxPoolItem* pState)
 {
-    if (eState == SfxItemState::DEFAULT) // Can access pState
+    if (eState != SfxItemState::DEFAULT)
     {
-        GetStatusBar().SetItemText(GetId(), static_cast<const SfxStringItem*>(pState)->GetValue());
-        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_WORDCOUNT_HINT));
+        mnIssues = -1;
+    }
+    else if (auto pItem = dynamic_cast<const SfxInt32Item*>(pState))
+    {
+        mnIssues = pItem->GetValue();
     }
     else
     {
-        GetStatusBar().SetItemText(GetId(), u"");
+        mnIssues = -1;
+    }
+
+    GetStatusBar().SetItemData(GetId(), nullptr); // necessary ?
+    GetStatusBar().SetItemText(GetId(), ""); // necessary ?
+
+    if (eState == SfxItemState::DEFAULT) // Can access pState
+    {
+        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_ACCESSIBILITY_CHECK_HINT));
+    }
+    else
+    {
         GetStatusBar().SetQuickHelpText(GetId(), u"");
     }
+}
+
+void AccessibilityStatusBarControl::Paint(const UserDrawEvent& rUserEvent)
+{
+    vcl::RenderContext* pRenderContext = rUserEvent.GetRenderContext();
+
+    tools::Rectangle aRect = rUserEvent.GetRect();
+    Color aOldLineColor = pRenderContext->GetLineColor();
+    Color aOldFillColor = pRenderContext->GetFillColor();
+
+    if (mnIssues > 0)
+        pRenderContext->SetFillColor(COL_RED);
+    else
+        pRenderContext->SetFillColor(COL_GREEN);
+
+    pRenderContext->DrawRect(aRect);
+
+    pRenderContext->SetLineColor(aOldLineColor);
+    pRenderContext->SetFillColor(aOldFillColor);
 }
 
 } // end sw
