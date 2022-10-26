@@ -367,6 +367,11 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
         {
             const unsigned nParentId = std::atoi(aRoot.get<std::string>("parentId").c_str());
             GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, nParentId);
+            if (!pDialog)
+            {
+                g_warning("no parent dialog (id: %d) for created child; is child a sidebar?", nParentId);
+                return;
+            }
             const std::string aPos = aRoot.get<std::string>("position");
             std::vector<int> aPosPoints = GtvHelpers::split<int>(aPos, ", ", 2);
             gtv_lok_dialog_child_create(GTV_LOK_DIALOG(pDialog), nWinId, aPosPoints[0], aPosPoints[1], aSizePoints[0], aSizePoints[1]);
