@@ -378,7 +378,7 @@ static void lcl_AdjustSingleLineTabs(tools::Long nMaxWidth, ImplTabCtrlData *pTa
     {
         if (!item.m_bVisible)
             continue;
-        nRightSpace -= item.maRect.Right() - item.maRect.Left();
+        nRightSpace -= item.maRect.GetWidth();
     }
     nRightSpace /= 2;
 
