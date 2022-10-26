@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uiimpress, \
     sd \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \
