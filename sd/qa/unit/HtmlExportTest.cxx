@@ -7,32 +7,25 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sdmodeltestbase.hxx"
-
+#include <test/unoapi_test.hxx>
 #include <test/htmltesttools.hxx>
 #include <test/xmltesttools.hxx>
 
 using namespace css;
 
-class SdHTMLFilterTest : public SdModelTestBase, public XmlTestTools, public HtmlTestTools
+class SdHTMLFilterTest : public UnoApiTest, public XmlTestTools, public HtmlTestTools
 {
-private:
-    htmlDocUniquePtr exportAndParseHtml(sd::DrawDocShellRef const& xDocShRef)
+public:
+    SdHTMLFilterTest()
+        : UnoApiTest("/sd/qa/unit/data/")
     {
-        FileFormat* pFormat = getFormat(HTML);
-        OUString aExt = "." + OUString::createFromAscii(pFormat->pName);
-        utl::TempFileNamed aTempFile(u"", true, aExt);
-        aTempFile.EnableKillingFile();
-        exportTo(xDocShRef.get(), pFormat, aTempFile);
-        return parseHtml(aTempFile);
     }
 
-public:
     void testHTMLExport()
     {
-        sd::DrawDocShellRef xDocShRef = loadURL(
-            m_directories.getURLFromSrc(u"/sd/qa/unit/data/HtmlExportTestDocument.odp"), ODP);
-        htmlDocUniquePtr htmlDoc = exportAndParseHtml(xDocShRef);
+        loadFromURL(u"HtmlExportTestDocument.odp");
+        utl::TempFileNamed aTempFile = save("impress_html_Export");
+        htmlDocUniquePtr htmlDoc = parseHtml(aTempFile);
 
         assertXPath(htmlDoc, "/html", 1);
         assertXPath(htmlDoc, "/html/body", 1);
