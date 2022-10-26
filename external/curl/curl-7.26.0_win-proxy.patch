@@ -12,18 +12,18 @@
 --- curl-7.26.0/lib/url.c
 +++ misc/build/curl-7.26.0/lib/url.c
 @@ -78,6 +78,10 @@
- bool curl_win32_idn_to_ascii(const char *in, char **out);
+ bool Curl_win32_idn_to_ascii(const char *in, char **out);
  #endif  /* USE_LIBIDN2 */
  
 +#ifdef _WIN32
 +#include <WinHttp.h>
 +#endif
 +
+ #include "doh.h"
  #include "urldata.h"
  #include "netrc.h"
- 
 @@ -4586,6 +4590,21 @@
- }
+ #ifndef CURL_DISABLE_PROXY
  
  #ifndef CURL_DISABLE_HTTP
 +#ifdef _WIN32
@@ -72,7 +72,7 @@
 +        }
 +      }
 +
-+      if(!check_noproxy(conn->host.name, no_proxy)) {
++      if(!Curl_check_noproxy(conn->host.name, no_proxy)) {
 +        /* Look for the http proxy setting */
 +        char *tok;
 +        char *saveptr;
