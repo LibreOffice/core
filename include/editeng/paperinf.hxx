@@ -25,6 +25,7 @@
 #include <tools/mapunit.hxx>
 #include <i18nutil/paper.hxx>
 #include <tools/gen.hxx>
+#include <basegfx/units/Size2DLWrap.hxx>
 #include <editeng/editengdllapi.h>
 
 // forward ---------------------------------------------------------------
@@ -42,6 +43,9 @@ public:
     static Paper    GetSvxPaper( const Size &rSize, MapUnit eUnit );
     static tools::Long     GetSloppyPaperDimension( tools::Long nSize );
     static OUString GetName( Paper ePaper );
+
+    static gfx::Size2DLWrap getPaperSize(Paper ePaper);
+    static gfx::Size2DLWrap getDefaultPaperSize();
 };
 
 // INLINE -----------------------------------------------------------------
