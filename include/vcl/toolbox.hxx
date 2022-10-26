@@ -270,7 +270,7 @@ public:
     virtual void        Select();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    void        MouseButtonDown2( const MouseEvent& rMEvt );
+    void        MouseButtonHover( const MouseEvent& rMEvt , const int nTempPos);
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
