@@ -39,6 +39,12 @@ Size SvxPaperInfo::GetPaperSize( Paper ePaper, MapUnit eUnit )
         : OutputDevice::LogicToLogic(aRet, MapMode(MapUnit::Map100thMM), MapMode(eUnit));
 }
 
+gfx::Size2DLWrap SvxPaperInfo::getPaperSize(Paper ePaper)
+{
+    PaperInfo aInfo(ePaper);
+    return { gfx::Length::hmm(aInfo.getWidth()), gfx::Length::hmm(aInfo.getHeight()) };
+}
+
 /*------------------------------------------------------------------------
  Description:   Return the paper size of the printer, aligned to our
                 own sizes. If no Printer is set in the system, A4 portrait
@@ -106,6 +112,12 @@ Size SvxPaperInfo::GetDefaultPaperSize( MapUnit eUnit )
     return eUnit == MapUnit::Map100thMM
         ? aRet
         : OutputDevice::LogicToLogic(aRet, MapMode(MapUnit::Map100thMM), MapMode(eUnit));
+}
+
+gfx::Size2DLWrap SvxPaperInfo::getDefaultPaperSize()
+{
+    PaperInfo aInfo(PaperInfo::getSystemDefaultPaper());
+    return { gfx::Length::hmm(aInfo.getWidth()), gfx::Length::hmm(aInfo.getHeight()) };
 }
 
 /*------------------------------------------------------------------------
