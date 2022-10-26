@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_vml, \
     cppu \
     oox \
     sal \
+    subsequenttest \
     test \
     unotest \
     utl \
