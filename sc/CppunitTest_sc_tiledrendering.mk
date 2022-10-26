@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering, \
     sc \
     scfilt \
     scui \
+    subsequenttest \
     test \
     unotest \
     $(call gb_Helper_optional,SCRIPTING, \
