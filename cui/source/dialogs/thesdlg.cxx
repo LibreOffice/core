@@ -165,8 +165,8 @@ void SvxThesaurusDialog::LookUp_Impl()
     m_xAlternativesCT->set_visible(m_bWordFound);
     m_xNotFound->set_visible(!m_bWordFound);
 
-    if (m_bWordFound)
-        Application::PostUserEvent(LINK(this, SvxThesaurusDialog, SelectFirstHdl_Impl));
+    if (m_bWordFound && !m_nSelectFirstEvent)
+        m_nSelectFirstEvent = Application::PostUserEvent(LINK(this, SvxThesaurusDialog, SelectFirstHdl_Impl));
 
     if (m_xWordCB->find_text(aText) == -1)
         m_xWordCB->append_text(aText);
@@ -217,13 +217,15 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, weld::TreeView&,
 
     //! workaround to set the selection since calling SelectEntryPos within
     //! the double click handler does not work
-    Application::PostUserEvent(LINK(this, SvxThesaurusDialog, SelectFirstHdl_Impl));
+    if (!m_nSelectFirstEvent)
+        m_nSelectFirstEvent = Application::PostUserEvent(LINK(this, SvxThesaurusDialog, SelectFirstHdl_Impl));
 
     return true;
 }
 
 IMPL_LINK_NOARG(SvxThesaurusDialog, SelectFirstHdl_Impl, void *, void)
 {
+    m_nSelectFirstEvent = nullptr;
     if (m_xAlternativesCT->n_children() >= 2)
     {
         m_xAlternativesCT->select(1);  // pos 0 is a 'header' that is not selectable
@@ -249,6 +251,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     , m_xReplaceEdit(m_xBuilder->weld_entry("replaceed"))
     , m_xLangLB(m_xBuilder->weld_combo_box("langcb"))
     , m_xReplaceBtn(m_xBuilder->weld_button("ok"))
+    , m_nSelectFirstEvent(nullptr)
 {
     m_aModifyIdle.SetInvokeHandler( LINK( this, SvxThesaurusDialog, ModifyTimer_Hdl ) );
     m_aModifyIdle.SetPriority( TaskPriority::LOWEST );
@@ -316,6 +319,11 @@ SvxThesaurusDialog::SvxThesaurusDialog(
 
 SvxThesaurusDialog::~SvxThesaurusDialog()
 {
+    if (m_nSelectFirstEvent)
+    {
+        Application::RemoveUserEvent(m_nSelectFirstEvent);
+        m_nSelectFirstEvent = nullptr;
+    }
 }
 
 IMPL_LINK_NOARG(SvxThesaurusDialog, ReplaceBtnHdl_Impl, weld::Button&, void)

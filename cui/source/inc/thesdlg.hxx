@@ -26,6 +26,8 @@
 #include <memory>
 #include <stack>
 
+struct ImplSVEvent;
+
 class SvxThesaurusDialog : public SfxDialogController
 {
     Idle                    m_aModifyIdle;
@@ -43,6 +45,7 @@ class SvxThesaurusDialog : public SfxDialogController
     std::unique_ptr<weld::Entry> m_xReplaceEdit;
     std::unique_ptr<weld::ComboBox> m_xLangLB;
     std::unique_ptr<weld::Button> m_xReplaceBtn;
+    ImplSVEvent* m_nSelectFirstEvent;
 
 public:
     virtual ~SvxThesaurusDialog() override;
