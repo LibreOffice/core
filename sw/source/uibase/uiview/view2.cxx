@@ -1815,19 +1815,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case FN_STAT_ACCESSIBILITY_CHECK:
             {
-                if (rShell.GetDoc()->getOnlineAccessibilityCheck())
+                std::unique_ptr<sw::OnlineAccessibilityCheck> const& rOnlineAccessibilityCheck = rShell.GetDoc()->getOnlineAccessibilityCheck();
+                if (rOnlineAccessibilityCheck)
                 {
-                    auto nIssues = rShell.GetDoc()->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues();
-                    OUString aString;
-                    if (nIssues > 0)
-                    {
-                        aString = u"Issues: " + OUString::number(nIssues);
-                    }
-                    else
-                    {
-                        aString = u"No Issues";
-                    }
-                    rSet.Put(SfxStringItem(FN_STAT_ACCESSIBILITY_CHECK, aString));
+                    sal_Int32 nIssues = rOnlineAccessibilityCheck->getNumberOfAccessibilityIssues();
+                    rSet.Put(SfxInt32Item(FN_STAT_ACCESSIBILITY_CHECK, nIssues));
                 }
             }
             break;

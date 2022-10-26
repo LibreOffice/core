@@ -15,14 +15,17 @@ namespace sw
 {
 class AccessibilityStatusBarControl final : public SfxStatusBarControl
 {
+    sal_Int32 mnIssues;
+
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 
     AccessibilityStatusBarControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
     virtual ~AccessibilityStatusBarControl() override;
 
-    virtual void StateChangedAtStatusBarControl(sal_uInt16 nSID, SfxItemState eState,
-                                                const SfxPoolItem* pState) override;
+    void StateChangedAtStatusBarControl(sal_uInt16 nSID, SfxItemState eState,
+                                        const SfxPoolItem* pState) override;
+    void Paint(const UserDrawEvent& rEvent) override;
 };
 
 } // end sw

@@ -5974,7 +5974,7 @@ SfxStringItem StateWordCount FN_STAT_WORDCOUNT
     GroupId = SfxGroupId::View;
 ]
 
-SfxStringItem StateAccessibilityCheck FN_STAT_ACCESSIBILITY_CHECK
+SfxInt32Item StateAccessibilityCheck FN_STAT_ACCESSIBILITY_CHECK
 
 [
     AutoUpdate = FALSE,

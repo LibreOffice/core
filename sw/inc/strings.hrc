@@ -1095,6 +1095,7 @@
 #define STR_BOOKCTRL_HINT                       NC_("STR_BOOKCTRL_HINT", "Page number in document. Click to open Go to Page dialog or right-click for bookmark list.")
 #define STR_BOOKCTRL_HINT_EXTENDED              NC_("STR_BOOKCTRL_HINT_EXTENDED", "Page number in document (Page number on printed document). Click to open Go to Page dialog.")
 #define STR_TMPLCTRL_HINT                       NC_("STR_TMPLCTRL_HINT", "Page Style. Right-click to change style or click to open Style dialog.")
+#define STR_ACCESSIBILITY_CHECK_HINT            NC_("STR_ACCESSIBILITY_CHECK_HINT", "Status of the accessibility check.")
 
 // Strings for textual attributes.
 #define STR_DROP_OVER                           NC_("STR_DROP_OVER", "Drop Caps over")
