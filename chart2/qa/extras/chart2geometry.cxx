@@ -209,7 +209,6 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify the content of the opacity definition
-    loadFromURL(u"pptx/tdf128345_ChartArea_CG_TS.pptx");
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -261,7 +260,6 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    loadFromURL(u"pptx/tdf128345_ChartWall_CS_TG.pptx");
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -312,7 +310,6 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     const OUString sOUOpacityName
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
-    loadFromURL(u"pptx/tdf128345_Legend_CS_TG_axial.pptx");
     // Verify content of the opacity definition
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);

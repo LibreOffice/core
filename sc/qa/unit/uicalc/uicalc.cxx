@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
     CPPUNIT_ASSERT(pDoc);
 
     // Save the document
-    utl::TempFileNamed aTempFile = save("calc8");
+    saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -186,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     insertStringToCell(*pModelObj, "D3", u"FISHY");
 
     // Save the document
-    utl::TempFileNamed aTempFile = save("calc8");
+    utl::TempFileNamed aTempFile = saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     insertStringToCell(*pModelObj, "B1", u"2");
 
     // Save the document
-    utl::TempFileNamed aTempFile = save("calc8");
+    utl::TempFileNamed aTempFile = saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     insertStringToCell(*pModelObj, "A1", u"50");
 
     // Save the document
-    utl::TempFileNamed aTempFile = save("calc8");
+    utl::TempFileNamed aTempFile = saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");

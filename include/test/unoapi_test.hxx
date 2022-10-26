@@ -37,6 +37,7 @@ public:
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
     utl::TempFileNamed save(const OUString& rFilter);
+    utl::TempFileNamed saveAndClose(const OUString& rFilter);
     void saveAndReload(const OUString& rFilter);
 
 protected:

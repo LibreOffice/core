@@ -1127,8 +1127,6 @@ void Chart2ExportTest2::testTdf127792()
         assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val",
                     "between");
     }
-
-    loadFromURL(u"docx/MSO_axis_position.docx");
     {
         xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart2", "Office Open XML Text");
         CPPUNIT_ASSERT(pXmlDoc);

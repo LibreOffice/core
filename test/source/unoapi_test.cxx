@@ -87,8 +87,6 @@ utl::TempFileNamed UnoApiTest::save(const OUString& rFilter)
     uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-    mxComponent->dispose();
-    mxComponent.clear();
 
     if (!mbSkipValidation)
     {
@@ -119,9 +117,19 @@ utl::TempFileNamed UnoApiTest::save(const OUString& rFilter)
     return aTempFile;
 }
 
-void UnoApiTest::saveAndReload(const OUString& rFilter)
+utl::TempFileNamed UnoApiTest::saveAndClose(const OUString& rFilter)
 {
     utl::TempFileNamed aTempFile = save(rFilter);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    return aTempFile;
+}
+
+void UnoApiTest::saveAndReload(const OUString& rFilter)
+{
+    utl::TempFileNamed aTempFile = saveAndClose(rFilter);
 
     mxComponent = loadFromDesktop(aTempFile.GetURL());
 }
