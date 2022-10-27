@@ -119,7 +119,6 @@ public:
     }
 
     uno::Sequence < OUString > getImpressChartColumnDescriptions( std::u16string_view pDir, const char* pName );
-    std::u16string_view getFileExtension( std::u16string_view rFileName );
 
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( std::u16string_view pDir, const char* pName );
 
