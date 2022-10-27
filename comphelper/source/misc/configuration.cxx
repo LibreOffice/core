@@ -128,7 +128,11 @@ public:
         std::scoped_lock aGuard(gMutex);
         gPropertyCache.clear();
     }
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    {
+        std::scoped_lock aGuard(gMutex);
+        gPropertyCache.clear();
+    }
 };
 
 } // namespace
