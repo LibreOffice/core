@@ -519,7 +519,6 @@ Fraction Fraction::MakeFraction( tools::Long nN1, tools::Long nN2, tools::Long n
         bFail = checked_multiply_by(a, b);
     }
 
-    rational_ReduceInaccurate(a, /*nSignificantBits*/32);
     return Fraction(a.numerator(), a.denominator());
 }
 
