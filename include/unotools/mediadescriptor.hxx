@@ -86,6 +86,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static constexpr OUStringLiteral PROP_REFERRER = u"Referer";
         static constexpr OUStringLiteral PROP_REPLACEABLE = u"Replaceable";
         static constexpr OUStringLiteral PROP_SALVAGEDFILE = u"SalvagedFile";
+        static constexpr OUStringLiteral PROP_SILENT = u"Silent";
         static constexpr OUStringLiteral PROP_STATUSINDICATOR = u"StatusIndicator";
         static constexpr OUStringLiteral PROP_STREAM = u"Stream";
         static constexpr OUStringLiteral PROP_STREAMFOROUTPUT = u"StreamForOutput";

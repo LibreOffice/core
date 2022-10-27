@@ -2596,7 +2596,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             comphelper::makePropertyValue("FilterOptions", sFilterOptions),
             comphelper::makePropertyValue("InteractionHandler", xInteraction),
             comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode),
-            comphelper::makePropertyValue("AsTemplate", false)
+            comphelper::makePropertyValue("AsTemplate", false),
+            comphelper::makePropertyValue("Silent", !aBatch.isEmpty())
         };
 
         /* TODO

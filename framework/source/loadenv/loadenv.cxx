@@ -295,6 +295,14 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
         !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false) &&
         !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
 
+    if( comphelper::LibreOfficeKit::isActive() &&
+        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_SILENT, false))
+    {
+        rtl::Reference<QuietInteraction> pQuietInteraction = new QuietInteraction();
+        uno::Reference<task::XInteractionHandler> xInteractionHandler(pQuietInteraction);
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] <<= xInteractionHandler;
+    }
+
     initializeUIDefaults(m_xContext, m_lMediaDescriptor, bUIMode, &m_pQuietInteraction);
 
     start();
