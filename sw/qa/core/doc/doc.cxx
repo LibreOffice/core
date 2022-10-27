@@ -425,6 +425,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteRedline)
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testHeaderFooterDelete)
+{
+    // Given a document with bookmarks in header/footers:
+    // When importing that document:
+    // Then make sure that we don't crash:
+    // Without the accompanying fix in place, this test would have crashed, an invalidated iterator
+    // was used in sw::mark::MarkManager::deleteMarks().
+    createSwDoc(DATA_DIRECTORY, "header-footer-delete.docx");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

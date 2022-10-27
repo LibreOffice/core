@@ -1219,6 +1219,21 @@ namespace sw::mark
         }
     };
 
+    struct LazyDdeBookmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
+    {
+        std::unique_ptr<DdeBookmark> m_pDdeBookmark;
+        SwDoc& m_rDoc;
+        LazyDdeBookmarkDeleter(DdeBookmark *const pDdeBookmark, SwDoc& rDoc)
+            : m_pDdeBookmark(pDdeBookmark), m_rDoc(rDoc)
+        {
+            assert(pDdeBookmark);
+        }
+        virtual ~LazyDdeBookmarkDeleter() override
+        {
+            m_pDdeBookmark->DeregisterFromDoc(m_rDoc);
+        }
+    };
+
     }
 
     std::unique_ptr<IDocumentMarkAccess::ILazyDeleter>
@@ -1292,21 +1307,7 @@ namespace sw::mark
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(pMark);
         if (pDdeBookmark)
         {
-            pDdeBookmark->DeregisterFromDoc(m_rDoc);
-
-            // Update aI, possibly a selection listener invalidated the iterators of m_vAllMarks.
-            assureSortedMarkContainers();
-            auto [it, endIt] = equal_range(m_vAllMarks.begin(), m_vAllMarks.end(),
-                                           pMark->GetMarkStart(), CompareIMarkStartsBefore());
-            for (; it != endIt; ++it)
-            {
-                if (*it == pMark)
-                {
-                    aI = m_vAllMarks.begin();
-                    std::advance(aI, std::distance<container_t::const_iterator>(aI, it));
-                    break;
-                }
-            }
+            ret.reset(new LazyDdeBookmarkDeleter(dynamic_cast<DdeBookmark*>(pMark), m_rDoc));
         }
 
         m_vAllMarks.erase(aI);
