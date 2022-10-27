@@ -9486,7 +9486,6 @@ sd/inc/undo/undomanager.hxx
 sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
-sd/qa/unit/export-tests-ooxml2.cxx
 sd/qa/unit/export-tests.cxx
 sd/qa/unit/filters-test.cxx
 sd/qa/unit/import-tests.cxx
