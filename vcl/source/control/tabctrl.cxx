@@ -1131,19 +1131,25 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
     {
         const bool bPaneWithHeader = mbShowTabs && rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::TabPaneWithHeader);
         tools::Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
-        if (bPaneWithHeader)
+
+        if (mpTabCtrlData->maItemList.size())
         {
-            aRect.SetTop(0);
-            if (mpTabCtrlData->maItemList.size())
+            tools::Long nLeft = LONG_MAX;
+            tools::Long nRight = 0;
+            for (const auto &item : mpTabCtrlData->maItemList)
             {
-                tools::Long nRight = 0;
-                for (const auto &item : mpTabCtrlData->maItemList)
-                    if (item.m_bVisible)
-                        nRight = item.maRect.Right();
-                assert(nRight);
-                aHeaderRect.SetRight(nRight);
+                if (!item.m_bVisible)
+                    continue;
+                nRight = std::max(nRight, item.maRect.Right());
+                nLeft = std::min(nLeft, item.maRect.Left());
             }
+            aHeaderRect.SetLeft(nLeft);
+            aHeaderRect.SetRight(nRight);
         }
+
+        if (bPaneWithHeader)
+            aRect.SetTop(0);
+
         const TabPaneValue aTabPaneValue(aHeaderRect, pCurItem ? pCurItem->maRect : tools::Rectangle());
 
         ControlState nState = ControlState::ENABLED;
