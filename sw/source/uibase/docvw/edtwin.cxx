@@ -2784,7 +2784,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 /**
  * MouseEvents
  */
-void SwEditWin::RstMBDownFlags()
+void SwEditWin::ResetMouseButtonDownFlags()
 {
     // Not on all systems a MouseButtonUp is used ahead
     // of the modal dialog (like on WINDOWS).
@@ -3382,7 +3382,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             switch ( rSh.GetSelectionType() & ~SelectionType( SelectionType::FontWork | SelectionType::ExtrudedCustomShape ) )
                             {
                             case SelectionType::Graphic:
-                                RstMBDownFlags();
+                                ResetMouseButtonDownFlags();
                                 if (!comphelper::LibreOfficeKit::isActive())
                                 {
                                     GetView().GetViewFrame()->GetBindings().Execute(
@@ -3393,12 +3393,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                             // double click on OLE object --> OLE-InPlace
                             case SelectionType::Ole:
-                                RstMBDownFlags();
+                                ResetMouseButtonDownFlags();
                                 rSh.LaunchOLEObj();
                                 return;
 
                             case SelectionType::Frame:
-                                RstMBDownFlags();
+                                ResetMouseButtonDownFlags();
                                 if (!comphelper::LibreOfficeKit::isActive())
                                 {
                                     GetView().GetViewFrame()->GetBindings().Execute(
@@ -3408,7 +3408,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 return;
 
                             case SelectionType::DrawObject:
-                                RstMBDownFlags();
+                                ResetMouseButtonDownFlags();
                                 EnterDrawTextMode(aDocPos);
                                 if ( auto pSwDrawTextShell = dynamic_cast< SwDrawTextShell *>(  m_rView.GetCurShell() )  )
                                     pSwDrawTextShell->Init();
@@ -3430,7 +3430,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             (nullptr != (pField = rSh.GetCurField(true)) ||
                               ( bFootnote = rSh.GetCurFootnote() )        ) )
                         {
-                            RstMBDownFlags();
+                            ResetMouseButtonDownFlags();
                             if( bFootnote )
                                 GetView().GetViewFrame()->GetBindings().Execute( FN_EDIT_FOOTNOTE );
                             else
@@ -3491,7 +3491,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             IFieldmark *pFieldBM = const_cast< IFieldmark* > ( aContentAtPos.aFnd.pFieldmark );
                             if ( pFieldBM->GetFieldname( ) == ODF_FORMDROPDOWN || pFieldBM->GetFieldname( ) == ODF_FORMDATE )
                             {
-                                RstMBDownFlags();
+                                ResetMouseButtonDownFlags();
                                 rSh.getIDocumentMarkAccess()->ClearFieldActivation();
                                 GetView().GetViewFrame()->GetBindings().Execute(SID_FM_CTL_PROPERTIES);
                                 return;
