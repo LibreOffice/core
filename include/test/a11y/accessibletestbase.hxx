@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/window.hxx>
 
 #include <rtl/ustring.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -128,6 +129,104 @@ protected:
         CPPUNIT_ASSERT(menuBar.is());
         return activateMenuItem(menuBar, names...);
     }
+
+    /* Dialog handling */
+    class Dialog
+    {
+        friend class AccessibleTestBase;
+
+    private:
+        VclPtr<vcl::Window> mxWindow;
+        bool mbAutoClose;
+
+        Dialog(vcl::Window* pWindow, bool bAutoClose = true);
+
+    public:
+        virtual ~Dialog();
+
+        explicit operator bool() const { return mxWindow && !mxWindow->isDisposed(); }
+        bool operator!() const { return !bool(*this); }
+
+        void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }
+
+        css::uno::Reference<css::accessibility::XAccessible> getAccessible() const
+        {
+            return mxWindow ? mxWindow->GetAccessible() : nullptr;
+        }
+
+        bool close(sal_Int32 result = VclResponseType::RET_CANCEL);
+    };
+
+    class DialogWaiter
+    {
+    public:
+        virtual ~DialogWaiter() {}
+
+        /**
+         * @brief Waits for the associated dialog to close
+         * @param nTimeoutMs Maximum delay to wait the dialog for
+         * @returns @c true if the dialog closed, @c false if timeout was reached
+         *
+         * @throws css::uno::RuntimeException if an unexpected dialog poped up instead of the
+         *         expected one.
+         * @throws Any exception that the user callback supplied to awaitDialog() might have thrown.
+         */
+        virtual bool waitEndDialog(sal_uInt64 nTimeoutMs = 3000) = 0;
+    };
+
+    /**
+     * @brief Helper to call user code when a given dialog opens
+     * @param name The title of the dialog window to wait for
+     * @param callback The user code to run when the given dialog opens
+     * @param bAutoClose Whether to automatically cancel the dialog after the user code finished, if
+     *                   the dialog is still there.  You should leave this to @c true unless you
+     *                   know exactly what you are doing, see below.
+     * @returns A @c DialogWaiter wrapper on which call waitEndDialog() after having triggered the
+     *          dialog in some way.
+     *
+     * This function makes it fairly easy and safe to execute code once a dialog pops up:
+     * @code
+     * auto waiter = awaitDialog(u"Special Characters", [this](Dialog &dialog) {
+     *     // for example, something like this:
+     *     // something();
+     *     // CPPUNIT_ASSERT(somethingElse);
+     * });
+     * CPPUNIT_ASSERT(activateMenuItem(u"Some menu", u"Some Item Triggering a Dialog..."));
+     * CPPUNIT_ASSERT(waiter->waitEndDialog());
+     * @endcode
+     *
+     * @note The user code might actually be executed before DialogWaiter::waitEndDialog() is
+     *       called.  It is actually likely to be called at the time the call that triggers the
+     *       dialog happens.  However, as letting an exception slip in a event handler is likely to
+     *       cause problems, exceptions are forwarded to the DialogWaiter::waitEndDialog() call.
+     *       However, note that you cannot rely on something like this:
+     *       @code
+     *       int foo = 0;
+     *       auto waiter = awaitDialog(u"Some Dialog", [&foo](Dialog&) {
+     *           CPPUNIT_ASSERT_EQUAL(1, foo);
+     *       });
+     *       CPPUNIT_ASSERT(activateMenuItem(u"Some menu", u"Some Item Triggering a Dialog..."));
+     *       foo = 1; // here, the callback likely already ran as a result of the
+     *                // Scheduler::ProcessEventsToIdle() call that activateMenuItem() did.
+     *       CPPUNIT_ASSERT(waiter->waitEndDialog());
+     *       @endcode
+     *
+     * @warning You should almost certainly always leave @p bAutoClose to @c true. If it is set to
+     *          @c false, you have to take extreme care:
+     *          - The dialog will not be canceled if the user code raises an exception.
+     *          - If the dialog is run through Dialog::Execute(), control won't return to the test
+     *            body until the dialog is closed.  This means that the only ways to execute code
+     *            until then is a separate thread or via code dispatched by the main loop.
+     *            Thus, you have to make sure you DO close the dialog some way or another yourself
+     *            in order for the test code to terminate at some point.
+     *          - If the dialog doesn't use Dialog::Execute() but is rather similar to a second
+     *            separate window (e.g. non-modal), you might still have to close the dialog before
+     *            closing the test document is possible without a CloseVetoException -- which might
+     *            badly break the test run.
+     */
+    static std::shared_ptr<DialogWaiter> awaitDialog(const std::u16string_view name,
+                                                     std::function<void(Dialog&)> callback,
+                                                     bool bAutoClose = true);
 
 public:
     virtual void setUp() override;

@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,test,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,test,\
+    CppunitTest_test_a11y \
     CppunitTest_test_xpath \
 ))
 

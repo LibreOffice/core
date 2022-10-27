@@ -16,6 +16,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -23,9 +24,12 @@
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <vcl/scheduler.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
 
@@ -229,6 +233,158 @@ bool test::AccessibleTestBase::activateMenuItem(
         return true;
     }
     return false;
+}
+
+/* Dialog handling */
+
+test::AccessibleTestBase::Dialog::Dialog(vcl::Window* pWindow, bool bAutoClose)
+    : mxWindow(pWindow)
+    , mbAutoClose(bAutoClose)
+{
+    CPPUNIT_ASSERT(pWindow);
+    CPPUNIT_ASSERT(pWindow->IsDialog());
+}
+
+test::AccessibleTestBase::Dialog::~Dialog()
+{
+    if (mbAutoClose)
+        close();
+}
+
+bool test::AccessibleTestBase::Dialog::close(sal_Int32 result)
+{
+    if (mxWindow && !mxWindow->isDisposed())
+    {
+        uno::Reference<awt::XDialog2> xDialog2(mxWindow->GetComponentInterface(),
+                                               uno::UNO_QUERY_THROW);
+        xDialog2->endDialog(result);
+        return mxWindow->isDisposed();
+    }
+    return true;
+}
+
+std::shared_ptr<test::AccessibleTestBase::DialogWaiter>
+test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
+                                      std::function<void(Dialog&)> callback, bool bAutoClose)
+{
+    /* Helper class to wait on a dialog to pop up and to close, running user code between the
+     * two.  This has to work both for "other window"-style dialogues (non-modal), as well as
+     * for modal dialogues using Dialog::Execute() (which runs a nested main loop, hence
+     * blocking our test flow execution.
+     * The approach here is to wait on the WindowActivate event for the dialog, and run the
+     * test code in there. Then, close the dialog if not already done, resuming normal flow to
+     * the caller. */
+    class ListenerHelper : public DialogWaiter
+    {
+        DialogCancelMode miPreviousDialogCancelMode;
+        Link<VclSimpleEvent&, void> mLink;
+        bool mbWaitingForDialog;
+        std::exception_ptr mpException;
+        std::u16string_view msName;
+        std::function<void(Dialog&)> mCallback;
+        bool mbAutoClose;
+
+    public:
+        virtual ~ListenerHelper()
+        {
+            Application::SetDialogCancelMode(miPreviousDialogCancelMode);
+            Application::RemoveEventListener(mLink);
+        }
+
+        ListenerHelper(const std::u16string_view& name, std::function<void(Dialog&)> callback,
+                       bool bAutoClose)
+            : mbWaitingForDialog(true)
+            , msName(name)
+            , mCallback(callback)
+            , mbAutoClose(bAutoClose)
+        {
+            mLink = LINK(this, ListenerHelper, eventListener);
+            Application::AddEventListener(mLink);
+
+            miPreviousDialogCancelMode = Application::GetDialogCancelMode();
+            Application::SetDialogCancelMode(DialogCancelMode::Off);
+        }
+
+    private:
+        // mimic IMPL_LINK inline
+        static void LinkStubeventListener(void* instance, VclSimpleEvent& event)
+        {
+            static_cast<ListenerHelper*>(instance)->eventListener(event);
+        }
+
+        void eventListener(VclSimpleEvent& event)
+        {
+            assert(mbWaitingForDialog);
+
+            if (event.GetId() != VclEventId::WindowActivate)
+                return;
+
+            auto pWin = static_cast<VclWindowEvent*>(&event)->GetWindow();
+
+            if (!pWin->IsDialog())
+                return;
+
+            mbWaitingForDialog = false;
+
+            // remove ourselves, we don't want to run again
+            Application::RemoveEventListener(mLink);
+
+            /* bind the dialog before checking its name so auto-close can kick in if anything
+             * fails/throws */
+            Dialog dialog(pWin, true);
+
+            /* The poping up dialog ought to be the right one, or something's fishy and
+             * we're bound to failure (e.g. waiting on a dialog that either will never come, or
+             * that will not run after the current one -- deadlock style) */
+            if (msName != pWin->GetText())
+            {
+                mpException = std::make_exception_ptr(css::uno::RuntimeException(
+                    "Unexpected dialog '" + pWin->GetText() + "' opened instead of the expected '"
+                    + msName + "'"));
+            }
+            else
+            {
+                std::cout << "found dialog, calling user callback" << std::endl;
+
+                // set the real requested auto close now we're just calling the user callback
+                dialog.setAutoClose(mbAutoClose);
+
+                try
+                {
+                    mCallback(dialog);
+                }
+                catch (...)
+                {
+                    mpException = std::current_exception();
+                }
+            }
+        }
+
+    public:
+        virtual bool waitEndDialog(sal_uInt64 nTimeoutMs) override
+        {
+            /* Usually this loop will actually never run at all because a previous
+             * Scheduler::ProcessEventsToIdle() would have triggered the dialog already, but we
+             * can't be sure of that or of delays, so be safe and wait with a timeout. */
+            if (mbWaitingForDialog)
+            {
+                Timer aTimer("wait for dialog");
+                aTimer.SetTimeout(nTimeoutMs);
+                aTimer.Start();
+                do
+                {
+                    Application::Yield();
+                } while (mbWaitingForDialog && aTimer.IsActive());
+            }
+
+            if (mpException)
+                std::rethrow_exception(mpException);
+
+            return !mbWaitingForDialog;
+        }
+    };
+
+    return std::make_shared<ListenerHelper>(name, callback, bAutoClose);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
