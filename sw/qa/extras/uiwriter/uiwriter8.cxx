@@ -2375,6 +2375,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
     CPPUNIT_ASSERT(!sCharStyleName.isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf151462.odt");
+    //   xmlDocUniquePtr pLayout = parseLayoutDump();
+    dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // tdf#151462 - without the fix in place, there would be just the first index entry
+    assertXPath(pLayout,
+                "/root/page[1]/body/txt[2]/anchored/fly/section/txt[1]/SwParaPortion/"
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", "sub one");
+    assertXPath(pLayout,
+                "/root/page[1]/body/txt[2]/anchored/fly/section/txt[2]/SwParaPortion/"
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", "sub two");
+    assertXPath(pLayout,
+                "/root/page[1]/body/txt[2]/anchored/fly/section/txt[3]/SwParaPortion/"
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", "sub three");
+
+    // tdf#151462 - without the fix in place, there would be just the first index entry
+    assertXPath(pLayout,
+                "/root/page[1]/body/txt[6]/anchored/fly/section/txt[1]/SwParaPortion/"
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", "another sub one");
+    assertXPath(pLayout,
+                "/root/page[1]/body/txt[6]/anchored/fly/section/txt[2]/SwParaPortion/"
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", "another sub two");
+    assertXPath(pLayout,
+                "/root/page[1]/body/txt[6]/anchored/fly/section/txt[3]/SwParaPortion/"
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", "another sub three");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
