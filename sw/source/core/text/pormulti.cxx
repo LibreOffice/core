@@ -1040,16 +1040,25 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             if (startPos.first->GetIndex() == pNode->GetIndex())
             {
                 iterAtStartOfNode.Assign(iter);
-                pNodeRotateItem = pNode->GetSwAttrSet().GetItemIfSet(RES_CHRATR_ROTATE);
-                if (pNodeRotateItem && pNodeRotateItem->GetValue())
+                if (SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_ROTATE, true, &pNodeRotateItem) &&
+                    pNodeRotateItem->GetValue())
                 {
                     pActiveRotateItem = pNodeRotateItem;
                 }
-                pNodeTwoLinesItem = startPos.first->GetSwAttrSet().GetItemIfSet(
-                            RES_CHRATR_TWO_LINES);
-                if (pNodeTwoLinesItem && pNodeTwoLinesItem->GetValue())
+                else
+                {
+                    pNodeRotateItem = nullptr;
+                }
+                if (SfxItemState::SET == startPos.first->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem) &&
+                    pNodeTwoLinesItem->GetValue())
                 {
                     pActiveTwoLinesItem = pNodeTwoLinesItem;
+                }
+                else
+                {
+                    pNodeTwoLinesItem = nullptr;
                 }
             }
         }
