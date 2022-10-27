@@ -721,6 +721,32 @@ bool NatNumTakesParameters(sal_Int16 nNum)
 }
 }
 
+// is there a 3-letter bank code in NatNum12 param (but not
+// followed by an equal mark, like in the date code "NNN=")?
+static bool lcl_isNatNum12Currency( const OUString& sParam )
+{
+    sal_Int32 nUpper = 0;
+    sal_Int32 nLen = sParam.getLength();
+    for (sal_Int32 n = 0; n < nLen; ++n)
+    {
+        sal_Unicode c = sParam[n];
+        if ( 'A' <= c && c <= 'Z' )
+        {
+            ++nUpper;
+        }
+        else if ( c == ' ' && nUpper == 3 && (n == 3 || sParam[n - 4] == ' ') )
+        {
+            return true;
+        }
+        else
+        {
+            nUpper = 0;
+        }
+    }
+
+    return nUpper == 3 && (nLen == 3 || sParam[nLen - 4] == ' ');
+}
+
 SvNumberformat::SvNumberformat(OUString& rString,
                                ImpSvNumberformatScan* pSc,
                                ImpSvNumberInputScan* pISc,
@@ -938,6 +964,12 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         {
                             if (sParams.isEmpty())
                                 sParams = "cardinal"; // default NatNum12 format is "cardinal"
+                            else if (sParams.indexOf("CURRENCY") >= 0)
+                                sParams = sParams.replaceAll("CURRENCY",
+                                    GetFormatter().GetLocaleData()->getCurrBankSymbol());
+                            // compatible (old) currency format
+                            else if (sParams.indexOf("CCC") >= 0)
+                                sParams = sParams.replaceAll("CCC", rScan.GetCurAbbrev());
                             NumFor[nIndex].SetNatNumParams(sParams);
                             sStr += " " + sParams;
                         }
@@ -1176,7 +1208,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         // type check
                         if (nIndex == 0)
                         {
-                            eType = NumFor[nIndex].Info().eScannedType;
+                            if ( NumFor[nIndex].GetNatNum().GetNatNum() == 12 &&
+                                    lcl_isNatNum12Currency(NumFor[nIndex].GetNatNum().GetParams()) )
+                                eType = SvNumFormatType::CURRENCY;
+                            else
+                                eType = NumFor[nIndex].Info().eScannedType;
                         }
                         else if (nIndex == 3)
                         {   // #77026# Everything recognized IS text

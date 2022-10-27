@@ -699,7 +699,23 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
                 case LOWER:
                     return xCharClass->toLower(aStr, 0, aStr.getLength(), aLocale);
                 case TITLE:
-                    return xCharClass->toTitle(aStr, 0, aStr.getLength(), aLocale);
+                {
+                    if ( rLocale.Language == "en" )
+                    {
+                        // title case is common in English, so fix bugs of toTitle():
+                        // not "One Dollar *And* *Twenty-two* Cents", but
+                        // "One Dollar *and* *Twenty-Two* Cents".
+
+                        // Add spaces after hyphens to separate the elements of the
+                        // hyphenated compound words temporarily, allowing their
+                        // capitalization by toTitle()
+                        aStr = aStr.replaceAll("-", "- ");
+                        aStr = xCharClass->toTitle(aStr, 0, aStr.getLength(), aLocale);
+                        return aStr.replaceAll("- ", "-").replaceAll(" And ", " and ");
+                    }
+                    else
+                        return xCharClass->toTitle(aStr, 0, aStr.getLength(), aLocale);
+               }
             }
         }
         else

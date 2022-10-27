@@ -403,6 +403,65 @@ class formatCell(UITestCase):
                 xspinDegrees.executeAction("UP", tuple())
                 self.assertEqual(get_state_as_dict(xspinDegrees)["Text"].replace('°', ''), "0")
 
+    def test_format_cell_spell_out_numbering(self):
+        #numberingformatpage.ui
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #select cell A1
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            #format - cell
+            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")  #tab Numbers
 
+                formatlb = xDialog.getChild("formatlb")
+                xformatted = xDialog.getChild("formatted")
+
+                # NatNum12 number formats
+
+                entry = formatlb.getChild("6")
+                self.assertEqual(get_state_as_dict(entry)["Text"], "ONE HUNDRED")
+                entry.executeAction("SELECT", tuple())
+                self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 upper cardinal]0")
+
+                entry = formatlb.getChild("7")
+                self.assertEqual(get_state_as_dict(entry)["Text"], "One Hundred")
+                entry.executeAction("SELECT", tuple())
+                self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 title cardinal]0")
+
+                entry = formatlb.getChild("8")
+                self.assertEqual(get_state_as_dict(entry)["Text"], "One hundred")
+                entry.executeAction("SELECT", tuple())
+                self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 capitalize cardinal]0")
+
+                entry = formatlb.getChild("9")
+                self.assertEqual(get_state_as_dict(entry)["Text"], "one hundred")
+                entry.executeAction("SELECT", tuple())
+                self.assertEqual(get_state_as_dict(xformatted)["Text"], "[NatNum12 cardinal]0")
+
+                # NatNum12 en_US currency formats
+
+                categorylb = xDialog.getChild("categorylb")
+                entry = categorylb.getChild("4") # Currency
+                entry.executeAction("SELECT", tuple())
+
+                currencies = ["ONE U.S. DOLLAR AND TWENTY CENTS", "ONE U.S. DOLLAR", "One U.S. Dollar and Twenty Cents", "One U.S. Dollar"]
+                formats = ["[NatNum12 upper USD]0.00", "[NatNum12 upper USD]0", "[NatNum12 title USD]0.00", "[NatNum12 title USD]0"]
+
+                # handle different order of the items
+                numCurrency = 0
+                numFormat = 0
+                for i in formatlb.getChildren():
+                    entry = formatlb.getChild(i)
+                    if get_state_as_dict(entry)["Text"] in currencies:
+                        numCurrency = numCurrency + 1
+                    entry.executeAction("SELECT", tuple())
+                    xformatted = xDialog.getChild("formatted")
+                    if get_state_as_dict(xformatted)["Text"] in formats:
+                        numFormat = numFormat + 1
+
+                self.assertEqual(4, numCurrency)
+                self.assertEqual(4, numFormat)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -546,8 +546,7 @@ short SvxNumberFormatShell::FillEntryList_Impl(std::vector<OUString>& rList)
     else
     {
         FillEListWithStd_Impl(rList, nCurCategory, nSelPos, true);
-        if (nCurCategory != SvNumFormatType::CURRENCY)
-            nSelPos = FillEListWithUsD_Impl(rList, nCurCategory, nSelPos);
+        nSelPos = FillEListWithUsD_Impl(rList, nCurCategory, nSelPos);
         if (nCurCategory == SvNumFormatType::DATE || nCurCategory == SvNumFormatType::TIME)
             nSelPos = FillEListWithDateTime_Impl(rList, nSelPos, true);
     }
@@ -1038,6 +1037,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl(std::vector<OUString>& rList,
 
     const bool bCatDefined = (eCategory == SvNumFormatType::DEFINED);
     const bool bCategoryMatch = (eCategory != SvNumFormatType::ALL && !bCatDefined);
+    const bool bNatNumCurrency = (eCategory == SvNumFormatType::CURRENCY);
 
     for (const auto& rEntry : *pCurFmtTable)
     {
@@ -1057,6 +1057,9 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl(std::vector<OUString>& rList,
         if (!IsRemoved_Impl(nKey))
         {
             aNewFormNInfo = pNumEntry->GetFormatstring();
+
+            if (bNatNumCurrency && (aNewFormNInfo.indexOf("NatNum12") < 0 || bUserDefined))
+                continue; // for; extra CURRENCY must be not user-defined NatNum12 type
 
             bool bAdd = true;
             if (pNumEntry->HasNewCurrency())
@@ -1315,7 +1318,10 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     if (nEntry < 0)
         return OUString();
 
-    if (!aCurrencyFormatList.empty())
+    if (!aCurrencyFormatList.empty()
+        && (!pFormatter->GetEntry(aCurEntryList[nEntry])
+            || pFormatter->GetEntry(aCurEntryList[nEntry])->GetFormatstring().indexOf("NatNum12")
+                   < 0))
     {
         if (aCurrencyFormatList.size() > o3tl::make_unsigned(nEntry))
             return aCurrencyFormatList[nEntry];

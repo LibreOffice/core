@@ -1665,6 +1665,16 @@ OUString SvxNumberFormatTabPage::GetExpColorString(
     }
     double fVal = fSvxNumValConst[i];
 
+    // use lower number for long NatNum12 transliteration
+    if ( ( CAT_CURRENCY == nTmpCatPos || CAT_NUMBER == nTmpCatPos ) &&
+             rFormatStr.indexOf("NatNum12") >= 0 )
+    {
+        if ( CAT_CURRENCY == nTmpCatPos )
+            fVal = 1.2;
+        else
+            fVal = 100; // show also title case for English: One Hundred
+    }
+
     OUString aPreviewString;
     pNumFmtShell->MakePrevStringFromVal( rFormatStr, aPreviewString, rpPreviewColor, fVal );
     return aPreviewString;

@@ -11,7 +11,7 @@ Quarter
 // sYAxisTitle
 Income (Ft)
 // nYAxisNumberFormat
-151
+159
 // nYAxisNumberType
 17
 // aColumnLabels.getLength()
