@@ -53,8 +53,4 @@
 #undef Yield
 #undef mciSetCommand
 
-#if !defined INCLUDED_POSTWIN_H && defined __cplusplus
-#define INCLUDED_POSTWIN_H
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
