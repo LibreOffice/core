@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <utility>
+#include <vcl/glyphitemcache.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -364,8 +365,11 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             if (!aDXArray.empty())
             {
+                const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+                    mpOutputDevice, aText, nPos, nLen);
                 mpOutputDevice->DrawTextArray(aStartPoint, aText, aDXArray,
-                                              rTextCandidate.getKashidaArray(), nPos, nLen);
+                                              rTextCandidate.getKashidaArray(), nPos, nLen,
+                                              SalLayoutFlags::NONE, pGlyphs);
             }
             else
             {
