@@ -437,11 +437,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106541_noinheritChapterNumbering)
     CPPUNIT_ASSERT_EQUAL(sPara3NumberingStyle, getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//body/txt/Special", 3);  //three of the four paragraphs have numbering
-    assertXPath(pXmlDoc, "//body/txt[1]/Special", "rText", "1");
-    assertXPath(pXmlDoc, "//body/txt[2]/Special", 0); //second paragraph style disables numbering
-    assertXPath(pXmlDoc, "//body/txt[3]/Special", "rText", "I.");
-    assertXPath(pXmlDoc, "//body/txt[4]/Special", "rText", "II.");
+    assertXPath(pXmlDoc, "//body/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", 3);  //three of the four paragraphs have numbering
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "1");
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", 0); //second paragraph style disables numbering
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "I.");
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", "II.");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf53856_conflictingStyle, "tdf53856_conflictingStyle.docx")
@@ -859,7 +859,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
 
     // The paragraph marker's red font color was inherited by the number portion, this was ff0000.
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), parseDump("//Special[@nType='PortionType::Number']/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), parseDump("//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "font-color"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")
