@@ -112,7 +112,7 @@ public:
     CPPUNIT_TEST(testTdf136956);
     CPPUNIT_TEST_SUITE_END();
 
-virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
         XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
     }
@@ -123,11 +123,12 @@ private:
 
 sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    uno::Reference<frame::XDesktop2> xDesktop
+        = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
 
     // create a frame
-    uno::Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame("_blank", 0);
+    uno::Reference<frame::XFrame> xTargetFrame = xDesktop->findFrame("_blank", 0);
     CPPUNIT_ASSERT(xTargetFrame.is());
 
     // This ContainerWindow corresponds to the outermost window of a running LibreOffice.
@@ -143,22 +144,24 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     sd::DrawDocShellRef xDocSh = loadURL(rURL, nFormat);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
 
-    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
+    uno::Reference<frame::XModel2> xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT(xModel2.is());
 
-    uno::Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
+    uno::Reference<frame::XController2> xController
+        = xModel2->createDefaultViewController(xTargetFrame);
     CPPUNIT_ASSERT(xController.is());
 
     // introduce model/view/controller to each other
     utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel2);
 
-    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
 
     // Draw has no slidesorter, Impress never shows a LayerTabBar
     if (sd::ViewShell::ST_DRAW == pViewShell->GetShellType())
     {
-        sd::LayerTabBar* pLayerTabBar = static_cast<sd::GraphicViewShell*>(pViewShell)->GetLayerTabControl();
+        sd::LayerTabBar* pLayerTabBar
+            = static_cast<sd::GraphicViewShell*>(pViewShell)->GetLayerTabControl();
         CPPUNIT_ASSERT(pLayerTabBar);
         pLayerTabBar->StateChanged(StateChangedType::InitShow);
     }
@@ -169,7 +172,9 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
         {
             // Process all Tasks - slide sorter is created here
             Scheduler::ProcessEventsToIdle();
-            if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
+            if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
+                     pViewShell->GetViewShellBase()))
+                != nullptr)
                 break;
             osl::Thread::wait(std::chrono::milliseconds(100));
         }
@@ -183,9 +188,11 @@ void SdMiscTest::testTdf96206()
 {
     // Copying/pasting slide referring to a non-default master with a text duplicated the master
 
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
-    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
-    auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+    sd::DrawDocShellRef xDocSh
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
+    auto pSSVS
+        = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
 
     const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
@@ -200,9 +207,11 @@ void SdMiscTest::testTdf96206()
 
 void SdMiscTest::testTdf96708()
 {
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
-    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
-    auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+    sd::DrawDocShellRef xDocSh
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
+    auto pSSVS
+        = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
     auto& rPageSelector = rSSController.GetPageSelector();
 
@@ -225,23 +234,27 @@ void SdMiscTest::testTdf96708()
 void SdMiscTest::testTdf99396()
 {
     // Load the document and select the table.
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf99396.odp"), ODP);
-    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
+    sd::DrawDocShellRef xDocSh
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pObject, pView->GetSdrPageView());
 
     // Make sure that the undo stack is empty.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
 
     // Set the vertical alignment of the cells to bottom.
-    sdr::table::SvxTableController* pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+    sdr::table::SvxTableController* pTableController
+        = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
     CPPUNIT_ASSERT(pTableController);
     SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
     pTableController->Execute(aRequest);
     // This was 0, it wasn't possible to undo a vertical alignment change.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
 
     xDocSh->DoClose();
 }
@@ -251,7 +264,8 @@ void SdMiscTest::testTableObjectUndoTest()
     // See tdf#99396 for the issue
 
     // Load the document and select the table.
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::DrawDocShellRef xDocSh
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf99396.odp"), ODP);
     sd::ViewShell* pViewShell = xDocSh->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -260,7 +274,8 @@ void SdMiscTest::testTableObjectUndoTest()
     pView->MarkObj(pTableObject, pView->GetSdrPageView());
 
     // Make sure that the undo stack is empty.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
 
     // Set horizontal and vertical adjustment during text edit.
     pView->SdrBeginTextEdit(pTableObject);
@@ -279,31 +294,37 @@ void SdMiscTest::testTableObjectUndoTest()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pLocalUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(OUString("Apply attributes"), pLocalUndoManager->GetUndoActionComment());
     {
-        auto pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+        auto pTableController
+            = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
         CPPUNIT_ASSERT(pTableController);
         SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
         pTableController->Execute(aRequest);
     }
     // Global change "Format cell" is applied only - Change the vertical alignment to "Bottom"
     CPPUNIT_ASSERT_EQUAL(size_t(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment());
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment());
 
     pView->SdrEndTextEdit();
 
     // End of text edit, so the text edit action is added to the undo stack
     CPPUNIT_ASSERT_EQUAL(size_t(2), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Edit text of Table"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit text of Table"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(1));
 
     // Check that the result is what we expect.
     {
         uno::Reference<table::XTable> xTable = pTableObject->getTable();
         uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
-        drawing::TextVerticalAdjust eAdjust = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
+        drawing::TextVerticalAdjust eAdjust
+            = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
         CPPUNIT_ASSERT_EQUAL(int(drawing::TextVerticalAdjust_BOTTOM), static_cast<int>(eAdjust));
     }
     {
-        const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+        const EditTextObject& rEdit
+            = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
         const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
         auto pAdjust = rParaAttribs.GetItem(EE_PARA_JUST);
         CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, pAdjust->GetAdjust());
@@ -314,18 +335,21 @@ void SdMiscTest::testTableObjectUndoTest()
 
     // Undoing the last action - one left
     CPPUNIT_ASSERT_EQUAL(size_t(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
 
     // Check again that the result is what we expect.
     {
         uno::Reference<table::XTable> xTable = pTableObject->getTable();
         uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
-        drawing::TextVerticalAdjust eAdjust = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
+        drawing::TextVerticalAdjust eAdjust
+            = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
         // This failed: Undo() did not change it from drawing::TextVerticalAdjust_BOTTOM.
         CPPUNIT_ASSERT_EQUAL(int(drawing::TextVerticalAdjust_TOP), static_cast<int>(eAdjust));
     }
     {
-        const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+        const EditTextObject& rEdit
+            = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
         const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
         auto pAdjust = rParaAttribs.GetItem(EE_PARA_JUST);
         CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, pAdjust->GetAdjust());
@@ -333,7 +357,8 @@ void SdMiscTest::testTableObjectUndoTest()
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
 
     /*
      * now test tdf#103950 - Undo does not revert bundled font size changes for table cells
@@ -345,25 +370,33 @@ void SdMiscTest::testTableObjectUndoTest()
         static_cast<sd::DrawViewShell*>(pViewShell)->ExecChar(aRequest);
     }
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("Apply attributes to Table"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Grow font size"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(2));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Apply attributes to Table"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Grow font size"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"),
+                         xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(2));
 
     xDocSh->DoClose();
 }
 
 void SdMiscTest::testFillGradient()
 {
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc( xDocShRef );
+    ::sd::DrawDocShellRef xDocShRef
+        = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     // Insert a new page.
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0), uno::UNO_SET_THROW );
-    uno::Reference<drawing::XShapes> xShapes(xDrawPage,uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiServiceFactory> const xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0),
+                                                 uno::UNO_SET_THROW);
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> const xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                          uno::UNO_QUERY);
     // Create a rectangle
-    uno::Reference<drawing::XShape> xShape1(xDoc->createInstance("com.sun.star.drawing.RectangleShape"),uno::UNO_QUERY_THROW );
+    uno::Reference<drawing::XShape> xShape1(
+        xDoc->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xShape1, uno::UNO_QUERY_THROW);
     // Set FillStyle and FillGradient
     awt::Gradient aGradient;
@@ -376,32 +409,35 @@ void SdMiscTest::testFillGradient()
 
     // Retrieve the shape and check FillStyle and FillGradient
     uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPage, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet > xPropSet2(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet2(xIndexAccess->getByIndex(0),
+                                                  uno::UNO_QUERY_THROW);
     drawing::FillStyle eFillStyle;
     awt::Gradient aGradient2;
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillStyle") >>= eFillStyle);
     CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(eFillStyle));
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)),aGradient2.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)),aGradient2.EndColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)), aGradient2.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)), aGradient2.EndColor);
 
     xDocShRef->DoClose();
 }
 
 void SdMiscTest::testTdf44774()
 {
-    sd::DrawDocShellRef xDocShRef = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false,
-        DocumentType::Draw);
+    sd::DrawDocShellRef xDocShRef
+        = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Draw);
     const uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY_THROW);
     xLoadable->initNew();
     SfxStyleSheetBasePool* pSSPool = xDocShRef->GetStyleSheetPool();
 
     // Create a new style with an empty name, like what happens in UI when creating a new style
-    SfxStyleSheetBase& rStyleA = pSSPool->Make("", SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
+    SfxStyleSheetBase& rStyleA
+        = pSSPool->Make("", SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
     // Assign a new name, which does not yet set its ApiName
     rStyleA.SetName("StyleA");
     // Create another style
-    SfxStyleSheetBase& rStyleB = pSSPool->Make("StyleB", SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
+    SfxStyleSheetBase& rStyleB
+        = pSSPool->Make("StyleB", SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
     // ... and set its parent to the first one
     rStyleB.SetParent("StyleA");
 
@@ -419,8 +455,8 @@ void SdMiscTest::testTdf44774()
 
 void SdMiscTest::testTdf38225()
 {
-    sd::DrawDocShellRef xDocShRef = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false,
-        DocumentType::Draw);
+    sd::DrawDocShellRef xDocShRef
+        = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Draw);
     const uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY_THROW);
     xLoadable->initNew();
     SfxStyleSheetBasePool* pSSPool = xDocShRef->GetStyleSheetPool();
@@ -557,47 +593,57 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     // only in the ODF attributes draw:display and draw:protected. The resaved document
     // should still have the ODF attributes and in addition the config items in settings.xml.
     // "Load" is needed for to handle layers, simple "loadURL" does not work.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving including items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
     pBatch->commit();
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+    save(xDocShRef.get(), getFormat(ODG), aTempFile);
 
     // Verify, that the saved document still has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
-    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    const OString sPathStart(
+        "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc,
+                sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has got the items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    const OString sPathStart2("/office:document-settings/office:settings/"
+                              "config:config-item-set[@config:name='ooo:view-settings']/"
+                              "config:config-item-map-indexed[@config:name='Views']/"
+                              "config:config-item-map-entry");
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
     // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
     OUString sBase64;
     uno::Sequence<sal_Int8> aDecodedSeq;
-    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc2,
+                              sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item VisibleLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x0F, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F );
+    CPPUNIT_ASSERT_EQUAL(0x0F, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
 
-    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc2,
+                              sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item PrintableLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x17, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+    CPPUNIT_ASSERT_EQUAL(0x17, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
 
-    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc2,
+                              sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item LockedLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+    CPPUNIT_ASSERT_EQUAL(0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
 
     xDocShRef->DoClose();
 }
@@ -607,36 +653,46 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     // Loads a document, which has the visible/printable/locked information for layers
     // only in the ODF attributes draw:display and draw:protected. The resave document
     // should have only the ODF attributes and no config items in settings.xml.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving without items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
     pBatch->commit();
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+    save(xDocShRef.get(), getFormat(ODG), aTempFile);
 
     // Verify, that the saved document still has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
-    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    const OString sPathStart(
+        "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc,
+                sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has no layer items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
-    xmlXPathObjectPtr pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    const OString sPathStart2("/office:document-settings/office:settings/"
+                              "config:config-item-set[@config:name='ooo:view-settings']/"
+                              "config:config-item-map-indexed[@config:name='Views']/"
+                              "config:config-item-map-entry");
+    xmlXPathObjectPtr pXmlObj
+        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
     CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
     xmlXPathFreeObject(pXmlObj);
-    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    pXmlObj = getXPathNode(pXmlDoc2,
+                           sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
     CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
     xmlXPathFreeObject(pXmlObj);
-    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    pXmlObj
+        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
     CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
     xmlXPathFreeObject(pXmlObj);
 
@@ -649,47 +705,57 @@ void SdMiscTest::testTdf101242_settings_keep()
     // only in the config items in settings.xml. That is the case for all old documents.
     // The resaved document should have the ODF attributes draw:display and draw:protected
     // and should still have these config items in settings.xml.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving including items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
     pBatch->commit();
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+    save(xDocShRef.get(), getFormat(ODG), aTempFile);
 
     // Verify, that the saved document has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
-    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    const OString sPathStart(
+        "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc,
+                sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document still has the items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    const OString sPathStart2("/office:document-settings/office:settings/"
+                              "config:config-item-set[@config:name='ooo:view-settings']/"
+                              "config:config-item-map-indexed[@config:name='Views']/"
+                              "config:config-item-map-entry");
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
     // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
     OUString sBase64;
     uno::Sequence<sal_Int8> aDecodedSeq;
-    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc2,
+                              sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item VisibleLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x0F, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F );
+    CPPUNIT_ASSERT_EQUAL(0x0F, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
 
-    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc2,
+                              sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item PrintableLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x17, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+    CPPUNIT_ASSERT_EQUAL(0x17, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
 
-    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc2,
+                              sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item LockedLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+    CPPUNIT_ASSERT_EQUAL(0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
 
     xDocShRef->DoClose();
 }
@@ -700,36 +766,46 @@ void SdMiscTest::testTdf101242_settings_remove()
     // only in the config items in settings.xml. That is the case for all old documents.
     // The resaved document should have only the ODF attributes draw:display and draw:protected
     // and should have no config items in settings.xml.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving without config items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
     pBatch->commit();
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+    save(xDocShRef.get(), getFormat(ODG), aTempFile);
 
     // Verify, that the saved document has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
-    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    const OString sPathStart(
+        "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc,
+                sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has no layer items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
-    xmlXPathObjectPtr pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    const OString sPathStart2("/office:document-settings/office:settings/"
+                              "config:config-item-set[@config:name='ooo:view-settings']/"
+                              "config:config-item-map-indexed[@config:name='Views']/"
+                              "config:config-item-map-entry");
+    xmlXPathObjectPtr pXmlObj
+        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
     CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
     xmlXPathFreeObject(pXmlObj);
-    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    pXmlObj = getXPathNode(pXmlDoc2,
+                           sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
     CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
     xmlXPathFreeObject(pXmlObj);
-    pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    pXmlObj
+        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
     CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
     xmlXPathFreeObject(pXmlObj);
 
@@ -741,46 +817,56 @@ void SdMiscTest::testTdf119392()
     // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
     // Checks, that the bitfields in the saved file have the bits in the correct order, in case
     // option WriteLayerAsConfigItem is true and the config items are written.
-    std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, batch);
     batch->commit();
 
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     // Insert layer "-P-", not visible, printable, not locked
-    SdrView* pView = xDocShRef -> GetViewShell()->GetView();
-    pView -> InsertNewLayer("-P-", 6); // 0..4 standard layer, 5 layer "V--"
-    SdrPageView* pPageView = pView -> GetSdrPageView();
-    pPageView -> SetLayerVisible("-P-", false);
-    pPageView -> SetLayerPrintable("-P-", true);
-    pPageView -> SetLayerLocked("-P-", false);
+    SdrView* pView = xDocShRef->GetViewShell()->GetView();
+    pView->InsertNewLayer("-P-", 6); // 0..4 standard layer, 5 layer "V--"
+    SdrPageView* pPageView = pView->GetSdrPageView();
+    pPageView->SetLayerVisible("-P-", false);
+    pPageView->SetLayerPrintable("-P-", true);
+    pPageView->SetLayerLocked("-P-", false);
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+    save(xDocShRef.get(), getFormat(ODG), aTempFile);
 
     // Verify correct bit order in bitfield in the config items in settings.xml
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    const OString sPathStart("/office:document-settings/office:settings/"
+                             "config:config-item-set[@config:name='ooo:view-settings']/"
+                             "config:config-item-map-indexed[@config:name='Views']/"
+                             "config:config-item-map-entry");
     // First Byte is in order 'V-L -P- V-- measurelines controls backgroundobjects background layout'
     // Bits need to be: visible=10111111=0xbf=191 printable=01011111=0x5f=95 locked=10000000=0x80=128
     // The values in file are Base64 encoded.
     OUString sBase64;
     uno::Sequence<sal_Int8> aDecodedSeq;
-    sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='VisibleLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc,
+                              sPathStart + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item VisibleLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0xbF, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff); // & 0xff forces unambiguous types for CPPUNIT_ASSERT_EQUAL
+    CPPUNIT_ASSERT_EQUAL(0xbF,
+                         static_cast<sal_uInt8>(aDecodedSeq[0])
+                             & 0xff); // & 0xff forces unambiguous types for CPPUNIT_ASSERT_EQUAL
 
-    sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='PrintableLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());
+    sBase64 = getXPathContent(pXmlDoc,
+                              sPathStart + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item PrintableLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x5f, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
+    CPPUNIT_ASSERT_EQUAL(0x5f, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
 
-    sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='LockedLayers']");
-    CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
+    sBase64
+        = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_MESSAGE("Item LockedLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0x80, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
+    CPPUNIT_ASSERT_EQUAL(0x80, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
 
     xDocShRef->DoClose();
 }
@@ -790,19 +876,22 @@ void SdMiscTest::testTdf67248()
     // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
     // On opening the user layer must still exists. The error was, that it was merged into the standard
     // layer "background".
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf67248.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf67248.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16(6), rLayerAdmin.GetLayerCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), rLayerAdmin.GetLayerCount());
 
     xDocShRef->DoClose();
 }
 
 void SdMiscTest::testTdf119956()
 {
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf119956.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf119956.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
-    sd::GraphicViewShell* pGraphicViewShell = static_cast<sd::GraphicViewShell*>(xDocShRef -> GetViewShell());
+    sd::GraphicViewShell* pGraphicViewShell
+        = static_cast<sd::GraphicViewShell*>(xDocShRef->GetViewShell());
     CPPUNIT_ASSERT(pGraphicViewShell);
     sd::LayerTabBar* pLayerTabBar = pGraphicViewShell->GetLayerTabControl();
     CPPUNIT_ASSERT(pLayerTabBar);
@@ -819,7 +908,8 @@ void SdMiscTest::testTdf119956()
     {
         sal_uInt16 nIdOfTabPos0(pLayerTabBar->GetPageId(0));
         tools::Rectangle aTabPos0Rect(pLayerTabBar->GetPageRect(nIdOfTabPos0));
-        aSyntheticMouseEvent = MouseEvent(aTabPos0Rect.Center(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0);
+        aSyntheticMouseEvent
+            = MouseEvent(aTabPos0Rect.Center(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0);
         pLayerTabBar->MouseButtonDown(aSyntheticMouseEvent);
     }
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLayerTabBar->GetCurPagePos());
@@ -827,7 +917,8 @@ void SdMiscTest::testTdf119956()
     // Alt+Click on tab "Layer4"
     sal_uInt16 nIdOfTabPos3(pLayerTabBar->GetPageId(3));
     tools::Rectangle aTabPos3Rect(pLayerTabBar->GetPageRect(nIdOfTabPos3));
-    aSyntheticMouseEvent = MouseEvent(aTabPos3Rect.Center(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, KEY_MOD2);
+    aSyntheticMouseEvent = MouseEvent(aTabPos3Rect.Center(), 1, MouseEventModifiers::SYNTHETIC,
+                                      MOUSE_LEFT, KEY_MOD2);
     pLayerTabBar->MouseButtonDown(aSyntheticMouseEvent);
 
     // Make sure, tab 3 is current tab now.
@@ -839,8 +930,10 @@ void SdMiscTest::testTdf119956()
 void SdMiscTest::testTdf98839_ShearVFlipH()
 {
     // Loads a document with a sheared shape and mirrors it
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf98839_ShearVFlipH.odg"), ODG);
-    sd::GraphicViewShell* pViewShell = static_cast<sd::GraphicViewShell*>(xDocShRef->GetViewShell());
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf98839_ShearVFlipH.odg"), ODG);
+    sd::GraphicViewShell* pViewShell
+        = static_cast<sd::GraphicViewShell*>(xDocShRef->GetViewShell());
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>(pPage->GetObj(0));
     pShape->Mirror(Point(4000, 2000), Point(4000, 10000));
@@ -853,23 +946,26 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
     const OString sPathStart("/office:document-content/office:body/office:drawing/draw:page");
     assertXPath(pXmlDoc, sPathStart);
-    const OUString sTransform = getXPath(pXmlDoc, sPathStart + "/draw:custom-shape","transform");
+    const OUString sTransform = getXPath(pXmlDoc, sPathStart + "/draw:custom-shape", "transform");
 
     // Error was, that the shear angle had a wrong sign.
-    CPPUNIT_ASSERT_MESSAGE("expected: draw:transform='skewX (-0.64350...)", sTransform.startsWith("skewX (-"));
+    CPPUNIT_ASSERT_MESSAGE("expected: draw:transform='skewX (-0.64350...)",
+                           sTransform.startsWith("skewX (-"));
 
     xDocShRef->DoClose();
 }
 
 void SdMiscTest::testTdf130988()
 {
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf130988_3D_create_lathe.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf130988_3D_create_lathe.odg"), ODG);
 
     //emulate command .uno:ConvertInto3DLathe
     sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
     E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
-    pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0), basegfx::B2DPoint(3000.0, -8000.0));
+    pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0),
+                                basegfx::B2DPoint(3000.0, -8000.0));
     E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
     CPPUNIT_ASSERT(pObj);
 
@@ -884,7 +980,8 @@ void SdMiscTest::testTdf130988()
 
 void SdMiscTest::testTdf131033()
 {
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef
+        = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg"), ODG);
 
     // The document contains a polygon, so that emulate command .uno:ConvertInto3DLathe
     // by direct call of ConvertMarkedObjTo3D works.
@@ -893,7 +990,8 @@ void SdMiscTest::testTdf131033()
     sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
     E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
-    pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0), basegfx::B2DPoint(11000.0, -9000.0));
+    pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0),
+                                basegfx::B2DPoint(11000.0, -9000.0));
     E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
     CPPUNIT_ASSERT(pObj);
 
@@ -909,7 +1007,8 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 {
     // Versions LO 6.2 to 6.4 have produced files, where the layer DrawnInSlideshow has
     // got visible=false and printable=false attributes. Those files should be repaired now.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp"), ODP);
+    sd::DrawDocShellRef xDocShRef = Load(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp"), ODP);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Verify model
@@ -931,15 +1030,17 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 
 void SdMiscTest::testTdf136956()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/cellspan.odp"), ODP);
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/cellspan.odp"), ODP);
 
-    const SdrPage *pPage = GetPage( 1, xDocShRef );
-    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT( pTableObj );
-    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+    uno::Reference<table::XTable> xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
 
-    uno::Reference< css::table::XMergeableCellRange > xRange(
-            xTable->createCursorByRange( xTable->getCellRangeByPosition( 0, 0, 3, 2 ) ), uno::UNO_QUERY_THROW );
+    uno::Reference<css::table::XMergeableCellRange> xRange(
+        xTable->createCursorByRange(xTable->getCellRangeByPosition(0, 0, 3, 2)),
+        uno::UNO_QUERY_THROW);
 
     // 4x3 Table before merge.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getColumnCount());

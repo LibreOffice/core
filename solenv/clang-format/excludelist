@@ -9489,7 +9489,6 @@ sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/export-tests.cxx
 sd/qa/unit/filters-test.cxx
 sd/qa/unit/import-tests.cxx
-sd/qa/unit/misc-tests.cxx
 sd/qa/unit/sdmodeltestbase.hxx
 sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uimpress.cxx
