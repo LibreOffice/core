@@ -98,12 +98,12 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 
 bool SwViewOption::IsShowOutlineContentVisibilityButton() const
 {
-    return static_cast<bool>(m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton);
+    return m_nCoreOptions.bShowOutlineContentVisibilityButton;
 }
 
 bool SwViewOption::IsTreatSubOutlineLevelsAsContent() const
 {
-    return static_cast<bool>(m_nCoreOptions & ViewOptFlags1::TreatSubOutlineLevelsAsContent);
+    return m_nCoreOptions.bTreatSubOutlineLevelsAsContent;
 }
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
@@ -178,19 +178,6 @@ SwViewOption::SwViewOption() :
     m_eZoom( SvxZoomType::PERCENT ),
     m_nTableDestination(TBL_DEST_CELL)
 {
-    // Initialisation is a little simpler now
-    // all Bits to 0
-    m_nCoreOptions =
-        ViewOptFlags1::HardBlank |
-        ViewOptFlags1::SoftHyph |
-        ViewOptFlags1::Ref |
-        ViewOptFlags1::Graphic |
-        ViewOptFlags1::Table |
-        ViewOptFlags1::Draw |
-        ViewOptFlags1::Control |
-        ViewOptFlags1::Pageback |
-        ViewOptFlags1::Postits;
-
     m_nCore2Options =
         ViewOptCoreFlags2::BlackFont |
         ViewOptCoreFlags2::HiddenPara;
@@ -332,14 +319,6 @@ bool SwViewOption::IsAutoCompleteWords()
 {
     const SvxSwAutoFormatFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     return rFlags.bAutoCmpltCollectWords;
-}
-
-void SwViewOption::SetOnlineSpell(bool b)
-{
-    if (b)
-        m_nCoreOptions |= ViewOptFlags1::OnlineSpell;
-    else
-        m_nCoreOptions &= ~ViewOptFlags1::OnlineSpell;
 }
 
 AuthorCharAttr::AuthorCharAttr() :
