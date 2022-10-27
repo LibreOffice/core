@@ -1219,6 +1219,8 @@ namespace sw::mark
         }
     };
 
+    // Call DeregisterFromDoc() lazily, because it can call selection change listeners, which
+    // may mutate the marks container
     struct LazyDdeBookmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
     {
         std::unique_ptr<DdeBookmark> m_pDdeBookmark;
