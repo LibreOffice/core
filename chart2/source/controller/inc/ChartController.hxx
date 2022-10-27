@@ -34,7 +34,7 @@
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -94,7 +94,7 @@ enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
 
 class ChartController final : public ::cppu::WeakImplHelper <
-         css::frame::XController   //comprehends XComponent (required interface)
+         css::frame::XController2   //comprehends XComponent (css::frame::XController is required interface)
         ,css::frame::XDispatchProvider     //(required interface)
         ,css::view::XSelectionSupplier     //(optional interface)
         ,css::ui::XContextMenuInterception //(optional interface)
@@ -141,6 +141,12 @@ public:
 
     virtual sal_Bool SAL_CALL
         suspend( sal_Bool bSuspend ) override;
+
+    // css::frame::XController2
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getComponentWindow() override;
+    virtual OUString SAL_CALL getViewControllerName() override;
+    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getCreationArguments() override;
+    virtual css::uno::Reference<css::ui::XSidebarProvider> SAL_CALL getSidebar() override;
 
     // css::lang::XComponent (base of XController)
     virtual void SAL_CALL

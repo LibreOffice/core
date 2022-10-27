@@ -23,6 +23,7 @@
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/mvc.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -104,24 +105,13 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     //create the controller(+XWindow)
     rtl::Reference< ChartController > xController = new ChartController(m_xCC);
 
-    //!!!it is a special characteristic of the example application
-    //that the controller simultaneously provides the XWindow controller functionality
-    uno::Reference< awt::XWindow > xComponentWindow = xController;
-
     if( impl_checkCancel() )
         return false;
 
     //connect frame, controller and model one to each other:
     if(xModel.is())
     {
-        xModel->connectController(xController);
-        xModel->setCurrentController(xController);
-        xController->attachModel(xModel);
-        if(xFrame.is())
-            xFrame->setComponent(xComponentWindow,xController);
-        //creates the view and menu
-        //for correct menu creation the initialized component must be already set into the frame
-        xController->attachFrame(xFrame);
+        utl::ConnectModelViewController(xModel, xFrame, xController);
     }
 
     // call initNew() or load() at XLoadable
@@ -160,6 +150,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
                 //resize standalone files to get correct size:
                 if( aMDHelper.ISSET_FilterName && aMDHelper.FilterName == "StarChart 5.0" )
                 {
+                    uno::Reference<awt::XWindow> xComponentWindow = xController->getComponentWindow();
                     awt::Rectangle aRect( xComponentWindow->getPosSize() );
                     xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, 0 );
                 }

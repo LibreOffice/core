@@ -41,7 +41,8 @@ ConnectModelViewController(const css::uno::Reference<css::frame::XModel>& xModel
                            const css::uno::Reference<css::frame::XController2>& xController)
 {
     ConnectModelController(xModel, xController);
-    xFrame->setComponent(xController->getComponentWindow(), xController);
+    if (xFrame)
+        xFrame->setComponent(xController->getComponentWindow(), xController);
     // creates the view and menu
     // for correct menu creation the initialized component must be already set into the frame
     xController->attachFrame(xFrame);

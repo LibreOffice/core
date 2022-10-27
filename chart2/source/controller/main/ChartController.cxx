@@ -694,6 +694,24 @@ sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
     return true;
 }
 
+// css::frame::XController2
+
+css::uno::Reference<css::awt::XWindow> SAL_CALL ChartController::getComponentWindow()
+{
+    // it is a special characteristic of ChartController
+    // that it simultaneously provides the XWindow functionality
+    return this;
+}
+
+OUString SAL_CALL ChartController::getViewControllerName() { return {}; }
+
+css::uno::Sequence<css::beans::PropertyValue> SAL_CALL ChartController::getCreationArguments()
+{
+    return {};
+}
+
+css::uno::Reference<css::ui::XSidebarProvider> SAL_CALL ChartController::getSidebar() { return {}; }
+
 void ChartController::impl_createDrawViewController()
 {
     SolarMutexGuard aGuard;
