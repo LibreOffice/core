@@ -58,6 +58,7 @@
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
+#include <unotools/mvc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -149,11 +150,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     CPPUNIT_ASSERT(xController.is());
 
     // introduce model/view/controller to each other
-    xController->attachModel(xModel2);
-    xModel2->connectController(xController);
-    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
-    xController->attachFrame(xTargetFrame);
-    xModel2->setCurrentController(xController);
+    utl::ConnectModelViewController(xModel2, xTargetFrame, xController);
 
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);

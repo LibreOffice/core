@@ -58,6 +58,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/mvc.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -580,11 +581,7 @@ Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Re
     ), UNO_SET_THROW );
 
     // introduce model/view/controller to each other
-    xController->attachModel( i_rModel );
-    i_rModel->connectController( xController );
-    i_rFrame->setComponent( xController->getComponentWindow(), xController );
-    xController->attachFrame( i_rFrame );
-    i_rModel->setCurrentController( xController );
+    utl::ConnectModelViewController(i_rModel, i_rFrame, xController);
 
     return xController;
 }

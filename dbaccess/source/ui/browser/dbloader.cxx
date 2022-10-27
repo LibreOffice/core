@@ -38,6 +38,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/mvc.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -177,9 +178,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         if ( xReportModel.is() )
         {
             xController.set( ReportDesign::create( m_xContext ) );
-            xController->attachModel( xReportModel );
-            xReportModel->connectController( xController );
-            xReportModel->setCurrentController( xController );
+            utl::ConnectModelController(xReportModel, xController);
         }
     }
 
