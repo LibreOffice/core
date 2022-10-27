@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "helper/qahelper.hxx"
+#include <test/unoapi_test.hxx>
 #include "helper/xpath.hxx"
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -18,11 +18,11 @@
 using namespace css;
 
 /** Test import, export or roundtrip of sparklines for ODF and OOXML */
-class SparklineImportExportTest : public ScBootstrapFixture, public XmlTestTools
+class SparklineImportExportTest : public UnoApiTest, public XmlTestTools
 {
 public:
     SparklineImportExportTest()
-        : ScBootstrapFixture("sc/qa/unit/data")
+        : UnoApiTest("sc/qa/unit/data")
     {
     }
 
@@ -149,25 +149,26 @@ void checkSparklines(ScDocument& rDocument)
 
 void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
+    loadFromURL(u"xlsx/Sparklines.xlsx");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
 
-    checkSparklines(xDocSh->GetDocument());
+    checkSparklines(*pModelObj->GetDocument());
 
-    xDocSh = saveAndReload(*xDocSh, FORMAT_XLSX);
+    saveAndReload("Calc Office Open XML");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
 
-    checkSparklines(xDocSh->GetDocument());
-
-    xDocSh->DoClose();
+    checkSparklines(*pModelObj->GetDocument());
 }
 
 void SparklineImportExportTest::testSparklinesExportODS()
 {
     // Load the document containing sparklines
-    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
+    loadFromURL(u"xlsx/Sparklines.xlsx");
 
     // Save as ODS and check content.xml with XPath
-    std::shared_ptr<utl::TempFileNamed> pXPathFile
-        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_ODS);
+    auto pXPathFile = std::make_shared<utl::TempFileNamed>(save("calc8"));
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
 
     // We have 3 sparkline groups = 3 tables that contain sparklines
@@ -211,16 +212,18 @@ void SparklineImportExportTest::testSparklinesExportODS()
 
 void SparklineImportExportTest::testSparklinesRoundtripODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
+    loadFromURL(u"xlsx/Sparklines.xlsx");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
 
-    checkSparklines(xDocSh->GetDocument());
+    checkSparklines(*pModelObj->GetDocument());
 
     // Trigger export and import of sparklines
-    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
+    saveAndReload("calc8");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
 
-    checkSparklines(xDocSh->GetDocument());
-
-    xDocSh->DoClose();
+    checkSparklines(*pModelObj->GetDocument());
 }
 
 void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
@@ -229,10 +232,9 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     // Check no sparkline elements are written when there is none in the document
 
     // Load the document containing NO sparklines
-    ScDocShellRef xDocSh = loadDoc(u"empty.", FORMAT_XLSX);
+    loadFromURL(u"xlsx/empty.xlsx");
 
-    std::shared_ptr<utl::TempFileNamed> pXPathFile
-        = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    auto pXPathFile = std::make_shared<utl::TempFileNamed>(save("Calc Office Open XML"));
     xmlDocUniquePtr pXmlDoc
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
