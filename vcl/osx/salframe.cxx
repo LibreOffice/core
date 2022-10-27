@@ -1266,6 +1266,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                                          aStyleSettings.GetHighlightTextColor(), mpNSWindow ) );
     aStyleSettings.SetHighlightTextColor( aHighlightTextColor );
 
+    aStyleSettings.SetLinkColor(getColor( [NSColor linkColor],
+                                           aStyleSettings.GetLinkColor(), mpNSWindow ) );
+    aStyleSettings.SetVisitedLinkColor(getColor( [NSColor purpleColor],
+                                                  aStyleSettings.GetVisitedLinkColor(), mpNSWindow ) );
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     Color aMenuHighlightColor( getColor( [NSColor selectedMenuItemColor],
