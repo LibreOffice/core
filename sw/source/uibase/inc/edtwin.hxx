@@ -134,7 +134,7 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
     void            JustifyAreaTimer();
     inline void     EnterArea();
 
-    void            RstMBDownFlags();
+    void            ResetMouseButtonDownFlags();
 
     void            ChangeFly( sal_uInt8 nDir, bool bWeb );
     void            ChangeDrawing( sal_uInt8 nDir );
