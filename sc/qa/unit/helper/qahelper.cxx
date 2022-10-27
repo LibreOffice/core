@@ -665,34 +665,6 @@ ScDocShellRef ScBootstrapFixture::loadEmptyDocument(const uno::Sequence<beans::P
     return dynamic_cast<ScDocShell*>(pFoundShell);
 }
 
-ScDocShellRef ScBootstrapFixture::loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat)
-{
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
-
-    // create a frame
-    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame("_blank", 0);
-    CPPUNIT_ASSERT(xTargetFrame.is());
-
-    // 1. Open the document
-    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, true);
-
-    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
-    CPPUNIT_ASSERT(xModel2.is());
-
-    Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
-    CPPUNIT_ASSERT(xController.is());
-
-    // introduce model/view/controller to each other
-    xController->attachModel(xModel2);
-    xModel2->connectController(xController);
-    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
-    xController->attachFrame(xTargetFrame);
-    xModel2->setCurrentController(xController);
-
-    return xDocSh;
-}
-
 ScDocShellRef ScBootstrapFixture::loadDoc(
     std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite, bool bCheckErrorCode )
 {

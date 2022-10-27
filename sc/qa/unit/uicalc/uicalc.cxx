@@ -163,6 +163,24 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
     CPPUNIT_ASSERT(pDoc);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode)
+{
+    // Tests are running in Headless mode
+    // Import an ods file with 'Hide' global grid visibility setting.
+    ScModelObj* pModelObj = createDoc("tdf126541_GridOffGlobally.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(!pDoc->GetViewOptions().GetOption(VOPT_GRID));
+
+    // To avoid regression, in headless mode leave the bug tdf126541
+    // It means Sheet based grid line visibility setting will overwrite the global setting.
+    // If there is only 1 sheet in the document, it will not result visible problems.
+    pModelObj = createDoc("tdf126541_GridOff.xlsx");
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(!pDoc->GetViewOptions().GetOption(VOPT_GRID));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 {
     ScModelObj* pModelObj = createDoc();

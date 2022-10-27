@@ -170,7 +170,6 @@ public:
     void testTdf84874();
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
-    void testTdf142854_GridVisibilityImportXlsxInHeadlessMode();
     void testTdf144642_RowHeightRounding();
     void testTdf145129_DefaultRowHeightRounding();
     void testTdf140431();
@@ -295,7 +294,6 @@ public:
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
-    CPPUNIT_TEST(testTdf142854_GridVisibilityImportXlsxInHeadlessMode);
     CPPUNIT_TEST(testTdf144642_RowHeightRounding);
     CPPUNIT_TEST(testTdf145129_DefaultRowHeightRounding);
     CPPUNIT_TEST(testTdf140431);
@@ -2514,21 +2512,6 @@ void ScExportTest2::testTdf139258_rotated_image()
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:row", "12");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:col", "6");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
-}
-
-void ScExportTest2::testTdf142854_GridVisibilityImportXlsxInHeadlessMode()
-{
-    // Tests are running in Headless mode
-    // Import an ods file with 'Hide' global grid visibility setting.
-    ScDocShellRef xShell
-        = loadDocAndSetupModelViewController(u"tdf126541_GridOffGlobally.", FORMAT_ODS);
-    CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
-
-    // To avoid regression, in headless mode leave the bug tdf126541
-    // It means Sheet based grid line visibility setting will overwrite the global setting.
-    // If there is only 1 sheet in the document, it will not result visible problems.
-    xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
 }
 
 void ScExportTest2::testTdf144642_RowHeightRounding()
