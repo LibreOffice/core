@@ -68,9 +68,14 @@ static void assertMotionPath(std::u16string_view rStr1, std::u16string_view rStr
     assertEquals(sal_Int32(-1), nIdx2, rSourceLine, sMessage.getStr());
 }
 
-class SdOOXMLExportTest2 : public SdModelTestBaseXML
+class SdOOXMLExportTest2 : public SdUnoApiTestXml
 {
 public:
+    SdOOXMLExportTest2()
+        : SdUnoApiTestXml("/sd/qa/unit/data/")
+    {
+    }
+
     void testTdf151492();
     void testTdf149697();
     void testTdf149126();
@@ -219,29 +224,22 @@ public:
 
 void SdOOXMLExportTest2::testTdf151492()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf151492.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf151492.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn",
                 "idx", "0");
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf149697()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149697.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"pptx/tdf149697.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:cxnSp[1]/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn", "idx", "5");
-
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:cxnSp[1]/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn", "idx", "4");
 
@@ -250,30 +248,22 @@ void SdOOXMLExportTest2::testTdf149697()
 
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn", "idx", "1");
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf149126()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf149126.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf149126.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom", "prst",
                 "triangle");
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf131905()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf131905.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"pptx/tdf131905.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(
@@ -290,16 +280,13 @@ void SdOOXMLExportTest2::testTdf131905()
         pXmlDocContent,
         "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr[3]/a:tc/a:tcPr",
         "anchor", "b");
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf93883()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf93883.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    loadFromURL(u"odp/tdf93883.odp");
+    saveAndReload("Impress Office Open XML");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
     uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(!xPropSet->getPropertyValue("NumberingLevel").hasValue());
@@ -308,39 +295,36 @@ void SdOOXMLExportTest2::testTdf93883()
 void SdOOXMLExportTest2::testBnc822341()
 {
     // Check import / export of embedded text document
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/bnc822341.odp"), ODP);
-    utl::TempFileNamed tempFile1;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile1);
+    loadFromURL(u"odp/bnc822341.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     // Export an LO specific ole object (imported from an ODP document)
     {
-        xmlDocUniquePtr pXmlDocCT = parseExport(tempFile1, "[Content_Types].xml");
+        xmlDocUniquePtr pXmlDocCT = parseExport(tempFile, "[Content_Types].xml");
         assertXPath(pXmlDocCT,
                     "/ContentType:Types/ContentType:Override[@ContentType='application/"
                     "vnd.openxmlformats-officedocument.wordprocessingml.document']",
                     "PartName", "/ppt/embeddings/oleObject1.docx");
 
-        xmlDocUniquePtr pXmlDocRels = parseExport(tempFile1, "ppt/slides/_rels/slide1.xml.rels");
+        xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
         assertXPath(
             pXmlDocRels,
             "/rels:Relationships/rels:Relationship[@Target='../embeddings/oleObject1.docx']",
             "Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
 
-        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
         assertXPath(pXmlDocContent,
                     "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/p:oleObj",
                     "progId", "Word.Document.12");
 
-        const SdrPage* pPage = GetPage(1, xDocShRef.get());
+        const SdrPage* pPage = GetPage(1);
 
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
 
-    utl::TempFileNamed tempFile2;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile2);
+    utl::TempFileNamed tempFile2 = save("Impress Office Open XML");
 
     // Export an MS specific ole object (imported from a PPTX document)
     {
@@ -350,41 +334,34 @@ void SdOOXMLExportTest2::testBnc822341()
                     "vnd.openxmlformats-officedocument.wordprocessingml.document']",
                     "PartName", "/ppt/embeddings/oleObject1.docx");
 
-        xmlDocUniquePtr pXmlDocRels = parseExport(tempFile2, "ppt/slides/_rels/slide1.xml.rels");
+        xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
         assertXPath(
             pXmlDocRels,
             "/rels:Relationships/rels:Relationship[@Target='../embeddings/oleObject1.docx']",
             "Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
 
-        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile2, "ppt/slides/slide1.xml");
+        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
         assertXPath(pXmlDocContent,
                     "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/p:oleObj",
                     "progId", "Word.Document.12");
 
-        SdDrawDocument* pDoc = xDocShRef->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
-        const SdrPage* pPage = pDoc->GetPage(1);
-        CPPUNIT_ASSERT_MESSAGE("no page", pPage != nullptr);
+        const SdrPage* pPage = GetPage(1);
 
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testMathObject()
 {
     // Check import / export of math object
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/math.odp"), ODP);
-    utl::TempFileNamed tempFile1;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile1);
+    loadFromURL(u"odp/math.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     // Export an LO specific ole object (imported from an ODP document)
     {
-        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
         assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
                     "Requires", "a14");
         assertXPathContent(pXmlDocContent,
@@ -392,18 +369,17 @@ void SdOOXMLExportTest2::testMathObject()
                            "a14:m/m:oMath/m:r[1]/m:t",
                            "a");
 
-        const SdrPage* pPage = GetPage(1, xDocShRef);
+        const SdrPage* pPage = GetPage(1);
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
 
-    utl::TempFileNamed tempFile2;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile2);
+    utl::TempFileNamed tempFile2 = save("Impress Office Open XML");
 
     // Export an MS specific ole object (imported from a PPTX document)
     {
-        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile2, "ppt/slides/slide1.xml");
         assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
                     "Requires", "a14");
         assertXPathContent(pXmlDocContent,
@@ -411,26 +387,22 @@ void SdOOXMLExportTest2::testMathObject()
                            "a14:m/m:oMath/m:r[1]/m:t",
                            "a");
 
-        const SdrPage* pPage = GetPage(1, xDocShRef);
+        const SdrPage* pPage = GetPage(1);
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testMathObjectPPT2010()
 {
     // Check import / export of math object
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/Math.pptx"), PPTX);
-    utl::TempFileNamed tempFile1;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile1);
+    loadFromURL(u"pptx/Math.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     // Export an MS specific ole object (imported from a PPTX document)
     {
-        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
         assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
                     "Requires", "a14");
         assertXPathContent(pXmlDocContent,
@@ -438,22 +410,19 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
                            "a14:m/m:oMath/m:sSup/m:e/m:r[1]/m:t",
                            u"\U0001D44E"); // non-BMP char
 
-        const SdrPage* pPage = GetPage(1, xDocShRef);
+        const SdrPage* pPage = GetPage(1);
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf119015()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf119015.pptx"), PPTX);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    loadFromURL(u"pptx/tdf119015.pptx");
+    saveAndReload("Impress Office Open XML");
 
-    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrPage* pPage = GetPage(1);
 
     sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObj);
@@ -466,17 +435,14 @@ void SdOOXMLExportTest2::testTdf119015()
     uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(1, 0),
                                                 uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf123090()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf123090.pptx"), PPTX);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    loadFromURL(u"pptx/tdf123090.pptx");
+    saveAndReload("Impress Office Open XML");
 
-    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrPage* pPage = GetPage(1);
 
     sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObj);
@@ -493,18 +459,17 @@ void SdOOXMLExportTest2::testTdf123090()
     uno::Reference<beans::XPropertySet> xRefColumn(xColumns->getByIndex(1), uno::UNO_QUERY_THROW);
     xRefColumn->getPropertyValue("Width") >>= nWidth;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9136), nWidth);
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf126324()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf126324.pptx"), PPTX);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDoc.is());
+    loadFromURL(u"pptx/tdf126324.pptx");
+    saveAndReload("Impress Office Open XML");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPage.is());
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
@@ -512,24 +477,18 @@ void SdOOXMLExportTest2::testTdf126324()
     uno::Reference<text::XText> xText
         = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("17"), xText->getString());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf119187()
 {
-    std::vector<sd::DrawDocShellRef> xDocShRef;
     // load document
-    xDocShRef.push_back(
-        loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf119187.pptx"), PPTX));
-    // load resaved document
-    xDocShRef.push_back(saveAndReload(xDocShRef.at(0).get(), PPTX));
+    loadFromURL(u"pptx/tdf119187.pptx");
 
-    // check documents
-    for (const sd::DrawDocShellRef& xDoc : xDocShRef)
+    //Check For Import and Export Both
+    for (sal_uInt32 i = 0; i < 2; i++)
     {
         // get shape properties
-        const SdrPage* pPage = GetPage(1, xDoc);
+        const SdrPage* pPage = GetPage(1);
         CPPUNIT_ASSERT(pPage);
         SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT(pObj);
@@ -540,14 +499,14 @@ void SdOOXMLExportTest2::testTdf119187()
             = rProperties.GetItem(SDRATTR_TEXT_VERTADJUST);
         const SdrTextVertAdjust eTVA = rSdrTextVertAdjustItem.GetValue();
         CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_TOP, eTVA);
+        saveAndReload("Impress Office Open XML");
     }
 }
 
 void SdOOXMLExportTest2::testTdf132472()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf132472.pptx"), PPTX);
-    const SdrPage* pPage = GetPage(1, xDocShRef);
+    loadFromURL(u"pptx/tdf132472.pptx");
+    const SdrPage* pPage = GetPage(1);
 
     sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObj);
@@ -569,16 +528,13 @@ void SdOOXMLExportTest2::testTdf132472()
     // - Expected: Color: R:0 G:0 B:0 A:0
     // - Actual  : Color: R:255 G:255 B:255 A:0
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf80224()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf80224.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    loadFromURL(u"odp/tdf80224.odp");
+    saveAndReload("Impress Office Open XML");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
     uno::Reference<beans::XPropertySet> xPropSet(xParagraph->getStart(), uno::UNO_QUERY_THROW);
@@ -586,20 +542,16 @@ void SdOOXMLExportTest2::testTdf80224()
     Color nCharColor;
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x6562ac), nCharColor);
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf91378()
 {
     //Check For Import and Export Both
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf91378.pptx"), PPTX);
+    loadFromURL(u"pptx/tdf91378.pptx");
     for (sal_uInt32 i = 0; i < 2; i++)
     {
-        SdDrawDocument* pDoc = xDocShRef->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
         uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
-            xDocShRef->GetModel(), uno::UNO_QUERY);
+            mxComponent, uno::UNO_QUERY);
         uno::Reference<document::XDocumentProperties> xProps
             = xDocumentPropertiesSupplier->getDocumentProperties();
         uno::Reference<beans::XPropertySet> xUDProps(xProps->getUserDefinedProperties(),
@@ -607,9 +559,8 @@ void SdOOXMLExportTest2::testTdf91378()
         OUString propValue;
         xUDProps->getPropertyValue("Testing") >>= propValue;
         CPPUNIT_ASSERT(propValue.isEmpty());
-        xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+        saveAndReload("Impress Office Open XML");
     }
-    xDocShRef->DoClose();
 }
 
 static bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> const& xDoc,
@@ -660,11 +611,12 @@ static bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> co
 
 void SdOOXMLExportTest2::testExportTransitionsPPTX()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/AllTransitions.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY_THROW);
+    loadFromURL(u"AllTransitions.odp");
+    saveAndReload("Impress Office Open XML");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
 
     // WIPE TRANSITIONS
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 01, TransitionType::BARWIPE,
@@ -721,14 +673,11 @@ void SdOOXMLExportTest2::testExportTransitionsPPTX()
     //CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 76, TransitionType::ELLIPSEWIPE, TransitionSubType::VERTICAL));
     CPPUNIT_ASSERT(
         checkTransitionOnPage(xDoc, 76, TransitionType::ELLIPSEWIPE, TransitionSubType::CIRCLE));
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testPresetShapesExport()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/preset-shapes-export.odp"), ODP);
+    loadFromURL(u"odp/preset-shapes-export.odp");
     const char* sShapeTypeAndValues[] = {
         "wedgeEllipseCallout",
         "adj1",
@@ -819,8 +768,7 @@ void SdOOXMLExportTest2::testPresetShapesExport()
         "val 3770",
     };
 
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocCT = parseExport(tempFile, "ppt/slides/slide1.xml");
     const OString sPattern(
@@ -851,16 +799,14 @@ void SdOOXMLExportTest2::testTdf92527()
 {
     // We draw a diamond in an empty document.
     // If custom shape has name and preset information in OOXML, should be export as preset shape.
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/empty.fodp"), FODG);
-    uno::Reference<css::lang::XMultiServiceFactory> xFactory(xDocShRef->GetDoc()->getUnoModel(),
-                                                             uno::UNO_QUERY);
+    loadFromURL(u"empty.fodp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPage> xPage1(getPage(0));
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(pDoc->getUnoModel(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape1(
         xFactory->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc1(xDocShRef->GetDoc()->getUnoModel(),
-                                                      uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage1(xDoc1->getDrawPages()->getByIndex(0),
-                                              uno::UNO_QUERY_THROW);
     xPage1->add(xShape1);
     xShape1->setSize(awt::Size(10000, 10000));
     xShape1->setPosition(awt::Point(1000, 1000));
@@ -870,10 +816,12 @@ void SdOOXMLExportTest2::testTdf92527()
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
     xPropertySet1->setPropertyValue("CustomShapeGeometry", uno::Any(aShapeGeometry));
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(xDocShRef->GetDoc()->getUnoModel(),
-                                                      uno::UNO_QUERY_THROW);
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0),
                                               uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -896,7 +844,6 @@ void SdOOXMLExportTest2::testTdf92527()
 
     // 4 coordinate pairs
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCoordinates.getLength());
-    xDocShRef->DoClose();
 }
 
 namespace
@@ -950,96 +897,77 @@ void matchNumberFormat(int nPage, uno::Reference<text::XTextField> const& xField
 
 void SdOOXMLExportTest2::testDatetimeFieldNumberFormat()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/numfmt.odp"), ODP);
+    loadFromURL(u"odp/numfmt.odp");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
     for (sal_uInt16 i = 0; i <= 8; ++i)
     {
-        matchNumberFormat(i, getTextFieldFromPage(0, 0, 0, i, xDocShRef));
+        matchNumberFormat(i, getTextFieldFromPage(0, 0, 0, i));
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testDatetimeFieldNumberFormatPPTX()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/numfmt.pptx"), PPTX);
+    loadFromURL(u"pptx/numfmt.pptx");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
     for (sal_uInt16 i = 0; i <= 8; ++i)
     {
-        matchNumberFormat(i, getTextFieldFromPage(0, 0, 0, i, xDocShRef));
+        matchNumberFormat(i, getTextFieldFromPage(0, 0, 0, i));
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testSlideNumberField()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/slidenum_field.odp"), ODP);
+    loadFromURL(u"odp/slidenum_field.odp");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testSlideNumberFieldPPTX()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/slidenum_field.pptx"), PPTX);
+    loadFromURL(u"pptx/slidenum_field.pptx");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testSlideCountField()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/slidecount_field.odp"), ODP);
+    loadFromURL(u"odp/slidecount_field.odp");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testSlideNameField()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/slidename_field.odp"), ODP);
+    loadFromURL(u"odp/slidename_field.odp");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testExtFileField()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/extfile_field.odp"), ODP);
+    loadFromURL(u"odp/extfile_field.odp");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
     for (sal_uInt16 i = 0; i <= 3; ++i)
     {
-        uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, i, 0, xDocShRef);
+        uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, i, 0);
         CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
 
         uno::Reference<beans::XPropertySet> xPropSet(xField, uno::UNO_QUERY_THROW);
@@ -1060,62 +988,47 @@ void SdOOXMLExportTest2::testExtFileField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("File formats don't match", sal_Int32(3), nNumFmt);
         }
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testAuthorField()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/author_field.odp"), ODP);
+    loadFromURL(u"odp/author_field.odp");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    saveAndReload("Impress Office Open XML");
 
-    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf99224()
 {
-    sd::DrawDocShellRef xShell
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf99224.odp"), ODP);
-    xShell = saveAndReload(xShell.get(), PPTX);
-    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    loadFromURL(u"odp/tdf99224.odp");
+    saveAndReload("Impress Office Open XML");
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     // This was 0: the image with text was lost on export.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
-    xShell->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf92076()
 {
-    sd::DrawDocShellRef xShell
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf92076.odp"), ODP);
-    xShell = saveAndReload(xShell.get(), PPTX);
-    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    loadFromURL(u"odp/tdf92076.odp");
+    saveAndReload("Impress Office Open XML");
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
-    xShell->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf59046()
 {
-    sd::DrawDocShellRef xShell
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf59046.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
-    xShell->DoClose();
+    loadFromURL(u"odp/tdf59046.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", 1);
 }
 
 void SdOOXMLExportTest2::testTdf133502()
 {
-    sd::DrawDocShellRef xShell
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf133502.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
-    xShell->DoClose();
+    loadFromURL(u"odp/tdf133502.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/comments/comment1.xml");
 
     assertXPathContent(pXmlDocRels, "/p:cmLst/p:cm/p:text", "Test for creator-initials");
@@ -1128,11 +1041,9 @@ void SdOOXMLExportTest2::testTdf133502()
 void SdOOXMLExportTest2::testTdf105739()
 {
     // Gradient was lost during saving to ODP
-    sd::DrawDocShellRef xShell
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf105739.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xShell = saveAndReload(xShell.get(), ODP, &tempFile);
-    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    loadFromURL(u"pptx/tdf105739.pptx");
+    utl::TempFileNamed tempFile = save("impress8");
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
     uno::Any aAny = xPropSet->getPropertyValue("Background");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1153,22 +1064,21 @@ void SdOOXMLExportTest2::testTdf105739()
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aFillGradient.StartColor));
         CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(ColorTransparency, aFillGradient.EndColor));
     }
-
-    xShell->DoClose();
 }
 
 void SdOOXMLExportTest2::testPageBitmapWithTransparency()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/page_transparent_bitmap.pptx"), PPTX);
+    loadFromURL(u"pptx/page_transparent_bitmap.pptx");
 
-    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY_THROW);
+    saveAndReload("impress8");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one page", static_cast<sal_Int32>(1),
                                  xDoc->getDrawPages()->getCount());
 
-    uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
     uno::Any aAny = xPropSet->getPropertyValue("Background");
@@ -1181,33 +1091,24 @@ void SdOOXMLExportTest2::testPageBitmapWithTransparency()
     aAny >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide background transparency is wrong", sal_Int32(49),
                                  nTransparence);
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testPptmContentType()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptm/macro.pptm"), PPTM);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTM, &tempFile);
+    loadFromURL(u"pptm/macro.pptm");
+    utl::TempFileNamed tempFile = save("Impress MS PowerPoint 2007 XML VBA");
 
     // Assert that the content type is the one of PPTM
     xmlDocUniquePtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
     assertXPath(pXmlContentType,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
                 "ContentType", "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml");
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf111798()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf111798.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"odp/tdf111798.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
 
     const OUString data[][11] = { { "2700000", "2458080", "2414880", "1439640", "1440000", "gd[1]",
@@ -1242,27 +1143,20 @@ void SdOOXMLExportTest2::testTdf111798()
 
 void SdOOXMLExportTest2::testPptmVBAStream()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptm/macro.pptm"), PPTM);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTM, &tempFile);
+    loadFromURL(u"pptm/macro.pptm");
+    utl::TempFileNamed tempFile = save("Impress MS PowerPoint 2007 XML VBA");
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       tempFile.GetURL());
     // This failed: VBA stream was not roundtripped
     CPPUNIT_ASSERT(xNameAccess->hasByName("ppt/vbaProject.bin"));
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf111863()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf111863.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf111863.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     // check that transition attribute didn't change from 'out' to 'in'
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
@@ -1274,12 +1168,8 @@ void SdOOXMLExportTest2::testTdf111863()
 
 void SdOOXMLExportTest2::testTdf111518()
 {
-    sd::DrawDocShellRef xShell
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf111518.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    tempFile.EnableKillingFile(false);
-    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
-    xShell->DoClose();
+    loadFromURL(u"pptx/tdf111518.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
     OUString sActual = getXPath(pXmlDocRels,
@@ -1292,11 +1182,8 @@ void SdOOXMLExportTest2::testTdf111518()
 
 void SdOOXMLExportTest2::testTdf100387()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf100387.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"odp/tdf100387.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn",
@@ -1347,11 +1234,8 @@ void SdOOXMLExportTest2::testTdf100387()
 // tdf#126746 Add support for Line Caps import and export
 void SdOOXMLExportTest2::testClosingShapesAndLineCaps()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/closed-shapes.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"odp/closed-shapes.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo/a:pt",
@@ -1397,11 +1281,8 @@ void SdOOXMLExportTest2::testClosingShapesAndLineCaps()
 
 void SdOOXMLExportTest2::testRotateFlip()
 {
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/rotate_flip.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"odp/rotate_flip.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
     const OUString data[][4] = { // flipH flipV     x          y
@@ -1447,20 +1328,16 @@ void SdOOXMLExportTest2::testRotateFlip()
 
 void SdOOXMLExportTest2::testTdf106867()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf106867.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"pptx/tdf106867.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
-    const SdrPage* pPage = GetPage(1, xDocShRef.get());
+    const SdrPage* pPage = GetPage(1);
 
     // first check that we have the media object
     const SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(pPage->GetObj(2));
     CPPUNIT_ASSERT_MESSAGE("no media object", pMediaObj != nullptr);
     CPPUNIT_ASSERT_EQUAL(OUString("vnd.sun.star.Package:ppt/media/media1.avi"),
                          pMediaObj->getURL());
-
-    xDocShRef->DoClose();
 
     // additional checks of the output file
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -1485,11 +1362,8 @@ void SdOOXMLExportTest2::testTdf106867()
 
 void SdOOXMLExportTest2::testTdf112280()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112280.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf112280.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     // check the animRot value
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
@@ -1501,11 +1375,8 @@ void SdOOXMLExportTest2::testTdf112280()
 
 void SdOOXMLExportTest2::testTdf112088()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112088.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf112088.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     // check gradient stops
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
@@ -1515,11 +1386,8 @@ void SdOOXMLExportTest2::testTdf112088()
 
 void SdOOXMLExportTest2::testTdf112333()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112333.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf112333.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
@@ -1566,10 +1434,8 @@ void SdOOXMLExportTest2::testTdf112333()
 void SdOOXMLExportTest2::testTdf112552()
 {
     // Background fill was not displayed, but it was because of the wrong geometry
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf112552.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf112552.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path",
@@ -1582,28 +1448,22 @@ void SdOOXMLExportTest2::testTdf112552()
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt",
                 "y", "0");
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf112557()
 {
     // Subtitle shape should be skipped by export.
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf112557.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf112557.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
     assertXPath(pXmlDocContent, "/p:sldMaster/p:cSld/p:spTree/p:sp", 2); // title and object
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf128049()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf128049.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf128049.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:custGeom", 0);
@@ -1613,15 +1473,12 @@ void SdOOXMLExportTest2::testTdf128049()
                 "name", "adj");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:prstGeom/a:avLst/a:gd",
                 "fmla", "val 12500");
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf106026()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf106026.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf106026.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlMasterContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
     assertXPath(pXmlMasterContent,
@@ -1656,16 +1513,12 @@ void SdOOXMLExportTest2::testTdf106026()
     assertXPath(pXmlSlideContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[3]/a:pPr/a:spcAft/a:spcPts", "val",
                 "11339");
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf112334()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112334.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf112334.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
@@ -1678,11 +1531,8 @@ void SdOOXMLExportTest2::testTdf112334()
 
 void SdOOXMLExportTest2::testTdf112089()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112089.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf112089.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
@@ -1698,11 +1548,8 @@ void SdOOXMLExportTest2::testTdf112089()
 
 void SdOOXMLExportTest2::testTdf112086()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112086.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf112086.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
@@ -1731,15 +1578,13 @@ void SdOOXMLExportTest2::testTdf112086()
                         "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
                         "p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("ppt_h"), sAttributeName);
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf112647()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf112647.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    loadFromURL(u"odp/tdf112647.odp");
+    saveAndReload("Impress Office Open XML");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
     uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
 
@@ -1747,16 +1592,12 @@ void SdOOXMLExportTest2::testTdf112647()
     xPropSet->getPropertyValue("ParaLineSpacing") >>= aLineSpacing;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(css::style::LineSpacingMode::FIX), aLineSpacing.Mode);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2117), aLineSpacing.Height);
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testGroupRotation()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/group_rotation.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"odp/group_rotation.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:grpSpPr/a:xfrm",
@@ -1769,11 +1610,8 @@ void SdOOXMLExportTest2::testGroupRotation()
 
 void SdOOXMLExportTest2::testTdf104788()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf104788.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf104788.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide6.xml");
 
@@ -1789,25 +1627,21 @@ void SdOOXMLExportTest2::testTdf104788()
                         "p:par[2]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
                         "p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("xshear"), sAttributeName);
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testSmartartRotation2()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/smartart-rotation2.pptx"), PPTX);
+    loadFromURL(u"pptx/smartart-rotation2.pptx");
 
     // clear SmartArt data to check how group shapes with double-rotated children are exported, not smartart
     // NOTE: Resetting the GrabBag data is a *very* indirect way to reset the SmartArt functionality.
     //       Since this worked before and there is not (yet?) a better way to do it using UNO API, I added
     //       code to support this for now
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xShape->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag));
 
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPathContent(pXmlDocContent,
@@ -1826,11 +1660,8 @@ void SdOOXMLExportTest2::testSmartartRotation2()
 
 void SdOOXMLExportTest2::testTdf91999_rotateShape()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf91999_rotateShape.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf91999_rotateShape.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:nvSpPr/p:cNvPr", "name",
@@ -1846,11 +1677,8 @@ void SdOOXMLExportTest2::testTdf91999_rotateShape()
 
 void SdOOXMLExportTest2::testTdf114845_rotateShape()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf114845_rotateShape.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf114845_rotateShape.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:nvCxnSpPr/p:cNvPr", "name",
@@ -1868,11 +1696,8 @@ void SdOOXMLExportTest2::testTdf114845_rotateShape()
 
 void SdOOXMLExportTest2::testGroupsPosition()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/group.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/group.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off",
@@ -1887,11 +1712,8 @@ void SdOOXMLExportTest2::testGroupsPosition()
 
 void SdOOXMLExportTest2::testGroupsRotatedPosition()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/group-rot.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/group-rot.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x",
@@ -1902,11 +1724,8 @@ void SdOOXMLExportTest2::testGroupsRotatedPosition()
 
 void SdOOXMLExportTest2::testAccentColor()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/accent-color.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/accent-color.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:style/a:fillRef/a:schemeClr", "val",
@@ -1931,11 +1750,8 @@ void SdOOXMLExportTest2::testAccentColor()
 
 void SdOOXMLExportTest2::testThemeColors()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf84205.pptx"), PPTX);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"pptx/tdf84205.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
@@ -1946,11 +1762,8 @@ void SdOOXMLExportTest2::testThemeColors()
 
 void SdOOXMLExportTest2::testTdf111785()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf111785.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-    xDocShRef->DoClose();
+    loadFromURL(u"odp/tdf111785.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
 
@@ -1963,10 +1776,8 @@ void SdOOXMLExportTest2::testTdf111785()
 
 void SdOOXMLExportTest2::testTdf118825()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf118825-motionpath.odp"), ODP);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    loadFromURL(u"odp/tdf118825-motionpath.odp");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
     CPPUNIT_ASSERT_MOTIONPATH(
@@ -2002,7 +1813,6 @@ void SdOOXMLExportTest2::testTdf118825()
                               u"-0.0444444444444444 L 0.132142857142857 -0.146031746031746 L "
                               u"0.0964285714285715 -0.146031746031746 E",
                               getXPath(pXmlDocContent, "(//p:animMotion)[4]", "path"));
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTextColumns_tdf140852()
@@ -2010,13 +1820,9 @@ void SdOOXMLExportTest2::testTextColumns_tdf140852()
     // The document defines two columns in slideLayout12.xml, but explicitly redefines
     // in slide1.xml. Here we check that the redefinition in the slide takes precedence.
 
-    auto xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140852.pptx"), PPTX);
-
+    loadFromURL(u"pptx/tdf140852.pptx");
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
-        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
@@ -2031,14 +1837,10 @@ void SdOOXMLExportTest2::testTextColumns_tdf140852()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue("AutomaticDistance"));
     }
-
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
-        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
@@ -2053,26 +1855,18 @@ void SdOOXMLExportTest2::testTextColumns_tdf140852()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue("AutomaticDistance"));
     }
-
-    xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "numCol", "1");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "spcCol",
                 "360000");
-
-    tempFile.EnableKillingFile();
 }
 
 void SdOOXMLExportTest2::testTextColumns_3columns()
 {
-    auto xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/3columns.pptx"), PPTX);
-
+    loadFromURL(u"pptx/3columns.pptx");
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
-        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
@@ -2089,13 +1883,10 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
         CPPUNIT_ASSERT_LESS(sal_Int16(100), nScale);
     }
 
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc(xDocShRef);
-        uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<container::XIndexAccess> xIndexAccess(xPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
@@ -2111,32 +1902,28 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
         CPPUNIT_ASSERT_GREATER(sal_Int16(0), nScale);
         CPPUNIT_ASSERT_LESS(sal_Int16(100), nScale);
     }
-
-    xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "numCol", "3");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "spcCol",
                 "108000");
-
-    tempFile.EnableKillingFile();
 }
 
 void SdOOXMLExportTest2::testTdf59323_slideFooters()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf59323.pptx"), PPTX);
+    loadFromURL(u"pptx/tdf59323.pptx");
 
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY_THROW);
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDoc->getDrawPages()->getCount());
 
     for (int nPageIndex = 0; nPageIndex < 3; nPageIndex++)
     {
-        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(true, xPropSet->getPropertyValue("IsFooterVisible").get<bool>());
         CPPUNIT_ASSERT_EQUAL(true, xPropSet->getPropertyValue("IsDateTimeVisible").get<bool>());
@@ -2162,36 +1949,29 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
     // - Expected: 1
     // - Actual  : 0
     assertXPath(pXmlDocSlide1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr");
-
-    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf53970()
 {
     // Embedded media file
     {
-        ::sd::DrawDocShellRef xDocShRef
-            = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970.odp"), ODP);
-        xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+        loadFromURL(u"odp/tdf53970.odp");
+        saveAndReload("Impress Office Open XML");
 
         // Without fix in place, the media shape was lost on export.
-        CPPUNIT_ASSERT(getPage(0, xDocShRef)->hasElements());
-
-        xDocShRef->DoClose();
+        CPPUNIT_ASSERT(getPage(0)->hasElements());
     }
 
     // Linked media file
     {
-        ::sd::DrawDocShellRef xDocShRef = loadURL(
-            m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970_linked.odp"), ODP);
-        utl::TempFileNamed tempFile;
-        xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+        loadFromURL(u"odp/tdf53970_linked.odp");
+        utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
         xmlDocUniquePtr pXmlRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
         CPPUNIT_ASSERT(pXmlRels);
         assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@TargetMode='External']", 2);
 
-        uno::Reference<beans::XPropertySet> xShape(getShape(0, getPage(0, xDocShRef)));
+        uno::Reference<beans::XPropertySet> xShape(getShape(0, getPage(0)));
         CPPUNIT_ASSERT(xShape.is());
         OUString sVideoURL;
 
@@ -2200,8 +1980,6 @@ void SdOOXMLExportTest2::testTdf53970()
         CPPUNIT_ASSERT_MESSAGE("MediaURL property is not set",
                                xShape->getPropertyValue("MediaURL") >>= sVideoURL);
         CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
-
-        xDocShRef->DoClose();
     }
 }
 
