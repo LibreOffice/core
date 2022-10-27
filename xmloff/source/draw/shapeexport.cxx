@@ -2321,37 +2321,35 @@ void XMLShapeExport::ImpExportPolygonShape(
     // prepare name (with most used)
     enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
 
-    if(bBezier)
+    uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
+    basegfx::B2DPolyPolygon aPolyPolygon;
+
+    // tdf#145240 the Any can contain PolyPolygonBezierCoords or PointSequenceSequence
+    // (see OWN_ATTR_BASE_GEOMETRY in SvxShapePolyPolygon::getPropertyValueImpl),
+    // so be more flexible in interpreting it. Try to access bezier first:
     {
-        // get PolygonBezier
-        uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
         auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(aAny);
+
         if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
         {
-            const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-                    *pSourcePolyPolygon));
-
-            // complex polygon shape, write as svg:d
-            const OUString aPolygonString(
-                basegfx::utils::exportToSvgD(
-                    aPolyPolygon,
-                    true,       // bUseRelativeCoordinates
-                    false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                    true));     // bHandleRelativeNextPointCompatible
-
-            // write point array
-            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
+            aPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*pSourcePolyPolygon);
         }
     }
-    else
-    {
-        // get non-bezier polygon
-        uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
-        const basegfx::B2DPolyPolygon aPolyPolygon(
-            basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doAccess<drawing::PointSequenceSequence>(aAny)));
 
-        if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
+    // if received no data, try to access point sequence second:
+    if(0 == aPolyPolygon.count())
+    {
+        auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny);
+
+        if(pSourcePolyPolygon)
+        {
+            aPolyPolygon = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(*pSourcePolyPolygon);
+        }
+    }
+
+    if(aPolyPolygon.count())
+    {
+        if(!bBezier && !aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
         {
             // simple polygon shape, can be written as svg:points sequence
             const basegfx::B2DPolygon& aPolygon(aPolyPolygon.getB2DPolygon(0));
