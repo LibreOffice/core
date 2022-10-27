@@ -499,10 +499,18 @@ Fraction Fraction::MakeFraction( tools::Long nN1, tools::Long nN2, tools::Long n
     if ( nD2 < 0 ) { i = -i; nD2 = -nD2; }
     // all positive; i sign
 
+    assert( nN1 >= std::numeric_limits<sal_Int32>::min() );
+    assert( nN1 <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nD1 >= std::numeric_limits<sal_Int32>::min() );
+    assert( nD1 <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nN2 >= std::numeric_limits<sal_Int32>::min() );
+    assert( nN2 <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nD2 >= std::numeric_limits<sal_Int32>::min() );
+    assert( nD2 <= std::numeric_limits<sal_Int32>::max( ));
+
     boost::rational<sal_Int32> a = toRational(i*nN1, nD1);
     boost::rational<sal_Int32> b = toRational(nN2, nD2);
     bool bFail = checked_multiply_by(a, b);
-
 
     while ( bFail ) {
         if ( nN1 > nN2 )
