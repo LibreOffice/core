@@ -1821,6 +1821,7 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
         aAttributeStrings[ PDFWriter::ListNumbering ]       = "ListNumbering";
         aAttributeStrings[ PDFWriter::RowSpan ]             = "RowSpan";
         aAttributeStrings[ PDFWriter::ColSpan ]             = "ColSpan";
+        aAttributeStrings[ PDFWriter::Scope ]               = "Scope";
         aAttributeStrings[ PDFWriter::LinkAnnotation ]      = "LinkAnnotation";
     }
 
@@ -1857,6 +1858,9 @@ const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue
         aValueStrings[ PDFWriter::Underline ]               = "Underline";
         aValueStrings[ PDFWriter::Overline ]                = "Overline";
         aValueStrings[ PDFWriter::LineThrough ]             = "LineThrough";
+        aValueStrings[ PDFWriter::Row ]                     = "Row";
+        aValueStrings[ PDFWriter::Column ]                  = "Column";
+        aValueStrings[ PDFWriter::Both ]                    = "Both";
         aValueStrings[ PDFWriter::Disc ]                    = "Disc";
         aValueStrings[ PDFWriter::Circle ]                  = "Circle";
         aValueStrings[ PDFWriter::Square ]                  = "Square";
@@ -1907,8 +1911,11 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
         if( attribute.first == PDFWriter::ListNumbering )
             appendStructureAttributeLine( attribute.first, attribute.second, aList, true );
         else if( attribute.first == PDFWriter::RowSpan ||
-                 attribute.first == PDFWriter::ColSpan )
+                 attribute.first == PDFWriter::ColSpan ||
+                 attribute.first == PDFWriter::Scope)
+        {
             appendStructureAttributeLine( attribute.first, attribute.second, aTable, false );
+        }
         else if( attribute.first == PDFWriter::LinkAnnotation )
         {
             sal_Int32 nLink = attribute.second.nValue;
@@ -10905,6 +10912,15 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                         eType == PDFWriter::BibEntry    ||
                         eType == PDFWriter::Code        ||
                         eType == PDFWriter::Link )
+                    {
+                        bInsert = true;
+                    }
+                }
+                break;
+            case PDFWriter::Scope:
+                if (eVal == PDFWriter::Row || eVal == PDFWriter::Column || eVal == PDFWriter::Both)
+                {
+                    if (eType == PDFWriter::TableHeader)
                     {
                         bInsert = true;
                     }

@@ -3128,6 +3128,67 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139736)
     CPPUNIT_ASSERT(nArtifacts >= 3);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf149140)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"TableTH_test_LibreOfficeWriter7.3.3_HeaderRow-HeadersInTopRow.fodt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    int nTH(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"));
+            if (pS && pS->GetValue() == "TH")
+            {
+                int nTable(0);
+                auto pAttrs = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("A"));
+                CPPUNIT_ASSERT(pAttrs != nullptr);
+                for (const auto& rAttrRef : pAttrs->GetElements())
+                {
+                    auto pARef = dynamic_cast<vcl::filter::PDFReferenceElement*>(rAttrRef);
+                    CPPUNIT_ASSERT(pARef != nullptr);
+                    auto pAttr = pARef->LookupObject();
+                    CPPUNIT_ASSERT(pAttr != nullptr);
+                    auto pAttrDict = pAttr->GetDictionary();
+                    CPPUNIT_ASSERT(pAttrDict != nullptr);
+                    auto pOwner
+                        = dynamic_cast<vcl::filter::PDFNameElement*>(pAttrDict->LookupElement("O"));
+                    CPPUNIT_ASSERT(pOwner != nullptr);
+                    if (pOwner->GetValue() == "Table")
+                    {
+                        auto pScope = dynamic_cast<vcl::filter::PDFNameElement*>(
+                            pAttrDict->LookupElement("Scope"));
+                        CPPUNIT_ASSERT(pScope != nullptr);
+                        CPPUNIT_ASSERT_EQUAL(OString("Column"), pScope->GetValue());
+                        ++nTable;
+                    }
+                }
+                CPPUNIT_ASSERT_EQUAL(int(1), nTable);
+                ++nTH;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(int(6), nTH);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
 {
     loadFromURL(u"master.odm");

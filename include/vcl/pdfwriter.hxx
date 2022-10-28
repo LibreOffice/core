@@ -138,7 +138,7 @@ public:
         Placement, WritingMode, SpaceBefore, SpaceAfter, StartIndent, EndIndent,
         TextIndent, TextAlign, Width, Height, BlockAlign, InlineAlign,
         LineHeight, BaselineShift, TextDecorationType, ListNumbering,
-        RowSpan, ColSpan,
+        RowSpan, ColSpan, Scope,
 
         // link destination is an artificial attribute that sets
         // the link annotation ID of a Link element
@@ -172,6 +172,8 @@ public:
         Normal,
         // TextDecorationType
         Underline, Overline, LineThrough,
+        // Scope
+        Row, Column, Both,
         // ListNumbering
         Disc, Circle, Square, Decimal, UpperRoman, LowerRoman, UpperAlpha, LowerAlpha
     };
