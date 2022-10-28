@@ -1346,6 +1346,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     aStyleSettings.SetHelpColor(aControlBackgroundColor);
     aStyleSettings.SetHelpTextColor(aControlTextColor);
+    aStyleSettings.SetToolTextColor(aControlTextColor);
 
     // Set text colors for tabs according to OS settings
 
