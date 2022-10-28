@@ -11,12 +11,14 @@
 #include <AccessibilityCheck.hxx>
 #include <AccessibilityIssue.hxx>
 #include <AccessibilityCheckStrings.hrc>
+#include <strings.hrc>
 #include <ndnotxt.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
+#include <sortedobjs.hxx>
 #include <swtable.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -26,11 +28,13 @@
 #include <unotools/intlwrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
+#include <calbck.hxx>
 #include <charatr.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
+#include <txtfrm.hxx>
 #include <svl/itemiter.hxx>
 #include <o3tl/vector_utils.hxx>
 #include <svx/swframetypes.hxx>
@@ -841,6 +845,67 @@ public:
     }
 };
 
+class FakeCaptionCheck : public NodeCheck
+{
+public:
+    FakeCaptionCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        const OUString& sText = pTextNode->GetText();
+
+        if (sText.getLength() == 0)
+            return;
+
+        // Check if it's a real caption
+        const SwNode* aStartFly = pCurrent->FindFlyStartNode();
+        if (aStartFly
+            && aStartFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            return;
+
+        auto aIter = SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti>(*pTextNode);
+        auto nCount = 0;
+        for (auto aTextFrame = aIter.First(); aTextFrame; aTextFrame = aIter.Next())
+        {
+            auto aObjects = aTextFrame->GetDrawObjs();
+            if (aObjects)
+                nCount += aObjects->size();
+
+            if (nCount > 1)
+                return;
+        }
+
+        // Check that there's exactly 1 image anchored in this node
+        if (nCount == 1)
+        {
+            OString sTemp;
+            sText.convertToString(&sTemp, RTL_TEXTENCODING_ASCII_US, 0);
+            if (sText.startsWith(SwResId(STR_POOLCOLL_LABEL))
+                || sText.startsWith(SwResId(STR_POOLCOLL_LABEL_ABB))
+                || sText.startsWith(SwResId(STR_POOLCOLL_LABEL_TABLE))
+                || sText.startsWith(SwResId(STR_POOLCOLL_LABEL_FRAME))
+                || sText.startsWith(SwResId(STR_POOLCOLL_LABEL_DRAWING))
+                || sText.startsWith(SwResId(STR_POOLCOLL_LABEL_FIGURE)))
+            {
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FAKE_CAPTIONS),
+                                          sfx::AccessibilityIssueID::FAKE_CAPTION);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pTextNode);
+                SwDoc& rDocument = pTextNode->GetDoc();
+                pIssue->setDoc(rDocument);
+                pIssue->setStart(0);
+                pIssue->setEnd(sText.getLength());
+            }
+        }
+    }
+};
+
 class BlinkingTextCheck : public NodeCheck
 {
 private:
@@ -1266,6 +1331,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<NewlineSpacingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<SpaceSpacingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<FakeFootnoteCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<FakeCaptionCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;

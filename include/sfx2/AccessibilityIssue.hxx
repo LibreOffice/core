@@ -32,6 +32,7 @@ enum class AccessibilityIssueID
     HYPERLINK_IS_TEXT,
     HYPERLINK_SHORT,
     FAKE_FOOTNOTE,
+    FAKE_CAPTION,
     MANUAL_NUMBERING
 };
 
