@@ -249,7 +249,9 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             bRet = ViewShell::KeyInput(rKEvt, pWin);
             //If object is marked , the corresponding entry is set true , else
             //the corresponding entry is set false .
-            if(KEY_TAB == rKEvt.GetKeyCode().GetCode())
+            if(KEY_TAB == rKEvt.GetKeyCode().GetCode()
+                    || KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
+
             {
                FreshNavigatrTree();
             }
