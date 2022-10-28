@@ -434,6 +434,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OString&, rIdent, void )
             {
                 pFrameView->SetIsNavigatorShowingAllShapes(bShowAllShapes);
             }
+            lcl_select_marked_object(pViewShell, mxTlbObjects.get());
         }
     }
 }
