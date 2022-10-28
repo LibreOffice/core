@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_shape_import_export_tests, \
     sd \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

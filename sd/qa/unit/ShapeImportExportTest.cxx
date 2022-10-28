@@ -19,9 +19,14 @@
 using namespace css;
 
 /// Shape / SdrObject import and export tests
-class ShapeImportExportTest : public SdModelTestBaseXML
+class ShapeImportExportTest : public SdUnoApiTestXml
 {
 public:
+    ShapeImportExportTest()
+        : SdUnoApiTestXml("/sd/qa/unit/data/")
+    {
+    }
+
     void testTextDistancesOOXML();
     void testTextDistancesOOXML_LargerThanTextAreaSpecialCase();
     void testTextDistancesOOXML_Export();
@@ -56,10 +61,9 @@ SdrObject* searchObject(SdrPage const* pPage, std::u16string_view rName)
 /* Test text distances (insets) */
 void ShapeImportExportTest::testTextDistancesOOXML()
 {
-    ::sd::DrawDocShellRef xDocShell
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/TextDistancesInsets1.pptx"), PPTX);
+    loadFromURL(u"TextDistancesInsets1.pptx");
 
-    SdrPage const* pPage = GetPage(1, xDocShell);
+    SdrPage const* pPage = GetPage(1);
     // Bottom Margin = 4cm
     {
         std::array<std::u16string_view, 3> aObjectDesc = {
@@ -161,17 +165,14 @@ void ShapeImportExportTest::testTextDistancesOOXML()
             CPPUNIT_ASSERT_EQUAL(tools::Long(-1292), pTextObj->GetTextLowerDistance());
         }
     }
-
-    xDocShell->DoClose();
 }
 
 /* Test text distances (insets) variants where top+bottom margin > text area*/
 void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase()
 {
-    ::sd::DrawDocShellRef xDocShell
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/TextDistancesInsets2.pptx"), PPTX);
+    loadFromURL(u"TextDistancesInsets2.pptx");
 
-    SdrPage const* pPage = GetPage(1, xDocShell);
+    SdrPage const* pPage = GetPage(1);
 
     // Top/Bottom 0cm/3cm, 1cm/4cm, 4cm/7cm - all should be converted to the same value in LO
     {
@@ -252,20 +253,14 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
             CPPUNIT_ASSERT_EQUAL(tools::Long(-792), pTextObj->GetTextLowerDistance());
         }
     }
-
-    xDocShell->DoClose();
 }
 
 /* Test export of text distances (insets) - conversion back of special case */
 void ShapeImportExportTest::testTextDistancesOOXML_Export()
 {
-    ::sd::DrawDocShellRef xDocShell
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/TextDistancesInsets3.pptx"), PPTX);
+    loadFromURL(u"TextDistancesInsets3.pptx");
 
-    utl::TempFileNamed aTempFile;
-    xDocShell = saveAndReload(xDocShell.get(), PPTX, &aTempFile);
-    xDocShell->DoClose();
-
+    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
