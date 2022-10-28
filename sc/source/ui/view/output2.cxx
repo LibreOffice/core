@@ -4689,15 +4689,25 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 {
                                     eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
-                                    if ( nAttrRotate == 18000_deg100 )
+                                    // tdf#143377 To use the same limits to avoid too big Skew
+                                    // with TextOrientation in Calc, use 1/2 degree here, too.
+                                    // This equals '50' in the notation here
+                                    const bool bForbidSkew(
+                                        nAttrRotate < Degree100(50) || // range [0..50]
+                                        nAttrRotate > Degree100(36000 - 50) || // range [35950..36000[
+                                        (nAttrRotate > Degree100(18000 - 50) && (nAttrRotate < Degree100(18000 + 50)))); // range 50 around 18000
+
+                                    if ( bForbidSkew )
+                                    {
                                         eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
+                                    }
 
                                     if ( bLayoutRTL )
                                         nAttrRotate = -nAttrRotate;
 
                                     double nRealOrient = toRadians(nAttrRotate);   // 1/100 degree
                                     nCos = cos( nRealOrient );
-                                    nSin = sin( nRealOrient );
+                                    nSin = bForbidSkew ? 0 : sin( nRealOrient );
                                 }
                             }
 

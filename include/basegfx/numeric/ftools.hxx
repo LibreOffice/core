@@ -109,7 +109,7 @@ namespace basegfx
 
     /** Snap v to the range [0.0 .. fWidth] using modulo
      */
-    double snapToZeroRange(double v, double fWidth);
+    BASEGFX_DLLPUBLIC double snapToZeroRange(double v, double fWidth);
 
     /** Snap v to the range [fLow .. fHigh] using modulo
      */

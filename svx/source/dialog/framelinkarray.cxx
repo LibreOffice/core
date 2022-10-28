@@ -29,6 +29,7 @@
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+// #include <basegfx/numeric/ftools.hxx>
 
 //#define OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
 #ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
@@ -110,27 +111,47 @@ basegfx::B2DHomMatrix Cell::HelperCreateB2DHomMatrixFromB2DRange(
 
     if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode )
     {
-        // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
-        const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
+        // tdf#143377 We need to limit applying Skew to geometry since the closer
+        // we get to 0.0 or PI the more sin(mfOrientation) will get to zero and the
+        // huger the Skew effect will be. For that, use an epsilon-radius of 1/2
+        // degree around the dangerous points 0.0 and PI.
 
-        switch (meRotMode)
+        // Snap to modulo to [0.0 .. 2PI[ to make compare easier
+        const double fSnapped(::basegfx::snapToZeroRange(mfOrientation, M_PI * 2.0));
+
+        // As a compromize, allow up to 1/2 degree
+        static const double fMinAng(M_PI/360.0);
+
+        // Check if Skew makes sense or would be too huge
+        const bool bForbidSkew(
+            fSnapped < fMinAng || // range [0.0 .. fMinAng]
+            fSnapped > (M_PI * 2.0) - fMinAng || // range [PI-fMinAng .. 2PI[
+            fabs(fSnapped - M_PI) < fMinAng); // range [PI-fMinAng .. PI+fMinAng]
+
+        if(!bForbidSkew)
         {
-        case SvxRotateMode::SVX_ROTATE_MODE_TOP:
-            // shear Y-Axis
-            aY.setX(-fSkew);
-            break;
-        case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
-            // shear origin half, Y full
-            aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
-            aY.setX(-fSkew);
-            break;
-        case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
-            // shear origin full, Y full
-            aOrigin.setX(aOrigin.getX() + fSkew);
-            aY.setX(-fSkew);
-            break;
-        default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
-            break;
+            // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
+            const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
+
+            switch (meRotMode)
+            {
+            case SvxRotateMode::SVX_ROTATE_MODE_TOP:
+                // shear Y-Axis
+                aY.setX(-fSkew);
+                break;
+            case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
+                // shear origin half, Y full
+                aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
+                aY.setX(-fSkew);
+                break;
+            case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
+                // shear origin full, Y full
+                aOrigin.setX(aOrigin.getX() + fSkew);
+                aY.setX(-fSkew);
+                break;
+            default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
+                break;
+            }
         }
     }
 
