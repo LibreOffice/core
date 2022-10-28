@@ -845,8 +845,8 @@ void SfxViewShell::Activate( bool bMDI )
     if ( bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
-        if ( pSh->GetModel().is() )
-            pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame().GetController() );
+        if (const auto xModel = pSh->GetModel())
+            xModel->setCurrentController(GetController());
 
         SetCurrentDocument();
     }
