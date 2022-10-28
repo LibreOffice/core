@@ -941,40 +941,39 @@ namespace
     class ValueTransfer
     {
     public:
-        ValueTransfer( const sal_Int32& _rSourcePos, const sal_Int32& _rDestPos, std::vector< sal_Int32 >&& _rColTypes,
+        ValueTransfer( std::vector< sal_Int32 > _rColTypes,
             const Reference< XRow >& _rxSource, const Reference< XParameters >& _rxDest )
-            :m_rSourcePos( _rSourcePos )
-            ,m_rDestPos( _rDestPos )
-            ,m_rColTypes( std::move(_rColTypes) )
+            :m_ColTypes( std::move(_rColTypes) )
             ,m_xSource( _rxSource )
             ,m_xDest( _rxDest )
         {
         }
 
     template< typename VALUE_TYPE >
-    void transferValue( VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
+    void transferValue( sal_Int32 _nSourcePos, sal_Int32 _nDestPos,
+        VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
         void (SAL_CALL XParameters::*_pSetter)( sal_Int32, VALUE_TYPE ) )
     {
-        VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
+        VALUE_TYPE value( (m_xSource.get()->*_pGetter)( _nSourcePos ) );
         if ( m_xSource->wasNull() )
-            m_xDest->setNull( m_rDestPos, m_rColTypes[ m_rSourcePos ] );
+            m_xDest->setNull( _nDestPos, m_ColTypes[ _nSourcePos ] );
         else
-            (m_xDest.get()->*_pSetter)( m_rDestPos, value );
+            (m_xDest.get()->*_pSetter)( _nDestPos, value );
     }
- template< typename VALUE_TYPE >
-    void transferComplexValue( VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
+
+    template< typename VALUE_TYPE >
+    void transferComplexValue( sal_Int32 _nSourcePos, sal_Int32 _nDestPos,
+        VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
         void (SAL_CALL XParameters::*_pSetter)( sal_Int32, const VALUE_TYPE& ) )
     {
-        const VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
+        const VALUE_TYPE value( (m_xSource.get()->*_pGetter)( _nSourcePos ) );
         if ( m_xSource->wasNull() )
-            m_xDest->setNull( m_rDestPos, m_rColTypes[ m_rSourcePos ] );
+            m_xDest->setNull( _nDestPos, m_ColTypes[ _nSourcePos ] );
         else
-            (m_xDest.get()->*_pSetter)( m_rDestPos, value );
+            (m_xDest.get()->*_pSetter)( _nDestPos, value );
     }
     private:
-        const sal_Int32&                    m_rSourcePos;
-        const sal_Int32&                    m_rDestPos;
-        const std::vector< sal_Int32 >    m_rColTypes;
+        const std::vector< sal_Int32 >      m_ColTypes;
         const Reference< XRow >             m_xSource;
         const Reference< XParameters >      m_xDest;
     };
@@ -1137,13 +1136,12 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             // notify listeners
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copyingRow, aCopyEvent );
 
-            sal_Int32 nDestColumn( 0 );
-            sal_Int32 nSourceColumn( 1 );
-            ValueTransfer aTransfer( nSourceColumn, nDestColumn, std::vector(aSourceColTypes), xRow, xStatementParams );
+            sal_Int32 nSourceColumn( 0 );
+            ValueTransfer aTransfer( aSourceColTypes, xRow, xStatementParams );
 
             for ( auto const& rColumnPos : aColumnPositions )
             {
-                nDestColumn = rColumnPos.first;
+                sal_Int32 nDestColumn = rColumnPos.first;
                 if ( nDestColumn == COLUMN_POSITION_NOT_FOUND )
                 {
                     ++nSourceColumn;
@@ -1161,7 +1159,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 {
                     case DataType::DOUBLE:
                     case DataType::REAL:
-                        aTransfer.transferValue( &XRow::getDouble, &XParameters::setDouble );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getDouble, &XParameters::setDouble );
                         break;
 
                     case DataType::CHAR:
@@ -1169,64 +1167,64 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::LONGVARCHAR:
                     case DataType::DECIMAL:
                     case DataType::NUMERIC:
-                        aTransfer.transferComplexValue( &XRow::getString, &XParameters::setString );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getString, &XParameters::setString );
                         break;
 
                     case DataType::BIGINT:
-                        aTransfer.transferValue( &XRow::getLong, &XParameters::setLong );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getLong, &XParameters::setLong );
                         break;
 
                     case DataType::FLOAT:
-                        aTransfer.transferValue( &XRow::getFloat, &XParameters::setFloat );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getFloat, &XParameters::setFloat );
                         break;
 
                     case DataType::LONGVARBINARY:
                     case DataType::BINARY:
                     case DataType::VARBINARY:
-                        aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getBytes, &XParameters::setBytes );
                         break;
 
                     case DataType::DATE:
-                        aTransfer.transferComplexValue( &XRow::getDate, &XParameters::setDate );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getDate, &XParameters::setDate );
                         break;
 
                     case DataType::TIME:
-                        aTransfer.transferComplexValue( &XRow::getTime, &XParameters::setTime );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getTime, &XParameters::setTime );
                         break;
 
                     case DataType::TIMESTAMP:
-                        aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
 
                     case DataType::BIT:
                         if ( aSourcePrec[nSourceColumn] > 1 )
                         {
-                            aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
+                            aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getBytes, &XParameters::setBytes );
                             break;
                         }
                         [[fallthrough]];
                     case DataType::BOOLEAN:
-                        aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getBoolean, &XParameters::setBoolean );
                         break;
 
                     case DataType::TINYINT:
-                        aTransfer.transferValue( &XRow::getByte, &XParameters::setByte );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getByte, &XParameters::setByte );
                         break;
 
                     case DataType::SMALLINT:
-                        aTransfer.transferValue( &XRow::getShort, &XParameters::setShort );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getShort, &XParameters::setShort );
                         break;
 
                     case DataType::INTEGER:
-                        aTransfer.transferValue( &XRow::getInt, &XParameters::setInt );
+                        aTransfer.transferValue( nSourceColumn, nDestColumn, &XRow::getInt, &XParameters::setInt );
                         break;
 
                     case DataType::BLOB:
-                        aTransfer.transferComplexValue( &XRow::getBlob, &XParameters::setBlob );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getBlob, &XParameters::setBlob );
                         break;
 
                     case DataType::CLOB:
-                        aTransfer.transferComplexValue( &XRow::getClob, &XParameters::setClob );
+                        aTransfer.transferComplexValue( nSourceColumn, nDestColumn, &XRow::getClob, &XParameters::setClob );
                         break;
 
                     default:
