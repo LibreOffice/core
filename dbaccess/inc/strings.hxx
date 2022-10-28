@@ -176,7 +176,7 @@ inline constexpr OUStringLiteral SERVICE_SDB_DATACOLUMN = u"com.sun.star.sdb.Dat
 inline constexpr OUStringLiteral SERVICE_SDB_DATASOURCE = u"com.sun.star.sdb.DataSource";
 inline constexpr OUStringLiteral SERVICE_SDB_RESULTSET = u"com.sun.star.sdb.ResultSet";
 inline constexpr OUStringLiteral SERVICE_SDB_ROWSET = u"com.sun.star.sdb.RowSet";
-inline constexpr OUStringLiteral SERVICE_SDB_PREPAREDSTATMENT
+inline constexpr OUStringLiteral SERVICE_SDB_PREPAREDSTATEMENT
     = u"com.sun.star.sdb.PreparedStatement";
 inline constexpr OUStringLiteral SERVICE_SDB_CALLABLESTATEMENT
     = u"com.sun.star.sdb.CallableStatement";
