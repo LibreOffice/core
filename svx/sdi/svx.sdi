@@ -12546,6 +12546,24 @@ SfxVoidItem AccessibilityCheck SID_ACCESSIBILITY_CHECK
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxBoolItem AccessibilityCheckOnline SID_ACCESSIBILITY_CHECK_ONLINE
+(SfxBoolItem Enable FN_PARAM_1)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]
+
 XColorItem GlowColor SID_ATTR_GLOW_COLOR
 
 [

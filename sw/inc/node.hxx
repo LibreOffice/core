@@ -87,7 +87,6 @@ namespace sw
 struct AccessibilityCheckStatus
 {
     std::unique_ptr<sfx::AccessibilityIssueCollection> pCollection;
-    bool bDirty = true;
 };
 
 }

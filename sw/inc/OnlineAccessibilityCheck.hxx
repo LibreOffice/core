@@ -52,15 +52,18 @@ private:
     SwNodeOffset m_nPreviousNodeIndex;
     sal_Int32 m_nAccessibilityIssues;
     bool m_bInitialCheck;
+    bool m_bOnlineCheckStatus;
 
     void runAccessibilityCheck(SwNode* pNode);
     void updateStatusbar();
     void updateNodeStatus(SwNode* pContentNode);
     void initialCheck();
+    void lookForPreviousNodeAndUpdate(SwPosition const& rNewPos);
+    void clearAccessibilityIssuesFromAllNodes();
 
 public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
-    void update(const SwPosition& rNewPos);
+    void update(SwPosition const& rNewPos);
     sal_Int32 getNumberOfAccessibilityIssues() { return m_nAccessibilityIssues; }
 };
 

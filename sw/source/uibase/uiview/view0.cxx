@@ -25,6 +25,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/infobar.hxx>
@@ -326,6 +327,12 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case SID_AUTOSPELL_CHECK:
                 aBool.SetValue( pOpt->IsOnlineSpell() );
             break;
+            case SID_ACCESSIBILITY_CHECK_ONLINE:
+            {
+                bool bOnlineAccessibilityCheck = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+                aBool.SetValue(bOnlineAccessibilityCheck);
+            }
+            break;
             case FN_SHADOWCURSOR:
                 if ( pOpt->getBrowseMode() )
                 {
@@ -573,6 +580,23 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             }
         }
         break;
+
+    case SID_ACCESSIBILITY_CHECK_ONLINE:
+    {
+        if (pArgs && pArgs->HasItem(FN_PARAM_1, &pItem))
+        {
+            bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        }
+        else if (STATE_TOGGLE == eState)
+        {
+            bool bOnlineCheck = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+            bSet = !bOnlineCheck;
+        }
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(bSet, batch);
+        batch->commit();
+    }
+    break;
 
     case FN_SHADOWCURSOR:
         if( STATE_TOGGLE == eState )

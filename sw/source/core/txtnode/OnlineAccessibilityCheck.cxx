@@ -66,6 +66,8 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
     , m_nPreviousNodeIndex(-1)
     , m_nAccessibilityIssues(0)
     , m_bInitialCheck(false)
+    , m_bOnlineCheckStatus(
+          officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get())
 {
 }
 
@@ -159,9 +161,32 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
     bool bOnlineCheckStatus
         = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
 
+    if (bOnlineCheckStatus != m_bOnlineCheckStatus)
+    {
+        EndListeningAll();
+        m_pPreviousNode = nullptr;
+        m_nPreviousNodeIndex = SwNodeOffset(-1);
+        m_bInitialCheck = false; // force initial check
+
+        if (!bOnlineCheckStatus)
+        {
+            clearAccessibilityIssuesFromAllNodes(); // cleanup all accessibility check data on nodes
+            updateStatusbar();
+        }
+
+        m_bOnlineCheckStatus = bOnlineCheckStatus;
+    }
+
     if (!bOnlineCheckStatus)
         return;
 
+    initialCheck();
+
+    lookForPreviousNodeAndUpdate(rNewPos);
+}
+
+void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rNewPos)
+{
     auto nCurrenNodeIndex = rNewPos.GetNodeIndex();
     auto* pCurrentNode = &rNewPos.GetNode();
 
@@ -217,8 +242,23 @@ void OnlineAccessibilityCheck::update(const SwPosition& rNewPos)
         m_pPreviousNode = nullptr;
         m_nPreviousNodeIndex = SwNodeOffset(-1);
     }
+}
 
-    initialCheck();
+void OnlineAccessibilityCheck::clearAccessibilityIssuesFromAllNodes()
+{
+    auto const& pNodes = m_rDocument.GetNodes();
+    for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
+    {
+        SwNode* pNode = pNodes[n];
+        if (pNode)
+        {
+            auto& rStatus = pNode->getAccessibilityCheckStatus();
+            rStatus.pCollection.reset();
+        }
+    }
+
+    m_aNodes.clear();
+    updateStatusbar();
 }
 
 } // end sw

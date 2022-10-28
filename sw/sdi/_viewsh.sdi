@@ -825,10 +825,17 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
     SID_AUTOSPELL_CHECK
     [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions;
+    ]
+
+    SID_ACCESSIBILITY_CHECK_ONLINE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions;
     ]
 
       //Extra/Options/View
