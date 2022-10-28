@@ -538,6 +538,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 break;
 
             case vcl::PDFWriter::TableHeader :
+                mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Scope, vcl::PDFWriter::Column);
+                [[fallthrough]];
             case vcl::PDFWriter::TableData :
                 bPlacement =
                 bWritingMode =
