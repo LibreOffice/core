@@ -76,8 +76,8 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/string_view.hxx>
+#include <unotools/fcm.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/mvc.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
@@ -3423,7 +3423,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             }
 
             // introduce model/view/controller to each other
-            utl::ConnectModelViewController(xModel, xTargetFrame, xController);
+            utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
         }
 
         rInfo.Document = xModel.get();

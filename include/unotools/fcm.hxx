@@ -34,11 +34,11 @@ inline void ConnectModelController(const css::uno::Reference<css::frame::XModel>
     xModel->setCurrentController(xController);
 }
 
-// Introduce model/view/controller to each other
+// Introduce frame/controller/model to each other
 inline void
-ConnectModelViewController(const css::uno::Reference<css::frame::XModel>& xModel,
-                           const css::uno::Reference<css::frame::XFrame>& xFrame,
-                           const css::uno::Reference<css::frame::XController2>& xController)
+ConnectFrameControllerModel(const css::uno::Reference<css::frame::XFrame>& xFrame,
+                            const css::uno::Reference<css::frame::XController2>& xController,
+                            const css::uno::Reference<css::frame::XModel>& xModel)
 {
     ConnectModelController(xModel, xController);
     if (xFrame)

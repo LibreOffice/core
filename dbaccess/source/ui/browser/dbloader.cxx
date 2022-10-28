@@ -38,7 +38,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/mvc.hxx>
+#include <unotools/fcm.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

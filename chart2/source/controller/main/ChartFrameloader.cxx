@@ -22,8 +22,8 @@
 #include <MediaDescriptorHelper.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
+#include <unotools/fcm.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/mvc.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     //connect frame, controller and model one to each other:
     if(xModel.is())
     {
-        utl::ConnectModelViewController(xModel, xFrame, xController);
+        utl::ConnectFrameControllerModel(xFrame, xController, xModel);
     }
 
     // call initNew() or load() at XLoadable
