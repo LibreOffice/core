@@ -429,6 +429,9 @@ ShapeContextHandler::getShape()
                     pShapePtr->setDiagramDoms(mpShape->getDiagramDoms());
                     pShapePtr->keepDiagramDrawing(*mxShapeFilterBase, aFragmentPath);
 
+                    if (mpShape->getFontRefColorForNodes().isUsed())
+                        applyFontRefColor(pShapePtr, mpShape->getFontRefColorForNodes());
+
                     // migrate IDiagramHelper to new oox::Shape (from mpShape which was loaded
                     // to pShapePtr where the geometry is now constructed)
                     mpShape->migrateDiagramHelperToNewShape(pShapePtr);
@@ -586,6 +589,16 @@ void ShapeContextHandler::setGraphicMapper(css::uno::Reference<css::graphic::XGr
     mxShapeFilterBase->setGraphicMapper(rxGraphicMapper);
 }
 
+void ShapeContextHandler::applyFontRefColor(const oox::drawingml::ShapePtr& pShape,
+                                            const oox::drawingml::Color& rFontRefColor)
+{
+    pShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rFontRefColor;
+    std::vector<oox::drawingml::ShapePtr>& vChildren = pShape->getChildren();
+    for (auto const& child : vChildren)
+    {
+        applyFontRefColor(child, rFontRefColor);
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

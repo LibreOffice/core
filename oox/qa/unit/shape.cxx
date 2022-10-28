@@ -19,6 +19,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <officecfg/Office/Common.hxx>
 #include <rtl/math.hxx>
@@ -250,6 +251,59 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
         CPPUNIT_ASSERT_EQUAL(aExpected[i].nLowerDistance, nLower);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].nUpperDistance, nUpper);
     }
+
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
+        pChange->commit();
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
+{
+    // The document contains a SmartArt where the color for the texts in the shapes is given by
+    // the theme.
+    // Error was, that the theme was not considered and therefore the text was white.
+
+    // Make sure it is not loaded as metafile but with single shapes.
+    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
+        pChange->commit();
+    }
+
+    // get SmartArt
+    loadFromURL(u"tdf54095_SmartArtThemeTextColor.docx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // shape 0 is the background shape without text
+    uno::Reference<text::XTextRange> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);
+
+    // text color
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+    sal_Int32 nActualColor{ 0 };
+    xPortion->getPropertyValue("CharColor") >>= nActualColor;
+    // Without fix the test would have failed with:
+    // - Expected:  2050429 (0x1F497D)
+    // - Actual  : 16777215 (0xFFFFFF), that is text was white
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), nActualColor);
+
+    // clrScheme. For map between name in docx and index from CharColorTheme see
+    // oox::drawingml::Color::getSchemeColorIndex()
+    // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2),
+                         xPortion->getPropertyValue("CharColorTheme").get<sal_Int16>());
 
     if (!bUseGroup)
     {

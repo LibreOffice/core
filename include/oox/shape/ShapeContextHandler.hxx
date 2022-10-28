@@ -21,6 +21,7 @@
 #include <memory>
 #include <stack>
 #include <cppuhelper/implbase.hxx>
+#include <oox/drawingml/color.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -151,8 +152,10 @@ private:
     css::uno::Reference<XFastContextHandler> const & getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> const & getWpgContext(sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
-};
 
+    void applyFontRefColor(const oox::drawingml::ShapePtr& pShape,
+                           const oox::drawingml::Color& rFontRefColor);
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
