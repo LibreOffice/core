@@ -1066,6 +1066,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
     const OCopyTableWizard& rWizard             = impl_getDialog_throw();
     ODatabaseExport::TPositions aColumnPositions = rWizard.GetColumnPositions();
+    const bool bShouldCreatePrimaryKey = rWizard.shouldCreatePrimaryKey();
 
     Reference< XRow > xRow              ( _rxSourceResultSet, UNO_QUERY_THROW );
     Reference< XRowLocate > xRowLocate  ( _rxSourceResultSet, UNO_QUERY_THROW );
@@ -1097,6 +1098,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     const Any* pSelectedRow         = m_aSourceSelection.getConstArray();
     const Any* pSelEnd              = pSelectedRow + m_aSourceSelection.getLength();
 
+    sal_Int32 nRowCount = 0;
     bool bContinue = false;
 
     CopyTableRowEvent aCopyEvent;
@@ -1131,9 +1133,12 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             break;
         }
 
+        ++nRowCount;
+
         aCopyEvent.Error.clear();
         try
         {
+            bool bInsertedPrimaryKey = false;
             // notify listeners
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copyingRow, aCopyEvent );
 
@@ -1148,6 +1153,14 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 {
                     ++nSourceColumn;
                     // otherwise we don't get the correct value when only the 2nd source column was selected
+                    continue;
+                }
+
+                if ( bShouldCreatePrimaryKey && !bInsertedPrimaryKey )
+                {
+                    xStatementParams->setInt( 1, nRowCount );
+                    ++nSourceColumn;
+                    bInsertedPrimaryKey = true;
                     continue;
                 }
 
@@ -1252,6 +1265,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         }
         catch( const Exception& )
         {
+            TOOLS_WARN_EXCEPTION("dbaccess", "");
             aCopyEvent.Error = ::cppu::getCaughtException();
         }
 
