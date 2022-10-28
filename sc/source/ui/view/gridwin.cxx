@@ -1376,12 +1376,12 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     mpFilterBox->EndInit();
 }
 
-void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
+void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
 {
     mpFilterBox.reset();
 
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    const SCTAB nTab = mrViewData.GetTabNo();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     tools::Long nSizeX  = 0;
@@ -1417,6 +1417,9 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     // SetSize later
 
+    const sal_uInt32 nIndex = rDoc.GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA)->GetValue();
+    const ScValidationData* pData = nIndex ? rDoc.GetValidationEntry(nIndex) : nullptr;
+
     bool bEmpty = false;
     std::vector<ScTypedStrData> aStrings; // case sensitive
     // Fill List
@@ -1435,7 +1438,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
             EnterWait();
 
         for (const auto& rString : aStrings)
-            rFilterBox.append_text(rString.GetString());
+        {
+            // IsIgnoreBlank allows blank values. Don't add empty string unless "Allow Empty Cells"
+            const OUString& rFilterString = rString.GetString();
+            if (!rFilterString.isEmpty() || !pData || pData->IsIgnoreBlank())
+                rFilterBox.append_text(rFilterString);
+        }
 
         if (bWait)
             LeaveWait();
@@ -1447,10 +1455,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     sal_Int32 nSelPos = -1;
 
-    sal_uInt32 nIndex = rDoc.GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
     if ( nIndex )
     {
-        const ScValidationData* pData = rDoc.GetValidationEntry( nIndex );
         if (pData)
         {
             std::unique_ptr<ScTypedStrData> pNew;
