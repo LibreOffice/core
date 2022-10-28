@@ -276,7 +276,7 @@
 #define RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT       NC_("RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT", "Text direction left-to-right (vertical)")
 #define RID_SVXITEMS_FRMDIR_ENVIRONMENT         NC_("RID_SVXITEMS_FRMDIR_ENVIRONMENT", "Use superordinate object text direction setting")
 #define RID_SVXITEMS_FRMDIR_VERT_BOT_LEFT       NC_("RID_SVXITEMS_FRMDIR_VERT_BOT_LEFT", "Text direction left-to-right (vertical from bottom)")
-#define RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT90     NC_("RID_SVXITEMS_FRMDIR_Vert_TOP_RIGHT90", "Text direction right-to-left (vertical all characters rotated)")
+#define RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT90     NC_("RID_SVXITEMS_FRMDIR_Vert_TOP_RIGHT90", "Text direction right-to-left (vertical, all characters rotated)")
 #define RID_SVXITEMS_PARASNAPTOGRID_ON          NC_("RID_SVXITEMS_PARASNAPTOGRID_ON", "Paragraph snaps to text grid (if active)")
 #define RID_SVXITEMS_PARASNAPTOGRID_OFF         NC_("RID_SVXITEMS_PARASNAPTOGRID_OFF", "Paragraph does not snap to text grid")
 #define RID_SVXITEMS_CHARHIDDEN_FALSE           NC_("RID_SVXITEMS_CHARHIDDEN_FALSE", "Not hidden")

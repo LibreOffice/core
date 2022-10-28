@@ -76,7 +76,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin_end">5</property>
-                <property name="label" translatable="yes" context="deepltabpage|label3">Auth Key:</property>
+                <property name="label" translatable="yes" context="deepltabpage|label3">Authentication key:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">authkey</property>
               </object>
