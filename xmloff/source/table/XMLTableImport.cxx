@@ -35,6 +35,8 @@
 
 #include <utility>
 #include <xmloff/table/XMLTableImport.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -89,6 +91,44 @@ struct MergeInfo
 
     MergeInfo( sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
         : mnStartColumn( nStartColumn ), mnStartRow( nStartRow ), mnEndColumn( nStartColumn + nColumnSpan - 1 ), mnEndRow( nStartRow + nRowSpan - 1 ) {};
+};
+
+class XMLCellImportPropertyMapper : public SvXMLImportPropertyMapper
+{
+public:
+    using SvXMLImportPropertyMapper::SvXMLImportPropertyMapper;
+
+    bool handleSpecialItem(
+        XMLPropertyState& rProperty,
+        std::vector< XMLPropertyState >& rProperties,
+        const OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& /*rNamespaceMap*/) const override
+    {
+        assert(getPropertySetMapper()->GetEntryXMLName(rProperty.mnIndex) == GetXMLToken(XML_BACKGROUND_COLOR));
+        (void)rProperty;
+
+        auto nIndex = getPropertySetMapper()->GetEntryIndex(XML_NAMESPACE_DRAW, GetXMLToken(XML_FILL), 0);
+        XMLPropertyState aFillProperty(nIndex);
+
+        if (IsXMLToken(rValue, XML_TRANSPARENT))
+        {
+            getPropertySetMapper()->importXML(GetXMLToken(XML_NONE), aFillProperty, rUnitConverter);
+            rProperties.push_back(aFillProperty);
+        }
+        else
+        {
+            getPropertySetMapper()->importXML(GetXMLToken(XML_SOLID), aFillProperty, rUnitConverter);
+            rProperties.push_back(aFillProperty);
+
+            nIndex = getPropertySetMapper()->GetEntryIndex(XML_NAMESPACE_DRAW, GetXMLToken(XML_FILL_COLOR), 0);
+            XMLPropertyState aColorProperty(nIndex);
+            getPropertySetMapper()->importXML(rValue, aColorProperty, rUnitConverter);
+            rProperties.push_back(aColorProperty);
+        }
+
+        return false;
+    }
 };
 
 }
@@ -216,7 +256,7 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     {
         mxCellImportPropertySetMapper = new SvXMLImportPropertyMapper( xCellPropertySetMapper, rImport );
         mxCellImportPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImport));
-        mxCellImportPropertySetMapper->ChainImportMapper(new SvXMLImportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true), rImport));
+        mxCellImportPropertySetMapper->ChainImportMapper(new XMLCellImportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true), rImport));
     }
 
     rtl::Reference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef, false ) );

@@ -92,6 +92,18 @@ const XMLPropertyMapEntry* getCellPropertiesMap()
     static const XMLPropertyMapEntry aXMLCellProperties[] =
     {
         CELLMAP( "RotateAngle",     XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE,         XML_SD_TYPE_CELL_ROTATION_ANGLE,   0),
+        CELLMAP( "TextVerticalAdjust", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN,      XML_SD_TYPE_VERTICAL_ALIGN|MID_FLAG_SPECIAL_ITEM_EXPORT, 0),
+        CELLMAP( "BackColor",       XML_NAMESPACE_FO,    XML_BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_SPECIAL_ITEM, 0),
+        CELLMAP( "LeftBorder",      XML_NAMESPACE_FO,    XML_BORDER,                 XML_TYPE_BORDER|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARALLBORDER),
+        CELLMAP( "LeftBorder",      XML_NAMESPACE_FO,    XML_BORDER_LEFT,            XML_TYPE_BORDER|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARLEFTBORDER),
+        CELLMAP( "RightBorder",     XML_NAMESPACE_FO,    XML_BORDER_RIGHT,           XML_TYPE_BORDER|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARRIGHTBORDER),
+        CELLMAP( "TopBorder",       XML_NAMESPACE_FO,    XML_BORDER_TOP,             XML_TYPE_BORDER|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARTOPBORDER),
+        CELLMAP( "BottomBorder",    XML_NAMESPACE_FO,    XML_BORDER_BOTTOM,          XML_TYPE_BORDER|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARBOTTOMBORDER),
+        CELLMAP( "TextLeftDistance", XML_NAMESPACE_FO,   XML_PADDING,                XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARALLBORDERDISTANCE),
+        CELLMAP( "TextLeftDistance", XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARLEFTBORDERDISTANCE),
+        CELLMAP( "TextRightDistance", XML_NAMESPACE_FO,  XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARRIGHTBORDERDISTANCE),
+        CELLMAP( "TextUpperDistance", XML_NAMESPACE_FO,  XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARTOPBORDERDISTANCE),
+        CELLMAP( "TextLowerDistance", XML_NAMESPACE_FO,  XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_CHARBOTTOMBORDERDISTANCE),
         MAP_END
     };
 
@@ -190,7 +202,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     {
         mxCellExportPropertySetMapper = xExportPropertyMapper;
         mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
-        mxCellExportPropertySetMapper->ChainExportMapper(new SvXMLExportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true)));
+        mxCellExportPropertySetMapper->ChainExportMapper(new XMLCellExportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true)));
     }
 
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef, true ) );

@@ -28,6 +28,7 @@
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -95,6 +96,7 @@ public:
     void testMasterPageBackgroundFullSize();
     void testColumnsODG();
     void testTdf112126();
+    void testCellProperties();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -143,6 +145,7 @@ public:
     CPPUNIT_TEST(testMasterPageBackgroundFullSize);
     CPPUNIT_TEST(testColumnsODG);
     CPPUNIT_TEST(testTdf112126);
+    CPPUNIT_TEST(testCellProperties);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1992,6 +1995,38 @@ void SdExportTest::testTdf112126()
     // - Actual  : Slide 1
     CPPUNIT_ASSERT_EQUAL(OUString("Page 1"), xPageName);
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testCellProperties()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odg/tablestyles.fodg"), FODG);
+    utl::TempFileNamed tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj != nullptr);
+    uno::Reference<beans::XPropertySet> xCell(pTableObj->getTable()->getCellByPosition(0, 0),
+                                              uno::UNO_QUERY_THROW);
+
+    Color nColor;
+    table::BorderLine2 aBorderLine;
+    drawing::TextVerticalAdjust aTextAdjust;
+    sal_Int32 nPadding;
+
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), nColor);
+    xCell->getPropertyValue("RightBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(Color(0x99ccff), Color(ColorTransparency, aBorderLine.Color));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(159), aBorderLine.LineWidth);
+    xCell->getPropertyValue("TextRightDistance") >>= nPadding;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(300), nPadding);
+    xCell->getPropertyValue("TextVerticalAdjust") >>= aTextAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust::TextVerticalAdjust_CENTER, aTextAdjust);
+
+    xDocShRef->DoClose();
+    tempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
