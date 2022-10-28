@@ -3164,6 +3164,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         }
         else if (const SwpHints* pTextAttrs = rNode.GetpSwpHints())
         {
+            bool bFoundAtEnd = false;
             for( size_t i = 0; i < pTextAttrs->Count(); ++i )
             {
                 const SwTextAttr* pHt = pTextAttrs->Get(i);
@@ -3172,13 +3173,23 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // Check if these attributes are for the last character in the paragraph
                 // - which means the paragraph marker. If a paragraph has 7 characters,
                 // then properties on character 8 are for the paragraph marker
-                if( endPos && (startPos == *endPos ) && (*endPos == rNode.GetText().getLength()) )
+                if (!endPos)
+                {
+                    continue;
+                }
+                bool bAtEnd = (startPos == *endPos ) && (*endPos == rNode.GetText().getLength());
+                if (bAtEnd)
+                {
+                    bFoundAtEnd = true;
+                }
+                bool bWholePara = startPos == 0 && *endPos == rNode.GetText().getLength();
+                if (bAtEnd || (!bFoundAtEnd && bWholePara))
                 {
                     SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
                     sal_uInt16 nWhich = pHt->GetAttr().Which();
                     SAL_INFO( "sw.ww8", "nWhich" << nWhich);
                     if ((nWhich == RES_TXTATR_AUTOFMT && bCharFormatOnly)
-                        || nWhich == RES_TXTATR_CHARFMT)
+                        || (nWhich == RES_TXTATR_CHARFMT && !bWholePara))
                     {
                         aParagraphMarkerProperties.Put(pHt->GetAttr());
                     }
