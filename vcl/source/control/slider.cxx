@@ -792,7 +792,8 @@ void Slider::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( nType == StateChangedType::Enable )
+    else if ( nType == StateChangedType::Enable ||
+              nType == StateChangedType::ControlFocus )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
         {
