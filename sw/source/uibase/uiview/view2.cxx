@@ -156,8 +156,6 @@
 #include <svx/srchdlg.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <strings.hrc>
-
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
