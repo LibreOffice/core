@@ -3162,6 +3162,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
                 mpDrawView->SelectAll();
 
+            FreshNavigatrTree();
+
             Cancel();
             rReq.Done ();
         }
