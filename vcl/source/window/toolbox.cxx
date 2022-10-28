@@ -538,7 +538,7 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
                 // choose the same color as the popup will use
                 rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor());
             else
-                rRenderContext.SetFillColor(COL_WHITE);
+                rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
 
             rRenderContext.DrawRect(rRect);
             rRenderContext.Pop();
