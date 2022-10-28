@@ -153,7 +153,7 @@ namespace dbaui
         void enableCheckOnly() { m_bCheckOnly = true; }
         bool isCheckEnabled() const { return m_bCheckOnly; }
 
-        static css::uno::Reference< css::sdbc::XPreparedStatement > createPreparedStatment( const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData
+        static css::uno::Reference< css::sdbc::XPreparedStatement > createPreparedStatement( const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData
                                                        ,const css::uno::Reference< css::beans::XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumnPositions);
     };

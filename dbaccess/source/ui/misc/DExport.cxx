@@ -655,7 +655,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 
 void ODatabaseExport::createRowSet()
 {
-    m_pUpdateHelper = std::make_shared<OParameterUpdateHelper>(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions));
+    m_pUpdateHelper = std::make_shared<OParameterUpdateHelper>(createPreparedStatement(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions));
 }
 
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)
@@ -778,7 +778,7 @@ void ODatabaseExport::ensureFormatter()
     }
 }
 
-Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const Reference<XDatabaseMetaData>& _xMetaData
+Reference< XPreparedStatement > ODatabaseExport::createPreparedStatement( const Reference<XDatabaseMetaData>& _xMetaData
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
 {
