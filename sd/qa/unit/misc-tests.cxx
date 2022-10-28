@@ -40,11 +40,6 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <SlideSorterViewShell.hxx>
-#include <SlideSorter.hxx>
-#include <controller/SlideSorterController.hxx>
-#include <controller/SlsClipboard.hxx>
-#include <controller/SlsPageSelector.hxx>
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
 #include <chrono>
@@ -66,8 +61,6 @@ using namespace ::com::sun::star;
 class SdMiscTest : public SdModelTestBaseXML
 {
 public:
-    void testTdf96206();
-    void testTdf96708();
     void testTdf99396();
     void testTableObjectUndoTest();
     void testFillGradient();
@@ -89,8 +82,6 @@ public:
     void testTdf136956();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
-    CPPUNIT_TEST(testTdf96206);
-    CPPUNIT_TEST(testTdf96708);
     CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST(testTableObjectUndoTest);
     CPPUNIT_TEST(testFillGradient);
@@ -154,81 +145,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     // introduce model/view/controller to each other
     utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel2);
 
-    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
-    CPPUNIT_ASSERT(pViewShell);
-
-    // Draw has no slidesorter, Impress never shows a LayerTabBar
-    if (sd::ViewShell::ST_DRAW == pViewShell->GetShellType())
-    {
-        sd::LayerTabBar* pLayerTabBar
-            = static_cast<sd::GraphicViewShell*>(pViewShell)->GetLayerTabControl();
-        CPPUNIT_ASSERT(pLayerTabBar);
-        pLayerTabBar->StateChanged(StateChangedType::InitShow);
-    }
-    else
-    {
-        sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
-        for (int i = 0; i < 1000; i++)
-        {
-            // Process all Tasks - slide sorter is created here
-            Scheduler::ProcessEventsToIdle();
-            if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
-                     pViewShell->GetViewShellBase()))
-                != nullptr)
-                break;
-            osl::Thread::wait(std::chrono::milliseconds(100));
-        }
-        CPPUNIT_ASSERT(pSSVS);
-    }
-
     return xDocSh;
-}
-
-void SdMiscTest::testTdf96206()
-{
-    // Copying/pasting slide referring to a non-default master with a text duplicated the master
-
-    sd::DrawDocShellRef xDocSh
-        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
-    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
-    auto pSSVS
-        = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
-    auto& rSSController = pSSVS->GetSlideSorter().GetController();
-
-    const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCnt1);
-    rSSController.GetClipboard().DoCopy();
-    rSSController.GetClipboard().DoPaste();
-    const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
-
-    xDocSh->DoClose();
-}
-
-void SdMiscTest::testTdf96708()
-{
-    sd::DrawDocShellRef xDocSh
-        = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
-    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
-    auto pSSVS
-        = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
-    auto& rSSController = pSSVS->GetSlideSorter().GetController();
-    auto& rPageSelector = rSSController.GetPageSelector();
-
-    const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nMasterPageCnt1);
-    rPageSelector.SelectAllPages();
-    rSSController.GetClipboard().DoCopy();
-
-    // Now wait for timers to trigger creation of auto-layout
-    osl::Thread::wait(std::chrono::milliseconds(100));
-    Scheduler::ProcessEventsToIdle();
-
-    rSSController.GetClipboard().DoPaste();
-    const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
-
-    xDocSh->DoClose();
 }
 
 void SdMiscTest::testTdf99396()
@@ -895,6 +812,7 @@ void SdMiscTest::testTdf119956()
     CPPUNIT_ASSERT(pGraphicViewShell);
     sd::LayerTabBar* pLayerTabBar = pGraphicViewShell->GetLayerTabControl();
     CPPUNIT_ASSERT(pLayerTabBar);
+    pLayerTabBar->StateChanged(StateChangedType::InitShow);
 
     // Alt+Click sets a tab in edit mode, so that you can rename it.
     // The error was, that Alt+Click on a tab, which was not the current tab, did not set the clicked tab

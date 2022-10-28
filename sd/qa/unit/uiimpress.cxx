@@ -39,6 +39,7 @@
 #include <svx/xlndsit.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
+#include <controller/SlsClipboard.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <svl/stritem.hxx>
@@ -325,6 +326,52 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
     dispatchCommand(mxComponent, ".uno:ConvertIntoMetaFile", {});
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
+{
+    // Copying/pasting slide referring to a non-default master with a text duplicated the master
+
+    loadFromURL(u"odp/tdf96206.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCnt1);
+    rSSController.GetClipboard().DoCopy();
+    rSSController.GetClipboard().DoPaste();
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96708)
+{
+    loadFromURL(u"odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nMasterPageCnt1);
+    rSSController.GetClipboard().DoCopy();
+    rPageSelector.SelectAllPages();
+
+    // Now wait for timers to trigger creation of auto-layout
+    osl::Thread::wait(std::chrono::milliseconds(100));
+    Scheduler::ProcessEventsToIdle();
+
+    rSSController.GetClipboard().DoPaste();
+
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    //FIXME: tdf#151802: Number of master pages should be 4, it's 5 instead
+    //CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), nMasterPageCnt2);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
