@@ -44,13 +44,13 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter iOS MACOSX,$(OS)),\
 				--with-secure-transport,\
 				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out") --with-nss-deprecated,--without-nss)) \
-			--without-openssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
+			--without-openssl --without-gnutls --without-mbedtls \
 			--enable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
-			--without-libssh2 --without-metalink --without-nghttp2 \
+			--without-libssh2 --without-nghttp2 \
 			--without-libssh --without-brotli \
 			--without-ngtcp2 --without-quiche \
-			--without-zstd --without-hyper --without-gsasl --without-gssapi \
+			--without-zstd --without-hyper --without-libgsasl --without-gssapi \
 			--disable-mqtt --disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
