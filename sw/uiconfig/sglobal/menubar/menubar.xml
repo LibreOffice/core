@@ -719,6 +719,7 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:WordCountDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:AccessibilityCheck"/>
+      <menu:menuitem menu:id=".uno:AccessibilityCheckOnline"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Translate" menu:style="text"/>
       <menu:menuseparator/>
