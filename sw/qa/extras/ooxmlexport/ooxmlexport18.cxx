@@ -115,6 +115,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
     assertXPath(pXmlDoc, "//w:fldChar", 3); // no field characters elsewhere
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
+{
+    // Given a document with a single paragraph, direct formatting asks 24pt font size for the
+    // numbering and the text portion:
+    load(DATA_DIRECTORY, "number-portion-format.odt");
+
+    // When saving to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure that the paragraph marker's char format has that custom font size:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//w:pPr/w:rPr/w:sz' number of nodes is incorrect
+    // i.e. <w:sz> was missing under <w:pPr>'s <w:rPr>.
+    assertXPath(pXmlDoc, "//w:pPr/w:rPr/w:sz", "val", "48");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
