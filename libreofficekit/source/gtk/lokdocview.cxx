@@ -2771,17 +2771,13 @@ static void lok_doc_view_destroy (GtkWidget* widget)
 
     if (priv->m_pDocument)
     {
-        if (priv->m_pDocument->pClass->getViewsCount(priv->m_pDocument) > 1)
+        // This call may drop several views - e.g., embedded OLE in-place clients
+        priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
+        if (priv->m_pDocument->pClass->getViewsCount(priv->m_pDocument) == 0)
         {
-            priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
-        }
-        else
-        {
-            if (priv->m_pDocument)
-            {
-                priv->m_pDocument->pClass->destroy (priv->m_pDocument);
-                priv->m_pDocument = nullptr;
-            }
+            // Last view(s) gone
+            priv->m_pDocument->pClass->destroy (priv->m_pDocument);
+            priv->m_pDocument = nullptr;
             if (priv->m_pOffice)
             {
                 priv->m_pOffice->pClass->destroy (priv->m_pOffice);
