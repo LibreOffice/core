@@ -277,8 +277,8 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
 void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
                                              bool bSubpixelPositioning)
 {
-    const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
-    const vcl::font::FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
+    const CoreTextFont& rFont = *static_cast<const CoreTextFont*>(&rLayout.GetFont());
+    const vcl::font::FontSelectPattern& rFontSelect = rFont.GetFontSelectPattern();
     int nHeight = rFontSelect.mnHeight;
     int nWidth = rFontSelect.mnWidth ? rFontSelect.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
@@ -302,12 +302,12 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
     }
 
     CTFontRef pFont
-        = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
+        = static_cast<CTFontRef>(CFDictionaryGetValue(rFont.GetStyleDict(), kCTFontAttributeName));
     sk_sp<SkTypeface> typeface = SkMakeTypefaceFromCTFont(pFont);
     SkFont font(typeface);
     font.setSize(nHeight);
-    //    font.setScaleX(rStyle.mfFontStretch); TODO
-    if (rStyle.mbFauxBold)
+    //    font.setScaleX(rFont.mfFontStretch); TODO
+    if (rFont.mbFauxBold)
         font.setEmbolden(true);
 
     SkFont::Edging ePreferredAliasing

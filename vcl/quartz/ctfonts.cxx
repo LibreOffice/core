@@ -41,7 +41,7 @@
 #include <sallayout.hxx>
 #include <hb-coretext.h>
 
-CoreTextStyle::CoreTextStyle(const CoreTextFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
+CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
@@ -94,13 +94,13 @@ CoreTextStyle::CoreTextStyle(const CoreTextFontFace& rPFF, const vcl::font::Font
     CFRelease( pNewCTFont);
 }
 
-CoreTextStyle::~CoreTextStyle()
+CoreTextFont::~CoreTextFont()
 {
     if( mpStyleDict )
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
+void CoreTextFont::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -117,7 +117,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
     rxFontMetric->SetMinKashida(GetKashidaWidth());
 }
 
-bool CoreTextStyle::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const
+bool CoreTextFont::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const
 {
     CGGlyph nCGGlyph = nId;
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
@@ -195,7 +195,7 @@ static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
     }
 }
 
-bool CoreTextStyle::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rResult, bool) const
+bool CoreTextFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rResult, bool) const
 {
     rResult.clear();
 
@@ -284,7 +284,7 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
     return pBlob;
 }
 
-void CoreTextStyle::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
+void CoreTextFont::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
 {
 
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
@@ -326,14 +326,14 @@ void CoreTextStyle::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
         hb_font_set_variations(pHbFont, aHBVariations.data(), aHBVariations.size());
 }
 
-void CoreTextStyle::ImplInitHbFont(hb_font_t* pHbFont)
+void CoreTextFont::ImplInitHbFont(hb_font_t* pHbFont)
 {
     SetFontVariationsOnHBFont(pHbFont);
 }
 
 rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
-    return new CoreTextStyle(*this, rFSD);
+    return new CoreTextFont(*this, rFSD);
 }
 
 int CoreTextFontFace::GetFontTable(uint32_t nTagCode, unsigned char* pResultBuf ) const

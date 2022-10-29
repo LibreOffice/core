@@ -78,12 +78,12 @@ private:
     CTFontDescriptorRef             mxFontDescriptor;
 };
 
-class CoreTextStyle final : public LogicalFontInstance
+class CoreTextFont final : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
-    ~CoreTextStyle() override;
+    ~CoreTextFont() override;
 
     void       GetFontMetric( ImplFontMetricDataRef const & );
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
@@ -98,7 +98,7 @@ public:
     bool mbFauxBold;
 
 private:
-    explicit CoreTextStyle(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);
+    explicit CoreTextFont(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);
 
     virtual void ImplInitHbFont(hb_font_t*) override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
@@ -459,7 +459,7 @@ class AquaSalGraphics : public SalGraphicsAutoDelegateToImpl
     sal_Int32                               mnRealDPIY;
 
     // Device Font settings
-    rtl::Reference<CoreTextStyle>           mpTextStyle[MAX_FALLBACK];
+    rtl::Reference<CoreTextFont>            mpFont[MAX_FALLBACK];
 
 public:
                             AquaSalGraphics();
