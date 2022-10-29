@@ -100,6 +100,8 @@ public:
 
     virtual hb_face_t* GetHbFace() const override;
     virtual hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
+
+    std::vector<hb_variation_t> GetVariations() const override;
 };
 
 class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
@@ -108,7 +110,6 @@ class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
 
     std::unique_ptr<FreetypeFont> mxFreetypeFont;
 
-    virtual void ImplInitHbFont(hb_font_t*) override;
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     explicit FreetypeFontInstance(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP);

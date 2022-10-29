@@ -129,7 +129,7 @@ public:
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 
-    void                    SetFontVariationsOnHBFont(hb_font_t* pHbFace) const;
+    std::vector<hb_variation_t> GetVariations() const;
 
 private:
     friend class FreetypeFontInstance;

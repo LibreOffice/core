@@ -75,12 +75,6 @@ FreetypeFontInstance::~FreetypeFontInstance()
 {
 }
 
-void FreetypeFontInstance::ImplInitHbFont(hb_font_t* pHbFont)
-{
-    assert(mxFreetypeFont);
-    mxFreetypeFont->SetFontVariationsOnHBFont(pHbFont);
-}
-
 bool FreetypeFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const
 {
     assert(mxFreetypeFont);

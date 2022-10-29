@@ -72,6 +72,8 @@ public:
 
     virtual hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
 
+    std::vector<hb_variation_t> GetVariations() const override;
+
 private:
     CTFontDescriptorRef             mxFontDescriptor;
 };
@@ -98,10 +100,7 @@ public:
 private:
     explicit CoreTextFont(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);
 
-    virtual void ImplInitHbFont(hb_font_t*) override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
-
-    void SetFontVariationsOnHBFont(hb_font_t*) const;
 
     CTFontRef mpCTFont;
 };

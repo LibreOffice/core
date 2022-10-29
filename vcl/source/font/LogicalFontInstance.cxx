@@ -57,11 +57,18 @@ hb_font_t* LogicalFontInstance::InitHbFont()
     auto pFace = GetFontFace();
     hb_face_t* pHbFace = pFace->GetHbFace();
     assert(pHbFace);
-    hb_font_t* pHbFont = hb_font_create(pHbFace);
     auto nUPEM = pFace->UnitsPerEm();
+
+    hb_font_t* pHbFont = hb_font_create(pHbFace);
     hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
+
+    auto aVariations = pFace->GetVariations();
+    if (!aVariations.empty())
+        hb_font_set_variations(pHbFont, aVariations.data(), aVariations.size());
+
     ImplInitHbFont(pHbFont);
+
     return pHbFont;
 }
 

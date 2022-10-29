@@ -269,49 +269,49 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
     return pBlob;
 }
 
-void CoreTextFont::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
+std::vector<hb_variation_t> CoreTextFontFace::GetVariations() const
 {
+    CTFontRef pFont = CTFontCreateWithFontDescriptor(mxFontDescriptor, 0.0, nullptr);
 
-    CFArrayRef pAxes = CTFontCopyVariationAxes(mpCTFont);
-    if (!pAxes)
-        return;
-
-    CFDictionaryRef pVariations = CTFontCopyVariation(mpCTFont);
-    std::vector<hb_variation_t> aHBVariations;
-    if (pVariations)
+    if (m_aVariations.empty())
     {
-        CFIndex nAxes = CFArrayGetCount(pAxes);
-        for (CFIndex i = 0; i < nAxes; ++i)
+        CFArrayRef pAxes = CTFontCopyVariationAxes(pFont);
+        if (pAxes)
         {
-            auto pAxis = static_cast<CFDictionaryRef>(CFArrayGetValueAtIndex(pAxes, i));
-            if (pAxis)
+            CFDictionaryRef pVariations = CTFontCopyVariation(pFont);
+            std::vector<hb_variation_t> aHBVariations;
+            if (pVariations)
             {
-                hb_tag_t nTag;
-                auto pTag = static_cast<CFNumberRef>(CFDictionaryGetValue(pAxis, kCTFontVariationAxisIdentifierKey));
-                if (!pTag)
-                    continue;
-                CFNumberGetValue(pTag, kCFNumberIntType, &nTag);
+                CFIndex nAxes = CFArrayGetCount(pAxes);
+                for (CFIndex i = 0; i < nAxes; ++i)
+                {
+                    auto pAxis = static_cast<CFDictionaryRef>(CFArrayGetValueAtIndex(pAxes, i));
+                    if (pAxis)
+                    {
+                        hb_tag_t nTag;
+                        auto pTag = static_cast<CFNumberRef>(
+                            CFDictionaryGetValue(pAxis, kCTFontVariationAxisIdentifierKey));
+                        if (!pTag)
+                            continue;
+                        CFNumberGetValue(pTag, kCFNumberIntType, &nTag);
 
-                float fValue;
-                auto pValue = static_cast<CFNumberRef>(CFDictionaryGetValue(pVariations, pTag));
-                if (!pValue)
-                    continue;
-                CFNumberGetValue(pValue, kCFNumberFloatType, &fValue);
+                        float fValue;
+                        auto pValue
+                            = static_cast<CFNumberRef>(CFDictionaryGetValue(pVariations, pTag));
+                        if (!pValue)
+                            continue;
+                        CFNumberGetValue(pValue, kCFNumberFloatType, &fValue);
 
-                aHBVariations.push_back({ nTag, fValue });
+                        m_aVariations.push_back({ nTag, fValue });
+                    }
+                }
+                CFRelease(pVariations);
             }
+            CFRelease(pAxes);
         }
-        CFRelease(pVariations);
     }
-    CFRelease(pAxes);
 
-    if (!aHBVariations.empty())
-        hb_font_set_variations(pHbFont, aHBVariations.data(), aHBVariations.size());
-}
-
-void CoreTextFont::ImplInitHbFont(hb_font_t* pHbFont)
-{
-    SetFontVariationsOnHBFont(pHbFont);
+    return m_aVariations;
 }
 
 rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
