@@ -154,6 +154,9 @@ public:
 
     // @@@ public copy ctor, but no copy assignment?
     SwTable( const SwTable& rTable );       // no copy of the lines !!
+
+    virtual const SwTable* DynCastTable() const override { return this; }
+
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &) = delete;

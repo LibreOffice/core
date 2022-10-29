@@ -38,6 +38,7 @@ class SwAttrSet;
 class SwCellFrame;
 class SwTabFrame;
 class SwRowFrame;
+class SwTable;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -123,6 +124,7 @@ namespace sw
             virtual const SwCellFrame* DynCastCellFrame() const { return nullptr; }
             virtual const SwTabFrame* DynCastTabFrame() const { return nullptr; }
             virtual const SwRowFrame* DynCastRowFrame() const { return nullptr; }
+            virtual const SwTable* DynCastTable() const { return nullptr; }
     };
     enum class IteratorMode { Exact, UnwrapMulti };
 }
@@ -326,6 +328,11 @@ namespace sw::detail
     inline const CastDest * internal_dyn_cast(const sw::WriterListener * pSource)
     {
         return dynamic_cast<const CastDest *>(pSource);
+    }
+    template<>
+    inline const SwTable* internal_dyn_cast(const sw::WriterListener * pSource)
+    {
+        return pSource->DynCastTable();
     }
     template<>
     inline const SwCellFrame* internal_dyn_cast(const sw::WriterListener * pSource)
