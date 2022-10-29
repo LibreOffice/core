@@ -144,11 +144,11 @@ const TranslateId ANALYSIS_Sqrtpi[] =
 
 const TranslateId ANALYSIS_Randbetween[] =
 {
-    NC_("ANALYSIS_Randbetween", "Returns a random integer between the numbers you specify"),
+    NC_("ANALYSIS_Randbetween", "Returns a random integer between the specified Bottom and Top values (both inclusive)"),
     NC_("ANALYSIS_Randbetween", "Bottom"),
-    NC_("ANALYSIS_Randbetween", "The smallest integer returned"),
+    NC_("ANALYSIS_Randbetween", "The smallest integer that can be returned"),
     NC_("ANALYSIS_Randbetween", "Top"),
-    NC_("ANALYSIS_Randbetween", "The largest integer returned")
+    NC_("ANALYSIS_Randbetween", "The largest integer that can be returned")
 };
 
 const TranslateId ANALYSIS_Gcd[] =

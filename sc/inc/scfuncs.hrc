@@ -4144,11 +4144,11 @@ const TranslateId SC_OPCODE_RANDOM_NV_ARY[] =
 // -=*# Resource for function RANDBETWEEN.NV #*=-
 const TranslateId SC_OPCODE_RANDBETWEEN_NV_ARY[] =
 {
-    NC_("SC_OPCODE_RANDBETWEEN_NV", "Returns a random integer between the numbers you specify, non-volatile."),
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "Returns a random integer between the specified Bottom and Top values (both inclusive), non-volatile."),
     NC_("SC_OPCODE_RANDBETWEEN_NV", "Bottom"),
-    NC_("SC_OPCODE_RANDBETWEEN_NV", "The smallest integer returned."),
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "The smallest integer that can be returned."),
     NC_("SC_OPCODE_RANDBETWEEN_NV", "Top"),
-    NC_("SC_OPCODE_RANDBETWEEN_NV", "The largest integer returned.")
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "The largest integer that can be returned.")
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
