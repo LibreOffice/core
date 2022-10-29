@@ -288,6 +288,8 @@ public:
 
     const SwTextFrame* GetSavedOutlineFrame() const { return m_pSavedOutlineFrame; }
     void SetSavedOutlineFrame(SwTextFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
+    // bSubs set true, sets all sub level outline content to same visibility as nOutlinePos.
+    // It is only applicable when not treating sub outline levels as content.
     void ToggleOutlineContentVisibility(const size_t nOutlinePos, const bool bSubs);
 
     virtual FactoryFunction GetUITestFactory() const override;

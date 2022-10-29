@@ -1345,16 +1345,9 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY:
         {
-            m_pWrtShell->EnterStdMode();
-            size_t nPos(m_pWrtShell->GetOutlinePos());
-            if (nPos != SwOutlineNodes::npos)
-            {
-                SwNode* pNode = m_pWrtShell->GetNodes().GetOutLineNds()[nPos];
-                pNode->GetTextNode()->SetAttrOutlineContentVisible(
-                            !m_pWrtShell->GetAttrOutlineContentVisible(nPos));
-                m_pWrtShell->InvalidateOutlineContentVisibility();
-                m_pWrtShell->GotoOutline(nPos);
-            }
+        size_t nPos(m_pWrtShell->GetOutlinePos());
+        if (nPos != SwOutlineNodes::npos)
+            GetEditWin().ToggleOutlineContentVisibility(nPos, false);
         }
         break;
         case FN_NAV_ELEMENT:
