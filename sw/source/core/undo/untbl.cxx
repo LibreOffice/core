@@ -1937,7 +1937,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
                     // also delete not needed attributes
                     SwContentIndex aTmpIdx( pTextNd, nDelPos );
                     if( pTextNd->GetpSwpHints() && pTextNd->GetpSwpHints()->Count() )
-                        pTextNd->RstTextAttr( aTmpIdx, pTextNd->GetText().getLength() - nDelPos + 1 );
+                        pTextNd->RstTextAttr( nDelPos, pTextNd->GetText().getLength() - nDelPos + 1 );
                     // delete separator
                     pTextNd->EraseText( aTmpIdx, 1 );
                 }

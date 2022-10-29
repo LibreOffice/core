@@ -330,7 +330,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  * 5) The attribute is outside the deletion range
  *    -> nothing to do
  *
- * @param rIdx starting position
+ * @param nStt starting position
  * @param nLen length of the deletion
  * @param nthat ???
  * @param pSet ???
@@ -338,18 +338,16 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  */
 
 void SwTextNode::RstTextAttr(
-    const SwContentIndex &rIdx,
+    sal_Int32 nStt,
     const sal_Int32 nLen,
     const sal_uInt16 nWhich,
     const SfxItemSet* pSet,
     const bool bInclRefToxMark,
     const bool bExactRange )
 {
-    assert(rIdx.GetContentNode() == this);
     if ( !GetpSwpHints() )
         return;
 
-    sal_Int32 nStt = rIdx.GetIndex();
     sal_Int32 nEnd = nStt + nLen;
     {
         // enlarge range for the reset of text attributes in case of an overlapping input field

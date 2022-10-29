@@ -1982,9 +1982,8 @@ bool SwTextNode::SetAttr(
                     (GetDoc().GetDfltCharFormat() ==
                      static_cast<const SwFormatCharFormat*>(pItem)->GetCharFormat()))
                 {
-                    SwContentIndex aIndex( this, nStt );
-                    RstTextAttr( aIndex, nEnd - nStt, RES_TXTATR_CHARFMT );
-                    DontExpandFormat( aIndex.GetIndex() );
+                    RstTextAttr( nStt, nEnd - nStt, RES_TXTATR_CHARFMT );
+                    DontExpandFormat( nStt );
                 }
                 else
                 {

@@ -290,7 +290,7 @@ public:
     /** delete all attributes.
         If neither pSet nor nWhich is given, delete all attributes (except
         refmarks, toxmarks, meta) in range.
-        @param rIdx     start position
+        @param nContentStart start position
         @param nLen     range in which attributes will be deleted
         @param pSet     if not 0, delete only attributes contained in pSet
         @param nWhich   if not 0, delete only attributes with matching which
@@ -302,7 +302,7 @@ public:
         which are simply included in the range.
      */
     void RstTextAttr(
-        const SwContentIndex &rIdx,
+        const sal_Int32 nContentStart,
         const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
         const SfxItemSet* pSet = nullptr,

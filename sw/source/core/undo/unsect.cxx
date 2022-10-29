@@ -288,10 +288,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, SwNodeOffset nNode )
     pTextNd->JoinNext();
 
     if (m_pHistory)
-    {
-        SwContentIndex aCntIdx( pTextNd, 0 );
-        pTextNd->RstTextAttr( aCntIdx, pTextNd->Len(), 0, nullptr, true );
-    }
+        pTextNd->RstTextAttr( 0, pTextNd->Len(), 0, nullptr, true );
 }
 
 void

@@ -594,9 +594,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf72788)
     }
     //Clear all the Direct Formatting ( Ctrl + M )
     SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
-    SwContentIndex aSt(pTextNode, 0);
     sal_Int32 nEnd = pTextNode->Len();
-    pTextNode->RstTextAttr(aSt, nEnd - aSt.GetIndex());
+    pTextNode->RstTextAttr(0, nEnd);
     //In case of Regression RstTextAttr() call will result to infinite recursion
     //Check that bold is removed in first paragraph
     aSet.ClearItem();

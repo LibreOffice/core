@@ -1468,8 +1468,7 @@ namespace //local functions originally from docfmt.cxx
                     {
                         pCurrentNode->ResetAttr(RES_PARATR_LIST_AUTOFMT);
                         // reset also paragraph marker
-                        SwContentIndex nIdx( pCurrentNode, pCurrentNode->Len() );
-                        pCurrentNode->GetTextNode()->RstTextAttr(nIdx, 1);
+                        pCurrentNode->GetTextNode()->RstTextAttr(pCurrentNode->Len(), 1);
                     }
                     pCurrentNode = SwNodes::GoPrevious( &aIdx );
                 }
@@ -1745,18 +1744,17 @@ namespace //local functions originally from docfmt.cxx
                 if( !(nFlags & SetAttrMode::DONTREPLACE ) &&
                     pTextNd->HasHints() && !nMkPos && nPtPos == rStr.getLength())
                 {
-                    SwContentIndex aSt( pTextNd );
                     if( pHistory )
                     {
                         // Save all attributes for the Undo.
                         SwRegHistory aRHst( *pTextNd, pHistory );
                         pTextNd->GetpSwpHints()->Register( &aRHst );
-                        pTextNd->RstTextAttr( aSt, nPtPos, 0, pCharSet );
+                        pTextNd->RstTextAttr( 0, nPtPos, 0, pCharSet );
                         if( pTextNd->GetpSwpHints() )
                             pTextNd->GetpSwpHints()->DeRegister();
                     }
                     else
-                        pTextNd->RstTextAttr( aSt, nPtPos, 0, pCharSet );
+                        pTextNd->RstTextAttr( 0, nPtPos, 0, pCharSet );
                 }
 
                 if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
@@ -4058,13 +4056,13 @@ bool DocumentContentOperationsManager::lcl_RstTextAttr( SwNode* pNd, void* pArgs
             // Save all attributes for the Undo.
             SwRegHistory aRHst( *pTextNode, pPara->pHistory );
             pTextNode->GetpSwpHints()->Register( &aRHst );
-            pTextNode->RstTextAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
+            pTextNode->RstTextAttr( aSt.GetIndex(), nEnd - aSt.GetIndex(), pPara->nWhich,
                                   pPara->pDelSet, pPara->bInclRefToxMark, pPara->bExactRange );
             if( pTextNode->GetpSwpHints() )
                 pTextNode->GetpSwpHints()->DeRegister();
         }
         else
-            pTextNode->RstTextAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
+            pTextNode->RstTextAttr( aSt.GetIndex(), nEnd - aSt.GetIndex(), pPara->nWhich,
                                   pPara->pDelSet, pPara->bInclRefToxMark, pPara->bExactRange );
     }
     return true;
