@@ -369,7 +369,8 @@ void OInterfaceContainerHelper4<ListenerT>::disposeAndClear(std::unique_lock<std
                                                             const css::lang::EventObject& rEvt)
 {
     OInterfaceIteratorHelper4<ListenerT> aIt(rGuard, *this);
-    maData->clear();
+    maData
+        = DEFAULT(); // cheaper than calling maData->clear() because it doesn't allocate a new vector
     rGuard.unlock();
     // unlock followed by iterating is only safe because we are not going to call remove() on the iterator
     while (aIt.hasMoreElements())
