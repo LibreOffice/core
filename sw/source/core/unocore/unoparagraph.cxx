@@ -189,14 +189,17 @@ void SwXParagraph::Impl::Notify(const SfxHint& rHint)
     if(rHint.GetId() == SfxHintId::Dying)
     {
         m_pTextNode = nullptr;
-        uno::Reference<uno::XInterface> const xThis(m_wThis);
-        if (!xThis.is())
-        {   // fdo#72695: if UNO object is already dead, don't revive it with event
-            return;
-        }
-        lang::EventObject const ev(xThis);
         std::unique_lock aGuard(m_Mutex);
-        m_EventListeners.disposeAndClear(aGuard, ev);
+        if (m_EventListeners.getLength(aGuard) != 0)
+        {
+            uno::Reference<uno::XInterface> const xThis(m_wThis);
+            if (!xThis.is())
+            {   // fdo#72695: if UNO object is already dead, don't revive it with event
+                return;
+            }
+            lang::EventObject const ev(xThis);
+            m_EventListeners.disposeAndClear(aGuard, ev);
+        }
     }
 }
 
