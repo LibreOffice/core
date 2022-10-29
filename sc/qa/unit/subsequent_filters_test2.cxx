@@ -55,6 +55,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
@@ -188,6 +189,7 @@ public:
     void testTooManyColsRows();
     void testTdf83671_SmartArt_import();
     void testTdf83671_SmartArt_import2();
+    void testTdf151818_SmartArtFontColor();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -306,6 +308,7 @@ public:
     CPPUNIT_TEST(testTooManyColsRows);
     CPPUNIT_TEST(testTdf83671_SmartArt_import);
     CPPUNIT_TEST(testTdf83671_SmartArt_import2);
+    CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3131,6 +3134,61 @@ void ScFiltersTest2::testTdf83671_SmartArt_import2()
         std::shared_ptr<comphelper::ConfigurationChanges> pChange(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
+        pChange->commit();
+    }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf151818_SmartArtFontColor()
+{
+    // The document contains a SmartArt where the color for the texts in the shapes is given by
+    // the theme.
+    // Error was, that the theme was not considered and therefore the text was white.
+
+    // Make sure it is not loaded as metafile but with single shapes.
+    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
+        pChange->commit();
+    }
+
+    // Get document and shape in SmartArt object
+    ScDocShellRef xDocSh = loadDoc(u"tdf151818_SmartartThemeFontColor.", FORMAT_XLSX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xSmartArt(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    // shape 0 is the background shape without text
+    uno::Reference<text::XTextRange> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);
+
+    // text color
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+    sal_Int32 nActualColor{ 0 };
+    xPortion->getPropertyValue("CharColor") >>= nActualColor;
+    // Without fix the test would have failed with:
+    // - Expected:  4478058 (0x44546A)
+    // - Actual  : 16777215 (0xFFFFFF), that is text was white
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x44546A), nActualColor);
+
+    // clrScheme. For map between name in xlsx and index from CharColorTheme see
+    // oox::drawingml::Color::getSchemeColorIndex()
+    // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2),
+                         xPortion->getPropertyValue("CharColorTheme").get<sal_Int16>());
+
+    if (!bUseGroup)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
         pChange->commit();
     }
 

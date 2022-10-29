@@ -325,6 +325,9 @@ void DrawingFragment::onEndElement()
                         mxShape->setId(sBackupId);
                     }
 
+                    if (mxShape->getFontRefColorForNodes().isUsed())
+                          applyFontRefColor(mxShape, mxShape->getFontRefColorForNodes());
+
                     basegfx::B2DHomMatrix aTransformation;
                     if ( !bIsShapeVisible)
                         mxShape->setHidden(true);
@@ -352,6 +355,17 @@ void DrawingFragment::onEndElement()
             mxShape.reset();
             mxAnchor.reset();
         break;
+    }
+}
+
+void DrawingFragment::applyFontRefColor(const oox::drawingml::ShapePtr& pShape,
+                                        const oox::drawingml::Color& rFontRefColor)
+{
+    pShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rFontRefColor;
+    std::vector<oox::drawingml::ShapePtr>& vChildren = pShape->getChildren();
+    for (auto const& child : vChildren)
+    {
+        applyFontRefColor(child, rFontRefColor);
     }
 }
 

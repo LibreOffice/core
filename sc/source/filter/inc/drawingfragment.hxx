@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/drawingml/color.hxx>
 #include <oox/ole/axcontrol.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <oox/ole/vbaproject.hxx>
@@ -112,6 +113,10 @@ private:
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
+    // for SmartArt. Apply the colors in rFontRefColor (from clrScheme) to all shapes in pShape,
+    // the group object which represents the SmartArt.
+    void applyFontRefColor(const oox::drawingml::ShapePtr& pShape,
+                           const oox::drawingml::Color& rFontRefColor);
 };
 
 // VML
