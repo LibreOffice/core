@@ -109,7 +109,7 @@ void SwXMLImport::SetStatistics(
 
     SvXMLImport::SetStatistics(i_rStats);
 
-    SwDoc *pDoc = SwImport::GetDocFromXMLImport( *this );
+    SwDoc *pDoc = getDoc();
     SwDocStat aDocStat( pDoc->getIDocumentStatistics().GetDocStat() );
 
     sal_uInt32 nTokens = 0;

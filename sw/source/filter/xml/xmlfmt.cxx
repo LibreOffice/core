@@ -525,7 +525,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
 
     SvXMLImportContext *pContext = nullptr;
 
-    SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
+    SwDoc* pDoc = GetSwImport().getDoc();
 
     SfxItemPool& rItemPool = pDoc->GetAttrPool();
     switch( GetFamily() )
@@ -615,7 +615,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         return;
     m_bPageDescConnected = true;
 
-    SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
+    SwDoc *pDoc = GetSwImport().getDoc();
 
     // #i40788# - first determine the display name of the page style,
     // then map this name to the corresponding user interface name.
@@ -673,7 +673,7 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
         {
             if( !m_oItemSet )
             {
-                SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
+                SwDoc *pDoc = GetSwImport().getDoc();
 
                 SfxItemPool& rItemPool = pDoc->GetAttrPool();
                 m_oItemSet.emplace( rItemPool, aTableBoxSetRange );
@@ -1006,7 +1006,7 @@ void SwXMLImport::FinishStyles()
 void SwXMLImport::UpdateTextCollConditions( SwDoc *pDoc )
 {
     if( !pDoc )
-        pDoc = SwImport::GetDocFromXMLImport( *this );
+        pDoc = getDoc();
 
     const SwTextFormatColls& rColls = *pDoc->GetTextFormatColls();
     const size_t nCount = rColls.size();

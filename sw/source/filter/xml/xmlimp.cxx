@@ -828,7 +828,7 @@ void SwXMLImport::endDocument()
     // tdf#150753: pDoc may be null e.g. when the package lacks content.xml;
     // we should not forget to tidy up here, including unlocking draw model
     if (!pDoc)
-        pDoc = SwImport::GetDocFromXMLImport(*this);
+        pDoc = getDoc();
     assert(pDoc);
     // SJ: #i49801# -> now permitting repaints
     if (getImportFlags() == SvXMLImportFlags::ALL)
@@ -1630,16 +1630,6 @@ void SwXMLImport::initialize(
             }
         }
     }
-}
-
-SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport const & rImport )
-{
-    auto pTextDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(rImport.GetModel());
-    assert( pTextDoc );
-    assert( pTextDoc->GetDocShell() );
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    OSL_ENSURE( pDoc, "Where is my document?" );
-    return pDoc;
 }
 
 void SwXMLImport::initXForms()

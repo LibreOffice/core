@@ -1166,7 +1166,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         }
     }
 
-    SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
+    SwDoc *pDoc = GetSwImport().getDoc();
 
     OUString sTableName;
     if( !aName.isEmpty() )
@@ -2687,7 +2687,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     }
     else
     {
-        SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
+        SwDoc* pDoc = GetSwImport().getDoc();
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : m_pTableNode->EndOfSectionNode();
         // #i78921# - make code robust

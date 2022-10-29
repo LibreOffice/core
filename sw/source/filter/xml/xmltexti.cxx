@@ -220,7 +220,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
-    SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
+    SwDoc *pDoc = static_cast<SwXMLImport&>(rImport).getDoc();
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );
     Size aTwipSize( 0, 0 );
@@ -522,7 +522,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
-    SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
+    SwDoc *pDoc = static_cast<SwXMLImport&>(rImport).getDoc();
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );
     Size aTwipSize( 0, 0 );

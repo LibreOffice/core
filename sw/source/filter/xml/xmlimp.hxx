@@ -48,10 +48,6 @@ enum class SfxStyleFamily;
 // for styles, autostyles and settings + meta
 #define PROGRESS_BAR_STEP 20
 
-namespace SwImport {
-    SwDoc* GetDocFromXMLImport( SvXMLImport const & );
-}
-
 // we only need this scoped enum to be flags here, in sw
 namespace o3tl
 {

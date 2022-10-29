@@ -343,7 +343,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
             aAny <<= true;
             m_xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
             // TODO maybe we need some property for the view-setting?
-            SwDoc *const pDoc(SwImport::GetDocFromXMLImport(m_rImport));
+            SwDoc *const pDoc(static_cast<SwXMLImport&>(m_rImport).getDoc());
             assert(pDoc);
             pDoc->GetDocumentRedlineManager().SetHideRedlines(!m_bShowChanges);
         }
