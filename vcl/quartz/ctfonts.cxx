@@ -46,7 +46,7 @@ CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSe
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
     , mbFauxBold(false)
-    , mpStyleDict( nullptr )
+    , mpCTFont(nullptr)
 {
     double fScaledFontHeight = rFSP.mfExactHeight;
 
@@ -62,15 +62,6 @@ CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSe
         mfFontStretch = float(rFSP.mnWidth) / rFSP.mnHeight;
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
-
-    // create the style object for CoreText font attributes
-    static const CFIndex nMaxDictSize = 16; // TODO: does this really suffice?
-    mpStyleDict = CFDictionaryCreateMutable( nullptr, nMaxDictSize,
-                                             &kCFTypeDictionaryKeyCallBacks,
-                                             &kCFTypeDictionaryValueCallBacks );
-
-    CFBooleanRef pCFVertBool = rFSP.mbVertical ? kCFBooleanTrue : kCFBooleanFalse;
-    CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
 
     // fake bold
     if ( (rFSP.GetWeight() >= WEIGHT_BOLD) &&
@@ -89,30 +80,24 @@ CoreTextFont::CoreTextFont(const CoreTextFontFace& rPFF, const vcl::font::FontSe
     }
 
     CTFontDescriptorRef pFontDesc = rPFF.GetFontDescriptorRef();
-    CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
-    CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
-    CFRelease( pNewCTFont);
+    mpCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
 }
 
 CoreTextFont::~CoreTextFont()
 {
-    if( mpStyleDict )
-        CFRelease( mpStyleDict );
+    if (mpCTFont)
+        CFRelease(mpCTFont);
 }
 
 void CoreTextFont::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 {
-    // get the matching CoreText font handle
-    // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
-    CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
-
     rxFontMetric->ImplCalcLineSpacing(this);
     rxFontMetric->ImplInitBaselines(this);
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
-    rxFontMetric->SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
+    rxFontMetric->SetWidth( lrint( CTFontGetSize(mpCTFont) * mfFontStretch) );
 
     rxFontMetric->SetMinKashida(GetKashidaWidth());
 }
@@ -120,12 +105,11 @@ void CoreTextFont::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 bool CoreTextFont::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const
 {
     CGGlyph nCGGlyph = nId;
-    CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(aCTFontRef, aFontOrientation, &nCGGlyph, nullptr, 1);
+    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(mpCTFont, aFontOrientation, &nCGGlyph, nullptr, 1);
 
     // Apply font rotation to non-vertical glyphs.
     if (mfFontRotation && !bVertical)
@@ -200,12 +184,11 @@ bool CoreTextFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rRe
     rResult.clear();
 
     CGGlyph nCGGlyph = nId;
-    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(pCTFont, aFontOrientation, &nCGGlyph, nullptr, 1);
+    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(mpCTFont, aFontOrientation, &nCGGlyph, nullptr, 1);
 
     if (!CGRectIsNull(aCGRect) && CGRectIsEmpty(aCGRect))
     {
@@ -214,7 +197,7 @@ bool CoreTextFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rRe
         return true;
     }
 
-    CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, nullptr );
+    CGPathRef xPath = CTFontCreatePathForGlyph(mpCTFont, nCGGlyph, nullptr);
     if (!xPath)
     {
         return false;
@@ -287,13 +270,11 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
 void CoreTextFont::SetFontVariationsOnHBFont(hb_font_t* pHbFont) const
 {
 
-    CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
-
-    CFArrayRef pAxes = CTFontCopyVariationAxes(aCTFontRef);
+    CFArrayRef pAxes = CTFontCopyVariationAxes(mpCTFont);
     if (!pAxes)
         return;
 
-    CFDictionaryRef pVariations = CTFontCopyVariation(aCTFontRef);
+    CFDictionaryRef pVariations = CTFontCopyVariation(mpCTFont);
     std::vector<hb_variation_t> aHBVariations;
     if (pVariations)
     {

@@ -85,11 +85,10 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
 {
     bool bFound = false;
     CoreTextFont* pFont = static_cast<CoreTextFont*>(pLogicalFont);
-    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(pFont->GetStyleDict(), kCTFontAttributeName));
     CFStringRef pStr = CreateCFString(rMissingChars);
     if (pStr)
     {
-        CTFontRef pFallback = CTFontCreateForString(pCTFont, pStr, CFRangeMake(0, CFStringGetLength(pStr)));
+        CTFontRef pFallback = CTFontCreateForString(pFont->GetCTFont(), pStr, CFRangeMake(0, CFStringGetLength(pStr)));
         if (pFallback)
         {
             bFound = true;
@@ -325,7 +324,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool b
         return;
     }
 
-    CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rFont.GetStyleDict(), kCTFontAttributeName));
+    CTFontRef pCTFont = rFont.GetCTFont();
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rFont.mfFontRotation);
 
     DevicePoint aPos;
@@ -347,7 +346,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool b
             {
                 bUprightGlyph = true;
                 // Adjust the position of upright (vertical) glyphs.
-                aGCPos.y -= CTFontGetAscent(pFont) - CTFontGetDescent(pFont);
+                aGCPos.y -= CTFontGetAscent(pCTFont) - CTFontGetDescent(pCTFont);
             }
             else
             {
@@ -424,7 +423,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool b
         {
             CGContextRotateCTM(mrShared.maContextHolder.get(), rFont.mfFontRotation);
         }
-        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrShared.maContextHolder.get());
+        CTFontDrawGlyphs(pCTFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrShared.maContextHolder.get());
         mrShared.maContextHolder.restoreState();
 
         aIt = aNext;

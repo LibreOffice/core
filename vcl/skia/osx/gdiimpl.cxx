@@ -301,9 +301,7 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
         }
     }
 
-    CTFontRef pFont
-        = static_cast<CTFontRef>(CFDictionaryGetValue(rFont.GetStyleDict(), kCTFontAttributeName));
-    sk_sp<SkTypeface> typeface = SkMakeTypefaceFromCTFont(pFont);
+    sk_sp<SkTypeface> typeface = SkMakeTypefaceFromCTFont(rFont.GetCTFont());
     SkFont font(typeface);
     font.setSize(nHeight);
     //    font.setScaleX(rFont.mfFontStretch); TODO

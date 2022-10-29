@@ -88,7 +88,7 @@ public:
     void       GetFontMetric( ImplFontMetricDataRef const & );
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
-    CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
+    CTFontRef GetCTFont() const { return mpCTFont; }
 
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float mfFontStretch;
@@ -105,8 +105,7 @@ private:
 
     void SetFontVariationsOnHBFont(hb_font_t*) const;
 
-    /// CoreText text style object
-    CFMutableDictionaryRef  mpStyleDict;
+    CTFontRef mpCTFont;
 };
 
 // TODO: move into cross-platform headers
