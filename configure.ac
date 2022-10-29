@@ -9623,7 +9623,7 @@ libo_CHECK_SYSTEM_MODULE([expat], [EXPAT], [expat])
 dnl ===================================================================
 dnl Check for system xmlsec
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([xmlsec], [XMLSEC], [xmlsec1-nss >= 1.2.28])
+libo_CHECK_SYSTEM_MODULE([xmlsec], [XMLSEC], [xmlsec1-nss >= 1.2.35])
 
 AC_MSG_CHECKING([whether to enable Embedded OpenType support])
 if test "$enable_eot" = "yes"; then
