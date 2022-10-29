@@ -4186,7 +4186,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
-    registerGlyph(nGlyphId, pDevFont, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->IsColorFont());
+    registerGlyph(nGlyphId, pDevFont, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
@@ -6083,7 +6083,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     return nFontID;
 }
 
-void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
+void PDFWriterImpl::registerSimpleGlyph(const sal_GlyphId nFontGlyphId,
                                   const vcl::font::PhysicalFontFace* pFont,
                                   const std::vector<sal_Ucs>& rCodeUnits,
                                   sal_Int32 nGlyphWidth,
@@ -6130,10 +6130,9 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
 void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   const vcl::font::PhysicalFontFace* pFace,
                                   const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth,
-                                  sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject,
-                                  bool bColor)
+                                  sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject)
 {
-    if (bColor)
+    if (pFace->IsColorFont())
     {
         // Font has colors, check if this glyph has color layers or bitmap.
         tools::Rectangle aRect;
@@ -6178,8 +6177,8 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                     {
                         sal_uInt8 nLayerGlyph;
                         sal_Int32 nLayerFontID;
-                        registerGlyph(aLayer.nGlyphIndex, pFace, rCodeUnits, nGlyphWidth,
-                                      nLayerGlyph, nLayerFontID);
+                        registerSimpleGlyph(aLayer.nGlyphIndex, pFace, rCodeUnits, nGlyphWidth,
+                                            nLayerGlyph, nLayerFontID);
 
                         rNewGlyphEmit.addColorLayer(
                             { nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
@@ -6198,7 +6197,8 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
     }
 
     // If we reach here then the glyph has no color layers.
-    registerGlyph(nFontGlyphId, pFace, rCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+    registerSimpleGlyph(nFontGlyphId, pFace, rCodeUnits, nGlyphWidth, nMappedGlyph,
+                        nMappedFontObject);
 }
 
 void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines )
@@ -6582,7 +6582,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     FontMetric aRefDevFontMetric = GetFontMetric();
-    const vcl::font::PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
     const GlyphItem* pGlyph = nullptr;
     const LogicalFontInstance* pGlyphFont = nullptr;
 
@@ -6646,7 +6645,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
-        registerGlyph(nGlyphId, pFace, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject, pDevFont->IsColorFont());
+        registerGlyph(nGlyphId, pFace, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())

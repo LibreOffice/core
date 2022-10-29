@@ -853,7 +853,7 @@ i12626
 
     /* creates fonts and subsets that will be emitted later */
     void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
-    void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&, bool);
+    void registerSimpleGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
