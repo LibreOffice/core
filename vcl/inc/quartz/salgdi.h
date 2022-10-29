@@ -68,8 +68,6 @@ public:
 
     CTFontDescriptorRef             GetFontDescriptorRef() const { return mxFontDescriptor; }
 
-    int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
-
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
     virtual hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
