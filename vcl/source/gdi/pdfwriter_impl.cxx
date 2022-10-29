@@ -2324,7 +2324,7 @@ namespace
 int XUnits(int nUPEM, int n) { return (n * 1000) / nUPEM; }
 }
 
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font::PhysicalFontFace* pFont, EmbedFont const & rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font::PhysicalFontFace* pFace, EmbedFont const & rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
 
@@ -2337,11 +2337,11 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     aInfo.m_nDescent = 200;
     aInfo.m_nCapHeight = 1000;
     aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
-    aInfo.m_aPSName = pFont->GetFamilyName();
+    aInfo.m_aPSName = pFace->GetFamilyName();
 
     sal_Int32 pWidths[256] = { 0 };
     const LogicalFontInstance* pFontInstance = rEmbed.m_pFontInstance;
-    auto nUPEM = pFont->UnitsPerEm();
+    auto nUPEM = pFace->UnitsPerEm();
     for( sal_Ucs c = 32; c < 256; c++ )
     {
         sal_GlyphId nGlyph = pFontInstance->GetGlyphIndex(c);
@@ -2352,10 +2352,10 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     sal_GlyphId aGlyphIds[] = { 0 };
     sal_uInt8 pEncoding[] = { 0 };
     std::vector<sal_uInt8> aBuffer;
-    pFont->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, 1, aInfo);
+    pFace->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, 1, aInfo);
 
     // write font descriptor
-    sal_Int32 nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, 0 );
+    sal_Int32 nFontDescriptor = emitFontDescriptor( pFace, aInfo, 0, 0 );
     if( nFontDescriptor )
     {
         // write font object
@@ -2369,7 +2369,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
             aLine.append( "/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            if( !pFont->IsSymbolFont() )
+            if( !pFace->IsSymbolFont() )
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
             aLine.append( "/FirstChar 32 /LastChar 255\n"
                           "/Widths[" );
@@ -2876,20 +2876,20 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* pFont, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* pFace, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
     // possibly characters outside Adobe standard encoding
     // so set Symbolic flag
     sal_Int32 nFontFlags = (1<<2);
-    if( pFont->GetItalic() == ITALIC_NORMAL || pFont->GetItalic() == ITALIC_OBLIQUE )
+    if( pFace->GetItalic() == ITALIC_NORMAL || pFace->GetItalic() == ITALIC_OBLIQUE )
         nFontFlags |= (1 << 6);
-    if( pFont->GetPitch() == PITCH_FIXED )
+    if( pFace->GetPitch() == PITCH_FIXED )
         nFontFlags |= 1;
-    if( pFont->GetFamilyType() == FAMILY_SCRIPT )
+    if( pFace->GetFamilyType() == FAMILY_SCRIPT )
         nFontFlags |= (1 << 3);
-    else if( pFont->GetFamilyType() == FAMILY_ROMAN )
+    else if( pFace->GetFamilyType() == FAMILY_ROMAN )
         nFontFlags |= (1 << 1);
 
     sal_Int32 nFontDescriptor = createObject();
@@ -2913,7 +2913,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* 
     aLine.append( ' ' );
     aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.Bottom()+1) );
     aLine.append( "]/ItalicAngle " );
-    if( pFont->GetItalic() == ITALIC_OBLIQUE || pFont->GetItalic() == ITALIC_NORMAL )
+    if( pFace->GetItalic() == ITALIC_OBLIQUE || pFace->GetItalic() == ITALIC_NORMAL )
         aLine.append( "-30" );
     else
         aLine.append( "0" );
@@ -4176,7 +4176,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     Push();
     SetFont( Font( OUString( "OpenSymbol" ), aFont.GetFontSize() ) );
     const LogicalFontInstance* pFontInstance = GetFontInstance();
-    const vcl::font::PhysicalFontFace* pDevFont = pFontInstance->GetFontFace();
+    const vcl::font::PhysicalFontFace* pFace = pFontInstance->GetFontFace();
     Pop();
 
     // make sure OpenSymbol is embedded, and includes our checkmark
@@ -4186,7 +4186,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
-    registerGlyph(nGlyphId, pDevFont, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+    registerGlyph(nGlyphId, pFace, { cMark }, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
@@ -6066,17 +6066,17 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     SetFont( i_rFont );
 
     const LogicalFontInstance* pFontInstance = GetFontInstance();
-    const vcl::font::PhysicalFontFace* pDevFont = pFontInstance->GetFontFace();
+    const vcl::font::PhysicalFontFace* pFace = pFontInstance->GetFontFace();
     sal_Int32 nFontID = 0;
-    auto it = m_aSystemFonts.find( pDevFont );
+    auto it = m_aSystemFonts.find( pFace );
     if( it != m_aSystemFonts.end() )
         nFontID = it->second.m_nNormalFontID;
     else
     {
         nFontID = m_nNextFID++;
-        m_aSystemFonts[ pDevFont ] = EmbedFont();
-        m_aSystemFonts[ pDevFont ].m_pFontInstance = const_cast<LogicalFontInstance*>(pFontInstance);
-        m_aSystemFonts[ pDevFont ].m_nNormalFontID = nFontID;
+        m_aSystemFonts[ pFace ] = EmbedFont();
+        m_aSystemFonts[ pFace ].m_pFontInstance = const_cast<LogicalFontInstance*>(pFontInstance);
+        m_aSystemFonts[ pFace ].m_nNormalFontID = nFontID;
     }
 
     Pop();
@@ -6084,13 +6084,13 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 }
 
 void PDFWriterImpl::registerSimpleGlyph(const sal_GlyphId nFontGlyphId,
-                                  const vcl::font::PhysicalFontFace* pFont,
+                                  const vcl::font::PhysicalFontFace* pFace,
                                   const std::vector<sal_Ucs>& rCodeUnits,
                                   sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
 {
-    FontSubset& rSubset = m_aSubsets[ pFont ];
+    FontSubset& rSubset = m_aSubsets[ pFace ];
     // search for font specific glyphID
     auto it = rSubset.m_aMapping.find( nFontGlyphId );
     if( it != rSubset.m_aMapping.end() )
@@ -6116,7 +6116,7 @@ void PDFWriterImpl::registerSimpleGlyph(const sal_GlyphId nFontGlyphId,
         // add new glyph to emitted font subset
         GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
         rNewGlyphEmit.setGlyphId( nNewId );
-        rNewGlyphEmit.setGlyphWidth(XUnits(pFont->UnitsPerEm(), nGlyphWidth));
+        rNewGlyphEmit.setGlyphWidth(XUnits(pFace->UnitsPerEm(), nGlyphWidth));
         for (const auto nCode : rCodeUnits)
             rNewGlyphEmit.addCode(nCode);
 
