@@ -169,11 +169,21 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SetDropdownPosHdl, void*, void)
 
 void ScCheckListMenuControl::CreateDropDown()
 {
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    // tdf#151820 The color used for the arrow head depends on the background color
+    Color aBackgroundColor = rStyleSettings.GetWindowColor();
+    Color aSpinColor;
+    if (aBackgroundColor.IsDark())
+        aSpinColor = rStyleSettings.GetLightColor();
+    else
+        aSpinColor = rStyleSettings.GetDarkShadowColor();
+
     int nWidth = (mxMenu->get_text_height() * 3) / 4;
     mxDropDown->SetOutputSizePixel(Size(nWidth, nWidth));
     DecorationView aDecoView(mxDropDown.get());
     aDecoView.DrawSymbol(tools::Rectangle(Point(0, 0), Size(nWidth, nWidth)),
-                         SymbolType::SPIN_RIGHT, mxDropDown->GetTextColor(),
+                         SymbolType::SPIN_RIGHT, aSpinColor,
                          DrawSymbolFlags::NONE);
 }
 
