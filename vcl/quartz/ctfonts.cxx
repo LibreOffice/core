@@ -219,21 +219,18 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
 {
     hb_blob_t* pBlob = nullptr;
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>(GetFontId());
+    CTFontRef pFont = CTFontCreateWithFontDescriptor(pFontDesc, 0.0, nullptr);
 
     if (!nTag)
     {
         // If nTag is 0, the whole font data is requested. CoreText does not
         // give us that, so we will construct an HarfBuzz face from CoreText
         // table data and return the blob of that face.
-        auto rCTFont = CTFontCreateWithFontDescriptor(pFontDesc, 0.0, nullptr);
 
-        auto pTags = CTFontCopyAvailableTables(rCTFont, kCTFontTableOptionNoOptions);
-        if (pTags)
+        auto pTags = CTFontCopyAvailableTables(pFont, kCTFontTableOptionNoOptions);
+        CFIndex nTags = pTags ? CFArrayGetCount(pTags) : 0;
+        if (nTags > 0)
         {
-            auto nTags = CFArrayGetCount(pTags);
-            if (!nTags)
-                return nullptr;
-
             hb_face_t* pHbFace = hb_face_builder_create();
             for (CFIndex i = 0; i < nTags; i++)
             {
@@ -246,30 +243,29 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
             pBlob = hb_face_reference_blob(pHbFace);
 
             hb_face_destroy(pHbFace);
-            CFRelease(pTags);
         }
-
-        return pBlob;
+        if (pTags)
+            CFRelease(pTags);
     }
-
-    CTFontRef pFont = CTFontCreateWithFontDescriptor(pFontDesc, 0.0, nullptr);
-    CFDataRef pData = CTFontCopyTable(pFont, nTag, kCTFontTableOptionNoOptions);
-
-    const CFIndex nLength = pData ? CFDataGetLength(pData) : 0;
-    if (nLength > 0)
+    else
     {
-        auto pBuffer = new UInt8[nLength];
-        const CFRange aRange = CFRangeMake(0, nLength);
-        CFDataGetBytes(pData, aRange, pBuffer);
+        CFDataRef pData = CTFontCopyTable(pFont, nTag, kCTFontTableOptionNoOptions);
+        const CFIndex nLength = pData ? CFDataGetLength(pData) : 0;
+        if (nLength > 0)
+        {
+            auto pBuffer = new UInt8[nLength];
+            const CFRange aRange = CFRangeMake(0, nLength);
+            CFDataGetBytes(pData, aRange, pBuffer);
 
-        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength,
-                               HB_MEMORY_MODE_READONLY, pBuffer,
-                               [](void* data) { delete[] static_cast<UInt8*>(data); });
+            pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength,
+                                   HB_MEMORY_MODE_READONLY, pBuffer,
+                                   [](void* data) { delete[] static_cast<UInt8*>(data); });
+        }
+        if (pData)
+            CFRelease(pData);
     }
-    if (pData)
-        CFRelease(pData);
-    CFRelease(pFont);
 
+    CFRelease(pFont);
     return pBlob;
 }
 
