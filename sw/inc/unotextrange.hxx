@@ -129,7 +129,7 @@ public:
     bool GetPositions(SwPaM & rToFill,
         ::sw::TextRangeMode eMode = ::sw::TextRangeMode::RequireTextNode) const;
 
-    static css::uno::Reference< css::text::XTextRange > CreateXTextRange(
+    static rtl::Reference< SwXTextRange > CreateXTextRange(
             SwDoc & rDoc,
             const SwPosition& rPos, const SwPosition *const pMark);
 

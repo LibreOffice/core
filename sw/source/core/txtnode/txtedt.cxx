@@ -1468,7 +1468,7 @@ SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
 
         SwPosition start(*pNode, nBegin);
         SwPosition end  (*pNode, nEnd);
-        Reference< css::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(pNode->GetDoc(), start, &end);
+        rtl::Reference<SwXTextRange> xRange = SwXTextRange::CreateXTextRange(pNode->GetDoc(), start, &end);
 
         rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
 

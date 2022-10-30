@@ -260,14 +260,13 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     UnoActionContext aAction( &GetTextNode()->GetDoc() );
 
-    const uno::Reference< text::XTextRange > xRange =
+    const rtl::Reference<SwXTextRange> xRange =
         SwXTextRange::CreateXTextRange(
             GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
-    uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
-    if ( xPropSet.is() )
+    if ( xRange.is() )
     {
         for ( const auto& rAttribute : aAttributes )
-            xPropSet->setPropertyValue( rAttribute.Name, rAttribute.Value );
+            xRange->setPropertyValue( rAttribute.Name, rAttribute.Value );
     }
 
     IDocumentContentOperations& rIDCO = pOldTextNode->getIDocumentContentOperations();
@@ -293,14 +292,13 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 
     UnoActionContext aAction( &GetTextNode()->GetDoc() );
 
-    const uno::Reference< text::XTextRange > xRange =
+    const rtl::Reference<SwXTextRange> xRange =
         SwXTextRange::CreateXTextRange(
             GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
-    uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
-    if ( xPropSet.is() )
+    if ( xRange.is() )
     {
         for ( const auto& rAttribute : aAttributes )
-            xPropSet->setPropertyValue( rAttribute.Name, rAttribute.Value );
+            xRange->setPropertyValue( rAttribute.Name, rAttribute.Value );
     }
 
     ClearTextNode(); // TODO: is this really needed?

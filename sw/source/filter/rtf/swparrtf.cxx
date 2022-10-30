@@ -59,7 +59,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
     // We want to work in an empty paragraph.
     // Step 1: XTextRange will be updated when content is inserted, so we know
     // the end position.
-    const uno::Reference<text::XTextRange> xInsertPosition
+    const rtl::Reference<SwXTextRange> xInsertPosition
         = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
     auto pSttNdIdx = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
     const SwPosition* pPos = rPam.GetPoint();
@@ -89,7 +89,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
     uno::Reference<lang::XComponent> xDstDoc(pDocShell->GetModel(), uno::UNO_QUERY_THROW);
     xImporter->setTargetDocument(xDstDoc);
 
-    const uno::Reference<text::XTextRange> xInsertTextRange
+    const rtl::Reference<SwXTextRange> xInsertTextRange
         = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
@@ -97,7 +97,8 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
         { { "InputStream",
             uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(*m_pStream))) },
           { "InsertMode", uno::Any(true) },
-          { "TextInsertModeRange", uno::Any(xInsertTextRange) } }));
+          { "TextInsertModeRange",
+            uno::Any(uno::Reference<text::XTextRange>(xInsertTextRange)) } }));
     auto ret = ERRCODE_NONE;
     try
     {

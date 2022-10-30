@@ -688,10 +688,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     }
     else if( m_bInsertMode )
     {
-        const uno::Reference<text::XTextRange> xInsertTextRange =
+        const rtl::Reference<SwXTextRange> xInsertTextRange =
             SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), nullptr);
         xInfoSet->setPropertyValue( "TextInsertModeRange",
-                                    Any(xInsertTextRange) );
+                                    Any(uno::Reference<text::XTextRange>(xInsertTextRange)) );
     }
     else
     {

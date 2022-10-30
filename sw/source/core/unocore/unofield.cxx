@@ -2083,7 +2083,7 @@ SwXTextField::getAnchor()
         }
     }
 
-    uno::Reference<text::XTextRange> xRange = SwXTextRange::CreateXTextRange(
+    rtl::Reference<SwXTextRange> xRange = SwXTextRange::CreateXTextRange(
             *m_pImpl->m_pDoc, *(pPamForTextField->GetPoint()), pPamForTextField->GetMark());
     return xRange;
 }

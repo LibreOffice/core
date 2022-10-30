@@ -277,7 +277,7 @@ uno::Reference<text::XTextRange> SwFormatFootnote::getAnchor(SwDoc& rDoc) const
     SwPaM aPam(m_pTextAttr->GetTextNode(), m_pTextAttr->GetStart());
     aPam.SetMark();
     aPam.GetMark()->AdjustContent(+1);
-    const uno::Reference<text::XTextRange> xRet =
+    const rtl::Reference<SwXTextRange> xRet =
         SwXTextRange::CreateXTextRange(rDoc, *aPam.Start(), aPam.End());
     return xRet;
 }

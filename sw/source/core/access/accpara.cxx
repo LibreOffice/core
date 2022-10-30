@@ -2616,7 +2616,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
         SwPosition aEndPos(pFrame->MapViewToModelPos(nEnd));
 
         // now create XTextRange as helper and set string
-        const uno::Reference<text::XTextRange> xRange(
+        const rtl::Reference<SwXTextRange> xRange(
             SwXTextRange::CreateXTextRange(
                 const_cast<SwDoc&>(pFrame->GetDoc()), aStartPos, &aEndPos));
         xRange->setString(sReplacement);

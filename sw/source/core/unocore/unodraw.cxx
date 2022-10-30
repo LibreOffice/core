@@ -1462,12 +1462,12 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         if ( aAnchor.GetContentAnchor() )
                         {
-                            const uno::Reference< text::XTextRange > xTextRange
+                            const rtl::Reference<SwXTextRange> xTextRange
                                 = SwXTextRange::CreateXTextRange(
                                                     *pFormat->GetDoc(),
                                                     *aAnchor.GetContentAnchor(),
                                                     nullptr );
-                            aRet <<= xTextRange;
+                            aRet <<= uno::Reference<text::XTextRange>(xTextRange);
                         }
                         else
                         {
@@ -2041,10 +2041,10 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 }
 
-uno::Reference< text::XTextRange >  SwXShape::getAnchor()
+uno::Reference< text::XTextRange > SwXShape::getAnchor()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  aRef;
+    uno::Reference< text::XTextRange > aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
@@ -2066,7 +2066,7 @@ uno::Reference< text::XTextRange >  SwXShape::getAnchor()
         }
     }
     else
-        aRef = m_pImpl->GetTextRange();
+        aRef = m_pImpl->GetTextRange().get();
     return aRef;
 }
 

@@ -817,7 +817,7 @@ uno::Reference<text::XTextRange> SAL_CALL SwXFieldmark::getAnchor()
     return SwXBookmark::getAnchor();
 }
 
-uno::Reference<text::XTextRange>
+rtl::Reference<SwXTextRange>
 SwXFieldmark::GetCommand(IFieldmark const& rMark)
 {
     SwPosition const sepPos(sw::mark::FindFieldSep(rMark));
@@ -826,7 +826,7 @@ SwXFieldmark::GetCommand(IFieldmark const& rMark)
     return SwXTextRange::CreateXTextRange(*GetDoc(), start, &sepPos);
 }
 
-uno::Reference<text::XTextRange>
+rtl::Reference<SwXTextRange>
 SwXFieldmark::GetResult(IFieldmark const& rMark)
 {
     SwPosition sepPos(sw::mark::FindFieldSep(rMark));

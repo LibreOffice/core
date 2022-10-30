@@ -2733,7 +2733,7 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
                     else
                     {
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                        uno::Reference<text::XTextRange> const xInsertPosition(
+                        rtl::Reference<SwXTextRange> const xInsertPosition(
                             SwXTextRange::CreateXTextRange(*pDoc,
                                 *m_pWrtShell->GetCursor()->GetPoint(), nullptr));
                         nErrno = pDocSh->ImportFrom(*pMedium, xInsertPosition)

@@ -36,6 +36,7 @@
 #include <IDocumentMarkAccess.hxx>
 
 class SwDoc;
+class SwXTextRange;
 
 typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
@@ -193,9 +194,9 @@ class SwXFieldmark final
     bool const m_bReplacementObject;
     bool m_isFieldmarkSeparatorAtStart = false;
 
-    css::uno::Reference<css::text::XTextRange>
+    rtl::Reference<SwXTextRange>
         GetCommand(::sw::mark::IFieldmark const& rMark);
-    css::uno::Reference<css::text::XTextRange>
+    rtl::Reference<SwXTextRange>
         GetResult(::sw::mark::IFieldmark const& rMark);
 
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);

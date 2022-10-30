@@ -435,9 +435,9 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                     pPoint = m_pRedline->GetPoint();
                 else
                     pPoint = m_pRedline->GetMark();
-                const uno::Reference<text::XTextRange> xRange =
+                const rtl::Reference<SwXTextRange> xRange =
                     SwXTextRange::CreateXTextRange(*m_pDoc, *pPoint, nullptr);
-                xRet = xRange.get();
+                xRet = uno::Reference<text::XTextRange>(xRange);
             }
             break;
             default:

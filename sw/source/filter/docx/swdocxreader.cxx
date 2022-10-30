@@ -63,7 +63,7 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     xImporter->setTargetDocument(xDstDoc);
 
-    const uno::Reference<text::XTextRange> xInsertTextRange = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
+    const rtl::Reference<SwXTextRange> xInsertTextRange = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*m_pMedium->GetInStream()));
 
     //SetLoading hack because the document properties will be re-initted
@@ -76,7 +76,7 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
     {
         { "InputStream", uno::Any(xStream) },
         { "InsertMode", uno::Any(true) },
-        { "TextInsertModeRange", uno::Any(xInsertTextRange) }
+        { "TextInsertModeRange", uno::Any(uno::Reference<text::XTextRange>(xInsertTextRange)) }
     }));
 
     ErrCode ret = ERRCODE_NONE;

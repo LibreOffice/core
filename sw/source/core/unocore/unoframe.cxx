@@ -2690,7 +2690,7 @@ void SwXFrame::dispose()
 uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  aRef;
+    rtl::Reference<SwXTextRange> aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(!pFormat)
         throw uno::RuntimeException();

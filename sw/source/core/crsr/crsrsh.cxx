@@ -3744,7 +3744,7 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     // create SwPosition for nEndIndex
     SwPosition aEndPos( rNode, nBegin + nLen );
 
-    const uno::Reference<text::XTextRange> xRange =
+    const rtl::Reference<SwXTextRange> xRange =
         SwXTextRange::CreateXTextRange(rNode.GetDoc(), aStartPos, &aEndPos);
 
     rRange = xRange;

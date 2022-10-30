@@ -1206,7 +1206,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
 
 } // namespace sw
 
-uno::Reference< text::XTextRange >
+rtl::Reference< SwXTextRange >
 SwXTextRange::CreateXTextRange(
     SwDoc & rDoc, const SwPosition& rPos, const SwPosition *const pMark)
 {
@@ -1219,10 +1219,8 @@ SwXTextRange::CreateXTextRange(
         *pNewCursor->GetMark() = *pMark;
     }
     const bool isCell( dynamic_cast<SwXCell*>(xParentText.get()) );
-    const uno::Reference< text::XTextRange > xRet(
-        new SwXTextRange(*pNewCursor, xParentText,
-            isCell ? RANGE_IN_CELL : RANGE_IN_TEXT) );
-    return xRet;
+    return new SwXTextRange(*pNewCursor, xParentText,
+            isCell ? RANGE_IN_CELL : RANGE_IN_TEXT);
 }
 
 namespace sw {
@@ -1588,7 +1586,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
     virtual SwUnoCursor* GetCursor() override
         { return &(*m_pUnoCursor); };
     void MakeRanges();
-    std::vector< uno::Reference< text::XTextRange > > m_Ranges;
+    std::vector< rtl::Reference<SwXTextRange> > m_Ranges;
     sw::UnoCursorPointer m_pUnoCursor;
 };
 
@@ -1601,7 +1599,7 @@ void SwXTextRangesImpl::MakeRanges()
 
     for(SwPaM& rTmpCursor : GetCursor()->GetRingContainer())
     {
-        const uno::Reference< text::XTextRange > xRange(
+        const rtl::Reference<SwXTextRange> xRange(
                 SwXTextRange::CreateXTextRange(
                     rTmpCursor.GetDoc(),
                     *rTmpCursor.GetPoint(), rTmpCursor.GetMark()));
@@ -1644,8 +1642,7 @@ uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= m_Ranges.size()))
         throw lang::IndexOutOfBoundsException();
-    uno::Any ret;
-    ret <<= m_Ranges.at(nIndex);
+    uno::Any ret(uno::Reference<text::XTextRange>(m_Ranges.at(nIndex)));
     return ret;
 }
 

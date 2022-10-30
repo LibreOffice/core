@@ -535,7 +535,7 @@ SwXTextView::createTextRangeByPixelPosition(const awt::Point& rPixelPosition)
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPosition aPosition(*rSh.GetCurrentShellCursor().GetPoint());
     rSh.GetLayout()->GetModelPositionForViewPoint(&aPosition, aLogicPoint);
-    uno::Reference<text::XTextRange> xRet
+    rtl::Reference<SwXTextRange> xRet
         = SwXTextRange::CreateXTextRange(*rSh.GetDoc(), aPosition, /*pMark=*/nullptr);
 
     return xRet;
@@ -1345,7 +1345,7 @@ uno::Reference< text::XText >  SwXTextViewCursor::getText()
     return xRet;
 }
 
-uno::Reference< text::XTextRange >  SwXTextViewCursor::getStart()
+uno::Reference< text::XTextRange > SwXTextViewCursor::getStart()
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  xRet;
@@ -1363,10 +1363,10 @@ uno::Reference< text::XTextRange >  SwXTextViewCursor::getStart()
     return xRet;
 }
 
-uno::Reference< text::XTextRange >  SwXTextViewCursor::getEnd()
+uno::Reference< text::XTextRange > SwXTextViewCursor::getEnd()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  xRet;
+    rtl::Reference<SwXTextRange> xRet;
     if(!m_pView)
         throw uno::RuntimeException();
 

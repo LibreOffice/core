@@ -1348,7 +1348,7 @@ SwXDocumentIndex::getAnchor()
         throw uno::RuntimeException();
     }
 
-    uno::Reference< text::XTextRange > xRet;
+    rtl::Reference<SwXTextRange> xRet;
     SwNodeIndex const*const pIdx( pSectionFormat->GetContent().GetContentIdx() );
     if (pIdx && pIdx->GetNode().GetNodes().IsDocNodes())
     {

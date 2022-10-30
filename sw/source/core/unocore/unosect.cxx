@@ -435,7 +435,7 @@ SwXTextSection::getAnchor()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange >  xRet;
+    rtl::Reference<SwXTextRange> xRet;
     SwSectionFormat *const pSectFormat = m_pImpl->GetSectionFormat();
     if(pSectFormat)
     {
