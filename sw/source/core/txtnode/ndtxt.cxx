@@ -5086,7 +5086,7 @@ namespace {
             bool mbUpdateListRestart;
             bool mbUpdateListCount;
 
-            void init( const std::vector<sal_uInt16>& rWhichArr );
+            void init( sal_uInt16 nWhich, bool& rbRemoveFromList );
     };
 
     HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode,
@@ -5100,11 +5100,11 @@ namespace {
     {
         if ( nWhich2 < nWhich1 )
             nWhich2 = nWhich1;
-        std::vector<sal_uInt16> rWhichArr;
+        bool bRemoveFromList( false );
         for ( sal_uInt16 nWhich = nWhich1; nWhich <= nWhich2; ++nWhich )
-            rWhichArr.push_back( nWhich );
-
-        init( rWhichArr );
+            init( nWhich, bRemoveFromList );
+        if ( bRemoveFromList && mrTextNode.IsInList() )
+            mrTextNode.RemoveFromList();
     }
 
     HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode,
@@ -5115,7 +5115,11 @@ namespace {
           mbUpdateListRestart( false ),
           mbUpdateListCount( false )
     {
-        init( rWhichArr );
+        bool bRemoveFromList( false );
+        for ( sal_uInt16 nWhich : rWhichArr )
+            init( nWhich, bRemoveFromList );
+        if ( bRemoveFromList && mrTextNode.IsInList() )
+            mrTextNode.RemoveFromList();
     }
 
     HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode )
@@ -5133,55 +5137,44 @@ namespace {
         mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
     }
 
-    void HandleResetAttrAtTextNode::init( const std::vector<sal_uInt16>& rWhichArr )
+    void HandleResetAttrAtTextNode::init( sal_uInt16 rWhich, bool& rbRemoveFromList )
     {
-        bool bRemoveFromList( false );
+        if ( rWhich == RES_PARATR_NUMRULE )
         {
-            for (const auto& rWhich : rWhichArr)
-            {
-                if ( rWhich == RES_PARATR_NUMRULE )
-                {
-                    bRemoveFromList = bRemoveFromList ||
-                                      mrTextNode.GetNumRule() != nullptr;
-                    mbListStyleOrIdReset = true;
-                }
-                else if ( rWhich == RES_PARATR_LIST_ID )
-                {
-                    bRemoveFromList = bRemoveFromList ||
-                        ( mrTextNode.GetpSwAttrSet() &&
-                          mrTextNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SfxItemState::SET );
-                    mbListStyleOrIdReset = true;
-                }
-                else if ( rWhich == RES_PARATR_OUTLINELEVEL )
-                    mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                else if ( rWhich == RES_BACKGROUND )
-                    mrTextNode.ResetAttr( XATTR_FILL_FIRST, XATTR_FILL_LAST );
-
-                if ( !bRemoveFromList )
-                {
-                    // RES_PARATR_LIST_LEVEL
-                    mbUpdateListLevel = mbUpdateListLevel ||
-                                        ( rWhich == RES_PARATR_LIST_LEVEL &&
-                                          mrTextNode.HasAttrListLevel() );
-
-                    // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
-                    mbUpdateListRestart = mbUpdateListRestart ||
-                                          ( rWhich == RES_PARATR_LIST_ISRESTART &&
-                                            mrTextNode.IsListRestart() ) ||
-                                          ( rWhich == RES_PARATR_LIST_RESTARTVALUE &&
-                                            mrTextNode.HasAttrListRestartValue() );
-
-                    // RES_PARATR_LIST_ISCOUNTED
-                    mbUpdateListCount = mbUpdateListCount ||
-                                        ( rWhich == RES_PARATR_LIST_ISCOUNTED &&
-                                          !mrTextNode.IsCountedInList() );
-                }
-            }
+            rbRemoveFromList = rbRemoveFromList ||
+                              mrTextNode.GetNumRule() != nullptr;
+            mbListStyleOrIdReset = true;
         }
-
-        if ( bRemoveFromList && mrTextNode.IsInList() )
+        else if ( rWhich == RES_PARATR_LIST_ID )
         {
-            mrTextNode.RemoveFromList();
+            rbRemoveFromList = rbRemoveFromList ||
+                ( mrTextNode.GetpSwAttrSet() &&
+                  mrTextNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SfxItemState::SET );
+            mbListStyleOrIdReset = true;
+        }
+        else if ( rWhich == RES_PARATR_OUTLINELEVEL )
+            mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+        else if ( rWhich == RES_BACKGROUND )
+            mrTextNode.ResetAttr( XATTR_FILL_FIRST, XATTR_FILL_LAST );
+
+        if ( !rbRemoveFromList )
+        {
+            // RES_PARATR_LIST_LEVEL
+            mbUpdateListLevel = mbUpdateListLevel ||
+                                ( rWhich == RES_PARATR_LIST_LEVEL &&
+                                  mrTextNode.HasAttrListLevel() );
+
+            // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
+            mbUpdateListRestart = mbUpdateListRestart ||
+                                  ( rWhich == RES_PARATR_LIST_ISRESTART &&
+                                    mrTextNode.IsListRestart() ) ||
+                                  ( rWhich == RES_PARATR_LIST_RESTARTVALUE &&
+                                    mrTextNode.HasAttrListRestartValue() );
+
+            // RES_PARATR_LIST_ISCOUNTED
+            mbUpdateListCount = mbUpdateListCount ||
+                                ( rWhich == RES_PARATR_LIST_ISCOUNTED &&
+                                  !mrTextNode.IsCountedInList() );
         }
     }
 
