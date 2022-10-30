@@ -1309,7 +1309,7 @@ namespace sw::mark
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(pMark);
         if (pDdeBookmark)
         {
-            ret.reset(new LazyDdeBookmarkDeleter(dynamic_cast<DdeBookmark*>(pMark), m_rDoc));
+            ret.reset(new LazyDdeBookmarkDeleter(pDdeBookmark, m_rDoc));
         }
 
         m_vAllMarks.erase(aI);
