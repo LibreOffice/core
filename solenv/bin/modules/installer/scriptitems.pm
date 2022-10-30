@@ -660,8 +660,8 @@ sub replace_setup_variables
             chomp;
             if (/^s*(\S+)=(\S+)$/)
             {
-                $key = $1;
-                $val = $2;
+                my $key = $1;
+                my $val = $2;
                 if ($key eq "channel")
                 {
                     $updatechannel = $val;
@@ -700,7 +700,7 @@ sub replace_setup_variables
 
 sub replace_userdir_variable
 {
-    my ($itemsarrayref) = @_;
+    my ($itemsarrayref, $allvariableshashref) = @_;
 
     my $userdir = "";
     if ( $allvariableshashref->{'LOCALUSERDIR'} ) { $userdir = $allvariableshashref->{'LOCALUSERDIR'}; }
@@ -1659,7 +1659,7 @@ sub collect_directories_from_filesarray
         {
             my $sourcepath = $onefile->{'sourcepath'};
             # Do the same as collect_directories_with_create_flag_from_directoryarray does
-            $alldirectoryhash = recursive_add_directory_with_create_flag_hash(\%alldirectoryhash, $onefile->{'destination'}, $onefile->{'specificlanguage'}, $onefile->{'gid'}, "(CREATE)", $onefile->{'modules'});
+            %alldirectoryhash = %{recursive_add_directory_with_create_flag_hash(\%alldirectoryhash, $onefile->{'destination'}, $onefile->{'specificlanguage'}, $onefile->{'gid'}, "(CREATE)", $onefile->{'modules'})};
 
             next;
         }
@@ -1810,7 +1810,7 @@ sub get_destination_link_path_for_links
             for ( my $j = 0; $j <= $#{$linksarrayref}; $j++ )
             {
                 my $destlink = ${$linksarrayref}[$j];
-                $shortcutgid = $destlink->{'gid'};
+                my $shortcutgid = $destlink->{'gid'};
 
                 if ( $shortcutgid eq $shortcutid )
                 {
@@ -2161,7 +2161,7 @@ sub collect_all_parent_feature
             if ( $found_root_module ) { installer::exiter::exit_program("ERROR: Only one module without ParentID or with empty ParentID allowed ($installer::globals::rootmodulegid, $onefeature->{'gid'}).", "collect_all_parent_feature"); }
             $installer::globals::rootmodulegid = $onefeature->{'gid'};
             $found_root_module = 1;
-            $infoline = "Setting Root Module: $installer::globals::rootmodulegid\n";
+            my $infoline = "Setting Root Module: $installer::globals::rootmodulegid\n";
             push( @installer::globals::globallogfileinfo, $infoline);
         }
 
@@ -2353,7 +2353,7 @@ sub _key_in_a_is_also_key_in_b
         if ( ! exists($hashref_b->{$key}) )
         {
             print "*****\n";
-            foreach $keyb ( keys %{$hashref_b} ) { print "$keyb : $hashref_b->{$keyb}\n"; }
+            foreach my $keyb ( keys %{$hashref_b} ) { print "$keyb : $hashref_b->{$keyb}\n"; }
             print "*****\n";
             $returnvalue = 0;
         }
