@@ -97,14 +97,6 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    enum RangePosition
-    {
-        RANGE_IN_TEXT,  // "ordinary" css::text::TextRange
-        RANGE_IN_CELL,  // position created with a cell that has no uno object
-        RANGE_IS_TABLE, // anchor of a table
-        RANGE_IS_SECTION, // anchor of a section
-    };
-
     void    SetPositions(SwPaM const& rPam);
     //TODO: new exception type for protected content
     /// @throws css::uno::RuntimeException
@@ -115,6 +107,14 @@ private:
     virtual ~SwXTextRange() override;
 
 public:
+
+    enum RangePosition
+    {
+        RANGE_IN_TEXT,  // "ordinary" css::text::TextRange
+        RANGE_IN_CELL,  // position created with a cell that has no uno object
+        RANGE_IS_TABLE, // anchor of a table
+        RANGE_IS_SECTION, // anchor of a section
+    };
 
     SwXTextRange(SwPaM const & rPam,
             const css::uno::Reference< css::text::XText > & xParent,

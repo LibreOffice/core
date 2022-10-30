@@ -41,6 +41,7 @@
 #include <paratr.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
+#include <unotbl.hxx>
 #include <fmtruby.hxx>
 #include <docsh.hxx>
 #include <docstyle.hxx>

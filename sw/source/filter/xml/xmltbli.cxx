@@ -63,6 +63,7 @@
 #include "xmltbli.hxx"
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
+#include <unotextcursor.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <algorithm>
@@ -2711,9 +2712,10 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                                                             ->GetContentNode();
             SwPosition aPos( *pCNd );
 
-            const rtl::Reference<SwXTextRange> xTextRange =
-                SwXTextRange::CreateXTextRange( *pDoc, aPos, nullptr );
-            Reference < XText > xText = xTextRange->getText();
+            Reference < XText > xText = ::sw::CreateParentXText(*pDoc, aPos);
+            const auto pNewCursor(pDoc->CreateUnoCursor(aPos));
+            rtl::Reference<SwXTextRange> xTextRange = new SwXTextRange(*pNewCursor, xText,
+                    SwXTextRange::RANGE_IN_CELL);
             Reference < XTextCursor > xTextCursor =
                 xText->createTextCursorByRange( xTextRange );
             GetImport().GetTextImport()->SetCursor( xTextCursor );
