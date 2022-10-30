@@ -781,9 +781,9 @@ void SAL_CALL SwXCell::release(  ) noexcept
 
 uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwXCellBaseClass::queryInterface(aType);
+    uno::Any aRet = SwXText::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
-        aRet = SwXText::queryInterface(aType);
+        aRet = SwXCellBaseClass::queryInterface(aType);
     return aRet;
 }
 

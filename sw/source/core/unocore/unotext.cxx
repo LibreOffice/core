@@ -198,6 +198,10 @@ SwXText::queryInterface(const uno::Type& rType)
     {
         aRet <<= uno::Reference< text::XText >(this);
     }
+    else if (rType == cppu::UnoType<lang::XUnoTunnel>::get())
+    {
+        aRet <<= uno::Reference< lang::XUnoTunnel >(this);
+    }
     else if (rType == cppu::UnoType<text::XSimpleText>::get())
     {
         aRet <<= uno::Reference< text::XSimpleText >(this);
@@ -225,10 +229,6 @@ SwXText::queryInterface(const uno::Type& rType)
     else if (rType == cppu::UnoType<beans::XPropertySet>::get())
     {
         aRet <<= uno::Reference< beans::XPropertySet >(this);
-    }
-    else if (rType == cppu::UnoType<lang::XUnoTunnel>::get())
-    {
-        aRet <<= uno::Reference< lang::XUnoTunnel >(this);
     }
     else if (rType == cppu::UnoType<text::XTextAppendAndConvert>::get())
     {
