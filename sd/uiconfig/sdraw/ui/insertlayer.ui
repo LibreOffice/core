@@ -181,6 +181,7 @@
                       <object class="GtkTextView" id="textview">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <child internal-child="accessible">
@@ -211,16 +212,87 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="visible">
-                <property name="label" translatable="yes" context="insertlayer|visible">_Visible</property>
+              <object class="GtkFrame">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="visible-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|visible">Show or hide the layer.</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkCheckButton" id="visible">
+                        <property name="label" translatable="yes" context="insertlayer|visible">_Visible</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="visible-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|visible">Show or hide the layer.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="printable">
+                        <property name="label" translatable="yes" context="insertlayer|printable">_Printable</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printable-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|printable">When printing, print or ignore this particular layer.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="locked">
+                        <property name="label" translatable="yes" context="insertlayer|locked">_Locked</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="locked-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|locked">Prevent elements on the layer from being edited.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label6">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="insertlayer|properties">Properties</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                 </child>
               </object>
@@ -228,46 +300,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="printable">
-                <property name="label" translatable="yes" context="insertlayer|printable">_Printable</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="printable-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|printable">When printing, print or ignore this particular layer.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="locked">
-                <property name="label" translatable="yes" context="insertlayer|locked">_Locked</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="locked-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|locked">Prevent elements on the layer from being edited.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
               </packing>
             </child>
           </object>
