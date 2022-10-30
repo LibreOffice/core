@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTTOKENHANDLER_HXX
-#define EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTTOKENHANDLER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
@@ -43,7 +42,4 @@ public:
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
 };
 
-#endif // EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTTOKENHANDLER_HXX
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_INTERCEPT_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INC_INTERCEPT_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -145,7 +144,5 @@ private:
 
     bool m_bLink;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
