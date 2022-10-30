@@ -171,6 +171,11 @@ namespace SwUnoCursorHelper
             const css::uno::Sequence< css::beans::PropertyValue > &
             rPropertyValues,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
+    void SetPropertyValues(
+            SwPaM& rPaM,
+            const SfxItemPropertySet & rPropSet,
+            o3tl::span< const css::beans::PropertyValue > aPropertyValues,
+            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
