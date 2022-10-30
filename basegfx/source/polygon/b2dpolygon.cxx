@@ -1075,7 +1075,10 @@ public:
 
 namespace basegfx
 {
-    B2DPolygon::B2DPolygon() = default;
+    static o3tl::cow_wrapper<ImplB2DPolygon> DEFAULT;
+
+    B2DPolygon::B2DPolygon()
+        : mpPolygon(DEFAULT) {}
 
     B2DPolygon::B2DPolygon(std::initializer_list<basegfx::B2DPoint> aPoints)
     {
