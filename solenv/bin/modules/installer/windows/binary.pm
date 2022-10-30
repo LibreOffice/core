@@ -18,6 +18,9 @@
 
 package installer::windows::binary;
 
+use strict;
+use warnings;
+
 use installer::files;
 use installer::globals;
 

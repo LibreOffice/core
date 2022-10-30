@@ -18,6 +18,9 @@
 
 package installer::simplepackage;
 
+use strict;
+use warnings;
+
 use Cwd;
 use File::Copy;
 use installer::download;
@@ -309,7 +312,7 @@ sub create_package
 
             print "... $systemcall ...\n";
             my $localreturnvalue = system($systemcall);
-            $infoline = "Systemcall: $systemcall\n";
+            my $infoline = "Systemcall: $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
 
             if ($localreturnvalue)
@@ -410,7 +413,7 @@ sub create_package
             {
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
-                $infoline = "Systemcall: $systemcall\n";
+                my $infoline = "Systemcall: $systemcall\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 my $output = `$systemcall 2>&1`;
                 if ($?)
@@ -436,7 +439,7 @@ sub create_package
                     $systemcall = "codesign --force --verbose --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{BUILDDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
                     print "... $systemcall ...\n";
                     my $returnvalue = system($systemcall);
-                    $infoline = "Systemcall: $systemcall\n";
+                    my $infoline = "Systemcall: $systemcall\n";
                     push( @installer::globals::logfileinfo, $infoline);
 
                     if ($returnvalue)
@@ -612,12 +615,10 @@ sub create_simple_package
             if ($copyreturn)
             {
                 $infoline = "Copy: $source to $destination\n";
-                $returnvalue = 1;
             }
             else
             {
                 $infoline = "ERROR: Could not copy $source to $destination $!\n";
-                $returnvalue = 0;
             }
 
             push(@installer::globals::logfileinfo, $infoline);

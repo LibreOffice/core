@@ -18,6 +18,9 @@
 
 package installer::worker;
 
+use strict;
+use warnings;
+
 use Cwd;
 use File::Copy;
 use File::stat;
@@ -548,7 +551,7 @@ sub add_variables_from_inc_to_hashref
     {
         $includefilename =~ s/^\s*//;
         $includefilename =~ s/\s*$//;
-        $includefilenameref = $ENV{'SRCDIR'} . "/" . $includefilename;
+        my $includefilenameref = $ENV{'SRCDIR'} . "/" . $includefilename;
         if ( ! -f $includefilenameref ) { installer::exiter::exit_program("Include file $includefilename ($includefilenameref) not found!\nADD_INCLUDE_FILES = $allvariables->{'ADD_INCLUDE_FILES'}", "add_variables_from_inc_to_hashref"); }
 
         $infoline = "Including inc file: $includefilenameref \n";
@@ -590,7 +593,7 @@ sub collect_all_files_from_includepaths
 
     for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
     {
-        $includepath = ${$patharrayref}[$i];
+        my $includepath = ${$patharrayref}[$i];
         installer::remover::remove_leading_and_ending_whitespaces(\$includepath);
 
         if ( ! -d $includepath )
@@ -913,7 +916,7 @@ sub collectpackagemaps
     # Create a tar gz file with all package maps
     my $tarfilename = $subdirname . ".tar";
     my $targzname = $tarfilename . ".gz";
-    $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | $installer::globals::packertool > $targzname";
+    my $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | $installer::globals::packertool > $targzname";
     installer::systemactions::make_systemcall($systemcall);
     installer::systemactions::remove_complete_directory($pkgmapsubdir, 1);
 }

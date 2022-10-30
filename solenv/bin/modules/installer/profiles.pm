@@ -18,6 +18,9 @@
 
 package installer::profiles;
 
+use strict;
+use warnings;
+
 use installer::converter;
 use installer::files;
 use installer::globals;
@@ -203,7 +206,7 @@ sub create_profiles
         }
 
         # Saving the profile as a file
-        $completeprofilename = $localprofilesdir . $installer::globals::separator . $profilename;
+        my $completeprofilename = $localprofilesdir . $installer::globals::separator . $profilename;
 
         installer::files::save_file($completeprofilename, $onefileref);
 

@@ -18,6 +18,9 @@
 
 package installer::windows::createfolder;
 
+use strict;
+use warnings;
+
 use installer::exiter;
 use installer::files;
 use installer::globals;

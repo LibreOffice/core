@@ -18,6 +18,9 @@
 
 package installer::parameter;
 
+use strict;
+use warnings;
+
 use Cwd;
 use installer::exiter;
 use installer::files;

@@ -18,6 +18,9 @@
 
 package installer::windows::icon;
 
+use strict;
+use warnings;
+
 use installer::files;
 use installer::globals;
 use installer::pathanalyzer;

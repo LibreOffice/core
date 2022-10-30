@@ -18,6 +18,9 @@
 
 package installer::windows::shortcut;
 
+use strict;
+use warnings;
+
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -113,9 +116,12 @@ sub get_shortcut_component
     my $shortcut_fileid = $shortcut->{'FileID'};
 
     my $absolute_filename = 0;
-    if ( $shortcut->{'Styles'} ) { $styles = $shortcut->{'Styles'}; }
-    if ( $styles =~ /\bABSOLUTE_FILENAME\b/ ) { $absolute_filename = 1; }   # FileID contains an absolute filename
-    if ( $styles =~ /\bUSE_HELPER_FILENAME\b/ ) { $absolute_filename = 1; } # ComponentIDFile contains id of a helper file
+    if ( $shortcut->{'Styles'} )
+    {
+        my $styles = $shortcut->{'Styles'};
+        if ( $styles =~ /\bABSOLUTE_FILENAME\b/ ) { $absolute_filename = 1; }   # FileID contains an absolute filename
+        if ( $styles =~ /\bUSE_HELPER_FILENAME\b/ ) { $absolute_filename = 1; } # ComponentIDFile contains id of a helper file
+    }
 
     # if the FileID contains an absolute filename, therefore the entry for "ComponentIDFile" has to be used.
     if ( $absolute_filename ) { $shortcut_fileid = $shortcut->{'ComponentIDFile'}; }
@@ -473,7 +479,7 @@ sub get_folderitem_icon
         installer::exiter::exit_program("ERROR: Did not find FileID $iconfilegid in file collection", "get_folderitem_icon");
     }
 
-    $iconfile = $onefile->{'Name'};
+    my $iconfile = $onefile->{'Name'};
 
     # collecting all icon files to copy them into the icon directory
 

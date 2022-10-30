@@ -8,6 +8,9 @@
 
 package installer::filelists;
 
+use strict;
+use warnings;
+
 use File::stat;
 
 use installer::files;

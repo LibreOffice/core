@@ -18,6 +18,9 @@
 
 package installer::epmfile;
 
+use strict;
+use warnings;
+
 use Cwd qw();
 use installer::converter;
 use installer::exiter;
@@ -418,7 +421,7 @@ sub create_epm_header
 
         if (( $installer::globals::issolarispkgbuild ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} ))
         {
-            if ( ! $installer::globals::englishlicenseset ) { _set_english_license() }
+            if ( ! $installer::globals::englishlicenseset ) { _set_english_license($variableshashref) }
 
             # The location for the new file
             my $languagestring = "";
@@ -921,7 +924,7 @@ sub set_revision_in_pkginfo
 
     if ( $mday < 10 ) { $mday = "0" . $mday; }
     if ( $mon < 10 ) { $mon = "0" . $mon; }
-    $datestring = $year . "." . $mon . "." . $mday;
+    my $datestring = $year . "." . $mon . "." . $mday;
     $revisionstring = $revisionstring . "." . $datestring;
 
     for ( my $i = 0; $i <= $#{$file}; $i++ )
@@ -1202,7 +1205,7 @@ sub set_autoprovreq_in_specfile
         {
             splice(@{$changefile},$i+1,0,$autoreqprovline);
             $autoreqprovline =~ s/\s*$//;
-            $infoline = "Success: Added line $autoreqprovline into spec file!\n";
+            my $infoline = "Success: Added line $autoreqprovline into spec file!\n";
             push( @installer::globals::logfileinfo, $infoline);
 
             last;
@@ -1907,7 +1910,7 @@ sub create_packages_without_epm
                 installer::systemactions::make_systemcall($systemcall);
 
                 $faspac = $$compressorref;
-                $infoline = "Found compressor: $faspac\n";
+                my $infoline = "Found compressor: $faspac\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
                 installer::logger::print_message( "... $faspac ...\n" );
@@ -1927,7 +1930,7 @@ sub create_packages_without_epm
             }
             else
             {
-                $infoline = "Not found: $faspac\n";
+                my $infoline = "Not found: $faspac\n";
                 push( @installer::globals::logfileinfo, $infoline);
             }
         }
@@ -1937,9 +1940,9 @@ sub create_packages_without_epm
         $systemcall = "cd $destinationdir; find $packagename -type d | xargs -i chmod 775 \{\} \;";
         installer::logger::print_message( "... $systemcall ...\n" );
 
-        $returnvalue = system($systemcall);
+        my $returnvalue = system($systemcall);
 
-        $infoline = "Systemcall: $systemcall\n";
+        my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
         if ($returnvalue)
@@ -2109,7 +2112,7 @@ sub create_packages_without_epm
 
                 my $helperreturnvalue = $?; # $? contains the return value of the systemcall
 
-                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBRARY_PATH)\n";
+                my $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBRARY_PATH)\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
                 $infoline = "\nSystemcall: $helpersystemcall\n";
@@ -2167,7 +2170,7 @@ sub remove_temporary_epm_files
 
             my $systemcall = "mv -f $removefile $destfile";
             system($systemcall);     # ignoring the return value
-            $infoline = "Systemcall: $systemcall\n";
+            my $infoline = "Systemcall: $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
@@ -2179,7 +2182,7 @@ sub remove_temporary_epm_files
 
         my $systemcall = "mv -f $removefile $destfile";
         system($systemcall);     # ignoring the return value
-        $infoline = "Systemcall: $systemcall\n";
+        my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
         # removing the directory "buildroot"
@@ -2201,7 +2204,7 @@ sub remove_temporary_epm_files
         $returnvalue = system($systemcall);
 
 
-        my $infoline = "Systemcall: $systemcall\n";
+        $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
         if ($returnvalue)
@@ -2431,7 +2434,7 @@ sub put_systemintegration_into_installset
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
         # Adding license content into Solaris packages
-        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { _add_license_into_systemintegrationpackages($destdir, $newcontent); }
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $allvariables->{'NO_LICENSE_INTO_COPYRIGHT'} )) { _add_license_into_systemintegrationpackages($destdir, $newcontent); }
     }
 }
 
@@ -2479,6 +2482,8 @@ sub analyze_rootpath
 
 sub _set_english_license
 {
+    my ($variableshashref) = @_;
+
     my $additional_license_name = $installer::globals::englishsolarislicensename;   # always the English file
     my $licensefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$additional_license_name, "" , 0);
     if ( $$licensefileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $additional_license_name!", "set_english_license"); }
@@ -2595,7 +2600,7 @@ sub _call_sum
 {
     my ($filename) = @_;
 
-    $sumfile = "/usr/bin/sum";
+    my $sumfile = "/usr/bin/sum";
 
     if ( ! -f $sumfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/sum", "call_sum"); }
 
@@ -2635,7 +2640,7 @@ sub _call_wc
 {
     my ($filename) = @_;
 
-    $wcfile = "/usr/bin/wc";
+    my $wcfile = "/usr/bin/wc";
 
     if ( ! -f $wcfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/wc", "call_wc"); }
 

@@ -18,6 +18,9 @@
 
 package installer::windows::strip;
 
+use strict;
+use warnings;
+
 use File::Temp qw(tmpnam);
 use installer::converter;
 use installer::globals;
@@ -118,7 +121,7 @@ sub strip_binaries
             my $shortfilename = $sourcefilename;
             installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$shortfilename);
 
-            $infoline = "Strip: $shortfilename\n";
+            my $infoline = "Strip: $shortfilename\n";
             push( @installer::globals::logfileinfo, $infoline);
 
             # copy file into directory for stripped libraries

@@ -18,6 +18,9 @@
 
 package installer::packagelist;
 
+use strict;
+use warnings;
+
 use installer::converter;
 use installer::exiter;
 use installer::globals;
@@ -56,7 +59,7 @@ sub analyze_list
 {
     my ($packagelist, $moduleslist) = @_;
 
-    @allpackages = ();
+    my @allpackages = ();
 
     my $moduleshash = get_module_hash($moduleslist);
 
@@ -554,7 +557,7 @@ sub get_packinfo
             $onepackage{'islanguagemodule'} = $islanguagemodule;
             if ( $islanguagemodule )
             {
-                $saveonelanguage = $onelanguage;
+                my $saveonelanguage = $onelanguage;
                 $saveonelanguage =~ s/_/-/g;
                 $onepackage{'language'} = $saveonelanguage;
             }

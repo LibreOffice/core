@@ -18,6 +18,9 @@
 
 package installer::windows::font;
 
+use strict;
+use warnings;
+
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;

@@ -18,6 +18,9 @@
 
 package installer::windows::msiglobal;
 
+use strict;
+use warnings;
+
 use Cwd;
 use Digest::MD5;
 use installer::converter;
@@ -592,7 +595,7 @@ sub get_security_for_sis
 
 sub write_summary_into_msi_database
 {
-    my ($msifilename, $language, $languagefile, $allvariableshashref) = @_;
+    my ($msifilename, $language, $allvariableshashref) = @_;
 
     # -g : required msi version
     # -c : codepage
@@ -805,11 +808,11 @@ sub create_transforms
         }
     }
 
-    $systemcall = "TEMP=$ENV{'TMPDIR'} $cscript \"$wilangid\" $basedbname Package $templatevalue";
+    my $systemcall = "TEMP=$ENV{'TMPDIR'} $cscript \"$wilangid\" $basedbname Package $templatevalue";
 
-    $returnvalue = system($systemcall);
+    my $returnvalue = system($systemcall);
 
-    $infoline = "Systemcall: $systemcall\n";
+    my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     if ($returnvalue)
@@ -1078,7 +1081,7 @@ sub prepare_64bit_database
             if ( -f $fullfilename )
             {
                 my $saving_required = 0;
-                $filecontent = installer::files::read_file($fullfilename);
+                my $filecontent = installer::files::read_file($fullfilename);
 
                 for ( my $i = 3; $i <= $#{$filecontent}; $i++ )     # ignoring the first three lines
                 {
@@ -1363,8 +1366,8 @@ sub set_global_code_variables
 
     # UpgradeCode can take english as default, if not defined in specified language
 
-    $searchstring = "UPGRADECODE";  # searching in the codes.txt file
-    $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+    my $searchstring = "UPGRADECODE";  # searching in the codes.txt file
+    my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
     $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
 
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }

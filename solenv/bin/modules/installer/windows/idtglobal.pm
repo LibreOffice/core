@@ -18,6 +18,9 @@
 
 package installer::windows::idtglobal;
 
+use strict;
+use warnings;
+
 use Cwd;
 use installer::converter;
 use installer::exiter;
@@ -1159,7 +1162,7 @@ sub connect_custom_action_to_control
 
     $line =~ s/\s*$//g;
 
-    $infoline = "Added line \"$line\" into table $tablename\n";
+    my $infoline = "Added line \"$line\" into table $tablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 }
 
@@ -1178,7 +1181,7 @@ sub connect_condition_to_control
 
     $line =~ s/\s*$//g;
 
-    $infoline = "Added line \"$line\" into table $tablename\n";
+    my $infoline = "Added line \"$line\" into table $tablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 }
 
@@ -1277,10 +1280,10 @@ sub include_subdirname_into_directory_table
                 my $newparent = "INSTALLLOCATION";
                 my $newname = $name . "\:" . $subdir;
                 my $newline =
-                $line = "$newuniquename\t$newparent\t$newname\n";
+                my $line = "$newuniquename\t$newparent\t$newname\n";
                 push(@{$directorytable}, $line);
                 installer::remover::remove_leading_and_ending_whitespaces(\$line);
-                $infoline = "Added $line into directory table $directorytablename\n";
+                my $infoline = "Added $line into directory table $directorytablename\n";
                 push(@installer::globals::logfileinfo, $infoline);
 
                 $includedline = 1;
@@ -1321,7 +1324,7 @@ sub include_subdir_into_componenttable
 
                 installer::remover::remove_leading_and_ending_whitespaces(\$oldvalue);
                 installer::remover::remove_leading_and_ending_whitespaces(\$newvalue);
-                $infoline = "Change in Component table: From \"$oldvalue\" to \"$newvalue\"\n";
+                my $infoline = "Change in Component table: From \"$oldvalue\" to \"$newvalue\"\n";
                 push(@installer::globals::logfileinfo, $infoline);
 
                 $changeddirectory = 1;
@@ -1722,7 +1725,7 @@ sub addcustomactions
                 }
                 else
                 {
-                    installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Unknown Windows CustomAction table: $assignmenthashref->{'parameter1'} ! Currently supported: InstallUISequence, InstallESequence, ControlEvent, ControlCondition", "addcustomactions");
+                    installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Unknown Windows CustomAction table: $assignment->{'parameter1'} ! Currently supported: InstallUISequence, InstallESequence, ControlEvent, ControlCondition", "addcustomactions");
                 }
             }
         }
@@ -1826,7 +1829,7 @@ sub setbidiattributes
     # Saving the file
 
     installer::files::save_file($dialogfilename, $dialogfile);
-    $infoline = "Set bidi support in idt file \"$dialogfilename\" for language $onelanguage\n";
+    my $infoline = "Set bidi support in idt file \"$dialogfilename\" for language $onelanguage\n";
     push(@installer::globals::logfileinfo, $infoline);
 
     installer::files::save_file($controlfilename, $controlfile);

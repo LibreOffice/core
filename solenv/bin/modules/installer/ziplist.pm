@@ -18,6 +18,9 @@
 
 package installer::ziplist;
 
+use strict;
+use warnings;
+
 use base 'Exporter';
 
 use File::Spec::Functions qw(rel2abs);
@@ -613,7 +616,7 @@ sub replace_languages_in_paths
                 my $language = ${$languagesref}[$j];
                 $line =~ s/\$\(LANG\)/$language/g;
                 push(@patharray ,$line);
-                $newdir = $line;
+                my $newdir = $line;
                 $line = $originalline;
 
                 installer::remover::remove_leading_and_ending_whitespaces(\$newline);
@@ -669,8 +672,6 @@ sub list_all_files_from_include_path
     }
 
     push( @installer::globals::logfileinfo, "\n");
-
-    return \@filesarray;
 }
 
 #####################################################

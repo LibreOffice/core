@@ -18,6 +18,9 @@
 
 package installer::systemactions;
 
+use strict;
+use warnings;
+
 use Cwd;
 use File::Copy;
 use installer::converter;
@@ -198,7 +201,7 @@ sub create_directories
         }
     }
 
-    $infoline = "create_directories: Using $path for $newdirectory !\n";
+    my $infoline = "create_directories: Using $path for $newdirectory !\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     if ($newdirectory eq "unzip" ) # special handling for common directory
@@ -618,7 +621,7 @@ sub copy_directory_with_fileextension
     $sourcedir =~ s/\Q$installer::globals::separator\E\s*$//;
     $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
 
-    $infoline = "\n";
+    my $infoline = "\n";
     push(@installer::globals::logfileinfo, $infoline);
     $infoline = "Copying files with extension $extension from directory $sourcedir to directory $destdir\n";
     push(@installer::globals::logfileinfo, $infoline);
@@ -708,7 +711,7 @@ sub find_file_with_file_extension
     push(@installer::globals::logfileinfo, $infoline);
 
     opendir(DIR, $dir);
-    @sourcefiles = sort readdir(DIR);
+    my @sourcefiles = sort readdir(DIR);
     closedir(DIR);
 
     my $onefile;
@@ -762,13 +765,13 @@ sub make_numbered_dir
 
     if ( move($olddir, $newdir) )
     {
-        $infoline = "\nMoved directory from $olddir to $newdir\n";
+        my $infoline = "\nMoved directory from $olddir to $newdir\n";
         push(@installer::globals::logfileinfo, $infoline);
         $returndir = $newdir;
     }
     else
     {
-        $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"make_numbered_dir\"\n";
+        my $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"make_numbered_dir\"\n";
         push(@installer::globals::logfileinfo, $infoline);
         $returndir = $olddir;
     }
@@ -1033,7 +1036,7 @@ sub try_to_create_directory
         if ($returnvalue)
         {
             $created_directory = 1;
-            $infoline = "\nCreated directory: $directory\n";
+            my $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
             chmod 0775, $directory;

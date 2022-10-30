@@ -18,6 +18,9 @@
 
 package installer::control;
 
+use strict;
+use warnings;
+
 use Cwd;
 use installer::converter;
 use installer::exiter;
@@ -35,8 +38,9 @@ use installer::systemactions;
 sub check_needed_files_in_path
 {
     my ( $filesref ) = @_;
+    my $error = 0;
 
-    foreach $onefile ( @{$filesref} )
+    foreach my $onefile ( @{$filesref} )
     {
         installer::logger::print_message( "... searching $onefile ..." );
 
@@ -80,7 +84,7 @@ sub check_system_path
         # When using cygwin's perl the PATH variable is POSIX style and
         # has to be converted to DOS style for further use.
         $pathvariable = join ';',
-                        map { $dir = qx{cygpath -m "$_"}; chomp($dir); $dir }
+                        map { my $dir = qx{cygpath -m "$_"}; chomp($dir); $dir }
                         split /\Q$local_pathseparator\E\s*/, $pathvariable;
         $local_pathseparator = ';';
     }
@@ -167,12 +171,12 @@ sub get_makecab_version
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        my $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
         push( @installer::globals::globallogfileinfo, $infoline);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        my $infoline = "Success: Executed \"$systemcall\" successfully!\n";
         push( @installer::globals::globallogfileinfo, $infoline);
 
         my $versionline = "";

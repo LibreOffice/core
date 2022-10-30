@@ -18,6 +18,9 @@
 
 package installer::windows::featurecomponent;
 
+use strict;
+use warnings;
+
 use installer::converter;
 use installer::exiter;
 use installer::files;
@@ -64,7 +67,7 @@ sub create_featurecomponent_table_from_files_collector
 
             installer::windows::idtglobal::shorten_feature_gid(\$featurecomponent{'Feature'});
 
-            $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
+            my $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
 
             # control of uniqueness
 
@@ -110,7 +113,7 @@ sub create_featurecomponent_table_from_registry_collector
 
         installer::windows::idtglobal::shorten_feature_gid(\$featurecomponent{'Feature'});
 
-        $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
+        my $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
 
         # control of uniqueness
 

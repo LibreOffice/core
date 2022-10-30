@@ -18,6 +18,9 @@
 
 package installer::windows::property;
 
+use strict;
+use warnings;
+
 use installer::exiter;
 use installer::files;
 use installer::globals;

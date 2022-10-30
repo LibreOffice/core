@@ -18,6 +18,10 @@
 
 package installer::scriptitems;
 
+use strict;
+no strict 'refs';
+use warnings;
+
 use installer::converter;
 use installer::exiter;
 use installer::globals;

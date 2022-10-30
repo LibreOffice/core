@@ -18,6 +18,9 @@
 
 package installer::windows::mergemodule;
 
+use strict;
+use warnings;
+
 use Cwd;
 use Digest::MD5;
 use installer::converter;
@@ -557,7 +560,7 @@ sub merge_mergemodules_into_msi_database
                 my $localworkdir = $workdir;
                 $localmsifilename =~ s/\//\\\\/g;
                 $localworkdir =~ s/\//\\\\/g;
-        foreach $table (split / /, $workingtables . ' ' . $executetables) {
+        foreach my $table (split / /, $workingtables . ' ' . $executetables) {
           $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -i " . $table;
           my $retval = system($systemcall);
           $infoline = "Systemcall returned $retval: $systemcall\n";
@@ -766,7 +769,7 @@ sub get_source
     {
         if ( exists($mediafile->{$line}->{'Source'}) )
         {
-            $diskprompt = $mediafile->{$line}->{'Source'};
+            $source = $mediafile->{$line}->{'Source'};
             last;
         }
     }
@@ -1171,7 +1174,7 @@ sub change_file_table
 
     # For performance reasons creating a hash with file names and rows
     # The content of File.idt is changed after every merge -> content cannot be saved in global hash
-    $merge_filetablehashref = analyze_filetable_file($filecontent, $idtfilename);
+    my $merge_filetablehashref = analyze_filetable_file($filecontent, $idtfilename);
 
     my $attributes = "16384"; # Always
 
@@ -1304,6 +1307,7 @@ sub collect_directories
 
 sub collect_feature
 {
+    my ($workdir) = @_;
     my $idtfilename = "Feature.idt";
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "collect_feature"); }
     my $filecontent = installer::files::read_file($idtfilename);
@@ -1346,7 +1350,7 @@ sub change_featurecomponent_table
 
     if ( ! $installer::globals::mergefeaturecollected )
     {
-        collect_feature(); # putting content into hash %installer::globals::merge_allfeature_hash
+        collect_feature($workdir); # putting content into hash %installer::globals::merge_allfeature_hash
         $installer::globals::mergefeaturecollected = 1;
     }
 
@@ -1521,7 +1525,7 @@ sub change_msiassembly_table
 
     if ( ! $installer::globals::mergefeaturecollected )
     {
-        collect_feature();  # putting content into hash %installer::globals::merge_allfeature_hash
+        collect_feature($workdir);  # putting content into hash %installer::globals::merge_allfeature_hash
         $installer::globals::mergefeaturecollected = 1;
     }
 

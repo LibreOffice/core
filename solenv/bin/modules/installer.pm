@@ -18,6 +18,9 @@
 
 package installer;
 
+use strict;
+use warnings;
+
 use base 'Exporter';
 
 use Cwd;
@@ -536,7 +539,7 @@ sub run {
         # Resolving include paths (language dependent)
         ################################################
 
-        $includepatharrayref_lang = installer::ziplist::replace_languages_in_paths($includepatharrayref, \@setuplanguagesarray);
+        my $includepatharrayref_lang = installer::ziplist::replace_languages_in_paths($includepatharrayref, \@setuplanguagesarray);
 
         if ( $installer::globals::refresh_includepaths ) { installer::worker::collect_all_files_from_includepaths($includepatharrayref_lang); }
 
@@ -1023,7 +1026,7 @@ sub run {
 
                 if ( ! ( $#{$filesinpackage} > -1 ))
                 {
-                    $infoline = "\n\nNo file in package: $packagename \-\> Skipping\n\n";
+                    my $infoline = "\n\nNo file in package: $packagename \-\> Skipping\n\n";
                     push(@installer::globals::logfileinfo, $infoline);
                     next;   # next package, end of loop !
                 }
@@ -1379,7 +1382,7 @@ sub run {
                 installer::windows::assembly::add_assembly_condition_into_component_table($filesinproductlanguageresolvedarrayref, $newidtdir);
             }
 
-            $infoline = "\n";
+            my $infoline = "\n";
             push(@installer::globals::logfileinfo, $infoline);
 
             # Localizing the language dependent idt files
@@ -1535,7 +1538,7 @@ sub run {
 
                     # validating the database   # ToDo
 
-                    installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
+                    installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $allvariableshashref);
 
                     # copy msi database into installation directory
 

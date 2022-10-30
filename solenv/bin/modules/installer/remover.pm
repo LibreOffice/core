@@ -18,6 +18,9 @@
 
 package installer::remover;
 
+use strict;
+use warnings;
+
 use installer::globals;
 
 ############################################

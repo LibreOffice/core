@@ -18,6 +18,9 @@
 
 package installer::windows::inifile;
 
+use strict;
+use warnings;
+
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -51,7 +54,7 @@ sub file_is_part_of_product
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
-        $onefile = ${$filesref}[$i];
+        my $onefile = ${$filesref}[$i];
         my $filegid = $onefile->{'gid'};
 
         if ( $filegid eq $profilegid )

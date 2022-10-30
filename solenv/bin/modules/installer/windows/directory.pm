@@ -18,6 +18,9 @@
 
 package installer::windows::directory;
 
+use strict;
+use warnings;
+
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -486,7 +489,7 @@ sub add_root_directories
         if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} )
         {
             $productkey = $productname;
-            $realproductkey = $realproductname;
+            $realproductkey = $productname;
         }
         if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} )
         {

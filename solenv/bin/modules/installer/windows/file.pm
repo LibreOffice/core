@@ -18,6 +18,9 @@
 
 package installer::windows::file;
 
+use strict;
+use warnings;
+
 use Digest::MD5;
 use installer::exiter;
 use installer::files;
@@ -380,7 +383,7 @@ sub generate_unique_filename_for_filetable
     {
         $uniquefilename = $uniquefilenamehashref->{"$component/$uniquefilename"};  # syntax of $value: ($uniquename;$shortname)
         if ( $uniquefilename =~ /^\s*(.*?)\;\s*(.*?)\s*$/ ) { $uniquefilename = $1; }
-         $lcuniquefilename = lc($uniquefilename);
+        my $lcuniquefilename = lc($uniquefilename);
         $installer::globals::alluniquefilenames{$uniquefilename} = 1;
         $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
         return $uniquefilename;
@@ -390,7 +393,7 @@ sub generate_unique_filename_for_filetable
         # If we have a FTK mapping for this component/file, use it.
         $installer::globals::savedmapping{"$component/$uniquefilename"} =~ m/^(.*);/;
         $uniquefilename = $1;
-         $lcuniquefilename = lc($uniquefilename);
+        my $lcuniquefilename = lc($uniquefilename);
         $installer::globals::alluniquefilenames{$uniquefilename} = 1;
         $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
         return $uniquefilename;
@@ -540,6 +543,7 @@ sub get_fileversion
     {
         open (EXE, "<$onefile->{'sourcepath'}");
         binmode EXE;
+        my $exedata;
         {local $/ = undef; $exedata = <EXE>;}
         close EXE;
 
@@ -993,7 +997,7 @@ sub create_files_table
     }
 
     # putting content from %allfilecomponents to $allfilecomponentsref for later usage
-    foreach $localkey (keys %allfilecomponents ) { push( @{$allfilecomponentsref}, $localkey); }
+    foreach my $localkey (keys %allfilecomponents ) { push( @{$allfilecomponentsref}, $localkey); }
 
     my $filetablename = $basedir . $installer::globals::separator . "File.idt";
     installer::files::save_file($filetablename ,\@filetable);

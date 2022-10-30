@@ -18,6 +18,9 @@
 
 package installer::windows::update;
 
+use strict;
+use warnings;
+
 use installer::converter;
 use installer::exiter;
 use installer::files;
@@ -184,7 +187,7 @@ sub read_all_tables_from_msidatabase
         my $filecontent = installer::files::read_file($longonefilename);
         my $idtcontent = analyze_idt_file($filecontent);
         if ($onefilename eq "Directory.idt") {
-            collect_directories($filecontent);
+            collect_directories($filecontent, $longonefilename);
         }
         my $key = $onefilename;
         $key =~ s/\.idt\s*$//;
@@ -415,7 +418,7 @@ sub readdatabase
 
 sub collect_directories
 {
-    my ($filecontent) = @_;
+    my ($filecontent, $idtfilename) = @_;
 
     for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
     {

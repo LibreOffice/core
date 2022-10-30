@@ -18,6 +18,9 @@
 
 package installer::setupscript;
 
+use strict;
+use warnings;
+
 use base 'Exporter';
 
 use installer::exiter;
@@ -473,7 +476,7 @@ sub replace_preset_properties
     push(@presetproperties, "SYSTEMINTUNIXPACKAGENAME");
 
 
-    foreach $property ( @presetproperties )
+    foreach my $property ( @presetproperties )
     {
         my $presetproperty = "PRESET" . $property;
         if (( exists($allvariables->{$presetproperty}) ) && ( $allvariables->{$presetproperty} ne "" ))
