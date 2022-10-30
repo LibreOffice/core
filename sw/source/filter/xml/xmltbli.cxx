@@ -2710,14 +2710,13 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             m_pBox1->m_pStartNode = pStNd;
             SwContentNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
                                                             ->GetContentNode();
-            SwPosition aPos( *pCNd );
-
-            Reference < XText > xText = ::sw::CreateParentXText(*pDoc, aPos);
-            const auto pNewCursor(pDoc->CreateUnoCursor(aPos));
-            rtl::Reference<SwXTextRange> xTextRange = new SwXTextRange(*pNewCursor, xText,
+            SwFrameFormat *const pTableFormat = m_pTableNode->GetTable().GetFrameFormat();
+            rtl::Reference<SwXCell> xParent = SwXCell::CreateXCell( pTableFormat, m_pBox1 );
+            const auto pNewCursor(pDoc->CreateUnoCursor(SwPosition( *pCNd )));
+            rtl::Reference<SwXTextRange> xTextRange = new SwXTextRange(*pNewCursor, xParent,
                     SwXTextRange::RANGE_IN_CELL);
             Reference < XTextCursor > xTextCursor =
-                xText->createTextCursorByRange( xTextRange );
+                xParent->createTextCursorByRange( xTextRange );
             GetImport().GetTextImport()->SetCursor( xTextCursor );
         }
     }
