@@ -3084,21 +3084,22 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
         m_pFrameFormat = nullptr;
         EndListeningAll();
     }
+    std::unique_lock aGuard(m_Mutex);
+    if (m_EventListeners.getLength(aGuard) == 0 && m_ChartListeners.getLength(aGuard) == 0)
+        return;
     uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        if(!m_pFrameFormat)
-        {
-            lang::EventObject const ev(xThis);
-            std::unique_lock aGuard(m_Mutex);
-            m_EventListeners.disposeAndClear(aGuard, ev);
-            m_ChartListeners.disposeAndClear(aGuard, ev);
-        }
-        else
-        {
-            std::unique_lock aGuard(m_Mutex);
-            lcl_SendChartEvent(aGuard, xThis, m_ChartListeners);
-        }
+    // fdo#72695: if UNO object is already dead, don't revive it with event
+    if (!xThis)
+        return;
+    if(!m_pFrameFormat)
+    {
+        lang::EventObject const ev(xThis);
+        m_EventListeners.disposeAndClear(aGuard, ev);
+        m_ChartListeners.disposeAndClear(aGuard, ev);
+    }
+    else
+    {
+        lcl_SendChartEvent(aGuard, xThis, m_ChartListeners);
     }
 }
 
