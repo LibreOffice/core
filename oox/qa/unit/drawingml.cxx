@@ -541,6 +541,26 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(-1), nFillColorTheme);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
+{
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113187_arcTo_withoutReferences.pptx";
+    load(aURL);
+    // Get ViewBox of shape
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+    // Without the fix width and height of the ViewBox were 0 and thus the shape was not shown.
+    auto aViewBox = aGeoPropMap["ViewBox"].get<css::awt::Rectangle>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
