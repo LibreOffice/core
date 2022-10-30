@@ -123,6 +123,7 @@ public:
     static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, std::u16string_view rFormulaName );
 
     sal_Int32 getArcNum() { return mnArcNum++; }
+    sal_Int32 countArcTo() { return mnArcNum; }
 
     /**
        Returns whether or not the current CustomShapeProperties

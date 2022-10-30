@@ -198,7 +198,9 @@ void CustomShapeProperties::pushToPropSet(
         // This size specifically affects scaling.
         // Note 2: Width and Height are set to 0 to force scaling to 1.
         awt::Rectangle aViewBox( 0, 0, aSize.Width, aSize.Height );
-        if( !maGuideList.empty() )
+        // tdf#113187 Each ArcTo introduces two additional equations for converting start and swing
+        // angles. They do not count for test for use of standard ooxml coordinates
+        if (maGuideList.size() - 2 * countArcTo() > 0)
             aViewBox = awt::Rectangle( 0, 0, 0, 0 );
         aPropertyMap.setProperty( PROP_ViewBox, aViewBox);
 
