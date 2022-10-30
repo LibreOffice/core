@@ -2715,9 +2715,13 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             const auto pNewCursor(pDoc->CreateUnoCursor(SwPosition( *pCNd )));
             rtl::Reference<SwXTextRange> xTextRange = new SwXTextRange(*pNewCursor, xParent,
                     SwXTextRange::RANGE_IN_CELL);
-            Reference < XTextCursor > xTextCursor =
-                xParent->createTextCursorByRange( xTextRange );
-            GetImport().GetTextImport()->SetCursor( xTextCursor );
+            DBG_TESTSOLARMUTEX();
+            SwUnoInternalPaM aPam(*pDoc);
+            ::sw::XTextRangeToSwPaM(aPam, xTextRange);
+            rtl::Reference<SwXTextCursor> xTextCursor =
+                new SwXTextCursor(*pDoc, xParent, CursorType::TableText,
+                *aPam.GetPoint(), aPam.GetMark());
+            GetImport().GetTextImport()->SetCursor( static_cast<XWordCursor*>(xTextCursor.get()) );
         }
     }
 
