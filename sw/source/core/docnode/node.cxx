@@ -307,12 +307,13 @@ SwNode::SwNode( const SwNode& rWhere, const SwNodeType nNdType )
 #endif
     , m_pStartOfSection( nullptr )
 {
-    if( !rWhere.GetIndex() )
+    SwNodeOffset nWhereOffset = rWhere.GetIndex();
+    if( !nWhereOffset )
         return;
 
     SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
-    SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
-    rNodes.InsertNode( this, rWhere.GetIndex() );
+    SwNode* pNd = rNodes[ nWhereOffset -1 ];
+    rNodes.InsertNode( this, nWhereOffset );
     m_pStartOfSection = pNd->GetStartNode();
     if( nullptr == m_pStartOfSection )
     {

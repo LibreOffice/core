@@ -4953,9 +4953,8 @@ SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertCont
 
     //If a StartIdx is available, ContentFrames are added in the cell, otherwise
     //Rows have to be present and those are added.
-    if ( rBox.GetSttIdx() )
+    if ( SwNodeOffset nIndex = rBox.GetSttIdx() )
     {
-        SwNodeOffset nIndex = rBox.GetSttIdx();
         ::InsertCnt_( this, rBox.GetFrameFormat()->GetDoc(), ++nIndex );
     }
     else
