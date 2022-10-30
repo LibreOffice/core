@@ -1,6 +1,6 @@
---- misc/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:17.375000000 +0000
-+++ misc/build/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:34.703125000 +0000
-@@ -81,10 +81,6 @@
+--- misc/expat-2.5.0/lib/expat_external.h	2022-10-25 01:32:54.000000000 +0900
++++ misc/build/expat-2.5.0/lib/expat_external.h	2022-10-30 23:09:47.339459134 +0900
+@@ -88,10 +88,6 @@
  #  ifndef XML_BUILDING_EXPAT
  /* using Expat from an application */
  
@@ -11,12 +11,13 @@
  #  endif
  #endif /* not defined XML_STATIC */
  
---- misc/expat-2.1.0/lib/xmlparse.c	2021-05-23 16:56:25.000000000 +0100
-+++ misc/build/expat-2.1.0/lib/xmlparse.c	2021-05-25 12:42:11.997173600 +0100
-@@ -64,6 +64,8 @@
+--- misc/expat-2.5.0/lib/xmlparse.c	2022-10-26 00:09:08.000000000 +0900
++++ misc/build/expat-2.5.0/lib/xmlparse.c	2022-10-30 23:09:01.843006341 +0900
+@@ -67,6 +67,9 @@
  #endif
  
  #ifdef _WIN32
++#  undef HAVE_ARC4RANDOM_BUF
 +#  undef HAVE_GETRANDOM
 +#  undef HAVE_SYSCALL_GETRANDOM
  /* force stdlib to define rand_s() */
