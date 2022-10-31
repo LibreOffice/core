@@ -1380,7 +1380,9 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     }
                 }
 
-                if (!sPKCL.isEmpty())
+                // If we created a new primary key, then it won't necessarily be an IDENTITY column
+                const bool bShouldCreatePrimaryKey = rWizard.shouldCreatePrimaryKey();
+                if (!bShouldCreatePrimaryKey && !sPKCL.isEmpty())
                 {
                     OUString strSql = "SELECT MAX(\"" + sPKCL + "\") FROM " + sComposedTableName;
 
