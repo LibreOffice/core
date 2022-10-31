@@ -356,6 +356,8 @@
 #define STR_WINDOW_TITLE_RENAME_TEMPLATE        NC_("STR_WINDOW_TITLE_RENAME_TEMPLATE","Rename")
 #define STR_WINDOW_TITLE_RENAME_CATEGORY        NC_("STR_WINDOW_TITLE_RENAME_CATEGORY","Rename Category")
 #define STR_WINDOW_TITLE_RENAME_NEW_CATEGORY    NC_("STR_WINDOW_TITLE_RENAME_NEW_CATEGORY","New Category")
+
+#define STR_OBJECT_INSPECTOR                    NC_("STR_OBJECT_INSPECTOR", "UNO Object Inspector")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

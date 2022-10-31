@@ -17,6 +17,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 
 #include "SelectionChangeHandler.hxx"
 
@@ -51,6 +53,8 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     mxSelectionSupplier.set(xController, css::uno::UNO_QUERY);
 
     maObjectInspectorTreeHandler.introspect(mxRoot);
+
+    SetText(SfxResId(STR_OBJECT_INSPECTOR));
 }
 
 IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, weld::TreeView&,
