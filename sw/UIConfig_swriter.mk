@@ -208,6 +208,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/newuserindexdialog \
 	sw/uiconfig/swriter/ui/numparapage \
 	sw/uiconfig/swriter/ui/numberingnamedialog \
+	sw/uiconfig/swriter/ui/numberinput \
 	sw/uiconfig/swriter/ui/objectdialog \
 	sw/uiconfig/swriter/ui/optcomparison \
 	sw/uiconfig/swriter/ui/optcompatpage \

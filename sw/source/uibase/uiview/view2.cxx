@@ -198,7 +198,11 @@ public:
         m_xSpinButton->set_position(-1);
         m_xSpinButton->select_region(0, -1);
         m_xSpinButton->connect_changed(LINK(this, SwNumberInputDlg, InputModifiedHdl));
-        rLabel2.isEmpty() ? m_xLabel2->hide() : m_xLabel2->set_label(rLabel2);
+        if (!rLabel2.isEmpty())
+        {
+            m_xLabel2->set_label(rLabel2);
+            m_xLabel2->show();
+        }
     }
 
     auto GetNumber()
@@ -1338,7 +1342,8 @@ void SwView::Execute(SfxRequest &rReq)
             SwNumberInputDlg aDlg(GetViewFrame()->GetFrameWeld(),
                                   SwResId(STR_OUTLINE_LEVELS_SHOWN_TITLE),
                                   SwResId(STR_OUTLINE_LEVELS_SHOWN_SPIN_LABEL),
-                                  nOutlineLevel + 1, 1, 10);
+                                  nOutlineLevel + 1, 1, 10,
+                                  SwResId(STR_OUTLINE_LEVELS_SHOWN_HELP_LABEL));
             if (aDlg.run() == RET_OK)
                 rSh.MakeOutlineLevelsVisible(aDlg.GetNumber());
         }
