@@ -9487,7 +9487,6 @@ sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/filters-test.cxx
-sd/qa/unit/sdmodeltestbase.hxx
 sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uimpress.cxx
 sd/source/core/CustomAnimationCloner.cxx

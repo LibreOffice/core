@@ -168,36 +168,31 @@ public:
 
 CPPUNIT_NS_BEGIN
 
-template<> struct assertion_traits<Color>
+template <> struct assertion_traits<Color>
 {
-    static bool equal( const Color& c1, const Color& c2 )
-    {
-        return c1 == c2;
-    }
+    static bool equal(const Color& c1, const Color& c2) { return c1 == c2; }
 
-    static std::string toString( const Color& c )
+    static std::string toString(const Color& c)
     {
         OStringStream ost;
         ost << "Color: R:" << static_cast<int>(c.GetRed())
-              << " G:" << static_cast<int>(c.GetGreen())
-              << " B:" << static_cast<int>(c.GetBlue())
-              << " A:" << static_cast<int>(255 - c.GetAlpha());
+            << " G:" << static_cast<int>(c.GetGreen()) << " B:" << static_cast<int>(c.GetBlue())
+            << " A:" << static_cast<int>(255 - c.GetAlpha());
         return ost.str();
     }
 };
 
-template<> struct assertion_traits<tools::Rectangle>
+template <> struct assertion_traits<tools::Rectangle>
 {
-    static bool equal( const tools::Rectangle& r1, const tools::Rectangle& r2 )
-    {
-        return r1 == r2;
-    }
+    static bool equal(const tools::Rectangle& r1, const tools::Rectangle& r2) { return r1 == r2; }
 
-    static std::string toString( const tools::Rectangle& r)
+    static std::string toString(const tools::Rectangle& r)
     {
         OStringStream ost;
-        ost << "Rect P: [" << r.Top() << ", " << r.Left() << "] "
-            "S: [" << r.GetWidth() << ", " << r.GetHeight() << "]";
+        ost << "Rect P: [" << r.Top() << ", " << r.Left()
+            << "] "
+               "S: ["
+            << r.GetWidth() << ", " << r.GetHeight() << "]";
         return ost.str();
     }
 };
