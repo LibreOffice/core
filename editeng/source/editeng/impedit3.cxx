@@ -1050,8 +1050,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         // Search for Tab-Pos...
                         tools::Long nCurPos = nTmpWidth+nStartX;
                         // consider scaling
-                        if ( aStatus.DoStretch() && ( nStretchX != 100 ) )
-                            nCurPos = nCurPos*100/std::max(static_cast<sal_Int32>(nStretchX), static_cast<sal_Int32>(1));
+                        if ( aStatus.DoStretch() && ( mnStretchX != 100.0 ) )
+                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mnStretchX, 1.0));
 
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, aEditDoc.GetDefTab() );
@@ -2982,22 +2982,21 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
         if ( aStatus.DoStretch() )
         {
-            if ( nStretchY != 100 )
+            if (mnStretchY != 100.0)
             {
-                aRealSz.setHeight( aRealSz.Height() * nStretchY );
-                aRealSz.setHeight( aRealSz.Height() / 100 );
+                double fNewHeight = (double(aRealSz.Height()) * mnStretchY) / 100.0;
+                aRealSz.setHeight(basegfx::fround(fNewHeight));
             }
-            if ( nStretchX != 100 )
+            if (mnStretchX != 100.0)
             {
-                if ( nStretchX == nStretchY &&
-                     nRelWidth == 100 )
+                if (mnStretchX == mnStretchY && nRelWidth == 100 )
                 {
                     aRealSz.setWidth( 0 );
                 }
                 else
                 {
-                    aRealSz.setWidth( aRealSz.Width() * nStretchX );
-                    aRealSz.setWidth( aRealSz.Width() / 100 );
+                    double fNewWidth = (double(aRealSz.Width()) * mnStretchX) / 100.0;
+                    aRealSz.setWidth(basegfx::fround(fNewWidth));
 
                     // Also the Kerning: (long due to handle Interim results)
                     tools::Long nKerning = rFont.GetFixKerning();
@@ -3012,17 +3011,15 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
   >0        >100        > (Proportional)
   <0        >100        < (The amount, thus disproportional)
 */
-                    if ( ( nKerning < 0  ) && ( nStretchX > 100 ) )
+                    if (nKerning < 0 && mnStretchX > 100.0)
                     {
                         // disproportional
-                        nKerning *= 100;
-                        nKerning /= nStretchX;
+                        nKerning = basegfx::fround((double(nKerning) * 100.0) / mnStretchX);
                     }
                     else if ( nKerning )
                     {
                         // Proportional
-                        nKerning *= nStretchX;
-                        nKerning /= 100;
+                        nKerning = basegfx::fround((double(nKerning) * mnStretchX) / 100.0);
                     }
                     rFont.SetFixKerning( static_cast<short>(nKerning) );
                 }
@@ -4428,20 +4425,20 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
         pActiveView->ShowCursor();
 }
 
-void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
+void ImpEditEngine::SetCharStretching(double nX, double nY)
 {
     bool bChanged;
     if ( !IsEffectivelyVertical() )
     {
-        bChanged = nStretchX!=nX || nStretchY!=nY;
-        nStretchX = nX;
-        nStretchY = nY;
+        bChanged = mnStretchX != nX || mnStretchY != nY;
+        mnStretchX = nX;
+        mnStretchY = nY;
     }
     else
     {
-        bChanged = nStretchX!=nY || nStretchY!=nX;
-        nStretchX = nY;
-        nStretchY = nX;
+        bChanged = mnStretchX != nY || mnStretchY != nX;
+        mnStretchX = nY;
+        mnStretchY = nX;
     }
 
     if (bChanged && aStatus.DoStretch())

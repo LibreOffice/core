@@ -528,8 +528,8 @@ private:
 
     Color               maBackgroundColor;
 
-    sal_uInt16          nStretchX;
-    sal_uInt16          nStretchY;
+    double mnStretchX;
+    double mnStretchY;
 
     CharCompressType    nAsianCompressionMode;
 
@@ -1080,8 +1080,8 @@ public:
     SvxCellJustifyMethod    GetJustifyMethod( sal_Int32 nPara ) const;
     SvxCellVerJustify       GetVerJustification( sal_Int32 nPara ) const;
 
-    void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
-    inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const;
+    void                SetCharStretching(double nX, double nY);
+    inline void         GetCharStretching(double& rX, double& rY) const;
 
     sal_Int32           GetBigTextObjectStart() const                               { return nBigTextObjectStart; }
 
@@ -1282,43 +1282,43 @@ inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode const * pNode )
     return GetParaPortions()[ nPos ];
 }
 
-inline void ImpEditEngine::GetCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const
+inline void ImpEditEngine::GetCharStretching(double& rX, double& rY) const
 {
-    rX = nStretchX;
-    rY = nStretchY;
+    rX = mnStretchX;
+    rY = mnStretchY;
 }
 
 inline short ImpEditEngine::GetXValue( short nXValue ) const
 {
-    if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )
+    if ( !aStatus.DoStretch() || ( mnStretchX == 100.0 ) )
         return nXValue;
 
-    return static_cast<short>(static_cast<tools::Long>(nXValue)*nStretchX/100);
+    return basegfx::fround(double(nXValue) * mnStretchX / 100.0);
 }
 
 
 inline tools::Long ImpEditEngine::GetXValue( tools::Long nXValue ) const
 {
-    if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )
+    if ( !aStatus.DoStretch() || ( mnStretchX == 100.0 ) )
         return nXValue;
 
-    return nXValue*nStretchX/100;
+    return basegfx::fround(nXValue * mnStretchX / 100.0);
 }
 
 inline short ImpEditEngine::GetYValue( short nYValue ) const
 {
-    if ( !aStatus.DoStretch() || ( nStretchY == 100 ) )
+    if ( !aStatus.DoStretch() || ( mnStretchY == 100.0 ) )
         return nYValue;
 
-    return static_cast<short>(static_cast<tools::Long>(nYValue)*nStretchY/100);
+    return basegfx::fround(double(nYValue) * mnStretchY / 100.0);
 }
 
 inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
 {
-    if ( !aStatus.DoStretch() || ( nStretchY == 100 ) )
+    if ( !aStatus.DoStretch() || ( mnStretchY == 100.0 ) )
         return nYValue;
 
-    return static_cast<sal_uInt16>(static_cast<tools::Long>(nYValue)*nStretchY/100);
+    return basegfx::fround(double(nYValue) * mnStretchY / 100.0);
 }
 
 inline PointerStyle ImpEditView::GetPointer()

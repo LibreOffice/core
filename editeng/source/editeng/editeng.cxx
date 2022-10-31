@@ -2266,12 +2266,12 @@ bool EditEngine::HasText( const SvxSearchItem& rSearchItem )
     return pImpEditEngine->HasText( rSearchItem );
 }
 
-void EditEngine::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
+void EditEngine::SetGlobalCharStretching(double nX, double nY)
 {
     pImpEditEngine->SetCharStretching( nX, nY );
 }
 
-void EditEngine::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const
+void EditEngine::GetGlobalCharStretching(double& rX, double& rY) const
 {
     pImpEditEngine->GetCharStretching( rX, rY );
 }

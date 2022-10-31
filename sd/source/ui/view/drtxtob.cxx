@@ -165,7 +165,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_CHAR_CASEMAP:
             {
-                sal_uInt16 stretchX = 100;
+                double stretchX = 100.0;
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, false );
 
@@ -183,9 +183,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     if (OutlineView* pOView = dynamic_cast<OutlineView*>(mpView))
                         pOLV = pOView->GetViewByWindow(mpViewShell->GetActiveWindow());
 
-                    sal_uInt16 stretchY = 100;
+                    double stretchY = 100.0;
                     if( pOutliner )
-                        pOutliner->GetGlobalCharStretching( stretchX, stretchY );
+                        pOutliner->GetGlobalCharStretching(stretchX, stretchY);
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
                     {

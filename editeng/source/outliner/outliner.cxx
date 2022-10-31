@@ -840,7 +840,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     }
 
     // Use original scale...
-    sal_uInt16 nStretchX, nStretchY;
+    double nStretchX, nStretchY;
     GetGlobalCharStretching(nStretchX, nStretchY);
 
     sal_uInt16 nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
@@ -887,12 +887,12 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
     bool bRightToLeftPara = pEditEngine->IsRightToLeft( nPara );
 
     tools::Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
-    sal_uInt16 nStretchX, nStretchY;
+    double nStretchX, nStretchY;
     GetGlobalCharStretching(nStretchX, nStretchY);
-    aBulletArea = tools::Rectangle( Point(aBulletArea.Left()*nStretchX/100,
-                                   aBulletArea.Top()),
-                             Size(aBulletArea.GetWidth()*nStretchX/100,
-                                  aBulletArea.GetHeight()) );
+    tools::Long nStretchBulletX = basegfx::fround(double(aBulletArea.Left()) * nStretchX / 100.0);
+    tools::Long nStretchBulletWidth = basegfx::fround(double(aBulletArea.GetWidth()) * nStretchX / 100.0);
+    aBulletArea = tools::Rectangle(Point(nStretchBulletX, aBulletArea.Top()),
+                             Size(nStretchBulletWidth, aBulletArea.GetHeight()) );
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );

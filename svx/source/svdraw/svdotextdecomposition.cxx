@@ -1223,7 +1223,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // to layout without mirroring
     const double fScaleX(fabs(aScale.getX()) / aOutlinerScale.getX());
     const double fScaleY(fabs(aScale.getY()) / aOutlinerScale.getY());
-    rOutliner.SetGlobalCharStretching(static_cast<sal_Int16>(FRound(fScaleX * 100.0)), static_cast<sal_Int16>(FRound(fScaleY * 100.0)));
+    rOutliner.SetGlobalCharStretching(fScaleX * 100.0, fScaleY * 100.0);
 
     // When mirroring in X and Y,
     // move the null point which was top left to bottom right.
