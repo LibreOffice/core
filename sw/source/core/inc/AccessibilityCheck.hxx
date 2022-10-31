@@ -51,6 +51,7 @@ public:
     void check() override;
     void checkObject(SdrObject* pObject);
     void checkNode(SwNode* pNode);
+    void checkDocumentProperties();
 };
 
 } // end sw namespace

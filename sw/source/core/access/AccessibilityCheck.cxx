@@ -1410,7 +1410,7 @@ void AccessibilityCheck::checkNode(SwNode* pNode)
     }
 }
 
-void AccessibilityCheck::check()
+void AccessibilityCheck::checkDocumentProperties()
 {
     if (m_pDoc == nullptr)
         return;
@@ -1423,6 +1423,16 @@ void AccessibilityCheck::check()
         if (pDocumentCheck)
             pDocumentCheck->check(m_pDoc);
     }
+}
+
+void AccessibilityCheck::check()
+{
+    if (m_pDoc == nullptr)
+        return;
+
+    init();
+
+    checkDocumentProperties();
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
