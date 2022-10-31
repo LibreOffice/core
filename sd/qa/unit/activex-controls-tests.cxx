@@ -24,9 +24,14 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 
-class SdActiveXControlsTest: public SdModelTestBase
+class SdActiveXControlsTest: public SdUnoApiTest
 {
 public:
+    SdActiveXControlsTest()
+        : SdUnoApiTest("/sd/qa/unit/data/")
+    {
+    }
+
     void testBackgroundColor();
     void testLabelProperties();
     void testTextBoxProperties();
@@ -63,7 +68,7 @@ public:
 void SdActiveXControlsTest::testBackgroundColor()
 {
     // Check whether all system colors are imported correctly
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/control_background_color.pptx"), PPTX);
+    loadFromURL(u"pptx/control_background_color.pptx");
 
     const std::vector<Color> vBackgroundColors =
     {
@@ -97,7 +102,7 @@ void SdActiveXControlsTest::testBackgroundColor()
 
     for (size_t i = 0; i < vBackgroundColors.size(); ++i)
     {
-        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(i, 0, xDocShRef), uno::UNO_QUERY_THROW);
+        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(i, 0), uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
         Color nColor;
@@ -105,16 +110,14 @@ void SdActiveXControlsTest::testBackgroundColor()
         OString sMessage = "The wrong control's index is: " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), vBackgroundColors[i], nColor);
     }
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testLabelProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_label.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_label.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
@@ -149,7 +152,7 @@ void SdActiveXControlsTest::testLabelProperties()
     CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_TOP, eAlign);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Label") >>= sLabel;
@@ -181,20 +184,18 @@ void SdActiveXControlsTest::testLabelProperties()
     CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_TOP, eAlign);
 
     // Third control has transparent background
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testTextBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_textbox.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_textbox.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sText;
@@ -252,7 +253,7 @@ void SdActiveXControlsTest::testTextBoxProperties()
     CPPUNIT_ASSERT_EQUAL(false, bReadOnly);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Text") >>= sText;
@@ -298,7 +299,7 @@ void SdActiveXControlsTest::testTextBoxProperties()
     CPPUNIT_ASSERT_EQUAL(true, bReadOnly);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     // Transparent background
@@ -314,7 +315,7 @@ void SdActiveXControlsTest::testTextBoxProperties()
     CPPUNIT_ASSERT_EQUAL(true, bVScroll);
 
     // Fourth shape has both scroll bar
-    xControlShape.set(getShapeFromPage(3, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(3, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("HScroll") >>= bHScroll;
@@ -322,16 +323,14 @@ void SdActiveXControlsTest::testTextBoxProperties()
 
     xPropertySet->getPropertyValue("VScroll") >>= bVScroll;
     CPPUNIT_ASSERT_EQUAL(true, bVScroll);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testSpinButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_spinbutton.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_spinbutton.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
@@ -375,7 +374,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nSpinValue);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
@@ -409,21 +408,19 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(123), nSpinValue);
 
     // Third control has horizontal orientation
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::HORIZONTAL), nOrientation);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testCommandButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_commandbutton.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_commandbutton.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
@@ -454,7 +451,7 @@ void SdActiveXControlsTest::testCommandButtonProperties()
     CPPUNIT_ASSERT_EQUAL(false, bRepeat);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Label") >>= sLabel;
@@ -479,22 +476,20 @@ void SdActiveXControlsTest::testCommandButtonProperties()
     CPPUNIT_ASSERT_EQUAL(false, bRepeat);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     // Transparent background
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testScrollBarProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_scrollbar.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_scrollbar.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
@@ -545,7 +540,7 @@ void SdActiveXControlsTest::testScrollBarProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::VERTICAL), nOrientation);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
@@ -585,7 +580,7 @@ void SdActiveXControlsTest::testScrollBarProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::VERTICAL), nOrientation);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
@@ -593,16 +588,14 @@ void SdActiveXControlsTest::testScrollBarProperties()
 
     xPropertySet->getPropertyValue("VisibleSize") >>= nVisibleSize;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nVisibleSize);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testCheckBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_checkbox.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_checkbox.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
@@ -641,7 +634,7 @@ void SdActiveXControlsTest::testCheckBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Label") >>= sLabel;
@@ -672,7 +665,7 @@ void SdActiveXControlsTest::testCheckBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("TriState") >>= bTriState;
@@ -686,16 +679,14 @@ void SdActiveXControlsTest::testCheckBoxProperties()
 
     // Transparent background
     CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testOptionButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_optionbutton.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_optionbutton.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
@@ -730,7 +721,7 @@ void SdActiveXControlsTest::testOptionButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Label") >>= sLabel;
@@ -758,7 +749,7 @@ void SdActiveXControlsTest::testOptionButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("State") >>= nState;
@@ -769,16 +760,14 @@ void SdActiveXControlsTest::testOptionButtonProperties()
 
     // Transparent background
     CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testComboBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_combobox.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_combobox.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
@@ -829,7 +818,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
@@ -869,7 +858,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Autocomplete") >>= bAutocomplete;
@@ -883,16 +872,14 @@ void SdActiveXControlsTest::testComboBoxProperties()
 
     // Transparent background
     CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testListBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_listbox.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_listbox.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
@@ -935,7 +922,7 @@ void SdActiveXControlsTest::testListBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
@@ -963,7 +950,7 @@ void SdActiveXControlsTest::testListBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("MultiSelection") >>= bMultiSelection;
@@ -971,16 +958,14 @@ void SdActiveXControlsTest::testListBoxProperties()
 
     xPropertySet->getPropertyValue("Align") >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testToggleButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_togglebutton.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_togglebutton.pptx");
 
     // First control has default properties
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
@@ -1015,7 +1000,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Second control has custom properties
-    xControlShape.set(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("Label") >>= sLabel;
@@ -1043,7 +1028,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Third shape has some other custom properties
-    xControlShape.set(getShapeFromPage(2, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("State") >>= nState;
@@ -1055,13 +1040,11 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     // Transparent background
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testPictureProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_picture.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_picture.pptx");
 
     // Different controls has different image positioning
 
@@ -1085,7 +1068,7 @@ void SdActiveXControlsTest::testPictureProperties()
 
     for (size_t i = 0; i < vImagePositions.size(); ++i)
     {
-        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(i, 0, xDocShRef), uno::UNO_QUERY_THROW);
+        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(i, 0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
         uno::Reference<graphic::XGraphic> xGraphic;
@@ -1101,7 +1084,7 @@ void SdActiveXControlsTest::testPictureProperties()
     // Picture controls with different properties
     for (size_t i = 0; i < 4; ++i)
     {
-        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(vImagePositions.size() + i, 0, xDocShRef), uno::UNO_QUERY_THROW);
+        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(vImagePositions.size() + i, 0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
         OString sMessage = "The wrong control's index is: " + OString::number(i);
@@ -1125,19 +1108,17 @@ void SdActiveXControlsTest::testPictureProperties()
 
     // Note: LO picture control does not support tiled image and also image positioning
     // When there is no scaling picture positioned to center.
-
-    xDocShRef->DoClose();
 }
 
 void SdActiveXControlsTest::testFontProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_fontproperties.pptx"), PPTX);
+    loadFromURL(u"pptx/activex_fontproperties.pptx");
 
     // Different controls has different font properties
 
     for (size_t i = 0; i < 8; ++i)
     {
-        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(i, 0, xDocShRef), uno::UNO_QUERY_THROW);
+        uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(i, 0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
         OString sMessage = "The wrong control's index is: " + OString::number(i);
@@ -1184,8 +1165,6 @@ void SdActiveXControlsTest::testFontProperties()
         else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), 14.0f, fFontHeight);
     }
-
-    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdActiveXControlsTest);
