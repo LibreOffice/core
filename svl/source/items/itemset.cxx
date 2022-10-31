@@ -157,9 +157,9 @@ SfxItemSet::~SfxItemSet()
 {
     if (!m_pWhichRanges.empty()) // might be nullptr if we have been moved-from
     {
-        sal_uInt16 nCount = TotalCount();
         if( Count() )
         {
+            sal_uInt16 nCount = TotalCount();
             SfxPoolItem const** ppFnd = m_ppItems;
             for( sal_uInt16 nCnt = nCount; nCnt; --nCnt, ++ppFnd )
                 if( *ppFnd && !IsInvalidItem(*ppFnd) )
