@@ -450,10 +450,7 @@ void SdOOXMLExportTest1::testTdf142648()
 {
     loadFromURL(u"pptx/tdf142648.pptx");
 
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDPS(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
     uno::Reference<drawing::XDrawPage> xDrawPage;
     xDrawPages->getByIndex(0) >>= xDrawPage;
@@ -1318,10 +1315,7 @@ void SdOOXMLExportTest1::testTdf94238()
     // Load document and export it to a temporary file.
     loadFromURL(u"pptx/tdf94238.pptx");
     utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -1354,10 +1348,7 @@ void SdOOXMLExportTest1::testPictureTransparency()
     // Load document and export it to a temporary file.
     loadFromURL(u"odp/image_transparency.odp");
     utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -1389,10 +1380,7 @@ void SdOOXMLExportTest1::testRoundtripOwnLineStyles()
 {
     // Load odp document and read the LineDash values.
     loadFromURL(u"odp/LineStylesOwn.odp");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDocodp(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDocodp(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocodp.is());
     uno::Reference<drawing::XDrawPage> xPageodp(xDocodp->getDrawPages()->getByIndex(0),
                                                 uno::UNO_QUERY);
@@ -1407,10 +1395,7 @@ void SdOOXMLExportTest1::testRoundtripOwnLineStyles()
 
     // Save to pptx, reload and compare the LineDash values
     utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocpptx.is());
     uno::Reference<drawing::XDrawPage> xPagepptx(xDocpptx->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -1451,13 +1436,9 @@ void SdOOXMLExportTest1::testRoundtripPrstDash()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong prstDash", sOriginal[i], sResaved);
     }
 
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-
     // tdf#126746: Make sure that dash-dot pattern starts with the longer dash, as defined in OOXML
     // Make sure Style is drawing::DashStyle_RECTRELATIVE
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPage.is());

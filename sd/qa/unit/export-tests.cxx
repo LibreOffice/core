@@ -157,15 +157,16 @@ public:
     {
         XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
     }
+
+private:
+    uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
 };
 
-namespace
-{
-uno::Reference<awt::XBitmap> getBitmapFromTable(SdDrawDocument* pDoc, OUString const& rName)
+uno::Reference<awt::XBitmap> SdExportTest::getBitmapFromTable(OUString const& rName)
 {
     uno::Reference<awt::XBitmap> xBitmap;
 
-    uno::Reference<css::lang::XMultiServiceFactory> xFactory(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
 
     try
     {
@@ -183,7 +184,6 @@ uno::Reference<awt::XBitmap> getBitmapFromTable(SdDrawDocument* pDoc, OUString c
 
     return xBitmap;
 }
-}
 
 void SdExportTest::testBackgroundImage()
 {
@@ -196,11 +196,7 @@ void SdExportTest::testBackgroundImage()
 
     // Check that imported background image from PPTX exists
     {
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1),
                                      xDoc->getDrawPages()->getCount());
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -217,7 +213,7 @@ void SdExportTest::testBackgroundImage()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide Background is not imported from PPTX correctly",
                                      OUString("msFillBitmap 1"), bgImageName);
 
-        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(pDoc, bgImageName);
+        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(bgImageName);
         CPPUNIT_ASSERT_MESSAGE("Slide Background Bitmap is missing when imported from PPTX",
                                xBitmap.is());
     }
@@ -225,11 +221,7 @@ void SdExportTest::testBackgroundImage()
     // Save as PPTX, reload and check again so we make sure exporting to PPTX is working correctly
     {
         saveAndReload("Impress Office Open XML");
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1),
                                      xDoc->getDrawPages()->getCount());
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -246,7 +238,7 @@ void SdExportTest::testBackgroundImage()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide Background is not exported from PPTX correctly",
                                      OUString("msFillBitmap 1"), bgImageName);
 
-        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(pDoc, bgImageName);
+        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(bgImageName);
         CPPUNIT_ASSERT_MESSAGE("Slide Background Bitmap is missing when exported from PPTX",
                                xBitmap.is());
     }
@@ -254,11 +246,7 @@ void SdExportTest::testBackgroundImage()
     // Save as ODP, reload and check again so we make sure exporting and importing to ODP is working correctly
     {
         saveAndReload("impress8");
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1),
                                      xDoc->getDrawPages()->getCount());
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -276,7 +264,7 @@ void SdExportTest::testBackgroundImage()
             "Slide Background is not exported or imported from ODP correctly",
             OUString("msFillBitmap 1"), bgImageName);
 
-        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(pDoc, bgImageName);
+        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(bgImageName);
         CPPUNIT_ASSERT_MESSAGE(
             "Slide Background Bitmap is missing when exported or imported from ODP", xBitmap.is());
     }
@@ -544,11 +532,7 @@ void SdExportTest::testSwappedOutImageExport()
         saveAndReload(vFormat[i]);
 
         // Check whether graphic exported well after it was swapped out
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(pDoc->getUnoModel(),
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
                                      xDrawPagesSupplier->getDrawPages()->getCount());
@@ -688,11 +672,7 @@ void SdExportTest::testTdf80020()
 {
     loadFromURL(u"odp/tdf80020.odp");
     {
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocShell->GetModel(),
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies
             = xStyleFamiliesSupplier->getStyleFamilies();
@@ -702,10 +682,7 @@ void SdExportTest::testTdf80020()
         CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
         saveAndReload("impress8");
     }
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocShell->GetModel(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -719,11 +696,7 @@ void SdExportTest::testTdf128985()
 {
     loadFromURL(u"odp/tdf128985.odp");
     {
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocShell->GetModel(),
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                              uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies
             = xStyleFamiliesSupplier->getStyleFamilies();
@@ -740,11 +713,7 @@ void SdExportTest::testTdf128985()
 
         saveAndReload("impress8");
     }
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
-
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocShell->GetModel(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -874,11 +843,7 @@ void SdExportTest::testImageWithSpecialID()
         saveAndReload(vFormat[i]);
 
         // Check whether graphic was exported well
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(pDoc->getUnoModel(),
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
                                      xDrawPagesSupplier->getDrawPages()->getCount());
@@ -1111,10 +1076,7 @@ void SdExportTest::testPageWithTransparentBackground()
     loadFromURL(u"odp/page_transparent_background.odp");
 
     saveAndReload("impress8");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one page", static_cast<sal_Int32>(1),
                                  xDoc->getDrawPages()->getCount());
 
@@ -1546,10 +1508,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
     // BackgroundFullSize exists on master pages only
     // (note: this document can't be created with the UI because UI keeps
     //  page margins and the flag synchronized across all master pages)
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XMasterPagesSupplier> xMPS(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPagesSupplier> xMPS(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xMPs(xMPS->getMasterPages());
     Color nFillColor;
     {
@@ -1625,10 +1584,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
 
     utl::TempFileNamed tempFile = saveAndReload("impress8");
 
-    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    pDoc = pXImpressDocument->GetDoc();
-    xMPS.set(pDoc->getUnoModel(), uno::UNO_QUERY);
+    xMPS.set(mxComponent, uno::UNO_QUERY);
     xMPs.set(xMPS->getMasterPages());
     {
         uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(0), uno::UNO_QUERY);
@@ -1737,11 +1693,7 @@ void SdExportTest::testColumnsODG()
     loadFromURL(u"odg/two_columns.odg");
 
     {
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(pDoc->getUnoModel(),
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
         uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -1765,11 +1717,7 @@ void SdExportTest::testColumnsODG()
     utl::TempFileNamed tempFile = saveAndReload("draw8");
 
     {
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(pDoc->getUnoModel(),
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPages> xPages = xDrawPagesSupplier->getDrawPages();
         uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY_THROW);

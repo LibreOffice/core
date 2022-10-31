@@ -1098,9 +1098,6 @@ void SdImportTest::testTdf97808()
 {
     loadFromURL(u"tdf97808.fodp");
 
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
@@ -1114,8 +1111,7 @@ void SdImportTest::testTdf97808()
     CPPUNIT_ASSERT_EQUAL(OUString("Arrow"), lineend);
 
     // the draw:marker-end="" did not override the style
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDocShell->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xLine(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -1709,11 +1705,7 @@ void SdImportTest::testPDFImportShared()
 void SdImportTest::testPDFImport()
 {
     loadFromURL(u"pdf/txtpic.pdf");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("no exactly two shapes", static_cast<sal_Int32>(2),
@@ -1731,11 +1723,7 @@ void SdImportTest::testPDFImportSkipImages()
     pParams->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, "SkipImages"));
 
     loadFromURL(u"pdf/txtpic.pdf"), PDF, pParams);
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("no exactly one shape", static_cast<sal_Int32>(1),

@@ -53,11 +53,7 @@ public:
 
     uno::Reference<drawing::XDrawPage> getPage(int nPage)
     {
-        SdXImpressDocument* pXImpressDocument
-            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pXImpressDocument);
-        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDoc.is());
         uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nPage),
                                                  uno::UNO_QUERY_THROW);

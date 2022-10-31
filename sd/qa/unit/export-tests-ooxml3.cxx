@@ -1399,10 +1399,7 @@ void SdOOXMLExportTest3::testTdf127379()
 {
     loadFromURL(u"odp/tdf127379.odp");
     saveAndReload("Impress Office Open XML");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDoc->getDrawPages()->getCount());
 
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));

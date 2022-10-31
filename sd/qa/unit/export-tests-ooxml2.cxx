@@ -465,11 +465,7 @@ void SdOOXMLExportTest2::testTdf126324()
 {
     loadFromURL(u"pptx/tdf126324.pptx");
     saveAndReload("Impress Office Open XML");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPage.is());
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
@@ -613,10 +609,7 @@ void SdOOXMLExportTest2::testExportTransitionsPPTX()
 {
     loadFromURL(u"AllTransitions.odp");
     saveAndReload("Impress Office Open XML");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     // WIPE TRANSITIONS
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 01, TransitionType::BARWIPE,
@@ -800,11 +793,8 @@ void SdOOXMLExportTest2::testTdf92527()
     // We draw a diamond in an empty document.
     // If custom shape has name and preset information in OOXML, should be export as preset shape.
     loadFromURL(u"empty.fodp");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
     uno::Reference<drawing::XDrawPage> xPage1(getPage(0));
-    uno::Reference<css::lang::XMultiServiceFactory> xFactory(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape1(
         xFactory->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
     xPage1->add(xShape1);
@@ -818,10 +808,7 @@ void SdOOXMLExportTest2::testTdf92527()
 
     saveAndReload("Impress Office Open XML");
 
-    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0),
                                               uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -1071,10 +1058,7 @@ void SdOOXMLExportTest2::testPageBitmapWithTransparency()
     loadFromURL(u"pptx/page_transparent_bitmap.pptx");
 
     saveAndReload("impress8");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one page", static_cast<sal_Int32>(1),
                                  xDoc->getDrawPages()->getCount());
 
@@ -1915,10 +1899,7 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
 
     utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(pDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDoc->getDrawPages()->getCount());
 
     for (int nPageIndex = 0; nPageIndex < 3; nPageIndex++)
