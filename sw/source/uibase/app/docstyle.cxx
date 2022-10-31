@@ -2657,10 +2657,9 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find(const OUString& rName,
                         : static_cast<const SwFormat*>(pMod)->GetPoolFormatId();
 
         if( ( nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
-            ? !(nId & USER_FMT)
+            && !(nId & USER_FMT) )
                 // searched for used and found none
-            : bSearchUsed )
-            bFnd = false;
+                bFnd = false;
     }
     return bFnd ? mxStyleSheet.get() : nullptr;
 }
