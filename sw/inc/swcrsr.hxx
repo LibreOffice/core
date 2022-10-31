@@ -216,10 +216,10 @@ public:
 
     sal_Int32 GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
 
-    SwCursor* GetNext()             { return static_cast<SwCursor *>(GetNextInRing()); }
-    const SwCursor* GetNext() const { return static_cast<SwCursor const *>(GetNextInRing()); }
-    SwCursor* GetPrev()             { return static_cast<SwCursor *>(GetPrevInRing()); }
-    const SwCursor* GetPrev() const { return static_cast<SwCursor const *>(GetPrevInRing()); }
+    SwCursor* GetNext()             { return dynamic_cast<SwCursor *>(GetNextInRing()); }
+    const SwCursor* GetNext() const { return dynamic_cast<SwCursor const *>(GetNextInRing()); }
+    SwCursor* GetPrev()             { return dynamic_cast<SwCursor *>(GetPrevInRing()); }
+    const SwCursor* GetPrev() const { return dynamic_cast<SwCursor const *>(GetPrevInRing()); }
 };
 
 /**
