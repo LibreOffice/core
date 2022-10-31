@@ -544,7 +544,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
 
             // TextEdit attached to an object in a locked layer
-            if (pPV->GetLockedLayers().IsSet(pHitObj->GetLayer()))
+            if (bTEHit && pPV->GetLockedLayers().IsSet(pHitObj->GetLayer()))
             {
                 bTEHit=false;
             }
