@@ -2072,6 +2072,7 @@ reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
 res/adrbook.png cmd/sc_viewdatasourcebrowser.png
 res/basbrk.png cmd/sc_addwatch.png
 res/browse.png cmd/sc_browseview.png
+res/da02.png res/da01.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/extension_plus_26.png cmd/lc_insertplugin.png
