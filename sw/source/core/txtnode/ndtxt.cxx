@@ -2363,7 +2363,10 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & r
     {
         return sInserted;
     }
-    m_Text = m_Text.replaceAt(aPos, 0, sInserted);
+    if (aPos == 0 && m_Text.isEmpty())
+        m_Text = sInserted;
+    else
+        m_Text = m_Text.replaceAt(aPos, 0, sInserted);
     assert(GetSpaceLeft()>=0);
     nLen = m_Text.getLength() - aPos - nLen;
     assert(nLen != 0);
