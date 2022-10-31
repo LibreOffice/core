@@ -119,7 +119,7 @@ basegfx::B2DHomMatrix Cell::HelperCreateB2DHomMatrixFromB2DRange(
         // Snap to modulo to [0.0 .. 2PI[ to make compare easier
         const double fSnapped(::basegfx::snapToZeroRange(mfOrientation, M_PI * 2.0));
 
-        // As a compromize, allow up to 1/2 degree
+        // As a compromise, allow up to 1/2 degree
         static const double fMinAng(M_PI/360.0);
 
         // Check if Skew makes sense or would be too huge
