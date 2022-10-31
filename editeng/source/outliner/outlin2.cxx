@@ -482,9 +482,8 @@ void Outliner::QuickFormatDoc()
     pEditEngine->QuickFormatDoc();
 }
 
-void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
+void Outliner::SetGlobalCharStretching(double nX, double nY)
 {
-
     // reset bullet size
     sal_Int32 nParagraphs = pParaList->GetParagraphCount();
     for ( sal_Int32 nPara = 0; nPara < nParagraphs; nPara++ )
@@ -497,9 +496,9 @@ void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     pEditEngine->SetGlobalCharStretching( nX, nY );
 }
 
-void Outliner::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const
+void Outliner::GetGlobalCharStretching(double& rX, double& rY) const
 {
-    pEditEngine->GetGlobalCharStretching( rX, rY );
+    pEditEngine->GetGlobalCharStretching(rX, rY);
 }
 
 void Outliner::EraseVirtualDevice()
