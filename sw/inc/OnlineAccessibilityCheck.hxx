@@ -53,6 +53,7 @@ private:
     sal_Int32 m_nAccessibilityIssues;
     bool m_bInitialCheck;
     bool m_bOnlineCheckStatus;
+    std::unique_ptr<sfx::AccessibilityIssueCollection> m_pDocumentAccessibilityIssues;
 
     void runAccessibilityCheck(SwNode* pNode);
     void updateStatusbar();
@@ -60,6 +61,7 @@ private:
     void initialCheck();
     void lookForPreviousNodeAndUpdate(SwPosition const& rNewPos);
     void clearAccessibilityIssuesFromAllNodes();
+    void runDocumentLevelAccessibilityCheck();
 
 public:
     OnlineAccessibilityCheck(SwDoc& rDocument);

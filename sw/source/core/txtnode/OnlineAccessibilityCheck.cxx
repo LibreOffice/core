@@ -135,10 +135,21 @@ void OnlineAccessibilityCheck::runAccessibilityCheck(SwNode* pNode)
         = std::make_unique<sfx::AccessibilityIssueCollection>(aCollection);
 }
 
+void OnlineAccessibilityCheck::runDocumentLevelAccessibilityCheck()
+{
+    m_aAccessibilityCheck.getIssueCollection().clear();
+    m_aAccessibilityCheck.checkDocumentProperties();
+    auto aCollection = m_aAccessibilityCheck.getIssueCollection();
+    m_pDocumentAccessibilityIssues
+        = std::make_unique<sfx::AccessibilityIssueCollection>(aCollection);
+}
+
 void OnlineAccessibilityCheck::initialCheck()
 {
     if (m_bInitialCheck)
         return;
+
+    runDocumentLevelAccessibilityCheck();
 
     auto const& pNodes = m_rDocument.GetNodes();
     for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
