@@ -2169,7 +2169,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         SvxFont aFont;
         SeekCursor( pParaPortion->GetNode(), nBreakPos, aFont );
         aFont.SetPhysFont(*GetRefDevice());
-        pHyphPortion->SetSize(Size(GetRefDevice()->GetTextHeight(), GetRefDevice()->GetTextWidth(CH_HYPH)));
+        pHyphPortion->SetSize(Size(GetRefDevice()->GetTextWidth(CH_HYPH), GetRefDevice()->GetTextHeight()));
 
         pParaPortion->GetTextPortions().Insert(++nEndPortion, pHyphPortion);
     }
