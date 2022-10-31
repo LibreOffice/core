@@ -127,6 +127,9 @@ void Communicator::execute()
 
 void Communicator::informListenerDestroyed()
 {
+    // called only from the Listener::disposing() method
+    // during disposal of this communicator
+
     if ( pTransmitter )
         pTransmitter->addMessage( "slideshow_finished\n\n",
                                   Transmitter::PRIORITY_HIGH );
