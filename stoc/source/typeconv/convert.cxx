@@ -359,7 +359,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
 
     default:
         throw CannotConvertException(
-            "TYPE is not supported!",
+            "Type " + OUString::number(static_cast<int>(aDestinationClass)) + " is not supported!",
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
@@ -439,7 +439,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
 
     default:
         throw CannotConvertException(
-            "TYPE is not supported!",
+            "Type " + OUString::number(static_cast<int>(aDestinationClass)) + " is not supported!",
             Reference< XInterface >(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
