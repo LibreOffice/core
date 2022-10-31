@@ -337,6 +337,9 @@ SwXMLImport::~SwXMLImport() noexcept
         ClearShapeImport();
     }
     FinitItemImport();
+    // Call cleanup() here because the destruction of some stuff like XMLRedlineImportHelper will cast
+    // to cast their mrImport to SwXMLImport and that is illegal after this destructor is done.
+    cleanup();
 }
 
 void SwXMLImport::setTextInsertMode(
