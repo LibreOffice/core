@@ -6812,7 +6812,7 @@ void SwEditWin::ToggleOutlineContentVisibility(const size_t nOutlinePos, const b
 {
     // bSubs purpose is to set all sub level outline content to the same visibility as
     // nOutlinePos outline content visibility is toggled. It is only applicable when not treating
-    // sub ouline levels as content.
+    // sub outline levels as content.
     SwWrtShell& rSh = GetView().GetWrtShell();
 
     if (GetView().GetDrawView()->IsTextEdit())
@@ -6830,7 +6830,7 @@ void SwEditWin::ToggleOutlineContentVisibility(const size_t nOutlinePos, const b
     }
     else if (bSubs)
     {
-        // also toggle sub levels to the same content visibilty
+        // also toggle sub levels to the same content visibility
         SwOutlineNodes::size_type nPos = nOutlinePos;
         SwOutlineNodes::size_type nOutlineNodesCount
                 = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
