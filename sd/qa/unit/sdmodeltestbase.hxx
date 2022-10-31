@@ -441,23 +441,6 @@ protected:
 
 };
 
-class SdModelTestBaseXML
-    : public SdModelTestBase, public XmlTestTools
-{
-
-public:
-    xmlDocUniquePtr parseExport(utl::TempFileNamed const & rTempFile, OUString const& rStreamName)
-    {
-        std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
-        OUString const url(rTempFile.GetURL());
-        pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
-            reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
-        return pXmlDoc;
-    }
-
-};
-
 class SdUnoApiTest : public UnoApiTest
 {
 public:
