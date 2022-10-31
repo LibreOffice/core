@@ -383,7 +383,7 @@ File gid_File_Extension_Dictionary_Da
 End
 #endif
 
-#if defined WITH_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS && !defined MPL_SUBSET
 File gid_File_Extension_Dictionary_De
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-de.filelist";
@@ -392,7 +392,7 @@ File gid_File_Extension_Dictionary_De
 End
 #endif
 
-#if defined WITH_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS && !defined MPL_SUBSET
 File gid_File_Extension_Dictionary_En
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-en.filelist";
@@ -536,7 +536,7 @@ File gid_File_Extension_Dictionary_Is
 End
 #endif
 
-#if defined WITH_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS && !defined MPL_SUBSET
 File gid_File_Extension_Dictionary_It
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-it.filelist";

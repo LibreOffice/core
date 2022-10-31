@@ -23,6 +23,7 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_MACOSX_SANDBOX \
 	ENABLE_ONLINE_UPDATE \
+	MPL_SUBSET \
 	SYSTEM_CURL \
 	SYSTEM_HSQLDB \
 	SYSTEM_LIBXSLT \
