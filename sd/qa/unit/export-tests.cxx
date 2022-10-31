@@ -1819,12 +1819,10 @@ void SdExportTest::testTdf112126()
 
 void SdExportTest::testCellProperties()
 {
-    auto xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odg/tablestyles.fodg"), FODG);
-    utl::TempFileNamed tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
+    loadFromURL(u"odg/tablestyles.fodg");
+    saveAndReload("draw8");
 
-    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrPage* pPage = GetPage(1);
     auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObj != nullptr);
     uno::Reference<beans::XPropertySet> xCell(pTableObj->getTable()->getCellByPosition(0, 0),
@@ -1844,9 +1842,6 @@ void SdExportTest::testCellProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(300), nPadding);
     xCell->getPropertyValue("TextVerticalAdjust") >>= aTextAdjust;
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust::TextVerticalAdjust_CENTER, aTextAdjust);
-
-    xDocShRef->DoClose();
-    tempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
