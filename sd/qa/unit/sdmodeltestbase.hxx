@@ -304,51 +304,6 @@ protected:
         return loadURL(pTempFile->GetURL(), nExportType);
     }
 
-    /** Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
-
-        @param bCreate Instead of comparing to the reference file(s), create it/them.
-    */
-    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, std::u16string_view rShapesDumpFileNameBase, bool bCreate )
-    {
-        CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.is() );
-        CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
-
-        uno::Reference<frame::XModel> xTempModel(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (xTempModel, uno::UNO_QUERY_THROW);
-        uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
-        CPPUNIT_ASSERT(xDrawPages.is());
-
-        sal_Int32 nLength = xDrawPages->getCount();
-        for (sal_Int32 i = 0; i < nLength; ++i)
-        {
-            uno::Reference<drawing::XDrawPage> xDrawPage;
-            uno::Any aAny = xDrawPages->getByIndex(i);
-            aAny >>= xDrawPage;
-            uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
-            OUString aString = XShapeDumper::dump(xShapes);
-
-            OString aFileName = OUStringToOString( rShapesDumpFileNameBase, RTL_TEXTENCODING_UTF8 ) +
-                OString::number(i) + ".xml";
-
-            if ( bCreate )
-            {
-                std::ofstream aStream( aFileName.getStr(), std::ofstream::out | std::ofstream::binary );
-                aStream << aString;
-                aStream.close();
-            }
-            else
-            {
-                doXMLDiff(aFileName.getStr(),
-                        OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
-                        static_cast<int>(aString.getLength()),
-                        OUStringToOString(
-                            m_directories.getPathFromSrc(u"/sd/qa/unit/data/tolerance.xml"),
-                            RTL_TEXTENCODING_UTF8).getStr());
-            }
-        }
-        xDocShRef->DoClose();
-    }
-
     uno::Reference< drawing::XDrawPagesSupplier > getDoc( sd::DrawDocShellRef xDocShRef )
     {
         uno::Reference< drawing::XDrawPagesSupplier > xDoc (
