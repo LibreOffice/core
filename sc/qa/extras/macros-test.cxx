@@ -411,13 +411,7 @@ void ScMacrosTest::testTdf114427()
 {
     loadFromURL(u"tdf114427.ods");
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-
-    uno::Reference< frame::XModel > xModel = pDocSh->GetModel();
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xDraws(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
