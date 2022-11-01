@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
     cppuhelper \
     comphelper \
     sal \
+    subsequenttest \
     svt \
     test \
     unotest \

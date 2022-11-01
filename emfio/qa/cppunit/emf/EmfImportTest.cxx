@@ -10,9 +10,8 @@
 #include <sal/config.h>
 #include <config_fonts.h>
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmltesttools.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -39,9 +38,8 @@ using namespace css::graphic;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 
-class Test : public test::BootstrapFixture, public XmlTestTools, public unotest::MacrosTest
+class Test : public UnoApiTest, public XmlTestTools
 {
-    uno::Reference<lang::XComponent> mxComponent;
     const OString aXPathPrefix = "/primitive2D/metafile/transform/";
 
     void testPolyPolygon();
@@ -91,9 +89,10 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     Primitive2DSequence parseEmf(std::u16string_view aSource);
 
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/emfio/qa/cppunit/emf/data/")
+    {
+    }
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testPolyPolygon);
@@ -140,21 +139,6 @@ public:
     CPPUNIT_TEST(TestPdfInEmf);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 Primitive2DSequence Test::parseEmf(std::u16string_view aSource)
 {
@@ -1604,11 +1588,10 @@ void Test::TestPdfInEmf()
     }
 
     // Load a PPTX file, which has a shape, with a bitmap fill, which is an EMF, containing a PDF.
-    OUString aURL = m_directories.getURLFromSrc(u"emfio/qa/cppunit/emf/data/pdf-in-emf.pptx");
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"pdf-in-emf.pptx");
 
     // Get the EMF.
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
