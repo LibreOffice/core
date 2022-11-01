@@ -34,6 +34,8 @@ using drawinglayer::primitive2d::Primitive2DContainer;
 
 class Test : public test::BootstrapFixture, public XmlTestTools
 {
+    const OString aXPathPrefix = "/primitive2D/metafile/transform/";
+
     void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     void testWorking();
@@ -42,6 +44,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void TestDrawLine();
     void TestLinearGradient();
     void TestFillRegion();
+    void TestNegativeWinOrg();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
 
@@ -53,6 +56,7 @@ public:
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestNegativeWinOrg);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -212,6 +216,24 @@ void Test::TestFillRegion()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
                        "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 1323,2644 0,2644 0,1322 1323,1322");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]", "color", "#000000");
+}
+
+void Test::TestNegativeWinOrg()
+{
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestNegativeWinOrg.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The crop box (EMR_EXTSELECTCLIPRGN) would not factor in WinOrg coordinates
+    // and be lower and more to the right than it actually is which would cut the
+    // text in the emf above in half.
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", 1);
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "minx", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "miny", "272");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxx", "6800");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxy", "644");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
