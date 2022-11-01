@@ -114,7 +114,6 @@ class SwXParagraph::Impl
 {
 public:
     SwXParagraph& m_rThis;
-    unotools::WeakReference<SwXParagraph> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
@@ -192,12 +191,8 @@ void SwXParagraph::Impl::Notify(const SfxHint& rHint)
         std::unique_lock aGuard(m_Mutex);
         if (m_EventListeners.getLength(aGuard) != 0)
         {
-            uno::Reference<uno::XInterface> const xThis(m_wThis);
-            if (!xThis.is())
-            {   // fdo#72695: if UNO object is already dead, don't revive it with event
-                return;
-            }
-            lang::EventObject const ev(xThis);
+            uno::Reference<uno::XInterface> const xThis(m_rThis);
+            lang::EventObject const ev(m_rThis);
             m_EventListeners.disposeAndClear(aGuard, ev);
         }
     }
@@ -219,6 +214,10 @@ SwXParagraph::SwXParagraph(
 
 SwXParagraph::~SwXParagraph()
 {
+    SolarMutexGuard aGuard;
+    // need to stop listening before destruction so we don't get DYING events
+    // that might then revive the SwXParagraph when constructing an EventObject
+    m_pImpl->EndListeningAll();
 }
 
 const SwTextNode * SwXParagraph::GetTextNode() const
@@ -265,8 +264,6 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
     {
         pTextNode->SetXParagraph(xParagraph);
     }
-    // need a permanent Reference to initialize m_wThis
-    pXPara->m_pImpl->m_wThis = xParagraph.get();
     return xParagraph;
 }
 
