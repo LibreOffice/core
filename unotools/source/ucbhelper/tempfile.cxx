@@ -422,7 +422,9 @@ void TempFileFast::CloseStream()
 {
     if (mxStream)
     {
+#if !defined _WIN32
         OUString aName = mxStream->GetFileName();
+#endif
         mxStream.reset();
 #ifdef _WIN32
         // On Windows, the file is opened with FILE_FLAG_DELETE_ON_CLOSE, so it will delete as soon as the handle closes.
