@@ -137,6 +137,11 @@ short AbstractScDeleteCellDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScDeleteCellDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
+{
+    return ScDeleteCellDlg::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 //for dataform
 short AbstractScDataFormDlg_Impl::Execute()
 {
@@ -172,6 +177,11 @@ short AbstractScGroupDlg_Impl::Execute()
 short AbstractScInsertCellDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+bool AbstractScInsertCellDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
+{
+    return ScInsertCellDlg::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScInsertContentsDlg_Impl::Execute()
