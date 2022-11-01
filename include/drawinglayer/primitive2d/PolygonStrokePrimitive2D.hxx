@@ -46,6 +46,9 @@ private:
     /// the line stroking (if used)
     attribute::StrokeAttribute maStrokeAttribute;
 
+    /// the buffered result of PolygonStrokePrimitive2D::getB2DRange
+    mutable basegfx::B2DRange maBufferedRange;
+
 protected:
     /// local decomposition.
     virtual void
