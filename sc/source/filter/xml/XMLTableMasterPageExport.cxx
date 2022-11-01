@@ -68,6 +68,17 @@ void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < cs
     if( !xHeaderFooter.is() )
         return;
 
+    sal_uInt16 nNameSpace = XML_NAMESPACE_STYLE;
+    if (aName == XML_HEADER_FIRST || aName == XML_FOOTER_FIRST)
+    {
+        // Since ODF 1.3 OFFICE-3789 or 1.2-extended.
+        auto const nVersion(GetExport().getSaneDefaultVersion());
+        if (nVersion <= SvtSaveOptions::ODFSVER_012)
+            return;
+        if (nVersion < SvtSaveOptions::ODFSVER_013)
+            nNameSpace = XML_NAMESPACE_LO_EXT;
+    }
+
     Reference < XText > xCenter(xHeaderFooter->getCenterText());
     Reference < XText > xLeft(xHeaderFooter->getLeftText());
     Reference < XText > xRight(xHeaderFooter->getRightText());
@@ -81,7 +92,7 @@ void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < cs
     if( !bDisplay )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                         XML_DISPLAY, XML_FALSE );
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+    SvXMLElementExport aElem( GetExport(), nNameSpace,
                               aName, true, true );
     if (!sCenter.isEmpty() && sLeft.isEmpty() && sRight.isEmpty())
         exportHeaderFooterContent( xCenter, false, false );
