@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,lotuswordpro_import_test, \
     cppu \
     cppuhelper \
     sal \
+    subsequenttest \
     test \
     tl \
     unotest \

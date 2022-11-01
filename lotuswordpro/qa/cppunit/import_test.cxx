@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -24,34 +23,14 @@
 
 using namespace ::com::sun::star;
 
-class LotusWordProTest : public test::BootstrapFixture, public unotest::MacrosTest
+class LotusWordProTest : public UnoApiTest
 {
 public:
-    virtual void setUp() override;
-
-    virtual void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
+    LotusWordProTest()
+        : UnoApiTest("/lotuswordpro/qa/cppunit/data/")
+    {
+    }
 };
-
-void LotusWordProTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void LotusWordProTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/lotuswordpro/qa/cppunit/data/";
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
 {
@@ -65,9 +44,8 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     //         2) Numbered bullet w/ bracket two (2))
     //             a) Lettered bullet w/ bracket lowercase 1 (a))
     //             b) Lettered bullet w/ bracket lowercase 2 (b))
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf33787-ordered-bullets.lwp";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<text::XTextDocument> textDocument(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"tdf33787-ordered-bullets.lwp");
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -157,9 +135,8 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf129993.lwp";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<text::XTextDocument> textDocument(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"tdf129993.lwp");
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -172,9 +149,8 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paragraphProperties.lwp";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<text::XTextDocument> textDocument(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"paragraphProperties.lwp");
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
