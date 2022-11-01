@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_dmapper, \
     cppu \
     oox \
     sal \
+    subsequenttest \
     test \
     unotest \
     vcl \

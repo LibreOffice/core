@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -29,43 +28,23 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for writerfilter/source/dmapper/DomainMapper_Impl.cxx.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/writerfilter/qa/cppunittests/dmapper/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
 {
     // Load a document which refers to a footer which ends with a table, and there is a page break
     // in the body text right after the footer reference.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "page-break-footer-table.docx";
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"page-break-footer-table.docx");
 
     // Check the last paragraph.
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -86,11 +65,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "num-restart-style-parent.docx";
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"num-restart-style-parent.docx");
 
     // The paragraphs are A 1 2 B 1 2.
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -116,10 +94,9 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "frame-direction.docx";
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"frame-direction.docx");
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xFrame0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
@@ -135,9 +112,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
 
 CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "alt-chunk.docx";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"alt-chunk.docx");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -170,9 +146,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
 {
     // Load a document with a field in a table cell: it contains an IF field with various nested
     // fields.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "field-if-inside-if.docx";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<text::XTextTablesSupplier> xTextDocument(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"field-if-inside-if.docx");
+    uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
@@ -197,11 +172,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
 
 CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "create-date-preserve.docx";
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"create-date-preserve.docx");
     // Trigger idle layout.
     Scheduler::ProcessEventsToIdle();
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -219,13 +193,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
 CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
 {
     // Given a document with a chart and a shape on it:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart-zorder.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"chart-zorder.docx");
 
     // Then make sure the shape is on top of the chart:
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<lang::XServiceInfo> xChart(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed, as the chart was on top
@@ -236,13 +207,10 @@ CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
 CPPUNIT_TEST_FIXTURE(Test, testPTab)
 {
     // Given a document that has a <w:ptab> to render a linebreak:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ptab.docx";
-
-    // When opening that file:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"ptab.docx");
 
     // Then make sure that the Writer doc model contains that linebreak:
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -261,14 +229,14 @@ CPPUNIT_TEST_FIXTURE(Test, testPTab)
 CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
 {
     // Given an empty document:
-    getComponent() = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
     // When pasting RTF into that document:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<document::XDocumentInsertable> xCursor(
         xText->createTextCursorByRange(xText->getStart()), uno::UNO_QUERY);
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paste-ole.rtf";
+    OUString aURL = createFileURL(u"paste-ole.rtf");
     xCursor->insertDocumentFromURL(aURL, {});
 
     // Then make sure that all the 3 paragraphs of the paste data (empty para, OLE obj, text) are
@@ -288,13 +256,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 {
     // Given a document with a clearing break:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "clearing-break.docx";
-
-    // When loading that file:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"clearing-break.docx");
 
     // Then make sure that the clear property of the break is not ignored:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParaEnumAccess->createEnumeration();
@@ -323,14 +288,10 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDateDataBinding)
 {
     // Given a document with date content control and data binding, data binding date is 2012,
     // in-document date is 2022:
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-date-data-binding.docx";
-
-    // When loading that file:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"content-control-date-data-binding.docx");
 
     // Then make sure that the date is from the data binding, not from document.xml:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParaEnumAccess->createEnumeration();

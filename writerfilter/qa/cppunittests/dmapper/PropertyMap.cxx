@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -23,39 +22,19 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for writerfilter/source/dmapper/PropertyMap.cxx.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/writerfilter/qa/cppunittests/dmapper/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableHeader)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "floating-table-header.docx";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<frame::XModel> xModel(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"floating-table-header.docx");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
@@ -72,9 +51,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
 {
     // Load a document with 2 pages: first page has larger top margin, second page has smaller top
     // margin.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "follow-page-top-margin.docx";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    loadFromURL(u"follow-page-top-margin.docx");
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -94,14 +72,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
 {
     // Given a document with a table which has a negative vertical position (moves up to overlap
     // with the header):
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-negative-vertical-pos.docx";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"table-negative-vertical-pos.docx");
 
     // Then make sure we don't import that as a plain table, which can't have a negative top margin:
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -113,14 +87,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 {
     // Given a document with a top margin and a border which has more spacing than the margin:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "negative-page-border.docx";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"negative-page-border.docx");
 
     // Then make sure that the border distance is negative, so it can appear at the correct
     // position:
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -142,15 +113,11 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
 {
     // Given a document with no top margin and a border which has spacing:
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "negative-page-border-no-margin.docx";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"negative-page-border-no-margin.docx");
 
     // Then make sure that the border distance is negative, so it can appear at the correct
     // position:
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();

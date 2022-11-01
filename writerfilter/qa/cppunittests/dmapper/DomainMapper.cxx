@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -22,42 +21,22 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for writerfilter/source/dmapper/DomainMapper.cxx.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/writerfilter/qa/cppunittests/dmapper/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testLargeParaTopMargin)
 {
     // Given a document with a paragraph with a large "before" spacing.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "large-para-top-margin.docx";
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"large-para-top-margin.docx");
 
     // When checking the first paragraph.
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -79,13 +58,10 @@ CPPUNIT_TEST_FIXTURE(Test, testLargeParaTopMargin)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
 {
     // Given a document with a block SDT, and inside that some content + a run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-in-para.docx";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-in-para.docx");
 
     // Then make sure the content inside the block SDT but outside the run SDT is not lost:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -100,14 +76,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
 CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
 {
     // Given a document with <w:listItem w:value="..."/> (no display text):
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-dropdown-no-display-text.docx";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-dropdown-no-display-text.docx");
 
     // Then make sure we create a dropdown content control, not a rich text one:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
                                                                     uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -22,44 +21,22 @@ using namespace com::sun::star;
 namespace
 {
 /// Tests for writerfilter/source/dmapper/SdtHelper.cxx.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/writerfilter/qa/cppunittests/dmapper/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
 {
     // Given a document with a rich text inline/run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-rich-text.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-rich-text.docx");
 
     // Then make sure that formatting of the text inside the SDT is not lost:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -100,13 +77,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)
 {
     // Given a document with a plain text inline/run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-plain-text.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-plain-text.docx");
 
     // Then make sure that the text inside the SDT is not rich:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -130,13 +104,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunCheckbox)
 {
     // Given a document with a checkbox inline/run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-checkbox.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-checkbox.docx");
 
     // Then make sure that the doc model has a clickable checkbox content control:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -176,13 +147,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunCheckbox)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
 {
     // Given a document with a dropdown inline/run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-dropdown.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-dropdown.docx");
 
     // Then make sure that the doc model has a clickable dropdown content control:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
                                                                     uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
@@ -224,13 +192,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunComboBox)
 {
     // Given a document with a combo box inline/run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-combobox.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-combobox.docx");
 
     // Then make sure that the doc model has a clickable combo box content control:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
                                                                     uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
@@ -254,13 +219,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunComboBox)
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
 {
     // Given a document with a dropdown inline/run SDT:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-picture.docx";
-
-    // When loading the document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"sdt-run-picture.docx");
 
     // Then make sure that the doc model has a clickable picture content control:
-    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
                                                                     uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
