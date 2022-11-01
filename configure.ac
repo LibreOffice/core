@@ -6591,7 +6591,7 @@ find_al()
     unset altest
 
     # We need this check to detect 4.6.1 or above.
-    for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
+    for ver in 4.8.1 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
         PathFormat "$regvalue"
         if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
@@ -6615,7 +6615,7 @@ find_dotnetsdk46()
 {
     unset frametest
 
-    for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
+    for ver in 4.8.1 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
