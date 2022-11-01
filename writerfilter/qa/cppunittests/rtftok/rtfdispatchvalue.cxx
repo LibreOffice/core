@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -20,44 +19,22 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for writerfilter/source/rtftok/rtfdispatchvalue.cxx.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/writerfilter/qa/cppunittests/rtftok/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/rtftok/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
 {
     // Given a file with \snext:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "follow-style.rtf";
-
-    // When loading that file:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"follow-style.rtf");
 
     // Then make sure we set the follow of the para style correctly:
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
@@ -77,14 +54,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 {
     // Given a document with a top margin and a border which has more spacing than the margin:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "negative-page-border.rtf";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"negative-page-border.rtf");
 
     // Then make sure that the border distance is negative, so it can appear at the correct
     // position:
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();

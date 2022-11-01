@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -21,39 +20,19 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for writerfilter/source/rtftok/rtfsdrimport.cxx.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/writerfilter/qa/cppunittests/rtftok/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/rtftok/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "picture-in-textframe.rtf";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<drawing::XDrawPageSupplier> xTextDocument(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"picture-in-textframe.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
     uno::Reference<beans::XPropertySet> xInnerShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
@@ -70,13 +49,10 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermark)
 {
     // Given a document with a picture watermark, and the "washout" checkbox is ticked on the Word
     // UI:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "watermark.rtf";
-
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"watermark.rtf");
 
     // Then make sure the watermark effect is not lost on import:
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPagesSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     drawing::ColorMode eMode{};

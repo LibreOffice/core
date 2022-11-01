@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
     cppu \
     oox \
     sal \
+    subsequenttest \
     test \
     unotest \
     vcl \
