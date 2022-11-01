@@ -1932,6 +1932,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
     vcl::Window* pWin = pGridWin[ePos];
 
     bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bUpdateFix = false;
 
     if ( bFreeze )
     {
@@ -2015,6 +2016,15 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
                 aViewData.SetPosY(SC_SPLIT_TOP, nTopPos);
                 aViewData.SetPosY(SC_SPLIT_BOTTOM, nBottomPos);
             }
+            else if (nPosY == 1 && eSplitMethod == SC_SPLIT_METHOD_ROW)
+            {
+                // Freeze first row, but row 1 is not visible on screen now == special handling
+                aViewData.SetVSplitMode(SC_SPLIT_FIX);
+                aViewData.SetFixPosY(nPosY);
+
+                aViewData.SetPosY(SC_SPLIT_TOP, 0);
+                bUpdateFix = true;
+            }
             else
                 aViewData.SetVSplitMode(SC_SPLIT_NONE);
         }
@@ -2040,6 +2050,16 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
                 aViewData.SetPosX(SC_SPLIT_LEFT, nLeftPos);
                 aViewData.SetPosX(SC_SPLIT_RIGHT, nRightPos);
             }
+            else if (nPosX == 1 && eSplitMethod == SC_SPLIT_METHOD_COL)
+            {
+                // Freeze first column, but col A is not visible on screen now == special handling
+                aViewData.SetHSplitMode(SC_SPLIT_FIX);
+                aViewData.SetFixPosX(nPosX);
+
+                aViewData.SetPosX(SC_SPLIT_RIGHT, aViewData.GetPosX(SC_SPLIT_LEFT));
+                aViewData.SetPosX(SC_SPLIT_LEFT, 0);
+                bUpdateFix = true;
+            }
             else
                 aViewData.SetHSplitMode( SC_SPLIT_NONE );
         }
@@ -2059,7 +2079,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
             p->SetMapMode( p->GetDrawMapMode() );
     SetNewVisArea();
 
-    RepeatResize(false);
+    RepeatResize(bUpdateFix);
 
     UpdateShow();
     PaintLeft();
