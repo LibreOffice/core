@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -25,47 +24,27 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/core/ code.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("svx/qa/unit/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/svx/qa/unit/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
 {
     // Given a Calc document with a chart in it:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart.ods";
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"chart.ods");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // When exporting that chart to PDF:
     utl::TempFileNamed aTempFile;
-    GraphicHelper::SaveShapeAsGraphicToPath(getComponent(), xShape, "application/pdf",
+    GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "application/pdf",
                                             aTempFile.GetURL());
 
     // Then make sure we get a valid, non-empty PDF:
@@ -85,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
 
 CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolver)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "GraphicObjectResolverTest.zip";
+    OUString aURL = createFileURL(u"GraphicObjectResolverTest.zip");
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
                                                                 embed::ElementModes::READWRITE);

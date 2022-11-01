@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_core, \
     cppu \
     cppuhelper \
     sal \
+    subsequenttest \
     svx \
     svxcore \
     test \
