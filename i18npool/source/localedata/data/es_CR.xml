@@ -53,6 +53,18 @@
   </LC_CTYPE>
   <LC_FORMAT>
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
+    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY" formatindex="105">
+      <FormatCode>[NatNum12 CURRENCY]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY" formatindex="106">
+      <FormatCode>[NatNum12 CURRENCY]0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY" formatindex="107">
+      <FormatCode>[NatNum12 upper CURRENCY]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY" formatindex="108">
+      <FormatCode>[NatNum12 upper CURRENCY]0,00</FormatCode>
+    </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/MM/AA</FormatCode>
     </FormatElement>
@@ -190,6 +202,15 @@
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER"  formatindex="9">
       <FormatCode>0,00" "%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER" formatindex="101">
+      <FormatCode>[NatNum12 cardinal]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey10" default="false" type="medium" usage="FIXED_NUMBER" formatindex="102">
+      <FormatCode>[NatNum12 capitalize cardinal]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey12" default="false" type="medium" usage="FIXED_NUMBER" formatindex="104">
+      <FormatCode>[NatNum12 upper cardinal]0</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="6">
       <FormatCode>0,00E+000</FormatCode>

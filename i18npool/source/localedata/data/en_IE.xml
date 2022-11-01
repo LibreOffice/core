@@ -51,7 +51,20 @@
     <TimePM>p.m.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT ref="en_GB" replaceTo="[$IR£-1809]"/>
+  <LC_FORMAT ref="en_GB" replaceTo="[$IR£-1809]">
+    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY" formatindex="105">
+      <FormatCode>[NatNum12 title CURRENCY]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY" formatindex="106">
+      <FormatCode>[NatNum12 title CURRENCY]0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY" formatindex="107">
+      <FormatCode>[NatNum12 upper CURRENCY]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY" formatindex="108">
+      <FormatCode>[NatNum12 upper CURRENCY]0.00</FormatCode>
+    </FormatElement>
+  </LC_FORMAT>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="en_US"/>
