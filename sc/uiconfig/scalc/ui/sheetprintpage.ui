@@ -642,8 +642,8 @@
                 <property name="can-focus">False</property>
                 <items>
                   <item translatable="yes" context="sheetprintpage|comboLB_SCALEMODE">Reduce/enlarge printout</item>
-                  <item translatable="yes" context="sheetprintpage|comboLB_SCALEMODE">Fit print range(s) to width/height</item>
-                  <item translatable="yes" context="sheetprintpage|comboLB_SCALEMODE">Fit print range(s) on number of pages</item>
+                  <item translatable="yes" context="sheetprintpage|comboLB_SCALEMODE">Shrink print range(s) to width/height</item>
+                  <item translatable="yes" context="sheetprintpage|comboLB_SCALEMODE">Shrink print range(s) on number of pages</item>
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="comboLB_SCALEMODE-atkobject">

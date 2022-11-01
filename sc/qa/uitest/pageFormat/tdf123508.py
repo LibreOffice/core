@@ -23,8 +23,8 @@ class tdf123508(UITestCase):
             scalingMode = xDialog.getChild("comboLB_SCALEMODE")
             spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
             spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
-            #select "Fit print range(s) to width/height"  from the scale mode drop-down list
-            select_by_text(scalingMode, "Fit print range(s) to width/height")
+            #select "Shrink print range(s) to width/height"  from the scale mode drop-down list
+            select_by_text(scalingMode, "Shrink print range(s) to width/height")
             #define a value for the page, e.g.: width   2; height  2
             spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
             spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())
@@ -38,7 +38,7 @@ class tdf123508(UITestCase):
             spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
             spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
 
-            self.assertEqual(get_state_as_dict(scalingMode)["SelectEntryText"], "Fit print range(s) to width/height")
+            self.assertEqual(get_state_as_dict(scalingMode)["SelectEntryText"], "Shrink print range(s) to width/height")
             self.assertEqual(get_state_as_dict(spinEDSCALEPAGEWIDTH)["Text"], "2")
             self.assertEqual(get_state_as_dict(spinEDSCALEPAGEHEIGHT)["Text"], "2")
 
