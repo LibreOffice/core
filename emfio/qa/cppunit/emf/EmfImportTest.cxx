@@ -69,6 +69,7 @@ class Test : public UnoApiXmlTest
     void TestEmfPlusDrawPathWithMiterLimit();
     void TestEmfPlusFillClosedCurve();
     void TestExtTextOutOpaqueAndClipTransform();
+    void TestNegativeWinOrg();
 
     void TestBitBltStretchBltWMF();
     void TestExtTextOutOpaqueAndClipWMF();
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(TestEmfPlusDrawPathWithMiterLimit);
     CPPUNIT_TEST(TestEmfPlusFillClosedCurve);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
+    CPPUNIT_TEST(TestNegativeWinOrg);
 
     CPPUNIT_TEST(TestBitBltStretchBltWMF);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
@@ -1201,6 +1203,24 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
                 "Opaque ClipP-");
     assertXPath(pDocument, aXPathPrefix + "group[3]/mask/group/textsimpleportion", "fontcolor",
                 "#000000");
+}
+
+void Test::TestNegativeWinOrg()
+{
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestNegativeWinOrg.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The crop box (EMR_EXTSELECTCLIPRGN) would not factor in WinOrg coordinates
+    // and be lower and more to the right than it actually is which would cut the
+    // text in the emf above in half.
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", 1);
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "minx", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "miny", "272");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxx", "6800");
+    assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxy", "644");
 }
 
 void Test::TestBitBltStretchBltWMF()

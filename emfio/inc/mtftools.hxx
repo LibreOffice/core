@@ -731,6 +731,7 @@ namespace emfio
         void                ScaleDevExt(double fX, double fY);
 
         void                SetWinOrg(const Point& rPoint, bool bIsEMF = false);
+        Point               GetWinOrg() { return Point(mnWinOrgX, mnWinOrgY); }
         void                SetWinOrgOffset(sal_Int32 nX, sal_Int32 nY);
         void                SetWinExt(const Size& rSize, bool bIsEMF = false);
         void                ScaleWinExt(double fX, double fY);

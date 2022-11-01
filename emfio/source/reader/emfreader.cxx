@@ -332,7 +332,7 @@ SvStream& operator>>(SvStream& rInStream, BLENDFUNCTION& rBlendFun)
     return rInStream;
 }
 
-bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
+bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen, Point aWinOrg )
 {
     if (nLen < 32) // 32 bytes - Size of RegionDataHeader
         return false;
@@ -369,6 +369,10 @@ bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_
         rStream.ReadInt32(nTop);
         rStream.ReadInt32(nRight);
         rStream.ReadInt32(nBottom);
+        nLeft += aWinOrg.X();
+        nRight += aWinOrg.X();
+        nTop += aWinOrg.Y();
+        nBottom += aWinOrg.Y();
         rPolyPoly.append( basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( nLeft, nTop, nRight, nBottom ) ) );
         SAL_INFO("emfio", "\t\t" << i << " Left: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
     }
@@ -1348,7 +1352,7 @@ namespace emfio
                             {
                                 basegfx::B2DPolyPolygon aPolyPoly;
                                 if (cbRgnData)
-                                    ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
+                                    ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize, GetWinOrg());
                                 const tools::PolyPolygon aPolyPolygon(aPolyPoly);
                                 SetClipPath(aPolyPolygon, static_cast<RegionMode>(nClippingMode), false);
                             }
@@ -1930,7 +1934,7 @@ namespace emfio
                             mpInputStream->ReadUInt32( nRgnDataSize ).ReadUInt32( nIndex );
                             nRemainingRecSize -= 24;
 
-                            if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize))
+                            if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize, GetWinOrg()))
                             {
                                 Push();
                                 SelectObject( nIndex );
@@ -1955,7 +1959,7 @@ namespace emfio
                             mpInputStream->ReadUInt32( nRgnDataSize );
                             nRemainingRecSize -= 20;
 
-                            if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize))
+                            if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize, GetWinOrg()))
                             {
                                 tools::PolyPolygon aPolyPolygon(aPolyPoly);
                                 DrawPolyPolygon( aPolyPolygon );
