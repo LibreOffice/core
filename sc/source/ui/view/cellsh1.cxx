@@ -169,6 +169,60 @@ void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId
         pTabViewShell->SetCursor(aFoundPos.Col(), aFoundPos.Row());
     }
 }
+
+void InsertCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsCellCmd eCmd)
+{
+    if (eCmd!=INS_NONE)
+    {
+        pTabViewShell->InsertCells( eCmd );
+
+        if( ! rReq.IsAPI() )
+        {
+            OUString aParam;
+
+            switch( eCmd )
+            {
+            case INS_CELLSDOWN: aParam = "V"; break;
+            case INS_CELLSRIGHT: aParam = ">"; break;
+            case INS_INSROWS_BEFORE: aParam = "R"; break;
+            case INS_INSCOLS_BEFORE: aParam = "C"; break;
+            default:
+            {
+                // added to avoid warnings
+            }
+            }
+            rReq.AppendItem( SfxStringItem( FID_INS_CELL, aParam ) );
+            rReq.Done();
+        }
+    }
+}
+
+void DeleteCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, DelCellCmd eCmd)
+{
+    if (eCmd != DelCellCmd::NONE )
+    {
+        pTabViewShell->DeleteCells( eCmd );
+
+        if( ! rReq.IsAPI() )
+        {
+            OUString aParam;
+
+            switch( eCmd )
+            {
+            case DelCellCmd::CellsUp: aParam = "U"; break;
+            case DelCellCmd::CellsLeft: aParam = "L"; break;
+            case DelCellCmd::Rows: aParam = "R"; break;
+            case DelCellCmd::Cols: aParam = "C"; break;
+            default:
+            {
+                // added to avoid warnings
+            }
+            }
+            rReq.AppendItem( SfxStringItem( FID_DELETE_CELL, aParam ) );
+            rReq.Done();
+        }
+    }
+}
 }
 
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -287,35 +341,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), bTheFlag));
-                        if (pDlg->Execute() == RET_OK)
-                            eCmd = pDlg->GetInsCellCmd();
-                    }
-                }
-
-                if (eCmd!=INS_NONE)
-                {
-                    pTabViewShell->InsertCells( eCmd );
-
-                    if( ! rReq.IsAPI() )
-                    {
-                        OUString aParam;
-
-                        switch( eCmd )
-                        {
-                            case INS_CELLSDOWN: aParam = "V"; break;
-                            case INS_CELLSRIGHT: aParam = ">"; break;
-                            case INS_INSROWS_BEFORE: aParam = "R"; break;
-                            case INS_INSCOLS_BEFORE: aParam = "C"; break;
-                            default:
+                        VclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), bTheFlag));
+                        pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                            if (nResult == RET_OK)
                             {
-                                // added to avoid warnings
+                                SfxRequest aRequest(pTabViewShell->GetViewFrame(), FID_INS_CELL);
+                                InsertCells(pTabViewShell, aRequest, pDlg->GetInsCellCmd());
                             }
-                        }
-                        rReq.AppendItem( SfxStringItem( FID_INS_CELL, aParam ) );
-                        rReq.Done();
+                            pDlg->disposeOnce();
+                        });
                     }
                 }
+
+                InsertCells(pTabViewShell, rReq, eCmd);
             }
             break;
 
@@ -356,37 +394,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             (rDoc.GetChangeTrack() != nullptr);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        VclPtr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetFrameWeld(), bTheFlag ));
 
-                        ScopedVclPtr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetFrameWeld(), bTheFlag ));
-
-                        if (pDlg->Execute() == RET_OK)
-                            eCmd = pDlg->GetDelCellCmd();
-                    }
-                }
-
-                if (eCmd != DelCellCmd::NONE )
-                {
-                    pTabViewShell->DeleteCells( eCmd );
-
-                    if( ! rReq.IsAPI() )
-                    {
-                        OUString aParam;
-
-                        switch( eCmd )
-                        {
-                            case DelCellCmd::CellsUp: aParam = "U"; break;
-                            case DelCellCmd::CellsLeft: aParam = "L"; break;
-                            case DelCellCmd::Rows: aParam = "R"; break;
-                            case DelCellCmd::Cols: aParam = "C"; break;
-                            default:
+                        pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                            if (nResult == RET_OK)
                             {
-                                // added to avoid warnings
+                                SfxRequest aRequest(pTabViewShell->GetViewFrame(), FID_INS_CELL);
+                                DeleteCells(pTabViewShell, aRequest, pDlg->GetDelCellCmd());
                             }
-                        }
-                        rReq.AppendItem( SfxStringItem( FID_DELETE_CELL, aParam ) );
-                        rReq.Done();
+                            pDlg->disposeOnce();
+                        });
                     }
                 }
+                DeleteCells(pTabViewShell, rReq, eCmd);
             }
             break;
 

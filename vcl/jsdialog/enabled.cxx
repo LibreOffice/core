@@ -50,6 +50,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/datafielddialog.ui"
         || rUIFile == u"modules/scalc/ui/pivotfielddialog.ui"
         || rUIFile == u"modules/scalc/ui/datafieldoptionsdialog.ui"
+        || rUIFile == u"modules/scalc/ui/insertcells.ui"
+        || rUIFile == u"modules/scalc/ui/deletecells.ui"
         || rUIFile == u"svx/ui/fontworkgallerydialog.ui"
         || rUIFile == u"svx/ui/findreplacedialog.ui" || rUIFile == u"svx/ui/findreplacedialog.ui"
         || rUIFile == u"cui/ui/macroselectordialog.ui" || rUIFile == u"uui/ui/macrowarnmedium.ui"
