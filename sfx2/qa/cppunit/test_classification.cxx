@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -24,14 +23,16 @@ namespace
 {
 
 /// Tests the handling of the .uno:ClassificationApply command in various applications.
-class ClassificationTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ClassificationTest : public UnoApiTest
 {
-    uno::Reference<lang::XComponent> mxComponent;
     void testClassification();
 
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    ClassificationTest()
+        : UnoApiTest("/sfx2/qa/cppunit/data/")
+    {
+    }
+
     void testWriter();
     void testCalc();
     void testImpress();
@@ -42,21 +43,6 @@ public:
     CPPUNIT_TEST(testImpress);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void ClassificationTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void ClassificationTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 void ClassificationTest::testClassification()
 {
