@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -24,40 +23,20 @@
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sfx2/qa/cppunit/data/";
-
 /// Covers sfx2/source/view/ fixes.
-class Sfx2ViewTest : public test::BootstrapFixture, public unotest::MacrosTest
+class Sfx2ViewTest : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Sfx2ViewTest()
+        : UnoApiTest("/sfx2/qa/cppunit/data/")
+    {
+    }
 };
-
-void Sfx2ViewTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Sfx2ViewTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
 {
     // Load a document, which has 2 pages.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reload-page.odg";
-    getComponent() = loadFromDesktop(aURL);
+    loadFromURL(u"reload-page.odg");
 
     // Reload, and request to start on page 2.
     SfxViewFrame* pFrame = SfxViewFrame::Current();
@@ -66,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
     SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
     pFrame->ExecReload_Impl(aReq);
     uno::Reference<frame::XModel> xModel = SfxObjectShell::Current()->GetBaseModel();
-    getComponent() = xModel;
+    mxComponent = xModel;
 
     // Check the current page after reload.
     uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
