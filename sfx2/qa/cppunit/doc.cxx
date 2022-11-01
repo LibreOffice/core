@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -24,39 +23,22 @@ using namespace com::sun::star;
 namespace
 {
 /// Covers sfx2/source/doc/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/sfx2/qa/cppunit/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
 {
     // Load a document and select the first shape.
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue("ReadOnly",
                                                                                        true) };
-    getComponent() = loadFromDesktop("private:factory/simpress", "", aArgs);
-    uno::Reference<frame::XModel> xModel(getComponent(), uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/simpress", "", aArgs);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -79,8 +61,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
 CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
 {
     // Create a test file in a directory that contains the URL-encoded "testÿ" string.
-    getComponent() = loadFromDesktop("private:factory/swriter");
-    auto pBaseModel = dynamic_cast<SfxBaseModel*>(getComponent().get());
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    auto pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     OUString aTargetDir
         = m_directories.getURLFromWorkdir(u"CppunitTest/sfx2_doc.test.user/test%25C3%25Bf");
@@ -89,11 +71,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         "FilterName", OUString("writer8")) };
     pBaseModel->storeAsURL(aTargetFile, aArgs);
-    getComponent()->dispose();
+    mxComponent->dispose();
 
     // Load it and export to PDF.
-    getComponent() = loadFromDesktop(aTargetFile);
-    pBaseModel = dynamic_cast<SfxBaseModel*>(getComponent().get());
+    mxComponent = loadFromDesktop(aTargetFile);
+    pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     OUString aPdfTarget = aTargetDir + "/test.pdf";
     css::uno::Sequence<css::beans::PropertyValue> aPdfArgs{ comphelper::makePropertyValue(
         "FilterName", OUString("writer_pdf_Export")) };
