@@ -51,6 +51,8 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 #undef Yield
+#undef max
 #undef mciSetCommand
+#undef min
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

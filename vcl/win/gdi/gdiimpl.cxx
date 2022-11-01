@@ -49,15 +49,6 @@
 #include <win/salids.hrc>
 #include <ControlCacheKey.hxx>
 
-#if defined _MSC_VER
-#ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-#endif
-
 #include <prewin.h>
 
 #include <gdiplus.h>

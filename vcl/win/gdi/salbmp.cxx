@@ -35,15 +35,6 @@
 #include <tools/helpers.hxx>
 #include <map>
 
-#if defined _MSC_VER
-#ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-#endif
-
 #include <prewin.h>
 #include <gdiplus.h>
 #include <postwin.h>

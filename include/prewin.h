@@ -44,6 +44,17 @@
 
 #include <commctrl.h>
 
+// For some old versions of the Windows SDK, at least GidplusTypes.h (as indirectly included from
+// gdiplus.h, which in turn we often include from between these prewin.h/postwin.h wrappers) expects
+// pre-existing min and max.  That is true for e.g.
+// C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um/GdiplusTypes.h, but not for e.g.
+// C:/Program Files (x86)/Windows Kits/10/Include/10.0.22000.0/um/GdiplusTypes.h which explicitly
+// defines its own GDIPLUS_MIN/MAX macros.  The easiest fix appears to be to define min/max here and
+// to undefin them again in postwin.h, until no supported version of the Windows SDK requires this
+// hack any longer:
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
