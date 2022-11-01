@@ -61,6 +61,11 @@ public:
                         WinSalBitmap();
     virtual             ~WinSalBitmap() override;
 
+    using SalBitmap::addOrReplaceSystemDependentData;
+    using SalBitmap::getSystemDependentData;
+    using SystemDependentDataHolder::addOrReplaceSystemDependentData;
+    using SystemDependentDataHolder::getSystemDependentData;
+
 public:
 
     bool                        Create( HANDLE hBitmap );
