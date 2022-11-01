@@ -26,9 +26,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -43,12 +42,14 @@ using namespace ::com::sun::star;
 namespace {
 
 class MiscTest
-    : public test::BootstrapFixture
-    , public unotest::MacrosTest
+    : public UnoApiTest
     , public XmlTestTools
 {
 public:
-    virtual void setUp() override;
+    MiscTest()
+        : UnoApiTest("/sfx2/qa/cppunit/misc/")
+    {
+    }
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
@@ -61,13 +62,6 @@ public:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("baz"), BAD_CAST("http://baz.net"));
     }
 };
-
-void MiscTest::setUp()
-{
-    m_xContext = comphelper::getProcessComponentContext();
-    mxDesktop.set(frame::Desktop::create(m_xContext));
-    SfxApplication::GetOrCreate();
-}
 
 CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 {
@@ -101,15 +95,13 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 {
     // Load a document.
-    const OUString aURL(m_directories.getURLFromSrc(u"/sfx2/qa/cppunit/misc/hello.odt"));
-    uno::Reference<lang::XComponent> xComponent
-        = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+    loadFromURL(u"hello.odt");
 
     // Save it with the NoThumbnail option and assert that it has no thumbnail.
 #ifndef _WIN32
     mode_t nMask = umask(022);
 #endif
-    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
@@ -144,17 +136,14 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 
     umask(nMask);
 #endif
-
-    xComponent->dispose();
 }
 
 CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 {
 #ifndef _WIN32
-    OUString aSourceDir = m_directories.getURLFromSrc(u"/sfx2/qa/cppunit/misc/");
     OUString aTargetDir = m_directories.getURLFromWorkdir(u"/CppunitTest/sfx2_misc.test.user/");
     const OUString aURL(aTargetDir + "hello.odt");
-    osl::File::copy(aSourceDir + "hello.odt", aURL);
+    osl::File::copy(createFileURL(u"hello.odt"), aURL);
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aURL, aTargetPath);
     OString aOld = aTargetPath.toUtf8();
@@ -163,9 +152,9 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     int nRet = link(aOld.getStr(), aNew.getStr());
     CPPUNIT_ASSERT_EQUAL(0, nRet);
 
-    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
 
-    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->store();
 
     struct stat buf;
@@ -185,8 +174,6 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     CPPUNIT_ASSERT_EQUAL(0, nRet);
     // This failed, the hello.odt.2 symlink was replaced with a real file.
     CPPUNIT_ASSERT(bool(S_ISLNK(buf.st_mode)));
-
-    xComponent->dispose();
 #endif
 }
 
@@ -195,9 +182,9 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    uno::Reference<lang::XComponent> xComponent
+    mxComponent
         = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
-    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
 
     // overwrite the file using the default case of the Overwrite option (true)
@@ -218,8 +205,6 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     catch (const css::uno::Exception&)
     {
     }
-
-    xComponent->dispose();
 }
 
 }

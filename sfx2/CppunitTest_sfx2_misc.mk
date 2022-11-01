@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_misc, \
 	unotest \
 	vcl \
 	sal \
+    subsequenttest \
 	sfx \
 	utl \
 ))
