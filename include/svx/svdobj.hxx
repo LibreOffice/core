@@ -41,6 +41,7 @@
 
 class SfxBroadcaster;
 class AutoTimer;
+class E3dScene;
 class OutlinerParaObject;
 class Outliner;
 class SdrOutliner;
@@ -995,6 +996,10 @@ private:
 
     SdrObject( const SdrObject& ) = delete;
 };
+
+SVXCORE_DLLPUBLIC E3dScene* DynCastE3dScene(SdrObject*);
+inline const E3dScene* DynCastE3dScene(const SdrObject* p) { return DynCastE3dScene(const_cast<SdrObject*>(p)); }
+
 
 struct SdrObjCreatorParams
 {

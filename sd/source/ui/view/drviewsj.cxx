@@ -136,7 +136,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             const auto* pSdrObjGroup = dynamic_cast<const SdrObjGroup*>(pObj);
 
             if( !( ( pSdrObjGroup != nullptr && nInv == SdrInventor::Default ) ||
-                   ( dynamic_cast< const E3dScene* >(pObj) != nullptr ) ) )
+                   DynCastE3dScene(pObj) ) )
             {
                 rSet.DisableItem( SID_ENTER_GROUP );
             }
@@ -382,7 +382,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 }
                 else if (nInv == SdrInventor::E3d)
                 {
-                    if(dynamic_cast< const E3dScene *>( pObj ) !=  nullptr)
+                    if(DynCastE3dScene(pObj))
                         b3dObj = true;
                     else if(dynamic_cast< const E3dCompoundObject* >(pObj) !=  nullptr)
                         bE3dCompoundObject = true;

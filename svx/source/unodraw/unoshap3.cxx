@@ -191,7 +191,7 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
 
     sal_Int32 nRetval = 0;
 
-    if(HasSdrObject() && dynamic_cast<const E3dScene* >(GetSdrObject()) != nullptr && GetSdrObject()->GetSubList())
+    if(HasSdrObject() && DynCastE3dScene(GetSdrObject()) && GetSdrObject()->GetSubList())
         nRetval = GetSdrObject()->GetSubList()->GetObjCount();
     return nRetval;
 }

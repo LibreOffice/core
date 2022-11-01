@@ -42,7 +42,7 @@ void E3dView::ConvertMarkedToPolyObj()
 
         if (pObj)
         {
-            auto pScene = dynamic_cast< const E3dScene* >(pObj);
+            const E3dScene* pScene = DynCastE3dScene(pObj);
             if (pScene)
             {
                 pNewObj = pScene->ConvertToPolyObj(false/*bBezier*/, false/*bLineToArea*/);

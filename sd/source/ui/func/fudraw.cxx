@@ -556,7 +556,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
                 if (bDefPointer
                     && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr
-                        || dynamic_cast<const E3dScene*>(pObj) != nullptr))
+                        || DynCastE3dScene(pObj)))
                 {
                     // take a glance into the group
                     pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV,
@@ -698,7 +698,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
             bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
 
-            if (!bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dScene* >(pObj) != nullptr))
+            if (!bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || DynCastE3dScene(pObj)))
             {
                 // take a glance into the group
                 SdrPageView* pPV = nullptr;

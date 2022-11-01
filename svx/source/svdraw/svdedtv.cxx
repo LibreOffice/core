@@ -150,7 +150,7 @@ bool SdrEditView::ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) co
         SdrObjList* pSubOL = pObj->GetSubList();
 
         // explicitly test for group objects and 3d scenes
-        if(pSubOL && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr || dynamic_cast< const E3dScene* >(pObj) !=  nullptr))
+        if(pSubOL && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr || DynCastE3dScene(pObj)))
         {
             if(!ImpDelLayerCheck(pSubOL, nDelID))
             {
@@ -185,7 +185,7 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 
 
         // explicitly test for group objects and 3d scenes
-        if(pSubOL && (dynamic_cast<const SdrObjGroup*>( pObj) != nullptr || dynamic_cast<const E3dScene* >(pObj) !=  nullptr))
+        if(pSubOL && (dynamic_cast<const SdrObjGroup*>( pObj) != nullptr || DynCastE3dScene(pObj)))
         {
             if(ImpDelLayerCheck(pSubOL, nDelID))
             {
@@ -249,7 +249,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
                 SdrObjList* pSubOL = pObj->GetSubList();
 
                 // explicitly test for group objects and 3d scenes
-                if(pSubOL && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr || dynamic_cast<const E3dScene* >(pObj) !=  nullptr))
+                if(pSubOL && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr || DynCastE3dScene(pObj)))
                 {
                     if(ImpDelLayerCheck(pSubOL, nDelID))
                     {

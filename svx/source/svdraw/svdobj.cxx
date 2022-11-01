@@ -3094,7 +3094,7 @@ void SdrObject::MakeNameUnique()
 {
     if (GetName().isEmpty())
     {
-        if (const E3dScene* pE3dObj = dynamic_cast<const E3dScene*>(this))
+        if (const E3dScene* pE3dObj = DynCastE3dScene(this))
         {
             SdrObjList* pObjList = pE3dObj->GetSubList();
             if (pObjList)
@@ -3193,6 +3193,13 @@ void SdrObject::resetOutRectangle()
 void SdrObject::moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta)
 {
     m_aOutRect.Move(nXDelta, nYDelta);
+}
+
+E3dScene* DynCastE3dScene(SdrObject* pObj)
+{
+    if( pObj && pObj->GetObjInventor() == SdrInventor::E3d && pObj->GetObjIdentifier() == SdrObjKind::E3D_Scene )
+        return static_cast<E3dScene*>(pObj);
+    return nullptr;
 }
 
 rtl::Reference<SdrObject> SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)

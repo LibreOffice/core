@@ -257,7 +257,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     SdrObjList* pOL = rNewObj.GetSubList();
     bool bIsGroup(pOL!=nullptr && pOL->GetObjCount());
-    bool bIs3DScene(bIsGroup && dynamic_cast< E3dScene* >(mxObj.get()) !=  nullptr);
+    bool bIs3DScene(bIsGroup && DynCastE3dScene(mxObj.get()));
 
     if(bIsGroup)
     {
@@ -300,7 +300,7 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 void SdrUndoAttrObj::Undo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
-    bool bIs3DScene(dynamic_cast< E3dScene* >(mxObj.get()) !=  nullptr);
+    bool bIs3DScene(DynCastE3dScene(mxObj.get()));
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -409,7 +409,7 @@ void SdrUndoAttrObj::Undo()
 void SdrUndoAttrObj::Redo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
-    bool bIs3DScene(dynamic_cast< E3dScene* >(mxObj.get()) !=  nullptr);
+    bool bIs3DScene(DynCastE3dScene(mxObj.get()));
 
     if(!pUndoGroup || bIs3DScene)
     {
@@ -560,7 +560,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
      , mbSkipChangeLayout(false)
 {
     SdrObjList* pOL=rNewObj.GetSubList();
-    if (pOL!=nullptr && pOL->GetObjCount() && dynamic_cast<const E3dScene* >( &rNewObj) ==  nullptr)
+    if (pOL!=nullptr && pOL->GetObjCount() && DynCastE3dScene(&rNewObj))
     {
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself

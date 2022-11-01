@@ -367,7 +367,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
             xShapeTunnel = nullptr;
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = nullptr;
-            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )
+            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || DynCastE3dScene(pObj)) )
                 pShape = new SwXGroupShape(xCreate, nullptr);
             else
                 pShape = new SwXShape(xCreate, nullptr);

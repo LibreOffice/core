@@ -403,7 +403,7 @@ std::unique_ptr<SdrModel> E3dView::CreateMarkedObjModel() const
             {
                 const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-                if(auto p3dscene = dynamic_cast< const E3dScene* >( pSrcOb))
+                if(const E3dScene* p3dscene = DynCastE3dScene( pSrcOb))
                 {
                     pScene = const_cast<E3dScene*>(p3dscene);
 
@@ -441,7 +441,7 @@ bool E3dView::Paste(
         return false;
 
     // Get owner of the list
-    E3dScene* pDstScene(dynamic_cast< E3dScene* >(pDstList->getSdrObjectFromSdrObjList()));
+    E3dScene* pDstScene(DynCastE3dScene(pDstList->getSdrObjectFromSdrObjList()));
 
     if(nullptr != pDstScene)
     {
@@ -461,7 +461,7 @@ bool E3dView::Paste(
             for(size_t nOb = 0; nOb < nObjCount; ++nOb)
             {
                 const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
-                if(auto p3dscene = dynamic_cast< const E3dScene* >(pSrcOb))
+                if(const E3dScene* p3dscene = DynCastE3dScene(pSrcOb))
                 {
                     E3dScene* pSrcScene = const_cast<E3dScene*>(p3dscene);
                     ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
@@ -1172,7 +1172,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                 SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
                 if(pObj)
                 {
-                    if( auto pScene = dynamic_cast< const E3dScene* >(pObj) )
+                    if( const E3dScene* pScene = DynCastE3dScene(pObj) )
                         if( pScene->getRootE3dSceneFromE3dObject() == pObj )
                             bThereAreRootScenes = true;
 
@@ -1520,7 +1520,7 @@ void E3dView::Break3DObj()
 
 void E3dView::BreakSingle3DObj(E3dObject* pObj)
 {
-    if(dynamic_cast< const E3dScene* >(pObj) !=  nullptr)
+    if(DynCastE3dScene(pObj))
     {
         SdrObjList* pSubList = pObj->GetSubList();
         SdrObjListIter aIter(pSubList, SdrIterMode::Flat);

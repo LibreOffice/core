@@ -408,7 +408,7 @@ void E3dScene::removeAllNonSelectedObjects()
         {
             bool bRemoveObject(false);
 
-            if(auto pScene = dynamic_cast<E3dScene*>(pObj))
+            if(E3dScene* pScene = DynCastE3dScene(pObj))
             {
                 // iterate over this sub-scene
                 pScene->removeAllNonSelectedObjects();

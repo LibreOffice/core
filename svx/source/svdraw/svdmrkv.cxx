@@ -2052,7 +2052,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
         nullptr != dynamic_cast< const E3dCompoundObject* >(pObjHit);
     if (bRemap)
     {
-        pScene = dynamic_cast< E3dScene* >(pObjHit->getParentSdrObjectFromSdrObject());
+        pScene = DynCastE3dScene(pObjHit->getParentSdrObjectFromSdrObject());
         bRemap = nullptr != pScene;
     }
 
@@ -2381,41 +2381,37 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 {
     SdrObject* pRet=nullptr;
     rpRootObj=nullptr;
-    if (pOL!=nullptr)
+    if (!pOL)
+        return nullptr;
+    const E3dScene* pRemapScene = DynCastE3dScene(pOL->getSdrObjectFromSdrObjList());
+    const size_t nObjCount(pOL->GetObjCount());
+    size_t nObjNum(nObjCount);
+
+    while (pRet==nullptr && nObjNum>0)
     {
-        const bool bRemap(
-            nullptr != pOL->getSdrObjectFromSdrObjList()
-            && nullptr != dynamic_cast< const E3dScene* >(pOL->getSdrObjectFromSdrObjList()));
-        const E3dScene* pRemapScene(bRemap ? static_cast< E3dScene* >(pOL->getSdrObjectFromSdrObjList()) : nullptr);
-        const size_t nObjCount(pOL->GetObjCount());
-        size_t nObjNum(nObjCount);
+        nObjNum--;
+        SdrObject* pObj;
 
-        while (pRet==nullptr && nObjNum>0)
+        if(pRemapScene)
         {
-            nObjNum--;
-            SdrObject* pObj;
-
-            if(bRemap)
+            pObj = pOL->GetObj(pRemapScene->RemapOrdNum(nObjNum));
+        }
+        else
+        {
+            pObj = pOL->GetObj(nObjNum);
+        }
+        if (nOptions & SdrSearchOptions::BEFOREMARK)
+        {
+            if (pMarkList!=nullptr)
             {
-                pObj = pOL->GetObj(pRemapScene->RemapOrdNum(nObjNum));
-            }
-            else
-            {
-                pObj = pOL->GetObj(nObjNum);
-            }
-            if (nOptions & SdrSearchOptions::BEFOREMARK)
-            {
-                if (pMarkList!=nullptr)
+                if ((*pMarkList).FindObject(pObj)!=SAL_MAX_SIZE)
                 {
-                    if ((*pMarkList).FindObject(pObj)!=SAL_MAX_SIZE)
-                    {
-                        return nullptr;
-                    }
+                    return nullptr;
                 }
             }
-            pRet=CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
-            if (pRet!=nullptr) rpRootObj=pObj;
         }
+        pRet=CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
+        if (pRet!=nullptr) rpRootObj=pObj;
     }
     return pRet;
 }

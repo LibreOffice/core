@@ -183,7 +183,7 @@ void VDiagram::createShapes_2d()
 
 static E3dScene* lcl_getE3dScene( const rtl::Reference<SvxShapeGroupAnyD>& xShape )
 {
-    return dynamic_cast< E3dScene* >(xShape->GetSdrObject());
+    return DynCastE3dScene(xShape->GetSdrObject());
 }
 
 static void lcl_setLightSources(

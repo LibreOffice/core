@@ -327,7 +327,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (!bReturn
                         && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr
-                            || dynamic_cast<const E3dScene*>(pObj) != nullptr))
+                            || DynCastE3dScene(pObj)))
                     {
                         if (rMEvt.GetClicks() == 1)
                         {

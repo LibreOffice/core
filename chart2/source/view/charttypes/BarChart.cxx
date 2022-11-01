@@ -449,8 +449,7 @@ void BarChart::createShapes()
 
         for (rtl::Reference<SvxShape> const & rShape : aShapeSet)
         {
-            E3dScene* pScene = dynamic_cast<E3dScene*>(rShape->GetSdrObject());
-            if(nullptr != pScene)
+            if(E3dScene* pScene = DynCastE3dScene(rShape->GetSdrObject()))
             {
                 aSceneSet.insert(pScene->getRootE3dSceneFromE3dObject());
             }
@@ -690,10 +689,10 @@ void BarChart::doXSlot(
         aShapeSet.insert(xSeriesGroupShape_Shapes);
         aShapeSet.insert(xSeriesBackgroundShape_Shapes);
         // Suspend setting rects dirty for the duration of this call
-        E3dScene* pScene = dynamic_cast<E3dScene*>(xSeriesGroupShape_Shapes->GetSdrObject());
+        E3dScene* pScene = DynCastE3dScene(xSeriesGroupShape_Shapes->GetSdrObject());
         if (pScene)
             pScene->SuspendReportingDirtyRects();
-        pScene = dynamic_cast<E3dScene*>(xSeriesBackgroundShape_Shapes->GetSdrObject());
+        pScene = DynCastE3dScene(xSeriesBackgroundShape_Shapes->GetSdrObject());
         if (pScene)
             pScene->SuspendReportingDirtyRects();
 

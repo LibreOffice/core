@@ -264,10 +264,7 @@ void E3dObject::StructureChanged()
 
 E3dScene* E3dObject::getParentE3dSceneFromE3dObject() const
 {
-    SdrObject* pParent = getParentSdrObjectFromSdrObject();
-    if( pParent && pParent->GetObjIdentifier() == SdrObjKind::E3D_Scene )
-        return static_cast<E3dScene* >(pParent);
-    return nullptr;
+    return DynCastE3dScene(getParentSdrObjectFromSdrObject());
 }
 
 // Determine the top-level scene object
