@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \
 	drawinglayercore \
     editeng \
 	sal \
+    subsequenttest \
 	sfx \
     svl \
 	svxcore \

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <rtl/ustring.hxx>
 #include <editeng/unoprnms.hxx>
 
@@ -24,30 +23,17 @@ using namespace ::com::sun::star;
 
 namespace
 {
-constexpr OUStringLiteral sDataDirectory(u"svx/qa/unit/data/");
-
 /// Tests not about special features of custom shapes, but about shapes in general.
-class ClassicshapesTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ClassicshapesTest : public UnoApiTest
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-    uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex);
-
 public:
-    virtual void setUp() override
+    ClassicshapesTest()
+        : UnoApiTest("svx/qa/unit/data/")
     {
-        test::BootstrapFixture::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
     }
 
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-        {
-            mxComponent->dispose();
-        }
-        test::BootstrapFixture::tearDown();
-    }
+protected:
+    uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex);
 };
 
 uno::Reference<drawing::XShape> ClassicshapesTest::getShape(sal_uInt8 nShapeIndex,
@@ -73,8 +59,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
     // They are converted to rotate * shear horizontal * scale.
     // Besides using a wrong sign in shear angle, error was, that TRSetGeometry of SdrPathObj did
     // not consider the additional scaling (tdf#98565).
-    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory) + "tdf98584_ShearVertical.odg");
-    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    loadFromURL(u"tdf98584_ShearVertical.odg");
 
     // Tests skewY
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 3; ++nPageIndex)
@@ -143,9 +128,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
     // LT 8000,5000 and RB 14000, 9000, which means width 6001, height 4001.
     // Error was, that not the mathematical matrix was used, but the API matrix, which has
     // wrong sign in shear angle.
-    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory)
-                        + "tdf98583_ShearHorizontal.odp");
-    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
+    loadFromURL(u"tdf98583_ShearHorizontal.odp");
 
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {
@@ -182,9 +165,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
     // transformed by a matrix equivalent to a horizontal flip. Error was
     // that the transformation was made before the CircleKind was set,
     // resulting in the flip being performed incorrectly.
-    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory)
-                        + "tdf130076_FlipOnSectorSection.odg");
-    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    loadFromURL(u"tdf130076_FlipOnSectorSection.odg");
 
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {

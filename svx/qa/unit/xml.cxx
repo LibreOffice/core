@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -23,36 +22,20 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/xml/ code.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    virtual void setUp() override
+    Test()
+        : UnoApiTest("svx/qa/unit/data/")
     {
-        test::BootstrapFixture::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
     }
-
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-        {
-            mxComponent->dispose();
-        }
-        test::BootstrapFixture::tearDown();
-    }
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, test3DObjectFallback)
 {
     // Load a document which has a 3D model we don't understand, but has a fallback PNG.
-    test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/3d-object-fallback.odp");
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"3d-object-fallback.odp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);

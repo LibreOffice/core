@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,28 +47,16 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/svdraw/ code.
-class SvdrawTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SvdrawTest : public UnoApiTest, public XmlTestTools
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-    SdrPage* getFirstDrawPageWithAssert();
-
 public:
-    virtual void setUp() override
+    SvdrawTest()
+        : UnoApiTest("svx/qa/unit/data/")
     {
-        test::BootstrapFixture::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
     }
 
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-        {
-            mxComponent->dispose();
-        }
-        test::BootstrapFixture::tearDown();
-    }
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+protected:
+    SdrPage* getFirstDrawPageWithAssert();
 };
 
 SdrPage* SvdrawTest::getFirstDrawPageWithAssert()
@@ -106,14 +93,14 @@ xmlDocUniquePtr lcl_dumpAndParseFirstObjectWithAssert(SdrPage* pSdrPage)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
 {
     // Create a new Draw document with a rectangle.
-    getComponent() = loadFromDesktop("private:factory/sdraw");
-    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/sdraw");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     xShape->setPosition(awt::Point(1000, 1000));
 
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     xDrawPage->add(xShape);
@@ -147,8 +134,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
 {
     // Given a path object:
-    getComponent() = loadFromDesktop("private:factory/sdraw");
-    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/sdraw");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance("com.sun.star.drawing.ClosedBezierShape"), uno::UNO_QUERY);
 
@@ -161,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     xShapeProps->setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_SOLID));
     xShapeProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(0)));
     // Add it to the draw page.
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     xDrawPage->add(xShape);
@@ -225,8 +212,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 {
     // Given a document with a groupshape, which has 2 children.
-    getComponent() = loadFromDesktop("private:factory/sdraw");
-    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    mxComponent = loadFromDesktop("private:factory/sdraw");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xRect1(
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
     xRect1->setPosition(awt::Point(1000, 1000));
@@ -237,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
     xRect2->setSize(awt::Size(10000, 10000));
     uno::Reference<drawing::XShapes> xGroup(
         xFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
@@ -353,15 +340,11 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
     // Given a document containing a shape that has:
     // 1) automatic height (resize shape to fix text)
     // 2) multiple columns (2)
-    OUString aURL
-        = m_directories.getURLFromSrc(u"svx/qa/unit/data/auto-height-multi-col-shape.pptx");
-
-    // When loading that document:
-    getComponent().set(loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument"));
+    loadFromURL(u"auto-height-multi-col-shape.pptx");
 
     // Make sure the in-file shape height is kept, even if nominally the shape height is
     // automatic:
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -378,8 +361,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
 {
-    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/FontWork.odg");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
+    loadFromURL(u"FontWork.odg");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
@@ -407,8 +389,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 {
-    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_metal.odp");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    loadFromURL(u"tdf140321_metal.odp");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -424,8 +405,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
 {
-    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_phong.odp");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    loadFromURL(u"tdf140321_phong.odp");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -438,8 +418,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
 {
-    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_Matte_import.ppt");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    loadFromURL(u"tdf140321_Matte_import.ppt");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -463,9 +442,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
 {
-    OUString aURL
-        = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_material_specular.odp");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    loadFromURL(u"tdf140321_material_specular.odp");
 
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
@@ -489,8 +466,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
 {
     // Given a slide with a media shape, containing a 4 sec video, red-green-blue-black being the 4
     // seconds:
-    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/video-snapshot.pptx");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    loadFromURL(u"video-snapshot.pptx");
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
     auto pSdrMediaObj = dynamic_cast<SdrMediaObj*>(pSdrPage->GetObj(0));
 
@@ -516,15 +492,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
 {
     // Given a document with 2 pages, first page footer has an off-page line shape:
-    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/page-view-draw-layer-clip.docx");
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(u"page-view-draw-layer-clip.docx");
 
     // When saving that document to PDF:
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    utl::TempFileNamed aTempFile = save("writer_pdf_Export");
 
     // Then make sure that line shape gets clipped:
     SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);

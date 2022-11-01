@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -30,27 +29,13 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/sdr/ code.
-class SdrTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SdrTest : public UnoApiTest, public XmlTestTools
 {
-protected:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    virtual void setUp() override
+    SdrTest()
+        : UnoApiTest("svx/qa/unit/data/")
     {
-        test::BootstrapFixture::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
     }
-
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-        {
-            mxComponent->dispose();
-        }
-        test::BootstrapFixture::tearDown();
-    }
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 
     drawinglayer::primitive2d::Primitive2DContainer
     renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage);
@@ -76,10 +61,8 @@ SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawP
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
 {
     // Load a document containing a custom shape.
-    test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/shadow-scale-origin.pptx");
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"shadow-scale-origin.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
@@ -102,10 +85,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
 CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
 {
     // Load a document containing a 0-width shape with text.
-    test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/0-width-text-wrap.pptx");
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"0-width-text-wrap.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
@@ -124,10 +105,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
 CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
 {
     // Given a document with a slide what has a linked background image:
-    test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/slide-background.odp");
-    getComponent() = loadFromDesktop(aURL);
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    loadFromURL(u"slide-background.odp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 

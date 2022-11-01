@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -25,30 +24,14 @@
 
 using namespace com::sun::star;
 
-class XOutdevTest : public test::BootstrapFixture, public unotest::MacrosTest
+class XOutdevTest : public UnoApiTest
 {
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    virtual void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    XOutdevTest()
+        : UnoApiTest("svx/qa/unit/data/")
+    {
+    }
 };
-
-void XOutdevTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void XOutdevTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
 {
@@ -60,8 +43,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
 
     // Import the graphic.
     Graphic aGraphic;
-    test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/graphic.pdf");
+    OUString aURL = createFileURL(u"graphic.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
                          GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
@@ -89,8 +71,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
 {
     Graphic aGraphic;
-    test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/tdf60684.jpg");
+    OUString aURL = createFileURL(u"tdf60684.jpg");
     SvFileStream aStream(aURL, StreamMode::READ);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
                          GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
@@ -117,11 +98,11 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
 {
     // Given an empty Impress document with a (title) shape:
-    getComponent() = loadFromDesktop("private:factory/simpress",
-                                     "com.sun.star.presentation.PresentationDocument");
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
 
     // When setting the theme index of the shape's fill color:
-    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
