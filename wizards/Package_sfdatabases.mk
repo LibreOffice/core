@@ -21,6 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvsfdatabases,$(SRCDIR)/wizards/s
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvsfdatabases,$(LIBO_SHARE_FOLDER)/basic/SFDatabases,\
 	SF_Database.xba \
+	SF_Datasheet.xba \
 	SF_Register.xba \
 	__License.xba \
 	dialog.xlb \

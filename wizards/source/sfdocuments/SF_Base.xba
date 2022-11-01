@@ -459,7 +459,7 @@ Public Function OpenFormDocument(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;	Open the FormDocument given by its hierarchical name either in normal or in design mode
 &apos;&apos;&apos;	If the form document is already open, the form document is made active without changing its mode
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;		FormDocument: a valid form document name as a case-sensitive string
 &apos;&apos;&apos;		DesignMode: when True the form document is opened in design mode (Default = False)
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if the form document could be opened, otherwise False
@@ -508,6 +508,111 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Base.OpenFormDocument
+
+REM -----------------------------------------------------------------------------
+Public Function OpenQuery(Optional ByVal QueryName As Variant _
+									, Optional ByVal DesignMode As Variant _
+									) As Object
+&apos;&apos;&apos;	Open the query given by its name either in normal or in design mode
+&apos;&apos;&apos;	If the query is already open, the query datasheet is made active without changing its mode
+&apos;&apos;&apos;	If still open, the datasheet will be closed together with the actual Base document.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		QueryName: a valid Query name as a case-sensitive string
+&apos;&apos;&apos;		DesignMode: when True the query is opened in design mode (Default = False)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A Datasheet class instance if the query could be opened and DesignMode = False, otherwise False
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Query name is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDoc.OpenQuery(&quot;myQuery&quot;, DesignMode := False)
+
+Dim oOpen As Object					&apos;	Return value
+Dim vQueries As Variant				&apos;	Array of query names
+Dim oNewQuery As Object				&apos;	Output of loadComponent()
+Const cstThisSub = &quot;SFDocuments.Base.OpenQuery&quot;
+Const cstSubArgs = &quot;QueryName, [DesignMode=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Check:
+	If IsMissing(DesignMode) Or IsEmpty(DesignMode) Then DesignMode = False
+	vQueries = GetDatabase().Queries	&apos;	Includes _IsStillAlive()
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(QueryName, &quot;QueryName&quot;, V_STRING, vQueries) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(DesignMode, &quot;DesignMode&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	With _Component.CurrentController
+		&apos;	The connection may have been done previously by a user commmand. If not, do it now.
+		If Not .IsConnected Then .connect()
+		&apos;	loadComponent activates the query component when already loaded
+		Set oNewQuery = .loadComponent(com.sun.star.sdb.application.DatabaseObject.QUERY, QueryName, DesignMode)
+	End With
+	&apos;	When design mode, the method returns Nothing
+	If Not DesignMode Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, [Me], oNewQuery)
+
+Finally:
+	Set OpenQuery = oOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.OpenQuery
+
+REM -----------------------------------------------------------------------------
+Public Function OpenTable(Optional ByVal TableName As Variant _
+									, Optional ByVal DesignMode As Variant _
+									) As Object
+&apos;&apos;&apos;	Open the table given by its name either in normal or in design mode
+&apos;&apos;&apos;	If the table is already open, the table datasheet is made active without changing its mode
+&apos;&apos;&apos;	If still open, the datasheet will be closed together with the actual Base document.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		TableName: a valid table name as a case-sensitive string
+&apos;&apos;&apos;		DesignMode: when True the table is opened in design mode (Default = False)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A Datasheet class instance if the table could be opened or was already open, and DesignMode = False.
+&apos;&apos;&apos;		Otherwise Nothing
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Table name is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDoc.OpenTable(&quot;myTable&quot;, DesignMode := False)
+
+Dim oOpen As Object					&apos;	Return value
+Dim vTables As Variant				&apos;	Array of table names
+Dim oNewTable As Object				&apos;	Output of loadComponent()
+Const cstThisSub = &quot;SFDocuments.Base.OpenTable&quot;
+Const cstSubArgs = &quot;TableName, [DesignMode=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Check:
+	If IsMissing(DesignMode) Or IsEmpty(DesignMode) Then DesignMode = False
+	vTables = GetDatabase().Tables
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(TableName, &quot;TableName&quot;, V_STRING, vTables) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(DesignMode, &quot;DesignMode&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	With _Component.CurrentController
+		&apos;	The connection may have been done previously by a user commmand. If not, do it now.
+		If Not .IsConnected Then .connect()
+		&apos;	loadComponent activates the table component when already loaded
+		Set oNewTable = .loadComponent(com.sun.star.sdb.application.DatabaseObject.TABLE, TableName, DesignMode)
+	End With
+	&apos;	When design mode, the method returns Nothing
+	If Not DesignMode Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, [Me], oNewTable)
+
+Finally:
+	Set OpenTable = oOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.OpenTable
 
 REM -----------------------------------------------------------------------------
 Public Function PrintOut(Optional ByVal FormDocument As Variant _

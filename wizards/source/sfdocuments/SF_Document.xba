@@ -864,7 +864,9 @@ Check:
 	&apos;	When called from a subclass (Calc, Writer, ..) the arguments are gathered into one single array item
 	vArgs = Args
 	If IsArray(Args) Then
-		If UBound(Args) &gt;= 0 And IsArray(Args(0)) Then vArgs = Args(0)
+		If UBound(Args) &gt;= 0 Then
+			If IsArray(Args(0)) Then vArgs = Args(0)
+		End If
 	End If
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally

@@ -46,6 +46,7 @@ Public Sub RegisterScriptServices() As Variant
 	With GlobalScope.ScriptForge.SF_Services
 		.RegisterService(&quot;Database&quot;,				&quot;SFDatabases.SF_Register._NewDatabase&quot;)		&apos;	Reference to the function initializing the service
 		.RegisterService(&quot;DatabaseFromDocument&quot;,	&quot;SFDatabases.SF_Register._NewDatabaseFromSource&quot;)
+		.RegisterService(&quot;Datasheet&quot;,				&quot;SFDatabases.SF_Register._NewDatasheet&quot;)
 	End With
 
 End Sub			&apos;	SFDatabases.SF_Register.RegisterScriptServices
@@ -55,7 +56,7 @@ REM =========================================================== PRIVATE FUNCTION
 REM -----------------------------------------------------------------------------
 Public Function _NewDatabase(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Create a new instance of the SF_Database class
-&apos;	Args:
+&apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName : the name of the file (compliant with the SF_FileSystem.FileNaming notation)
 &apos;&apos;&apos;		RegistrationName: mutually exclusive with FileName. Used when database is registered
 &apos;&apos;&apos;		ReadOnly : (boolean). Default = True
@@ -140,7 +141,7 @@ Public Function _NewDatabaseFromSource(Optional ByVal pvArgs As Variant) As Obje
 &apos;&apos;&apos;	Create a new instance of the SF_Database class from the given datasource
 &apos;&apos;&apos;	established in the SFDocuments.Base service
 &apos;&apos;&apos;	THIS SERVICE MUST NOT BE CALLED FROM A USER SCRIPT
-&apos;	Args:
+&apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DataSource: 	com.sun.star.sdbc.XDataSource
 &apos;&apos;&apos;		User, Password : connection parameters
 &apos;&apos;&apos;	Returns:
@@ -190,6 +191,59 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDatabases.SF_Register._NewDatabaseFromSource
+
+REM -----------------------------------------------------------------------------
+Public Function _NewDatasheet(Optional ByVal pvArgs As Variant) As Object
+&apos;							  Optional ByRef poParent As Object _
+&apos;								, Optional ByRef poComponent As Object _
+&apos;								) As Object
+&apos;&apos;&apos;	Create a new instance of the SF_Datasheet class
+&apos;&apos;&apos;	Called from (internal calls only)
+&apos;&apos;&apos;		base.Datasheets()
+&apos;&apos;&apos;		base.OpenTable()
+&apos;&apos;&apos;		base.OpenQuery()
+&apos;&apos;&apos;		database.OpenTable()
+&apos;&apos;&apos;		database.OpenQuery()
+&apos;&apos;&apos;		database.OpenSql()
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Parent: the parent SF_Database or SF_Base instance having produced the new datasheet
+&apos;&apos;&apos;		Component:	the component of the new datasheet
+&apos;&apos;&apos;						com.sun.star.lang.XComponent - org.openoffice.comp.dbu.ODatasourceBrowser
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The instance or Nothing
+
+Dim oDatasheet As Object		&apos;	Return value
+Dim oParent As Object			&apos;	The parent SF_Database or SF_Base instance having produced the new datasheet
+Dim oComponent As Object		&apos;	The component of the new datasheet
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oDatasheet = Nothing
+
+Check:
+	&apos;	Get arguments
+	If UBound(pvArgs) &lt;&gt; 1 Then GoTo Catch
+	Set oParent = pvArgs(0)
+	Set oComponent = pvArgs(1)
+	If IsNull(oParent) Or IsNull(oComponent) Then GoTo Catch
+	If IsEmpty(oComponent.Selection) Then GoTo Catch
+
+Try:
+		Set oDatasheet = New SF_Datasheet
+		With oDatasheet
+			Set .[Me] = oDatasheet
+			Set .[_Parent] = oParent
+			Set ._Component = oComponent
+			&apos;	Achieve the initialization
+			._Initialize()
+		End With
+
+Finally:
+	Set _NewDatasheet = oDatasheet
+	Exit Function
+Catch:
+	Set oDatasheet = Nothing
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Register._NewDatasheet
 
 REM ============================================== END OF SFDATABASES.SF_REGISTER
 </script:module>

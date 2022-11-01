@@ -13,7 +13,7 @@ Option Explicit
 
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 &apos;&apos;&apos;	SF_Database
-&apos;&apos;&apos;	=========
+&apos;&apos;&apos;	===========
 &apos;&apos;&apos;		Management of databases embedded in or related to Base documents
 &apos;&apos;&apos;		Each instance of the current class represents a single database, with essentially its tables, queries and data
 &apos;&apos;&apos;
@@ -27,7 +27,7 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation and usage:
 &apos;&apos;&apos;		1) To access any database at anytime
-&apos;&apos;&apos;			Dim myDatabase As Object
+&apos;&apos;&apos;				Dim myDatabase As Object
 &apos;&apos;&apos;				Set myDatabase = CreateScriptService(&quot;SFDatabases.Database&quot;, FileName, , [ReadOnly], [User, [Password]])
 &apos;&apos;&apos;					&apos;	Args:
 &apos;&apos;&apos;					&apos;		FileName:	the name of the Base file compliant with the SF_FileSystem.FileNaming notation
@@ -38,7 +38,7 @@ Option Explicit
 &apos;&apos;&apos;				myDatabase.CloseDatabase()
 &apos;&apos;&apos;
 &apos;&apos;&apos;		2) To access the database related to the current Base document
-&apos;&apos;&apos;			Dim myDoc As Object, myDatabase As Object, ui As Object
+&apos;&apos;&apos;				Dim myDoc As Object, myDatabase As Object, ui As Object
 &apos;&apos;&apos;				Set ui = CreateScriptService(&quot;UI&quot;)
 &apos;&apos;&apos;				Set myDoc = ui.OpenBaseDocument(&quot;myDb.odb&quot;)
 &apos;&apos;&apos;				Set myDatabase = myDoc.GetDatabase()	&apos;	user and password are supplied here, if needed
@@ -401,10 +401,126 @@ Public Function Methods() As Variant
 					, &quot;DMin&quot; _
 					, &quot;DSum&quot; _
 					, &quot;GetRows&quot; _
+					, &quot;OpenQuery&quot; _
+					, &quot;OpenSql&quot; _
+					, &quot;OpenTable&quot; _
 					, &quot;RunSql&quot; _
 					)
 
 End Function	&apos;	SFDatabases.SF_Database.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function OpenQuery(Optional ByVal QueryName As Variant) As Object
+&apos;&apos;&apos;	Open the query given by its name
+&apos;&apos;&apos;	The datasheet will live independently from any other (typically Base) component
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		QueryName: a valid query name as a case-sensitive string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A Datasheet class instance if the query could be opened, otherwise Nothing
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Query name is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDb.OpenQuery(&quot;myQuery&quot;)
+
+Dim oOpen As Object				&apos;	Return value
+Const cstThisSub = &quot;SFDatabases.Database.OpenQuery&quot;
+Const cstSubArgs = &quot;QueryName&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(QueryName, &quot;QueryName&quot;, V_STRING, Queries) Then GoTo Finally
+	End If
+
+Try:
+	Set oOpen = _OpenDatasheet(QueryName, com.sun.star.sdb.CommandType.QUERY _
+						, _Connection.Queries.getByName(QueryName).EscapeProcessing)
+
+Finally:
+	Set OpenQuery = oOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.OpenQuery
+
+REM -----------------------------------------------------------------------------
+Public Function OpenSql(Optional ByRef Sql As Variant _
+							, Optional ByVal DirectSql As Variant _
+							) As Object
+&apos;&apos;&apos;	Open the datasheet based on a SQL SELECT statement.
+&apos;&apos;&apos;	The datasheet will live independently from any other (typically Base) component
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Sql:	a valid Sql statement as a case-sensitive string.
+&apos;&apos;&apos;				Identifiers may be surrounded by square brackets
+&apos;&apos;&apos;		DirectSql: when True, the statement is processed by the targeted RDBMS
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A Datasheet class instance if it could be opened, otherwise Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDb.OpenSql(&quot;SELECT * FROM [Customers] ORDER BY [CITY]&quot;)
+
+Dim oOpen As Object				&apos;	Return value
+Const cstThisSub = &quot;SFDatabases.Database.OpenSql&quot;
+Const cstSubArgs = &quot;Sql, [DirectSql=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Check:
+	If IsMissing(DirectSql) Or IsEmpty(DirectSql) Then DirectSql = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Sql, &quot;Sql&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(DirectSql, &quot;DirectSql&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	Set oOpen = _OpenDatasheet(_ReplaceSquareBrackets(Sql), com.sun.star.sdb.CommandType.COMMAND, Not DirectSql)
+
+Finally:
+	Set OpenSql = oOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.OpenSql
+
+REM -----------------------------------------------------------------------------
+Public Function OpenTable(Optional ByVal TableName As Variant) As Object
+&apos;&apos;&apos;	Open the table given by its name
+&apos;&apos;&apos;	The datasheet will live independently from any other (typically Base) component
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		TableName: a valid table name as a case-sensitive string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A Datasheet class instance if the table could be opened, otherwise Nothing
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Table name is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDb.OpenTable(&quot;myTable&quot;)
+
+Dim oOpen As Object				&apos;	Return value
+Const cstThisSub = &quot;SFDatabases.Database.OpenTable&quot;
+Const cstSubArgs = &quot;TableName&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(TableName, &quot;TableName&quot;, V_STRING, Tables) Then GoTo Finally
+	End If
+
+Try:
+	Set oOpen = _OpenDatasheet(TableName, com.sun.star.sdb.CommandType.TABLE, True)
+
+Finally:
+	Set OpenTable = oOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.OpenTable
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
@@ -664,8 +780,8 @@ Private Function _GetColumnValue(ByRef poResultSet As Object _
 &apos;&apos;&apos;	Get the data stored in the current record of a result set in a given column
 &apos;&apos;&apos;	The type of the column is found in the resultset&apos;s metadata
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		poResultSet: com.sun.star.sdbc.XResultSet
-&apos;&apos;&apos;		plColIndex: the index of the column to extract the value from
+&apos;&apos;&apos;		poResultSet: com.sun.star.sdbc.XResultSet or com.sun.star.awt.XTabControllerModel
+&apos;&apos;&apos;		plColIndex: the index of the column to extract the value from. Starts at 1
 &apos;&apos;&apos;		pbReturnBinary: when True, the method returns the content of a binary field,
 &apos;&apos;&apos;			as long as its length does not exceed a maximum length.
 &apos;&apos;&apos;			Default = False: binary fields are not returned, only their length
@@ -685,7 +801,7 @@ Dim lSize As Long				&apos;	Binary field length
 Const cstMaxBinlength = 2 * 65535
 
 	On Local Error Goto 0			&apos;	Disable error handler
-	vValue = Null					&apos;	Default value if error
+	vValue = Empty					&apos;	Default value if error
 	If IsMissing(pbReturnBinary) Then pbReturnBinary = False
 
 	With com.sun.star.sdbc.DataType
@@ -701,17 +817,17 @@ Const cstMaxBinlength = 2 * 65535
 						If Not ScriptForge.SF_Session.HasUNOMethod(oStream, &quot;getLength&quot;) Then	&apos;	When no recordset
 							lSize = cstMaxBinLength
 						Else
-							lSize = CLng(oValue.getLength())
+							lSize = CLng(oStream.getLength())
 						End If
 						If lSize &lt;= cstMaxBinLength And pbReturnBinary Then
 							vValue = Array()
-							oValue.readBytes(vValue, lSize)
+							oStream.readBytes(vValue, lSize)
 						Else	&apos;	Return length of field, not content
 							vValue = lSize
 						End If
 					End If
 				End If
-				oValue.closeInput()
+				If Not IsNull(oStream) Then oStream.closeInput()
 			Case .BIT, .BOOLEAN				:	vValue = poResultSet.getBoolean(plColIndex)
 			Case .DATE
 				vDateTime = poResultSet.getDate(plColIndex)
@@ -753,6 +869,61 @@ Const cstMaxBinlength = 2 * 65535
 	_GetColumnValue = vValue
 	
 End Function	&apos;	SFDatabases.SF_Database.GetColumnValue
+
+REM -----------------------------------------------------------------------------
+Public Function _OpenDatasheet(Optional ByVal psCommand As Variant _
+								, piDatasheetType As Integer _
+								, pbEscapeProcessing As Boolean _
+								) As Object
+&apos;&apos;&apos;	Open the datasheet given by its name and its type
+&apos;&apos;&apos;	The datasheet will live independently from any other component
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psCommand: a valid table or query name or an SQL statement as a case-sensitive string
+&apos;&apos;&apos;		piDatasheetType: one of the com.sun.star.sdb.CommandType constants
+&apos;&apos;&apos;		pbEscapeProcessing: == Not DirectSql
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A Datasheet class instance if the datasheet could be opened, otherwise Nothing
+
+Dim oOpen As Object				&apos;	Return value
+Dim oNewDatasheet As Object		&apos;	com.sun.star.lang.XComponent
+Dim oURL As Object				&apos;	com.sun.star.util.URL
+Dim oDispatch As Object			&apos;	com.sun.star.frame.XDispatch
+Dim vArgs As Variant			&apos;	Array of property values
+
+	On Local Error GoTo Catch
+	Set oOpen = Nothing
+
+Try:
+	&apos;	Setup the dispatcher
+	Set oURL = New com.sun.star.util.URL
+	oURL.Complete = &quot;.component:DB/DataSourceBrowser&quot;
+	Set oDispatch = StarDesktop.queryDispatch(oURL, &quot;_Blank&quot;, 8)
+
+	&apos;	Setup the arguments of the component to create
+	With ScriptForge.SF_Utils
+		vArgs = Array( _
+			._MakePropertyValue(&quot;ActiveConnection&quot;,		_Connection) _
+			, ._MakePropertyValue(&quot;CommandType&quot;,		piDatasheetType) _
+			, ._MakePropertyValue(&quot;Command&quot;,			psCommand) _
+			, ._MakePropertyValue(&quot;ShowMenu&quot;,			True) _
+			, ._MakePropertyValue(&quot;ShowTreeView&quot;,		False) _
+			, ._MakePropertyValue(&quot;ShowTreeViewButton&quot;,	False) _
+			, ._MakePropertyValue(&quot;Filter&quot;,				&quot;&quot;) _
+			, ._MakePropertyValue(&quot;ApplyFilter&quot;,		False) _
+			, ._MakePropertyValue(&quot;EscapeProcessing&quot;,	pbEscapeProcessing) _
+			)
+	End With
+
+	&apos;	Open the targeted datasheet
+	Set oNewDatasheet = oDispatch.dispatchWithReturnValue(oURL, vArgs)
+	If Not IsNull(oNewDatasheet) Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, [Me], oNewDatasheet)
+
+Finally:
+	Set _OpenDatasheet = oOpen
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base._OpenDatasheet
 
 REM -----------------------------------------------------------------------------
 Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant

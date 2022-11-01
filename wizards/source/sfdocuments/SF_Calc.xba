@@ -401,7 +401,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.A1Style
+End Function	&apos;	SFDocuments.SF_Calc.A1Style
 
 REM -----------------------------------------------------------------------------
 Public Function Activate(Optional ByVal SheetName As Variant) As Boolean
@@ -560,7 +560,7 @@ Public Sub ClearAll(Optional ByVal Range As Variant _
 
 	_ClearRange(&quot;All&quot;, Range, FilterFormula, FilterScope)
 
-End Sub	&apos;	SF_Documents.SF_Calc.ClearAll
+End Sub	&apos;	SFDocuments.SF_Calc.ClearAll
 
 REM -----------------------------------------------------------------------------
 Public Sub ClearFormats(Optional ByVal Range As Variant _
@@ -580,7 +580,7 @@ Public Sub ClearFormats(Optional ByVal Range As Variant _
 
 	_ClearRange(&quot;Formats&quot;, Range, FilterFormula, FilterScope)
 
-End Sub	&apos;	SF_Documents.SF_Calc.ClearFormats
+End Sub	&apos;	SFDocuments.SF_Calc.ClearFormats
 
 REM -----------------------------------------------------------------------------
 Public Sub ClearValues(Optional ByVal Range As Variant _
@@ -600,7 +600,7 @@ Public Sub ClearValues(Optional ByVal Range As Variant _
 
 	_ClearRange(&quot;Values&quot;, Range, FilterFormula, FilterScope)
 
-End Sub	&apos;	SF_Documents.SF_Calc.ClearValues
+End Sub	&apos;	SFDocuments.SF_Calc.ClearValues
 
 REM -----------------------------------------------------------------------------
 Public Function CompactLeft(Optional ByVal Range As Variant _
@@ -1424,7 +1424,7 @@ Try:
 
 Finally:
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc.DAvg
+End Function	&apos;	SFDocuments.SF_Calc.DAvg
 
 REM -----------------------------------------------------------------------------
 Public Function DCount(Optional ByVal Range As Variant) As Long
@@ -1441,7 +1441,7 @@ Try:
 
 Finally:
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc.DCount
+End Function	&apos;	SFDocuments.SF_Calc.DCount
 
 REM -----------------------------------------------------------------------------
 Public Function DMax(Optional ByVal Range As Variant) As Double
@@ -1458,7 +1458,7 @@ Try:
 
 Finally:
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc.DMax
+End Function	&apos;	SFDocuments.SF_Calc.DMax
 
 REM -----------------------------------------------------------------------------
 Public Function DMin(Optional ByVal Range As Variant) As Double
@@ -1475,7 +1475,7 @@ Try:
 
 Finally:
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc.DMin
+End Function	&apos;	SFDocuments.SF_Calc.DMin
 
 REM -----------------------------------------------------------------------------
 Public Function DSum(Optional ByVal Range As Variant) As Double
@@ -1492,7 +1492,7 @@ Try:
 
 Finally:
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc.DSum
+End Function	&apos;	SFDocuments.SF_Calc.DSum
 
 REM -----------------------------------------------------------------------------
 Public Function ExportRangeToFile(Optional ByVal Range As Variant _
@@ -1754,7 +1754,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.GetFormula
+End Function	&apos;	SFDocuments.SF_Calc.GetFormula
 
 REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant _
@@ -1839,7 +1839,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.GetValue
+End Function	&apos;	SFDocuments.SF_Calc.GetValue
 
 REM -----------------------------------------------------------------------------
 Public Function ImportFromCSVFile(Optional ByVal FileName As Variant _
@@ -2300,7 +2300,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.Offset
+End Function	&apos;	SFDocuments.SF_Calc.Offset
 
 REM -----------------------------------------------------------------------------
 Public Function OpenRangeSelector(Optional ByVal Title As Variant _
@@ -2381,7 +2381,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.OpenRangeSelector
+End Function	&apos;	SFDocuments.SF_Calc.OpenRangeSelector
 
 REM -----------------------------------------------------------------------------
 Public Function Printf(Optional ByVal InputStr As Variant _
@@ -2478,7 +2478,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.Printf
+End Function	&apos;	SFDocuments.SF_Calc.Printf
 
 REM -----------------------------------------------------------------------------
 Public Function PrintOut(Optional ByVal SheetName As Variant _
@@ -2711,7 +2711,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.SetArray
+End Function	&apos;	SFDocuments.SF_Calc.SetArray
 
 REM -----------------------------------------------------------------------------
 Public Function SetCellStyle(Optional ByVal TargetRange As Variant _
@@ -2789,7 +2789,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.SetCellStyle
+End Function	&apos;	SFDocuments.SF_Calc.SetCellStyle
 
 REM -----------------------------------------------------------------------------
 Public Function SetFormula(Optional ByVal TargetRange As Variant _
@@ -2858,7 +2858,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.SetFormula
+End Function	&apos;	SFDocuments.SF_Calc.SetFormula
 
 REM -----------------------------------------------------------------------------
 Private Function SetProperty(Optional ByVal psProperty As String _
@@ -2966,7 +2966,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.SetValue
+End Function	&apos;	SFDocuments.SF_Calc.SetValue
 
 REM -----------------------------------------------------------------------------
 Public Function ShiftDown(Optional ByVal Range As Variant _
@@ -3423,7 +3423,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc.SortRange
+End Function	&apos;	SFDocuments.SF_Calc.SortRange
 
 REM ======================================================= SUPERCLASS PROPERTIES
 
@@ -3685,7 +3685,7 @@ Finally:
 	Exit Sub
 Catch:
 	GoTo Finally
-End Sub	&apos;	SF_Documents.SF_Calc._ClearRange
+End Sub	&apos;	SFDocuments.SF_Calc._ClearRange
 
 REM -----------------------------------------------------------------------------
 Private Function _ComputeFilter(ByRef poRange As Object _
@@ -3853,7 +3853,7 @@ Try:
 
 Finally:
 	_ConvertFromDataArray = vArray
-End Function	&apos;	SF_Documents.SF_Calc._ConvertFromDataArray
+End Function	&apos;	SFDocuments.SF_Calc._ConvertFromDataArray
 
 REM -----------------------------------------------------------------------------
 Private Function _ConvertToCellValue(ByVal pvItem As Variant) As Variant
@@ -3873,7 +3873,7 @@ Try:
 Finally:
 	_ConvertToCellValue = vCell
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc._ConvertToCellValue
+End Function	&apos;	SFDocuments.SF_Calc._ConvertToCellValue
 
 REM -----------------------------------------------------------------------------
 Private Function _ConvertToDataArray(ByRef pvArray As Variant _
@@ -3997,7 +3997,7 @@ Try:
 Finally:
 	_ConvertToDataArray = vDataArray
 	Exit Function
-End Function	&apos;	SF_Documents.SF_Calc._ConvertToDataArray
+End Function	&apos;	SFDocuments.SF_Calc._ConvertToDataArray
 
 REM -----------------------------------------------------------------------------
 Private Function _DFunction(ByVal psFunction As String _
@@ -4043,7 +4043,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc._DFunction
+End Function	&apos;	SFDocuments.SF_Calc._DFunction
 
 REM -----------------------------------------------------------------------------
 Private Function _FileIdent() As String
@@ -4205,7 +4205,7 @@ CatchAddress:
 				, &quot;Rows&quot;, plRows, &quot;Columns&quot;, plColumns, &quot;Height&quot;, plHeight, &quot;Width&quot;, plWidth _
 				, &quot;Document&quot;, [_Super]._FileIdent())
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Calc._Offset
+End Function	&apos;	SFDocuments.SF_Calc._Offset
 
 REM -----------------------------------------------------------------------------
 Private Function _ParseAddress(ByVal psAddress As String) As Object

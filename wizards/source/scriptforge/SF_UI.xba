@@ -53,6 +53,7 @@ Type Window
 	WindowTitle				As String		&apos;	Only mean to identify new documents
 	WindowFileName			As String		&apos;	URL of file name
 	DocumentType			As String		&apos;	Writer, Calc, ...
+	ParentName				As String		&apos;	Identifier of the parent Base file when Window is a subcomponent
 End Type
 
 &apos;	The progress/status bar of the active window
@@ -72,11 +73,12 @@ Const IMPRESSDOCUMENT			= &quot;Impress&quot;
 Const MATHDOCUMENT				= &quot;Math&quot;
 Const WRITERDOCUMENT			= &quot;Writer&quot;
 
-&apos;	Window subtypes - Not supported yet
-Const BASETABLE					= &quot;BASETABLE&quot;
-Const BASEQUERY					= &quot;BASEQUERY&quot;
-Const BASEREPORT				= &quot;BASEREPORT&quot;
-Const BASEDIAGRAM				= &quot;BASEDIAGRAM&quot;
+&apos;	Window subtypes
+Const TABLEDATA					= &quot;TableData&quot;
+Const QUERYDATA					= &quot;QueryData&quot;
+Const SQLDATA					= &quot;SqlData&quot;
+Const BASEREPORT				= &quot;BaseReport&quot;
+Const BASEDIAGRAM				= &quot;BaseDiaram&quot;
 
 &apos;	Macro execution modes
 Const cstMACROEXECNORMAL		= 0		&apos;	Default, execution depends on user configuration and choice
@@ -1246,7 +1248,8 @@ Public Function _IdentifyWindow(ByRef poComponent As Object) As Object
 Dim oWindow As Window				&apos;	Return value
 Dim sImplementation As String		&apos;	Component&apos;s implementationname
 Dim sIdentifier As String			&apos;	Component&apos;s identifier
-Dim vArg As Variant					&apos;	One single item of the Args UNO property
+Dim vSelection As Variant			&apos;	Array of poCOmponent.Selection property values
+Dim iCommandType As Integer			&apos;	Datasheet type
 Dim FSO As Object					&apos;	Alias for SF_FileSystem
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
@@ -1261,6 +1264,7 @@ Dim FSO As Object					&apos;	Alias for SF_FileSystem
 		.WindowTitle = &quot;&quot;
 		.WindowFileName = &quot;&quot;
 		.DocumentType = &quot;&quot;
+		.ParentName = &quot;&quot;
 		If IsNull(poComponent) Then GoTo Finally
 		If SF_Session.HasUnoProperty(poComponent, &quot;ImplementationName&quot;) Then sImplementation = poComponent.ImplementationName
 		If SF_Session.HasUnoProperty(poComponent, &quot;Identifier&quot;) Then sIdentifier = poComponent.Identifier
@@ -1272,7 +1276,20 @@ Dim FSO As Object					&apos;	Alias for SF_FileSystem
 				.WindowFileName = SF_Utils._GetPropertyValue(poComponent.Args, &quot;URL&quot;)
 				If Len(.WindowFileName) &gt; 0 Then .WindowName = FSO.GetName(FSO._ConvertFromUrl(.WindowFileName))
 				.DocumentType = BASEDOCUMENT
-			Case &quot;org.openoffice.comp.dbu.ODatasourceBrowser&quot;
+			Case &quot;org.openoffice.comp.dbu.ODatasourceBrowser&quot;		&apos;	Base datasheet (table, query or sql in read mode
+				Set .Frame = poComponent.Frame
+				If Not IsEmpty(poComponent.Selection) Then		&apos;	Empty for (F4) DatasourceBrowser !!
+					vSelection = poComponent.Selection
+					.WindowName = SF_Utils._GetPropertyValue(vSelection, &quot;Command&quot;)
+					iCommandType = SF_Utils._GetPropertyValue(vSelection, &quot;CommandType&quot;)
+					Select Case iCommandType
+						Case com.sun.star.sdb.CommandType.TABLE		:	.DocumentType = TABLEDATA
+						Case com.sun.star.sdb.CommandType.QUERY		:	.DocumentType = QUERYDATA
+						Case com.sun.star.sdb.CommandType.COMMAND	:	.DocumentType = SQLDATA
+					End Select
+					.ParentName = SF_Utils._GetPropertyValue(vSelection, &quot;DataSourceName&quot;)
+					.WindowTitle = .WindowName
+				End If
 			Case &quot;org.openoffice.comp.dbu.OTableDesign&quot;, &quot;org.openoffice.comp.dbu.OQueryDesign&quot;			&apos;	Table or Query in Edit mode
 			Case &quot;org.openoffice.comp.dbu.ORelationDesign&quot;
 			Case &quot;com.sun.star.comp.sfx2.BackingComp&quot;				&apos;		Welcome screen

@@ -129,7 +129,7 @@ Try:
 			Case &quot;document&quot;, &quot;calc&quot;, &quot;writer&quot;, &quot;base&quot;, &quot;documentevent&quot;, &quot;formevent&quot;
 														sLibrary = &quot;SFDocuments&quot;
 			Case &quot;dialog&quot;, &quot;dialogevent&quot;			:	sLibrary = &quot;SFDialogs&quot;
-			Case &quot;database&quot;							:	sLibrary = &quot;SFDatabases&quot;
+			Case &quot;database&quot;, &quot;datasheet&quot;			:	sLibrary = &quot;SFDatabases&quot;
 			Case &quot;unittest&quot;							:	sLibrary = &quot;SFUnitTests&quot;
 			Case &quot;menu&quot;, &quot;popupmenu&quot;				:	sLibrary = &quot;SFWidgets&quot;
 			Case Else
