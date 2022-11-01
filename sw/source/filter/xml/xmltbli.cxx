@@ -2705,19 +2705,14 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                                                  pColl );
         // Consider the case that a table is defined without a row.
         if( !pPrevSttNd && m_pBox1 != nullptr )
-
         {
             m_pBox1->m_pStartNode = pStNd;
             SwContentNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
                                                             ->GetContentNode();
             SwFrameFormat *const pTableFormat = m_pTableNode->GetTable().GetFrameFormat();
             rtl::Reference<SwXCell> xParent = SwXCell::CreateXCell( pTableFormat, m_pBox1 );
-            const auto pNewCursor(pDoc->CreateUnoCursor(SwPosition( *pCNd )));
-            rtl::Reference<SwXTextRange> xTextRange = new SwXTextRange(*pNewCursor, xParent,
-                    SwXTextRange::RANGE_IN_CELL);
             DBG_TESTSOLARMUTEX();
-            SwUnoInternalPaM aPam(*pDoc);
-            ::sw::XTextRangeToSwPaM(aPam, xTextRange);
+            SwPaM aPam(*pCNd, *pCNd);
             rtl::Reference<SwXTextCursor> xTextCursor =
                 new SwXTextCursor(*pDoc, xParent, CursorType::TableText,
                 *aPam.GetPoint(), aPam.GetMark());
