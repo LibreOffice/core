@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -359,7 +360,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
 
     default:
         throw CannotConvertException(
-            "Type " + OUString::number(static_cast<int>(aDestinationClass)) + " is not supported!",
+            "Type " + OUString::number(o3tl::to_underlying(aDestinationClass)) + " is not supported!",
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
@@ -439,7 +440,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
 
     default:
         throw CannotConvertException(
-            "Type " + OUString::number(static_cast<int>(aDestinationClass)) + " is not supported!",
+            "Type " + OUString::number(o3tl::to_underlying(aDestinationClass)) + " is not supported!",
             Reference< XInterface >(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
