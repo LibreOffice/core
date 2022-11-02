@@ -322,7 +322,7 @@ Public Function GetText(Optional ByVal Column As Variant) As String
 &apos;&apos;&apos;		The text in the cell as a string as how it is displayed
 &apos;&apos;&apos;		Note that the position of the cursor is left unchanged.
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oSheet.GeText(&quot;ShipCity&quot;))	&apos;	Extract the text on the current row from the column &quot;ShipCity&quot;
+&apos;&apos;&apos;		oSheet.GetText(&quot;ShipCity&quot;))	&apos;	Extract the text on the current row from the column &quot;ShipCity&quot;
 
 Dim sText As String				&apos;	Return Text
 Dim lCol As Long					&apos;	Numeric index of Column in lists of columns
