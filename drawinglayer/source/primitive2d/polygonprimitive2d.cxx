@@ -350,7 +350,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             // - expanding by more (like sqrt(2) * 0.5 * LineWidth) immediately extends the size
             //   of e.g. geometry converted to PNG, plus many similar cases that cannot be thought
             //   of in advance.
-            // This means that converting those thoght-experiment examples in (4) will and do lead
+            // This means that converting those thought-experiment examples in (4) will and do lead
             // to bigger e.g. Bitmap conversion(s), not avoiding but painting the free space. That
             // could only be done by correctly and fully decomposing the geometry, including
             // stroke, and accepting the cost...
@@ -378,14 +378,14 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             //     other PrimitiveProcessors. Maybe not by the VclPixelProcessor2D/VclProcessor2D
             //     since it handles this primitive directly - not even sure for all cases.
             //     Sooner or later another PrimitiveProcessor will re-use this wrong temporary
-            //     decompositon, and as an error, a non-stroked line will be painted/used.
+            //     decomposition, and as an error, a non-stroked line will be painted/used.
             // (4) The B2DRange is not strictly defined as minimal bound for the geometry,
             //     but it should be as small/tight as possible. Making it larger risks more
             //     area to be invalidated (repaint) and processed (all geometric stuff,l may
             //     include future and existing exports to other formats which are or will be
             //     implemented as PrimitiveProcessor). It is easy to imagine cases with much
             //     too large B2DRange - a line with a pattern that would solve to a single
-            //     small start-rectange and rest is empty, or a circle with a stroke that
+            //     small start-rectangle and rest is empty, or a circle with a stroke that
             //     makes only a quarter of it visible.
             //
             // The reason to do this is speed, what is a good argument. But speed should
@@ -404,7 +404,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             //     the buffered decomposition will not be harmed.
             //     Disadvantage: Same as (a), decomposition will be potentially done repeatedly
             // (c) Use a temporary, local PolygonStrokePrimitive2D and buffer B2DRange
-            //     locally for this Prmitive. Due to (1)/(2) this cannot change, so
+            //     locally for this Primitive. Due to (1)/(2) this cannot change, so
             //     when calculated once it is totally legal to use it.
             //
             // Thus here I would use (c): It accepts the disadvantages of (4) over speed, but
@@ -446,7 +446,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
     // - either use maBufferedRange, additionally remember view-dependent
     //   factor & reset if that changes
     // - or do not buffer for hairline -> not really needed, the range is buffered
-    //   in the B2DPolygon, no decompostion is needed and a simple grow is cheap
+    //   in the B2DPolygon, no decomposition is needed and a simple grow is cheap
     basegfx::B2DRange aHairlineRange = getB2DPolygon().getB2DRange();
 
     if (!aHairlineRange.isEmpty())
