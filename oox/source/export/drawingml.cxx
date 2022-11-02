@@ -110,6 +110,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/stream.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
@@ -3335,21 +3336,27 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     // Transform the text distance values so they are compatible with OOXML insets
     if (xShape.is())
     {
-        sal_Int32 nTextHeight = xShape->getSize().Width;
+        sal_Int32 nTextHeight = xShape->getSize().Height; // Hmm, default
 
-        auto* pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+        // CustomShape can have text area different from shape rectangle
+        auto* pCustomShape
+            = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
         if (pCustomShape)
         {
-            tools::Rectangle aAnchorRect;
-            pCustomShape->TakeTextAnchorRect(aAnchorRect);
-            nTextHeight = aAnchorRect.GetSize().getHeight();
+            const EnhancedCustomShape2d aCustomShape2d(*pCustomShape);
+            nTextHeight = aCustomShape2d.GetTextRect().getOpenHeight();
+            if (DOCUMENT_DOCX == meDocumentType)
+                nTextHeight = convertTwipToMm100(nTextHeight);
         }
 
         if (nTop + nBottom >= nTextHeight)
         {
-            sal_Int32 nDiff = std::abs(std::min(nTop, nBottom));
-            nTop += nDiff;
-            nBottom += nDiff;
+            // Effective bottom would be above effective top of text area. LO normalizes the
+            // effective text area in such case implicitely for rendering. MS needs indents so that
+            // the result is the normalized effective text area.
+            std::swap(nTop, nBottom);
+            nTop = nTextHeight - nTop;
+            nBottom = nTextHeight - nBottom;
         }
     }
 

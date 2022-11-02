@@ -30,11 +30,13 @@ public:
     void testTextDistancesOOXML();
     void testTextDistancesOOXML_LargerThanTextAreaSpecialCase();
     void testTextDistancesOOXML_Export();
+    void testTextDistancesODP_OOXML_Export();
 
     CPPUNIT_TEST_SUITE(ShapeImportExportTest);
     CPPUNIT_TEST(testTextDistancesOOXML);
     CPPUNIT_TEST(testTextDistancesOOXML_LargerThanTextAreaSpecialCase);
     CPPUNIT_TEST(testTextDistancesOOXML_Export);
+    CPPUNIT_TEST(testTextDistancesODP_OOXML_Export);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -267,28 +269,28 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
     //Check shape Top/Bottom - 0cm, 4cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:nvSpPr/p:cNvPr", "name", "Text_TB_0_4");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr",
-                     { { "tIns", "0" }, { "bIns", "1439640" } });
+                     { { "tIns", "-360000" }, { "bIns", "1079640" } });
 
     //Check shape Top/Bottom - 4cm, 0cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:nvSpPr/p:cNvPr", "name", "Text_TB_4_0");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr",
-                     { { "tIns", "1439640" }, { "bIns", "0" } });
+                     { { "tIns", "1079640" }, { "bIns", "-360000" } });
 
     //Check shape Top/Bottom - 0cm, 3cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:nvSpPr/p:cNvPr", "name", "Text_TB_0_3");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:bodyPr",
-                     { { "tIns", "0" }, { "bIns", "1079640" } });
+                     { { "tIns", "-180000" }, { "bIns", "899640" } });
 
     //Check shape Top/Bottom - 2cm, 1cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:nvSpPr/p:cNvPr", "name", "Text_TB_2_1");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:txBody/a:bodyPr",
-                     { { "tIns", "720000" }, { "bIns", "360000" } });
+                     { { "tIns", "540000" }, { "bIns", "180000" } });
 
     //Check shape Top/Bottom - 0cm, 2.5cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_0_2.5");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:txBody/a:bodyPr",
-                     { { "tIns", "0" }, { "bIns", "899640" } });
+                     { { "tIns", "-90000" }, { "bIns", "809640" } });
 
     //Check shape Top/Bottom - 0cm, 2cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[6]/p:nvSpPr/p:cNvPr", "name", "Text_TB_0_2");
@@ -304,13 +306,13 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
     //Check shape Top/Bottom - 3cm, 0cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[8]/p:nvSpPr/p:cNvPr", "name", "Text_TB_3_0");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[8]/p:txBody/a:bodyPr",
-                     { { "tIns", "1079640" }, { "bIns", "0" } });
+                     { { "tIns", "899640" }, { "bIns", "-180000" } });
 
     //Check shape Top/Bottom - 2.5cm, 0cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[9]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_2.5_0");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[9]/p:txBody/a:bodyPr",
-                     { { "tIns", "899640" }, { "bIns", "0" } });
+                     { { "tIns", "809640" }, { "bIns", "-90000" } });
 
     //Check shape Top/Bottom - 2cm, 0cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[10]/p:nvSpPr/p:cNvPr", "name", "Text_TB_2_0");
@@ -326,47 +328,61 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
     //Check shape Top/Bottom - 1cm, 2cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[12]/p:nvSpPr/p:cNvPr", "name", "Text_TB_1_2");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[12]/p:txBody/a:bodyPr",
-                     { { "tIns", "360000" }, { "bIns", "720000" } });
+                     { { "tIns", "180000" }, { "bIns", "540000" } });
 
     //Check shape Top/Bottom - 2cm, 1.5cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[13]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_2_1.5");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[13]/p:txBody/a:bodyPr",
-                     { { "tIns", "720000" }, { "bIns", "540000" } });
+                     { { "tIns", "450000" }, { "bIns", "270000" } });
 
     //Check shape Top/Bottom - 1.5cm, 2cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[14]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_1.5_2");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[14]/p:txBody/a:bodyPr",
-                     { { "tIns", "540000" }, { "bIns", "720000" } });
+                     { { "tIns", "270000" }, { "bIns", "450000" } });
 
     //Check shape Top/Bottom - 2cm, 1.75cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[15]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_2_1.75");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[15]/p:txBody/a:bodyPr",
-                     { { "tIns", "720000" }, { "bIns", "630000" } });
+                     { { "tIns", "405000" }, { "bIns", "315000" } });
 
     //Check shape Top/Bottom - 1.75cm, 2cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[16]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_1.75_2");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[16]/p:txBody/a:bodyPr",
-                     { { "tIns", "630000" }, { "bIns", "720000" } });
+                     { { "tIns", "315000" }, { "bIns", "405000" } });
 
     //Check shape Top/Bottom - 2cm, 2cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[17]/p:nvSpPr/p:cNvPr", "name", "Text_TB_2_2");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[17]/p:txBody/a:bodyPr",
-                     { { "tIns", "720000" }, { "bIns", "720000" } });
+                     { { "tIns", "360000" }, { "bIns", "360000" } });
 
     //Check shape Top/Bottom - 1cm, 1cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[18]/p:nvSpPr/p:cNvPr", "name", "Text_TB_1_1");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[18]/p:txBody/a:bodyPr",
-                     { { "tIns", "720000" }, { "bIns", "720000" } });
+                     { { "tIns", "360000" }, { "bIns", "360000" } });
 
     //Check shape Top/Bottom - 0.5cm, 0.5cm
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[19]/p:nvSpPr/p:cNvPr", "name",
                 "Text_TB_0.5_0.5");
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[19]/p:txBody/a:bodyPr",
                      { { "tIns", "180000" }, { "bIns", "180000" } });
+}
+
+void ShapeImportExportTest::testTextDistancesODP_OOXML_Export()
+{
+    loadFromURL(u"odp/tdf150966_hugeInset.odp");
+    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The text ends 5cm below the top edge of the shape.
+    // Without the fix we exported tIns="3600000" and bIns="5400000".
+    // The text had ended about 3.3cm below the top edge in PowerPoint.
+    assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr",
+                     { { "tIns", "720000" }, { "bIns", "2520000" } });
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ShapeImportExportTest);

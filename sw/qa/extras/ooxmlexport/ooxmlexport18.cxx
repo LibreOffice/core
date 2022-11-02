@@ -137,6 +137,24 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
     assertXPath(pXmlDoc, "//w:pPr/w:rPr/w:sz", "val", "48");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
+{
+    // Given a docx document with a rectangular shape with height cy="900000" (EMU), tIns="180000"
+    // and bIns="360000", resulting in 360000EMU text area height.
+    load(DATA_DIRECTORY, "tdf150966_regularInset.docx");
+
+    // The shape is imported as custom shape with attached frame.
+    // The insets are currently imported as margin top="4.99mm" and bottom="10mm".
+    // That should result in tIns="179640" and bIns="360000" on export.
+
+    // Without fix the insets were tIns="359280" and bIns="539640". The text area had 1080Emu height
+    // and Word displayes no text at all.
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPathAttrs(pXmlDoc, "//wps:bodyPr", { { "tIns", "179640" }, { "bIns", "360000" } });
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
