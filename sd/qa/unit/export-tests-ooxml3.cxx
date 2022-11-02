@@ -2068,7 +2068,7 @@ void SdOOXMLExportTest3::testAutofittedTextboxIndent()
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
-                "691200");
+                "712800");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);

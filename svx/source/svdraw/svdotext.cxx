@@ -1252,9 +1252,8 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
     // loop early-exits if we detect an already attained value
     double nMinStretchX = 0.0;
     double nMinStretchY = 0.0;
-    sal_uInt16 aOldStretchXVals[]={0,0,0,0,0,0,0,0,0,0};
-    const size_t aStretchArySize=SAL_N_ELEMENTS(aOldStretchXVals);
-    for(unsigned int i=0; i<aStretchArySize; ++i)
+    std::array<sal_Int32, 10> aOldStretchXVals = {0,0,0,0,0,0,0,0,0,0};
+    for (size_t i = 0; i < aOldStretchXVals.size(); ++i)
     {
         const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();
         double fFactor = 1.0;
@@ -1279,7 +1278,7 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
         double nCurrStretchX, nCurrStretchY;
         rOutliner.GetGlobalCharStretching(nCurrStretchX, nCurrStretchY);
 
-        if (fFactor >= 1.0 )
+        if (fFactor >= 0.98)
         {
             // resulting text area fits into available shape rect -
             // err on the larger stretching, to optimally fill area
@@ -1287,14 +1286,14 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
             nMinStretchY = std::max(nMinStretchY, nCurrStretchY);
         }
 
-        aOldStretchXVals[i] = nCurrStretchX;
-        if( std::find(aOldStretchXVals, aOldStretchXVals+i, nCurrStretchX) != aOldStretchXVals+i )
+        aOldStretchXVals[i] = basegfx::fround(nCurrStretchX * 10.0);
+        if (std::find(aOldStretchXVals.begin(), aOldStretchXVals.begin() + i, basegfx::fround(nCurrStretchX * 10.0)) != aOldStretchXVals.begin() + i)
             break; // same value already attained once; algo is looping, exit
 
         if (fFactor < 1.0 || nCurrStretchX != 100)
         {
-            nCurrStretchX = nCurrStretchX * fFactor;
-            nCurrStretchY = nCurrStretchY * fFactor;
+            nCurrStretchX = double(basegfx::fround(nCurrStretchX * fFactor * 100.0)) / 100.00;
+            nCurrStretchY = double(basegfx::fround(nCurrStretchY * fFactor * 100.0)) / 100.00;
 
             rOutliner.SetGlobalCharStretching(std::min(100.0, nCurrStretchX), std::min(100.0, nCurrStretchY));
             SAL_INFO("svx", "zoom is " << nCurrStretchX);
