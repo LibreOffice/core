@@ -78,7 +78,7 @@ Const TABLEDATA					= &quot;TableData&quot;
 Const QUERYDATA					= &quot;QueryData&quot;
 Const SQLDATA					= &quot;SqlData&quot;
 Const BASEREPORT				= &quot;BaseReport&quot;
-Const BASEDIAGRAM				= &quot;BaseDiaram&quot;
+Const BASEDIAGRAM				= &quot;BaseDiagram&quot;
 
 &apos;	Macro execution modes
 Const cstMACROEXECNORMAL		= 0		&apos;	Default, execution depends on user configuration and choice
