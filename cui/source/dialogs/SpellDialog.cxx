@@ -1140,6 +1140,7 @@ void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
     rDevice.SetBackground(aBgColor);
     m_xEditView->SetBackgroundColor(aBgColor);
+    m_xEditEngine->SetBackgroundColor(aBgColor);
 }
 
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
@@ -1671,8 +1672,13 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CJK);
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CTL);
 
+    // tdf#116566 Use color defined in the current Color Scheme
+    Color aSpellErrorCollor = svtools::ColorConfig().GetColorValue(svtools::SPELL).nColor;
+
+    // TODO: Create a new Color Scheme entry for grammar mistakes and use it below
+    // instead of using hardcoded COL_LIGHTBLUE
     SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
-    aSet.Put(SvxColorItem(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED, EE_CHAR_COLOR));
+    aSet.Put(SvxColorItem(bGrammarError ? COL_LIGHTBLUE : aSpellErrorCollor, EE_CHAR_COLOR));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL));
