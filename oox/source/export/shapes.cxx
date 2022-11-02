@@ -47,6 +47,7 @@
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -2616,6 +2617,10 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLEObject");
     }
 
+    sal_Int64 nAspect;
+    bool bShowAsIcon = (xPropSet->getPropertyValue("Aspect") >>= nAspect)
+                       && nAspect == embed::Aspects::MSOLE_ICON;
+
     OUString const sRelId = mpFB->addRelation(
         mpFS->getOutputStream(), sRelationType,
         Concat2View(OUString::createFromAscii(GetRelationCompPrefix()) + sFileName));
@@ -2642,6 +2647,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     if (pProgID)
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                          XML_showAsIcon, sax_fastparser::UseIf("1", bShowAsIcon),
                           XML_progId, pProgID,
                           FSNS(XML_r, XML_id), sRelId,
                           XML_spid, "" );
@@ -2650,6 +2656,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
 //?                                              XML_name, "Document",
+                          XML_showAsIcon, sax_fastparser::UseIf("1", bShowAsIcon),
                           FSNS(XML_r, XML_id), sRelId,
                           // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
                           XML_spid, "" );
