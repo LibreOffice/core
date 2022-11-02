@@ -381,7 +381,7 @@ Public Function GetValue(Optional ByVal Column As Variant) As Variant
 &apos;&apos;&apos;		An EMPTY return value means that the value could not be retrieved.
 &apos;&apos;&apos;		Note that the position of the cursor is left unchanged.
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oSheet.GeValue(&quot;ShipCity&quot;))	&apos;	Extract the value on the current row from the column &quot;ShipCity&quot;
+&apos;&apos;&apos;		oSheet.GetValue(&quot;ShipCity&quot;))	&apos;	Extract the value on the current row from the column &quot;ShipCity&quot;
 
 Dim vValue As Variant				&apos;	Return value
 Dim lCol As Long					&apos;	Numeric index of Column in lists of columns
