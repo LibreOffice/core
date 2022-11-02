@@ -129,7 +129,6 @@ public:
     void testTdf94122_autoColor();
     void testTdf124333();
     void testAutofittedTextboxIndent();
-    void testTdf151622_oleIcon();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -219,7 +218,6 @@ public:
     CPPUNIT_TEST(testTdf94122_autoColor);
     CPPUNIT_TEST(testTdf124333);
     CPPUNIT_TEST(testAutofittedTextboxIndent);
-    CPPUNIT_TEST(testTdf151622_oleIcon);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2071,23 +2069,6 @@ void SdOOXMLExportTest3::testAutofittedTextboxIndent()
     xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
                 "691200");
-}
-
-void SdOOXMLExportTest3::testTdf151622_oleIcon()
-{
-    auto xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/ole_icon.odp"), ODP);
-
-    utl::TempFileNamed tmpfile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
-    xDocShRef->DoClose();
-
-    xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expression: prop
-    // - In ..., XPath '//p:oleObj' no attribute 'showAsIcon' exist
-    // i.e. show as icon option wasn't exported.
-    assertXPath(pXml, "//p:oleObj", "showAsIcon", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
