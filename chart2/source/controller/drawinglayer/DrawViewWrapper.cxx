@@ -168,7 +168,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
         //3d objects need a special treatment
         //because the simple PickObj method is not accurate in this case for performance reasons
-        E3dObject* pE3d = dynamic_cast< E3dObject* >(pRet);
+        E3dObject* pE3d = DynCastE3dObject(pRet);
         if( pE3d )
         {
             E3dScene* pScene(pE3d->getRootE3dSceneFromE3dObject());

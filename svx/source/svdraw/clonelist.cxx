@@ -34,10 +34,10 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     bool bOriginalIsGroup(pOriginal->IsGroupObject());
     bool bCloneIsGroup(pClone->IsGroupObject());
 
-    if(bOriginalIsGroup && dynamic_cast<const E3dObject* >(pOriginal) != nullptr && DynCastE3dScene(pOriginal) == nullptr )
+    if(bOriginalIsGroup && DynCastE3dObject(pOriginal) != nullptr && DynCastE3dScene(pOriginal) == nullptr )
         bOriginalIsGroup = false;
 
-    if(bCloneIsGroup && dynamic_cast<const E3dObject* >(pClone) != nullptr && DynCastE3dScene(pClone) == nullptr)
+    if(bCloneIsGroup && DynCastE3dObject(pClone) != nullptr && DynCastE3dScene(pClone) == nullptr)
         bCloneIsGroup = false;
 
     if(!(bOriginalIsGroup && bCloneIsGroup))

@@ -355,7 +355,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                 while (i < nMarkCnt && !b3DObjMarked)
                 {
-                    if (nullptr != dynamic_cast< E3dObject *>( rMarkList.GetMark(i)->GetMarkedSdrObj() ))
+                    if (DynCastE3dObject( rMarkList.GetMark(i)->GetMarkedSdrObj() ))
                     {
                         b3DObjMarked = true;
                     }

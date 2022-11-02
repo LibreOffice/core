@@ -136,7 +136,7 @@ namespace sdr::contact
                 // (only with complex CustomShapes with multiple representation SdrObjects and
                 // only visible when transparency involved, but runtime-expensive).
                 // Thus: Just do not iterate, will check behaviour deeply.
-                b3DShape = (nullptr != dynamic_cast< const E3dObject* >(pSdrObjRepresentation));
+                b3DShape = (nullptr != DynCastE3dObject(pSdrObjRepresentation));
                 pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer(xGroup);
             }
 

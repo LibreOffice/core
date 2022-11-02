@@ -651,7 +651,7 @@ void E3dScene::RecalcSnapRect()
 
         for(size_t a = 0; a < GetObjCount(); ++a)
         {
-            E3dObject* pCandidate(dynamic_cast< E3dObject* >(GetObj(a)));
+            E3dObject* pCandidate(DynCastE3dObject(GetObj(a)));
 
             if(pCandidate)
             {
@@ -729,7 +729,7 @@ void E3dScene::SetSelected(bool bNew)
 
     for(size_t a(0); a < GetObjCount(); a++)
     {
-        E3dObject* pCandidate(dynamic_cast< E3dObject* >(GetObj(a)));
+        E3dObject* pCandidate(DynCastE3dObject(GetObj(a)));
 
         if(pCandidate)
         {
@@ -741,7 +741,7 @@ void E3dScene::SetSelected(bool bNew)
 void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
     // Is it even a 3D object?
-    if(nullptr != dynamic_cast< const E3dObject* >(pObj))
+    if(DynCastE3dObject(pObj))
     {
         // Normal 3D object, insert means call parent
         SdrObjList::NbcInsertObject(pObj, nPos);
@@ -760,7 +760,7 @@ void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
 void E3dScene::InsertObject(SdrObject* pObj, size_t nPos)
 {
     // Is it even a 3D object?
-    if(nullptr != dynamic_cast< const E3dObject* >(pObj))
+    if(DynCastE3dObject(pObj))
     {
         // call parent
         SdrObjList::InsertObject(pObj, nPos);
@@ -805,7 +805,7 @@ void E3dScene::SetBoundAndSnapRectsDirty(bool bNotMyself, bool bRecursive)
 
     for(size_t a = 0; a < GetObjCount(); ++a)
     {
-        E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
 
         if(pCandidate)
         {
@@ -821,7 +821,7 @@ void E3dScene::NbcSetLayer(SdrLayerID nLayer)
 
     for(size_t a = 0; a < GetObjCount(); ++a)
     {
-        E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
 
         if(pCandidate)
         {
@@ -840,7 +840,7 @@ void E3dScene::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 
     for(size_t a(0); a < GetObjCount(); a++)
     {
-        E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
 
         if(pCandidate)
         {
@@ -865,7 +865,7 @@ basegfx::B3DRange E3dScene::RecalcBoundVolume() const
 
     for(size_t a = 0; a < nObjCnt; ++a)
     {
-        const E3dObject* p3DObject = dynamic_cast< const E3dObject* >(GetObj(a));
+        const E3dObject* p3DObject = DynCastE3dObject(GetObj(a));
 
         if(p3DObject)
         {
@@ -885,7 +885,7 @@ void E3dScene::SetTransformChanged()
 
     for(size_t a = 0; a < GetObjCount(); ++a)
     {
-        E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
 
         if(pCandidate)
         {

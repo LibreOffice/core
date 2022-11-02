@@ -28,7 +28,7 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
 :   mpScene(nullptr)
 {
     // Secure old 3D transformation stack before modification
-    const E3dObject* pE3dObject = dynamic_cast< const E3dObject* >(pObject);
+    const E3dObject* pE3dObject = DynCastE3dObject(pObject);
     if(!pE3dObject)
         return;
 

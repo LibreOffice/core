@@ -700,7 +700,7 @@ namespace sdr
 
         bool bIsGroup(pObj->IsGroupObject());
 
-        if(bIsGroup && dynamic_cast< const E3dObject* >(pObj) != nullptr && DynCastE3dScene(pObj) == nullptr)
+        if(bIsGroup && DynCastE3dObject(pObj) != nullptr && DynCastE3dScene(pObj) == nullptr)
         {
             bIsGroup = false;
         }

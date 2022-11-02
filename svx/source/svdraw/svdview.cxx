@@ -1074,7 +1074,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
                 bool b3DObjSelected = false;
                 for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
-                    if(dynamic_cast<const E3dObject* >(pObj) !=  nullptr)
+                    if(DynCastE3dObject(pObj))
                         b3DObjSelected = true;
                 }
                 // If we have a 3D object, go on despite !IsShearAllowed,

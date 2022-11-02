@@ -754,7 +754,7 @@ std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
                 SdrObjList*  pOL = pObj->getParentSdrObjListFromSdrObject();
                 const size_t nOrdNum(pObj->GetOrdNumDirect());
 
-                bool bIs3D = dynamic_cast< E3dObject* >(pObj);
+                bool bIs3D = DynCastE3dObject(pObj);
                 // set up a scene updater if object is a 3d object
                 if(bIs3D)
                 {

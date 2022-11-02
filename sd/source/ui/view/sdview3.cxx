@@ -813,7 +813,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                             pPickObj->SetMergedItemSetAndBroadcast( aSet );
 
-                            if( dynamic_cast< E3dObject *>( pPickObj ) !=  nullptr && dynamic_cast< E3dObject *>( pObj ) !=  nullptr )
+                            if( DynCastE3dObject( pPickObj ) && DynCastE3dObject( pObj ) )
                             {
                                 // handle 3D attribute in addition
                                 SfxItemSetFixed<SID_ATTR_3D_START, SID_ATTR_3D_END> aNewSet( mrDoc.GetPool() );

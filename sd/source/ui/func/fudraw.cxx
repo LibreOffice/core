@@ -517,7 +517,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 // wouldn't be possible per default.
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
                 SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                if ((dynamic_cast<const E3dObject* >(pObject) !=  nullptr) && (rMarkList.GetMarkCount() == 1))
+                if (DynCastE3dObject(pObject) && (rMarkList.GetMarkCount() == 1))
                 {
                     mpWindow->SetPointer(PointerStyle::Rotate);
                     bDefPointer = false;     // Otherwise it'll be called Joe's routine and the mousepointer will reconfigurate again

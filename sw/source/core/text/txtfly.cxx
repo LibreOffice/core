@@ -234,7 +234,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         }
         else
         {
-            if( dynamic_cast< const E3dObject *>( pObj ) ==  nullptr )
+            if( DynCastE3dObject( pObj ) == nullptr )
             {
                 aPolyPolygon = pObj->TakeXorPoly();
             }

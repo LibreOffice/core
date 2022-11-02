@@ -3202,6 +3202,13 @@ E3dScene* DynCastE3dScene(SdrObject* pObj)
     return nullptr;
 }
 
+E3dObject* DynCastE3dObject(SdrObject* pObj)
+{
+    if( pObj && pObj->GetObjInventor() == SdrInventor::E3d )
+        return static_cast<E3dObject*>(pObj);
+    return nullptr;
+}
+
 rtl::Reference<SdrObject> SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)
 {
     SdrObjCreatorParams aParams { nInventor, nObjIdentifier, rSdrModel };

@@ -55,7 +55,7 @@ E3dDragMethod::E3dDragMethod (
         // for non-visible 3D objects fallback to wireframe interaction
         for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
-            E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
+            E3dObject* pE3dObj = DynCastE3dObject(rMark.GetMark(nObjs)->GetMarkedSdrObj());
 
             if(pE3dObj)
             {
@@ -70,7 +70,7 @@ E3dDragMethod::E3dDragMethod (
 
     for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
     {
-        E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
+        E3dObject* pE3dObj = DynCastE3dObject(rMark.GetMark(nObjs)->GetMarkedSdrObj());
 
         if(pE3dObj)
         {

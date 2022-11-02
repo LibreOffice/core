@@ -117,7 +117,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
         throw uno::RuntimeException();
 
     rtl::Reference<SdrObject> pSdrShape = mxPage->CreateSdrObject_( xShape );
-    if( dynamic_cast<const E3dObject* >(pSdrShape.get()) !=  nullptr )
+    if( DynCastE3dObject(pSdrShape.get()) )
     {
         GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape.get() );
         pShape->Create(pSdrShape.get(), mxPage.get());
@@ -139,7 +139,7 @@ void Svx3DSceneObject::addShape( SvxShape& rShape )
         throw uno::RuntimeException();
 
     rtl::Reference<SdrObject> pSdrShape = mxPage->CreateSdrObject_( &rShape );
-    if( dynamic_cast<const E3dObject* >(pSdrShape.get()) !=  nullptr )
+    if( DynCastE3dObject(pSdrShape.get()) )
     {
         GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape.get() );
         rShape.Create(pSdrShape.get(), mxPage.get());

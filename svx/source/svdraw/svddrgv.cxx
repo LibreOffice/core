@@ -270,7 +270,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             for(size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a)
                             {
                                 SdrObject* pObj = GetMarkedObjectByIndex(a);
-                                if(dynamic_cast< const E3dObject* >(pObj))
+                                if(DynCastE3dObject(pObj))
                                     b3DObjSelected = true;
                             }
                             // If yes, allow shear even when !IsShearAllowed,

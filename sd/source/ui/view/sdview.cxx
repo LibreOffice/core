@@ -976,7 +976,7 @@ bool View::IsMorphingAllowed() const
              ( nKind1 != SdrObjKind::Graphic && nKind2 != SdrObjKind::Graphic ) &&
              ( nKind1 != SdrObjKind::OLE2 && nKind2 != SdrObjKind::OLE2 ) &&
              ( nKind1 != SdrObjKind::Caption && nKind2 !=  SdrObjKind::Caption ) &&
-             dynamic_cast< const E3dObject *>( pObj1 ) == nullptr && dynamic_cast< const E3dObject *>( pObj2 ) ==  nullptr )
+             DynCastE3dObject( pObj1 ) == nullptr && DynCastE3dObject( pObj2 ) ==  nullptr )
         {
             SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLSTYLE> aSet1( mrDoc.GetPool() );
             SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLSTYLE> aSet2( mrDoc.GetPool() );

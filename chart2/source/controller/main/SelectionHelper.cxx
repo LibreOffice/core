@@ -465,7 +465,7 @@ SelectionHelper::~SelectionHelper()
 bool SelectionHelper::getFrameDragSingles()
 {
     //true == green == surrounding handles
-    return dynamic_cast<const E3dObject*>( m_pSelectedObj) == nullptr;
+    return DynCastE3dObject( m_pSelectedObj) == nullptr;
 }
 
 SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
@@ -532,7 +532,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
 
     if(pObj)
     {
-        pRotateable = dynamic_cast<E3dObject*>(pObj);
+        pRotateable = DynCastE3dObject(pObj);
         if( !pRotateable )
         {
             SolarMutexGuard aSolarGuard;
@@ -542,8 +542,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
                 SdrObjListIter aIterator(pSubList, SdrIterMode::DeepWithGroups);
                 while( aIterator.IsMore() && !pRotateable )
                 {
-                    SdrObject* pSubObj = aIterator.Next();
-                    pRotateable = dynamic_cast<E3dObject*>(pSubObj);
+                    pRotateable = DynCastE3dObject(aIterator.Next());
                 }
             }
         }

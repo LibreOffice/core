@@ -332,7 +332,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCop
             }
 
             // set up a scene updater if object is a 3d object
-            if(dynamic_cast< E3dObject* >(pO))
+            if(DynCastE3dObject(pO))
             {
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pO));
             }
@@ -396,7 +396,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
             }
 
             // set up a scene updater if object is a 3d object
-            if(dynamic_cast< E3dObject* >(pO))
+            if(DynCastE3dObject(pO))
             {
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pO));
             }
@@ -1188,7 +1188,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         }
 
         // set up a scene updater if object is a 3d object
-        if(dynamic_cast< E3dObject* >(pObj))
+        if(DynCastE3dObject(pObj))
         {
             aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
         }

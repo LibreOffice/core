@@ -551,7 +551,7 @@ static bool isControlList(const SdrMarkList& rMarkList)
     for (size_t i = 0; i < nMarkCount && bControlList; ++i)
     {
         SdrObject *pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        E3dObject* pAs3DObject = dynamic_cast< E3dObject* >( pObj);
+        E3dObject* pAs3DObject = DynCastE3dObject( pObj);
         // E3dObject's do not contain any 2D-objects (by definition)
         // we need this extra check here : an E3dObject->IsGroupObject says "YES", but an SdrObjListIter working
         // with an E3dObject doesn't give me any Nodes (E3dObject has a sub list, but no members in that list,
