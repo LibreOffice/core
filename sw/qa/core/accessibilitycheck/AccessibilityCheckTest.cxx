@@ -154,6 +154,17 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeCaption)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::FAKE_CAPTION, aIssues[0]->m_eIssueID);
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTableFormatting)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TableFormattingTest.odt");
+    CPPUNIT_ASSERT(pDoc);
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TABLE_FORMATTING, aIssues[0]->m_eIssueID);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

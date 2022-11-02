@@ -236,6 +236,50 @@ public:
     }
 };
 
+class TableFormattingCheck : public NodeCheck
+{
+private:
+    void checkTableNode(SwTableNode* pTableNode)
+    {
+        if (!pTableNode)
+            return;
+
+        const SwTable& rTable = pTableNode->GetTable();
+        if (!rTable.IsTableComplex())
+        {
+            size_t nEmptyBoxes = 0;
+            size_t nBoxCount = 0;
+            for (const SwTableLine* pTableLine : rTable.GetTabLines())
+            {
+                nBoxCount += pTableLine->GetTabBoxes().size();
+                for (const SwTableBox* pBox : pTableLine->GetTabBoxes())
+                    if (pBox->IsEmpty())
+                        ++nEmptyBoxes;
+            }
+            // If more than half of the boxes are empty we can assume that it is used for formatting
+            if (nEmptyBoxes > nBoxCount / 2)
+                lclAddIssue(m_rIssueCollection, SwResId(STR_TABLE_FORMATTING),
+                            sfx::AccessibilityIssueID::TABLE_FORMATTING);
+        }
+    }
+
+public:
+    TableFormattingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->GetNodeType() & SwNodeType::Table)
+        {
+            SwTableNode* pTableNode = pCurrent->GetTableNode();
+            if (pTableNode)
+                checkTableNode(pTableNode);
+        }
+    }
+};
+
 class NumberingCheck : public NodeCheck
 {
 private:
@@ -672,6 +716,10 @@ public:
     void check(SwNode* pCurrent) override
     {
         if (!pCurrent->IsTextNode())
+            return;
+
+        // Don't count empty table box text nodes
+        if (pCurrent->GetTableBox())
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
@@ -1318,6 +1366,7 @@ void AccessibilityCheck::check()
     std::vector<std::unique_ptr<NodeCheck>> aNodeChecks;
     aNodeChecks.push_back(std::make_unique<NoTextNodeAltTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TableNodeMergeSplitCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<TableFormattingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NumberingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HyperlinkCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextContrastCheck>(m_aIssueCollection));
