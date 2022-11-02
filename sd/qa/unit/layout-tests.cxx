@@ -292,6 +292,28 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBnc480256)
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[8]/linecolor[1]", "color", "#ff0000");
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
+{
+    // This test checks that the text fitting is working correctly when
+    // the textbox is set to "fit to frame" by stretching the text to or
+    // near the textbox boundary. The problem is especially complicated
+    // when the font size is set to a higher number (like 999)
+    //
+    // The text fitting behaviour when "fit by frame" is enabled is to
+    // always fit the text into the text box (without forcing the text
+    // into new line) by shrinking or expanding the text horizontally
+    // and vertically.
+
+    xmlDocUniquePtr pXmlDoc = load("odg/FitToFrameText.odg");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", "0");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "406");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first", "114");
+#ifndef _WIN32 // Windows seems to differ in text layouting, so ignore for now
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last", "7010");
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -811,11 +811,16 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
 
                 if (!pMetaTextArrayAction->GetDXArray().empty())
                 {
+                    auto & rArray = pMetaTextArrayAction->GetDXArray();
                     rWriter.startElement("dxarray");
+                    if (aIndex < o3tl::narrowing<sal_Int32>(rArray.size()))
+                        rWriter.attribute("first", rArray[aIndex]);
+                    if (aIndex + aLength - 1 < o3tl::narrowing<sal_Int32>(rArray.size()))
+                        rWriter.attribute("last", rArray[aIndex + aLength - 1]);
                     OUStringBuffer sDxLengthString;
                     for (sal_Int32 i = 0; i < aLength - aIndex; ++i)
                     {
-                        sDxLengthString.append(pMetaTextArrayAction->GetDXArray()[aIndex + i]);
+                        sDxLengthString.append(rArray[aIndex + i]);
                         sDxLengthString.append(" ");
                     }
                     rWriter.content(sDxLengthString);
