@@ -308,9 +308,17 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     rDevice.SetBackground(SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
-    const Fraction aFraction(1, 1);
-    MapUnit unit = comphelper::LibreOfficeKit::isActive() ? MapUnit::MapPixel : MapUnit::Map100thMM;
-    rDevice.SetMapMode(MapMode(unit, Point(), aFraction, aFraction));
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Disable map mode, so that it's possible to send mouse event coordinates
+        // directly in twips.
+        rDevice.EnableMapMode(false);
+    }
+    else
+    {
+        const Fraction aFraction(1, 1);
+        rDevice.SetMapMode(MapMode(SmMapUnit(), Point(), aFraction, aFraction));
+    }
 
     SetTotalSize();
 
@@ -801,9 +809,11 @@ bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
     nZoom = std::clamp(Factor, MINZOOM, MAXZOOM);
     Fraction aFraction(nZoom, 100);
-    SetGraphicMapMode(MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction));
+    SetGraphicMapMode(MapMode(SmMapUnit(), Point(), aFraction, aFraction));
     mxGraphic->SetTotalSize();
     SmViewShell& rViewSh = mxGraphic->GetView();
     rViewSh.GetViewFrame()->GetBindings().Invalidate(SID_ATTR_ZOOM);
@@ -813,7 +823,7 @@ void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 void SmGraphicWindow::ZoomToFitInWindow()
 {
     // set defined mapmode before calling 'LogicToPixel' below
-    SetGraphicMapMode(MapMode(MapUnit::Map100thMM));
+    SetGraphicMapMode(MapMode(SmMapUnit()));
 
     assert(mxGraphic->GetDoc());
     Size aSize(mxGraphic->GetOutputDevice().LogicToPixel(mxGraphic->GetDoc()->GetSize()));
@@ -1101,7 +1111,7 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( !aObjSize.IsEmpty() )
     {
-        Size aProvidedSize = GetWindow()->PixelToLogic(rSize, MapMode(MapUnit::Map100thMM));
+        Size aProvidedSize = GetWindow()->PixelToLogic(rSize, MapMode(SmMapUnit()));
         Fraction aZoomX(aProvidedSize.Width(), aObjSize.Width());
         Fraction aZoomY(aProvidedSize.Height(), aObjSize.Height());
         MapMode aMap(mxGraphicWindow->GetGraphicMapMode());
@@ -1404,44 +1414,43 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
     switch (ePrintSize)
     {
         case PRINT_SIZE_NORMAL:
-            OutputMapMode = MapMode(MapUnit::Map100thMM);
+            OutputMapMode = MapMode(SmMapUnit());
             break;
 
         case PRINT_SIZE_SCALED:
             if (!aSize.IsEmpty())
             {
-                Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
-                                                            aOutRect.GetHeight()), MapMode(MapUnit::Map100thMM)));
-                Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MapUnit::Map100thMM)));
-                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
-                                                                          tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
+                Size OutputSize(rOutDev.LogicToPixel(aOutRect.GetSize(), MapMode(SmMapUnit())));
+                Size GraphicSize(rOutDev.LogicToPixel(aSize, MapMode(SmMapUnit())));
+                sal_uInt16 nZ = std::min(o3tl::convert(OutputSize.Width(), 100, GraphicSize.Width()),
+                                         o3tl::convert(OutputSize.Height(), 100, GraphicSize.Height()));
                 nZ -= 10;
-                Fraction aFraction (std::clamp(nZ, MINZOOM, sal_uInt16(100)));
+                Fraction aFraction(std::clamp(nZ, MINZOOM, sal_uInt16(100)), 1);
 
-                OutputMapMode = MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction);
+                OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
             }
             else
-                OutputMapMode = MapMode(MapUnit::Map100thMM);
+                OutputMapMode = MapMode(SmMapUnit());
             break;
 
         case PRINT_SIZE_ZOOMED:
         {
             Fraction aFraction( nZoomFactor, 100 );
 
-            OutputMapMode = MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction);
+            OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
             break;
         }
     }
 
     aSize = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aSize, OutputMapMode),
-                                   MapMode(MapUnit::Map100thMM));
+                                   MapMode(SmMapUnit()));
 
     Point aPos (aOutRect.Left() + (aOutRect.GetWidth()  - aSize.Width())  / 2,
                 aOutRect.Top()  + (aOutRect.GetHeight() - aSize.Height()) / 2);
 
-    aPos     = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aPos, MapMode(MapUnit::Map100thMM)),
+    aPos     = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aPos, MapMode(SmMapUnit())),
                                           OutputMapMode);
-    aOutRect   = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aOutRect, MapMode(MapUnit::Map100thMM)),
+    aOutRect   = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aOutRect, MapMode(SmMapUnit())),
                                           OutputMapMode);
 
     rOutDev.SetMapMode(OutputMapMode);
@@ -2252,7 +2261,7 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
         case SvxZoomType::PAGEWIDTH:
         case SvxZoomType::WHOLEPAGE:
         {
-            const MapMode aMap( MapUnit::Map100thMM );
+            const MapMode aMap( SmMapUnit() );
             SfxPrinter *pPrinter = GetPrinter( true );
             tools::Rectangle  OutputRect(Point(), pPrinter->GetOutputSize());
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),

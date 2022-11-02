@@ -23,6 +23,7 @@
 #include "tmpdevice.hxx"
 #include <utility>
 #include <visitors.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/metric.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
@@ -135,8 +136,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
 
     if (!(Flags() & FontChangeMask::Size))
     {
-        constexpr auto md = o3tl::getConversionMulDiv(o3tl::Length::pt, o3tl::Length::mm100);
-        Fraction aVal (Fraction(md.first, md.second) * rSize);
+        Fraction aVal(conversionFract(o3tl::Length::pt, SmO3tlLengthUnit()) * rSize);
         tools::Long      nHeight = static_cast<tools::Long>(aVal);
 
         aFntSize = GetFont().GetFontSize();
@@ -168,7 +168,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
         }
 
         // check the requested size against maximum value
-        constexpr int nMaxVal = o3tl::convert(128, o3tl::Length::pt, o3tl::Length::mm100);
+        const int nMaxVal = o3tl::convert(128, o3tl::Length::pt, SmO3tlLengthUnit());
         if (aFntSize.Height() > nMaxVal)
             aFntSize.setHeight( nMaxVal );
 

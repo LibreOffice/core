@@ -21,10 +21,13 @@
 
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <vcl/weld.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <deque>
 
 
@@ -112,5 +115,15 @@ public:
     SmFontPickListBox& operator = (const SmFontPickList& rList);
     virtual void    Insert(const vcl::Font &rFont) override;
 };
+
+// Math uses 100ths of MM by default, but lok needs twips everywhere
+inline MapUnit SmMapUnit()
+{
+    return comphelper::LibreOfficeKit::isActive() ? MapUnit::MapTwip : MapUnit::Map100thMM;
+}
+inline o3tl::Length SmO3tlLengthUnit()
+{
+    return comphelper::LibreOfficeKit::isActive() ? o3tl::Length::twip : o3tl::Length::mm100;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

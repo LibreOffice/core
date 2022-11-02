@@ -253,10 +253,10 @@ void SmDocShell::ArrangeFormula()
         else
         {
             pOutDev = &SM_MOD()->GetDefaultVirtualDev();
-            pOutDev->SetMapMode( MapMode(MapUnit::Map100thMM) );
+            pOutDev->SetMapMode( MapMode(SmMapUnit()) );
         }
     }
-    OSL_ENSURE(pOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM,
+    OSL_ENSURE(pOutDev->GetMapMode().GetMapUnit() == SmMapUnit(),
                "Sm : wrong MapMode");
 
     const SmFormat &rFormat = GetFormat();
@@ -417,13 +417,13 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             //!this class.
 
             const MapUnit eOld = pPrinter->GetMapMode().GetMapUnit();
-            if ( MapUnit::Map100thMM != eOld )
+            if ( SmMapUnit() != eOld )
             {
                 MapMode aMap( pPrinter->GetMapMode() );
-                aMap.SetMapUnit( MapUnit::Map100thMM );
+                aMap.SetMapUnit( SmMapUnit() );
                 Point aTmp( aMap.GetOrigin() );
-                aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM ) );
-                aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM ) );
+                aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, SmMapUnit() ) );
+                aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, SmMapUnit() ) );
                 aMap.SetOrigin( aTmp );
                 pPrinter->SetMapMode( aMap );
             }
@@ -445,13 +445,13 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     //!this class.
 
     const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
-    if ( MapUnit::Map100thMM != eOld )
+    if ( SmMapUnit() != eOld )
     {
         MapMode aMap( pRefDev->GetMapMode() );
-        aMap.SetMapUnit( MapUnit::Map100thMM );
+        aMap.SetMapUnit( SmMapUnit() );
         Point aTmp( aMap.GetOrigin() );
-        aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM ) );
-        aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM ) );
+        aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, SmMapUnit() ) );
+        aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, SmMapUnit() ) );
         aMap.SetOrigin( aTmp );
         pRefDev->SetMapMode( aMap );
     }
@@ -486,7 +486,7 @@ Printer* SmDocShell::GetPrt()
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pOptions));
-        mpPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
+        mpPrinter->SetMapMode(MapMode(SmMapUnit()));
     }
     return mpPrinter;
 }
@@ -507,7 +507,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
     mpPrinter.disposeAndClear();
     mpPrinter = pNew;    //Transfer ownership
-    mpPrinter->SetMapMode( MapMode(MapUnit::Map100thMM) );
+    mpPrinter->SetMapMode( MapMode(SmMapUnit()) );
     SetFormulaArranged(false);
     Repaint();
 }
@@ -562,6 +562,8 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
 
     SetBaseModel(new SmModel(this));
     SetSmSyntaxVersion(mnSmSyntaxVersion);
+
+    SetMapUnit(SmMapUnit());
 }
 
 SmDocShell::~SmDocShell()

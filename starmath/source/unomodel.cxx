@@ -479,7 +479,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if(nVal < 1)
                     throw IllegalArgumentException();
                 Size aSize = aFormat.GetBaseSize();
-                aSize.setHeight(o3tl::convert(nVal, o3tl::Length::pt, o3tl::Length::mm100));
+                aSize.setHeight(o3tl::convert(nVal, o3tl::Length::pt, SmO3tlLengthUnit()));
                 aFormat.SetBaseSize(aSize);
 
                 // apply base size to fonts
@@ -729,7 +729,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             {
                 // Point!
                 *pValue <<= sal_Int16(o3tl::convert(aFormat.GetBaseSize().Height(),
-                                                    o3tl::Length::mm100, o3tl::Length::pt));
+                                                    SmO3tlLengthUnit(), o3tl::Length::pt));
             }
             break;
             case HANDLE_RELATIVE_FONT_HEIGHT_TEXT           :
@@ -916,7 +916,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
     if (aPrtPaperSize.IsEmpty())
-        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MapUnit::Map100thMM);
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(SmMapUnit());
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
@@ -962,7 +962,7 @@ void SAL_CALL SmModel::render(
     if (!pOut)
         throw RuntimeException();
 
-    pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
+    pOut->SetMapMode(MapMode(SmMapUnit()));
 
     uno::Reference< frame::XModel > xModel;
     rSelection >>= xModel;
@@ -990,7 +990,7 @@ void SAL_CALL SmModel::render(
     // no real printer ??
     if (aPrtPaperSize.IsEmpty())
     {
-        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MapUnit::Map100thMM);
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(SmMapUnit());
         // factors from Windows DIN A4
         aOutputSize    = Size( static_cast<tools::Long>(aPrtPaperSize.Width()  * 0.941),
                                static_cast<tools::Long>(aPrtPaperSize.Height() * 0.961));

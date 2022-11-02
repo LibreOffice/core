@@ -18,6 +18,8 @@
  */
 
 #include <smmod.hxx>
+#include <utility.hxx>
+
 #include "tmpdevice.hxx"
 
 #include <svtools/colorcfg.hxx>
@@ -36,10 +38,10 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
 {
     rOutDev.Push(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE |
                  vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::TEXTCOLOR);
-    if (bUseMap100th_mm  &&  MapUnit::Map100thMM != rOutDev.GetMapMode().GetMapUnit())
+    if (bUseMap100th_mm  &&  SmMapUnit() != rOutDev.GetMapMode().GetMapUnit())
     {
         SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode(MapMode(MapUnit::Map100thMM)); // format for 100% always
+        rOutDev.SetMapMode(MapMode(SmMapUnit())); // format for 100% always
     }
 }
 

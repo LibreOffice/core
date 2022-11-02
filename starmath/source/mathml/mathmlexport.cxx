@@ -1197,7 +1197,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
                     //Must fix StarMath to retain the original pt values
                     double mytest
                         = o3tl::convert<double>(pFontNode->GetFont().GetFontSize().Height(),
-                                                o3tl::Length::mm100, o3tl::Length::pt);
+                                                SmO3tlLengthUnit(), o3tl::Length::pt);
 
                     if (pFontNode->GetSizeType() == FontSizeType::MINUS)
                         mytest -= static_cast<double>(aFrac);
