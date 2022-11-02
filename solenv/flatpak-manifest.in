@@ -1,7 +1,7 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "21.08",
+    "runtime-version": "22.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk11"
@@ -19,7 +19,7 @@
             "name": "gvfs",
             "buildsystem": "meson",
             "config-opts": [ "-Dsystemduserunitdir=no", "-Dtmpfilesdir=no", "-Dinstalled_tests=true",
-            "-Ddbus_service_dir=/usr/share/dbus-1/services", "-Dadmin=false", "-Dafc=false", "-Dafp=false",
+            "-Dadmin=false", "-Dafc=false", "-Dafp=false",
             "-Darchive=false", "-Dcdda=false", "-Ddnssd=false", "-Dgoa=false", "-Dgoogle=false",
             "-Dgphoto2=false", "-Dhttp=false", "-Dmtp=false", "-Dnfs=false", "-Dsftp=false", "-Dsmb=false",
             "-Dudisks2=false", "-Dbluray=false", "-Dfuse=false", "-Dgcr=false", "-Dgcrypt=false",
