@@ -1999,24 +1999,24 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
 
         if (eSplitMethod == SC_SPLIT_METHOD_ROW || eSplitMethod == SC_SPLIT_METHOD_CURSOR)
         {
-             if (eOldV != SC_SPLIT_NONE)
-             {
-                 nTopPos = aViewData.GetPosY(SC_SPLIT_TOP);
-                 if (aViewData.GetPosY(SC_SPLIT_BOTTOM) > nBottomPos)
-                     nBottomPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
-             }
-             aSplit = aViewData.GetScrPos( nPosX, nPosY, ePos, true );
-             if (aSplit.Y() > 0)
-             {
-                 aViewData.SetVSplitMode( SC_SPLIT_FIX );
-                 aViewData.SetVSplitPos( aSplit.Y() + aWinStart.Y() );
-                 aViewData.SetFixPosY( nPosY );
+            if (eOldV != SC_SPLIT_NONE)
+            {
+                nTopPos = aViewData.GetPosY(SC_SPLIT_TOP);
+                if (aViewData.GetPosY(SC_SPLIT_BOTTOM) > nBottomPos)
+                    nBottomPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
+            }
+            aSplit = aViewData.GetScrPos(nPosX, nPosY, ePos, true);
+            if (aSplit.Y() > 0)
+            {
+                aViewData.SetVSplitMode(SC_SPLIT_FIX);
+                aViewData.SetVSplitPos(aSplit.Y() + aWinStart.Y());
+                aViewData.SetFixPosY(nPosY);
 
-                 aViewData.SetPosY(SC_SPLIT_TOP, nTopPos);
-                 aViewData.SetPosY(SC_SPLIT_BOTTOM, nBottomPos);
-             }
-             else
-                 aViewData.SetVSplitMode( SC_SPLIT_NONE );
+                aViewData.SetPosY(SC_SPLIT_TOP, nTopPos);
+                aViewData.SetPosY(SC_SPLIT_BOTTOM, nBottomPos);
+            }
+            else
+                aViewData.SetVSplitMode(SC_SPLIT_NONE);
         }
 
         if (eSplitMethod == SC_SPLIT_METHOD_COL || eSplitMethod == SC_SPLIT_METHOD_CURSOR)
