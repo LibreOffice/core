@@ -122,14 +122,29 @@ vcl::Window* LokStarMathHelper::GetWidgetWindow()
     return mpWidgetWindow.get();
 }
 
+const SfxViewShell* LokStarMathHelper::GetSmViewShell()
+{
+    if (vcl::Window* pGraphWindow = GetGraphicWindow())
+    {
+        return SfxViewShell::GetFirst(false, [pGraphWindow](const SfxViewShell* shell) {
+            return shell->GetWindow() && shell->GetWindow()->IsChild(pGraphWindow);
+        });
+    }
+    return nullptr;
+}
+
+tools::Rectangle LokStarMathHelper::GetBoundingBox() const
+{
+    return mpIPClient ? mpIPClient->GetObjArea() : tools::Rectangle{};
+}
+
 bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
                                        int nModifier, double /*fScaleX*/, double /*fScaleY*/)
 {
-    if (vcl::Window* pWindow = GetWidgetWindow())
+    const tools::Rectangle rBBox = GetBoundingBox();
+    if (Point aMousePos(nX, nY); rBBox.Contains(aMousePos))
     {
-        Point aMousePos(nX, nY);
-        tools::Rectangle rBBox = mpIPClient->GetObjArea();
-        if (rBBox.Contains(aMousePos))
+        if (vcl::Window* pWindow = GetWidgetWindow())
         {
             aMousePos -= rBBox.TopLeft();
             LokMouseEventData aMouseEventData(

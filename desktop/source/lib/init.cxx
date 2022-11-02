@@ -2138,6 +2138,11 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
 
 void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* viewShell, int viewId )
 {
+    if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
+    {
+        if (const SfxViewShell* viewShell2 = LokStarMathHelper(viewShell).GetSmViewShell())
+            viewShell = viewShell2;
+    }
     std::optional<OString> payload = viewShell->getLOKPayload( type, viewId );
     if(!payload)
         return; // No actual payload to send.

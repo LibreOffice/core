@@ -11,8 +11,11 @@
 #include <document.hxx>
 #include <view.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 #include <editeng/editeng.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <osl/diagnose.h>
+#include <sfx2/lokhelper.hxx>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;
@@ -169,6 +172,11 @@ void SmCursor::AnnotateSelection(){
 
 void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible){
     SmCaretDrawingVisitor(pDev, GetPosition(), Offset, isCaretVisible);
+}
+
+tools::Rectangle SmCursor::GetCaretRectangle(OutputDevice& rOutDev) const
+{
+    return SmCaretRectanglesVisitor(rOutDev, GetPosition()).getCaret();
 }
 
 void SmCursor::DeletePrev(OutputDevice* pDev){
@@ -1319,7 +1327,11 @@ void SmCursor::EndEdit(){
 void SmCursor::RequestRepaint(){
     SmViewShell *pViewSh = SmGetActiveView();
     if( pViewSh ) {
-        if ( SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode() )
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            pViewSh->SendCaretToLOK();
+        }
+        else if ( SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode() )
             mpDocShell->Repaint();
         else
             pViewSh->GetGraphicWidget().Invalidate();

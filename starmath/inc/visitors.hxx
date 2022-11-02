@@ -111,26 +111,64 @@ protected:
     virtual void DefaultVisit( SmNode* pNode ) = 0;
 };
 
+// SmCaretLinesVisitor: ancestor of caret rectangle enumeration and drawing visitors
+
+class SmCaretLinesVisitor : public SmDefaultingVisitor
+{
+public:
+    SmCaretLinesVisitor(OutputDevice& rDevice, SmCaretPos position, Point offset);
+    virtual ~SmCaretLinesVisitor() = default;
+    void Visit(SmTextNode* pNode) override;
+    using SmDefaultingVisitor::Visit;
+
+protected:
+    void DoIt();
+
+    OutputDevice& getDev() { return mrDev; }
+    virtual void ProcessCaretLine(Point from, Point to) = 0;
+    virtual void ProcessUnderline(Point from, Point to) = 0;
+
+    /** Default method for drawing pNodes */
+    void DefaultVisit(SmNode* pNode) override;
+
+private:
+    OutputDevice& mrDev;
+    SmCaretPos maPos;
+    /** Offset to draw from */
+    Point  maOffset;
+};
+
+// SmCaretRectanglesVisitor: obtains the set of rectangles to sent to lok
+
+class SmCaretRectanglesVisitor final : public SmCaretLinesVisitor
+{
+public:
+    SmCaretRectanglesVisitor(OutputDevice& rDevice, SmCaretPos position);
+    const tools::Rectangle& getCaret() const { return maCaret; }
+
+protected:
+    virtual void ProcessCaretLine(Point from, Point to) override;
+    virtual void ProcessUnderline(Point from, Point to) override;
+
+private:
+    tools::Rectangle maCaret;
+};
+
 // SmCaretDrawingVisitor
 
 /** Visitor for drawing a caret position */
-class SmCaretDrawingVisitor final : public SmDefaultingVisitor
+class SmCaretDrawingVisitor final : public SmCaretLinesVisitor
 {
 public:
     /** Given position and device this constructor will draw the caret */
     SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
-    virtual ~SmCaretDrawingVisitor() {}
-    void Visit( SmTextNode* pNode ) override;
-    using SmDefaultingVisitor::Visit;
-private:
-    OutputDevice &mrDev;
-    SmCaretPos maPos;
-    /** Offset to draw from */
-    Point  maOffset;
-    bool  mbCaretVisible;
 
-    /** Default method for drawing pNodes */
-    void DefaultVisit( SmNode* pNode ) override;
+protected:
+    virtual void ProcessCaretLine(Point from, Point to) override;
+    virtual void ProcessUnderline(Point from, Point to) override;
+
+private:
+    bool  mbCaretVisible;
 };
 
 // SmCaretPos2LineVisitor

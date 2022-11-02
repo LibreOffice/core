@@ -40,6 +40,8 @@
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
@@ -365,6 +367,9 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (SmViewShell::IsInlineEditEnabled()) {
         GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
+        // 'on grab' window events are missing in lok, do it explicitly
+        if (comphelper::LibreOfficeKit::isActive())
+            SetIsCursorVisible(true);
         return true;
     }
     const SmNode *pNode = nullptr;
@@ -456,13 +461,15 @@ IMPL_LINK_NOARG(SmGraphicWidget, CaretBlinkTimerHdl, Timer *, void)
 
 void SmGraphicWidget::CaretBlinkInit()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return; // No blinking in lok case
     aCaretBlinkTimer.SetInvokeHandler(LINK(this, SmGraphicWidget, CaretBlinkTimerHdl));
     aCaretBlinkTimer.SetTimeout(Application::GetSettings().GetStyleSettings().GetCursorBlinkTime());
 }
 
 void SmGraphicWidget::CaretBlinkStart()
 {
-    if (!SmViewShell::IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled() || comphelper::LibreOfficeKit::isActive())
         return;
     if (aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME)
         aCaretBlinkTimer.Start();
@@ -470,7 +477,7 @@ void SmGraphicWidget::CaretBlinkStart()
 
 void SmGraphicWidget::CaretBlinkStop()
 {
-    if (!SmViewShell::IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled() || comphelper::LibreOfficeKit::isActive())
         return;
     aCaretBlinkTimer.Stop();
 }
@@ -494,6 +501,17 @@ void SmGraphicWidget::ShowLine(bool bShow)
         return;
 
     bIsLineVisible = bShow;
+}
+
+void SmGraphicWidget::SetIsCursorVisible(bool bVis)
+{
+    bIsCursorVisible = bVis;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mrViewShell.SendCaretToLOK();
+        mrViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
+                                               OString::boolean(bVis).getStr());
+    }
 }
 
 void SmGraphicWidget::SetCursor(const SmNode *pNode)
@@ -2131,6 +2149,16 @@ public:
         mpSelectionChangeHandler->selectionChanged({}); // Installs the correct context
     }
 
+    virtual void SAL_CALL dispose() override
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+            if (auto pViewShell = GetViewShell_Impl())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
+                                                       OString::boolean(false).getStr());
+
+        SfxBaseController::dispose();
+    }
+
 private:
     static OUString GetContextName() { return "Math"; } // Static constant for now
 
@@ -2282,6 +2310,20 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
     switch (nType)
     {
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        {
+            OString sRectangle;
+            if (const SmGraphicWidget& widget = GetGraphicWidget(); widget.IsCursorVisible())
+            {
+                SmCursor& rCursor = GetDoc()->GetCursor();
+                OutputDevice& rOutDev = const_cast<SmGraphicWidget&>(widget).GetOutputDevice();
+                tools::Rectangle aCaret = rCursor.GetCaretRectangle(rOutDev);
+                LokStarMathHelper helper(SfxViewShell::Current());
+                tools::Rectangle aBounds = helper.GetBoundingBox();
+                aCaret.Move(aBounds.Left(), aBounds.Top());
+                sRectangle = aCaret.toString();
+            }
+            return SfxLokHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
+        }
         case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         case LOK_CALLBACK_TEXT_SELECTION:
         case LOK_CALLBACK_TEXT_SELECTION_START:
@@ -2290,6 +2332,16 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
             return {};
     }
     return SfxViewShell::getLOKPayload(nType, nViewId); // aborts
+}
+
+void SmViewShell::SendCaretToLOK() const
+{
+    const int nViewId = sal_Int32(GetViewShellId());
+    if (const auto& payload = getLOKPayload(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
+    {
+        libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+                                             payload->getStr(), nViewId);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
