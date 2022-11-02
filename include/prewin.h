@@ -50,7 +50,7 @@
 // C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um/GdiplusTypes.h, but not for e.g.
 // C:/Program Files (x86)/Windows Kits/10/Include/10.0.22000.0/um/GdiplusTypes.h which explicitly
 // defines its own GDIPLUS_MIN/MAX macros.  The easiest fix appears to be to define min/max here and
-// to undefin them again in postwin.h, until no supported version of the Windows SDK requires this
+// to undefine them again in postwin.h, until no supported version of the Windows SDK requires this
 // hack any longer:
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) > (b)) ? (a) : (b))
