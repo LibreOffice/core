@@ -506,7 +506,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     std::unique_ptr<SmNode> pNode = maParser->ParseExpression(aElementVisual);
     VclPtr<VirtualDevice> pDevice(mpIconView->create_virtual_device());
     pDevice->SetTextRenderModeForResolutionIndependentLayout(true);
-    pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
+    pDevice->SetMapMode(MapMode(SmMapUnit()));
     pDevice->SetDrawMode(DrawModeFlags::Default);
     pDevice->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
     pDevice->SetDigitLanguage(LANGUAGE_ENGLISH);
