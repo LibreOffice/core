@@ -17,10 +17,12 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template<class E> class Sequence; }
 namespace rtl { class OUString; }
 namespace vcl { class Window; }
 
+class SfxInPlaceClient;
 class SfxViewShell;
 class VirtualDevice;
 
@@ -67,25 +69,20 @@ public:
 class SFX2_DLLPUBLIC LokStarMathHelper
 {
 public:
-    LokStarMathHelper(const SfxViewShell* pViewShell)
-        : mpViewShell(pViewShell)
-    {
-    }
+    LokStarMathHelper(const SfxViewShell* pViewShell);
 
     vcl::Window* GetGraphicWindow();
     vcl::Window* GetWidgetWindow();
 
-    void Dispatch(const rtl::OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments);
+    void Dispatch(const rtl::OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);
 
 private:
-    css::uno::Reference<css::frame::XController>& GetXController();
-    tools::Rectangle GetBoundingBox();
-
     const SfxViewShell* mpViewShell;
-    css::uno::Reference<css::frame::XController> mxController;
+    const SfxInPlaceClient* mpIPClient = nullptr; // not nullptr when the object is valid
+    css::uno::Reference<css::frame::XFrame> mxFrame; // not empty when the object is valid
     VclPtr<vcl::Window> mpGraphicWindow;
     VclPtr<vcl::Window> mpWidgetWindow;
 };

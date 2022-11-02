@@ -23,9 +23,10 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-css::uno::Reference<css::frame::XController>& LokStarMathHelper::GetXController()
+LokStarMathHelper::LokStarMathHelper(const SfxViewShell* pViewShell)
+    : mpViewShell(pViewShell)
 {
-    if (!mxController && mpViewShell)
+    if (mpViewShell)
     {
         if (const SfxInPlaceClient* pIPClient = mpViewShell->GetIPClient())
         {
@@ -34,22 +35,27 @@ css::uno::Reference<css::frame::XController>& LokStarMathHelper::GetXController(
                 css::uno::Reference<css::lang::XServiceInfo> xComp(xEmbObj->getComponent(),
                                                                    css::uno::UNO_QUERY);
                 if (xComp && xComp->supportsService("com.sun.star.formula.FormulaProperties"))
+                {
                     if (css::uno::Reference<css::frame::XModel> xModel{ xComp,
                                                                         css::uno::UNO_QUERY })
-                        mxController = xModel->getCurrentController();
+                    {
+                        if (auto xController = xModel->getCurrentController())
+                        {
+                            mpIPClient = pIPClient;
+                            mxFrame = xController->getFrame();
+                        }
+                    }
+                }
             }
         }
     }
-
-    return mxController;
 }
 
-void LokStarMathHelper::Dispatch(const OUString& cmd,
-                                 const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+void LokStarMathHelper::Dispatch(
+    const OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
-    if (const css::uno::Reference<css::frame::XController>& xController = GetXController())
-        if (const css::uno::Reference<css::frame::XFrame> xFrame = xController->getFrame())
-            comphelper::dispatchCommand(cmd, xFrame, rArguments);
+    if (mxFrame)
+        comphelper::dispatchCommand(cmd, mxFrame, rArguments);
 }
 
 namespace
@@ -98,13 +104,10 @@ vcl::Window* LokStarMathHelper::GetGraphicWindow()
 {
     if (!mpGraphicWindow)
     {
-        if (const css::uno::Reference<css::frame::XController>& xController = GetXController())
+        if (mxFrame)
         {
-            if (const css::uno::Reference<css::frame::XFrame> xFrame = xController->getFrame())
-            {
-                css::uno::Reference<css::awt::XWindow> xDockerWin = xFrame->getContainerWindow();
-                mpGraphicWindow.set(FindSmGraphicWindow(VCLUnoHelper::GetWindow(xDockerWin)));
-            }
+            css::uno::Reference<css::awt::XWindow> xDockerWin = mxFrame->getContainerWindow();
+            mpGraphicWindow.set(FindSmGraphicWindow(VCLUnoHelper::GetWindow(xDockerWin)));
         }
     }
 
@@ -119,59 +122,18 @@ vcl::Window* LokStarMathHelper::GetWidgetWindow()
     return mpWidgetWindow.get();
 }
 
-tools::Rectangle LokStarMathHelper::GetBoundingBox()
-{
-    if (mpViewShell)
-    {
-        if (SfxInPlaceClient* pIPClient = mpViewShell->GetIPClient())
-        {
-            if (vcl::Window* pRootWin = pIPClient->GetEditWin())
-            {
-                if (vcl::Window* pWindow = GetWidgetWindow())
-                {
-                    // In all cases, the following code fragment
-                    // returns the bounding box in twips.
-                    // Note: the correct mapmode (representing document zoom) is provided by
-                    // GraphicWindow, not WidgetWindow
-                    const MapMode& aMapMode = GetGraphicWindow()->GetMapMode();
-                    const auto & [ m, d ]
-                        = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-                    const Fraction& scaleX = aMapMode.GetScaleX();
-                    const Fraction& scaleY = aMapMode.GetScaleY();
-                    const auto nXNum = m * scaleX.GetDenominator();
-                    const auto nXDen = d * scaleX.GetNumerator();
-                    const auto nYNum = m * scaleY.GetDenominator();
-                    const auto nYDen = d * scaleY.GetNumerator();
-
-                    Point aOffset
-                        = pWindow->GetOffsetPixelFrom(*pRootWin).scale(nXNum, nXDen, nYNum, nYDen);
-                    Size aSize = pWindow->GetSizePixel().scale(nXNum, nXDen, nYNum, nYDen);
-                    return { aOffset, aSize };
-                }
-            }
-        }
-    }
-    return {};
-}
-
 bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
-                                       int nModifier, double fScaleX, double fScaleY)
+                                       int nModifier, double /*fScaleX*/, double /*fScaleY*/)
 {
     if (vcl::Window* pWindow = GetWidgetWindow())
     {
         Point aMousePos(nX, nY);
-        tools::Rectangle rBBox = GetBoundingBox();
+        tools::Rectangle rBBox = mpIPClient->GetObjArea();
         if (rBBox.Contains(aMousePos))
         {
-            int nWinX = nX - rBBox.Left();
-            int nWinY = nY - rBBox.Top();
-
-            // window expects pixels, but the conversion factor
-            // can depend on the client zoom
-            Point aPos(nWinX * fScaleX, nWinY * fScaleY);
-
-            LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
-                                              nButtons, nModifier);
+            aMousePos -= rBBox.TopLeft();
+            LokMouseEventData aMouseEventData(
+                nType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
             SfxLokHelper::postMouseEventAsync(pWindow, aMouseEventData);
 
             return true;
