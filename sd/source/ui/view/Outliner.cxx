@@ -1160,7 +1160,7 @@ namespace
 
 bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
 {
-    auto* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get().get() );
+    auto* pObject = DynCastSdrTextObj( rPosition.mxObject.get().get() );
     return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
 
@@ -1469,7 +1469,7 @@ bool SdOutliner::ShowWrapAroundDialog()
 
 void SdOutliner::PutTextIntoOutliner()
 {
-    mpSearchSpellTextObj = dynamic_cast<SdrTextObj*>( mpObj );
+    mpSearchSpellTextObj = DynCastSdrTextObj( mpObj );
     if ( mpSearchSpellTextObj && mpSearchSpellTextObj->HasText() && !mpSearchSpellTextObj->IsEmptyPresObj() )
     {
         SdrText* pText = mpSearchSpellTextObj->getText( maCurrentPosition.mnText );

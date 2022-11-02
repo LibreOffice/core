@@ -427,7 +427,7 @@ void SdImportTest2::testTdf103792()
     CPPUNIT_ASSERT_MESSAGE("No page found", pPage != nullptr);
     SdrObject* pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT_MESSAGE("Not a text object", pTxtObj != nullptr);
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
@@ -694,7 +694,7 @@ void SdImportTest2::testTdf103477()
 
     const SdrPage* pPage = GetPage(1);
 
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(6));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(6));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
@@ -1053,7 +1053,7 @@ void SdImportTest2::testTdf108925()
 
     loadFromURL(u"odp/tdf108925.odp");
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
 
@@ -1123,7 +1123,7 @@ void SdImportTest2::testTdf90626()
 {
     loadFromURL(u"pptx/tdf90626.pptx");
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(1));
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     for (int i = 0; i < 4; i++)
@@ -1140,7 +1140,7 @@ void SdImportTest2::testTdf138148()
 {
     loadFromURL(u"pptx/tdf138148.pptx");
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     for (int i = 0; i < 2; i++)
@@ -1207,7 +1207,7 @@ void SdImportTest2::testTdf134210()
 void SdImportTest2::testTdf114913()
 {
     loadFromURL(u"pptx/tdf114913.pptx");
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(GetPage(1)->GetObj(1));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(GetPage(1)->GetObj(1));
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem* pItem
         = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(
@@ -1394,7 +1394,7 @@ void SdImportTest2::testTdf116899()
 void SdImportTest2::testTdf77747()
 {
     loadFromURL(u"ppt/tdf77747.ppt");
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(GetPage(1)->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(GetPage(1)->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem* pNumFmt
         = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(
@@ -1709,7 +1709,7 @@ void SdImportTest2::testTdf49856()
 {
     loadFromURL(u"ppt/tdf49856.ppt");
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(1));
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
@@ -1989,7 +1989,7 @@ void SdImportTest2::testTdf149961AutofitIndentation()
     const SdrPage* pPage = GetPage(1);
 
     {
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
         CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
 
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
@@ -2002,7 +2002,7 @@ void SdImportTest2::testTdf149961AutofitIndentation()
     }
 
     {
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(1));
         CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
 
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();

@@ -74,7 +74,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 
         for (auto const& rString : aObjectDesc)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rString));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rString));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(-1292), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(2708), pTextObj->GetTextLowerDistance());
@@ -91,7 +91,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 
         for (auto const& rString : aObjectDesc)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rString));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rString));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(1000), pTextObj->GetTextLowerDistance());
@@ -108,7 +108,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 
         for (auto const& rString : aObjectDesc)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rString));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rString));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(708), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(708), pTextObj->GetTextLowerDistance());
@@ -125,7 +125,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 
         for (auto const& rString : aObjectDesc)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rString));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rString));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLowerDistance());
@@ -142,7 +142,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 
         for (auto const& rString : aObjectDesc)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rString));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rString));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(1000), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLowerDistance());
@@ -159,7 +159,7 @@ void ShapeImportExportTest::testTextDistancesOOXML()
 
         for (auto const& rString : aObjectDesc)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rString));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rString));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(2708), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(-1292), pTextObj->GetTextLowerDistance());
@@ -183,7 +183,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
 
         for (auto const& rName : aObjectNames)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rName));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rName));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(-792), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(2208), pTextObj->GetTextLowerDistance());
@@ -199,7 +199,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
 
         for (auto const& rName : aObjectNames)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rName));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rName));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(-292), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(1708), pTextObj->GetTextLowerDistance());
@@ -215,7 +215,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
 
         for (auto const& rName : aObjectNames)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rName));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rName));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(708), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(708), pTextObj->GetTextLowerDistance());
@@ -231,7 +231,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
 
         for (auto const& rName : aObjectNames)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rName));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rName));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(1708), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(-292), pTextObj->GetTextLowerDistance());
@@ -247,7 +247,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
 
         for (auto const& rName : aObjectNames)
         {
-            auto* pTextObj = dynamic_cast<SdrTextObj*>(searchObject(pPage, rName));
+            auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, rName));
             CPPUNIT_ASSERT(pTextObj);
             CPPUNIT_ASSERT_EQUAL(tools::Long(2208), pTextObj->GetTextUpperDistance());
             CPPUNIT_ASSERT_EQUAL(tools::Long(-792), pTextObj->GetTextLowerDistance());

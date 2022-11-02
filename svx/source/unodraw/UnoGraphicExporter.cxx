@@ -837,7 +837,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             else if( rSettings.mbScrollText )
             {
                 SdrObject* pObj = aShapes.front();
-                auto pTextObj = dynamic_cast<SdrTextObj*>( pObj);
+                auto pTextObj = DynCastSdrTextObj( pObj);
                 if( pTextObj && pTextObj->HasText() )
                 {
                     tools::Rectangle aScrollRectangle;

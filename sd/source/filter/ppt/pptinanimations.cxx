@@ -2508,7 +2508,7 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
                     if((begin == -1) && (end == -1))
                         break;
 
-                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pSdrObject );
+                    SdrTextObj* pTextObj = DynCastSdrTextObj( pSdrObject );
                     if(!pTextObj)
                         break;
 

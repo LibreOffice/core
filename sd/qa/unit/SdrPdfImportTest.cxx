@@ -137,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     // Object should be a text object containing one paragraph with
     // content "This is PDF!"
 
-    SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pImportedObject);
+    SdrTextObj* pTextObject = DynCastSdrTextObj(pImportedObject);
     CPPUNIT_ASSERT(pTextObject);
     OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
     const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();

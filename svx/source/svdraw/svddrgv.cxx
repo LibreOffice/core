@@ -419,7 +419,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                 {
                                     mpMarkedObj=GetMarkedObjectByIndex(0);
                                     if ( mpMarkedObj &&
-                                        dynamic_cast<const SdrTextObj*>( mpMarkedObj) !=  nullptr &&
+                                        DynCastSdrTextObj( mpMarkedObj) !=  nullptr &&
                                         static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame() )
                                         bSingleTextObjMark = true;
                                 }

@@ -1023,7 +1023,7 @@ void SdrUndoObjSetText::AfterSetText()
 void SdrUndoObjSetText::Undo()
 {
     // only works with SdrTextObj
-    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(mxObj.get());
+    SdrTextObj* pTarget = DynCastSdrTextObj(mxObj.get());
 
     if(!pTarget)
     {
@@ -1065,7 +1065,7 @@ void SdrUndoObjSetText::Undo()
 void SdrUndoObjSetText::Redo()
 {
     // only works with SdrTextObj
-    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(mxObj.get());
+    SdrTextObj* pTarget = DynCastSdrTextObj(mxObj.get());
 
     if(!pTarget)
     {
@@ -1125,7 +1125,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
     for (size_t nm=0; nm<nCount; ++nm)
     {
         SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
-        SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pObj2 );
+        SdrTextObj* pTextObj=DynCastSdrTextObj( pObj2 );
         if (pTextObj!=nullptr)
         {
             if( bUndo )

@@ -188,7 +188,7 @@ namespace
 
             if((pObj->GetObjInventor() == SdrInventor::Default) && (SdrObjKind::Text == eKind || SdrObjKind::TitleText == eKind || SdrObjKind::OutlineText == eKind))
             {
-                const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pObj);
+                const SdrTextObj* pSdrTextObj = DynCastSdrTextObj(pObj);
 
                 if(pSdrTextObj && pSdrTextObj->HasText())
                 {

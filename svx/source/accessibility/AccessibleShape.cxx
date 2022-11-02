@@ -152,7 +152,7 @@ void AccessibleShape::Init()
     if( !pSdrObject )
         return;
 
-    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( pSdrObject  );
     const bool hasOutlinerParaObject = (pTextObj && pTextObj->CanCreateEditOutlinerParaObject()) || (pSdrObject->GetOutlinerParaObject() != nullptr);
 
     // create AccessibleTextHelper to handle this shape's text

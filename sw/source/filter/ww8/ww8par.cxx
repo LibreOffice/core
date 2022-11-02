@@ -912,7 +912,7 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
 
                 if (bVerticalText)
                 {
-                    SdrTextObj *pTextObj = dynamic_cast< SdrTextObj* >(pObj.get());
+                    SdrTextObj *pTextObj = DynCastSdrTextObj(pObj.get());
                     if (pTextObj)
                         pTextObj->SetVerticalWriting(true);
                 }

@@ -448,7 +448,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         InsertObject(pSdrObj.get());
 
-        if ( auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj.get() ) )
+        if ( auto pTextObj = DynCastSdrTextObj( pSdrObj.get() ) )
         {
             // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
@@ -496,7 +496,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         OUString aString = GetPresObjText(eObjKind);
         if(!aString.isEmpty() || bForceText)
-            if (auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj.get() ) )
+            if (auto pTextObj = DynCastSdrTextObj( pSdrObj.get() ) )
             {
                 SdrOutliner* pOutliner = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetInternalOutliner();
 
@@ -2014,7 +2014,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                     }
                     else if ( eObjKind != SdrObjKind::TitleText   &&
                               eObjKind != SdrObjKind::OutlineText &&
-                              dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr       &&
+                              DynCastSdrTextObj( pObj ) !=  nullptr       &&
                               pObj->GetOutlinerParaObject() )
                     {
                         /******************************************************
@@ -2220,7 +2220,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj1, PresObjKind eObjKind,
 
         pObj->SetUserCall(this);
 
-        SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >(pObj.get());
+        SdrTextObj* pTextObject = DynCastSdrTextObj(pObj.get());
         if( pTextObject )
         {
             if( pTextObject->IsVerticalWriting() != bVertical )
@@ -2869,7 +2869,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
 {
     bool bRet = false;
 
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
 
     if( pTextObj )
     {

@@ -3666,7 +3666,7 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
 // our outliner is too complicate to be used properly,
 void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 {
-    SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pObj  );
+    SdrTextObj* pText = DynCastSdrTextObj( pObj  );
     if ( !pText )
         return;
 

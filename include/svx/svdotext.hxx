@@ -625,6 +625,8 @@ public:
     */
     static bool HasTextImpl( SdrOutliner const * pOutliner );
 
+    virtual bool IsSdrTextObj() const final { return true; }
+
     friend class ::SdrTextObjTest;
 };
 

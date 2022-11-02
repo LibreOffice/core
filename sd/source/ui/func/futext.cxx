@@ -196,7 +196,7 @@ void FuText::DoExecute( SfxRequest& )
         mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         mpView->MarkObj(aVEvt.mpRootObj, pPV);
 
-        mxTextObj = dynamic_cast< SdrTextObj* >( aVEvt.mpObj );
+        mxTextObj = DynCastSdrTextObj( aVEvt.mpObj );
     }
     else if (mpView->AreObjectsMarked())
     {
@@ -205,7 +205,7 @@ void FuText::DoExecute( SfxRequest& )
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            mxTextObj = dynamic_cast< SdrTextObj* >( pObj );
+            mxTextObj = DynCastSdrTextObj( pObj );
         }
     }
 
@@ -354,7 +354,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         if (bMarkChanges)
                             mpView->MarkObj(aVEvt.mpRootObj, pPV);
 
-                        if (auto pSdrTextObj = dynamic_cast<SdrTextObj*>(aVEvt.mpObj))
+                        if (auto pSdrTextObj = DynCastSdrTextObj(aVEvt.mpObj))
                         {
                             mxTextObj = pSdrTextObj;
                         }
@@ -702,7 +702,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     else if( mpView && mpView->IsCreateObj() && rMEvt.IsLeft())
     {
         // object was created
-        rtl::Reference<SdrTextObj> pTextObj = dynamic_cast< SdrTextObj* >( mpView->GetCreateObj() );
+        rtl::Reference<SdrTextObj> pTextObj = DynCastSdrTextObj( mpView->GetCreateObj() );
         mxTextObj = pTextObj.get();
 
         if( pTextObj )
@@ -808,7 +808,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             aPnt.AdjustY(nDrgLog + nDrgLog );
             mpView->MovAction(aPnt);
 
-            mxTextObj = dynamic_cast< SdrTextObj* >( mpView->GetCreateObj() );
+            mxTextObj = DynCastSdrTextObj( mpView->GetCreateObj() );
 
             if(mxTextObj.get().is())
             {
@@ -1281,7 +1281,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
             mpView->MarkObj(aVEvt.mpRootObj, pPV);
 
-            if (auto pSdrTextObj = dynamic_cast<SdrTextObj*>(aVEvt.mpObj))
+            if (auto pSdrTextObj = DynCastSdrTextObj(aVEvt.mpObj))
             {
                 mxTextObj = pSdrTextObj;
             }
@@ -1295,7 +1295,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-            if( auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ))
+            if( auto pTextObj = DynCastSdrTextObj( pObj ))
             {
                 mxTextObj = pTextObj;
             }
@@ -1339,7 +1339,7 @@ rtl::Reference<SdrObject> FuText::CreateDefaultObject(const sal_uInt16 nID, cons
 
     if(pObj)
     {
-        if( auto pText = dynamic_cast< SdrTextObj *>( pObj.get() ) )
+        if( auto pText = DynCastSdrTextObj( pObj.get() ) )
         {
             pText->SetLogicRect(rRectangle);
 
@@ -1413,7 +1413,7 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         for( size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark )
         {
-            SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( rMarkList.GetMark(nMark)->GetMarkedSdrObj() );
+            SdrTextObj* pTextObj = DynCastSdrTextObj( rMarkList.GetMark(nMark)->GetMarkedSdrObj() );
             if( pTextObj )
             {
                 rtl::Reference<sdr::SelectionController> xSelectionController(pView->getSelectionController());

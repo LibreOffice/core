@@ -78,7 +78,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                pTextObj = dynamic_cast<SdrTextObj *>( pObj );
+                pTextObj = DynCastSdrTextObj( pObj );
             }
         }
 

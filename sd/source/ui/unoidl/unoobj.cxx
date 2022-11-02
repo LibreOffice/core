@@ -839,7 +839,7 @@ bool SdXShape::IsEmptyPresObj() const
     if( (pObj != nullptr) && pObj->IsEmptyPresObj() )
     {
         // check if the object is in edit, then if it's temporarily not empty
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
         if( pTextObj == nullptr )
             return true;
 
@@ -890,7 +890,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
         // really delete SdrOutlinerObj at pObj
         pObj->NbcSetOutlinerParaObject(std::nullopt);
         if( bVertical )
-            if (auto pTextObj = dynamic_cast<SdrTextObj*>( pObj ) )
+            if (auto pTextObj = DynCastSdrTextObj( pObj ) )
                 pTextObj->SetVerticalWriting( true );
 
         SdrGrafObj* pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj  );

@@ -221,7 +221,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
     {
         bool bCreateOutline(false);
 
-        if( pObject->IsEmptyPresObj() && dynamic_cast< SdrTextObj *>( pObject ) !=  nullptr )
+        if( pObject->IsEmptyPresObj() && DynCastSdrTextObj( pObject ) !=  nullptr )
         {
             if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
             {
@@ -367,7 +367,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
                         aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
                         // create font
-                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
+                        SdrTextObj* pTextObj = DynCastSdrTextObj( pObject );
                         const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
                         vcl::Font aScaledVclFont;
 
@@ -1220,7 +1220,7 @@ bool View::ShouldToggleOn(
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
+        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectByIndex(nIndex));
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
         if( dynamic_cast< const SdrTableObj *>( pTextObj ) !=  nullptr)
@@ -1291,7 +1291,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
     {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
+        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectByIndex(nIndex));
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
         if( dynamic_cast< SdrTableObj *>( pTextObj ) !=  nullptr)

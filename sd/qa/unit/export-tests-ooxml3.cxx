@@ -1351,7 +1351,7 @@ void SdOOXMLExportTest3::testTdf126234()
     // check relative size of the bullet, 400% is a legitimate value for MS Office document
     // Without a fix, it will fail to set the size correctly
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);

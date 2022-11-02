@@ -2880,7 +2880,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec& rRecord,
         pThisGroup->GetSubList()->NbcInsertObject(pSdrTextObj.get());
     }
     else
-        pSdrTextObj = dynamic_cast<SdrTextObj*>(rRecord.pObj.get());
+        pSdrTextObj = DynCastSdrTextObj(rRecord.pObj.get());
 
     if( pSdrTextObj )
     {
@@ -2976,7 +2976,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(rtl::Reference<SdrObject
         MatchSdrItemsIntoFlySet(rpObject.get(), rFlySet, rRecord.eLineStyle, rRecord.eLineDashing,
                                 rRecord.eShapeType, aInnerDist);
 
-        SdrTextObj *pSdrTextObj = dynamic_cast<SdrTextObj*>(rpObject.get());
+        SdrTextObj *pSdrTextObj = DynCastSdrTextObj(rpObject.get());
         if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
             rFlySet.Put(SvxFrameDirectionItem(SvxFrameDirection::Vertical_RL_TB, RES_FRAMEDIR));
 

@@ -416,7 +416,7 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj1, bool bScale)
         const SdrLayerID aOldLayer(pObj->GetLayer());
         const SfxItemSet aOldItemSet(pObj->GetMergedItemSet());
         const SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(pObj.get());
-        const SdrTextObj* pSdrTextObj = dynamic_cast<SdrTextObj*>(pObj.get());
+        const SdrTextObj* pSdrTextObj = DynCastSdrTextObj(pObj.get());
 
         if (pSdrTextObj && pSdrTextObj->HasText())
         {
@@ -561,7 +561,7 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj1, bool bScale)
 
     if (!bVisible)
     {
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj.get());
+        SdrTextObj* pTextObj = DynCastSdrTextObj(pObj.get());
 
         if (pTextObj && pTextObj->HasText())
         {

@@ -110,7 +110,7 @@ private:
                                     {
                                         if (!mbShapeIsEditMode)
                                             return false;
-                                        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+                                        SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
                                         return pTextObj && pTextObj->IsTextEditActive();
                                     }
 
@@ -170,7 +170,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
 
     if( !mpText )
     {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject );
         if( pTextObj )
             mpText = pTextObj->getText( 0 );
     }
@@ -201,7 +201,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
 {
     if( !mpText )
     {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject );
         if( pTextObj )
             mpText = pTextObj->getText( 0 );
     }
@@ -441,7 +441,7 @@ void SvxTextEditSourceImpl::SetupOutliner()
     if( !(mpObject && mpOutliner) )
         return;
 
-    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
     if( pTextObj )
     {
         tools::Rectangle aPaintRect;
@@ -462,7 +462,7 @@ void SvxTextEditSourceImpl::UpdateOutliner()
     if( !(mpObject && mpOutliner) )
         return;
 
-    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
     if( pTextObj )
     {
         tools::Rectangle aPaintRect;
@@ -486,7 +486,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         if( mpOutliner == nullptr )
         {
-            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+            SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
             OutlinerMode nOutlMode = OutlinerMode::TextObject;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == SdrObjKind::OutlineText )
                 nOutlMode = OutlinerMode::OutlineObject;
@@ -536,7 +536,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mpTextForwarder->flushCache();
 
         std::optional<OutlinerParaObject> pOutlinerParaObject;
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
         if( pTextObj && pTextObj->getActiveText() == mpText )
             pOutlinerParaObject = pTextObj->CreateEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
         bool bOwnParaObj(false);
@@ -665,7 +665,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         {
             assert(!mbForwarderIsEditMode); // because without a view there is no other option except !mbForwarderIsEditMode
             bool bTextEditActive = false;
-            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mpObject);
+            SdrTextObj* pTextObj = DynCastSdrTextObj(mpObject);
             // similar to the GetBackgroundTextForwarder check, see if the text edit is active
             if (pTextObj && pTextObj->getActiveText() == mpText && pTextObj->CanCreateEditOutlinerParaObject())
                 bTextEditActive = true; // text edit active
@@ -685,7 +685,7 @@ std::unique_ptr<SvxDrawOutlinerViewForwarder> SvxTextEditSourceImpl::CreateViewF
         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
         mbNotifyEditOutlinerSet = true;
 
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
         if( pTextObj )
         {
             tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
@@ -736,7 +736,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
 
             if(mpView->SdrBeginTextEdit(mpObject))
             {
-                SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+                SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject  );
                 if (pTextObj && pTextObj->IsTextEditActive())
                 {
                     // create new view forwarder
@@ -773,7 +773,7 @@ void SvxTextEditSourceImpl::UpdateData()
     {
         if( mpOutliner && mpObject && mpText )
         {
-            SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+            SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject );
             if( pTextObj )
             {
                 if( (mpOutliner->GetParagraphCount() == 1 && mpOutliner->GetEditEngine().GetTextLen( 0 ) == 0 )

@@ -414,7 +414,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     else
                     {
                         // check if the object is in edit, then if it's temporarily not empty
-                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                        SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
                         if( pTextObj )
                         {
                             if( pTextObj->CanCreateEditOutlinerParaObject() )

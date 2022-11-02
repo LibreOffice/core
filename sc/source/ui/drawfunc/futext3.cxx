@@ -122,7 +122,7 @@ void FuText::StopEditMode()
 
     /*  If the entire text has been cleared, the cell note and its caption
         object have to be removed. */
-    SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >( pObject );
+    SdrTextObj* pTextObject = DynCastSdrTextObj( pObject );
     bool bDeleteNote = !pTextObject || !pTextObject->HasText();
     if( bDeleteNote )
     {

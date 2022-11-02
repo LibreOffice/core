@@ -297,10 +297,10 @@ void SdExportTest::testTransparentBackground()
 
     const SdrPage* pPage = GetPage(1);
 
-    const SdrTextObj* pObj1 = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    const SdrTextObj* pObj1 = DynCastSdrTextObj(pPage->GetObj(0));
     checkFontAttributes<Color, SvxColorItem>(pObj1, COL_TRANSPARENT, EE_CHAR_BKGCOLOR);
 
-    const SdrTextObj* pObj2 = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+    const SdrTextObj* pObj2 = DynCastSdrTextObj(pPage->GetObj(1));
     checkFontAttributes<Color, SvxColorItem>(pObj2, COL_YELLOW, EE_CHAR_BKGCOLOR);
 }
 
@@ -310,7 +310,7 @@ void SdExportTest::testTdf142716()
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
-    const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(0));
 
     OUString sText = pObj->GetOutlinerParaObject()->GetTextObject().GetText(0);
 
@@ -1707,7 +1707,7 @@ void SdExportTest::testColumnsODG()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
                              xColProps->getPropertyValue("AutomaticDistance"));
 
-        auto pTextObj = dynamic_cast<SdrTextObj*>(SdrObject::getSdrObjectFromXShape(xShape));
+        auto pTextObj = DynCastSdrTextObj(SdrObject::getSdrObjectFromXShape(xShape));
         CPPUNIT_ASSERT(pTextObj);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
@@ -1731,7 +1731,7 @@ void SdExportTest::testColumnsODG()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
                              xColProps->getPropertyValue("AutomaticDistance"));
 
-        auto pTextObj = dynamic_cast<SdrTextObj*>(SdrObject::getSdrObjectFromXShape(xShape));
+        auto pTextObj = DynCastSdrTextObj(SdrObject::getSdrObjectFromXShape(xShape));
         CPPUNIT_ASSERT(pTextObj);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());

@@ -1232,7 +1232,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
     // FIXME this encourages all sorts of bad habits and should be removed
     SdrEndTextEdit();
 
-    SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pObj_);
+    SdrTextObj* pObj = DynCastSdrTextObj(pObj_);
     if (!pObj)
         return false; // currently only possible with text objects
 
@@ -2963,7 +2963,7 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoChara
         }
 
         // now apply character and paragraph formatting to text, if the shape has any
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTextObj = DynCastSdrTextObj(pObj);
         if (pTextObj)
         {
             sal_Int32 nText = pTextObj->getTextCount();

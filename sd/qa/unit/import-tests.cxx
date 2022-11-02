@@ -803,7 +803,7 @@ void SdImportTest::testN759180()
 
     // Get the object
     SdrObject* pObj = pPage->GetObj(0);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT(pTxtObj);
     std::vector<EECharAttrib> rLst;
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
@@ -833,7 +833,7 @@ void SdImportTest::testN862510_1()
     {
         std::vector<EECharAttrib> rLst;
         SdrObject* pObj = pPage->GetObj(0);
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
         CPPUNIT_ASSERT(pTxtObj);
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         aEdit.GetCharAttribs(0, rLst);
@@ -874,7 +874,7 @@ void SdImportTest::testN862510_4()
     {
         std::vector<EECharAttrib> rLst;
         SdrObject* pObj = pPage->GetObj(0);
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
         CPPUNIT_ASSERT(pTxtObj);
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         aEdit.GetCharAttribs(0, rLst);
@@ -894,7 +894,7 @@ void SdImportTest::testN828390_2()
     const SdrPage* pPage = GetPage(1);
 
     SdrObject* pObj = pPage->GetObj(0);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT(pTxtObj);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Linux  "), aEdit.GetText(0));
@@ -907,7 +907,7 @@ void SdImportTest::testN828390_3()
     const SdrPage* pPage = GetPage(1);
 
     SdrObject* pObj = pPage->GetObj(0);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT(pTxtObj);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     std::vector<EECharAttrib> rLst;
@@ -1014,7 +1014,7 @@ void SdImportTest::testN778859()
     {
         // Get the object
         SdrObject* pObj = pPage->GetObj(1);
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
         CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
@@ -1026,7 +1026,7 @@ void SdImportTest::testFdo68594()
 
     const SdrPage* pPage = &(GetPage(1)->TRG_GetMasterPage());
     SdrObject* pObj = pPage->GetObj(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     const SvxColorItem* pC = &pTxtObj->GetMergedItem(EE_CHAR_COLOR);
     CPPUNIT_ASSERT_MESSAGE("no color item", pC != nullptr);
@@ -1261,13 +1261,13 @@ void SdImportTest::testMultiColTexts()
     loadFromURL(u"pptx/multicol.pptx");
     const SdrPage* pPage = GetPage(1);
 
-    auto pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    auto pTextObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTextObj);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), pTextObj->GetTextColumnsSpacing());
 
-    auto pMasterTextObj = dynamic_cast<SdrTextObj*>(pPage->TRG_GetMasterPage().GetObj(0));
+    auto pMasterTextObj = DynCastSdrTextObj(pPage->TRG_GetMasterPage().GetObj(0));
     CPPUNIT_ASSERT(pMasterTextObj);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pMasterTextObj->GetTextColumnsNumber());
@@ -1354,7 +1354,7 @@ void SdImportTest::testBnc584721_1()
 
     const SdrPage* pPage = &(GetPage(1)->TRG_GetMasterPage());
     SdrObject* pObj = pPage->GetObj(0);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master title style"), aEdit.GetText(0));
@@ -1744,7 +1744,7 @@ void SdImportTest::testBulletSuffix()
 
     // check suffix of the char bullet
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);

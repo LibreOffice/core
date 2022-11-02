@@ -98,7 +98,7 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
 void ViewContactOfSdrObj::ActionChanged()
 {
     // look for own changes
-    if (SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(&GetSdrObject()))
+    if (SdrTextObj* pTextObj = DynCastSdrTextObj(&GetSdrObject()))
     {
         //  tdf#146860 no idea why, but calling this makes the text boxes render properly
         pTextObj->GetTextAniKind();

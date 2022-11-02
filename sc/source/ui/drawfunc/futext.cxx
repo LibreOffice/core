@@ -416,7 +416,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 if(rMarkList.GetMark(0))
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    if(auto pText = dynamic_cast<SdrTextObj*>( pObj))
+                    if(auto pText = DynCastSdrTextObj( pObj))
                     {
                         SfxItemSet aSet(pDrDoc->GetItemPool());
 
@@ -557,7 +557,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     if (!(nSdrObjKind == SdrObjKind::Text ||
         nSdrObjKind == SdrObjKind::TitleText ||
         nSdrObjKind == SdrObjKind::OutlineText ||
-        dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr))
+        DynCastSdrTextObj( pObj) !=  nullptr))
         return;
 
     SdrPageView* pPV = pView->GetSdrPageView();
@@ -634,7 +634,7 @@ rtl::Reference<SdrObject> FuText::CreateDefaultObject(const sal_uInt16 nID, cons
 
     if(pObj)
     {
-        if(auto pText = dynamic_cast<SdrTextObj*>( pObj.get() ))
+        if(auto pText = DynCastSdrTextObj( pObj.get() ))
         {
             pText->SetLogicRect(rRectangle);
 

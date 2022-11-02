@@ -957,7 +957,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
         {
             // #i12587# support for shapes in chart
             SdrObject* pObj = DrawViewWrapper::getSdrObject( m_aSelection.getSelectedAdditionalShape() );
-            if ( dynamic_cast< const SdrTextObj* >(pObj) !=  nullptr )
+            if ( DynCastSdrTextObj(pObj) !=  nullptr )
             {
                 bEditText = true;
             }

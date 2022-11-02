@@ -55,6 +55,7 @@ class SdrObjList;
 class SdrObject;
 class SdrPage;
 class SdrPageView;
+class SdrTextObj;
 class SdrView;
 class SfxItemSet;
 class SfxGrabBagItem;
@@ -760,6 +761,7 @@ public:
     bool IsVisible() const { return mbVisible;}
     void SetMarkProtect(bool bProt);
     bool IsMarkProtect() const { return m_bMarkProt;}
+    virtual bool IsSdrTextObj() const { return false; }
 
     /// Whether the aspect ratio should be kept by default when resizing.
     virtual bool shouldKeepAspectRatio() const { return false; }
@@ -1002,6 +1004,8 @@ SVXCORE_DLLPUBLIC E3dScene* DynCastE3dScene(SdrObject*);
 inline const E3dScene* DynCastE3dScene(const SdrObject* p) { return DynCastE3dScene(const_cast<SdrObject*>(p)); }
 SVXCORE_DLLPUBLIC E3dObject* DynCastE3dObject(SdrObject*);
 inline const E3dObject* DynCastE3dObject(const SdrObject* p) { return DynCastE3dObject(const_cast<SdrObject*>(p)); }
+SVXCORE_DLLPUBLIC SdrTextObj* DynCastSdrTextObj(SdrObject*);
+inline const SdrTextObj* DynCastSdrTextObj(const SdrObject* p) { return DynCastSdrTextObj(const_cast<SdrObject*>(p)); }
 
 
 struct SdrObjCreatorParams

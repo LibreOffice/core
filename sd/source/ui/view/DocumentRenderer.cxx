@@ -1642,7 +1642,7 @@ private:
                     if (pObj->GetObjInventor() == SdrInventor::Default
                         && pObj->GetObjIdentifier() == SdrObjKind::TitleText)
                     {
-                        pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+                        pTextObj = DynCastSdrTextObj(pObj);
                     }
                 }
 
@@ -1666,7 +1666,7 @@ private:
                     if (pObj->GetObjInventor() == SdrInventor::Default
                         && pObj->GetObjIdentifier() == SdrObjKind::OutlineText)
                     {
-                        pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+                        pTextObj = DynCastSdrTextObj(pObj);
                     }
                 }
 
@@ -1674,7 +1674,7 @@ private:
                 if (!pTextObj)
                 {
                     bSubTitle = true;
-                    pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Text));  // is there a subtitle?
+                    pTextObj = DynCastSdrTextObj(pPage->GetPresObj(PresObjKind::Text));  // is there a subtitle?
                 }
 
                 sal_Int32 nParaCount1 = pOutliner->GetParagraphCount();

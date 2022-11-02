@@ -632,7 +632,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject const * pObj, bool& rAny3D,
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {
-    if(dynamic_cast<const SdrTextObj*>( pObj) ==  nullptr)
+    if(DynCastSdrTextObj( pObj) ==  nullptr)
         return;
 
     const SfxItemSet& rSet = pObj->GetMergedItemSet();

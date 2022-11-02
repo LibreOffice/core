@@ -421,7 +421,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
-        const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>( pObj );
+        const SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {
@@ -511,7 +511,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
-        const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>( pObj );
+        const SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {

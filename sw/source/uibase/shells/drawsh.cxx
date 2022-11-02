@@ -599,7 +599,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >(pObj);
+    const SdrTextObj* pTextObj = DynCastSdrTextObj(pObj);
     const bool bDeactivate(
         !pObj ||
         !pTextObj ||

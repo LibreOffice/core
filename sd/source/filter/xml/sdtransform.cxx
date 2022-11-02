@@ -165,7 +165,7 @@ void SdTransformOOo2xDocument::transformShapes( SdrObjList const & rShapes )
 
 void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )
 {
-    SdrTextObj* pTextShape = dynamic_cast< SdrTextObj* >( &rObj );
+    SdrTextObj* pTextShape = DynCastSdrTextObj( &rObj );
     if( pTextShape )
     {
         transformTextShape( *pTextShape );

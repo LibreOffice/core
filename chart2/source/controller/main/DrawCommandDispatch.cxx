@@ -473,7 +473,7 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uI
                     case COMMAND_ID_DRAW_TEXT:
                     case COMMAND_ID_DRAW_TEXT_VERTICAL:
                         {
-                            if ( SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj.get()) )
+                            if ( SdrTextObj* pTextObj = DynCastSdrTextObj( pObj.get()) )
                             {
                                 pTextObj->SetLogicRect( aRect );
                                 bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );

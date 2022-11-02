@@ -2445,7 +2445,7 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
     SdrObject* pObject = pActualPage->GetObj(2);
     CPPUNIT_ASSERT(pObject);
-    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
+    SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
     CPPUNIT_ASSERT(pTextObj);
     CPPUNIT_ASSERT_EQUAL(SdrObjKind::Text, pTextObj->GetObjIdentifier());
     const Point aPos = pTextObj->GetLastBoundRect().TopLeft();

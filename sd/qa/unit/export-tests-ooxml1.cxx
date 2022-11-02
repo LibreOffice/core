@@ -532,7 +532,7 @@ void SdOOXMLExportTest1::testBnc887230()
 
     const SdrPage* pPage = GetPage(1);
 
-    const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(0));
     // Without the fix in place, this test would have failed with
     //- Expected: 255
     //- Actual  : 13421823
@@ -550,14 +550,14 @@ void SdOOXMLExportTest1::testBnc870233_1()
 
     // First shape has red, bold font
     {
-        const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+        const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(0));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xff0000), EE_CHAR_COLOR);
         checkFontAttributes<FontWeight, SvxWeightItem>(pObj, WEIGHT_BOLD, EE_CHAR_WEIGHT);
     }
 
     // Second shape has blue, italic font
     {
-        const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+        const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
         checkFontAttributes<FontItalic, SvxPostureItem>(pObj, ITALIC_NORMAL, EE_CHAR_ITALIC);
     }
@@ -576,7 +576,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
     {
         const SdrObjGroup* pObjGroup = dynamic_cast<SdrObjGroup*>(pPage->GetObj(0));
         CPPUNIT_ASSERT(pObjGroup);
-        const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pObjGroup->GetSubList()->GetObj(1));
+        const SdrTextObj* pObj = DynCastSdrTextObj(pObjGroup->GetSubList()->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
     }
 
@@ -584,7 +584,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
     {
         const SdrObjGroup* pObjGroup = dynamic_cast<SdrObjGroup*>(pPage->GetObj(1));
         CPPUNIT_ASSERT(pObjGroup);
-        const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pObjGroup->GetSubList()->GetObj(1));
+        const SdrTextObj* pObj = DynCastSdrTextObj(pObjGroup->GetSubList()->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x1f497d), EE_CHAR_COLOR);
     }
 
@@ -592,7 +592,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
     {
         const SdrObjGroup* pObjGroup = dynamic_cast<SdrObjGroup*>(pPage->GetObj(2));
         CPPUNIT_ASSERT(pObjGroup);
-        const SdrTextObj* pObj = dynamic_cast<SdrTextObj*>(pObjGroup->GetSubList()->GetObj(1));
+        const SdrTextObj* pObj = DynCastSdrTextObj(pObjGroup->GetSubList()->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xffffff), EE_CHAR_COLOR);
     }
 }
@@ -608,7 +608,7 @@ void SdOOXMLExportTest1::testN828390_4()
     {
         std::vector<EECharAttrib> rLst;
         SdrObject* pObj = pPage->GetObj(0);
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
         CPPUNIT_ASSERT(pTxtObj);
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         aEdit.GetCharAttribs(0, rLst);
@@ -645,7 +645,7 @@ void SdOOXMLExportTest1::testN828390_5()
     const SdrPage* pPage = GetPage(1);
     {
         SdrObject* pObj = pPage->GetObj(0);
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
         CPPUNIT_ASSERT(pTxtObj);
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         const SvxNumBulletItem& rNumFmt = aEdit.GetParaAttribs(3).Get(EE_PARA_NUMBULLET);
@@ -783,7 +783,7 @@ void SdOOXMLExportTest1::testN828390()
         std::vector<EECharAttrib> rLst;
         // Get the object
         SdrObject* pObj = pPage->GetObj(0);
-        SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pObj);
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pObj);
         CPPUNIT_ASSERT(pTxtObj);
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         aEdit.GetCharAttribs(0, rLst);
@@ -853,7 +853,7 @@ void SdOOXMLExportTest1::testBnc822347_EmptyBullet()
     SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
     const SdrPage* pPage = pDoc->GetPage(1);
     SdrObject* pObject = pPage->GetObj(0);
-    SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
+    SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
     CPPUNIT_ASSERT(pTextObject);
 
     OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
@@ -878,7 +878,7 @@ void SdOOXMLExportTest1::testFdo90607()
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(1));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     OutlinerParaObject* pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
     const sal_Int16 nDepth = pOutlinerParagraphObject->GetDepth(0);
@@ -955,7 +955,7 @@ void SdOOXMLExportTest1::testBulletStartNumber()
     saveAndReload("Impress Office Open XML");
 
     const SdrPage* pPage = GetPage(1);
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
@@ -1052,7 +1052,7 @@ void SdOOXMLExportTest1::testBulletColor()
 
     const SdrPage* pPage = GetPage(1);
 
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
@@ -1098,7 +1098,7 @@ void SdOOXMLExportTest1::testBulletMarginAndIndentation()
 
     const SdrPage* pPage = GetPage(1);
 
-    SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(0));
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();

@@ -204,7 +204,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             }
         }
     }
-    else if( auto pTextObj = dynamic_cast< SdrTextObj *>( pObj ) )
+    else if( auto pTextObj = DynCastSdrTextObj( pObj ) )
     {
         const OutlinerParaObject* pPara;
 

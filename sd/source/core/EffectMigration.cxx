@@ -607,7 +607,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
         return;
     }
 
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
 
     // ignore old text effects on shape without text
     if( (pTextObj == nullptr) || (!pTextObj->HasText()) )

@@ -1389,7 +1389,7 @@ sal_Int32 VMLExport::StartShape()
     OString const textboxStyle(m_TextboxStyle.makeStringAndClear());
 
     // now check if we have some editeng text (not associated textbox) and we have a text exporter registered
-    const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>( m_pSdrObject );
+    const SdrTextObj* pTxtObj = DynCastSdrTextObj( m_pSdrObject );
     if (pTxtObj && m_pTextExport && msfilter::util::HasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
     {
         std::optional<OutlinerParaObject> pParaObj;

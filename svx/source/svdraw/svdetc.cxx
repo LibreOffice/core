@@ -504,7 +504,7 @@ namespace
             }
             else
             {
-                SdrTextObj* pText = dynamic_cast< SdrTextObj * >(pObj);
+                SdrTextObj* pText = DynCastSdrTextObj(pObj);
 
                 // Exclude zero master page object (i.e. background shape) from color query
                 if(pText

@@ -1498,7 +1498,7 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
     size_t nObjCount(getSdrPageFromSdrObject()->GetObjCount());
     for (size_t i = 0; i < nObjCount; i++)
     {
-        SdrTextObj* pCurObj(dynamic_cast< SdrTextObj* >(getSdrPageFromSdrObject()->GetObj(i)));
+        SdrTextObj* pCurObj(DynCastSdrTextObj(getSdrPageFromSdrObject()->GetObj(i)));
         if(pCurObj == this)
         {
             SAL_INFO("svx.chaining", "Working on TextBox " << i);

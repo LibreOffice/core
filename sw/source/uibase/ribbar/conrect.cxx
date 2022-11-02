@@ -109,7 +109,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if(mbVertical)
             {
-                if (SdrTextObj* pText = dynamic_cast<SdrTextObj*>(pObj))
+                if (SdrTextObj* pText = DynCastSdrTextObj(pObj))
                 {
                     SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
 

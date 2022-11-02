@@ -1616,13 +1616,12 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             //iterate inside of a grouped object
             while(aListIter.IsMore())
             {
-                SdrObject* pSdrOElement = aListIter.Next();
-                auto pTextObj = const_cast<SdrTextObj*>(dynamic_cast<const SdrTextObj*>(pSdrOElement));
+                SdrTextObj* pTextObj = DynCastSdrTextObj(aListIter.Next());
                 if(pTextObj && pTextObj->HasText())
                     pCollectTextObjectsHint->m_rTextObjects.push_back(pTextObj);
             }
         }
-        else if(auto pTextObj = const_cast<SdrTextObj*>(dynamic_cast<const SdrTextObj*>(pSdrO)))
+        else if(SdrTextObj* pTextObj = DynCastSdrTextObj(pSdrO))
         {
             if(pTextObj->HasText())
                 pCollectTextObjectsHint->m_rTextObjects.push_back(pTextObj);

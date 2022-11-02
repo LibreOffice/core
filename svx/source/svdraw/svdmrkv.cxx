@@ -1214,7 +1214,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         if(nullptr != mpMarkedObj)
         {
             bSingleTextObjMark =
-                dynamic_cast<const SdrTextObj*>( mpMarkedObj) !=  nullptr &&
+                DynCastSdrTextObj( mpMarkedObj) !=  nullptr &&
                 static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame();
 
             // RotGrfFlyFrame: we may have limited rotation
@@ -1254,7 +1254,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         // Also formerly #122142#: Pretty much the same for SdrCaptionObj's in calc.
         if(static_cast<SdrView*>(this)->IsTextEdit())
         {
-            const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(mpMarkedObj);
+            const SdrTextObj* pSdrTextObj = DynCastSdrTextObj(mpMarkedObj);
 
             if (pSdrTextObj && pSdrTextObj->IsInEditMode())
             {
@@ -2307,7 +2307,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     const bool bCheckIfMarkable(nOptions & SdrSearchOptions::TESTMARKABLE);
     const bool bDeep(nOptions & SdrSearchOptions::DEEP);
     const bool bOLE(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
-    auto pTextObj = dynamic_cast<const SdrTextObj*>( pObj);
+    auto pTextObj = DynCastSdrTextObj( pObj);
     const bool bTXT(pTextObj && pTextObj->IsTextFrame());
     SdrObject* pRet=nullptr;
     tools::Rectangle aRect(pObj->GetCurrentBoundRect());

@@ -438,7 +438,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     // check for URL field
     if (eHit==SdrHitKind::UnmarkedObject)
     {
-        SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pHitObj );
+        SdrTextObj* pTextObj=DynCastSdrTextObj( pHitObj );
         if (pTextObj!=nullptr && pTextObj->HasText())
         {
             // use the primitive-based HitTest which is more accurate anyways. It
@@ -518,7 +518,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         tools::Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
         // Force to SnapRect when Fontwork
-        if( auto pTextObj = dynamic_cast<const SdrTextObj*>(pHitObj) )
+        if( auto pTextObj = DynCastSdrTextObj(pHitObj) )
             if( pTextObj->IsFontwork() )
                 aBoundRect = pHitObj->GetSnapRect();
 
@@ -1041,7 +1041,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
         case SdrHitKind::TextEdit :
         case SdrHitKind::TextEditObj:
         {
-            SdrTextObj* pText = dynamic_cast< SdrTextObj* >(aVEvt.mpObj);
+            SdrTextObj* pText = DynCastSdrTextObj(aVEvt.mpObj);
             if(pText && pText->HasText())
             {
                 OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();

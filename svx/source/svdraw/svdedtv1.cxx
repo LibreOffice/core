@@ -1181,7 +1181,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             // multiple portions exist with multiple formats. If an OutlinerParaObject
             // really exists and needs to be rescued is evaluated in the undo
             // implementation itself.
-            const bool bRescueText = dynamic_cast< SdrTextObj* >(pObj) != nullptr;
+            const bool bRescueText = DynCastSdrTextObj(pObj) != nullptr;
 
             // add attribute undo
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,false,bHasEEItems || bPossibleGeomChange || bRescueText));
@@ -1226,7 +1226,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             }
         }
 
-        if(auto pTextObj = dynamic_cast<SdrTextObj*>( pObj))
+        if(auto pTextObj = DynCastSdrTextObj( pObj))
         {
             if(!aCharWhichIds.empty())
             {

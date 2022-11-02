@@ -436,7 +436,7 @@ IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
 
 void SelectionIteratorImpl::GotoNextText()
 {
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get().get() );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( mrObjectList.at(mnObjectIndex).get().get() );
     if (mbDirectionIsForward)
     {
         if( pTextObj )
@@ -472,7 +472,7 @@ void SelectionIteratorImpl::GotoNextText()
 
         if( (maPosition.mnText == -1) && (mnObjectIndex >= 0) )
         {
-            pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get().get() );
+            pTextObj = DynCastSdrTextObj( mrObjectList.at(mnObjectIndex).get().get() );
             if( pTextObj )
                 maPosition.mnText = pTextObj->getTextCount() - 1;
         }
@@ -561,7 +561,7 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 
 void ViewIteratorImpl::GotoNextText()
 {
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get().get() );
+    SdrTextObj* pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
     if( pTextObj )
     {
         if (mbDirectionIsForward)
@@ -601,7 +601,7 @@ void ViewIteratorImpl::GotoNextText()
     maPosition.mnText = 0;
     if( !mbDirectionIsForward && maPosition.mxObject.get().is() )
     {
-        pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get().get() );
+        pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
         if( pTextObj )
             maPosition.mnText = pTextObj->getTextCount() - 1;
     }
@@ -656,7 +656,7 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
     maPosition.mnText = 0;
     if( !mbDirectionIsForward && maPosition.mxObject.get().is() )
     {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get().get() );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
         if( pTextObj )
             maPosition.mnText = pTextObj->getTextCount() - 1;
     }

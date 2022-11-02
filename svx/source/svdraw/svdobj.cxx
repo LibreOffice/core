@@ -1107,7 +1107,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
     if(pClone)
     {
-        const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >(this);
+        const SdrTextObj* pTextObj = DynCastSdrTextObj(this);
 
         if(pTextObj)
         {
@@ -3206,6 +3206,15 @@ E3dObject* DynCastE3dObject(SdrObject* pObj)
 {
     if( pObj && pObj->GetObjInventor() == SdrInventor::E3d )
         return static_cast<E3dObject*>(pObj);
+    return nullptr;
+}
+
+SdrTextObj* DynCastSdrTextObj(SdrObject* pObj)
+{
+    // SdrTextObj has a lot of subclasses, with lots of SdrObjKind identifiers, so use a virtual method
+    // to be safer.
+    if( pObj && pObj->IsSdrTextObj() )
+        return static_cast<SdrTextObj*>(pObj);
     return nullptr;
 }
 

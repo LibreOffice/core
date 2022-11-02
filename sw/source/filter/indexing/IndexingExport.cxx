@@ -118,7 +118,7 @@ public:
 
         m_rXmlWriter.endElement();
 
-        SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
+        SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
         if (!pTextObject)
             return;
 

@@ -3199,7 +3199,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
             pCaptionObj->SetTailPos(
                 aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
         }
-        else if(auto pText = dynamic_cast<SdrTextObj*>( pObj.get()))
+        else if(auto pText = DynCastSdrTextObj( pObj.get()))
         {
             pText->SetLogicRect(aRect);
 

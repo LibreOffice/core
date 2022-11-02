@@ -4932,7 +4932,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
     auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
-    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+    SdrTextObj* pTextObj = DynCastSdrTextObj(pObj);
     CPPUNIT_ASSERT(pTextObj);
     const auto& aOutStr = pTextObj->GetOutlinerParaObject()->GetTextObject();
 

@@ -890,7 +890,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                 }
             }
 
-            if( auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ) )
+            if( auto pTextObj = DynCastSdrTextObj( pObj ) )
                 if (pTextObj->IsEmptyPresObj())
                 {
                     PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);

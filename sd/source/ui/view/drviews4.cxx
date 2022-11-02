@@ -208,7 +208,7 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 {
                     SdrObject* pObj = aIter.Next();
 
-                    if(auto pSdrTextObj = dynamic_cast<SdrTextObj *>( pObj ))
+                    if(auto pSdrTextObj = DynCastSdrTextObj( pObj ))
                     {
                         SdrInventor nInv(pObj->GetObjInventor());
                         SdrObjKind  nKnd(pObj->GetObjIdentifier());

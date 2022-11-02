@@ -3117,7 +3117,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXShapePropSet.get());
         if (pTextShape)
         {
-            SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
+            SdrTextObj* pTextObject = DynCastSdrTextObj(pTextShape->GetSdrObject());
             if (pTextObject)
             {
                 const auto nFontScaleY = pTextObject->GetFontScaleY();
@@ -3796,7 +3796,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXIface.get());
                 if (pTextShape)
                 {
-                    SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
+                    SdrTextObj* pTextObject = DynCastSdrTextObj(pTextShape->GetSdrObject());
                     if (pTextObject)
                         nFontScale = pTextObject->GetFontScaleY() * 1000;
                 }
@@ -3828,7 +3828,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         return;
 
     SdrObject* pSdrObject = xShape.is() ? SdrObject::getSdrObjectFromXShape(xShape) : nullptr;
-    const SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>( pSdrObject );
+    const SdrTextObj* pTxtObj = DynCastSdrTextObj( pSdrObject );
     if (pTxtObj && mpTextExport)
     {
         std::optional<OutlinerParaObject> pParaObj;

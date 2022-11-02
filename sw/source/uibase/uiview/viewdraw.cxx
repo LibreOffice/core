@@ -480,9 +480,9 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
     {
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
         auto pVirtObj =  dynamic_cast<SwDrawVirtObj*>( pObj );
-        if ( (pVirtObj && dynamic_cast< const SdrTextObj *>(&pVirtObj->GetReferencedObj() ) != nullptr &&
+        if ( (pVirtObj && DynCastSdrTextObj(&pVirtObj->GetReferencedObj() ) != nullptr &&
                m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE) ||
-             dynamic_cast< const SdrTextObj *>( pObj ) != nullptr )
+             DynCastSdrTextObj( pObj ) != nullptr )
         {
             // Refuse to edit editeng text of the shape if it has textbox attached.
             if (!lcl_isTextBox(pObj))

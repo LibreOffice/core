@@ -1147,7 +1147,7 @@ rtl::Reference<SdrObject> SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData
                     */
                     if ( dynamic_cast<const SdrObjCustomShape* >(pTObj.get()) ==  nullptr && !bFitShapeToText && !bWordWrap )
                     {
-                        SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pTObj.get()  );
+                        SdrTextObj* pText = DynCastSdrTextObj( pTObj.get()  );
                         if ( pText )
                         {
                             if ( bVerticalText )
@@ -2226,7 +2226,7 @@ SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj const * pSdrText )
 
 SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pSdrObj, SdPageCapsule pPage ) const
 {
-    SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pSdrObj  );
+    SdrTextObj* pText = DynCastSdrTextObj( pSdrObj  );
     if ( pText )
     {
         if ( !ApplyTextObj( pTextObj, pText, pPage, nullptr, nullptr ) )

@@ -2645,7 +2645,7 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
 
                                     bool bDontAnimateInvisibleShape = false;
                                     {
-                                        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj.get());
+                                        SdrTextObj* pTextObj = DynCastSdrTextObj(pObj.get());
 
                                         if( pTextObj && pTextObj->HasText() &&
                                             dynamic_cast< SdrObjGroup *>( pObj.get() ) ==  nullptr &&

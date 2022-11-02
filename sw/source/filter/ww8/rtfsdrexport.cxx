@@ -587,7 +587,7 @@ sal_Int32 RtfSdrExport::StartShape()
         }
     }
 
-    auto pTextObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
+    auto pTextObj = DynCastSdrTextObj(m_pSdrObject);
     if (pTextObj)
     {
         const OutlinerParaObject* pParaObj = nullptr;

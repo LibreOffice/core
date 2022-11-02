@@ -1763,7 +1763,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( const Sd
     {
         SdrInventor nInventor   = rObject.GetObjInventor();
         SdrObjKind  nIdentifier = rObject.GetObjIdentifier();
-        bool        bIsTextObj  = dynamic_cast< const SdrTextObj *>( &rObject ) !=  nullptr;
+        bool        bIsTextObj  = DynCastSdrTextObj( &rObject ) !=  nullptr;
 
         if ( nInventor == SdrInventor::Default )
         {

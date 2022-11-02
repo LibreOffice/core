@@ -197,7 +197,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         {
                             SdrObject* pObj = aIter.Next();
 
-                            if(auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ))
+                            if(auto pTextObj = DynCastSdrTextObj( pObj ))
                             {
                                 SdrInventor nInv(pObj->GetObjInventor());
                                 SdrObjKind nKnd(pObj->GetObjIdentifier());
@@ -786,7 +786,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                 // #i118485# allow TextInput for OLEs, too
-                if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr && pObj->HasTextEdit())
+                if( DynCastSdrTextObj( pObj ) !=  nullptr && pObj->HasTextEdit())
                 {
                     // use common IsSimpleCharInput from the EditEngine.
                     bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
@@ -824,7 +824,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         {
                             SdrObject* pObj = aIter.Next();
 
-                            if(auto pTextObj = dynamic_cast< SdrTextObj *>( pObj ))
+                            if(auto pTextObj = DynCastSdrTextObj( pObj ))
                             {
                                 SdrInventor nInv(pObj->GetObjInventor());
                                 SdrObjKind nKnd(pObj->GetObjIdentifier());

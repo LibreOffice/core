@@ -186,7 +186,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     if (pObject)
     {
-        auto pSourceText = dynamic_cast<SdrTextObj*>(pObject);
+        auto pSourceText = DynCastSdrTextObj(pObject);
         uno::Reference<text::XTextRange> xDestText(xRealTextFrame, uno::UNO_QUERY);
 
         xDestText->setString(sCopyableText);

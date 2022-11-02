@@ -1911,7 +1911,7 @@ static void ImpUpdateChainLinks(SdrTextObj *pTextObj, std::u16string_view aNextL
 
     SdrPage *pPage(pTextObj->getSdrPageFromSdrObject());
     assert(pPage);
-    SdrTextObj *pNextTextObj = dynamic_cast< SdrTextObj * >
+    SdrTextObj *pNextTextObj = DynCastSdrTextObj
                                 (ImpGetObjByName(pPage, aNextLinkName));
     if (!pNextTextObj) {
         SAL_INFO("svx.chaining", "[CHAINING] Can't find object as next link.");
@@ -2033,7 +2033,7 @@ bool SdrTextObj::GetPreventChainable() const
 rtl::Reference<SdrObject> SdrTextObj::getFullDragClone() const
 {
     rtl::Reference<SdrObject> pClone = SdrAttrObj::getFullDragClone();
-    SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone.get());
+    SdrTextObj *pTextObjClone = DynCastSdrTextObj(pClone.get());
     if (pTextObjClone != nullptr) {
         // Avoid transferring of text for chainable object during dragging
         pTextObjClone->mbIsUnchainableClone = true;

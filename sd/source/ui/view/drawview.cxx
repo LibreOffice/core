@@ -593,7 +593,7 @@ void DrawView::DeleteMarked()
                     default:
                         break;
                     }
-                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                    SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
                     bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
                     ::tools::Rectangle aRect( pObj->GetLogicRect() );
                     SdrObject* pNewObj = pPage->InsertAutoLayoutShape( nullptr, ePresObjKind, bVertical, aRect, true );

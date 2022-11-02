@@ -723,7 +723,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     if ( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( auto pSdrTextObj = dynamic_cast<SdrTextObj *>( pObj ) )
+        if( auto pSdrTextObj = DynCastSdrTextObj( pObj ) )
             pCurrentTextObj = pSdrTextObj;
     }
     // at first fill the list of drawing objects

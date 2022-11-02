@@ -309,7 +309,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
         // Does the shape have matching text?
         SdrOutliner& rOutliner = GetDrawModel()->GetDrawOutliner();
         SdrObject* pObject = const_cast<SdrObject*>(rFrameFormat.FindSdrObject());
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
+        SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
         if (!pTextObj)
             continue;
         const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();

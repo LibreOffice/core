@@ -1237,7 +1237,7 @@ void SdrEditView::CombineMarkedTextObjects()
     while ( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj );
+        SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
         const OutlinerParaObject* pOPO = pTextObj ? pTextObj->GetOutlinerParaObject() : nullptr;
         if ( pOPO && pTextObj->IsTextFrame()
              &&  pTextObj->GetObjIdentifier() == SdrObjKind::Text   // not callouts (OBJ_CAPTION)

@@ -1498,7 +1498,7 @@ rtl::Reference<SdrObject> XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDf
 void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     // set text data
-    if( SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj ) )
+    if( SdrTextObj* pTextObj = DynCastSdrTextObj( &rSdrObj ) )
     {
         if( maTextData.mxString )
         {
