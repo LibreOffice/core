@@ -26,6 +26,7 @@
 #include <document.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
+#include <svtools/colorcfg.hxx>
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomY, ScDocument* pDoc) :
     mpDoc(pDoc),
@@ -181,11 +182,19 @@ void ScDPFieldButton::drawPopupButton()
 
     float fScaleFactor = mpOutDev->GetDPIScaleFactor();
 
-    // Background & outer black border
-    mpOutDev->SetLineColor(COL_BLACK);
+    // Button background color
+    Color aFaceColor = mpStyle->GetFaceColor();
     Color aBackgroundColor
         = mbHasHiddenMember ? mpStyle->GetHighlightColor()
-                            : mbPopupPressed ? mpStyle->GetShadowColor() : mpStyle->GetFaceColor();
+                            : mbPopupPressed ? mpStyle->GetShadowColor() : aFaceColor;
+
+    // Button line color
+    mpOutDev->SetLineColor(mpStyle->GetLabelTextColor());
+    // If the document background is light and face color is dark, use ShadowColor instead
+    Color aDocColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    if (aDocColor.IsBright() && aFaceColor.IsDark())
+        mpOutDev->SetLineColor(mpStyle->GetShadowColor());
+
     mpOutDev->SetFillColor(aBackgroundColor);
     mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
 
