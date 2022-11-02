@@ -400,6 +400,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
 
     vcl::Window *pWin = mpOutDev->GetOwnerWindow();
     vcl::Window *pCtrl = nullptr;
+    vcl::Window *pSubEdit = nullptr;
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
@@ -435,6 +436,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
                         {
                             aCtrlType = ControlType::Listbox;
                             mbNWFBorder = true;
+                            pSubEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
                         }
                         break;
                     case WindowType::LISTBOXWINDOW:
@@ -447,6 +449,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
                         {
                             aCtrlType = ControlType::Combobox;
                             mbNWFBorder = true;
+                            pSubEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
                         }
                         break;
                     case WindowType::MULTILINEEDIT:
@@ -466,6 +469,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
                             aCtrlType = ControlType::Spinbox;
                         else
                             aCtrlType = ControlType::Editbox;
+                        pSubEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
                         break;
                     default:
                         break;
@@ -501,7 +505,11 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
                         mpBorderWindow->SetPaintTransparent( true );
                         mpBorderWindow->SetBackground();
                         if (!pCtrl->IsControlBackground())
+                        {
                             pCtrl->SetPaintTransparent(true);
+                            if (pSubEdit)
+                                pSubEdit->SetPaintTransparent(true);
+                        }
 
                         vcl::Window* pCompoundParent = nullptr;
                         if( pWin->GetParent() && pWin->GetParent()->IsCompoundControl() )
