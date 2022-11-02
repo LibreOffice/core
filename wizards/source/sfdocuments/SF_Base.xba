@@ -545,7 +545,7 @@ Check:
 
 Try:
 	With _Component.CurrentController
-		&apos;	The connection may have been done previously by a user commmand. If not, do it now.
+		&apos;	The connection may have been done previously by a user command. If not, do it now.
 		If Not .IsConnected Then .connect()
 		&apos;	loadComponent activates the query component when already loaded
 		Set oNewQuery = .loadComponent(com.sun.star.sdb.application.DatabaseObject.QUERY, QueryName, DesignMode)
@@ -598,7 +598,7 @@ Check:
 
 Try:
 	With _Component.CurrentController
-		&apos;	The connection may have been done previously by a user commmand. If not, do it now.
+		&apos;	The connection may have been done previously by a user command. If not, do it now.
 		If Not .IsConnected Then .connect()
 		&apos;	loadComponent activates the table component when already loaded
 		Set oNewTable = .loadComponent(com.sun.star.sdb.application.DatabaseObject.TABLE, TableName, DesignMode)
