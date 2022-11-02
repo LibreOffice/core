@@ -73,6 +73,8 @@ public:
 
     vcl::Window* GetGraphicWindow();
     vcl::Window* GetWidgetWindow();
+    const SfxViewShell* GetSmViewShell();
+    tools::Rectangle GetBoundingBox() const;
 
     void Dispatch(const rtl::OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 

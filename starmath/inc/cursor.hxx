@@ -184,6 +184,8 @@ public:
     /** Draw the caret */
     void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
+    tools::Rectangle GetCaretRectangle(OutputDevice& rOutDev) const;
+
     bool IsAtTailOfBracket(SmBracketType eBracketType) const;
 
 private:

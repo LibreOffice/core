@@ -154,19 +154,19 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
     DefaultVisit( pNode );
 }
 
-// SmCaretDrawingVisitor
+// SmCaretLinesVisitor
 
-SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
-                                             SmCaretPos position,
-                                             Point offset,
-                                             bool caretVisible )
-    : mrDev( rDevice )
-    , maPos( position )
-    , maOffset( offset )
-    , mbCaretVisible( caretVisible )
+SmCaretLinesVisitor::SmCaretLinesVisitor(OutputDevice& rDevice, SmCaretPos position, Point offset)
+    : mrDev(rDevice)
+    , maPos(position)
+    , maOffset(offset)
 {
-    SAL_WARN_IF( !position.IsValid(), "starmath", "Cannot draw invalid position!" );
-    if( !position.IsValid( ) )
+}
+
+void SmCaretLinesVisitor::DoIt()
+{
+    SAL_WARN_IF(!maPos.IsValid(), "starmath", "Cannot draw invalid position!");
+    if (!maPos.IsValid())
         return;
 
     //Save device state
@@ -177,7 +177,7 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
     mrDev.Pop( );
 }
 
-void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
+void SmCaretLinesVisitor::Visit( SmTextNode* pNode )
 {
     tools::Long i = maPos.nIndex;
 
@@ -193,23 +193,14 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
     tools::Long left_line = pLine->GetLeft( ) + maOffset.X( );
     tools::Long right_line = pLine->GetRight( ) + maOffset.X( );
 
-    //Set color
-    mrDev.SetLineColor( COL_BLACK );
+    // Vertical line
+    ProcessCaretLine({ left, top }, { left, top + height });
 
-    if ( mbCaretVisible ) {
-        //Draw vertical line
-        Point p1( left, top );
-        Point p2( left, top + height );
-        mrDev.DrawLine( p1, p2 );
-    }
-
-    //Underline the line
-    Point aLeft( left_line, top + height );
-    Point aRight( right_line, top + height );
-    mrDev.DrawLine( aLeft, aRight );
+    // Underline
+    ProcessUnderline({ left_line, top + height }, { right_line, top + height });
 }
 
-void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
+void SmCaretLinesVisitor::DefaultVisit( SmNode* pNode )
 {
     //Find the line
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
@@ -221,20 +212,52 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     tools::Long left_line = pLine->GetLeft( ) + maOffset.X( );
     tools::Long right_line = pLine->GetRight( ) + maOffset.X( );
 
-    //Set color
-    mrDev.SetLineColor( COL_BLACK );
+    // Vertical line
+    ProcessCaretLine({ left, top }, { left, top + height });
 
+    // Underline
+    ProcessUnderline({ left_line, top + height }, { right_line, top + height });
+}
+
+// SmCaretRectanglesVisitor
+
+SmCaretRectanglesVisitor::SmCaretRectanglesVisitor(OutputDevice& rDevice, SmCaretPos position)
+    : SmCaretLinesVisitor(rDevice, position, {})
+{
+    DoIt();
+}
+
+void SmCaretRectanglesVisitor::ProcessCaretLine(Point from, Point to) { maCaret = { from, to }; }
+void SmCaretRectanglesVisitor::ProcessUnderline(Point /*from*/, Point /*to*/) {} // No underline
+
+// SmCaretDrawingVisitor
+
+SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
+                                             SmCaretPos position,
+                                             Point offset,
+                                             bool caretVisible )
+    : SmCaretLinesVisitor(rDevice, position, offset)
+    , mbCaretVisible( caretVisible )
+{
+    DoIt();
+}
+
+void SmCaretDrawingVisitor::ProcessCaretLine(Point from, Point to)
+{
     if ( mbCaretVisible ) {
+        //Set color
+        getDev().SetLineColor(COL_BLACK);
         //Draw vertical line
-        Point p1( left, top );
-        Point p2( left, top + height );
-        mrDev.DrawLine( p1, p2 );
+        getDev().DrawLine(from, to);
     }
+}
 
+void SmCaretDrawingVisitor::ProcessUnderline(Point from, Point to)
+{
+    //Set color
+    getDev().SetLineColor(COL_BLACK);
     //Underline the line
-    Point aLeft( left_line, top + height );
-    Point aRight( right_line, top + height );
-    mrDev.DrawLine( aLeft, aRight );
+    getDev().DrawLine(from, to);
 }
 
 // SmCaretPos2LineVisitor

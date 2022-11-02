@@ -138,10 +138,7 @@ public:
     }
 
 private:
-    void SetIsCursorVisible(bool bVis)
-    {
-        bIsCursorVisible = bVis;
-    }
+    void SetIsCursorVisible(bool bVis);
     void SetCursor(const SmNode *pNode);
     void SetCursor(const tools::Rectangle &rRect);
 
@@ -297,7 +294,7 @@ public:
     SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
     virtual ~SmViewShell() override;
 
-    SmDocShell * GetDoc()
+    SmDocShell * GetDoc() const
     {
         return static_cast<SmDocShell *>( GetViewFrame()->GetObjectShell() );
     }
@@ -326,6 +323,8 @@ public:
 
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+SfxInterfaceId(2))
     SFX_DECL_VIEWFACTORY(SmViewShell);
+
+    void SendCaretToLOK() const;
 
 private:
     /// SfxInterface initializer.
