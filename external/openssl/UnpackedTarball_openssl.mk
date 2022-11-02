@@ -15,7 +15,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssl-no-multilib.patch.0 \
 	external/openssl/configurable-z-option.patch.0 \
 	external/openssl/openssl-no-ipc-cmd.patch.0 \
-	external/openssl/0001-Inthe-VC-common-target-unquote-CC.patch.1 \
 	external/openssl/system-cannot-find-path-for-move.patch.0 \
 ))
 

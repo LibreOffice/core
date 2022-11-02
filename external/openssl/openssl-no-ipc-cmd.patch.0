@@ -1,15 +1,15 @@
 --- util/perl/OpenSSL/config.pm	2022-09-08 11:45:57.408532119 +0100
 +++ util/perl/OpenSSL/config.pm	2022-09-08 11:47:46.877590711 +0100
-@@ -15,7 +15,7 @@
- use warnings;
+@@ -16,7 +16,7 @@
  use Getopt::Std;
  use File::Basename;
+ use File::Spec;
 -use IPC::Cmd;
 +# use IPC::Cmd;
  use POSIX;
+ use Config;
  use Carp;
- 
-@@ -193,7 +193,8 @@
+@@ -205,7 +205,8 @@
  
  # Look for ISC/SCO with its unique uname program
  sub is_sco_uname {
@@ -19,7 +19,7 @@
  
      open UNAME, "uname -X 2>/dev/null|" or return '';
      my $line = "";
-@@ -291,13 +292,13 @@
+@@ -303,13 +304,13 @@
      $CCVENDOR = '';             # Dunno, don't care (unless found later)
  
      # Find a compiler if we don't already have one
@@ -40,7 +40,7 @@
  
      if ( $CC ) {
          # Find the compiler vendor and version number for certain compilers
-@@ -352,14 +353,14 @@
+@@ -364,14 +365,14 @@
              }
          }
  
