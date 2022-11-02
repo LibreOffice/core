@@ -442,7 +442,7 @@ Public Function GoToCell(Optional ByVal Row As Variant _
 &apos;&apos;&apos;		oSheet.GoToCell(1000000, &quot;ShipCity&quot;))	&apos;	Set the cursor on he last row, column &quot;ShipCity&quot;
 
 Dim bGoTo As Boolean				&apos;	Return value
-Dim lCol As Long					&apos;	Numercic index of Column in lists of columns
+Dim lCol As Long					&apos;	Numeric index of Column in lists of columns
 Dim lMaxCol As Long				&apos;	Index of last column
 Const cstThisSub = &quot;SFDatabases.Datasheet.GoToCell&quot;
 Const cstSubArgs = &quot;[Row=0], [Column=0]&quot;
