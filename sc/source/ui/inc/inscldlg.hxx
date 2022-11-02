@@ -30,7 +30,6 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBtnCellsRight;
     std::unique_ptr<weld::RadioButton> m_xBtnInsRow;
     std::unique_ptr<weld::RadioButton> m_xBtnInsCol;
-    std::unique_ptr<weld::Label> m_xLbCellsRight;
 
 public:
     ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove);

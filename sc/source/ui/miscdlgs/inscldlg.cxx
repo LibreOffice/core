@@ -32,11 +32,10 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     , m_xBtnCellsRight(m_xBuilder->weld_radio_button("right"))
     , m_xBtnInsRow(m_xBuilder->weld_radio_button("rows"))
     , m_xBtnInsCol(m_xBuilder->weld_radio_button("cols"))
-    , m_xLbCellsRight(m_xBuilder->weld_label("right"))
 {
     const ScViewData* pViewData = ScDocShell::GetViewData();
     if (pViewData && pViewData->GetDocument().IsLayoutRTL(pViewData->GetTabNo()))
-        m_xLbCellsRight->set_label(ScResId(SCSTR_INSERT_RTL));
+        m_xBtnCellsRight->set_label(ScResId(SCSTR_INSERT_RTL));
 
     if (bDisallowCellMove)
     {
