@@ -4730,7 +4730,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                     // tdf#143377 new strategy: instead of using zero for nSin, which
                                     // would be the *correct* value, continue with the corrected maximum
-                                    // allowed value which is then *not* zero. This is silmilar to
+                                    // allowed value which is then *not* zero. This is similar to
                                     // the behaviour before where (just due to numerical unprecisions)
                                     // nSin was also not zero (pure coincidence), but very close to it.
                                     // I checked and tried to make safe all places below that use
