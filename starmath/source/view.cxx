@@ -309,7 +309,8 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     rDevice.SetBackground(SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
     const Fraction aFraction(1, 1);
-    rDevice.SetMapMode(MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction));
+    MapUnit unit = comphelper::LibreOfficeKit::isActive() ? MapUnit::MapPixel : MapUnit::Map100thMM;
+    rDevice.SetMapMode(MapMode(unit, Point(), aFraction, aFraction));
 
     SetTotalSize();
 
