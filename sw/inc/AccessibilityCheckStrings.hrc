@@ -34,6 +34,7 @@
 #define STR_HEADING_IN_TABLE            NC_("STR_HEADING_IN_TABLE", "Tables must not contain headings.")
 #define STR_HEADING_ORDER               NC_("STR_HEADING_ORDER", "Keep headings' levels ordered. Heading level %LEVEL_CURRENT% must not go after %LEVEL_PREV%.")
 #define STR_FONTWORKS                   NC_("STR_FONTWORKS", "Avoid Fontwork objects in your documents. Make sure you use it for samples or other meaningless text.")
+#define STR_TABLE_FORMATTING            NC_("STR_TABLE_FORMATTING", "Avoid using empty table cells for formatting.")
 
 #define STR_DOCUMENT_DEFAULT_LANGUAGE   NC_("STR_DOCUMENT_DEFAULT_LANGUAGE", "Document default language is not set")
 #define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style '%STYLE_NAME%' has no language set")
