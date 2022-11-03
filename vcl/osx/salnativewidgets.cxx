@@ -22,6 +22,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/threadex.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
 
@@ -70,18 +71,18 @@ static HIRect ImplGetHIRectFromRectangle(tools::Rectangle aRect)
     return aHIRect;
 }
 
-static ThemeButtonValue ImplGetButtonValue(ButtonValue aButtonValue)
+static NSControlStateValue ImplGetButtonValue(ButtonValue aButtonValue)
 {
     switch (aButtonValue)
     {
         case ButtonValue::On:
-            return kThemeButtonOn;
+            return NSControlStateValueOn;
         case ButtonValue::Off:
         case ButtonValue::DontKnow:
-            return kThemeButtonOff;
+            return NSControlStateValueOff;
         case ButtonValue::Mixed:
         default:
-            return kThemeButtonMixed;
+            return NSControlStateValueMixed;
     }
 }
 
@@ -226,7 +227,7 @@ bool AquaSalGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
     return false;
 }
 
-static UInt32 getState(ControlState nState, AquaSalFrame* mpFrame)
+static bool getEnabled(ControlState nState, AquaSalFrame* mpFrame)
 {
 
     // there are non key windows which are children of key windows, e.g. autofilter configuration dialog or sidebar dropdown dialogs.
@@ -236,19 +237,9 @@ static UInt32 getState(ControlState nState, AquaSalFrame* mpFrame)
                              || mpFrame->mpParent == nullptr || [mpFrame->mpParent->getNSWindow() isKeyWindow];
     if (!(nState & ControlState::ENABLED) || !bDrawActive)
     {
-        return kThemeStateInactive;
+        return false;
     }
-    if (nState & ControlState::PRESSED)
-        return kThemeStatePressed;
-    return kThemeStateActive;
-}
-
-static UInt32 getTrackState(ControlState nState, AquaSalFrame* mpFrame)
-{
-    const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
-    if (!(nState & ControlState::ENABLED) || !bDrawActive)
-        return kThemeTrackInactive;
-    return kThemeTrackActive;
+    return true;
 }
 
 bool AquaSalGraphics::drawNativeControl(ControlType nType,
@@ -262,6 +253,95 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     return mpBackend->drawNativeControl(nType, nPart, rControlRegion, nState, aValue);
 }
 
+static void paintCell(NSCell* pBtn, const NSRect& bounds, bool bShowsFirstResponder, CGContextRef context, NSView* pView)
+{
+    //translate and scale because up side down otherwise
+    CGContextSaveGState(context);
+    CGContextTranslateCTM(context, bounds.origin.x, bounds.origin.y + bounds.size.height);
+    CGContextScaleCTM(context, 1, -1);
+
+    NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+    [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithCGContext:context flipped:NO]];
+
+    NSRect rect = { NSZeroPoint, bounds.size };
+
+    if ([pBtn isKindOfClass: [NSSliderCell class]])
+    {
+        // NSSliderCell doesn't seem to work with drawWithFrame(?), so draw the elements directly
+        [static_cast<NSSliderCell*>(pBtn)
+            drawBarInside: [static_cast<NSSliderCell*>(pBtn) barRectFlipped: NO] flipped: NO];
+        rect = [static_cast<NSSliderCell*>(pBtn) knobRectFlipped: NO];
+        [static_cast<NSSliderCell*>(pBtn) drawKnob: rect];
+    }
+    else
+        [pBtn drawWithFrame: rect inView: pView];
+
+    // setShowsFirstResponder apparently causes a hang when set on NSComboBoxCell
+    const bool bIsComboBox = [pBtn isMemberOfClass: [NSComboBoxCell class]];
+    if (!bIsComboBox)
+        [pBtn setShowsFirstResponder: bShowsFirstResponder];
+
+    if (bShowsFirstResponder)
+    {
+        NSSetFocusRingStyle(NSFocusRingOnly);
+
+        CGContextBeginTransparencyLayerWithRect(context, rect, nullptr);
+        if ([pBtn isMemberOfClass: [NSTextFieldCell class]])
+        {
+            // I wonder why NSTextFieldCell doesn't work for me in the default else branch.
+            // NSComboBoxCell works, and that derives from NSTextFieldCell, on the other
+            // hand setShowsFirstResponder causes a hangs when set on NSComboBoxCell
+            NSRect out = [pBtn focusRingMaskBoundsForFrame: rect inView: pView];
+            CGContextFillRect(context, out);
+        }
+        else if ([pBtn isKindOfClass: [NSSliderCell class]])
+        {
+            // Not getting anything useful for a NSSliderCell, so use the knob
+            [static_cast<NSSliderCell*>(pBtn) drawKnob: rect];
+        }
+        else
+            [pBtn drawFocusRingMaskWithFrame:rect inView: pView];
+
+        CGContextEndTransparencyLayer(context);
+    }
+
+    [NSGraphicsContext setCurrentContext:savedContext];
+    CGContextRestoreGState(context);
+}
+
+static void paintFocusRect(double radius, const NSRect& rect, CGContextRef context)
+{
+    NSRect bounds = rect;
+
+    CGPathRef path = CGPathCreateWithRoundedRect(bounds, radius, radius, nullptr);
+    CGContextSetStrokeColorWithColor(context, [NSColor keyboardFocusIndicatorColor].CGColor);
+    CGContextSetLineWidth(context, FOCUS_RING_WIDTH);
+    CGContextBeginPath(context);
+    CGContextAddPath(context, path);
+    CGContextStrokePath(context);
+    CFRelease(path);
+}
+
+@interface FixedWidthTabViewItem : NSTabViewItem {
+    int m_nWidth;
+}
+- (NSSize)sizeOfLabel: (BOOL)computeMin;
+- (void)setTabWidth: (int)nWidth;
+@end
+
+@implementation FixedWidthTabViewItem
+- (NSSize)sizeOfLabel: (BOOL)computeMin
+{
+    NSSize size = [super sizeOfLabel: computeMin];
+    size.width = m_nWidth;
+    return size;
+}
+- (void)setTabWidth: (int)nWidth
+{
+    m_nWidth = nWidth;
+}
+@end
+
 bool AquaGraphicsBackend::drawNativeControl(ControlType nType,
                                             ControlPart nPart,
                                             const tools::Rectangle &rControlRegion,
@@ -271,8 +351,8 @@ bool AquaGraphicsBackend::drawNativeControl(ControlType nType,
     if (!mrShared.checkContext())
         return false;
     mrShared.maContextHolder.saveState();
-    bool bOK = performDrawNativeControl( nType, nPart, rControlRegion, nState, aValue,
-        mrShared.maContextHolder.get(), mrShared.mpFrame );
+    bool bOK = performDrawNativeControl(nType, nPart, rControlRegion, nState, aValue,
+                                        mrShared.maContextHolder.get(), mrShared.mpFrame);
     mrShared.maContextHolder.restoreState();
 
     tools::Rectangle buttonRect = rControlRegion;
@@ -297,88 +377,73 @@ bool AquaGraphicsBackend::drawNativeControl(ControlType nType,
     return bOK;
 }
 
+static void drawBox(CGContextRef context, const NSRect& rc, NSColor* pColor)
+{
+    CGContextSaveGState(context);
+    CGContextTranslateCTM(context, rc.origin.x, rc.origin.y + rc.size.height);
+    CGContextScaleCTM(context, 1, -1);
+
+    NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+
+    NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+    NSBox* pBox = [[NSBox alloc] initWithFrame: rect];
+
+    [pBox setBoxType: NSBoxCustom];
+    [pBox setFillColor: pColor];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // setBorderType first deprecated in macOS 10.15
+    [pBox setBorderType: NSNoBorder];
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    [pBox displayRectIgnoringOpacity: rect inContext: graphicsContext];
+
+    [pBox release];
+
+    CGContextRestoreGState(context);
+}
+
+// if I don't crystallize this bg then the InvertCursor using kCGBlendModeDifference doesn't
+// work correctly and the cursor doesn't appear correctly
+static void drawEditableBackground(CGContextRef context, const NSRect& rc)
+{
+    CGContextSaveGState(context);
+    CGContextSetFillColorWithColor(context, [NSColor controlBackgroundColor].CGColor);
+    CGContextFillRect(context, rc);
+    CGContextRestoreGState(context);
+}
+
+// As seen in macOS 12.3.1. All a bit odd really.
+const int RoundedMargin[4] = { 6, 4, 0, 3 };
+
 bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
-                                                       ControlPart nPart,
-                                                       const tools::Rectangle &rControlRegion,
-                                                       ControlState nState,
-                                                       const ImplControlValue &aValue,
-                                                       CGContextRef context,
-                                                       AquaSalFrame* mpFrame)
+                                ControlPart nPart,
+                                const tools::Rectangle &rControlRegion,
+                                ControlState nState,
+                                const ImplControlValue &aValue,
+                                CGContextRef context,
+                                AquaSalFrame* mpFrame)
 {
     bool bOK = false;
+    AquaSalInstance* pInst = GetSalData()->mpInstance;
     HIRect rc = ImplGetHIRectFromRectangle(rControlRegion);
     switch (nType)
     {
         case ControlType::Toolbar:
             {
-#if HAVE_FEATURE_MACOSX_SANDBOX
-                HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
-                aMenuItemDrawInfo.version = 0;
-                aMenuItemDrawInfo.state = kThemeMenuActive;
-                aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
-                HIThemeDrawMenuItem(&rc, &rc, &aMenuItemDrawInfo, context, kHIThemeOrientationNormal, nullptr);
-#else
-                if (rControlRegion.Top() == 0 && nPart == ControlPart::DrawBackgroundHorz)
-                {
-                    const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
-                    CGFloat unifiedHeight = rControlRegion.GetHeight();
-                    CGRect drawRect = CGRectMake(rControlRegion.Left(), rControlRegion.Top(),
-                                                 rControlRegion.GetWidth(), rControlRegion.GetHeight());
-                    CUIDraw([NSWindow coreUIRenderer], drawRect, context,
-                            reinterpret_cast<CFDictionaryRef>([NSDictionary dictionaryWithObjectsAndKeys:
-                                                               @"kCUIWidgetWindowFrame",
-                                                               @"widget",
-                                                               @"regularwin",
-                                                               @"windowtype",
-                                                               (bDrawActive ? @"normal" : @"inactive"),
-                                                               @"state",
-                                                               [NSNumber numberWithDouble:unifiedHeight],
-                                                               @"kCUIWindowFrameUnifiedTitleBarHeightKey",
-                                                               [NSNumber numberWithBool:NO],
-                                                               @"kCUIWindowFrameDrawTitleSeparatorKey",
-                                                               [NSNumber numberWithBool:YES],
-                                                               @"is.flipped",
-                                                               nil]),
-                            nil);
-                }
-                else
-                {
-                    HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
-                    aMenuItemDrawInfo.version = 0;
-                    aMenuItemDrawInfo.state = kThemeMenuActive;
-                    aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
-                    HIThemeDrawMenuItem(&rc, &rc, &aMenuItemDrawInfo, context, kHIThemeOrientationNormal, nullptr);
-                }
-#endif
+                drawBox(context, rc, NSColor.windowBackgroundColor);
                 bOK = true;
             }
             break;
         case ControlType::WindowBackground:
             {
-                HIThemeBackgroundDrawInfo aThemeBackgroundInfo;
-                aThemeBackgroundInfo.version = 0;
-                aThemeBackgroundInfo.state = getState(nState, mpFrame);
-                aThemeBackgroundInfo.kind = kThemeBrushDialogBackgroundActive;
-
-                // FIXME: without this magical offset there is a 2 pixel black border on the right and bottom
-
-                rc.size.width += 2;
-                rc.size.height += 2;
-                HIThemeApplyBackground( &rc, &aThemeBackgroundInfo, context, kHIThemeOrientationNormal);
-                CGContextFillRect(context, rc);
+                drawBox(context, rc, NSColor.windowBackgroundColor);
                 bOK = true;
             }
             break;
         case ControlType::Tooltip:
             {
-                HIThemeBackgroundDrawInfo aThemeBackgroundInfo;
-                aThemeBackgroundInfo.version = 0;
-                aThemeBackgroundInfo.state = getState(nState, mpFrame);
-                aThemeBackgroundInfo.kind = kThemeBrushAlertBackgroundActive;
                 rc.size.width += 2;
                 rc.size.height += 2;
-                HIThemeApplyBackground(&rc, &aThemeBackgroundInfo, context, kHIThemeOrientationNormal);
-                CGContextFillRect(context, rc);
+                drawBox(context, rc, NSColor.controlBackgroundColor);
                 bOK = true;
             }
             break;
@@ -386,7 +451,6 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
         case ControlType::MenuPopup:
             if (nPart == ControlPart::Entire || nPart == ControlPart::MenuItem || nPart == ControlPart::HasBackgroundTexture)
             {
-
                 // FIXME: without this magical offset there is a 2 pixel black border on the right
 
                 rc.size.width += 2;
@@ -420,7 +484,6 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
             }
             else if (nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark)
             {
-
                 // checked, else it is not displayed (see vcl/source/window/menu.cxx)
 
                 if (nState & ControlState::PRESSED)
@@ -448,159 +511,158 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
             break;
         case ControlType::Pushbutton:
             {
+                NSControlSize eSizeKind = NSControlSizeRegular;
+                NSBezelStyle eBezelStyle = NSBezelStyleRounded;
 
-                // FIXME: instead of use a value, VCL can retrieve correct values on the fly (to be implemented)
-
-                HIThemeButtonDrawInfo aPushInfo;
-                aPushInfo.version = 0;
-
-                // no animation
-
-                aPushInfo.animation.time.start = 0;
-                aPushInfo.animation.time.current = 0;
                 PushButtonValue const *pPBVal = aValue.getType() == ControlType::Pushbutton ?
                                                 static_cast<PushButtonValue const *>(&aValue) : nullptr;
-                int nPaintHeight = static_cast<int>(rc.size.height);
+
+                SInt32 nPaintHeight = rc.size.height;
                 if (rc.size.height <= PUSH_BUTTON_NORMAL_HEIGHT)
                 {
-                    aPushInfo.kind = kThemePushButtonMini;
-                    nPaintHeight = PUSH_BUTTON_SMALL_HEIGHT;
+                    eSizeKind = NSControlSizeMini;
+                    GetThemeMetric(kThemeMetricSmallPushButtonHeight, &nPaintHeight);
                 }
                 else if ((pPBVal && pPBVal->mbSingleLine) || rc.size.height < PUSH_BUTTON_NORMAL_HEIGHT * 3 / 2)
                 {
-                    aPushInfo.kind = kThemePushButtonNormal;
-                    nPaintHeight = PUSH_BUTTON_NORMAL_HEIGHT;
+                    GetThemeMetric(kThemeMetricPushButtonHeight, &nPaintHeight);
+                }
+                else
+                {
+                    // A simple square bezel style that can scale to any size
+                    eBezelStyle = NSBezelStyleSmallSquare;
+                }
 
-                    // avoid clipping when focused
+                // translate the origin for controls with fixed paint height so content ends up somewhere sensible
+                rc.origin.y += (rc.size.height - nPaintHeight + 1) / 2;
+                rc.size.height = nPaintHeight;
+
+                NSButtonCell* pBtn = pInst->mpButtonCell;
+                pBtn.allowsMixedState = YES;
+
+                [pBtn setTitle: @""];
+                [pBtn setButtonType: NSButtonTypeMomentaryPushIn];
+                [pBtn setBezelStyle: eBezelStyle];
+                [pBtn setState: ImplGetButtonValue(aValue.getTristateVal())];
+                [pBtn setEnabled: getEnabled(nState, mpFrame)];
+                [pBtn setFocusRingType: NSFocusRingTypeExterior];
+                [pBtn setHighlighted: (nState & ControlState::PRESSED) ? YES : NO];
+                [pBtn setControlSize: eSizeKind];
+                if (nState & ControlState::DEFAULT)
+                    [pBtn setKeyEquivalent: @"\r"];
+                else
+                    [pBtn setKeyEquivalent: @""];
+
+                if (eBezelStyle == NSBezelStyleRounded)
+                {
+                    int nMargin = RoundedMargin[eSizeKind];
+                    rc.origin.x -= nMargin;
+                    rc.size.width += nMargin * 2;
 
                     rc.origin.x += FOCUS_RING_WIDTH / 2;
                     rc.size.width -= FOCUS_RING_WIDTH;
                 }
-                else
-                    aPushInfo.kind = kThemeBevelButton;
 
-                // translate the origin for controls with fixed paint height so content ends up somewhere sensible
+                const bool bFocused(nState & ControlState::FOCUSED);
+                paintCell(pBtn, rc, bFocused, context, nullptr);
 
-                rc.origin.y += (rc.size.height - nPaintHeight) / 2;
-                aPushInfo.state = getState(nState, mpFrame);
-                aPushInfo.value = ImplGetButtonValue(aValue.getTristateVal());
-                aPushInfo.adornment = (nState & ControlState::DEFAULT) ? kThemeAdornmentDefault : kThemeAdornmentNone;
-                if (nState & ControlState::FOCUSED)
-                    aPushInfo.adornment |= kThemeAdornmentFocus;
-                HIThemeDrawButton(&rc, &aPushInfo, context, kHIThemeOrientationNormal, nullptr);
                 bOK = true;
             }
             break;
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
             {
-                HIThemeButtonDrawInfo aInfo;
-                aInfo.version = 0;
-                switch (nType)
-                {
-                    case ControlType::Radiobutton:
-                        if (rc.size.width >= RADIO_BUTTON_SMALL_SIZE)
-                            aInfo.kind = kThemeRadioButton;
-                        else
-                            aInfo.kind = kThemeSmallRadioButton;
-                        break;
-                    case ControlType::Checkbox:
-                        if (rc.size.width >= CHECKBOX_SMALL_SIZE)
-                            aInfo.kind = kThemeCheckBox;
-                        else
-                            aInfo.kind = kThemeSmallCheckBox;
-                        break;
-                    default:
-                        break;
-                }
-                aInfo.state = getState(nState, mpFrame);
-                ButtonValue aButtonValue = aValue.getTristateVal();
-                aInfo.value = ImplGetButtonValue(aButtonValue);
-                aInfo.adornment = (nState & ControlState::DEFAULT) ? kThemeAdornmentDefault : kThemeAdornmentNone;
-                if (nState & ControlState::FOCUSED)
-                    aInfo.adornment |= kThemeAdornmentFocus;
                 rc.size.width -= 2 * FOCUS_RING_WIDTH;
                 rc.size.height = RADIO_BUTTON_SMALL_SIZE;
                 rc.origin.x += FOCUS_RING_WIDTH;
                 rc.origin.y += FOCUS_RING_WIDTH;
-                HIThemeDrawButton(&rc, &aInfo, context, kHIThemeOrientationNormal, nullptr);
+
+                NSButtonCell* pBtn = nType == ControlType::Checkbox ? pInst->mpCheckCell : pInst->mpRadioCell;
+                pBtn.allowsMixedState = YES;
+
+                [pBtn setTitle: @""];
+                [pBtn setButtonType: nType == ControlType::Checkbox ? NSButtonTypeSwitch : NSButtonTypeRadio];
+                [pBtn setState: ImplGetButtonValue(aValue.getTristateVal())];
+                [pBtn setEnabled: getEnabled(nState, mpFrame)];
+                [pBtn setFocusRingType: NSFocusRingTypeExterior];
+                [pBtn setHighlighted: (nState & ControlState::PRESSED) ? YES : NO];
+
+                const bool bFocused(nState & ControlState::FOCUSED);
+                paintCell(pBtn, rc, bFocused, context, nullptr);
+
                 bOK = true;
             }
             break;
         case ControlType::ListNode:
             {
-                ButtonValue aButtonValue = aValue.getTristateVal();
-                HIThemeButtonDrawInfo aInfo;
-                aInfo.version = 0;
-                aInfo.kind = kThemeDisclosureTriangle;
-                aInfo.value = kThemeDisclosureRight;
-                aInfo.state = getState(nState, mpFrame);
-                aInfo.adornment = kThemeAdornmentNone;
-                switch (aButtonValue)
-                {
-                    case ButtonValue::On:
-                        aInfo.value = kThemeDisclosureDown;
-                        break;
-                    case ButtonValue::Off:
-                        if (AllSettings::GetLayoutRTL())
-                            aInfo.value = kThemeDisclosureLeft;
-                        break;
-                    case ButtonValue::DontKnow:
-                    default:
-                        break;
-                }
-                HIThemeDrawButton(&rc, &aInfo, context, kHIThemeOrientationNormal, nullptr);
+                NSButtonCell* pBtn = pInst->mpListNodeCell;
+                pBtn.allowsMixedState = YES;
+
+                [pBtn setTitle: @""];
+                [pBtn setButtonType: NSButtonTypeOnOff];
+                [pBtn setBezelStyle: NSBezelStyleDisclosure];
+                [pBtn setState: ImplGetButtonValue(aValue.getTristateVal())];
+                [pBtn setEnabled: getEnabled(nState, mpFrame)];
+                [pBtn setFocusRingType: NSFocusRingTypeExterior];
+
+                const bool bFocused(nState & ControlState::FOCUSED);
+                paintCell(pBtn, rc, bFocused, context, nullptr);
+
                 bOK = true;
             }
             break;
         case ControlType::Progress:
         case ControlType::IntroProgress:
             {
-                tools::Long nProgressWidth = aValue.getNumericVal();
-                HIThemeTrackDrawInfo aTrackInfo;
-                aTrackInfo.version = 0;
-                aTrackInfo.kind  = (rc.size.height > 10) ? kThemeProgressBarLarge : kThemeProgressBarMedium;
-                aTrackInfo.bounds  = rc;
-                aTrackInfo.min  = 0;
-                aTrackInfo.max  = static_cast<SInt32>(rc.size.width);
-                aTrackInfo.value  = nProgressWidth;
-                aTrackInfo.reserved  = 0;
-                aTrackInfo.attributes = kThemeTrackHorizontal;
-                if (AllSettings::GetLayoutRTL())
-                    aTrackInfo.attributes |= kThemeTrackRightToLeft;
-                aTrackInfo.enableState  = getTrackState(nState, mpFrame);
+                NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+                NSProgressIndicator* pBox = [[NSProgressIndicator alloc] initWithFrame: rect];
+                [pBox setControlSize: (rc.size.height > MEDIUM_PROGRESS_INDICATOR_HEIGHT) ?
+                                      NSControlSizeRegular : NSControlSizeSmall];
+                [pBox setMinValue: 0];
+                [pBox setMaxValue: rc.size.width];
+                [pBox setDoubleValue: aValue.getNumericVal()];
+                pBox.usesThreadedAnimation = NO;
+                [pBox setIndeterminate: NO];
 
-                // the intro bitmap never gets key anyway; we want to draw that enabled
+                CGContextSaveGState(context);
+                CGContextTranslateCTM(context, rc.origin.x, rc.origin.y);
 
-                if (nType == ControlType::IntroProgress)
-                    aTrackInfo.enableState  = kThemeTrackActive;
-                aTrackInfo.filler1  = 0;
-                aTrackInfo.trackInfo.progress.phase = static_cast<long long>(CFAbsoluteTimeGetCurrent() * 10.0);
-                HIThemeDrawTrack(&aTrackInfo, nullptr, context, kHIThemeOrientationNormal);
+                NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+                NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+                [NSGraphicsContext setCurrentContext: graphicsContext];
+
+                [pBox drawRect: rect];
+
+                [NSGraphicsContext setCurrentContext: savedContext];
+
+                CGContextRestoreGState(context);
+
+                [pBox release];
+
                 bOK = true;
             }
             break;
         case ControlType::Slider:
             {
                 const SliderValue *pSliderVal = static_cast<SliderValue const *>(&aValue);
-                HIThemeTrackDrawInfo aTrackDraw;
-                aTrackDraw.kind = kThemeSliderMedium;
                 if (nPart == ControlPart::TrackHorzArea || nPart == ControlPart::TrackVertArea)
                 {
-                    aTrackDraw.bounds = rc;
-                    aTrackDraw.min = pSliderVal->mnMin;
-                    aTrackDraw.max = pSliderVal->mnMax;
-                    aTrackDraw.value = pSliderVal->mnCur;
-                    aTrackDraw.reserved = 0;
-                    aTrackDraw.attributes = kThemeTrackShowThumb;
-                    if (nPart == ControlPart::TrackHorzArea)
-                        aTrackDraw.attributes |= kThemeTrackHorizontal;
-                    aTrackDraw.enableState = (nState & ControlState::ENABLED) ? kThemeTrackActive : kThemeTrackInactive;
-                    SliderTrackInfo aSlideInfo;
-                    aSlideInfo.thumbDir = kThemeThumbUpward;
-                    aSlideInfo.pressState = 0;
-                    aTrackDraw.trackInfo.slider = aSlideInfo;
-                    HIThemeDrawTrack(&aTrackDraw, nullptr, context, kHIThemeOrientationNormal);
+                    NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+                    NSSlider* pBox = [[NSSlider alloc] initWithFrame: rect];
+
+                    [pBox setEnabled: getEnabled(nState, mpFrame)];
+                    [pBox setVertical: nPart == ControlPart::TrackVertArea];
+                    [pBox setMinValue: pSliderVal->mnMin];
+                    [pBox setMaxValue: pSliderVal->mnMax];
+                    [pBox setIntegerValue: pSliderVal->mnCur];
+                    [pBox setSliderType: NSSliderTypeLinear];
+                    [pBox setFocusRingType: NSFocusRingTypeExterior];
+
+                    const bool bFocused(nState & ControlState::FOCUSED);
+                    paintCell(pBox.cell, rc, bFocused, context, mpFrame->getNSView());
+
+                    [pBox release];
+
                     bOK = true;
                 }
             }
@@ -611,70 +673,120 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                                                     ? static_cast<const ScrollbarValue *>(&aValue) : nullptr;
                 if (nPart == ControlPart::DrawBackgroundVert || nPart == ControlPart::DrawBackgroundHorz)
                 {
-                    HIThemeTrackDrawInfo aTrackDraw;
-                    aTrackDraw.kind = kThemeMediumScrollBar;
-                    aTrackDraw.bounds = rc;
-                    aTrackDraw.min = pScrollbarVal->mnMin;
-                    aTrackDraw.max = pScrollbarVal->mnMax - pScrollbarVal->mnVisibleSize;
-                    aTrackDraw.value = pScrollbarVal->mnCur;
-                    aTrackDraw.reserved = 0;
-                    aTrackDraw.attributes = kThemeTrackShowThumb;
-                    if (nPart == ControlPart::DrawBackgroundHorz)
-                        aTrackDraw.attributes |= kThemeTrackHorizontal;
-                    aTrackDraw.enableState = getTrackState(nState, mpFrame);
-                    ScrollBarTrackInfo aScrollInfo;
-                    aScrollInfo.viewsize = pScrollbarVal->mnVisibleSize;
-                    aScrollInfo.pressState = 0;
-                    if (pScrollbarVal->mnButton1State & ControlState::ENABLED)
-                        if (pScrollbarVal->mnButton1State & ControlState::PRESSED)
-                            aScrollInfo.pressState = kThemeTopOutsideArrowPressed;
-                    if (pScrollbarVal->mnButton2State & ControlState::ENABLED )
-                        if (pScrollbarVal->mnButton2State & ControlState::PRESSED )
-                            aScrollInfo.pressState = kThemeBottomOutsideArrowPressed;
-                    if ( pScrollbarVal->mnThumbState & ControlState::ENABLED)
-                        if (pScrollbarVal->mnThumbState & ControlState::PRESSED)
-                            aScrollInfo.pressState = kThemeThumbPressed;
-                    aTrackDraw.trackInfo.scrollbar = aScrollInfo;
-                    HIThemeDrawTrack(&aTrackDraw, nullptr, context, kHIThemeOrientationNormal);
+                    drawBox(context, rc, NSColor.controlBackgroundColor);
+
+                    NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+                    NSScroller* pBar = [[NSScroller alloc] initWithFrame: rect];
+
+                    double range = pScrollbarVal->mnMax - pScrollbarVal->mnVisibleSize - pScrollbarVal->mnMin;
+                    double value = range ? (pScrollbarVal->mnCur - pScrollbarVal->mnMin) / range : 0;
+
+                    double length = pScrollbarVal->mnMax - pScrollbarVal->mnMin;
+                    double proportion = pScrollbarVal->mnVisibleSize / length;
+
+                    [pBar setEnabled: getEnabled(nState, mpFrame)];
+                    [pBar setScrollerStyle: NSScrollerStyleLegacy];
+                    [pBar setFloatValue: value];
+                    [pBar setKnobProportion: proportion];
+                    bool bPressed = (pScrollbarVal->mnThumbState & ControlState::ENABLED) &&
+                                    (pScrollbarVal->mnThumbState & ControlState::PRESSED);
+
+                    CGContextSaveGState(context);
+                    CGContextTranslateCTM(context, rc.origin.x, rc.origin.y);
+
+                    NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+
+                    NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+                    [NSGraphicsContext setCurrentContext: graphicsContext];
+
+                    // For not-pressed first draw without the knob and then
+                    // draw just the knob but with 50% opaque which looks sort of
+                    // right
+
+                    [pBar drawKnobSlotInRect: rect highlight: NO];
+
+                    NSBitmapImageRep* pImageRep = [pBar bitmapImageRepForCachingDisplayInRect: rect];
+
+                    NSGraphicsContext* imageContext = [NSGraphicsContext graphicsContextWithBitmapImageRep:pImageRep];
+                    [NSGraphicsContext setCurrentContext: imageContext];
+
+                    [pBar drawKnob];
+
+                    [NSGraphicsContext setCurrentContext: graphicsContext];
+
+                    NSImage* pImage = [[NSImage alloc] initWithSize: rect.size];
+                    [pImage addRepresentation: pImageRep]; // takes ownership of pImageRep
+
+                    [pImage drawInRect: rect fromRect: rect
+                                        operation: NSCompositingOperationSourceOver
+                                        fraction: bPressed ? 1.0 : 0.5];
+
+                    [pImage release];
+
+                    [NSGraphicsContext setCurrentContext:savedContext];
+
+                    CGContextRestoreGState(context);
+
                     bOK = true;
+
+                    [pBar release];
                 }
             }
             break;
         case ControlType::TabPane:
             {
-                HIThemeTabPaneDrawInfo aTabPaneDrawInfo;
-                aTabPaneDrawInfo.version = 1;
-                aTabPaneDrawInfo.state = kThemeStateActive;
-                aTabPaneDrawInfo.direction = kThemeTabNorth;
-                aTabPaneDrawInfo.size = kHIThemeTabSizeNormal;
-                aTabPaneDrawInfo.kind = kHIThemeTabKindNormal;
+                NSTabView* pBox = [[NSTabView alloc] initWithFrame: rc];
 
-                // border is outside the rect rc for Carbon but for VCL it should be inside
+                SInt32 nOverlap;
+                GetThemeMetric(kThemeMetricTabFrameOverlap, &nOverlap);
 
-                rc.origin.x += 1;
-                rc.origin.y -= TAB_HEIGHT / 2;
-                rc.size.height += TAB_HEIGHT / 2;
-                rc.size.width -= 2;
-                HIThemeDrawTabPane(&rc, &aTabPaneDrawInfo, context, kHIThemeOrientationNormal);
+                // this calculation is probably more than a little dubious
+                rc.origin.x -= pBox.contentRect.origin.x - FOCUS_RING_WIDTH;
+                rc.size.width += rc.size.width - pBox.contentRect.size.width - 2 * FOCUS_RING_WIDTH;
+                double nTopBorder = pBox.contentRect.origin.y;
+                double nBottomBorder = rc.size.height - pBox.contentRect.size.height - nTopBorder;
+                double nExtraTop = (nTopBorder - nBottomBorder) / 2;
+                rc.origin.y -= (nTopBorder - nExtraTop + nOverlap);
+                rc.size.height += (nTopBorder - nExtraTop + nBottomBorder);
+
+                CGContextSaveGState(context);
+                CGContextTranslateCTM(context, rc.origin.x, rc.origin.y);
+
+                rc.origin.x = 0;
+                rc.origin.y = 0;
+
+                [pBox setBoundsOrigin: rc.origin];
+                [pBox setBoundsSize: rc.size];
+
+                // jam this in to force the tab contents area to be left undrawn, the ControlType::TabItem
+                // will be drawn in this space.
+                const TabPaneValue& rValue = static_cast<const TabPaneValue&>(aValue);
+                SInt32 nEndCapWidth;
+                GetThemeMetric(kThemeMetricLargeTabCapsWidth, &nEndCapWidth);
+                FixedWidthTabViewItem* pItem = [[[FixedWidthTabViewItem alloc] initWithIdentifier: @"tab"] autorelease];
+                [pItem setTabWidth: rValue.m_aTabHeaderRect.GetWidth() - 2 * nEndCapWidth];
+                [pBox addTabViewItem: pItem];
+
+                NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+
+                NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+                [NSGraphicsContext setCurrentContext: graphicsContext];
+
+                [pBox drawRect: rc];
+
+                [NSGraphicsContext setCurrentContext: savedContext];
+
+                [pBox release];
+
+                CGContextRestoreGState(context);
+
                 bOK = true;
             }
             break;
         case ControlType::TabItem:
             {
-                HIThemeTabDrawInfo aTabItemDrawInfo;
-                aTabItemDrawInfo.version = 1;
-                aTabItemDrawInfo.style = kThemeTabNonFront;
-                aTabItemDrawInfo.direction = kThemeTabNorth;
-                aTabItemDrawInfo.size = kHIThemeTabSizeNormal;
-                aTabItemDrawInfo.adornment = kHIThemeTabAdornmentTrailingSeparator;
-                if (nState & ControlState::SELECTED)
-                    aTabItemDrawInfo.style = kThemeTabFront;
-                if(nState & ControlState::FOCUSED)
-                    aTabItemDrawInfo.adornment |= kHIThemeTabAdornmentFocus;
-
                 // first, last or middle tab
 
-                aTabItemDrawInfo.position = kHIThemeTabPositionMiddle;
                 TabitemValue const * pTabValue = static_cast<TabitemValue const *>(&aValue);
                 TabitemFlags nAlignment = pTabValue->mnAlignment;
 
@@ -682,35 +794,80 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 // when there are several lines of tabs because there is only one first tab and one
                 // last tab and TabitemFlags::FirstInGroup (and TabitemFlags::LastInGroup) because when the
                 // line width is different from window width, there may not be TabitemFlags::RightAligned
-
+                int nPaintIndex = 1;
+                bool bSolo = false;
                 if (((nAlignment & TabitemFlags::LeftAligned) && (nAlignment & TabitemFlags::RightAligned))
                     || ((nAlignment & TabitemFlags::FirstInGroup) && (nAlignment & TabitemFlags::LastInGroup)))
-                    aTabItemDrawInfo.position = kHIThemeTabPositionOnly;
-                else if ((nAlignment & TabitemFlags::LeftAligned) || (nAlignment & TabitemFlags::FirstInGroup))
-                    aTabItemDrawInfo.position = kHIThemeTabPositionFirst;
-                else if ((nAlignment & TabitemFlags::RightAligned) || (nAlignment & TabitemFlags::LastInGroup))
-                    aTabItemDrawInfo.position = kHIThemeTabPositionLast;
-
-                // support for RTL (see issue 79748)
-
-                if (AllSettings::GetLayoutRTL()) {
-                    if (aTabItemDrawInfo.position == kHIThemeTabPositionFirst)
-                        aTabItemDrawInfo.position = kHIThemeTabPositionLast;
-                    else if (aTabItemDrawInfo.position == kHIThemeTabPositionLast)
-                        aTabItemDrawInfo.position = kHIThemeTabPositionFirst;
+                {
+                    nPaintIndex = 0;
+                    bSolo = true;
                 }
-                HIThemeDrawTab(&rc, &aTabItemDrawInfo, context, kHIThemeOrientationNormal, nullptr);
+                else if ((nAlignment & TabitemFlags::LeftAligned) || (nAlignment & TabitemFlags::FirstInGroup))
+                    nPaintIndex = !AllSettings::GetLayoutRTL() ? 0 : 2;
+                else if ((nAlignment & TabitemFlags::RightAligned) || (nAlignment & TabitemFlags::LastInGroup))
+                    nPaintIndex = !AllSettings::GetLayoutRTL() ? 2 : 0;
+
+                int nCells = !bSolo ? 3 : 1;
+                NSRect ctrlrect = { NSZeroPoint, NSMakeSize(rc.size.width * nCells + FOCUS_RING_WIDTH, rc.size.height) };
+                NSSegmentedControl* pCtrl = [[NSSegmentedControl alloc] initWithFrame: ctrlrect];
+                [pCtrl setSegmentCount: nCells];
+                if (bSolo)
+                    [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH forSegment: 0];
+                else
+                {
+                    [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 0];
+                    [pCtrl setWidth: rc.size.width forSegment: 1];
+                    [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 2];
+                }
+                [pCtrl setSelected: (nState & ControlState::SELECTED) ? YES : NO forSegment: nPaintIndex];
+                [pCtrl setFocusRingType: NSFocusRingTypeExterior];
+
+                NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+                [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithCGContext:context flipped:NO]];
+
+                NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+                NSRect tabrect = { NSMakePoint(rc.size.width * nPaintIndex + FOCUS_RING_WIDTH / 2, 0),
+                                   NSMakeSize(rc.size.width, rc.size.height) };
+                NSBitmapImageRep* pImageRep = [pCtrl bitmapImageRepForCachingDisplayInRect: tabrect];
+                [pCtrl cacheDisplayInRect: tabrect toBitmapImageRep: pImageRep];
+
+                NSImage* pImage = [[NSImage alloc] initWithSize: rect.size];
+                [pImage addRepresentation: pImageRep]; // takes ownership of pImageRep
+
+                [pImage drawInRect: rc fromRect: rect
+                        operation: NSCompositingOperationSourceOver
+                        fraction: 1.0];
+
+                [pImage release];
+
+                [NSGraphicsContext setCurrentContext:savedContext];
+
+                [pCtrl release];
+
+                if (nState & ControlState::FOCUSED)
+                {
+                    if (!bSolo)
+                    {
+                        if (nPaintIndex == 0)
+                        {
+                            rc.origin.x += FOCUS_RING_WIDTH / 2;
+                            rc.size.width -= FOCUS_RING_WIDTH / 2;
+                        }
+                        else if (nPaintIndex == 2)
+                        {
+                            rc.size.width -= FOCUS_RING_WIDTH / 2;
+                            rc.size.width -= FOCUS_RING_WIDTH / 2;
+                        }
+                    }
+
+                    paintFocusRect(4.0, rc, context);
+                }
                 bOK=true;
             }
             break;
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
             {
-                HIThemeFrameDrawInfo aTextDrawInfo;
-                aTextDrawInfo.version = 0;
-                aTextDrawInfo.kind = kHIThemeFrameTextFieldSquare;
-                aTextDrawInfo.state = getState(nState, mpFrame);
-                aTextDrawInfo.isFocused = false;
                 rc.size.width += 2 * EDITBOX_INSET_MARGIN;
                 if (nType == ControlType::Editbox)
                   rc.size.height = EDITBOX_HEIGHT;
@@ -719,63 +876,100 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 rc.origin.x -= EDITBOX_INSET_MARGIN;
                 rc.origin.y -= EDITBOX_INSET_MARGIN;
 
-                // fill a white background, because HIThemeDrawFrame only draws the border
+                NSTextFieldCell* pBtn = pInst->mpTextFieldCell;
 
-                CGContextFillRect(context, CGRectMake(rc.origin.x, rc.origin.y, rc.size.width, rc.size.height));
-                HIThemeDrawFrame(&rc, &aTextDrawInfo, context, kHIThemeOrientationNormal);
-                if (nState & ControlState::FOCUSED)
-                    HIThemeDrawFocusRect(&rc, true, context, kHIThemeOrientationNormal);
+                [pBtn setEnabled: getEnabled(nState, mpFrame)];
+                [pBtn setBezeled: YES];
+                [pBtn setEditable: YES];
+                [pBtn setFocusRingType: NSFocusRingTypeExterior];
+
+                drawEditableBackground(context, rc);
+                const bool bFocused(nState & ControlState::FOCUSED);
+                paintCell(pBtn, rc, bFocused, context, mpFrame->getNSView());
+
                 bOK = true;
             }
             break;
         case ControlType::Combobox:
             if (nPart == ControlPart::HasBackgroundTexture || nPart == ControlPart::Entire)
             {
-                HIThemeButtonDrawInfo aComboInfo;
-                aComboInfo.version = 0;
-                aComboInfo.kind = kThemeComboBox;
-                aComboInfo.state = getState(nState, mpFrame);
-                aComboInfo.value = kThemeButtonOn;
-                aComboInfo.adornment = kThemeAdornmentNone;
-                if (nState & ControlState::FOCUSED)
-                    aComboInfo.adornment |= kThemeAdornmentFocus;
-                rc.size.width -= 2 * FOCUS_RING_WIDTH;
+                rc.origin.y += (rc.size.height - COMBOBOX_HEIGHT + 1) / 2;
                 rc.size.height = COMBOBOX_HEIGHT;
-                rc.origin.x += FOCUS_RING_WIDTH;
-                rc.origin.y += FOCUS_RING_WIDTH;
-                HIThemeDrawButton(&rc, &aComboInfo, context, kHIThemeOrientationNormal, nullptr);
+
+                NSComboBoxCell* pBtn = pInst->mpComboBoxCell;
+
+                [pBtn setEnabled: getEnabled(nState, mpFrame)];
+                [pBtn setEditable: YES];
+                [pBtn setState: ImplGetButtonValue(aValue.getTristateVal())];
+                [pBtn setFocusRingType: NSFocusRingTypeExterior];
+
+                {
+                    rc.origin.x += 2;
+                    rc.size.width -= 1;
+                }
+
+                drawEditableBackground(context, rc);
+                const bool bFocused(nState & ControlState::FOCUSED);
+                paintCell(pBtn, rc, bFocused, context, mpFrame->getNSView());
+
                 bOK = true;
             }
             break;
         case ControlType::Listbox:
+
             switch (nPart)
             {
                 case ControlPart::Entire:
                 case ControlPart::ButtonDown:
-                    HIThemeButtonDrawInfo aListInfo;
-                    aListInfo.version = 0;
-                    aListInfo.kind = kThemePopupButton;
-                    aListInfo.state = getState(nState, mpFrame);
-                    aListInfo.value = kThemeButtonOn;
-                    aListInfo.adornment = kThemeAdornmentDefault;
-                    if (nState & ControlState::FOCUSED)
-                        aListInfo.adornment |= kThemeAdornmentFocus;
-                    rc.size.width -= 2 * FOCUS_RING_WIDTH;
+                {
+                    rc.origin.y += (rc.size.height - LISTBOX_HEIGHT + 1) / 2;
                     rc.size.height = LISTBOX_HEIGHT;
-                    rc.origin.x += FOCUS_RING_WIDTH;
-                    rc.origin.y += FOCUS_RING_WIDTH;
-                    HIThemeDrawButton(&rc, &aListInfo, context, kHIThemeOrientationNormal, nullptr);
+
+                    NSPopUpButtonCell* pBtn = pInst->mpPopUpButtonCell;
+
+                    [pBtn setTitle: @""];
+                    [pBtn setEnabled: getEnabled(nState, mpFrame)];
+                    [pBtn setFocusRingType: NSFocusRingTypeExterior];
+                    [pBtn setHighlighted: (nState & ControlState::PRESSED) ? YES : NO];
+                    if (nState & ControlState::DEFAULT)
+                        [pBtn setKeyEquivalent: @"\r"];
+                    else
+                        [pBtn setKeyEquivalent: @""];
+
+                    {
+                        rc.size.width += 1;
+                    }
+
+                    const bool bFocused(nState & ControlState::FOCUSED);
+                    paintCell(pBtn, rc, bFocused, context, nullptr);
+
                     bOK = true;
                     break;
+                }
                 case ControlPart::ListboxWindow:
-                    HIThemeFrameDrawInfo aTextDrawInfo;
-                    aTextDrawInfo.version = 0;
-                    aTextDrawInfo.kind = kHIThemeFrameListBox;
-                    aTextDrawInfo.state = kThemeStateActive;
-                    aTextDrawInfo.isFocused = false;
-                    HIThemeDrawFrame(&rc, &aTextDrawInfo, context, kHIThemeOrientationNormal);
+                {
+                    NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+                    NSScrollView* pBox = [[NSScrollView alloc] initWithFrame: rect];
+                    [pBox setBorderType: NSLineBorder];
+
+                    CGContextSaveGState(context);
+                    CGContextTranslateCTM(context, rc.origin.x, rc.origin.y);
+
+                    NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+                    NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+                    [NSGraphicsContext setCurrentContext: graphicsContext];
+
+                    [pBox drawRect: rect];
+
+                    [NSGraphicsContext setCurrentContext: savedContext];
+
+                    CGContextRestoreGState(context);
+
+                    [pBox release];
+
                     bOK = true;
                     break;
+                }
                 default:
                     break;
             }
@@ -783,70 +977,49 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
         case ControlType::Spinbox:
             if (nPart == ControlPart::Entire)
             {
-
                 // text field
 
-                HIThemeFrameDrawInfo aTextDrawInfo;
-                aTextDrawInfo.version = 0;
-                aTextDrawInfo.kind = kHIThemeFrameTextFieldSquare;
-                aTextDrawInfo.state = getState(nState, mpFrame);
-                aTextDrawInfo.isFocused = false;
                 rc.size.width -= SPIN_BUTTON_WIDTH + 4 * FOCUS_RING_WIDTH;
                 rc.size.height = EDITBOX_HEIGHT;
                 rc.origin.x += FOCUS_RING_WIDTH;
                 rc.origin.y += FOCUS_RING_WIDTH;
 
-                // fill a white background, because HIThemeDrawFrame only draws the border
+                NSTextFieldCell* pEdit = pInst->mpTextFieldCell;
 
-                CGContextFillRect(context, CGRectMake(rc.origin.x, rc.origin.y, rc.size.width, rc.size.height));
-                HIThemeDrawFrame(&rc, &aTextDrawInfo, context, kHIThemeOrientationNormal);
-                if (nState & ControlState::FOCUSED)
-                    HIThemeDrawFocusRect(&rc, true, context, kHIThemeOrientationNormal);
+                [pEdit setEnabled: YES];
+                [pEdit setBezeled: YES];
+                [pEdit setEditable: YES];
+                [pEdit setFocusRingType: NSFocusRingTypeExterior];
+
+                drawEditableBackground(context, rc);
+                const bool bFocused(nState & ControlState::FOCUSED);
+                paintCell(pEdit, rc, bFocused, context, mpFrame->getNSView());
 
                 // buttons
 
                 const SpinbuttonValue *pSpinButtonVal = (aValue.getType() == ControlType::SpinButtons)
                                                       ? static_cast <const SpinbuttonValue *>(&aValue) : nullptr;
-                ControlState nUpperState = ControlState::ENABLED;
-                ControlState nLowerState = ControlState::ENABLED;
                 if (pSpinButtonVal)
                 {
-                    nUpperState = pSpinButtonVal->mnUpperState;
-                    nLowerState = pSpinButtonVal->mnLowerState;
-                    HIThemeButtonDrawInfo aSpinInfo;
-                    aSpinInfo.kind = kThemeIncDecButton;
-                    aSpinInfo.state = kThemeStateActive;
-                    if (nUpperState & ControlState::PRESSED)
-                        aSpinInfo.state = kThemeStatePressedUp;
-                    else if (nLowerState & ControlState::PRESSED)
-                        aSpinInfo.state = kThemeStatePressedDown;
-                    else if (nUpperState & ~ControlState::ENABLED || nLowerState & ~ControlState::ENABLED)
-                        aSpinInfo.state = kThemeStateInactive;
-                    else if (nUpperState & ControlState::ROLLOVER || nLowerState & ControlState::ROLLOVER)
-                        aSpinInfo.state = kThemeStateRollover;
-                    switch (aValue.getTristateVal())
-                    {
-                        case ButtonValue::On:
-                            aSpinInfo.value = kThemeButtonOn;
-                            break;
-                        case ButtonValue::Off:
-                            aSpinInfo.value = kThemeButtonOff;
-                            break;
-                        case ButtonValue::Mixed:
-                        case ButtonValue::DontKnow:
-                        default:
-                            aSpinInfo.value = kThemeButtonMixed;
-                            break;
-                    }
-                    aSpinInfo.adornment = (nUpperState & ControlState::DEFAULT || nLowerState & ControlState::DEFAULT)
-                                        ? kThemeAdornmentDefault : kThemeAdornmentNone;
-                    if (nUpperState & ControlState::FOCUSED || nLowerState & ControlState::FOCUSED)
-                        aSpinInfo.adornment |= kThemeAdornmentFocus;
+                    ControlState nUpperState = pSpinButtonVal->mnUpperState;
+                    ControlState nLowerState = pSpinButtonVal->mnLowerState;
+
                     rc.origin.x += rc.size.width + FOCUS_RING_WIDTH + 1;
                     rc.origin.y -= 1;
                     rc.size.width = SPIN_BUTTON_WIDTH;
                     rc.size.height = SPIN_LOWER_BUTTON_HEIGHT + SPIN_LOWER_BUTTON_HEIGHT;
-                    HIThemeDrawButton(&rc, &aSpinInfo, context, kHIThemeOrientationNormal, nullptr);
+
+                    NSStepperCell* pBtn = pInst->mpStepperCell;
+
+                    [pBtn setTitle: @""];
+                    [pBtn setState: ImplGetButtonValue(aValue.getTristateVal())];
+                    [pBtn setEnabled: (nUpperState & ControlState::ENABLED || nLowerState & ControlState::ENABLED) ?
+                                    YES : NO];
+                    [pBtn setFocusRingType: NSFocusRingTypeExterior];
+                    [pBtn setHighlighted: (nState & ControlState::PRESSED) ? YES : NO];
+
+                    const bool bSpinFocused(nUpperState & ControlState::FOCUSED || nLowerState & ControlState::FOCUSED);
+                    paintCell(pBtn, rc, bSpinFocused, context, nullptr);
                 }
                 bOK = true;
             }

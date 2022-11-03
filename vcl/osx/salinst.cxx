@@ -308,23 +308,6 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
     // put cocoa into multithreaded mode
     [NSThread detachNewThreadSelector:@selector(enableCocoaThreads:) toTarget:[[CocoaThreadEnabler alloc] init] withObject:nil];
 
-    // Dark mode is disabled as long as it is not implemented completely. For development purposes, it may be controlled by
-    // environment variables: VCL_MACOS_FORCE_DARK_MODE enable dark mode independent of system settings,
-    // VCL_MACOS_USE_SYSTEM_APPEARANCE to use system settings (light mode or the dark mode as configured within system preferences).
-
-    // TODO: After implementation of dark mode, this code has to be removed.
-
-    if (@available(macOS 10.14, iOS 13, *))
-    {
-        if (getenv("VCL_MACOS_FORCE_DARK_MODE"))
-        {
-            [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
-        }
-        else
-            if (!getenv("VCL_MACOS_USE_SYSTEM_APPEARANCE"))
-                [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
-    }
-
     // activate our delegate methods
     [NSApp setDelegate: NSApp];
 
@@ -358,6 +341,15 @@ AquaSalInstance::AquaSalInstance()
     pSVData->maAppData.mxToolkitName = OUString("osx");
     m_bSupportsOpenGL = true;
 
+    mpButtonCell = [[NSButtonCell alloc] init];
+    mpCheckCell = [[NSButtonCell alloc] init];
+    mpRadioCell = [[NSButtonCell alloc] init];
+    mpTextFieldCell = [[NSTextFieldCell alloc] initTextCell:@""];
+    mpComboBoxCell = [[NSComboBoxCell alloc] initTextCell:@""];
+    mpPopUpButtonCell = [[NSPopUpButtonCell alloc] init];
+    mpStepperCell = [[NSStepperCell alloc] init];
+    mpListNodeCell = [[NSButtonCell alloc] init];
+
 #if HAVE_FEATURE_SKIA
     AquaSkiaSalGraphicsImpl::prepareSkia();
 #endif
@@ -372,6 +364,15 @@ AquaSalInstance::~AquaSalInstance()
         [pDockMenu release];
         pDockMenu = nil;
     }
+
+    [mpListNodeCell release];
+    [mpStepperCell release];
+    [mpPopUpButtonCell release];
+    [mpComboBoxCell release];
+    [mpTextFieldCell release];
+    [mpRadioCell release];
+    [mpCheckCell release];
+    [mpButtonCell release];
 
 #if HAVE_FEATURE_SKIA
     SkiaHelper::cleanup();

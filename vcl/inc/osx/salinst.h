@@ -76,6 +76,14 @@ class AquaSalInstance : public SalInstance, public SalUserEventList
 public:
     virtual void TriggerUserEventProcessing() override;
 
+    NSButtonCell*                           mpButtonCell;
+    NSButtonCell*                           mpCheckCell;
+    NSButtonCell*                           mpRadioCell;
+    NSTextFieldCell*                        mpTextFieldCell;
+    NSComboBoxCell*                         mpComboBoxCell;
+    NSPopUpButtonCell*                      mpPopUpButtonCell;
+    NSStepperCell*                          mpStepperCell;
+    NSButtonCell*                           mpListNodeCell;
     OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     int                                     mnActivePrintJobs;
