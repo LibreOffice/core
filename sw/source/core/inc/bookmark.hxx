@@ -290,7 +290,8 @@ namespace sw::mark {
 
         /// Fieldmark representing a drop-down form field.
         class DropDownFieldmark final
-            : public FieldmarkWithDropDownButton
+            : virtual public IDropdownFieldmark
+            , public FieldmarkWithDropDownButton
         {
         public:
             DropDownFieldmark(const SwPaM& rPaM, const OUString& rName);
@@ -298,6 +299,12 @@ namespace sw::mark {
 
             virtual void ShowButton(SwEditWin* pEditWin) override;
             virtual void RemoveButton() override;
+            OUString GetContent(sal_Int32* pIndex) const override;
+            OUString GetContent() const override;
+            void AddContent(const OUString& rText, sal_Int32* pIndex = nullptr) override;
+            void DelContent(sal_Int32 nDelIndex = -1) override;
+            void ReplaceContent(const OUString* pText, sal_Int32* pIndex) override;
+            void ReplaceContent(const OUString& sNewContent) override;
 
             // This method should be called only by the portion so we can now the portion's painting area
             void SetPortionPaintArea(const SwRect& rPortionPaintArea);

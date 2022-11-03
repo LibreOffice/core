@@ -75,6 +75,9 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/vbaformfield \
     sw/source/ui/vba/vbaformfields \
     sw/source/ui/vba/vbaformfieldcheckbox \
+    sw/source/ui/vba/vbaformfielddropdown \
+    sw/source/ui/vba/vbaformfielddropdownlistentries \
+    sw/source/ui/vba/vbaformfielddropdownlistentry \
     sw/source/ui/vba/vbaformfieldtextinput \
     sw/source/ui/vba/vbaframe \
     sw/source/ui/vba/vbaframes \

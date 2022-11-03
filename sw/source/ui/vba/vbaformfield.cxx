@@ -26,6 +26,7 @@
 
 #include "vbaformfield.hxx"
 #include "vbaformfieldcheckbox.hxx"
+#include "vbaformfielddropdown.hxx"
 #include "vbaformfieldtextinput.hxx"
 #include "wordvbahelper.hxx"
 
@@ -61,9 +62,8 @@ uno::Any SAL_CALL SwVbaFormField::CheckBox()
 
 uno::Any SAL_CALL SwVbaFormField::DropDown()
 {
-    // return uno::Any(uno::Reference<word::XDropDown>(
-    //     new SwVbaFormFieldDropDown(mxParent, mxContext, m_rFormField)));
-    return uno::Any();
+    return uno::Any(uno::Reference<word::XDropDown>(
+        new SwVbaFormFieldDropDown(mxParent, mxContext, m_rFormField)));
 }
 
 uno::Any SAL_CALL SwVbaFormField::TextInput()

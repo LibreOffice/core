@@ -1052,6 +1052,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XDocument \
 	XDocumentOutgoing \
 	XDocuments \
+	XDropDown \
 	XField \
 	XFields \
 	XFind \
@@ -1063,6 +1064,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XGlobals \
 	XHeaderFooter \
 	XHeadersFooters \
+	XListEntries \
+	XListEntry \
 	XListFormat \
 	XListGalleries \
 	XListGallery \
