@@ -1502,8 +1502,8 @@ void SdTiledRenderingTest::testTdf102223()
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
     CPPUNIT_ASSERT_EQUAL(OUString("Red"), rEditView.GetSelected());
-    const SvxFontHeightItem& rItem = rEditView.GetAttribs().Get(EE_CHAR_FONTHEIGHT);
-    CPPUNIT_ASSERT_EQUAL(int(1411), static_cast<int>(rItem.GetHeight()));
+    CPPUNIT_ASSERT_EQUAL(
+        int(1411), static_cast<int>(rEditView.GetAttribs().Get(EE_CHAR_FONTHEIGHT).GetHeight()));
 
     // cut contents of cell
     uno::Sequence<beans::PropertyValue> aArgs;
@@ -1514,8 +1514,8 @@ void SdTiledRenderingTest::testTdf102223()
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(0, 0, 0, 1)); // start para, start char, end para, end char.
-    const SvxFontHeightItem& rItem2 = rEditView2.GetAttribs().Get(EE_CHAR_FONTHEIGHT);
-    CPPUNIT_ASSERT_EQUAL(int(1411), static_cast<int>(rItem2.GetHeight()));
+    CPPUNIT_ASSERT_EQUAL(
+        int(1411), static_cast<int>(rEditView2.GetAttribs().Get(EE_CHAR_FONTHEIGHT).GetHeight()));
 }
 
 void SdTiledRenderingTest::testTdf118354()
