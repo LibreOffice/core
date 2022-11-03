@@ -139,7 +139,7 @@ void SwModelTestBase::executeImportExport(const char* filename, const char* pPas
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
     load(mpTestDocumentPath, filename, pPassword);
-    save(OUString::createFromAscii(mpFilter), maTempFile);
+    save(OUString::createFromAscii(mpFilter));
     maTempFile.EnableKillingFile(false);
     verify();
     finish();
@@ -626,26 +626,25 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
         calcLayout();
 }
 
-void SwModelTestBase::save(const OUString& aFilterName, utl::TempFileNamed& rTempFile)
+void SwModelTestBase::save(const OUString& aFilterName)
 {
-    rTempFile.EnableKillingFile();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= aFilterName;
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-    xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     // TODO: for now, validate only ODF here
     if (aFilterName == "writer8" || aFilterName == "OpenDocument Text Flat XML")
     {
-        validate(rTempFile.GetFileName(), test::ODF);
+        validate(maTempFile.GetFileName(), test::ODF);
     }
 }
 
 void SwModelTestBase::loadAndSave(const char* pName)
 {
     load(mpTestDocumentPath, pName);
-    save(OUString::createFromAscii(mpFilter), maTempFile);
+    save(OUString::createFromAscii(mpFilter));
     mbExported = true;
 }
 

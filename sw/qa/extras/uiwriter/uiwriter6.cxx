@@ -1302,11 +1302,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
     // save document and verify the bookmark scoup
     {
         // save document
-        utl::TempFileNamed aTempFile;
-        save("writer8", aTempFile);
+        save("writer8");
 
         // load only content.xml
-        if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+        if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
         {
             const OString aPath("/office:document-content/office:body/office:text/text:p");
 

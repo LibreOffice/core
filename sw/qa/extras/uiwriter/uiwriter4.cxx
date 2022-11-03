@@ -646,11 +646,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
     CPPUNIT_ASSERT(pDoc);
 
     // save original document
-    utl::TempFileNamed aTempFile;
-    save("writer8", aTempFile);
+    save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -722,11 +721,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
     }
 
     // save document
-    utl::TempFileNamed aTempFile;
-    save("writer8", aTempFile);
+    save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -825,11 +823,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
     }
 
     // save document
-    utl::TempFileNamed aTempFile;
-    save("writer8", aTempFile);
+    save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -891,11 +888,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
     }
 
     // save original document
-    utl::TempFileNamed aTempFile;
-    save("writer8", aTempFile);
+    save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 

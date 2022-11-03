@@ -877,7 +877,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
     // output was produced:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
@@ -889,7 +889,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
     // output was produced, since the <w:sdt> was conditional but the </w:sdt> was unconditional:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
@@ -920,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
     xContentControl2->setString("New Extended Property Value");
 
     // Save and check saved data
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
     xmlDocUniquePtr pXmlCustomPropsDoc = parseExport("customXml/item1.xml");
     CPPUNIT_ASSERT(pXmlCustomPropsDoc);

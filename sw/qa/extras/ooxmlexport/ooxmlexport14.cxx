@@ -805,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf133771)
     // Without the fix in place, this test would have failed with
     // "An uncaught exception of type com.sun.star.io.IOException"
     // exporting to docx
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -823,7 +823,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
     xParagraph->setPropertyValue("ParaLineSpacing", uno::Any(aSpacing));
 
     // Export to docx.
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -851,7 +851,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     xTextRange->setString("x");
 
     // Export to docx.
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -896,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
 
     // Export to docx.
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -950,7 +950,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
     properties->setPropertyValue("ListAutoFormat", uno::Any(aListAutoFormat));
 
     // Export to docx.
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Paragraph 2 should have only one w:highlight written per w:rPr. Without the fix, there were two.

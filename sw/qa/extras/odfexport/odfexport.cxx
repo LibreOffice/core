@@ -901,10 +901,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
      * and replacement image) OLE objects using UNO, so we'll check the zip file directly.
      */
 
-    utl::TempFileNamed aTempFile;
-    save("writer8", aTempFile);
+    save("writer8");
 
-    uno::Sequence<uno::Any> aArgs{ uno::Any(aTempFile.GetURL()) };
+    uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
     const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     // The exported document must have three objects named ObjNNN. The names are assigned in

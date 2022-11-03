@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
 
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
 }
 }
 

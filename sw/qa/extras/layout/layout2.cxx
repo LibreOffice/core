@@ -2246,12 +2246,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
 
     // Reload (docx)
-    utl::TempFileNamed aTemp;
-    save("Office Open XML Text", aTemp);
+    save("Office Open XML Text");
 
     // The second part: check if the reloaded doc has flys inside a fly
     uno::Reference<lang::XComponent> xComponent
-        = loadFromDesktop(aTemp.GetURL(), "com.sun.star.text.TextDocument");
+        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     uno::Reference<text::XTextDocument> xTextDoc(xComponent, uno::UNO_QUERY);
     auto pTextDoc = dynamic_cast<SwXTextDocument*>(xTextDoc.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2270,7 +2269,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
         }
     }
     // Drop the tempfile
-    aTemp.CloseStream();
+    maTempFile.CloseStream();
 
     // With the fix this cannot be true, if it is, that means Word unable to read the file..
     CPPUNIT_ASSERT_MESSAGE("Corrupt exported docx file!", !bFlyInFlyFound);

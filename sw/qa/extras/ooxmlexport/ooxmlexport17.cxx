@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -391,7 +391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure the expected markup is used:
@@ -472,7 +472,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
 
     // When exporting to DOCX:
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mbExported = true;
 
     // Then make sure that the page edge -> border space is correct:
@@ -991,7 +991,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
     load(DATA_DIRECTORY, "tdf147978_enhancedPath_commandABVW.odt");
     CPPUNIT_ASSERT(mxComponent);
-    save("Office Open XML Text", maTempFile);
+    save("Office Open XML Text");
     mxComponent->dispose();
     mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     // Make sure the new implemented export for commands A,B,V and W use the correct arc between

@@ -1278,7 +1278,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
     CPPUNIT_ASSERT(!rA2Set.GetBox().GetRight());
 
     // Given this document model, when exporting to ODT:
-    save("writer8", maTempFile);
+    save("writer8");
     mbExported = true;
 
     // Then make sure the covered cell has a style.
