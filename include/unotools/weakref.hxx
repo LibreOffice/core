@@ -29,6 +29,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
+#include <type_traits>
 
 namespace unotools
 {
@@ -114,7 +115,12 @@ public:
     rtl::Reference<interface_type> SAL_CALL get() const
     {
         css::uno::Reference<css::uno::XInterface> xInterface = WeakReferenceHelper::get();
-        return dynamic_cast<interface_type*>(xInterface.get());
+        // If XInterface is an ambiguous base of interface_type, we have to use dynamic_cast,
+        // otherwise we can use the faster static_cast.
+        if constexpr (std::is_convertible_v<css::uno::XInterface, interface_type>)
+            return static_cast<interface_type*>(xInterface.get());
+        else
+            return dynamic_cast<interface_type*>(xInterface.get());
     }
 
     /**  Gets a hard reference to the object.
