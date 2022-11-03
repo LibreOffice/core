@@ -241,6 +241,12 @@ namespace sw::mark {
             TextFieldmark(const SwPaM& rPaM, const OUString& rName);
             virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
             virtual void ReleaseDoc(SwDoc& rDoc) override;
+
+            OUString GetContent() const override;
+            void ReplaceContent(const OUString& sNewContent) override;
+
+        private:
+            sw::DocumentContentOperationsManager* m_pDocumentContentOperationsManager;
         };
 
         // Non text fieldmarks have no content between the start and end marks.

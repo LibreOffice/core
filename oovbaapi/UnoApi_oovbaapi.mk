@@ -1097,6 +1097,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XTabStop \
 	XTabStops \
 	XTemplate \
+	XTextInput \
 	XVariable \
 	XVariables \
 	XView \
