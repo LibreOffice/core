@@ -1679,33 +1679,28 @@ sub add_directory_with_create_flag_hash
 sub collect_directories_from_filesarray
 {
     my ($filesarrayref, $unixlinksarrayref) = @_;
-    my @allfiles;
-    push @allfiles, @{$filesarrayref};
-    push @allfiles, @{$unixlinksarrayref};
 
     my %alldirectoryhash = ();
-    my @filteredfilesarrayref = (); # without empty directories
-
-    # Preparing this already as hash, although the only needed value at the moment is the HostName
-    # But also adding: "specificlanguage" and "Dir" (for instance gid_Dir_Program)
-
-    for ( my $i = 0; $i <= $#allfiles; $i++ )
+    my @filteredfilesarray = (); # without empty directories
+    foreach my $onefile (@{$filesarrayref})
     {
-        my $onefile = $allfiles[$i];
-        my $destinationpath = $onefile->{'destination'};
-
         # The "file" can actually be an empty directory added e.g. by gb_Package_add_empty_directory.
         # TODO/LATER: it would be better if gb_Package_add_empty_directory added empty directories to
         # "directories with CREATE flag" instead of a filelist.
         if (-d $onefile->{'sourcepath'})
         {
-            my $sourcepath = $onefile->{'sourcepath'};
             # Do the same as collect_directories_with_create_flag_from_directoryarray does
             %alldirectoryhash = %{add_directory_with_create_flag_hash(\%alldirectoryhash, $onefile->{'destination'}, $onefile->{'specificlanguage'}, $onefile->{'gid'}, "(CREATE)", $onefile->{'modules'})};
-
-            next;
         }
-        push(@filteredfilesarrayref, $onefile);
+        else { push(@filteredfilesarray, $onefile); }
+    }
+
+    # Preparing this already as hash, although the only needed value at the moment is the HostName
+    # But also adding: "specificlanguage" and "Dir" (for instance gid_Dir_Program)
+
+    foreach my $onefile (@filteredfilesarray, @{$unixlinksarrayref})
+    {
+        my $destinationpath = $onefile->{'destination'};
 
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
         $destinationpath =~ s/\Q$installer::globals::separator\E\s*$//;     # removing ending slashes or backslashes
@@ -1746,7 +1741,7 @@ sub collect_directories_from_filesarray
         $alldirectoryhash{$destdir}->{'modules'} = optimize_list($alldirectoryhash{$destdir}->{'modules'});
     }
 
-    @_[0] = \@filteredfilesarrayref; # out argument
+    @_[0] = \@filteredfilesarray; # out argument
     return \%alldirectoryhash;
 }
 
@@ -1758,12 +1753,10 @@ sub collect_directories_with_create_flag_from_directoryarray
 {
     my ($directoryarrayref, $alldirectoryhash) = @_;
 
-    my $alreadyincluded = 0;
     my @alldirectories = ();
 
-    for ( my $i = 0; $i <= $#{$directoryarrayref}; $i++ )
+    foreach my $onedir (@{$directoryarrayref})
     {
-        my $onedir = ${$directoryarrayref}[$i];
         $alldirectoryhash = add_directory_with_create_flag_hash($alldirectoryhash, $onedir->{'HostName'}, $onedir->{'specificlanguage'}, $onedir->{'gid'}, $onedir->{'Styles'}, $onedir->{'modules'});
     }
 
