@@ -5714,8 +5714,17 @@ OUString GtkSalFrame::GetPreeditDetails(GtkIMContext* pIMContext, std::vector<Ex
                 case PANGO_ATTR_UNDERLINE:
                 {
                     PangoAttrInt* pango_underline = reinterpret_cast<PangoAttrInt*>(pango_attr);
-                    if (pango_underline->value != PANGO_UNDERLINE_NONE)
-                        sal_attr |= ExtTextInputAttr::Underline;
+                    switch (pango_underline->value)
+                    {
+                        case PANGO_UNDERLINE_NONE:
+                            break;
+                        case PANGO_UNDERLINE_DOUBLE:
+                            sal_attr |= ExtTextInputAttr::DoubleUnderline;
+                            break;
+                        default:
+                            sal_attr |= ExtTextInputAttr::Underline;
+                            break;
+                    }
                     break;
                 }
                 case PANGO_ATTR_STRIKETHROUGH:

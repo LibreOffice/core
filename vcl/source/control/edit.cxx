@@ -639,6 +639,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                         vcl::Font aFont = rRenderContext.GetFont();
                         if (nAttr & ExtTextInputAttr::Underline)
                             aFont.SetUnderline(LINESTYLE_SINGLE);
+                        else if (nAttr & ExtTextInputAttr::DoubleUnderline)
+                            aFont.SetUnderline(LINESTYLE_DOUBLE);
                         else if (nAttr & ExtTextInputAttr::BoldUnderline)
                             aFont.SetUnderline( LINESTYLE_BOLD);
                         else if (nAttr & ExtTextInputAttr::DottedUnderline)

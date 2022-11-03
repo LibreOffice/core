@@ -3061,6 +3061,8 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
     if ( nAttr & ExtTextInputAttr::Underline )
         rFont.SetUnderline( LINESTYLE_SINGLE );
+    else if ( nAttr & ExtTextInputAttr::DoubleUnderline )
+        rFont.SetUnderline( LINESTYLE_DOUBLE );
     else if ( nAttr & ExtTextInputAttr::BoldUnderline )
         rFont.SetUnderline( LINESTYLE_BOLD );
     else if ( nAttr & ExtTextInputAttr::DottedUnderline )

@@ -1382,6 +1382,8 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
     ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
     if ( nAttr & ExtTextInputAttr::Underline )
         rFont.SetUnderline( LINESTYLE_SINGLE );
+    else if ( nAttr & ExtTextInputAttr::DoubleUnderline )
+        rFont.SetUnderline( LINESTYLE_DOUBLE );
     else if ( nAttr & ExtTextInputAttr::BoldUnderline )
         rFont.SetUnderline( LINESTYLE_BOLD );
     else if ( nAttr & ExtTextInputAttr::DottedUnderline )

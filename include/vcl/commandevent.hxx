@@ -48,18 +48,19 @@ enum class CommandEventId;
 
 enum class ExtTextInputAttr {
     NONE                  = 0x0000,
-    GrayWaveline          = 0x0100,
-    Underline             = 0x0200,
-    BoldUnderline         = 0x0400,
-    DottedUnderline       = 0x0800,
-    DashDotUnderline      = 0x1000,
-    Highlight             = 0x2000,
-    RedText               = 0x4000,
-    HalfToneText          = 0x8000
+    GrayWaveline          = 0x0010,
+    Underline             = 0x0020,
+    BoldUnderline         = 0x0040,
+    DottedUnderline       = 0x0080,
+    DashDotUnderline      = 0x0100,
+    DoubleUnderline       = 0x0200,
+    Highlight             = 0x0400,
+    RedText               = 0x0800,
+    HalfToneText          = 0x1000
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ExtTextInputAttr> : is_typed_flags<ExtTextInputAttr, 0xff00> {};
+    template<> struct typed_flags<ExtTextInputAttr> : is_typed_flags<ExtTextInputAttr, 0x1ff0> {};
 }
 
 #define EXTTEXTINPUT_CURSOR_INVISIBLE           (sal_uInt16(0x0001))
