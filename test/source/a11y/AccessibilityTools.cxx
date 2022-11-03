@@ -24,8 +24,11 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
 
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/scheduler.hxx>
@@ -645,6 +648,56 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleContext* ctx)
 OUString AccessibilityTools::debugName(accessibility::XAccessible* acc)
 {
     return debugName(acc->getAccessibleContext().get());
+}
+
+OUString AccessibilityTools::debugName(accessibility::XAccessibleAction* xAct)
+{
+    OUStringBuffer r = "actions=[";
+
+    const sal_Int32 nActions = xAct->getAccessibleActionCount();
+    for (sal_Int32 i = 0; i < nActions; i++)
+    {
+        if (i > 0)
+            r.append(", ");
+
+        r.append("description=\"");
+        r.append(xAct->getAccessibleActionDescription(i));
+        r.append('"');
+
+        const auto& xKeyBinding = xAct->getAccessibleActionKeyBinding(i);
+        if (xKeyBinding)
+        {
+            r.append(" keybindings=[");
+            const sal_Int32 nKeyBindings = xKeyBinding->getAccessibleKeyBindingCount();
+            for (sal_Int32 j = 0; j < nKeyBindings; j++)
+            {
+                if (j > 0)
+                    r.append(", ");
+
+                int k = 0;
+                for (const auto& keyStroke : xKeyBinding->getAccessibleKeyBinding(j))
+                {
+                    if (k++ > 0)
+                        r.append(", ");
+
+                    r.append('"');
+                    if (keyStroke.Modifiers & awt::KeyModifier::MOD1)
+                        r.append("<Mod1>");
+                    if (keyStroke.Modifiers & awt::KeyModifier::MOD2)
+                        r.append("<Mod2>");
+                    if (keyStroke.Modifiers & awt::KeyModifier::MOD3)
+                        r.append("<Mod3>");
+                    if (keyStroke.Modifiers & awt::KeyModifier::SHIFT)
+                        r.append("<Shift>");
+                    r.append(keyStroke.KeyChar);
+                    r.append('"');
+                }
+            }
+            r.append("]");
+        }
+    }
+    r.append("]");
+    return r.makeStringAndClear();
 }
 
 OUString AccessibilityTools::debugName(const accessibility::AccessibleEventObject* evobj)
