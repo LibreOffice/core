@@ -354,7 +354,7 @@ void Chart2ExportTest::testTrendline()
 {
     // Validation fails with
     // Error: tag name "chart:symbol-image" is not allowed. Possible tag names are: <label-separator>
-    mbSkipValidation = true;
+    skipValidation();
     loadFromURL(u"ods/trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     saveAndReload("calc8");
@@ -594,7 +594,7 @@ void Chart2ExportTest::testAreaChartLoad()
     loadFromURL(u"docx/testAreaChartLoad.docx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -652,7 +652,7 @@ void Chart2ExportTest::testPieChartWallLineStyle()
     loadFromURL(u"odt/testPieChartWallLineStyle.odt");
 
     // FIXME: validation error in OOXML export: Errors: 9
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -920,7 +920,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     aTest.checkObject2(xChartDoc);
 
     // FIXME: validation error in OOXML export: Errors: 3
-    mbSkipValidation = true;
+    skipValidation();
 
     saveAndReload("Office Open XML Text");
 
@@ -938,7 +938,7 @@ void Chart2ExportTest::testDataLabel3DChartDOCX()
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -972,7 +972,7 @@ void Chart2ExportTest::testDataLabelClusteredBarChartDOCX()
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // FIXME: validation error in OOXML export: Errors: 9
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1004,7 +1004,7 @@ void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1022,7 +1022,7 @@ void Chart2ExportTest::testDataLabelAreaChartDOCX()
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1060,7 +1060,7 @@ void Chart2ExportTest::testIndividualDataLabelProps()
     loadFromURL(u"xlsx/tdf122915.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1090,7 +1090,7 @@ void Chart2ExportTest::testShapeFollowedByChart()
     loadFromURL(u"docx/FDO74430.docx");
 
     // FIXME: validation error in OOXML export: Errors: 5
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document", "Office Open XML Text" );
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1106,7 +1106,7 @@ void Chart2ExportTest::testPieChartDataLabels()
     loadFromURL(u"docx/PieChartDataLabels.docx");
 
     // FIXME: validation error in OOXML export: Errors: 19
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);

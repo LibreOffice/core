@@ -247,7 +247,7 @@ void Chart2ExportTest2::testCombinedChartSecondaryAxisODS()
 void Chart2ExportTest2::testCrossBetweenXLSX()
 {
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     // Original files were created with MS Office
     {
@@ -333,7 +333,7 @@ void Chart2ExportTest2::testAxisCrossBetweenDOCX()
     loadFromURL(u"odt/axis-position.odt");
 
     // FIXME: validation error in OOXML export: Errors: 3
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
@@ -504,7 +504,7 @@ void Chart2ExportTest2::testDataSeriesName()
 void Chart2ExportTest2::testCustomPositionofDataLabel()
 {
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     loadFromURL(u"xlsx/testCustomPosDataLabels.xlsx");
     {
@@ -639,7 +639,7 @@ void Chart2ExportTest2::testCustomDataLabelMultipleSeries()
 void Chart2ExportTest2::testLeaderLines()
 {
     // FIXME: validation error in OOXML export: Errors: 2
-    mbSkipValidation = true;
+    skipValidation();
 
     loadFromURL(u"xlsx/testTdf90749.xlsx");
     {
@@ -903,7 +903,7 @@ void Chart2ExportTest2::testTdf122031()
     loadFromURL(u"xlsx/tdf122031.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -935,7 +935,7 @@ void Chart2ExportTest2::testTdf134118()
     loadFromURL(u"xlsx/tdf134118.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -951,7 +951,7 @@ void Chart2ExportTest2::testTdf123206_customLabelText()
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // FIXME: validation error in OOXML export: Errors: 2
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -970,7 +970,7 @@ void Chart2ExportTest2::testCustomLabelText()
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // FIXME: validation error in OOXML export: Errors: 3
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1173,7 +1173,7 @@ void Chart2ExportTest2::testTdf131979()
 void Chart2ExportTest2::testTdf132076()
 {
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     {
         loadFromURL(u"ods/tdf132076.ods");
@@ -1217,7 +1217,7 @@ void Chart2ExportTest2::testTdf133190()
     loadFromURL(u"xlsx/tdf133190_tdf133191.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1238,7 +1238,7 @@ void Chart2ExportTest2::testTdf133191()
     loadFromURL(u"xlsx/tdf133190_tdf133191.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1274,7 +1274,7 @@ void Chart2ExportTest2::testTdf134255()
     CPPUNIT_ASSERT(bWrap);
 
     // FIXME: validation error in OOXML export: Errors: 11
-    mbSkipValidation = true;
+    skipValidation();
 
     // export test
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -1303,7 +1303,7 @@ void Chart2ExportTest2::testTdf134977()
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(9), nFontSize);
 
     // FIXME: validation error in OOXML export: Errors: 2
-    mbSkipValidation = true;
+    skipValidation();
 
     //export test
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
@@ -1328,7 +1328,7 @@ void Chart2ExportTest2::testTdf136267()
     loadFromURL(u"xlsx/tdf136267.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 2
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1360,7 +1360,7 @@ void Chart2ExportTest2::testTdf137917()
     loadFromURL(u"xlsx/tdf137917.xlsx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1429,7 +1429,7 @@ void Chart2ExportTest2::testTdf138204()
     }
 
     // FIXME: validation error in OOXML export: Errors: 2
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1621,7 +1621,7 @@ void Chart2ExportTest2::testTdf143942()
     }
 
     // FIXME: validation error in OOXML export: Errors: 4
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1660,7 +1660,7 @@ void Chart2ExportTest2::testDateCategoriesPPTX()
     loadFromURL(u"pptx/bnc889755.pptx");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);

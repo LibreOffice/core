@@ -413,7 +413,7 @@ void Chart2GeometryTest::testTdf135366LabelExport()
     loadFromURL(u"odt/tdf135366_data_label_export.odt");
 
     // FIXME: Error: unexpected attribute "loext:label-stroke-color"
-    mbSkipValidation = true;
+    skipValidation();
 
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "writer8");
     CPPUNIT_ASSERT(pXmlDoc);

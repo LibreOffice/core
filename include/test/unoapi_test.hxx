@@ -40,17 +40,16 @@ public:
     utl::TempFileNamed saveAndClose(const OUString& rFilter);
     utl::TempFileNamed saveAndReload(const OUString& rFilter);
 
+    void skipValidation() { mbSkipValidation = true; }
     void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
 
 protected:
     // reference to document component that we are testing
     css::uno::Reference<css::lang::XComponent> mxComponent;
 
-    bool mbSkipValidation; // if you set this flag for a new test I'm going to haunt you!
-
 private:
+    bool mbSkipValidation;
     OUString m_aBaseString;
-
     OUString maFilterOptions;
 };
 

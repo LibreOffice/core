@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     loadFromURL(u"tdf141786_RotatedShapeInGroup.odt");
 
     // FIXME: validation error in OOXML export: Errors: 3
-    mbSkipValidation = true;
+    skipValidation();
 
     // When saving that to DOCX:
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
@@ -89,7 +89,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     loadFromURL(u"dml-groupshape-polygon.docx");
 
     // FIXME: validation error in OOXML export: Errors: 9
-    mbSkipValidation = true;
+    skipValidation();
 
     // When saving that to DOCX:
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
     loadFromURL(u"tdf142602_CustomShapeArrows.odt");
 
     // FIXME: validation error in OOXML export: Errors: 11
-    mbSkipValidation = true;
+    skipValidation();
 
     // When saving that to DOCX:
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
     loadFromURL(u"tdf109169_OctagonBevel.odt");
 
     // FIXME: validation error in OOXML export: Errors: 1
-    mbSkipValidation = true;
+    skipValidation();
 
     // Export to docx had not written a:fill or a:stroke attributes at all.
     utl::TempFileNamed aTempFile = save("Office Open XML Text");

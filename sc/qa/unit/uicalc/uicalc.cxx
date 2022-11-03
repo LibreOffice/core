@@ -1015,7 +1015,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
 
     // FIXME: validation fails with
     // Error: unexpected attribute "drawooo:display"
-    mbSkipValidation = true;
+    skipValidation();
 
     // Without the fix in place, this test would have crashed
     saveAndReload("calc8");

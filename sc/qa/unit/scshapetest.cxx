@@ -1040,7 +1040,7 @@ void ScShapeTest::testTdf115655_HideDetail()
 
     // FIXME: validation fails with
     // Error: unexpected attribute "drawooo:display"
-    mbSkipValidation = true;
+    skipValidation();
 
     // Save and reload
     saveAndReload("calc8");

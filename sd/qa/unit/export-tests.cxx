@@ -584,7 +584,7 @@ void SdExportTest::testOOoXMLAnimations()
     loadFromURL(u"sxi/ooo41061-1.sxi");
 
     // FIXME: Error: unexpected attribute "presentation:preset-property"
-    mbSkipValidation = true;
+    skipValidation();
 
     utl::TempFileNamed aTempFile = save("impress8");
 
@@ -654,7 +654,7 @@ void SdExportTest::testUnknownAttributes()
     loadFromURL(u"unknown-attribute.fodp");
 
     // FIXME: Error: unexpected attribute "foo:non-existent-att"
-    mbSkipValidation = true;
+    skipValidation();
 
     utl::TempFileNamed aTempFile = save("impress8");
 
