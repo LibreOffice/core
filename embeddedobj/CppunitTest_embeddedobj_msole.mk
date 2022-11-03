@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,embeddedobj_msole, \
     cppu \
     embobj \
     sal \
+    subsequenttest \
     test \
     unotest \
     utl \
