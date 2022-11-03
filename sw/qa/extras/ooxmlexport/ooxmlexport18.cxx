@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
     // That should result in tIns="179640" and bIns="360000" on export.
 
     // Without fix the insets were tIns="359280" and bIns="539640". The text area had 1080Emu height
-    // and Word displayes no text at all.
+    // and Word displays no text at all.
     save("Office Open XML Text", maTempFile);
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
