@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_html_export_test, \
     scqahelper \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

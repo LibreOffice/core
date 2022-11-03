@@ -16,6 +16,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <utility>
 
 using namespace css;
@@ -84,9 +85,12 @@ utl::TempFileNamed UnoApiTest::save(const OUString& rFilter)
 {
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
-    uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= rFilter;
+    if (!maFilterOptions.isEmpty())
+        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     if (!mbSkipValidation)
     {

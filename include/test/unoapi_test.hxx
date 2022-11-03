@@ -40,6 +40,8 @@ public:
     utl::TempFileNamed saveAndClose(const OUString& rFilter);
     utl::TempFileNamed saveAndReload(const OUString& rFilter);
 
+    void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
+
 protected:
     // reference to document component that we are testing
     css::uno::Reference<css::lang::XComponent> mxComponent;
@@ -48,6 +50,8 @@ protected:
 
 private:
     OUString m_aBaseString;
+
+    OUString maFilterOptions;
 };
 
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX

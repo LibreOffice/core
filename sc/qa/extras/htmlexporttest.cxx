@@ -15,81 +15,36 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <test/bootstrapfixture.hxx>
 #include <test/htmltesttools.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/mediadescriptor.hxx>
-#include <unotest/macros_test.hxx>
 
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::frame;
 using namespace utl;
 
-class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools, public HtmlTestTools
+class ScHTMLExportTest : public UnoApiXmlTest, public HtmlTestTools
 {
-    Reference<XComponent> mxComponent;
-    OUString              maFilterOptions;
-
-    void load(std::u16string_view pDir, const char* pName)
-    {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Calc.SpreadsheetDocument");
-    }
-
-    void save(const OUString& aFilterName, TempFileNamed const & rTempFile)
-    {
-        Reference<XStorable> xStorable(mxComponent, UNO_QUERY);
-        MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= aFilterName;
-        if (!maFilterOptions.isEmpty())
-            aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-        xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    }
-
 public:
     ScHTMLExportTest()
+        : UnoApiXmlTest("/sc/qa/extras/testdocuments/")
     {}
-
-    virtual void setUp() override
-    {
-        test::BootstrapFixture::setUp();
-        mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-    }
-
-    virtual void tearDown() override
-    {
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        test::BootstrapFixture::tearDown();
-    }
 
     void testHtmlSkipImage()
     {
-        // need a temp dir, because there's an image exported too
-        TempFileNamed aTempDir(nullptr, true);
-        aTempDir.EnableKillingFile();
-        OUString const url(aTempDir.GetURL());
-        TempFileNamed aTempFile(&url, false);
-
-        htmlDocUniquePtr pDoc;
-
-        load(u"/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
-        save("HTML (StarCalc)", aTempFile);
-        pDoc = parseHtml(aTempFile);
+        loadFromURL(u"BaseForHTMLExport.ods");
+        utl::TempFileNamed aTempFile = save("HTML (StarCalc)");
+        htmlDocUniquePtr pDoc = parseHtml(aTempFile);
         CPPUNIT_ASSERT (pDoc);
 
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
-        load(u"/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
-        maFilterOptions = "SkipImages";
-        save("HTML (StarCalc)", aTempFile);
+        setFilterOptions("SkipImages");
+        utl::TempFileNamed aTempFile2 = save("HTML (StarCalc)");
 
-        pDoc = parseHtml(aTempFile);
+        pDoc = parseHtml(aTempFile2);
         CPPUNIT_ASSERT (pDoc);
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 0);
