@@ -3352,7 +3352,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         if (nTop + nBottom >= nTextHeight)
         {
             // Effective bottom would be above effective top of text area. LO normalizes the
-            // effective text area in such case implicitely for rendering. MS needs indents so that
+            // effective text area in such case implicitly for rendering. MS needs indents so that
             // the result is the normalized effective text area.
             std::swap(nTop, nBottom);
             nTop = nTextHeight - nTop;
