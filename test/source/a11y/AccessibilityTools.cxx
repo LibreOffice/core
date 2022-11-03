@@ -84,6 +84,26 @@ AccessibilityTools::getAccessibleObjectForRole(
     return getAccessibleObjectForRole(xacc->getAccessibleContext(), role);
 }
 
+/* this is basically the same as getAccessibleObjectForPredicate() but specialized for efficiency,
+ * and because the template version will not work with getAccessibleObjectForPredicate() anyway */
+css::uno::Reference<css::accessibility::XAccessibleContext>
+AccessibilityTools::getAccessibleObjectForName(
+    const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, const sal_Int16 role,
+    std::u16string_view name)
+{
+    if (xCtx->getAccessibleRole() == role && nameEquals(xCtx, name))
+        return xCtx;
+
+    auto nChildren = xCtx->getAccessibleChildCount();
+    for (decltype(nChildren) i = 0; i < nChildren && i < AccessibilityTools::MAX_CHILDREN; i++)
+    {
+        if (auto xMatchChild = getAccessibleObjectForName(xCtx->getAccessibleChild(i), role, name))
+            return xMatchChild;
+    }
+
+    return nullptr;
+}
+
 bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessible>& xacc1,
                                 const uno::Reference<accessibility::XAccessible>& xacc2)
 {

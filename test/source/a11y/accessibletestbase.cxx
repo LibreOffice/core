@@ -317,6 +317,33 @@ test::AccessibleTestBase::tabTo(const uno::Reference<accessibility::XAccessible>
     return nullptr;
 }
 
+bool test::AccessibleTestBase::tabTo(
+    const uno::Reference<accessibility::XAccessible>& xRoot,
+    const uno::Reference<accessibility::XAccessibleContext>& xChild,
+    const EventPosterHelperBase* pEventPosterHelper)
+{
+    AccessibleEventPosterHelper eventHelper;
+    if (!pEventPosterHelper)
+    {
+        eventHelper.setWindow(xRoot);
+        pEventPosterHelper = &eventHelper;
+    }
+
+    std::cout << "Tabbing to " << AccessibilityTools::debugString(xChild) << "..." << std::endl;
+    for (int i = 0; i < 100; i++)
+    {
+        if (xChild->getAccessibleStateSet() & accessibility::AccessibleStateType::FOCUSED)
+            return true;
+
+        std::cout << "  no match, sending <TAB>" << std::endl;
+        pEventPosterHelper->postKeyEventAsync(0, awt::Key::TAB);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    std::cerr << "NOT FOUND" << std::endl;
+    return false;
+}
+
 /* Dialog handling */
 
 test::AccessibleTestBase::Dialog::Dialog(vcl::Window* pWindow, bool bAutoClose)

@@ -53,6 +53,103 @@ public:
     getAccessibleObjectForRole(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
                                sal_Int16 role);
 
+    /**
+     * @brief Gets a descendant of @p xCtx (or @p xCtx itself) that matches the given role and name.
+     * @param xCtx An accessible context object to start the search from
+     * @param role The role of the object to look up.
+     * @param name The name of the object to look up.
+     * @returns The found object, or @c nullptr if not found.
+     *
+     * Finds a descendant of @p xCtx (or @p xCtx itself) that matches @p role and @p name.
+     * @code
+     * AccessibilityTools::getAccessibleObjectForName(
+     *     css::accessibility::AccessibleRole::PUSH_BUTTON, u"Insert");
+     * @endcode
+     *
+     * @see AccessibilityTools::getAccessibleObjectForPredicate() */
+    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForName(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+        const sal_Int16 role, std::u16string_view name);
+    static inline css::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForName(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+                               const sal_Int16 role, std::u16string_view name)
+    {
+        return getAccessibleObjectForName(xAcc->getAccessibleContext(), role, name);
+    }
+
+    /**
+     * @brief Gets a descendant of @p xCtx (or @p xCtx itself) that matches the last given role and
+     *        name pair, and has ancestors matching the leading pairs in the given order.
+     * @param xCtx An accessible context to start the search from.
+     * @param role The role of the first ancestor to match.
+     * @param name The name of the first ancestor to match.
+     * @param Ts...args Additional role and name pairs of ancestors, ending with the role and name
+     *                  pair of the target object to match.
+     * @returns The found object, or @c nullptr if not found.
+     *
+     * Specialized version allowing specifying arbitrary objects on the path to the target one. Not
+     * all objects have to be matched, but there have to be ancestors matching in the given order.
+     * This is useful to easily solve conflicts if there are more than one possible match.
+     *
+     * This can be used to find an "Insert" push button inside a panel named "Some group" for
+     * example, as shown below:
+     *
+     * @code
+     * AccessibilityTools::getAccessibleObjectForName(
+     *     css::accessibility::AccessibleRole::PANEL, u"Some group",
+     *     css::accessibility::AccessibleRole::PUSH_BUTTON, u"Insert");
+     * @endcode
+     *
+     * @note This returns the first match in the object tree when walking it depth-first.  Depending
+     *       on the tree, this might not be able to find the expected match, e.g. if there is a
+     *       first match with intermediate unmatched objects, and the target has the same tree but
+     *       without intermediate objects that can be used to refine the search and prevent the
+     *       unwanted tree to match.  The same issue arises with two identical trees, yet in that
+     *       case no walking scenario could solve it automatically anyway.
+     *       In such situations, a custom @c getAccessibleObjectForPredicate() call, or successive
+     *       lookups interleaved with specific child lookups are likely the best solution.
+     *
+     * @see getAccessibleObjectForPredicate().
+     */
+    /* TODO: reimplement as IDDFS or BFS?  Not sure the additional complexity/performance costs
+     *       warrant it. */
+    template <typename... Ts>
+    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForName(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+        const sal_Int16 role, std::u16string_view name, Ts... args)
+    {
+        auto nChildren = xCtx->getAccessibleChildCount();
+
+        // try self first
+        if (xCtx->getAccessibleRole() == role && nameEquals(xCtx, name))
+        {
+            for (decltype(nChildren) i = 0; i < nChildren && i < MAX_CHILDREN; i++)
+            {
+                if (auto xMatchChild
+                    = getAccessibleObjectForName(xCtx->getAccessibleChild(i), args...))
+                    return xMatchChild;
+            }
+        }
+
+        // if not found, try at a deeper level
+        for (decltype(nChildren) i = 0; i < nChildren && i < MAX_CHILDREN; i++)
+        {
+            if (auto xMatchChild
+                = getAccessibleObjectForName(xCtx->getAccessibleChild(i), role, name, args...))
+                return xMatchChild;
+        }
+
+        return nullptr;
+    }
+
+    template <typename... Ts>
+    static inline css::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForName(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+                               const sal_Int16 role, std::u16string_view name, Ts... args)
+    {
+        return getAccessibleObjectForName(xAcc->getAccessibleContext(), role, name, args...);
+    }
+
     static bool equals(const css::uno::Reference<css::accessibility::XAccessible>& xacc1,
                        const css::uno::Reference<css::accessibility::XAccessible>& xacc2);
     static bool equals(const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx1,

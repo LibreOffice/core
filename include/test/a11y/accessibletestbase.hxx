@@ -176,6 +176,10 @@ protected:
           const std::u16string_view name,
           const EventPosterHelperBase* pEventPosterHelper = nullptr);
 
+    static bool tabTo(const css::uno::Reference<css::accessibility::XAccessible>& xRoot,
+                      const css::uno::Reference<css::accessibility::XAccessibleContext>& xChild,
+                      const EventPosterHelperBase* pEventPosterHelper = nullptr);
+
     /* Dialog handling */
     class Dialog : public test::EventPosterHelper
     {
@@ -202,6 +206,11 @@ protected:
         tabTo(const sal_Int16 role, const std::u16string_view name)
         {
             return AccessibleTestBase::tabTo(getAccessible(), role, name, this);
+        }
+
+        bool tabTo(const css::uno::Reference<css::accessibility::XAccessibleContext>& xChild)
+        {
+            return AccessibleTestBase::tabTo(getAccessible(), xChild, this);
         }
     };
 

@@ -19,6 +19,87 @@ using namespace css;
 
 // FIXME: dialog doesn't pop up on macos and doesn't close on win32...
 #if !defined(_WIN32) && !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialog)
+{
+    load(u"private:factory/swriter");
+
+    auto dialogWaiter = awaitDialog(u"Special Characters", [this](Dialog& dialog) {
+        dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
+
+        CPPUNIT_ASSERT_EQUAL(
+            AccessibilityTools::getAccessibleObjectForName(
+                dialog.getAccessible(), accessibility::AccessibleRole::TEXT, u"Search:"),
+            getFocusedObject(dialog.getAccessible()));
+
+        // search for (c) symbol
+        dialog.postExtTextEventAsync(u"copyright");
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u"©"));
+
+        /* here there is a bug that the "insert" action is not working right away, even though we
+         * have the right character selected.  Move around the table to actually trigger the
+         * selection logic.
+         * See https://bugs.documentfoundation.org/show_bug.cgi?id=153806 */
+        dialog.postKeyEventAsync(0, awt::Key::RIGHT);
+        dialog.postKeyEventAsync(0, awt::Key::LEFT);
+
+        /* there was a focus issue in this dialog: the table holding the characters always had the
+         * selected element as focused, even when tabbing outside.
+         * Fixed with https://gerrit.libreoffice.org/c/core/+/147660.
+         * Anyway, we still use the target element match API to also exercise it. */
+        auto xChild = AccessibilityTools::getAccessibleObjectForName(
+            dialog.getAccessible(), accessibility::AccessibleRole::PUSH_BUTTON, u"Insert");
+        CPPUNIT_ASSERT(xChild);
+        CPPUNIT_ASSERT(dialog.tabTo(xChild));
+        dialog.postKeyEventAsync(0, awt::Key::RETURN);
+
+        Scheduler::ProcessEventsToIdle();
+    });
+
+    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Special Character..."));
+    CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
+
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>©</PARAGRAPH>"), collectText());
+}
+#endif
+
+// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
+#if !defined(_WIN32) && !defined(MACOSX)
+/* checks for the fix from https://gerrit.libreoffice.org/c/core/+/147660 */
+CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocus)
+{
+    load(u"private:factory/swriter");
+
+    auto dialogWaiter = awaitDialog(u"Special Characters", [](Dialog& dialog) {
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u" "));
+
+        /* as there is a bug that focusing the character table doesn't enable the Insert button
+         * (https://bugs.documentfoundation.org/show_bug.cgi?id=153806), we move to another cell
+         * so it works -- and we actually don't care which one it is */
+        dialog.postKeyEventAsync(0, awt::Key::DOWN);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(
+            AccessibilityTools::getAccessibleObjectForName(
+                dialog.getAccessible(), accessibility::AccessibleRole::TABLE_CELL, u"0"),
+            getFocusedObject(dialog.getAccessible()));
+
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::PUSH_BUTTON, u"Insert"));
+        dialog.postKeyEventAsync(0, awt::Key::RETURN);
+
+        Scheduler::ProcessEventsToIdle();
+    });
+
+    CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Special Character..."));
+    CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
+
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>0</PARAGRAPH>"), collectText());
+}
+#endif
+
+// FIXME: dialog doesn't pop up on macos and doesn't close on win32...
+#if !defined(_WIN32) && !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 {
     load(u"private:factory/swriter");
