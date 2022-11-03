@@ -25,6 +25,7 @@
 #include <docsh.hxx>
 
 #include "vbaformfield.hxx"
+#include "vbaformfieldcheckbox.hxx"
 #include "wordvbahelper.hxx"
 
 using namespace ::ooo::vba;
@@ -53,9 +54,8 @@ SwVbaFormField::~SwVbaFormField() {}
 
 uno::Any SAL_CALL SwVbaFormField::CheckBox()
 {
-    // return uno::Any(uno::Reference<word::XCheckBox>(
-    //     new SwVbaFormFieldCheckBox(mxParent, mxContext, m_rFormField)));
-    return uno::Any();
+    return uno::Any(uno::Reference<word::XCheckBox>(
+        new SwVbaFormFieldCheckBox(mxParent, mxContext, m_rFormField)));
 }
 
 uno::Any SAL_CALL SwVbaFormField::DropDown()

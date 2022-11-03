@@ -22,7 +22,21 @@ module ooo {  module vba {  module word {
 interface XCheckBox
 {
     interface ooo::vba::XHelperInterface;
+    interface com::sun::star::script::XDefaultProperty;
 
+    /// Default member: True if the specified form field object is a valid check box form field.
+    [attribute, readonly] boolean Valid;
+
+    /** AutoSize:
+     * True sizes the check box or text frame according to the font size of the surrounding text.
+     * False sizes the check box or text frame according to the Size property.
+     */
+    [attribute] boolean AutoSize;
+    /// Returns or sets the default check box value. True if the default value is checked.
+    [attribute] boolean Default;
+    /// Returns or sets the size of a check box, in points.
+    [attribute] long Size;
+    /// Returns or sets true if the check box is ticked.
     [attribute] boolean Value;
 };
 

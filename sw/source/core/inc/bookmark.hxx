@@ -262,6 +262,8 @@ namespace sw::mark {
             CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName);
             bool IsChecked() const override;
             void SetChecked(bool checked) override;
+            virtual OUString GetContent() const override;
+            virtual void ReplaceContent(const OUString& sNewContent) override;
         };
 
         /// Fieldmark with a drop down button (e.g. this button opens the date picker for a date field)

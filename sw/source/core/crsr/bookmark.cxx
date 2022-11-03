@@ -644,6 +644,17 @@ namespace sw::mark
         return bResult;
     }
 
+    OUString CheckboxFieldmark::GetContent() const
+    {
+        return IsChecked() ? "1" : "0";
+    }
+
+    void CheckboxFieldmark::ReplaceContent(const OUString& sNewContent)
+    {
+        SetChecked(sNewContent.toBoolean());
+        Invalidate();
+    }
+
     FieldmarkWithDropDownButton::FieldmarkWithDropDownButton(const SwPaM& rPaM)
         : NonTextFieldmark(rPaM)
         , m_pButton(nullptr)
