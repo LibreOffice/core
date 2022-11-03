@@ -392,8 +392,9 @@ SmFontSizeDialog::~SmFontSizeDialog()
 void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 {
     //! watch out: round properly!
-    m_xBaseSize->set_value( SmRoundFraction(
-        Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ), FieldUnit::NONE );
+    m_xBaseSize->set_value(
+        o3tl::convert(rFormat.GetBaseSize().Height(), o3tl::Length::mm100, o3tl::Length::pt),
+        FieldUnit::NONE);
 
     m_xTextSize->set_value( rFormat.GetRelSize(SIZ_TEXT), FieldUnit::NONE );
     m_xIndexSize->set_value( rFormat.GetRelSize(SIZ_INDEX), FieldUnit::NONE );
@@ -404,7 +405,7 @@ void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 
 void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
-    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< tools::Long >(m_xBaseSize->get_value(FieldUnit::NONE)))) );
+    rFormat.SetBaseSize( Size(0, o3tl::convert(m_xBaseSize->get_value(FieldUnit::NONE), o3tl::Length::pt, o3tl::Length::mm100)) );
 
     rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_xTextSize->get_value(FieldUnit::NONE)));
     rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_xIndexSize->get_value(FieldUnit::NONE)));

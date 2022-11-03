@@ -203,7 +203,7 @@ void SmFace::SetSize(const Size& rSize)
     Size  aSize (rSize);
 
     // check the requested size against minimum value
-    static int const    nMinVal = SmPtsTo100th_mm(2);
+    constexpr int nMinVal = o3tl::convert(2, o3tl::Length::pt, o3tl::Length::mm100);
 
     if (aSize.Height() < nMinVal)
         aSize.setHeight( nMinVal );

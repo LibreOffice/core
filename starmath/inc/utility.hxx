@@ -27,35 +27,6 @@
 #include <tools/fract.hxx>
 #include <deque>
 
-inline tools::Long SmPtsTo100th_mm(tools::Long nNumPts)
-    // returns the length (in 100th of mm) that corresponds to the length
-    // 'nNumPts' (in units points).
-    // 72.27 [pt] = 1 [inch] = 2,54 [cm] = 2540 [100th of mm].
-    // result is being rounded to the nearest integer.
-{
-    SAL_WARN_IF( nNumPts < 0, "starmath", "Ooops..." );
-    // broken into multiple and fraction of 'nNumPts' to reduce chance
-    // of overflow
-    // (7227 / 2) is added in order to round to the nearest integer
-    return 35 * nNumPts + (nNumPts * 1055L + (7227 / 2)) / 7227L;
-}
-
-
-inline Fraction Sm100th_mmToPts(tools::Long nNum100th_mm)
-    // returns the length (in points) that corresponds to the length
-    // 'nNum100th_mm' (in 100th of mm).
-{
-    SAL_WARN_IF( nNum100th_mm < 0, "starmath", "Ooops..." );
-    return Fraction(7227L, 254000L) * Fraction(nNum100th_mm);
-}
-
-
-inline tools::Long SmRoundFraction(const Fraction &rFrac)
-{
-    SAL_WARN_IF( rFrac <= Fraction(), "starmath", "Ooops..." );
-    return (rFrac.GetNumerator() + rFrac.GetDenominator() / 2) / rFrac.GetDenominator();
-}
-
 
 class SmViewShell;
 SmViewShell * SmGetActiveView();
