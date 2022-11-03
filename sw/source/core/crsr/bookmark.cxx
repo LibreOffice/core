@@ -558,6 +558,7 @@ namespace sw::mark
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM, const OUString& rName)
         : Fieldmark(rPaM)
+        , m_pDocumentContentOperationsManager(nullptr)
     {
         if ( !rName.isEmpty() )
             m_aName = rName;
@@ -566,6 +567,7 @@ namespace sw::mark
     void TextFieldmark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode const eMode, SwPosition const*const pSepPos)
     {
+        m_pDocumentContentOperationsManager = &io_rDoc.GetDocumentContentOperationsManager();
         if (eMode == sw::mark::InsertMode::New)
         {
             lcl_SetFieldMarks(*this, io_rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
@@ -588,6 +590,45 @@ namespace sw::mark
         // notify layouts to unhide - for the entire fieldmark, as in InitDoc()
         SwPaM const tmp(GetMarkPos(), GetOtherMarkPos());
         sw::UpdateFramesForRemoveDeleteRedline(rDoc, tmp);
+    }
+
+    OUString TextFieldmark::GetContent() const
+    {
+        const SwTextNode& rTextNode = *GetMarkEnd().nNode.GetNode().GetTextNode();
+        SwPosition const sepPos(sw::mark::FindFieldSep(*this));
+        const sal_Int32 nStart(sepPos.nContent.GetIndex());
+        const sal_Int32 nEnd(GetMarkEnd().nContent.GetIndex());
+
+        OUString sContent;
+        const sal_Int32 nLen = rTextNode.GetText().getLength();
+        if (nStart + 1 < nLen && nEnd <= nLen && nEnd > nStart + 2)
+            sContent = rTextNode.GetText().copy(nStart + 1, nEnd - nStart - 2);
+
+        return sContent;
+    }
+
+    void TextFieldmark::ReplaceContent(const OUString& sNewContent)
+    {
+        if (!m_pDocumentContentOperationsManager)
+            return;
+
+        SwPosition const sepPos(sw::mark::FindFieldSep(*this));
+        const sal_Int32 nStart(sepPos.nContent.GetIndex());
+        const sal_Int32 nEnd(GetMarkEnd().nContent.GetIndex());
+
+        const sal_Int32 nLen = GetMarkEnd().nNode.GetNode().GetTextNode()->GetText().getLength();
+        if (nStart + 1 < nLen && nEnd <= nLen && nEnd > nStart + 2)
+        {
+            SwPaM aFieldPam(GetMarkStart().nNode.GetNode(), nStart + 1,
+                            GetMarkStart().nNode.GetNode(), nEnd - 1);
+            m_pDocumentContentOperationsManager->ReplaceRange(aFieldPam, sNewContent, false);
+        }
+        else
+        {
+            SwPaM aFieldStartPam(GetMarkStart().nNode.GetNode(), nStart + 1);
+            m_pDocumentContentOperationsManager->InsertString(aFieldStartPam, sNewContent);
+        }
+        Invalidate();
     }
 
     NonTextFieldmark::NonTextFieldmark(const SwPaM& rPaM)
