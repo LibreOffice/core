@@ -40,6 +40,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <editeng/paperinf.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
@@ -894,28 +895,6 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     return 1;
 }
 
-
-static Size lcl_GuessPaperSize()
-{
-    Size aRes;
-    const LocaleDataWrapper& rLocWrp( AllSettings().GetLocaleDataWrapper() );
-    if( MeasurementSystem::Metric == rLocWrp.getMeasurementSystemEnum() )
-    {
-        // in 100th mm
-        PaperInfo aInfo( PAPER_A4 );
-        aRes.setWidth( aInfo.getWidth() );
-        aRes.setHeight( aInfo.getHeight() );
-    }
-    else
-    {
-        // in 100th mm
-        PaperInfo aInfo( PAPER_LETTER );
-        aRes.setWidth( aInfo.getWidth() );
-        aRes.setHeight( aInfo.getHeight() );
-    }
-    return aRes;
-}
-
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
@@ -937,7 +916,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
     if (aPrtPaperSize.IsEmpty())
-        aPrtPaperSize = lcl_GuessPaperSize();
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MapUnit::Map100thMM);
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
@@ -1011,7 +990,7 @@ void SAL_CALL SmModel::render(
     // no real printer ??
     if (aPrtPaperSize.IsEmpty())
     {
-        aPrtPaperSize = lcl_GuessPaperSize();
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MapUnit::Map100thMM);
         // factors from Windows DIN A4
         aOutputSize    = Size( static_cast<tools::Long>(aPrtPaperSize.Width()  * 0.941),
                                static_cast<tools::Long>(aPrtPaperSize.Height() * 0.961));
