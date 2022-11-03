@@ -3428,7 +3428,7 @@ if test $_os = Darwin; then
     # The SDK in the currently selected Xcode should be found.
 
     AC_MSG_CHECKING([what macOS SDK to use])
-    for macosx_sdk in 12.3 12.1 12.0 11.3 11.1 11.0 10.15 10.14 10.13; do
+    for macosx_sdk in 13.0 12.3 12.1 12.0 11.3 11.1 11.0 10.15 10.14 10.13; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
             break
@@ -3472,6 +3472,9 @@ if test $_os = Darwin; then
         ;;
     12.3)
         MACOSX_SDK_VERSION=120300
+        ;;
+    13.0)
+        MACOSX_SDK_VERSION=130000
         ;;
     *)
         AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported])
@@ -3538,8 +3541,11 @@ if test $_os = Darwin; then
     12.3)
         MAC_OS_X_VERSION_MIN_REQUIRED="120300"
         ;;
+    13.0)
+        MAC_OS_X_VERSION_MIN_REQUIRED="130000"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.14--12.3])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.14--13.0])
         ;;
     esac
 
