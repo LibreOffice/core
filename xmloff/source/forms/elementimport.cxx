@@ -769,10 +769,10 @@ namespace xmloff
             return;
         }
 
-        const char* pValueProperty = nullptr;
-        const char* pCurrentValueProperty = nullptr;
-        const char* pMinValueProperty = nullptr;
-        const char* pMaxValueProperty = nullptr;
+        OUString pValueProperty;
+        OUString pCurrentValueProperty;
+        OUString pMinValueProperty;
+        OUString pMaxValueProperty;
 
         bool bRetrievedValues = false;
         bool bRetrievedValueLimits = false;
@@ -794,7 +794,7 @@ namespace xmloff
                     if (!bRetrievedValues)
                     {
                         getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
-                        if ( !pCurrentValueProperty && !pValueProperty )
+                        if ( pCurrentValueProperty.isEmpty() && pValueProperty.isEmpty() )
                         {
                             SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value property names!" );
                             break;
@@ -802,13 +802,13 @@ namespace xmloff
 
                         bRetrievedValues = true;
                     }
-                    if ( PROPID_VALUE == rValueProps.Handle && !pValueProperty )
+                    if ( PROPID_VALUE == rValueProps.Handle && pValueProperty.isEmpty() )
                     {
                         SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a value property!");
                         break;
                     }
 
-                    if ( PROPID_CURRENT_VALUE == rValueProps.Handle && !pCurrentValueProperty )
+                    if ( PROPID_CURRENT_VALUE == rValueProps.Handle && pCurrentValueProperty.isEmpty() )
                     {
                         SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a current-value property!");
                         break;
@@ -816,9 +816,9 @@ namespace xmloff
 
                     // transfer the name
                     if (PROPID_VALUE == rValueProps.Handle)
-                        rValueProps.Name = OUString::createFromAscii(pValueProperty);
+                        rValueProps.Name = pValueProperty;
                     else
-                        rValueProps.Name = OUString::createFromAscii(pCurrentValueProperty);
+                        rValueProps.Name = pCurrentValueProperty;
                     bSuccess = true;
                 }
                 break;
@@ -829,7 +829,7 @@ namespace xmloff
                     if (!bRetrievedValueLimits)
                     {
                         getValueLimitPropertyNames(nClassId, pMinValueProperty, pMaxValueProperty);
-                        if ( !pMinValueProperty || !pMaxValueProperty )
+                        if ( pMinValueProperty.isEmpty() || pMaxValueProperty.isEmpty() )
                         {
                             SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value limit property names!" );
                             break;
@@ -837,16 +837,16 @@ namespace xmloff
 
                         bRetrievedValueLimits = true;
                     }
-                    OSL_ENSURE((PROPID_MIN_VALUE != rValueProps.Handle) || pMinValueProperty,
+                    OSL_ENSURE((PROPID_MIN_VALUE != rValueProps.Handle) || !pMinValueProperty.isEmpty(),
                         "OControlImport::StartElement: the control does not have a value property!");
-                    OSL_ENSURE((PROPID_MAX_VALUE != rValueProps.Handle) || pMaxValueProperty,
+                    OSL_ENSURE((PROPID_MAX_VALUE != rValueProps.Handle) || !pMaxValueProperty.isEmpty(),
                         "OControlImport::StartElement: the control does not have a current-value property!");
 
                     // transfer the name
                     if (PROPID_MIN_VALUE == rValueProps.Handle)
-                        rValueProps.Name = OUString::createFromAscii(pMinValueProperty);
+                        rValueProps.Name = pMinValueProperty;
                     else
-                        rValueProps.Name = OUString::createFromAscii(pMaxValueProperty);
+                        rValueProps.Name = pMaxValueProperty;
                     bSuccess = true;
                 }
                 break;
@@ -930,10 +930,10 @@ namespace xmloff
                                  "caught an exception while retrieving the class id!");
         }
 
-        const char* pValueProperty = nullptr;
-        const char* pDefaultValueProperty = nullptr;
+        OUString pValueProperty;
+        OUString pDefaultValueProperty;
         getRuntimeValuePropertyNames(m_eElementType, nClassId, pValueProperty, pDefaultValueProperty);
-        if ( pDefaultValueProperty && pValueProperty )
+        if ( !pDefaultValueProperty.isEmpty() && !pValueProperty.isEmpty() )
         {
             bool bNonDefaultValuePropertyValue = false;
                 // is the "value property" part of the sequence?
@@ -941,9 +941,9 @@ namespace xmloff
             // look up this property in our sequence
             for ( const auto& rCheck : m_aValues )
             {
-                if ( rCheck.Name.equalsAscii( pDefaultValueProperty ) )
+                if ( rCheck.Name == pDefaultValueProperty )
                     bRestoreValuePropertyValue = true;
-                else if ( rCheck.Name.equalsAscii( pValueProperty ) )
+                else if ( rCheck.Name == pValueProperty )
                 {
                     bNonDefaultValuePropertyValue = true;
                     // we need to restore the value property we found here, nothing else
@@ -956,7 +956,7 @@ namespace xmloff
                 // found it -> need to remember (and restore) the "value property value", which is not set explicitly
                 try
                 {
-                    aValuePropertyValue = m_xElement->getPropertyValue( OUString::createFromAscii( pValueProperty ) );
+                    aValuePropertyValue = m_xElement->getPropertyValue( pValueProperty );
                 }
                 catch( const Exception& )
                 {
@@ -971,11 +971,11 @@ namespace xmloff
         OElementImport::endFastElement(nElement);
 
         // restore the "value property value", if necessary
-        if ( bRestoreValuePropertyValue && pValueProperty )
+        if ( bRestoreValuePropertyValue && !pValueProperty.isEmpty() )
         {
             try
             {
-                m_xElement->setPropertyValue( OUString::createFromAscii( pValueProperty ), aValuePropertyValue );
+                m_xElement->setPropertyValue( pValueProperty, aValuePropertyValue );
             }
             catch( const Exception& )
             {

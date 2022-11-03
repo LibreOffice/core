@@ -245,36 +245,36 @@ namespace rptui
                 u"ControlLabel", /// TODO: has to be checked
                 u"LabelControl",
                 u"Title", // comment this out if you want to have title feature for charts
-                u"" PROPERTY_MAXTEXTLEN,
-                u"" PROPERTY_EFFECTIVEDEFAULT,
-                u"" PROPERTY_EFFECTIVEMAX,
-                u"" PROPERTY_EFFECTIVEMIN,
+                PROPERTY_MAXTEXTLEN,
+                PROPERTY_EFFECTIVEDEFAULT,
+                PROPERTY_EFFECTIVEMAX,
+                PROPERTY_EFFECTIVEMIN,
                 u"HideInactiveSelection",
                 u"SubmitAction",
                 u"InputRequired",
                 u"VerticalAlign",
-                u"" PROPERTY_ALIGN,
-                u"" PROPERTY_EMPTY_IS_NULL,
-                u"" PROPERTY_FILTERPROPOSAL
-                ,u"" PROPERTY_POSITIONX
-                ,u"" PROPERTY_POSITIONY
-                ,u"" PROPERTY_WIDTH
-                ,u"" PROPERTY_HEIGHT
-                ,u"" PROPERTY_AUTOGROW
-                ,u"" PROPERTY_FONT
-                ,u"" PROPERTY_LABEL
-                ,u"" PROPERTY_LINECOLOR
-                ,u"" PROPERTY_BORDER
-                ,u"" PROPERTY_BORDERCOLOR
-                ,u"" PROPERTY_BACKTRANSPARENT
-                ,u"" PROPERTY_CONTROLBACKGROUND
-                ,u"" PROPERTY_BACKGROUNDCOLOR
-                ,u"" PROPERTY_CONTROLBACKGROUNDTRANSPARENT
-                ,u"" PROPERTY_FORMULALIST
-                ,u"" PROPERTY_SCOPE
-                ,u"" PROPERTY_TYPE
-                ,u"" PROPERTY_DATASOURCENAME
-                ,u"" PROPERTY_VERTICALALIGN
+                PROPERTY_ALIGN,
+                PROPERTY_EMPTY_IS_NULL,
+                PROPERTY_FILTERPROPOSAL
+                ,PROPERTY_POSITIONX
+                ,PROPERTY_POSITIONY
+                ,PROPERTY_WIDTH
+                ,PROPERTY_HEIGHT
+                ,PROPERTY_AUTOGROW
+                ,PROPERTY_FONT
+                ,PROPERTY_LABEL
+                ,PROPERTY_LINECOLOR
+                ,PROPERTY_BORDER
+                ,PROPERTY_BORDERCOLOR
+                ,PROPERTY_BACKTRANSPARENT
+                ,PROPERTY_CONTROLBACKGROUND
+                ,PROPERTY_BACKGROUNDCOLOR
+                ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
+                ,PROPERTY_FORMULALIST
+                ,PROPERTY_SCOPE
+                ,PROPERTY_TYPE
+                ,PROPERTY_DATASOURCENAME
+                ,PROPERTY_VERTICALALIGN
         };
 
         for (beans::Property const & prop : aProps)

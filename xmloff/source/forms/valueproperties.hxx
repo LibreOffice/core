@@ -20,6 +20,7 @@
 #pragma once
 
 #include "controlelement.hxx"
+#include <rtl/ustring.hxx>
 
 namespace xmloff
 {
@@ -39,8 +40,8 @@ namespace xmloff
         static void getValuePropertyNames(
             OControlElement::ElementType _eType,
             sal_Int16 _nFormComponentType,
-            char const * & _rpCurrentValuePropertyName,
-            char const * & _rpValuePropertyName);
+            OUString & _rpCurrentValuePropertyName,
+            OUString & _rpValuePropertyName);
 
         /** calculate the property names for the <em>min-value</em> and the <em>max-value</em> attribute.
 
@@ -49,8 +50,8 @@ namespace xmloff
         */
         static void getValueLimitPropertyNames(
             sal_Int16 _nFormComponentType,
-            char const * & _rpMinValuePropertyName,
-            char const * & _rpMaxValuePropertyName);
+            OUString & _rpMinValuePropertyName,
+            OUString & _rpMaxValuePropertyName);
 
         /** calculate the names of the properties which, at runtime, are used for <em>value</em> and
             <em>default value</em>.
@@ -58,8 +59,8 @@ namespace xmloff
         static void getRuntimeValuePropertyNames(
             OControlElement::ElementType _eType,
             sal_Int16 _nFormComponentType,
-            char const * & _rpValuePropertyName,
-            char const * & _rpDefaultValuePropertyName);
+            OUString & _rpValuePropertyName,
+            OUString & _rpDefaultValuePropertyName);
     };
 
 }   // namespace xmloff

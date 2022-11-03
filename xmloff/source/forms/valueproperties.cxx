@@ -30,10 +30,10 @@ namespace xmloff
     //= OValuePropertiesMetaData
     void OValuePropertiesMetaData::getValuePropertyNames(
             OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
-            char const * & _rpCurrentValuePropertyName, char const * & _rpValuePropertyName)
+            OUString & _rpCurrentValuePropertyName, OUString & _rpValuePropertyName)
     {
         // reset the pointers in case we can't determine the property names
-        _rpCurrentValuePropertyName = _rpValuePropertyName = nullptr;
+        _rpCurrentValuePropertyName = _rpValuePropertyName = OUString();
         switch (_nFormComponentType)
         {
             case FormComponentType::TEXTFIELD:
@@ -92,9 +92,9 @@ namespace xmloff
     }
 
     void OValuePropertiesMetaData::getValueLimitPropertyNames(sal_Int16 _nFormComponentType,
-        char const * & _rpMinValuePropertyName, char const * & _rpMaxValuePropertyName)
+        OUString & _rpMinValuePropertyName, OUString & _rpMaxValuePropertyName)
     {
-        _rpMinValuePropertyName = _rpMaxValuePropertyName = nullptr;
+        _rpMinValuePropertyName = _rpMaxValuePropertyName = OUString();
         switch (_nFormComponentType)
         {
             case FormComponentType::NUMERICFIELD:
@@ -126,10 +126,10 @@ namespace xmloff
 
     void OValuePropertiesMetaData::getRuntimeValuePropertyNames(
         OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
-        char const * & _rpValuePropertyName, char const * & _rpDefaultValuePropertyName )
+        OUString & _rpValuePropertyName, OUString & _rpDefaultValuePropertyName )
     {
         // reset the pointers in case we can't determine the property names
-        _rpValuePropertyName = _rpDefaultValuePropertyName = nullptr;
+        _rpValuePropertyName = _rpDefaultValuePropertyName = OUString();
         switch (_nFormComponentType)
         {
             case FormComponentType::TEXTFIELD:

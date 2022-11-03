@@ -31,8 +31,7 @@
 */
 struct XMLPropertyMapEntry
 {
-    const char*     msApiName;      /// Property-Name
-    sal_Int32       nApiNameLength; /// length of property name
+    rtl::OUStringConstExpr  msApiName;      /// Property-Name
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */
@@ -100,9 +99,11 @@ struct XMLPropertyMapEntry
      */
     bool            mbImportOnly;
 
-    template< std::size_t N >
+    static constexpr OUStringLiteral EMPTY{u""};
+
+    template<std::size_t N>
     XMLPropertyMapEntry(
-            const char (&sApiName)[N],
+            const OUStringLiteral<N>& sApiName,
             sal_uInt16      nNameSpace,
             enum ::xmloff::token::XMLTokenEnum eXMLName,
             sal_uInt32 nType,
@@ -111,26 +112,24 @@ struct XMLPropertyMapEntry
             bool            bImportOnly)
         :
         msApiName(sApiName),
-        nApiNameLength(N-1),
         meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
         mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
         mbImportOnly(bImportOnly)
     {}
-    XMLPropertyMapEntry(
-            std::nullptr_t ,
-            sal_uInt16      nNameSpace,
-            enum ::xmloff::token::XMLTokenEnum eXMLName,
-            sal_uInt32 nType,
-            sal_Int16       nContextId,
-            SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport,
-            bool            bImportOnly)
+
+    /// used to mark the end of the array
+    XMLPropertyMapEntry(std::nullptr_t)
         :
-        msApiName(nullptr),
-        nApiNameLength(0),
-        meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
-        mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
-        mbImportOnly(bImportOnly)
+        msApiName(EMPTY),
+        meXMLName(xmloff::token::XML_TOKEN_INVALID), mnNameSpace(0), mnType(0),
+        mnContextId(0), mnEarliestODFVersionForExport(SvtSaveOptions::ODFSVER_010),
+        mbImportOnly(false)
     {}
+
+    const OUString & getApiName() const { return static_cast<const OUString &>(msApiName); }
+
+    // use token because an empty API name is a valid entry
+    bool IsEnd() const { return meXMLName == xmloff::token::XML_TOKEN_INVALID; }
 };
 
 

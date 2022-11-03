@@ -5081,14 +5081,12 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     {
                         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
 
-                        for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; pEntry->msApiName; pEntry++ )
+                        for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; !pEntry->IsEnd(); pEntry++ )
                         {
                             try
                             {
                                 bool bBool = false;
-                                const OUString sAPIPropertyName( pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US );
-
-                                xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
+                                xPropSet->getPropertyValue( pEntry->getApiName() ) >>= bBool;
                                 if( bBool )
                                     mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
                             }

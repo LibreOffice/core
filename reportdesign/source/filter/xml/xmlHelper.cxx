@@ -101,7 +101,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 #define MAP_CONST_P_ASCII( name, prefix, token, type, context ) { name, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_PARAGRAPH,  context, SvtSaveOptions::ODFSVER_010, false }
 #define MAP_CONST_S( name, prefix, token, type, context )  { name, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_SECTION,    context, SvtSaveOptions::ODFSVER_010, false }
 #define MAP_CONST_C_ASCII( name, prefix, token, type, context ) { name, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_END() { nullptr, 0, XML_TOKEN_INVALID, 0 ,0, SvtSaveOptions::ODFSVER_010, false}
+#define MAP_END() { nullptr }
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat, bool bForExport)
 {
@@ -120,10 +120,10 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_P_ASCII(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-            MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
-            MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
-            MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
-            MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERLEFT,       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERRIGHT,      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERTOP,        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERBOTTOM,     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
             MAP_END()
         };
         return new XMLPropertySetMapper(s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
@@ -140,10 +140,10 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
             MAP_CONST_C_ASCII(      PROPERTY_VERTICALALIGN,
                                                 STYLE,    VERTICAL_ALIGN,       XML_RPT_ALIGNMENT, 0 ),
-            MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
-            MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
-            MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
-            MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERLEFT,       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERRIGHT,      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERTOP,        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_BORDERBOTTOM,     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
             MAP_END()
         };
         return new XMLPropertySetMapper(s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
@@ -165,8 +165,8 @@ const XMLPropertyMapEntry* OXMLHelper::GetRowStyleProps()
 {
     static const XMLPropertyMapEntry aXMLStylesProperties[] =
     {
-        MAP_CONST_S("Height", STYLE, ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_MEASURE, 0),
-        MAP_CONST_S("MinHeight", STYLE, MIN_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_MEASURE, 0),
+        MAP_CONST_S(PROPERTY_HEIGHT, STYLE, ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_MEASURE, 0),
+        MAP_CONST_S(PROPERTY_MINHEIGHT, STYLE, MIN_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_MEASURE, 0),
         MAP_END()
     };
     return aXMLStylesProperties;
@@ -176,7 +176,7 @@ const XMLPropertyMapEntry* OXMLHelper::GetColumnStyleProps()
 {
     static const XMLPropertyMapEntry aXMLColumnStylesProperties[] =
     {
-        MAP_CONST_S(    "Width",                 STYLE,     COLUMN_WIDTH,           XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
+        MAP_CONST_S(    PROPERTY_WIDTH,                 STYLE,     COLUMN_WIDTH,           XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
         MAP_END()
     };
     return aXMLColumnStylesProperties;

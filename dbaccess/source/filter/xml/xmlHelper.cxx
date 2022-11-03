@@ -72,7 +72,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMap
 {
     static const XMLPropertyMapEntry s_aTableStylesProperties[] =
     {
-        { nullptr, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
+        { nullptr }
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aTableStylesProperties, xFac, bForExport);
@@ -87,7 +87,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMa
           CTF_DB_ISVISIBLE, SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_NUMBERFORMAT, XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM|XML_TYPE_PROP_TABLE_COLUMN,
            CTF_DB_NUMBERFORMAT, SvtSaveOptions::ODFSVER_010, false },
-        { nullptr, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
+        { nullptr }
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aColumnStylesProperties, xFac, bForExport);
@@ -113,29 +113,29 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapp
         { PROPERTY_FONTORIENTATION, XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE, XML_TYPE_ROTATION_ANGLE|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_FONTPITCH, XML_NAMESPACE_STYLE, XML_FONT_PITCH, XML_TYPE_TEXT_FONTPITCH|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_FONTSLANT, XML_NAMESPACE_FO, XML_FONT_STYLE, XML_TYPE_TEXT_POSTURE|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
-        { "CharStrikeout", XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_STYLE,
+        { PROPERTY_CHAR_STRIKEOUT, XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_STYLE,
            XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_010, false },
-        { "CharStrikeout", XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_TYPE,
+        { PROPERTY_CHAR_STRIKEOUT, XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_TYPE,
           XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_010, false },
-        { "CharStrikeout", XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_WIDTH,
+        { PROPERTY_CHAR_STRIKEOUT, XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_WIDTH,
           XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_010, false },
-        { "CharStrikeout", XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_TEXT,
+        { PROPERTY_CHAR_STRIKEOUT, XML_NAMESPACE_STYLE, XML_TEXT_LINE_THROUGH_TEXT,
           XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_FONTSTYLENAME, XML_NAMESPACE_STYLE, XML_FONT_STYLE_NAME, XML_TYPE_STRING|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
-        { "CharUnderline", XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_STYLE,
+        { PROPERTY_CHAR_UNDERLINE, XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_STYLE,
            XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
-        { "CharUnderline", XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_TYPE,
+        { PROPERTY_CHAR_UNDERLINE, XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_TYPE,
            XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
-        { "CharUnderline", XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_WIDTH,
+        { PROPERTY_CHAR_UNDERLINE, XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_WIDTH,
            XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
-        { "CharUnderlineColor", XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_COLOR,
+        { PROPERTY_CHAR_UNDERLINE_COLOR, XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_COLOR,
           XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY|XML_TYPE_PROP_TEXT, 0    , SvtSaveOptions::ODFSVER_010, false },
-        { "CharUnderlineHasColor", XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_COLOR, XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE|XML_TYPE_PROP_TEXT, 0    , SvtSaveOptions::ODFSVER_010, false },
+        { PROPERTY_CHAR_UNDERLINE_HAS_COLOR, XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_COLOR, XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE|XML_TYPE_PROP_TEXT, 0    , SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_FONTWEIGHT, XML_NAMESPACE_FO, XML_FONT_WEIGHT, XML_TYPE_TEXT_WEIGHT|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_FONTWIDTH, XML_NAMESPACE_STYLE, XML_FONT_WIDTH, XML_TYPE_FONT_WIDTH|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
         { PROPERTY_FONTWORDLINEMODE, XML_NAMESPACE_STYLE, XML_TEXT_UNDERLINE_MODE,
           XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY|XML_TYPE_PROP_TEXT, 0 , SvtSaveOptions::ODFSVER_010, false },
-        { nullptr, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
+        { nullptr }
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new /*OPropertyHandlerFactory*/::xmloff::OControlPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aCellStylesProperties, xFac, bForExport);
@@ -146,7 +146,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMappe
     static const XMLPropertyMapEntry s_aStylesProperties[] =
     {
         { PROPERTY_ROW_HEIGHT, XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_TYPE_MEASURE|XML_TYPE_PROP_TABLE_ROW, 0, SvtSaveOptions::ODFSVER_010, false },
-        { nullptr, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
+        { nullptr }
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aStylesProperties, xFac, true/*bForExport*/);
