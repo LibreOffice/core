@@ -2492,8 +2492,19 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
 
         return xFilter->filter( aArgs );
-        }catch(...)
-        {}
+        }
+        catch (const css::uno::RuntimeException & e)
+        {
+            SAL_INFO("sfx.doc", "ExportTo: " << e);
+        }
+        catch (const std::exception & e)
+        {
+            SAL_INFO("sfx.doc", "ExportTo: " << e.what());
+        }
+        catch(...)
+        {
+            SAL_INFO("sfx.doc", "ExportTo: Unknown exception!");
+        }
     }
 
     return false;
