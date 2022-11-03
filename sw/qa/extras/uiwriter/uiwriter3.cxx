@@ -226,33 +226,82 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // the fields in cell are: variable-get variable-set variable-get
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special", 3);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[1]", "rText", "0");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[2]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[3]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/Special[1]", "rText", "0");
-    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/Special[1]", "rText", "1");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+        3);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "0");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "1");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "1");
     // here the header had shown the wrong value
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/Special[1]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/Special[1]", "rText", "2");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "1");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "2");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "2");
+    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "1");
+    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "2");
 
-    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/Special[1]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/Special[1]", "rText", "3");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "2");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "3");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "3");
+    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "2");
+    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "3");
 
-    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "4");
-    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "4");
-    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/Special[1]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/Special[1]", "rText", "4");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "3");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "4");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "4");
+    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "3");
+    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "4");
 
-    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/Special[1]", "rText", "4");
-    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/Special[1]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "4");
+    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "4");
 
     discardDumpedLayout();
     // update and check again
@@ -261,33 +310,82 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
     pXmlDoc = parseLayoutDump();
 
     // the fields in cell are: variable-get variable-set variable-get
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special", 3);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[1]", "rText", "0");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[2]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[3]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/Special[1]", "rText", "0");
-    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/Special[1]", "rText", "1");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+        3);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "0");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "1");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "1");
     // here the header had shown the wrong value
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/Special[1]", "rText", "1");
-    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/Special[1]", "rText", "2");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "1");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "2");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "2");
+    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "1");
+    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "2");
 
-    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/Special[1]", "rText", "2");
-    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/Special[1]", "rText", "3");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "2");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "3");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "3");
+    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "2");
+    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "3");
 
-    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "4");
-    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "4");
-    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/Special[1]", "rText", "3");
-    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/Special[1]", "rText", "4");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+        "expand", "3");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+        "expand", "4");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]",
+        "expand", "4");
+    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "3");
+    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "4");
 
-    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/Special[1]", "rText", "4");
-    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/Special[1]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "4");
+    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", "4");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
