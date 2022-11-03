@@ -375,7 +375,7 @@ void ShapeImportExportTest::testTextDistancesODP_OOXML_Export()
 {
     loadFromURL(u"odp/tdf150966_hugeInset.odp");
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     // The text ends 5cm below the top edge of the shape.
