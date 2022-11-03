@@ -479,7 +479,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
     ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
     OSL_ENSURE(pData,"AutoFormat data not available");
 
-    bool bBool;
+    bool bBool = false;
     if (aPropertyName == SC_UNONAME_INCBACK && (aValue >>= bBool))
         pData->SetIncludeBackground( bBool );
     else if (aPropertyName == SC_UNONAME_INCBORD && (aValue >>= bBool))
