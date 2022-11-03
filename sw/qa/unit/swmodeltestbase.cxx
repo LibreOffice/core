@@ -694,20 +694,6 @@ xmlDocUniquePtr SwModelTestBase::parseExportedFile()
     return parseXmlStream(&stream);
 }
 
-std::unique_ptr<SvStream> SwModelTestBase::parseExportStream(const OUString& url,
-                                                             const OUString& rStreamName)
-{
-    // Read the stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
-                                                      url);
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName),
-                                                  uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xInputStream.is());
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    return pStream;
-}
-
 xmlDocUniquePtr SwModelTestBase::parseExportInternal(const OUString& url,
                                                      const OUString& rStreamName)
 {

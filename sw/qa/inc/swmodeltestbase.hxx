@@ -369,8 +369,6 @@ protected:
      */
     xmlDocUniquePtr parseExportedFile();
 
-    std::unique_ptr<SvStream> parseExportStream(const OUString& url, const OUString& rStreamName);
-
     xmlDocUniquePtr parseExportInternal(const OUString& url, const OUString& rStreamName);
 
     /**

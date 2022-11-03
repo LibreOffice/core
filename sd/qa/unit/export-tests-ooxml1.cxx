@@ -1306,7 +1306,7 @@ void SdOOXMLExportTest1::testCustomXml()
     assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
                 "itemProps1.xml");
 
-    std::unique_ptr<SvStream> pStream = parseExportStream(tempFile, "ddp/ddpfile.xen");
+    std::unique_ptr<SvStream> pStream = parseExportStream(tempFile.GetURL(), "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
 }
 
@@ -1641,7 +1641,7 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     // Something like ppt/media/image2.png.
     OUString aImageRelName;
     CPPUNIT_ASSERT(aImageAbsName.startsWith("file:///", &aImageRelName));
-    std::unique_ptr<SvStream> pImageStream = parseExportStream(aTempFile, aImageRelName);
+    std::unique_ptr<SvStream> pImageStream = parseExportStream(aTempFile.GetURL(), aImageRelName);
     vcl::PngImageReader aReader(*pImageStream);
     BitmapEx aBitmapEx = aReader.read();
     // Without the accompanying fix in place, this test would have failed with:

@@ -92,7 +92,7 @@ public:
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
     /// Opens rStreamName from rTempFile, assuming it's a ZIP storage.
-    static std::unique_ptr<SvStream> parseExportStream(const utl::TempFileNamed& rTempFile,
+    static std::unique_ptr<SvStream> parseExportStream(const OUString& url,
                                                        const OUString& rStreamName);
 
     void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);

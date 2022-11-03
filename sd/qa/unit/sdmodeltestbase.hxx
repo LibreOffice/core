@@ -153,7 +153,7 @@ public:
 
     xmlDocUniquePtr parseExport(utl::TempFileNamed const& rTempFile, OUString const& rStreamName)
     {
-        std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
+        std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile.GetURL(), rStreamName));
         xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
         return pXmlDoc;
     }

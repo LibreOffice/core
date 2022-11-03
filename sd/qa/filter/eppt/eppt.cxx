@@ -83,7 +83,8 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Then verify that this color is not lost:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "ppt/theme/theme1.xml");
+    std::unique_ptr<SvStream> pStream
+        = parseExportStream(aTempFile.GetURL(), "ppt/theme/theme1.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
     assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val", "000002");
     // Without the fix in place, this test would have failed with:
@@ -102,7 +103,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Then make sure that the "infinite" repeat count is written:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "ppt/slides/slide1.xml");
+    std::unique_ptr<SvStream> pStream
+        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
     // Without the fix in place, this test would have failed with:
     // - Expected: 1

@@ -1072,10 +1072,12 @@ void SdOOXMLExportTest3::testTdf44223()
     loadFromURL(u"pptx/tdf44223.pptx");
     utl::TempFileNamed tempFile = save("Impress Office Open XML");
 
-    std::unique_ptr<SvStream> const pStream1(parseExportStream(tempFile, "ppt/media/audio1.wav"));
+    std::unique_ptr<SvStream> const pStream1(
+        parseExportStream(tempFile.GetURL(), "ppt/media/audio1.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(11140), pStream1->remainingSize());
 
-    std::unique_ptr<SvStream> const pStream2(parseExportStream(tempFile, "ppt/media/audio2.wav"));
+    std::unique_ptr<SvStream> const pStream2(
+        parseExportStream(tempFile.GetURL(), "ppt/media/audio2.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(28074), pStream2->remainingSize());
 
     xmlDocUniquePtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
