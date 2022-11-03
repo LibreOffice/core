@@ -1578,10 +1578,10 @@ static AquaSalFrame* getMouseContainerFrame()
                 aInputFlags[i] = ExtTextInputAttr::Underline;
                 break;
             case NSUnderlineStyleThick:
-                aInputFlags[i] = ExtTextInputAttr::Underline | ExtTextInputAttr::Highlight;
+                aInputFlags[i] = ExtTextInputAttr::BoldUnderline;
                 break;
             case NSUnderlineStyleDouble:
-                aInputFlags[i] = ExtTextInputAttr::BoldUnderline;
+                aInputFlags[i] = ExtTextInputAttr::DoubleUnderline;
                 break;
             default:
                 aInputFlags[i] = ExtTextInputAttr::Highlight;
