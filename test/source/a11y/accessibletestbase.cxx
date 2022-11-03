@@ -235,10 +235,92 @@ bool test::AccessibleTestBase::activateMenuItem(
     return false;
 }
 
+uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getFocusedObject(
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx)
+{
+    return AccessibilityTools::getAccessibleObjectForPredicate(
+        xCtx, [](const uno::Reference<accessibility::XAccessibleContext>& xCandidateCtx) {
+            const auto states = (accessibility::AccessibleStateType::FOCUSED
+                                 | accessibility::AccessibleStateType::SHOWING);
+            return (xCandidateCtx->getAccessibleStateSet() & states) == states;
+        });
+}
+
+uno::Reference<accessibility::XAccessibleContext>
+test::AccessibleTestBase::tabTo(const uno::Reference<accessibility::XAccessible>& xRoot,
+                                const sal_Int16 role, const std::u16string_view name,
+                                const EventPosterHelperBase* pEventPosterHelper)
+{
+    AccessibleEventPosterHelper eventHelper;
+    if (!pEventPosterHelper)
+    {
+        eventHelper.setWindow(xRoot);
+        pEventPosterHelper = &eventHelper;
+    }
+
+    auto xOriginalFocus = getFocusedObject(xRoot);
+    auto xFocus = xOriginalFocus;
+    int nSteps = 0;
+
+    std::cout << "Tabbing to '" << OUString(name) << "'..." << std::endl;
+    while (xFocus && (nSteps == 0 || xFocus != xOriginalFocus))
+    {
+        std::cout << "  focused object is: " << AccessibilityTools::debugString(xFocus)
+                  << std::endl;
+        if (xFocus->getAccessibleRole() == role && AccessibilityTools::nameEquals(xFocus, name))
+        {
+            std::cout << "  -> OK, focus matches" << std::endl;
+            return xFocus;
+        }
+        if (++nSteps > 100)
+        {
+            std::cerr << "Object not found after tabbing 100 times! bailing out" << std::endl;
+            break;
+        }
+
+        std::cout << "  -> no match, sending <TAB>" << std::endl;
+        pEventPosterHelper->postKeyEventAsync(0, awt::Key::TAB);
+        Scheduler::ProcessEventsToIdle();
+
+        const auto xPrevFocus = xFocus;
+        xFocus = getFocusedObject(xRoot);
+        if (!xFocus)
+            std::cerr << "Focus lost after sending <TAB>!" << std::endl;
+        else if (xPrevFocus == xFocus)
+        {
+            std::cerr << "Focus didn't move after sending <TAB>! bailing out" << std::endl;
+            std::cerr << "Focused object(s):" << std::endl;
+            int iFocusedCount = 0;
+            // count and print out objects with focused state
+            AccessibilityTools::getAccessibleObjectForPredicate(
+                xRoot,
+                [&iFocusedCount](const uno::Reference<accessibility::XAccessibleContext>& xCtx) {
+                    const auto states = (accessibility::AccessibleStateType::FOCUSED
+                                         | accessibility::AccessibleStateType::SHOWING);
+                    if ((xCtx->getAccessibleStateSet() & states) == states)
+                    {
+                        std::cerr << " * " << AccessibilityTools::debugString(xCtx) << std::endl;
+                        iFocusedCount++;
+                    }
+                    return false; // keep going
+                });
+            std::cerr << "Total focused element(s): " << iFocusedCount << std::endl;
+            if (iFocusedCount > 1)
+                std::cerr << "WARNING: there are more than one focused object! This usually means "
+                             "there is a BUG in the focus handling of that accessibility tree."
+                          << std::endl;
+            break;
+        }
+    }
+
+    std::cerr << "NOT FOUND" << std::endl;
+    return nullptr;
+}
+
 /* Dialog handling */
 
 test::AccessibleTestBase::Dialog::Dialog(vcl::Window* pWindow, bool bAutoClose)
-    : mxWindow(pWindow)
+    : test::EventPosterHelper(pWindow)
     , mbAutoClose(bAutoClose)
 {
     CPPUNIT_ASSERT(pWindow);

@@ -28,6 +28,7 @@
 
 #include <rtl/ustring.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <test/a11y/eventposter.hxx>
 
 #include "AccessibilityTools.hxx"
 
@@ -130,22 +131,63 @@ protected:
         return activateMenuItem(menuBar, names...);
     }
 
+    /**
+     * @brief Gets the focused accessible object at @p xAcc level or below
+     * @param xAcc An accessible object
+     * @returns The accessible context of the focused object, or @c nullptr
+     *
+     * Finds the accessible object context at or under @p xAcc that has the focused state (and is
+     * showing).  Normally only one such object should exist in a given hierarchy, but in all cases
+     * this function will return the first one found.
+     *
+     * @see AccessibilityTools::getAccessibleObjectForPredicate()
+     */
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    getFocusedObject(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx);
+
+    static inline css::uno::Reference<css::accessibility::XAccessibleContext>
+    getFocusedObject(const css::uno::Reference<css::accessibility::XAccessible>& xAcc)
+    {
+        return getFocusedObject(xAcc->getAccessibleContext());
+    }
+
+    /**
+     * @brief Navigates through focusable elements using the Tab keyboard shortcut.
+     * @param xRoot The root element to look for focused elements in.
+     * @param role The accessible role of the element to tab to.
+     * @param name The accessible name of the element to tab to.
+     * @param pEventPosterHelper Pointer to a @c EventPosterHelper instance, or @c nullptr to obtain
+     *                           it from @p xRoot.
+     * @returns The element tabbed to, or @c nullptr if not found.
+     *
+     * Navigates through focusable elements in the top level containing @p xRoot using the Tab
+     * keyboard key until the focused elements matches @p role and @p name.
+     *
+     * Note that usually @p xRoot should be the toplevel accessible, or at least contain all
+     * focusable elements within that window.  It is however *not* a requirement, but only elements
+     * actually inside it will be candidate for a match, and thus if focus goes outside it, it might
+     * lead to not finding the target element.
+     *
+     * If @p pEventPosterHelper is @c nullptr, this function will try to construct one from
+     * @p xRoot.  @see EventPosterHelper.
+     */
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    tabTo(const css::uno::Reference<css::accessibility::XAccessible>& xRoot, const sal_Int16 role,
+          const std::u16string_view name,
+          const EventPosterHelperBase* pEventPosterHelper = nullptr);
+
     /* Dialog handling */
-    class Dialog
+    class Dialog : public test::EventPosterHelper
     {
         friend class AccessibleTestBase;
 
     private:
-        VclPtr<vcl::Window> mxWindow;
         bool mbAutoClose;
 
         Dialog(vcl::Window* pWindow, bool bAutoClose = true);
 
     public:
         virtual ~Dialog();
-
-        explicit operator bool() const { return mxWindow && !mxWindow->isDisposed(); }
-        bool operator!() const { return !bool(*this); }
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }
 
@@ -155,6 +197,12 @@ protected:
         }
 
         bool close(sal_Int32 result = VclResponseType::RET_CANCEL);
+
+        css::uno::Reference<css::accessibility::XAccessibleContext>
+        tabTo(const sal_Int16 role, const std::u16string_view name)
+        {
+            return AccessibleTestBase::tabTo(getAccessible(), role, name, this);
+        }
     };
 
     class DialogWaiter
@@ -189,7 +237,9 @@ protected:
      * auto waiter = awaitDialog(u"Special Characters", [this](Dialog &dialog) {
      *     // for example, something like this:
      *     // something();
+     *     // CPPUNIT_ASSERT(dialog.tabTo(...));
      *     // CPPUNIT_ASSERT(somethingElse);
+     *     // dialog.postKeyEventAsync(0, awt::Key::RETURN);
      * });
      * CPPUNIT_ASSERT(activateMenuItem(u"Some menu", u"Some Item Triggering a Dialog..."));
      * CPPUNIT_ASSERT(waiter->waitEndDialog());
