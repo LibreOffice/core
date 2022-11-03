@@ -1581,7 +1581,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                             eType != formula::ParamClass::ForceArray)
                     {
                         // can't convert to matrix
-                        SetError( FormulaError::NoValue);
+                        SetError( FormulaError::NoRef);
                     }
                     // else: the consuming function has to decide if and how to
                     // handle a reference list argument in array context.
