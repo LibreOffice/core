@@ -205,7 +205,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_CHARMAP:
             {
-                const SvxFontItem& rItem = pOutView->GetAttribs().Get(EE_CHAR_FONTINFO);
+                auto const attribs = pOutView->GetAttribs();
+                const SvxFontItem& rItem = attribs.Get(EE_CHAR_FONTINFO);
 
                 OUString aString;
                 std::shared_ptr<SvxFontItem> aNewItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO));
