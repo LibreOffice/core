@@ -76,11 +76,11 @@ static std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xR
 }
 
 /// Impress import filters tests.
-class SdImportTest : public SdUnoApiTest
+class SdImportTest : public SdModelTestBase
 {
 public:
     SdImportTest()
-        : SdUnoApiTest("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 

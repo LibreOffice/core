@@ -11,8 +11,7 @@
 
 #include <string_view>
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -28,7 +27,7 @@
 using namespace ::com::sun::star;
 
 /// SVG filter tests.
-class SvgFilterTest : public UnoApiTest, public XmlTestTools
+class SvgFilterTest : public UnoApiXmlTest
 {
 public:
     SvgFilterTest();
@@ -36,7 +35,7 @@ public:
 };
 
 SvgFilterTest::SvgFilterTest()
-    : UnoApiTest("/filter/qa/unit/data/")
+    : UnoApiXmlTest("/filter/qa/unit/data/")
 {
 }
 

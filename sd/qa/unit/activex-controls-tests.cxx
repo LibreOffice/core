@@ -24,11 +24,11 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 
-class SdActiveXControlsTest: public SdUnoApiTest
+class SdActiveXControlsTest: public SdModelTestBase
 {
 public:
     SdActiveXControlsTest()
-        : SdUnoApiTest("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 

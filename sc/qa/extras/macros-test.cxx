@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 #include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/svdpage.hxx>
@@ -28,14 +28,12 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <editeng/brushitem.hxx>
 
-#include <helper/xpath.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public UnoApiTest, public XmlTestTools
+class ScMacrosTest : public UnoApiXmlTest
 {
 protected:
     void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
@@ -230,10 +228,10 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     loadFromURL(u"macro-button-form-control.xlsm");
 
     // When exporting to XLSM:
-    auto pTempFile = std::make_shared<utl::TempFileNamed>(save("Calc MS Excel 2007 VBA XML"));
+    utl::TempFileNamed tempFile = save("Calc MS Excel 2007 VBA XML");
 
     // Then make sure that the macro is associated with the control:
-    xmlDocUniquePtr pSheetDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheetDoc = parseExport(tempFile.GetURL(), "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheetDoc);
     // Without the fix in place, this test would have failed with:
     // - XPath '//x:controlPr' no attribute 'macro' exist
@@ -242,7 +240,7 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
 
     // Then also make sure that there is no defined name for the macro, which is only needed for
     // XLS:
-    xmlDocUniquePtr pWorkbookDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/workbook.xml");
+    xmlDocUniquePtr pWorkbookDoc = parseExport(tempFile.GetURL(), "xl/workbook.xml");
     CPPUNIT_ASSERT(pWorkbookDoc);
     assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
 }
@@ -901,7 +899,7 @@ void ScMacrosTest::testFunctionAccessIndirect()
 }
 
 ScMacrosTest::ScMacrosTest()
-      : UnoApiTest("/sc/qa/extras/testdocuments")
+      : UnoApiXmlTest("/sc/qa/extras/testdocuments")
 {
 }
 

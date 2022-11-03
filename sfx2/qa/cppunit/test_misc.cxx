@@ -26,8 +26,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include <test/xmltesttools.hxx>
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -42,12 +41,11 @@ using namespace ::com::sun::star;
 namespace {
 
 class MiscTest
-    : public UnoApiTest
-    , public XmlTestTools
+    : public UnoApiXmlTest
 {
 public:
     MiscTest()
-        : UnoApiTest("/sfx2/qa/cppunit/misc/")
+        : UnoApiXmlTest("/sfx2/qa/cppunit/misc/")
     {
     }
 

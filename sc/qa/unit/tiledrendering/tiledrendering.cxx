@@ -7,9 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 #include <test/helper/transferable.hxx>
-#include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -63,7 +62,7 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 namespace
 {
 
-class ScTiledRenderingTest : public UnoApiTest, public XmlTestTools
+class ScTiledRenderingTest : public UnoApiXmlTest
 {
 public:
     ScTiledRenderingTest();
@@ -204,14 +203,14 @@ private:
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
-    : UnoApiTest("/sc/qa/unit/tiledrendering/data/"),
+    : UnoApiXmlTest("/sc/qa/unit/tiledrendering/data/"),
     m_callbackWrapper(&callback, this)
 {
 }
 
 void ScTiledRenderingTest::setUp()
 {
-    UnoApiTest::setUp();
+    UnoApiXmlTest::setUp();
 
     comphelper::LibreOfficeKit::setActive(true);
 }
@@ -227,7 +226,7 @@ void ScTiledRenderingTest::tearDown()
     m_callbackWrapper.clear();
     comphelper::LibreOfficeKit::setActive(false);
 
-    UnoApiTest::tearDown();
+    UnoApiXmlTest::tearDown();
 }
 
 ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)

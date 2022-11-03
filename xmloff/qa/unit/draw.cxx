@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -38,7 +37,7 @@
 using namespace ::com::sun::star;
 
 /// Covers xmloff/source/draw/ fixes.
-class XmloffDrawTest : public UnoApiTest, public XmlTestTools
+class XmloffDrawTest : public UnoApiXmlTest
 {
 public:
     XmloffDrawTest();
@@ -47,7 +46,7 @@ public:
 };
 
 XmloffDrawTest::XmloffDrawTest()
-    : UnoApiTest("/xmloff/qa/unit/data/")
+    : UnoApiXmlTest("/xmloff/qa/unit/data/")
 {
 }
 
@@ -125,8 +124,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     utl::TempFileNamed aTempFile = save("impress8");
 
     // Check if the 12 colors are written in the XML:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "styles.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 12
     // - Actual  : 0
@@ -164,8 +162,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     // Execute ODP export:
     utl::TempFileNamed aTempFile = save("impress8");
 
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Check that the preview was exported:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -207,8 +204,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
     utl::TempFileNamed aTempFile = save("impress8");
 
     // Make sure the export result has the theme reference:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//style:style[@style:name='T1']/style:text-properties' no attribute 'theme-color' exist
     // i.e. only the direct color was written, but not the theme reference.
@@ -318,8 +314,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // assert XML.
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", "true");
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']");
@@ -342,8 +337,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // assert XML.
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", "true");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-metal-type]", 0);
 
@@ -381,8 +375,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // assert XML.
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']");
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']");

@@ -6,17 +6,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
-class SdLayoutTest : public UnoApiTest, public XmlTestTools
+class SdLayoutTest : public UnoApiXmlTest
 {
 public:
     SdLayoutTest()
-        : UnoApiTest("/sd/qa/unit/data/")
+        : UnoApiXmlTest("/sd/qa/unit/data/")
     {
     }
 

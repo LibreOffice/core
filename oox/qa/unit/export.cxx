@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -21,11 +20,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers ooox/source/export/ fixes.
-class Test : public UnoApiTest, public XmlTestTools
+class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiTest("/oox/qa/unit/data/")
+        : UnoApiXmlTest("/oox/qa/unit/data/")
     {
     }
 
@@ -45,8 +44,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
 
     // Then make sure polyline and connector have the correct position.
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "word/document.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
 
     // For child elements of groups in Writer the position has to be adapted to be relative
     // to group instead of being relative to anchor. That was missing for polyline and
@@ -75,8 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
 
     // Then make sure the rotated child shape has the correct position.
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "word/document.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
 
     // For a group itself and for shapes outside of groups, the position calculation is done in
     // DocxSdrExport. For child elements of groups it has to be done in
@@ -99,8 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
 
     // Then make sure that the group shape, the group shape's child size and the child shape's size
     // match:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "word/document.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:ext", "cx", "5328360");
     // Without the accompanying fix in place, this test would have failed, the <a:chExt> element was
     // not written.
@@ -120,8 +116,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
 
     // Then the shapes should retain their correct control values.
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "word/document.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
 
     // Without the fix the output OOXML would have no <a:prstGeom> tags in it.
 
@@ -306,9 +301,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
     // When saving that document:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // Then make sure the revolution is exported without a problem:
     // First shape textbox:
     assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
@@ -333,9 +326,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     // When saving that document:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // Then make sure the shape text color is a scheme color:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -382,9 +373,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToThemeShapeFill)
     // - Actual  : 0
     // i.e. the <a:schemeClr> element was not written. Note that this was already working from PPTX
     // files via grab-bags, so this test intentionally uses an ODP file as input.
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val", "accent1");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod' number of nodes is incorrect
@@ -401,9 +390,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
     // When saving that document:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // Make sure the text size is exported correctly:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 500
@@ -422,9 +409,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
     // When saving that document:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // Then make sure the pathLst has two child elements,
     // Without the accompanying fix in place, only one element a:path was exported.
     assertXPathChildren(pXmlDoc, "//a:pathLst", 2);
@@ -441,9 +426,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
     // When saving that document:
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // Then make sure the path has a child element arcTo. Prior to the fix that part of the curve was
     // not exported at all. In odp it is a command A. Such does not exist in OOXML and is therefore
     // exported as a:lnTo followed by a:arcTo
@@ -465,9 +448,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 216 216"
     assertXPath(pXmlDoc, "//a:pathLst/a:path", "w", "216");
     assertXPath(pXmlDoc, "//a:pathLst/a:path", "h", "216");
@@ -496,9 +477,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 10 10"
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "10");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "10");
@@ -532,9 +511,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 80 80"
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "80");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "80");
@@ -556,9 +533,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // File should have four subpaths with increasing path size
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "10");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "10");
@@ -578,9 +553,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup. Without fix the values were l="l", t="t", r="r", b="b"
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//a:custGeom/a:rect", "l", "textAreaLeft");
     assertXPath(pXmlDoc, "//a:custGeom/a:rect", "t", "textAreaTop");
     assertXPath(pXmlDoc, "//a:custGeom/a:rect", "r", "textAreaRight");
@@ -605,8 +578,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
     utl::TempFileNamed aTempFile = save("Office Open XML Text");
 
     // Verify the markup:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "word/document.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
     // File should have six subpaths, one with stroke and five with fill
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "stroke", "0");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "darkenLess");
@@ -627,9 +599,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // First child of a:path should be a moveTo in all four shapes.
     assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
     assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
@@ -647,9 +617,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup.
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
 
     // x-position of last segment should be same as path width. It was 21600 without fix.
     sal_Int32 nWidth
@@ -685,9 +653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup.
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
 
     // x-position of second quadBezTo control should be same as path width. It was 21600 without fix.
     sal_Int32 nWidth
@@ -726,9 +692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup.
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
 
     // wR of first ArcTo in first shape should be same as path width/2. It was 10800 without fix.
     sal_Int32 nHalfWidth
@@ -762,9 +726,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup. The values must be the same as in the original file.
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     for (sal_Int32 i = 1; i <= 2; i++)
     {
         OString sElement = "//p:spTree/p:sp[" + OString::number(i) + "]/p:txBody/a:bodyPr";
@@ -786,9 +748,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Verify the markup. The values must be the same as in the original file.
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "upright", "1");
     assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "rot");
 }
@@ -797,9 +757,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
 {
     loadFromURL(u"tdf151008_eaVertAnchor.pptx");
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // The order of the shapes in the file is by name "Right", "Center", "Left", "RightMiddle",
     // "CenterMiddle" and "LeftMiddle". I access the shapes here by index, because the XPath is
     // easier then.

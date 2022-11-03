@@ -19,11 +19,11 @@
 using namespace css;
 
 /// Shape / SdrObject import and export tests
-class ShapeImportExportTest : public SdUnoApiTestXml
+class ShapeImportExportTest : public SdModelTestBase
 {
 public:
     ShapeImportExportTest()
-        : SdUnoApiTestXml("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 
@@ -261,7 +261,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
     loadFromURL(u"TextDistancesInsets3.pptx");
 
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     //Check shape Top/Bottom - 0cm, 4cm

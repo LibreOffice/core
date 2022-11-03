@@ -65,11 +65,11 @@ uno::Reference<drawing::XShape> findChildShapeByText(const uno::Reference<drawin
 }
 }
 
-class SdImportTestSmartArt : public SdUnoApiTest
+class SdImportTestSmartArt : public SdModelTestBase
 {
 public:
     SdImportTestSmartArt()
-        : SdUnoApiTest("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 

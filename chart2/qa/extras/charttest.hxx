@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -110,11 +109,11 @@ OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAcc
 
 }
 
-class ChartTest : public UnoApiTest, public XmlTestTools
+class ChartTest : public UnoApiXmlTest
 {
 public:
     ChartTest(OUString path)
-        : UnoApiTest(path)
+        : UnoApiXmlTest(path)
     {
     }
 

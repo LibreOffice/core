@@ -23,7 +23,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
@@ -31,7 +31,6 @@
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <test/xmltesttools.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/filter/PngImageReader.hxx>
@@ -43,11 +42,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/unodraw/ code.
-class UnodrawTest : public UnoApiTest, public XmlTestTools
+class UnodrawTest : public UnoApiXmlTest
 {
 public:
     UnodrawTest()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiXmlTest("svx/qa/unit/data/")
     {
     }
 };

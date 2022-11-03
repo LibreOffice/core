@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -29,11 +28,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/sdr/ code.
-class SdrTest : public UnoApiTest, public XmlTestTools
+class SdrTest : public UnoApiXmlTest
 {
 public:
     SdrTest()
-        : UnoApiTest("svx/qa/unit/data/")
+        : UnoApiXmlTest("svx/qa/unit/data/")
     {
     }
 

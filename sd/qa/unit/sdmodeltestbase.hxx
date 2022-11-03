@@ -12,13 +12,8 @@
 #include <memory>
 #include <string_view>
 
-#include <test/bootstrapfixture.hxx>
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 #include <test/xmldiff.hxx>
-#include <test/xmltesttools.hxx>
-
-#include <unotest/filters-test.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -43,11 +38,11 @@
 
 using namespace ::com::sun::star;
 
-class SdUnoApiTest : public UnoApiTest
+class SdModelTestBase : public UnoApiXmlTest
 {
 public:
-    SdUnoApiTest(OUString path)
-        : UnoApiTest(path)
+    SdModelTestBase(OUString path)
+        : UnoApiXmlTest(path)
     {
     }
 
@@ -140,22 +135,6 @@ public:
         uno::Reference<text::XTextField> xField;
         xPropSet->getPropertyValue("TextField") >>= xField;
         return xField;
-    }
-};
-
-class SdUnoApiTestXml : public SdUnoApiTest, public XmlTestTools
-{
-public:
-    SdUnoApiTestXml(OUString path)
-        : SdUnoApiTest(path)
-    {
-    }
-
-    xmlDocUniquePtr parseExport(utl::TempFileNamed const& rTempFile, OUString const& rStreamName)
-    {
-        std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile.GetURL(), rStreamName));
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
-        return pXmlDoc;
     }
 };
 

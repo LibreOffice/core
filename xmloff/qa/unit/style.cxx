@@ -11,8 +11,7 @@
 
 #include <string_view>
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -32,7 +31,7 @@
 using namespace ::com::sun::star;
 
 /// Covers xmloff/source/style/ fixes.
-class XmloffStyleTest : public UnoApiTest, public XmlTestTools
+class XmloffStyleTest : public UnoApiXmlTest
 {
 public:
     XmloffStyleTest();
@@ -40,7 +39,7 @@ public:
 };
 
 XmloffStyleTest::XmloffStyleTest()
-    : UnoApiTest("/xmloff/qa/unit/data/")
+    : UnoApiXmlTest("/xmloff/qa/unit/data/")
 {
 }
 
@@ -191,8 +190,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
         utl::TempFileNamed aTempFile = save("writer8");
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
-        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "styles.xml");
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
         assertXPath(pXmlDoc,
                     "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
                     "style:graphic-properties[@loext:writing-mode]");
@@ -213,8 +211,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
         // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "styles.xml");
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-styles/office:styles/"
                                "style:style[@style:name='FrameBTLR']/style:graphic-properties",
@@ -247,8 +244,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
         // written.
-        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
@@ -271,8 +267,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-content/office:automatic-styles/"
                                "style:style[@style:name='gr1']/style:graphic-properties",
@@ -305,8 +300,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
         // written.
-        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
@@ -329,8 +323,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-content/office:automatic-styles/"
                                "style:style[@style:name='gr1']/style:graphic-properties",

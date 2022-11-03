@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
@@ -16,7 +16,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include <test/xmltesttools.hxx>
 
 #include <docsh.hxx>
 #include <defaultsoptions.hxx>
@@ -26,14 +25,12 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <scdll.hxx>
 
-#include "helper/xpath.hxx"
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 /* Tests for sheets larger than 1024 columns and/or 1048576 rows. */
 
-class ScJumboSheetsTest : public UnoApiTest, public XmlTestTools
+class ScJumboSheetsTest : public UnoApiXmlTest
 {
 public:
     ScJumboSheetsTest();
@@ -132,7 +129,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
     }
 
-    auto pExportedFile = std::make_shared<utl::TempFileNamed>(saveAndReload("calc8"));
+    utl::TempFileNamed tempFile = saveAndReload("calc8");
     {
         ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
         CPPUNIT_ASSERT(pModelObj);
@@ -140,8 +137,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
         ScDocument* pDoc = pModelObj->GetDocument();
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), pDoc->GetFormula(0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
-        xmlDocUniquePtr pXmlDoc
-            = XPathHelper::parseExport(pExportedFile, m_xSFactory, "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
         CPPUNIT_ASSERT(pXmlDoc);
         assertXPath(pXmlDoc,
                     "/office:document-content/office:body/office:spreadsheet/table:table/"
@@ -157,8 +153,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
 {
     loadFromURL(u"ods/sum-whole-column-row.ods");
-    auto pExportedFile
-        = std::make_shared<utl::TempFileNamed>(saveAndReload("Calc Office Open XML"));
+    utl::TempFileNamed tempFile = saveAndReload("Calc Office Open XML");
     {
         ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
         CPPUNIT_ASSERT(pModelObj);
@@ -166,8 +161,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
         ScDocument* pDoc = pModelObj->GetDocument();
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), pDoc->GetFormula(0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
-        xmlDocUniquePtr pXmlDoc
-            = XPathHelper::parseExport(pExportedFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "xl/worksheets/sheet1.xml");
         CPPUNIT_ASSERT(pXmlDoc);
         assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", "SUM(2:2)");
         assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", "SUM(C:C)");
@@ -364,13 +358,13 @@ void ScJumboSheetsTest::testTdf109061()
 }
 
 ScJumboSheetsTest::ScJumboSheetsTest()
-    : UnoApiTest("/sc/qa/unit/data/")
+    : UnoApiXmlTest("/sc/qa/unit/data/")
 {
 }
 
 void ScJumboSheetsTest::setUp()
 {
-    UnoApiTest::setUp();
+    UnoApiXmlTest::setUp();
 
     //Init before GetDefaultsOptions
     ScDLL::Init();
@@ -386,7 +380,7 @@ void ScJumboSheetsTest::tearDown()
     aDefaultsOption.SetInitJumboSheets(false);
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
 
-    UnoApiTest::tearDown();
+    UnoApiXmlTest::tearDown();
 }
 
 void ScJumboSheetsTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)

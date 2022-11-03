@@ -8,8 +8,8 @@
  */
 
 #include <officecfg/Office/Common.hxx>
-#include "sdmodeltestbase.hxx"
 
+#include <test/unoapixml_test.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -30,6 +30,8 @@
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
 #include <vcl/scheduler.hxx>
 #include <osl/thread.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
@@ -53,16 +55,17 @@
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
+#include <unomodel.hxx>
 #include <unotools/fcm.hxx>
 
 using namespace ::com::sun::star;
 
 /// Impress miscellaneous tests.
-class SdMiscTest : public SdUnoApiTestXml
+class SdMiscTest : public UnoApiXmlTest
 {
 public:
     SdMiscTest()
-        : SdUnoApiTestXml("/sd/qa/unit/data/")
+        : UnoApiXmlTest("/sd/qa/unit/data/")
     {
     }
 
@@ -473,7 +476,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     utl::TempFileNamed aTempFile = save("draw8");
 
     // Verify, that the saved document still has the ODF attributes
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
@@ -483,7 +486,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has got the items in settings.xml
-    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile.GetURL(), "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/"
                               "config:config-item-set[@config:name='ooo:view-settings']/"
@@ -527,7 +530,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     utl::TempFileNamed aTempFile = save("draw8");
 
     // Verify, that the saved document still has the ODF attributes
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
@@ -537,7 +540,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has no layer items in settings.xml
-    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile.GetURL(), "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/"
                               "config:config-item-set[@config:name='ooo:view-settings']/"
@@ -573,7 +576,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     utl::TempFileNamed aTempFile = save("draw8");
 
     // Verify, that the saved document has the ODF attributes
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
@@ -583,7 +586,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document still has the items in settings.xml
-    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile.GetURL(), "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/"
                               "config:config-item-set[@config:name='ooo:view-settings']/"
@@ -628,7 +631,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     utl::TempFileNamed aTempFile = save("draw8");
 
     // Verify, that the saved document has the ODF attributes
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
@@ -638,7 +641,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has no layer items in settings.xml
-    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile.GetURL(), "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/"
                               "config:config-item-set[@config:name='ooo:view-settings']/"
@@ -682,7 +685,7 @@ void SdMiscTest::testTdf119392()
     utl::TempFileNamed aTempFile = save("draw8");
 
     // Verify correct bit order in bitfield in the config items in settings.xml
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
     const OString sPathStart("/office:document-settings/office:settings/"
                              "config:config-item-set[@config:name='ooo:view-settings']/"
@@ -782,7 +785,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
 
     // Save and examine attribute draw:transform
     utl::TempFileNamed aTempFile = save("draw8");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
     const OString sPathStart("/office:document-content/office:body/office:drawing/draw:page");
     assertXPath(pXmlDoc, sPathStart);

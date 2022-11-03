@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -26,7 +25,7 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers sd/source/filter/eppt/ fixes.
-class Test : public UnoApiTest, public XmlTestTools
+class Test : public UnoApiXmlTest
 {
 public:
     Test();
@@ -39,7 +38,7 @@ void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 }
 
 Test::Test()
-    : UnoApiTest("/sd/qa/filter/eppt/data/")
+    : UnoApiXmlTest("/sd/qa/filter/eppt/data/")
 {
 }
 
@@ -83,9 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Then verify that this color is not lost:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/theme/theme1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/theme/theme1.xml");
     assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val", "000002");
     // Without the fix in place, this test would have failed with:
     // - Expected: 1
@@ -103,9 +100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     utl::TempFileNamed aTempFile = save("Impress Office Open XML");
 
     // Then make sure that the "infinite" repeat count is written:
-    std::unique_ptr<SvStream> pStream
-        = parseExportStream(aTempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
     // Without the fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0

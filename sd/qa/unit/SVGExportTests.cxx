@@ -10,10 +10,9 @@
 #include <sal/config.h>
 
 #include <string_view>
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <sal/macros.h>
-#include <test/xmltesttools.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -68,7 +67,7 @@ bool isValidTiledBackgroundId(const OUString& sId)
 
 }
 
-class SdSVGFilterTest : public UnoApiTest, public XmlTestTools
+class SdSVGFilterTest : public UnoApiXmlTest
 {
     class Resetter
     {
@@ -95,7 +94,7 @@ class SdSVGFilterTest : public UnoApiTest, public XmlTestTools
 
 public:
     SdSVGFilterTest()
-        : UnoApiTest("/sd/qa/unit/data/odp/")
+        : UnoApiXmlTest("/sd/qa/unit/data/odp/")
     {
     }
 

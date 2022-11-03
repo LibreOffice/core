@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -29,7 +28,7 @@
 using namespace ::com::sun::star;
 
 /// Covers xmloff/source/text/ fixes.
-class XmloffStyleTest : public UnoApiTest, public XmlTestTools
+class XmloffStyleTest : public UnoApiXmlTest
 {
 public:
     XmloffStyleTest();
@@ -37,7 +36,7 @@ public:
 };
 
 XmloffStyleTest::XmloffStyleTest()
-    : UnoApiTest("/xmloff/qa/unit/data/")
+    : UnoApiXmlTest("/xmloff/qa/unit/data/")
 {
 }
 
@@ -216,8 +215,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
     // Then make sure that unreferenced xml:id="..." attributes are not written:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '//text:list' unexpected 'id' attribute
     // i.e. xml:id="..." was written unconditionally, even when no other list needed it.
@@ -244,8 +242,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '//text:line-break' number of nodes is incorrect
     // i.e. the clearing break was lost on export.
@@ -318,8 +315,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 3.1492in (8cm)
     // - Actual  : 0.0161in (0.04 cm)
@@ -356,8 +352,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 
     // Then make sure that we still export a non-zero size:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 0.7874in
     // - Actual  : 0in
@@ -386,8 +381,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '//loext:content-control' number of nodes is incorrect
     // i.e. the content control was lost on export.
@@ -449,8 +443,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     assertXPath(pXmlDoc, "//loext:content-control", "checkbox", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "checked", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "checked-state", u"☒");
@@ -536,8 +529,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -621,8 +613,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'picture' exist
     assertXPath(pXmlDoc, "//loext:content-control", "picture", "true");
@@ -680,10 +671,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'date' exist
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
     assertXPath(pXmlDoc, "//loext:content-control", "date", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "date-format", "YYYY-MM-DD");
     assertXPath(pXmlDoc, "//loext:content-control", "date-rfc-language-tag", "en-US");
@@ -747,8 +737,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'plain-text' exist
     // i.e. the plain text content control was turned into a rich text one on export.
@@ -803,8 +792,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'combobox' exist
     // i.e. the combo box content control was turned into a drop-down one on export.
@@ -833,8 +821,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure the expected markup is used:
-    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile.GetURL(), "content.xml");
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: prop
     // - XPath '//loext:content-control' no attribute 'alias' exist

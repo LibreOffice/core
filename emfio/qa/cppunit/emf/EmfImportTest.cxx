@@ -10,8 +10,7 @@
 #include <sal/config.h>
 #include <config_fonts.h>
 
-#include <test/unoapi_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -38,7 +37,7 @@ using namespace css::graphic;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 
-class Test : public UnoApiTest, public XmlTestTools
+class Test : public UnoApiXmlTest
 {
     const OString aXPathPrefix = "/primitive2D/metafile/transform/";
 
@@ -90,7 +89,7 @@ class Test : public UnoApiTest, public XmlTestTools
 
 public:
     Test()
-        : UnoApiTest("/emfio/qa/cppunit/emf/data/")
+        : UnoApiXmlTest("/emfio/qa/cppunit/emf/data/")
     {
     }
 

@@ -7,13 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../sdmodeltestbase.hxx"
-
 #include "CallbackRecorder.hxx"
+#include <test/unoapi_test.hxx>
 
-#include <test/bootstrapfixture.hxx>
 #include <test/helper/transferable.hxx>
-#include <test/xmltesttools.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
@@ -25,6 +22,8 @@
 #include <ViewShell.hxx>
 #include <unomodel.hxx>
 
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -33,7 +32,7 @@
 
 using namespace css;
 
-class LOKitSearchTest : public UnoApiTest, public XmlTestTools
+class LOKitSearchTest : public UnoApiTest
 {
 public:
     LOKitSearchTest()

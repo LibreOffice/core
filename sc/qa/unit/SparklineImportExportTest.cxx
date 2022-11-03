@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
-#include "helper/xpath.hxx"
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <docsh.hxx>
@@ -18,11 +17,11 @@
 using namespace css;
 
 /** Test import, export or roundtrip of sparklines for ODF and OOXML */
-class SparklineImportExportTest : public UnoApiTest, public XmlTestTools
+class SparklineImportExportTest : public UnoApiXmlTest
 {
 public:
     SparklineImportExportTest()
-        : UnoApiTest("sc/qa/unit/data")
+        : UnoApiXmlTest("sc/qa/unit/data")
     {
     }
 
@@ -168,8 +167,8 @@ void SparklineImportExportTest::testSparklinesExportODS()
     loadFromURL(u"xlsx/Sparklines.xlsx");
 
     // Save as ODS and check content.xml with XPath
-    auto pXPathFile = std::make_shared<utl::TempFileNamed>(save("calc8"));
-    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    utl::TempFileNamed tempFile = save("calc8");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
 
     // We have 3 sparkline groups = 3 tables that contain sparklines
     assertXPath(pXmlDoc, "//table:table/calcext:sparkline-groups", 3);
@@ -234,9 +233,8 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     // Load the document containing NO sparklines
     loadFromURL(u"xlsx/empty.xlsx");
 
-    auto pXPathFile = std::make_shared<utl::TempFileNamed>(save("Calc Office Open XML"));
-    xmlDocUniquePtr pXmlDoc
-        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    utl::TempFileNamed tempFile = save("Calc Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/x:worksheet", 1);

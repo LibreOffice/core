@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <app.hrc>
 #include <test/bootstrapfixture.hxx>
 #include <test/helper/transferable.hxx>
-#include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
@@ -70,7 +69,7 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId id)
     return os;
 }
 
-class SdTiledRenderingTest : public UnoApiTest, public XmlTestTools
+class SdTiledRenderingTest : public UnoApiXmlTest
 {
 public:
     SdTiledRenderingTest();
@@ -218,7 +217,7 @@ private:
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
-    : UnoApiTest("/sd/qa/unit/tiledrendering/data/"),
+    : UnoApiXmlTest("/sd/qa/unit/tiledrendering/data/"),
       m_bFound(true),
       m_nPart(0),
       m_nSelectionBeforeSearchResult(0),
@@ -230,7 +229,7 @@ SdTiledRenderingTest::SdTiledRenderingTest()
 
 void SdTiledRenderingTest::setUp()
 {
-    UnoApiTest::setUp();
+    UnoApiXmlTest::setUp();
 
     // prevent showing warning message box
     setenv("OOX_NO_SMARTART_WARNING", "1", 1);
@@ -251,7 +250,7 @@ void SdTiledRenderingTest::tearDown()
     m_callbackWrapper.clear();
     comphelper::LibreOfficeKit::setActive(false);
 
-    UnoApiTest::tearDown();
+    UnoApiXmlTest::tearDown();
 }
 
 SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments)

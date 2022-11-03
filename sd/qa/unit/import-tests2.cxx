@@ -62,11 +62,11 @@
 
 using namespace ::com::sun::star;
 
-class SdImportTest2 : public SdUnoApiTest
+class SdImportTest2 : public SdModelTestBase
 {
 public:
     SdImportTest2()
-        : SdUnoApiTest("/sd/qa/unit/data/")
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 
