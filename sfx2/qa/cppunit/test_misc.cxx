@@ -76,11 +76,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
     xProps->storeToMedium(aTempFile.GetURL(), mimeArgs);
 
     // check that custom metadata is preserved
-    uno::Reference<packages::zip::XZipFileAccess2> const xZip(
-        packages::zip::ZipFileAccess::createWithURL(m_xContext, aTempFile.GetURL()));
-    uno::Reference<io::XInputStream> const xInputStream(xZip->getByName("meta.xml"), uno::UNO_QUERY);
-    std::unique_ptr<SvStream> const pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "meta.xml");
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/bork", "bork");
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar", 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo", 1);

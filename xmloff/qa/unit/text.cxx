@@ -17,7 +17,6 @@
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -152,25 +151,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
 
     // Test the export as well:
-
-    // Given a doc model that has a para style with NumberingLevel=2:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-    // When exporting that to ODT:
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer8")) },
-    });
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure we save the style's numbering level:
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("styles.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '/office:document-styles/office:styles/style:style[@style:name='mystyle']' no attribute 'list-level' exist
     // i.e. a custom NumberingLevel was lost on save.
@@ -206,13 +190,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     loadFromURL(u"list-id.fodt");
 
     // When storing that document as ODF:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer8")) },
-    });
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure that unreferenced xml:id="..." attributes are not written:
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
@@ -307,13 +285,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     // Body frame width is 16cm.
     xStyle->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(20000)));
 
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer8")) },
-    });
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    utl::TempFileNamed aTempFile = save("writer8");
 
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     // Without the accompanying fix in place, this failed with:
@@ -343,13 +315,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
 
     // When exporting to ODT:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer8")) },
-    });
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure that we still export a non-zero size:
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");

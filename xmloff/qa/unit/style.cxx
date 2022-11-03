@@ -16,7 +16,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
@@ -89,12 +88,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
     utl::TempFileNamed aTempFile = save("writer8");
 
     // Then make sure <style:font-face> elements are sorted (by style:name="..."):
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("content.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
     xmlXPathObjectPtr pXPath
         = getXPathNode(pXmlDoc, "/office:document-content/office:font-face-decls/style:font-face");
     xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;

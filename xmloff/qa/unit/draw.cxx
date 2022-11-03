@@ -13,7 +13,6 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -91,12 +90,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
 
     // Prepare use of XPath
     utl::TempFileNamed aTempFile = save("draw8");
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("content.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
 
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
     // default in ODF, but only default inside LO.
