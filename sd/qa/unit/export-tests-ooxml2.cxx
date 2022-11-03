@@ -76,6 +76,7 @@ public:
     {
     }
 
+    void testTdf142291();
     void testTdf151492();
     void testTdf149697();
     void testTdf149126();
@@ -146,6 +147,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
+    CPPUNIT_TEST(testTdf142291);
     CPPUNIT_TEST(testTdf151492);
     CPPUNIT_TEST(testTdf149697);
     CPPUNIT_TEST(testTdf149126);
@@ -221,6 +223,34 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest2::testTdf142291()
+{
+    loadFromURL(u"pptx/tdt142291.pptx");
+    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr/a:tc[1]/"
+                "a:tcPr/a:lnL/a:prstDash",
+                "val", "sysDashDotDot");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr/a:tc[1]/"
+                "a:tcPr/a:lnR/a:prstDash",
+                "val", "dot");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr/a:tc[1]/"
+                "a:tcPr/a:lnT/a:prstDash",
+                "val", "solid");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr/a:tc[1]/"
+                "a:tcPr/a:lnB/a:prstDash",
+                "val", "dash");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr/a:tc[2]/"
+                "a:tcPr/a:lnR/a:prstDash",
+                "val", "dashDot");
+}
 
 void SdOOXMLExportTest2::testTdf151492()
 {

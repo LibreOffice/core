@@ -24,6 +24,7 @@
 
 #include <filter/msfilter/util.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/any.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
@@ -65,6 +66,7 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -2290,7 +2292,30 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
             mpFS->singleElementNS(XML_a, XML_noFill);
         else
             DrawingML::WriteSolidFill( ::Color(ColorTransparency, rBorderLine.Color) );
-        mpFS->endElementNS( XML_a, XML_line );
+
+        OUString sBorderStyle;
+        sal_Int16 nStyle = rBorderLine.LineStyle;
+        mAny.setValue(&nStyle, cppu::UnoType<sal_Int16>::get());
+        switch (*o3tl::doAccess<sal_Int16>(mAny))
+        {
+            case ::table::BorderLineStyle::SOLID:
+                sBorderStyle = "solid";
+                break;
+            case ::table::BorderLineStyle::DOTTED:
+                sBorderStyle = "dot";
+                break;
+            case ::table::BorderLineStyle::DASHED:
+                sBorderStyle = "dash";
+                break;
+            case ::table::BorderLineStyle::DASH_DOT:
+                sBorderStyle = "dashDot";
+                break;
+            case ::table::BorderLineStyle::DASH_DOT_DOT:
+                sBorderStyle = "sysDashDotDot";
+                break;
+        }
+        mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, sBorderStyle);
+        mpFS->endElementNS(XML_a, XML_line);
     }
     else if( nBorderWidth == 0)
     {
