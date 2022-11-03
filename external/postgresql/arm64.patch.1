@@ -40,7 +40,7 @@ diff -ur postgresql.org/src/tools/msvc/Solution.pm postgresql/src/tools/msvc/Sol
 --- postgresql.org/src/tools/msvc/Solution.pm	2021-03-14 02:09:15.288060770 +0100
 +++ postgresql/src/tools/msvc/Solution.pm	2021-03-14 02:12:22.351726582 +0100
 @@ -62,10 +62,7 @@
- 	if ($^O eq "MSWin32")
+ 	if (1) #($^O eq "MSWin32")
  	{
  		# Examine CL help output to determine if we are in 32 or 64-bit mode.
 -		my $output = `cl /? 2>&1`;
