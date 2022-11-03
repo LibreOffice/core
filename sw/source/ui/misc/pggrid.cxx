@@ -232,7 +232,12 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         aGridItem.SetBaseHeight( static_cast< sal_uInt16 >(
             m_bRubyUserValue ? m_nRubyUserValue :
                 m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP))) );
-        aGridItem.SetRubyHeight( static_cast< sal_uInt16 >(m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))) );
+        // Tdf#151544: set ruby height from the value get from UI only when in square page mode.
+        // When in normal mode, the ruby height should be zero.
+        if (m_bSquaredMode)
+            aGridItem.SetRubyHeight(static_cast<sal_uInt16>(m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
+        else
+            aGridItem.SetRubyHeight(0);
         aGridItem.SetBaseWidth( static_cast< sal_uInt16 >(m_xCharWidthMF->denormalize(m_xCharWidthMF->get_value(FieldUnit::TWIP))) );
         aGridItem.SetRubyTextBelow(m_xRubyBelowCB->get_active());
         aGridItem.SetSquaredMode(m_bSquaredMode);
@@ -385,7 +390,6 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, weld::SpinButton&, rField, void)
             assert(nValue && "div-by-zero");
             auto nHeight = m_aPageSize.Height() / nValue;
             m_xTextSizeMF->set_value(m_xTextSizeMF->normalize(nHeight), FieldUnit::TWIP);
-            m_xRubySizeMF->set_value(0, FieldUnit::TWIP);
             SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
 
             m_nRubyUserValue = nHeight;
