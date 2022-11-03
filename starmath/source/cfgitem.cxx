@@ -988,7 +988,7 @@ void SmMathConfig::LoadFormat()
     ++pVal;
     // StandardFormat/BaseSize
     if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-        pFormat->SetBaseSize( Size(0, SmPtsTo100th_mm( nTmp16 )) );
+        pFormat->SetBaseSize(Size(0, o3tl::convert(nTmp16, o3tl::Length::pt, o3tl::Length::mm100)));
     ++pVal;
 
     sal_uInt16 i;
@@ -1059,8 +1059,8 @@ void SmMathConfig::SaveFormat()
     // StandardFormat/HorizontalAlignment
     *pValue++ <<= static_cast<sal_Int16>(pFormat->GetHorAlign());
     // StandardFormat/BaseSize
-    *pValue++ <<= static_cast<sal_Int16>(SmRoundFraction( Sm100th_mmToPts(
-                                    pFormat->GetBaseSize().Height() ) ));
+    *pValue++ <<= static_cast<sal_Int16>(
+        o3tl::convert(pFormat->GetBaseSize().Height(), o3tl::Length::mm100, o3tl::Length::pt));
 
     sal_uInt16 i;
     for (i = SIZ_BEGIN;  i <= SIZ_END;  ++i)

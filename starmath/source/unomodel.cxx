@@ -478,7 +478,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if(nVal < 1)
                     throw IllegalArgumentException();
                 Size aSize = aFormat.GetBaseSize();
-                aSize.setHeight( SmPtsTo100th_mm(nVal) );
+                aSize.setHeight(o3tl::convert(nVal, o3tl::Length::pt, o3tl::Length::mm100));
                 aFormat.SetBaseSize(aSize);
 
                 // apply base size to fonts
@@ -727,9 +727,8 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_BASE_FONT_HEIGHT                   :
             {
                 // Point!
-                *pValue <<= sal_Int16(
-                    SmRoundFraction(
-                        Sm100th_mmToPts(aFormat.GetBaseSize().Height())));
+                *pValue <<= sal_Int16(o3tl::convert(aFormat.GetBaseSize().Height(),
+                                                    o3tl::Length::mm100, o3tl::Length::pt));
             }
             break;
             case HANDLE_RELATIVE_FONT_HEIGHT_TEXT           :

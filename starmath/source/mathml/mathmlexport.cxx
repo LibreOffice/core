@@ -1175,12 +1175,12 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
             {
                 case FontSizeType::MULTIPLY:
                     ::sax::Converter::convertDouble(sStrBuf,
-                                                    static_cast<double>(aFrac * Fraction(100.00)));
+                                                    static_cast<double>(aFrac * Fraction(100, 1)));
                     sStrBuf.append('%');
                     break;
                 case FontSizeType::DIVIDE:
                     ::sax::Converter::convertDouble(sStrBuf,
-                                                    static_cast<double>(Fraction(100.00) / aFrac));
+                                                    static_cast<double>(Fraction(100, 1) / aFrac));
                     sStrBuf.append('%');
                     break;
                 case FontSizeType::ABSOLUT:
@@ -1195,14 +1195,14 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
                     //value specified in points.
 
                     //Must fix StarMath to retain the original pt values
-                    Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().GetFontSize().Height());
+                    double mytest
+                        = o3tl::convert<double>(pFontNode->GetFont().GetFontSize().Height(),
+                                                o3tl::Length::mm100, o3tl::Length::pt);
 
                     if (pFontNode->GetSizeType() == FontSizeType::MINUS)
-                        aTemp -= aFrac;
+                        mytest -= static_cast<double>(aFrac);
                     else
-                        aTemp += aFrac;
-
-                    double mytest = static_cast<double>(aTemp);
+                        mytest += static_cast<double>(aFrac);
 
                     mytest = ::rtl::math::round(mytest, 1);
                     ::sax::Converter::convertDouble(sStrBuf, mytest);

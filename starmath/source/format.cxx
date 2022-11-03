@@ -21,7 +21,7 @@
 
 
 SmFormat::SmFormat()
-:   aBaseSize(0, SmPtsTo100th_mm(12))
+:   aBaseSize(0, o3tl::convert(12, o3tl::Length::pt, o3tl::Length::mm100))
 {
     eHorAlign       = SmHorAlign::Center;
     nGreekCharStyle = 0;

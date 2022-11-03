@@ -135,8 +135,8 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
 
     if (!(Flags() & FontChangeMask::Size))
     {
-        Fraction  aVal (SmPtsTo100th_mm(rSize.GetNumerator()),
-                        rSize.GetDenominator());
+        constexpr auto md = o3tl::getConversionMulDiv(o3tl::Length::pt, o3tl::Length::mm100);
+        Fraction aVal (Fraction(md.first, md.second) * rSize);
         tools::Long      nHeight = static_cast<tools::Long>(aVal);
 
         aFntSize = GetFont().GetFontSize();
@@ -168,7 +168,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
         }
 
         // check the requested size against maximum value
-        static int const    nMaxVal = SmPtsTo100th_mm(128);
+        constexpr int nMaxVal = o3tl::convert(128, o3tl::Length::pt, o3tl::Length::mm100);
         if (aFntSize.Height() > nMaxVal)
             aFntSize.setHeight( nMaxVal );
 
