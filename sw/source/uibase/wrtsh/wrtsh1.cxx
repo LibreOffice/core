@@ -2360,59 +2360,53 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 
 void SwWrtShell::MakeOutlineLevelsVisible(const int nLevel)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+
     m_rView.SetMaxOutlineLevelShown(nLevel);
 
     bool bDocChanged = false;
 
-    const SwNodes& rNodes = GetNodes();
-    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+    const SwOutlineNodes& rOutlineNodes = GetNodes().GetOutLineNds();
 
-    StartAction();
+    // Make all missing frames.
+    for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+    {
+        SwNode* pNode = rOutlineNodes[nPos];
+        if (!pNode->GetTextNode()->getLayoutFrame(GetLayout()))
+        {
+            SwNodeIndex aIdx(*pNode, +1);
+            // Make the outline paragraph frame
+            MakeFrames(GetDoc(), *pNode, aIdx.GetNode());
+            // Make the outline content visible but don't set the outline visible attribute and
+            // don't make outline content made visible not visible that have outline visible
+            // attribute false. Visibility will be taken care of when
+            // MakeAllOutlineContentTemporarilyVisible goes out of scope.
+            MakeOutlineContentVisible(nPos, true, false);
+            bDocChanged = true;
+        }
+    }
+    // Remove outline paragraph frame and outline content frames above given level.
     for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
     {
         SwNode* pNode = rOutlineNodes[nPos];
         auto nOutlineLevel = pNode->GetTextNode()->GetAttrOutlineLevel();
-        if ( nOutlineLevel > nLevel)
+        if (nOutlineLevel > nLevel)
         {
-            // MakeOutlineContentVisible(nPos, false) sets the outline node outline content
-            // visible attribute false so it needs restored to true if it was true.
-            bool bOutlineContentVisible = false;
-            pNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisible);
-            MakeOutlineContentVisible(nPos, false);
+            // Remove the outline content but don't set the outline visible attribute. Visibility
+            // will be taken care of when MakeAllOutlineContentTemporarilyVisible goes out of scope.
+            MakeOutlineContentVisible(nPos, false, false);
+            // Remove the outline paragraph frame.
             pNode->GetTextNode()->DelFrames(GetLayout());
-            if (bOutlineContentVisible)
-                pNode->GetTextNode()->SetAttrOutlineContentVisible(true);
             bDocChanged = true;
         }
-        else
-        {
-            if (!pNode->GetTextNode()->getLayoutFrame(GetLayout()))
-            {
-                SwNodeIndex aIdx(*pNode, +1);
-                {
-                    // MakeAllOutlineContentTemporarilyVisible in this scope! Don't place at the
-                    // start of the function. Placed there will restore content to what it was
-                    // was at that point when the function exits.
-                    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
-                    MakeFrames(GetDoc(), *pNode, aIdx.GetNode());
-                }
-                bool bVisible = true;
-                if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
-                    pNode->GetTextNode()->GetAttrOutlineContentVisible(bVisible);
-                if (bVisible)
-                    MakeOutlineContentVisible(nPos, true);
-                bDocChanged = true;
-            }
-        }
     }
-    EndAction();
 
     // Broadcast DocChanged if document layout has changed so the Navigator will be updated.
     if (bDocChanged)
         GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
-void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible)
+void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible, bool bSetAttrOutlineVisibility)
 {
     const SwNodes& rNodes = GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
@@ -2499,31 +2493,34 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible)
         aIdx.Assign(*pSttNd, +1);
         MakeFrames(GetDoc(), aIdx.GetNode(), *pEndNd);
 
-        pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
-
-        // make outline content made visible that have outline visible attribute false not visible
-        while (aIdx != *pEndNd)
+        if (bSetAttrOutlineVisibility)
         {
-            SwNode* pNd = &aIdx.GetNode();
-            if (pNd->IsTextNode() && pNd->GetTextNode()->IsOutline())
+            pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
+
+            // make outline content made visible that have outline visible attribute false not visible
+            while (aIdx != *pEndNd)
             {
-                SwTextNode* pTextNd = pNd->GetTextNode();
-                bool bOutlineContentVisibleAttr = true;
-                pTextNd->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                if (!bOutlineContentVisibleAttr)
+                SwNode* pNd = &aIdx.GetNode();
+                if (pNd->IsTextNode() && pNd->GetTextNode()->IsOutline())
                 {
-                    SwOutlineNodes::size_type iPos;
-                    if (rOutlineNodes.Seek_Entry(pTextNd, &iPos))
+                    SwTextNode* pTextNd = pNd->GetTextNode();
+                    bool bOutlineContentVisibleAttr = true;
+                    pTextNd->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                    if (!bOutlineContentVisibleAttr)
                     {
-                        if (pTextNd->getLayoutFrame(nullptr))
-                            MakeOutlineContentVisible(iPos, false);
+                        SwOutlineNodes::size_type iPos;
+                        if (rOutlineNodes.Seek_Entry(pTextNd, &iPos))
+                        {
+                            if (pTextNd->getLayoutFrame(nullptr))
+                                MakeOutlineContentVisible(iPos, false);
+                        }
                     }
                 }
+                aIdx++;
             }
-            aIdx++;
         }
     }
-    else
+    else if (bSetAttrOutlineVisibility)
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
 }
 

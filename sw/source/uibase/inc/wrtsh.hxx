@@ -501,7 +501,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
 
     bool IsOutlineContentVisible(const size_t nPos);
-    void MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible = true);
+    void MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible = true, bool bSetAttrOutlineVisibility = true);
     void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
     void InvalidateOutlineContentVisibility();
     bool GetAttrOutlineContentVisible(const size_t nPos);
