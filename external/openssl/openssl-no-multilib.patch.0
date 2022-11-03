@@ -1,6 +1,6 @@
 --- Configure.orig	2020-04-21 14:22:39.000000000 +0200
 +++ Configure	2020-07-07 17:25:19.256297500 +0200
-@@ -28,7 +28,7 @@
+@@ -27,7 +27,7 @@
  my $orig_death_handler = $SIG{__DIE__};
  $SIG{__DIE__} = \&death_handler;
  
@@ -9,7 +9,7 @@
  
  my $banner = <<"EOF";
  
-@@ -87,6 +87,7 @@
+@@ -86,6 +86,7 @@
  #               If disabled, it also disables shared and dynamic-engine.
  # no-asm        do not use assembler
  # no-egd        do not compile support for the entropy-gathering daemon APIs
@@ -17,7 +17,7 @@
  # [no-]zlib     [don't] compile support for zlib compression.
  # zlib-dynamic  Like "zlib", but the zlib library is expected to be a shared
  #               library and will be loaded in run-time by the OpenSSL library.
-@@ -459,6 +460,7 @@
+@@ -458,6 +459,7 @@
      "module",
      "msan",
      "multiblock",
@@ -25,7 +25,7 @@
      "nextprotoneg",
      "ocb",
      "ocsp",
-@@ -1917,6 +1919,10 @@
+@@ -1907,6 +1909,10 @@
  
      my @build_dirs = ( [ ] );   # current directory
  
