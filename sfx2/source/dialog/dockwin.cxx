@@ -1456,6 +1456,9 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         // base class, otherwise the parent learns nothing
         // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer
         ResizableDockingWindow::EventNotify( rEvt );
+        // tdf#151112 move focus into container widget hierarchy if not already there
+        if (m_xContainer && !m_xContainer->has_child_focus())
+            m_xContainer->child_grab_focus();
         return true;
     }
     else if( rEvt.GetType() == NotifyEventType::KEYINPUT )
