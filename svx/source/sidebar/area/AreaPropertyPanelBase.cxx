@@ -411,11 +411,6 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
     bool bShowMTRAngle = false;
     bool bShowToolBoxColor = false;
     bool bShowBmpImport = false;
-    // Transparency widgets are shown by default
-    bool bShowLBTransType = true;
-    bool bShowTrspTextFT = true;
-    bool bShowMTRTransparent = true;
-    bool bShowSldTransparent = true;
 
     // #i122676# Do no longer trigger two Execute calls, one for SID_ATTR_FILL_STYLE
     // and one for setting the fill attribute itself, but add two SfxPoolItems to the
@@ -632,10 +627,12 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
         }
         case USE_BACKGROUND:
         {
-            bShowLBTransType = false;
-            bShowTrspTextFT = false;
-            bShowMTRTransparent = false;
-            bShowSldTransparent = false;
+            // No transparencies here
+            mxLBTransType->hide();
+            mxTrspTextFT->hide();
+            mxMTRTransparent->hide();
+            mxSldTransparent->hide();
+            mxBTNGradient->hide();
             if (bUpdateModel)
             {
                 const XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
@@ -653,10 +650,6 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
     mxMTRAngle->set_visible(bShowMTRAngle);
     mxToolBoxColor->set_visible(bShowToolBoxColor);
     mxBmpImport->set_visible(bShowBmpImport);
-    mxLBTransType->set_visible(bShowLBTransType);
-    mxTrspTextFT->set_visible(bShowTrspTextFT);
-    mxMTRTransparent->set_visible(bShowMTRTransparent);
-    mxSldTransparent->set_visible(bShowSldTransparent);
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
 
