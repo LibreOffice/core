@@ -28,12 +28,12 @@ class SwTextNode;
 
 class SwFieldRefPage : public SwFieldPage
 {
-    OUString    sBookmarkText;
-    OUString    sFootnoteText;
-    OUString    sEndnoteText;
+    OUString    m_sBookmarkText;
+    OUString    m_sFootnoteText;
+    OUString    m_sEndnoteText;
     // #i83479#
-    OUString    sHeadingText;
-    OUString    sNumItemText;
+    OUString    m_sHeadingText;
+    OUString    m_sNumItemText;
 
     IDocumentOutlineNodes::tSortedOutlineNodeList maOutlineNodes;
     IDocumentListItems::tSortedNodeNumList maNumItems;

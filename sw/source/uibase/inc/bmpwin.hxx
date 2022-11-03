@@ -28,12 +28,12 @@
 class BmpWindow final : public weld::CustomWidgetController
 {
 private:
-    Graphic     aGraphic;
-    BitmapEx    aBmp;
+    Graphic     m_aGraphic;
+    BitmapEx    m_aBmp;
 
-    bool        bHorz : 1;
-    bool        bVert : 1;
-    bool        bGraphic : 1;
+    bool        m_bHorz : 1;
+    bool        m_bVert : 1;
+    bool        m_bGraphic : 1;
 
     virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect) override;
 
@@ -42,8 +42,8 @@ private:
 public:
     BmpWindow();
     virtual ~BmpWindow() override;
-    void MirrorVert(bool bMirror) { bVert = bMirror; Invalidate(); }
-    void MirrorHorz(bool bMirror) { bHorz = bMirror; Invalidate(); }
+    void MirrorVert(bool bMirror) { m_bVert = bMirror; Invalidate(); }
+    void MirrorHorz(bool bMirror) { m_bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
     void SetBitmapEx(const BitmapEx& rGrf);
 };

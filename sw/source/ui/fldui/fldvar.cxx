@@ -58,8 +58,8 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     , m_xSeparatorED(m_xBuilder->weld_entry("separator"))
     , m_xNewPB(m_xBuilder->weld_button("apply"))
     , m_xDelPB(m_xBuilder->weld_button("delete"))
-    , nOldFormat(0)
-    , bInit(true)
+    , m_nOldFormat(0)
+    , m_bInit(true)
 {
     FillFieldSelect(*m_xTypeLB);
     m_xSelectionLB->make_sorted();
@@ -71,8 +71,8 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     m_xSelectionLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->set_size_request(nWidth, nHeight/2);
 
-    sOldValueFT = m_xValueFT->get_label();
-    sOldNameFT = m_xNameFT->get_label();
+    m_sOldValueFT = m_xValueFT->get_label();
+    m_sOldNameFT = m_xNameFT->get_label();
 
     for (sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         m_xChapterLevelLB->append_text(OUString::number(i));
@@ -181,7 +181,7 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     {
         m_xSelectionLB->save_value();
         m_xFormatLB->save_value();
-        nOldFormat = m_xNumFormatLB->GetFormat();
+        m_nOldFormat = m_xNumFormatLB->GetFormat();
         m_xNameED->save_value();
         m_xValueED->save_value();
         m_xInvisibleCB->save_state();
@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, TypeHdl, weld::TreeView&, void)
 
     if (nOld != GetTypeSel() || nOld == -1)
     {
-        bInit = true;
+        m_bInit = true;
         if (nOld != -1)
         {
             m_xNameED->set_text(OUString());
@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, TypeHdl, weld::TreeView&, void)
         UpdateSubType();    // initialise selection-listboxes
     }
 
-    bInit = false;
+    m_bInit = false;
 }
 
 IMPL_LINK( SwFieldVarPage, SubTypeListBoxHdl, weld::TreeView&, rBox, void )
@@ -234,7 +234,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
     if (nSelPos != -1)
         nSelData = m_xSelectionLB->get_id(nSelPos).toUInt32();
 
-    if (IsFieldEdit() && (!pBox || bInit))
+    if (IsFieldEdit() && (!pBox || m_bInit))
     {
         if (nTypeId != SwFieldTypesEnum::Formel)
             m_xNameED->set_text(GetFieldMgr().GetCurFieldPar1());
@@ -242,10 +242,10 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
         m_xValueED->set_text(GetFieldMgr().GetCurFieldPar2());
     }
 
-    if (m_xNameFT->get_label() != sOldNameFT)
-        m_xNameFT->set_label(sOldNameFT);
-    if (m_xValueFT->get_label() != sOldValueFT)
-        m_xValueFT->set_label(sOldValueFT);
+    if (m_xNameFT->get_label() != m_sOldNameFT)
+        m_xNameFT->set_label(m_sOldNameFT);
+    if (m_xValueFT->get_label() != m_sOldValueFT)
+        m_xValueFT->set_label(m_sOldValueFT);
 
     FillFormatLB(nTypeId);
 
@@ -267,7 +267,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
             {
                 if (!IsFieldEdit())
                 {
-                    if (pBox || (bInit && !IsRefresh()))    // only when interacting via mouse
+                    if (pBox || (m_bInit && !IsRefresh()))    // only when interacting via mouse
                     {
                         m_xNameED->set_text(pType->GetName());
 
@@ -420,7 +420,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                             m_xNumFormatLB->select(0);
                         }
                     }
-                    if (GetCurField() && IsFieldEdit() && (!pBox || bInit) )
+                    if (GetCurField() && IsFieldEdit() && (!pBox || m_bInit) )
                         m_xValueED->set_text(static_cast<SwSetExpField*>(GetCurField())->GetPromptText());
                 }
                 else    // USERFLD
@@ -541,7 +541,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
 
 IMPL_LINK(SwFieldVarPage, SubTypeInsertHdl, weld::TreeView&, rBox, bool)
 {
-    if (!bInit)
+    if (!m_bInit)
     {
         SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
         if (nTypeId == SwFieldTypesEnum::Formel)
@@ -1210,7 +1210,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         m_xValueED->get_value_changed_from_saved() ||
         m_xSelectionLB->get_value_changed_from_saved() ||
         m_xFormatLB->get_value_changed_from_saved() ||
-        nOldFormat != m_xNumFormatLB->GetFormat() ||
+        m_nOldFormat != m_xNumFormatLB->GetFormat() ||
         m_xInvisibleCB->get_state_changed_from_saved() ||
         m_xChapterLevelLB->get_value_changed_from_saved() ||
         m_xSeparatorED->get_value_changed_from_saved())

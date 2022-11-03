@@ -76,12 +76,12 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
         m_xFormatLB->append_text(SwResId(FLD_REF_PAGE_TYPES[i]));
     }
 
-    sBookmarkText = m_xTypeLB->get_text(0);
-    sFootnoteText = m_xTypeLB->get_text(1);
-    sEndnoteText = m_xTypeLB->get_text(2);
+    m_sBookmarkText = m_xTypeLB->get_text(0);
+    m_sFootnoteText = m_xTypeLB->get_text(1);
+    m_sEndnoteText = m_xTypeLB->get_text(2);
     // #i83479#
-    sHeadingText = m_xTypeLB->get_text(3);
-    sNumItemText = m_xTypeLB->get_text(4);
+    m_sHeadingText = m_xTypeLB->get_text(3);
+    m_sNumItemText = m_xTypeLB->get_text(4);
 
     auto nHeight = m_xTypeLB->get_height_rows(8);
     auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
@@ -191,8 +191,8 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     // #i83479#
     // entries for headings and numbered items
-    m_xTypeLB->append(OUString::number(REFFLDFLAG_HEADING), sHeadingText);
-    m_xTypeLB->append(OUString::number(REFFLDFLAG_NUMITEM), sNumItemText);
+    m_xTypeLB->append(OUString::number(REFFLDFLAG_HEADING), m_sHeadingText);
+    m_xTypeLB->append(OUString::number(REFFLDFLAG_NUMITEM), m_sNumItemText);
 
     // fill up with the sequence types
     SwWrtShell *pSh = GetWrtShell();
@@ -226,18 +226,18 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     }
 
     // text marks - now always (because of globaldocuments)
-    m_xTypeLB->append(OUString::number(REFFLDFLAG_BOOKMARK), sBookmarkText);
+    m_xTypeLB->append(OUString::number(REFFLDFLAG_BOOKMARK), m_sBookmarkText);
 
     // footnotes:
     if( pSh->HasFootnotes() )
     {
-        m_xTypeLB->append(OUString::number(REFFLDFLAG_FOOTNOTE), sFootnoteText);
+        m_xTypeLB->append(OUString::number(REFFLDFLAG_FOOTNOTE), m_sFootnoteText);
     }
 
     // endnotes:
     if ( pSh->HasFootnotes(true) )
     {
-        m_xTypeLB->append(OUString::number(REFFLDFLAG_ENDNOTE), sEndnoteText);
+        m_xTypeLB->append(OUString::number(REFFLDFLAG_ENDNOTE), m_sEndnoteText);
     }
 
     m_xTypeLB->thaw();
@@ -315,30 +315,30 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
                     if ( pRefField &&
                          pRefField->IsRefToHeadingCrossRefBookmark() )
                     {
-                        sName = sHeadingText;
+                        sName = m_sHeadingText;
                         nFlag = REFFLDFLAG_HEADING;
                     }
                     else if ( pRefField &&
                               pRefField->IsRefToNumItemCrossRefBookmark() )
                     {
-                        sName = sNumItemText;
+                        sName = m_sNumItemText;
                         nFlag = REFFLDFLAG_NUMITEM;
                     }
                     else
                     {
-                        sName = sBookmarkText;
+                        sName = m_sBookmarkText;
                         nFlag = REFFLDFLAG_BOOKMARK;
                     }
                 }
                 break;
 
                 case REF_FOOTNOTE:
-                    sName = sFootnoteText;
+                    sName = m_sFootnoteText;
                     nFlag = REFFLDFLAG_FOOTNOTE;
                     break;
 
                 case REF_ENDNOTE:
-                    sName = sEndnoteText;
+                    sName = m_sEndnoteText;
                     nFlag = REFFLDFLAG_ENDNOTE;
                     break;
 

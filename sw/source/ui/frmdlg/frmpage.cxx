@@ -2573,9 +2573,9 @@ IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl, weld::Toggleable&, void)
 
 // example window
 BmpWindow::BmpWindow()
-    : bHorz(false)
-    , bVert(false)
-    , bGraphic(false)
+    : m_bHorz(false)
+    , m_bVert(false)
+    , m_bGraphic(false)
 {
 }
 
@@ -2600,11 +2600,11 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     Point aPntPos;
     Size aPntSz(GetOutputSizePixel());
     Size aGrfSize;
-    if (bGraphic)
-        aGrfSize = ::GetGraphicSizeTwip(aGraphic, &rRenderContext);
+    if (m_bGraphic)
+        aGrfSize = ::GetGraphicSizeTwip(m_aGraphic, &rRenderContext);
     //it should show the default bitmap also if no graphic can be found
     if (!aGrfSize.Width() && !aGrfSize.Height())
-        aGrfSize = rRenderContext.PixelToLogic(aBmp.GetSizePixel());
+        aGrfSize = rRenderContext.PixelToLogic(m_aBmp.GetSizePixel());
 
     tools::Long nRelGrf = aGrfSize.Width() * 100 / aGrfSize.Height();
     tools::Long nRelWin = aPntSz.Width() * 100 / aPntSz.Height();
@@ -2612,7 +2612,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     {
         const tools::Long nWidth = aPntSz.Width();
         // if we use a replacement preview, try to draw at original size
-        if (!bGraphic && (aGrfSize.Width() <= aPntSz.Width())
+        if (!m_bGraphic && (aGrfSize.Width() <= aPntSz.Width())
                       && (aGrfSize.Height() <= aPntSz.Height()))
         {
             const tools::Long nHeight = aPntSz.Height();
@@ -2629,24 +2629,24 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     // #i119307# clear window background, the graphic might have transparency
     rRenderContext.DrawRect(tools::Rectangle(aPntPos, aPntSz));
 
-    if (bHorz || bVert)
+    if (m_bHorz || m_bVert)
     {
-        BitmapEx aTmpBmp(bGraphic ? aGraphic.GetBitmapEx() : aBmp);
+        BitmapEx aTmpBmp(m_bGraphic ? m_aGraphic.GetBitmapEx() : m_aBmp);
         BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
-        if (bHorz)
+        if (m_bHorz)
             nMirrorFlags |= BmpMirrorFlags::Vertical;
-        if (bVert)
+        if (m_bVert)
             nMirrorFlags |= BmpMirrorFlags::Horizontal;
         aTmpBmp.Mirror(nMirrorFlags);
         rRenderContext.DrawBitmapEx(aPntPos, aPntSz, aTmpBmp);
     }
-    else if (bGraphic)  //draw unmirrored preview graphic
+    else if (m_bGraphic)  //draw unmirrored preview graphic
     {
-        aGraphic.Draw(rRenderContext, aPntPos, aPntSz);
+        m_aGraphic.Draw(rRenderContext, aPntPos, aPntSz);
     }
     else    //draw unmirrored stock sample image
     {
-        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, aBmp);
+        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, m_aBmp);
     }
 }
 
@@ -2656,15 +2656,15 @@ BmpWindow::~BmpWindow()
 
 void BmpWindow::SetGraphic(const Graphic& rGraphic)
 {
-    aGraphic = rGraphic;
-    Size aSize = aGraphic.GetPrefSize();
-    bGraphic = aSize.Width() && aSize.Height();
+    m_aGraphic = rGraphic;
+    Size aSize = m_aGraphic.GetPrefSize();
+    m_bGraphic = aSize.Width() && aSize.Height();
     Invalidate();
 }
 
 void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
 {
-    aBmp = rBmp;
+    m_aBmp = rBmp;
     Invalidate();
 }
 

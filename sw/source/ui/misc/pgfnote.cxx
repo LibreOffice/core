@@ -60,19 +60,19 @@ IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, weld::Toggleable&, void)
 // handler limit values
 IMPL_LINK_NOARG(SwFootNotePage, HeightModify, weld::MetricSpinButton&, void)
 {
-    m_xMaxHeightEdit->set_max(m_xMaxHeightEdit->normalize(lMaxHeight -
+    m_xMaxHeightEdit->set_max(m_xMaxHeightEdit->normalize(m_lMaxHeight -
             (m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP)) +
             m_xLineDistEdit->denormalize(m_xLineDistEdit->get_value(FieldUnit::TWIP)))),
             FieldUnit::TWIP);
     if (m_xMaxHeightEdit->get_value(FieldUnit::NONE) < 0)
         m_xMaxHeightEdit->set_value(0, FieldUnit::NONE);
-    m_xDistEdit->set_max(m_xDistEdit->normalize(lMaxHeight -
+    m_xDistEdit->set_max(m_xDistEdit->normalize(m_lMaxHeight -
             (m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FieldUnit::TWIP)) +
             m_xLineDistEdit->denormalize(m_xLineDistEdit->get_value(FieldUnit::TWIP)))),
             FieldUnit::TWIP);
     if (m_xDistEdit->get_value(FieldUnit::NONE) < 0)
         m_xDistEdit->set_value(0, FieldUnit::NONE);
-    m_xLineDistEdit->set_max(m_xLineDistEdit->normalize(lMaxHeight -
+    m_xLineDistEdit->set_max(m_xLineDistEdit->normalize(m_lMaxHeight -
             (m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FieldUnit::TWIP)) +
             m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP)))),
             FieldUnit::TWIP);
@@ -95,7 +95,7 @@ IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, ColorListBox&, rColorBox, void
 
 SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/footnoteareapage.ui", "FootnoteAreaPage", &rSet)
-    , lMaxHeight(0)
+    , m_lMaxHeight(0)
     , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
     , m_xMaxHeightBtn(m_xBuilder->weld_radio_button("maxheight"))
     , m_xMaxHeightEdit(m_xBuilder->weld_metric_spin_button("maxheightsb", FieldUnit::CM))
@@ -260,7 +260,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 {
     auto const & rSize = rSet.Get( RES_FRM_SIZE );
-    lMaxHeight = rSize.GetHeight();
+    m_lMaxHeight = rSize.GetHeight();
 
     if( const SvxSetItem* pHeaderSetItem = rSet.GetItemIfSet( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), false ) )
     {
@@ -272,7 +272,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
         {
             const SvxSizeItem& rSizeItem =
                 rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
-            lMaxHeight -= rSizeItem.GetSize().Height();
+            m_lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
 
@@ -286,17 +286,17 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
         {
             const SvxSizeItem& rSizeItem =
                 rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) );
-            lMaxHeight -= rSizeItem.GetSize().Height();
+            m_lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
 
     if ( const SvxULSpaceItem* pSpaceItem = rSet.GetItemIfSet( RES_UL_SPACE , false ) )
     {
-        lMaxHeight -= pSpaceItem->GetUpper() + pSpaceItem->GetLower();
+        m_lMaxHeight -= pSpaceItem->GetUpper() + pSpaceItem->GetLower();
     }
 
-    lMaxHeight *= 8;
-    lMaxHeight /= 10;
+    m_lMaxHeight *= 8;
+    m_lMaxHeight /= 10;
 
     // set maximum values
     HeightModify(*m_xMaxHeightEdit);

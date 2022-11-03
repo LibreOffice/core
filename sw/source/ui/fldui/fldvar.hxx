@@ -47,11 +47,11 @@ class SwFieldVarPage : public SwFieldPage
     std::unique_ptr<weld::Button> m_xNewPB;
     std::unique_ptr<weld::Button> m_xDelPB;
 
-    OUString            sOldValueFT;
-    OUString            sOldNameFT;
+    OUString            m_sOldValueFT;
+    OUString            m_sOldNameFT;
 
-    sal_uInt32          nOldFormat;
-    bool                bInit;
+    sal_uInt32          m_nOldFormat;
+    bool                m_bInit;
 
     DECL_LINK( TypeHdl, weld::TreeView&, void );
     DECL_LINK( SubTypeListBoxHdl, weld::TreeView&, void );
