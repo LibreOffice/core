@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure the field links the source.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -646,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     pContentControl->SetAlias("mydesc");
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that a fillable form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that a checkbox form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that a dropdown form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that a date form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -751,7 +751,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting that document to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that the widget in the PDF result has that custom font size:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -774,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that a combo box form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();
@@ -811,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     pWrtShell->SetAttrSet(aSet);
 
     // When exporting to PDF:
-    StoreToTempFile("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that a single fillable form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = LoadPdfFromTempFile();

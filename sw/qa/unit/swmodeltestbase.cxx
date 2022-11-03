@@ -744,14 +744,6 @@ SwXTextDocument& SwModelTestBase::getSwXTextDocument()
 
 SwDoc* SwModelTestBase::getSwDoc() { return getSwXTextDocument().GetDocShell()->GetDoc(); }
 
-void SwModelTestBase::StoreToTempFile(const OUString& rFilterName)
-{
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= rFilterName;
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-}
-
 std::unique_ptr<vcl::pdf::PDFiumDocument> SwModelTestBase::LoadPdfFromTempFile()
 {
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);

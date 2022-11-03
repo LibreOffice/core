@@ -402,8 +402,6 @@ protected:
      */
     SwDoc* getSwDoc();
 
-    void StoreToTempFile(const OUString& rFilterName);
-
     std::unique_ptr<vcl::pdf::PDFiumDocument> LoadPdfFromTempFile();
 
     /**
