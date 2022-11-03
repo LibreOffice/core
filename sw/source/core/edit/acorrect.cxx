@@ -563,10 +563,21 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         if (pFormatter && !sWord.isEmpty())
         {
             const Color* pColor = nullptr;
-            // Send text as NatNum12 prefix
-            OUString sPrefix("[NatNum12 " + sDisambiguatedWord + "]0");
+
+            // Send text as NatNum12 prefix: "word" -> "[NatNum12 word]0"
+
+            // Closing bracket doesn't allowed in NatNum parameters, remove it from transliteration:
+            // "[word]" -> "[NatNum12 [word]0"
+            bool bHasBracket = sWord.endsWith("]");
+            if ( !bHasBracket )
+                sDisambiguatedWord.append("]");
+            OUString sPrefix("[NatNum12 " + sDisambiguatedWord + "0");
             if (pFormatter->GetPreviewString(sPrefix, 0, sConverted, &pColor, LANGUAGE_USER_HUNGARIAN_ROVAS))
+            {
+                if ( bHasBracket )
+                    sConverted = sConverted + "]";
                 bRet = true;
+            }
         }
 
         SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(rSttPos)),

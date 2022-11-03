@@ -1787,6 +1787,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     emulateTyping(rXTextDocument, u"„idézőjel” ");
     sReplaced += u"⹂𐳐𐳇𐳋𐳯𐳟𐳒𐳉𐳖‟ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    // tdf#148672 transliterate word with closing bracket
+    emulateTyping(rXTextDocument, u"word] ");
+    sReplaced += u"𐳮𐳛𐳢𐳇] "; // This was "word]" (no transliteration)
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testAutoCorr)
