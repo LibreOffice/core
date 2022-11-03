@@ -383,8 +383,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 sal_uInt16 nFontWhich = ( nScript == SvtScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK :
                                 ( ( nScript == SvtScriptType::COMPLEX ) ? EE_CHAR_FONTINFO_CTL :
                                                                         EE_CHAR_FONTINFO );
+                auto const attribs = pTableView->GetAttribs();
                 const SvxFontItem& rItem = static_cast<const SvxFontItem&>(
-                            pTableView->GetAttribs().Get(nFontWhich));
+                            attribs.Get(nFontWhich));
 
                 OUString aString;
                 std::shared_ptr<SvxFontItem> aNewItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO));
