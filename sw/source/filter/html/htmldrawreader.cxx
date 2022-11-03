@@ -538,7 +538,7 @@ void SwHTMLParser::EndMarquee()
     static_cast<SdrTextObj*>(m_pMarquee.get())->SetText( m_aContents );
     m_pMarquee->SetMergedItemSetAndBroadcast( m_pMarquee->GetMergedItemSet() );
 
-    if( m_bFixMarqueeWidth )
+    if (m_bFixMarqueeWidth && !m_bFuzzing)
     {
         // adjust the size to the text
         static_cast<SdrTextObj*>(m_pMarquee.get())->FitFrameToTextSize();
