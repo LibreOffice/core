@@ -316,7 +316,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     {
         const double fAngle = std::abs( toRadians(nAngle) );
         const double fTan = tan( fAngle );
-        const tools::Long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
+        const tools::Long   nXOff = FRound( (static_cast<double>(rRect.Bottom()) - rRect.Top()) / fTan );
         tools::Long         nPX;
 
         nDist = FRound( nDist / sin( fAngle ) );
