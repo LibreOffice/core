@@ -656,13 +656,6 @@ enum RTF_TOKEN_IDS {
     RTF_BRDROUTSET,
     RTF_BRDRFRAME,
 
-    // Swg border tokens
-    RTF_BRDBOX          = (RTF_BRDRDEF|RTF_SWGDEFS),
-    RTF_BRDLINE_COL,
-    RTF_BRDLINE_IN,
-    RTF_BRDLINE_OUT,
-    RTF_BRDLINE_DIST,
-
 /*  */
 
     RTF_PLAIN       = RTF_CHRFMT,

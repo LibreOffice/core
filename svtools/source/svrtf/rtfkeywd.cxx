@@ -1112,12 +1112,6 @@ static RTF_TokenEntry aRTFTokenTab[] = {
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_FLYCOLUMN),     RTF_FLY_COLUMN},
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_FLYPAGE),       RTF_FLY_PAGE},
 
-        {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_BRDBOX),        RTF_BRDBOX},
-        {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_BRDLNCOL),      RTF_BRDLINE_COL},
-        {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_BRDLNIN),       RTF_BRDLINE_IN},
-        {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_BRDLNOUT),      RTF_BRDLINE_OUT},
-        {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_BRDLNDIST),     RTF_BRDLINE_DIST},
-
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_SHADOW),        RTF_SHADOW},
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_SHDWDIST),      RTF_SHDW_DIST},
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_SHDWSTYLE),     RTF_SHDW_STYLE},
