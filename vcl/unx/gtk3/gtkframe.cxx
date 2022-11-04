@@ -3149,7 +3149,7 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
     if (bDifferentEventWindow)
         translate_coords(pEvent->window, pEventWidget, nEventX, nEventY);
 
-    if (!aDel.isDeleted())
+    if (!aDel.isDeleted() && !(pThis->m_nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
         int frame_x = static_cast<int>(pEvent->x_root - nEventX);
         int frame_y = static_cast<int>(pEvent->y_root - nEventY);
@@ -3168,8 +3168,8 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
     if (!aDel.isDeleted())
     {
         bRet = pThis->DrawingAreaButton(nEventType,
-                                        pEvent->x_root - pThis->maGeometry.nX,
-                                        pEvent->y_root - pThis->maGeometry.nY,
+                                        nEventX,
+                                        nEventY,
                                         pEvent->button,
                                         pEvent->time,
                                         pEvent->state);
@@ -3463,21 +3463,22 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     int frame_x = static_cast<int>(pEvent->x_root - nEventX);
     int frame_y = static_cast<int>(pEvent->y_root - nEventY);
 
-    if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
+    if (!aDel.isDeleted() && !(pThis->m_nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
-        pThis->m_bGeometryIsProvisional = false;
-        pThis->maGeometry.nX = frame_x;
-        pThis->maGeometry.nY = frame_y;
-        ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maNWFData.mbCanDetermineWindowPosition)
-            pThis->CallCallbackExc(SalEvent::Move, nullptr);
+        if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY)
+        {
+            pThis->m_bGeometryIsProvisional = false;
+            pThis->maGeometry.nX = frame_x;
+            pThis->maGeometry.nY = frame_y;
+            ImplSVData* pSVData = ImplGetSVData();
+            if (pSVData->maNWFData.mbCanDetermineWindowPosition)
+                pThis->CallCallbackExc(SalEvent::Move, nullptr);
+        }
     }
 
     if (!aDel.isDeleted())
     {
-        pThis->DrawingAreaMotion(pEvent->x_root - pThis->maGeometry.nX,
-                                 pEvent->y_root - pThis->maGeometry.nY,
-                                 pEvent->time, pEvent->state);
+        pThis->DrawingAreaMotion(nEventX, nEventY, pEvent->time, pEvent->state);
     }
 
     if (!aDel.isDeleted())
@@ -3530,8 +3531,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     pThis->DrawingAreaCrossing((pEvent->type == GDK_ENTER_NOTIFY) ? SalEvent::MouseMove : SalEvent::MouseLeave,
-                               pEvent->x_root - pThis->maGeometry.nX,
-                               pEvent->y_root - pThis->maGeometry.nY,
+                               pEvent->x,
+                               pEvent->y,
                                pEvent->time,
                                pEvent->state);
     return true;
