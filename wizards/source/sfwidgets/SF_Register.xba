@@ -113,7 +113,7 @@ Public Function _NewPopupMenu(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Create a new instance of the SF_PopupMenu class
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Event: a mouse event
-&apos;&apos;&apos;			If the event has no source or is not a mouse event, the menu is displayed above ThisComponent
+&apos;&apos;&apos;			If the event has no source or is not a mouse event, the menu is displayed above the actual window
 &apos;&apos;&apos;		X, Y: forced coordinates
 &apos;&apos;&apos;		SubmenuChar: Delimiter used in menu trees
 &apos;&apos;&apos;	Returns: the instance or Nothing
@@ -123,14 +123,17 @@ Dim Event As Variant				&apos;	Mouse event
 Dim X As Long						&apos;	Mouse click coordinates
 Dim Y As Long
 Dim SubmenuChar As String			&apos;	Delimiter in menu trees
-Dim oSession As Object				&apos;	ScriptForge.SF_Session
 Dim vUno As Variant					&apos;	UNO type split into an array
 Dim sEventType As String			&apos;	Event type, must be &quot;MouseEvent&quot;
 Dim oControl As Object				&apos;	The dialog or form control view which triggered the event
+Dim oWindow As Object				&apos;	ui.Window type
+Dim oSession As Object				:	Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Session&quot;)
+Dim oUi As Object					:	Set oUi = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.UI&quot;)
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 Check:
+	&apos;	Check and get arguments, their number may vary
 	If IsMissing(pvArgs) Or IsEmpty(pvArgs) Then pvArgs = Array()
 	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)
 	If UBound(pvArgs) &gt;= 0 Then Event = pvArgs(0) Else Event = Nothing
@@ -145,7 +148,7 @@ Check:
 	Set oMenu = Nothing
 
 Try:
-	Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
+	&apos;	Find and identify the control that triggered the popup menu
 	Set oControl = Nothing
 	If Not IsNull(Event) Then
 		&apos;	Determine the X, Y coordinates
@@ -158,9 +161,12 @@ Try:
 			If oSession.HasUnoProperty(Event, &quot;Source&quot;) Then Set oControl = Event.Source.Peer
 		End If
 	End If
-	&apos;	If not a mouse event, if no control, ...
+	&apos;	If not a mouse event, if no control, find what can be decent alternatives: (a menu header in) the actual window
 	If IsNull(oControl) Then
-		If Not IsNull(ThisComponent) Then Set oControl = ThisComponent.CurrentController.Frame.getContainerWindow()
+		Set oWindow = oUi._IdentifyWindow(StarDesktop.getCurrentComponent())	&apos;	A menu has been clicked necessarily in the current window
+		With oWindow
+			If Not IsNull(.Frame) Then Set oControl = .Frame.getContainerWindow()
+		End With
 	End If
 
 	If Not IsNull(oControl) Then

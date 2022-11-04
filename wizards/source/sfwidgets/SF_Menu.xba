@@ -503,12 +503,20 @@ Public Sub _Initialize(ByRef poComponent As Object _
 Dim oLayout As Object			&apos;	com.sun.star.comp.framework.LayoutManager
 Dim sName As String				&apos;	Menu name
 Dim iMenuId As Integer			&apos;	Menu identifier
+Dim oWindow As Object			&apos;	ui.Window type
+Dim oUi As Object				:	Set oUi = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.UI&quot;)
 Dim i As Integer
 Const cstTilde = &quot;~&quot;
 
+Check:
+	&apos;	How does the window look on top of which a menu is requested ?
+	Set oWindow = oUi._IdentifyWindow(poComponent)
+	With oWindow
+		If Not IsNull(.Frame) Then Set oLayout = .Frame.LayoutManager Else GoTo Finally
+	End With
+
 Try:
 	&apos;	Initialize the menubar
-	Set oLayout = poComponent.CurrentController.Frame.LayoutManager
 	Set MenuBar = oLayout.getElement(&quot;private:resource/menubar/menubar&quot;).XMenuBar
 
 	&apos;	Determine the new menu identifier and its position

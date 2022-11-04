@@ -897,7 +897,7 @@ Try:
 	&apos;	Setup the dispatcher
 	Set oURL = New com.sun.star.util.URL
 	oURL.Complete = &quot;.component:DB/DataSourceBrowser&quot;
-	Set oDispatch = StarDesktop.queryDispatch(oURL, &quot;_Blank&quot;, 8)
+	Set oDispatch = StarDesktop.queryDispatch(oURL, &quot;_blank&quot;, com.sun.star.frame.FrameSearchFlag.CREATE)
 
 	&apos;	Setup the arguments of the component to create
 	With ScriptForge.SF_Utils
@@ -916,7 +916,7 @@ Try:
 
 	&apos;	Open the targeted datasheet
 	Set oNewDatasheet = oDispatch.dispatchWithReturnValue(oURL, vArgs)
-	If Not IsNull(oNewDatasheet) Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, [Me], oNewDatasheet)
+	If Not IsNull(oNewDatasheet) Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, oNewDatasheet, [Me])
 
 Finally:
 	Set _OpenDatasheet = oOpen

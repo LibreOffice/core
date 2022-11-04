@@ -660,6 +660,7 @@ Public Function GetDatabase(Optional ByVal User As Variant _
 &apos;&apos;&apos;			Set myDb = oForm.GetDatabase()
 
 Dim FSO As Object				&apos;	Alias for SF_FileSystem
+Dim sDataSource As String		&apos;	Database file name in FileNaming format
 Dim sUser As String				&apos;	Alias for User
 Dim sPassword As String			&apos;	Alias for Password
 Const cstThisSub = &quot;SFDocuments.Form.GetDatabase&quot;
@@ -700,9 +701,10 @@ Try:
 		Else
 			&apos;	Check if DataSourceName is a file or a registered name and create database instance accordingly
 			Set FSO = ScriptForge.SF_FileSystem
-			If FSO.FileExists(FSO._ConvertFromUrl(_Form.DataSourceName)) Then
+			sDataSource = FSO._ConvertFromUrl(_Form.DataSourceName)
+			If FSO.FileExists(sDataSource) Then
 				Set _Database = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Database&quot; _
-								, _Form.DataSourceName, , , sUser, sPassword)
+								, sDataSource, , , sUser, sPassword)
 			Else
 				Set _Database = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Database&quot; _
 								, , _Form.DataSourceName, , sUser, sPassword)

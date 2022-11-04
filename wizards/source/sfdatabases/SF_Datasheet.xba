@@ -123,12 +123,24 @@ Property Get CurrentRow() As Long
 End Property	&apos;	SFDatabases.SF_Datasheet.CurrentRow
 
 REM -----------------------------------------------------------------------------
+Property Get DatabaseFileName() As String
+&apos;&apos;&apos;	Returns the file name of the Base file in FSO.FileNaming format
+	DatabaseFileName = _PropertyGet(&quot;DatabaseFileName&quot;)
+End Property	&apos;	SFDatabases.SF_Datasheet.DatabaseFileName
+
+REM -----------------------------------------------------------------------------
 Property Get LastRow() As Long
 &apos;&apos;&apos;	Returns the total number of rows
 &apos;&apos;&apos;	The process may imply to move the cursor to the last available row.
 &apos;&apos;&apos;	Afterwards the cursor is reset to the current row.
 	LastRow = _PropertyGet(&quot;LastRow&quot;)
 End Property	&apos;	SFDatabases.SF_Datasheet.LastRow
+
+REM -----------------------------------------------------------------------------
+Property Get ParentDatabase() As Object
+&apos;&apos;&apos;	Returns the database instance to which the datasheet belongs
+	Set ParentDatabase = _PropertyGet(&quot;ParentDatabase&quot;)
+End Property	&apos;	SFDatabases.SF_Datasheet.ParentDatabase
 
 REM -----------------------------------------------------------------------------
 Property Get Source() As String
@@ -281,6 +293,60 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;   SFDatabases.SF_Datasheet.CloseDatasheet
+
+REM -----------------------------------------------------------------------------
+Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
+								, Optional ByVal Before As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Object
+&apos;&apos;&apos; Create a new menu entry in the datasheet&apos;s menubar
+&apos;&apos;&apos;	The menu is not intended to be saved neither in the LibreOffice global environment, nor elsewhere
+&apos;&apos;&apos;	The method returns a SFWidgets.Menu instance. Its methods let define the menu further.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		MenuHeader: the name/header of the menu
+&apos;&apos;&apos;		Before: the place where to put the new menu on the menubar (string or number &gt;= 1)
+&apos;&apos;&apos;			When not found =&gt; last position
+&apos;&apos;&apos;		SubmenuChar: the delimiter used in menu trees. Default = &quot;&gt;&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A SFWidgets.Menu instance or Nothing
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim oMenu As Object
+&apos;&apos;&apos;		Set oMenu = oDoc.CreateMenu(&quot;My menu&quot;, Before := &quot;Styles&quot;)
+&apos;&apos;&apos;		With oMenu
+&apos;&apos;&apos;			.AddItem(&quot;Item 1&quot;, Command := &quot;.uno:About&quot;)
+&apos;&apos;&apos;			&apos;...
+&apos;&apos;&apos;			.Dispose()	&apos;	When definition is complete, the menu instance may be disposed
+&apos;&apos;&apos;		End With
+&apos;&apos;&apos;			&apos; ...
+
+Dim oMenu As Object			&apos;	return value
+Const cstThisSub = &quot;SFDatabases.Datasheet.CreateMenu&quot;
+Const cstSubArgs = &quot;MenuHeader, [Before=&quot;&quot;&quot;&quot;], [SubmenuChar=&quot;&quot;&gt;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oMenu = Nothing
+
+Check:
+	If IsMissing(Before) Or IsEmpty(Before) Then Before = &quot;&quot;
+	If IsMissing(SubmenuChar) Or IsEmpty(SubmenuChar) Then SubmenuChar = &quot;&quot;
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(MenuHeader, &quot;MenuHeader&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Before, &quot;Before&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SubmenuChar, &quot;SubmenuChar&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oMenu = ScriptForge.SF_Services.CreateScriptService(&quot;SFWidgets.Menu&quot;, _Component, MenuHeader, Before, SubmenuChar)
+
+Finally:
+	Set CreateMenu = oMenu
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDatabases.SF_Document.CreateMenu
 
 REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
@@ -442,7 +508,7 @@ Public Function GoToCell(Optional ByVal Row As Variant _
 &apos;&apos;&apos;		oSheet.GoToCell(1000000, &quot;ShipCity&quot;))	&apos;	Set the cursor on he last row, column &quot;ShipCity&quot;
 
 Dim bGoTo As Boolean				&apos;	Return value
-Dim lCol As Long					&apos;	Numeric index of Column in lists of columns
+Dim lCol As Long					&apos;	Numeric index of Column in list of columns
 Dim lMaxCol As Long				&apos;	Index of last column
 Const cstThisSub = &quot;SFDatabases.Datasheet.GoToCell&quot;
 Const cstSubArgs = &quot;[Row=0], [Column=0]&quot;
@@ -503,10 +569,12 @@ Public Function Methods() As Variant
 					&quot;Activate&quot; _
 					, &quot;ApplyFilter&quot; _
 					, &quot;CloseDatasheet&quot; _
+					, &quot;CreateMenu&quot; _
 					, &quot;GetText&quot; _
 					, &quot;GetValue&quot; _
 					, &quot;GoToCell&quot; _
 					, &quot;OrderBy&quot; _
+					, &quot;RemoveMenu&quot; _
 					)
 
 End Function	&apos;	SFDatabases.SF_Datasheet.Methods
@@ -569,7 +637,9 @@ Public Function Properties() As Variant
 					&quot;ColumnHeaders&quot; _
 					, &quot;CurrentColumn&quot; _
 					, &quot;CurrentRow&quot; _
+					, &quot;DatabaseFileName&quot; _
 					, &quot;LastRow&quot; _
+					, &quot;ParentDatabase&quot; _
 					, &quot;Source&quot; _
 					, &quot;SourceType&quot; _
 					, &quot;XComponent&quot; _
@@ -578,6 +648,69 @@ Public Function Properties() As Variant
 					)
 
 End Function	&apos;	SFDatabases.SF_Datasheet.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveMenu(Optional ByVal MenuHeader As Variant) As Boolean
+&apos;&apos;&apos; Remove a menu entry in the document&apos;s menubar
+&apos;&apos;&apos;	The removal is not intended to be saved neither in the LibreOffice global environment, nor in the document
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		MenuHeader: the name/header of the menu, without tilde &quot;~&quot;, as a case-sensitive string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.RemoveMenu(&quot;File&quot;)
+&apos;&apos;&apos;			&apos; ...
+
+Dim bRemove As Boolean			&apos;	Return value
+Dim oLayout As Object			&apos;	com.sun.star.comp.framework.LayoutManager
+Dim oMenuBar As Object			&apos;	com.sun.star.awt.XMenuBar or stardiv.Toolkit.VCLXMenuBar
+Dim sName As String				&apos;	Menu name
+Dim iMenuId As Integer			&apos;	Menu identifier
+Dim iMenuPosition As Integer	&apos;	Menu position &gt;= 0
+Dim i As Integer
+Const cstTilde = &quot;~&quot;
+
+Const cstThisSub = &quot;SFDatabases.Datasheet.RemoveMenu&quot;
+Const cstSubArgs = &quot;MenuHeader&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bRemove = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(MenuHeader, &quot;MenuHeader&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oLayout = _Component.Frame.LayoutManager
+	Set oMenuBar = oLayout.getElement(&quot;private:resource/menubar/menubar&quot;).XMenuBar
+
+	&apos;	Search the menu identifier to remove by its name, Mark its position
+	With oMenuBar
+		iMenuPosition = -1
+		For i = 0 To .ItemCount - 1
+			iMenuId = .getItemId(i)
+			sName = Replace(.getItemText(iMenuId), cstTilde, &quot;&quot;)
+			If MenuHeader= sName Then
+				iMenuPosition = i
+				Exit For
+			End If
+		Next i
+		&apos;	Remove the found menu item
+		If iMenuPosition &gt;= 0 Then
+			.removeItem(iMenuPosition, 1)
+			bRemove = True
+		End If
+	End With
+
+Finally:
+	RemoveMenu = bRemove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDatabases.SF_Datasheet.RemoveMenu
 
 REM =========================================================== PRIVATE FUNCTIONS
 
@@ -589,10 +722,11 @@ Public Sub _Initialize()
 Dim iType As Integer			&apos;	One of the com.sun.star.sdb.CommandType constants
 Dim oColumn As Object			&apos;	A single column
 Dim oColumnDescriptor As Object	&apos;	A single column descriptor
+Dim FSO As Object				:	Set FSO = ScriptForge.SF_FileSystem
 Dim i As Long
 
 Try:
-	_ParentType = [_Parent].ObjectType
+	If IsNull([_Parent]) Then _ParentType = &quot;&quot; Else _ParentType = [_Parent].ObjectType
 
 	With _Component
 		&apos;	The existence of _Component.Selection must be checked upfront
@@ -611,31 +745,33 @@ Try:
 		&apos;	Useful UNO objects
 		Set _Frame = .Frame
 		Set _ControlView = .CurrentControl
-		Set _TabControllerModel = .com_sun_star_awt_XTabController_getModel
+		Set _TabControllerModel = .com_sun_star_awt_XTabController_getModel()
 		Set _ControlModel = _ControlView.getModel()
+	End With
 
 		&apos;	Retrieve the parent database instance
-		Select Case [_Parent].ObjectType
+	With _TabControllerModel
+		Select Case _ParentType
 			Case &quot;BASE&quot;
-				With _TabControllerModel
-					Set _ParentDatabase = [_Parent].GetDatabase(.User, .Password)
-				End With
+				Set _ParentDatabase = [_Parent].GetDatabase(.User, .Password)
 				Set _ParentBase = [_Parent]
 			Case &quot;DATABASE&quot;
 				Set _ParentDatabase = [_Parent]
 				Set _ParentBase = Nothing
+			Case &quot;&quot;				&apos;	Derive the DATABASE instance from what can be found in the Component
+				Set _ParentDatabase = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Database&quot; _
+						, FSO._ConvertFromUrl(_BaseFileName), , , .User, .Password)
+				_ParentType = &quot;DATABASE&quot;
+				Set _ParentBase = Nothing
 		End Select
-
 		&apos;	Load column headers
-		_ColumnHeaders  = _TabControllerModel.getColumns().getElementNames()
-
+		_ColumnHeaders = .getColumns().getElementNames()
 	End With
 
 Finally:
 	Exit Sub
 End Sub			&apos;	SFDatabases.SF_Datasheet._Initialize
 
-											&apos; or Nothing when opened manually from the user interface
 REM -----------------------------------------------------------------------------
 Private Function _IsStillAlive(Optional ByVal pbError As Boolean) As Boolean
 &apos;&apos;&apos;	Returns True if the datasheet has not been closed manually or incidentally since the last use
@@ -685,14 +821,13 @@ Const cstSubArgs = &quot;&quot;
 
 	Select Case psProperty
 		Case &quot;ColumnHeaders&quot;
-											&apos; or Nothing when opened manually from the user interface
-
-											&apos; or Nothing when opened manually from the user interface
 			_PropertyGet = _ColumnHeaders
 		Case &quot;CurrentColumn&quot;
 			_PropertyGet = _ColumnHeaders(_ControlView.getCurrentColumnPosition())
 		Case &quot;CurrentRow&quot;
 			_PropertyGet = _TabControllerModel.Row
+		Case &quot;DatabaseFileName&quot;
+			_PropertyGet = ScriptForge.SF_FileSystem._ConvertFromUrl(_BaseFileName)
 		Case &quot;LastRow&quot;
 			With _TabControllerModel
 				If .IsRowCountFinal Then
@@ -708,6 +843,8 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				End If
 			End With
+		Case &quot;ParentDatabase&quot;
+			Set _PropertyGet = _ParentDatabase
 		Case &quot;Source&quot;
 			_PropertyGet = _Command
 		Case &quot;SourceType&quot;

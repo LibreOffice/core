@@ -766,7 +766,7 @@ End Function	&apos;	SFDocuments.SF_Document.Properties
 REM -----------------------------------------------------------------------------
 Public Function RemoveMenu(Optional ByVal MenuHeader As Variant _
 							, Optional ByRef _Document As Variant _
-) As Boolean
+							) As Boolean
 &apos;&apos;&apos; Remove a menu entry in the document&apos;s menubar
 &apos;&apos;&apos;	The removal is not intended to be saved neither in the LibreOffice global environment, nor in the document
 &apos;&apos;&apos;	Args:

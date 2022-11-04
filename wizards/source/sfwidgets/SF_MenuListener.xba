@@ -71,8 +71,8 @@ Dim bType As Boolean				&apos;	True when status is meaningful: item is radio but
 Dim bStatus As Boolean				&apos;	Status of the menu item, always False for normal items
 Dim oFrame As Object				&apos;	com.sun.star.comp.framework.Frame
 Dim oDispatcher As Object			&apos;	com.sun.star.frame.DispatchHelper
-Dim oSession As Object				&apos;	SF_Session service
 Dim vScript As Variant				&apos;	Split command in script/argument
+Dim oSession As Object				:	Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Session&quot;)
 Dim oArgs() As new com.sun.star.beans.PropertyValue
 
 	On Local Error GoTo Catch		&apos;	Avoid stopping event scripts
@@ -88,15 +88,14 @@ Try:
 	End With
 	
 	If Len(sCommand) &gt; 0 Then
+		Set oFrame = StarDesktop.ActiveFrame	&apos;	A menu has been clicked necessarily in the current window
 		If Left(sCommand, Len(cstUnoPrefix)) = cstUnoPrefix Then
 			&apos;	Execute uno command
-			Set oFrame = StarDesktop.CurrentComponent.CurrentController.Frame	&apos;	A menu has been clicked necessarily in the current window
 			Set oDispatcher = ScriptForge.SF_Utils._GetUNOService(&quot;DispatchHelper&quot;)
 			oDispatcher.executeDispatch(oFrame, sCommand, &quot;&quot;, 0, oArgs())
 			oFrame.activate()
 		Else
 			&apos;	Execute script
-			Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 			vScript = Split(sCommand, cstScriptArg)
 			oSession._ExecuteScript(vScript(0), vScript(1) &amp; &quot;,&quot; &amp; Iif(bStatus, &quot;1&quot;, &quot;0&quot;))	&apos;	Return value is ignored
 		End If

@@ -551,7 +551,7 @@ Try:
 		Set oNewQuery = .loadComponent(com.sun.star.sdb.application.DatabaseObject.QUERY, QueryName, DesignMode)
 	End With
 	&apos;	When design mode, the method returns Nothing
-	If Not DesignMode Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, [Me], oNewQuery)
+	If Not DesignMode Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, oNewQuery, [Me])
 
 Finally:
 	Set OpenQuery = oOpen
@@ -604,7 +604,7 @@ Try:
 		Set oNewTable = .loadComponent(com.sun.star.sdb.application.DatabaseObject.TABLE, TableName, DesignMode)
 	End With
 	&apos;	When design mode, the method returns Nothing
-	If Not DesignMode Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, [Me], oNewTable)
+	If Not DesignMode Then Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Datasheet&quot;, oNewTable, [Me])
 
 Finally:
 	Set OpenTable = oOpen
