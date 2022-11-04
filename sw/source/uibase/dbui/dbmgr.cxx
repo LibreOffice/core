@@ -173,7 +173,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     const WorkingDocType aType, const SwWrtShell &rSourceWrtShell,
     const vcl::Window *pSourceWindow,
     SwDBManager** const ppDBManager,
-    SwView** const pView, SwWrtShell** const pWrtShell, SwDoc** const pDoc );
+    SwView** const pView, SwWrtShell** const pWrtShell, rtl::Reference<SwDoc>* const pDoc );
 
 static bool lcl_getCountFromResultSet( sal_Int32& rCount, const SwDSParam* pParam )
 {
@@ -434,7 +434,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 
     SfxObjectShellLock  xWorkObjSh;
     SwWrtShell         *pWorkShell            = nullptr;
-    SwDoc              *pWorkDoc              = nullptr;
+    rtl::Reference<SwDoc> pWorkDoc;
     SwDBManager        *pWorkDocOrigDBManager = nullptr;
 
     switch( rMergeDesc.nMergeType )
@@ -905,7 +905,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     // optional in and output to swap the DB manager
     SwDBManager** const ppDBManager,
     // optional output
-    SwView** const pView, SwWrtShell** const pWrtShell, SwDoc** const pDoc )
+    SwView** const pView, SwWrtShell** const pWrtShell, rtl::Reference<SwDoc>* const pDoc )
 {
     const SwDoc *pSourceDoc = rSourceWrtShell.GetDoc();
     SfxObjectShellRef xWorkObjectShell = pSourceDoc->CreateCopy( true, (aType == WorkingDocType::TARGET) );
@@ -1178,8 +1178,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     SwView*           pTargetView     = rMergeDescriptor.pMailMergeConfigItem ?
                                         rMergeDescriptor.pMailMergeConfigItem->GetTargetView() : nullptr;
     SwWrtShell*       pTargetShell    = nullptr;
-    SwDoc*            pTargetDoc      = nullptr;
     SfxObjectShellRef xTargetDocShell;
+    rtl::Reference<SwDoc> pTargetDoc;
 
     std::unique_ptr< utl::TempFileNamed > aTempFile;
     sal_uInt16 nStartingPageNo = 0;
@@ -1283,7 +1283,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // it is more safe to use SfxObjectShellLock here
         SfxObjectShellLock xWorkDocSh;
         SwView*            pWorkView             = nullptr;
-        SwDoc*             pWorkDoc              = nullptr;
+        rtl::Reference<SwDoc> pWorkDoc;
         SwDBManager*       pWorkDocOrigDBManager = nullptr;
         SwWrtShell*        pWorkShell            = nullptr;
         bool               bWorkDocInitialized   = false;
@@ -1511,6 +1511,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 if( bCreateSingleFile || bIsPDFexport || bIsMultiFile)
                 {
                     pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
+                    pWorkDoc.clear();
                     xWorkDocSh->DoClose();
                     xWorkDocSh = nullptr;
                 }
@@ -1543,7 +1544,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 Printer::FinishPrintJob( pWorkView->GetPrinterController());
             if( !bIsPDFexport )
             {
-                pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
+                if (pWorkDoc)
+                    pWorkDoc->SetDBManager(pWorkDocOrigDBManager);
                 if (xWorkDocSh.Is())
                     xWorkDocSh->DoClose();
             }
