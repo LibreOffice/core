@@ -167,8 +167,8 @@ void SparklineImportExportTest::testSparklinesExportODS()
     loadFromURL(u"xlsx/Sparklines.xlsx");
 
     // Save as ODS and check content.xml with XPath
-    utl::TempFileNamed tempFile = save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    save("calc8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // We have 3 sparkline groups = 3 tables that contain sparklines
     assertXPath(pXmlDoc, "//table:table/calcext:sparkline-groups", 3);
@@ -233,8 +233,8 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     // Load the document containing NO sparklines
     loadFromURL(u"xlsx/empty.xlsx");
 
-    utl::TempFileNamed tempFile = save("Calc Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "xl/worksheets/sheet1.xml");
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/x:worksheet", 1);

@@ -41,10 +41,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
     // Given a document with a group shape and therein a polyline and a connector.
     loadFromURL(u"tdf141786_PolylineConnectorInGroup.odt");
     // When saving that to DOCX:
-    utl::TempFileNamed aTempFile = save("Office Open XML Text");
+    save("Office Open XML Text");
 
     // Then make sure polyline and connector have the correct position.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // For child elements of groups in Writer the position has to be adapted to be relative
     // to group instead of being relative to anchor. That was missing for polyline and
@@ -70,10 +70,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     skipValidation();
 
     // When saving that to DOCX:
-    utl::TempFileNamed aTempFile = save("Office Open XML Text");
+    save("Office Open XML Text");
 
     // Then make sure the rotated child shape has the correct position.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // For a group itself and for shapes outside of groups, the position calculation is done in
     // DocxSdrExport. For child elements of groups it has to be done in
@@ -92,11 +92,11 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     skipValidation();
 
     // When saving that to DOCX:
-    utl::TempFileNamed aTempFile = save("Office Open XML Text");
+    save("Office Open XML Text");
 
     // Then make sure that the group shape, the group shape's child size and the child shape's size
     // match:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:ext", "cx", "5328360");
     // Without the accompanying fix in place, this test would have failed, the <a:chExt> element was
     // not written.
@@ -113,10 +113,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
     skipValidation();
 
     // When saving that to DOCX:
-    utl::TempFileNamed aTempFile = save("Office Open XML Text");
+    save("Office Open XML Text");
 
     // Then the shapes should retain their correct control values.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Without the fix the output OOXML would have no <a:prstGeom> tags in it.
 
@@ -299,9 +299,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
     loadFromURL(u"camera-rotation-revolution-nonwps.pptx");
 
     // When saving that document:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Then make sure the revolution is exported without a problem:
     // First shape textbox:
     assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
@@ -324,9 +324,9 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     loadFromURL(u"refer-to-theme.pptx");
 
     // When saving that document:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Then make sure the shape text color is a scheme color:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -365,7 +365,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToThemeShapeFill)
     loadFromURL(u"refer-to-theme-shape-fill.odp");
 
     // When saving that document:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Then make sure the shape fill color is a scheme color:
     // Without the accompanying fix in place, this test would have failed with:
@@ -373,7 +373,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToThemeShapeFill)
     // - Actual  : 0
     // i.e. the <a:schemeClr> element was not written. Note that this was already working from PPTX
     // files via grab-bags, so this test intentionally uses an ODP file as input.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val", "accent1");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//p:sp[1]/p:spPr/a:solidFill/a:schemeClr/a:lumMod' number of nodes is incorrect
@@ -388,9 +388,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
     loadFromURL(u"endParaRPr-newline-textsize.pptx");
 
     // When saving that document:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Make sure the text size is exported correctly:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 500
@@ -407,9 +407,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
     loadFromURL(u"tdf147978_endsubpath.odp");
 
     // When saving that document:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Then make sure the pathLst has two child elements,
     // Without the accompanying fix in place, only one element a:path was exported.
     assertXPathChildren(pXmlDoc, "//a:pathLst", 2);
@@ -424,9 +424,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
     loadFromURL(u"tdf147978_enhancedPath_commandA.odp");
 
     // When saving that document:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Then make sure the path has a child element arcTo. Prior to the fix that part of the curve was
     // not exported at all. In odp it is a command A. Such does not exist in OOXML and is therefore
     // exported as a:lnTo followed by a:arcTo
@@ -445,10 +445,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
     loadFromURL(u"tdf147978_enhancedPath_commandT.odp");
 
     // Export to pptx had only exported the command M and has used a wrong path size
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 216 216"
     assertXPath(pXmlDoc, "//a:pathLst/a:path", "w", "216");
     assertXPath(pXmlDoc, "//a:pathLst/a:path", "h", "216");
@@ -474,10 +474,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandXY)
     loadFromURL(u"tdf147978_enhancedPath_commandXY.odp");
 
     // Export to pptx had dropped commands X and Y.
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 10 10"
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "10");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "10");
@@ -508,10 +508,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandHIJK)
     loadFromURL(u"tdf147978_enhancedPath_commandHIJK.odp");
 
     // Export to pptx had dropped commands X and Y.
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File has draw:viewBox="0 0 80 80"
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "80");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "80");
@@ -530,10 +530,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
     loadFromURL(u"tdf147978_enhancedPath_subpath.pptx");
 
     // Export to pptx had dropped the subpaths.
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // File should have four subpaths with increasing path size
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "w", "10");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "h", "10");
@@ -550,10 +550,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
     // The document has a custom shape of type "non-primitive" to trigger the custGeom export
     loadFromURL(u"tdf100391_TextAreaRect.odp");
     // When saving to PPTX the textarea rect was set to default instead of using the actual area
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup. Without fix the values were l="l", t="t", r="r", b="b"
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//a:custGeom/a:rect", "l", "textAreaLeft");
     assertXPath(pXmlDoc, "//a:custGeom/a:rect", "t", "textAreaTop");
     assertXPath(pXmlDoc, "//a:custGeom/a:rect", "r", "textAreaRight");
@@ -575,10 +575,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
     skipValidation();
 
     // Export to docx had not written a:fill or a:stroke attributes at all.
-    utl::TempFileNamed aTempFile = save("Office Open XML Text");
+    save("Office Open XML Text");
 
     // Verify the markup:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // File should have six subpaths, one with stroke and five with fill
     assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "stroke", "0");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "darkenLess");
@@ -596,10 +596,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     // instead of the normally used lnTo. If a lnTo is written, MS Office shows nothing of the shape.
     loadFromURL(u"FaultyPathStart.odp");
 
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // First child of a:path should be a moveTo in all four shapes.
     assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
     assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
@@ -614,10 +614,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered. The
     // line at right and bottom edge were positioned inside as if the shape had a square size.
     loadFromURL(u"tdf148784_StretchXY.odp");
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
 
     // x-position of last segment should be same as path width. It was 21600 without fix.
     sal_Int32 nWidth
@@ -650,10 +650,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
     // That results in wrong arcs on the right or bottom side of the shape.
     loadFromURL(u"tdf148784_StretchCommandQ.odp");
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
 
     // x-position of second quadBezTo control should be same as path width. It was 21600 without fix.
     sal_Int32 nWidth
@@ -689,10 +689,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
     // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
     // That results in circles instead of ellipses.
     loadFromURL(u"tdf148784_StretchCommandVW.odp");
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
 
     // wR of first ArcTo in first shape should be same as path width/2. It was 10800 without fix.
     sal_Int32 nHalfWidth
@@ -723,10 +723,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
     // has paddings lIns="720000"=2cm, tIns="360000"=1cm, rIns="0" and bIns="0".
     // After load and save the paddings were rotated and a 90deg text rotation was added.
     loadFromURL(u"tdf149551_vert_and_padding.pptx");
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup. The values must be the same as in the original file.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     for (sal_Int32 i = 1; i <= 2; i++)
     {
         OString sElement = "//p:spTree/p:sp[" + OString::number(i) + "]/p:txBody/a:bodyPr";
@@ -745,10 +745,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
     // attribute but no 'rot' attribute. Without the fix the 'rot' attribute with values from
     // the emulation was written out.
     loadFromURL(u"tdf149538_upright.pptx");
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Verify the markup. The values must be the same as in the original file.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "upright", "1");
     assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp/p:txBody/a:bodyPr", "rot");
 }
@@ -756,8 +756,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
 CPPUNIT_TEST_FIXTURE(Test, testTdf151008VertAnchor)
 {
     loadFromURL(u"tdf151008_eaVertAnchor.pptx");
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // The order of the shapes in the file is by name "Right", "Center", "Left", "RightMiddle",
     // "CenterMiddle" and "LeftMiddle". I access the shapes here by index, because the XPath is
     // easier then.

@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     insertStringToCell(*pModelObj, "D3", u"FISHY");
 
     // Save the document
-    utl::TempFileNamed aTempFile = saveAndClose("calc8");
+    saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -216,8 +216,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     // Insert the references to the external document
     {
         // tdf#115162
-        OUString aFormula = "=SUMIFS('" + aTempFile.GetURL() + "'#$Sheet1.C1:C3,'"
-                            + aTempFile.GetURL() + "'#$Sheet1.B1:B3,1,'" + aTempFile.GetURL()
+        OUString aFormula = "=SUMIFS('" + maTempFile.GetURL() + "'#$Sheet1.C1:C3,'"
+                            + maTempFile.GetURL() + "'#$Sheet1.B1:B3,1,'" + maTempFile.GetURL()
                             + "'#$Sheet1.A1:A3,2015)";
         insertStringToCell(*pModelObj, "A1", aFormula);
 
@@ -229,8 +229,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 
     {
         // tdf#114820
-        OUString aFormula = "=VLOOKUP('" + aTempFile.GetURL() + "'#$Sheet1.A1;'"
-                            + aTempFile.GetURL() + "'#$Sheet1.A1:B3,2,0)";
+        OUString aFormula = "=VLOOKUP('" + maTempFile.GetURL() + "'#$Sheet1.A1;'"
+                            + maTempFile.GetURL() + "'#$Sheet1.A1:B3,2,0)";
         insertStringToCell(*pModelObj, "A1", aFormula);
 
         // Without the fix in place, this test would have failed with
@@ -241,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 
     {
         // tdf#116149
-        OUString aFormula = "=VAR('" + aTempFile.GetURL() + "'#$Sheet1.C1;'" + aTempFile.GetURL()
+        OUString aFormula = "=VAR('" + maTempFile.GetURL() + "'#$Sheet1.C1;'" + maTempFile.GetURL()
                             + "'#$Sheet1.C2)";
         insertStringToCell(*pModelObj, "A1", aFormula);
 
@@ -254,13 +254,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     {
         // tdf#100847
         // Use an empty cell
-        OUString aFormula = "=+'" + aTempFile.GetURL() + "'#$Sheet1.A1000";
+        OUString aFormula = "=+'" + maTempFile.GetURL() + "'#$Sheet1.A1000";
         insertStringToCell(*pModelObj, "A1", aFormula);
 
-        aFormula = "=+'" + aTempFile.GetURL() + "'#$Sheet1.A1000*1";
+        aFormula = "=+'" + maTempFile.GetURL() + "'#$Sheet1.A1000*1";
         insertStringToCell(*pModelObj, "B1", aFormula);
 
-        aFormula = "=+N('" + aTempFile.GetURL() + "'#$Sheet1.A1000)*1";
+        aFormula = "=+N('" + maTempFile.GetURL() + "'#$Sheet1.A1000)*1";
         insertStringToCell(*pModelObj, "C1", aFormula);
 
         CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(0, 0, 0)));
@@ -274,10 +274,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 
     {
         //tdf#36387
-        OUString aAndFormula = "=AND('" + aTempFile.GetURL() + "'#$Sheet1.A1:C1)";
+        OUString aAndFormula = "=AND('" + maTempFile.GetURL() + "'#$Sheet1.A1:C1)";
         insertStringToCell(*pModelObj, "A1", aAndFormula);
 
-        OUString aOrFormula = "=OR('" + aTempFile.GetURL() + "'#$Sheet1.A1:C1)";
+        OUString aOrFormula = "=OR('" + maTempFile.GetURL() + "'#$Sheet1.A1:C1)";
         insertStringToCell(*pModelObj, "B1", aOrFormula);
 
         // Without the fix in place, this test would have failed with
@@ -289,7 +289,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 
     {
         //tdf#113898
-        OUString aAndFormula = "=SUMPRODUCT(NOT(ISERROR(FIND(\"FISH\";'" + aTempFile.GetURL()
+        OUString aAndFormula = "=SUMPRODUCT(NOT(ISERROR(FIND(\"FISH\";'" + maTempFile.GetURL()
                                + "'#$Sheet1.D1:D3))))";
         insertStringToCell(*pModelObj, "A1", aAndFormula);
 
@@ -310,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     insertStringToCell(*pModelObj, "B1", u"2");
 
     // Save the document
-    utl::TempFileNamed aTempFile = saveAndClose("calc8");
+    saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -320,7 +320,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     CPPUNIT_ASSERT(pDoc);
 
     // Insert the reference to the external document
-    OUString aFormula = "='" + aTempFile.GetURL() + "'#$Sheet1.A1";
+    OUString aFormula = "='" + maTempFile.GetURL() + "'#$Sheet1.A1";
     insertStringToCell(*pModelObj, "A1", aFormula);
 
     CPPUNIT_ASSERT_EQUAL(aFormula, pDoc->GetFormula(0, 0, 0));
@@ -352,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     insertStringToCell(*pModelObj, "A1", u"50");
 
     // Save the document
-    utl::TempFileNamed aTempFile = saveAndClose("calc8");
+    saveAndClose("calc8");
 
     // Open a new document
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -365,7 +365,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     pDoc->SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
     // Insert the reference to the external document
-    OUString aFormula = "=['" + aTempFile.GetURL() + "']Sheet1!A1";
+    OUString aFormula = "=['" + maTempFile.GetURL() + "']Sheet1!A1";
     insertStringToCell(*pModelObj, "A1", aFormula);
 
     // Without the fix in place, this test would have failed with

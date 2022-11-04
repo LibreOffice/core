@@ -632,10 +632,10 @@ getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& 
 
 xmlDocUniquePtr ChartTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
 {
-    utl::TempFileNamed aTempFile = save(rFilterFormat);
+    save(rFilterFormat);
 
     // Read the XML stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));

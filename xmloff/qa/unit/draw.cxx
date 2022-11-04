@@ -89,8 +89,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     loadFromURL(u"tdf141301_Extrusion_Skew.odg");
 
     // Prepare use of XPath
-    utl::TempFileNamed aTempFile = save("draw8");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    save("draw8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
     // default in ODF, but only default inside LO.
@@ -115,10 +115,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // Export to ODP:
-    utl::TempFileNamed aTempFile = save("impress8");
+    save("impress8");
 
     // Check if the 12 colors are written in the XML:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 12
     // - Actual  : 0
@@ -154,9 +154,9 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1356), rCrop.Right);
 
     // Execute ODP export:
-    utl::TempFileNamed aTempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Check that the preview was exported:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -195,10 +195,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
 {
     // Given a document that refers to a theme color:
     loadFromURL(u"refer-to-theme.odp");
-    utl::TempFileNamed aTempFile = save("impress8");
+    save("impress8");
 
     // Make sure the export result has the theme reference:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//style:style[@style:name='T1']/style:text-properties' no attribute 'theme-color' exist
     // i.e. only the direct color was written, but not the theme reference.
@@ -305,16 +305,16 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     lcl_assertMetalProperties("from doc", xShape);
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // assert XML.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", "true");
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']");
 
     // reload
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
@@ -328,10 +328,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     // added to ODF.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // assert XML.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", "true");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-metal-type]", 0);
 
@@ -366,16 +366,16 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // assert XML.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']");
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']");
 
     // reload and verify, that the loext value is used
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
     // Save to ODF 1.3 strict and make sure it does not produce a validation error.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     SetODFDefaultVersion(nCurrentODFVersion);
 }

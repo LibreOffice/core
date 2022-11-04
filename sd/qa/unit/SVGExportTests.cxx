@@ -104,12 +104,12 @@ public:
     void testSVGExportTextDecorations()
     {
         loadFromURL(u"svg-export-text-decorations.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(aTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
+        svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG ), 1);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class", "SlideGroup");
@@ -127,9 +127,9 @@ public:
     void testSVGExportJavascriptURL()
     {
         loadFromURL(u"textbox-link-javascript.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         // There should be only one child (no link to javascript url)
@@ -142,9 +142,9 @@ public:
     void testSVGExportSlideCustomBackground()
     {
         loadFromURL(u"slide-custom-background.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
@@ -153,9 +153,9 @@ public:
     void testSVGExportTextFieldsInMasterPage()
     {
         loadFromURL(u"text-fields.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class", "Master_Slide");
@@ -181,9 +181,9 @@ public:
     void testSVGExportEmbeddedVideo()
     {
         loadFromURL(u"slide-video-thumbnail.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG ), 1);
@@ -212,9 +212,9 @@ public:
     void testSVGExportSlideBitmapBackground()
     {
         loadFromURL(u"slide-bitmap-background.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class", "BackgroundBitmaps");
@@ -241,9 +241,9 @@ public:
     void testSVGExportSlideTileBitmapBackground()
     {
         loadFromURL(u"slide-tile-background.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         // check the bitmap
@@ -306,9 +306,9 @@ public:
         Application::SetSettings(aSettings);
 
         loadFromURL(u"text-fields.odp");
-        utl::TempFileNamed aTempFile = save("impress_svg_Export");
+        save("impress_svg_Export");
 
-        xmlDocUniquePtr svgDoc = parseXml(aTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class", "Master_Slide");

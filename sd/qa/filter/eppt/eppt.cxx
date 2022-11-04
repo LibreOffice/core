@@ -79,10 +79,10 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // When exporting to PPTX:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Then verify that this color is not lost:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/theme/theme1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
     assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val", "000002");
     // Without the fix in place, this test would have failed with:
     // - Expected: 1
@@ -97,10 +97,10 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     loadFromURL(u"video-loop.pptx");
 
     // When exporting that to PPTX:
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Then make sure that the "infinite" repeat count is written:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     // Without the fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0

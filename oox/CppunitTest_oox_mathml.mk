@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_mathml, \
     subsequenttest \
     test \
     unotest \
+    utl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,oox_mathml))

@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
     subsequenttest \
     test \
     unotest \
+    utl \
     vcl \
 ))
 

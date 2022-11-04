@@ -49,15 +49,13 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
                          GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
 
     // Export it.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
                              | XOutFlags::UseNativeIfPossible;
-    OUString aTempURL = aTempFile.GetURL();
+    OUString aTempURL = maTempFile.GetURL();
     XOutBitmap::WriteGraphic(aGraphic, aTempURL, "pdf", eFlags);
 
     // Assert that the output looks like a PDF.
-    SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream->TellEnd() > 5);
     sal_uInt8 sFirstBytes[5];
     pStream->ReadBytes(sFirstBytes, 5);
@@ -77,14 +75,12 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
                          GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
 
     // Export it.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
                              | XOutFlags::UseNativeIfPossible;
-    OUString aTempURL = aTempFile.GetURL();
+    OUString aTempURL = maTempFile.GetURL();
     XOutBitmap::WriteGraphic(aGraphic, aTempURL, "png", eFlags);
 
-    SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream->TellEnd() > 4);
     sal_uInt8 sFirstBytes[4];
     pStream->ReadBytes(sFirstBytes, 4);

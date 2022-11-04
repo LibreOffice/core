@@ -22,7 +22,7 @@ class OOO_DLLPUBLIC_TEST UnoApiXmlTest : public UnoApiTest, public XmlTestTools
 public:
     UnoApiXmlTest(OUString path);
 
-    xmlDocUniquePtr parseExport(OUString const& rTempFile, OUString const& rStreamName);
+    xmlDocUniquePtr parseExport(OUString const& rStreamName);
 };
 
 #endif // INCLUDED_TEST_UNOAPIXML_TEST_HXX

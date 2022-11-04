@@ -72,18 +72,15 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
     uno::Sequence<beans::PropertyValue> mimeArgs({
         beans::PropertyValue("MediaType", -1, uno::Any(OUString("application/vnd.oasis.opendocument.text")), beans::PropertyState_DIRECT_VALUE)
         });
-    utl::TempFileNamed aTempFile;
-    xProps->storeToMedium(aTempFile.GetURL(), mimeArgs);
+    xProps->storeToMedium(maTempFile.GetURL(), mimeArgs);
 
     // check that custom metadata is preserved
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "meta.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("meta.xml");
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/bork", "bork");
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar", 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo", 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo[@baz:bar='foo']");
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/foo:bar/foo:baz", "bar");
-
-    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
@@ -97,21 +94,19 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 #endif
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "NoThumbnail", uno::Any(true) } }));
-    osl::File::remove(aTempFile.GetURL());
-    xStorable->storeToURL(aTempFile.GetURL(), aProperties);
+    osl::File::remove(maTempFile.GetURL());
+    xStorable->storeToURL(maTempFile.GetURL(), aProperties);
     uno::Reference<packages::zip::XZipFileAccess2> xZipFile
-        = packages::zip::ZipFileAccess::createWithURL(m_xContext, aTempFile.GetURL());
+        = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
     CPPUNIT_ASSERT(!xZipFile->hasByName("Thumbnails/thumbnail.png"));
 
 #ifndef _WIN32
     // Check permissions of the URL after store.
     osl::DirectoryItem aItem;
     CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None,
-                         osl::DirectoryItem::get(aTempFile.GetURL(), aItem));
+                         osl::DirectoryItem::get(maTempFile.GetURL(), aItem));
 
     osl::FileStatus aStatus(osl_FileStatus_Mask_Attributes);
     CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None, aItem.getFileStatus(aStatus));
@@ -122,7 +117,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_OthRead);
 
     // Now "save as" again to trigger the "overwrite" case.
-    xStorable->storeToURL(aTempFile.GetURL(), {});
+    xStorable->storeToURL(maTempFile.GetURL(), {});
     CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None, aItem.getFileStatus(aStatus));
     // The following check used to fail in the past, result had temp file
     // permissions.
@@ -174,25 +169,23 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
 {
     // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     mxComponent
-        = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
 
     // overwrite the file using the default case of the Overwrite option (true)
-    CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(aTempFile.GetURL(), {}));
+    CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(maTempFile.GetURL(), {}));
 
     // explicitly overwrite the file using the Overwrite option
     CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(
-        aTempFile.GetURL(),
+        maTempFile.GetURL(),
         comphelper::InitPropertySequence({ { "Overwrite", uno::Any(true) } })));
 
     try
     {
         // overwrite an existing file with the Overwrite flag set to false
-        xStorable->storeToURL(aTempFile.GetURL(), comphelper::InitPropertySequence(
+        xStorable->storeToURL(maTempFile.GetURL(), comphelper::InitPropertySequence(
                                                       { { "Overwrite", uno::Any(false) } }));
         CPPUNIT_ASSERT_MESSAGE("We expect an exception on overwriting an existing file", false);
     }

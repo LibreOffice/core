@@ -48,11 +48,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG"))
     };
 
@@ -63,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
 
@@ -112,11 +109,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG"))
     };
 
@@ -127,7 +121,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
 
@@ -185,11 +179,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue("Translucent",
                                                                                    sal_Int32(0)) };
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG")),
         comphelper::makePropertyValue("FilterData", aFilterData)
     };
@@ -201,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     xGraphicExporter->setSourceDocument(xShape);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
     AlphaMask aAlpha = aBMPEx.GetAlpha();
@@ -224,11 +215,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
         comphelper::makePropertyValue("PixelHeight", sal_Int32(100))
     };
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG")),
         comphelper::makePropertyValue("FilterData", aFilterData)
     };
@@ -239,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
 
@@ -278,11 +266,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
         comphelper::makePropertyValue("Translucent", sal_Int32(1)),
     };
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG")),
         comphelper::makePropertyValue("FilterData", aFilterData)
     };
@@ -293,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
 
@@ -329,11 +314,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
         comphelper::makePropertyValue("PixelHeight", sal_Int32(100)),
     };
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG")),
         comphelper::makePropertyValue("FilterData", aFilterData)
     };
@@ -344,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
 
@@ -383,11 +365,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
         comphelper::makePropertyValue("PixelHeight", sal_Int32(180))
     };
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
         comphelper::makePropertyValue("FilterName", OUString("PNG")),
         comphelper::makePropertyValue("FilterData", aFilterData)
     };
@@ -398,7 +377,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
     xGraphicExporter->setSourceDocument(xPage);
     xGraphicExporter->filter(aDescriptor);
 
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.read();
 
@@ -444,11 +423,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
             comphelper::makePropertyValue("PixelHeight", sal_Int32(240))
         };
 
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-
         uno::Sequence<beans::PropertyValue> aDescriptor{
-            comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+            comphelper::makePropertyValue("URL", maTempFile.GetURL()),
             comphelper::makePropertyValue("FilterName", OUString("PNG")),
             comphelper::makePropertyValue("FilterData", aFilterData)
         };
@@ -460,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
         xGraphicExporter->setSourceDocument(xPage);
         xGraphicExporter->filter(aDescriptor);
 
-        SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+        SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
         vcl::PngImageReader aPNGReader(aFileStream);
         BitmapEx aBMPEx = aPNGReader.read();
         Bitmap aBMP = aBMPEx.GetBitmap();

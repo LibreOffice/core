@@ -151,10 +151,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
 
     // Test the export as well:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure we save the style's numbering level:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '/office:document-styles/office:styles/style:style[@style:name='mystyle']' no attribute 'list-level' exist
     // i.e. a custom NumberingLevel was lost on save.
@@ -190,10 +190,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     loadFromURL(u"list-id.fodt");
 
     // When storing that document as ODF:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure that unreferenced xml:id="..." attributes are not written:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '//text:list' unexpected 'id' attribute
     // i.e. xml:id="..." was written unconditionally, even when no other list needed it.
@@ -217,10 +217,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '//text:line-break' number of nodes is incorrect
     // i.e. the clearing break was lost on export.
@@ -285,9 +285,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     // Body frame width is 16cm.
     xStyle->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(20000)));
 
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 3.1492in (8cm)
     // - Actual  : 0.0161in (0.04 cm)
@@ -315,10 +315,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure that we still export a non-zero size:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 0.7874in
     // - Actual  : 0in
@@ -344,10 +344,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
     // - XPath '//loext:content-control' number of nodes is incorrect
     // i.e. the content control was lost on export.
@@ -406,10 +406,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//loext:content-control", "checkbox", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "checked", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "checked-state", u"☒");
@@ -492,10 +492,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -576,10 +576,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'picture' exist
     assertXPath(pXmlDoc, "//loext:content-control", "picture", "true");
@@ -634,10 +634,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'date' exist
     assertXPath(pXmlDoc, "//loext:content-control", "date", "true");
@@ -700,10 +700,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'plain-text' exist
     // i.e. the plain text content control was turned into a rich text one on export.
@@ -755,10 +755,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//loext:content-control' no attribute 'combobox' exist
     // i.e. the combo box content control was turned into a drop-down one on export.
@@ -784,10 +784,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: prop
     // - XPath '//loext:content-control' no attribute 'alias' exist
@@ -866,11 +866,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer8")) },
     });
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     // Without the accompanying fix in place, this test would have failed, we had duplicated XML
     // attributes.
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProps);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

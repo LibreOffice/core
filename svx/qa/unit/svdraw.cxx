@@ -494,10 +494,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
     loadFromURL(u"page-view-draw-layer-clip.docx");
 
     // When saving that document to PDF:
-    utl::TempFileNamed aTempFile = save("writer_pdf_Export");
+    save("writer_pdf_Export");
 
     // Then make sure that line shape gets clipped:
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();

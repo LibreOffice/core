@@ -228,10 +228,10 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     loadFromURL(u"macro-button-form-control.xlsm");
 
     // When exporting to XLSM:
-    utl::TempFileNamed tempFile = save("Calc MS Excel 2007 VBA XML");
+    save("Calc MS Excel 2007 VBA XML");
 
     // Then make sure that the macro is associated with the control:
-    xmlDocUniquePtr pSheetDoc = parseExport(tempFile.GetURL(), "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheetDoc = parseExport("xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheetDoc);
     // Without the fix in place, this test would have failed with:
     // - XPath '//x:controlPr' no attribute 'macro' exist
@@ -240,7 +240,7 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
 
     // Then also make sure that there is no defined name for the macro, which is only needed for
     // XLS:
-    xmlDocUniquePtr pWorkbookDoc = parseExport(tempFile.GetURL(), "xl/workbook.xml");
+    xmlDocUniquePtr pWorkbookDoc = parseExport("xl/workbook.xml");
     CPPUNIT_ASSERT(pWorkbookDoc);
     assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
 }

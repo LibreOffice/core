@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_styles, \
     subsequenttest \
     test \
     unotest \
+    utl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,svx_styles))

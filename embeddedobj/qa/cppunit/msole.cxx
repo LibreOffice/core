@@ -94,9 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
 
     // When saving that document on a thread:
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    OdtExportThread aThread(mxComponent, aTempFile.GetURL());
+    OdtExportThread aThread(mxComponent, maTempFile.GetURL());
     aThread.create();
     {
         SolarMutexReleaser r;
@@ -108,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
     }
 
     // Then make sure its visible area's width is correct.
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // 16 pixels, assuming 96 DPI.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0.1665in

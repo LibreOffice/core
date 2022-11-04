@@ -26,9 +26,9 @@ UnoApiXmlTest::UnoApiXmlTest(OUString path)
 {
 }
 
-xmlDocUniquePtr UnoApiXmlTest::parseExport(OUString const& url, OUString const& rStreamName)
+xmlDocUniquePtr UnoApiXmlTest::parseExport(OUString const& rStreamName)
 {
-    std::unique_ptr<SvStream> const pStream(parseExportStream(url, rStreamName));
+    std::unique_ptr<SvStream> const pStream(parseExportStream(maTempFile.GetURL(), rStreamName));
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
     return pXmlDoc;
 }

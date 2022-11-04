@@ -336,9 +336,9 @@ void SdExportTest::testMediaEmbedding()
 void SdExportTest::testFillBitmapUnused()
 {
     loadFromURL(u"odp/fillbitmap2.odp");
-    utl::TempFileNamed aTempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // shapes
     assertXPath(
         pXmlDoc,
@@ -359,7 +359,7 @@ void SdExportTest::testFillBitmapUnused()
         "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']",
         "fill-color", "#808080");
 
-    xmlDocUniquePtr pStyles = parseExport(aTempFile.GetURL(), "styles.xml");
+    xmlDocUniquePtr pStyles = parseExport("styles.xml");
     // master slide presentation style
     assertXPath(pStyles,
                 "/office:document-styles/office:styles/style:style[@style:family='presentation' "
@@ -451,7 +451,7 @@ void SdExportTest::testTdf97630()
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
     }
 
-    utl::TempFileNamed aTempFile = saveAndReload("impress8");
+    saveAndReload("impress8");
 
     {
         uno::Reference<drawing::XDrawPage> xDP(getPage(0));
@@ -480,7 +480,7 @@ void SdExportTest::testTdf97630()
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
     }
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // text shapes
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='presentation']/"
@@ -586,11 +586,11 @@ void SdExportTest::testOOoXMLAnimations()
     // FIXME: Error: unexpected attribute "presentation:preset-property"
     skipValidation();
 
-    utl::TempFileNamed aTempFile = save("impress8");
+    save("impress8");
 
     // the problem was that legacy OOoXML animations were lost if store
     // immediately follows load because they were "converted" async by a timer
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//anim:par[@presentation:node-type='timing-root']", 26);
     // currently getting 52 of these without the fix (depends on timing)
     assertXPath(pXmlDoc, "//anim:par", 223);
@@ -656,9 +656,9 @@ void SdExportTest::testUnknownAttributes()
     // FIXME: Error: unexpected attribute "foo:non-existent-att"
     skipValidation();
 
-    utl::TempFileNamed aTempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/"
                          "style:style[@style:name='gr1']/"
                          "style:graphic-properties[@foo:non-existent-att='bar']");
@@ -791,8 +791,8 @@ void SdExportTest::testLinkedGraphicRT()
 void SdExportTest::testTdf79082()
 {
     loadFromURL(u"ppt/tdf79082.ppt");
-    utl::TempFileNamed tempFile = save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    save("impress8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // P1 should have 6 tab stops defined
     assertXPathChildren(
@@ -1010,9 +1010,9 @@ void SdExportTest::testDefaultSubscripts()
 void SdExportTest::testTdf98477()
 {
     loadFromURL(u"pptx/tdf98477grow.pptx");
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//anim:animateTransform", "by", "0.5,0.5");
 }
 
@@ -1035,9 +1035,9 @@ void SdExportTest::testTdf50499()
 {
     loadFromURL(u"pptx/tdf50499.pptx");
 
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//anim:animate[1]", "from", "(-width/2)");
     assertXPath(pXmlDoc, "//anim:animate[1]", "to", "(x)");
     assertXPath(pXmlDoc, "//anim:animate[3]", "by", "(height/3+width*0.1)");
@@ -1271,9 +1271,9 @@ void SdExportTest::testTdf113822()
     // Was unable to export iterate container (tdf#99213).
     saveAndReload("Impress Office Open XML");
     // Was unable to import iterate container (tdf#113822).
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // IterateContainer was created as ParallelTimeContainer before, so
     // the iterate type is not set too.
@@ -1289,9 +1289,9 @@ void SdExportTest::testTdf113818()
     loadFromURL(u"pptx/tdf113818-swivel.pptx");
     saveAndReload("MS PowerPoint 97");
     saveAndReload("Impress Office Open XML");
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//anim:animate[1]", "formula", "width*sin(2.5*pi*$)");
     assertXPath(pXmlDoc, "//anim:animate[1]", "values", "0;1");
 }
@@ -1300,9 +1300,9 @@ void SdExportTest::testTdf119629()
 {
     loadFromURL(u"ppt/tdf119629.ppt");
     saveAndReload("MS PowerPoint 97");
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // MSO's effect node type Click parallel node, with group node, after group node
     // were missing.
@@ -1347,8 +1347,8 @@ void SdExportTest::testTdf123557()
 {
     loadFromURL(u"pptx/trigger.pptx");
     saveAndReload("Impress Office Open XML");
-    utl::TempFileNamed tempFile = save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    save("impress8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // Contains 2 interactive sequences and 3 triggered effects.
     assertXPath(pXmlDoc, "//draw:page", 1);
@@ -1388,7 +1388,7 @@ void SdExportTest::testTdf126761()
 void SdExportTest::testGlow()
 {
     loadFromURL(u"odg/glow.odg");
-    utl::TempFileNamed tempFile = saveAndReload("draw8");
+    saveAndReload("draw8");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Check glow properties
@@ -1403,7 +1403,7 @@ void SdExportTest::testGlow()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nGlowEffectTransparency); // 60%
 
     // Test ODF element
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // check that we actually test graphic style
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
@@ -1426,7 +1426,7 @@ void SdExportTest::testGlow()
 void SdExportTest::testSoftEdges()
 {
     loadFromURL(u"odg/softedges.odg");
-    utl::TempFileNamed tempFile = saveAndReload("draw8");
+    saveAndReload("draw8");
     auto xShapeProps(getShapeFromPage(0, 0));
 
     // Check property
@@ -1435,7 +1435,7 @@ void SdExportTest::testSoftEdges()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRad); // 18 pt
 
     // Test ODF element
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     // check that we actually test graphic style
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
@@ -1450,14 +1450,14 @@ void SdExportTest::testSoftEdges()
 void SdExportTest::testShadowBlur()
 {
     loadFromURL(u"odg/shadow-blur.odg");
-    utl::TempFileNamed tempFile = saveAndReload("draw8");
+    saveAndReload("draw8");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     sal_Int32 nRad = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowBlur") >>= nRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRad); // 11 pt = 388 Hmm
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]",
                 "family", "graphic");
@@ -1484,8 +1484,8 @@ void SdExportTest::testTdf91060()
 void SdExportTest::testTdf128550()
 {
     loadFromURL(u"pptx/tdf128550.pptx");
-    utl::TempFileNamed tempFile = save("impress8");
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    save("impress8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='background']", 1);
     assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='text']", 4);
 }
@@ -1582,7 +1582,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
             sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
 
-    utl::TempFileNamed tempFile = saveAndReload("impress8");
+    saveAndReload("impress8");
 
     xMPS.set(mxComponent, uno::UNO_QUERY);
     xMPs.set(xMPS->getMasterPages());
@@ -1657,7 +1657,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
             sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     assertXPath(pXmlDoc,
                 "/office:document-styles/office:automatic-styles/"
                 "style:style[@style:family='drawing-page' and @style:name = "
@@ -1714,7 +1714,7 @@ void SdExportTest::testColumnsODG()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(700), pTextObj->GetTextColumnsSpacing());
     }
 
-    utl::TempFileNamed tempFile = saveAndReload("draw8");
+    saveAndReload("draw8");
 
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
@@ -1738,7 +1738,7 @@ void SdExportTest::testColumnsODG()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(700), pTextObj->GetTextColumnsSpacing());
     }
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc,
                 "/office:document-content/office:automatic-styles/style:style/"
                 "style:graphic-properties/style:columns",

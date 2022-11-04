@@ -26,6 +26,7 @@ UnoApiTest::UnoApiTest(OUString path)
     : mbSkipValidation(false)
     , m_aBaseString(std::move(path))
 {
+    maTempFile.EnableKillingFile();
 }
 
 void UnoApiTest::setUp()
@@ -81,63 +82,55 @@ uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
     return aRet;
 }
 
-utl::TempFileNamed UnoApiTest::save(const OUString& rFilter)
+void UnoApiTest::save(const OUString& rFilter)
 {
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= rFilter;
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     if (!mbSkipValidation)
     {
         if (rFilter == "Office Open XML Text")
-            validate(aTempFile.GetFileName(), test::OOXML);
+            validate(maTempFile.GetFileName(), test::OOXML);
         else if (rFilter == "Calc Office Open XML")
-            validate(aTempFile.GetFileName(), test::OOXML);
+            validate(maTempFile.GetFileName(), test::OOXML);
         else if (rFilter == "Impress Office Open XML")
-            validate(aTempFile.GetFileName(), test::OOXML);
+            validate(maTempFile.GetFileName(), test::OOXML);
         else if (rFilter == "writer8")
-            validate(aTempFile.GetFileName(), test::ODF);
+            validate(maTempFile.GetFileName(), test::ODF);
         else if (rFilter == "calc8")
-            validate(aTempFile.GetFileName(), test::ODF);
+            validate(maTempFile.GetFileName(), test::ODF);
         else if (rFilter == "impress8")
-            validate(aTempFile.GetFileName(), test::ODF);
+            validate(maTempFile.GetFileName(), test::ODF);
         else if (rFilter == "draw8")
-            validate(aTempFile.GetFileName(), test::ODF);
+            validate(maTempFile.GetFileName(), test::ODF);
         else if (rFilter == "OpenDocument Text Flat XML")
-            validate(aTempFile.GetFileName(), test::ODF);
+            validate(maTempFile.GetFileName(), test::ODF);
         else if (rFilter == "MS Word 97")
-            validate(aTempFile.GetFileName(), test::MSBINARY);
+            validate(maTempFile.GetFileName(), test::MSBINARY);
         else if (rFilter == "MS Excel 97")
-            validate(aTempFile.GetFileName(), test::MSBINARY);
+            validate(maTempFile.GetFileName(), test::MSBINARY);
         else if (rFilter == "MS PowerPoint 97")
-            validate(aTempFile.GetFileName(), test::MSBINARY);
+            validate(maTempFile.GetFileName(), test::MSBINARY);
     }
-
-    return aTempFile;
 }
 
-utl::TempFileNamed UnoApiTest::saveAndClose(const OUString& rFilter)
+void UnoApiTest::saveAndClose(const OUString& rFilter)
 {
-    utl::TempFileNamed aTempFile = save(rFilter);
+    save(rFilter);
 
     mxComponent->dispose();
     mxComponent.clear();
-
-    return aTempFile;
 }
 
-utl::TempFileNamed UnoApiTest::saveAndReload(const OUString& rFilter)
+void UnoApiTest::saveAndReload(const OUString& rFilter)
 {
-    utl::TempFileNamed aTempFile = saveAndClose(rFilter);
+    saveAndClose(rFilter);
 
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
-
-    return aTempFile;
+    mxComponent = loadFromDesktop(maTempFile.GetURL());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

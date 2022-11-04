@@ -213,19 +213,16 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     }
 
     { // save as PDF and check annotations
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
         uno::Sequence<beans::PropertyValue> aFilterData(
             comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
         aMediaDescriptor["FilterData"] <<= aFilterData;
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         mxComponent->dispose();
 
-        SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+        SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
         SvMemoryStream aMemory;
         aMemory.WriteStream(aFile);
 
@@ -249,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
                              pPDFAnnotation2->getSubType()); // Pop-up annotation
 
         // Load document again
-        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        mxComponent = loadFromDesktop(maTempFile.GetURL());
         auto pNewImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         sd::ViewShell* pNewViewShell = pNewImpressDocument->GetDocShell()->GetViewShell();
         CPPUNIT_ASSERT(pNewViewShell);

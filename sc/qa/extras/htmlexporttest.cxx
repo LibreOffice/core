@@ -34,17 +34,17 @@ public:
     void testHtmlSkipImage()
     {
         loadFromURL(u"BaseForHTMLExport.ods");
-        utl::TempFileNamed aTempFile = save("HTML (StarCalc)");
-        htmlDocUniquePtr pDoc = parseHtml(aTempFile);
+        save("HTML (StarCalc)");
+        htmlDocUniquePtr pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
 
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
         setFilterOptions("SkipImages");
-        utl::TempFileNamed aTempFile2 = save("HTML (StarCalc)");
+        save("HTML (StarCalc)");
 
-        pDoc = parseHtml(aTempFile2);
+        pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 0);

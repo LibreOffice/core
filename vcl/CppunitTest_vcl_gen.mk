@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_gen, \
 	test \
 	tl \
 	unotest \
+	utl \
 	vcl \
 ))
 

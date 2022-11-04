@@ -36,9 +36,9 @@ public:
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
-    utl::TempFileNamed save(const OUString& rFilter);
-    utl::TempFileNamed saveAndClose(const OUString& rFilter);
-    utl::TempFileNamed saveAndReload(const OUString& rFilter);
+    void save(const OUString& rFilter);
+    void saveAndClose(const OUString& rFilter);
+    void saveAndReload(const OUString& rFilter);
 
     void skipValidation() { mbSkipValidation = true; }
     void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
@@ -46,6 +46,8 @@ public:
 protected:
     // reference to document component that we are testing
     css::uno::Reference<css::lang::XComponent> mxComponent;
+
+    utl::TempFileNamed maTempFile;
 
 private:
     bool mbSkipValidation;

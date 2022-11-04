@@ -43,16 +43,15 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
 
     // When exporting that chart to PDF:
-    utl::TempFileNamed aTempFile;
     GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "application/pdf",
-                                            aTempFile.GetURL());
+                                            maTempFile.GetURL());
 
     // Then make sure we get a valid, non-empty PDF:
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
     SvMemoryStream aMemory;
-    aMemory.WriteStream(*aTempFile.GetStream(StreamMode::READ));
+    aMemory.WriteStream(*maTempFile.GetStream(StreamMode::READ));
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPdfium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     // Without the accompanying fix in place, this test would have failed, because the output was

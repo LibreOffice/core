@@ -230,9 +230,9 @@ public:
 void SdOOXMLExportTest3::testTdf129430()
 {
     loadFromURL(u"odp/tdf129430.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:pPr/a:lnSpc/a:spcPct",
                 "val", "100000");
 }
@@ -240,12 +240,12 @@ void SdOOXMLExportTest3::testTdf129430()
 void SdOOXMLExportTest3::testTdf114848()
 {
     loadFromURL(u"pptx/tdf114848.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocTheme1 = parseExport(tempFile.GetURL(), "ppt/theme/theme1.xml");
+    xmlDocUniquePtr pXmlDocTheme1 = parseExport("ppt/theme/theme1.xml");
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "1f497d");
-    xmlDocUniquePtr pXmlDocTheme2 = parseExport(tempFile.GetURL(), "ppt/theme/theme2.xml");
+    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "1f497d");
 }
@@ -253,9 +253,9 @@ void SdOOXMLExportTest3::testTdf114848()
 void SdOOXMLExportTest3::testTdf147586()
 {
     loadFromURL(u"pptx/tdf147586.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     // Without the fix in place, this test would have failed with
     // - Expected: 227fc7
     // - Actual  : 4f4f4f
@@ -270,9 +270,9 @@ void SdOOXMLExportTest3::testTdf147586()
 void SdOOXMLExportTest3::testTdf68759()
 {
     loadFromURL(u"odp/tdf68759.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:pic[1]/p:spPr/a:xfrm/a:off", "x",
                 "1687320");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:pic[1]/p:spPr/a:xfrm/a:off", "y",
@@ -293,18 +293,18 @@ void SdOOXMLExportTest3::testTdf68759()
 void SdOOXMLExportTest3::testTdf127901()
 {
     loadFromURL(u"odp/tdf127901.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:lum", "bright",
                 "70000");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:lum", "contrast",
                 "-70000");
 
-    xmlDocUniquePtr pXmlDocContent2 = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
     assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:grayscl", 1);
 
-    xmlDocUniquePtr pXmlDocContent3 = parseExport(tempFile.GetURL(), "ppt/slides/slide3.xml");
+    xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide3.xml");
     assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:biLevel",
                 "thresh", "50000");
 }
@@ -312,9 +312,9 @@ void SdOOXMLExportTest3::testTdf127901()
 void SdOOXMLExportTest3::testTdf48735()
 {
     loadFromURL(u"odp/tdf48735.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "b", "23627");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "l", "23627");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "r", "23627");
@@ -324,9 +324,9 @@ void SdOOXMLExportTest3::testTdf48735()
 void SdOOXMLExportTest3::testTdf90626()
 {
     loadFromURL(u"odp/tdf90626.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[1]/a:pPr/a:buSzPct",
                 "val", "100000");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[2]/a:pPr/a:buSzPct",
@@ -340,7 +340,7 @@ void SdOOXMLExportTest3::testTdf90626()
 void SdOOXMLExportTest3::testTdf107608()
 {
     loadFromURL(u"pptx/tdf107608.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
@@ -363,7 +363,7 @@ void SdOOXMLExportTest3::testTdf111786()
     // Export line transparency with the color
 
     loadFromURL(u"pptx/tdf111786.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
@@ -380,8 +380,8 @@ void SdOOXMLExportTest3::testTdf111786()
 void SdOOXMLExportTest3::testFontScale()
 {
     loadFromURL(u"pptx/font-scale.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
 
     // Rounding errors possible, approximate value (+/- 1%)
     OUString sScale = getXPath(
@@ -392,8 +392,8 @@ void SdOOXMLExportTest3::testFontScale()
 void SdOOXMLExportTest3::testShapeAutofitPPTX()
 {
     loadFromURL(u"pptx/testShapeAutofit.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDocContent);
 
     // TextAutoGrowHeight --> "Resize shape to fit text" --> true
@@ -405,8 +405,8 @@ void SdOOXMLExportTest3::testShapeAutofitPPTX()
 void SdOOXMLExportTest3::testLegacyShapeAutofitPPTX()
 {
     loadFromURL(u"odp/testLegacyShapeAutofit.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     CPPUNIT_ASSERT(pXmlDocContent);
 
     // Text in a legacy rectangle
@@ -420,7 +420,7 @@ void SdOOXMLExportTest3::testLegacyShapeAutofitPPTX()
 void SdOOXMLExportTest3::testTdf115394()
 {
     loadFromURL(u"pptx/tdf115394.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -456,7 +456,7 @@ void SdOOXMLExportTest3::testTdf115394()
 void SdOOXMLExportTest3::testTdf115394Zero()
 {
     loadFromURL(u"pptx/tdf115394-zero.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
     double fTransitionDuration;
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -470,11 +470,11 @@ void SdOOXMLExportTest3::testTdf115394Zero()
 void SdOOXMLExportTest3::testTdf115005()
 {
     loadFromURL(u"odp/tdf115005.odp");
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
     // additional checks of the output file
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, tempFile.GetURL());
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
     const uno::Sequence<OUString> names = xNameAccess->getElementNames();
@@ -503,11 +503,11 @@ int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages
     }
 
     // save the file with already set options
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
     // additional checks of the output file
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, tempFile.GetURL());
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
     const uno::Sequence<OUString> names = xNameAccess->getElementNames();
@@ -541,16 +541,16 @@ void SdOOXMLExportTest3::testTdf115005_FallBack_Images_Off()
 void SdOOXMLExportTest3::testTdf118806()
 {
     loadFromURL(u"odp/tdf118806.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:animMotion", "origin", "layout");
 }
 
 void SdOOXMLExportTest3::testTdf130058()
 {
     loadFromURL(u"pptx/tdf130058.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     bool bHasShadow = false;
@@ -580,7 +580,7 @@ void SdOOXMLExportTest3::testTdf111789()
     // Shadow properties were not exported for text shapes.
 
     loadFromURL(u"pptx/tdf111789.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // First text shape has some shadow
     {
@@ -619,8 +619,8 @@ void SdOOXMLExportTest3::testTdf111789()
 void SdOOXMLExportTest3::testTdf145162()
 {
     loadFromURL(u"pptx/tdf145162.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
 
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[2]/a:pPr/a:buNone");
     // Before the fix, that tag was missing so PP put bullet to each para.
@@ -631,11 +631,11 @@ void SdOOXMLExportTest3::testZeroIndentExport()
     // Load the bugdoc and save to pptx then.
 
     loadFromURL(u"odp/testZeroIndent.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
     // There are 3 slides, get them
-    xmlDocUniquePtr pSlide1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
-    xmlDocUniquePtr pSlide2 = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
-    xmlDocUniquePtr pSlide3 = parseExport(tempFile.GetURL(), "ppt/slides/slide3.xml");
+    xmlDocUniquePtr pSlide1 = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pSlide2 = parseExport("ppt/slides/slide2.xml");
+    xmlDocUniquePtr pSlide3 = parseExport("ppt/slides/slide3.xml");
 
     CPPUNIT_ASSERT(pSlide1);
     CPPUNIT_ASSERT(pSlide2);
@@ -662,10 +662,10 @@ void SdOOXMLExportTest3::testZeroIndentExport()
 void SdOOXMLExportTest3::testTdf100348_convert_Fontwork2TextWarp()
 {
     loadFromURL(u"odp/tdf100348_Fontwork2TextWarp.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Resulting pptx has to contain the TextWarp shape
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     const OString sPathStart("/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp");
     assertXPath(pXmlDocContent, sPathStart + "[@prst='textWave1']");
     const OString sPathAdj(sPathStart + "/a:avLst/a:gd");
@@ -714,11 +714,11 @@ void SdOOXMLExportTest3::testTdf100348_convert_Fontwork2TextWarp()
 void SdOOXMLExportTest3::testTdf1225573_FontWorkScaleX()
 {
     loadFromURL(u"pptx/tdf125573_FontWorkScaleX.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Error was, that attribute 'fromWordArt' was ignored
     // ensure, resulting pptx has fromWordArt="1" on textArchDown shape
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr[@fromWordArt='1']");
 
@@ -745,10 +745,10 @@ void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
     // Adjustment values need to exist and their values need to correspond to the
     // original angles. Shape 'arc' needs to be unfilled.
     loadFromURL(u"odp/tdf99497_CircleKind.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // slide 1 45° -> adj1 = 20493903, 270° -> adj2 = 5400000, <a:noFill/> exists
-    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     const OString sPathStart1("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
     assertXPath(pXmlDocContent1, sPathStart1 + "[@prst='arc']");
     const OString sPathAdj1(sPathStart1 + "/a:avLst/a:gd");
@@ -757,7 +757,7 @@ void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:noFill");
 
     // slide 2 270° -> adj1 = 5400000, 180° -> adj2 = 10800000
-    xmlDocUniquePtr pXmlDocContent2 = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
     const OString sPathStart2("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
     assertXPath(pXmlDocContent2, sPathStart2 + "[@prst='chord']");
     const OString sPathAdj2(sPathStart2 + "/a:avLst/a:gd");
@@ -765,7 +765,7 @@ void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
     assertXPath(pXmlDocContent2, sPathAdj2 + "[@name='adj2' and  @fmla='val 10800000']");
 
     // slide 3 120° -> adj1 = 12600000, 30° -> adj2 = 20946396
-    xmlDocUniquePtr pXmlDocContent3 = parseExport(tempFile.GetURL(), "ppt/slides/slide3.xml");
+    xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide3.xml");
     const OString sPathStart3("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
     assertXPath(pXmlDocContent3, sPathStart3 + "[@prst='pie']");
     const OString sPathAdj3(sPathStart3 + "/a:avLst/a:gd");
@@ -776,9 +776,9 @@ void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
 void SdOOXMLExportTest3::testTdf104792()
 {
     loadFromURL(u"pptx/tdf104792-smart-art-animation.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/"
                 "p:par[1]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/"
@@ -789,9 +789,9 @@ void SdOOXMLExportTest3::testTdf104792()
 void SdOOXMLExportTest3::testTdf90627()
 {
     loadFromURL(u"odp/tdf90627.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     // Don't export empty endCondLst without cond.
     assertXPath(pXmlDocContent,
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/"
@@ -803,9 +803,9 @@ void SdOOXMLExportTest3::testTdf90627()
 void SdOOXMLExportTest3::testTdf104786()
 {
     loadFromURL(u"pptx/tdf104786.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide2.xml");
     // Don't export empty 'to'
     assertXPath(pXmlDocContent,
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/"
@@ -817,9 +817,9 @@ void SdOOXMLExportTest3::testTdf104786()
 void SdOOXMLExportTest3::testTdf118783()
 {
     loadFromURL(u"odp/tdf118783.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     OUString sAttributeName
         = getXPathContent(pXmlDocContent, "//p:animRot/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("r"), sAttributeName);
@@ -828,9 +828,9 @@ void SdOOXMLExportTest3::testTdf118783()
 void SdOOXMLExportTest3::testTdf104789()
 {
     loadFromURL(u"pptx/tdf104789.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     OUString sAttributeName = getXPathContent(
         pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/"
                         "p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/"
@@ -845,7 +845,7 @@ void SdOOXMLExportTest3::testOpenDocumentAsReadOnly()
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::DrawDocShell* pDocShell = pXImpressDocument->GetDocShell();
     CPPUNIT_ASSERT(pDocShell->IsSecurityOptOpenReadOnly());
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
     pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     pDocShell = pXImpressDocument->GetDocShell();
@@ -855,9 +855,9 @@ void SdOOXMLExportTest3::testOpenDocumentAsReadOnly()
 void SdOOXMLExportTest3::testTdf118835()
 {
     loadFromURL(u"odp/tdf118835.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "(//p:animClr)[1]", "clrSpc", "rgb");
     assertXPathContent(pXmlDocContent, "(//p:animClr)[1]//p:attrName", "style.color");
     assertXPath(pXmlDocContent, "(//p:animClr)[1]//p:to/a:srgbClr", "val", "ed1c24");
@@ -880,9 +880,9 @@ void SdOOXMLExportTest3::testTdf118835()
 void SdOOXMLExportTest3::testTdf118768()
 {
     loadFromURL(u"odp/tdf118768-brake.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:anim[1]", "from", "(-#ppt_w/2)");
     assertXPath(pXmlDocContent, "//p:anim[1]", "to", "(#ppt_x)");
     assertXPath(pXmlDocContent, "//p:anim[2]", "from", "0");
@@ -897,9 +897,9 @@ void SdOOXMLExportTest3::testTdf118768()
 void SdOOXMLExportTest3::testTdf118836()
 {
     loadFromURL(u"odp/tdf118836.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:animScale/p:by", "x", "250000");
     assertXPath(pXmlDocContent, "//p:animScale/p:by", "y", "250000");
 }
@@ -986,9 +986,9 @@ void SdOOXMLExportTest3::testTdf116350TextEffects()
     CPPUNIT_ASSERT_EQUAL(true, bScaleX);
 
     // Export
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textArchUp");
     assertXPath(pXmlDocContent, "//p:sp[14]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textCircle");
     assertXPath(pXmlDocContent, "//p:sp[14]/p:spPr/a:solidFill/a:srgbClr", 0);
@@ -997,15 +997,15 @@ void SdOOXMLExportTest3::testTdf116350TextEffects()
 void SdOOXMLExportTest3::testTdf128096()
 {
     loadFromURL(u"odp/tdf128096.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1,
                 "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val",
                 "ffff00");
 
     // Check that underlined content is also highlighted
-    xmlDocUniquePtr pXmlDocContent2 = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
     assertXPath(pXmlDocContent2,
                 "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val",
                 "ffff00");
@@ -1013,19 +1013,18 @@ void SdOOXMLExportTest3::testTdf128096()
 void SdOOXMLExportTest3::testTdf120573()
 {
     loadFromURL(u"pptx/tdf120573.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/a:audioFile", 1);
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/a:videoFile", 0);
 
-    xmlDocUniquePtr pXmlDocRels
-        = parseExport(tempFile.GetURL(), "ppt/slides/_rels/slide1.xml.rels");
+    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/_rels/slide1.xml.rels");
     assertXPath(pXmlDocRels,
                 "(/rels:Relationships/rels:Relationship[@Target='../media/media1.wav'])[1]", "Type",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio");
 
-    xmlDocUniquePtr pXmlContentType = parseExport(tempFile.GetURL(), "[Content_Types].xml");
+    xmlDocUniquePtr pXmlContentType = parseExport("[Content_Types].xml");
     assertXPath(pXmlContentType,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/media1.wav']",
                 "ContentType", "audio/x-wav");
@@ -1034,8 +1033,8 @@ void SdOOXMLExportTest3::testTdf120573()
 void SdOOXMLExportTest3::testTdf119118()
 {
     loadFromURL(u"pptx/tdf119118.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:iterate", "type", "lt");
     assertXPath(pXmlDocContent, "//p:tmAbs", "val", "200");
 }
@@ -1043,8 +1042,8 @@ void SdOOXMLExportTest3::testTdf119118()
 void SdOOXMLExportTest3::testTdf99213()
 {
     loadFromURL(u"odp/tdf99213-target-missing.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     // Number of nodes with p:attrNameLst was 3, including one that missed tgtEl
     assertXPath(pXmlDocContent, "//p:attrNameLst", 2);
     // Timenode that miss its target element should be filtered.
@@ -1057,10 +1056,10 @@ void SdOOXMLExportTest3::testPotxExport()
     mxComponent = loadFromDesktop("private:factory/simpress");
 
     // Export as a POTM template
-    utl::TempFileNamed tempFile = save("Impress Office Open XML Template");
+    save("Impress Office Open XML Template");
 
     // Load and check content type
-    xmlDocUniquePtr pContentTypes = parseExport(tempFile.GetURL(), "[Content_Types].xml");
+    xmlDocUniquePtr pContentTypes = parseExport("[Content_Types].xml");
     CPPUNIT_ASSERT(pContentTypes);
     assertXPath(pContentTypes,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
@@ -1071,17 +1070,17 @@ void SdOOXMLExportTest3::testPotxExport()
 void SdOOXMLExportTest3::testTdf44223()
 {
     loadFromURL(u"pptx/tdf44223.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     std::unique_ptr<SvStream> const pStream1(
-        parseExportStream(tempFile.GetURL(), "ppt/media/audio1.wav"));
+        parseExportStream(maTempFile.GetURL(), "ppt/media/audio1.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(11140), pStream1->remainingSize());
 
     std::unique_ptr<SvStream> const pStream2(
-        parseExportStream(tempFile.GetURL(), "ppt/media/audio2.wav"));
+        parseExportStream(maTempFile.GetURL(), "ppt/media/audio2.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(28074), pStream2->remainingSize());
 
-    xmlDocUniquePtr pXmlContentType = parseExport(tempFile.GetURL(), "[Content_Types].xml");
+    xmlDocUniquePtr pXmlContentType = parseExport("[Content_Types].xml");
     assertXPath(pXmlContentType,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/audio1.wav']",
                 "ContentType", "audio/x-wav");
@@ -1090,17 +1089,17 @@ void SdOOXMLExportTest3::testTdf44223()
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/audio2.wav']",
                 "ContentType", "audio/x-wav");
 
-    xmlDocUniquePtr pDoc1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pDoc1 = parseExport("ppt/slides/slide1.xml");
 
     // Start condition: 0s after timenode id 5 begins.
     assertXPath(pDoc1, "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "evt", "begin");
     assertXPath(pDoc1, "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "delay", "0");
     assertXPath(pDoc1, "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond/p:tn", "val", "5");
 
-    xmlDocUniquePtr pDoc2 = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
+    xmlDocUniquePtr pDoc2 = parseExport("ppt/slides/slide2.xml");
     assertXPath(pDoc2, "//p:transition/p:sndAc/p:stSnd/p:snd[@r:embed]", 2);
 
-    xmlDocUniquePtr pRels1 = parseExport(tempFile.GetURL(), "ppt/slides/_rels/slide1.xml.rels");
+    xmlDocUniquePtr pRels1 = parseExport("ppt/slides/_rels/slide1.xml.rels");
     assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Type",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio");
     assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Target", "../media/audio1.wav");
@@ -1109,9 +1108,9 @@ void SdOOXMLExportTest3::testTdf44223()
 void SdOOXMLExportTest3::testTdf135843()
 {
     loadFromURL(u"pptx/tdf135843_export.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     const OString sPathStart("/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnL/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnR/a:solidFill");
@@ -1132,9 +1131,9 @@ void SdOOXMLExportTest3::testTdf135843()
 void SdOOXMLExportTest3::testSmartArtPreserve()
 {
     loadFromURL(u"pptx/smartart-preserve.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr");
     assertXPath(pXmlDoc,
                 "//p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/dgm:relIds");
@@ -1144,8 +1143,7 @@ void SdOOXMLExportTest3::testSmartArtPreserve()
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/"
                          "p:extLst/p:ext/p14:modId");
 
-    xmlDocUniquePtr pXmlDocRels
-        = parseExport(tempFile.GetURL(), "ppt/slides/_rels/slide1.xml.rels");
+    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/_rels/slide1.xml.rels");
     assertXPath(
         pXmlDocRels,
         "(/rels:Relationships/rels:Relationship[@Target='../diagrams/layout1.xml'])[1]", "Type",
@@ -1162,7 +1160,7 @@ void SdOOXMLExportTest3::testSmartArtPreserve()
         "(/rels:Relationships/rels:Relationship[@Target='../diagrams/quickStyle1.xml'])[1]", "Type",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle");
 
-    xmlDocUniquePtr pXmlContentType = parseExport(tempFile.GetURL(), "[Content_Types].xml");
+    xmlDocUniquePtr pXmlContentType = parseExport("[Content_Types].xml");
     assertXPath(pXmlContentType,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/layout1.xml']",
                 "ContentType",
@@ -1186,7 +1184,7 @@ void SdOOXMLExportTest3::testTdf125346()
     // There are two themes in the test document, make sure we use the right theme
 
     loadFromURL(u"pptx/tdf125346.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
@@ -1206,7 +1204,7 @@ void SdOOXMLExportTest3::testTdf125346_2()
     // Test more slides with different themes
 
     loadFromURL(u"pptx/tdf125346_2.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     {
         uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1259,7 +1257,7 @@ void SdOOXMLExportTest3::testTdf125360()
 
     xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -1279,7 +1277,7 @@ void SdOOXMLExportTest3::testTdf125360_1()
 
     xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -1303,7 +1301,7 @@ void SdOOXMLExportTest3::testTdf125360_2()
 
     xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -1315,7 +1313,7 @@ void SdOOXMLExportTest3::testTdf125360_2()
 void SdOOXMLExportTest3::testTdf125551()
 {
     loadFromURL(u"pptx/tdf125551.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getByIndex(0), uno::UNO_QUERY);
@@ -1329,7 +1327,7 @@ void SdOOXMLExportTest3::testTdf125551()
 void SdOOXMLExportTest3::testTdf136830()
 {
     loadFromURL(u"pptx/tdf136830.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Without the fix in place, the X position of the shapes would have been 0
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1350,7 +1348,7 @@ void SdOOXMLExportTest3::testTdf136830()
 void SdOOXMLExportTest3::testTdf126234()
 {
     loadFromURL(u"pptx/tdf126234.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // check relative size of the bullet, 400% is a legitimate value for MS Office document
     // Without a fix, it will fail to set the size correctly
@@ -1366,7 +1364,7 @@ void SdOOXMLExportTest3::testTdf126234()
 void SdOOXMLExportTest3::testTdf126741()
 {
     loadFromURL(u"pptx/tdf126741.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // dash dot dot line style import fix
     // The original fixed values are replaced with the percent values, because
@@ -1441,18 +1439,18 @@ void SdOOXMLExportTest3::testTdf98603()
 void SdOOXMLExportTest3::testTdf128213()
 {
     loadFromURL(u"pptx/tdf128213.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm", "rot");
 }
 
 void SdOOXMLExportTest3::testTdf79082()
 {
     loadFromURL(u"pptx/tdf79082.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]", "pos",
                 "360000");
@@ -1594,8 +1592,8 @@ void SdOOXMLExportTest3::testTdf132282()
 void SdOOXMLExportTest3::testTdf132201EffectOrder()
 {
     loadFromURL(u"pptx/effectOrder.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
     assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst", 2);
     // The relative order of effects is important: glow must be before shadow
     CPPUNIT_ASSERT_EQUAL(0, getXPathPosition(pXmlDocContent,
@@ -1632,9 +1630,9 @@ void SdOOXMLExportTest3::testShapeShadowBlurEffect()
 void SdOOXMLExportTest3::testTdf119223()
 {
     loadFromURL(u"odp/tdf119223.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeCustomShape']");
 
     assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomePicture']");
@@ -1653,9 +1651,9 @@ void SdOOXMLExportTest3::testTdf119223()
 void SdOOXMLExportTest3::testTdf128213ShapeRot()
 {
     loadFromURL(u"pptx/tdf128213-shaperot.pptx");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
 
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d");
     assertXPath(pXmlDocRels,
@@ -1668,9 +1666,9 @@ void SdOOXMLExportTest3::testTdf125560_textDeflate()
     loadFromURL(u"pptx/ShapePlusImage.pptx");
 
     // This problem did not affect the pptx export, only the ODP so assert that
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport("content.xml");
     assertXPath(pXmlDocRels,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry",
@@ -1682,9 +1680,9 @@ void SdOOXMLExportTest3::testTdf125560_textInflateTop()
     loadFromURL(u"pptx/ShapeTextInflateTop.pptx");
 
     // This problem did not affect the pptx export, only the ODP so assert that
-    utl::TempFileNamed tempFile = save("impress8");
+    save("impress8");
 
-    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport("content.xml");
     assertXPath(pXmlDocRels,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry",
@@ -1695,10 +1693,10 @@ void SdOOXMLExportTest3::testTdf142235_TestPlaceholderTextAlignment()
 {
     loadFromURL(u"odp/placeholder-box-textalignment.odp");
 
-    utl::TempFileNamed tmpfile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXml1 = parseExport(tmpfile.GetURL(), "ppt/slides/slide2.xml");
-    xmlDocUniquePtr pXml2 = parseExport(tmpfile.GetURL(), "ppt/slides/slide3.xml");
+    xmlDocUniquePtr pXml1 = parseExport("ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXml2 = parseExport("ppt/slides/slide3.xml");
 
     // Without the fix in place many of these asserts failed, because alignment was bad.
 
@@ -1770,9 +1768,9 @@ void SdOOXMLExportTest3::testTdf143315()
 {
     loadFromURL(u"ppt/tdf143315-WordartWithoutBullet.ppt");
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXml = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
 
     // Without the fix in place, this would have failed with
     // - Expected:
@@ -1801,10 +1799,10 @@ void SdOOXMLExportTest3::testTdf147121()
     // Save the font size
     const auto nFontSizeBefore = xRun->getPropertyValue("CharHeight").get<float>() * 100;
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Parse the export
-    xmlDocUniquePtr pXml = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
     const auto nFontSizeAfter
         = getXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:br[1]/a:rPr", "sz").toFloat();
 
@@ -1847,11 +1845,11 @@ void SdOOXMLExportTest3::testEnhancedPathViewBox()
 void SdOOXMLExportTest3::testTdf74670()
 {
     loadFromURL(u"odp/tdf74670.odp");
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
-                                                      tempFile.GetURL());
+                                                      maTempFile.GetURL());
     const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     int nImageFiles = 0;
     for (const auto& rElementName : aNames)
@@ -1953,8 +1951,8 @@ void SdOOXMLExportTest3::testTdf149551_tbrl90()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90, eWritingMode);
 
     // Test, that it is exported to vert="vert"
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//a:bodyPr", "vert", "vert");
 
     // Test, that the shape has writing mode TB_RL90 after read from pptx
@@ -1964,8 +1962,8 @@ void SdOOXMLExportTest3::testTdf149551_tbrl90()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90, eWritingMode2);
 
     // Test, that it is written to odp with loext:writing-mode="tb-rl90"
-    utl::TempFileNamed aTempFile2 = save("impress8");
-    pXmlDoc = parseExport(aTempFile2.GetURL(), "content.xml");
+    save("impress8");
+    pXmlDoc = parseExport("content.xml");
     assertXPath(
         pXmlDoc,
         "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='tb-rl90']");
@@ -1985,8 +1983,8 @@ void SdOOXMLExportTest3::testTdf149551_btlr()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, eWritingMode);
 
     // Test, that it is exported to vert="vert270"
-    utl::TempFileNamed aTempFile = save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "ppt/slides/slide1.xml");
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "//a:bodyPr", "vert", "vert270");
 
     // Test, that the shape has writing mode BT_LR after read from pptx
@@ -1996,8 +1994,8 @@ void SdOOXMLExportTest3::testTdf149551_btlr()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, eWritingMode2);
 
     // Test, that it is written to odp with loext:writing-mode="bt-lr"
-    utl::TempFileNamed aTempFile2 = save("impress8");
-    pXmlDoc = parseExport(aTempFile2.GetURL(), "content.xml");
+    save("impress8");
+    pXmlDoc = parseExport("content.xml");
     assertXPath(
         pXmlDoc,
         "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='bt-lr']");
@@ -2014,7 +2012,7 @@ void SdOOXMLExportTest3::testTdf94122_autoColor()
 
     loadFromURL(u"odp/tdf94122_autocolor.odp");
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Without the accompanying fix in place, these tests would have failed with:
     // - Expected: 1
@@ -2022,17 +2020,17 @@ void SdOOXMLExportTest3::testTdf94122_autoColor()
     // - In ..., XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr' number of nodes is incorrect
     // i.e. automatic color wasn't resolved & exported
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1,
                 "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
                 "000000");
 
-    xmlDocUniquePtr pXmlDocContent2 = parseExport(tempFile.GetURL(), "ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
     assertXPath(pXmlDocContent2,
                 "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr", "val",
                 "ffffff");
 
-    xmlDocUniquePtr pXmlDocContent3 = parseExport(tempFile.GetURL(), "ppt/slides/slide3.xml");
+    xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide3.xml");
     assertXPath(pXmlDocContent3,
                 "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
                 "val", "ffffff");
@@ -2062,7 +2060,7 @@ void SdOOXMLExportTest3::testAutofittedTextboxIndent()
 {
     loadFromURL(u"odp/autofitted-textbox-indent.odp");
 
-    utl::TempFileNamed tempFile = save("Impress Office Open XML");
+    save("Impress Office Open XML");
 
     // Without the accompanying fix in place, these tests would have failed with:
     // - Expected: 691200
@@ -2070,7 +2068,7 @@ void SdOOXMLExportTest3::testAutofittedTextboxIndent()
     // i.e. paragraph indent wasn't scaled proportionally to autofitted textbox
     // font scale on export
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport(tempFile.GetURL(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
                 "712800");
 }

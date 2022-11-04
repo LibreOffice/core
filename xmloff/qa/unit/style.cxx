@@ -85,10 +85,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
     mxComponent = loadFromDesktop("private:factory/swriter");
 
     // When saving that document to ODT:
-    utl::TempFileNamed aTempFile = save("writer8");
+    save("writer8");
 
     // Then make sure <style:font-face> elements are sorted (by style:name="..."):
-    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     xmlXPathObjectPtr pXPath
         = getXPathNode(pXmlDoc, "/office:document-content/office:font-face-decls/style:font-face");
     xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
@@ -181,10 +181,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile = save("writer8");
+        save("writer8");
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
-        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
         assertXPath(pXmlDoc,
                     "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
                     "style:graphic-properties[@loext:writing-mode]");
@@ -201,11 +201,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile = save("writer8");
+        save("writer8");
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
         // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-styles/office:styles/"
                                "style:style[@style:name='FrameBTLR']/style:graphic-properties",
@@ -234,11 +234,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile = save("writer8");
+        save("writer8");
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
         // written.
-        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
@@ -257,11 +257,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile = save("writer8");
+        save("writer8");
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-content/office:automatic-styles/"
                                "style:style[@style:name='gr1']/style:graphic-properties",
@@ -290,11 +290,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile = save("writer8");
+        save("writer8");
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
         // written.
-        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
@@ -313,11 +313,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
-        utl::TempFileNamed aTempFile = save("writer8");
+        save("writer8");
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        xmlDocUniquePtr pXmlDoc = parseExport(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-content/office:automatic-styles/"
                                "style:style[@style:name='gr1']/style:graphic-properties",

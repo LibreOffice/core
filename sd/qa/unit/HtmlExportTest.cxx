@@ -23,8 +23,8 @@ public:
     void testHTMLExport()
     {
         loadFromURL(u"HtmlExportTestDocument.odp");
-        utl::TempFileNamed aTempFile = save("impress_html_Export");
-        htmlDocUniquePtr htmlDoc = parseHtml(aTempFile);
+        save("impress_html_Export");
+        htmlDocUniquePtr htmlDoc = parseHtml(maTempFile);
 
         assertXPath(htmlDoc, "/html", 1);
         assertXPath(htmlDoc, "/html/body", 1);
