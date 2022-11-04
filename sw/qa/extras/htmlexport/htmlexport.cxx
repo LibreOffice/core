@@ -313,12 +313,8 @@ void SwHtmlDomExportTest::ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryS
 
 void SwHtmlDomExportTest::ExportToReqif()
 {
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save("HTML (StarWriter)");
 }
 
 void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
@@ -1057,11 +1053,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
     xParagraph->setPropertyValue("ParaStyleName", uno::Any(OUString("Quotations")));
 
     // Export it.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("HTML (StarWriter)");
-    aMediaDescriptor["FilterOptions"] <<= OUString("xhtmlns=reqif-xhtml");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save("HTML (StarWriter)");
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
@@ -1216,16 +1209,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     mxComponent->dispose();
     mxComponent.clear();
     ImportFromReqif(maTempFile.GetURL());
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("writer8")),
-    };
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProperties);
+    save("writer8");
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
-                                                      aTempFile.GetURL());
+                                                      maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("Object 2"),
                                                   uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
@@ -1246,12 +1233,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
     ImportFromReqif(aURL);
 
     // Save it as ODT to inspect the result of the OLE1 -> OLE2 conversion.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable.set(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("writer8")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    save("writer8");
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
@@ -1669,12 +1651,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGDirectly)
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure the PNG is embedded directly, without an RTF wrapper:
     SvMemoryStream aStream;
@@ -1699,12 +1676,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGDirectly)
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure the JPG is embedded directly, without an RTF wrapper:
     SvMemoryStream aStream;
@@ -1735,12 +1707,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeDirectly)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure the PNG is embedded directly, without an RTF wrapper:
     SvMemoryStream aStream;
@@ -1768,12 +1735,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGShapeDirectly)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure the JPG is embedded directly, without an RTF wrapper:
     SvMemoryStream aStream;
@@ -1836,12 +1798,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure the shape is embedded as a PNG:
     SvMemoryStream aStream;
@@ -1876,15 +1833,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to plain HTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
-    mxComponent->dispose();
+    reload("HTML (StarWriter)", "");
 
-    // Then make sure importing it back results in a clean doc model:
-    mxComponent = loadFromDesktop(maTempFile.GetURL());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected:
     // - Actual  :  />
@@ -1904,14 +1854,9 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testJson)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to HTML, and specifying options as JSON:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    OUString aJson("{\"XhtmlNs\":{\"type\":\"string\", \"value\":\"reqif-xhtml\"},"
-                   "\"ShapeDPI\":{\"type\":\"long\",\"value\":\"192\"}}");
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", aJson),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    setFilterOptions("{\"XhtmlNs\":{\"type\":\"string\", \"value\":\"reqif-xhtml\"},"
+                     "\"ShapeDPI\":{\"type\":\"long\",\"value\":\"192\"}}");
+    save("HTML (StarWriter)");
 
     // Then make sure those options are not ignored:
     // Without the accompanying fix in place, this test would have failed, as GetPngPath() expects

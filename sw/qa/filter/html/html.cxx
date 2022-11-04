@@ -19,8 +19,6 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/filter/html/data/";
-
 /**
  * Covers sw/source/filter/html/ fixes.
  *
@@ -32,19 +30,19 @@ constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/filter/html/data/";
  */
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase("/sw/qa/filter/html/data/", "HTML (StarWriter)")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptyParagraph)
 {
     // Given a document with 2 paragraphs, the second is empty:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty-paragraph.xhtml";
-    uno::Sequence<beans::PropertyValue> aLoadArgs = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-
-    // When loading that file:
-    mxComponent = loadFromDesktop(aURL, OUString(), aLoadArgs);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "empty-paragraph.xhtml");
 
     // Then make sure that the resulting document has a 2nd empty paragraph:
     getParagraph(1, "a");
@@ -57,14 +55,9 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyParagraph)
 CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
 {
     // Given a document with an OLE object, width set to 100%, height is not set:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "relative-keep-aspect.xhtml";
-    uno::Sequence<beans::PropertyValue> aLoadArgs = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-
-    // When loading that file:
-    mxComponent = loadFromDesktop(aURL, OUString(), aLoadArgs);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "relative-keep-aspect.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
     auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -83,15 +76,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
 CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
 {
     // Given a document with an image, width set to 100%, height is not set:
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "relative-keep-aspect-image.xhtml";
-    uno::Sequence<beans::PropertyValue> aLoadArgs = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-
-    // When loading that file:
-    mxComponent = loadFromDesktop(aURL, OUString(), aLoadArgs);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "relative-keep-aspect-image.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
     auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -126,12 +113,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
     xBodyText->insertTextContent(xCursor, xTextContent, false);
 
     // When exporting to reqif:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save("HTML (StarWriter)");
 
     // Then make sure we only export PNG:
     SvMemoryStream aStream;

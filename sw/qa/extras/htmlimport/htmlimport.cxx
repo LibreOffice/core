@@ -430,9 +430,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 /// HTML import to the sw doc model tests.
 class SwHtmlOptionsImportTest : public SwModelTestBase
 {
+    public:
+        SwHtmlOptionsImportTest() : SwModelTestBase("/sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
 };
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/htmlimport/data/";
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
 {
@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
         comphelper::makePropertyValue("AllowedRTFOLEMimeTypes", aTypes),
     };
     OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "allowed-rtf-ole-mime-types.xhtml";
+        = m_directories.getURLFromSrc(mpTestDocumentPath) + "allowed-rtf-ole-mime-types.xhtml";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
@@ -462,12 +462,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testHiddenTextframe)
 {
     // Load HTML content into Writer, similar to HTML paste.
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-    };
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "hidden-textframe.html";
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    load(mpTestDocumentPath, "hidden-textframe.html");
 
     // Check the content of the draw page.
     uno::Reference<drawing::XDrawPageSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -480,18 +475,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testHiddenTextframe)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleImg)
+CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImg)
 {
     // Given an XHTML with an <object> (containing GIF) and an inner <object> (containing PNG, to be
     // ignored):
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole-img.xhtml";
-
-    // When loading the document:
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "ole-img.xhtml");
 
     // Then make sure the result is a single Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -504,18 +494,13 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleImg)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleImgSvg)
+CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImgSvg)
 {
     // Given an XHTML with an <object> (containing SVG) and an inner <object> (containing PNG, to be
     // ignored):
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole-img-svg.xhtml";
-
-    // When loading the document:
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "ole-img-svg.xhtml");
 
     // Then make sure the result is a single Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -536,18 +521,13 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
                          getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleData)
+CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
 {
     // Given an XHTML with an <object> (containing non-image, non-OLE2 data) and an inner <object>
     // (containing PNG):
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole-data.xhtml";
-
-    // When loading the document:
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "ole-data.xhtml");
 
     // Then make sure the result is a single clickable Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -563,17 +543,12 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleData)
     CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").endsWith("/data.ole"));
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleData2)
+CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData2)
 {
     // Given an XHTML with 2 objects: the first has a link, the second does not have:
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole-data2.xhtml";
-
-    // When loading the document:
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(mpTestDocumentPath, "ole-data2.xhtml");
 
     // Then make sure that the second image doesn't have a link set:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
