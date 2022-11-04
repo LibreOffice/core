@@ -597,12 +597,20 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
     }
     if (!aRectangles.empty())
     {
+        bool bEmpty = true;
         for (auto const& rectangle : aRectangles)
         {
+            if (rectangle.GetWidth() <= 0 || rectangle.GetHeight() <= 0)
+            {
+                SAL_WARN("vcl.gdi", "bad clip rect of: " << rectangle);
+                continue;
+            }
             cairo_rectangle(cr, rectangle.Left(), rectangle.Top(), rectangle.GetWidth(),
                             rectangle.GetHeight());
+            bEmpty = false;
         }
-        cairo_clip(cr);
+        if (!bEmpty)
+            cairo_clip(cr);
     }
 }
 
