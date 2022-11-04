@@ -3568,8 +3568,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     pThis->DrawingAreaCrossing((pEvent->type == GDK_ENTER_NOTIFY) ? SalEvent::MouseMove : SalEvent::MouseLeave,
-                               pEvent->x_root - pThis->maGeometry.x(),
-                               pEvent->y_root - pThis->maGeometry.y(),
+                               pEvent->x,
+                               pEvent->y,
                                pEvent->time,
                                pEvent->state);
     return true;
