@@ -36,11 +36,14 @@
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/doc/data/";
-
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
 {
+public:
+    SwCoreDocTest()
+        : SwModelTestBase("/sw/qa/core/doc/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
@@ -69,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
 {
     // Check the writing direction of the only TextFrame in the document.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-textrotateangle.odt");
+    SwDoc* pDoc = createSwDoc("textbox-textrotateangle.odt");
     SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFrameFormats.size());
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFrameFormats[0]->Which());
@@ -87,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "num-down-indent.docx");
+    SwDoc* pDoc = createSwDoc("num-down-indent.docx");
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
@@ -106,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "locale-independent-template.odt");
+    SwDoc* pDoc = createSwDoc("locale-independent-template.odt");
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SfxItemSet aSet(pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE>);
@@ -126,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxZOrder)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-zorder.docx");
+    SwDoc* pDoc = createSwDoc("textbox-zorder.docx");
     SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rFormats.size());
     const SwFrameFormat* pEllipse = rFormats[2];
@@ -143,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxZOrder)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
 {
     // Given a document with an as-char textbox (as-char draw format + at-char fly format):
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-makeflyframe.docx");
+    SwDoc* pDoc = createSwDoc("textbox-makeflyframe.docx");
 
     // When cutting the textbox and pasting it to a new document:
     SwView* pView = pDoc->GetDocShell()->GetView();
@@ -262,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
 {
     // Given a document with a bookmark in a header that is linked later:
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "copy-bookmarks.docx");
+    SwDoc* pDoc = createSwDoc("copy-bookmarks.docx");
 
     // When checking the # of non-copy bookmarks in the resulting doc model:
     sal_Int32 nActual = 0;
@@ -417,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteListeners)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteRedline)
 {
     // Given a document with redlines, a mark (annotation mark) inside a redline:
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "bookmark-delete-redline.doc");
+    SwDoc* pDoc = createSwDoc("bookmark-delete-redline.doc");
 
     // When hiding deletions / showing only inserts, make sure we don't crash:
     // Without the accompanying fix in place, this test would have crashed, equal_range() was used
@@ -432,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testHeaderFooterDelete)
     // Then make sure that we don't crash:
     // Without the accompanying fix in place, this test would have crashed, an invalidated iterator
     // was used in sw::mark::MarkManager::deleteMarks().
-    createSwDoc(DATA_DIRECTORY, "header-footer-delete.docx");
+    createSwDoc("header-footer-delete.docx");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

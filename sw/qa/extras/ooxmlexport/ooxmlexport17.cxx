@@ -38,12 +38,10 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
-
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledNumbering.docx")
@@ -213,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 
 CPPUNIT_TEST_FIXTURE(Test, TestTdf146802)
 {
-    load(DATA_DIRECTORY, "tdf146802.docx");
+    load("tdf146802.docx");
 
     // First check if the load failed, as before the fix.
     CPPUNIT_ASSERT(mxComponent);
@@ -989,7 +987,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
-    load(DATA_DIRECTORY, "tdf147978_enhancedPath_commandABVW.odt");
+    load("tdf147978_enhancedPath_commandABVW.odt");
     CPPUNIT_ASSERT(mxComponent);
     save("Office Open XML Text");
     mxComponent->dispose();

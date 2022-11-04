@@ -55,8 +55,8 @@ void SwModelTestBase::paste(std::u16string_view aFilename,
 }
 
 SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const char* pFilter)
-    : mpXmlBuffer(nullptr)
-    , mpTestDocumentPath(pTestDocumentPath)
+    : mpTestDocumentPath(pTestDocumentPath)
+    , mpXmlBuffer(nullptr)
     , mpFilter(pFilter)
     , mnStartTime(0)
     , mbExported(false)
@@ -96,7 +96,7 @@ void SwModelTestBase::executeImportTest(const char* filename, const char* pPassw
         maTempFile.EnableKillingFile(false);
         header();
         std::unique_ptr<Resetter> const pChanges(preTest(filename));
-        load(mpTestDocumentPath, filename, pPassword);
+        load(filename, pPassword);
         verify();
         finish();
         maTempFile.EnableKillingFile();
@@ -108,7 +108,7 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(mpTestDocumentPath, filename, pPassword);
+    load(filename, pPassword);
     if (mustTestImportOf(filename))
     {
         verify();
@@ -125,7 +125,7 @@ void SwModelTestBase::executeLoadReloadVerify(const char* filename, const char* 
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(mpTestDocumentPath, filename, pPassword);
+    load(filename, pPassword);
     postLoad(filename);
     reload(mpFilter, filename, pPassword);
     verify();
@@ -138,7 +138,7 @@ void SwModelTestBase::executeImportExport(const char* filename, const char* pPas
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(mpTestDocumentPath, filename, pPassword);
+    load(filename, pPassword);
     save(OUString::createFromAscii(mpFilter));
     maTempFile.EnableKillingFile(false);
     verify();
@@ -643,14 +643,14 @@ void SwModelTestBase::save(const OUString& aFilterName)
 
 void SwModelTestBase::loadAndSave(const char* pName)
 {
-    load(mpTestDocumentPath, pName);
+    load(pName);
     save(OUString::createFromAscii(mpFilter));
     mbExported = true;
 }
 
 void SwModelTestBase::loadAndReload(const char* pName)
 {
-    load(mpTestDocumentPath, pName);
+    load(pName);
     reload(mpFilter, pName);
 }
 
@@ -715,22 +715,22 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
-SwDoc* SwModelTestBase::createSwDoc(std::u16string_view rDataDirectory, const char* pName)
+SwDoc* SwModelTestBase::createSwDoc(const char* pName)
 {
-    if (rDataDirectory.empty() || !pName)
+    if (!pName)
         loadURL("private:factory/swriter", nullptr);
     else
-        load(rDataDirectory, pName);
+        load(pName);
 
     return getSwDoc();
 }
 
-SwDoc* SwModelTestBase::createSwWebDoc(std::u16string_view rDataDirectory, const char* pName)
+SwDoc* SwModelTestBase::createSwWebDoc(const char* pName)
 {
-    if (rDataDirectory.empty() || !pName)
+    if (!pName)
         loadURL("private:factory/swriter/web", nullptr);
     else
-        load_web(rDataDirectory, pName);
+        load_web(pName);
 
     return getSwDoc();
 }

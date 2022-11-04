@@ -35,12 +35,10 @@
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
-
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(Tdf130907, "tdf130907.docx")
@@ -75,11 +73,11 @@ DECLARE_OOXMLEXPORT_TEST(Tdf130907, "tdf130907.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
 {
-    load(mpTestDocumentPath, "128197_compat14.docx");
+    load("128197_compat14.docx");
     xmlDocUniquePtr pLayout14 = parseLayoutDump();
     sal_Int32 nHeight14 = getXPath(pLayout14, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
 
-    load(mpTestDocumentPath, "128197_compat15.docx");
+    load("128197_compat15.docx");
     xmlDocUniquePtr pLayout15 = parseLayoutDump();
     sal_Int32 nHeight15 = getXPath(pLayout15, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
 
@@ -794,11 +792,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleConfNested)
     assertXPath(pXmlDoc, "//w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders/w:top", "val", "nil");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf133771)
+CPPUNIT_TEST_FIXTURE(Test, testTdf133771)
 {
     // Create the doc model.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf133771.odt";
-    loadURL(aURL, nullptr, /*pPassword*/ "test");
+    load("tdf133771.odt", /*pPassword*/ "test");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Password Protected"), getParagraph(1)->getString());
 
@@ -812,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf133771)
     assertXPathContent(pXmlDoc, "//w:body/w:p/w:r/w:t", "Password Protected");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
+CPPUNIT_TEST_FIXTURE(Test, testZeroLineSpacing)
 {
     // Create the doc model.
     loadURL("private:factory/swriter", nullptr);
@@ -836,7 +833,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "line", "0");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
+CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
 {
     // Create an in-memory empty document.
     loadURL("private:factory/swriter", nullptr);
@@ -867,19 +864,19 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     CPPUNIT_ASSERT_EQUAL(nTransparence, nActual);
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf147485)
+CPPUNIT_TEST_FIXTURE(Test, testTdf147485)
 {
     // Before the fix this was impossible.
-    load(DATA_DIRECTORY, "Tdf147485.docx");
+    load("Tdf147485.docx");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf149546)
+CPPUNIT_TEST_FIXTURE(Test, testTdf149546)
 {
     // Before the fix this was impossible.
-    load(DATA_DIRECTORY, "tdf149546.docx");
+    load("tdf149546.docx");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
+CPPUNIT_TEST_FIXTURE(Test, testUserField)
 {
     // Create an in-memory empty document with a user field.
     loadURL("private:factory/swriter", nullptr);
@@ -913,11 +910,10 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     assertXPath(pXmlDoc, "//w:docVars/w:docVar", "val", "bar");
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
+CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 {
     // Create the doc model.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf135774_numberingCRProps.docx";
-    loadURL(aURL, nullptr);
+    load("tdf135774_numberingCRProps.docx");
 
     // This only affects when saving as w:highlight - which is not the default since 7.0.
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();

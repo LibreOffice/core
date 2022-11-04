@@ -338,7 +338,7 @@ DECLARE_RTFEXPORT_TEST(testCjklist34, "cjklist34.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testTabStopFillChars)
 {
-    load(mpTestDocumentPath, "tab-stop-fill-chars.rtf");
+    load("tab-stop-fill-chars.rtf");
     // tlmdot
     auto aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
     CPPUNIT_ASSERT(aTabstops.hasElements());
@@ -517,7 +517,7 @@ DECLARE_RTFEXPORT_TEST(testTdf136587_noStyleName, "tdf136587_noStyleName.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
 {
-    load(mpTestDocumentPath, "page-border.rtf");
+    load("page-border.rtf");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
     auto aTopBorder = getProperty<table::BorderLine2>(xPageStyle, "TopBorder");
@@ -547,7 +547,7 @@ DECLARE_RTFEXPORT_TEST(testTbrlPage, "tbrl-page.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126309)
 {
-    load(mpTestDocumentPath, "tdf126309.rtf");
+    load("tdf126309.rtf");
     // Without the accompanying fix in place, this test would have failed, as
     // the paragraph was aligned to left, not right.
     CPPUNIT_ASSERT_EQUAL(
@@ -586,7 +586,7 @@ DECLARE_RTFEXPORT_TEST(testTdf116358, "tdf116358.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 {
-    load(mpTestDocumentPath, "gutter-left.rtf");
+    load("gutter-left.rtf");
     reload(mpFilter, "gutter-left.rtf");
     uno::Reference<beans::XPropertySet> xPageStyle;
     getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
@@ -601,7 +601,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
-    load(mpTestDocumentPath, "gutter-top.rtf");
+    load("gutter-top.rtf");
     reload(mpFilter, "gutter-left.rtf");
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
@@ -637,7 +637,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 
     // Given a document with a clearing break:
     // When loading that file:
-    load(mpTestDocumentPath, "clearing-break.rtf");
+    load("clearing-break.rtf");
     // Then make sure that the clear property of the break is not ignored:
     verify();
     reload(mpFilter, "clearing-break.rtf");

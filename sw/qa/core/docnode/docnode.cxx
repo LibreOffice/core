@@ -14,18 +14,21 @@
 #include <doc.hxx>
 #include <docary.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/docnode/data/";
-
 /// Covers sw/source/core/docnode/ fixes.
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase("/sw/qa/core/docnode/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
 {
     // Load a document where a delete redline ends right before a ToC, then redlines are hidden at a
     // layout level.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "redline-ends-before-toc.docx");
+    SwDoc* pDoc = createSwDoc("redline-ends-before-toc.docx");
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     // Without the accompanying fix in place, this test would have resulted in an assertion failure
     // in InsertCnt_(), because the start of the section was hidden, but not its end.
@@ -38,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
 CPPUNIT_TEST_FIXTURE(Test, testTdf150086)
 {
     // Load a document where an insert redline ends right before a ToC
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf150086.docx");
+    SwDoc* pDoc = createSwDoc("tdf150086.docx");
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(8), rTable.size());
 

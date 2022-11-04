@@ -53,15 +53,15 @@
 #include <rootfrm.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-namespace
-{
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data/";
-} // namespace
-
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase
 {
 public:
+    SwUiWriterTest5()
+        : SwModelTestBase("/sw/qa/extras/uiwriter/data/")
+    {
+    }
+
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
@@ -83,7 +83,7 @@ protected:
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf139127)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf139127.fodt");
+    SwDoc* pDoc = createSwDoc("tdf139127.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // switch on "Show changes in margin" mode
@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf138479)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf138666)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
+    SwDoc* pDoc = createSwDoc("tdf39721.fodt");
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf138666)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf115815.odt");
+    SwDoc* pDoc = createSwDoc("tdf115815.odt");
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -276,7 +276,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126206)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf126206.docx");
+    createSwDoc("tdf126206.docx");
 
     // normal text (it was bold)
     auto xText = getParagraph(1)->getText();
@@ -304,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126206)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf50447)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126206.docx");
+    SwDoc* pDoc = createSwDoc("tdf126206.docx");
 
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf50447)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143918)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126206.docx");
+    SwDoc* pDoc = createSwDoc("tdf126206.docx");
 
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
@@ -393,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143918)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143938)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf54819.fodt");
+    SwDoc* pDoc = createSwDoc("tdf54819.fodt");
 
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143938)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143939)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126206.docx");
+    SwDoc* pDoc = createSwDoc("tdf126206.docx");
 
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
@@ -504,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143939)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf50447_keep_hints)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf50447.fodt");
+    SwDoc* pDoc = createSwDoc("tdf50447.fodt");
 
     // first paragraph (_Lorem_ /ipsum/)
 
@@ -657,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf50447_keep_hints)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144272)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf50447.fodt");
+    SwDoc* pDoc = createSwDoc("tdf50447.fodt");
 
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testMixedFormFieldInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147723)
 {
-    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "tdf147723.docx");
+    SwDoc* const pDoc = createSwDoc("tdf147723.docx");
 
     IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getAllMarksCount());
@@ -912,7 +912,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147723)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147006)
 {
-    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "tdf147006.rtf");
+    SwDoc* const pDoc = createSwDoc("tdf147006.rtf");
 
     IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
@@ -947,7 +947,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147006)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
 {
-    createSwDoc(DATA_DIRECTORY, "floating-table-position.docx");
+    createSwDoc("floating-table-position.docx");
 
     // get the table frame, set new values and dismiss the references
     {
@@ -982,7 +982,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118699_redline_numbering)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118699.docx");
+    SwDoc* pDoc = createSwDoc("tdf118699.docx");
 
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(true);
@@ -999,7 +999,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118699_redline_numbering)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125881_redline_list_level)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf125881.docx");
+    createSwDoc("tdf125881.docx");
 
     uno::Reference<beans::XPropertySet> xProps(getParagraph(8), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("deleted paragraph: erroneous numbering",
@@ -1016,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125881_redline_list_level)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125916_redline_restart_numbering)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125916.docx");
+    SwDoc* pDoc = createSwDoc("tdf125916.docx");
 
     // moveFrom/moveTo are imported as separated redlines from fixing tdf#145718.
     // Accept the first inline moveFrom redline before accepting the remaining ones
@@ -1036,7 +1036,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125916_redline_restart_numbering)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125310)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125310.fodt");
+    SwDoc* pDoc = createSwDoc("tdf125310.fodt");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -1071,7 +1071,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125310)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125310b)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125310b.fodt");
+    SwDoc* pDoc = createSwDoc("tdf125310b.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
@@ -1101,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125310b)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120336)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf120336.docx");
+    SwDoc* pDoc = createSwDoc("tdf120336.docx");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1123,7 +1123,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120336)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf106843)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf106843.docx");
+    SwDoc* pDoc = createSwDoc("tdf106843.docx");
 
     // try to turn off red-lining
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
@@ -1136,7 +1136,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf106843)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
 {
     // Load a document with an as-char image in it.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image-comment.odt");
+    SwDoc* pDoc = createSwDoc("image-comment.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Test document has "before<image>after", remove the content before the image.
@@ -1234,7 +1234,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
 {
     // Load a document with an at-char image in it.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image-comment-at-char.odt");
+    SwDoc* pDoc = createSwDoc("image-comment-at-char.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Select the image.
@@ -1303,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageDeletion)
 {
     // load a document with an image anchored to paragraph in it
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image.odt");
+    SwDoc* pDoc = createSwDoc("image.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // select the image
@@ -1347,9 +1347,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageInsertion)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Insert an image with change tracking
-    OUString aImageURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole2.png";
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FileName", aImageURL),
+        comphelper::makePropertyValue("FileName", createFileURL(u"ole2.png")),
     };
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
@@ -1360,7 +1359,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120338)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf120338.docx");
+    createSwDoc("tdf120338.docx");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
                          getProperty<sal_Int32>(getParagraph(2), "ParaAdjust")); // right
@@ -1410,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120338)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120338_multiple_paragraph_join)
 {
-    createSwDoc(DATA_DIRECTORY, "redline-para-join.docx");
+    createSwDoc("redline-para-join.docx");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -1433,7 +1432,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120338_multiple_paragraph_join)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testShapePageMove)
 {
     // Load a document with 2 pages, shape on the first page.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-page-move.odt");
+    SwDoc* pDoc = createSwDoc("shape-page-move.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
     // Make sure that the 2nd page is below the 1st one.
     pView->SetViewLayout(/*nColumns=*/1, /*bBookMode=*/false);
@@ -1665,7 +1664,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
     comphelper::LibreOfficeKit::setActive();
 
     // Load a document with a Draw doc in it.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ole-save-while-edit.odt");
+    SwDoc* pDoc = createSwDoc("ole-save-while-edit.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
 
@@ -1695,7 +1694,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf105330)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf105330.odt");
+    SwDoc* pDoc = createSwDoc("tdf105330.odt");
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
@@ -1717,7 +1716,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf105330)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118311)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    createSwDoc("tdf118311.fodt");
 
     // Jump to the first cell, selecting its content
     uno::Sequence<beans::PropertyValue> aSearch(comphelper::InitPropertySequence({
@@ -1746,7 +1745,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1857,7 +1856,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
 {
     // load a 1-row table, and delete the row with track changes
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-row.fodt");
+    SwDoc* pDoc = createSwDoc("select-row.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1901,7 +1900,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
 {
     // load a 1-row table, and delete the row with hidden track changes
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-row.fodt");
+    SwDoc* pDoc = createSwDoc("select-row.fodt");
 
     // turn on red-lining and hide changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
@@ -1944,7 +1943,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
 {
     // load a 1-row table, and select the row
-    createSwDoc(DATA_DIRECTORY, "select-row.fodt");
+    createSwDoc("select-row.fodt");
 
     // check table
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1971,7 +1970,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_row)
 {
     // load a 2-row table, and select row 2 by clicking before it
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-column.fodt");
+    SwDoc* pDoc = createSwDoc("select-column.fodt");
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -2005,7 +2004,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_row)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_column)
 {
     // load a 2-row table, and select column B by clicking before them
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "select-column.fodt");
+    SwDoc* pDoc = createSwDoc("select-column.fodt");
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -2043,7 +2042,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2096,7 +2095,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2149,7 +2148,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineDOCXTableInsertion)
 {
     // load a 3-row table inserted with change tracking by text to table conversion
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-converttotable.docx");
+    SwDoc* pDoc = createSwDoc("TC-table-converttotable.docx");
 
     // check table count (1)
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -2173,7 +2172,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineDOCXTableMoveToFrame)
 {
     // load a table with tracked drag & drop: Table1 is the moveFrom,
     // Table2 is the moveTo - and framed - table
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-DnD-move.docx");
+    SwDoc* pDoc = createSwDoc("TC-table-DnD-move.docx");
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
@@ -2201,7 +2200,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineDOCXTableMoveToFrame)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143215)
 {
     // load a table with tracked insertion of an empty row
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-rowadd.docx");
+    SwDoc* pDoc = createSwDoc("TC-table-rowadd.docx");
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
@@ -2235,7 +2234,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143215)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150666)
 {
     // load a table with tracked insertion of an empty row
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-rowadd.docx");
+    SwDoc* pDoc = createSwDoc("TC-table-rowadd.docx");
 
     // check table count
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -2274,7 +2273,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150666)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150666_regression)
 {
     // load a table with tracked insertion of an empty row
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-rowadd.docx");
+    SwDoc* pDoc = createSwDoc("TC-table-rowadd.docx");
 
     // check table count
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -2304,7 +2303,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144748)
 {
     // load a table with an empty row, and an empty line before the table
     // (to allow the easy selection of the full text with the table)
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144748.fodt");
+    SwDoc* pDoc = createSwDoc("tdf144748.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2347,7 +2346,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144748)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128335.odt");
+    SwDoc* pDoc = createSwDoc("tdf128335.odt");
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
@@ -2385,7 +2384,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
     // and only accepting all of them will result the deletion of the table row.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2458,7 +2457,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowInsertionWithReject)
 {
     // load a 1-row table, and insert a row with enabled change tracking
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2503,7 +2502,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowInsertionWithReject)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX)
 {
     // load a 1-row table, and insert a row with enabled change tracking
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2556,7 +2555,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testPasteTrackedTableRow)
 {
     // load a 1-row table
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2603,7 +2602,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testPasteTrackedTableRow)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testPasteTrackedTableRowInHideChangesMode)
 {
     // load a 1-row table
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118311.fodt");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
@@ -2650,7 +2649,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf146966)
 {
     // load a 4-row table, select more than 1 row and copy them
     // to check insertion of unnecessary empty rows
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144748.fodt");
+    SwDoc* pDoc = createSwDoc("tdf144748.fodt");
 
     // check table row count
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -2685,7 +2684,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf146966)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
 {
     // load a deleted table, reject them, and delete only its text and export to DOCX
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf145091.docx");
+    SwDoc* pDoc = createSwDoc("tdf145091.docx");
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2735,7 +2734,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
 {
     // Load the bugdoc, which has 3 textboxes.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128603.odt");
+    SwDoc* pDoc = createSwDoc("tdf128603.odt");
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
@@ -2786,7 +2785,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOfz18563)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143904)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143904.odt");
+    SwDoc* pDoc = createSwDoc("tdf143904.odt");
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -2809,7 +2808,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143904)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf90069)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90069.docx");
+    SwDoc* pDoc = createSwDoc("tdf90069.docx");
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -2833,7 +2832,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf90069)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf109266)
 {
     // transliteration with redlining
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "lorem.fodt");
+    SwDoc* pDoc = createSwDoc("lorem.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -2894,7 +2893,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf109266)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf129655)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf129655-vtextbox.odt");
+    createSwDoc("tdf129655-vtextbox.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//anchored/fly/txt[@WritingMode='Vertical']", 1);
 }
@@ -3224,7 +3223,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126735)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
+    SwDoc* pDoc = createSwDoc("tdf39721.fodt");
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete

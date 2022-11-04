@@ -1018,7 +1018,7 @@ DECLARE_RTFEXPORT_TEST(testTdf80708, "tdf80708.rtf")
 
 CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
 {
-    load(mpTestDocumentPath, "tdf90421.fodt");
+    load("tdf90421.fodt");
     // Change the hyperlink, so its URL is empty.
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
     xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString()));

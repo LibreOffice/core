@@ -22,17 +22,20 @@
 #include <view.hxx>
 #include <cmdid.h>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/undo/data/";
-
 /// Covers sw/source/core/undo/ fixes.
 class SwCoreUndoTest : public SwModelTestBase
 {
+public:
+    SwCoreUndoTest()
+        : SwModelTestBase("/sw/qa/core/undo/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutSave)
 {
     // Load the document and select all.
-    load(DATA_DIRECTORY, "textbox-cut-save.docx");
+    load("textbox-cut-save.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -58,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutSave)
 
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutUndo)
 {
-    load(DATA_DIRECTORY, "textbox-cut-undo.docx");
+    load("textbox-cut-undo.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -87,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutUndo)
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTableCopyRedline)
 {
     // Given a document with two table cells and redlining enabled:
-    load(DATA_DIRECTORY, "table-copy-redline.odt");
+    load("table-copy-redline.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();

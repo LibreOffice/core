@@ -21,12 +21,10 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <o3tl/string_view.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
-
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123621)

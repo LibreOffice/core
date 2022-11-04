@@ -21,11 +21,14 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/uno/data/";
-
 /// Covers sw/source/uibase/uno/ fixes.
 class SwUibaseUnoTest : public SwModelTestBase
 {
+public:
+    SwUibaseUnoTest()
+        : SwModelTestBase("/sw/qa/uibase/uno/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testLockControllers)
@@ -45,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testLockControllers)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCondFieldCachedValue)
 {
-    load(DATA_DIRECTORY, "cond-field-cached-value.docx");
+    load("cond-field-cached-value.docx");
     Scheduler::ProcessEventsToIdle();
 
     // Without the accompanying fix in place, this test would have failed with:

@@ -99,6 +99,7 @@ private:
     OUString maFilterOptions;
     OUString maImportFilterOptions;
     OUString maImportFilterName;
+    const OUString mpTestDocumentPath;
 
 protected:
     css::uno::Reference< css::lang::XComponent > mxComponent;
@@ -106,7 +107,6 @@ protected:
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
     xmlBufferPtr mpXmlBuffer;
-    const OUString mpTestDocumentPath;
     const char* mpFilter;
 
     sal_uInt32 mnStartTime;
@@ -317,16 +317,21 @@ protected:
 
     void header();
 
-    void load(std::u16string_view pDir, const char* pName, const char* pPassword = nullptr)
+    void load(const char* pName, const char* pPassword = nullptr)
     {
-        return loadURLWithComponent(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName),
+        return loadURLWithComponent(createFileURL(OUString::createFromAscii(pName)),
                                     "com.sun.star.text.TextDocument", pName, pPassword);
     }
 
-    void load_web(std::u16string_view pDir, const char* pName, const char* pPassword = nullptr)
+    void load_web(const char* pName, const char* pPassword = nullptr)
     {
-        return loadURLWithComponent(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName),
+        return loadURLWithComponent(createFileURL(OUString::createFromAscii(pName)),
                                     "com.sun.star.text.WebDocument", pName, pPassword);
+    }
+
+    OUString createFileURL(std::u16string_view aFileName)
+    {
+        return m_directories.getSrcRootURL() + mpTestDocumentPath + "/" + aFileName;
     }
 
     void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions);
@@ -381,16 +386,14 @@ protected:
      *
      * Examples:
      * SwDoc* pDoc = createSwDoc();
-     * SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test.fodt");
+     * SwDoc* pDoc = createSwDoc("test.fodt");
      */
-    SwDoc* createSwDoc(
-        std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
+    SwDoc* createSwDoc(const char* pName = nullptr);
 
     /**
      * As createSwDoc except a Web Document in Browse Mode
      */
-    SwDoc* createSwWebDoc(
-        std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
+    SwDoc* createSwWebDoc(const char* pName = nullptr);
 
     /**
      * Gets SwXTextDocument from loaded component

@@ -63,8 +63,6 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data/";
-
 void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 {
     rPaM.GetPoint()->nContent.Assign(rPaM.GetPointContentNode(), first);
@@ -76,6 +74,10 @@ void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 class SwUiWriterTest : public SwModelTestBase
 {
 public:
+    SwUiWriterTest() :
+        SwModelTestBase("/sw/qa/extras/uiwriter/data/")
+    {}
+
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(
         std::u16string_view sFileName, bool bEmpty = false);
     void testRedlineFrame(char const*const file);
@@ -88,7 +90,7 @@ std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_vi
     OUString rURL = tmp.GetURL();
     CPPUNIT_ASSERT_EQUAL(
         osl::FileBase::E_None,
-        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + sFileName, rURL));
+        osl::File::copy(createFileURL(sFileName), rURL));
 
     SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
     SwDoc* pDoc = createSwDoc();
@@ -105,7 +107,7 @@ std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_vi
 
 void SwUiWriterTest::testRedlineFrame(char const*const file)
 {
-    SwDoc * pDoc(createSwDoc(DATA_DIRECTORY, file));
+    SwDoc * pDoc(createSwDoc(file));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // there is exactly one frame
@@ -199,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtPara2ndParagraph)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testThreadedException)
 {
-    SvFileStream aFileStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "threadedException.fodt", StreamMode::READ);
+    SvFileStream aFileStream(createFileURL(u"threadedException.fodt"), StreamMode::READ);
 
     //threaded reading only kicks in if there is sufficient buffer to make it worthwhile, so read
     //from a SvFileStream to ensure that
@@ -277,9 +279,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testInsertFileInInputFieldException)
     xBody->insertTextContent(xCursor, xContent, false);
     xCursor->goLeft(1, false);
     // try to insert some random file
-    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo75110.odt");
     // inserting even asserts in debug builds - document model goes invalid with input field split across 2 nodes
-    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(url, {}), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(createFileURL(u"fdo75110.odt"), {}), uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)
@@ -465,7 +466,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo75110)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75110.odt");
+    SwDoc* pDoc = createSwDoc("fdo75110.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SelAll();
@@ -478,7 +479,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo75110)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo75898)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75898.odt");
+    SwDoc* pDoc = createSwDoc("fdo75898.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SelAll();
     pWrtShell->InsertRow(1, true);
@@ -517,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceBackward)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo69893)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo69893.odt");
+    SwDoc* pDoc = createSwDoc("fdo69893.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SelAll(); // A1 is empty -> selects the whole table.
@@ -531,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo69893)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo70807)
 {
-    createSwDoc(DATA_DIRECTORY, "fdo70807.odt");
+    createSwDoc("fdo70807.odt");
 
     uno::Reference<container::XIndexAccess> xStylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
 
@@ -699,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextGallery)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
 {
-    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "watermark.docx");
+    SwDoc* const pDoc = createSwDoc("watermark.docx");
     SwDocShell* pDocShell = pDoc->GetDocShell();
     const SfxWatermarkItem* pWatermark;
     SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->QueryState(SID_WATERMARK, pWatermark);
@@ -727,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         int aPages = aPagesInDocument + aAdditionalPagesCount[i];
 
         // Empty document with one Page Break
-        SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "watermark-position.odt");
+        SwDoc* pDoc = createSwDoc("watermark-position.odt");
         SwEditShell* pEditShell = pDoc->GetEditShell();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
@@ -862,7 +863,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf98512)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxSelect)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox.odt");
+    SwDoc* pDoc = createSwDoc("shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
@@ -880,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxSelect)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxDelete)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox.odt");
+    SwDoc* pDoc = createSwDoc("shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
@@ -897,7 +898,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxDelete)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testAnchorChangeSelection)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test_anchor_as_character.odt");
+    SwDoc* pDoc = createSwDoc("test_anchor_as_character.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
@@ -916,7 +917,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testAnchorChangeSelection)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "cp1000071.odt");
+    SwDoc* pDoc = createSwDoc("cp1000071.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -955,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxVertadjust)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox-vertadjust.odt");
+    SwDoc* pDoc = createSwDoc("shape-textbox-vertadjust.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
     SwFrameFormat* pFormat = static_cast<SwContact*>(pObject->GetUserCall())->GetFormat();
@@ -965,7 +966,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxVertadjust)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxAutosize)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox-autosize.odt");
+    SwDoc* pDoc = createSwDoc("shape-textbox-autosize.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // 0-1 is the first UI-visible shape+textbox.
     SdrObject* pFirst = pPage->GetObj(0);
@@ -983,7 +984,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxAutosize)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo82191)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo82191.odt");
+    SwDoc* pDoc = createSwDoc("fdo82191.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // Make sure we have a single draw shape.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), SwTextBoxHelper::getCount(pPage));
@@ -1004,7 +1005,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCommentedWord)
 {
     // This word is commented. <- string in document
     // 123456789 <- character positions
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "commented-word.odt");
+    SwDoc* pDoc = createSwDoc("commented-word.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
@@ -1026,7 +1027,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCommentedWord)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextFieldGetAnchorGetTextInFooter)
 {
-    createSwDoc(DATA_DIRECTORY, "textfield-getanchor-gettext-in-footer.odt");
+    createSwDoc("textfield-getanchor-gettext-in-footer.odt");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1135,7 +1136,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionSimplifiedToTraditiona
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
 {
     // Load the document, it contains one shape with a textbox.
-    createSwDoc(DATA_DIRECTORY, "fdo85554.odt");
+    createSwDoc("fdo85554.odt");
 
     // Add a second shape to the document.
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -1155,10 +1156,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
 {
-    SwDoc* const pDoc1(createSwDoc(DATA_DIRECTORY, "merge-change1.odt"));
+    SwDoc* const pDoc1(createSwDoc("merge-change1.odt"));
 
     auto xDoc2Component(loadFromDesktop(
-            m_directories.getURLFromSrc(DATA_DIRECTORY) + "merge-change2.odt",
+            createFileURL(u"merge-change2.odt"),
             "com.sun.star.text.TextDocument"));
     auto pxDoc2Document(
             dynamic_cast<SwXTextDocument *>(xDoc2Component.get()));
@@ -1186,7 +1187,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCreatePortions)
 {
-    createSwDoc(DATA_DIRECTORY, "uno-cycle.odt");
+    createSwDoc("uno-cycle.odt");
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName("Mark"), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xTextCursor(xText->getAnchor(), uno::UNO_QUERY);
@@ -1360,7 +1361,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
 {
-    createSwDoc(DATA_DIRECTORY, "fdo87448.odt");
+    createSwDoc("fdo87448.odt");
 
     // Save the first shape to a metafile.
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(comphelper::getProcessComponentContext());
@@ -1443,7 +1444,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000115)
 {
-    createSwDoc(DATA_DIRECTORY, "cp1000115.fodt");
+    createSwDoc("cp1000115.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
@@ -1483,7 +1484,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90003)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf90003.odt");
+    createSwDoc("tdf90003.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1: an unexpected fly portion was created, resulting in too

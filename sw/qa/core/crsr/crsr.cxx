@@ -27,11 +27,14 @@
 #include <ndtxt.hxx>
 #include <formatcontentcontrol.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/crsr/data/";
-
 /// Covers sw/source/core/crsr/ fixes.
 class SwCoreCrsrTest : public SwModelTestBase
 {
+public:
+    SwCoreCrsrTest()
+        : SwModelTestBase("/sw/qa/core/crsr/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
@@ -87,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
 
 CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testSelAllStartsWithTable)
 {
-    load(DATA_DIRECTORY, "sel-all-starts-with-table.odt");
+    load("sel-all-starts-with-table.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwDoc* pDoc = pDocShell->GetDoc();

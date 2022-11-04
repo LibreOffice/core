@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyParagraph)
     // Given a document with 2 paragraphs, the second is empty:
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load(mpTestDocumentPath, "empty-paragraph.xhtml");
+    load("empty-paragraph.xhtml");
 
     // Then make sure that the resulting document has a 2nd empty paragraph:
     getParagraph(1, "a");
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
     // Given a document with an OLE object, width set to 100%, height is not set:
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load(mpTestDocumentPath, "relative-keep-aspect.xhtml");
+    load("relative-keep-aspect.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
     auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
     // Given a document with an image, width set to 100%, height is not set:
     setImportFilterOptions("xhtmlns=reqif-xhtml");
     setImportFilterName("HTML (StarWriter)");
-    load(mpTestDocumentPath, "relative-keep-aspect-image.xhtml");
+    load("relative-keep-aspect-image.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
     auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());

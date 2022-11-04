@@ -24,17 +24,20 @@
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/frmedt/data/";
-
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase
 {
+public:
+    SwCoreFrmedtTest()
+        : SwModelTestBase("/sw/qa/core/frmedt/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
 {
     // Load a document with a textframe and a textbox(shape+textframe).
-    load(DATA_DIRECTORY, "textbox-reanchor.odt");
+    load("textbox-reanchor.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pDrawPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -111,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
 CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteFlyInTextBox)
 {
     // Given a document that contains a textbox, which contains an sw image (fly frame)
-    load(DATA_DIRECTORY, "paste-fly-in-textbox.docx");
+    load("paste-fly-in-textbox.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();

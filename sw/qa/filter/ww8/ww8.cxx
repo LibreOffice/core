@@ -17,8 +17,6 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/filter/ww8/data/";
-
 /**
  * Covers sw/source/filter/ww8/ fixes.
  *
@@ -30,13 +28,18 @@ constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/filter/ww8/data/";
  */
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase("/sw/qa/filter/ww8/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderDocImport)
 {
     // Given a document with a border distance that is larger than the margin, when loading that
     // document:
-    createSwDoc(DATA_DIRECTORY, "negative-page-border.doc");
+    createSwDoc("negative-page-border.doc");
 
     // Then make sure we map that to a negative border distance (move border from the edge of body
     // frame towards the center of the page, not towards the edge of the page):

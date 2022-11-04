@@ -44,7 +44,7 @@ public:
 
 void IndexingExportTest::testIndexingExport_Paragraphs()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_VariousParagraphs.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -79,7 +79,7 @@ void IndexingExportTest::testIndexingExport_Paragraphs()
 
 void IndexingExportTest::testIndexingExport_Images()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Images.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Images.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -101,7 +101,7 @@ void IndexingExportTest::testIndexingExport_Images()
 
 void IndexingExportTest::testIndexingExport_OLE()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_OLE.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_OLE.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -120,7 +120,7 @@ void IndexingExportTest::testIndexingExport_OLE()
 
 void IndexingExportTest::testIndexingExport_Shapes()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Shapes.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Shapes.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -159,7 +159,7 @@ void IndexingExportTest::testIndexingExport_Shapes()
 
 void IndexingExportTest::testIndexingExport_Tables()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Tables.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Tables.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -226,7 +226,7 @@ void IndexingExportTest::testIndexingExport_Tables()
 
 void IndexingExportTest::testIndexingExport_Sections()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Sections.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Sections.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -257,7 +257,7 @@ void IndexingExportTest::testIndexingExport_Sections()
 
 void IndexingExportTest::testIndexingExport_Fontwork()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Fontwork.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Fontwork.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
@@ -281,7 +281,7 @@ void IndexingExportTest::testIndexingExport_Fontwork()
 
 void IndexingExportTest::testIndexingExport_Header_Footer()
 {
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Header_Footer.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Header_Footer.odt");
     CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;

@@ -11,28 +11,20 @@
 
 #include <config_features.h>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/odfimport/data/";
-
 class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(DATA_DIRECTORY, "writer8")
+        : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8")
     {
     }
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testFeatureText) { load(mpTestDocumentPath, "feature_text.odt"); }
+CPPUNIT_TEST_FIXTURE(Test, testFeatureText) { load("feature_text.odt"); }
 
-CPPUNIT_TEST_FIXTURE(Test, testFeatureTextBold)
-{
-    load(mpTestDocumentPath, "feature_text_bold.odt");
-}
+CPPUNIT_TEST_FIXTURE(Test, testFeatureTextBold) { load("feature_text_bold.odt"); }
 
-CPPUNIT_TEST_FIXTURE(Test, testFeatureTextItalic)
-{
-    load(mpTestDocumentPath, "feature_text_italic.odt");
-}
+CPPUNIT_TEST_FIXTURE(Test, testFeatureTextItalic) { load("feature_text_italic.odt"); }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

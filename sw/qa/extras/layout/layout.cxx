@@ -43,11 +43,15 @@
 #include <svx/svdotext.hxx>
 #include <dcontact.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
-
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase
 {
+public:
+    SwLayoutWriter()
+        : SwModelTestBase("/sw/qa/extras/layout/data/")
+    {
+    }
+
 protected:
     void CheckRedlineFootnotesHidden();
     void CheckRedlineSectionsHidden();
@@ -119,7 +123,7 @@ void SwLayoutWriter::CheckRedlineSectionsHidden()
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 {
-    createSwDoc(DATA_DIRECTORY, "redline_footnotes.odt");
+    createSwDoc("redline_footnotes.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -279,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136588)
 {
-    load(DATA_DIRECTORY, "tdf136588.docx");
+    load("tdf136588.docx");
     auto pXMLLayoutDump = parseLayoutDump();
     CPPUNIT_ASSERT(pXMLLayoutDump);
 
@@ -696,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134472.odt");
+    SwDoc* pDoc = createSwDoc("tdf134472.odt");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "height", "843");
@@ -705,7 +709,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestNestedTableMoveFwd)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tabellen_test_windows_1.odt");
+    SwDoc* pDoc = createSwDoc("tabellen_test_windows_1.odt");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // the row with the nested table should not be split but be the first row on page 2
@@ -718,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestNestedTableMoveFwd)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf136613.docx");
+    SwDoc* pDoc = createSwDoc("tdf136613.docx");
     CPPUNIT_ASSERT(pDoc);
 
     //get the flys and the root frame
@@ -749,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf88496)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf88496.docx");
+    SwDoc* pDoc = createSwDoc("tdf88496.docx");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 4, table fallback "switch off repeating header" started on a new page
@@ -1189,7 +1193,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
 {
     // Check the padding of the textbox
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf137025.docx");
+    SwDoc* pDoc = createSwDoc("tdf137025.docx");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1874,7 +1878,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143239-1-min.odt");
+    SwDoc* pDoc = createSwDoc("tdf143239-1-min.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // These are unstable on macOS and Win64 builds,
@@ -1934,7 +1938,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
 {
     // Load a document that has a fly anchored in the footer.
     // It also has a table which initially overlaps with the fly, but then moves to the next page.
-    load(DATA_DIRECTORY, "footer-fly-table.fodt");
+    load("footer-fly-table.fodt");
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // no fly portions, was: 8
     assertXPath(pLayout,
@@ -1961,7 +1965,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134277.docx");
+    SwDoc* pDoc = createSwDoc("tdf134277.docx");
     CPPUNIT_ASSERT(pDoc);
     SwDocShell* pShell = pDoc->GetDocShell();
 
@@ -1979,7 +1983,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf116486.docx");
+    SwDoc* pDoc = createSwDoc("tdf116486.docx");
     CPPUNIT_ASSERT(pDoc);
     OUString aTop = parseDump(
         "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/child::*[@type='PortionType::Fly']",
@@ -1990,7 +1994,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf142080)
 {
     // this caused an infinite loop
-    load(DATA_DIRECTORY, "fdo43573-2-min.docx");
+    load("fdo43573-2-min.docx");
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // check the first paragraph on page 9 with its fly; the column was empty too
@@ -2008,7 +2012,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf142080)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128198-1.docx");
+    SwDoc* pDoc = createSwDoc("tdf128198-1.docx");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // the problem was that line 5 was truncated at "this  "
@@ -2022,7 +2026,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
 {
-    load(DATA_DIRECTORY, "no-line-break-at-slash.fodt");
+    load("no-line-break-at-slash.fodt");
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // the line break was between  "Foostrasse 13/c/" and "2"
@@ -2046,7 +2050,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106153)
 {
-    load(DATA_DIRECTORY, "tdf106153.docx");
+    load("tdf106153.docx");
     xmlDocUniquePtr pDump = parseLayoutDump();
 
     const sal_Int64 nPageValLeft = getXPath(pDump, "/root/page/infos/bounds", "left").toInt64();
@@ -3056,7 +3060,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
 {
-    createSwDoc(DATA_DIRECTORY, "redline_sections.fodt");
+    createSwDoc("redline_sections.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -3157,7 +3161,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_images)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf69647_images.odt");
+    createSwDoc("tdf69647_images.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 2, getPages());
@@ -3165,7 +3169,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_images)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_text)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf69647_text.docx");
+    createSwDoc("tdf69647_text.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 2, getPages());
@@ -3173,7 +3177,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_text)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 {
-    createSwDoc(DATA_DIRECTORY, "redline_table.fodt");
+    createSwDoc("redline_table.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -3259,7 +3263,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf144057.fodt");
+    createSwDoc("tdf144057.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -3320,7 +3324,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf144057.fodt");
+    createSwDoc("tdf144057.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -3374,7 +3378,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf109137.docx");
+    createSwDoc("tdf109137.docx");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
@@ -3390,124 +3394,79 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint72)
-{
-    createSwDoc(DATA_DIRECTORY, "forcepoint72-1.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint72) { createSwDoc("forcepoint72-1.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint75)
-{
-    createSwDoc(DATA_DIRECTORY, "forcepoint75-1.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint75) { createSwDoc("forcepoint75-1.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL)
-{
-    createSwDoc(DATA_DIRECTORY, "LIBREOFFICE-UXTSOREL.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createSwDoc("LIBREOFFICE-UXTSOREL.rtf"); }
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
 {
-    createSwDoc(DATA_DIRECTORY, "forcepoint-swfootnoteframe-1.rtf");
+    createSwDoc("forcepoint-swfootnoteframe-1.rtf");
 }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76)
-{
-    createSwDoc(DATA_DIRECTORY, "forcepoint76-1.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76) { createSwDoc("forcepoint76-1.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testN4LA0OHZ)
-{
-    createSwDoc(DATA_DIRECTORY, "LIBREOFFICE-N4LA0OHZ.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testN4LA0OHZ) { createSwDoc("LIBREOFFICE-N4LA0OHZ.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint89.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89) { createSwWebDoc("forcepoint89.html"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90)
-{
-    createSwDoc(DATA_DIRECTORY, "forcepoint90.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90) { createSwDoc("forcepoint90.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint91.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91) { createSwWebDoc("forcepoint91.html"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92)
-{
-    createSwDoc(DATA_DIRECTORY, "forcepoint92.doc");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92) { createSwDoc("forcepoint92.doc"); }
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint93)
 {
-    createSwDoc(DATA_DIRECTORY, "forcepoint93-1.rtf");
-    createSwDoc(DATA_DIRECTORY, "forcepoint93-2.rtf");
+    createSwDoc("forcepoint93-1.rtf");
+    createSwDoc("forcepoint93-2.rtf");
 }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94) { createSwWebDoc("forcepoint94.html"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint98.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98) { createSwWebDoc("forcepoint98.html"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint100)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint100.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint100) { createSwWebDoc("forcepoint100.html"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint102)
-{
-    createSwDoc(DATA_DIRECTORY, "forcepoint102.rtf");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint102) { createSwDoc("forcepoint102.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint103)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint103.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint103) { createSwWebDoc("forcepoint103.html"); }
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf147485-forcepoint.docx");
+    createSwDoc("tdf147485-forcepoint.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118058.fodt");
+    SwDoc* pDoc = createSwDoc("tdf118058.fodt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint99)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint99.html");
-}
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint99) { createSwWebDoc("forcepoint99.html"); }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf128611.fodt");
+    createSwDoc("tdf128611.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:
@@ -3520,7 +3479,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf125893.docx");
+    createSwDoc("tdf125893.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 400. The paragraph must have zero top border.
     assertXPath(pXmlDoc, "/root/page/body/txt[4]/infos/prtBounds", "top", "0");
@@ -3528,7 +3487,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134463)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf134463.docx");
+    createSwDoc("tdf134463.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 621. The previous paragraph must have zero bottom border.
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/prtBounds", "top", "21");
@@ -3536,7 +3495,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134463)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf117188.docx");
+    createSwDoc("tdf117188.docx");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile;
     aTempFile.EnableKillingFile();
@@ -3557,7 +3516,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117187)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf117187.odt");
+    createSwDoc("tdf117187.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // there should be no fly portions
@@ -3568,7 +3527,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117187)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf119875)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf119875.odt");
+    createSwDoc("tdf119875.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFirstTop
         = getXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "top").toInt32();
@@ -3581,7 +3540,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf119875)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf120287.fodt");
+    createSwDoc("tdf120287.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 2, TabOverMargin Word-specific compat flag did not imply
     // default-in-Word printer-independent layout, resulting in an additional
@@ -3591,7 +3550,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106234)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf106234.fodt");
+    createSwDoc("tdf106234.fodt");
     // Ensure that all text portions are calculated before testing.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -3616,7 +3575,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106234)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287b)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf120287b.fodt");
+    createSwDoc("tdf120287b.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 1418, TabOverMargin did the right split of the paragraph to two
     // lines, but then calculated a too large tab portion size on the first
@@ -3629,7 +3588,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287b)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287c)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf120287c.fodt");
+    createSwDoc("tdf120287c.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 2, the second line was not broken into a 2nd and a 3rd one,
     // rendering text outside the paragraph frame.
@@ -3638,7 +3597,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287c)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122878)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf122878.docx");
+    createSwDoc("tdf122878.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // FIXME: the XPath should be adjusted when the proper floating table would be imported
     const sal_Int32 nTblTop
@@ -3660,7 +3619,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122878)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115094)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf115094.docx");
+    createSwDoc("tdf115094.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     sal_Int32 nTopOfD1
@@ -3687,7 +3646,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115094)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf112290)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf112290.docx");
+    SwDoc* pDoc = createSwDoc("tdf112290.docx");
     CPPUNIT_ASSERT(pDoc);
     auto pXml = parseLayoutDump();
     assertXPath(pXml, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]", "portion", "Xxxx Xxxx");
@@ -3695,7 +3654,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf112290)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testKeepWithNextPlusFlyFollowTextFlow)
 {
-    createSwDoc(DATA_DIRECTORY, "keep-with-next-fly.fodt");
+    createSwDoc("keep-with-next-fly.fodt");
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -3747,7 +3706,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testKeepWithNextPlusFlyFollowTextFlow)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf122607.odt");
+    createSwDoc("tdf122607.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc,
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
@@ -3769,9 +3728,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
     if (mxComponent.is())
         mxComponent->dispose();
 
-    OUString const pName("tdf122607_leerzeile.odt");
-
-    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + pName);
+    OUString const url(createFileURL(u"tdf122607_leerzeile.odt"));
 
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
@@ -3779,8 +3736,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
     std::vector<beans::PropertyValue> aFilterOptions = {
         { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
     };
-
-    std::cout << pName << ":\n";
 
     // inline the loading because currently properties can't be passed...
     mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
@@ -3813,9 +3768,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150616)
     if (mxComponent.is())
         mxComponent->dispose();
 
-    OUString const pName("in_056132_mod.odt");
-
-    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + pName);
+    OUString const url(createFileURL(u"in_056132_mod.odt"));
 
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
@@ -3823,8 +3776,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150616)
     std::vector<beans::PropertyValue> aFilterOptions = {
         { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
     };
-
-    std::cout << pName << ":\n";
 
     // inline the loading because currently properties can't be passed...
     mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
@@ -3858,7 +3809,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150616)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "btlr-cell.odt");
+    SwDoc* pDoc = createSwDoc("btlr-cell.odt");
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -4020,7 +3971,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123898)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf123898.odt");
+    createSwDoc("tdf123898.odt");
 
     // Make sure spellchecker has done its job already
     Scheduler::ProcessEventsToIdle();
@@ -4035,7 +3986,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123898)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123651)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf123651.docx");
+    createSwDoc("tdf123651.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
     // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
@@ -4047,19 +3998,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123651)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116501)
 {
     //just care it doesn't freeze
-    createSwDoc(DATA_DIRECTORY, "tdf116501.odt");
+    createSwDoc("tdf116501.odt");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123163)
 {
     //just care it doesn't assert
-    createSwDoc(DATA_DIRECTORY, "tdf123163-1.docx");
+    createSwDoc("tdf123163-1.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testAbi11870)
 {
     //just care it doesn't assert
-    createSwDoc(DATA_DIRECTORY, "abi11870-2.odt");
+    createSwDoc("abi11870-2.odt");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118719)
@@ -4086,7 +4037,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118719)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTabOverMargin)
 {
-    createSwDoc(DATA_DIRECTORY, "tab-over-margin.odt");
+    createSwDoc("tab-over-margin.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // 2nd paragraph has a tab over the right margin, and with the TabOverMargin compat option,
@@ -4099,7 +4050,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testImageComment)
 {
     // Load a document that has "aaa" in it, then a commented image (4th char is the as-char image,
     // 5th char is the comment anchor).
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image-comment.odt");
+    SwDoc* pDoc = createSwDoc("image-comment.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // Look up a layout position which is on the right of the image.
@@ -4133,7 +4084,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testImageComment)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testScriptField)
 {
     // Test clicking script field inside table ( tdf#141079 )
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf141079.odt");
+    SwDoc* pDoc = createSwDoc("tdf141079.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // Look up layout position which is the first cell in the table
@@ -4166,7 +4117,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testScriptField)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCommentCursorPosition)
 {
     // Load a document that has "aaa" in it, followed by three comments.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "endOfLineComments.odt");
+    SwDoc* pDoc = createSwDoc("endOfLineComments.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     SwRootFrame* pRoot = pWrtShell->GetLayout();
@@ -4199,7 +4150,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCommentCursorPosition)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCombiningCharacterCursorPosition)
 {
     // Load a document that has "a" in it, followed by a combining acute in a separate rext span
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf138592-a-acute.fodt");
+    SwDoc* pDoc = createSwDoc("tdf138592-a-acute.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     SwRootFrame* pRoot = pWrtShell->GetLayout();
@@ -4228,7 +4179,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCombiningCharacterCursorPosition)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf64222.docx");
+    createSwDoc("tdf64222.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(
         pXmlDoc,
@@ -4238,7 +4189,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf113014.fodt");
+    SwDoc* pDoc = createSwDoc("tdf113014.fodt");
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -4257,7 +4208,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130218)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf130218.fodt");
+    SwDoc* pDoc = createSwDoc("tdf130218.fodt");
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Dump the rendering of the first page as an XML file.
@@ -4273,14 +4224,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130218)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf127235.odt");
+    SwDoc* pDoc = createSwDoc("tdf127235.odt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138039)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf138039.odt");
+    createSwDoc("tdf138039.odt");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
@@ -4304,7 +4255,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138039)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134298)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf134298.ott");
+    createSwDoc("tdf134298.ott");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
@@ -4431,7 +4382,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlapWrap)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124600)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf124600.docx");
+    createSwDoc("tdf124600.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -4447,7 +4398,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124601)
     // This is a testcase for the ContinuousEndnotes compat flag.
     // The document has 2 pages, the endnote anchor is on the first page.
     // The endnote should be on the 2nd page together with the last page content.
-    createSwDoc(DATA_DIRECTORY, "tdf124601.doc");
+    createSwDoc("tdf124601.doc");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -4466,7 +4417,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124601b)
     // The shape has layoutInCell=1, so should match what Word does here.
     // Also the horizontal position should be in the last column, even if the anchor is in the
     // last-but-one column.
-    createSwDoc(DATA_DIRECTORY, "tdf124601b.doc");
+    createSwDoc("tdf124601b.doc");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     sal_Int32 nFlyTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
@@ -4592,7 +4543,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testContinuousEndnotesDeletePageAtStart)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128399.docx");
+    SwDoc* pDoc = createSwDoc("tdf128399.docx");
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     SwFrame* pBody = pPage->GetLower();
@@ -4619,7 +4570,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf145826)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf145826.odt");
+    createSwDoc("tdf145826.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -4636,7 +4587,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf145826)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf105481)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf105481.odt");
+    createSwDoc("tdf105481.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -4699,7 +4650,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf105481)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117982)
 {
-    SwDoc* pDocument = createSwDoc(DATA_DIRECTORY, "tdf117982.docx");
+    SwDoc* pDocument = createSwDoc("tdf117982.docx");
     SwDocShell* pShell = pDocument->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
@@ -4712,7 +4663,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117982)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128959)
 {
     // no orphan/widow control in table cells
-    SwDoc* pDocument = createSwDoc(DATA_DIRECTORY, "tdf128959.docx");
+    SwDoc* pDocument = createSwDoc("tdf128959.docx");
     CPPUNIT_ASSERT(pDocument);
     discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -4739,7 +4690,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    createSwDoc(DATA_DIRECTORY, "tdf121658.odt");
+    createSwDoc("tdf121658.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Only 2 hyphenated words should appear in the document (in the lowercase words).
@@ -4753,7 +4704,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149420)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    createSwDoc(DATA_DIRECTORY, "tdf149420.odt");
+    createSwDoc("tdf149420.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Only 3 hyphenated words should appear in the document (last paragraph
@@ -4768,7 +4719,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149324)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    createSwDoc(DATA_DIRECTORY, "tdf149324.odt");
+    createSwDoc("tdf149324.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Only 3 hyphenated words should appear in the document (last paragraph
@@ -4783,7 +4734,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149248)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    createSwDoc(DATA_DIRECTORY, "tdf149248.odt");
+    createSwDoc("tdf149248.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Only 1 hyphenated word should appear in the document (last word of the second
@@ -4794,7 +4745,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149248)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testWriterImageNoCapture)
 {
-    createSwDoc(DATA_DIRECTORY, "writer-image-no-capture.docx");
+    createSwDoc("writer-image-no-capture.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nPageLeft = getXPath(pXmlDoc, "//page/infos/bounds", "left").toInt32();
@@ -4833,7 +4784,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
     // it also has a style:master-page named "StandardEntwurf", which contains some fields.
     // if you add a break to page 2, or append some text to page 4 (or just toggle display field names),
     // the page anchored frame on page 4 vanishes, as it is incorrectly moved out of the page bounds.
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "stable-at-page-anchored-fly-position.odt");
+    SwDoc* pDoc = createSwDoc("stable-at-page-anchored-fly-position.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // look up the layout position of the page-bound frame on page four
@@ -4852,7 +4803,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134548)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf134548.odt");
+    createSwDoc("tdf134548.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Second paragraph has two non zero width tabs in beginning of line
@@ -4880,7 +4831,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134548)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124423)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf124423.docx");
+    createSwDoc("tdf124423.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFly1Width
         = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
@@ -4890,7 +4841,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124423)
     CPPUNIT_ASSERT_EQUAL(nPageWidth, nFly2Width);
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
 
-    createSwDoc(DATA_DIRECTORY, "tdf124423.odt");
+    createSwDoc("tdf124423.odt");
     pXmlDoc = parseLayoutDump();
     nFly1Width = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
     nFly2Width = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
@@ -4902,7 +4853,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124423)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
 {
     // First load the sample bugdoc
-    load(DATA_DIRECTORY, "tdf137185.odt");
+    load("tdf137185.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // Get the doc shell
@@ -4942,7 +4893,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138782)
 {
-    CPPUNIT_ASSERT(createSwDoc(DATA_DIRECTORY, "tdf138782.docx"));
+    CPPUNIT_ASSERT(createSwDoc("tdf138782.docx"));
     auto pXml = parseLayoutDump();
     CPPUNIT_ASSERT(pXml);
 
@@ -4958,7 +4909,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138782)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf135035.docx");
+    createSwDoc("tdf135035.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFly1Width
         = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
@@ -4971,7 +4922,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
     CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly3Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);
 
-    createSwDoc(DATA_DIRECTORY, "tdf135035.odt");
+    createSwDoc("tdf135035.odt");
     pXmlDoc = parseLayoutDump();
     nFly1Width = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
     nFly2Width = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
@@ -4984,7 +4935,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf146704_EndnoteInSection)
 {
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf146704_EndnoteInSection.odt");
+    SwDoc* pDoc = createSwDoc("tdf146704_EndnoteInSection.odt");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the fix, the endnote placed to 2. page
@@ -4993,8 +4944,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf146704_EndnoteInSection)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage)
 {
-    SwDoc* pDoc
-        = createSwDoc(DATA_DIRECTORY, "tdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage.docx");
+    SwDoc* pDoc = createSwDoc("tdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage.docx");
     CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the fix, it would be 5 pages, but with the fix the whole document
@@ -5012,8 +4962,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf54465_ColumnsWithFootnoteDoNotOccupy
     // was more than 1 page long.
     // Note: Somewhy this test miscalculates the layout of the old odt file.
     // It will be 4 pages long, while opened in Writer it is 5 pages long.
-    SwDoc* pDoc
-        = createSwDoc(DATA_DIRECTORY, "tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_Old.odt");
+    SwDoc* pDoc = createSwDoc("tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_Old.odt");
     CPPUNIT_ASSERT(pDoc);
     Scheduler::ProcessEventsToIdle();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -5023,7 +4972,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf54465_ColumnsWithFootnoteDoNotOccupy
     xmlXPathFreeObject(pXmlObj);
 
     discardDumpedLayout();
-    pDoc = createSwDoc(DATA_DIRECTORY, "tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New.odt");
+    pDoc = createSwDoc("tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New.odt");
     CPPUNIT_ASSERT(pDoc);
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 1);

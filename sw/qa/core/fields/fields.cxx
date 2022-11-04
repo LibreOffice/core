@@ -26,9 +26,12 @@ namespace
 /// Covers sw/source/core/fields/ fixes.
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase("/sw/qa/core/fields/data/")
+    {
+    }
 };
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/fields/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
 {
@@ -69,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143424)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf143424.odt");
+    createSwDoc("tdf143424.odt");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
@@ -97,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143424)
 
 CPPUNIT_TEST_FIXTURE(Test, testChapterFieldsFollowedBy)
 {
-    createSwDoc(DATA_DIRECTORY, "chapter_field_followedby.odt");
+    createSwDoc("chapter_field_followedby.odt");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(

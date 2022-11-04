@@ -15,17 +15,20 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/attr/data/";
-
 /// Covers sw/source/core/attr/ fixes.
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase("/sw/qa/core/attr/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
 {
     // Given a document with track changes and the whole document is selected:
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "attr-set.docx");
+    SwDoc* pDoc = createSwDoc("attr-set.docx");
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     dispatchCommand(mxComponent, ".uno:SelectAll", {});

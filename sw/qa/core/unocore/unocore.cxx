@@ -31,20 +31,20 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/unocore/data/";
-}
-
 /// Covers sw/source/core/unocore/ fixes.
 class SwCoreUnocoreTest : public SwModelTestBase
 {
+public:
+    SwCoreUnocoreTest()
+        : SwModelTestBase("/sw/qa/core/unocore/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
 {
     // Load a doc with a nested table in it.
-    load(DATA_DIRECTORY, "tdf119081.odt");
+    load("tdf119081.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
@@ -169,8 +169,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testViewCursorTextFrame)
 {
     // Given a document with a graphic and holding a reference to that graphic frame:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aInsertArgs = { comphelper::makePropertyValue(
-        "FileName", m_directories.getURLFromSrc(DATA_DIRECTORY) + "graphic.png") };
+    uno::Sequence<beans::PropertyValue> aInsertArgs
+        = { comphelper::makePropertyValue("FileName", createFileURL(u"graphic.png")) };
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aInsertArgs);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
@@ -198,7 +198,7 @@ static void BasicDisplayErrorHandler(const OUString& /*rErr*/, const OUString& /
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBrokenEmbeddedObject)
 {
     // Given a document with a broken embedded object (the XML markup is not well-formed):
-    load(DATA_DIRECTORY, "broken-embedded-object.odt");
+    load("broken-embedded-object.odt");
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
                                                      uno::UNO_QUERY);
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testInsertFileInContentControlException)
 
     // Reject inserting a document inside the content control:
     xCursor->goLeft(1, false);
-    OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf119081.odt");
+    OUString aURL(createFileURL(u"tdf119081.odt"));
     uno::Reference<document::XDocumentInsertable> xInsertable(xCursor, uno::UNO_QUERY);
     CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(aURL, {}), uno::RuntimeException);
 

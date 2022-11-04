@@ -21,12 +21,10 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
-
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo47669, "fdo47669.docx")
@@ -871,8 +869,7 @@ DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
 CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 {
     // Given a document with a <w:sdt> tag:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-grab-bag.docx";
-    loadURL(aURL, nullptr);
+    load("content-control-grab-bag.docx");
 
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
@@ -883,8 +880,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
 CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 {
     // Given a document with a <w:sdt> tag:
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-shape.docx";
-    loadURL(aURL, nullptr);
+    load("content-control-shape.docx");
 
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
@@ -895,8 +891,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 {
     // Test how we can roundtrip sdt plain text with databindings support
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf104823.docx";
-    loadURL(aURL, nullptr);
+    load("tdf104823.docx");
 
     // First paragraph: content from core properties
     uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);

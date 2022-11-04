@@ -35,11 +35,14 @@
 #include <drawdoc.hxx>
 #include <docsh.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/shells/data/";
-
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
 {
+public:
+    SwUibaseShellsTest()
+        : SwModelTestBase("/sw/qa/uibase/shells/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
@@ -116,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
 {
     // Load a document with 2 charts in it. The second is down enough that you have to scroll to
     // trigger its rendering. Previews are missing for both.
-    load(DATA_DIRECTORY, "ole-save-preview-update.odt");
+    load("ole-save-preview-update.odt");
 
     // Explicitly update OLE previews, etc.
     dispatchCommand(mxComponent, ".uno:UpdateAll", {});
@@ -137,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOlePreviewUpdate)
 {
     // Given a document with an embedded Writer object:
-    load(DATA_DIRECTORY, "ole-preview-update.odt");
+    load("ole-preview-update.odt");
 
     // When updating "all" (including OLE previews):
     dispatchCommand(mxComponent, ".uno:UpdateAll", {});

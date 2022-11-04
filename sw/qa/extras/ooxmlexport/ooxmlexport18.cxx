@@ -32,12 +32,10 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
-
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
@@ -83,7 +81,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".
-    load(DATA_DIRECTORY, "tdf149551_mongolianVert.docx");
+    load("tdf149551_mongolianVert.docx");
 
     // The shape is imported as custom shape with attached frame.
     // Without fix the shape itself had WritingMode = 0 = LR_TB,
@@ -121,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
 {
     // Given a document with a single paragraph, direct formatting asks 24pt font size for the
     // numbering and the text portion:
-    load(DATA_DIRECTORY, "number-portion-format.odt");
+    load("number-portion-format.odt");
 
     // When saving to DOCX:
     save("Office Open XML Text");
@@ -141,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
 {
     // Given a docx document with a rectangular shape with height cy="900000" (EMU), tIns="180000"
     // and bIns="360000", resulting in 360000EMU text area height.
-    load(DATA_DIRECTORY, "tdf150966_regularInset.docx");
+    load("tdf150966_regularInset.docx");
 
     // The shape is imported as custom shape with attached frame.
     // The insets are currently imported as margin top="4.99mm" and bottom="10mm".

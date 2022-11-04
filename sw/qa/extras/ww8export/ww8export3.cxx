@@ -190,7 +190,7 @@ DECLARE_WW8EXPORT_TEST(testGutterLeft, "gutter-left.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
-    load(mpTestDocumentPath, "gutter-top.doc");
+    load("gutter-top.doc");
     reload(mpFilter, "gutter-top.doc");
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
@@ -863,7 +863,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     };
 
     // Given a document with RTL gutter, when loading it:
-    load(mpTestDocumentPath, "rtl-gutter.doc");
+    load("rtl-gutter.doc");
     // Then make sure the section's gutter is still RTL:
     // Without the accompanying fix in place, this test would have failed as the SPRM was missing.
     verify();
@@ -1087,7 +1087,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 
     // Given a document with a clearing break:
     // When loading that file:
-    load(mpTestDocumentPath, "clearing-break.doc");
+    load("clearing-break.doc");
     // Then make sure that the clear property of the break is not ignored:
     verify();
     reload(mpFilter, "clearing-break.doc");

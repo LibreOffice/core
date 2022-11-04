@@ -87,7 +87,7 @@ public:
         utl::TempFileNamed aTempDir(nullptr, true);
         aTempDir.EnableKillingFile();
         const OUString aWorkDir = aTempDir.GetURL();
-        const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
+        const OUString aURI( createFileURL(OUString::createFromAscii(datasource) ) );
         const OUString aPrefix = column ? OUString::createFromAscii( column ) : "LOMM_";
         const OUString aDBName = registerDBsource( aURI, aWorkDir );
         initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, filter, selection, column != nullptr );
@@ -150,7 +150,7 @@ public:
 
         mMMargs.emplace_back( UNO_NAME_OUTPUT_TYPE, uno::Any( filter ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
         mMMargs.emplace_back( UNO_NAME_DOCUMENT_URL, uno::Any(
-                                         ( OUString( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
+                                         ( createFileURL(OUString::createFromAscii(filename)) ) ) );
         mMMargs.emplace_back( UNO_NAME_DATA_SOURCE_NAME, uno::Any( aDBName ) );
         mMMargs.emplace_back( UNO_NAME_OUTPUT_URL, uno::Any( aWorkDir ) );
         if (filter)
@@ -216,7 +216,7 @@ public:
         // Windows before MM uses it, MM won't work, as it's already open.
         // Don't move the load before the mail merge execution!
         // (see gb_CppunitTest_use_instdir_configuration)
-        load(mpTestDocumentPath, maMMtestFilename);
+        load(maMMtestFilename);
 
         if (mnCurOutputType == text::MailMergeType::SHELL)
         {

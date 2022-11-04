@@ -633,7 +633,7 @@ DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 {
-    load(mpTestDocumentPath, "tdf57317_autoListName.odt");
+    load("tdf57317_autoListName.odt");
     // The list style (from styles.xml) overrides a duplicate named auto-style
     //uno::Any aNumStyle = getStyles("NumberingStyles")->getByName("L1");
     //CPPUNIT_ASSERT(aNumStyle.hasValue());
@@ -766,7 +766,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
 {
     // Given a document with a para and a char style that links each other, when loading that
     // document:
-    load(mpTestDocumentPath, "style-link.fodt");
+    load("style-link.fodt");
 
     // Then make sure the char style links the para one:
     uno::Any aCharStyle = getStyles("CharacterStyles")->getByName("List Paragraph Char");

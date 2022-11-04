@@ -432,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     };
 
     // Given a document with RTL gutter, when loading it:
-    load(mpTestDocumentPath, "rtl-gutter.rtf");
+    load("rtl-gutter.rtf");
     // Then make sure the section's gutter is still RTL:
     // Without the accompanying fix in place, this test would have failed as \rtlgutter was missing.
     verify();
@@ -493,7 +493,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
 {
-    load(mpTestDocumentPath, "tdf127806.rtf");
+    load("tdf127806.rtf");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(1)->getShapeType());

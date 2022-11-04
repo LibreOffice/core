@@ -41,7 +41,7 @@ void SearchResultLocatorTest::testSearchResultLocator()
     if (!IsDefaultDPI())
         return;
 
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_VariousParagraphs.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
@@ -68,7 +68,7 @@ void SearchResultLocatorTest::testSearchResultLocatorUsingXmlPayload()
     if (!IsDefaultDPI())
         return;
 
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_VariousParagraphs.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
@@ -96,7 +96,7 @@ void SearchResultLocatorTest::testSearchResultLocatorUsingJsonPayload()
     if (!IsDefaultDPI())
         return;
 
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_VariousParagraphs.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
@@ -124,7 +124,7 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
     if (!IsDefaultDPI())
         return;
 
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Shapes.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Shapes.odt");
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
@@ -151,7 +151,7 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjectsUsingJsonPaylo
     if (!IsDefaultDPI())
         return;
 
-    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "IndexingExport_Shapes.odt");
+    SwDoc* pDoc = createSwDoc("IndexingExport_Shapes.odt");
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);

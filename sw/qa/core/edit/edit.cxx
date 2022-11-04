@@ -13,20 +13,23 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/edit/data/";
-
 namespace
 {
 /// Covers sw/source/core/edit/ fixes.
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase("/sw/qa/core/edit/data/")
+    {
+    }
 };
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineHidden)
 {
     // Given a document with ShowRedlineChanges=false:
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "redline-hidden.fodt");
+    SwDoc* pDoc = createSwDoc("redline-hidden.fodt");
 
     // When formatting a paragraph by setting the para adjust to center, then make sure setting the
     // new item set on the paragraph doesn't crash:

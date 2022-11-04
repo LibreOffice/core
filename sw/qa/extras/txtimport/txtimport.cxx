@@ -49,7 +49,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf112191)
 {
-    load(mpTestDocumentPath, "bullets.odt");
+    load("bullets.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf112191)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withoutbom)
 {
-    load(mpTestDocumentPath, "UTF8WITHOUTBOM.txt");
+    load("UTF8WITHOUTBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withoutbom)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
 {
-    load(mpTestDocumentPath, "UTF8WITHBOM.txt");
+    load("UTF8WITHBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
 {
-    load(mpTestDocumentPath, "UTF16LEWITHOUTBOM.txt");
+    load("UTF16LEWITHOUTBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
 {
-    load(mpTestDocumentPath, "UTF16LEWITHBOM.txt");
+    load("UTF16LEWITHBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
 {
-    load(mpTestDocumentPath, "GB18030.txt");
+    load("GB18030.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 {
-    load(mpTestDocumentPath, "UTF16BEWITHOUTBOM.txt");
+    load("UTF16BEWITHOUTBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithbom)
 {
-    load(mpTestDocumentPath, "UTF16BEWITHBOM.txt");
+    load("UTF16BEWITHBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();

@@ -31,11 +31,14 @@
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/txtnode/data/";
-
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
 {
+public:
+    SwCoreTxtnodeTest()
+        : SwModelTestBase("/sw/qa/core/txtnode/data/")
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
@@ -44,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     // classified as vertical, i.e. the glyph has the same direction in both the lrtb ("Latin") and
     // tbrl ("Chinese") directions. Make sure that Chinese text is handled the same way in the btlr
     // case as it's handled in the Latin case.
-    load(DATA_DIRECTORY, "btlr-cell-chinese.doc");
+    load("btlr-cell-chinese.doc");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -60,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
 {
-    load(DATA_DIRECTORY, "textbox-copy-anchor.docx");
+    load("textbox-copy-anchor.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
@@ -88,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
 {
-    load(DATA_DIRECTORY, "textbox-node-split.docx");
+    load("textbox-node-split.docx");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
@@ -132,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     comphelper::LibreOfficeKit::setActive(true);
 
     // Given a document with a title field:
-    load(DATA_DIRECTORY, "title-field-invalidate.fodt");
+    load("title-field-invalidate.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pTextDoc->initializeForTiledRendering({});
     SwDocShell* pShell = pTextDoc->GetDocShell();
@@ -168,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
 {
     // Given a document with a fly frame, anchored after the last char of the document:
-    load(DATA_DIRECTORY, "fly-anchor-undo.odt");
+    load("fly-anchor-undo.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     SwDoc* pDoc = pShell->GetDoc();
