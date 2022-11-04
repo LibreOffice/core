@@ -117,6 +117,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/Links")           ,true },
         { std::u16string_view(u"/LinksVisited")    ,true },
         { std::u16string_view(u"/Spell")     ,false },
+        { std::u16string_view(u"/Grammar")     ,false },
         { std::u16string_view(u"/SmartTags")     ,false },
         { std::u16string_view(u"/Shadow")        , true },
         { std::u16string_view(u"/WriterTextGrid")  ,false },
@@ -372,6 +373,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, // LINKS
         Color(0x0000cc), // LINKSVISITED
         COL_LIGHTRED, // SPELL
+        COL_LIGHTBLUE, // GRAMMAR
         COL_LIGHTMAGENTA, // SMARTTAGS
         COL_GRAY, // SHADOWCOLOR
         COL_LIGHTGRAY, // WRITERTEXTGRID

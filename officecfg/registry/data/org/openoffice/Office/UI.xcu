@@ -198,6 +198,11 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="Grammar">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="SmartTags">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -489,6 +494,11 @@
         <node oor:name="Spell">
           <prop oor:name="Color">
             <value>13181214</value>
+          </prop>
+        </node>
+        <node oor:name="Grammar">
+          <prop oor:name="Color">
+            <value>7512015</value>
           </prop>
         </node>
         <node oor:name="SmartTags">

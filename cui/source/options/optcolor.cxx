@@ -106,6 +106,7 @@ const vEntryInfo[] =
     { Group_General, IDS_CB(unvisitedlinks) },
     { Group_General, IDS_CB(visitedlinks) },
     { Group_General, IDS(autospellcheck) },
+    { Group_General, IDS(grammarcheck) },
     { Group_General, IDS(smarttags) },
     { Group_General, IDS_CB(shadows) },
 

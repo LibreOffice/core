@@ -38,6 +38,7 @@ enum ColorConfigEntry
     LINKS               ,
     LINKSVISITED        ,
     SPELL         ,
+    GRAMMAR       ,
     SMARTTAGS     ,
     SHADOWCOLOR         ,
     WRITERTEXTGRID      ,

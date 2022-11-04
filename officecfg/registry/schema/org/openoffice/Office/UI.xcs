@@ -160,6 +160,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="Grammar">
+        <info>
+          <desc>Specifies the settings for incorrect grammar found with spellchecking.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color of incorrect grammar found with AutoSpellcheck.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="SmartTags">
         <info>
           <desc>Specifies the settings for smart tags.</desc>

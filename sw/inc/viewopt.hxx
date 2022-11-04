@@ -207,6 +207,7 @@ class SW_DLLPUBLIC SwViewOption
     static Color    s_aDirectCursorColor;
     static Color    s_aTextGridColor;
     static Color    s_aSpellColor;     // mark color of online spell checking
+    static Color    s_aGrammarColor;
     static Color    s_aSmarttagColor;
     static Color    s_aFieldShadingsColor;
     static Color    s_aSectionBoundColor;
@@ -759,6 +760,7 @@ public:
     static Color&   GetDirectCursorColor();
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
+    static Color&   GetGrammarColor();
     static Color&   GetSmarttagColor();
     static Color&   GetShadowColor();
     static Color&   GetFontColor();

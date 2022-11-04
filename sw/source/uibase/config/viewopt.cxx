@@ -51,6 +51,7 @@ Color SwViewOption::s_aVisitedLinksColor(COL_RED);
 Color SwViewOption::s_aDirectCursorColor(COL_BLUE);
 Color SwViewOption::s_aTextGridColor(COL_LIGHTGRAY);
 Color SwViewOption::s_aSpellColor(COL_LIGHTRED);
+Color SwViewOption::s_aGrammarColor(COL_LIGHTBLUE);
 Color SwViewOption::s_aSmarttagColor(COL_LIGHTMAGENTA);
 Color SwViewOption::s_aFontColor(COL_BLACK);
 Color SwViewOption::s_aFieldShadingsColor(COL_LIGHTGRAY);
@@ -420,6 +421,11 @@ Color&   SwViewOption::GetSpellColor()
     return s_aSpellColor;
 }
 
+Color&   SwViewOption::GetGrammarColor()
+{
+    return s_aGrammarColor;
+}
+
 Color&   SwViewOption::GetSmarttagColor()
 {
     return s_aSmarttagColor;
@@ -502,6 +508,7 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     s_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
 
     s_aSpellColor = rConfig.GetColorValue(svtools::SPELL).nColor;
+    s_aGrammarColor = rConfig.GetColorValue(svtools::GRAMMAR).nColor;
 
     s_aSmarttagColor = rConfig.GetColorValue(svtools::SMARTTAGS).nColor;
 

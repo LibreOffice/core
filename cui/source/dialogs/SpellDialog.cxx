@@ -1674,11 +1674,10 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
 
     // tdf#116566 Use color defined in the current Color Scheme
     Color aSpellErrorCollor = svtools::ColorConfig().GetColorValue(svtools::SPELL).nColor;
+    Color aGrammarErrorCollor = svtools::ColorConfig().GetColorValue(svtools::GRAMMAR).nColor;
 
-    // TODO: Create a new Color Scheme entry for grammar mistakes and use it below
-    // instead of using hardcoded COL_LIGHTBLUE
     SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
-    aSet.Put(SvxColorItem(bGrammarError ? COL_LIGHTBLUE : aSpellErrorCollor, EE_CHAR_COLOR));
+    aSet.Put(SvxColorItem(bGrammarError ? aGrammarErrorCollor : aSpellErrorCollor, EE_CHAR_COLOR));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL));
