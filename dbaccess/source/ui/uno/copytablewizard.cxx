@@ -1416,8 +1416,8 @@ void CopyTableWizard::impl_doCopy_nothrow()
     }
     catch( const Exception& )
     {
-        TOOLS_WARN_EXCEPTION("dbaccess", "");
         aError = ::cppu::getCaughtException();
+        SAL_WARN("dbaccess", exceptionToString(aError));
 
         // silence the error of the user cancelling the parameter's dialog
         SQLException aSQLError;
