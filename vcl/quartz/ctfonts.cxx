@@ -279,7 +279,6 @@ std::vector<hb_variation_t> CoreTextFontFace::GetVariations() const
         if (pAxes)
         {
             CFDictionaryRef pVariations = CTFontCopyVariation(pFont);
-            std::vector<hb_variation_t> aHBVariations;
             if (pVariations)
             {
                 CFIndex nAxes = CFArrayGetCount(pAxes);
