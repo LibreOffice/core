@@ -3133,6 +3133,10 @@ bool GtkSalFrame::DrawingAreaButton(SalEvent nEventType, int nEventX, int nEvent
 
 void GtkSalFrame::UpdateGeometryFromEvent(int x_root, int y_root, int nEventX, int nEventY)
 {
+    //tdf#151509 don't overwrite geometry for system childs
+    if (m_nStyle & SalFrameStyleFlags::SYSTEMCHILD)
+        return;
+
     int frame_x = x_root - nEventX;
     int frame_y = y_root - nEventY;
     if (m_bGeometryIsProvisional || frame_x != maGeometry.x() || frame_y != maGeometry.y())
