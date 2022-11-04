@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/NotInitializedException.hpp>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <docuno.hxx>
 #include <table.hxx>
 #include <column.hxx>
@@ -6748,7 +6749,15 @@ void ScDocument::SetNote(const ScAddress& rPos, std::unique_ptr<ScPostIt> pNote)
 void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPostIt> pNote)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    {
         maTabs[nTab]->SetNote(nCol, nRow, std::move(pNote));
+
+        if (ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(GetDocumentShell()))
+        {
+            HelperNotifyChanges::NotifyIfChangesListeners(
+                *pDocSh, ScRange(nCol, nRow, nTab), "note");
+        }
+    }
 }
 
 bool ScDocument::HasNote(const ScAddress& rPos) const

@@ -1803,9 +1803,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
     SelectionChanged(true);
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
-    if (!pModelObj)
-        return;
+    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
 
     ScRangeList aChangeRanges;
     for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
@@ -1819,7 +1817,11 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
             aChangeRanges.push_back(aChangeRange);
         }
     }
-    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
+
+    if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "paste");
+    else if (pModelObj)
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "data-area-invalidate");
 }
 
 //      D R A G   A N D   D R O P

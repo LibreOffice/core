@@ -41,6 +41,7 @@
 #include <columnspanset.hxx>
 
 #include <editable.hxx>
+#include <table.hxx>
 #include <tabprotection.hxx>
 #include <undomanager.hxx>
 
@@ -5387,6 +5388,7 @@ void Test::testAreasWithNotes()
 
     m_pDoc->SetString(0, 3, 0, "Some Text");
     m_pDoc->SetString(3, 3, 0, "Some Text");
+    m_pDoc->FetchTable(0)->InvalidateCellArea();
 
     dataFound = m_pDoc->GetDataStart(0,col,row);
 

@@ -1487,9 +1487,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     if ( bDoAutoSpell )
         CopyAutoSpellData(eDir, nStartCol, nStartRow, nEndCol, nEndRow, nCount);
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
-    if (!pModelObj)
-        return;
+    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
 
     ScRangeList aChangeRanges;
     ScRange aChangeRange( aRange );
@@ -1511,7 +1509,11 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
             break;
     }
     aChangeRanges.push_back( aChangeRange );
-    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
+
+    if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
+    else if (pModelObj)
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "data-area-invalidate");
 }
 
 void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,

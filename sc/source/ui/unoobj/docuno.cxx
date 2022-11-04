@@ -695,9 +695,9 @@ Size ScModelObj::getDataArea(long nPart)
     SCTAB nTab = nPart;
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
-    const ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
-    const ScTable* pTab = rDoc.FetchTable(nTab);
+    ScTable* pTab = rDoc.FetchTable(nTab);
     if (!pTab)
         return aSize;
 
@@ -3173,9 +3173,75 @@ bool ScModelObj::HasChangesListeners() const
     return pDocShell && pDocShell->GetDocument().HasAnySheetEventScript(ScSheetEventId::CHANGE);
 }
 
+namespace
+{
+
+void lcl_dataAreaInvalidation(ScDocument& rDocument, ScModelObj* pModel,
+                              const ScRangeList& rRanges,
+                              bool bInvalidateDataArea, bool bExtendDataArea)
+{
+    size_t nRangeCount = rRanges.size();
+
+    for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
+    {
+        ScRange const & rRange = rRanges[ nIndex ];
+        ScAddress const & rEnd = rRange.aEnd;
+        SCTAB nTab = rEnd.Tab();
+
+        bool bAreaExtended = false;
+
+        if (bExtendDataArea)
+        {
+            const Size aCurrentDataArea = pModel->getDataArea( nTab );
+
+            SCCOL nLastCol = aCurrentDataArea.Width();
+            SCROW nLastRow = aCurrentDataArea.Height();
+
+            bAreaExtended = rEnd.Col() > nLastCol || rEnd.Row() > nLastRow;
+        }
+
+        bool bInvalidate = bAreaExtended || bInvalidateDataArea;
+        if ( bInvalidate )
+        {
+            ScTable* pTab = rDocument.FetchTable( nTab );
+            if ( pTab )
+                pTab->InvalidateCellArea();
+
+            if ( comphelper::LibreOfficeKit::isActive() )
+                SfxLokHelper::notifyPartSizeChangedAllViews( pModel, nTab );
+        }
+    }
+}
+
+};
+
 void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& rRanges,
     const uno::Sequence< beans::PropertyValue >& rProperties )
 {
+    OUString aOperation = rOperation;
+    bool bIsDataAreaInvalidateType = aOperation == "data-area-invalidate";
+    bool bIsDataAreaExtendType = aOperation == "data-area-extend";
+
+    bool bInvalidateDataArea = bIsDataAreaInvalidateType
+        || HelperNotifyChanges::isDataAreaInvalidateType(aOperation);
+    bool bExtendDataArea = bIsDataAreaExtendType || aOperation == "cell-change";
+
+    if ( pDocShell )
+    {
+        ScDocument& rDocument = pDocShell->GetDocument();
+        lcl_dataAreaInvalidation(rDocument, this, rRanges, bInvalidateDataArea, bExtendDataArea);
+
+        // check if we were called only to update data area
+        if (bIsDataAreaInvalidateType || bIsDataAreaExtendType)
+            return;
+
+        // backward-compatibility Operation conversion
+        // FIXME: make sure it can be passed
+        if (rOperation == "delete-content" || rOperation == "undo"
+            || rOperation == "redo" || rOperation == "paste")
+            aOperation = "cell-change";
+    }
+
     if ( pDocShell && HasChangesListeners() )
     {
         util::ChangesEvent aEvent;
@@ -3200,7 +3266,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
             }
 
             util::ElementChange& rChange = pChanges[ static_cast< sal_Int32 >( nIndex ) ];
-            rChange.Accessor <<= rOperation;
+            rChange.Accessor <<= aOperation;
             rChange.Element <<= rProperties;
             rChange.ReplacedElement <<= xRangeObj;
         }
@@ -3218,27 +3284,9 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        size_t nRangeCount = rRanges.size();
-        for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
-        {
-            ScRange const & rRange = rRanges[ nIndex ];
-            ScAddress const & rEnd = rRange.aEnd;
-            const Size aCurrentDataArea = getDataArea(rEnd.Tab());
-
-            SCCOL nLastCol = aCurrentDataArea.Width();
-            SCROW nLastRow = aCurrentDataArea.Height();
-
-            // is equal -> probably we just edited last col/row
-            if (rEnd.Col() >= nLastCol || rEnd.Row() >= nLastRow)
-                SfxLokHelper::notifyPartSizeChangedAllViews(this, rEnd.Tab());
-        }
-    }
-
     // handle sheet events
     //! separate method with ScMarkData? Then change HasChangesListeners back.
-    if ( !(rOperation == "cell-change" && pDocShell) )
+    if ( !(aOperation == "cell-change" && pDocShell) )
         return;
 
     ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());

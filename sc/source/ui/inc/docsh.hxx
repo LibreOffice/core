@@ -470,13 +470,34 @@ public:
 //#i97876# Spreadsheet data changes are not notified
 namespace HelperNotifyChanges
 {
-    inline ScModelObj* getMustPropagateChangesModel(const ScDocShell &rDocShell)
+    inline bool isDataAreaInvalidateType(std::u16string_view rType)
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(rDocShell.GetModel());
-        const bool isLOK = comphelper::LibreOfficeKit::isActive(); // for LOK_CALLBACK_DOCUMENT_SIZE_CHANGED
-        if (pModelObj && (pModelObj->HasChangesListeners() || isLOK))
-            return pModelObj;
-        return nullptr;
+        if (rType == u"delete-content")
+            return true;
+        if (rType == u"delete-rows")
+            return true;
+        if (rType == u"delete-columns")
+            return true;
+        if (rType == u"undo")
+            return true;
+        if (rType == u"redo")
+            return true;
+        if (rType == u"paste")
+            return true;
+        if (rType == u"note")
+            return true;
+
+        return false;
+    }
+
+    inline ScModelObj* getModel(const ScDocShell &rDocShell)
+    {
+        return comphelper::getFromUnoTunnel<ScModelObj>(rDocShell.GetModel());
+    }
+
+    inline bool getMustPropagateChangesModel(ScModelObj* pModelObj)
+    {
+        return pModelObj && pModelObj->HasChangesListeners();
     }
 
     inline void Notify(ScModelObj &rModelObj, const ScRangeList &rChangeRanges,
@@ -490,10 +511,15 @@ namespace HelperNotifyChanges
     inline void NotifyIfChangesListeners(const ScDocShell &rDocShell, const ScRange &rRange,
         const OUString &rType = OUString("cell-change"))
     {
-        if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))
-        {
-            ScRangeList aChangeRanges(rRange);
+        ScModelObj* pModelObj = getModel(rDocShell);
+        ScRangeList aChangeRanges(rRange);
+
+        if (getMustPropagateChangesModel(pModelObj))
             Notify(*pModelObj, aChangeRanges, rType);
+        else if (pModelObj) // possibly need to invalidate getCellArea results
+        {
+            Notify(*pModelObj, aChangeRanges, isDataAreaInvalidateType(rType)
+                ? OUString("data-area-invalidate") : OUString("data-area-extend"));
         }
     }
 };
