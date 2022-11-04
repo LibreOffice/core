@@ -18,6 +18,7 @@
 
 #if USE_TLS_NSS
 #include <nss.h>
+#include <nspr.h>
 #include <sechash.h>
 #elif USE_TLS_OPENSSL
 #include <openssl/evp.h>
@@ -78,7 +79,9 @@ struct HashImpl
 #if USE_TLS_NSS
         auto const e = NSS_NoDB_Init(nullptr);
         if (e != SECSuccess) {
-            throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString::number(e));
+            PRErrorCode error = PR_GetError();
+            const char* errorText = PR_ErrorToName(error);
+            throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number((int) error) + ")");
         }
         mpContext = HASH_Create(getNSSType());
         HASH_Begin(mpContext);
