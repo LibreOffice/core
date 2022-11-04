@@ -3130,6 +3130,21 @@ bool GtkSalFrame::DrawingAreaButton(SalEvent nEventType, int nEventX, int nEvent
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
+
+void GtkSalFrame::UpdateGeometryFromEvent(int x_root, int y_root, int nEventX, int nEventY)
+{
+    int frame_x = x_root - nEventX;
+    int frame_y = y_root - nEventY;
+    if (m_bGeometryIsProvisional || frame_x != maGeometry.x() || frame_y != maGeometry.y())
+    {
+        m_bGeometryIsProvisional = false;
+        maGeometry.setPos({ frame_x, frame_y });
+        ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->maNWFData.mbCanDetermineWindowPosition)
+            CallCallbackExc(SalEvent::Move, nullptr);
+    }
+}
+
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
@@ -3187,18 +3202,7 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
         translate_coords(pEvent->window, pEventWidget, nEventX, nEventY);
 
     if (!aDel.isDeleted())
-    {
-        int frame_x = static_cast<int>(pEvent->x_root - nEventX);
-        int frame_y = static_cast<int>(pEvent->y_root - nEventY);
-        if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.x() || frame_y != pThis->maGeometry.y())
-        {
-            pThis->m_bGeometryIsProvisional = false;
-            pThis->maGeometry.setPos({ frame_x, frame_y });
-            ImplSVData* pSVData = ImplGetSVData();
-            if (pSVData->maNWFData.mbCanDetermineWindowPosition)
-                pThis->CallCallbackExc(SalEvent::Move, nullptr);
-        }
-    }
+        pThis->UpdateGeometryFromEvent(pEvent->x_root, pEvent->y_root, nEventX, nEventY);
 
     bool bRet = false;
     if (!aDel.isDeleted())
@@ -3501,22 +3505,10 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     if (bDifferentEventWindow)
         translate_coords(pEvent->window, pEventWidget, nEventX, nEventY);
 
-    int frame_x = static_cast<int>(pEvent->x_root - nEventX);
-    int frame_y = static_cast<int>(pEvent->y_root - nEventY);
-
-    if (pThis->m_bGeometryIsProvisional || frame_x != pThis->maGeometry.x() || frame_y != pThis->maGeometry.y())
-    {
-        pThis->m_bGeometryIsProvisional = false;
-        pThis->maGeometry.setPos({ frame_x, frame_y });
-        ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maNWFData.mbCanDetermineWindowPosition)
-            pThis->CallCallbackExc(SalEvent::Move, nullptr);
-    }
+    pThis->UpdateGeometryFromEvent(pEvent->x_root, pEvent->y_root, nEventX, nEventY);
 
     if (!aDel.isDeleted())
-    {
         pThis->DrawingAreaMotion(nEventX, nEventY, pEvent->time, pEvent->state);
-    }
 
     if (!aDel.isDeleted())
     {

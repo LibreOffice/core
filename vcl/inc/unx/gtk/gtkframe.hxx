@@ -425,6 +425,8 @@ class GtkSalFrame final : public SalFrame
 
     void ListenPortalSettings();
 
+    void UpdateGeometryFromEvent(int x_root, int y_root, int nEventX, int nEventY);
+
 public:
     cairo_surface_t*                m_pSurface;
     basegfx::B2IVector              m_aFrameSize;
