@@ -1132,9 +1132,7 @@ drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const
         {
             case SdrObjKind::Polygon:      aRetval = drawing::PolygonKind_POLY; break;
             case SdrObjKind::PolyLine:      aRetval = drawing::PolygonKind_PLIN; break;
-            case SdrObjKind::SplineLine:
             case SdrObjKind::PathLine:  aRetval = drawing::PolygonKind_PATHLINE; break;
-            case SdrObjKind::SplineFill:
             case SdrObjKind::PathFill:  aRetval = drawing::PolygonKind_PATHFILL; break;
             case SdrObjKind::FreehandLine:  aRetval = drawing::PolygonKind_FREELINE; break;
             case SdrObjKind::FreehandFill:  aRetval = drawing::PolygonKind_FREEFILL; break;

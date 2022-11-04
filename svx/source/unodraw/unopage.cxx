@@ -670,11 +670,9 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                 case SdrObjKind::PolyLine:
                     pRet = new SvxShapePolyPolygon( pObj );
                     break;
-                case SdrObjKind::SplineLine:
                 case SdrObjKind::PathLine:
                     pRet = new SvxShapePolyPolygon( pObj );
                     break;
-                case SdrObjKind::SplineFill:
                 case SdrObjKind::PathFill:
                     pRet = new SvxShapePolyPolygon( pObj );
                     break;

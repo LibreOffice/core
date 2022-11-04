@@ -2764,8 +2764,6 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
         case SdrObjKind::PathFill:
         case SdrObjKind::FreehandLine:
         case SdrObjKind::FreehandFill:
-        case SdrObjKind::SplineLine:
-        case SdrObjKind::SplineFill:
         case SdrObjKind::Text:
         case SdrObjKind::TitleText:
         case SdrObjKind::OutlineText:

@@ -1000,8 +1000,6 @@ static bool svx_needLogicRectHack( SdrObject const * pObj )
         case SdrObjKind::PathFill:
         case SdrObjKind::FreehandLine:
         case SdrObjKind::FreehandFill:
-        case SdrObjKind::SplineLine:
-        case SdrObjKind::SplineFill:
         case SdrObjKind::Edge:
         case SdrObjKind::PathPoly:
         case SdrObjKind::PathPolyLine:

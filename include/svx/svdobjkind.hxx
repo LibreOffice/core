@@ -37,8 +37,6 @@ enum class SdrObjKind : sal_uInt16
     PathFill = 11, /// closed Bezier-curve
     FreehandLine = 12, /// open free-hand line
     FreehandFill = 13, /// closed free-hand line
-    SplineLine = 14, /// natural cubic Spline                  (ni)
-    SplineFill = 15, /// periodic cubic Spline                 (ni)
     Text = 16, /// text object
     TitleText = 20, /// TitleText, special text object for StarDraw
     OutlineText = 21, /// OutlineText, special text object for StarDraw

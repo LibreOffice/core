@@ -522,7 +522,7 @@ public:
     PointerStyle GetCreatePointer() const;
 
     // helping stuff
-    static bool IsClosed(SdrObjKind eKind) { return eKind==SdrObjKind::Polygon || eKind==SdrObjKind::PathPoly || eKind==SdrObjKind::PathFill || eKind==SdrObjKind::FreehandFill || eKind==SdrObjKind::SplineFill; }
+    static bool IsClosed(SdrObjKind eKind) { return eKind==SdrObjKind::Polygon || eKind==SdrObjKind::PathPoly || eKind==SdrObjKind::PathFill || eKind==SdrObjKind::FreehandFill; }
     static bool IsFreeHand(SdrObjKind eKind) { return eKind==SdrObjKind::FreehandLine || eKind==SdrObjKind::FreehandFill; }
     static bool IsBezier(SdrObjKind eKind) { return eKind==SdrObjKind::PathLine || eKind==SdrObjKind::PathFill; }
     bool IsCreating() const { return mbCreating; }
@@ -1270,8 +1270,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
                 case SdrObjKind::PathFill:
                 case SdrObjKind::FreehandLine:
                 case SdrObjKind::FreehandFill:
-                case SdrObjKind::SplineLine:
-                case SdrObjKind::SplineFill: {
+                {
                     pU->eCurrentKind=eNewKind;
                     pU->bMixedCreate=true;
                     pU->nBezierStartPoint=rXPoly.GetPointCount();
@@ -1592,8 +1591,6 @@ PointerStyle ImpPathForDragAndCreate::GetCreatePointer() const
         case SdrObjKind::PathFill: return PointerStyle::DrawBezier;
         case SdrObjKind::FreehandLine: return PointerStyle::DrawFreehand;
         case SdrObjKind::FreehandFill: return PointerStyle::DrawFreehand;
-        case SdrObjKind::SplineLine: return PointerStyle::DrawFreehand;
-        case SdrObjKind::SplineFill: return PointerStyle::DrawFreehand;
         case SdrObjKind::PathPoly: return PointerStyle::DrawPolygon;
         case SdrObjKind::PathPolyLine: return PointerStyle::DrawPolygon;
         default: break;
@@ -1784,7 +1781,6 @@ void SdrPathObj::ImpSetClosed(bool bClose)
             case SdrObjKind::PolyLine    : meKind=SdrObjKind::Polygon;     break;
             case SdrObjKind::PathLine: meKind=SdrObjKind::PathFill; break;
             case SdrObjKind::FreehandLine: meKind=SdrObjKind::FreehandFill; break;
-            case SdrObjKind::SplineLine: meKind=SdrObjKind::SplineFill; break;
             default: break;
         }
 
@@ -1797,7 +1793,6 @@ void SdrPathObj::ImpSetClosed(bool bClose)
             case SdrObjKind::Polygon    : meKind=SdrObjKind::PolyLine;     break;
             case SdrObjKind::PathFill: meKind=SdrObjKind::PathLine; break;
             case SdrObjKind::FreehandFill: meKind=SdrObjKind::FreehandLine; break;
-            case SdrObjKind::SplineFill: meKind=SdrObjKind::SplineLine; break;
             default: break;
         }
 
@@ -1812,7 +1807,7 @@ void SdrPathObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bNoContortion=false;
 
     bool bCanConv = !HasText() || ImpCanConvTextToCurve();
-    bool bIsPath = IsBezier() || IsSpline();
+    bool bIsPath = IsBezier();
 
     rInfo.bEdgeRadiusAllowed    = false;
     rInfo.bCanConvToPath = bCanConv && !bIsPath;
@@ -1916,10 +1911,8 @@ OUString SdrPathObj::TakeObjNameSingul() const
         {
             case SdrObjKind::PathLine: sName = SvxResId(STR_ObjNameSingulPATHLINE); break;
             case SdrObjKind::FreehandLine: sName = SvxResId(STR_ObjNameSingulFREELINE); break;
-            case SdrObjKind::SplineLine: sName = SvxResId(STR_ObjNameSingulNATSPLN); break;
             case SdrObjKind::PathFill: sName = SvxResId(STR_ObjNameSingulPATHFILL); break;
             case SdrObjKind::FreehandFill: sName = SvxResId(STR_ObjNameSingulFREEFILL); break;
-            case SdrObjKind::SplineFill: sName = SvxResId(STR_ObjNameSingulPERSPLN); break;
             default: break;
         }
     }
@@ -1941,10 +1934,8 @@ OUString SdrPathObj::TakeObjNamePlural() const
         case SdrObjKind::Polygon    : sName=SvxResId(STR_ObjNamePluralPOLY    ); break;
         case SdrObjKind::PathLine: sName=SvxResId(STR_ObjNamePluralPATHLINE); break;
         case SdrObjKind::FreehandLine: sName=SvxResId(STR_ObjNamePluralFREELINE); break;
-        case SdrObjKind::SplineLine: sName=SvxResId(STR_ObjNamePluralNATSPLN); break;
         case SdrObjKind::PathFill: sName=SvxResId(STR_ObjNamePluralPATHFILL); break;
         case SdrObjKind::FreehandFill: sName=SvxResId(STR_ObjNamePluralFREEFILL); break;
-        case SdrObjKind::SplineFill: sName=SvxResId(STR_ObjNamePluralPERSPLN); break;
         default: break;
     }
     return sName;

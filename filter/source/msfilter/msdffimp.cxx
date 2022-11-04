@@ -542,8 +542,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             case SdrObjKind::PathFill :
                             case SdrObjKind::FreehandLine :
                             case SdrObjKind::FreehandFill :
-                            case SdrObjKind::SplineLine :
-                            case SdrObjKind::SplineFill :
                             case SdrObjKind::PathPoly :
                             case SdrObjKind::PathPolyLine :
                             {
