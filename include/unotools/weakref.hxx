@@ -117,7 +117,7 @@ public:
         css::uno::Reference<css::uno::XInterface> xInterface = WeakReferenceHelper::get();
         // If XInterface is an ambiguous base of interface_type, we have to use dynamic_cast,
         // otherwise we can use the faster static_cast.
-        if constexpr (std::is_convertible_v<css::uno::XInterface, interface_type>)
+        if constexpr (std::is_convertible_v<interface_type*, css::uno::XInterface*>)
             return static_cast<interface_type*>(xInterface.get());
         else
             return dynamic_cast<interface_type*>(xInterface.get());
