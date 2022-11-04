@@ -325,15 +325,21 @@ static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 
 namespace HelperNotifyChanges
 {
-    static void NotifyIfChangesListeners(const ScDocShell &rDocShell, ScMarkData& rMark, SCCOL nCol, SCROW nRow)
+    static void NotifyIfChangesListeners(const ScDocShell &rDocShell, ScMarkData& rMark,
+                                         SCCOL nCol, SCROW nRow, const OUString& rType = "cell-change")
     {
-        if (ScModelObj *pModelObj = getMustPropagateChangesModel(rDocShell))
-        {
-            ScRangeList aChangeRanges;
-            for (const auto& rTab : rMark)
-                aChangeRanges.push_back( ScRange( nCol, nRow, rTab ) );
+        ScModelObj* pModelObj = getModel(rDocShell);
 
-            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "cell-change");
+        ScRangeList aChangeRanges;
+        for (const auto& rTab : rMark)
+            aChangeRanges.push_back( ScRange( nCol, nRow, rTab ) );
+
+        if (getMustPropagateChangesModel(pModelObj))
+            Notify(*pModelObj, aChangeRanges, rType);
+        else
+        {
+            Notify(*pModelObj, aChangeRanges, isDataAreaInvalidateType(rType)
+                    ? OUString("data-area-invalidate") : OUString("data-area-extend"));
         }
     }
 }
@@ -613,7 +619,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     pDocSh->UpdateOle(GetViewData());
 
-    HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow);
+    const OUString aType(rString.isEmpty() ? u"delete-content" : u"cell-change");
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow, aType);
 
     if ( bRecord )
         rFunc.EndListAction();
@@ -767,7 +774,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             pDocSh->UpdateOle(GetViewData());
 
-            HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow);
+            bool bIsEmpty = rData.GetParagraphCount() == 0
+                || (rData.GetParagraphCount() == 1 && rData.GetText(0).isEmpty());
+            const OUString aType(bIsEmpty ? u"delete-content" : u"cell-change");
+            HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow, aType);
 
             aModificator.SetDocumentModified();
         }
@@ -1273,8 +1283,9 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         CellContentChanged();
     }
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
-    if (pModelObj)
+    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
+
+    if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
     {
         css::uno::Sequence< css::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
@@ -2033,7 +2044,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 
     pDocSh->UpdateOle(GetViewData());
 
-    if (ScModelObj *pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh))
+    if (ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh))
     {
         ScRangeList aChangeRanges;
         if ( bSimple )
@@ -2044,7 +2055,11 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
         {
             aFuncMark.FillRangeListWithMarks( &aChangeRanges, false );
         }
-        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
+
+        if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
+            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "delete-content");
+        else if (pModelObj)
+            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "data-area-invalidate");
     }
 
     CellContentChanged();
@@ -2348,8 +2363,9 @@ void ScViewFunc::SetWidthOrHeight(
     if ( !bWidth )
         return;
 
-    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
-    if (!pModelObj)
+    ScModelObj* pModelObj = HelperNotifyChanges::getModel(*pDocSh);
+
+    if (!HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
         return;
 
     ScRangeList aChangeRanges;

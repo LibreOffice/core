@@ -115,6 +115,7 @@
 #include <warnpassword.hxx>
 #include <optsolver.hxx>
 #include <sheetdata.hxx>
+#include <table.hxx>
 #include <tabprotection.hxx>
 #include <docparam.hxx>
 #include "docshimp.hxx"

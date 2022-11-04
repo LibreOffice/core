@@ -244,6 +244,10 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatEndX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
     nRepeatEndY( SCROW_REPEAT_NONE ),
+    mbCellAreaDirty( true ),
+    mbCellAreaEmpty( true ),
+    mnEndCol( -1 ),
+    mnEndRow( -1 ),
     mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
     mpHiddenCols(new ScFlatBoolColSegments(rDoc.MaxCol())),
     mpHiddenRows(new ScFlatBoolRowSegments(rDoc.MaxRow())),
@@ -510,8 +514,15 @@ void ScTable::SetOptimalHeightOnly(
         delete pProgress;
 }
 
-bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
+bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow )
 {
+    if (!mbCellAreaDirty)
+    {
+        rEndCol = mnEndCol;
+        rEndRow = mnEndRow;
+        return !mbCellAreaEmpty;
+    }
+
     bool bFound = false;
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
@@ -555,8 +566,10 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
             }
     }
 
-    rEndCol = nMaxX;
-    rEndRow = nMaxY;
+    mnEndCol = rEndCol = nMaxX;
+    mnEndRow = rEndRow = nMaxY;
+    mbCellAreaEmpty = !bFound;
+    mbCellAreaDirty = false;
     return bFound;
 }
 
