@@ -1032,7 +1032,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (bMailPrepareExport)
                 {
                     SfxRequest aRequest(SID_MAIL_PREPAREEXPORT, SfxCallMode::SYNCHRON, GetPool());
-                    aRequest.AppendItem(SfxBoolItem(FN_PARAM_1, true));
+                    aRequest.AppendItem(SfxBoolItem(FN_NOUPDATE, true));
                     ExecuteSlot(aRequest);
                 }
 

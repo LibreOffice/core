@@ -881,13 +881,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
         case SID_MAIL_PREPAREEXPORT:
         {
-            const SfxPoolItem* pNoUpdate;
+            const SfxBoolItem* pNoUpdate = pArgs ?
+                pArgs->GetItem<SfxBoolItem>(FN_NOUPDATE, false) :
+                nullptr;
 
             //pWrtShell is not set in page preview
             if (m_pWrtShell)
                 m_pWrtShell->StartAllAction();
 
-            if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1, &pNoUpdate)))
+            if (!pNoUpdate || !pNoUpdate->GetValue())
             {
                 m_xDoc->getIDocumentFieldsAccess().UpdateFields( false );
                 m_xDoc->getIDocumentLinksAdministration().EmbedAllLinks();

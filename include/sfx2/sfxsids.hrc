@@ -673,6 +673,7 @@ class SvxZoomItem;
 #define FN_PARAM_4                          (FN_PARAM+63)
 #define FN_PARAM_5                          (FN_PARAM+64)
 #define FN_PARAM_6                          (FN_PARAM+65)
+#define FN_NOUPDATE                         (FN_PARAM+66)
 #define FN_FAX                              (SID_SW_START + 28)   /* Fax */
 
 #define SID_KEYFUNC_START                   (SID_SC_START + 521)
