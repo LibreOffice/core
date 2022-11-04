@@ -3204,8 +3204,8 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
     if (!aDel.isDeleted())
     {
         bRet = pThis->DrawingAreaButton(nEventType,
-                                        pEvent->x_root - pThis->maGeometry.x(),
-                                        pEvent->y_root - pThis->maGeometry.y(),
+                                        nEventX,
+                                        nEventY,
                                         pEvent->button,
                                         pEvent->time,
                                         pEvent->state);
@@ -3515,9 +3515,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     if (!aDel.isDeleted())
     {
-        pThis->DrawingAreaMotion(pEvent->x_root - pThis->maGeometry.x(),
-                                 pEvent->y_root - pThis->maGeometry.y(),
-                                 pEvent->time, pEvent->state);
+        pThis->DrawingAreaMotion(nEventX, nEventY, pEvent->time, pEvent->state);
     }
 
     if (!aDel.isDeleted())
