@@ -344,12 +344,20 @@ void SdImportTest::testConnectors()
 {
     loadFromURL(u"pptx/connectors.pptx");
 
-    sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476, 1357, -1357, 1604, -1540 };
-    for (size_t i = 1; i < 9; i++)
+    sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476,  1356, -1357, 1604,  -1540,
+                               607,   1296,  -1638, -1060, -522, 1578,  -1291, 333 };
+
+    sal_Int32 nCount = 0;
+    for (size_t i = 0; i < 18; i++)
     {
         uno::Reference<beans::XPropertySet> xConnector(getShapeFromPage(i, 0));
-        sal_Int32 nEdgeLine = xConnector->getPropertyValue("EdgeLine1Delta").get<sal_Int32>();
-        CPPUNIT_ASSERT_EQUAL(aEdgeValue[i - 1], nEdgeLine);
+        bool bConnector = xConnector->getPropertySetInfo()->hasPropertyByName("EdgeLine1Delta");
+        if (bConnector)
+        {
+            sal_Int32 nEdgeLine = xConnector->getPropertyValue("EdgeLine1Delta").get<sal_Int32>();
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLine);
+            nCount++;
+        }
     }
 }
 

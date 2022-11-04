@@ -46,6 +46,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <utility>
+#include <svx/svdobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -355,6 +356,7 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
 {
     sal_Int32 nEdge = 0;
     awt::Point aStartPt, aEndPt;
+    tools::Rectangle aStartRect, aEndRect;
     uno::Reference<drawing::XShape> xStartSp, xEndSp;
     uno::Reference<beans::XPropertySet> xPropSet(rXConnector, uno::UNO_QUERY);
     xPropSet->getPropertyValue("EdgeStartPoint") >>= aStartPt;
@@ -366,6 +368,14 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
     xPropSet->setPropertyValue("EdgeNode2HorzDist", Any(sal_Int32(0)));
     xPropSet->setPropertyValue("EdgeNode2VertDist", Any(sal_Int32(0)));
 
+    SdrObject* pStartObj = xStartSp.is() ? SdrObject::getSdrObjectFromXShape(xStartSp) : nullptr;
+    SdrObject* pEndObj = xEndSp.is() ? SdrObject::getSdrObjectFromXShape(xEndSp) : nullptr;
+
+    if (pStartObj)
+        aStartRect = pStartObj->GetSnapRect();
+    if (pEndObj)
+        aEndRect = pEndObj->GetSnapRect();
+
     const OUString sConnectorName = rShapePtr->getConnectorName();
     if (sConnectorName == "bentConnector2")
     {
@@ -375,16 +385,20 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
             if (aConnSize.Height < aConnSize.Width)
             {
                 if (xStartSp.is())
-                    nEdge = (aStartPt.Y > aEndPt.Y) ? -aConnSize.Height : aConnSize.Height;
+                    nEdge -= (aStartPt.Y > aEndPt.Y) ? (aStartRect.Top() - aEndPt.Y)
+                                                     : (aStartRect.Bottom() - aEndPt.Y);
                 else
-                    nEdge = (aStartPt.Y > aEndPt.Y) ? aConnSize.Height : -aConnSize.Height;
+                    nEdge -= (aStartPt.Y > aEndPt.Y) ? (aEndRect.Bottom() - aStartPt.Y)
+                                                     : (aEndRect.Top() - aStartPt.Y);
             }
             else
             {
                 if (xStartSp.is())
-                    nEdge = (aStartPt.X > aEndPt.X) ? -aConnSize.Width : aConnSize.Width;
+                    nEdge -= (aStartPt.X > aEndPt.X) ? (aStartRect.Left() - aEndPt.X)
+                                                     : (aStartRect.Right() - aEndPt.X);
                 else
-                    nEdge = (aStartPt.X > aEndPt.X) ? aConnSize.Width : -aConnSize.Width;
+                    nEdge -= (aStartPt.X > aEndPt.X) ? (aEndRect.Right() - aStartPt.X)
+                                                     : (aEndRect.Left() - aStartPt.X);
             }
         }
         else
@@ -395,7 +409,7 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
             if (aConnSize.Height < aConnSize.Width)
             {
                 if ((nConnectorAngle == 90 && bFlipH && bFlipV) || (nConnectorAngle == 180)
-                    || (nConnectorAngle == 180 && bFlipV) || (nConnectorAngle == 270 && bFlipH))
+                    || (nConnectorAngle == 270 && bFlipH))
                     nEdge -= aConnSize.Width;
                 else
                     nEdge += aConnSize.Width;
