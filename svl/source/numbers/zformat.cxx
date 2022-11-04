@@ -966,10 +966,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                 sParams = "cardinal"; // default NatNum12 format is "cardinal"
                             else if (sParams.indexOf("CURRENCY") >= 0)
                                 sParams = sParams.replaceAll("CURRENCY",
-                                    GetFormatter().GetLocaleData()->getCurrBankSymbol());
-                            // compatible (old) currency format
-                            else if (sParams.indexOf("CCC") >= 0)
-                                sParams = sParams.replaceAll("CCC", rScan.GetCurAbbrev());
+                                    rLoc().getCurrBankSymbol());
                             NumFor[nIndex].SetNatNumParams(sParams);
                             sStr += " " + sParams;
                         }
