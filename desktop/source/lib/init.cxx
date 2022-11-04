@@ -3404,6 +3404,20 @@ static void doc_iniUnoCommands ()
         return;
     }
 
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
+    if (!xSEInitializer.is())
+    {
+        SAL_WARN("lok", "iniUnoCommands: XSEInitializer is not available");
+        return;
+    }
+
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext =
+        xSEInitializer->createSecurityContext(OUString());
+    if (!xSecurityContext.is())
+    {
+        SAL_WARN("lok", "iniUnoCommands: failed to create security context");
+    }
+
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
 
