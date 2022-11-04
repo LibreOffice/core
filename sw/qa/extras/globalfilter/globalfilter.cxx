@@ -38,7 +38,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase() {}
+    Test() : SwModelTestBase("/sw/qa/extras/globalfilter/data/") {}
 
     void testEmbeddedGraphicRoundtrip();
     void testLinkedGraphicRT();
@@ -103,23 +103,10 @@ void Test::testEmbeddedGraphicRoundtrip()
     {
         // Check whether the export code swaps in the image which was swapped out before by auto mechanism
 
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+        load("document_with_two_images.odt");
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check whether graphic exported well after it was swapped out
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -170,24 +157,12 @@ void Test::testLinkedGraphicRT()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
+        load("document_with_linked_graphic.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
@@ -238,22 +213,10 @@ void Test::testImageWithSpecialID()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/images_with_special_IDs.odt"), "com.sun.star.text.TextDocument");
+        load("images_with_special_IDs.odt");
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -333,22 +296,10 @@ void Test::testGraphicShape()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/graphic_shape.odt"), "com.sun.star.text.TextDocument");
+        load("graphic_shape.odt");
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -439,21 +390,10 @@ void Test::testMultipleIdenticalGraphics()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/multiple_identical_graphics.odt"), "com.sun.star.text.TextDocument");
+        load("multiple_identical_graphics.odt");
 
         // Export the document and import again for a check
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        mxComponent->dispose();
-
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -492,25 +432,12 @@ void Test::testCharHighlightBody()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_highlight.docx"),
-                                      "com.sun.star.text.TextDocument");
+        load("char_highlight.docx");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
         // Both highlight and background
@@ -588,25 +515,12 @@ void Test::testCharStyleHighlight()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/tdf138345_charstyle_highlight.odt"),
-                                      "com.sun.star.text.TextDocument");
+        load("tdf138345_charstyle_highlight.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         uno::Reference<beans::XPropertySet> xCharStyle;
         getStyles("CharacterStyles")->getByName("charBackground") >>= xCharStyle;
@@ -634,8 +548,7 @@ void Test::testCharHighlight()
 
 void Test::testCharHighlightODF()
 {
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
-                                      "com.sun.star.text.TextDocument");
+    load("char_background_editing.docx");
 
     // don't check import, testMSCharBackgroundEditing already does that
 
@@ -671,17 +584,7 @@ void Test::testCharHighlightODF()
         }
     }
 
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer8");
-
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-    xComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    reload("writer8", nullptr);
 
     xPara.set(getParagraph(1));
     for (int i = 1; i <= 4; ++i)
@@ -724,11 +627,7 @@ void Test::testMSCharBackgroundEditing()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
-                                      "com.sun.star.text.TextDocument");
+        load("char_background_editing.docx");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -785,17 +684,7 @@ void Test::testMSCharBackgroundEditing()
         rOpt.SetCharBackground2Highlighting();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check whether background was exported as highlighting
         xPara.set(getParagraph(1));
@@ -837,10 +726,7 @@ void Test::testCharBackgroundToHighlighting()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_background.odt"),
-                                      "com.sun.star.text.TextDocument");
+        load("char_background.odt");
 
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -849,17 +735,7 @@ void Test::testCharBackgroundToHighlighting()
         rOpt.SetCharBackground2Highlighting();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check highlight color
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
@@ -902,10 +778,10 @@ void Test::testSkipImages()
     // during DOC and DOCX import, using the "SkipImages" FilterOptions.
 
     std::pair<OUString, OUString> aFilterNames[] = {
-        { "/sw/qa/extras/globalfilter/data/skipimages.doc", "" },
-        { "/sw/qa/extras/globalfilter/data/skipimages.doc", "SkipImages" },
-        { "/sw/qa/extras/globalfilter/data/skipimages.docx", "" },
-        { "/sw/qa/extras/globalfilter/data/skipimages.docx", "SkipImages" }
+        { "skipimages.doc", "" },
+        { "skipimages.doc", "SkipImages" },
+        { "skipimages.docx", "" },
+        { "skipimages.docx", "SkipImages" }
     };
 
     for (auto const & rFilterNamePair : aFilterNames)
@@ -913,22 +789,9 @@ void Test::testSkipImages()
         bool bSkipImages = !rFilterNamePair.second.isEmpty();
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterNamePair.first.toUtf8();
 
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        if (bSkipImages)
-        {
-            // FilterOptions parameter
-            uno::Sequence<beans::PropertyValue> args(comphelper::InitPropertySequence({
-                    { "FilterOptions", uno::Any(rFilterNamePair.second) }
-            }));
-            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(rFilterNamePair.first), "com.sun.star.text.TextDocument", args);
-            sFailedMessage += " - " + rFilterNamePair.second.toUtf8();
-        }
-        else
-        {
-            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(rFilterNamePair.first), "com.sun.star.text.TextDocument");
-        }
+        setImportFilterOptions(rFilterNamePair.second);
+        load(rFilterNamePair.first.toUtf8().getStr());
+        sFailedMessage += " - " + rFilterNamePair.second.toUtf8();
 
         // Check shapes (images, textboxes, custom shapes)
         uno::Reference<drawing::XShape> xShape;
@@ -1048,30 +911,14 @@ void Test::testNestedFieldmark()
 
     for (auto const & rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-        {
-            mxComponent->dispose();
-        }
-
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
-                Concat2View("/sw/qa/extras/globalfilter/data/" + rFilterName.second)),
-            "com.sun.star.text.TextDocument");
+        load(rFilterName.second.toUtf8().getStr());
 
         verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);
 
         // Export the document and import again
-        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName.first;
-
-        utl::TempFileNamed aTempFile;
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        mxComponent->dispose();
-
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.first.toUtf8().getStr(), nullptr);
 
         verifyNestedFieldmark(rFilterName.first + " exported-reload", mxComponent);
-        aTempFile.EnableKillingFile();
     }
 }
 
@@ -1109,9 +956,7 @@ auto Test::verifyText13(char const*const pTestName) -> void
 void Test::testODF13()
 {
     // import
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
-            u"/sw/qa/extras/globalfilter/data/text13e.odt"),
-        "com.sun.star.text.TextDocument");
+    load("text13e.odt");
 
     // check model
     verifyText13("import");
@@ -1130,15 +975,10 @@ void Test::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
 
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OUString("writer8");
-
-        utl::TempFileNamed aTempFile;
-        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        reload("writer8", nullptr);
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExportInternal(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pContentXml = parseExportInternal(maTempFile.GetURL(), "content.xml");
         assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
@@ -1146,15 +986,11 @@ void Test::testODF13()
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
-        xmlDocUniquePtr pStylesXml = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExportInternal(maTempFile.GetURL(), "styles.xml");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
-
-        // reload
-        mxComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // check model
         verifyText13("1.3 reload");
@@ -1166,15 +1002,16 @@ void Test::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
         pBatch->commit();
 
+        // FIXME: it's not possible to use 'reload' here because the validation fails with
+        // Error: unexpected attribute "loext:contextual-spacing"
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OUString("writer8");
 
-        utl::TempFileNamed aTempFile;
         uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExportInternal(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pContentXml = parseExportInternal(maTempFile.GetURL(), "content.xml");
         assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
@@ -1182,7 +1019,7 @@ void Test::testODF13()
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
-        xmlDocUniquePtr pStylesXml = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExportInternal(maTempFile.GetURL(), "styles.xml");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first");
@@ -1190,7 +1027,7 @@ void Test::testODF13()
 
         // reload
         mxComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // check model
         verifyText13("1.2 Extended reload");
@@ -1202,15 +1039,11 @@ void Test::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
         pBatch->commit();
 
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OUString("writer8");
-
-        utl::TempFileNamed aTempFile;
-        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        // don't reload - no point
+        save("writer8");
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExportInternal(aTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pContentXml = parseExportInternal(maTempFile.GetURL(), "content.xml");
         assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties", "contextual-spacing");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
@@ -1218,13 +1051,11 @@ void Test::testODF13()
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
-        xmlDocUniquePtr pStylesXml = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExportInternal(maTempFile.GetURL(), "styles.xml");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
-
-        // don't reload - no point
     }
 }
 
@@ -1237,7 +1068,7 @@ void Test::testRedlineFlags()
         "Office Open XML Text",
     };
 
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop("private:factory/swriter");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -1264,14 +1095,7 @@ void Test::testRedlineFlags()
     for (OUString const & rFilterName : aFilterNames)
     {
         // export the document
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(),
-                aMediaDescriptor.getAsConstPropertyValueList());
+        save(rFilterName);
 
         // tdf#97103 check that redline mode is properly restored
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -1293,10 +1117,7 @@ void Test::testBulletAsImage()
     {
         OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
-        if (mxComponent.is())
-            mxComponent->dispose();
-
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/BulletAsImage.odt"), "com.sun.star.text.TextDocument");
+        load("BulletAsImage.odt");
 
         // Check if import was successful
         {
@@ -1345,19 +1166,7 @@ void Test::testBulletAsImage()
         }
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-
-
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         {
             uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -1430,22 +1239,12 @@ void Test::testTextFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/text_form_field.odt"), "com.sun.star.text.TextDocument");
+        load("text_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check the document after round trip
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1493,22 +1292,12 @@ void Test::testCheckBoxFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/checkbox_form_field.odt"), "com.sun.star.text.TextDocument");
+        load("checkbox_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check the document after round trip
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1556,22 +1345,12 @@ void Test::testDropDownFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/dropdown_form_field.odt"), "com.sun.star.text.TextDocument");
+        load("dropdown_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check the document after round trip
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1641,22 +1420,12 @@ void Test::testDateFormField()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/date_form_field.odt"), "com.sun.star.text.TextDocument");
+        load("date_form_field.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check the document after round trip
         if (rFilterName == "writer8")
@@ -1835,22 +1604,12 @@ void Test::testDateFormFieldCharacterFormatting()
 
     for (const OUString& rFilterName : aFilterNames)
     {
-        if (mxComponent.is())
-            mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/date_form_field_char_formatting.odt"), "com.sun.star.text.TextDocument");
+        load("date_form_field_char_formatting.odt");
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= rFilterName;
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        reload(rFilterName.toUtf8().getStr(), nullptr);
 
         // Check the document after round trip
         if (rFilterName == "writer8")
