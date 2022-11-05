@@ -36,7 +36,7 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <svl/grabbagitem.hxx>
 #include <doc.hxx>
@@ -230,8 +230,7 @@ void UnfloatTableButton::PaintButton()
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev,
-                                                                         aNewViewInfos));
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
 
     pProcessor->process(aSeq);
 

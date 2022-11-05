@@ -96,7 +96,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit0.hxx>
@@ -5195,7 +5195,7 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> SwFrame::CreateProce
             GetXDrawPageForSdrPage( pDrawPage ),
             0.0);
 
-    return  drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+    return  drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     *getRootFrame()->GetCurrShell()->GetOut(),
                     aNewViewInfos );
 }

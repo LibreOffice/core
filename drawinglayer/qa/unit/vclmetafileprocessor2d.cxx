@@ -19,7 +19,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <cppcanvas/vclfactory.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -83,7 +83,7 @@ public:
         metafile.Record(metadevice);
         drawinglayer::geometry::ViewInformation2D view;
         std::unique_ptr<processor2d::BaseProcessor2D> processor(
-            processor2d::createBaseProcessor2DFromOutputDevice(*metadevice, view));
+            processor2d::createProcessor2DFromOutputDevice(*metadevice, view));
         CPPUNIT_ASSERT(processor);
         // Match the values Impress uses.
         basegfx::B2DPolygon polygon = { { 15601, 0 }, { 15602, 5832 } };

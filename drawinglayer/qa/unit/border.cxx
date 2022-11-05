@@ -15,7 +15,7 @@
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <rtl/ref.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/metaact.hxx>
@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
     ScopedVclPtrInstance<VirtualDevice> pDev;
     drawinglayer::geometry::ViewInformation2D aView;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*pDev, aView));
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(*pDev, aView));
     CPPUNIT_ASSERT(pProcessor);
     GDIMetaFile aMetaFile;
     // Start recording after the processor is created, so we can test the pixel processor.

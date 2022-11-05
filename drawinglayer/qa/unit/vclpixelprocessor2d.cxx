@@ -17,7 +17,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 using namespace drawinglayer;
 
@@ -53,7 +53,7 @@ public:
 
         drawinglayer::geometry::ViewInformation2D view;
         std::unique_ptr<processor2d::BaseProcessor2D> processor(
-            processor2d::createBaseProcessor2DFromOutputDevice(*device, view));
+            processor2d::createProcessor2DFromOutputDevice(*device, view));
         CPPUNIT_ASSERT(processor);
 
         basegfx::B2DRange definitionRange(0, 0, 100, 200);

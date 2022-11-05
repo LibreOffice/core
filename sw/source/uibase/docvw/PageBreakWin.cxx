@@ -41,7 +41,7 @@
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -243,7 +243,7 @@ void SwPageBreakWin::PaintButton()
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
 
     pProcessor->process(aGhostedSeq);
 

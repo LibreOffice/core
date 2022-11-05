@@ -15,7 +15,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/metric.hxx>
 
 #include <HeaderFooterWin.hxx>
@@ -125,7 +125,7 @@ void SwContentControlAliasButton::PaintButton()
     // Create the processor and process the primitives
     drawinglayer::geometry::ViewInformation2D aViewInfo;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor
-        = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aViewInfo);
+        = drawinglayer::processor2d::createProcessor2DFromOutputDevice(*m_xVirDev, aViewInfo);
 
     pProcessor->process(aSeq);
 

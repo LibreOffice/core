@@ -42,7 +42,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
@@ -374,7 +374,7 @@ void SwHeaderFooterWin::PaintButton()
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
 
     // TODO Ghost it all if needed
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);

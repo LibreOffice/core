@@ -12,7 +12,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <memory>
 #include <officecfg/Office/UI/Infobar.hxx>
 #include <sfx2/bindings.hxx>
@@ -108,7 +108,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
 
     const ViewInformation2D aNewViewInfos;
     const std::unique_ptr<BaseProcessor2D> pProcessor(
-        createBaseProcessor2DFromOutputDevice(*xDevice, aNewViewInfos));
+        createProcessor2DFromOutputDevice(*xDevice, aNewViewInfos));
 
     const ::tools::Rectangle aRect(aBtnPos, xDevice->PixelToLogic(aSize));
 

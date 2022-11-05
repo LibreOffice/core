@@ -74,7 +74,7 @@
 #include <ndtxt.hxx>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <osl/diagnose.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -123,7 +123,7 @@ void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools:
     m_xContainer->draw(rRenderContext, rRect.TopLeft(), GetSizePixel());
 
     const drawinglayer::geometry::ViewInformation2D aViewInformation;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aViewInformation));
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation));
 
     // drawinglayer sets the map mode to pixels, not needed here.
     rRenderContext.Pop();
@@ -216,7 +216,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(
             *pDev, aNewViewInfos ));
 
     if (mpAnchor)
