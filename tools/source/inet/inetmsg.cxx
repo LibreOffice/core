@@ -23,6 +23,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/character.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sprintf.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <map>
@@ -265,7 +266,7 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     tools::Time aCurTime( tools::Time::SYSTEM );
     sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
     nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
-    sprintf (sTail, "%08X%08X",
+    o3tl::sprintf (sTail, "%08X%08X",
              static_cast< unsigned int >(aCurTime.GetTime()),
              static_cast< unsigned int >(nThis));
     m_aBoundary = "------------_4D48";
