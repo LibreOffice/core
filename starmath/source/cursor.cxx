@@ -165,7 +165,7 @@ bool SmCursor::SetCaretPosition(SmCaretPos pos){
     return false;
 }
 
-void SmCursor::AnnotateSelection(){
+void SmCursor::AnnotateSelection() const {
     //TODO: Manage a state, reset it upon modification and optimize this call
     SmSetSelectionVisitor(mpAnchor->CaretPos, mpPosition->CaretPos, mpTree);
 }
@@ -177,6 +177,12 @@ void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible){
 tools::Rectangle SmCursor::GetCaretRectangle(OutputDevice& rOutDev) const
 {
     return SmCaretRectanglesVisitor(rOutDev, GetPosition()).getCaret();
+}
+
+tools::Rectangle SmCursor::GetSelectionRectangle(OutputDevice& rOutDev) const
+{
+    AnnotateSelection();
+    return SmSelectionRectanglesVisitor(rOutDev, mpTree).GetSelection();
 }
 
 void SmCursor::DeletePrev(OutputDevice* pDev){

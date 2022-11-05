@@ -424,29 +424,38 @@ private:
 };
 
 
-// SmSelectionDrawingVisitor
+// SmSelectionRectanglesVisitor: collect selection
 
-class SmSelectionDrawingVisitor final : public SmDefaultingVisitor
+class SmSelectionRectanglesVisitor : public SmDefaultingVisitor
 {
 public:
-    /** Draws a selection on rDevice for the selection on pTree */
-    SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset );
-    virtual ~SmSelectionDrawingVisitor() {}
+    SmSelectionRectanglesVisitor(OutputDevice& rDevice, SmNode* pTree);
+    virtual ~SmSelectionRectanglesVisitor() = default;
     void Visit( SmTextNode* pNode ) override;
     using SmDefaultingVisitor::Visit;
+
+    const tools::Rectangle& GetSelection() { return maSelectionArea; }
+
 private:
     /** Reference to drawing device */
     OutputDevice& mrDev;
-    /** True if  aSelectionArea have been initialized */
-    bool mbHasSelectionArea;
     /** The current area that is selected */
     tools::Rectangle maSelectionArea;
     /** Extend the area that must be selected  */
-    void ExtendSelectionArea(const tools::Rectangle& rArea);
+    void ExtendSelectionArea(const tools::Rectangle& rArea) { maSelectionArea.Union(rArea); }
     /** Default visiting method */
     void DefaultVisit( SmNode* pNode ) override;
     /** Visit the children of a given pNode */
     void VisitChildren( SmNode* pNode );
+};
+
+// SmSelectionDrawingVisitor
+
+class SmSelectionDrawingVisitor final : public SmSelectionRectanglesVisitor
+{
+public:
+    /** Draws a selection on rDevice for the selection on pTree */
+    SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset );
 };
 
 // SmNodeToTextVisitor
