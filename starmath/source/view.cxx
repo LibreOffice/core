@@ -2324,10 +2324,28 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
             }
             return SfxLokHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
         }
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         case LOK_CALLBACK_TEXT_SELECTION:
+        {
+            OString sRectangle;
+            if (const SmGraphicWidget& widget = GetGraphicWidget(); widget.IsCursorVisible())
+            {
+                SmCursor& rCursor = GetDoc()->GetCursor();
+                OutputDevice& rOutDev = const_cast<SmGraphicWidget&>(widget).GetOutputDevice();
+                tools::Rectangle aSelection = rCursor.GetSelectionRectangle(rOutDev);
+                if (!aSelection.IsEmpty())
+                {
+                    LokStarMathHelper helper(SfxViewShell::Current());
+                    tools::Rectangle aBounds = helper.GetBoundingBox();
+
+                    aSelection.Move(aBounds.Left(), aBounds.Top());
+                    sRectangle = aSelection.toString();
+                }
+            }
+            return sRectangle;
+        }
         case LOK_CALLBACK_TEXT_SELECTION_START:
         case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             return {};
     }
@@ -2341,6 +2359,10 @@ void SmViewShell::SendCaretToLOK() const
     {
         libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
                                              payload->getStr(), nViewId);
+    }
+    if (const auto& payload = getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId))
+    {
+        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, payload->getStr());
     }
 }
 

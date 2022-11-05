@@ -1888,49 +1888,45 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
 // SmSelectionDrawingVisitor
 
 SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset )
-    : mrDev( rDevice )
-    , mbHasSelectionArea( false )
+    : SmSelectionRectanglesVisitor( rDevice, pTree )
 {
-    //Visit everything
-    SAL_WARN_IF( !pTree, "starmath", "pTree can't be null!" );
-    if( pTree )
-        pTree->Accept( this );
-
     //Draw selection if there's any
-    if( !mbHasSelectionArea )        return;
+    if(GetSelection().IsEmpty())        return;
 
-    maSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
+    tools::Rectangle aSelectionArea = GetSelection() + rOffset;
 
     //Save device state
-    mrDev.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+    rDevice.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
     //Change colors
-    mrDev.SetLineColor( );
-    mrDev.SetFillColor( COL_LIGHTGRAY );
+    rDevice.SetLineColor( );
+    rDevice.SetFillColor( COL_LIGHTGRAY );
 
     //Draw rectangle
-    mrDev.DrawRect( maSelectionArea );
+    rDevice.DrawRect( aSelectionArea );
 
     //Restore device state
-    mrDev.Pop( );
+    rDevice.Pop( );
 }
 
-void SmSelectionDrawingVisitor::ExtendSelectionArea(const tools::Rectangle& rArea)
+// SmSelectionRectanglesVisitor
+
+SmSelectionRectanglesVisitor::SmSelectionRectanglesVisitor(OutputDevice& rDevice, SmNode* pTree)
+    : mrDev(rDevice)
 {
-    if ( ! mbHasSelectionArea ) {
-        maSelectionArea = rArea;
-        mbHasSelectionArea = true;
-    } else
-        maSelectionArea.Union(rArea);
+    // Visit everything
+    SAL_WARN_IF(!pTree, "starmath", "pTree can't be null!");
+    if (pTree)
+        pTree->Accept(this);
 }
 
-void SmSelectionDrawingVisitor::DefaultVisit( SmNode* pNode )
+void SmSelectionRectanglesVisitor::DefaultVisit( SmNode* pNode )
 {
     if( pNode->IsSelected( ) )
         ExtendSelectionArea( pNode->AsRectangle( ) );
     VisitChildren( pNode );
 }
 
-void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
+void SmSelectionRectanglesVisitor::VisitChildren( SmNode* pNode )
 {
     if(pNode->GetNumSubNodes() == 0)
         return;
@@ -1942,7 +1938,7 @@ void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
     }
 }
 
-void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
+void SmSelectionRectanglesVisitor::Visit( SmTextNode* pNode )
 {
     if( !pNode->IsSelected())
         return;
