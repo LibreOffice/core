@@ -28,6 +28,7 @@
 #include <dbgoutsw.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <rtl/string.hxx>
 
 namespace ww8
 {
@@ -1274,8 +1275,9 @@ std::string WW8TableCellGrid::toString()
     static char sBuffer[1024];
     while (aTopsIt != getRowTopsEnd())
     {
-        sprintf(sBuffer, "<row y=\"%" SAL_PRIdINT64 "\">", sal_Int64(*aTopsIt));
-        sResult += sBuffer;
+        sResult += "<row y=\"";
+        sResult += OString::number(*aTopsIt).getStr();
+        sResult += "\">";
 
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
         CellInfoMultiSet::const_iterator aCellsEnd = getCellsEnd(*aTopsIt);

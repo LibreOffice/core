@@ -70,13 +70,7 @@ static OUString lcl_dbg_out_SvPtrArr(const T & rArr)
 
 const char * dbg_out(const void * pVoid)
 {
-    char sBuffer[1024];
-
-    sprintf(sBuffer, "%p", pVoid);
-
-    OUString aTmpStr(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
-
-    return dbg_out(aTmpStr);
+    return dbg_out(OUString::number(reinterpret_cast<sal_uIntPtr>(pVoid), 16));
 }
 
 const char * dbg_out(std::u16string_view aStr)
@@ -386,11 +380,8 @@ const char * dbg_out(const SwRect & rRect)
 
 static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
 {
-    char sBuffer[256];
-    sprintf(sBuffer, "%p", &rFrameFormat);
-
     OUString aResult = "[ " +
-        OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US) +
+        OUString::number(reinterpret_cast<sal_uIntPtr>(&rFrameFormat), 16) +
         "(" +
         rFrameFormat.GetName() + ")";
 
@@ -481,9 +472,6 @@ static OUString lcl_dbg_out_NumType(sal_Int16 nType)
 
 static OUString lcl_dbg_out(const SwNode & rNode)
 {
-    char aBuffer[128];
-    sprintf(aBuffer, "%p", &rNode);
-
     OUString aTmpStr = "<node "
         "index=\"" +
         OUString::number(sal_Int32(rNode.GetIndex())) +
@@ -495,7 +483,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
         OUString::number(sal_Int32( rNode.GetNodeType() ) ) +
         "\""
         " pointer=\"" +
-        OUString(aBuffer, strlen(aBuffer), RTL_TEXTENCODING_ASCII_US) +
+        OUString::number(reinterpret_cast<sal_uIntPtr>(&rNode), 16) +
         "\">";
 
     const SwTextNode * pTextNode = rNode.GetTextNode();
@@ -732,9 +720,7 @@ static OUString lcl_dbg_out(const SwNumRuleTable & rTable)
 
         aResult.append(rTable[n]->GetName());
 
-        char sBuffer[256];
-        sprintf(sBuffer, "(%p)", rTable[n]);
-        aResult.appendAscii(sBuffer);
+        aResult.append("(" + OUString::number(reinterpret_cast<sal_uIntPtr>(rTable[n]), 16) + ")");
     }
 
     aResult.append("]");
