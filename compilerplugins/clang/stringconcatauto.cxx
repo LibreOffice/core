@@ -85,12 +85,6 @@ bool StringConcatAuto::checkDecl( const DeclaratorDecl* decl, QualType type, con
     const char* typeString = nullptr;
     if( tc.Struct("StringConcat").Namespace("rtl").GlobalNamespace())
         typeString = "O(U)String";
-    else if( tc.Struct("StringNumberBase").Namespace("rtl").GlobalNamespace())
-        typeString = "O(U)String";
-    else if( tc.Struct("OUStringNumber").Namespace("rtl").GlobalNamespace())
-        typeString = "OUString";
-    else if( tc.Struct("OStringNumber").Namespace("rtl").GlobalNamespace())
-        typeString = "OString";
     else
         return true;
     report( DiagnosticsEngine::Warning,

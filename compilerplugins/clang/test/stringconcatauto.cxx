@@ -24,11 +24,7 @@ void foo()
     // expected-error-re@-1 {{creating a variable of type {{.+}} will make it reference temporaries}}
     // expected-note@-2 {{use O(U)String instead}}
     auto str5 = OUString::number(50);
-    // expected-error-re@-1 {{creating a variable of type '{{(rtl::)?}}OUStringNumber<{{.*}}>' will make it reference temporaries}}
-    // expected-note@-2 {{use OUString instead}}
     auto str6 = OUString::number(50).toAsciiUpperCase();
-    // expected-error-re@-1 {{creating a variable of type '{{(rtl::)?}}StringNumberBase<{{.*}}>' will make it reference temporaries}}
-    // expected-note@-2 {{use O(U)String instead}}
     (void)str1;
     (void)str2;
     (void)str3;
@@ -45,18 +41,8 @@ struct A
     {
         return "bar" + OString::number(110);
     }
-    auto baz()
-    // expected-error-re@-1 {{returning a variable of type '{{(rtl::)?}}OStringNumber<{{.*}}>' will make it reference temporaries}}
-    // expected-note@-2 {{use OString instead}}
-    {
-        return OString::number(120);
-    }
-    auto baz2()
-    // expected-error-re@-1 {{returning a variable of type '{{(rtl::)?}}StringNumberBase<{{.*}}>' will make it reference temporaries}}
-    // expected-note@-2 {{use O(U)String instead}}
-    {
-        return OString::number(120).toAsciiUpperCase();
-    }
+    auto baz() { return OString::number(120); }
+    auto baz2() { return OString::number(120).toAsciiUpperCase(); }
 };
 
 template <typename T> void fun(const T& par)
