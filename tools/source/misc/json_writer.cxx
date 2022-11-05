@@ -326,7 +326,11 @@ void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
     memcpy(mPos, "\": ", 3);
     mPos += 3;
 
+    // clang-format off
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
     mPos += sprintf(mPos, "%" SAL_PRIdINT64, nPropVal);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    // clang-format on
 
     validate();
 }

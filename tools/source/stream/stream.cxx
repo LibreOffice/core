@@ -26,12 +26,12 @@
 #include <memory>
 
 #include <string.h>
-#include <stdio.h>
 
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/long.hxx>
@@ -1361,17 +1361,15 @@ void SvStream::RefreshBuffer()
 
 SvStream& SvStream::WriteInt32AsString(sal_Int32 nInt32)
 {
-    char buffer[12];
-    std::size_t nLen = sprintf(buffer, "%" SAL_PRIdINT32, nInt32);
-    WriteBytes(buffer, nLen);
+    auto const buffer = OString::number(nInt32);
+    WriteBytes(buffer.getStr(), buffer.length);
     return *this;
 }
 
 SvStream& SvStream::WriteUInt32AsString(sal_uInt32 nUInt32)
 {
-    char buffer[11];
-    std::size_t nLen = sprintf(buffer, "%" SAL_PRIuUINT32, nUInt32);
-    WriteBytes(buffer, nLen);
+    auto const buffer = OString::number(nUInt32);
+    WriteBytes(buffer.getStr(), buffer.length);
     return *this;
 }
 

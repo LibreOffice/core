@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <string.h>
 
 #include <comphelper/mimeconfighelper.hxx>
+#include <o3tl/sprintf.hxx>
 #include <rtl/character.hxx>
 
 #include <tools/stream.hxx>
@@ -153,7 +153,7 @@ bool SvGlobalName::MakeId( std::u16string_view rIdStr )
 OUString SvGlobalName::GetHexName() const
 {
     char buf[ 37 ];
-    int n = sprintf(buf,
+    int n = o3tl::sprintf(buf,
                     "%8.8" SAL_PRIXUINT32 "-%4.4X-%4.4X-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x",
                     m_aData.Data1, m_aData.Data2, m_aData.Data3,
                     m_aData.Data4[0], m_aData.Data4[1], m_aData.Data4[2], m_aData.Data4[3],
