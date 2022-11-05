@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -28,6 +26,7 @@
 #include <osl/socket.hxx>
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/sprintf.hxx>
 
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
@@ -210,7 +209,7 @@ OUString LockFileCommon::GetCurrentLocalTime()
             {
                 char pDateTime[sizeof("65535.65535.-32768 65535:65535")];
                     // reserve enough space for hypothetical max length
-                sprintf( pDateTime, "%02" SAL_PRIuUINT32 ".%02" SAL_PRIuUINT32 ".%4" SAL_PRIdINT32 " %02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32, sal_uInt32(aDateTime.Day), sal_uInt32(aDateTime.Month), sal_Int32(aDateTime.Year), sal_uInt32(aDateTime.Hours), sal_uInt32(aDateTime.Minutes) );
+                o3tl::sprintf( pDateTime, "%02" SAL_PRIuUINT32 ".%02" SAL_PRIuUINT32 ".%4" SAL_PRIdINT32 " %02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32, sal_uInt32(aDateTime.Day), sal_uInt32(aDateTime.Month), sal_Int32(aDateTime.Year), sal_uInt32(aDateTime.Hours), sal_uInt32(aDateTime.Minutes) );
                 aTime = OUString::createFromAscii( pDateTime );
             }
         }

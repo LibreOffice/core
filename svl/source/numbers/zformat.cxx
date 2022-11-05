@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <string_view>
 
+#include <o3tl/sprintf.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
@@ -2942,7 +2942,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     else
     {
         char aBuf[100];
-        sprintf( aBuf, "%.f", fNum ); // simple rounded integer (#100211# - checked)
+        o3tl::sprintf( aBuf, "%.f", fNum ); // simple rounded integer
         sStr.appendAscii( aBuf );
         impTransliterate(sStr, NumFor[nIx].GetNatNum());
     }
