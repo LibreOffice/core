@@ -57,13 +57,13 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-#include <stdio.h>
+#include <o3tl/sprintf.hxx>
 #include <xfilter/xfcolor.hxx>
 
 OUString XFColor::ToString() const
 {
     char    buf[8] = {};
-    sprintf(buf,"#%2x%2x%2x",m_nRed, m_nGreen, m_nBlue);
+    o3tl::sprintf(buf,"#%2x%2x%2x",m_nRed, m_nGreen, m_nBlue);
     for( int i=1; i<7;i++ )
     {
         if( buf[i] == ' ' )

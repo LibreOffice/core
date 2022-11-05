@@ -55,9 +55,9 @@
  ************************************************************************/
 #include "first.hxx"
 #include "tocread.hxx"
-#include <stdio.h>
 #include <algorithm>
 #include <osl/diagnose.h>
+#include <rtl/string.hxx>
 
 namespace OpenStormBento
 {
@@ -277,16 +277,13 @@ std::vector<sal_uInt8> LtcBenContainer::GetGraphicData(const char *pObjectName)
         return aData;
     }
     // construct the string of property name
-    char sSName[64]="";
-    char sDName[64]="";
-
-    sprintf(sSName, "%s-S", pObjectName);
-    sprintf(sDName, "%s-D", pObjectName);
+    OString sSName=OString::Concat(pObjectName) + "-S";
+    OString sDName=OString::Concat(pObjectName) + "-D";
 
     /* traverse the found properties and construct the stream vectors */
     // get S&D's stream and merge them together
-    std::unique_ptr<SvStream> xS(FindValueStreamWithPropertyName(sSName));
-    std::unique_ptr<SvStream> xD(FindValueStreamWithPropertyName(sDName));
+    std::unique_ptr<SvStream> xS(FindValueStreamWithPropertyName(sSName.getStr()));
+    std::unique_ptr<SvStream> xD(FindValueStreamWithPropertyName(sDName.getStr()));
 
     sal_uInt64 nDLen = 0;
     if (xD)
