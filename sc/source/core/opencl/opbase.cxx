@@ -9,6 +9,7 @@
 
 #include <opencl/openclwrapper.hxx>
 #include <formula/vectortoken.hxx>
+#include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <utility>
 #include <unordered_map>
@@ -299,9 +300,8 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
 void SlidingFunctionBase::GenerateArg( int arg, SubArguments& vSubArguments, outputstream& ss,
     EmptyArgType empty, GenerateArgTypeType generateType )
 {
-    char buf[ 30 ];
-    sprintf( buf, "arg%d", arg );
-    GenerateArg( buf, arg, vSubArguments, ss, empty, generateType );
+    OString buf = "arg" + OString::number(arg);
+    GenerateArg( buf.getStr(), arg, vSubArguments, ss, empty, generateType );
 }
 
 void SlidingFunctionBase::GenerateArgWithDefault( const char* name, int arg, double def,

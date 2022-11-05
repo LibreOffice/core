@@ -23,6 +23,7 @@
 
 #include <filter/msfilter/util.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sprintf.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -709,7 +710,7 @@ OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream
 OString XclXmlUtils::ToOString( const Color& rColor )
 {
     char buf[9];
-    sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetAlpha(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+    o3tl::sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetAlpha(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
     buf[8] = '\0';
     return OString(buf);
 }

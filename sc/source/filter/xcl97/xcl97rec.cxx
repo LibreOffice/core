@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/sprintf.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/editobj.hxx>
@@ -992,7 +993,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     char        aBuf[ sizeof(sal_uInt32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
     sal_uInt32          nPictureId = sal_uInt32(reinterpret_cast<sal_uIntPtr>(this) >> 2);
-    sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
+    o3tl::sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
     tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName );
     if( !xOleStg.is() )
