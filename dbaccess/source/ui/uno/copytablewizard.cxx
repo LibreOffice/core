@@ -1368,6 +1368,17 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 // tdf#119962
                 const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
+                const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
+
+                OUString aSchema,aTable;
+                xTable->getPropertyValue("SchemaName") >>= aSchema;
+                xTable->getPropertyValue("Name")       >>= aTable;
+                Any aCatalog = xTable->getPropertyValue("CatalogName");
+
+                const Reference< XResultSet > xResultPKCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
+                Reference< XRow > xRowPKCL(xResultPKCL, UNO_QUERY_THROW);
+                OUString sPKCL;
+                if ( xRowPKCL.is() )
                 {
                     if (xResultPKCL->next())
                     {
