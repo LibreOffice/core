@@ -79,7 +79,7 @@ public:
     void Dispatch(const rtl::OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
-                        double fScaleX = 1.0, double fScaleY = 1.0);
+                        double fPPTScaleX, double fPPTScaleY);
 
 private:
     const SfxViewShell* mpViewShell;

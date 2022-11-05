@@ -139,7 +139,7 @@ tools::Rectangle LokStarMathHelper::GetBoundingBox() const
 }
 
 bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
-                                       int nModifier, double /*fScaleX*/, double /*fScaleY*/)
+                                       int nModifier, double fPPTScaleX, double fPPTScaleY)
 {
     const tools::Rectangle rBBox = GetBoundingBox();
     if (Point aMousePos(nX, nY); rBBox.Contains(aMousePos))
@@ -147,6 +147,17 @@ bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
         if (vcl::Window* pWindow = GetWidgetWindow())
         {
             aMousePos -= rBBox.TopLeft();
+
+            // In lok, Math does not convert coordinates (see SmGraphicWidget::SetDrawingArea,
+            // which disables MapMode), and uses twips internally (see SmDocShell ctor and
+            // SmMapUnit), but the conversion factor can depend on the client zoom.
+            // 1. Remove the twip->pixel factor in the passed scales
+            double fScaleX = o3tl::convert(fPPTScaleX, o3tl::Length::px, o3tl::Length::twip);
+            double fScaleY = o3tl::convert(fPPTScaleY, o3tl::Length::px, o3tl::Length::twip);
+            // 2. Adjust the position according to the scales
+            aMousePos
+                = Point(std::round(aMousePos.X() * fScaleX), std::round(aMousePos.Y() * fScaleY));
+
             LokMouseEventData aMouseEventData(
                 nType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
             SfxLokHelper::postMouseEventAsync(pWindow, aMouseEventData);
