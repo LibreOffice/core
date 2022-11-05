@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <o3tl/sprintf.hxx>
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/bitmapex.hxx>
@@ -745,7 +745,7 @@ IMPL_LINK(SaneDlg, ModifyHdl, weld::Entry&, rEdit, void)
                 fValue = mfMin;
             else if( fValue > mfMax )
                 fValue = mfMax;
-            sprintf( pBuf, "%g", fValue );
+            o3tl::sprintf( pBuf, "%g", fValue );
             mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
@@ -757,7 +757,7 @@ IMPL_LINK(SaneDlg, ModifyHdl, weld::Entry&, rEdit, void)
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
         {
             char pBuf[256];
-            sprintf( pBuf, "%g", fValue );
+            o3tl::sprintf( pBuf, "%g", fValue );
             OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
             mxNumericEdit->set_text( aValue );
             mxQuantumRangeBox->set_active_text( aValue );
@@ -1002,13 +1002,13 @@ void SaneDlg::EstablishQuantumRange()
         mfMax = mpRange[ nValues-1 ];
         for( int i = 0; i < nValues; i++ )
         {
-            sprintf( pBuf, "%g", mpRange[ i ] );
+            o3tl::sprintf( pBuf, "%g", mpRange[ i ] );
             mxQuantumRangeBox->append_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         double fValue;
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ) )
         {
-            sprintf( pBuf, "%g", fValue );
+            o3tl::sprintf( pBuf, "%g", fValue );
             mxQuantumRangeBox->set_active_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         mxQuantumRangeBox->show();
@@ -1033,12 +1033,12 @@ void SaneDlg::EstablishNumericOption()
     aText += mrSane.GetOptionUnitName( mnCurrentOption );
     if( mfMin != mfMax )
     {
-        sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
+        o3tl::sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
         aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
     mxOptionDescTxt->set_label( aText );
     mxOptionDescTxt->show();
-    sprintf( pBuf, "%g", fValue );
+    o3tl::sprintf( pBuf, "%g", fValue );
     mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
     mxNumericEdit->show();
 }
@@ -1398,7 +1398,7 @@ void SaneDlg::SaveState()
                             break;
                         if( n > 0 )
                             aString.append(':');
-                        sprintf( buf, "%lg", fValue );
+                        o3tl::sprintf( buf, "%lg", fValue );
                         aString.append(buf);
                     }
                     if( n >= mrSane.GetOptionElements( nOption ) )
