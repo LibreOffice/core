@@ -58,11 +58,11 @@ class FontAttributes;
 class XorEmulation;
 
 // CoreText-specific physically available font face
-class CoreTextFontFace : public vcl::font::PhysicalFontFace
+class CoreTextFontFace final : public vcl::font::PhysicalFontFace
 {
 public:
                                     CoreTextFontFace( const FontAttributes&, CTFontDescriptorRef xRef );
-    virtual                         ~CoreTextFontFace() override;
+                                    ~CoreTextFontFace() override;
 
     sal_IntPtr                      GetFontId() const override;
 
@@ -70,7 +70,7 @@ public:
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
-    virtual hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
+    hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
 
     std::vector<hb_variation_t> GetVariations() const override;
 
