@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <vcl/dibtools.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sprintf.hxx>
 #include <tools/stream.hxx>
 #include <memory>
 #include <unotools/configmgr.hxx>
@@ -306,7 +307,7 @@ record_type_name(sal_uInt32 nRecType)
         // Yes, return a pointer to a static buffer. This is a very
         // local debugging output function, so no big deal.
         static char buffer[11];
-        sprintf(buffer, "0x%08" SAL_PRIxUINT32, nRecType);
+        o3tl::sprintf(buffer, "0x%08" SAL_PRIxUINT32, nRecType);
         return buffer;
     }
 #endif
