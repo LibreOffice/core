@@ -29,7 +29,10 @@
 #include "hcode.h"
 #include "datecode.h"
 
+#include <o3tl/sprintf.hxx>
 #include <rtl/character.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
 
 int HBox::boxCount = 0;
 
@@ -285,7 +288,7 @@ hchar_string DateCode::GetString()
             ret.push_back(*fmt);
         }
         if (num != -1)
-            sprintf(cbuf, form, num);
+            o3tl::sprintf(cbuf, form, num);
         for (i = 0; 0 != cbuf[i]; i++)
         {
             ret.push_back(*(cbuf + i));
@@ -519,9 +522,9 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
         *hstr++ = '(';
     if (fmt & NUM)
     {
-        sprintf(buf, "%d", num);
-        str2hstr(buf, hstr);
-        hstr += strlen(buf);
+        auto const numbuf = OString::number(num);
+        str2hstr(numbuf.getStr(), hstr);
+        hstr += numbuf.length;
     }
     else if (fmt & (U_ROM | L_ROM))
     {
@@ -575,20 +578,18 @@ OUString Outline::GetUnicode() const
             case OLSTY_NUMS1:
             case OLSTY_NUMS2:
             {
-                char cur_num_str[10], buf[80];
+                OStringBuffer buf;
                 int i;
 
                 buf[0] = 0;
                 for (i = 0; i <= level; i++)
                 {
                     levelnum = ((number[i] < 1) ? 1 : number[i]);
-                    if (shape == OLSTY_NUMS2 && i && i == level)
-                        sprintf(cur_num_str, "%d%c", levelnum, 0);
-                    else
-                        sprintf(cur_num_str, "%d%c", levelnum, '.');
-                    strcat(buf, cur_num_str);
+                    buf.append(OString::number(levelnum));
+                    if (!(shape == OLSTY_NUMS2 && i && i == level))
+                        buf.append('.');
                 }
-                str2hstr(buf, buffer);
+                str2hstr(buf.getStr(), buffer);
                 return hstr2OUString(buffer);
             }
             case OLSTY_NUMSIG1:
@@ -670,20 +671,17 @@ OUString Outline::GetUnicode() const
                             break;
                         case 12: /* Sequenced numbers. */
                         {
-                             char cur_num_str[10],buf[80];
+                             OStringBuffer buf;
                              int j;
-                             buf[0] = 0;
                              for (j = 0; j <= level; j++)
                              {
                                   levelnum = ((number[j] < 1) ? 1 : number[j]);
-                                  if ((j && j == level) || (j == level && deco[i][1]))
-                                        sprintf(cur_num_str, "%d%c", levelnum, 0);
-                                  else
-                                        sprintf(cur_num_str, "%d%c", levelnum, '.');
-                                  strcat(buf, cur_num_str);
+                                  buf.append(OString::number(levelnum));
+                                  if (!((j && j == level) || (j == level && deco[i][1])))
+                                        buf.append('.');
                              }
-                             str2hstr(buf, buffer + l);
-                             l += strlen(buf);
+                             str2hstr(buf.getStr(), buffer + l);
+                             l += buf.getLength();
                              break;
                         }
                         default:

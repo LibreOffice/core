@@ -25,6 +25,7 @@
 #include <cmath>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/sprintf.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -313,7 +314,7 @@ void HwpReader::makeMeta()
         else {
             minute = 0;
         }
-        sprintf(d->buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
+        o3tl::sprintf(d->buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
         startEl("meta:creation-date");
         chars( OUString::createFromAscii(d->buf));
@@ -1814,8 +1815,10 @@ void HwpReader::makeTableStyle(Table *tbl)
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
-        sprintf(d->buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii(d->buf));
+        mxList->addAttribute(
+            "style:name", sXML_CDATA,
+            "Table" + OUString::number(hbox->style.boxnum) + "."
+                + OUStringChar(static_cast<char>('A'+i)));
         mxList->addAttribute("style:family", sXML_CDATA,"table-column");
         startEl("style:style");
         mxList->clear();
@@ -1830,8 +1833,9 @@ void HwpReader::makeTableStyle(Table *tbl)
 // row
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
-        sprintf(d->buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
-        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii(d->buf));
+        mxList->addAttribute(
+            "style:name", sXML_CDATA,
+            "Table" + OUString::number(hbox->style.boxnum) + ".row" + OUString::number(i + 1));
         mxList->addAttribute("style:family", sXML_CDATA,"table-row");
         startEl("style:style");
         mxList->clear();
@@ -1846,8 +1850,11 @@ void HwpReader::makeTableStyle(Table *tbl)
 // cell
     for (auto const& tcell : tbl->cells)
     {
-        sprintf(d->buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii(d->buf));
+        mxList->addAttribute(
+            "style:name", sXML_CDATA,
+            "Table" + OUString::number(hbox->style.boxnum) + "."
+                + OUStringChar(char('A'+ tcell->nColumnIndex))
+                + OUString::number(tcell->nRowIndex +1));
         mxList->addAttribute("style:family", sXML_CDATA,"table-cell");
         startEl("style:style");
         mxList->clear();
@@ -3378,8 +3385,10 @@ void HwpReader::makeTable(TxtBox * hbox)
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
-        sprintf(d->buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii(d->buf));
+        mxList->addAttribute(
+            "table:style-name", sXML_CDATA,
+            "Table" + OUString::number(hbox->style.boxnum) + "."
+                + OUStringChar(static_cast<char>('A'+i)));
         startEl("table:table-column");
         mxList->clear();
         endEl("table:table-column");
@@ -3397,15 +3406,20 @@ void HwpReader::makeTable(TxtBox * hbox)
                 k = j;
             }
 // row
-            sprintf(d->buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
-            mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii(d->buf));
+            mxList->addAttribute(
+                "table:style-name", sXML_CDATA,
+                "Table" + OUString::number(hbox->style.boxnum) + ".row"
+                    + OUString::number(tcell->nRowIndex + 1));
             startEl("table:table-row");
             mxList->clear();
             j = tcell->nRowIndex;
         }
 
-        sprintf(d->buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii(d->buf));
+        mxList->addAttribute(
+            "table:style-name", sXML_CDATA,
+            "Table" + OUString::number(hbox->style.boxnum) + "."
+                + OUStringChar(char('A'+ tcell->nColumnIndex))
+                + OUString::number(tcell->nRowIndex +1));
         if( tcell->nColumnSpan > 1 )
             mxList->addAttribute("table:number-columns-spanned", sXML_CDATA, OUString::number(tcell->nColumnSpan));
         if( tcell->nRowSpan > 1 )
@@ -4215,8 +4229,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                         OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     mxList->addAttribute("svg:height", sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
-                    sprintf(d->buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, OUString::createFromAscii(d->buf));
+                    mxList->addAttribute(
+                        "svg:viewBox", sXML_CDATA,
+                        "0 0 " + OUString::number(WTSM(drawobj->extent.w)) + " "
+                            + OUString::number(WTSM(drawobj->extent.h)));
 
                     OUStringBuffer oustr;
 
@@ -4262,24 +4278,29 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                   NaturalSpline(n, tarr.get(), yarr.get(), yb, carr, darr);
                               }
 
-                              sprintf(d->buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
-                                      WTSM(xarr[0] + xb[0]/3), WTSM(yarr[0] + yb[0]/3) );
-                              oustr.appendAscii(d->buf);
+                              oustr.append(
+                                  "M" + OUString::number(WTSM(xarr[0])) + " "
+                                  + OUString::number(WTSM(yarr[0])) + "C"
+                                  + OUString::number(WTSM(xarr[0] + xb[0]/3)) + " "
+                                  + OUString::number(WTSM(yarr[0] + yb[0]/3)));
 
                               for( i = 1 ; i < n  ; i++ ){
                                   if( i == n -1 ){
-                                      sprintf(d->buf, " %d %d %d %dz",
-                                              WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
-                                              WTSM(xarr[i]), WTSM(yarr[i]) );
+                                      oustr.append(
+                                          " " + OUString::number(WTSM(xarr[i] - xb[i]/3)) + " "
+                                          + OUString::number(WTSM(yarr[i] - yb[i]/3)) + " "
+                                          + OUString::number(WTSM(xarr[i])) + " "
+                                          + OUString::number(WTSM(yarr[i])) + "z");
                                   }
                                   else{
-                                      sprintf(d->buf, " %d %d %d %d %d %d",
-                                              WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
-                                              WTSM(xarr[i]), WTSM(yarr[i]),
-                                              WTSM(xarr[i] + xb[i]/3), WTSM(yarr[i] + yb[i]/3) );
+                                      oustr.append(
+                                          " " + OUString::number(WTSM(xarr[i] - xb[i]/3)) + " "
+                                          + OUString::number(WTSM(yarr[i] - yb[i]/3)) + " "
+                                          + OUString::number(WTSM(xarr[i])) + " "
+                                          + OUString::number(WTSM(yarr[i])) + " "
+                                          + OUString::number(WTSM(xarr[i] + xb[i]/3)) + " "
+                                          + OUString::number(WTSM(yarr[i] + yb[i]/3)));
                                   }
-
-                                  oustr.appendAscii(d->buf);
                               }
                     }
 
@@ -4315,22 +4336,21 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                     mxList->addAttribute("svg:height", sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
 
-                    sprintf(d->buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, OUString::createFromAscii(d->buf));
+                    mxList->addAttribute("svg:viewBox", sXML_CDATA, "0 0 " + OUString::number(WTSM(drawobj->extent.w)) + " " + OUString::number(WTSM(drawobj->extent.h)));
 
                     OUStringBuffer oustr;
 
                     if (drawobj->u.freeform.npt > 0)
                     {
-                        sprintf(d->buf, "%d,%d", WTSM(drawobj->u.freeform.pt[0].x), WTSM(drawobj->u.freeform.pt[0].y));
-                        oustr.appendAscii(d->buf);
+                        oustr.append(
+                            OUString::number(WTSM(drawobj->u.freeform.pt[0].x)) + ","
+                            + OUString::number(WTSM(drawobj->u.freeform.pt[0].y)));
                         int i;
                         for (i = 1; i < drawobj->u.freeform.npt  ; i++)
                         {
-                            sprintf(d->buf, " %d,%d",
-                                WTSM(drawobj->u.freeform.pt[i].x),
-                                WTSM(drawobj->u.freeform.pt[i].y));
-                            oustr.appendAscii(d->buf);
+                            oustr.append(
+                                " " + OUString::number(WTSM(drawobj->u.freeform.pt[i].x)) + ","
+                                + OUString::number(WTSM(drawobj->u.freeform.pt[i].y)));
                         }
                         if( drawobj->u.freeform.pt[0].x == drawobj->u.freeform.pt[i-1].x &&
                             drawobj->u.freeform.pt[0].y == drawobj->u.freeform.pt[i-1].y )

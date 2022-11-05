@@ -29,13 +29,10 @@
 # endif
 # include <windows.h>
 #endif
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _WIN32
-# define wsprintfA sprintf
-#endif
+#include <rtl/string.hxx>
 
 const int AllocSize = 8;
 
@@ -182,20 +179,16 @@ MzString &MzString::operator << (char ch)
 
 MzString &MzString::operator << (int i)
 {
-    char str[80];
-
-    wsprintfA(str, "%d", i);
-    append(str);
+    auto const str = OString::number(i);
+    append(str.getStr(), str.length);
     return *this;
 }
 
 
 MzString &MzString::operator << (tools::Long l)
 {
-    char str[80];
-
-    wsprintfA(str, "%ld", l);
-    append(str);
+    auto const str = OString::number(l);
+    append(str.getStr(), str.length);
     return *this;
 }
 

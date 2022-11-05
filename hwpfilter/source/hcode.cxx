@@ -31,12 +31,12 @@
 #include <comphelper/sequence.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sprintf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 #include <sal/macros.h>
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
@@ -1296,7 +1296,7 @@ OUString hcolor2str(uchar color, uchar shade, bool bIsChar)
 OUString rgb2str(unsigned char red, unsigned char green, unsigned char blue)
 {
     char buf[8];
-    int n = std::max(sprintf(buf, "#%02x%02x%02x", red, green, blue), 0);
+    int n = std::max(o3tl::sprintf(buf, "#%02x%02x%02x", red, green, blue), 0);
     return OUString::createFromAscii(std::string_view(buf, n));
 }
 
