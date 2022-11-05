@@ -24,7 +24,9 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/character.hxx>
+#include <o3tl/sprintf.hxx>
 #include <o3tl/string_view.hxx>
+#include <string_view>
 #include <utility>
 
 /*
@@ -234,17 +236,16 @@ void SbxBasicFormater::InitScan( double _dNum )
     dNum = _dNum;
     InitExp( get_number_of_digits( dNum ) );
     // maximum of 15 positions behind the decimal point, example: -1.234000000000000E-001
-    /*int nCount =*/ sprintf( sBuffer,"%+22.15lE",dNum );
+    /*int nCount =*/ o3tl::sprintf( sBuffer,"%+22.15lE",dNum );
     sSciNumStrg = OUString::createFromAscii( sBuffer );
 }
 
 
 void SbxBasicFormater::InitExp( double _dNewExp )
 {
-    char sBuffer[ MAX_DOUBLE_BUFFER_LENGTH ];
     nNumExp = static_cast<short>(_dNewExp);
-    /*int nCount =*/ sprintf( sBuffer,"%+i",nNumExp );
-    sNumExpStrg = OUString::createFromAscii( sBuffer );
+    sNumExpStrg = (nNumExp >= 0 ? std::u16string_view(u"+") : std::u16string_view(u""))
+        + OUString::number(nNumExp);
     nExpExp = static_cast<short>(get_number_of_digits( static_cast<double>(nNumExp) ));
 }
 
