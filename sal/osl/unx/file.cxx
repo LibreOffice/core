@@ -202,9 +202,7 @@ FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, OString path)
         if (pagesize != size_t(-1))
         {
             m_bufsiz = pagesize;
-            m_buffer = static_cast<sal_uInt8 *>(malloc(m_bufsiz));
-            if (m_buffer)
-                memset(m_buffer, 0, m_bufsiz);
+            m_buffer = static_cast<sal_uInt8 *>(calloc(1, m_bufsiz));
         }
     }
 }
