@@ -27,6 +27,7 @@
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/sprintf.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
@@ -926,24 +927,31 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         // The "#100211# - checked" comments serve for detection of "use of
         // sprintf is safe here" conditions. An sprintf encountered without
         // having that comment triggers alarm ;-)
-        char aStr[12];  // "-2147483648" and \0
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
                 value += 1;     // month is zero based
                 [[fallthrough]];
             case CalendarDisplayCode::SHORT_DAY:
-                sprintf(aStr, "%" SAL_PRIdINT32, value);     // #100211# - checked
+                aOUStr = OUString::number(value);
                 break;
             case CalendarDisplayCode::LONG_YEAR:
                 if ( aCalendar.Name == "gengou" )
-                    sprintf(aStr, "%02" SAL_PRIdINT32, value);     // #100211# - checked
+                {
+                    char aStr[12];  // "-2147483648" and \0
+                    o3tl::sprintf(aStr, "%02" SAL_PRIdINT32, value);     // #100211# - checked
+                    aOUStr = OUString::createFromAscii(aStr);
+                }
                 else
-                    sprintf(aStr, "%" SAL_PRIdINT32, value);     // #100211# - checked
+                    aOUStr = OUString::number(value);
                 break;
             case CalendarDisplayCode::LONG_MONTH:
-                value += 1;     // month is zero based
-                sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
-                break;
+                {
+                    value += 1;     // month is zero based
+                    char aStr[12];  // "-2147483648" and \0
+                    o3tl::sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
+                    aOUStr = OUString::createFromAscii(aStr);
+                    break;
+                }
             case CalendarDisplayCode::SHORT_YEAR:
                 // Take last 2 digits, or only one if value<10, for example,
                 // in case of the Gengou calendar. For combined era+year always
@@ -957,13 +965,21 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
                 // the only calendar using this.
                 // See i#116701 and fdo#60915
                 if (value < 100 || bEraMode || (eraArray && (eraArray[0].flags & kDisplayEraForcedLongYear)))
-                    sprintf(aStr, "%" SAL_PRIdINT32, value); // #100211# - checked
+                    aOUStr = OUString::number(value);
                 else
-                    sprintf(aStr, "%02" SAL_PRIdINT32, value % 100); // #100211# - checked
+                {
+                    char aStr[12];  // "-2147483648" and \0
+                    o3tl::sprintf(aStr, "%02" SAL_PRIdINT32, value % 100); // #100211# - checked
+                    aOUStr = OUString::createFromAscii(aStr);
+                }
                 break;
             case CalendarDisplayCode::LONG_DAY:
-                sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
-                break;
+                {
+                    char aStr[12];  // "-2147483648" and \0
+                    o3tl::sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
+                    aOUStr = OUString::createFromAscii(aStr);
+                    break;
+                }
 
             case CalendarDisplayCode::SHORT_DAY_NAME:
                 return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
@@ -1005,7 +1021,6 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
             default:
                 throw RuntimeException();
         }
-        aOUStr = OUString::createFromAscii(aStr);
     }
     // NatNum12 used only for selected parts
     if (nNativeNumberMode > 0 && nNativeNumberMode != 12) {
