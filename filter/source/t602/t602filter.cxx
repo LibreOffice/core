@@ -20,8 +20,6 @@
 #include "t602filter.hxx"
 #include <strings.hrc>
 
-#include <stdio.h>
-
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -210,10 +208,8 @@ void T602ImportFilter::inschr(unsigned char ch)
                 inschrdef(' ');
             pst.wasfdash = false;
         } else {
-            char s[20];
-            sprintf(s,"%i",pst.wasspace);
             if (mpAttrList)
-                mpAttrList->AddAttribute("text:c",OUString::createFromAscii(s));
+                mpAttrList->AddAttribute("text:c",OUString::number(pst.wasspace));
             Start_("text:s");
             End_("text:s");
         }
@@ -249,9 +245,8 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     Reference < XImporter > xImporter(mxHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
-    char fs[32], fs2[32];
-    sprintf(fs, "%ipt", inistruct::fontsize);
-    sprintf(fs2,"%ipt", 2*inistruct::fontsize);
+    auto const fs = OUString(OUString::number(inistruct::fontsize) + "pt");
+    auto const fs2 = OUString(OUString::number(2*inistruct::fontsize) + "pt");
 
     mpAttrList = new SvXMLAttributeList;
 
@@ -293,7 +288,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     mpAttrList->AddAttribute("style:parent-style-name","Standard");
     Start_("style:style");
     mpAttrList->AddAttribute("style:font-name","Courier New");
-    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs));
+    mpAttrList->AddAttribute("fo:font-size",fs);
     Start_("style:properties");
     End_("style:properties");
     End_("style:style");
@@ -304,7 +299,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     mpAttrList->AddAttribute("style:parent-style-name","Standard");
     Start_("style:style");
     mpAttrList->AddAttribute("style:font-name","Courier New");
-    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs));
+    mpAttrList->AddAttribute("fo:font-size",fs);
     mpAttrList->AddAttribute("fo:break-before","page");
     Start_("style:properties");
     End_("style:properties");
@@ -350,7 +345,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     mpAttrList->AddAttribute("style:name","T5");
     mpAttrList->AddAttribute("style:family","text");
     Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs2));
+    mpAttrList->AddAttribute("fo:font-size",fs2);
     mpAttrList->AddAttribute("fo:font-weight","bold");
     mpAttrList->AddAttribute("style:text-scale","50%");
     Start_("style:properties");
@@ -361,7 +356,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     mpAttrList->AddAttribute("style:name","T6");
     mpAttrList->AddAttribute("style:family","text");
     Start_("style:style");
-    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs2));
+    mpAttrList->AddAttribute("fo:font-size",fs2);
     mpAttrList->AddAttribute("fo:font-weight","bold");
     Start_("style:properties");
     End_("style:properties");
