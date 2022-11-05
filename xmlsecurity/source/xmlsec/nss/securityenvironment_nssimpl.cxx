@@ -477,7 +477,10 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromAsci
     xmlSecSize certSize;
     int nRet = xmlSecBase64Decode_ex( chCert, reinterpret_cast<xmlSecByte*>(chCert), xmlStrlen( chCert ), &certSize ) ;
     if (nRet < 0 || certSize == 0)
+    {
+        xmlFree(chCert);
         return nullptr;
+    }
 
     Sequence< sal_Int8 > rawCert(comphelper::arrayToSequence<sal_Int8>(chCert, certSize)) ;
 
