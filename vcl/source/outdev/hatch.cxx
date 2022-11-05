@@ -327,14 +327,14 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Bottom() );
             rEndPt1 = Point( rRect.Right() + nXOff, rRect.Top() );
-            nPX = FRound( aRef.X() - ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
+            nPX = FRound( aRef.X() - ( (static_cast<double>(rPt1.Y()) - aRef.Y()) / fTan ) );
         }
         else
         {
             rPt1 = rRect.BottomLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Top() );
             rEndPt1 = Point( rRect.Right() + nXOff, rRect.Bottom() );
-            nPX = FRound( aRef.X() + ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
+            nPX = FRound( aRef.X() + ( (static_cast<double>(rPt1.Y()) - aRef.Y()) / fTan ) );
         }
 
         if( nPX <= rPt1.X() )
