@@ -40,6 +40,7 @@
 
 #include <biginteger.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <sal/log.hxx>
 #include <rtl/locale.h>
@@ -708,24 +709,24 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
     return xcert ;
 }
 
-uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromAscii( const OUString& asciiCertificate ) {
-
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromAscii( const OUString& asciiCertificate )
+{
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
-
     xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
-
     xmlSecSize certSize;
-    xmlSecBase64Decode_ex( chCert, chCert, xmlStrlen( chCert ), &certSize ) ;
+    int nRet = xmlSecBase64Decode_ex( chCert, reinterpret_cast<xmlSecByte*>(chCert), xmlStrlen( chCert ), &certSize ) ;
+    if (nRet < 0 || certSize == 0)
+    {
+        xmlFree(chCert);
+        return nullptr;
+    }
 
-    uno::Sequence< sal_Int8 > rawCert( certSize ) ;
-    for( xmlSecSize i = 0 ; i < certSize ; i ++ )
-        rawCert[i] = *( chCert + i ) ;
+    uno::Sequence<sal_Int8> rawCert(comphelper::arrayToSequence<sal_Int8>(chCert, certSize));
 
     xmlFree( chCert ) ;
 
     return createCertificateFromRaw( rawCert ) ;
 }
-
 
 static HCERTSTORE getCertStoreForIntermediatCerts(
     const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
