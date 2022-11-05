@@ -1244,7 +1244,7 @@ namespace
             {
                 // need to create a new pack file, do this in a temp file to which data
                 // will be copied from local file (so keep it here until this is done)
-                oslFileHandle aHandle;
+                oslFileHandle aHandle = nullptr;
                 OUString aTempURL;
 
                 // open target temp file - it exists until deleted
