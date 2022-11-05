@@ -21,8 +21,8 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Lex/PPCallbacks.h>
+#include <llvm/ADT/StringExtras.h>
 #include <llvm/Support/TimeProfiler.h>
-#include <stdio.h>
 
 #if defined _WIN32
 #include <process.h>
@@ -384,8 +384,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             report( DiagnosticsEngine::Warning, pathWarning ) << name;
         if( bSkip )
             continue;
-        char* filename = new char[ modifyFile.length() + 100 ];
-        sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
+        auto const filename = modifyFile + ".new." + itostr(getpid());
         std::string error;
         bool bOk = false;
         std::error_code ec;
@@ -395,16 +394,15 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         {
             it->second.write( *ostream );
             ostream->close();
-            if( !ostream->has_error() && rename( filename, modifyFile.c_str()) == 0 )
+            if( !ostream->has_error() && rename( filename.c_str(), modifyFile.c_str()) == 0 )
                 bOk = true;
         }
         else
             error = "error: " + ec.message();
         ostream->clear_error();
-        unlink( filename );
+        unlink( filename.c_str() );
         if( !bOk )
             report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1)" ) << modifyFile << error;
-        delete[] filename;
     }
 #endif
  }
