@@ -46,3 +46,5 @@ SpaceBeforeAssignmentOperators: true
 ContinuationIndentWidth: 4
 SortIncludes: false
 SortUsingDeclarations: false
+# clang-format 8:
+#  StatementMacros: [SAL_WNODEPRECATED_DECLARATIONS_POP, SAL_WNODEPRECATED_DECLARATIONS_PUSH]
