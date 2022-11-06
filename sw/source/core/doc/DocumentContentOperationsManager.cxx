@@ -3527,9 +3527,6 @@ bool DocumentContentOperationsManager::InsertPoolItem(
     SwRootFrame const*const pLayout,
     SwTextAttr **ppNewTextAttr)
 {
-    if (utl::ConfigManager::IsFuzzing())
-        return false;
-
     SwDataChanged aTmp( rRg );
     std::unique_ptr<SwUndoAttr> pUndoAttr;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
