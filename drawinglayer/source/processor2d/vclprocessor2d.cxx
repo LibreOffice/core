@@ -407,8 +407,7 @@ void VclProcessor2D::RenderPolygonHairlinePrimitive2D(
     basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
     aLocalPolygon.transform(maCurrentTransformation);
 
-    if (bPixelBased && SvtOptionsDrawinglayer::IsAntiAliasing()
-        && SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete())
+    if (bPixelBased && getViewInformation2D().getPixelSnapHairline())
     {
         // #i98289#
         // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
@@ -818,7 +817,7 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     aMask.transform(maCurrentTransformation);
 
     // Unless smooth edges are needed, simply use clipping.
-    if (isRectangles(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
+    if (isRectangles(aMask) || !getViewInformation2D().getUseAntiAliasing())
     {
         mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
@@ -954,10 +953,9 @@ void VclProcessor2D::RenderTransformPrimitive2D(
     // create new transformations for CurrentTransformation
     // and for local ViewInformation2D
     maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
-    const geometry::ViewInformation2D aViewInformation2D(
-        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
-        getViewInformation2D().getViewTransformation(), getViewInformation2D().getViewport(),
-        getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime());
+    geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
+    aViewInformation2D.setObjectTransformation(getViewInformation2D().getObjectTransformation()
+                                               * rTransformCandidate.getTransformation());
     updateViewInformation(aViewInformation2D);
 
     // process content
@@ -976,10 +974,8 @@ void VclProcessor2D::RenderPagePreviewPrimitive2D(
     const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
     // create new local ViewInformation2D
-    const geometry::ViewInformation2D aViewInformation2D(
-        getViewInformation2D().getObjectTransformation(),
-        getViewInformation2D().getViewTransformation(), getViewInformation2D().getViewport(),
-        rPagePreviewCandidate.getXDrawPage(), getViewInformation2D().getViewTime());
+    geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
+    aViewInformation2D.setVisualizedPage(rPagePreviewCandidate.getXDrawPage());
     updateViewInformation(aViewInformation2D);
 
     // process decomposed content
@@ -1093,7 +1089,7 @@ void VclProcessor2D::RenderPolygonStrokePrimitive2D(
 
         if (nCount)
         {
-            const bool bAntiAliased(SvtOptionsDrawinglayer::IsAntiAliasing());
+            const bool bAntiAliased(getViewInformation2D().getUseAntiAliasing());
             aHairlinePolyPolygon.transform(maCurrentTransformation);
 
             if (bAntiAliased)

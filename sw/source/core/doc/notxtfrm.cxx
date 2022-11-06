@@ -888,12 +888,10 @@ static bool paintUsingPrimitivesHelper(
             // embed the primitives to it. Use original TargetRange here so there is also
             // no need to embed the primitives to a MaskPrimitive for cropping. This works
             // only in this case where the graphic object cannot be rotated, though.
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                aMappingTransform,
-                rOutputDevice.GetViewTransformation(),
-                rTargetRange,
-                nullptr,
-                0.0);
+            drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            aViewInformation2D.setObjectTransformation(aMappingTransform);
+            aViewInformation2D.setViewTransformation(rOutputDevice.GetViewTransformation());
+            aViewInformation2D.setViewport(rTargetRange);
 
             // get a primitive processor for rendering
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(

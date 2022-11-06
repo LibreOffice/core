@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <utility>
 
 using namespace com::sun::star;
@@ -39,6 +40,15 @@ constexpr OUStringLiteral g_PropertyName_Viewport = u"Viewport";
 constexpr OUStringLiteral g_PropertyName_Time = u"Time";
 constexpr OUStringLiteral g_PropertyName_VisualizedPage = u"VisualizedPage";
 constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = u"ReducedDisplayQuality";
+constexpr OUStringLiteral g_PropertyName_UseAntiAliasing = u"UseAntiAliasing";
+constexpr OUStringLiteral g_PropertyName_PixelSnapHairline = u"PixelSnapHairline";
+}
+
+namespace
+{
+bool bForwardsAreInitialized(false);
+bool bForwardedAntiAliasing(true);
+bool bForwardPixelSnapHairline(true);
 }
 
 class ImpViewInformation2D
@@ -74,34 +84,54 @@ protected:
     // the point in time
     double mfViewTime;
 
+    // allow to reduce DisplayQuality (e.g. sw 3d fallback renderer for interactions)
     bool mbReducedDisplayQuality : 1;
 
-public:
-    ImpViewInformation2D(basegfx::B2DHomMatrix aObjectTransformation,
-                         basegfx::B2DHomMatrix aViewTransformation,
-                         const basegfx::B2DRange& rViewport,
-                         uno::Reference<drawing::XDrawPage> xDrawPage, double fViewTime,
-                         bool bReducedDisplayQuality)
-        : maObjectTransformation(std::move(aObjectTransformation))
-        , maViewTransformation(std::move(aViewTransformation))
-        , maViewport(rViewport)
-        , mxVisualizedPage(std::move(xDrawPage))
-        , mfViewTime(fViewTime)
-        , mbReducedDisplayQuality(bReducedDisplayQuality)
-    {
-    }
+    // determine if to use AntiAliasing on target pixel device
+    bool mbUseAntiAliasing : 1;
 
+    // determine if to use PixelSnapHairline on target pixel device
+    bool mbPixelSnapHairline : 1;
+
+public:
     ImpViewInformation2D()
-        : mfViewTime(0.0)
+        : maObjectTransformation()
+        , maViewTransformation()
+        , maObjectToViewTransformation()
+        , maInverseObjectToViewTransformation()
+        , maViewport()
+        , maDiscreteViewport()
+        , mxVisualizedPage()
+        , mfViewTime(0.0)
         , mbReducedDisplayQuality(false)
+        , mbUseAntiAliasing(bForwardedAntiAliasing)
+        , mbPixelSnapHairline(bForwardedAntiAliasing && bForwardPixelSnapHairline)
     {
     }
 
     const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
+    void setObjectTransformation(const basegfx::B2DHomMatrix& rNew)
+    {
+        maObjectTransformation = rNew;
+        maObjectToViewTransformation.identity();
+        maInverseObjectToViewTransformation.identity();
+    }
 
     const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
+    void setViewTransformation(const basegfx::B2DHomMatrix& rNew)
+    {
+        maViewTransformation = rNew;
+        maDiscreteViewport.reset();
+        maObjectToViewTransformation.identity();
+        maInverseObjectToViewTransformation.identity();
+    }
 
     const basegfx::B2DRange& getViewport() const { return maViewport; }
+    void setViewport(const basegfx::B2DRange& rNew)
+    {
+        maViewport = rNew;
+        maDiscreteViewport.reset();
+    }
 
     const basegfx::B2DRange& getDiscreteViewport() const
     {
@@ -143,10 +173,28 @@ public:
     }
 
     double getViewTime() const { return mfViewTime; }
+    void setViewTime(double fNew)
+    {
+        if (fNew >= 0.0)
+        {
+            mfViewTime = fNew;
+        }
+    }
 
     const uno::Reference<drawing::XDrawPage>& getVisualizedPage() const { return mxVisualizedPage; }
+    void setVisualizedPage(const uno::Reference<drawing::XDrawPage>& rNew)
+    {
+        mxVisualizedPage = rNew;
+    }
 
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
+    void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
+
+    bool getUseAntiAliasing() const { return mbUseAntiAliasing; }
+    void setUseAntiAliasing(bool bNew) { mbUseAntiAliasing = bNew; }
+
+    bool getPixelSnapHairline() const { return mbPixelSnapHairline; }
+    void setPixelSnapHairline(bool bNew) { mbPixelSnapHairline = bNew; }
 
     bool operator==(const ImpViewInformation2D& rCandidate) const
     {
@@ -154,7 +202,10 @@ public:
                 && maViewTransformation == rCandidate.maViewTransformation
                 && maViewport == rCandidate.maViewport
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
-                && mfViewTime == rCandidate.mfViewTime);
+                && mfViewTime == rCandidate.mfViewTime
+                && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
+                && mbUseAntiAliasing == rCandidate.mbUseAntiAliasing
+                && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline);
     }
 };
 
@@ -167,20 +218,19 @@ ViewInformation2D::ImplType& theGlobalDefault()
 }
 }
 
-ViewInformation2D::ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
-                                     const basegfx::B2DHomMatrix& rViewTransformation,
-                                     const basegfx::B2DRange& rViewport,
-                                     const uno::Reference<drawing::XDrawPage>& rxDrawPage,
-                                     double fViewTime, bool bReducedDisplayQuality)
-    : mpViewInformation2D(ImpViewInformation2D(rObjectTransformation, rViewTransformation,
-                                               rViewport, rxDrawPage, fViewTime,
-                                               bReducedDisplayQuality))
-{
-}
-
 ViewInformation2D::ViewInformation2D()
     : mpViewInformation2D(theGlobalDefault())
 {
+    if (!bForwardsAreInitialized)
+    {
+        bForwardsAreInitialized = true;
+        bForwardedAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+        bForwardPixelSnapHairline
+            = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
+    }
+
+    setUseAntiAliasing(bForwardedAntiAliasing);
+    setPixelSnapHairline(bForwardPixelSnapHairline);
 }
 
 ViewInformation2D::ViewInformation2D(const ViewInformation2D&) = default;
@@ -203,9 +253,21 @@ const basegfx::B2DHomMatrix& ViewInformation2D::getObjectTransformation() const
     return mpViewInformation2D->getObjectTransformation();
 }
 
+void ViewInformation2D::setObjectTransformation(const basegfx::B2DHomMatrix& rNew)
+{
+    if (std::as_const(mpViewInformation2D)->getObjectTransformation() != rNew)
+        mpViewInformation2D->setObjectTransformation(rNew);
+}
+
 const basegfx::B2DHomMatrix& ViewInformation2D::getViewTransformation() const
 {
     return mpViewInformation2D->getViewTransformation();
+}
+
+void ViewInformation2D::setViewTransformation(const basegfx::B2DHomMatrix& rNew)
+{
+    if (std::as_const(mpViewInformation2D)->getViewTransformation() != rNew)
+        mpViewInformation2D->setViewTransformation(rNew);
 }
 
 const basegfx::B2DRange& ViewInformation2D::getViewport() const
@@ -213,11 +275,29 @@ const basegfx::B2DRange& ViewInformation2D::getViewport() const
     return mpViewInformation2D->getViewport();
 }
 
+void ViewInformation2D::setViewport(const basegfx::B2DRange& rNew)
+{
+    if (rNew != std::as_const(mpViewInformation2D)->getViewport())
+        mpViewInformation2D->setViewport(rNew);
+}
+
 double ViewInformation2D::getViewTime() const { return mpViewInformation2D->getViewTime(); }
+
+void ViewInformation2D::setViewTime(double fNew)
+{
+    if (fNew != std::as_const(mpViewInformation2D)->getViewTime())
+        mpViewInformation2D->setViewTime(fNew);
+}
 
 const uno::Reference<drawing::XDrawPage>& ViewInformation2D::getVisualizedPage() const
 {
     return mpViewInformation2D->getVisualizedPage();
+}
+
+void ViewInformation2D::setVisualizedPage(const uno::Reference<drawing::XDrawPage>& rNew)
+{
+    if (rNew != std::as_const(mpViewInformation2D)->getVisualizedPage())
+        mpViewInformation2D->setVisualizedPage(rNew);
 }
 
 const basegfx::B2DHomMatrix& ViewInformation2D::getObjectToViewTransformation() const
@@ -240,55 +320,112 @@ bool ViewInformation2D::getReducedDisplayQuality() const
     return mpViewInformation2D->getReducedDisplayQuality();
 }
 
+void ViewInformation2D::setReducedDisplayQuality(bool bNew)
+{
+    if (bNew != std::as_const(mpViewInformation2D)->getReducedDisplayQuality())
+        mpViewInformation2D->setReducedDisplayQuality(bNew);
+}
+
+bool ViewInformation2D::getUseAntiAliasing() const
+{
+    return mpViewInformation2D->getUseAntiAliasing();
+}
+
+void ViewInformation2D::setUseAntiAliasing(bool bNew)
+{
+    if (bNew != std::as_const(mpViewInformation2D)->getUseAntiAliasing())
+        mpViewInformation2D->setUseAntiAliasing(bNew);
+}
+
+bool ViewInformation2D::getPixelSnapHairline() const
+{
+    return mpViewInformation2D->getPixelSnapHairline();
+}
+
+void ViewInformation2D::setPixelSnapHairline(bool bNew)
+{
+    if (bNew != std::as_const(mpViewInformation2D)->getPixelSnapHairline())
+        mpViewInformation2D->setPixelSnapHairline(bNew);
+}
+
+void ViewInformation2D::forwardAntiAliasing(bool bAntiAliasing)
+{
+    bForwardedAntiAliasing = bAntiAliasing;
+}
+
+void ViewInformation2D::forwardPixelSnapHairline(bool bPixelSnapHairline)
+{
+    bForwardPixelSnapHairline = bPixelSnapHairline;
+}
+
 ViewInformation2D
 createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
 {
     if (!rViewParameters.hasElements())
         return ViewInformation2D();
 
-    bool bReducedDisplayQuality = false;
-    basegfx::B2DHomMatrix aObjectTransformation;
-    basegfx::B2DHomMatrix aViewTransformation;
-    basegfx::B2DRange aViewport;
-    double fViewTime = 0.0;
-    uno::Reference<drawing::XDrawPage> xVisualizedPage;
+    ViewInformation2D aRetval;
 
     for (auto const& rPropertyValue : rViewParameters)
     {
         if (rPropertyValue.Name == g_PropertyName_ReducedDisplayQuality)
         {
-            rPropertyValue.Value >>= bReducedDisplayQuality;
+            bool bNew(false);
+            rPropertyValue.Value >>= bNew;
+            aRetval.setReducedDisplayQuality(bNew);
+        }
+        else if (rPropertyValue.Name == g_PropertyName_PixelSnapHairline)
+        {
+            bool bNew(
+                true); //SvtOptionsDrawinglayer::IsAntiAliasing() && SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete());
+            rPropertyValue.Value >>= bNew;
+            aRetval.setPixelSnapHairline(bNew);
+        }
+        else if (rPropertyValue.Name == g_PropertyName_UseAntiAliasing)
+        {
+            bool bNew(true); //SvtOptionsDrawinglayer::IsAntiAliasing());
+            rPropertyValue.Value >>= bNew;
+            aRetval.setUseAntiAliasing(bNew);
         }
         else if (rPropertyValue.Name == g_PropertyName_ObjectTransformation)
         {
             css::geometry::AffineMatrix2D aAffineMatrix2D;
             rPropertyValue.Value >>= aAffineMatrix2D;
-            basegfx::unotools::homMatrixFromAffineMatrix(aObjectTransformation, aAffineMatrix2D);
+            basegfx::B2DHomMatrix aTransformation;
+            basegfx::unotools::homMatrixFromAffineMatrix(aTransformation, aAffineMatrix2D);
+            aRetval.setObjectTransformation(aTransformation);
         }
         else if (rPropertyValue.Name == g_PropertyName_ViewTransformation)
         {
             css::geometry::AffineMatrix2D aAffineMatrix2D;
             rPropertyValue.Value >>= aAffineMatrix2D;
-            basegfx::unotools::homMatrixFromAffineMatrix(aViewTransformation, aAffineMatrix2D);
+            basegfx::B2DHomMatrix aTransformation;
+            basegfx::unotools::homMatrixFromAffineMatrix(aTransformation, aAffineMatrix2D);
+            aRetval.setViewTransformation(aTransformation);
         }
         else if (rPropertyValue.Name == g_PropertyName_Viewport)
         {
             css::geometry::RealRectangle2D aUnoViewport;
             rPropertyValue.Value >>= aUnoViewport;
-            aViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aUnoViewport);
+            const basegfx::B2DRange aViewport(
+                basegfx::unotools::b2DRectangleFromRealRectangle2D(aUnoViewport));
+            aRetval.setViewport(aViewport);
         }
         else if (rPropertyValue.Name == g_PropertyName_Time)
         {
+            double fViewTime(0.0);
             rPropertyValue.Value >>= fViewTime;
+            aRetval.setViewTime(fViewTime);
         }
         else if (rPropertyValue.Name == g_PropertyName_VisualizedPage)
         {
+            css::uno::Reference<css::drawing::XDrawPage> xVisualizedPage;
             rPropertyValue.Value >>= xVisualizedPage;
+            aRetval.setVisualizedPage(xVisualizedPage);
         }
     }
 
-    return ViewInformation2D(aObjectTransformation, aViewTransformation, aViewport, xVisualizedPage,
-                             fViewTime, bReducedDisplayQuality);
+    return aRetval;
 }
 
 } // end of namespace drawinglayer::geometry

@@ -1795,12 +1795,10 @@ bool DrawFillAttributes(
                 }
                 assert(pPrimitives && pPrimitives->size());
 
-                const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                    basegfx::B2DHomMatrix(),
-                    rOut.GetViewTransformation(),
-                    aPaintRange,
-                    nullptr,
-                    0.0);
+                drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                aViewInformation2D.setViewTransformation(rOut.GetViewTransformation());
+                aViewInformation2D.setViewport(aPaintRange);
+
                 std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     rOut,
                     aViewInformation2D) );
@@ -5187,12 +5185,10 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> SwFrame::CreateProce
     basegfx::B2DRange aViewRange;
 
     SdrPage *pDrawPage = getRootFrame()->GetCurrShell()->Imp()->GetPageView()->GetPage();
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos(
-            basegfx::B2DHomMatrix(  ),
-            getRootFrame()->GetCurrShell()->GetOut()->GetViewTransformation(),
-            aViewRange,
-            GetXDrawPageForSdrPage( pDrawPage ),
-            0.0);
+    drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    aNewViewInfos.setViewTransformation(getRootFrame()->GetCurrShell()->GetOut()->GetViewTransformation());
+    aNewViewInfos.setViewport(aViewRange);
+    aNewViewInfos.setVisualizedPage(GetXDrawPageForSdrPage( pDrawPage ));
 
     return  drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     *getRootFrame()->GetCurrShell()->GetOut(),

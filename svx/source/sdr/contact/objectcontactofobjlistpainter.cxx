@@ -96,12 +96,10 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     }
 
     // update local ViewInformation2D
-    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-        basegfx::B2DHomMatrix(),
-        pTargetDevice->GetViewTransformation(),
-        aViewRange,
-        GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
-        0.0);
+    drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+    aNewViewInformation2D.setViewTransformation(pTargetDevice->GetViewTransformation());
+    aNewViewInformation2D.setViewport(aViewRange);
+    aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)));
     updateViewInformation2D(aNewViewInformation2D);
 
     // collect primitive data in a sequence; this will already use the updated ViewInformation2D

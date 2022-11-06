@@ -124,20 +124,21 @@ drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPr
     {
         // update own ViewInformation2D for visualized page
         const drawinglayer::geometry::ViewInformation2D& rOriginalViewInformation = mrViewObjectContactOfPageObj.GetObjectContact().getViewInformation2D();
-        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-            rOriginalViewInformation.getObjectTransformation(),
-            rOriginalViewInformation.getViewTransformation(),
+        drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(rOriginalViewInformation);
 
-            // #i101075# use empty range for page content here to force
-            // the content not to be physically clipped in any way. This
-            // would be possible, but would require the internal transformation
-            // which maps between the page visualisation object and the page
-            // content, including the aspect ratios (for details see in
-            // PagePreviewPrimitive2D::create2DDecomposition)
-            basegfx::B2DRange(),
+        // #i101075# use empty range for page content here to force
+        // the content not to be physically clipped in any way. This
+        // would be possible, but would require the internal transformation
+        // which maps between the page visualisation object and the page
+        // content, including the aspect ratios (for details see in
+        // PagePreviewPrimitive2D::create2DDecomposition)
+        aNewViewInformation2D.setViewport(basegfx::B2DRange());
 
-            GetXDrawPageForSdrPage(pStartPage),
-            0.0); // no time; page previews are not animated
+        aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(pStartPage));
+
+        // no time; page previews are not animated
+        aNewViewInformation2D.setViewTime(0.0);
+
         updateViewInformation2D(aNewViewInformation2D);
 
         // create copy of DisplayInfo to set PagePainting

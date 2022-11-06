@@ -2321,9 +2321,9 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
 
             // create view information and pixel renderer. Reuse known ViewInformation
             // except new transformation and range
-            const geometry::ViewInformation2D aViewInfo(
-                getViewInformation2D().getObjectTransformation(), aViewTransform, aViewRange,
-                getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime());
+            geometry::ViewInformation2D aViewInfo(getViewInformation2D());
+            aViewInfo.setViewTransformation(aViewTransform);
+            aViewInfo.setViewport(aViewRange);
 
             VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
 

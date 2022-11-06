@@ -91,14 +91,18 @@ public:
         The time the view is defined for. Default is 0.0. This parameter is used e.g. for
         animated objects
 
-        @param rReducedDisplayQuality
-    */
-    ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
-                      const basegfx::B2DHomMatrix& rViewTransformation,
-                      const basegfx::B2DRange& rViewport,
-                      const css::uno::Reference<css::drawing::XDrawPage>& rxDrawPage,
-                      double fViewTime, bool bReducedDisplayQuality = false);
+        @param bReducedDisplayQuality
+        Support reduced DisplayQuality, PropertyName is 'ReducedDisplayQuality'. This
+        is used e.g. to allow to lower display quality for OverlayPrimitives and
+        may lead to simpler decompositions in the local create2DDecomposition
+        implementations of the primitives
 
+        @param bUseAntiAliasing
+        Determine if to use AntiAliasing on target pixel device
+
+        @param bPixelSnapHairline
+        Determine if to use PixelSnapHairline on target pixel device
+    */
     /// default (empty) constructor
     ViewInformation2D();
 
@@ -120,11 +124,20 @@ public:
 
     /// data access
     const basegfx::B2DHomMatrix& getObjectTransformation() const;
+    void setObjectTransformation(const basegfx::B2DHomMatrix& rNew);
+
     const basegfx::B2DHomMatrix& getViewTransformation() const;
+    void setViewTransformation(const basegfx::B2DHomMatrix& rNew);
+
     /// Empty viewport means everything is visible.
     const basegfx::B2DRange& getViewport() const;
+    void setViewport(const basegfx::B2DRange& rNew);
+
     double getViewTime() const;
+    void setViewTime(double fNew);
+
     const css::uno::Reference<css::drawing::XDrawPage>& getVisualizedPage() const;
+    void setVisualizedPage(const css::uno::Reference<css::drawing::XDrawPage>& rNew);
 
     /// On-demand prepared Object to View transformation and its inverse for convenience
     const basegfx::B2DHomMatrix& getObjectToViewTransformation() const;
@@ -134,12 +147,20 @@ public:
     /// Empty viewport means everything is visible.
     const basegfx::B2DRange& getDiscreteViewport() const;
 
-    /** support reduced DisplayQuality, PropertyName is 'ReducedDisplayQuality'. This
-        is used e.g. to allow to lower display quality for OverlayPrimitives and
-        may lead to simpler decompositions in the local create2DDecomposition
-        implementations of the primitives
-     */
+    /// Support reduced DisplayQuality, PropertyName is 'ReducedDisplayQuality'.
     bool getReducedDisplayQuality() const;
+    void setReducedDisplayQuality(bool bNew);
+
+    /// Determine if to use AntiAliasing on target pixel device, PropertyName is 'UseAntiAliasing'
+    bool getUseAntiAliasing() const;
+    void setUseAntiAliasing(bool bNew);
+
+    /// Determine if to use PixelSnapHairline on target pixel device, PropertyName is 'PixelSnapHairline'
+    bool getPixelSnapHairline() const;
+    void setPixelSnapHairline(bool bNew);
+
+    static void forwardAntiAliasing(bool bAntiAliasing);
+    static void forwardPixelSnapHairline(bool bPixelSnapHairline);
 };
 
 DRAWINGLAYERCORE_DLLPUBLIC ViewInformation2D

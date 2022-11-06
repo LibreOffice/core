@@ -412,7 +412,7 @@ namespace sdr::overlay
             basegfx::B2DRange aDiscreteRange(rRange);
             aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
 
-            if(SvtOptionsDrawinglayer::IsAntiAliasing())
+            if(getCurrentViewInformation2D().getUseAntiAliasing())
             {
                 // assume AA needs one pixel more and invalidate one pixel more
                 const double fDiscreteOne(getDiscreteOne());

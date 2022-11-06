@@ -79,14 +79,11 @@ drawinglayer::geometry::ViewInformation2D
 expandB2DRangeAtViewInformation2D(const drawinglayer::geometry::ViewInformation2D& rViewInfo,
                                   double nAmount)
 {
+    drawinglayer::geometry::ViewInformation2D aRetval(rViewInfo);
     basegfx::B2DRange viewport(rViewInfo.getViewport());
     viewport.grow(nAmount);
-    return { rViewInfo.getObjectTransformation(),
-             rViewInfo.getViewTransformation(),
-             viewport,
-             rViewInfo.getVisualizedPage(),
-             rViewInfo.getViewTime(),
-             rViewInfo.getReducedDisplayQuality() };
+    aRetval.setViewport(viewport);
+    return aRetval;
 }
 
 } // end of namespace drawinglayer::primitive2d

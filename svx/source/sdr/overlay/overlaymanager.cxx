@@ -46,7 +46,7 @@ namespace sdr::overlay
                 return;
 
             const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
-            const bool bIsAntiAliasing(SvtOptionsDrawinglayer::IsAntiAliasing());
+            const bool bIsAntiAliasing(getCurrentViewInformation2D().getUseAntiAliasing());
             // tdf#150622 for High Contrast we typically force colors to a single pair Fore/Back,
             // but it seems reasonable to allow overlays to use the selection color
             // taken from the system High Contrast settings
@@ -137,8 +137,8 @@ namespace sdr::overlay
             mnStripeLengthPixel(5),
             mfDiscreteOne(0.0)
         {
-            // set Property 'ReducedDisplayQuality' to true to allow simpler interaction
-            // visualisations
+            // Set Property 'ReducedDisplayQuality' to true to allow simpler interaction
+            // visualisations. Note: Currently will use reduced quality for 3d scene soft renderer
             uno::Sequence< beans::PropertyValue > xProperties{
                 comphelper::makePropertyValue("ReducedDisplayQuality", true)
             };
@@ -172,12 +172,11 @@ namespace sdr::overlay
                 OverlayManager* pThis = const_cast< OverlayManager* >(this);
 
                 pThis->maViewTransformation = getOutputDevice().GetViewTransformation();
-                pThis->maViewInformation2D = drawinglayer::geometry::ViewInformation2D(
-                    maViewInformation2D.getObjectTransformation(),
-                    maViewTransformation,
-                    aViewRange,
-                    maViewInformation2D.getVisualizedPage(),
-                    maViewInformation2D.getViewTime());
+                drawinglayer::geometry::ViewInformation2D aViewInformation(maViewInformation2D);
+                aViewInformation.setViewTransformation(maViewTransformation);
+                aViewInformation.setViewport(aViewRange);
+                pThis->maViewInformation2D = aViewInformation;
+
                 pThis->mfDiscreteOne = 0.0;
             }
 
@@ -296,7 +295,7 @@ namespace sdr::overlay
             if (rRange.isEmpty()) {
                 return {};
             }
-            if (SvtOptionsDrawinglayer::IsAntiAliasing())
+            if (getCurrentViewInformation2D().getUseAntiAliasing())
             {
                 // assume AA needs one pixel more and invalidate one pixel more
                 const double fDiscreteOne(getDiscreteOne());

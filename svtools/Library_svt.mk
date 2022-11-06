@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,svt,\
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayercore \
     i18nlangtag \
     i18nutil \
     $(if $(ENABLE_JAVA), \

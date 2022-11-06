@@ -208,12 +208,11 @@ namespace sdr::contact
             }
 
             // update local ViewInformation2D
-            const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-                basegfx::B2DHomMatrix(),
-                rTargetOutDev.GetViewTransformation(),
-                aViewRange,
-                GetXDrawPageForSdrPage(GetSdrPage()),
-                fCurrentTime);
+            drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+            aNewViewInformation2D.setViewTransformation(rTargetOutDev.GetViewTransformation());
+            aNewViewInformation2D.setViewport(aViewRange);
+            aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(GetSdrPage()));
+            aNewViewInformation2D.setViewTime(fCurrentTime);
             updateViewInformation2D(aNewViewInformation2D);
 
             // if there is something to show, use a primitive processor to render it. There

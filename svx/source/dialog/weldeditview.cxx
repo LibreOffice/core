@@ -231,9 +231,9 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent,
                                                       aHighlight, std::move(aLogicRanges), true);
 
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-            basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(),
-            vcl::unotools::b2DRectangleFromRectangle(rRect), nullptr, 0.0);
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        aViewInformation2D.setViewTransformation(rRenderContext.GetViewTransformation());
+        aViewInformation2D.setViewport(vcl::unotools::b2DRectangleFromRectangle(rRect));
 
         std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
             drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,

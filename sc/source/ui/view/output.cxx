@@ -1716,12 +1716,10 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> ScOutputData::Create
 
     basegfx::B2DRange aViewRange;
     SdrPage *pDrawPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos(
-            basegfx::B2DHomMatrix(  ),
-            mpDev->GetViewTransformation(),
-            aViewRange,
-            GetXDrawPageForSdrPage( pDrawPage ),
-            0.0);
+    drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    aNewViewInfos.setViewTransformation(mpDev->GetViewTransformation());
+    aNewViewInfos.setViewport(aViewRange);
+    aNewViewInfos.setVisualizedPage(GetXDrawPageForSdrPage( pDrawPage ));
 
     return drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     *mpDev, aNewViewInfos );
