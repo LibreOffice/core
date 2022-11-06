@@ -2295,8 +2295,10 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                               OutputRect.GetHeight()), aMap));
             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
-                                                                      tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
+            if (GraphicSize.Width() <= 0 || GraphicSize.Height() <= 0)
+                break;
+            sal_uInt16 nZ = std::min(o3tl::convert(OutputSize.Width(), 100, GraphicSize.Width()),
+                                     o3tl::convert(OutputSize.Height(), 100, GraphicSize.Height()));
             mxGraphicWindow->SetZoom(nZ);
             break;
         }
