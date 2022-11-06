@@ -17,6 +17,7 @@
  */
 
 #include "sal/config.h"
+#include "sal/macros.h"
 
 #include <cstddef>
 #include <memory>
@@ -119,9 +120,8 @@ private:
         "com.sun.star.script.InvocationAdapterFactory",
         "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"
     };
-    for (auto const & service : services)
-    {
-        ::rtl::OUString name(::rtl::OUString::createFromAscii(service));
+    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
+        ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
         css::uno::Reference< css::uno::XInterface > instance;
         try {
             instance = context_->getServiceManager()->createInstanceWithContext(
@@ -165,11 +165,10 @@ private:
     static char const * const singletons[] = {
         "com.sun.star.reflection.theTypeDescriptionManager"
     };
-    for (auto const & singleton : singletons)
-    {
+    for (std::size_t i = 0; i != SAL_N_ELEMENTS(singletons); ++i) {
         css::uno::Reference< css::uno::XInterface > instance(
             context_->getValueByName(
-                "/singletons/" + rtl::OUString::createFromAscii(singleton)),
+                "/singletons/" + rtl::OUString::createFromAscii(singletons[i])),
             css::uno::UNO_QUERY_THROW);
     }
     css::util::theMacroExpander::get(context_);
