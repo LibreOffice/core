@@ -115,6 +115,7 @@ protected:
 
     bool mbBiff2HasXfs:1;      /// Select XF formatting or direct formatting in BIFF2.
     bool mbBiff2HasXfsValid:1; /// False = mbBiff2HasXfs is undetermined yet.
+    bool mbFuzzing:1;          /// True if fuzzing filter
 
     void SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt16 nXF, ScFormulaCell* pCell );
 
