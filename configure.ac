@@ -8403,9 +8403,11 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             fi
             # Try if clang is built from source (in which case its includes are not together with llvm includes).
             # src-root is [llvm-toplevel-src-dir]/llvm, clang is [llvm-toplevel-src-dir]/clang
-            clangsrcdir=$(dirname $($LLVM_CONFIG --src-root))
-            if test -n "$clangsrcdir" -a -d "$clangsrcdir" -a -d "$clangsrcdir/clang/include"; then
-                COMPILER_PLUGINS_CXXFLAGS="$COMPILER_PLUGINS_CXXFLAGS -I$clangsrcdir/clang/include"
+            if $LLVM_CONFIG --src-root >/dev/null 2>&1; then
+                clangsrcdir=$(dirname $($LLVM_CONFIG --src-root))
+                if test -n "$clangsrcdir" -a -d "$clangsrcdir" -a -d "$clangsrcdir/clang/include"; then
+                    COMPILER_PLUGINS_CXXFLAGS="$COMPILER_PLUGINS_CXXFLAGS -I$clangsrcdir/clang/include"
+                fi
             fi
             # obj-root is [llvm-toplevel-obj-dir]/, clang is [llvm-toplevel-obj-dir]/tools/clang
             clangobjdir=$($LLVM_CONFIG --obj-root)
