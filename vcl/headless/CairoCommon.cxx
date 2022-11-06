@@ -715,7 +715,7 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
 
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
-    constexpr int MaxNormalLineWidth = 96;
+    constexpr int MaxNormalLineWidth = 94;
     if (fLineWidth > MaxNormalLineWidth)
     {
         const double fLineWidthPixel
