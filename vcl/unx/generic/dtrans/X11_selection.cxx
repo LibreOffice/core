@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <cstdlib>
+#include <thread>
 
 #include <unx/saldisp.hxx>
 
@@ -946,7 +947,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
             else
             {
                 aGuard.clear();
-                osl::Thread::wait(std::chrono::milliseconds(100));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 aGuard.reset();
             }
             if( bHandle )
@@ -3501,7 +3502,7 @@ void SelectionManager::dragDoDispatch()
     {
         // let the thread in the run method do the dispatching
         // just look occasionally here whether drop timed out or is completed
-        osl::Thread::wait(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("vcl.unx.dtrans", "end executeDrag dispatching.");

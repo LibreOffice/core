@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <thread>
 #include <utility>
 
 #include <cppu/unotype.hxx>
@@ -512,7 +513,7 @@ namespace {
 
 void wait(sal_Int32 microSeconds) {
     OSL_ASSERT(microSeconds >= 0 && microSeconds <= SAL_MAX_INT32 / 1000);
-    osl::Thread::wait(std::chrono::microseconds(microSeconds));
+    std::this_thread::sleep_for(std::chrono::microseconds(microSeconds));
 }
 
 }

@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <mutex>
+#include <thread>
 #include <utility>
 
 /** thread to cancel a give list of cancellable jobs
@@ -133,7 +134,7 @@ void SAL_CALL CancelJobsThread::run()
         mbAllJobsCancelled = true;
 
         {
-            osl::Thread::wait(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
 }
@@ -347,7 +348,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
     if ( mpCancelJobsThread != nullptr &&
          !mpCancelJobsThread->allJobsCancelled() )
     {
-        osl::Thread::wait(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     if ( mpCancelJobsThread != nullptr &&
