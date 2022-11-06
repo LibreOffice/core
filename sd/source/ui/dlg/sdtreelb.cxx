@@ -1192,9 +1192,10 @@ void SdPageObjsTLV::SelectEntry(const SdrObject *pObj)
             {
                 if (weld::fromId<SdrObject*>(m_xTreeView->get_id(*xEntry)) == pObj)
                 {
-                    // only scroll to row of the first selected
-                    if (m_xTreeView->get_selected_rows().empty())
-                        m_xTreeView->scroll_to_row(*xEntry);
+                    // Only scroll to the row of the first selected. And only when the treeview
+                    // doesn't have the focus.
+                    if (!m_xTreeView->has_focus() && m_xTreeView->get_selected_rows().empty())
+                        m_xTreeView->set_cursor(*xEntry);
                     m_xTreeView->select(*xEntry);
                     break;
                 }
