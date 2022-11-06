@@ -1778,15 +1778,12 @@ class SFDatabases:
         servicename = 'SFDatabases.Datasheet'
         servicesynonyms = ('datasheet', 'sfdatabases.datasheet')
         serviceproperties = dict(ColumnHeaders = False, CurrentColumn = False, CurrentRow = False,
-                                 DatabaseFileName = False, LastRow = False, ParentDatabase = False, Source = False,
-                                 SourceType = False, XComponent = False, XControlModel = False,
-                                 XTabControllerModel = False)
+                                 DatabaseFileName = False, Filter = True, LastRow = False, OrderBy = True,
+                                 ParentDatabase = False, Source = False, SourceType = False, XComponent = False,
+                                 XControlModel = False, XTabControllerModel = False)
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
-
-        def ApplyFilter(self, filter = ''):
-            return self.ExecMethod(self.vbMethod, 'ApplyFilter', filter)
 
         def CloseDatasheet(self):
             return self.ExecMethod(self.vbMethod, 'CloseDatasheet')
@@ -1802,9 +1799,6 @@ class SFDatabases:
 
         def GoToCell(self, row = 0, column = 0):
             return self.ExecMethod(self.vbMethod, 'GoToCell', row, column)
-
-        def OrderBy(self, order = ''):
-            return self.ExecMethod(self.vbMethod, 'OrderBy', order)
 
         def RemoveMenu(self, menuheader):
             return self.ExecMethod(self.vbMethod, 'RemoveMenu', menuheader)

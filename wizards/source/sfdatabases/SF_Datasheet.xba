@@ -129,12 +129,40 @@ Property Get DatabaseFileName() As String
 End Property	&apos;	SFDatabases.SF_Datasheet.DatabaseFileName
 
 REM -----------------------------------------------------------------------------
+Property Get Filter() As Variant
+&apos;&apos;&apos;	The Filter is a SQL WHERE clause without the WHERE keyword
+	Filter = _PropertyGet(&quot;Filter&quot;)
+End Property	&apos;	SFDatabases.SF_Datasheet.Filter (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Filter(Optional ByVal pvFilter As Variant)
+&apos;&apos;&apos;	Set the updatable property Filter
+&apos;&apos;&apos;	Table and field names may be surrounded by square brackets
+&apos;&apos;&apos;	When the argument is the zero-length string, the actual filter is removed
+	_PropertySet(&quot;Filter&quot;, pvFilter)
+End Property	&apos;	SFDatabases.SF_Datasheet.Filter (let)
+
+REM -----------------------------------------------------------------------------
 Property Get LastRow() As Long
 &apos;&apos;&apos;	Returns the total number of rows
 &apos;&apos;&apos;	The process may imply to move the cursor to the last available row.
 &apos;&apos;&apos;	Afterwards the cursor is reset to the current row.
 	LastRow = _PropertyGet(&quot;LastRow&quot;)
 End Property	&apos;	SFDatabases.SF_Datasheet.LastRow
+
+REM -----------------------------------------------------------------------------
+Property Get OrderBy() As Variant
+&apos;&apos;&apos;	The Order is a SQL ORDER BY clause without the ORDER BY keywords
+	OrderBy = _PropertyGet(&quot;OrderBy&quot;)
+End Property	&apos;	SFDocuments.SF_Form.OrderBy (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OrderBy(Optional ByVal pvOrderBy As Variant)
+&apos;&apos;&apos;	Set the updatable property OrderBy
+&apos;&apos;&apos;	Table and field names may be surrounded by square brackets
+&apos;&apos;&apos;	When the argument is the zero-length string, the actual sort is removed
+	_PropertySet(&quot;OrderBy&quot;, pvOrderBy)
+End Property	&apos;	SFDocuments.SF_Form.OrderBy (let)
 
 REM -----------------------------------------------------------------------------
 Property Get ParentDatabase() As Object
@@ -208,56 +236,6 @@ Finally:
 Catch:
 	GoTo Finally
 End Sub			&apos;   SFDatabases.SF_Datasheet.Activate
-
-REM -----------------------------------------------------------------------------
-Public Function ApplyFilter(Optional ByVal Filter As Variant) As Boolean
-&apos;&apos;&apos; Apply the given filter to the actual datasheet
-&apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Filter: a SQL WHERE clause without the WHERE keyword
-&apos;&apos;&apos;			Table and field names may be surrounded by square brackets
-&apos;&apos;&apos;			When the argument is the zero-length string or absent, the actual filter is removed
-&apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		True when successful
-&apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oSheet.ApplyFilter(&quot;[ShipCountry]=&apos;USA&apos;&quot;)
-
-Dim bApply As Boolean				&apos;	Return value
-Dim sFilter As String				&apos;	Filter after replacement of square brackets by real delimiter
-Const cstThisSub = &quot;SFDatabases.Datasheet.ApplyFilter&quot;
-Const cstSubArgs = &quot;[Filter=&quot;&quot;&quot;&quot;]&quot;
-
-	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	bApply = False
-
-Check:
-	If IsMissing(Filter) Or IsEmpty(Filter) Then Filter = &quot;&quot;
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Catch
-	End If
-
-Try:
-	With _TabControllerModel
-		If Len(Filter) &gt; 0 Then
-			.Filter = _ParentDatabase._ReplaceSquareBrackets(Filter)
-			.ApplyFilter = True
-			.reload()
-		Else
-			.Filter = &quot;&quot;
-			.ApplyFilter = False
-			.reload()
-		End If
-	End With
-
-	bApply = True
-
-Finally:
-	ApplyFilter = bApply
-	SF_Utils._ExitFunction(cstThisSub)
-	Exit Function
-Catch:
-	GoTo Finally
-End Function	&apos;   SFDatabases.SF_Datasheet.ApplyFilter
 
 REM -----------------------------------------------------------------------------
 Public Function CloseDatasheet() As Boolean
@@ -567,67 +545,15 @@ Public Function Methods() As Variant
 
 	Methods = Array( _
 					&quot;Activate&quot; _
-					, &quot;ApplyFilter&quot; _
 					, &quot;CloseDatasheet&quot; _
 					, &quot;CreateMenu&quot; _
 					, &quot;GetText&quot; _
 					, &quot;GetValue&quot; _
 					, &quot;GoToCell&quot; _
-					, &quot;OrderBy&quot; _
 					, &quot;RemoveMenu&quot; _
 					)
 
 End Function	&apos;	SFDatabases.SF_Datasheet.Methods
-
-REM -----------------------------------------------------------------------------
-Public Function OrderBy(Optional ByVal Order As Variant) As Boolean
-&apos;&apos;&apos; Sort the actual datasheet based on the given ordering instructions
-&apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Order: a SQL ORDER BY clause without the ORDER BY keywords
-&apos;&apos;&apos;			Table and field names may be surrounded by square brackets
-&apos;&apos;&apos;			When the argument is the zero-length string or absent, the actual sort is removed
-&apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		True when successful
-&apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oSheet.OrderBy(&quot;[ShipCountry] DESC, [EmployeeID]&quot;)
-
-Dim bOrder As Boolean				&apos;	Return value
-Dim sOrder As String				&apos;	Order after replacement of square brackets by real delimiter
-Const cstThisSub = &quot;SFDatabases.Datasheet.OrderBy&quot;
-Const cstSubArgs = &quot;[Order=&quot;&quot;&quot;&quot;]&quot;
-
-	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	bOrder = False
-
-Check:
-	If IsMissing(Order) Or IsEmpty(Order) Then Order = &quot;&quot;
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Order, &quot;Order&quot;, V_STRING) Then GoTo Catch
-	End If
-
-Try:
-	With _TabControllerModel
-		If Len(Order) &gt; 0 Then
-			.Order = _ParentDatabase._ReplaceSquareBrackets(Order)
-			.ApplyFilter = True
-			.reload()
-		Else
-			.Order = &quot;&quot;
-			.ApplyFilter = False
-			.reload()
-		End If
-	End With
-
-	bOrder = True
-
-Finally:
-	OrderBy = bOrder
-	SF_Utils._ExitFunction(cstThisSub)
-	Exit Function
-Catch:
-	GoTo Finally
-End Function	&apos;   SFDatabases.SF_Datasheet.OrderBy
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
@@ -638,7 +564,9 @@ Public Function Properties() As Variant
 					, &quot;CurrentColumn&quot; _
 					, &quot;CurrentRow&quot; _
 					, &quot;DatabaseFileName&quot; _
+					, &quot;Filter&quot; _
 					, &quot;LastRow&quot; _
+					, &quot;OrderBy&quot; _
 					, &quot;ParentDatabase&quot; _
 					, &quot;Source&quot; _
 					, &quot;SourceType&quot; _
@@ -711,6 +639,38 @@ Finally:
 Catch:
 	GoTo Finally
 End Function   &apos;   SFDatabases.SF_Datasheet.RemoveMenu
+
+REM -----------------------------------------------------------------------------
+Public Function SetProperty(Optional ByVal PropertyName As Variant _
+								, Optional ByRef Value As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set a new value to the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;		Value: its new value
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;SFDatabases.Datasheet.SetProperty&quot;
+Const cstSubArgs = &quot;PropertyName, Value&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	SetProperty = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	SetProperty = _PropertySet(PropertyName, Value)
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Datasheet.SetProperty
 
 REM =========================================================== PRIVATE FUNCTIONS
 
@@ -828,6 +788,8 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = _TabControllerModel.Row
 		Case &quot;DatabaseFileName&quot;
 			_PropertyGet = ScriptForge.SF_FileSystem._ConvertFromUrl(_BaseFileName)
+		Case &quot;Filter&quot;
+			_PropertyGet = _TabControllerModel.Filter
 		Case &quot;LastRow&quot;
 			With _TabControllerModel
 				If .IsRowCountFinal Then
@@ -843,6 +805,8 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				End If
 			End With
+		Case &quot;OrderBy&quot;
+			_PropertyGet = _TabControllerModel.Order
 		Case &quot;ParentDatabase&quot;
 			Set _PropertyGet = _ParentDatabase
 		Case &quot;Source&quot;
@@ -867,13 +831,62 @@ Catch:
 End Function	&apos;	SFDatabases.SF_Datasheet._PropertyGet
 
 REM -----------------------------------------------------------------------------
+Private Function _PropertySet(Optional ByVal psProperty As String _
+								, Optional ByVal pvValue As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set the new value of the named property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+&apos;&apos;&apos;		pvValue: the new value of the given property
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if successful
+
+Dim bSet As Boolean							&apos;	Return value
+Dim cstThisSub As String
+Const cstSubArgs = &quot;Value&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bSet = False
+
+	cstThisSub = &quot;SFDatabases.Datasheet.set&quot; &amp; psProperty
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+	If Not _IsStillAlive() Then GoTo Finally
+
+	bSet = True
+	Select Case UCase(psProperty)
+		Case UCase(&quot;Filter&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Filter&quot;, V_STRING) Then GoTo Finally
+			With _TabControllerModel
+				If Len(pvValue) &gt; 0 Then .Filter = _ParentDatabase._ReplaceSquareBrackets(pvValue) Else .Filter = &quot;&quot;
+				.ApplyFilter = ( Len(pvValue) &gt; 0 )
+				.reload()
+			End With
+		Case UCase(&quot;OrderBy&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;OrderBy&quot;, V_STRING) Then GoTo Finally
+			With _TabControllerModel
+				If Len(pvValue) &gt; 0 Then .Order = _ParentDatabase._ReplaceSquareBrackets(pvValue) Else .Order = &quot;&quot;
+				.reload()
+			End With
+		Case Else
+			bSet = False
+	End Select
+
+Finally:
+	_PropertySet = bSet
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Datasheet._PropertySet
+
+REM -----------------------------------------------------------------------------
 Private Function _Repr() As String
 &apos;&apos;&apos;	Convert the Datasheet instance to a readable string, typically for debugging purposes (DebugPrint ...)
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Return:
-&apos;&apos;&apos;		&quot;[DATASHEET]: A readable string&quot;
+&apos;&apos;&apos;		&quot;[DATASHEET]: tablename,base file url&quot;
 
-	_Repr = &quot;[DATASHEET]: A readable string&quot;
+	_Repr = &quot;[DATASHEET]: &quot; &amp; _Command &amp; &quot;,&quot; &amp; _BaseFileName
 
 End Function	&apos;	SFDatabases.SF_Datasheet._Repr
 
