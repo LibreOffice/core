@@ -21,6 +21,7 @@
 
 #if USE_TLS_NSS
 #include <nss.h>
+#include <nspr.h>
 #include <pk11pub.h>
 #endif // USE_TLS_NSS
 
@@ -167,7 +168,16 @@ struct CryptoImpl
         , mWrapKey(nullptr)
     {
         // Initialize NSS, database functions are not needed
-        NSS_NoDB_Init(nullptr);
+        if (!NSS_IsInitialized())
+        {
+            auto const e = NSS_NoDB_Init(nullptr);
+            if (e != SECSuccess)
+            {
+                PRErrorCode error = PR_GetError();
+                const char* errorText = PR_ErrorToName(error);
+                throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number(static_cast<int>(error)) + ")");
+            }
+        }
     }
 
     ~CryptoImpl()
