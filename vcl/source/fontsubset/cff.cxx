@@ -24,6 +24,7 @@
 
 #include <fontsubset.hxx>
 
+#include <o3tl/restoreguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <strhelper.hxx>
 #include <sal/log.hxx>
@@ -1541,8 +1542,8 @@ const char* CffSubsetterContext::getString( int nStringID)
         return pStringIds[ nStringID];
 
     // else get the string from the StringIndex table
-    const U8* pReadPtr = mpReadPtr;
-    const U8* pReadEnd = mpReadEnd;
+    o3tl::RestoreGuard pReadPtr(mpReadPtr);
+    o3tl::RestoreGuard pReadEnd(mpReadEnd);
     nStringID -= nStdStrings;
     int nLen = seekIndexData( mnStringIdxBase, nStringID);
     // assert( nLen >= 0);
@@ -1559,8 +1560,6 @@ const char* CffSubsetterContext::getString( int nStringID)
             aNameBuf[i] = *(mpReadPtr++);
         aNameBuf[ nLen] = '\0';
     }
-    mpReadPtr = pReadPtr;
-    mpReadEnd = pReadEnd;
     return aNameBuf;
 }
 
