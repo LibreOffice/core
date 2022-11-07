@@ -354,6 +354,9 @@ public:
     bool IsDeleted() const;
     // is it a table with deleted row(s)
     bool HasDeletedRow() const;
+    // it doesn't contain box content (except single empty nested tables of the boxes
+    // which could remain after deletion of text content of the selected table)
+    bool IsEmpty() const;
 };
 
 /// SwTableLine is one table row in the document model.
@@ -397,7 +400,8 @@ public:
 
     bool hasSoftPageBreak() const;
 
-    // it doesn't contain box content
+    // it doesn't contain box content (except single empty nested tables of the boxes
+    // which could remain after deletion of text content of the selected table row)
     bool IsEmpty() const;
 
     // Update TextChangesOnly property based on the redlines of the table row.
@@ -473,8 +477,10 @@ public:
     void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return m_pStartNode; }
     SwNodeOffset GetSttIdx() const;
-    // it doesn't contain box content
-    bool IsEmpty() const;
+    // it doesn't contain box content or if bWithRemainingNestedTable = true,
+    // it contains only an empty nested table as box content (which
+    // could remain after deletion of the text content of the selected box).
+    bool IsEmpty( bool bWithRemainingNestedTable = true ) const;
 
     // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox*,

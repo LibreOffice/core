@@ -1895,6 +1895,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
 
     // This was false (not deleted row)
     CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRow());
+
+    // accept all tracked changes
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // tdf#151658 This was 1: not deleted table row (and table)
+    assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
@@ -1938,6 +1947,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
 
     // This was false (not deleted row)
     CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRow());
+
+    // accept all tracked changes
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // tdf#151658 This was 1: not deleted table row (and table)
+    assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
