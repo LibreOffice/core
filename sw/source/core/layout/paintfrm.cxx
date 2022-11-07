@@ -84,7 +84,6 @@
 #include <vcl/settings.hxx>
 
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
-#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 #include <svtools/borderhelper.hxx>
 
