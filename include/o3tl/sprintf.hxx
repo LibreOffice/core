@@ -22,7 +22,7 @@ namespace o3tl
 {
 // A drop-in replacement for safe uses of std::sprintf where it is statically known that the
 // provided buffer is large enough.  Compared to a plain use of std::sprintf, using o3tl::sprintf
-// for one makes it explicit that the call is considerd safe and for another avoids deprecation
+// for one makes it explicit that the call is considered safe and for another avoids deprecation
 // warnings on platforms like the macOS 13 SDK that mark std::sprintf as deprecated.  Many simple
 // uses of std::sprintf across the code base can be replaced with alternative code using e.g.
 // OString::number.  This is for the remaining formatting-rich cases for which there is no easy

@@ -252,7 +252,7 @@ void ScCsvGrid::InitColors()
     maAppBackColor = mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor;
     maTextColor = mpColorConfig->GetColorValue( ::svtools::FONTCOLOR, false ).nColor;
 
-    // tdf#147386 If Automatic font color is used, then check backgroud color and use Black/White as font color
+    // tdf#147386 If Automatic font color is used, then check background color and use Black/White as font color
     if ( maTextColor == COL_AUTO )
     {
         if ( maBackColor.IsDark() )
