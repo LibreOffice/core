@@ -194,8 +194,8 @@ public:
 
 class SwGrfExtPage final : public SfxTabPage
 {
-    OUString        aFilterName;
-    OUString        aGrfName, aNewGrfName;
+    OUString        m_aFilterName;
+    OUString        m_aGrfName, m_aNewGrfName;
 
     std::unique_ptr<::sfx2::FileDialogHelper> m_xGrfDlg;
 
@@ -303,14 +303,14 @@ class SwFrameAddPage final : public SfxTabPage
     DECL_LINK(EditModifyHdl, weld::Entry&, void);
     DECL_LINK(ChainModifyHdl, weld::ComboBox&, void);
 
-    static const WhichRangesContainer aAddPgRg;
+    static const WhichRangesContainer s_aAddPgRg;
 
 public:
     SwFrameAddPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwFrameAddPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
-    static WhichRangesContainer GetRanges() { return aAddPgRg; }
+    static WhichRangesContainer GetRanges() { return s_aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;

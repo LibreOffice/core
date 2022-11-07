@@ -392,7 +392,7 @@ const WhichRangesContainer SwFramePage::aPageRg(svl::Items<
     RES_COL, RES_COL,
     RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW
 >);
-const WhichRangesContainer SwFrameAddPage::aAddPgRg(svl::Items<
+const WhichRangesContainer SwFrameAddPage::s_aAddPgRg(svl::Items<
     RES_PRINT,              RES_PRINT,
     RES_PROTECT,            RES_PROTECT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
@@ -2420,8 +2420,8 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     {
         if( !pGraphicBrushItem->GetGraphicLink().isEmpty() )
         {
-            aGrfName = aNewGrfName = pGraphicBrushItem->GetGraphicLink();
-            m_xConnectED->set_text(aNewGrfName);
+            m_aGrfName = m_aNewGrfName = pGraphicBrushItem->GetGraphicLink();
+            m_xConnectED->set_text(m_aNewGrfName);
         }
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
@@ -2484,11 +2484,11 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
         rSet->Put( aMirror );
     }
 
-    if (aGrfName != aNewGrfName || m_xConnectED->get_value_changed_from_saved())
+    if (m_aGrfName != m_aNewGrfName || m_xConnectED->get_value_changed_from_saved())
     {
         bModified = true;
-        aGrfName = m_xConnectED->get_text();
-        rSet->Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
+        m_aGrfName = m_xConnectED->get_text();
+        rSet->Put( SvxBrushItem( m_aGrfName, m_aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
     }
 
@@ -2527,10 +2527,10 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
         return;
 
 // remember selected filter
-    aFilterName = m_xGrfDlg->GetCurrentFilter();
-    aNewGrfName = INetURLObject::decode( m_xGrfDlg->GetPath(),
+    m_aFilterName = m_xGrfDlg->GetCurrentFilter();
+    m_aNewGrfName = INetURLObject::decode( m_xGrfDlg->GetPath(),
                                        INetURLObject::DecodeMechanism::Unambiguous );
-    m_xConnectED->set_text(aNewGrfName);
+    m_xConnectED->set_text(m_aNewGrfName);
     //reset mirrors because maybe a Bitmap was swapped with
     //another type of graphic that cannot be mirrored.
     m_xMirrorVertBox->set_active(false);

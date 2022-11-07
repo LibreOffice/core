@@ -84,7 +84,7 @@ public:
 
 }
 
-OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
+OUString SwCaptionDialog::s_aSepTextSave(": "); // Caption separator text
 
 //Resolves: tdf#47427 disallow typing *or* pasting invalid content into the category box
 OUString TextFilterAutoConvert::filter(const OUString &rText)
@@ -262,7 +262,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
 
     ModifyHdl();
 
-    m_xSepEdit->set_text(our_aSepTextSave);
+    m_xSepEdit->set_text(s_aSepTextSave);
     m_xTextEdit->grab_focus();
     DrawSample();
 }
@@ -290,7 +290,7 @@ void SwCaptionDialog::Apply()
     aOpt.CopyAttributes() = m_bCopyAttributes;
     aOpt.SetCharacterStyle( m_sCharacterStyle );
     m_rView.InsertCaption( &aOpt );
-    our_aSepTextSave = m_xSepEdit->get_text();
+    s_aSepTextSave = m_xSepEdit->get_text();
 }
 
 short SwCaptionDialog::run()
