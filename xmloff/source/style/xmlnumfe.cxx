@@ -1205,12 +1205,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         const bool bWriteSpellout = aAttr.Format.isEmpty();
         assert(bWriteSpellout);     // mutually exclusive
 
-        // Export only for 1.2 with extensions or 1.3 and later.
+        // Export only for 1.2 and later with extensions
         SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
         // Also ensure that duplicated transliteration-language and
         // transliteration-country attributes never escape into the wild with
         // releases.
-        if (eVersion > SvtSaveOptions::ODFSVER_012 && bWriteSpellout)
+        if ( (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) && bWriteSpellout )
         {
             /* FIXME-BCP47: ODF defines no transliteration-script or
              * transliteration-rfc-language-tag */
