@@ -152,7 +152,7 @@ class OUStringConstExpr
 public:
     template<std::size_t N> constexpr OUStringConstExpr(OUStringLiteral<N> const & literal):
         pData(const_cast<rtl_uString *>(&literal.str)) {}
-    
+
     // prevent mis-use
     template<std::size_t N> constexpr OUStringConstExpr(OUStringLiteral<N> && literal)
         = delete;
@@ -3388,7 +3388,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << OUString( std::move(concat) );
 }
 
-    
 /// @endcond
 #endif
 
