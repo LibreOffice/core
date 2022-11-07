@@ -168,7 +168,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     if (!xRowProperties.is())
         return;
 
-    bool bHasRowOptimalHeight = false;
+    XMLTableStyleContext* ptmpStyle = nullptr;
 
     if (!sStyleName.isEmpty())
     {
@@ -188,13 +188,8 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                     pStyle->SetLastSheet(nSheet);
                 }
 
-                // check that, we already have valid optimal row heights
-                XMLPropertyState* pHeight = pStyle->FindProperty(CTF_SC_ROWHEIGHT);
-                XMLPropertyState* pOptimalHeight = pStyle->FindProperty(CTF_SC_ROWOPTIMALHEIGHT);
-                if (!pHeight && pOptimalHeight && ::cppu::any2bool(pOptimalHeight->maValue))
-                {
-                    bHasRowOptimalHeight = true;
-                }
+                // for later checking of optimal row height
+                ptmpStyle = pStyle;
             }
         }
     }
@@ -229,9 +224,22 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
             rRecalcRanges.emplace_back(0, pDoc->MaxRow());
         }
         rRecalcRanges.at(nSheet).mnTab = nSheet;
-        if (bHasRowOptimalHeight && nCurrentRow > 200) {
-            rRecalcRanges.at(nSheet).maRanges.setFalse(nFirstRow, nCurrentRow);
-        } else {
+
+        // check that, we already have valid optimal row heights
+        if (nCurrentRow > 200 && ptmpStyle && !ptmpStyle->FindProperty(CTF_SC_ROWHEIGHT))
+        {
+            XMLPropertyState* pOptimalHeight = ptmpStyle->FindProperty(CTF_SC_ROWOPTIMALHEIGHT);
+            if (pOptimalHeight && ::cppu::any2bool(pOptimalHeight->maValue))
+            {
+                rRecalcRanges.at(nSheet).maRanges.setFalse(nFirstRow, nCurrentRow);
+            }
+            else
+            {
+                rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
+            }
+        }
+        else
+        {
             rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
         }
     }
