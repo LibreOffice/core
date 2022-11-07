@@ -207,8 +207,8 @@ const sal_uInt16 EXC_COLOR_WINDOWBACK3      = 25;       /// System window backgr
 const sal_uInt16 EXC_COLOR_WINDOWTEXT       = 64;       /// System window text color (>=BIFF5).
 const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window background color (>=BIFF5).
 const sal_uInt16 EXC_COLOR_BUTTONBACK       = 67;       /// System button background color (face color).
-const sal_uInt16 EXC_COLOR_CHWINDOWTEXT     = 77;       /// System window text color (BIFF8 charts).
-const sal_uInt16 EXC_COLOR_CHWINDOWBACK     = 78;       /// System window background color (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_CHWINDOWTEXT     = 77;       /// Chart window text color (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_CHWINDOWBACK     = 78;       /// Chart window background color (BIFF8 charts).
 const sal_uInt16 EXC_COLOR_CHBORDERAUTO     = 79;       /// Automatic frame border for series (BIFF8 charts).
 const sal_uInt16 EXC_COLOR_NOTEBACK         = 80;       /// Note background color.
 const sal_uInt16 EXC_COLOR_NOTETEXT         = 81;       /// Note text color.
