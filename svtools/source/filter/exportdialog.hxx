@@ -56,9 +56,6 @@ private:
     OUString            msEstimatedSizeVec;
 
     OUString            ms1BitThreshold;
-    OUString            ms1BitDithered;
-    OUString            ms4BitGrayscale;
-    OUString            ms4BitColorPalette;
     OUString            ms8BitGrayscale;
     OUString            ms8BitColorPalette;
     OUString            ms24BitColor;

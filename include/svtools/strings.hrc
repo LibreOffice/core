@@ -185,9 +185,6 @@
 #define STR_SVT_ACC_RULER_VERT_NAME             NC_("STR_SVT_ACC_RULER_VERT_NAME", "Vertical Ruler")
 
 #define STR_SVT_1BIT_THRESHOLD                  NC_("STR_SVT_1BIT_THRESHOLD", "1-bit threshold")
-#define STR_SVT_1BIT_DITHERED                   NC_("STR_SVT_1BIT_DITHERED", "1-bit dithered")
-#define STR_SVT_4BIT_GRAYSCALE                  NC_("STR_SVT_4BIT_GRAYSCALE", "4-bit grayscale")
-#define STR_SVT_4BIT_COLOR_PALETTE              NC_("STR_SVT_4BIT_COLOR_PALETTE", "4-bit color")
 #define STR_SVT_8BIT_GRAYSCALE                  NC_("STR_SVT_8BIT_GRAYSCALE", "8-bit grayscale")
 #define STR_SVT_8BIT_COLOR_PALETTE              NC_("STR_SVT_8BIT_COLOR_PALETTE", "8-bit color")
 #define STR_SVT_24BIT_TRUE_COLOR                NC_("STR_SVT_24BIT_TRUE_COLOR", "24-bit true color")
