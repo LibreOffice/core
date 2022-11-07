@@ -2775,10 +2775,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetFixKerning( static_cast<short>(nKern) );
         rCTLFont.SetFixKerning( static_cast<short>(nKern) );
 
-        //the attribute value must be displayed also if it's above the maximum allowed value
+        //the attribute value must be displayed also if it's above/below the maximum allowed value
         tools::Long nVal = static_cast<tools::Long>(m_xKerningMF->get_max(FieldUnit::POINT));
         if(nVal < nKerning)
             m_xKerningMF->set_max(nKerning, FieldUnit::POINT);
+        nVal = static_cast<tools::Long>(m_xKerningMF->get_min(FieldUnit::POINT));
+        if (nVal > nKerning)
+            m_xKerningMF->set_min(nKerning, FieldUnit::POINT);
         m_xKerningMF->set_value(nKerning, FieldUnit::POINT);
     }
     else
