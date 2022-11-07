@@ -1532,8 +1532,10 @@ void SvtLineListBox::UpdateEntries()
     // Remove the old entries
     m_xLineSet->Clear();
 
-    // Add the new entries based on the defined width
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    Color aFieldColor = rSettings.GetFieldColor();
 
+    // Add the new entries based on the defined width
     sal_uInt16 n = 0;
     sal_uInt16 nCount = m_vLineList.size( );
     while ( n < nCount )
@@ -1543,9 +1545,9 @@ void SvtLineListBox::UpdateEntries()
         ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
                 pData->GetLine2ForWidth( m_nWidth ),
                 pData->GetDistForWidth( m_nWidth ),
-                GetColorLine1(m_xLineSet->GetItemCount()),
-                GetColorLine2(m_xLineSet->GetItemCount()),
-                GetColorDist(m_xLineSet->GetItemCount()),
+                pData->GetColorLine1(aColor),
+                pData->GetColorLine2(aColor),
+                pData->GetColorDist(aColor, aFieldColor),
                 pData->GetStyle(), aBmp );
         sal_Int16 nItemId = static_cast<sal_Int16>(pData->GetStyle()) + 1;
         m_xLineSet->InsertItem(nItemId, Image(aBmp), GetLineStyleName(pData->GetStyle()));
@@ -1555,36 +1557,6 @@ void SvtLineListBox::UpdateEntries()
     }
 
     m_xLineSet->SetOptimalSize();
-}
-
-Color SvtLineListBox::GetColorLine1( sal_Int32 nPos )
-{
-    sal_Int32 nStyle = GetStylePos( nPos );
-    if (nStyle == -1)
-        return GetPaintColor( );
-    auto& pData = m_vLineList[ nStyle ];
-    return pData->GetColorLine1( GetColor( ) );
-}
-
-Color SvtLineListBox::GetColorLine2( sal_Int32 nPos )
-{
-    sal_Int32 nStyle = GetStylePos(nPos);
-    if (nStyle == -1)
-        return GetPaintColor( );
-    auto& pData = m_vLineList[ nStyle ];
-    return pData->GetColorLine2( GetColor( ) );
-}
-
-Color SvtLineListBox::GetColorDist( sal_Int32 nPos )
-{
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    Color rResult = rSettings.GetFieldColor();
-
-    sal_Int32 nStyle = GetStylePos( nPos );
-    if (nStyle == -1)
-        return rResult;
-    auto& pData = m_vLineList[ nStyle ];
-    return pData->GetColorDist( GetColor( ), rResult );
 }
 
 IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, ValueSet*, void)

@@ -263,9 +263,6 @@ private:
     {
         return maPaintCol;
     }
-    Color   GetColorLine1( sal_Int32  nPos );
-    Color   GetColorLine2( sal_Int32  nPos );
-    Color   GetColorDist( sal_Int32  nPos );
 
     void UpdatePreview();
 
