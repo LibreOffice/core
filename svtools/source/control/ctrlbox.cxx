@@ -1575,6 +1575,8 @@ void SvtLineListBox::UpdatePreview()
         const auto nPos = (aVirDev->GetOutputSizePixel().Height() - aImage.GetSizePixel().Height()) / 2;
         aVirDev->Push(vcl::PushFlags::MAPMODE);
         aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        aVirDev->SetBackground(rSettings.GetFieldColor());
         aVirDev->Erase();
         aVirDev->DrawImage(Point(0, nPos), aImage);
         m_xControl->set_image(aVirDev.get());
