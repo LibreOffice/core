@@ -27,6 +27,8 @@
 #include <o3tl/restoreguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sprintf.hxx>
+#include <rtl/math.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <strhelper.hxx>
 #include <sal/log.hxx>
@@ -2118,10 +2120,9 @@ public:
     void        emitValVector( const char* pLineHead, const char* pLineTail, const std::vector<ValType>&);
 private:
     SvStream*   mpFileOut;
-    char        maBuffer[MAX_T1OPS_SIZE];   // TODO: dynamic allocation
     unsigned    mnEECryptR;
 public:
-    char*       mpPtr;
+    OStringBuffer maBuffer;
 
     char        maSubsetName[256];
     bool        mbPfbSubset;
@@ -2132,9 +2133,7 @@ public:
 
 Type1Emitter::Type1Emitter( SvStream* pOutFile, bool bPfbSubset)
 :   mpFileOut( pOutFile)
-,   maBuffer{}
 ,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
-,   mpPtr( maBuffer)
 ,   mbPfbSubset( bPfbSubset)
 ,   mnHexLineCol( 0)
 {
@@ -2187,20 +2186,19 @@ inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
 inline void Type1Emitter::emitAllRaw()
 {
     // writeout raw data
-    assert( (mpPtr - maBuffer) < int(sizeof(maBuffer)));
-    emitRawData( maBuffer, mpPtr - maBuffer);
+    emitRawData( maBuffer.getStr(), maBuffer.getLength());
     // reset the raw buffer
-    mpPtr = maBuffer;
+    maBuffer.setLength(0);
 }
 
 inline void Type1Emitter::emitAllHex()
 {
-    assert( (mpPtr - maBuffer) < int(sizeof(maBuffer)));
-    for( const char* p = maBuffer; p < mpPtr;) {
+    auto const end = maBuffer.getStr() + maBuffer.getLength();
+    for( const char* p = maBuffer.getStr(); p < end;) {
         // convert binary chunk to hex
         char aHexBuf[0x4000];
         char* pOut = aHexBuf;
-        while( (p < mpPtr) && (pOut < aHexBuf+sizeof(aHexBuf)-4)) {
+        while( (p < end) && (pOut < aHexBuf+sizeof(aHexBuf)-4)) {
             // convert each byte to hex
             char cNibble = (static_cast<unsigned char>(*p) >> 4) & 0x0F;
             cNibble += (cNibble < 10) ? '0' : 'A'-10;
@@ -2216,15 +2214,15 @@ inline void Type1Emitter::emitAllHex()
         emitRawData( aHexBuf, pOut-aHexBuf);
     }
     // reset the raw buffer
-    mpPtr = maBuffer;
+    maBuffer.setLength(0);
 }
 
 void Type1Emitter::emitAllCrypted()
 {
     // apply t1crypt
-    for( char* p = maBuffer; p < mpPtr; ++p) {
-        *p ^= (mnEECryptR >> 8);
-        mnEECryptR = (*reinterpret_cast<U8*>(p) + mnEECryptR) * 52845 + 22719;
+    for( sal_Int32 i = 0; i < maBuffer.getLength(); ++i) {
+        maBuffer[i] ^= (mnEECryptR >> 8);
+        mnEECryptR = (static_cast<U8>(maBuffer[i]) + mnEECryptR) * 52845 + 22719;
     }
 
     // emit the t1crypt result
@@ -2235,12 +2233,10 @@ void Type1Emitter::emitAllCrypted()
 }
 
 // #i110387# quick-and-dirty double->ascii conversion
-// needed because sprintf/ecvt/etc. alone are too localized (LC_NUMERIC)
 // also strip off trailing zeros in fraction while we are at it
-static int dbl2str( char* pOut, double fVal)
+static OString dbl2str( double fVal)
 {
-    const int nLen = psp::getValueOfDouble( pOut, fVal, 6);
-    return nLen;
+    return rtl::math::doubleToString(fVal, rtl_math_StringFormat_G, 6, '.', true);
 }
 
 void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
@@ -2251,20 +2247,20 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         return;
 
     // emit the line head
-    mpPtr += sprintf( mpPtr, "%s", pLineHead);
+    maBuffer.append( pLineHead);
     // emit the vector values
     std::vector<ValType>::value_type aVal = 0;
     for( std::vector<ValType>::const_iterator it = rVector.begin();;) {
         aVal = *it;
         if( ++it == rVector.end() )
             break;
-        mpPtr += dbl2str( mpPtr, aVal);
-        *(mpPtr++) = ' ';
+        maBuffer.append(dbl2str( aVal));
+        maBuffer.append(' ');
     }
     // emit the last value
-    mpPtr += dbl2str( mpPtr, aVal);
+    maBuffer.append(dbl2str( aVal));
     // emit the line tail
-    mpPtr += sprintf( mpPtr, "%s", pLineTail);
+    maBuffer.append( pLineTail);
 }
 
 void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int nGlyphCount,
@@ -2345,49 +2341,48 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     const char* pFullName = pFontName;
     const char* pFamilyName = pFontName;
 
-    char*& pOut = rEmitter.mpPtr; // convenience reference, TODO: cleanup
-
     // create a PFB+Type1 header
     if( rEmitter.mbPfbSubset ) {
         static const char aPfbHeader[] = "\x80\x01\x00\x00\x00\x00";
         rEmitter.emitRawData( aPfbHeader, sizeof(aPfbHeader)-1);
     }
 
-    pOut += sprintf( pOut, "%%!FontType1-1.0: %s 001.003\n", rEmitter.maSubsetName);
+    rEmitter.maBuffer.append(
+        "%!FontType1-1.0: " + OString::Concat(rEmitter.maSubsetName) + " 001.003\n");
     // emit TOPDICT
-    pOut += sprintf( pOut,
+    rEmitter.maBuffer.append(
         "11 dict begin\n"   // TODO: dynamic entry count for TOPDICT
         "/FontType 1 def\n"
         "/PaintType 0 def\n");
-    pOut += sprintf( pOut, "/FontName /%s def\n", rEmitter.maSubsetName);
-    pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
+    rEmitter.maBuffer.append( "/FontName /" + OString::Concat(rEmitter.maSubsetName) + " def\n");
+    rEmitter.maBuffer.append( "/UniqueID " + OString::number(nUniqueId) + " def\n");
     // emit FontMatrix
     if( maFontMatrix.size() == 6)
         rEmitter.emitValVector( "/FontMatrix [", "]readonly def\n", maFontMatrix);
     else // emit default FontMatrix if needed
-        pOut += sprintf( pOut, "/FontMatrix [0.001 0 0 0.001 0 0]readonly def\n");
+        rEmitter.maBuffer.append( "/FontMatrix [0.001 0 0 0.001 0 0]readonly def\n");
     // emit FontBBox
     auto aFontBBox = maFontBBox;
     if (aFontBBox.size() != 4)
         aFontBBox = { 0, 0, 999, 999 }; // emit default FontBBox if needed
     rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", aFontBBox);
     // emit FONTINFO into TOPDICT
-    pOut += sprintf( pOut,
+    rEmitter.maBuffer.append(
         "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
-        " /FullName (%s) readonly def\n"
-        " /FamilyName (%s) readonly def\n"
-        "end readonly def\n",
-            pFullName, pFamilyName);
+        " /FullName (" + OString::Concat(pFullName) + ") readonly def\n"
+        " /FamilyName (" + pFamilyName + ") readonly def\n"
+        "end readonly def\n");
 
-    pOut += sprintf( pOut,
+    rEmitter.maBuffer.append(
         "/Encoding 256 array\n"
         "0 1 255 {1 index exch /.notdef put} for\n");
     for( int i = 1; (i < nGlyphCount) && (i < 256); ++i) {
         OString pGlyphName = getGlyphName( pReqGlyphIds[i]);
-        pOut += sprintf( pOut, "dup %d /%s put\n", pReqEncoding[i], pGlyphName.getStr());
+        rEmitter.maBuffer.append(
+            "dup " + OString::number(pReqEncoding[i]) + " /" + pGlyphName + " put\n");
     }
-    pOut += sprintf( pOut, "readonly def\n");
-    pOut += sprintf( pOut,
+    rEmitter.maBuffer.append( "readonly def\n");
+    rEmitter.maBuffer.append(
         // TODO: more topdict entries
         "currentdict end\n"
         "currentfile eexec\n");
@@ -2425,73 +2420,73 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     nPrivEntryCount += int(mpCffLocal->mnLangGroup == 1);
     nPrivEntryCount += int(mpCffLocal->mbForceBold);
     // emit the privdict header
-    pOut += sprintf( pOut,
+    rEmitter.maBuffer.append(
         "\110\104\125 "
-        "dup\n/Private %d dict dup begin\n"
+        "dup\n/Private " + OString::number(nPrivEntryCount) + " dict dup begin\n"
         "/RD{string currentfile exch readstring pop}executeonly def\n"
         "/ND{noaccess def}executeonly def\n"
         "/NP{noaccess put}executeonly def\n"
         "/MinFeature{16 16}ND\n"
-        "/password 5839 def\n",     // TODO: mnRDCryptSeed?
-            nPrivEntryCount);
+        "/password 5839 def\n");    // TODO: mnRDCryptSeed?
 
     // emit blue hint related privdict entries
     if( !mpCffLocal->maBlueValues.empty())
         rEmitter.emitValVector( "/BlueValues [", "]ND\n", mpCffLocal->maBlueValues);
     else
-        pOut += sprintf( pOut, "/BlueValues []ND\n"); // default to empty BlueValues
+        rEmitter.maBuffer.append( "/BlueValues []ND\n"); // default to empty BlueValues
     rEmitter.emitValVector( "/OtherBlues [", "]ND\n", mpCffLocal->maOtherBlues);
     rEmitter.emitValVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
     rEmitter.emitValVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
 
     if( mpCffLocal->mfBlueScale) {
-        pOut += sprintf( pOut, "/BlueScale ");
-        pOut += dbl2str( pOut, mpCffLocal->mfBlueScale);
-        pOut += sprintf( pOut, " def\n");
+        rEmitter.maBuffer.append( "/BlueScale ");
+        rEmitter.maBuffer.append(dbl2str( mpCffLocal->mfBlueScale));
+        rEmitter.maBuffer.append( " def\n");
     }
     if( mpCffLocal->mfBlueShift) {  // default BlueShift==7
-        pOut += sprintf( pOut, "/BlueShift ");
-        pOut += dbl2str( pOut, mpCffLocal->mfBlueShift);
-        pOut += sprintf( pOut, " def\n");
+        rEmitter.maBuffer.append( "/BlueShift ");
+        rEmitter.maBuffer.append(dbl2str( mpCffLocal->mfBlueShift));
+        rEmitter.maBuffer.append( " def\n");
     }
     if( mpCffLocal->mfBlueFuzz) {       // default BlueFuzz==1
-        pOut += sprintf( pOut, "/BlueFuzz ");
-        pOut += dbl2str( pOut, mpCffLocal->mfBlueFuzz);
-        pOut += sprintf( pOut, " def\n");
+        rEmitter.maBuffer.append( "/BlueFuzz ");
+        rEmitter.maBuffer.append(dbl2str( mpCffLocal->mfBlueFuzz));
+        rEmitter.maBuffer.append( " def\n");
     }
 
     // emit stem hint related privdict entries
     if( mpCffLocal->maStemStdHW) {
-        pOut += sprintf( pOut, "/StdHW [");
-        pOut += dbl2str( pOut, mpCffLocal->maStemStdHW);
-        pOut += sprintf( pOut, "] def\n");
+        rEmitter.maBuffer.append( "/StdHW [");
+        rEmitter.maBuffer.append(dbl2str( mpCffLocal->maStemStdHW));
+        rEmitter.maBuffer.append( "] def\n");
     }
     if( mpCffLocal->maStemStdVW) {
-        pOut += sprintf( pOut, "/StdVW [");
-        pOut += dbl2str( pOut, mpCffLocal->maStemStdVW);
-        pOut += sprintf( pOut, "] def\n");
+        rEmitter.maBuffer.append( "/StdVW [");
+        rEmitter.maBuffer.append(dbl2str( mpCffLocal->maStemStdVW));
+        rEmitter.maBuffer.append( "] def\n");
     }
     rEmitter.emitValVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
     rEmitter.emitValVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
 
     // emit other hints
     if( mpCffLocal->mbForceBold)
-        pOut += sprintf( pOut, "/ForceBold true def\n");
+        rEmitter.maBuffer.append( "/ForceBold true def\n");
     if( mpCffLocal->mnLangGroup != 0)
-        pOut += sprintf( pOut, "/LanguageGroup %d def\n", mpCffLocal->mnLangGroup);
+        rEmitter.maBuffer.append(
+            "/LanguageGroup " + OString::number(mpCffLocal->mnLangGroup) + " def\n");
     if( mpCffLocal->mnLangGroup == 1) // compatibility with ancient printers
-        pOut += sprintf( pOut, "/RndStemUp false def\n");
+        rEmitter.maBuffer.append( "/RndStemUp false def\n");
     if( mpCffLocal->mfExpFactor) {
-        pOut += sprintf( pOut, "/ExpansionFactor ");
-        pOut += dbl2str( pOut, mpCffLocal->mfExpFactor);
-        pOut += sprintf( pOut, " def\n");
+        rEmitter.maBuffer.append( "/ExpansionFactor ");
+        rEmitter.maBuffer.append(dbl2str( mpCffLocal->mfExpFactor));
+        rEmitter.maBuffer.append( " def\n");
     }
 
     // emit remaining privdict entries
-    pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
+    rEmitter.maBuffer.append( "/UniqueID " + OString::number(nUniqueId) + " def\n");
     // TODO?: more privdict entries?
 
-    static const char aOtherSubrs[] =
+    rEmitter.maBuffer.append(
         "/OtherSubrs\n"
         "% Dummy code for faking flex hints\n"
         "[ {} {} {} {systemdict /internaldict known not {pop 3}\n"
@@ -2501,23 +2496,19 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "{dup /strtlck known\n"
         "{/strtlck get exec}\n"
         "{pop 3}\nifelse}\nifelse}\nifelse\n} executeonly\n"
-        "] ND\n";
-    memcpy( pOut, aOtherSubrs, sizeof(aOtherSubrs)-1);
-    pOut += sizeof(aOtherSubrs)-1;
+        "] ND\n");
 
     // emit used GlobalSubr charstrings
     // these are the just the default subrs
     // TODO: do we need them as the flex hints are resolved differently?
-    static const char aSubrs[] =
+    rEmitter.maBuffer.append(
         "/Subrs 5 array\n"
         "dup 0 15 RD \x5F\x3D\x6B\xAC\x3C\xBD\x74\x3D\x3E\x17\xA0\x86\x58\x08\x85 NP\n"
         "dup 1 9 RD \x5F\x3D\x6B\xD8\xA6\xB5\x68\xB6\xA2 NP\n"
         "dup 2 9 RD \x5F\x3D\x6B\xAC\x39\x46\xB9\x43\xF9 NP\n"
         "dup 3 5 RD \x5F\x3D\x6B\xAC\xB9 NP\n"
         "dup 4 12 RD \x5F\x3D\x6B\xAC\x3E\x5D\x48\x54\x62\x76\x39\x03 NP\n"
-        "ND\n";
-    memcpy( pOut, aSubrs, sizeof(aSubrs)-1);
-    pOut += sizeof(aSubrs)-1;
+        "ND\n");
 
     // TODO: emit more GlobalSubr charstrings?
     // TODO: emit used LocalSubr charstrings?
@@ -2534,24 +2525,25 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         mbDoSeac = false;
         convertCharStrings(maExtraGlyphIds.data(), maExtraGlyphIds.size(), aCharStrings);
     }
-    pOut += sprintf( pOut,
-        "2 index /CharStrings %zu dict dup begin\n", aCharStrings.size());
+    rEmitter.maBuffer.append(
+        "2 index /CharStrings " + OString::number(aCharStrings.size()) + " dict dup begin\n");
     rEmitter.emitAllCrypted();
     for (const auto& rCharString : aCharStrings)
     {
         // get the glyph name
         OString pGlyphName = getGlyphName(rCharString.nCffGlyphId);
         // emit the encrypted Type1op charstring
-        pOut += sprintf( pOut, "/%s %d RD ", pGlyphName.getStr(), rCharString.nLen);
-        memcpy( pOut, rCharString.aOps, rCharString.nLen);
-        pOut += rCharString.nLen;
-        pOut += sprintf( pOut, " ND\n");
+        rEmitter.maBuffer.append(
+            "/" + pGlyphName + " " + OString::number(rCharString.nLen) + " RD ");
+        rEmitter.maBuffer.append(
+            reinterpret_cast<char const *>(rCharString.aOps), rCharString.nLen);
+        rEmitter.maBuffer.append( " ND\n");
         rEmitter.emitAllCrypted();
         // provide individual glyphwidths if requested
     }
-    pOut += sprintf( pOut, "end end\nreadonly put\nput\n");
-    pOut += sprintf( pOut, "dup/FontName get exch definefont pop\n");
-    pOut += sprintf( pOut, "mark currentfile closefile\n");
+    rEmitter.maBuffer.append( "end end\nreadonly put\nput\n");
+    rEmitter.maBuffer.append( "dup/FontName get exch definefont pop\n");
+    rEmitter.maBuffer.append( "mark currentfile closefile\n");
     rEmitter.emitAllCrypted();
 
     // mark stop of eexec encryption
