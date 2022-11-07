@@ -184,6 +184,7 @@ sub check_style($)
     my ($h) = @_;
     my $src = ClangFormat::get_extension_regex();
     my @bad_names = ();
+    my @bad_renames = ();
     my $clang_format = ClangFormat::find();
 
     ## Check if ClangFormat has get_excludelist or the old
@@ -192,6 +193,17 @@ sub check_style($)
     eval    { ClangFormat::get_excludelist() };
     if ($@) { $excluded_list_names = ClangFormat::get_blacklist(); }
     else    { $excluded_list_names = ClangFormat::get_excludelist(); }
+
+    # Get a list of renamed files.
+    my %renames; # key is target pathname, value is source pathname
+    open (IN, "git diff-index --cached --find-renames --diff-filter=R --name-status $h |")
+        || die "Cannot run git diff.";
+    while (my $line = <IN>)
+    {
+        chomp $line;
+        $line =~ /^[^\t]+\t([^\t]+)\t([^\t]+)$/ ||  die "Unexpected response line: $line";
+        $renames{$2} = $1;
+    }
 
     # Get a list of non-deleted changed files.
     open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") ||  die "Cannot run git diff.";
@@ -233,21 +245,52 @@ sub check_style($)
             }
             if (!ClangFormat::check_style($clang_format, $filename))
             {
-                push @bad_names, $filename;
+                if (defined($renames{$filename}))
+                {
+                    push @bad_renames, $filename;
+                }
+                else
+                {
+                    push @bad_names, $filename;
+                }
             }
         }
     }
 
     # Enforce style.
-    if (scalar @bad_names)
+    if (scalar @bad_names || scalar @bad_renames)
     {
         my $autostyle = `git config libreoffice.autostyle`;
         chomp $autostyle;
-        if ($autostyle ne "true")
+        if ($autostyle ne "true" or scalar @bad_renames)
         {
             print("\nThe above differences were found between the code to commit \n");
-            print("and the clang-format rules. You can apply these changes with:\n");
-            print("\n$clang_format -i " . join(" ", @bad_names) . "\n\n");
+            print("and the clang-format rules.\n");
+            if (scalar @bad_names)
+            {
+                print("You can apply these changes with:\n");
+                print("\n$clang_format -i " . join(" ", @bad_names) . "\n\n");
+            }
+            if (scalar @bad_renames)
+            {
+                print("\nATTENTION: Of files detected as renamed by git, the following ones are\n");
+                print("not clang-format'ed and are not listed in the excludelist. If they are\n");
+                print("renames of previously excluded files, they should be added to the\n");
+                print("excludelist:\n\n");
+                foreach my $name (@bad_renames)
+                {
+                    if (exists($excluded_list_names->{$renames{$name}}))
+                    {
+                        print("* $name got renamed from $renames{$name},\n");
+                        print("    which is even still listed in the excludelist!\n");
+                    }
+                    else
+                    {
+                        print("* $name\n");
+                    }
+                }
+                print("\n");
+            }
             print("Aborting commit. Apply changes and commit again or skip checking\n");
             print("with --no-verify (not recommended).\n");
             exit(1);
