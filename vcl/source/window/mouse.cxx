@@ -637,6 +637,8 @@ void Window::EnterWait()
 
 void Window::LeaveWait()
 {
+    if( !mpWindowImpl )
+        return;
 
     if ( mpWindowImpl->mnWaitCount )
     {
