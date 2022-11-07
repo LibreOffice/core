@@ -1694,12 +1694,12 @@ bool CffSubsetterContext::getBaseAccent(ValType aBase, ValType aAccent, int* nBa
     for (int i = 0; i < mnCharStrCount; i++)
     {
         const char* pGlyphName = getGlyphName(i);
-        if (pGlyphName == pStandardEncoding[int(aBase)])
+        if (std::strcmp(pGlyphName, pStandardEncoding[int(aBase)]) == 0)
         {
             *nBase = i;
             bBase = true;
         }
-        if (pGlyphName == pStandardEncoding[int(aAccent)])
+        if (std::strcmp(pGlyphName, pStandardEncoding[int(aAccent)]) == 0)
         {
             *nAccent = i;
             bAccent = true;
