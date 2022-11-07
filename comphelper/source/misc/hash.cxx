@@ -77,11 +77,15 @@ struct HashImpl
     {
 
 #if USE_TLS_NSS
-        auto const e = NSS_NoDB_Init(nullptr);
-        if (e != SECSuccess) {
-            PRErrorCode error = PR_GetError();
-            const char* errorText = PR_ErrorToName(error);
-            throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number((int) error) + ")");
+        if (!NSS_IsInitialized())
+        {
+            auto const e = NSS_NoDB_Init(nullptr);
+            if (e != SECSuccess)
+            {
+                PRErrorCode error = PR_GetError();
+                const char* errorText = PR_ErrorToName(error);
+                throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number((int) error) + ")");
+            }
         }
         mpContext = HASH_Create(getNSSType());
         HASH_Begin(mpContext);
