@@ -1406,7 +1406,6 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     , m_nWidth( 5 )
     , aVirDev(VclPtr<VirtualDevice>::Create())
     , aColor(COL_BLACK)
-    , maPaintCol(COL_BLACK)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     m_xLineSet->SetStyle(WinBits(WB_FLATVALUESET | WB_NO_DIRECTSELECT | WB_TABSTOP));
@@ -1434,8 +1433,6 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
 
     aVirDev->SetLineColor();
     aVirDev->SetMapMode(MapMode(MapUnit::MapTwip));
-
-    UpdatePaintLineColor();
 }
 
 IMPL_LINK_NOARG(SvtLineListBox, FocusHdl, weld::Widget&, void)
@@ -1512,21 +1509,8 @@ void SvtLineListBox::InsertEntry(
         rWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn));
 }
 
-void SvtLineListBox::UpdatePaintLineColor()
-{
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    Color aNewCol(rSettings.GetWindowColor().IsDark() ? rSettings.GetLabelTextColor() : aColor);
-
-    bool bRet = aNewCol != maPaintCol;
-
-    if( bRet )
-        maPaintCol = aNewCol;
-}
-
 void SvtLineListBox::UpdateEntries()
 {
-    UpdatePaintLineColor( );
-
     SvxBorderLineStyle eSelected = GetSelectEntryStyle();
 
     // Remove the old entries
