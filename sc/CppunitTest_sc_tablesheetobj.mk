@@ -9,41 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_tablesheetobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_tablesheetobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_tablesheetobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_tablesheetobj, \
-    sc/qa/extras/sctablesheetobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_tablesheetobj, \
-    cppu \
-    sal \
-    salhelper \
-    sc \
-    subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_tablesheetobj,\
-    -I$(SRCDIR)/sc/inc \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_tablesheetobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_tablesheetobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_tablesheetobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_tablesheetobj,\
-    $(sc_unoapi_common_components) \
-    i18npool/source/search/i18nsearch \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_tablesheetobj))
+$(eval $(call sc_unoapi_common,tablesheetobj))
 
 # vim: set noet sw=4 ts=4:

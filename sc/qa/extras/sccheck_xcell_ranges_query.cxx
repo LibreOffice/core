@@ -19,8 +19,8 @@
 using namespace css;
 using namespace css::lang;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class CheckXCellRangesQuery : public UnoApiTest
 {
 public:
@@ -28,7 +28,7 @@ public:
 
     virtual void setUp() override;
 
-    uno::Reference< uno::XInterface > init();
+    uno::Reference<uno::XInterface> init();
     void checkEmptyCell();
     void checkFilledCell();
 
@@ -42,44 +42,44 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< sheet::XCellRangesQuery > m_xCell;
+    uno::Reference<sheet::XCellRangesQuery> m_xCell;
     OUString sSheetName;
 };
 
 CheckXCellRangesQuery::CheckXCellRangesQuery()
-     : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > CheckXCellRangesQuery::init()
+uno::Reference<uno::XInterface> CheckXCellRangesQuery::init()
 {
-        // create a calc document
-        if (!mxComponent.is())
-            // Load an empty document.
-            mxComponent = loadFromDesktop("private:factory/scalc");
+    // create a calc document
+    if (!mxComponent.is())
+        // Load an empty document.
+        mxComponent = loadFromDesktop("private:factory/scalc");
 
-        uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-        // Getting spreadsheet
-        uno::Reference< sheet::XSpreadsheets > oSheets = xSheetDoc->getSheets();
-        uno::Reference< container::XIndexAccess > oIndexSheets(oSheets, uno::UNO_QUERY_THROW);
-        uno::Any aAny = oIndexSheets->getByIndex(0);
-        uno::Reference<container::XNamed> xNamed;
-        CPPUNIT_ASSERT(aAny >>= xNamed);
-        sSheetName = xNamed->getName();
+    // Getting spreadsheet
+    uno::Reference<sheet::XSpreadsheets> oSheets = xSheetDoc->getSheets();
+    uno::Reference<container::XIndexAccess> oIndexSheets(oSheets, uno::UNO_QUERY_THROW);
+    uno::Any aAny = oIndexSheets->getByIndex(0);
+    uno::Reference<container::XNamed> xNamed;
+    CPPUNIT_ASSERT(aAny >>= xNamed);
+    sSheetName = xNamed->getName();
 
-        // get the cell
-        uno::Reference< sheet::XSpreadsheet > xSpreadSheet;
-        CPPUNIT_ASSERT(aAny >>= xSpreadSheet);
-        uno::Reference<uno::XInterface> oObj = xSpreadSheet->getCellByPosition(2, 3);
-        m_xCell = uno::Reference<sheet::XCellRangesQuery>(oObj, uno::UNO_QUERY_THROW);
+    // get the cell
+    uno::Reference<sheet::XSpreadsheet> xSpreadSheet;
+    CPPUNIT_ASSERT(aAny >>= xSpreadSheet);
+    uno::Reference<uno::XInterface> oObj = xSpreadSheet->getCellByPosition(2, 3);
+    m_xCell = uno::Reference<sheet::XCellRangesQuery>(oObj, uno::UNO_QUERY_THROW);
 
-        // set one value for comparison.
-        xSpreadSheet->getCellByPosition(1, 1)->setValue(15);
-        xSpreadSheet->getCellByPosition(1, 3)->setValue(5);
-        xSpreadSheet->getCellByPosition(2, 1)->setFormula("=B2+B4");
+    // set one value for comparison.
+    xSpreadSheet->getCellByPosition(1, 1)->setValue(15);
+    xSpreadSheet->getCellByPosition(1, 3)->setValue(5);
+    xSpreadSheet->getCellByPosition(2, 1)->setFormula("=B2+B4");
 
-        return xSpreadSheet;
+    return xSpreadSheet;
 }
 
 /**
@@ -111,7 +111,7 @@ void CheckXCellRangesQuery::checkEmptyCell()
 
 void CheckXCellRangesQuery::checkFilledCell()
 {
-    uno::Reference< sheet::XSpreadsheet > xSpreadSheet(init(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSpreadSheet(init(), uno::UNO_QUERY_THROW);
     // fill the cell with a value
     xSpreadSheet->getCellByPosition(2, 3)->setValue(15);
 
@@ -131,7 +131,8 @@ void CheckXCellRangesQuery::checkFilledCell()
 void CheckXCellRangesQuery::_queryColumnDifferences(const OUString& expected)
 {
     //Query column differences
-    uno::Reference<sheet::XSheetCellRanges> ranges = m_xCell->queryColumnDifferences(table::CellAddress(0, 1, 1));
+    uno::Reference<sheet::XSheetCellRanges> ranges
+        = m_xCell->queryColumnDifferences(table::CellAddress(0, 1, 1));
     OUString getting = ranges->getRangeAddressesAsString();
 
     CPPUNIT_ASSERT_EQUAL(expected, getting);
@@ -156,9 +157,11 @@ void CheckXCellRangesQuery::_queryEmptyCells(const OUString& expected)
  *
  * @param expected The expected outcome value.
  */
-void CheckXCellRangesQuery::_queryRowDifferences(const OUString& expected) {
+void CheckXCellRangesQuery::_queryRowDifferences(const OUString& expected)
+{
     //Query row differences
-    uno::Reference<sheet::XSheetCellRanges> ranges = m_xCell->queryRowDifferences(table::CellAddress(0, 1, 1));
+    uno::Reference<sheet::XSheetCellRanges> ranges
+        = m_xCell->queryRowDifferences(table::CellAddress(0, 1, 1));
     OUString getting = ranges->getRangeAddressesAsString();
 
     CPPUNIT_ASSERT_EQUAL(expected, getting);
@@ -171,7 +174,6 @@ void CheckXCellRangesQuery::setUp()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CheckXCellRangesQuery);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

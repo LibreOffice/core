@@ -47,9 +47,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sc_shapetest))
 $(eval $(call gb_CppunitTest_use_ure,sc_shapetest))
 $(eval $(call gb_CppunitTest_use_vcl,sc_shapetest))
 
-$(eval $(call gb_CppunitTest_use_components,sc_shapetest,\
-    $(sc_unoapi_common_components) \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_shapetest,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_shapetest))
 

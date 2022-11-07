@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_spreadsheetsettings))
-
-$(eval $(call gb_CppunitTest_use_external,sc_spreadsheetsettings,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_spreadsheetsettings))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetsettings, \
-	sc/qa/extras/scspreadsheetsettings \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsettings, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_spreadsheetsettings,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_spreadsheetsettings))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_spreadsheetsettings))
-$(eval $(call gb_CppunitTest_use_vcl,sc_spreadsheetsettings))
-
-$(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsettings,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_spreadsheetsettings))
+$(eval $(call sc_unoapi_common,spreadsheetsettings))
 
 # vim: set noet sw=4 ts=4:

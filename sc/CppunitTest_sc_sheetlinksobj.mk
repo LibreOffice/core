@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_sheetlinksobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_sheetlinksobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_sheetlinksobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_sheetlinksobj, \
-	sc/qa/extras/scsheetlinksobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_sheetlinksobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_sheetlinksobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_sheetlinksobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_sheetlinksobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_sheetlinksobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_sheetlinksobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_sheetlinksobj))
+$(eval $(call sc_unoapi_common,sheetlinksobj))
 
 # vim: set noet sw=4 ts=4:

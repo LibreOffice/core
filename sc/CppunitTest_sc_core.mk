@@ -39,9 +39,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sc_core))
 $(eval $(call gb_CppunitTest_use_ure,sc_core))
 $(eval $(call gb_CppunitTest_use_vcl,sc_core))
 
-$(eval $(call gb_CppunitTest_use_components,sc_core,\
-    $(sc_unoapi_common_components) \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_core,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_core))
 

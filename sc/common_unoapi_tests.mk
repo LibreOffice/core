@@ -9,41 +9,48 @@
 #
 #*************************************************************************
 
-define sc_unoapi_common_components
-    basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    filter/source/config/cache/filterconfig1 \
-    filter/source/storagefilterdetect/storagefd \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
-    sc/util/sc \
-    sc/util/scd \
-    sc/util/scfilt \
-    $(call gb_Helper_optional,SCRIPTING, sc/util/vbaobj) \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/source/fsstor/fsstorage \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    vcl/vcl.common \
-    xmloff/util/xo \
-    svtools/util/svt
+# template for unoapi tests
+define sc_unoapi_common
+
+$(eval $(call gb_CppunitTest_CppunitTest,sc_$(1)))
+
+$(eval $(call gb_CppunitTest_use_external,sc_$(1),boost_headers))
+
+$(eval $(call gb_Library_use_common_precompiled_header,sc_$(1)))
+
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_$(1), \
+    sc/qa/extras/sc$(1) \
+))
+
+$(eval $(call gb_CppunitTest_use_libraries,sc_$(1), \
+    comphelper \
+    cppu \
+    sal \
+    salhelper \
+    sc \
+    subsequenttest \
+    test \
+    unotest \
+    utl \
+    vcl \
+))
+
+$(eval $(call gb_CppunitTest_set_include,sc_$(1),\
+    -I$(SRCDIR)/sc/inc \
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_CppunitTest_use_api,sc_$(1),\
+    offapi \
+    udkapi \
+))
+
+$(eval $(call gb_CppunitTest_use_ure,sc_$(1)))
+$(eval $(call gb_CppunitTest_use_vcl,sc_$(1)))
+
+$(eval $(call gb_CppunitTest_use_rdb,sc_$(1),services))
+
+$(eval $(call gb_CppunitTest_use_configuration,sc_$(1)))
 endef
 
 # vim: set noet sw=4 ts=4:

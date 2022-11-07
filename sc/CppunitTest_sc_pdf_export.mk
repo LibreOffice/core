@@ -56,51 +56,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_pdf_export,\
 $(eval $(call gb_CppunitTest_use_ure,sc_pdf_export))
 $(eval $(call gb_CppunitTest_use_vcl,sc_pdf_export))
 
-$(eval $(call gb_CppunitTest_use_components,sc_pdf_export,\
-    basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    eventattacher/source/evtatt \
-    filter/source/config/cache/filterconfig1 \
-    filter/source/pdf/pdffilter \
-    filter/source/storagefilterdetect/storagefd \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/source/search/i18nsearch \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scripting/source/basprov/basprov \
-    scripting/source/dlgprov/dlgprov \
-    scripting/source/vbaevents/vbaevents \
-    scripting/util/scriptframe \
-    sc/util/sc \
-    sc/util/scd \
-    sc/util/scfilt \
-    $(call gb_Helper_optional,SCRIPTING, \
-        sc/util/vbaobj) \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    svx/util/svx \
-    svx/util/svxcore \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    vcl/vcl.common \
-    vbahelper/util/msforms \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_pdf_export,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_pdf_export))
 

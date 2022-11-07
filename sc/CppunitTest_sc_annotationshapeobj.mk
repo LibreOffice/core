@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_annotationshapeobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_annotationshapeobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_annotationshapeobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_annotationshapeobj, \
-	sc/qa/extras/scannotationshapeobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_annotationshapeobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_annotationshapeobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_annotationshapeobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_annotationshapeobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_annotationshapeobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_annotationshapeobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_annotationshapeobj))
+$(eval $(call sc_unoapi_common,annotationshapeobj))
 
 # vim: set noet sw=4 ts=4:

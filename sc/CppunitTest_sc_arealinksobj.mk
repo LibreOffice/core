@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_arealinksobj))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_arealinksobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_arealinksobj, \
-	sc/qa/extras/scarealinksobj \
-))
-
-$(eval $(call gb_CppunitTest_use_external,sc_arealinksobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_arealinksobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_arealinksobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_arealinksobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_arealinksobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_arealinksobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_arealinksobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_arealinksobj))
+$(eval $(call sc_unoapi_common,arealinksobj))
 
 # vim: set noet sw=4 ts=4:

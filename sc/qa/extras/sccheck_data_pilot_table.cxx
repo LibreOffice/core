@@ -29,16 +29,20 @@
 using namespace css;
 using namespace css::lang;
 
-namespace sc_apitest {
-
-class CheckDataPilotTable : public UnoApiTest, public apitest::XNamed, public apitest::XDataPilotTable, public apitest::XPropertySet, public apitest::XDataPilotDescriptor
+namespace sc_apitest
+{
+class CheckDataPilotTable : public UnoApiTest,
+                            public apitest::XNamed,
+                            public apitest::XDataPilotTable,
+                            public apitest::XPropertySet,
+                            public apitest::XDataPilotDescriptor
 {
 public:
     CheckDataPilotTable();
 
     virtual void setUp() override;
 
-    uno::Reference< uno::XInterface > init() override;
+    uno::Reference<uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(CheckDataPilotTable);
     // _XNamed
@@ -66,12 +70,12 @@ private:
 };
 
 CheckDataPilotTable::CheckDataPilotTable()
-     : UnoApiTest("/sc/qa/extras/testdocuments"),
-       apitest::XNamed("DataPilotTable")
+    : UnoApiTest("/sc/qa/extras/testdocuments")
+    , apitest::XNamed("DataPilotTable")
 {
 }
 
-uno::Reference< uno::XInterface > CheckDataPilotTable::init()
+uno::Reference<uno::XInterface> CheckDataPilotTable::init()
 {
     // create a calc document
     if (!mxComponent.is())
@@ -80,14 +84,14 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     else
         return mxObject;
 
-    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     // the cell range
     table::CellRangeAddress sCellRangeAddress;
     sCellRangeAddress.Sheet = 0;
     sCellRangeAddress.StartColumn = 1;
     sCellRangeAddress.StartRow = 0;
-    sCellRangeAddress.EndColumn = MAX_FIELD_INDEX-1;
+    sCellRangeAddress.EndColumn = MAX_FIELD_INDEX - 1;
     sCellRangeAddress.EndRow = MAX_FIELD_INDEX - 1;
 
     // position of the data pilot table
@@ -96,17 +100,17 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     sCellAddress.Column = 7;
     sCellAddress.Row = 8;
     // Getting spreadsheet
-    uno::Reference< sheet::XSpreadsheets > xSpreadsheets = xSheetDoc->getSheets();
-    uno::Reference< container::XIndexAccess > oIndexAccess(xSpreadsheets, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSpreadsheets = xSheetDoc->getSheets();
+    uno::Reference<container::XIndexAccess> oIndexAccess(xSpreadsheets, uno::UNO_QUERY_THROW);
 
     // Per default there's now just one sheet, make sure we have at least two, then
     xSpreadsheets->insertNewByName("Some Sheet", 0);
     uno::Any aAny = oIndexAccess->getByIndex(0);
-    uno::Reference< sheet::XSpreadsheet > oSheet;
+    uno::Reference<sheet::XSpreadsheet> oSheet;
     CPPUNIT_ASSERT(aAny >>= oSheet);
 
     uno::Any aAny2 = oIndexAccess->getByIndex(1);
-    uno::Reference< sheet::XSpreadsheet > oSheet2;
+    uno::Reference<sheet::XSpreadsheet> oSheet2;
     CPPUNIT_ASSERT(aAny2 >>= oSheet2);
 
     //Filling a table
@@ -130,27 +134,27 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     // change a value of a cell and check the change in the data pilot
     // cell of data
     uno::Any oChangeCell;
-    oChangeCell<<= oSheet->getCellByPosition(1, 5);
+    oChangeCell <<= oSheet->getCellByPosition(1, 5);
     int x = sCellAddress.Column;
     int y = sCellAddress.Row + 3;
     // cell of the data pilot output
     uno::Any oCheckCell;
-    oCheckCell<<= oSheet->getCellByPosition(x, y);
+    oCheckCell <<= oSheet->getCellByPosition(x, y);
     // create the test objects
-    uno::Reference< sheet::XDataPilotTablesSupplier> DPTS(oSheet, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XDataPilotTables> DPT = DPTS->getDataPilotTables();
-    uno::Reference< sheet::XDataPilotDescriptor> DPDsc = DPT->createDataPilotDescriptor();
+    uno::Reference<sheet::XDataPilotTablesSupplier> DPTS(oSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTables> DPT = DPTS->getDataPilotTables();
+    uno::Reference<sheet::XDataPilotDescriptor> DPDsc = DPT->createDataPilotDescriptor();
     DPDsc->setSourceRange(sCellRangeAddress);
 
     uno::Any oDataPilotField = DPDsc->getDataPilotFields()->getByIndex(0);
-    uno::Reference<beans::XPropertySet> fieldPropSet(oDataPilotField,  uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> fieldPropSet(oDataPilotField, uno::UNO_QUERY_THROW);
 
     uno::Any sum;
-    sum<<= sheet::GeneralFunction_SUM;
-    fieldPropSet->setPropertyValue("Function", sum );
+    sum <<= sheet::GeneralFunction_SUM;
+    fieldPropSet->setPropertyValue("Function", sum);
 
     uno::Any data;
-    data<<= sheet::DataPilotFieldOrientation_DATA;
+    data <<= sheet::DataPilotFieldOrientation_DATA;
     fieldPropSet->setPropertyValue("Orientation", data);
 
     //Insert the DataPilotTable
@@ -159,7 +163,7 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     DPT->insertNewByName("DataPilotTable", sCellAddress, DPDsc);
 
     uno::Reference<uno::XInterface> xDataPilotTableObject;
-    data = DPT->getByName( DPT->getElementNames()[0] );
+    data = DPT->getByName(DPT->getElementNames()[0]);
     CPPUNIT_ASSERT(data >>= xDataPilotTableObject);
     mxObject = xDataPilotTableObject;
 
@@ -173,7 +177,6 @@ void CheckDataPilotTable::setUp()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CheckDataPilotTable);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

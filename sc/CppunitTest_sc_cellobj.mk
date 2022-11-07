@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_cellobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_cellobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_cellobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_cellobj, \
-    sc/qa/extras/sccellobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_cellobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_cellobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_cellobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_cellobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_cellobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_cellobj,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_cellobj))
+$(eval $(call sc_unoapi_common,cellobj))
 
 # vim: set noet sw=4 ts=4:

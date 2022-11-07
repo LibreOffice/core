@@ -9,68 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_namedrangeobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_namedrangeobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_namedrangeobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_namedrangeobj, \
-    sc/qa/extras/scnamedrangeobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_namedrangeobj, \
-    basegfx \
-    comphelper \
-    cppu \
-    cppuhelper \
-    drawinglayer \
-    drawinglayercore \
-    editeng \
-    for \
-    forui \
-    i18nlangtag \
-    msfilter \
-    oox \
-    sal \
-    salhelper \
-    sax \
-    sb \
-    sc \
-    sfx \
-    sot \
-    subsequenttest \
-    svl \
-    svt \
-    svx \
-    svxcore \
-	test \
-    tk \
-    tl \
-    ucbhelper \
-	unotest \
-    utl \
-    $(call gb_Helper_optional,SCRIPTING, \
-        vbahelper) \
-    vcl \
-    xo \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_namedrangeobj,\
-    -I$(SRCDIR)/sc/source/ui/inc \
-    -I$(SRCDIR)/sc/inc \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_namedrangeobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_namedrangeobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_namedrangeobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_namedrangeobj,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_namedrangeobj))
+$(eval $(call sc_unoapi_common,namedrangeobj))
 
 # vim: set noet sw=4 ts=4:

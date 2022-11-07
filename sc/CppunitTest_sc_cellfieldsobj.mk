@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_cellfieldsobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_cellfieldsobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_cellfieldsobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_cellfieldsobj, \
-    sc/qa/extras/sccellfieldsobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_cellfieldsobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_cellfieldsobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_cellfieldsobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_cellfieldsobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_cellfieldsobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_cellfieldsobj,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_cellfieldsobj))
+$(eval $(call sc_unoapi_common,cellfieldsobj))
 
 # vim: set noet sw=4 ts=4:

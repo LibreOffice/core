@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_shapeobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_shapeobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_shapeobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_shapeobj, \
-	sc/qa/extras/scshapeobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_shapeobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_shapeobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_shapeobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_shapeobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_shapeobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_shapeobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_shapeobj))
+$(eval $(call sc_unoapi_common,shapeobj))
 
 # vim: set noet sw=4 ts=4:

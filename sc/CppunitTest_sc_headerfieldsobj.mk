@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_headerfieldsobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_headerfieldsobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_headerfieldsobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_headerfieldsobj, \
-    sc/qa/extras/scheaderfieldsobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_headerfieldsobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_headerfieldsobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_headerfieldsobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_headerfieldsobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_headerfieldsobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_headerfieldsobj,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_headerfieldsobj))
+$(eval $(call sc_unoapi_common,headerfieldsobj))
 
 # vim: set noet sw=4 ts=4:

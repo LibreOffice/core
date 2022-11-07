@@ -9,38 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_drawpagesobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_drawpagesobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_drawpagesobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_drawpagesobj, \
-	sc/qa/extras/scdrawpagesobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_drawpagesobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-	vcl \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_drawpagesobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_drawpagesobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_drawpagesobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_drawpagesobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_drawpagesobj,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_drawpagesobj))
+$(eval $(call sc_unoapi_common,drawpagesobj))
 
 # vim: set noet sw=4 ts=4:

@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_indexenumeration_sheetcellrangesenumeration))
-
-$(eval $(call gb_CppunitTest_use_external,sc_indexenumeration_sheetcellrangesenumeration,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_indexenumeration_sheetcellrangesenumeration))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_indexenumeration_sheetcellrangesenumeration, \
-	sc/qa/extras/scindexenumeration_sheetcellrangesenumeration \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_indexenumeration_sheetcellrangesenumeration, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_indexenumeration_sheetcellrangesenumeration,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_indexenumeration_sheetcellrangesenumeration))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_indexenumeration_sheetcellrangesenumeration))
-$(eval $(call gb_CppunitTest_use_vcl,sc_indexenumeration_sheetcellrangesenumeration))
-
-$(eval $(call gb_CppunitTest_use_components,sc_indexenumeration_sheetcellrangesenumeration,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_indexenumeration_sheetcellrangesenumeration))
+$(eval $(call sc_unoapi_common,indexenumeration_sheetcellrangesenumeration))
 
 # vim: set noet sw=4 ts=4:

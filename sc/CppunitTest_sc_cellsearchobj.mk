@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_cellsearchobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_cellsearchobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_cellsearchobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_cellsearchobj, \
-	sc/qa/extras/sccellsearchobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_cellsearchobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_cellsearchobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_cellsearchobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_cellsearchobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_cellsearchobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_cellsearchobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_cellsearchobj))
+$(eval $(call sc_unoapi_common,cellsearchobj))
 
 # vim: set noet sw=4 ts=4:

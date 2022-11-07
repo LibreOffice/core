@@ -9,38 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_scenariosobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_scenariosobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_scenariosobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_scenariosobj, \
-	sc/qa/extras/scscenariosobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_scenariosobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_scenariosobj,\
-	-I$(SRCDIR)/sc/inc \
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_scenariosobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_scenariosobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_scenariosobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_scenariosobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_scenariosobj))
+$(eval $(call sc_unoapi_common,scenariosobj))
 
 # vim: set noet sw=4 ts=4:

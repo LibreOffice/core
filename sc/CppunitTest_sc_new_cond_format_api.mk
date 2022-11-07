@@ -66,9 +66,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sc_new_cond_format_api))
 $(eval $(call gb_CppunitTest_use_ure,sc_new_cond_format_api))
 $(eval $(call gb_CppunitTest_use_vcl,sc_new_cond_format_api))
 
-$(eval $(call gb_CppunitTest_use_components,sc_new_cond_format_api,\
-    $(sc_unoapi_common_components) \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_new_cond_format_api,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_new_cond_format_api))
 

@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_functiondescriptionobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_functiondescriptionobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_functiondescriptionobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_functiondescriptionobj, \
-	sc/qa/extras/scfunctiondescriptionobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_functiondescriptionobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_functiondescriptionobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_functiondescriptionobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_functiondescriptionobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_functiondescriptionobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_functiondescriptionobj,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_functiondescriptionobj))
+$(eval $(call sc_unoapi_common,functiondescriptionobj))
 
 # vim: set noet sw=4 ts=4:

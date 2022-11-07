@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_labelrangesobj))
-
-$(eval $(call gb_CppunitTest_use_external,sc_labelrangesobj,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_labelrangesobj))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_labelrangesobj, \
-	sc/qa/extras/sclabelrangesobj \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_labelrangesobj, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_labelrangesobj,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_labelrangesobj))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_labelrangesobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_labelrangesobj))
-
-$(eval $(call gb_CppunitTest_use_components,sc_labelrangesobj,\
-	$(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_labelrangesobj))
+$(eval $(call sc_unoapi_common,labelrangesobj))
 
 # vim: set noet sw=4 ts=4:

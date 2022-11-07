@@ -9,37 +9,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_indexenumeration_sheetlinksenumeration))
-
-$(eval $(call gb_CppunitTest_use_external,sc_indexenumeration_sheetlinksenumeration,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_indexenumeration_sheetlinksenumeration))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_indexenumeration_sheetlinksenumeration, \
-	sc/qa/extras/scindexenumeration_sheetlinksenumeration \
-))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_indexenumeration_sheetlinksenumeration, \
-	cppu \
-	sal \
-	subsequenttest \
-	test \
-	unotest \
-))
-
-$(eval $(call gb_CppunitTest_set_include,sc_indexenumeration_sheetlinksenumeration,\
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_indexenumeration_sheetlinksenumeration))
-
-$(eval $(call gb_CppunitTest_use_ure,sc_indexenumeration_sheetlinksenumeration))
-$(eval $(call gb_CppunitTest_use_vcl,sc_indexenumeration_sheetlinksenumeration))
-
-$(eval $(call gb_CppunitTest_use_components,sc_indexenumeration_sheetlinksenumeration,\
-    $(sc_unoapi_common_components) \
-))
-
-$(eval $(call gb_CppunitTest_use_configuration,sc_indexenumeration_sheetlinksenumeration))
+$(eval $(call sc_unoapi_common,indexenumeration_sheetlinksenumeration))
 
 # vim: set noet sw=4 ts=4:
