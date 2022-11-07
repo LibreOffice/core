@@ -147,12 +147,12 @@ Color XclDefaultPalette::GetDefColor( sal_uInt16 nXclIndex ) const
     else switch( nXclIndex )
     {
         case EXC_COLOR_WINDOWTEXT3:
-        case EXC_COLOR_WINDOWTEXT:
-        case EXC_COLOR_CHWINDOWTEXT:    nColor = mnWindowText;  break;
+        case EXC_COLOR_WINDOWTEXT:      nColor = mnWindowText;  break;
         case EXC_COLOR_WINDOWBACK3:
-        case EXC_COLOR_WINDOWBACK:
-        case EXC_COLOR_CHWINDOWBACK:    nColor = mnWindowBack;  break;
+        case EXC_COLOR_WINDOWBACK:      nColor = mnWindowBack;  break;
         case EXC_COLOR_BUTTONBACK:      nColor = mnFaceColor;   break;
+        case EXC_COLOR_CHWINDOWTEXT:    nColor = COL_BLACK;     break;
+        case EXC_COLOR_CHWINDOWBACK:    nColor = COL_WHITE;     break;
         case EXC_COLOR_CHBORDERAUTO:    nColor = COL_BLACK;     break;  // TODO: really always black?
         case EXC_COLOR_NOTEBACK:        nColor = mnNoteBack;    break;
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
