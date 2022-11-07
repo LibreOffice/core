@@ -22,7 +22,7 @@
 
 #include "calbck.hxx"
 
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <svl/poolitem.hxx>
 #include <sfx2/Metadatable.hxx>
