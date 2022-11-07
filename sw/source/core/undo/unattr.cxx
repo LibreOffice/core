@@ -248,10 +248,10 @@ SwFormat* SwUndoFormatAttr::GetFormat( const SwDoc& rDoc )
     case RES_DRAWFRMFMT:
     case RES_FLYFRMFMT:
         {
-            SwFormat * pFormat = rDoc.GetSpzFrameFormats()->FindFormatByName(m_sFormatName);
-            if (pFormat)
-                return pFormat;
-            pFormat = rDoc.GetFrameFormats()->FindFormatByName(m_sFormatName);
+            auto it = rDoc.GetSpzFrameFormats()->findByTypeAndName( m_nFormatWhich, m_sFormatName );
+            if( it != rDoc.GetSpzFrameFormats()->typeAndNameEnd() )
+                return *it;
+            SwFormat* pFormat = rDoc.GetFrameFormats()->FindFormatByName(m_sFormatName);
             if (pFormat)
                 return pFormat;
         }
