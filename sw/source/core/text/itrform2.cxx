@@ -1111,7 +1111,7 @@ namespace sw::mark {
         assert(pBM->GetFieldname() == ODF_FORMDROPDOWN);
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(OUString(ODF_FORMDROPDOWN_RESULT));
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(ODF_FORMDROPDOWN_RESULT);
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
 
