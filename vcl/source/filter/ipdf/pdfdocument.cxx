@@ -349,7 +349,7 @@ sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_
     m_aEditBuffer.WriteUInt32AsString(nSignatureId);
     m_aEditBuffer.WriteCharPtr(" 0 R\n");
     m_aEditBuffer.WriteCharPtr("/AP<<\n/N ");
-    m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
+    m_aEditBuffer.WriteInt32AsString(nAppearanceId);
     m_aEditBuffer.WriteCharPtr(" 0 R\n>>\n");
     m_aEditBuffer.WriteCharPtr(">>\nendobj\n\n");
 
