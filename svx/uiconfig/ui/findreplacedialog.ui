@@ -526,6 +526,9 @@
                         <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|search">Finds and selects the next occurrence of the text or format that you are searching for in the document.</property>
                       </object>
                     </child>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
