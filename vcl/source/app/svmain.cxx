@@ -302,8 +302,6 @@ bool InitVCL()
         return true;
     }
 
-    osl_setThreadName("VCL Main");
-
     if( pExceptionHandler != nullptr )
         return false;
 
