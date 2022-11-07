@@ -803,7 +803,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133771)
     // "An uncaught exception of type com.sun.star.io.IOException"
     // exporting to docx
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(pXmlDoc, "//w:body/w:p/w:r/w:t", "Password Protected");
@@ -821,7 +820,6 @@ CPPUNIT_TEST_FIXTURE(Test, testZeroLineSpacing)
 
     // Export to docx.
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -849,7 +847,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
 
     // Export to docx.
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     double fValue = getXPath(
@@ -894,7 +891,6 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
 
     // Export to docx.
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -947,7 +943,6 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 
     // Export to docx.
     save("Office Open XML Text");
-    mbExported = true;
 
     // Paragraph 2 should have only one w:highlight written per w:rPr. Without the fix, there were two.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

@@ -77,7 +77,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -99,7 +98,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

@@ -1275,7 +1275,6 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
 
     // Given this document model, when exporting to ODT:
     save("writer8");
-    mbExported = true;
 
     // Then make sure the covered cell has a style.
     xmlDocUniquePtr pXmlSettings = parseExport("content.xml");

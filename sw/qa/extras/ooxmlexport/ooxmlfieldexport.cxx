@@ -916,7 +916,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 
     // Save and check saved data
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlCustomPropsDoc = parseExport("customXml/item1.xml");
     CPPUNIT_ASSERT(pXmlCustomPropsDoc);
     // FIXME: strange it won't run simple /employees/employee/name xpath query. Does not like namespaces?

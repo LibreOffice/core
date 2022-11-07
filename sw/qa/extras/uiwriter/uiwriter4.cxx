@@ -651,18 +651,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
     save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
-    {
-        const OString aPath("/office:document-content/office:body/office:text/text:p");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
-        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
-        CPPUNIT_ASSERT_EQUAL(0, pos1); // found, and it is first
+    const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-        CPPUNIT_ASSERT_ASSERTION_FAIL(
-            getXPathPosition(pXmlDoc, aPath, "bookmark-start")); // not found
-        CPPUNIT_ASSERT_ASSERTION_FAIL(
-            getXPathPosition(pXmlDoc, aPath, "bookmark-end")); // not found
-    }
+    const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+    CPPUNIT_ASSERT_EQUAL(0, pos1); // found, and it is first
+
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-start")); // not found
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-end")); // not found
 }
 
 // 1. Open a new writer document
@@ -726,17 +723,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
     save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
-    {
-        const OString aPath("/office:document-content/office:body/office:text/text:p");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
-        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
-        const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
-        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+    const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-        CPPUNIT_ASSERT_EQUAL(0, pos2); // found, and it is first
-        CPPUNIT_ASSERT_EQUAL(1, pos3); // found, and it is second
-    }
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
+    const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+    const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+
+    CPPUNIT_ASSERT_EQUAL(0, pos2); // found, and it is first
+    CPPUNIT_ASSERT_EQUAL(1, pos3); // found, and it is second
 }
 
 // 1. Open a new writer document
@@ -828,19 +824,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
     save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
-    {
-        const OString aPath("/office:document-content/office:body/office:text/text:p");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
-        CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
-        const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
-        const int pos3 = getXPathPosition(pXmlDoc, aPath, "text");
-        const int pos4 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+    const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-        CPPUNIT_ASSERT_EQUAL(0, pos2);
-        CPPUNIT_ASSERT_EQUAL(1, pos3);
-        CPPUNIT_ASSERT_EQUAL(2, pos4);
-    }
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
+    const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+    const int pos3 = getXPathPosition(pXmlDoc, aPath, "text");
+    const int pos4 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+
+    CPPUNIT_ASSERT_EQUAL(0, pos2);
+    CPPUNIT_ASSERT_EQUAL(1, pos3);
+    CPPUNIT_ASSERT_EQUAL(2, pos4);
 }
 
 // 1. Load document:
@@ -893,21 +888,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
     save("writer8");
 
     // load only content.xml from the resaved document
-    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
-    {
-        const OString aPath("/office:document-content/office:body/office:text/text:p");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
-        const int pos2 = getXPathPosition(pXmlDoc, aPath, "text");
+    const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+    const int pos2 = getXPathPosition(pXmlDoc, aPath, "text");
 
-        CPPUNIT_ASSERT_EQUAL(0, pos1);
-        CPPUNIT_ASSERT_EQUAL(1, pos2);
+    CPPUNIT_ASSERT_EQUAL(0, pos1);
+    CPPUNIT_ASSERT_EQUAL(1, pos2);
 
-        CPPUNIT_ASSERT_ASSERTION_FAIL(
-            getXPathPosition(pXmlDoc, aPath, "bookmark-start")); // not found
-        CPPUNIT_ASSERT_ASSERTION_FAIL(
-            getXPathPosition(pXmlDoc, aPath, "bookmark-end")); // not found
-    }
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-start")); // not found
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark-end")); // not found
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96961)

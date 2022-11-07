@@ -265,7 +265,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -300,7 +299,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -349,7 +347,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -390,7 +387,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -430,7 +426,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -471,7 +466,6 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 
     // When exporting to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure that the page edge -> border space is correct:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

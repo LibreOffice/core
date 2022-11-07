@@ -97,7 +97,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     // Such shape must have vert="mongolianVert" again after saving.
     // Without fix the orientation was vert="vert".
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//wps:bodyPr", "vert", "mongolianVert");
 }
@@ -123,7 +122,6 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
 
     // When saving to DOCX:
     save("Office Open XML Text");
-    mbExported = true;
 
     // Then make sure that the paragraph marker's char format has that custom font size:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -148,7 +146,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
     // Without fix the insets were tIns="359280" and bIns="539640". The text area had 1080Emu height
     // and Word displays no text at all.
     save("Office Open XML Text");
-    mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathAttrs(pXmlDoc, "//wps:bodyPr", { { "tIns", "179640" }, { "bIns", "360000" } });
 }

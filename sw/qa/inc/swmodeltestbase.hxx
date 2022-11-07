@@ -374,8 +374,6 @@ protected:
      */
     xmlDocUniquePtr parseExportedFile();
 
-    xmlDocUniquePtr parseExportInternal(const OUString& url, const OUString& rStreamName);
-
     /**
      * Helper method to return nodes represented by rXPath.
      */

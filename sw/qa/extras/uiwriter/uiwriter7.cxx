@@ -115,17 +115,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testExportToPicture)
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "FilterName", uno::Any(OUString("writer_png_Export")) },
           { "FilterData", uno::Any(aFilterData) } }));
-    utl::TempFileNamed aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    bool extchk = aTempFile.IsValid();
+    xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
+    bool extchk = maTempFile.IsValid();
     CPPUNIT_ASSERT_EQUAL(true, extchk);
-    osl::File tmpFile(aTempFile.GetURL());
+    osl::File tmpFile(maTempFile.GetURL());
     tmpFile.open(sal_uInt32(osl_File_OpenFlag_Read));
     sal_uInt64 val;
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
-    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77340)
@@ -1293,13 +1291,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74230)
 {
     createSwDoc();
     //exporting the empty document to ODT via TempFile
-    uno::Sequence<beans::PropertyValue> aDescriptor;
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    CPPUNIT_ASSERT(aTempFile.IsValid());
+    save("writer8");
+    CPPUNIT_ASSERT(maTempFile.IsValid());
     //loading an XML DOM of the "styles.xml" of the TempFile
-    xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     //pXmlDoc should not be null
     CPPUNIT_ASSERT(pXmlDoc);
     //asserting XPath in loaded XML DOM
@@ -1307,8 +1302,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74230)
                          "style:graphic-properties[@svg:stroke-color='#3465a4']");
     assertXPath(pXmlDoc, "//office:styles/style:default-style[@style:family='graphic']/"
                          "style:graphic-properties[@draw:fill-color='#729fcf']");
-    //deleting the TempFile
-    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf80663)
@@ -2766,18 +2759,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149184)
     pWrtShell->ChangeHeaderOrFooter(u"", false, false, false);
 
     // export to simplefooter.doc
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("MS Word 97")) },
-    });
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
 
     // Without the fix in place, the test fails with:
     // [CUT] sw_uiwriter7
     // Segmentation fault (core dumped)
     // [_RUN_____] testTdf149184::TestBody
-    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    save("MS Word 97");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)

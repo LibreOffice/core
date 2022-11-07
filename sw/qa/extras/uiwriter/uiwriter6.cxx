@@ -1080,9 +1080,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     OString aSettingsBaseXpath("/office:document-settings/office:settings/config:config-item-set");
 
     xmlDocUniquePtr pXmlDoc;
-    uno::Sequence<beans::PropertyValue> aDescriptor;
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
 
     // Get document settings
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
@@ -1100,18 +1097,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     // CASE 1 - no font embedding enabled
 
     // Save the document
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    CPPUNIT_ASSERT(aTempFile.IsValid());
+    save("writer8");
+    CPPUNIT_ASSERT(maTempFile.IsValid());
 
     // Check setting - No font embedding should be enabled
-    pXmlDoc = parseExportInternal(aTempFile.GetURL(), "settings.xml");
+    pXmlDoc = parseExport("settings.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "false");
 
     // Check content - No font-face-src nodes should be present
-    pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml");
+    pXmlDoc = parseExport("content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
@@ -1148,11 +1144,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::Any(false));
 
     // Save the document again
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    CPPUNIT_ASSERT(aTempFile.IsValid());
+    save("writer8");
+    CPPUNIT_ASSERT(maTempFile.IsValid());
 
     // Check setting - font embedding should be enabled + embed only used fonts and scripts
-    pXmlDoc = parseExportInternal(aTempFile.GetURL(), "settings.xml");
+    pXmlDoc = parseExport("settings.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "true");
@@ -1171,7 +1167,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
 
     // Check content - font-face-src should be present only for "Liberation Sans" fonts
 
-    pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml");
+    pXmlDoc = parseExport("content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
@@ -1211,11 +1207,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     xProps->setPropertyValue("EmbedComplexScriptFonts", uno::Any(true));
 
     // Save the document again
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    CPPUNIT_ASSERT(aTempFile.IsValid());
+    save("writer8");
+    CPPUNIT_ASSERT(maTempFile.IsValid());
 
     // Check setting - font embedding should be enabled + embed only used fonts and scripts
-    pXmlDoc = parseExportInternal(aTempFile.GetURL(), "settings.xml");
+    pXmlDoc = parseExport("settings.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "true");
@@ -1234,7 +1230,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
 
     // Check content - font-face-src should be present only for "Liberation Sans" fonts
 
-    pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml");
+    pXmlDoc = parseExport("content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
@@ -1307,17 +1303,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
         save("writer8");
 
         // load only content.xml
-        if (xmlDocUniquePtr pXmlDoc = parseExportInternal(maTempFile.GetURL(), "content.xml"))
-        {
-            const OString aPath("/office:document-content/office:body/office:text/text:p");
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+        const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-            const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
-            const int pos2 = getXPathPosition(pXmlDoc, aPath, "control");
-            const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+        const int pos2 = getXPathPosition(pXmlDoc, aPath, "control");
+        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
 
-            CPPUNIT_ASSERT_GREATER(pos1, pos2);
-            CPPUNIT_ASSERT_GREATER(pos2, pos3);
-        }
+        CPPUNIT_ASSERT_GREATER(pos1, pos2);
+        CPPUNIT_ASSERT_GREATER(pos2, pos3);
     }
 }
 

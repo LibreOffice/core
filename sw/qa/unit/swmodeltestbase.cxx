@@ -639,13 +639,13 @@ void SwModelTestBase::save(const OUString& aFilterName)
     {
         validate(maTempFile.GetFileName(), test::ODF);
     }
+    mbExported = true;
 }
 
 void SwModelTestBase::loadAndSave(const char* pName)
 {
     load(pName);
     save(OUString::createFromAscii(mpFilter));
-    mbExported = true;
 }
 
 void SwModelTestBase::loadAndReload(const char* pName)
@@ -684,24 +684,15 @@ xmlDocUniquePtr SwModelTestBase::parseExport(const OUString& rStreamName)
     if (!mbExported)
         return nullptr;
 
-    return parseExportInternal(maTempFile.GetURL(), rStreamName);
+    std::unique_ptr<SvStream> pStream(parseExportStream(maTempFile.GetURL(), rStreamName));
+
+    return parseXmlStream(pStream.get());
 }
 
 xmlDocUniquePtr SwModelTestBase::parseExportedFile()
 {
     auto stream(SvFileStream(maTempFile.GetURL(), StreamMode::READ | StreamMode::TEMPORARY));
     return parseXmlStream(&stream);
-}
-
-xmlDocUniquePtr SwModelTestBase::parseExportInternal(const OUString& url,
-                                                     const OUString& rStreamName)
-{
-    std::unique_ptr<SvStream> pStream(parseExportStream(url, rStreamName));
-
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
-    pXmlDoc->name = reinterpret_cast<char*>(xmlStrdup(
-        reinterpret_cast<xmlChar const*>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
-    return pXmlDoc;
 }
 
 void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)

@@ -978,7 +978,7 @@ void Test::testODF13()
         reload("writer8", nullptr);
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExportInternal(maTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pContentXml = parseExport("content.xml");
         assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
@@ -986,7 +986,7 @@ void Test::testODF13()
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
-        xmlDocUniquePtr pStylesXml = parseExportInternal(maTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first");
@@ -1011,7 +1011,7 @@ void Test::testODF13()
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExportInternal(maTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pContentXml = parseExport("content.xml");
         assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
@@ -1019,7 +1019,7 @@ void Test::testODF13()
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
-        xmlDocUniquePtr pStylesXml = parseExportInternal(maTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first");
@@ -1043,7 +1043,7 @@ void Test::testODF13()
         save("writer8");
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExportInternal(maTempFile.GetURL(), "content.xml");
+        xmlDocUniquePtr pContentXml = parseExport("content.xml");
         assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties", "contextual-spacing");
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
@@ -1051,7 +1051,7 @@ void Test::testODF13()
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
         assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
-        xmlDocUniquePtr pStylesXml = parseExportInternal(maTempFile.GetURL(), "styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);

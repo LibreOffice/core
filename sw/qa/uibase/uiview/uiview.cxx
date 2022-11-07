@@ -138,12 +138,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     CPPUNIT_ASSERT(pViewOption->IsKeepRatio());
 
     // Then export as well:
-    uno::Reference<frame::XStorable2> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreArgs = {
-        comphelper::makePropertyValue("FilterName", OUString("writer8")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreArgs);
-    mbExported = true;
+    save("writer8");
     xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']", "true");
 }

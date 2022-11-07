@@ -240,7 +240,9 @@ public:
             return nullptr;
 
         OUString name = msMailMergeOutputPrefix + OUString::number( 0 ) + ".odt";
-        return parseExportInternal( msMailMergeOutputURL + "/" + name, rStreamName );
+        std::unique_ptr<SvStream> pStream(parseExportStream(msMailMergeOutputURL + "/" + name, rStreamName));
+
+        return parseXmlStream(pStream.get());
     }
 
     void loadMailMergeDocument( const OUString &filename )
