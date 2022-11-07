@@ -256,10 +256,11 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                FreshNavigatrTree();
             }
         }
+        if (!bRet && !mbReadOnly) // tdf#139804
+        {
+            bRet = GetView()->KeyInput(rKEvt, pWin);
+        }
     }
-
-    if (!bRet)
-        bRet = GetView()->KeyInput(rKEvt, pWin);
 
     return bRet;
 }
