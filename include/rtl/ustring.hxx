@@ -163,7 +163,7 @@ public:
     /**
       make it easier to pass to OUStringBuffer and similar without casting/converting
     */
-    constexpr std::u16string_view asView() const { return {pData->buffer, static_cast<sal_uInt32>(pData->length)}; }
+    constexpr std::u16string_view asView() const { return std::u16string_view(pData->buffer, pData->length); }
 
     inline operator const OUString&() const;
 
