@@ -1677,12 +1677,10 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
     else {                  // glyph name from string table
         const char* pSidName = getString( nSID);
         // check validity of glyph name
-        if( pSidName) {
-            const char* p = pSidName;
-            while( (*p >= '0') && (*p <= 'z')) ++p;
-            if( (p >= pSidName+1) && (*p == '\0'))
-                pGlyphName = pSidName;
-        }
+        const char* p = pSidName;
+        while( (*p >= '0') && (*p <= 'z')) ++p;
+        if( (p >= pSidName+1) && (*p == '\0'))
+            pGlyphName = pSidName;
         // if needed invent a fallback name
         if( pGlyphName != pSidName)
              sprintf( aDefaultGlyphName, "bad%03d", nSID);
