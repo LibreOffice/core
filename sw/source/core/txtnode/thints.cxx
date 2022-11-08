@@ -1160,7 +1160,7 @@ SwTextAttr* MakeTextAttr(
         break;
     case RES_TXTATR_CONTENTCONTROL:
         pNew = SwTextContentControl::CreateTextContentControl(
-            pTextNode, static_cast<SwFormatContentControl&>(rNew), nStt, nEnd,
+            rDoc, pTextNode, static_cast<SwFormatContentControl&>(rNew), nStt, nEnd,
             bIsCopy == CopyOrNewType::Copy);
         break;
     default:

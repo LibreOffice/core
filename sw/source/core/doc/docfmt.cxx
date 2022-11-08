@@ -76,6 +76,7 @@
 #include <modcfg.hxx>
 #include <frameformats.hxx>
 #include <textboxhelper.hxx>
+#include <textcontentcontrol.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::i18n;
@@ -1965,6 +1966,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     m_PageDescs.dumpAsXml(pWriter);
     maDBData.dumpAsXml(pWriter);
     mpMarkManager->dumpAsXml(pWriter);
+    m_pContentControlManager->dumpAsXml(pWriter);
     m_pUndoManager->dumpAsXml(pWriter);
     m_pDocumentSettingManager->dumpAsXml(pWriter);
     getIDocumentFieldsAccess().GetFieldTypes()->dumpAsXml(pWriter);
