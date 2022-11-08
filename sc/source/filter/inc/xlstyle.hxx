@@ -263,8 +263,6 @@ public:
 
 private:
     const Color*        mpnColorTable;      /// The table with RGB values.
-    Color               mnWindowText;       /// System window text color.
-    Color               mnWindowBack;       /// System window background color.
     Color               mnFaceColor;        /// System button background color.
     Color               mnNoteText;         /// Note text color.
     Color               mnNoteBack;         /// Note background color.

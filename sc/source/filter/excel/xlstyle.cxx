@@ -94,8 +94,6 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     mnTableSize( 0 )
 {
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
-    mnWindowText = rSett.GetWindowTextColor();
-    mnWindowBack = rSett.GetWindowColor();
     mnFaceColor = rSett.GetFaceColor();
     // Don't use the system HelpBack and HelpText colours as it causes problems
     // with modern gnome. This is because mnNoteText and mnNoteBack are used
@@ -147,12 +145,12 @@ Color XclDefaultPalette::GetDefColor( sal_uInt16 nXclIndex ) const
     else switch( nXclIndex )
     {
         case EXC_COLOR_WINDOWTEXT3:
-        case EXC_COLOR_WINDOWTEXT:      nColor = mnWindowText;  break;
-        case EXC_COLOR_WINDOWBACK3:
-        case EXC_COLOR_WINDOWBACK:      nColor = mnWindowBack;  break;
-        case EXC_COLOR_BUTTONBACK:      nColor = mnFaceColor;   break;
+        case EXC_COLOR_WINDOWTEXT:
         case EXC_COLOR_CHWINDOWTEXT:    nColor = COL_BLACK;     break;
+        case EXC_COLOR_WINDOWBACK3:
+        case EXC_COLOR_WINDOWBACK:
         case EXC_COLOR_CHWINDOWBACK:    nColor = COL_WHITE;     break;
+        case EXC_COLOR_BUTTONBACK:      nColor = mnFaceColor;   break;
         case EXC_COLOR_CHBORDERAUTO:    nColor = COL_BLACK;     break;  // TODO: really always black?
         case EXC_COLOR_NOTEBACK:        nColor = mnNoteBack;    break;
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
