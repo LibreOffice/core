@@ -875,7 +875,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 
 // Resolves: fdo#35779 set background color of this shape as the editeng background if there
 // is one. Check the shape itself, then the host page, then that page's master page.
-void SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
+bool SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
 {
     const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
     if (drawing::FillStyle_NONE != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
@@ -883,7 +883,9 @@ void SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
         Color aColor(rOutliner.GetBackgroundColor());
         GetDraftFillColor(*pBackgroundFillSet, aColor);
         rOutliner.SetBackgroundColor(aColor);
+        return true;
     }
+    return false;
 }
 
 const SfxItemSet* SdrObject::getBackgroundFillSet() const

@@ -880,7 +880,8 @@ public:
 
     const css::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 
-    void setSuitableOutlinerBg(Outliner& rOutliner) const;
+    // return true if a bg was set, false otherwise
+    bool setSuitableOutlinerBg(Outliner& rOutliner) const;
     // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
     const Graphic* getFillGraphic() const;
 
