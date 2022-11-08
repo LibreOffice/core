@@ -41,6 +41,7 @@ public:
     {
     }
 
+    void testTdf92222();
     void testTdf129430();
     void testTdf114848();
     void testTdf147586();
@@ -133,6 +134,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
+    CPPUNIT_TEST(testTdf92222);
     CPPUNIT_TEST(testTdf129430);
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf147586);
@@ -229,6 +231,20 @@ public:
     }
 };
 
+void SdOOXMLExportTest3::testTdf92222()
+{
+    loadFromURL(u"pptx/tdf92222.pptx");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDocTheme = parseExport("ppt/theme/theme1.xml");
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:lnStyleLst/a:ln[1]", "w",
+                "6350");
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:lnStyleLst/a:ln[2]", "w",
+                "12700");
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:lnStyleLst/a:ln[3]", "w",
+                "19050");
+}
+
 void SdOOXMLExportTest3::testTdf129430()
 {
     loadFromURL(u"odp/tdf129430.odp");
@@ -248,6 +264,7 @@ void SdOOXMLExportTest3::testTdf114848()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "1f497d");
     xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme2.xml");
+
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "1f497d");
 }

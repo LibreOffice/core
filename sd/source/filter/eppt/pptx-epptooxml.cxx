@@ -2009,7 +2009,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
         </a:gradFill>\
       </a:fillStyleLst>\
       <a:lnStyleLst>\
-        <a:ln w=\"9525\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
+        <a:ln w=\"6350\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
           <a:solidFill>\
             <a:schemeClr val=\"phClr\">\
               <a:shade val=\"95000\"/>\
@@ -2019,14 +2019,14 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
           <a:prstDash val=\"solid\"/>\
           <a:miter/>\
         </a:ln>\
-        <a:ln w=\"25400\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
+        <a:ln w=\"12700\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
           <a:solidFill>\
             <a:schemeClr val=\"phClr\"/>\
           </a:solidFill>\
           <a:prstDash val=\"solid\"/>\
           <a:miter/>\
         </a:ln>\
-        <a:ln w=\"38100\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
+        <a:ln w=\"19050\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
           <a:solidFill>\
             <a:schemeClr val=\"phClr\"/>\
           </a:solidFill>\
