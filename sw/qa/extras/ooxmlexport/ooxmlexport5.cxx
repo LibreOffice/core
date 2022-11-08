@@ -1093,7 +1093,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo83048)
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
 {
     loadAndSave("sdt-2-run.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "firstsecond");

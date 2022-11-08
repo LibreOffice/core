@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The second fix used variable width.
     // The recent fix uses fixed width again, according to the fixed width cells.
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","dxa");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","1611");
@@ -378,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 {
     loadAndSave("fdo73389.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
     // This was 200
@@ -398,7 +398,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
 {
     loadAndSave("tdf59274.docx");
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW", "type", "dxa");
     // This was 7349: sum of the cell widths in first row, but the table width is determined by a longer row later.
@@ -624,7 +624,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
 {
     loadAndSave("tdf116194.docx");
     // The problem was that the importer lost consecutive tables with w:gridBefore
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
 }
 
@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 {
     loadAndSave("tdf134606.docx");
     // The problem was that the importer lost the nested table structure with w:gridBefore
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl");
 }
 

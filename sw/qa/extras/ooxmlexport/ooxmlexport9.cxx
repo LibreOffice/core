@@ -1127,7 +1127,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121670_columnsInSectionsOnly, "tdf121670_columns
 CPPUNIT_TEST_FIXTURE(Test, testTdf106492)
 {
     loadAndSave("tdf106492.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 4: an additional sectPr was added to the document.
     assertXPath(pXmlDoc, "//w:sectPr", 3);
 }
@@ -1336,7 +1336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1085), xShape->getPosition().Y);
 
     // Also check the specific OOXML elements
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // For inline controls use w:object as parent element and pictureFrame shapetype
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object", 1);

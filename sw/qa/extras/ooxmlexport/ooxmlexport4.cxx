@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(Test, fdo69656)
     // After changes for fdo76741 the fixed width is exported as "dxa" for DOCX
 
     // Check for the width type of table and its cells.
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","dxa");
 }
 

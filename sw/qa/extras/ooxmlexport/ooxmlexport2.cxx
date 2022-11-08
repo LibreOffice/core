@@ -605,7 +605,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellBtlr)
      * w:val="btLr"/> token was completely missing in the output.
      */
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
 }
 
@@ -961,7 +961,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
     // The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
     // for Word to handle (larger than 31 points)
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Assert the XPath expression - page borders
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders", "offsetFrom", "page");
@@ -990,7 +990,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGrabBag)
 {
     loadAndSave("grabbag.docx");
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
 }
 

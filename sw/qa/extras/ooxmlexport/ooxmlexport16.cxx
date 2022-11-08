@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
     // (Currently the Writer text frame becomes a text box (shape based)). See tdf#140961
     reload(mpFilter, "docxopenhyperlinkbox.docx");
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // DML
     assertXPath(pXmlDoc, "//w:drawing/wp:anchor/wp:docPr/a:hlinkClick", 1);
     // VML
@@ -668,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
     // reload("writer8", "tdf146171.odt");
     reload("Office Open XML Text", "tdf146171.docx");
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 0
     assertXPath(pXmlDoc, "//w:ins", 5);
     // This was 0
@@ -697,7 +697,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149198, "tdf149198.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
 {
     loadAndSave("footer-margin-lost.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 709
     // - Actual  : 0
@@ -738,7 +738,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     reload(mpFilter, "rtl-gutter.docx");
 
     // Then make sure the section's gutter is still RTL:
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed as the XML element was
     // missing.
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:rtlGutter", 1);

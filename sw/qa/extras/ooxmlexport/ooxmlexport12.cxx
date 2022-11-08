@@ -1974,7 +1974,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
 {
     loadAndSave("tdf128913.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // w:ins and w:del are imported correctly, if they contain only inline images
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
@@ -1983,7 +1983,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
 CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
 {
     loadAndSave("tdf142700.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // w:ins and w:del are imported correctly, if they contain only images anchored to character
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:anchor/a:graphic");
@@ -1992,7 +1992,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
 CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
 {
     loadAndSave("tdf142387.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // w:del in w:ins is exported correctly (only w:del was exported)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "inserts ");
 }

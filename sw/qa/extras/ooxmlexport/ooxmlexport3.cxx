@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiColumnLineSeparator)
 {
     loadAndSave("multi-column-line-separator-SAVED.docx");
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
 }
 
@@ -563,7 +563,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69644)
     // The problem was that the exporter exported the table definition
     // with only 3 columns, instead of 5 columns.
     // Check that the table grid is exported with 5 columns
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
@@ -576,7 +576,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
 CPPUNIT_TEST_FIXTURE(Test, testPgMargin)
 {
     loadAndSave("testPgMargin.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellGridSpan)
     // The problem was during export gridSpan value for 1st & 2nd cells for test document
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
     // Verifying gridSpan element is not present in RoundTripped Document (As it's Default value is 1).
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
@@ -712,7 +712,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
 CPPUNIT_TEST_FIXTURE(Test, testParaAutoSpacing)
 {
     loadAndSave("para-auto-spacing.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing","1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "afterAutospacing","1");
 
@@ -942,7 +942,7 @@ CPPUNIT_TEST_FIXTURE(Test, testcantSplit)
     // if Split table value is true for a table then during export do not write <w:cantSplit w:val="false"/>
     // in table row property,As default row prop is allow row to break across page.
     // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val","true");
 }

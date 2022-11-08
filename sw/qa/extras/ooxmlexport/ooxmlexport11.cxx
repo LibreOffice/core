@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 {
     loadAndSave("tdf121456_tabsOffset.odt");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", "Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Table of Contents");
@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 CPPUNIT_TEST_FIXTURE(Test, testTdf129525)
 {
     loadAndSave("tdf129525.rtf");
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", "Overview");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "3");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[1]/w:t", "More detailed description");
@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitleDocx)
 {
     loadAndSave("tdf121456_tabsOffset.odt");
     CPPUNIT_ASSERT_EQUAL(7, getPages());
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // get TOC node
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);

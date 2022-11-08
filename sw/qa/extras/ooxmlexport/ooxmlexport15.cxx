@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118701)
     // This was 6, related to moving inline images after the page breaks
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr[1]/w:numPr", 0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr[1]/w:numPr", 0);
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123401)
     CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<A1:A3>)"), xEnumerationAccess2->getPresentation(true).trim());
     CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess2->getPresentation(false).trim());
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // MEAN converted to AVERAGE
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", " =AVERAGE(A1:A2)");
@@ -209,7 +209,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116394, "tdf116394.docx")
 
     if (!isExported())
         return;
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " MERGEFIELD ab=cd ");
 }
 
@@ -361,7 +361,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123355, "tdf123355.docx")
 
     if (!isExported())
         return;
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // keep original formula IDs
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p/w:r[2]/w:instrText", " =average( below )");
@@ -412,7 +412,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123382, "tdf123382.docx")
 
     if (!isExported())
         return;
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // keep original formula IDs
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:r[2]/w:instrText", " =MAX(RIGHT)");
@@ -450,7 +450,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122648, "tdf122648.docx")
 
     if (!isExported())
         return;
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[2]/w:p/w:r[2]/w:instrText", " =A1");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[2]/w:tc[2]/w:p/w:r[2]/w:instrText", " =SUM(A1:B1)");
@@ -795,7 +795,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131561_necessaryBorder, "tdf131561_necessaryBord
 CPPUNIT_TEST_FIXTURE(Test, testTdf135655)
 {
     loadAndSave("tdf135655.odt");
-    const xmlDocUniquePtr pExpDoc = parseExport();
+    const xmlDocUniquePtr pExpDoc = parseExport("word/document.xml");
     const OUString sXFillColVal = getXPath(pExpDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "fillcolor");
     CPPUNIT_ASSERT_EQUAL(OUString("#00A933"), sXFillColVal);
 }
@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(Test, TestTdf143028)
     loadAndSave("fail_bracePair.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    auto pExportXml = parseExport();
+    auto pExportXml = parseExport("word/document.xml");
 
     CPPUNIT_ASSERT_EQUAL(1, getXPathNode(
         pExportXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
@@ -1057,7 +1057,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageSpaceSettings)
 {
     loadAndSave("tdf135047_ImageSpaceSettings.fodt");
     // tdf#135047 The spaces of image were not saved.
-    xmlDocUniquePtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distT", "90170");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distB", "90170");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distL", "90170");

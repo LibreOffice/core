@@ -362,7 +362,7 @@ protected:
      * xml stream, and asserting an XPath expression. This method returns the
      * xml stream, so that you can do the asserting.
      */
-    xmlDocUniquePtr parseExport(const OUString& rStreamName = OUString("word/document.xml"));
+    xmlDocUniquePtr parseExport(const OUString& rStreamName);
 
     /**
      * Returns an xml stream of an exported file.
