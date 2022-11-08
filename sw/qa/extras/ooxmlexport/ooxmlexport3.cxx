@@ -135,11 +135,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }
 
-    if (xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml"))
-    {
-        // Make sure we write qFormat for custom style names.
-        assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
-    }
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    // Make sure we write qFormat for custom style names.
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
@@ -289,9 +287,9 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
     CPPUNIT_ASSERT_EQUAL(14.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
 
     // This paragraph property was missing in table style.
-    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    if (!pXmlStyles)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:pPr/w:jc", "val", "center");
 
     // These run properties were missing

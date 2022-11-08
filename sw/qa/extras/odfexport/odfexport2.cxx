@@ -699,8 +699,9 @@ DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
+    if (isExported())
     {
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
         // Check how conversion from prefix/suffix to list format did work
         assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a",
                     "href", "http://shape.com/");
@@ -736,8 +737,9 @@ DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
     CPPUNIT_ASSERT_EQUAL(OUString(">>1.1.1<<"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1.1.2<<"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
 
-    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
+    if (isExported())
     {
+        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
         // Check how conversion from prefix/suffix to list format did work
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
             "text:list-level-style-number[@text:level='1']", "num-list-format", ">%1%<");

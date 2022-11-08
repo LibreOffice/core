@@ -78,9 +78,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("8."), getXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "expand"));
     CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "font-color"));
 
-    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:rStyle",
         "val", "Emphasis");
@@ -207,9 +207,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116394, "tdf116394.docx")
     // - Actual  : abcd..
     CPPUNIT_ASSERT_EQUAL(OUString("ab=cd.."), xEnumerationAccess->getPresentation(true).trim());
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " MERGEFIELD ab=cd ");
 }
 
@@ -359,9 +359,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123355, "tdf123355.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<A2:A2>)"), xEnumerationAccess5->getPresentation(true).trim());
     CPPUNIT_ASSERT_EQUAL(OUString("4"), xEnumerationAccess5->getPresentation(false).trim());
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     // keep original formula IDs
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p/w:r[2]/w:instrText", " =average( below )");
@@ -410,9 +410,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123382, "tdf123382.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("MAX(<B2:B4>)"), xEnumerationAccess7->getPresentation(true).trim());
     CPPUNIT_ASSERT_EQUAL(OUString("10"), xEnumerationAccess7->getPresentation(false).trim());
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     // keep original formula IDs
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:r[2]/w:instrText", " =MAX(RIGHT)");
@@ -448,9 +448,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122648, "tdf122648.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("SUM(<A1:B1>)"), xEnumerationAccess4->getPresentation(true).trim());
     CPPUNIT_ASSERT_EQUAL(OUString("2"), xEnumerationAccess4->getPresentation(false).trim());
 
-    xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[2]/w:p/w:r[2]/w:instrText", " =A1");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[2]/w:tc[2]/w:p/w:r[2]/w:instrText", " =SUM(A1:B1)");
@@ -849,9 +849,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136441_commentInFootnote)
 DECLARE_OOXMLEXPORT_TEST(testTdf137683_charHighlightTests, "tdf137683_charHighlightTests.docx")
 {
     // Don't export unnecessary w:highlight="none" (Unnecessary one intentionally hand-added to original .docx)
-    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    if (pXmlStyles)
+    if (isExported())
+    {
+        xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
         assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:highlight", 0);
+    }
 
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(10), 2, "no highlight"), uno::UNO_QUERY_THROW);
     // This test was failing with a cyan charHighlight of 65535 (0x00FFFF), instead of COL_TRANSPARENT (0xFFFFFFFF)

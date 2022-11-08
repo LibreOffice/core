@@ -492,9 +492,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
 {
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
        return; // initial import, no further checks
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
     OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");
@@ -665,9 +665,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Bookmark1"));
 
     // and it is really in exported DOCX (let's ensure)
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
        return; // initial import, no further checks
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
 }
@@ -861,9 +861,9 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
        return; // initial import, no further checks
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Ensure that we have <w:text w:multiLine="1"/>
     CPPUNIT_ASSERT_EQUAL(OUString("1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtPr/w:text", "multiLine"));
@@ -963,9 +963,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_1, "tdf148455_1.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
 {
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
        return; // initial import, no further checks
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Find list id for restarted list
     sal_Int32 nListId = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:numPr/w:numId", "val").toInt32();

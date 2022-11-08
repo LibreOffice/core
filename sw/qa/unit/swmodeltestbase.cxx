@@ -681,9 +681,6 @@ int SwModelTestBase::getShapes() const
 
 xmlDocUniquePtr SwModelTestBase::parseExport(const OUString& rStreamName)
 {
-    if (!mbExported)
-        return nullptr;
-
     std::unique_ptr<SvStream> pStream(parseExportStream(maTempFile.GetURL(), rStreamName));
 
     return parseXmlStream(pStream.get());

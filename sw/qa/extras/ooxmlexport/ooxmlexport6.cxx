@@ -93,9 +93,9 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     // This was drawing::LineStyle_NONE.
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
 
-    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     // This was wrap="none".
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", "square");
 

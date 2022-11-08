@@ -52,8 +52,8 @@ Another alternative is to assert the resulted export document directly.
 Currently this is only implemented for DOCX, which is a zipped XML, so it's
 possible to evaluate XPath checks. A check looks like this:
 
-if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
-    assertXPath(pXmlDoc, <xpath selecting the node>, <attribute>, <value>);
+xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+assertXPath(pXmlDoc, <xpath selecting the node>, <attribute>, <value>);
 
 It's important to check for the NULL pointer here, it's expected that it'll be
 NULL when the test runs first (after the first import), as there is nothing

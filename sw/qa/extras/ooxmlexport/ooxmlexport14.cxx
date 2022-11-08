@@ -516,9 +516,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130610)
 
     // check inline text properties
     {
-        xmlDocUniquePtr pXmlDoc =parseExport("word/document.xml");
-        if (pXmlDoc)
+        if (isExported())
         {
+            xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
             assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:b");
         }
     }
@@ -1469,9 +1469,9 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
 DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMirroredX.docx")
 {
     // tdf#97517 The "flip:x" was not handled for VML line shapes.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     OUString sStyle = getXPath(pXmlDoc,
         "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
         "style");
@@ -1481,9 +1481,9 @@ DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMi
 DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredY, "tdf137678_testVmlLineShapeMirroredY.docx")
 {
     // tdf#137678 The "flip:y" was not handled for VML line shapes.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     OUString sStyle = getXPath(pXmlDoc,
         "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
         "style");

@@ -105,11 +105,14 @@ DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
     // This was
     // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
     // we used the wrong content type for .docm files.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
+    if (isExported())
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
         assertXPath(pXmlDoc,
                     "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
                     "ContentType",
                     "application/vnd.ms-word.document.macroEnabled.main+xml");
+    }
 }
 
 DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
@@ -423,9 +426,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4318), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
-    if (!pXmlDoc)
+    if (!isExported())
          return;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // Validation test: order of elements was wrong. Order was: insideH, end, insideV.
     int nEnd = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders", "end");
     int nInsideH = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders", "insideH");
@@ -1166,9 +1169,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107684)
 {
     loadAndReload("tdf107684.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml"))
-        // This was 1, <w:outlineLvl> was duplicated for Heading1.
-        assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
+    // This was 1, <w:outlineLvl> was duplicated for Heading1.
+    assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107618)

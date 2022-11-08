@@ -365,10 +365,11 @@ DECLARE_OOXMLEXPORT_TEST(testChartDupe, "chart-dupe.docx")
     // This was 2, on second import we got a duplicated chart copy.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
 
-    xmlDocUniquePtr pXmlDocCT = parseExport("[Content_Types].xml");
 
-    if (!pXmlDocCT)
+    if (!isExported())
        return; // initial import
+
+    xmlDocUniquePtr pXmlDocCT = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDocCT,
         "/ContentType:Types/ContentType:Override[@PartName='/word/charts/chart1.xml']",

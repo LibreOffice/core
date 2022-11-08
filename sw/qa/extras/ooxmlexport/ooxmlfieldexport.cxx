@@ -483,8 +483,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStart2Sdt)
 
 DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
+    if (isExported())
     {
+        xmlDocUniquePtr pXmlDoc = parseExport();
         // Single <w:sdt> was exported as 2 <w:sdt> elements.
         assertXPath(pXmlDoc, "//w:sdt", 1);
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -641,8 +642,9 @@ DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), date.Month);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2014), date.Year);
 
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
+    if (isExported())
     {
+        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
         // Previously, fixed fields were exported as static text ("Date (fixed)")
         // Check they are now exported correctly as fldChar with fldLock attribute
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldLock", "true");
@@ -659,16 +661,16 @@ CPPUNIT_TEST_FIXTURE(Test, testOO34469)
 {
     loadAndReload("ooo34469-1.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating_New_files|outline");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating_New_files|outline");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOO39845)
 {
     loadAndReload("ooo39845-7.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "Figure4|graphic");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "Figure4|graphic");
 }
 
 DECLARE_OOXMLEXPORT_TEST( testTdf85161, "tdf85161.docx" )
@@ -830,8 +832,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")
     //   - Actual  : 12:32 a12/p12
     CPPUNIT_ASSERT_EQUAL(OUString("12:32 PM"), xField->getPresentation(false));
 
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
+    if (isExported())
     {
+        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
         // Without the fix in place, this would have failed with:
         //   - Expected:  DATE \@"H:mm\ AM/PM"
         //   - Actual  :  DATE \@"H:mm' a'M'/p'M"
@@ -844,9 +847,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")
 DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
 {
     // Check that roundtrip for date picker field does not lose essential data
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
+    if (!isExported())
        return; // initial import, no further checks
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Placeholder is here
     OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");

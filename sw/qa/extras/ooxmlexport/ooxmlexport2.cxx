@@ -173,9 +173,9 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 
     // Validation test: order of elements were wrong.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
-    if (!pXmlDoc)
+    if (!isExported())
         return;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
     int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
@@ -679,8 +679,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
     // 'Track-Changes' (Track Revisions) wasn't exported.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
     // 'Show-Changes' should not be exported - default is true.
-    if (xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml"))
+    if (isExported())
     {
+        xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
         assertXPath(pXmlSettings, "/w:settings/w:revisionView", 0);
     }
 }
