@@ -316,6 +316,15 @@ public:
         rtl_string_newFromStr( &pData, value );
     }
 
+#if __cplusplus > 202002L // C++23 P2266R3 "Simpler implicit move"
+    template< typename T >
+    OString( T&& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
+    {
+        pData = NULL;
+        rtl_string_newFromStr( &pData, value );
+    }
+#endif
+
     /**
       New string from a string literal.
 

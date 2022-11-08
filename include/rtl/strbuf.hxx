@@ -180,6 +180,17 @@ public:
         rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
     }
 
+#if __cplusplus > 202002L // C++23 P2266R3 "Simpler implicit move"
+    template< typename T >
+    OStringBuffer( T&& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+#endif
+
     /**
       Constructs a string buffer so that it represents the same
         sequence of characters as the string literal.

@@ -12,11 +12,24 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
 namespace
 {
+OString returnOString()
+{
+    char buf[] = "foo\0bar";
+    return buf;
+}
+
+OStringBuffer returnOStringBuffer()
+{
+    char buf[] = "foo\0bar";
+    return buf;
+}
+
 class Test : public CppUnit::TestFixture
 {
 private:
@@ -81,10 +94,17 @@ private:
         }
     }
 
+    void testP2266R3()
+    {
+        CPPUNIT_ASSERT_EQUAL(OString("foo"), returnOString());
+        CPPUNIT_ASSERT_EQUAL(OString("foo"), returnOStringBuffer().makeStringAndClear());
+    }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testOString);
     CPPUNIT_TEST(testOUStringChar);
     CPPUNIT_TEST(testOUStringChar16t);
+    CPPUNIT_TEST(testP2266R3);
     CPPUNIT_TEST_SUITE_END();
 };
 
