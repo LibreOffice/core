@@ -318,6 +318,7 @@ protected:
     {
         return loadURLWithComponent(createFileURL(OUString::createFromAscii(pName)),
                                     "com.sun.star.text.TextDocument", pName, pPassword);
+
     }
 
     void load_web(const char* pName, const char* pPassword = nullptr)
@@ -337,10 +338,10 @@ protected:
 
     void loadURL(OUString const& rURL, const char* pName, const char* pPassword = nullptr);
 
-    void reload(const char* pFilter, const char* filename, const char* pPassword = nullptr);
+    void reload(const char* pFilter, const char* pName, const char* pPassword = nullptr);
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
-    void save(const OUString& aFilterName, const char* filename = nullptr, const char* pPassword = nullptr);
+    void save(const OUString& aFilterName, const char* pName = nullptr, const char* pPassword = nullptr);
 
     /// Combines load() and save().
     void loadAndSave(const char* pName);

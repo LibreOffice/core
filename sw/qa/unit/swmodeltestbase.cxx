@@ -516,10 +516,14 @@ void SwModelTestBase::loadURLWithComponent(OUString const& rURL, OUString const&
         aFilterOptions.push_back(aValue);
     }
 
-    // Output name early, so in the case of a hang, the name of the hanging input file is visible.
-    if (pName)
-        std::cout << pName << ":\n";
-    mnStartTime = osl_getGlobalTimer();
+    // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
+    if (!isExported())
+    {
+        if (pName)
+            std::cout << pName << ":\n";
+        mnStartTime = osl_getGlobalTimer();
+    }
+
     mxComponent
         = loadFromDesktop(rURL, rComponent, comphelper::containerToSequence(aFilterOptions));
 
@@ -539,46 +543,14 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
     loadURLWithComponent(rURL, "com.sun.star.text.TextDocument", pName, pPassword);
 }
 
-void SwModelTestBase::reload(const char* pFilter, const char* filename, const char* pPassword)
+void SwModelTestBase::reload(const char* pFilter, const char* pName, const char* pPassword)
 {
-    save(OUString::createFromAscii(pFilter), filename, pPassword);
-    mxComponent->dispose();
+    save(OUString::createFromAscii(pFilter), pName, pPassword);
 
-    std::vector<beans::PropertyValue> aFilterOptions;
-    if (pPassword)
-    {
-        setTestInteractionHandler(pPassword, aFilterOptions);
-    }
-
-    if (!maImportFilterOptions.isEmpty())
-    {
-        beans::PropertyValue aValue;
-        aValue.Name = "FilterOptions";
-        aValue.Value <<= maImportFilterOptions;
-        aFilterOptions.push_back(aValue);
-    }
-
-    if (!maImportFilterName.isEmpty())
-    {
-        beans::PropertyValue aValue;
-        aValue.Name = "FilterName";
-        aValue.Value <<= maImportFilterName;
-        aFilterOptions.push_back(aValue);
-    }
-
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument",
-                                  comphelper::containerToSequence(aFilterOptions));
-    if (pPassword)
-    {
-        CPPUNIT_ASSERT_MESSAGE("Password set but not requested",
-                               xInteractionHandler->wasPasswordRequested());
-    }
-    discardDumpedLayout();
-    if (mustCalcLayoutOf(filename))
-        calcLayout();
+    loadURLWithComponent(maTempFile.GetURL(), "com.sun.star.text.TextDocument", pName, pPassword);
 }
 
-void SwModelTestBase::save(const OUString& aFilterName, const char* filename, const char* pPassword)
+void SwModelTestBase::save(const OUString& aFilterName, const char* pName, const char* pPassword)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
@@ -604,7 +576,7 @@ void SwModelTestBase::save(const OUString& aFilterName, const char* filename, co
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // TODO: for now, validate only ODF here
-    if (mustValidate(filename) || aFilterName == "writer8"
+    if (mustValidate(pName) || aFilterName == "writer8"
         || aFilterName == "OpenDocument Text Flat XML")
     {
         if (aFilterName == "Office Open XML Text")
@@ -623,8 +595,8 @@ void SwModelTestBase::save(const OUString& aFilterName, const char* filename, co
         else
         {
             OString aMessage
-                = OString::Concat("validation requested, but don't know how to validate ")
-                  + filename + " (" + OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) + ")";
+                = OString::Concat("validation requested, but don't know how to validate ") + pName
+                  + " (" + OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) + ")";
             CPPUNIT_FAIL(aMessage.getStr());
         }
     }
