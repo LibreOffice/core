@@ -30,12 +30,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97")
     {
     }
-
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".doc");
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148360)
