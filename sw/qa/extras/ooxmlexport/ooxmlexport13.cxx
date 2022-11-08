@@ -582,7 +582,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 CPPUNIT_TEST_FIXTURE(Test, testInputListExport)
 {
     loadAndReload("tdf122186_input_list.odt");
-    if (!mbExported) // importing the ODT, an input field
+    if (!isExported()) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -759,7 +759,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
     xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(hasProperty(xRun, "Bookmark"));
     // deleted paragraph mark at the end of the second paragraph
-    if (mbExported)
+    if (isExported())
     {
         // there is no run after the MoveBookmark
         CPPUNIT_ASSERT(!xRunEnum->hasMoreElements());
@@ -822,7 +822,7 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
     uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextFrame.is());
 
-    if (mbExported)
+    if (isExported())
     {
         // DML import: creates a TextBox, eaVert read back as TB_RL in TextWritingMode
 

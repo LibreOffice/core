@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf66401)
 DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
 {
     // This was crashed on export.
-    if (mbExported)
+    if (isExported())
     {
         uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
         uno::Reference<text::XText> xShapeText = xShape->getText();
@@ -730,7 +730,7 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
 DECLARE_OOXMLEXPORT_TEST( testDateFieldAtEndOfParagraph, "date_field_at_end_of_paragraph.docx" )
 {
     // Additional line end was added by import and it was crashed on export
-    if (mbExported)
+    if (isExported())
     {
         uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(2), 1), uno::UNO_QUERY);
         OUString aPortionType;
@@ -786,7 +786,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
     CPPUNIT_ASSERT(bool(pListEntries != pParameters->end()));
     css::uno::Sequence<OUString> vListEntries;
     pListEntries->second >>= vListEntries;
-    if (!mbExported)
+    if (!isExported())
         CPPUNIT_ASSERT_EQUAL(sal_Int32(26), vListEntries.getLength());
     else
         CPPUNIT_ASSERT_EQUAL(sal_Int32(25), vListEntries.getLength());

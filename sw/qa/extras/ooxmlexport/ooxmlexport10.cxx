@@ -1243,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInTablePosition.docx")
 {
-    if ( mbExported )
+    if ( isExported() )
     {
         xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1412,7 +1412,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105875_VmlShapeRotationWithFlip, "tdf105875_VmlS
 {
     // tdf#105875: check whether the rotation of the VML bezier shape is ok (with flip too)
     // TODO: fix export too
-    if (mbExported)
+    if (isExported())
         return;
 
     {

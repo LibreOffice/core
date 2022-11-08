@@ -295,7 +295,7 @@ DECLARE_OOXMLEXPORT_TEST(testDropdownInCell, "dropdown-in-cell.docx")
         uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xCell, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextRangeCompare->compareRegionStarts(xAnchor, xCell));
     }
-    else if (!mbExported)
+    else if (!isExported())
     {
         // ComboBox was imported as DropDown text field
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -925,7 +925,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")
 {
-    if (mbExported)
+    if (isExported())
     {
         uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
         CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("docProps/custom.xml")));

@@ -500,7 +500,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth, "tdf97648_relativeWidth.doc
 
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), getProperty<sal_Int32>(getShape(1), "LeftMargin") );
-    if (!mbExported)
+    if (!isExported())
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Text should wrap above/below the line", text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
         CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(2), "HoriOrient"));
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
     xEndnotes->getByIndex(0) >>= xEndnoteText;
 
     // ODT footnote-at-document-end's closest DOCX match is an endnote, so the two imports will not exactly match by design.
-    if (!mbExported)
+    if (!isExported())
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote count", sal_Int32(5), xFootnotes->getCount() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote count", sal_Int32(1), xEndnotes->getCount() );

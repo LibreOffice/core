@@ -133,7 +133,7 @@ DECLARE_WW8EXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.doc")
 
     // Verify that these are fields, and not just plain text
     // (import only, since export thankfully just dumps these fixed fields as plain text
-    if (mbExported)
+    if (isExported())
         return;
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -217,7 +217,7 @@ DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf128501, "tdf128501.doc")
 {
-    if (!mbExported)
+    if (!isExported())
     {
         uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
         CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShapeDescriptor->getShapeType());
@@ -807,7 +807,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     loadAndReload("btlr-frame.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (!mbExported)
+    if (!isExported())
     {
         return;
     }
@@ -962,10 +962,10 @@ DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberTortureTest, "tdf104239_chapte
     CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii"), getProperty<OUString>(xPara, "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 2
     xPara.set(getParagraph(9, "outline with Body listLvl(9)."), uno::UNO_QUERY);
-    if (!mbExported)
+    if (!isExported())
         CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
     xPara.set(getParagraph(10, "outline with Body listLvl(9) #2."), uno::UNO_QUERY);
-    if (!mbExported)
+    if (!isExported())
         CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
     xPara.set(getParagraph(11, "direct formatting - Body listLvl(9)."), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));

@@ -910,7 +910,7 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
     css::uno::Any aComment = xFields->nextElement();
     css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
 
-    if (!mbExported)
+    if (!isExported())
     {
         // Check that it's resolved when initially read
         CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue("Resolved").get<bool>());
@@ -928,7 +928,7 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
     aComment = xFields->nextElement();
     xComment.set(aComment, css::uno::UNO_QUERY_THROW);
 
-    if (!mbExported)
+    if (!isExported())
     {
         // Check that it's unresolved when initially read
         CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue("Resolved").get<bool>());

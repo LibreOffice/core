@@ -244,7 +244,7 @@ DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getParagraph(1)->getString());
 
     SwFrameFormats& rFlys(*pDoc->GetSpzFrameFormats());
-    if (mbExported)
+    if (isExported())
     { // 2, not 3: the form control becomes a field on export...
         CPPUNIT_ASSERT_EQUAL(size_t(2), rFlys.size());
     }
@@ -253,7 +253,7 @@ DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
         CPPUNIT_ASSERT_EQUAL(size_t(3), rFlys.size());
     }
 
-    sal_Int32 const nIndex(mbExported ? 4 : 3);
+    sal_Int32 const nIndex(isExported() ? 4 : 3);
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[0]->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
                          rFlys[0]->GetAnchor().GetContentAnchor()->GetNodeIndex());
@@ -487,7 +487,7 @@ DECLARE_RTFEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowS
     table::BorderLine2 aBorderLine = getProperty<table::BorderLine2>(xRun, "CharRightBorder");
     // MS formats can't have a shadow without a border.
     // Char borders are all or none, so have to decide to add borders, or throw away shadow...
-    if (mbExported)
+    if (isExported())
         CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
 
     xRun.set(getRun(getParagraph(4), 2, "shadow"));

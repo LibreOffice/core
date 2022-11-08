@@ -94,7 +94,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.docx")
 
     // Verify that these are fields, and not just plain text
     // (import only, since export thankfully just dumps these fixed fields as plain text
-    if (mbExported)
+    if (isExported())
         return;
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -674,7 +674,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
 {
-    if (mbExported)
+    if (isExported())
     {
         // Block SDT is turned into run SDT on export, so the next import will have this as content
         // control, not as a field.

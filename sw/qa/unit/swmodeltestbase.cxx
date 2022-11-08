@@ -56,10 +56,10 @@ void SwModelTestBase::paste(std::u16string_view aFilename,
 
 SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const char* pFilter)
     : mpTestDocumentPath(pTestDocumentPath)
+    , mbExported(false)
     , mpXmlBuffer(nullptr)
     , mpFilter(pFilter)
     , mnStartTime(0)
-    , mbExported(false)
     , mbFontNameWYSIWYG(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get())
 {
     maTempFile.EnableKillingFile();

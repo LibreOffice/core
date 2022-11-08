@@ -100,6 +100,7 @@ private:
     OUString maImportFilterOptions;
     OUString maImportFilterName;
     const OUString mpTestDocumentPath;
+    bool mbExported; ///< Does maTempFile already contain something useful?
 
 protected:
     css::uno::Reference< css::lang::XComponent > mxComponent;
@@ -112,10 +113,7 @@ protected:
     sal_uInt32 mnStartTime;
     utl::TempFileNamed maTempFile;
     SvMemoryStream maMemory; ///< Underlying memory for parsed PDF files.
-    bool mbExported; ///< Does maTempFile already contain something useful?
     bool mbFontNameWYSIWYG;
-
-protected:
 
     virtual OUString getTestName() { return OUString(); }
 
@@ -217,7 +215,6 @@ protected:
         return false;
     }
 
-protected:
     void dumpLayout(const css::uno::Reference< css::lang::XComponent > & rComponent);
 
     void discardDumpedLayout();
@@ -410,6 +407,8 @@ protected:
      * parse it.
      */
     void WrapReqifFromTempFile(SvMemoryStream& rStream);
+
+    bool isExported(){ return mbExported; }
 };
 
 /**

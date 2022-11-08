@@ -152,7 +152,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120852_readOnlyUnProtected, "tdf120852_readOnlyU
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY_THROW);
     const sal_Int32 nLastSection = xSections->getCount() - 1;
     uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(nLastSection), uno::UNO_QUERY_THROW);
-    if ( !mbExported )
+    if ( !isExported() )
     {
         CPPUNIT_ASSERT_MESSAGE("Section is not protected", !getProperty<bool>(xSect, "IsProtected"));
         // Enable section protection. The round-trip should have forms protection enabled.
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:pPr/w:rPr/w:vanish", 1);
-    if (!mbExported)
+    if (!isExported())
         // originally no <w:vanish> (the same as <w:vanish val="false">)
         assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", 0);
     else
@@ -824,7 +824,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119800)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:vanish", 1);
-    if (!mbExported)
+    if (!isExported())
         // originally no <w:vanish> (the same as <w:vanish val="false">)
         assertXPath(pXmlDoc,"/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish", 0);
     else

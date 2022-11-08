@@ -760,7 +760,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149421, "tdf121661.docx")
     // This was false
     CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, "ParaHyphenationZone"));
 
-    if (!mbExported)
+    if (!isExported())
     {
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(851), getProperty<sal_Int16>(xStyle, "ParaHyphenationZone"));
         // modify hyphenation zone (note: only hyphenation zone set in Standard paragraph style
@@ -1312,7 +1312,7 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
     // i.e. both the header and the footer on page 3 was wrong.
 
     // Additional problem: top margin on page 3 was wrong.
-    if (mbExported)
+    if (isExported())
     {
         xmlDocUniquePtr pXml = parseExport("word/document.xml");
         // Without the accompanying fix in place, this test would have failed with:
@@ -1457,7 +1457,7 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
 {
     // tdf#97618 The text wrapping of a shape was not handled in a canvas.
     // TODO: fix export too
-    if (mbExported)
+    if (isExported())
         return;
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     if (!pXmlDoc)

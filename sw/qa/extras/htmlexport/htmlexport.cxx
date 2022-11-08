@@ -709,7 +709,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     // Check alternate text (it was empty, for export the 'alt' attribute was used).
     CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());
 
-    if (!mbExported)
+    if (!isExported())
         return;
 
     // "type" attribute was missing for the inner <object> element.
@@ -877,7 +877,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
     // document storage, but the embedded object already opened it, so an
     // exception of type com.sun.star.io.IOException was thrown.
 
-    if (mbExported)
+    if (isExported())
     {
         // Check that the replacement graphic is exported at RTF level.
         SvMemoryStream aStream;

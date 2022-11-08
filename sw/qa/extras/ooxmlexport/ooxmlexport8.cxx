@@ -999,7 +999,7 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
     // M.d.yyyy date format was unhandled.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    if (mbExported)
+    if (isExported())
     {
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);

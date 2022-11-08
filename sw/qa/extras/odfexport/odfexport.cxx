@@ -1813,7 +1813,7 @@ DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     CPPUNIT_ASSERT(pFlyFrame);
     CPPUNIT_ASSERT(pFlyFrame->IsVertLRBT());
 
-    if (!mbExported)
+    if (!isExported())
         // Not yet exported, don't modify the doc model for test purposes.
         return;
 
@@ -2321,7 +2321,7 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
     // This was image/x-vclgraphic, not exposing the info that the image is a PDF one.
     CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
 
-    if (mbExported)
+    if (isExported())
     {
         uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
         uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);

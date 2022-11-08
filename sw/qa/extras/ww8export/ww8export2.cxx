@@ -152,7 +152,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
     xEndnotes->getByIndex(0) >>= xEndnoteText;
 
     // ODT footnote-at-document-end's closest DOC match is an endnote, so the two imports will not exactly match by design.
-    if (!mbExported)
+    if (!isExported())
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote count", sal_Int32(5), xFootnotes->getCount() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote count", sal_Int32(1), xEndnotes->getCount() );
@@ -291,7 +291,7 @@ DECLARE_WW8EXPORT_TEST(testTdf80635_marginRTL, "tdf80635_marginRightRTL.doc")
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    if ( !mbExported )
+    if ( !isExported() )
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xTable, "HoriOrient"));
 }
 
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box anchored as a floating object
     uno::Reference<drawing::XControlShape> xControlShape;
-    if(!mbExported)
+    if(!isExported())
         xControlShape.set(getShape(1), uno::UNO_QUERY);
     else
         xControlShape.set(getShape(2), uno::UNO_QUERY);
@@ -533,7 +533,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 
     // Second check box anchored inline / as character
-    if(!mbExported)
+    if(!isExported())
         xControlShape.set(getShape(2), uno::UNO_QUERY);
     else
         xControlShape.set(getShape(1), uno::UNO_QUERY);
@@ -587,7 +587,7 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
-    if (!mbExported)
+    if (!isExported())
         return;
 
     // Check whether we have all the necessary bookmarks exported and imported back
@@ -747,7 +747,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
-    if (!mbExported)
+    if (!isExported())
         return;
 
     // Check whether we have all the necessary bookmarks exported and imported back
@@ -864,7 +864,7 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
-    if (!mbExported)
+    if (!isExported())
         return;
 
     // Check whether we have all the necessary bookmarks exported and imported back

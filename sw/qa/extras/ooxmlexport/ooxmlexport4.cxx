@@ -63,7 +63,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     // width 8.61cm and 325px in UI in Word and rounds down to 8609 Hmm. Considering scaling of the
     // parent group to the anchor extent (* 3118485 / 3108960) we get a display width of 3108960 EMU
     // = 8636Hmm. FIXME: Expected value is as in LO 7.2. Reason for difference is yet unknown.
-    if (mbExported)
+    if (isExported())
     {
         uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
         // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.

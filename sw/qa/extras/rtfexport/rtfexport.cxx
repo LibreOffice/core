@@ -1261,7 +1261,7 @@ DECLARE_RTFEXPORT_TEST(testTdf98806, "tdf98806.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf61901, "tdf61901.rtf")
 {
     // Test the file directly, as current RTF import gives the correct font name with and without the fix.
-    if (mbExported)
+    if (isExported())
     {
         SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
         OString sLine;

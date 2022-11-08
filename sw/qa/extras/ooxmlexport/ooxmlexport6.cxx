@@ -260,10 +260,10 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
     // 1st shape has some cropping
     text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? 454 : 455 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? 367 : 368 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? -454 : -455 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? -367 : -368 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? 454 : 455 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? 367 : 368 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? -454 : -455 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? -367 : -368 ), aGraphicCropStruct.Bottom );
 
     // 2nd shape has no cropping
     aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
@@ -369,7 +369,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
 
     xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 14023 : 14021), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(isExported() ? 14023 : 14021), xChildGroup->getPosition().Y);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDMLGradientFillTheme)
@@ -466,7 +466,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx"
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 
-    if (!mbExported)
+    if (!isExported())
         return;
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocUniquePtr pXmlDoc = parseExport();
@@ -1036,7 +1036,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
     // tdf#133045 These shapes are relatively aligned from top margin, vertically to
     // top, center and bottom.
 
-    if (mbExported)
+    if (isExported())
         return;
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
