@@ -63,3 +63,21 @@
  
          if ( $SYSTEM eq "SunOS" ) {
              # check for Oracle Developer Studio, expected output is "cc: blah-blah C x.x blah-blah"
+--- util/perl/OpenSSL/config.pm.orig	2022-11-08 12:54:59.751298823 +0100
++++ util/perl/OpenSSL/config.pm	2022-11-08 12:55:16.436287053 +0100
+@@ -52,13 +52,13 @@
+ my @cc_version =
+     (
+      clang => sub {
+-         return undef unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
++         return undef; # unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
+          my $v = `$CROSS_COMPILE$CC -v 2>&1`;
+          $v =~ m/(?:(?:clang|LLVM) version|.*based on LLVM)\s+([0-9]+\.[0-9]+)/;
+          return $1;
+      },
+      gnu => sub {
+-         return undef unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
++         return undef; # unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
+          my $nul = File::Spec->devnull();
+          my $v = `$CROSS_COMPILE$CC -dumpversion 2> $nul`;
+          # Strip off whatever prefix egcs prepends the number with.
