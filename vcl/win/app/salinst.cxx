@@ -458,6 +458,15 @@ WinSalInstance::~WinSalInstance()
 #endif
 }
 
+void WinSalInstance::AfterAppInit()
+{
+// (1) Ideally this would be done at the place that creates the thread, but since this thread is normally
+// just the default/main thread, that is not possible.
+// (2) Don't do this on unix, where it causes tools like pstree on Linux to
+// confusingly report soffice.bin as VCL Main instead.
+    osl_setThreadName("VCL Main");
+}
+
 static LRESULT ImplSalDispatchMessage( const MSG* pMsg )
 {
     SalData* pSalData = GetSalData();
