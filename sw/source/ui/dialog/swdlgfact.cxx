@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <config_fuzzers.h>
+#include <config_wasm_strip.h>
 
 #include "swdlgfact.hxx"
 #include <svl/style.hxx>
@@ -824,8 +825,12 @@ sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
 
 std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSelectedLanguage()
 {
+#if !ENABLE_WASM_STRIP_EXTRA
     SwTranslateLangSelectDlg* pDlg = dynamic_cast<SwTranslateLangSelectDlg*>(m_xDlg.get());
     return pDlg->GetSelectedLanguage();
+#else
+    return {};
+#endif
 }
 
 VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg(weld::Window* pParent)
@@ -889,7 +894,13 @@ std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakD
 
 std::shared_ptr<AbstractSwTranslateLangSelectDlg> SwAbstractDialogFactory_Impl::CreateSwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell &rSh)
 {
+#if !ENABLE_WASM_STRIP_EXTRA
     return std::make_shared<AbstractSwTranslateLangSelectDlg_Impl>(std::make_unique<SwTranslateLangSelectDlg>(pParent, rSh));
+#else
+    (void) pParent;
+    (void) rSh;
+    return nullptr;
+#endif
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
