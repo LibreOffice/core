@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_epubexport, \
 	cppu \
 	cppuhelper \
 	sal \
+	subsequenttest \
 	test \
 	tl \
 	unotest \
