@@ -86,6 +86,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -107,6 +109,8 @@
 #include <sal/log.hxx>
 #include <svx/sdtaitm.hxx>
 #include <oox/drawingml/diagram/diagram.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -553,31 +557,31 @@ static SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
     return SDRTEXTHORZADJUST_LEFT;
 }
 
-static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
-                                         const OUString& rClass, const OUString& rPresetType,
-                                         const CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
-                                         const TextBodyPtr& pTextBody,
-                                         const GraphicHelper& rGraphicHelper)
+static void
+lcl_putCustomShapeIntoTextPathMode(const uno::Reference<drawing::XShape>& xShape,
+                                   const CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
+                                   const TextBodyPtr& pTextBody)
 {
     if (!xShape.is() || !pCustomShapePropertiesPtr || !pTextBody)
         return;
 
-    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter( xShape,
-                                                                       uno::UNO_QUERY );
-
-    if (!xDefaulter.is() || rClass.isEmpty())
+    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
+    if (!xDefaulter.is())
         return;
 
-    Reference<XPropertySet> xSet( xShape, UNO_QUERY );
+    Reference<XPropertySet> xSet(xShape, UNO_QUERY);
     if (!xSet.is())
         return;
+
+    const OUString sMSPresetType = pTextBody->getTextProperties().msPrst;
+    const OUString sFontworkType = PresetGeometryTypeNames::GetFontworkType(sMSPresetType);
 
     // The DrawingML shapes from the presetTextWarpDefinitions are mapped to the definitions
     // in svx/../EnhancedCustomShapeGeometry.cxx, which are used for WordArt shapes from
     // binary MS Office. Therefore all adjustment values need to be adapted.
     auto aAdjGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
-        !aAdjGdList.empty() ? aAdjGdList.size() : 1 );
+        !aAdjGdList.empty() ? aAdjGdList.size() : 1);
     auto pAdjustment = aAdjustment.getArray();
     int nIndex = 0;
     for (const auto& aEntry : aAdjGdList)
@@ -585,14 +589,14 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         double fValue = aEntry.maFormula.toDouble();
         // then: polar-handle, else: XY-handle
         // There exist only 8 polar-handles at all in presetTextWarp.
-        if ((rClass == "fontwork-arch-down-curve")
-            || (rClass == "fontwork-arch-down-pour" && aEntry.maName == "adj1")
-            || (rClass == "fontwork-arch-up-curve")
-            || (rClass == "fontwork-arch-up-pour" && aEntry.maName == "adj1")
-            || (rClass == "fontwork-open-circle-curve")
-            || (rClass == "fontwork-open-circle-pour" && aEntry.maName == "adj1")
-            || (rClass == "fontwork-circle-curve")
-            || (rClass == "fontwork-circle-pour" && aEntry.maName == "adj1"))
+        if ((sFontworkType == "fontwork-arch-down-curve")
+            || (sFontworkType == "fontwork-arch-down-pour" && aEntry.maName == "adj1")
+            || (sFontworkType == "fontwork-arch-up-curve")
+            || (sFontworkType == "fontwork-arch-up-pour" && aEntry.maName == "adj1")
+            || (sFontworkType == "fontwork-open-circle-curve")
+            || (sFontworkType == "fontwork-open-circle-pour" && aEntry.maName == "adj1")
+            || (sFontworkType == "fontwork-circle-curve")
+            || (sFontworkType == "fontwork-circle-pour" && aEntry.maName == "adj1"))
         {
             // DrawingML has 1/60000 degree unit, but WordArt simple degree. Range [0..360[
             // or range ]-180..180] doesn't matter, because only cos(angle) and
@@ -606,20 +610,20 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             // so scale with 21600/100000 = 0.216, with two exceptions:
             // X-handles of waves describe increase/decrease relative to horizontal center.
             // The gdRefR of pour-shapes is not relative to viewBox but to radius.
-            if ((rClass == "mso-spt158" && aEntry.maName == "adj2") // textDoubleWave1
-                || (rClass == "fontwork-wave" && aEntry.maName == "adj2") // textWave1
-                || (rClass == "mso-spt157" && aEntry.maName == "adj2") // textWave2
-                || (rClass == "mso-spt159" && aEntry.maName == "adj2")) // textWave4
+            if ((sFontworkType == "mso-spt158" && aEntry.maName == "adj2") // textDoubleWave1
+                || (sFontworkType == "fontwork-wave" && aEntry.maName == "adj2") // textWave1
+                || (sFontworkType == "mso-spt157" && aEntry.maName == "adj2") // textWave2
+                || (sFontworkType == "mso-spt159" && aEntry.maName == "adj2")) // textWave4
             {
                 fValue = (fValue + 50000.0) * 0.216;
             }
-            else if ( (rClass == "fontwork-arch-down-pour" && aEntry.maName == "adj2")
-                    || (rClass == "fontwork-arch-up-pour" && aEntry.maName == "adj2")
-                    || (rClass == "fontwork-open-circle-pour" && aEntry.maName == "adj2")
-                    || (rClass == "fontwork-circle-pour" && aEntry.maName == "adj2"))
-                {
-                    fValue *= 0.108;
-                }
+            else if ((sFontworkType == "fontwork-arch-down-pour" && aEntry.maName == "adj2")
+                     || (sFontworkType == "fontwork-arch-up-pour" && aEntry.maName == "adj2")
+                     || (sFontworkType == "fontwork-open-circle-pour" && aEntry.maName == "adj2")
+                     || (sFontworkType == "fontwork-circle-pour" && aEntry.maName == "adj2"))
+            {
+                fValue *= 0.108;
+            }
             else
             {
                 fValue *= 0.216;
@@ -630,119 +634,255 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         pAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
     }
 
-    // Set properties
-    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::Any( false ) );
-    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWWIDTH, uno::Any( false ) );
-    xSet->setPropertyValue( UNO_NAME_FILLSTYLE, uno::Any( drawing::FillStyle_SOLID ) );
+    // Set attributes in CustomShapeGeometry
+    xDefaulter->createCustomShapeDefaults(sFontworkType);
 
-    // ToDo: Old binary WordArt does not allow different styles for different paragraphs, so it
-    // was not necessary to examine all paragraphs. Solution for DrawingML is needed.
-    // Currently different alignment of paragraphs are lost, for example.
-    const TextParagraphVector& rParagraphs = pTextBody->getParagraphs();
-    if (!rParagraphs.empty() && !rParagraphs[0]->getRuns().empty())
-    {
-        std::shared_ptr<TextParagraph> pParagraph = rParagraphs[0];
-        std::shared_ptr<TextRun> pRun = pParagraph->getRuns()[0];
-        TextCharacterProperties& pProperties = pRun->getTextCharacterProperties();
-
-        if (pProperties.moBold.has_value() && pProperties.moBold.value())
-        {
-            xSet->setPropertyValue( UNO_NAME_CHAR_WEIGHT, uno::Any( css::awt::FontWeight::BOLD ) );
-        }
-        if (pProperties.moItalic.has_value() && pProperties.moItalic.value())
-        {
-            xSet->setPropertyValue( UNO_NAME_CHAR_POSTURE, uno::Any( css::awt::FontSlant::FontSlant_ITALIC ) );
-        }
-        if (pProperties.moHeight.has_value())
-        {
-            sal_Int32 nHeight = pProperties.moHeight.value() / 100;
-            xSet->setPropertyValue( UNO_NAME_CHAR_HEIGHT, uno::Any( nHeight ) );
-        }
-        if (pProperties.maFillProperties.maFillColor.isUsed())
-        {
-            const sal_Int32 aFillColor = static_cast<sal_Int32>(
-                pProperties.maFillProperties.maFillColor.getColor( rGraphicHelper ).GetRGBColor() );
-            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::Any( aFillColor ) );
-        }
-        else
-        {
-            // Set default color
-            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::Any( COL_BLACK ) );
-        }
-        {
-            ParagraphAdjust eAdjust = ParagraphAdjust_LEFT;
-            if (pParagraph->getProperties().getParaAdjust())
-                eAdjust = *pParagraph->getProperties().getParaAdjust();
-            xSet->setPropertyValue( "ParaAdjust", uno::Any( eAdjust ) );
-            SdrObject* pShape = SdrObject::getSdrObjectFromXShape( xShape );
-            assert(pShape);
-            SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust( eAdjust );
-            pShape->SetMergedItem( SdrTextHorzAdjustItem( eHorzAdjust ) );
-        }
-    }
-
-    // Apply vertical adjustment for text on arc
-    // ToDo: The property is currently not evaluated.
-    SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape);
-    assert(pShape);
-    if (rClass == "fontwork-arch-up-curve" || rClass == "fontwork-circle-curve")
-        pShape->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM ) );
-    else if (rClass == "fontwork-arch-down-curve")
-        pShape->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP ) );
-
-    // Apply preset shape
-    xDefaulter->createCustomShapeDefaults( rClass );
-
-    auto aGeomPropSeq = xSet->getPropertyValue( "CustomShapeGeometry" )
-                            .get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropSeq
+        = xSet->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
-        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
-            aGeomPropSeq );
+        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
     // Reset old properties
-    static const OUStringLiteral sTextPath( u"TextPath" );
-    static const OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
-    static const OUStringLiteral sPresetTextWarp( u"PresetTextWarp" );
+    static const OUStringLiteral sTextPath(u"TextPath");
+    static const OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
+    static const OUStringLiteral sPresetTextWarp(u"PresetTextWarp");
 
-    lcl_resetPropertyValue( aGeomPropVec, "CoordinateSize" );
-    lcl_resetPropertyValue( aGeomPropVec, "Equations" );
-    lcl_resetPropertyValue( aGeomPropVec, "Path" );
-    lcl_resetPropertyValue( aGeomPropVec, sAdjustmentValues);
+    lcl_resetPropertyValue(aGeomPropVec, "CoordinateSize");
+    lcl_resetPropertyValue(aGeomPropVec, "Equations");
+    lcl_resetPropertyValue(aGeomPropVec, "Path");
+    lcl_resetPropertyValue(aGeomPropVec, sAdjustmentValues);
 
     bool bFromWordArt(false);
     pTextBody->getTextProperties().maPropertyMap.getProperty(PROP_FromWordArt) >>= bFromWordArt;
 
     bool bScaleX(false);
     if (!bFromWordArt
-        && (rPresetType == "textArchDown" || rPresetType == "textArchUp"
-            || rPresetType == "textCircle" || rPresetType == "textButton"))
+        && (sMSPresetType == "textArchDown" || sMSPresetType == "textArchUp"
+            || sMSPresetType == "textCircle" || sMSPresetType == "textButton"))
     {
         bScaleX = true;
     }
 
-    // Apply geometry properties
-    uno::Sequence<beans::PropertyValue> aPropertyValues(
-        comphelper::InitPropertySequence(
-            { { sTextPath, uno::Any( true ) },
-                { "TextPathMode",
-                uno::Any( drawing::EnhancedCustomShapeTextPathMode_PATH ) },
-                { "ScaleX", uno::Any(bScaleX) } } ) );
+    // Apply new properties
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        { { sTextPath, uno::Any(true) },
+          { "TextPathMode", uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
+          { "ScaleX", uno::Any(bScaleX) } }));
 
-    lcl_setPropertyValue( aGeomPropVec, sTextPath,
-        comphelper::makePropertyValue( sTextPath, aPropertyValues ) );
+    lcl_setPropertyValue(aGeomPropVec, sTextPath,
+                         comphelper::makePropertyValue(sTextPath, aPropertyValues));
 
-    lcl_setPropertyValue( aGeomPropVec, sPresetTextWarp,
-        comphelper::makePropertyValue( sPresetTextWarp, rPresetType ) );
+    lcl_setPropertyValue(aGeomPropVec, sPresetTextWarp,
+                         comphelper::makePropertyValue(sPresetTextWarp, sMSPresetType));
 
     if (!aAdjGdList.empty())
     {
-        lcl_setPropertyValue( aGeomPropVec, sAdjustmentValues,
-            comphelper::makePropertyValue( sAdjustmentValues, aAdjustment ) );
+        lcl_setPropertyValue(aGeomPropVec, sAdjustmentValues,
+                             comphelper::makePropertyValue(sAdjustmentValues, aAdjustment));
     }
 
-    xSet->setPropertyValue(
-        "CustomShapeGeometry",
-        uno::Any(comphelper::containerToSequence(aGeomPropVec)));
+    xSet->setPropertyValue("CustomShapeGeometry",
+                           uno::Any(comphelper::containerToSequence(aGeomPropVec)));
+}
+
+// LO does not interpret properties in styles belonging to the text content of a FontWork shape,
+// but only those in the shape style. This method copies properties from the text content styles to
+// the shape style.
+static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xShape,
+                                     const TextBodyPtr& pTextBody,
+                                     const ::oox::core::XmlFilterBase& rFilter)
+{
+    if (!xShape.is() || !pTextBody)
+        return;
+
+    Reference<XPropertySet> xSet(xShape, UNO_QUERY);
+    if (!xSet.is())
+        return;
+
+    // Content stretches or scales to given width and height, thus disable autogrow.
+    xSet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::Any(false));
+    xSet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::Any(false));
+
+    // LibreOffice is not able (as of Nov 2022) to use different styles for the paragraphs or
+    // characters in FontWork, since that was not allowed in old binary WordArt. We use the
+    // properties of the first non empty paragraph for now.
+    const TextParagraphVector& rParagraphs = pTextBody->getParagraphs();
+    auto aParaIt = std::find_if_not(rParagraphs.cbegin(), rParagraphs.cend(),
+                                    [](const std::shared_ptr<TextParagraph> pParagraph) {
+                                        return pParagraph->getRuns().empty();
+                                    });
+    if (aParaIt != rParagraphs.cend())
+    {
+        std::shared_ptr<TextParagraph> pParagraph = *aParaIt;
+        const TextRunVector& rRuns = pParagraph->getRuns();
+        auto aRunIt = std::find_if_not(
+            rRuns.cbegin(), rRuns.cend(),
+            [](const std::shared_ptr<TextRun> pRun) { return pRun->getText().isEmpty(); });
+        if (aRunIt != rRuns.cend())
+        {
+            std::shared_ptr<TextRun> pRun = *aRunIt;
+            TextCharacterProperties& rCharProps = pRun->getTextCharacterProperties();
+
+            // set language
+            if (rCharProps.moLang.has_value() && !rCharProps.moLang.value().isEmpty())
+            {
+                LanguageTag aTag(rCharProps.moLang.value());
+                css::lang::Locale aLocale(aTag.getLocale(false));
+                switch (MsLangId::getScriptType(aTag.getLanguageType()))
+                {
+                    case css::i18n::ScriptType::LATIN:
+                        xSet->setPropertyValue(u"CharLocale", uno::Any(aLocale));
+                        break;
+                    case css::i18n::ScriptType::ASIAN:
+                        xSet->setPropertyValue(u"CharLocaleAsian", uno::Any(aLocale));
+                        break;
+                    case css::i18n::ScriptType::COMPLEX:
+                        xSet->setPropertyValue(u"CharLocaleComplex", uno::Any(aLocale));
+                        break;
+                    default:;
+                }
+            }
+
+            // Font Weight, Posture, Height
+            if (rCharProps.moBold.has_value() && rCharProps.moBold.value())
+            {
+                xSet->setPropertyValue(UNO_NAME_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::BOLD));
+            }
+            if (rCharProps.moItalic.has_value() && rCharProps.moItalic.value())
+            {
+                xSet->setPropertyValue(UNO_NAME_CHAR_POSTURE,
+                                       uno::Any(css::awt::FontSlant::FontSlant_ITALIC));
+            }
+            if (rCharProps.moHeight.has_value())
+            {
+                sal_Int32 nHeight = rCharProps.moHeight.value() / 100;
+                xSet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::Any(nHeight));
+            }
+
+            // Put theme fonts into shape properties
+            OUString sFontName;
+            sal_Int16 nFontPitch = 0;
+            sal_Int16 nFontFamily = 0;
+            bool bRet(false);
+            if (const Theme* pTheme = rFilter.getCurrentTheme())
+            {
+                // minor Latin
+                if (const TextFont* pFont = pTheme->resolveFont(u"+mn-lt"))
+                {
+                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                    if (bRet)
+                    {
+                        xSet->setPropertyValue(u"CharFontName", uno::Any(sFontName));
+                        xSet->setPropertyValue(u"CharFontPitch", uno::Any(nFontPitch));
+                        xSet->setPropertyValue(u"CharFontFamily", uno::Any(nFontFamily));
+                    }
+                }
+                // minor Asian
+                if (const TextFont* pFont = pTheme->resolveFont(u"+mn-ea"))
+                {
+                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                    if (bRet)
+                    {
+                        xSet->setPropertyValue(u"CharFontNameAsian", uno::Any(sFontName));
+                        xSet->setPropertyValue(u"CharFontPitchAsian", uno::Any(nFontPitch));
+                        xSet->setPropertyValue(u"CharFontFamilyAsian", uno::Any(nFontFamily));
+                    }
+                }
+                // minor Complex
+                if (const TextFont* pFont = pTheme->resolveFont(u"+mn-cs"))
+                {
+                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                    if (bRet)
+                    {
+                        xSet->setPropertyValue(u"CharFontNameComplex", uno::Any(sFontName));
+                        xSet->setPropertyValue(u"CharFontPitchComplex", uno::Any(nFontPitch));
+                        xSet->setPropertyValue(u"CharFontFamilyComplex", uno::Any(nFontFamily));
+                    }
+                }
+            }
+
+            // Replace theme fonts with formatting at run if any. ToDo: Inspect paragraph too?
+            // Latin
+            bRet = rCharProps.maLatinFont.getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+            if (!bRet)
+                // In case there is no direct font, try to look it up as a theme reference.
+                bRet = rCharProps.maLatinThemeFont.getFontData(sFontName, nFontPitch, nFontFamily,
+                                                               rFilter);
+
+            if (bRet)
+            {
+                xSet->setPropertyValue(u"CharFontName", uno::Any(sFontName));
+                xSet->setPropertyValue(u"CharFontPitch", uno::Any(nFontPitch));
+                xSet->setPropertyValue(u"CharFontFamily", uno::Any(nFontFamily));
+            }
+            // Asian
+            bRet = rCharProps.maAsianFont.getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+            if (!bRet)
+                // In case there is no direct font, try to look it up as a theme reference.
+                bRet = rCharProps.maAsianThemeFont.getFontData(sFontName, nFontPitch, nFontFamily,
+                                                               rFilter);
+            if (bRet)
+            {
+                xSet->setPropertyValue(u"CharFontNameAsian", uno::Any(sFontName));
+                xSet->setPropertyValue(u"CharFontPitchAsian", uno::Any(nFontPitch));
+                xSet->setPropertyValue(u"CharFontFamilyAsian", uno::Any(nFontFamily));
+            }
+            // Complex
+            bRet
+                = rCharProps.maComplexFont.getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+            if (!bRet)
+                // In case there is no direct font, try to look it up as a theme reference.
+                bRet = rCharProps.maComplexThemeFont.getFontData(sFontName, nFontPitch, nFontFamily,
+                                                                 rFilter);
+            if (bRet)
+            {
+                xSet->setPropertyValue(u"CharFontNameComplex", uno::Any(sFontName));
+                xSet->setPropertyValue(u"CharFontPitchComplex", uno::Any(nFontPitch));
+                xSet->setPropertyValue(u"CharFontFamilyComplex", uno::Any(nFontFamily));
+            }
+
+            // LO uses shape fill, MS Office character fill. Currently only this solid fill workaround
+            // is implemented.
+            // ToDo: Consider other fill styles
+            // ToDo: Consider Color Theme
+            xSet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::Any(drawing::FillStyle_SOLID));
+            sal_Int32 aFillColor(COL_BLACK); //default
+            if (rCharProps.maFillProperties.maFillColor.isUsed())
+            {
+                aFillColor = static_cast<sal_Int32>(
+                    rCharProps.maFillProperties.maFillColor.getColor(rFilter.getGraphicHelper())
+                        .GetRGBColor());
+            }
+            xSet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(aFillColor));
+
+            // ToDo: copy character outline to shape stroke.
+        }
+
+        // LO does not evaluate paragraph alignment in text path mode. Use text area anchor instead.
+        {
+            ParagraphAdjust eAdjust = ParagraphAdjust_LEFT;
+            if (pParagraph->getProperties().getParaAdjust())
+                eAdjust = *pParagraph->getProperties().getParaAdjust();
+            xSet->setPropertyValue("ParaAdjust", uno::Any(eAdjust));
+            SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape);
+            assert(pShape);
+            SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust(eAdjust);
+            pShape->SetMergedItem(SdrTextHorzAdjustItem(eHorzAdjust));
+        }
+    }
+
+    // Vertical adjustment is only meaningful for OOXML WordArt shapes of 'Follow Path' kinds. We set
+    // it so, that text position is approximately same as in MS Office.
+    const OUString sMSPresetType = pTextBody->getTextProperties().msPrst;
+    const OUString sFontworkType = PresetGeometryTypeNames::GetFontworkType(sMSPresetType);
+    SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape);
+    assert(pShape);
+    if (sFontworkType == "fontwork-arch-up-curve" || sFontworkType == "fontwork-circle-curve")
+        pShape->SetMergedItem(SdrTextVertAdjustItem(SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM));
+    else if (sFontworkType == "fontwork-arch-down-curve")
+        pShape->SetMergedItem(SdrTextVertAdjustItem(SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP));
+    else
+        pShape->SetMergedItem(SdrTextVertAdjustItem(SdrTextVertAdjust::SDRTEXTVERTADJUST_CENTER));
 }
 
 // Some helper methods for createAndInsert
@@ -1766,19 +1906,14 @@ Reference< XShape > const & Shape::createAndInsert(
             // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             SAL_INFO("oox.csdata", "==csdata== shape name: '" << msName << "'");
+
             mpCustomShapePropertiesPtr->pushToPropSet(xSet, maSize);
 
-            if (mpTextBody)
+            // Consider WordArt
+            if (mpTextBody && !mpTextBody->getTextProperties().msPrst.isEmpty()
+                && mpTextBody->getTextProperties().msPrst != u"textNoShape")
             {
-                bool bIsPresetShape = !mpTextBody->getTextProperties().msPrst.isEmpty();
-                if (bIsPresetShape)
-                {
-                    OUString sClass;
-                    const OUString sPresetType = mpTextBody->getTextProperties().msPrst;
-                    sClass = PresetGeometryTypeNames::GetFontworkType( sPresetType );
-
-                    lcl_createPresetShape( mxShape, sClass, sPresetType, mpCustomShapePropertiesPtr, mpTextBody, rGraphicHelper );
-                }
+                lcl_putCustomShapeIntoTextPathMode(mxShape, mpCustomShapePropertiesPtr, mpTextBody);
             }
         }
         else if( getTextBody() )
@@ -1846,6 +1981,14 @@ Reference< XShape > const & Shape::createAndInsert(
                         aTextCharacterProps.assignUsed(pParagraph->getEndProperties());
                         aTextCharacterProps.pushToPropSet(aPropertySet, rFilterBase);
                     }
+                }
+
+                // MS Office has e.g. fill and stroke of WordArt in the character properties,
+                // LibreOffice uses shape properties.
+                if (!mpTextBody->getTextProperties().msPrst.isEmpty()
+                    && mpTextBody->getTextProperties().msPrst != u"textNoShape")
+                {
+                    lcl_copyCharPropsToShape(mxShape, mpTextBody, rFilterBase);
                 }
             }
         }

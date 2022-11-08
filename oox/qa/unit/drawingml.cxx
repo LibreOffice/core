@@ -27,6 +27,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
@@ -547,6 +548,52 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
     auto aViewBox = aGeoPropMap["ViewBox"].get<css::awt::Rectangle>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
+{
+    // The font info for the shape is in the theme, the text run has no font settings.
+    loadFromURL(u"tdf125085_WordArtFontTheme.pptx");
+
+    // Get shape and its properties
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+
+    // Make sure shape has correct font and local.
+    // Without the fix some application defaults were used.
+    OUString sFontName;
+    xShapeProps->getPropertyValue("CharFontNameComplex") >>= sFontName;
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Noto Serif Hebrew"), sFontName);
+    css::lang::Locale aLocal;
+    xShapeProps->getPropertyValue("CharLocaleComplex") >>= aLocal;
+    CPPUNIT_ASSERT_EQUAL(OUString(u"IL"), aLocal.Country);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"he"), aLocal.Language);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
+{
+    // The font info for the shape is in the text run inside the shape.
+    loadFromURL(u"tdf125085_WordArtFontText.pptx");
+
+    // Get shape and its properties
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+
+    // Make sure shape has correct font and local.
+    // Without the fix some application defaults were used.
+    OUString sFontName;
+    xShapeProps->getPropertyValue("CharFontNameComplex") >>= sFontName;
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Noto Serif Hebrew"), sFontName);
+    css::lang::Locale aLocal;
+    xShapeProps->getPropertyValue("CharLocaleComplex") >>= aLocal;
+    CPPUNIT_ASSERT_EQUAL(OUString(u"IL"), aLocal.Country);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"he"), aLocal.Language);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

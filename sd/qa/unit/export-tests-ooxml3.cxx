@@ -65,7 +65,7 @@ public:
     void testTdf145162();
     void testZeroIndentExport();
     void testTdf100348_convert_Fontwork2TextWarp();
-    void testTdf1225573_FontWorkScaleX();
+    void testTdf125573_FontWorkScaleX();
     void testTdf99497_keepAppearanceOfCircleKind();
     /// SmartArt animated elements
     void testTdf104792();
@@ -155,7 +155,7 @@ public:
     CPPUNIT_TEST(testTdf145162);
     CPPUNIT_TEST(testZeroIndentExport);
     CPPUNIT_TEST(testTdf100348_convert_Fontwork2TextWarp);
-    CPPUNIT_TEST(testTdf1225573_FontWorkScaleX);
+    CPPUNIT_TEST(testTdf125573_FontWorkScaleX);
     CPPUNIT_TEST(testTdf99497_keepAppearanceOfCircleKind);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
@@ -711,7 +711,7 @@ void SdOOXMLExportTest3::testTdf100348_convert_Fontwork2TextWarp()
     CPPUNIT_ASSERT_EQUAL(9180.0, fAdj2);
 }
 
-void SdOOXMLExportTest3::testTdf1225573_FontWorkScaleX()
+void SdOOXMLExportTest3::testTdf125573_FontWorkScaleX()
 {
     loadFromURL(u"pptx/tdf125573_FontWorkScaleX.pptx");
     save("Impress Office Open XML");
@@ -722,19 +722,20 @@ void SdOOXMLExportTest3::testTdf1225573_FontWorkScaleX()
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr[@fromWordArt='1']");
 
+    // State of Nov 2022. It needs to be updated, when import of fill and stroke is implemented.
     // Error was, that text in legacy shapes of category "Follow Path" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeArchProps(getShapeFromPage(0, 0));
     awt::Rectangle aBoundRectArch;
     xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
-    // difference should be zero, but allow some range for stroke thickness
-    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectArch.Width - 13081));
+    // BoundRect is DPI dependent, thus allow some range.
+    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectArch.Width - 13038));
 
     // Error was, that text in shapes of category "Warp" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1));
     awt::Rectangle aBoundRectWave;
     xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
-    // difference should be zero, but allow some range for stroke thickness
-    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectWave.Width - 11514));
+    // BoundRect is DPI dependent, thus allow some range.
+    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectWave.Width - 11576));
 }
 
 void SdOOXMLExportTest3::testTdf99497_keepAppearanceOfCircleKind()
