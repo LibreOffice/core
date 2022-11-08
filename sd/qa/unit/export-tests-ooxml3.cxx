@@ -35,6 +35,7 @@
 class SdOOXMLExportTest3 : public SdModelTestBaseXML
 {
 public:
+    void testTdf92222();
     void testTdf129430();
     void testTdf114848();
     void testTdf147586();
@@ -124,6 +125,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
+    CPPUNIT_TEST(testTdf92222);
     CPPUNIT_TEST(testTdf129430);
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf147586);
@@ -216,6 +218,23 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest3::testTdf92222()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf92222.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocTheme = parseExport(tempFile, "ppt/theme/theme1.xml");
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:lnStyleLst/a:ln[1]", "w",
+                "6350");
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:lnStyleLst/a:ln[2]", "w",
+                "12700");
+    assertXPath(pXmlDocTheme, "/a:theme/a:themeElements/a:fmtScheme/a:lnStyleLst/a:ln[3]", "w",
+                "19050");
+}
 
 void SdOOXMLExportTest3::testTdf129430()
 {
