@@ -515,6 +515,11 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
             SAL_WARN("vcl.gdi", "suspicious average width of: " << rImplFont.maAverageFontSize.Width());
             rImplFont.maAverageFontSize.setWidth(8192);
         }
+        if (rImplFont.maAverageFontSize.Height() > 8192)
+        {
+            SAL_WARN("vcl.gdi", "suspicious average height of: " << rImplFont.maAverageFontSize.Height());
+            rImplFont.maAverageFontSize.setHeight(8192);
+        }
     }
 
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( static_cast<rtl_TextEncoding>(nTmp16) );
