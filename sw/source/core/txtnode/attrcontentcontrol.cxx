@@ -604,6 +604,25 @@ void SwContentControlManager::Erase(SwTextContentControl* pTextContentControl)
         m_aContentControls.end());
 }
 
+SwTextContentControl* SwContentControlManager::Get(size_t nIndex)
+{
+    // Only sort now: the items may not have an associated text node by the time they are inserted
+    // into the container.
+    std::sort(m_aContentControls.begin(), m_aContentControls.end(),
+              [](SwTextContentControl*& pLhs, SwTextContentControl*& pRhs) -> bool {
+                  SwNodeOffset nIdxLHS = pLhs->GetTextNode()->GetIndex();
+                  SwNodeOffset nIdxRHS = pRhs->GetTextNode()->GetIndex();
+                  if (nIdxLHS == nIdxRHS)
+                  {
+                      return pLhs->GetStart() < pRhs->GetStart();
+                  }
+
+                  return nIdxLHS < nIdxRHS;
+              });
+
+    return m_aContentControls[nIndex];
+}
+
 void SwContentControlManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControlManager"));

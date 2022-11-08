@@ -58,6 +58,9 @@ published service GenericTextDocument
 
     [optional] interface com::sun::star::text::XEndnotesSupplier;
 
+    /** @since LibreOffice 7.5 */
+    [optional] interface com::sun::star::text::XContentControlsSupplier;
+
     [optional] interface com::sun::star::util::XReplaceable;
 
     [optional] interface com::sun::star::text::XPagePrintable;

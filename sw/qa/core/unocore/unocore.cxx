@@ -798,6 +798,56 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlComboBox)
     CPPUNIT_ASSERT(pContentControl->GetComboBox());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControls)
+{
+    // Given an empty document:
+    createSwDoc();
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    uno::Reference<container::XIndexAccess> xContentControls = pXTextDocument->getContentControls();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xContentControls->getCount());
+
+    // When inserting content controls:
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    // First tag1.
+    xText->insertString(xCursor, "test1", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    {
+        uno::Reference<text::XTextContent> xContentControl(
+            xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("tag1")));
+        xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    }
+    xCursor->gotoStart(/*bExpand=*/false);
+    // Then tag2 before tag1.
+    xText->insertString(xCursor, "test2", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->goRight(5, /*bExpand=*/true);
+    {
+        uno::Reference<text::XTextContent> xContentControl(
+            xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        xContentControlProps->setPropertyValue("Tag", uno::Any(OUString("tag2")));
+        xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    }
+
+    // Then make sure that XContentControls contains the items in a correct order:
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xContentControls->getCount());
+    uno::Reference<beans::XPropertySet> xContentControl;
+    xContentControls->getByIndex(0) >>= xContentControl;
+    OUString aTag;
+    xContentControl->getPropertyValue("Tag") >>= aTag;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: tag2
+    // - Actual  : tag1
+    // i.e. the order of the items was sorted by insert time, not by their doc model position.
+    CPPUNIT_ASSERT_EQUAL(OUString("tag2"), aTag);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

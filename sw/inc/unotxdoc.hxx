@@ -29,6 +29,7 @@
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
+#include <com/sun/star/text/XContentControlsSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
@@ -99,6 +100,7 @@ typedef cppu::ImplInheritanceHelper
     css::text::XNumberingRulesSupplier,
     css::text::XFootnotesSupplier,
     css::text::XEndnotesSupplier,
+    css::text::XContentControlsSupplier,
     css::util::XReplaceable,
     css::text::XPagePrintable,
     css::text::XReferenceMarksSupplier,
@@ -156,6 +158,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet >             mxXFootnoteSettings;
     css::uno::Reference< css::container::XIndexAccess >         mxXEndnotes;
     css::uno::Reference< css::beans::XPropertySet >             mxXEndnoteSettings;
+    css::uno::Reference< css::container::XIndexAccess >         mxXContentControls;
     css::uno::Reference< css::container::XNameAccess >          mxXReferenceMarks;
     css::uno::Reference< css::container::XEnumerationAccess >   mxXTextFieldTypes;
     css::uno::Reference< css::container::XNameAccess >          mxXTextFieldMasters;
@@ -265,6 +268,9 @@ public:
     //XEndnotesSupplier
     virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getEndnotes() override;
     virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getEndnoteSettings() override;
+
+    // XContentControlsSupplier
+    css::uno::Reference<css::container::XIndexAccess> SAL_CALL getContentControls() override;
 
     //XReplaceable
     virtual css::uno::Reference< css::util::XReplaceDescriptor >  SAL_CALL createReplaceDescriptor() override;

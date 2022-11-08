@@ -22,6 +22,7 @@
 #include <mutex>
 
 #include <com/sun/star/text/XWordCursor.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -1259,6 +1260,75 @@ uno::Reference<container::XEnumeration> SAL_CALL SwXContentControl::createEnumer
     {
         return new SwXTextPortionEnumeration(aPam, std::deque(*m_pImpl->m_pTextPortions));
     }
+}
+
+SwXContentControls::SwXContentControls(SwDoc* pDoc)
+    : SwUnoCollection(pDoc)
+{
+}
+
+SwXContentControls::~SwXContentControls() {}
+
+sal_Int32 SwXContentControls::getCount()
+{
+    SolarMutexGuard aGuard;
+
+    if (!IsValid())
+    {
+        throw uno::RuntimeException();
+    }
+
+    return GetDoc()->GetContentControlManager().GetCount();
+}
+
+uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
+{
+    SolarMutexGuard aGuard;
+
+    if (!IsValid())
+    {
+        throw uno::RuntimeException();
+    }
+
+    SwContentControlManager& rManager = GetDoc()->GetContentControlManager();
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= rManager.GetCount())
+    {
+        throw lang::IndexOutOfBoundsException();
+    }
+
+    SwTextContentControl* pTextContentControl = rManager.Get(nIndex);
+    const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+    rtl::Reference<SwXContentControl> xContentControl
+        = SwXContentControl::CreateXContentControl(*rFormatContentControl.GetContentControl());
+    uno::Any aRet;
+    aRet <<= uno::Reference<text::XTextContent>(xContentControl);
+    return aRet;
+}
+
+uno::Type SwXContentControls::getElementType() { return cppu::UnoType<text::XTextContent>::get(); }
+
+sal_Bool SwXContentControls::hasElements()
+{
+    SolarMutexGuard aGuard;
+
+    if (!IsValid())
+    {
+        throw uno::RuntimeException();
+    }
+
+    return !GetDoc()->GetContentControlManager().IsEmpty();
+}
+
+OUString SwXContentControls::getImplementationName() { return "SwXContentControls"; }
+
+sal_Bool SwXContentControls::supportsService(const OUString& rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+uno::Sequence<OUString> SwXContentControls::getSupportedServiceNames()
+{
+    return { "com.sun.star.text.ContentControls" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

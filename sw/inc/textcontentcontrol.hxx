@@ -56,6 +56,9 @@ public:
     SwContentControlManager();
     void Insert(SwTextContentControl* pTextContentControl);
     void Erase(SwTextContentControl* pTextContentControl);
+    size_t GetCount() const { return m_aContentControls.size(); }
+    bool IsEmpty() const { return m_aContentControls.empty(); }
+    SwTextContentControl* Get(size_t nIndex);
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
