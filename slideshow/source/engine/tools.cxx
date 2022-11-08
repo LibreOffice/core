@@ -42,6 +42,8 @@
 
 #include <cppcanvas/basegfxfactory.hxx>
 
+#include <svtools/colorcfg.hxx>
+
 #include <unoview.hxx>
 #include <slideshowexceptions.hxx>
 #include <smilfunctionparser.hxx>
@@ -688,19 +690,29 @@ namespace slideshow::internal
                                                rSize.getY() ),
                       0x000000FFU );
 
-            // fill the bounds rectangle in white. Subtract one pixel
-            // from both width and height, because the slide size is
-            // chosen one pixel larger than given by the drawing
-            // layer. This is because shapes with line style, that
-            // have the size of the slide would otherwise be cut
-            // off. OTOH, every other slide background (solid fill,
-            // gradient, bitmap) render one pixel less, thus revealing
-            // ugly white pixel to the right and the bottom.
+            // tdf#148884 in dark mode impress's auto text color assumes it will render against
+            // the DOCCOLOR by default, so leaving this as white gives white on white, this
+            // looks the simplest approach, propogate dark mode into slideshow mode instead
+            // of reformatting to render onto a white slideshow
+            svtools::ColorConfig aColorConfig;
+            Color aApplicationDocumentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+            cppcanvas::IntSRGBA nCanvasColor = cppcanvas::makeColor(aApplicationDocumentColor.GetRed(),
+                                                                    aApplicationDocumentColor.GetGreen(),
+                                                                    aApplicationDocumentColor.GetBlue(),
+                                                                    0xFF);
+
+            // fill the bounds rectangle in DOCCOLOR (typically white).
+            // Subtract one pixel from both width and height, because the slide
+            // size is chosen one pixel larger than given by the drawing layer.
+            // This is because shapes with line style, that have the size of
+            // the slide would otherwise be cut off. OTOH, every other slide
+            // background (solid fill, gradient, bitmap) render one pixel less,
+            // thus revealing ugly white pixel to the right and the bottom.
             fillRect( pCanvas,
                       ::basegfx::B2DRectangle( 0.0, 0.0,
                                                rSize.getX()-1,
                                                rSize.getY()-1 ),
-                      0xFFFFFFFFU );
+                      nCanvasColor );
         }
 
         ::basegfx::B2DRectangle getAPIShapeBounds( const uno::Reference< drawing::XShape >& xShape )
