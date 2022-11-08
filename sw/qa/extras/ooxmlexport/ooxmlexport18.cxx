@@ -101,6 +101,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     assertXPath(pXmlDoc, "//wps:bodyPr", "vert", "mongolianVert");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
+{
+    // For now just ensure roundtrip is successful
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
 {
     const auto& pLayout = parseLayoutDump();

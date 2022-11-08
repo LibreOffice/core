@@ -28,6 +28,7 @@
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <ooxml/OOXMLDocument.hxx>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 
 namespace writerfilter::dmapper
@@ -225,25 +226,42 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
     const auto& aSourceIt = m_xPropertiesXMLs.find(m_sDataBindingStoreItemID);
     if (aSourceIt != m_xPropertiesXMLs.end())
     {
-        uno::Reference<XXPathObject> xResult
-            = xXpathAPI->eval(aSourceIt->second, m_sDataBindingXPath);
-
-        if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
-            && xResult->getString().getLength())
+        try
         {
-            return xResult->getString();
+            uno::Reference<XXPathObject> xResult
+                = xXpathAPI->eval(aSourceIt->second, m_sDataBindingXPath);
+
+            if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
+                && xResult->getString().getLength())
+            {
+                return xResult->getString();
+            }
+        }
+        catch (const XPathException& e)
+        {
+            // XPath failed? Log and continue with next data document
+            SAL_WARN("writerfilter", "SdtHelper::failed running XPath: " << e.Message);
         }
     }
 
     // Nothing found? Try to iterate storages and eval xpath
     for (const auto& aSource : m_xPropertiesXMLs)
     {
-        uno::Reference<XXPathObject> xResult = xXpathAPI->eval(aSource.second, m_sDataBindingXPath);
-
-        if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
-            && xResult->getString().getLength())
+        try
         {
-            return xResult->getString();
+            uno::Reference<XXPathObject> xResult
+                = xXpathAPI->eval(aSource.second, m_sDataBindingXPath);
+
+            if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
+                && xResult->getString().getLength())
+            {
+                return xResult->getString();
+            }
+        }
+        catch (const XPathException& e)
+        {
+            // XPath failed? Log and continue with next data document
+            SAL_WARN("writerfilter", "SdtHelper::failed running XPath: " << e.Message);
         }
     }
 
