@@ -43,7 +43,7 @@ default_encoding = 'utf-8'
 # python 2/3 compatibility helpers {{{
 
 
-if sys.version_info[:2] < (3, 0):
+if sys.version_info < (3, 0):
     PY3 = False
     text_type = unicode
 
@@ -593,7 +593,7 @@ class _BaseFile(list):
             0, keystart
 
         )
-        if PY3 and sys.version_info.minor > 1:  # python 3.2 or superior
+        if sys.version_info >= (3, 2):
             output += array.array("i", offsets).tobytes()
         else:
             output += array.array("i", offsets).tostring()

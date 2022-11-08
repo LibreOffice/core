@@ -35,7 +35,7 @@ __version__ = "1.14.0"
 # Useful for very coarse version differentiation.
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
-PY34 = sys.version_info[0:2] >= (3, 4)
+PY34 = sys.version_info >= (3, 4)
 
 if PY3:
     string_types = str,
@@ -641,7 +641,7 @@ if PY3:
     BytesIO = io.BytesIO
     del io
     _assertCountEqual = "assertCountEqual"
-    if sys.version_info[1] <= 1:
+    if sys.version_info <= (3, 1):
         _assertRaisesRegex = "assertRaisesRegexp"
         _assertRegex = "assertRegexpMatches"
         _assertNotRegex = "assertNotRegexpMatches"
@@ -726,7 +726,7 @@ else:
 """)
 
 
-if sys.version_info[:2] > (3,):
+if sys.version_info > (3,):
     exec_("""def raise_from(value, from_value):
     try:
         raise value from from_value
@@ -793,7 +793,7 @@ if print_ is None:
                 write(sep)
             write(arg)
         write(end)
-if sys.version_info[:2] < (3, 3):
+if sys.version_info < (3, 3):
     _print = print_
 
     def print_(*args, **kwargs):
@@ -805,7 +805,7 @@ if sys.version_info[:2] < (3, 3):
 
 _add_doc(reraise, """Reraise an exception.""")
 
-if sys.version_info[0:2] < (3, 4):
+if sys.version_info < (3, 4):
     # This does exactly the same what the :func:`py3:functools.update_wrapper`
     # function does on Python versions after 3.2. It sets the ``__wrapped__``
     # attribute on ``wrapper`` object and it doesn't raise an error if any of
@@ -845,7 +845,7 @@ def with_metaclass(meta, *bases):
     class metaclass(type):
 
         def __new__(cls, name, this_bases, d):
-            if sys.version_info[:2] >= (3, 7):
+            if sys.version_info >= (3, 7):
                 # This version introduced PEP 560 that requires a bit
                 # of extra care (we mimic what is done by __build_class__).
                 resolved_bases = types.resolve_bases(bases)
