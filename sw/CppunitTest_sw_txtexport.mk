@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_txtexport, \
     i18nlangtag \
     sal \
     sfx \
+    subsequenttest \
     sw \
 	swqahelper \
     test \

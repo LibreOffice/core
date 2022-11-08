@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filter_html, \
     editeng \
     sal \
     sfx \
+    subsequenttest \
     svl \
     svx \
     svxcore \

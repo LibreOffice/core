@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,swqahelper,\
 	sw \
 	sfx \
 	sot \
+	subsequenttest \
 	svl \
 	svt \
 	svx \

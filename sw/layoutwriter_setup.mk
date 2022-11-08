@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_layoutwriter$(1), \
     msword \
     sal \
     sfx \
+    subsequenttest \
     svl \
     svt \
     svxcore \

@@ -18,6 +18,7 @@ define sw_uiwriter_libraries
     msword \
     sal \
     sfx \
+    subsequenttest \
     svl \
     svt \
     svxcore \

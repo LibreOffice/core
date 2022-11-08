@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uibase_dochdl, \
     editeng \
     sal \
     sfx \
+    subsequenttest \
     svl \
     svx \
     svxcore \

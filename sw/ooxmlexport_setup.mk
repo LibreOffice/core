@@ -16,6 +16,7 @@ define sw_ooxmlexport_libraries
 	editeng \
 	sal \
 	sfx \
+	subsequenttest \
 	svl \
 	sw \
 	swqahelper \

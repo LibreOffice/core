@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_indexingexport, \
     sal \
     sfx \
     sot \
+    subsequenttest \
     sw \
     swqahelper \
     svl \

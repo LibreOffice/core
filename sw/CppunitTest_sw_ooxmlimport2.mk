@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport2, \
     cppuhelper \
     sal \
     sfx \
+    subsequenttest \
     test \
     unotest \
     utl \

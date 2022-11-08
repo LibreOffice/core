@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_filters_test, \
 $(eval $(call gb_CppunitTest_use_libraries,sw_filters_test, \
     sw \
     sfx \
+    subsequenttest \
     svl \
     svt \
     sot \

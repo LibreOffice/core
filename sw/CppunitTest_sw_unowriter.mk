@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_unowriter, \
     msword \
     sal \
     sfx \
+    subsequenttest \
     svl \
     svt \
     svxcore \

@@ -9,6 +9,7 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -82,13 +83,31 @@ uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
     return aRet;
 }
 
-void UnoApiTest::save(const OUString& rFilter)
+void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
 {
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= rFilter;
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+
+    if (pPassword)
+    {
+        if (rFilter != "Office Open XML Text")
+        {
+            aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
+        }
+        else
+        {
+            OUString sPassword = OUString::createFromAscii(pPassword);
+            uno::Sequence<beans::NamedValue> aEncryptionData{
+                { "CryptoType", uno::Any(OUString("Standard")) },
+                { "OOXPassword", uno::Any(sPassword) }
+            };
+            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
+        }
+    }
+
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     if (!mbSkipValidation)

@@ -23,10 +23,8 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 
 #include "swqahelperdllapi.h"
-#include <test/bootstrapfixture.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/unoapixml_test.hxx>
 #include <test/testinteractionhandler.hxx>
-#include <unotest/macros_test.hxx>
 #include <unotools/tempfile.hxx>
 
 #include <doc.hxx>
@@ -93,27 +91,21 @@ class PDFiumDocument;
 }
 
 /// Base class for filter tests loading or roundtripping a document, then asserting the document model.
-class SWQAHELPER_DLLPUBLIC SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiXmlTest
 {
 private:
-    OUString maFilterOptions;
     OUString maImportFilterOptions;
     OUString maImportFilterName;
-    const OUString mpTestDocumentPath;
     bool mbExported; ///< Does maTempFile already contain something useful?
 
 protected:
-    css::uno::Reference< css::lang::XComponent > mxComponent;
-
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
     xmlBufferPtr mpXmlBuffer;
     const char* mpFilter;
 
     sal_uInt32 mnStartTime;
-    utl::TempFileNamed maTempFile;
     SvMemoryStream maMemory; ///< Underlying memory for parsed PDF files.
-    bool mbFontNameWYSIWYG;
 
     virtual OUString getTestName() { return OUString(); }
 
@@ -121,11 +113,6 @@ protected:
     void paste(std::u16string_view aFilename, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
-    void setFilterOptions(const OUString &rFilterOptions)
-    {
-        maFilterOptions = rFilterOptions;
-    }
-
     void setImportFilterOptions(const OUString &rFilterOptions)
     {
         maImportFilterOptions = rFilterOptions;
@@ -137,10 +124,6 @@ public:
     }
 
     SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const char* pFilter = "");
-
-    void setUp() override;
-
-    void tearDown() override;
 
 protected:
     /**
@@ -327,11 +310,6 @@ protected:
                                     "com.sun.star.text.WebDocument", pName, pPassword);
     }
 
-    OUString createFileURL(std::u16string_view aFileName)
-    {
-        return m_directories.getSrcRootURL() + mpTestDocumentPath + "/" + aFileName;
-    }
-
     void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions);
 
     void loadURLWithComponent(OUString const& rURL, OUString const& rComponent, const char* pName, const char* pPassword);
@@ -356,14 +334,6 @@ protected:
 
     /// Get shape count.
     int getShapes() const;
-
-    /**
-     * Given that some problem doesn't affect the result in the importer, we
-     * test the resulting file directly, by opening the zip file, parsing an
-     * xml stream, and asserting an XPath expression. This method returns the
-     * xml stream, so that you can do the asserting.
-     */
-    xmlDocUniquePtr parseExport(const OUString& rStreamName);
 
     /**
      * Returns an xml stream of an exported file.

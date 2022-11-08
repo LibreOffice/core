@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_txtnode, \
     editeng \
     sal \
     sfx \
+    subsequenttest \
     svxcore \
     sw \
 	swqahelper \

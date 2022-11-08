@@ -55,37 +55,12 @@ void SwModelTestBase::paste(std::u16string_view aFilename,
 }
 
 SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const char* pFilter)
-    : mpTestDocumentPath(pTestDocumentPath)
+    : UnoApiXmlTest(pTestDocumentPath)
     , mbExported(false)
     , mpXmlBuffer(nullptr)
     , mpFilter(pFilter)
     , mnStartTime(0)
-    , mbFontNameWYSIWYG(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get())
 {
-    maTempFile.EnableKillingFile();
-}
-
-void SwModelTestBase::setUp()
-{
-    test::BootstrapFixture::setUp();
-    mxDesktop.set(
-        css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-    SfxApplication::GetOrCreate();
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(false, xChanges);
-    xChanges->commit();
-}
-
-void SwModelTestBase::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(mbFontNameWYSIWYG, xChanges);
-    xChanges->commit();
-    test::BootstrapFixture::tearDown();
 }
 
 void SwModelTestBase::executeImportTest(const char* filename, const char* pPassword)
@@ -552,28 +527,10 @@ void SwModelTestBase::reload(const char* pFilter, const char* pName, const char*
 
 void SwModelTestBase::save(const OUString& aFilterName, const char* pName, const char* pPassword)
 {
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= aFilterName;
-    if (!maFilterOptions.isEmpty())
-        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-    if (pPassword)
-    {
-        if (aFilterName != "Office Open XML Text")
-        {
-            aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
-        }
-        else
-        {
-            OUString sPassword = OUString::createFromAscii(pPassword);
-            css::uno::Sequence<css::beans::NamedValue> aEncryptionData{
-                { "CryptoType", css::uno::Any(OUString("Standard")) },
-                { "OOXPassword", css::uno::Any(sPassword) }
-            };
-            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
-        }
-    }
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    // FIXME: Merge skipValidation and mustValidate
+    skipValidation();
+
+    UnoApiXmlTest::save(aFilterName, pPassword);
 
     // TODO: for now, validate only ODF here
     if (mustValidate(pName) || aFilterName == "writer8"
@@ -638,13 +595,6 @@ int SwModelTestBase::getShapes() const
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     return xDraws->getCount();
-}
-
-xmlDocUniquePtr SwModelTestBase::parseExport(const OUString& rStreamName)
-{
-    std::unique_ptr<SvStream> pStream(parseExportStream(maTempFile.GetURL(), rStreamName));
-
-    return parseXmlStream(pStream.get());
 }
 
 xmlDocUniquePtr SwModelTestBase::parseExportedFile()

@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_docnode, \
     editeng \
     sal \
     sfx \
+    subsequenttest \
     sw \
     swqahelper \
     test \

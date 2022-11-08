@@ -36,7 +36,7 @@ public:
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
-    void save(const OUString& rFilter);
+    void save(const OUString& rFilter, const char* pPassword = nullptr);
     void saveAndClose(const OUString& rFilter);
     void saveAndReload(const OUString& rFilter);
 
