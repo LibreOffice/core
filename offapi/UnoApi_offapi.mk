@@ -1347,6 +1347,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/text,\
 	ChainedTextFrame \
 	ChapterNumberingRule \
 	ContentControl \
+	ContentControls \
 	ContentIndex \
 	ContentIndexMark \
 	Defaults \
@@ -3784,6 +3785,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	XAutoTextGroup \
 	XBookmarkInsertTool \
 	XBookmarksSupplier \
+	XContentControlsSupplier \
 	XChapterNumberingSupplier \
 	XDefaultNumberingProvider \
 	XDependentTextField \

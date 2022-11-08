@@ -167,6 +167,7 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
 #include <textcontentcontrol.hxx>
+#include <unocontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -658,6 +659,18 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings()
         mxXEndnoteSettings = new SwXEndnoteProperties(m_pDocShell->GetDoc());
     }
     return mxXEndnoteSettings;
+}
+
+Reference< XIndexAccess >  SwXTextDocument::getContentControls()
+{
+    SolarMutexGuard aGuard;
+    if(!IsValid())
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+    if(!mxXContentControls.is())
+    {
+        mxXContentControls = new SwXContentControls(m_pDocShell->GetDoc());
+    }
+    return mxXContentControls;
 }
 
 Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor()
@@ -1487,6 +1500,13 @@ void    SwXTextDocument::InitNewDoc()
         XIndexAccess* pFootnote = mxXEndnotes.get();
         static_cast<SwXFootnotes*>(pFootnote)->Invalidate();
         mxXEndnotes.clear();
+    }
+
+    if(mxXContentControls.is())
+    {
+        XIndexAccess* pContentControls = mxXContentControls.get();
+        static_cast<SwXContentControls*>(pContentControls)->Invalidate();
+        mxXContentControls.clear();
     }
 
     if(mxXDocumentIndexes.is())
