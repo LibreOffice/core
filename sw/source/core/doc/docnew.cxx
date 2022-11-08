@@ -105,6 +105,7 @@
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx>
+#include <textcontentcontrol.hxx>
 
 #include <svx/xfillit0.hxx>
 #include <unotools/configmgr.hxx>
@@ -204,6 +205,7 @@ SwDoc::SwDoc()
     maOLEModifiedIdle( "sw::SwDoc maOLEModifiedIdle" ),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
+    m_pContentControlManager(new ::SwContentControlManager()),
     m_pDocumentDrawModelManager( new ::sw::DocumentDrawModelManager( *this ) ),
     m_pDocumentRedlineManager( new ::sw::DocumentRedlineManager( *this ) ),
     m_pDocumentStateManager( new ::sw::DocumentStateManager( *this ) ),

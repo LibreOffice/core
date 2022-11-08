@@ -78,6 +78,7 @@ public:
      * (re-)moved.
      */
     void NotifyChangeTextNode(SwTextNode* pTextNode);
+    SwTextNode* GetTextNode() const;
     static SwFormatContentControl* CreatePoolDefault(sal_uInt16 nWhich);
     const std::shared_ptr<SwContentControl>& GetContentControl() const { return m_pContentControl; }
 

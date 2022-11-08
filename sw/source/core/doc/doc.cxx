@@ -131,6 +131,11 @@ sal_Int32 SwDoc::getReferenceCount() const
     return *m_pMetaFieldManager;
 }
 
+::SwContentControlManager& SwDoc::GetContentControlManager()
+{
+    return *m_pContentControlManager;
+}
+
 ::sw::UndoManager & SwDoc::GetUndoManager()
 {
     return *m_pUndoManager;

@@ -137,6 +137,16 @@ void SwFormatContentControl::NotifyChangeTextNode(SwTextNode* pTextNode)
     }
 }
 
+SwTextNode* SwFormatContentControl::GetTextNode() const
+{
+    if (!m_pContentControl)
+    {
+        return nullptr;
+    }
+
+    return m_pContentControl->GetTextNode();
+}
+
 // This SwFormatContentControl has been cloned and points at the same SwContentControl as the
 // source: this function copies the SwContentControl.
 void SwFormatContentControl::DoCopy(SwTextNode& rTargetTextNode)
@@ -501,7 +511,8 @@ SwContentControlListItem::ItemsFromAny(const css::uno::Any& rVal)
     return aRet;
 }
 
-SwTextContentControl* SwTextContentControl::CreateTextContentControl(SwTextNode* pTargetTextNode,
+SwTextContentControl* SwTextContentControl::CreateTextContentControl(SwDoc& rDoc,
+                                                                     SwTextNode* pTargetTextNode,
                                                                      SwFormatContentControl& rAttr,
                                                                      sal_Int32 nStart,
                                                                      sal_Int32 nEnd, bool bIsCopy)
@@ -516,17 +527,21 @@ SwTextContentControl* SwTextContentControl::CreateTextContentControl(SwTextNode*
         }
         rAttr.DoCopy(*pTargetTextNode);
     }
-    auto pTextContentControl(new SwTextContentControl(rAttr, nStart, nEnd));
+    SwContentControlManager* pManager = &rDoc.GetContentControlManager();
+    auto pTextContentControl(new SwTextContentControl(pManager, rAttr, nStart, nEnd));
     return pTextContentControl;
 }
 
-SwTextContentControl::SwTextContentControl(SwFormatContentControl& rAttr, sal_Int32 nStart,
+SwTextContentControl::SwTextContentControl(SwContentControlManager* pManager,
+                                           SwFormatContentControl& rAttr, sal_Int32 nStart,
                                            sal_Int32 nEnd)
     : SwTextAttr(rAttr, nStart)
     , SwTextAttrNesting(rAttr, nStart, nEnd)
+    , m_pManager(pManager)
 {
     rAttr.SetTextAttr(this);
     SetHasDummyChar(true);
+    m_pManager->Insert(this);
 }
 
 SwTextContentControl::~SwTextContentControl()
@@ -544,7 +559,26 @@ void SwTextContentControl::ChgTextNode(SwTextNode* pNode)
     if (rFormatContentControl.GetTextAttr() == this)
     {
         rFormatContentControl.NotifyChangeTextNode(pNode);
+
+        if (pNode)
+        {
+            m_pManager = &pNode->GetDoc().GetContentControlManager();
+        }
+        else
+        {
+            if (m_pManager)
+            {
+                m_pManager->Erase(this);
+            }
+            m_pManager = nullptr;
+        }
     }
+}
+
+SwTextNode* SwTextContentControl::GetTextNode() const
+{
+    auto& rFormatContentControl = static_cast<const SwFormatContentControl&>(GetAttr());
+    return rFormatContentControl.GetTextNode();
 }
 
 void SwTextContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -552,6 +586,34 @@ void SwTextContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextContentControl"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     SwTextAttr::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+SwContentControlManager::SwContentControlManager() {}
+
+void SwContentControlManager::Insert(SwTextContentControl* pTextContentControl)
+{
+    m_aContentControls.push_back(pTextContentControl);
+}
+
+void SwContentControlManager::Erase(SwTextContentControl* pTextContentControl)
+{
+    m_aContentControls.erase(
+        std::remove(m_aContentControls.begin(), m_aContentControls.end(), pTextContentControl),
+        m_aContentControls.end());
+}
+
+void SwContentControlManager::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControlManager"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    for (const auto& pContentControl : m_aContentControls)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextContentControl"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pContentControl);
+        (void)xmlTextWriterEndElement(pWriter);
+    }
 
     (void)xmlTextWriterEndElement(pWriter);
 }

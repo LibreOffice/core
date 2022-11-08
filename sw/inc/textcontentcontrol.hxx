@@ -20,15 +20,19 @@
 
 #include "txatbase.hxx"
 
+class SwContentControlManager;
 class SwFormatContentControl;
 
 /// SwTextAttr subclass that tracks the location of the wrapped SwFormatContentControl.
 class SW_DLLPUBLIC SwTextContentControl final : public SwTextAttrNesting
 {
-    SwTextContentControl(SwFormatContentControl& rAttr, sal_Int32 nStart, sal_Int32 nEnd);
+    SwContentControlManager* m_pManager;
+
+    SwTextContentControl(SwContentControlManager* pManager, SwFormatContentControl& rAttr,
+                         sal_Int32 nStart, sal_Int32 nEnd);
 
 public:
-    static SwTextContentControl* CreateTextContentControl(SwTextNode* pTargetTextNode,
+    static SwTextContentControl* CreateTextContentControl(SwDoc& rDoc, SwTextNode* pTargetTextNode,
                                                           SwFormatContentControl& rAttr,
                                                           sal_Int32 nStart, sal_Int32 nEnd,
                                                           bool bIsCopy);
@@ -37,7 +41,22 @@ public:
 
     void ChgTextNode(SwTextNode* pNode);
 
+    SwTextNode* GetTextNode() const;
+
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+};
+
+/// Knows all the text content controls in the document.
+class SW_DLLPUBLIC SwContentControlManager
+{
+    /// Non-owning reference to text content controls.
+    std::vector<SwTextContentControl*> m_aContentControls;
+
+public:
+    SwContentControlManager();
+    void Insert(SwTextContentControl* pTextContentControl);
+    void Erase(SwTextContentControl* pTextContentControl);
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

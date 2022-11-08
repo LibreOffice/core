@@ -133,6 +133,7 @@ class IDocumentExternalData;
 class IDocumentMarkAccess;
 class SetGetExpFields;
 struct SwInsertTableOptions;
+class SwContentControlManager;
 enum class SvMacroItemId : sal_uInt16;
 enum class SvxFrameDirection;
 enum class RndStdIds;
@@ -213,6 +214,7 @@ class SW_DLLPUBLIC SwDoc final
 
     const std::unique_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const std::unique_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
+    const std::unique_ptr< ::SwContentControlManager > m_pContentControlManager;
     const std::unique_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
     const std::unique_ptr< ::sw::DocumentRedlineManager > m_pDocumentRedlineManager;
     const std::unique_ptr< ::sw::DocumentStateManager > m_pDocumentStateManager;
@@ -1633,6 +1635,7 @@ public:
     const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() const { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
+    ::SwContentControlManager& GetContentControlManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
 
