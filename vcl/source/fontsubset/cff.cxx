@@ -24,7 +24,7 @@
 
 #include <fontsubset.hxx>
 
-#include <o3tl/restoreguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sprintf.hxx>
 #include <rtl/math.hxx>
@@ -1938,8 +1938,8 @@ OString CffSubsetterContext::getString( int nStringID)
         return pStringIds[ nStringID];
 
     // else get the string from the StringIndex table
-    o3tl::RestoreGuard pReadPtr(mpReadPtr);
-    o3tl::RestoreGuard pReadEnd(mpReadEnd);
+    comphelper::ValueRestorationGuard pReadPtr(mpReadPtr);
+    comphelper::ValueRestorationGuard pReadEnd(mpReadEnd);
     nStringID -= nStdStrings;
     int nLen = seekIndexData( mnStringIdxBase, nStringID);
     // assert( nLen >= 0);

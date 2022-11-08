@@ -46,6 +46,10 @@ namespace comphelper
     class ValueRestorationGuard : public ScopeGuard<ValueRestorationGuard_Impl<T>>
     {
     public:
+        ValueRestorationGuard(T& i_valRef)
+            : ScopeGuard<ValueRestorationGuard_Impl<T>>(ValueRestorationGuard_Impl(i_valRef))
+        {}
+
         template <typename T1>
         ValueRestorationGuard(T& i_valRef, T1&& i_temporaryValue)
             : ScopeGuard<ValueRestorationGuard_Impl<T>>(ValueRestorationGuard_Impl(i_valRef))
