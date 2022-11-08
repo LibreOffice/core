@@ -21,8 +21,10 @@
 #include <osl/thread.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/rendercontext/DrawTextFlags.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/gdimtf.hxx>
@@ -788,7 +790,13 @@ rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData* pD
     mrStream.ReadUInt16(nTmp);
 
     pAction->SetRect(aRect);
-    pAction->SetStyle(static_cast<DrawTextFlags>(nTmp));
+
+    DrawTextFlags nFlags(static_cast<DrawTextFlags>(nTmp));
+    const static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
+        nFlags = nFlags & ~DrawTextFlags::MultiLine;
+
+    pAction->SetStyle(nFlags);
 
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
