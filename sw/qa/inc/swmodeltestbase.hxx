@@ -340,7 +340,7 @@ protected:
     void reload(const char* pFilter, const char* filename, const char* pPassword = nullptr);
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
-    void save(const OUString& aFilterName);
+    void save(const OUString& aFilterName, const char* filename = nullptr, const char* pPassword = nullptr);
 
     /// Combines load() and save().
     void loadAndSave(const char* pName);

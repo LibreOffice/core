@@ -541,32 +541,8 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
 
 void SwModelTestBase::reload(const char* pFilter, const char* filename, const char* pPassword)
 {
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    OUString aFilterName = OUString::createFromAscii(pFilter);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= aFilterName;
-    if (!maFilterOptions.isEmpty())
-        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-    if (pPassword)
-    {
-        if (strcmp(pFilter, "Office Open XML Text"))
-        {
-            aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
-        }
-        else
-        {
-            OUString sPassword = OUString::createFromAscii(pPassword);
-            css::uno::Sequence<css::beans::NamedValue> aEncryptionData{
-                { "CryptoType", css::uno::Any(OUString("Standard")) },
-                { "OOXPassword", css::uno::Any(sPassword) }
-            };
-            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
-        }
-    }
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-    xComponent->dispose();
-    mbExported = true;
+    save(OUString::createFromAscii(pFilter), filename, pPassword);
+    mxComponent->dispose();
 
     std::vector<beans::PropertyValue> aFilterOptions;
     if (pPassword)
@@ -597,6 +573,37 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
         CPPUNIT_ASSERT_MESSAGE("Password set but not requested",
                                xInteractionHandler->wasPasswordRequested());
     }
+    discardDumpedLayout();
+    if (mustCalcLayoutOf(filename))
+        calcLayout();
+}
+
+void SwModelTestBase::save(const OUString& aFilterName, const char* filename, const char* pPassword)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= aFilterName;
+    if (!maFilterOptions.isEmpty())
+        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
+    if (pPassword)
+    {
+        if (aFilterName != "Office Open XML Text")
+        {
+            aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
+        }
+        else
+        {
+            OUString sPassword = OUString::createFromAscii(pPassword);
+            css::uno::Sequence<css::beans::NamedValue> aEncryptionData{
+                { "CryptoType", css::uno::Any(OUString("Standard")) },
+                { "OOXPassword", css::uno::Any(sPassword) }
+            };
+            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
+        }
+    }
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // TODO: for now, validate only ODF here
     if (mustValidate(filename) || aFilterName == "writer8"
         || aFilterName == "OpenDocument Text Flat XML")
     {
@@ -620,24 +627,6 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
                   + filename + " (" + OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) + ")";
             CPPUNIT_FAIL(aMessage.getStr());
         }
-    }
-    discardDumpedLayout();
-    if (mustCalcLayoutOf(filename))
-        calcLayout();
-}
-
-void SwModelTestBase::save(const OUString& aFilterName)
-{
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= aFilterName;
-    if (!maFilterOptions.isEmpty())
-        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    // TODO: for now, validate only ODF here
-    if (aFilterName == "writer8" || aFilterName == "OpenDocument Text Flat XML")
-    {
-        validate(maTempFile.GetFileName(), test::ODF);
     }
     mbExported = true;
 }
