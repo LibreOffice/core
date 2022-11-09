@@ -43,6 +43,10 @@ namespace com::sun::star::container {
     class XNameAccess;
 }
 
+namespace com::sun::star::io {
+    class XInputStream;
+}
+
 class ImplImageTree;
 class BitmapEx;
 class SvMemoryStream;
@@ -62,6 +66,9 @@ public:
 
     VCL_DLLPUBLIC std::shared_ptr<SvMemoryStream> getImageStream(
         OUString const & rName, OUString const & rStyle, OUString const & rLang);
+
+    VCL_DLLPUBLIC css::uno::Reference<css::io::XInputStream> getImageXInputStream(OUString const & rName,
+        OUString const & rStyle, OUString const & rLang);
 
     VCL_DLLPUBLIC bool loadImage(
         OUString const & name, OUString const & style,
