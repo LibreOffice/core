@@ -140,20 +140,6 @@ public:
 
 CPPUNIT_NS_BEGIN
 
-template <> struct assertion_traits<Color>
-{
-    static bool equal(const Color& c1, const Color& c2) { return c1 == c2; }
-
-    static std::string toString(const Color& c)
-    {
-        OStringStream ost;
-        ost << "Color: R:" << static_cast<int>(c.GetRed())
-            << " G:" << static_cast<int>(c.GetGreen()) << " B:" << static_cast<int>(c.GetBlue())
-            << " A:" << static_cast<int>(255 - c.GetAlpha());
-        return ost.str();
-    }
-};
-
 template <> struct assertion_traits<tools::Rectangle>
 {
     static bool equal(const tools::Rectangle& r1, const tools::Rectangle& r2) { return r1 == r2; }

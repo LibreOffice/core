@@ -373,15 +373,6 @@ inline void assertBorderEqual(
 #define CPPUNIT_ASSERT_BORDER_EQUAL(aExpected, aActual) \
         assertBorderEqual( aExpected, aActual, CPPUNIT_SOURCELINE() ) \
 
-inline std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
-{
-    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed())
-          << " G:" << static_cast<int>(rColor.GetGreen())
-          << " B:" << static_cast<int>(rColor.GetBlue())
-          << " A:" << static_cast<int>(255 - rColor.GetAlpha());
-    return rStrm;
-}
-
 #endif // INCLUDED_SW_QA_INC_SWMODELTESTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

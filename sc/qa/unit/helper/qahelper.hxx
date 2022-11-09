@@ -109,8 +109,6 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScRange
 
 SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList);
 
-SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const Color& rColor);
-
 SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode);
 
 bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);

@@ -92,12 +92,6 @@ std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
     return rStrm;
 }
 
-std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
-{
-    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed()) << " G:" << static_cast<int>(rColor.GetGreen()) << " B: " << static_cast<int>(rColor.GetBlue());
-    return rStrm;
-}
-
 std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
 {
     rStrm << static_cast<sal_uInt16>(rCode);

@@ -21,12 +21,6 @@
 
 using namespace css;
 
-static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
-{
-    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed()) << " G:" << static_cast<int>(rColor.GetGreen()) << " B: " << static_cast<int>(rColor.GetBlue());
-    return rStrm;
-}
-
 namespace sc_apitest {
 
 class ScConditionalFormatTest : public UnoApiTest

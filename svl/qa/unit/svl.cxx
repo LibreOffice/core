@@ -42,12 +42,6 @@
 using namespace ::com::sun::star;
 using namespace svl;
 
-static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
-{
-    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed()) << " G:" << static_cast<int>(rColor.GetGreen()) << " B: " << static_cast<int>(rColor.GetBlue());
-    return rStrm;
-}
-
 namespace svl
 {
 static std::ostream& operator<<(std::ostream& rStrm, const SharedString& string )
