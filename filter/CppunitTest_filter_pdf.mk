@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pdf, \
     cppu \
     cppuhelper \
     sal \
+    subsequenttest \
     test \
     tl \
     unotest \
