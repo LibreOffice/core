@@ -53,6 +53,7 @@ public:
     {
     }
 
+    void testTdf149803();
     void testTdf149311();
     void testTdf149128();
     void testTdf66228();
@@ -126,6 +127,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf149803);
     CPPUNIT_TEST(testTdf149311);
     CPPUNIT_TEST(testTdf149128);
     CPPUNIT_TEST(testTdf66228);
@@ -223,6 +225,15 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
         }
     }
 }
+}
+
+void SdOOXMLExportTest1::testTdf149803()
+{
+    loadFromURL(u"pptx/tdf149803.pptx");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp", "useBgFill", "1");
 }
 
 void SdOOXMLExportTest1::testTdf149311()

@@ -812,11 +812,17 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     }
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
-
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
+        bool bUseBackground = false;
+        if (GETA(FillUseSlideBackground))
+            mAny >>= bUseBackground;
+        if (bUseBackground)
+            mpFS->startElementNS(mnXmlNamespace, XML_sp, XML_useBgFill, "1");
+        else
+            mpFS->startElementNS(mnXmlNamespace, XML_sp);
+
         bool isVisible = true ;
         if( GETA (Visible))
         {
@@ -904,7 +910,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
     }
     else
+    {
+        pFS->startElementNS(mnXmlNamespace, XML_wsp);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
+    }
 
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
