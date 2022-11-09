@@ -692,7 +692,7 @@ namespace slideshow::internal
 
             // tdf#148884 in dark mode impress's auto text color assumes it will render against
             // the DOCCOLOR by default, so leaving this as white gives white on white, this
-            // looks the simplest approach, propogate dark mode into slideshow mode instead
+            // looks the simplest approach, propagate dark mode into slideshow mode instead
             // of reformatting to render onto a white slideshow
             svtools::ColorConfig aColorConfig;
             Color aApplicationDocumentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
