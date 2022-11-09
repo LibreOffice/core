@@ -53,7 +53,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <svx/svditer.hxx>
 #include <vcl/commandevent.hxx>
 
 using namespace com::sun::star;
