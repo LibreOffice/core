@@ -1058,12 +1058,17 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             break;
         }
         case SwContentControlType::COMBO_BOX:
-        {
-            pContentControl->SetComboBox(true);
-            [[fallthrough]];
-        }
         case SwContentControlType::DROP_DOWN_LIST:
         {
+            if (eType == SwContentControlType::COMBO_BOX)
+            {
+                pContentControl->SetComboBox(true);
+            }
+            else if (eType == SwContentControlType::DROP_DOWN_LIST)
+            {
+                pContentControl->SetDropDown(true);
+            }
+
             pContentControl->SetShowingPlaceHolder(true);
             if (!HasSelection())
             {

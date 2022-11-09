@@ -120,7 +120,7 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
         m_xCheckboxFrame->set_visible(false);
     }
 
-    if (m_pContentControl->HasListItems())
+    if (m_pContentControl->GetComboBox() || m_pContentControl->GetDropDown())
     {
         for (const auto& rListItem : m_pContentControl->GetListItems())
         {

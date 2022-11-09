@@ -697,7 +697,7 @@ void SwSelPaintRects::HighlightContentControl()
             aJson.put("action", "show");
             aJson.put("rectangles", aPayload);
 
-            if (pContentControl && pContentControl->HasListItems())
+            if (pContentControl && (pContentControl->GetComboBox() || pContentControl->GetDropDown()))
             {
                 tools::ScopedJsonWriterArray aItems = aJson.startArray("items");
                 for (const auto& rItem : pContentControl->GetListItems())
@@ -742,7 +742,7 @@ void SwSelPaintRects::HighlightContentControl()
             }
         }
 
-        if (pContentControl && pContentControl->HasListItems())
+        if (pContentControl && (pContentControl->GetComboBox() || pContentControl->GetDropDown()))
         {
             if (pWrtShell)
             {
