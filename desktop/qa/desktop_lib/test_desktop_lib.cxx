@@ -675,9 +675,7 @@ void DesktopLOKTest::testPaintTile()
 void DesktopLOKTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
 void DesktopLOKTest::testSaveAsJsonOptions()
@@ -686,21 +684,12 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     LibLODocument_Impl* pDocument = loadDoc("3page.odg");
 
     // When exporting that document to PDF, skipping the first page:
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
     OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}");
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
 
     // Then make sure the resulting PDF has 2 pages:
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
-        return;
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
-    CPPUNIT_ASSERT(pPdfDocument);
+        = parsePDFExport();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 3
@@ -711,9 +700,7 @@ void DesktopLOKTest::testSaveAsJsonOptions()
 void DesktopLOKTest::testSaveAsCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
 void DesktopLOKTest::testPasteWriter()
@@ -2725,12 +2712,10 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
-    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
+    pDocument = loadDocUrl(maTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
@@ -2775,12 +2760,10 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
-    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
+    pDocument = loadDocUrl(maTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
@@ -2832,12 +2815,10 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.docx");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
     closeDoc();
 
-    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
+    pDocument = loadDocUrl(maTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
@@ -2889,8 +2870,6 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
@@ -2924,7 +2903,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
         CPPUNIT_ASSERT(bResult);
     }
 
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
 
     closeDoc();
 
@@ -2934,7 +2913,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
     LibLibreOffice_Impl aOffice;
-    bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, aTempFile.GetURL().toUtf8().getStr(),
+    bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, maTempFile.GetURL().toUtf8().getStr(),
                                          aCertificate.data(), int(aCertificate.size()),
                                          aPrivateKey.data(), int(aPrivateKey.size()));
 
@@ -3096,13 +3075,11 @@ void DesktopLOKTest::testCalcSaveAs()
     Scheduler::ProcessEventsToIdle();
 
     // Save as a new file.
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "ods", nullptr);
+    pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "ods", nullptr);
     closeDoc();
 
     // Load the new document and verify that the in-flight changes are saved.
-    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_SPREADSHEET);
+    pDocument = loadDocUrl(maTempFile.GetURL(), LOK_DOCTYPE_SPREADSHEET);
     CPPUNIT_ASSERT(pDocument);
 
     ViewCallback aView(pDocument);

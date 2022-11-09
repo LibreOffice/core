@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filter_eppt, \
     test \
     unotest \
     utl \
+    tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sd_filter_eppt))

@@ -220,15 +220,9 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
             comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
         aMediaDescriptor["FilterData"] <<= aFilterData;
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        mxComponent->dispose();
-
-        SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-        SvMemoryStream aMemory;
-        aMemory.WriteStream(aFile);
 
         // Check PDF for annotations
-        auto pPDFDocument
-            = pPdfiumLibrary->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        auto pPDFDocument = parsePDFExport();
         CPPUNIT_ASSERT(pPDFDocument);
         CPPUNIT_ASSERT_EQUAL(1, pPDFDocument->getPageCount());
 

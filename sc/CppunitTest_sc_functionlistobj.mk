@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_functionlistobj, \
 	test \
 	unotest \
 	utl \
+	tl \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_functionlistobj,\

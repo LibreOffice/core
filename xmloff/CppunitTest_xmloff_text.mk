@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_text, \
     test \
     unotest \
     utl \
+    tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,xmloff_text))

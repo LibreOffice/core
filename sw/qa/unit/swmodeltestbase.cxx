@@ -643,18 +643,6 @@ SwXTextDocument& SwModelTestBase::getSwXTextDocument()
 
 SwDoc* SwModelTestBase::getSwDoc() { return getSwXTextDocument().GetDocShell()->GetDoc(); }
 
-std::unique_ptr<vcl::pdf::PDFiumDocument> SwModelTestBase::LoadPdfFromTempFile()
-{
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
-    {
-        return nullptr;
-    }
-    return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
-}
-
 void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
 {
     rStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");

@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_dmapper, \
     test \
     unotest \
     utl \
+    tl \
     vcl \
 ))
 

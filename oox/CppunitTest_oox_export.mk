@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_export, \
     test \
     unotest \
     utl \
+    tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,oox_export))

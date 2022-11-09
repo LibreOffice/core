@@ -105,7 +105,6 @@ protected:
     const char* mpFilter;
 
     sal_uInt32 mnStartTime;
-    SvMemoryStream maMemory; ///< Underlying memory for parsed PDF files.
 
     virtual OUString getTestName() { return OUString(); }
 
@@ -370,8 +369,6 @@ protected:
      * Gets SwDoc from loaded component
      */
     SwDoc* getSwDoc();
-
-    std::unique_ptr<vcl::pdf::PDFiumDocument> LoadPdfFromTempFile();
 
     /**
      * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can

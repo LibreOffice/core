@@ -19,6 +19,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 // basic uno api test class
 
@@ -40,6 +41,8 @@ public:
     void saveAndClose(const OUString& rFilter);
     void saveAndReload(const OUString& rFilter);
 
+    std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
+
     void skipValidation() { mbSkipValidation = true; }
     void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
 
@@ -53,6 +56,7 @@ private:
     bool mbSkipValidation;
     OUString m_aBaseString;
     OUString maFilterOptions;
+    SvMemoryStream maMemory; // Underlying memory for parsed PDF files.
 };
 
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX

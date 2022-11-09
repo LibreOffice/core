@@ -152,4 +152,19 @@ void UnoApiTest::saveAndReload(const OUString& rFilter)
     mxComponent = loadFromDesktop(maTempFile.GetURL());
 }
 
+std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OString& rPassword)
+{
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return nullptr;
+    }
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), rPassword);
+    CPPUNIT_ASSERT(pPdfDocument);
+    return pPdfDocument;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,16 +47,9 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
                                             maTempFile.GetURL());
 
     // Then make sure we get a valid, non-empty PDF:
-    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPdfium)
-        return;
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(*maTempFile.GetStream(StreamMode::READ));
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPdfium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     // Without the accompanying fix in place, this test would have failed, because the output was
     // empty (0 bytes).
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     int nPageCount = pPdfDocument->getPageCount();
     CPPUNIT_ASSERT_GREATER(0, nPageCount);
 }

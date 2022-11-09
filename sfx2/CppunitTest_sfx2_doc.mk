@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_doc, \
     sfx \
     svl \
     utl \
+	tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sfx2_doc))
