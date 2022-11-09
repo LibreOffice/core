@@ -143,7 +143,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( std::u16s
     return xRet;
 }
 
-
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( std::u16string_view rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
@@ -154,12 +153,13 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
         BitmapEx aBitmap;
         if ( vcl::ImageRepository::loadImage( OUString(sPathName), aBitmap ) )
         {
-            xRet = Graphic(aBitmap).GetXGraphic();
+            Graphic aGraphic(aBitmap);
+            aGraphic.setOriginURL(OUString(rResourceURL));
+            xRet = aGraphic.GetXGraphic();
         }
     }
     return xRet;
 }
-
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( std::u16string_view rResourceURL )
 {
