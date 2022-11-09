@@ -32,17 +32,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/bigint/BigIntegerUtils.cc third_party/bigint/BigIntegerUtils.cpp && \
     mv third_party/bigint/BigUnsigned.cc third_party/bigint/BigUnsigned.cpp && \
     mv third_party/bigint/BigUnsignedInABase.cc third_party/bigint/BigUnsignedInABase.cpp && \
-    mv third_party/base/allocator/partition_allocator/address_space_randomization.cc third_party/base/allocator/partition_allocator/address_space_randomization.cpp && \
-    mv third_party/base/allocator/partition_allocator/page_allocator.cc third_party/base/allocator/partition_allocator/page_allocator.cpp && \
-    mv third_party/base/allocator/partition_allocator/partition_alloc.cc third_party/base/allocator/partition_allocator/partition_alloc.cpp && \
-    mv third_party/base/allocator/partition_allocator/spin_lock.cc third_party/base/allocator/partition_allocator/spin_lock.cpp && \
     mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp && \
-    mv third_party/base/allocator/partition_allocator/oom_callback.cc third_party/base/allocator/partition_allocator/oom_callback.cpp && \
-    mv third_party/base/allocator/partition_allocator/partition_bucket.cc third_party/base/allocator/partition_allocator/partition_bucket.cpp && \
-    mv third_party/base/allocator/partition_allocator/partition_oom.cc third_party/base/allocator/partition_allocator/partition_oom.cpp && \
-    mv third_party/base/allocator/partition_allocator/partition_page.cc third_party/base/allocator/partition_allocator/partition_page.cpp && \
-    mv third_party/base/allocator/partition_allocator/partition_root_base.cc third_party/base/allocator/partition_allocator/partition_root_base.cpp && \
-    mv third_party/base/allocator/partition_allocator/random.cc third_party/base/allocator/partition_allocator/random.cpp && \
     mv third_party/base/memory/aligned_memory.cc third_party/base/memory/aligned_memory.cpp && \
     mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp && \
     mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
