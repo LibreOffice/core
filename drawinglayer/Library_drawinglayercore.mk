@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,drawinglayercore,\
     salhelper \
     svl \
     tl \
+    utl \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,drawinglayercore,\

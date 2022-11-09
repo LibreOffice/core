@@ -26,6 +26,7 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
 #include <utility>
 
 using namespace com::sun::star;
@@ -224,9 +225,12 @@ ViewInformation2D::ViewInformation2D()
     if (!bForwardsAreInitialized)
     {
         bForwardsAreInitialized = true;
-        bForwardedAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
-        bForwardPixelSnapHairline
-            = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
+        if (!utl::ConfigManager::IsFuzzing())
+        {
+            bForwardedAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+            bForwardPixelSnapHairline
+                = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
+        }
     }
 
     setUseAntiAliasing(bForwardedAntiAliasing);
