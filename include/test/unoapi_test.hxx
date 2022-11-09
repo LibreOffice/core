@@ -52,11 +52,12 @@ protected:
 
     utl::TempFileNamed maTempFile;
 
+    SvMemoryStream maMemory; // Underlying memory for parsed PDF files.
+
 private:
     bool mbSkipValidation;
     OUString m_aBaseString;
     OUString maFilterOptions;
-    SvMemoryStream maMemory; // Underlying memory for parsed PDF files.
 };
 
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX

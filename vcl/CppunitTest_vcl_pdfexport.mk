@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport, \
 	cppu \
 	cppuhelper \
 	sal \
+	subsequenttest \
 	test \
 	unotest \
 	utl \

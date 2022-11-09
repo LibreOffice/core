@@ -31,8 +31,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
@@ -61,61 +60,25 @@ static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 namespace
 {
 /// Tests the PDF export filter.
-class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
+class PdfExportTest : public UnoApiTest
 {
 protected:
-    uno::Reference<lang::XComponent> mxComponent;
-    utl::TempFileNamed maTempFile;
-    SvMemoryStream maMemory;
     utl::MediaDescriptor aMediaDescriptor;
-    std::unique_ptr<vcl::pdf::PDFiumDocument> parseExport(const OString& rPassword = OString());
-    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
 public:
-    PdfExportTest();
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    PdfExportTest()
+        : UnoApiTest("/vcl/qa/cppunit/pdfexport/data/")
+    {
+    }
+
     void saveAsPDF(std::u16string_view rFile);
     void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
 };
 
-PdfExportTest::PdfExportTest() { maTempFile.EnableKillingFile(); }
-
-std::unique_ptr<vcl::pdf::PDFiumDocument> PdfExportTest::parseExport(const OString& rPassword)
-{
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), rPassword);
-    CPPUNIT_ASSERT(pPdfDocument);
-    return pPdfDocument;
-}
-
-void PdfExportTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-
-    mpPDFium = vcl::pdf::PDFiumLibrary::get();
-}
-
-void PdfExportTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
-
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(rFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
@@ -219,8 +182,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
     saveAsPDF(u"tdf105461.odp");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -252,8 +214,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
 #if !defined MACOSX && !defined _WIN32
 
     // Import the bugdoc and print to PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107868.odt";
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(u"tdf107868.odt");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
@@ -262,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -377,8 +338,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
     saveAsPDF(u"tdf127217.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -494,8 +454,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
 #if !defined MACOSX && !defined _WIN32
 
     // Import the bugdoc and print to PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "softhyphen_pdf.odt";
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(u"softhyphen_pdf.odt");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
@@ -504,7 +463,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -617,8 +576,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148706)
     saveAsPDF(u"tdf148706.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -783,8 +741,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     saveAsPDF(u"tdf108963.odp");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1192,8 +1149,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1a)
     saveAsPDF(u"tdf115117-1.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1228,8 +1184,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     saveAsPDF(u"tdf115117-2.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1259,8 +1214,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
     saveAsPDF(u"tdf150846.txt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -1287,8 +1241,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
     saveAsPDF(u"tdf103492.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has two page.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -1335,8 +1288,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
     saveAsPDF(u"tdf145274.docx");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -1664,8 +1616,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
     saveAsPDF(u"tdf105954.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1689,8 +1640,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128445)
     // Import the bugdoc and export as PDF.
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
     saveAsPDF(u"tdf128445.odp");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1714,8 +1664,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
     // Import the bugdoc and export as PDF.
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
     saveAsPDF(u"tdf128630.odp");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1749,8 +1698,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"tdf106702.odt");
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -1806,8 +1754,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
     aMediaDescriptor["FilterData"] <<= aFilterData;
     saveAsPDF(u"tdf113143.odp");
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -1884,8 +1831,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 {
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     saveAsPDF(u"tdf115262.ods");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(8, pPdfDocument->getPageCount());
 
     // Get the 6th page.
@@ -1924,8 +1870,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"tdf121962.odt");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -1949,8 +1894,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"tdf115967.odt");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -2156,8 +2100,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf129085)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
 {
     // Load the Writer document.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "toc-link.fodt";
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(u"toc-link.fodt");
 
     // Update the ToC.
     uno::Reference<text::XDocumentIndexesSupplier> xDocumentIndexesSupplier(mxComponent,
@@ -2171,12 +2114,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
     xToc->refresh();
 
     // Save as PDF.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("writer_pdf_Export");
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -2193,8 +2133,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
     // Load the Writer document.
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"reduce-small-image.fodt");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2219,8 +2158,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf114256)
 {
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     saveAsPDF(u"tdf114256.ods");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2235,8 +2173,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150931)
 {
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     saveAsPDF(u"tdf150931.ods");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2286,8 +2223,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147027)
     // Load the Calc document.
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     saveAsPDF(u"tdf147027.ods");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2303,8 +2239,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135346)
     // Load the Calc document.
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     saveAsPDF(u"tdf135346.ods");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2319,8 +2254,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147164)
 {
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
     saveAsPDF(u"tdf147164.odp");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2334,8 +2268,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147164)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
 {
     // Load the Writer document.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reduce-image.fodt";
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(u"reduce-image.fodt");
 
     // Save as PDF.
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -2360,8 +2293,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
     aOutputStream.Close();
 
     // Parse the PDF: get the image.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2387,8 +2319,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
     // Import the bugdoc and export as PDF.
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
     saveAsPDF(u"link-wrong-page.odp");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has 2 pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -2419,8 +2350,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPagePartial)
     saveAsPDF(u"link-wrong-page-partial.odg");
 
     // Then make sure the we have a link on the 1st page, but not on the 2nd one:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -2442,8 +2372,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPageRange)
     saveAsPDF(u"link-wrong-page-partial.odg");
 
     // Then make sure the resulting PDF has 2 pages:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 3
@@ -2456,8 +2385,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
     // Import the bugdoc and export as PDF.
     aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
     saveAsPDF(u"6m-wide.odg");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has 1 page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2482,8 +2410,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    OUString aURL
-        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-resource-inline-xobject-ref.pdf";
+    OUString aURL = createFileURL(u"pdf-image-resource-inline-xobject-ref.pdf");
     xGraphicObject->setPropertyValue("GraphicURL", uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
@@ -2496,8 +2423,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Make sure that the page -> form -> form has a child image.
@@ -2548,8 +2474,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testDefaultVersion)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
 }
@@ -2568,8 +2493,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
@@ -2715,8 +2639,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
     saveAsPDF(u"form-font-name.odt");
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -3207,8 +3130,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139736)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "master.odm";
-    mxComponent = loadFromDesktop(aURL);
+    loadFromURL(u"master.odm");
 
     // update linked section
     dispatchCommand(mxComponent, ".uno:UpdateAllLinks", {});
@@ -3303,7 +3225,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-rotate-180.pdf";
+    OUString aURL = createFileURL(u"pdf-image-rotate-180.pdf");
     xGraphicObject->setPropertyValue("GraphicURL", uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
@@ -3316,8 +3238,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Make sure that the page -> form -> form has a child image.
@@ -3359,8 +3280,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
 #ifdef _WIN32
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     saveAsPDF(u"tdf144222.ods");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -3401,8 +3321,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145873)
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
     saveAsPDF(u"tdf145873.pptx");
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -3439,8 +3358,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageHyperlink)
     saveAsPDF(u"pdf-image-hyperlink.odg");
 
     // Then make sure that link is preserved:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
     // Without the accompanying fix in place, this test would have failed, the hyperlink of the PDF
@@ -3623,8 +3541,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageAnnots)
     saveAsPDF(u"pdf-image-annots.odg");
 
     // Then make sure only the hyperlink is kept, since Draw itself has its own comments:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
     // Without the accompanying fix in place, this test would have failed with:
@@ -3644,7 +3561,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageEncryption)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "rectangles.pdf";
+    OUString aURL = createFileURL(u"rectangles.pdf");
     xGraphicObject->setPropertyValue("GraphicURL", uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
@@ -3662,8 +3579,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageEncryption)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Then make sure that the image is not lost:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport("secret");
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret");
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -3692,8 +3608,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testBitmapScaledown)
     saveAsPDF(u"bitmap-scaledown.odt");
 
     // Then verify that the bitmap is not downscaled:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -3721,8 +3636,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
 #if HAVE_MORE_FONTS
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"justified-arabic-kashida.odt");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
-    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
