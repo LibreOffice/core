@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(gb_RUN_CONFIGURE) ./configure \
 		$(if $(debug),STRIP=" ") \
 		$(if $(filter ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS) $(gb_VISIBILITY_FLAGS)") \
-		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS=" $(ZLIB_CFLAGS) -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS)" --enable-pthread=yes PTHREAD_LIBS="") \
+		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS=-DCAIRO_NO_MUTEX" $(ZLIB_CFLAGS) -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS)" ) \
 		$(if $(filter-out EMSCRIPTEN ANDROID iOS,$(OS)), \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,cairo) $(ZLIB_CFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,cairo)" \
