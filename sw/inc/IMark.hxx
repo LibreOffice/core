@@ -102,6 +102,10 @@ namespace sw::mark
             virtual void SetFieldname(const OUString& rFieldname) =0;
             virtual void SetFieldHelptext(const OUString& rFieldHelptext) =0;
             virtual void Invalidate() = 0;
+
+            virtual OUString GetContent() const { return OUString(); }
+            virtual void ReplaceContent(const OUString& /*sNewContent*/) {}
+
         private:
             IFieldmark(IFieldmark const &) = delete;
             IFieldmark &operator =(IFieldmark const&) = delete;
@@ -128,8 +132,8 @@ namespace sw::mark
             IDateFieldmark() = default;
 
         public:
-            virtual OUString GetContent() const = 0;
-            virtual void ReplaceContent(const OUString& sNewContent) = 0;
+            virtual OUString GetContent() const override = 0;
+            virtual void ReplaceContent(const OUString& sNewContent) override = 0;
 
             virtual std::pair<bool, double> GetCurrentDate() const = 0;
             virtual void SetCurrentDate(double fDate) = 0;

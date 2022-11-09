@@ -22,12 +22,60 @@ module ooo {  module vba {  module word {
 interface XFormField
 {
     interface ooo::vba::XHelperInterface;
+    interface com::sun::star::script::XDefaultProperty;
 
+    /// Default member: returns the field type from WdFieldType
+    [attribute, readonly] long Type;
+
+    /**
+     * Returns or sets true if references to the specified form field
+     * are automatically updated whenever the field is exited.
+     */
+    [attribute] boolean CalculateOnExit;
+    /// Returns or sets a string that represents the result of the specified form field
     [attribute] string Result;
+    /// Returns or sets true if a form field is enabled
     [attribute] boolean Enabled;
+    /// Returns or sets the macro name that runs on keyboard (tab) navigation into the field
+    [attribute] string EntryMacro;
+    /// Returns or sets an exit macro name that runs on keyboard (tab) navigation out of the field
+    [attribute] string ExitMacro;
+    /**
+     * Returns or sets the text that's displayed in a message box
+     * when the form field has the focus and the user presses F1.
+     *
+     * When OwnHelp is False, HelpText specifies the name of an AutoText entry
+     * that contains help text for the form field
+     */
+    [attribute] string HelpText;
+    /**
+     * Returns or sets the specifies the source of the F1 text that's displayed in a message box
+     * If True, the text specified by the HelpText property is displayed.
+     * If False, the text in the AutoText entry specified by the HelpText property is displayed.
+     */
+    [attribute] boolean OwnHelp;
+    /// returns or sets the name of the specified object.
+    [attribute] string Name;
+    /// Returns or sets the text that is displayed in the status bar when a form field has the focus
+    [attribute] string StatusText;
+    /** OwnStatus:
+     * If True, the text specified by the StatusText property is displayed.
+     * If False, the text of the AutoText entry specified by the StatusText property is displayed.
+     */
+    [attribute] boolean OwnStatus;
 
     any CheckBox();
-
+    any DropDown();
+    any TextInput();
+    /// Returns the next form field in the collection.
+    any Next();
+    /// returns the previous form field in the collection.
+    any Previous();
+    /**
+     * Represents a contiguous area in a document.
+     * Each Range object is defined by a starting and ending character position.
+     */
+    any Range();
 };
 
 }; }; };
