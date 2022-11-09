@@ -5552,6 +5552,13 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     icu::RegexMatcher rmatch6("\\b(ABOVE|BELOW|LEFT|RIGHT)\\b", usInput, rMatcherFlags, status);
     usInput = rmatch6.replaceAll(icu::UnicodeString(" $1 "), status);
 
+    /* fix decimal separator */
+    if ( m_pSettingsTable->GetDecimalSymbol() == "," )
+    {
+        icu::RegexMatcher rmatch7("\\b([0-9]+),([0-9]+([eE][-]?[0-9]+)?)\\b", usInput, rMatcherFlags, status);
+        usInput = rmatch7.replaceAll(icu::UnicodeString("$1.$2"), status);
+    }
+
     return OUString(usInput.getTerminatedBuffer());
 }
 

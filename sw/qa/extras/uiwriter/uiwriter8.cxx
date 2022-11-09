@@ -1382,6 +1382,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146573)
     CPPUNIT_ASSERT_EQUAL(OUString("204"), xCellA4->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148799)
+{
+    // load a document with table formulas with comman delimiter
+    SwDoc* pDoc = createSwDoc("tdf148799.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // check formula update
+
+    // put cursor in the first table row
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTextTable->getRows()->getCount());
+
+    // These were "** Expression is faulty **"
+
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("D3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2.3"), xCellA1->getString());
+    uno::Reference<text::XTextRange> xCellA3(xTextTable->getCellByName("D4"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2345"), xCellA3->getString());
+    uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("D5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("23684.5"), xCellA4->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148849)
 {
     // load a document with a table and an empty paragraph before the table
