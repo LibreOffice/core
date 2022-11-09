@@ -969,7 +969,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 const SfxBoolItem *pItem = nId != SID_DIRECTEXPORTDOCASPDF ? nullptr :
                     dynamic_cast<const SfxBoolItem*>( GetSlotState(SID_MAIL_PREPAREEXPORT) );
-                if (pItem && pItem->GetValue())
+                // Fetch value from the pool item early, because GUIStoreModel() can free the pool
+                // item as part of spinning the main loop if a dialog is opened.
+                bool bMailPrepareExport = pItem && pItem->GetValue();
+                if (bMailPrepareExport)
                 {
                     SfxRequest aRequest(SID_MAIL_PREPAREEXPORT, SfxCallMode::SYNCHRON, GetPool());
                     aRequest.AppendItem(SfxBoolItem(FN_PARAM_1, true));
@@ -982,7 +985,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                        bPreselectPassword,
                                        GetDocumentSignatureState() );
 
-                if (pItem && pItem->GetValue())
+                if (bMailPrepareExport)
                 {
                     SfxRequest aRequest(SID_MAIL_EXPORT_FINISHED, SfxCallMode::SYNCHRON, GetPool());
                     ExecuteSlot(aRequest);
