@@ -244,9 +244,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/render/charposlist \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_devicebuffer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_docrenderdata \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imageloader \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_imageloader \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imagerenderer \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_pagerendercache \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pageimagecache \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_progressiverenderer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_rendercontext \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_renderoptions \
@@ -566,17 +566,7 @@ endif
 
 # pdfium_base
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/address_space_randomization \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/page_allocator \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/spin_lock \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_alloc \
     UnpackedTarball/pdfium/third_party/base/debug/alias \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/oom_callback \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_bucket \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_oom \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_page \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_root_base \
-    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/random \
     UnpackedTarball/pdfium/third_party/base/memory/aligned_memory \
 ))
 

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:21:21 using:
+ Generated on 2022-11-08 17:05:53 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -31,7 +31,6 @@
 #include <agg_vcgen_stroke.h>
 #include <algorithm>
 #include <array>
-#include <atomic>
 #include <cassert>
 #include <cfloat>
 #include <climits>
@@ -127,11 +126,13 @@
 #include <core/fpdfapi/page/cpdf_graphicstates.h>
 #include <core/fpdfapi/page/cpdf_iccprofile.h>
 #include <core/fpdfapi/page/cpdf_image.h>
+#include <core/fpdfapi/page/cpdf_imageloader.h>
 #include <core/fpdfapi/page/cpdf_imageobject.h>
 #include <core/fpdfapi/page/cpdf_indexedcs.h>
 #include <core/fpdfapi/page/cpdf_meshstream.h>
 #include <core/fpdfapi/page/cpdf_occontext.h>
 #include <core/fpdfapi/page/cpdf_page.h>
+#include <core/fpdfapi/page/cpdf_pageimagecache.h>
 #include <core/fpdfapi/page/cpdf_pagemodule.h>
 #include <core/fpdfapi/page/cpdf_pageobject.h>
 #include <core/fpdfapi/page/cpdf_pageobjectholder.h>
@@ -189,9 +190,7 @@
 #include <core/fpdfapi/render/charposlist.h>
 #include <core/fpdfapi/render/cpdf_devicebuffer.h>
 #include <core/fpdfapi/render/cpdf_docrenderdata.h>
-#include <core/fpdfapi/render/cpdf_imageloader.h>
 #include <core/fpdfapi/render/cpdf_imagerenderer.h>
-#include <core/fpdfapi/render/cpdf_pagerendercache.h>
 #include <core/fpdfapi/render/cpdf_pagerendercontext.h>
 #include <core/fpdfapi/render/cpdf_progressiverenderer.h>
 #include <core/fpdfapi/render/cpdf_rendercontext.h>
@@ -309,6 +308,8 @@
 #include <core/fxcrt/css/cfx_cssvaluelistparser.h>
 #include <core/fxcrt/data_vector.h>
 #include <core/fxcrt/fileaccess_iface.h>
+#include <core/fxcrt/fixed_try_alloc_zeroed_data_vector.h>
+#include <core/fxcrt/fixed_uninit_data_vector.h>
 #include <core/fxcrt/fx_bidi.h>
 #include <core/fxcrt/fx_codepage.h>
 #include <core/fxcrt/fx_coordinates.h>
@@ -461,22 +462,6 @@
 #include <third_party/agg23/agg_rasterizer_scanline_aa.h>
 #include <third_party/agg23/agg_renderer_scanline.h>
 #include <third_party/agg23/agg_scanline_u.h>
-#include <third_party/base/allocator/partition_allocator/address_space_randomization.h>
-#include <third_party/base/allocator/partition_allocator/oom.h>
-#include <third_party/base/allocator/partition_allocator/oom_callback.h>
-#include <third_party/base/allocator/partition_allocator/page_allocator.h>
-#include <third_party/base/allocator/partition_allocator/page_allocator_internal.h>
-#include <third_party/base/allocator/partition_allocator/partition_alloc.h>
-#include <third_party/base/allocator/partition_allocator/partition_alloc_check.h>
-#include <third_party/base/allocator/partition_allocator/partition_alloc_constants.h>
-#include <third_party/base/allocator/partition_allocator/partition_bucket.h>
-#include <third_party/base/allocator/partition_allocator/partition_direct_map_extent.h>
-#include <third_party/base/allocator/partition_allocator/partition_oom.h>
-#include <third_party/base/allocator/partition_allocator/partition_page.h>
-#include <third_party/base/allocator/partition_allocator/partition_root_base.h>
-#include <third_party/base/allocator/partition_allocator/random.h>
-#include <third_party/base/allocator/partition_allocator/spin_lock.h>
-#include <third_party/base/bits.h>
 #include <third_party/base/check.h>
 #include <third_party/base/check_op.h>
 #include <third_party/base/compiler_specific.h>
