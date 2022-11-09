@@ -3415,7 +3415,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
         auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
         const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
         std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
-        if (!pContentControl->HasListItems())
+        if (!pContentControl->GetComboBox() && !pContentControl->GetDropDown())
         {
             return;
         }

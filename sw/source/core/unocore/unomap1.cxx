@@ -1004,6 +1004,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetContentCo
         { u"" UNO_NAME_CURRENT_DATE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_PLAIN_TEXT, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_COMBO_BOX, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_DROP_DOWN, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_PLACEHOLDER_DOC_PART, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATA_BINDING_PREFIX_MAPPINGS, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATA_BINDING_XPATH, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },

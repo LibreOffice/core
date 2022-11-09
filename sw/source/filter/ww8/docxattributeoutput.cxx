@@ -2403,7 +2403,7 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->endElementNS(XML_w14, XML_checkbox);
     }
 
-    if (m_pContentControl->HasListItems())
+    if (m_pContentControl->GetComboBox() || m_pContentControl->GetDropDown())
     {
         if (m_pContentControl->GetComboBox())
         {

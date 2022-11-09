@@ -133,6 +133,14 @@ void XMLContentControlContext::startFastElement(
                 }
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_DROPDOWN):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bDropDown = bTmp;
+                }
+                break;
+            }
             case XML_ELEMENT(LO_EXT, XML_ALIAS):
             {
                 m_aAlias = rIter.toString();
@@ -237,6 +245,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (m_bComboBox)
     {
         xPropertySet->setPropertyValue("ComboBox", uno::Any(m_bComboBox));
+    }
+
+    if (m_bDropDown)
+    {
+        xPropertySet->setPropertyValue("DropDown", uno::Any(m_bDropDown));
     }
 
     if (!m_aAlias.isEmpty())

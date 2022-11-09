@@ -2,7 +2,7 @@
 <office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
   <office:body>
     <office:text>
-      <text:p><loext:content-control><loext:list-item loext:display-text="red" loext:value="R"/><loext:list-item loext:display-text="green" loext:value="G"/><loext:list-item loext:display-text="blue" loext:value="B"/>choose a color</loext:content-control></text:p>
+      <text:p><loext:content-control loext:dropdown="true"><loext:list-item loext:display-text="red" loext:value="R"/><loext:list-item loext:display-text="green" loext:value="G"/><loext:list-item loext:display-text="blue" loext:value="B"/>choose a color</loext:content-control></text:p>
     </office:text>
   </office:body>
 </office:document>

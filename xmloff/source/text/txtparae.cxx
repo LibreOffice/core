@@ -4037,6 +4037,15 @@ void XMLTextParagraphExport::ExportContentControl(
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_COMBOBOX, aBuffer.makeStringAndClear());
         }
 
+        bool bDropDown = false;
+        xPropertySet->getPropertyValue("DropDown") >>= bDropDown;
+        if (bDropDown)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bDropDown);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DROPDOWN, aBuffer.makeStringAndClear());
+        }
+
         OUString aAlias;
         xPropertySet->getPropertyValue("Alias") >>= aAlias;
         if (!aAlias.isEmpty())

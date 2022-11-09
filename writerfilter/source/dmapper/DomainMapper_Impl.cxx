@@ -980,7 +980,11 @@ void DomainMapper_Impl::PopSdt()
                 pItems[i] = aItem;
             }
             xContentControlProps->setPropertyValue("ListItems", uno::Any(aItems));
-            if (m_pSdtHelper->getControlType() == SdtControlType::comboBox)
+            if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)
+            {
+                xContentControlProps->setPropertyValue("DropDown", uno::Any(true));
+            }
+            else
             {
                 xContentControlProps->setPropertyValue("ComboBox", uno::Any(true));
             }

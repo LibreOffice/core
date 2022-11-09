@@ -473,6 +473,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
+        xContentControlProps->setPropertyValue("DropDown", uno::Any(true));
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
@@ -496,6 +497,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    assertXPath(pXmlDoc, "//loext:content-control", "dropdown", "true");
     // Without the accompanying fix in place, this failed with:
     // - Expected: 1
     // - Actual  : 0

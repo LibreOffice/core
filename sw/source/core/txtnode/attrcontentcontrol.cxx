@@ -340,10 +340,17 @@ bool SwContentControl::IsInteractingCharacter(sal_Unicode cCh)
 
 bool SwContentControl::ShouldOpenPopup(const vcl::KeyCode& rKeyCode)
 {
-    if (HasListItems() || GetDate())
+    switch (GetType())
     {
-        // Alt-down opens the popup.
-        return rKeyCode.IsMod2() && rKeyCode.GetCode() == KEY_DOWN;
+        case SwContentControlType::DROP_DOWN_LIST:
+        case SwContentControlType::COMBO_BOX:
+        case SwContentControlType::DATE:
+        {
+            // Alt-down opens the popup.
+            return rKeyCode.IsMod2() && rKeyCode.GetCode() == KEY_DOWN;
+        }
+        default:
+            break;
     }
 
     return false;
@@ -361,7 +368,7 @@ SwContentControlType SwContentControl::GetType() const
         return SwContentControlType::COMBO_BOX;
     }
 
-    if (!m_aListItems.empty())
+    if (m_bDropDown)
     {
         return SwContentControlType::DROP_DOWN_LIST;
     }
@@ -413,6 +420,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(OString::boolean(m_bPlainText).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("combo-box"),
                                       BAD_CAST(OString::boolean(m_bComboBox).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("drop-down"),
+                                      BAD_CAST(OString::boolean(m_bDropDown).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("placeholder-doc-part"),
                                       BAD_CAST(m_aPlaceholderDocPart.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("data-binding-prefix-mappings"),

@@ -327,6 +327,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
+        xContentControlProps->setPropertyValue("DropDown", uno::Any(true));
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
