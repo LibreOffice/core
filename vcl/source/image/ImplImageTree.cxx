@@ -275,7 +275,7 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
     return OUString();
 }
 
-std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
+uno::Reference<io::XInputStream> ImplImageTree::getImageXInputStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
 {
     OUString aStyle(rStyle);
 
@@ -300,7 +300,7 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
                         bool ok = rNameAccess->getByName(rPath) >>= aStream;
                         assert(ok);
                         (void)ok; // prevent unused warning in release build
-                        return wrapStream(aStream);
+                        return aStream;
                     }
                 }
             }
@@ -312,6 +312,14 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
 
         aStyle = fallbackStyle(aStyle);
     }
+    return nullptr;
+}
+
+std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
+{
+    uno::Reference<io::XInputStream> xStream = getImageXInputStream(rName, rStyle, rLang);
+    if (xStream)
+        return wrapStream(xStream);
     return std::shared_ptr<SvMemoryStream>();
 }
 

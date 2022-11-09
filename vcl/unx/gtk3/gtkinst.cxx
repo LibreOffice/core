@@ -79,6 +79,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/tempfile.hxx>
 #include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/abstdlg.hxx>
@@ -4783,12 +4784,43 @@ namespace
         return pixbuf;
     }
 
+    std::shared_ptr<SvMemoryStream> get_icon_stream_by_name_theme_lang(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        return ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
+    }
+
     GdkPixbuf* load_icon_by_name_theme_lang(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
     {
-        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
+        auto xMemStm = get_icon_stream_by_name_theme_lang(rIconName, rIconTheme, rUILang);
         if (!xMemStm)
             return nullptr;
         return load_icon_from_stream(*xMemStm);
+    }
+
+    std::unique_ptr<utl::TempFileNamed> get_icon_stream_as_file(const OUString& rIconName)
+    {
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+        uno::Reference<io::XInputStream> xInputStream = ImageTree::get().getImageXInputStream(rIconName, sIconTheme, sUILang);
+        if (!xInputStream)
+            return nullptr;
+
+        std::unique_ptr<utl::TempFileNamed> xRet(new utl::TempFileNamed);
+        xRet->EnableKillingFile(true);
+        SvStream* pStream = xRet->GetStream(StreamMode::WRITE);
+
+        for (;;)
+        {
+            const sal_Int32 nSize(2048);
+            uno::Sequence<sal_Int8> aData(nSize);
+            sal_Int32 nRead = xInputStream->readBytes(aData, nSize);
+            pStream->WriteBytes(aData.getConstArray(), nRead);
+            if (nRead < nSize)
+                break;
+        }
+        xRet->CloseStream();
+
+        return xRet;
     }
 }
 
@@ -4829,6 +4861,34 @@ namespace
         aWriter.write(aBitmapEx);
 
         return load_icon_from_stream(aMemStm);
+    }
+
+    // tdf#151898 as far as I can see only gtk_image_new_from_file (or gtk_image_new_from_resource) can support the use of a
+    // scaleable input format to create a hidpi GtkImage, rather than an upscaled lodpi one so forced to go via a file here
+    std::unique_ptr<utl::TempFileNamed> getImageFile(const css::uno::Reference<css::graphic::XGraphic>& rImage, bool bMirror = false)
+    {
+        Image aImage(rImage);
+        if (bMirror)
+            aImage = mirrorImage(aImage);
+
+        OUString sStock(aImage.GetStock());
+        if (!sStock.isEmpty())
+            return get_icon_stream_as_file(sStock);
+
+        std::unique_ptr<utl::TempFileNamed> xRet(new utl::TempFileNamed);
+        xRet->EnableKillingFile(true);
+        SvStream* pStream = xRet->GetStream(StreamMode::WRITE);
+
+        // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
+        css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+            "Compression", sal_Int32(1)) };
+        auto aBitmapEx = aImage.GetBitmapEx();
+        vcl::PngImageWriter aWriter(*pStream);
+        aWriter.setParameters(aFilterData);
+        aWriter.write(aBitmapEx);
+
+        xRet->CloseStream();
+        return xRet;
     }
 
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
@@ -11834,10 +11894,9 @@ private:
     {
         GtkWidget* pImage = nullptr;
 
-        if (GdkPixbuf* pixbuf = getPixbuf(rIcon, bMirror))
+        if (auto xTempFile = getImageFile(rIcon, bMirror))
         {
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
+            pImage = gtk_image_new_from_file(OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
             gtk_widget_show(pImage);
         }
 

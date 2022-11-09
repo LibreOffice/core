@@ -37,6 +37,10 @@ namespace com::sun::star::container {
     class XNameAccess;
 }
 
+namespace com::sun::star::io {
+    class XInputStream;
+}
+
 struct ImageRequestParameters
 {
     OUString msName;
@@ -70,6 +74,9 @@ public:
 
     OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
+
+    css::uno::Reference<css::io::XInputStream> getImageXInputStream(OUString const & rName,
+        OUString const & rStyle, OUString const & rLang);
 
     std::shared_ptr<SvMemoryStream> getImageStream(
         OUString const & rName, OUString const & rStyle, OUString const & rLang);

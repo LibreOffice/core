@@ -34,6 +34,11 @@ std::shared_ptr<SvMemoryStream> ImageTree::getImageStream(OUString const & rName
     return mpImplImageTree->getImageStream(rName, rStyle, rLang);
 }
 
+css::uno::Reference<css::io::XInputStream> ImageTree::getImageXInputStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
+{
+    return mpImplImageTree->getImageXInputStream(rName, rStyle, rLang);
+}
+
 bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
                           BitmapEx & rBitmap, bool bLocalized,
                           sal_Int32 nScalePercentage,
