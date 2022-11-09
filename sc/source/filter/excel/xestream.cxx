@@ -56,6 +56,7 @@
 #include <sfx2/app.hxx>
 
 #include <docsh.hxx>
+#include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <excdoc.hxx>
 
@@ -1050,6 +1051,16 @@ bool XclExpXmlStream::exportDocument()
     // Get the viewsettings before processing
     if( ScDocShell::GetViewData() )
         ScDocShell::GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
+    else
+    {
+        // Try to get ScViewData through the current ScDocShell
+        ScTabViewShell* pTabViewShell = pShell->GetBestViewShell( false );
+        if ( pTabViewShell )
+        {
+            ScViewData* pViewData = &pTabViewShell->GetViewData();
+            pViewData->WriteExtOptions( mpRoot->GetExtDocOptions() );
+        }
+    }
 
     OUString const workbook = "xl/workbook.xml";
     const char* pWorkbookContentType = nullptr;
