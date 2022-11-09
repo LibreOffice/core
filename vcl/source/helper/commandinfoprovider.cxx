@@ -360,10 +360,9 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
             Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager());
             Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), UNO_QUERY);
 
-            Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
             Sequence<OUString> aImageCmdSeq { rsCommandName };
 
-            aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
+            Sequence<Reference<graphic::XGraphic>> aGraphicSeq = xDocImgMgr->getImages(nImageType, aImageCmdSeq);
             Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
             if (xGraphic.is())
                 return xGraphic;
@@ -373,17 +372,15 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
     {
     }
 
-    try {
+    try
+    {
         Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(GetModuleConfigurationSupplier());
         Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier(rxFrame)));
-
-        Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
         Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), UNO_QUERY);
 
         Sequence<OUString> aImageCmdSeq { rsCommandName };
 
-        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
-
+        Sequence<Reference<graphic::XGraphic>> aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
         Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
 
         return xGraphic;
