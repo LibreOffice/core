@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="dragmodemenu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkRadioMenuItem" id="1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorpanelSTR_DRAGTYPE_URL">Insert as Hyperlink</property>
-        <property name="draw_as_radio">True</property>
+        <property name="draw-as-radio">True</property>
       </object>
     </child>
     <child>
       <object class="GtkRadioMenuItem" id="2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorpanel|STR_DRAGTYPE_LINK">Insert as Link</property>
-        <property name="draw_as_radio">True</property>
+        <property name="draw-as-radio">True</property>
         <property name="group">1</property>
       </object>
     </child>
     <child>
       <object class="GtkRadioMenuItem" id="3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorpanel|STR_DRAGTYPE_EMBEDDED">Insert as Copy</property>
-        <property name="draw_as_radio">True</property>
+        <property name="draw-as-radio">True</property>
         <property name="group">1</property>
       </object>
     </child>
@@ -45,24 +45,24 @@
   <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="NavigatorPanel">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
+    <property name="border-width">6</property>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <!-- n-columns=1 n-rows=3 -->
       <object class="GtkGrid">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
+        <property name="row-spacing">3</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkComboBoxText" id="documents">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
+            <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
@@ -71,30 +71,29 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="tree">
-                <property name="width_request">-1</property>
+                <property name="width-request">-1</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="model">liststore2</property>
-                <property name="headers_visible">False</property>
+                <property name="headers-visible">False</property>
                 <property name="reorderable">True</property>
-                <property name="search_column">1</property>
-                <property name="enable_tree_lines">True</property>
+                <property name="search-column">1</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="Macro Library List-selection11"/>
                 </child>
@@ -125,22 +124,23 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="toolbox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="toolbar_style">icons</property>
+            <property name="toolbar-style">icons</property>
             <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id="first">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
-                <property name="icon_name">sd/res/nv03.png</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
+                <property name="icon-name">sd/res/nv03.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="first-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|first">Jumps to the first page.</property>
@@ -155,8 +155,9 @@
             <child>
               <object class="GtkToolButton" id="previous">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
-                <property name="icon_name">sd/res/nv04.png</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
+                <property name="icon-name">sd/res/nv04.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="previous-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|previous">Moves back one page.</property>
@@ -171,8 +172,9 @@
             <child>
               <object class="GtkToolButton" id="next">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
-                <property name="icon_name">sd/res/nv05.png</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
+                <property name="icon-name">sd/res/nv05.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="next-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|next">Move forward one page.</property>
@@ -187,8 +189,9 @@
             <child>
               <object class="GtkToolButton" id="last">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
-                <property name="icon_name">sd/res/nv06.png</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
+                <property name="icon-name">sd/res/nv06.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="last-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|last">Jumps to the last page.</property>
@@ -203,7 +206,7 @@
             <child>
               <object class="GtkSeparatorToolItem" id="separator">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
               </object>
@@ -215,8 +218,9 @@
             <child>
               <object class="GtkMenuToolButton" id="dragmode">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
-                <property name="icon_name">sd/res/nv09.png</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
+                <property name="icon-name">sd/res/nv09.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="dragmode-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|dragmode">Drag and drop slides and named objects into the active slide.</property>
@@ -231,8 +235,9 @@
             <child>
               <object class="GtkMenuToolButton" id="shapes">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
-                <property name="icon_name">sd/res/graphic.png</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
+                <property name="icon-name">sd/res/graphic.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="shapes-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|shapes">In the submenu you can choose to display a list of all shapes or only the named shapes. Use drag-and-drop in the list to reorder the shapes. When you set the focus to a slide and press the Tab key, the next shape in the defined order is selected.</property>
@@ -246,14 +251,14 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child internal-child="accessible">
@@ -264,23 +269,23 @@
   </object>
   <object class="GtkMenu" id="shapemenu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkRadioMenuItem" id="named">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_SHOW_NAMED_SHAPES">Named shapes</property>
-        <property name="use_underline">True</property>
-        <property name="draw_as_radio">True</property>
+        <property name="use-underline">True</property>
+        <property name="draw-as-radio">True</property>
       </object>
     </child>
     <child>
       <object class="GtkRadioMenuItem" id="all">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_SHOW_ALL_SHAPES">All shapes</property>
-        <property name="use_underline">True</property>
-        <property name="draw_as_radio">True</property>
+        <property name="use-underline">True</property>
+        <property name="draw-as-radio">True</property>
         <property name="group">named</property>
       </object>
     </child>

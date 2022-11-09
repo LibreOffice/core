@@ -379,8 +379,8 @@ namespace
 
         std::unique_ptr<weld::TreeIter> xSourceParent(rTreeView.make_iterator(xSource.get()));
         bool bSourceHasParent = rTreeView.iter_parent(*xSourceParent);
-        // level 1 objects only
-        if (!bSourceHasParent || rTreeView.get_iter_depth(*xSourceParent))
+        // disallow root drag
+        if (!bSourceHasParent)
             return false;
 
         SdrObject* pSourceObject = weld::fromId<SdrObject*>(rTreeView.get_id(*xSource));
@@ -495,20 +495,36 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
         return DND_ACTION_NONE;
 
+    // disallow when root is drop target
+    if (m_rTreeView.get_iter_depth(*xTarget) == 0)
+        return DND_ACTION_NONE;
+
+    // disallow if there is no source entry selected
     std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
     if (!m_rTreeView.get_selected(xSource.get()))
         return DND_ACTION_NONE;
 
+    // disallow when root is source
+    if (m_rTreeView.get_iter_depth(*xSource) == 0)
+        return DND_ACTION_NONE;
+
+    // disallow when the source is the parent or ancestoral parent of the target
     std::unique_ptr<weld::TreeIter> xTargetParent(m_rTreeView.make_iterator(xTarget.get()));
-    while (m_rTreeView.get_iter_depth(*xTargetParent))
-        m_rTreeView.iter_parent(*xTargetParent);
+    while (m_rTreeView.get_iter_depth(*xTargetParent) > 1)
+    {
+        if (!m_rTreeView.iter_parent(*xTargetParent) ||
+                m_rTreeView.iter_compare(*xSource, *xTargetParent) == 0)
+            return DND_ACTION_NONE;
+    }
 
-    std::unique_ptr<weld::TreeIter> xSourceParent(m_rTreeView.make_iterator(xSource.get()));
-    while (m_rTreeView.get_iter_depth(*xSourceParent))
-        m_rTreeView.iter_parent(*xSourceParent);
-
-    // can only drop within the same page
-    if (m_rTreeView.iter_compare(*xTargetParent, *xSourceParent) != 0)
+    // disallow drop when source and target are not within the same page
+    std::unique_ptr<weld::TreeIter> xSourcePage(m_rTreeView.make_iterator(xSource.get()));
+    std::unique_ptr<weld::TreeIter> xTargetPage(m_rTreeView.make_iterator(xTarget.get()));
+    while (m_rTreeView.get_iter_depth(*xTargetPage))
+        m_rTreeView.iter_parent(*xTargetPage);
+    while (m_rTreeView.get_iter_depth(*xSourcePage))
+        m_rTreeView.iter_parent(*xSourcePage);
+    if (m_rTreeView.iter_compare(*xTargetPage, *xSourcePage) != 0)
         return DND_ACTION_NONE;
 
     return DND_ACTION_MOVE;
@@ -529,35 +545,73 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), false))
         return DND_ACTION_NONE;
-    int nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget) + 1;
+
+    auto nIterCompare = m_rTreeView.iter_compare(*xSource, *xTarget);
+    if (nIterCompare == 0)
+    {
+        // drop position is the same as source position
+        return DND_ACTION_NONE;
+    }
 
     SdrObject* pTargetObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xTarget));
     SdrObject* pSourceObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xSource));
     if (pSourceObject == reinterpret_cast<SdrObject*>(1))
         pSourceObject = nullptr;
+    if (pTargetObject == reinterpret_cast<SdrObject*>(1))
+        pTargetObject = nullptr;
 
     if (pTargetObject != nullptr && pSourceObject != nullptr)
     {
         SdrPage* pObjectList = pSourceObject->getSdrPageFromSdrObject();
-        if (pObjectList != nullptr)
-        {
-            sal_uInt32 nNewPosition;
-            if (pTargetObject == reinterpret_cast<SdrObject*>(1))
-            {
-                nNewPosition = 0;
-                nTargetPos = 0;
-            }
-            else
-                nNewPosition = pTargetObject->GetNavigationPosition() + 1;
-            pObjectList->SetObjectNavigationPosition(*pSourceObject, nNewPosition);
-        }
 
         std::unique_ptr<weld::TreeIter> xSourceParent(m_rTreeView.make_iterator(xSource.get()));
         m_rTreeView.iter_parent(*xSourceParent);
+        std::unique_ptr<weld::TreeIter> xTargetParent(m_rTreeView.make_iterator(xTarget.get()));
+        m_rTreeView.iter_parent(*xTargetParent);
 
-        m_rTreeView.move_subtree(*xSource, xSourceParent.get(), nTargetPos);
+        int nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
+
+        // Make the tree view what the model will be when it is changed below.
+        m_rTreeView.move_subtree(*xSource, xTargetParent.get(), nTargetPos);
+        m_rTreeView.iter_previous_sibling(*xTarget);
+        m_rTreeView.set_cursor(*xTarget);
+
+        if (m_rTreeView.iter_compare(*xSourceParent, *xTargetParent) == 0 && nIterCompare < 0)
+            nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
+
+        // Remove the source object from soure parent list and insert it in the target parent list.
+        SdrObject* pSourceParentObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xSourceParent));
+        SdrObject* pTargetParentObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xTargetParent));
+
+        // Presumably there is need for a hard reference to hold on to the removed object so it is
+        // guaranteed to be valid for insert back into an object list.
+        rtl::Reference<SdrObject> rSourceObject;
+
+        // remove object
+        if (pSourceParentObject == reinterpret_cast<SdrObject*>(1))
+        {
+            rSourceObject = pObjectList->NbcRemoveObject(pSourceObject->GetOrdNum());
+        }
+        else
+        {
+            SdrObjList* pList = pSourceParentObject->GetSubList();
+            rSourceObject = pList->NbcRemoveObject(pSourceObject->GetOrdNum());
+        }
+
+        // insert object
+        if (pTargetParentObject == reinterpret_cast<SdrObject*>(1))
+        {
+            pObjectList->NbcInsertObject(rSourceObject.get());
+            pObjectList->SetObjectNavigationPosition(*rSourceObject, nTargetPos);
+        }
+        else
+        {
+            SdrObjList* pList = pTargetParentObject->GetSubList();
+            pList->NbcInsertObject(rSourceObject.get(), nTargetPos);
+            pList->SetObjectNavigationPosition(*rSourceObject, nTargetPos);
+        }
     }
 
     return DND_ACTION_NONE;

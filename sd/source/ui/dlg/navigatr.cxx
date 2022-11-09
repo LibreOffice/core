@@ -808,7 +808,7 @@ void SdNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
     if (nState & NavState::TableUpdate)
     {
         // InitTlb; is initiated by Slot
-        if (maUpdateRequest)
+        if (maUpdateRequest && !pNavigatorWin->GetObjects().get_treeview().has_focus())
             maUpdateRequest();
     }
 }
