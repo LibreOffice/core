@@ -36,6 +36,9 @@
         <entry os="windows" vendor="nvidia" compare="less" version="457.36.0">
             <device id="all"/>
         </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#151929 Crash with GTX 670 -->
+            <device id="0x1189"/>
+        </entry>
         <entry os="windows" vendor="nvidia"> <!-- tdf#150232 -->
             <device id="0x1401"/>
         </entry>
