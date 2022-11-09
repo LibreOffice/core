@@ -3636,12 +3636,18 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
     switch (nWCharVal)
     {
         case 0:
+            if (!m_bFuzzing)
             {
                 // Page number
                 SwPageNumberField aField(
                     static_cast<SwPageNumberFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(
                     SwFieldIds::PageNumber )), PG_RANDOM, SVX_NUM_ARABIC);
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+            }
+            else
+            {
+                // extremely slow, so skip for fuzzing, and insert a space instead
+                cInsert = ' ';
             }
             break;
         case 0xe:
