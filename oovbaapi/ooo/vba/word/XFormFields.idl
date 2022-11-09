@@ -28,10 +28,15 @@
 module ooo {  module vba {  module word {
 
 
-
+interface XFormField;
 interface XFormFields
 {
     interface ::ooo::vba::XCollection;
+
+    ///Returns and sets if shading is applied to form XFormFields
+    [attribute] boolean  Shaded;
+    /// Returns a FormField object that represents a new WdFieldType added at a range
+    //XFormField Add( [in] any Range, [in] long Type ) raises ( com::sun::star::script::BasicErrorException );
 };
 
 }; }; };

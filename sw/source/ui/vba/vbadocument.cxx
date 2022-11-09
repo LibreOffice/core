@@ -22,6 +22,7 @@
 
 #include "vbafilterpropsfromformat.hxx"
 #include "vbadocument.hxx"
+#include "vbaformfields.hxx"
 #include "vbarange.hxx"
 #include "vbarangehelper.hxx"
 #include "vbadocumentproperties.hxx"
@@ -273,11 +274,12 @@ SwVbaDocument::TablesOfContents( const uno::Any& index )
     return uno::makeAny( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::FormFields( const uno::Any& /*index*/ )
+uno::Any SAL_CALL SwVbaDocument::FormFields(const uno::Any& index)
 {
-    uno::Reference< XCollection > xCol;
-    return uno::makeAny( xCol );
+    uno::Reference<XCollection> xCol(new SwVbaFormFields(this, mxContext, mxModel));
+    if (index.hasValue())
+        return xCol->Item(index, uno::Any());
+    return uno::Any(xCol);
 }
 
 uno::Any SAL_CALL
