@@ -1378,7 +1378,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146573)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148799)
 {
-    // load a document with table formulas with comman delimiter
+    // load a document with table formulas with comma delimiter
     SwDoc* pDoc = createSwDoc("tdf148799.docx");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
