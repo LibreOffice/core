@@ -5096,7 +5096,7 @@ static void lcl_convertToPolar(std::vector<double>& rCmplxArray, double fMinMag)
     {
         fR = rCmplxArray[nIdx];
         fI = rCmplxArray[nPoints+nIdx];
-        fMag = sqrt(fR*fR + fI*fI);
+        fMag = std::hypot(fR, fI);
         if (fMag < fMinMag)
         {
             fMag = 0.0;

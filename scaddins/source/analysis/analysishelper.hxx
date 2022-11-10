@@ -652,7 +652,7 @@ inline double Complex::Imag() const
 
 inline double Complex::Abs() const
 {
-    return sqrt( r * r + i * i );
+    return std::hypot(r, i);
 }
 
 
