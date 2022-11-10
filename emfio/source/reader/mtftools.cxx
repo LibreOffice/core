@@ -1330,7 +1330,7 @@ namespace emfio
         maFillStyle = maBkColor;
         mnBkMode = BackgroundMode::OPAQUE;
         ImplSetNonPersistentLineColorTransparenz();
-        DrawPolygon(std::move(aPoly), false);
+        DrawPolygon(aPoly, false);
         mnBkMode = mnBkModeBackup; // The rectangle needs to be always drawned even if mode is transparent
         maFillStyle = aFillStyleBackup;
         maLineStyle.bTransparent = aTransparentBackup;
