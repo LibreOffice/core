@@ -235,7 +235,6 @@ extern int ifsatisfied[NIF];
 extern int Mflag;
 extern int Iflag;
 extern int Pflag;
-extern int Aflag;
 extern int Lflag;
 extern int Xflag;
 extern int Vflag;

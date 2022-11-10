@@ -40,7 +40,6 @@
 int Pflag = 0;                          /* print no line information */
 int Iflag = 0;                          /* print includes */
 int Mflag = 0;                          /* print macro expansion */
-int Aflag = 0;                          /* translate character sets */
 int Xflag = 0;                          /* print pragma for include/import */
 int Vflag = 0;                          /* verbose flag */
 int Cflag = 0;                          /* do not remove any comments */
@@ -140,10 +139,6 @@ void
                         break;
                     switch (c)
                     {
-                        case 'a':
-                            Aflag++;
-                            break;
-
                         case 'i':
                             Xflag++;
                             break;
