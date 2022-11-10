@@ -2881,7 +2881,7 @@ void SdrDragCrook::createSdrDragEntries()
 
         if(aDragRaster.count())
         {
-            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aDragRaster))));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragRaster)));
         }
     }
 
@@ -3412,7 +3412,7 @@ void SdrDragDistort::createSdrDragEntries()
 
         if(aDragRaster.count())
         {
-            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aDragRaster))));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragRaster)));
         }
     }
 

@@ -550,7 +550,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                     rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                     rMtf.AddAction( new MetaPopAction() );
-                    rMtf.AddAction( new MetaPolyLineAction( std::move(aPoly), aLineInfo ) );
+                    rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
                 }
                 else
                     rMtf.AddAction( new MetaArcAction( aRect, aPt, aPt1 ) );
@@ -571,7 +571,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                     rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                     rMtf.AddAction( new MetaPopAction() );
-                    rMtf.AddAction( new MetaPolyLineAction( std::move(aPoly), aLineInfo ) );
+                    rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
                 }
                 else
                     rMtf.AddAction( new MetaPieAction( aRect, aPt, aPt1 ) );
