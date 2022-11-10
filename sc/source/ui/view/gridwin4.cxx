@@ -748,8 +748,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // the same as editeng and drawinglayer), and get rid of all the
         // SetMapMode's and other unnecessary fun we have with pixels
         // See also ScGridWindow::GetDrawMapMode() for the rest of this hack
-        aDrawMode.SetOrigin(PixelToLogic(Point(tools::Long(nScrX / aOutputData.aZoomX),
-                                               tools::Long(nScrY / aOutputData.aZoomY)), aDrawMode));
+        aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
     }
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
@@ -1057,9 +1056,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             if (bIsTiledRendering)
             {
-                const double fZoomX = static_cast<double>(aOutputData.aZoomX);
-                const double fZoomY = static_cast<double>(aOutputData.aZoomY);
-
                 Point aOrigin = aOriginalMode.GetOrigin();
                 if (bLayoutRTL)
                     aOrigin.setX(-o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
@@ -1071,8 +1067,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
                              + aOutputData.nScrY);
                 const double twipFactor = 15 * 1.76388889; // 26.45833335
-                aOrigin = Point(aOrigin.getX() * twipFactor / fZoomX,
-                                aOrigin.getY() * twipFactor / fZoomY);
+                aOrigin = Point(aOrigin.getX() * twipFactor,
+                                aOrigin.getY() * twipFactor);
                 MapMode aNew = rDevice.GetMapMode();
                 aNew.SetOrigin(aOrigin);
                 rDevice.SetMapMode(aNew);
@@ -1658,7 +1654,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                              -nTopLeftTileRowOffset,
                              nTopLeftTileCol, nTopLeftTileRow,
                              nBottomRightTileCol, nBottomRightTileRow,
-                             fPPTX, fPPTY, &aFracX, &aFracY);
+                             fPPTX, fPPTY, nullptr, nullptr);
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
