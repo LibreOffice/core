@@ -149,7 +149,7 @@ static void addLine3D( std::vector<std::vector<css::drawing::Position3D>>& rPoin
 }
 
 VCartesianGrid::VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-                               , const std::vector< Reference< beans::XPropertySet > >  aGridPropertiesList )
+                               , std::vector< Reference< beans::XPropertySet > >  aGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
             , m_aGridPropertiesList( std::move(aGridPropertiesList) )
 {
