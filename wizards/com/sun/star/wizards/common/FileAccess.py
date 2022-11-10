@@ -17,7 +17,6 @@
 #
 import traceback
 
-from os import sep as FileSeparator
 
 '''
 This class delivers static convenience methods

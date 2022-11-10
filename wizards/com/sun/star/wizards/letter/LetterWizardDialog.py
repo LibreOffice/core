@@ -15,12 +15,12 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+
 from .LetterWizardDialogConst import LetterWizardDialogConst, HIDMAIN, HID
 from .LetterWizardDialogResources import LetterWizardDialogResources
 from ..common.HelpIds import HelpIds
 from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 
-from com.sun.star.awt.FontUnderline import SINGLE
 
 class LetterWizardDialog(WizardDialog):
 

@@ -19,7 +19,6 @@ from .FaxWizardDialogResources import FaxWizardDialogResources
 from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN, HID
 from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 
-from com.sun.star.awt.FontUnderline import SINGLE
 
 class FaxWizardDialog(WizardDialog):
 

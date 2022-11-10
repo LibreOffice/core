@@ -18,12 +18,11 @@
 #
 import uno
 import traceback
-from .PeerConfig import PeerConfig
 from .UIConsts import UIConsts
 from ..common.PropertyNames import PropertyNames
-
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS
+
 
 class UnoDialog(object):
 

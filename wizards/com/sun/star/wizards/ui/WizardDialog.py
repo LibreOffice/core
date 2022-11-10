@@ -26,7 +26,6 @@ from ..common.FileAccess import FileAccess
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.frame import TerminationVetoException
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
-from com.sun.star.awt.FontWeight import BOLD
 
 import sys, os
 

@@ -16,16 +16,16 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .Desktop import Desktop
 
+from .Desktop import Desktop
 from com.sun.star.ui.dialogs.TemplateDescription import \
-    FILESAVE_AUTOEXTENSION, FILEOPEN_SIMPLE
+    FILESAVE_AUTOEXTENSION
 from com.sun.star.ui.dialogs.ExtendedFilePickerElementIds import \
     CHECKBOX_AUTOEXTENSION
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt.WindowClass import MODALTOP
-from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.awt.VclWindowPeerAttribute import OK
+
 
 class SystemDialog(object):
 
