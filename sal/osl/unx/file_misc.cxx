@@ -330,9 +330,9 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
         pImpl = nullptr;
     }
 #ifdef _DIRENT_HAVE_D_TYPE
-    pImpl = new DirectoryItem_Impl(std::move(strFilePath), pEntry->d_type);
+    pImpl = new DirectoryItem_Impl(strFilePath, pEntry->d_type);
 #else
-    pImpl = new DirectoryItem_Impl(std::move(strFilePath));
+    pImpl = new DirectoryItem_Impl(strFilePath);
 #endif /* _DIRENT_HAVE_D_TYPE */
     *pItem = pImpl;
 
