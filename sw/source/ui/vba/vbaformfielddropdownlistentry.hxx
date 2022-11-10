@@ -21,7 +21,7 @@ class SwVbaFormFieldDropDownListEntry : public SwVbaFormFieldDropDownListEntry_B
 {
 private:
     sw::mark::IDropdownFieldmark& m_rDropDown;
-    // All LO and internal functions are 0-based. Convert to 1-based when sending to VBA
+    // All LO and internal UNO functions are 0-based. Convert to 1-based when sending to VBA
     const sal_Int32 m_nZIndex;
 
 public:

@@ -5,16 +5,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
 #include <comphelper/sequence.hxx>
@@ -36,7 +26,7 @@ using namespace ::com::sun::star;
 //        [in] -1 to indicate searching using the provided name, SAL_MAX_INT32 for totals
 //        [out] rIndex indicates the found index, or the total number of fieldmarks
 static sw::mark::IFieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& rIndex,
-                                              const css::uno::Reference<frame::XModel>& xModel,
+                                              const uno::Reference<frame::XModel>& xModel,
                                               uno::Sequence<OUString>* pElementNames = nullptr)
 {
     SwDoc* pDoc = word::getDocShell(xModel)->GetDoc();
@@ -91,16 +81,13 @@ class FormFieldsEnumWrapper : public EnumerationHelper_BASE
 
 public:
     explicit FormFieldsEnumWrapper(uno::Reference<container::XIndexAccess> xIndexAccess)
-        : mxIndexAccess(std::move(xIndexAccess))
+        : mxIndexAccess(xIndexAccess)
         , nIndex(0)
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements() override
-    {
-        return (nIndex < mxIndexAccess->getCount());
-    }
+    sal_Bool SAL_CALL hasMoreElements() override { return (nIndex < mxIndexAccess->getCount()); }
 
-    virtual uno::Any SAL_CALL nextElement() override
+    uno::Any SAL_CALL nextElement() override
     {
         if (nIndex < mxIndexAccess->getCount())
         {
@@ -117,14 +104,14 @@ class FormFieldCollectionHelper
 private:
     uno::Reference<XHelperInterface> mxParent;
     uno::Reference<uno::XComponentContext> mxContext;
-    css::uno::Reference<frame::XModel> mxModel;
+    uno::Reference<frame::XModel> mxModel;
     sw::mark::IFieldmark* m_pCache;
 
 public:
     /// @throws css::uno::RuntimeException
-    FormFieldCollectionHelper(css::uno::Reference<ov::XHelperInterface> xParent,
-                              css::uno::Reference<css::uno::XComponentContext> xContext,
-                              css::uno::Reference<frame::XModel> xModel)
+    FormFieldCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
+                              uno::Reference<uno::XComponentContext> xContext,
+                              uno::Reference<frame::XModel> xModel)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
         , mxModel(std::move(xModel))
@@ -133,25 +120,25 @@ public:
     }
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override
+    sal_Int32 SAL_CALL getCount() override
     {
         sal_Int32 nCount = SAL_MAX_INT32;
         lcl_getFieldmark("", nCount, mxModel);
         return nCount == SAL_MAX_INT32 ? 0 : nCount;
     }
 
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         m_pCache = lcl_getFieldmark("", Index, mxModel);
         if (!m_pCache)
-            throw css::lang::IndexOutOfBoundsException();
+            throw lang::IndexOutOfBoundsException();
 
         return uno::Any(uno::Reference<word::XFormField>(
             new SwVbaFormField(mxParent, mxContext, mxModel, *m_pCache)));
     }
 
     // XNameAccess
-    virtual uno::Sequence<OUString> SAL_CALL getElementNames() override
+    uno::Sequence<OUString> SAL_CALL getElementNames() override
     {
         sal_Int32 nCount = SAL_MAX_INT32;
         uno::Sequence<OUString> aSeq;
@@ -159,7 +146,7 @@ public:
         return aSeq;
     }
 
-    virtual uno::Any SAL_CALL getByName(const OUString& aName) override
+    uno::Any SAL_CALL getByName(const OUString& aName) override
     {
         if (!hasByName(aName))
             throw container::NoSuchElementException();
@@ -168,7 +155,7 @@ public:
             new SwVbaFormField(mxParent, mxContext, mxModel, *m_pCache)));
     }
 
-    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) override
+    sal_Bool SAL_CALL hasByName(const OUString& aName) override
     {
         sal_Int32 nCount = -1;
         m_pCache = lcl_getFieldmark(aName.toUtf8(), nCount, mxModel);
@@ -176,15 +163,12 @@ public:
     }
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override
-    {
-        return cppu::UnoType<word::XFormField>::get();
-    }
+    uno::Type SAL_CALL getElementType() override { return cppu::UnoType<word::XFormField>::get(); }
 
-    virtual sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
+    sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
 
     // XEnumerationAccess
-    virtual uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override
+    uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override
     {
         return new FormFieldsEnumWrapper(this);
     }
@@ -211,7 +195,7 @@ void SwVbaFormFields::setShaded(sal_Bool /*bSet*/)
     SAL_INFO("sw.vba", "SwVbaFormFields::setShaded stub");
 }
 
-// uno::Reference<ooo::vba::word::XFormField> SwVbaFormFields::Add(const css::uno::Any& Range,
+// uno::Reference<ooo::vba::word::XFormField> SwVbaFormFields::Add(const uno::Any& Range,
 //                                                                 sal_Int32 Type)
 // {
 //     sw::mark::IFieldmark* pFieldmark = nullptr;
@@ -237,11 +221,11 @@ uno::Reference<container::XEnumeration> SwVbaFormFields::createEnumeration()
     return new FormFieldsEnumWrapper(m_xIndexAccess);
 }
 
-uno::Any SwVbaFormFields::createCollectionObject(const css::uno::Any& aSource) { return aSource; }
+uno::Any SwVbaFormFields::createCollectionObject(const uno::Any& aSource) { return aSource; }
 
 OUString SwVbaFormFields::getServiceImplName() { return "SwVbaFormFields"; }
 
-css::uno::Sequence<OUString> SwVbaFormFields::getServiceNames()
+uno::Sequence<OUString> SwVbaFormFields::getServiceNames()
 {
     static uno::Sequence<OUString> const sNames{ "ooo.vba.word.FormFields" };
     return sNames;

@@ -17,8 +17,6 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 /**
- * Official documentation at https://learn.microsoft.com/en-us/office/vba/api/word.textinput
- *
  * TextInput formfields are inline text objects that are only found in MS Word.
  * They cannot be created in Excel or in Calc.
  *

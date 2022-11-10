@@ -15,9 +15,6 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 /**
- * Information about the method and properties of CheckBox was gathered from
- * https://www.codevba.com/Word/CheckBox.htm
- *
  * CheckBoxes are inline text objects that are only found in MS Word.
  * They cannot be created in Excel or in Calc.
  *

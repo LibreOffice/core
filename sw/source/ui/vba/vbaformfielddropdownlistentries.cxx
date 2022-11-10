@@ -35,12 +35,9 @@ public:
     {
     }
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
-    {
-        return (nIndex < mxIndexAccess->getCount());
-    }
+    sal_Bool SAL_CALL hasMoreElements() override { return (nIndex < mxIndexAccess->getCount()); }
 
-    virtual uno::Any SAL_CALL nextElement() override
+    uno::Any SAL_CALL nextElement() override
     {
         if (nIndex < mxIndexAccess->getCount())
         {
@@ -69,12 +66,9 @@ public:
     {
     }
 
-    virtual sal_Int32 SAL_CALL getCount() override
-    {
-        return lcl_getListEntries(m_rDropDown).getLength();
-    }
+    sal_Int32 SAL_CALL getCount() override { return lcl_getListEntries(m_rDropDown).getLength(); }
 
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         if (Index < 0 || Index >= getCount())
             throw lang::IndexOutOfBoundsException();
@@ -83,15 +77,12 @@ public:
             new SwVbaFormFieldDropDownListEntry(mxParent, mxContext, m_rDropDown, Index)));
     }
 
-    virtual uno::Type SAL_CALL getElementType() override
-    {
-        return cppu::UnoType<word::XListEntry>::get();
-    }
+    uno::Type SAL_CALL getElementType() override { return cppu::UnoType<word::XListEntry>::get(); }
 
-    virtual sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
+    sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
 
     // XEnumerationAccess
-    virtual uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override
+    uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override
     {
         return new ListEntriesEnumWrapper(this);
     }

@@ -48,16 +48,16 @@ namespace sw::mark {
         {
         public:
             //getters
-            virtual SwPosition& GetMarkPos() const override
+            SwPosition& GetMarkPos() const override
                 { return const_cast<SwPosition&>(*m_oPos1); }
-            virtual const OUString& GetName() const override
+            const OUString& GetName() const override
                 { return m_aName; }
-            virtual SwPosition& GetOtherMarkPos() const override
+            SwPosition& GetOtherMarkPos() const override
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
                 return const_cast<SwPosition&>(*m_oPos2);
             }
-            virtual SwPosition& GetMarkStart() const override
+            SwPosition& GetMarkStart() const override
             {
                 if( !IsExpanded() ) return GetMarkPos( );
                 if ( GetMarkPos( ) < GetOtherMarkPos( ) )
@@ -65,7 +65,7 @@ namespace sw::mark {
                 else
                     return GetOtherMarkPos( );
             }
-            virtual SwPosition& GetMarkEnd() const override
+            SwPosition& GetMarkEnd() const override
             {
                 if( !IsExpanded() ) return GetMarkPos();
                 if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
@@ -74,8 +74,8 @@ namespace sw::mark {
                     return GetOtherMarkPos( );
             }
 
-            virtual bool IsCoveringPosition(const SwPosition& rPos) const override;
-            virtual bool IsExpanded() const override
+            bool IsCoveringPosition(const SwPosition& rPos) const override;
+            bool IsExpanded() const override
                 { return m_oPos2.has_value(); }
 
             void SetName(const OUString& rName)
@@ -87,8 +87,8 @@ namespace sw::mark {
 
             virtual auto InvalidateFrames() -> void;
 
-            virtual OUString ToString( ) const override;
-            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+            OUString ToString( ) const override;
+            void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
             void Swap()
             {
@@ -100,7 +100,7 @@ namespace sw::mark {
             {
             }
 
-            virtual ~MarkBase() override;
+            ~MarkBase() override;
 
             const unotools::WeakReference<SwXBookmark> & GetXBookmark() const
                     { return m_wXBookmark; }
@@ -108,7 +108,7 @@ namespace sw::mark {
 
         protected:
             // SwClient
-            virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+            void SwClientNotify(const SwModify&, const SfxHint&) override;
 
             MarkBase(const SwPaM& rPaM, OUString aName);
             std::optional<SwPosition> m_oPos1;
@@ -147,7 +147,7 @@ namespace sw::mark {
             void SetRefObject( SwServerObject* pObj );
 
             virtual void DeregisterFromDoc(SwDoc& rDoc);
-            virtual ~DdeBookmark() override;
+            ~DdeBookmark() override;
 
         private:
             tools::SvRef<SwServerObject> m_aRefObj;
@@ -162,33 +162,33 @@ namespace sw::mark {
             Bookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName);
-            virtual void InitDoc(SwDoc& io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            void InitDoc(SwDoc& io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
-            virtual void DeregisterFromDoc(SwDoc& io_rDoc) override;
+            void DeregisterFromDoc(SwDoc& io_rDoc) override;
 
-            virtual auto InvalidateFrames() -> void override;
+            auto InvalidateFrames() -> void override;
 
-            virtual const OUString& GetShortName() const override
+            const OUString& GetShortName() const override
                 { return m_sShortName; }
-            virtual const vcl::KeyCode& GetKeyCode() const override
+            const vcl::KeyCode& GetKeyCode() const override
                 { return m_aCode; }
-            virtual void SetShortName(const OUString& rShortName) override
+            void SetShortName(const OUString& rShortName) override
                 { m_sShortName = rShortName; }
-            virtual void SetKeyCode(const vcl::KeyCode& rCode) override
+            void SetKeyCode(const vcl::KeyCode& rCode) override
                 { m_aCode = rCode; }
-            virtual bool IsHidden() const override
+            bool IsHidden() const override
                 { return m_bHidden; }
-            virtual const OUString& GetHideCondition() const override
+            const OUString& GetHideCondition() const override
                 { return m_sHideCondition; }
-            virtual void Hide(bool rHide) override;
-            virtual void SetHideCondition(const OUString& rHideCondition) override;
+            void Hide(bool rHide) override;
+            void SetHideCondition(const OUString& rHideCondition) override;
 
             // ::sfx2::Metadatable
-            virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
-            virtual bool IsInClipboard() const override;
-            virtual bool IsInUndo() const override;
-            virtual bool IsInContent() const override;
-            virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
+            ::sfx2::IXmlIdRegistry& GetRegistry() override;
+            bool IsInClipboard() const override;
+            bool IsInUndo() const override;
+            bool IsInContent() const override;
+            css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
         private:
             vcl::KeyCode m_aCode;
@@ -204,29 +204,29 @@ namespace sw::mark {
         public:
             Fieldmark(const SwPaM& rPaM);
 
-            virtual OUString GetFieldname() const override
+            OUString GetFieldname() const override
                 { return m_aFieldname; }
-            virtual OUString GetFieldHelptext() const override
+            OUString GetFieldHelptext() const override
                 { return m_aFieldHelptext; }
 
-            virtual IFieldmark::parameter_map_t* GetParameters() override
+            IFieldmark::parameter_map_t* GetParameters() override
                 { return &m_vParams; }
 
-            virtual const IFieldmark::parameter_map_t* GetParameters() const override
+            const IFieldmark::parameter_map_t* GetParameters() const override
                 { return &m_vParams; }
 
-            virtual void SetFieldname(const OUString& aFieldname) override
+            void SetFieldname(const OUString& aFieldname) override
                 { m_aFieldname = aFieldname; }
-            virtual void SetFieldHelptext(const OUString& aFieldHelptext) override
+            void SetFieldHelptext(const OUString& aFieldHelptext) override
                 { m_aFieldHelptext = aFieldHelptext; }
 
             virtual void ReleaseDoc(SwDoc&) = 0;
 
             void SetMarkStartPos( const SwPosition& rNewStartPos );
 
-            virtual void Invalidate() override;
-            virtual OUString ToString() const override;
-            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+            void Invalidate() override;
+            OUString ToString() const override;
+            void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
         private:
             OUString m_aFieldname;
@@ -239,8 +239,8 @@ namespace sw::mark {
         {
         public:
             TextFieldmark(const SwPaM& rPaM, const OUString& rName);
-            virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
-            virtual void ReleaseDoc(SwDoc& rDoc) override;
+            void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            void ReleaseDoc(SwDoc& rDoc) override;
 
             OUString GetContent() const override;
             void ReplaceContent(const OUString& sNewContent) override;
@@ -255,8 +255,8 @@ namespace sw::mark {
         {
         public:
             NonTextFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
-            virtual void ReleaseDoc(SwDoc& rDoc) override;
+            void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            void ReleaseDoc(SwDoc& rDoc) override;
         };
 
         /// Fieldmark representing a checkbox form field.
@@ -268,8 +268,8 @@ namespace sw::mark {
             CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName);
             bool IsChecked() const override;
             void SetChecked(bool checked) override;
-            virtual OUString GetContent() const override;
-            virtual void ReplaceContent(const OUString& sNewContent) override;
+            OUString GetContent() const override;
+            void ReplaceContent(const OUString& sNewContent) override;
         };
 
         /// Fieldmark with a drop down button (e.g. this button opens the date picker for a date field)
@@ -278,7 +278,7 @@ namespace sw::mark {
         {
         public:
             FieldmarkWithDropDownButton(const SwPaM& rPaM);
-            virtual ~FieldmarkWithDropDownButton() override;
+            ~FieldmarkWithDropDownButton() override;
 
             virtual void ShowButton(SwEditWin* pEditWin) = 0;
             virtual void RemoveButton();
@@ -295,10 +295,10 @@ namespace sw::mark {
         {
         public:
             DropDownFieldmark(const SwPaM& rPaM, const OUString& rName);
-            virtual ~DropDownFieldmark() override;
+            ~DropDownFieldmark() override;
 
-            virtual void ShowButton(SwEditWin* pEditWin) override;
-            virtual void RemoveButton() override;
+            void ShowButton(SwEditWin* pEditWin) override;
+            void RemoveButton() override;
             OUString GetContent(sal_Int32* pIndex) const override;
             OUString GetContent() const override;
             void AddContent(const OUString& rText, sal_Int32* pIndex = nullptr) override;
@@ -327,22 +327,22 @@ namespace sw::mark {
         {
         public:
             DateFieldmark(const SwPaM& rPaM);
-            virtual ~DateFieldmark() override;
+            ~DateFieldmark() override;
 
-            virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
-            virtual void ReleaseDoc(SwDoc& rDoc) override;
+            void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            void ReleaseDoc(SwDoc& rDoc) override;
 
-            virtual void ShowButton(SwEditWin* pEditWin) override;
+            void ShowButton(SwEditWin* pEditWin) override;
 
             void SetPortionPaintAreaStart(const SwRect& rPortionPaintArea);
             void SetPortionPaintAreaEnd(const SwRect& rPortionPaintArea);
 
-            virtual OUString GetContent() const override;
-            virtual void ReplaceContent(const OUString& sNewContent) override;
+            OUString GetContent() const override;
+            void ReplaceContent(const OUString& sNewContent) override;
 
-            virtual std::pair<bool, double> GetCurrentDate() const override;
-            virtual void SetCurrentDate(double fDate) override;
-            virtual OUString GetDateInStandardDateFormat(double fDate) const override;
+            std::pair<bool, double> GetCurrentDate() const override;
+            void SetCurrentDate(double fDate) override;
+            OUString GetDateInStandardDateFormat(double fDate) const override;
 
         private:
             OUString GetDateInCurrentDateFormat(double fDate) const;
