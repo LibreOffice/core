@@ -4864,7 +4864,7 @@ namespace
     }
 
     // tdf#151898 as far as I can see only gtk_image_new_from_file (or gtk_image_new_from_resource) can support the use of a
-    // scaleable input format to create a hidpi GtkImage, rather than an upscaled lodpi one so forced to go via a file here
+    // scalable input format to create a hidpi GtkImage, rather than an upscaled lodpi one so forced to go via a file here
     std::unique_ptr<utl::TempFileNamed> getImageFile(const css::uno::Reference<css::graphic::XGraphic>& rImage, bool bMirror = false)
     {
         Image aImage(rImage);
