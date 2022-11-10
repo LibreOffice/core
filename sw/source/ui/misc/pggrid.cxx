@@ -152,10 +152,13 @@ bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 
     // draw ticks of ruler
     SwView * pView = ::GetActiveView();
-    if ( m_bHRulerChanged )
-        pView->GetHRuler().DrawTicks();
-    if ( m_bVRulerChanged )
-        pView->GetVRuler().DrawTicks();
+    if (pView)
+    {
+        if ( m_bHRulerChanged )
+            pView->GetHRuler().DrawTicks();
+        if ( m_bVRulerChanged )
+            pView->GetVRuler().DrawTicks();
+    }
     return bRet;
 }
 
@@ -247,7 +250,7 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         rSet.Put(aGridItem);
 
         SwView * pView = ::GetActiveView();
-        if ( aGridItem.GetGridType() != GRID_NONE )
+        if (pView && aGridItem.GetGridType() != GRID_NONE)
         {
             if ( aGridItem.GetGridType() == GRID_LINES_CHARS )
             {
