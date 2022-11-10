@@ -29,6 +29,9 @@ in this Software without prior written authorization from the X Consortium.
 
 #include "def.h"
 #include <string.h>
+
+#include <sal/types.h>
+
 static size_t pr( struct inclist *ip, char *file,char *base);
 
 extern int  width;
@@ -117,8 +120,10 @@ size_t pr(struct inclist *ip, char *file, char *base)
     len = (int)strlen(ip->i_file)+4;
     if (file != lastfile) {
         lastfile = file;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH /* sprintf (macOS 13 SDK) */
         sprintf(buf, "\n%s%s%s: \\\n %s", objprefix, base, objsuffix,
             ip->i_file);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         len = (int)strlen(buf);
     }
     else {

@@ -27,6 +27,8 @@
 #endif
 #include <limits.h>
 
+#include <sal/types.h>
+
 #include "cpp.h"
 
 #define NCONCAT 16384
@@ -143,7 +145,9 @@ void
         {
             if (cp != location)
                 *cp++ = ' ';
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH /* sprintf (macOS 13 SDK) */
             sprintf((char *)cp, "%s:%d", s->filename, s->line);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             cp += strlen((char *)cp);
         }
 

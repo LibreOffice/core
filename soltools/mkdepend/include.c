@@ -32,6 +32,8 @@ in this Software without prior written authorization from the X Consortium.
 #include <string.h>
 #include <assert.h>
 
+#include <sal/types.h>
+
 static void remove_dotdot( char * );
 static int isdot( char const * );
 static int isdotdot( char const * );
@@ -128,7 +130,9 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
      */
     if (!found)
         for (pp = includedirs; *pp; pp++) {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH /* sprintf (macOS 13 SDK) */
             sprintf(path, "%s/%s", *pp, include);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             remove_dotdot(path);
             if ((exists_path(incCollection, path)) && stat(path, &st) == 0 && !(st.st_mode & S_IFDIR)) {
                 ip = newinclude(path, include);
