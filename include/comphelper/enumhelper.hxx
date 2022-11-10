@@ -48,8 +48,8 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName final :
     std::mutex m_aLock;
 
 public:
-    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess > _xAccess);
-    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess > _xAccess,
+    OEnumerationByName(css::uno::Reference< css::container::XNameAccess > _xAccess);
+    OEnumerationByName(css::uno::Reference< css::container::XNameAccess > _xAccess,
                        std::vector<OUString>             _aNames  );
     virtual ~OEnumerationByName() override;
 

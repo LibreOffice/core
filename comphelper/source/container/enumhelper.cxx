@@ -36,7 +36,7 @@ OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XName
 }
 
 
-OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess> _xAccess,
+OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XNameAccess> _xAccess,
                                        std::vector<OUString> _aNames  )
     :m_aNames(std::move(_aNames))
     ,m_xAccess(std::move(_xAccess))
