@@ -27,9 +27,6 @@ typedef CollTestImplHelper<ooo::vba::word::XFormFields> SwVbaFormFields_BASE;
 
 class SwVbaFormFields : public SwVbaFormFields_BASE
 {
-private:
-    const css::uno::Reference<css::frame::XModel>& m_xModel;
-
 public:
     /// @throws css::uno::RuntimeException
     SwVbaFormFields(const css::uno::Reference<ov::XHelperInterface>& xParent,

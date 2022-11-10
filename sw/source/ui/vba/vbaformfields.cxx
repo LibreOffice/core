@@ -196,7 +196,6 @@ SwVbaFormFields::SwVbaFormFields(const uno::Reference<XHelperInterface>& xParent
     : SwVbaFormFields_BASE(xParent, xContext,
                            uno::Reference<container::XIndexAccess>(
                                new FormFieldCollectionHelper(xParent, xContext, xModel)))
-    , m_xModel(std::move(xModel))
 {
 }
 
