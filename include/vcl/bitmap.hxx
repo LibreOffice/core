@@ -499,6 +499,29 @@ public:
                                 bool bInvert = false,
                                 bool msoBrightness = false );
 
+    /** Remove existing blending against COL_WHITE based on given AlphaMask
+
+        Inside convertToBitmapEx the content gets rendered to RGB target (no 'A'),
+        so it gets blended against the start condition of the target device which
+        is blank (usually white background, but others may be used).
+        Usually rendering to RGB is sufficient (e.g. EditViews), but for conversion
+        to BitmapEx the alpha channel is needed to e.g. allow export/conversion to
+        pixel target formats which support Alpha, e.g. PNG.
+        It is possible though to create the fully valid and correct AlphaChannel.
+        If the content, the start condition and the alpha values are known it is
+        possible to calculate back ("remove") the white blending from the result,
+        and this is what this method does.
+
+        @param rColor
+        The Color we know this Bitmap is blended against (usually COL_WHITE)
+
+        @param rAlphaMask
+        The AlphaMask which was used to blend white against this
+     */
+    void                    RemoveBlendedStartColor(
+                                const Color& rColor,
+                                const AlphaMask& rAlphaMask);
+
     // access to SystemDependentDataHolder, to support overload in derived class(es)
     const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
 

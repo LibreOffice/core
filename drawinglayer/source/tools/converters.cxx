@@ -32,8 +32,11 @@
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
-#include <vcl/filter/PngImageWriter.hxx>
+// #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/dibtools.hxx>
 #endif
+
+// #include <vcl/BitmapReadAccess.hxx>
 
 namespace
 {
@@ -137,39 +140,56 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
                            sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
                            sal_uInt32 nMaxSquarePixels)
 {
-    BitmapEx aRetval;
     drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
 
     if (!implPrepareConversion(aSequence, nDiscreteWidth, nDiscreteHeight, nMaxSquarePixels))
     {
-        return aRetval;
+        return BitmapEx();
     }
 
     const Point aEmptyPoint;
     const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
 
-    // Create target VirtualDevice. Use a VirtualDevice in the Alpha-mode.
-    // This creates the needed alpha channel 'in parallel'. It is not
-    // cheaper though since the VDev in that mode internally uses two VDevs,
-    // so resource-wise it's more expensive, speed-wise pretty much the same
-    // (the former two-path rendering created content & alpha separately in
-    // two runs). The former method always created the correct Alpha, but
-    // when transparent geometry was involved, the created content was
-    // blended against white (COL_WHITE) due to the starting conditions of
-    // creation.
-    // There are more ways than this to do this correctly, but this is the
-    // most simple for now. Due to hoping to be able to render to RGBA in the
-    // future anyways there is no need to experiment trying to do the correct
-    // thing using an expanded version of the former method.
-    ScopedVclPtrInstance<VirtualDevice> pContent(*Application::GetDefaultDevice(),
-                                                 DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    // Create target VirtualDevice. Go back to using a simple RGB
+    // target version (comared with former version, see history).
+    // Reasons are manyfold:
+    // - Avoid the RGBA mode for VirtualDevice (two VDevs)
+    //   - It's not suggested to be used outside presentation engine
+    //   - It only works *by chance* with VCLPrimitiveRenderer
+    // - Usage of two-VDev alpha-VDev avoided alpha blending against
+    //   COL_WHITE in the 1st layer of targets (not in buffers below)
+    //   but is kind of a 'hack' doing so
+    // - Other renderers (system-dependent PrimitiveRenderers, other
+    //   than the VCL-based ones) will probably not support splitted
+    //   VDevs for content/alpha, so require a method that works with
+    //   RGB targeting (for now)
+    // - Less ressource usage, better speed (no 2 VDevs, no merge of
+    //   AlphaChannels)
+    // As long as not all our mechanisms are changed to RGBA completely,
+    // mixing these is just too dangerous and expensive and may to wrong
+    // or deliver bad quality results.
+    // Nonetheless we need a RGBA result here. Luckily we are able to
+    // create a copmplete and valid AlphaChannel using 'createAlphaMask'
+    // above.
+    // When we know the content (RGB result from renderer), alpha
+    // (result from createAlphaMask) and the start condition (content
+    // rendered against COL_WHITE), it is possible to calculate back
+    // the content, quasi 'remove' that initial blending against
+    // COL_WHITE.
+    // That is what the helper Bitmap::RemoveBlendedStartColor does.
+    // Luckily we only need it for this 'convertToBitmapEx', not in
+    // any other rendering. It could be further optimized, too.
+    // This gives good results, it is in principle comparable with
+    // the results using pre-multiplied alpha tooling, also reducing
+    // the range of values where high alpha vlaues are used.
+    ScopedVclPtrInstance< VirtualDevice > pContent(*Application::GetDefaultDevice());
 
     // prepare vdev
     if (!pContent->SetOutputSizePixel(aSizePixel, false))
     {
         SAL_WARN("vcl", "Cannot set VirtualDevice to size : " << aSizePixel.Width() << "x"
                                                               << aSizePixel.Height());
-        return aRetval;
+        return BitmapEx();
     }
 
     // We map to pixel, use that MapMode. Init by erasing.
@@ -185,8 +205,8 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     // render content
     pContentProcessor->process(aSequence);
 
-    // create final BitmapEx result
-    aRetval = pContent->GetBitmapEx(aEmptyPoint, aSizePixel);
+    // create final BitmapEx result (content)
+    Bitmap aRetval(pContent->GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
     static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
@@ -197,28 +217,40 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
             OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
         if (!sDumpPath.isEmpty())
         {
-            SvFileStream aNew(sDumpPath + "test_combined.png",
-                              StreamMode::WRITE | StreamMode::TRUNC);
-            vcl::PngImageWriter aPNGWriter(aNew);
-            aPNGWriter.write(aRetval);
+            SvFileStream aNew(sDumpPath + "test_content.bmp", StreamMode::WRITE | StreamMode::TRUNC);
+            WriteDIB(aRetval, aNew, false, true);
         }
     }
 #endif
 
-    // Combined/mixed usage of VirtualDevice in Alpha-mode here and
-    // the faster method for divided content/alpha in the VclPixelProcessor2D
-    // *can* go wrong e.g. for objects filled with TransparenceGradients,
-    // so unfortunately for now we have to reliably re-create the
-    // AlphaMask using a method that does this always correct (also used
+    // Create the AlphaMask using a method that does this always correct (also used
     // now in GlowPrimitive2D and ShadowPrimitive2D which both only need the
     // AlphaMask to do their job, so speeding that up, too).
-    // Note: This could be further approved by creating a small ::B2DProcessor
-    //       that checks if rSeq contains a TransparenceGradient fill and only then use
-    //       this correction.
-    const AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel));
-    aRetval = BitmapEx(aRetval.GetBitmap(), aAlpha);
+    AlphaMask aAlpha(implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel));
 
-    return aRetval;
+#ifdef DBG_UTIL
+    if (bDoSaveForVisualControl)
+    {
+        // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
+        static const OUString sDumpPath(
+            OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+        if (!sDumpPath.isEmpty())
+        {
+            SvFileStream aNew(sDumpPath + "test_alpha.bmp", StreamMode::WRITE | StreamMode::TRUNC);
+            WriteDIB(aAlpha.GetBitmap(), aNew, false, true);
+        }
+    }
+#endif
+
+    if (aAlpha.hasAlpha())
+    {
+        // Need to correct content using known alpha to get to background-free
+        // RGBA result, usable e.g. in PNG export(s) or convert-to-bitmap
+        aRetval.RemoveBlendedStartColor(COL_WHITE, aAlpha);
+    }
+
+    // return combined result
+    return BitmapEx(aRetval, aAlpha);
 }
 
 BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer&& rSequence,

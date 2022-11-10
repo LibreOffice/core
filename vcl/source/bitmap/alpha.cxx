@@ -112,6 +112,34 @@ void AlphaMask::BlendWith(const Bitmap& rOther)
     }
 }
 
+bool AlphaMask::hasAlpha() const
+{
+    // no content, no alpha
+    if(IsEmpty())
+        return false;
+
+    ScopedReadAccess pAcc(const_cast<AlphaMask&>(*this));
+    const tools::Long nHeight(pAcc->Height());
+    const tools::Long nWidth(pAcc->Width());
+
+    // no content, no alpha
+    if(0 == nHeight || 0 == nWidth)
+        return false;
+
+    for (tools::Long y = 0; y < nHeight; ++y)
+    {
+        for (tools::Long x = 0; x < nWidth; ++x)
+        {
+            if (0 != pAcc->GetColor(y, x).GetRed())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
 {
     if( pAccess )

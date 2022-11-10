@@ -1717,6 +1717,75 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
+namespace
+{
+inline sal_uInt8 backBlendAlpha(sal_uInt16 alpha, sal_uInt16 srcCol, sal_uInt16 startCol)
+{
+    const sal_uInt16 nAlpha((alpha * startCol) / 255);
+    if(srcCol > nAlpha)
+    {
+        return static_cast<sal_uInt8>(((srcCol - nAlpha) * 255) / (255 - nAlpha));
+    }
+
+    return 0;
+}
+}
+
+void Bitmap::RemoveBlendedStartColor(
+    const Color& rStartColor,
+    const AlphaMask& rAlphaMask)
+{
+    // no content, done
+    if(IsEmpty())
+        return;
+
+    BitmapScopedWriteAccess pAcc(*this);
+    const tools::Long nHeight(pAcc->Height());
+    const tools::Long nWidth(pAcc->Width());
+
+    // no content, done
+    if(0 == nHeight || 0 == nWidth)
+        return;
+
+    AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlphaMask));
+
+    // inequal sizes of content and alpha, avoid change (maybe assert?)
+    if(pAlphaAcc->Height() != nHeight || pAlphaAcc->Width() != nWidth)
+        return;
+
+    // prepare local values as sal_uInt16 to avoid multiple conversions
+    const sal_uInt16 nStartColRed(rStartColor.GetRed());
+    const sal_uInt16 nStartColGreen(rStartColor.GetGreen());
+    const sal_uInt16 nStartColBlue(rStartColor.GetBlue());
+
+    for (tools::Long y = 0; y < nHeight; ++y)
+    {
+        for (tools::Long x = 0; x < nWidth; ++x)
+        {
+            // get alpha value
+            const sal_uInt8 nAlpha8(pAlphaAcc->GetColor(y, x).GetRed());
+
+            // not or completely transparent, no adaption needed
+            if(0 == nAlpha8 || 255 == nAlpha8)
+                continue;
+
+            // prepare local value as sal_uInt16 to avoid multiple conversions
+            const sal_uInt16 nAlpha16(static_cast<sal_uInt16>(nAlpha8));
+
+            // get source color
+            BitmapColor aColor(pAcc->GetColor(y, x));
+
+            // modify/blend back source color
+            aColor.SetRed(backBlendAlpha(nAlpha16, static_cast<sal_uInt16>(aColor.GetRed()), nStartColRed));
+            aColor.SetGreen(backBlendAlpha(nAlpha16, static_cast<sal_uInt16>(aColor.GetGreen()), nStartColGreen));
+            aColor.SetBlue(backBlendAlpha(nAlpha16, static_cast<sal_uInt16>(aColor.GetBlue()), nStartColBlue));
+
+            // write result back
+            pAcc->SetPixel(y, x, aColor);
+        }
+    }
+}
+
 const basegfx::SystemDependentDataHolder* Bitmap::accessSystemDependentDataHolder() const
 {
     if(!mxSalBmp)

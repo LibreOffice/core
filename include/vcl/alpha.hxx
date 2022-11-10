@@ -51,6 +51,9 @@ public:
     void        Erase( sal_uInt8 cTransparency );
     void        BlendWith(const Bitmap& rOther);
 
+    // check if alpha is used, returns true if at least one pixel has transparence
+    bool        hasAlpha() const;
+
     BitmapReadAccess*  AcquireAlphaReadAccess() { return Bitmap::AcquireReadAccess(); }
     BitmapWriteAccess* AcquireAlphaWriteAccess() { return Bitmap::AcquireWriteAccess(); }
 
