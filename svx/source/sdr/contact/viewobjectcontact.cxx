@@ -69,7 +69,7 @@ public:
 
     // data access
     const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-    drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence() const { return std::move(maPrimitive2DSequence); }
+    drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence() { return std::move(maPrimitive2DSequence); }
 };
 
 AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
