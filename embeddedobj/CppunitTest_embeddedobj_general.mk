@@ -24,8 +24,11 @@ $(eval $(call gb_CppunitTest_use_libraries,embeddedobj_general, \
     cppu \
     embobj \
     sal \
+    subsequenttest \
     test \
+    tl \
     unotest \
+    utl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,embeddedobj_general))

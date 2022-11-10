@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -24,31 +23,14 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers embeddedobj/source/general/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    void setUp() override;
-    void tearDown() override;
-    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    Test()
+        : UnoApiTest("/embeddedobj/qa/cppunit/data/")
+    {
+    }
 };
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
@@ -65,14 +47,12 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
                                                                                    pBatchReset);
         pBatchReset->commit();
     });
-    getComponent().set(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
 
     // Insert a file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
-    OUString aFileName
-        = m_directories.getURLFromSrc(u"embeddedobj/qa/cppunit/data/insert-file-config.doc");
+    OUString aFileName = createFileURL(u"insert-file-config.doc");
     uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
     OUString aName("Object 1");
     uno::Reference<embed::XEmbeddedObject> xObject
@@ -98,14 +78,12 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
         officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::set(true, pBatchReset);
         pBatchReset->commit();
     });
-    getComponent().set(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
 
     // Insert a file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
-    OUString aFileName
-        = m_directories.getURLFromSrc(u"embeddedobj/qa/cppunit/data/insert-file-config.vsdx");
+    OUString aFileName = createFileURL(u"insert-file-config.vsdx");
     uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
     OUString aName("Object 1");
     uno::Reference<embed::XEmbeddedObject> xObject
@@ -131,14 +109,12 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
         officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(true, pBatchReset);
         pBatchReset->commit();
     });
-    getComponent().set(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
 
     // Insert a PDF file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
-    OUString aFileName
-        = m_directories.getURLFromSrc(u"embeddedobj/qa/cppunit/data/insert-file-config.pdf");
+    OUString aFileName = createFileURL(u"insert-file-config.pdf");
     uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
     OUString aName("Object 1");
     uno::Reference<embed::XEmbeddedObject> xObject
