@@ -1347,7 +1347,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/text,\
 	ChainedTextFrame \
 	ChapterNumberingRule \
 	ContentControl \
-	ContentControls \
 	ContentIndex \
 	ContentIndexMark \
 	Defaults \
