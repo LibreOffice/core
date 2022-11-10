@@ -30,7 +30,7 @@ interface XFormFields
 
     ///Returns and sets if shading is applied to form XFormFields
     [attribute] boolean  Shaded;
-    /// Resturns a FormField object that representa new WdFieldType added at a range
+    /// Returns a FormField object that represents a new WdFieldType added at a range
     //XFormField Add( [in] any Range, [in] long Type ) raises ( com::sun::star::script::BasicErrorException );
 };
 
