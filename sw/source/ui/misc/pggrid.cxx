@@ -227,39 +227,39 @@ DeactivateRC SwTextGridPage::DeactivatePage( SfxItemSet* )
 
 void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
 {
-        SwTextGridItem aGridItem;
-        aGridItem.SetGridType(m_xNoGridRB->get_active() ? GRID_NONE :
-            m_xLinesGridRB->get_active() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
-        aGridItem.SetSnapToChars(m_xSnapToCharsCB->get_active());
-        aGridItem.SetLines( static_cast< sal_uInt16 >(m_xLinesPerPageNF->get_value()) );
-        aGridItem.SetBaseHeight( static_cast< sal_uInt16 >(
-            m_bRubyUserValue ? m_nRubyUserValue :
-                m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP))) );
-        // Tdf#151544: set ruby height from the value get from UI only when in square page mode.
-        // When in normal mode, the ruby height should be zero.
-        if (m_bSquaredMode)
-            aGridItem.SetRubyHeight(static_cast<sal_uInt16>(m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
-        else
-            aGridItem.SetRubyHeight(0);
-        aGridItem.SetBaseWidth( static_cast< sal_uInt16 >(m_xCharWidthMF->denormalize(m_xCharWidthMF->get_value(FieldUnit::TWIP))) );
-        aGridItem.SetRubyTextBelow(m_xRubyBelowCB->get_active());
-        aGridItem.SetSquaredMode(m_bSquaredMode);
-        aGridItem.SetDisplayGrid(m_xDisplayCB->get_active());
-        aGridItem.SetPrintGrid(m_xPrintCB->get_active());
-        aGridItem.SetColor(m_xColorLB->GetSelectEntryColor());
-        rSet.Put(aGridItem);
+    SwTextGridItem aGridItem;
+    aGridItem.SetGridType(m_xNoGridRB->get_active() ? GRID_NONE :
+        m_xLinesGridRB->get_active() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
+    aGridItem.SetSnapToChars(m_xSnapToCharsCB->get_active());
+    aGridItem.SetLines( static_cast< sal_uInt16 >(m_xLinesPerPageNF->get_value()) );
+    aGridItem.SetBaseHeight( static_cast< sal_uInt16 >(
+        m_bRubyUserValue ? m_nRubyUserValue :
+            m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP))) );
+    // Tdf#151544: set ruby height from the value get from UI only when in square page mode.
+    // When in normal mode, the ruby height should be zero.
+    if (m_bSquaredMode)
+        aGridItem.SetRubyHeight(static_cast<sal_uInt16>(m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
+    else
+        aGridItem.SetRubyHeight(0);
+    aGridItem.SetBaseWidth( static_cast< sal_uInt16 >(m_xCharWidthMF->denormalize(m_xCharWidthMF->get_value(FieldUnit::TWIP))) );
+    aGridItem.SetRubyTextBelow(m_xRubyBelowCB->get_active());
+    aGridItem.SetSquaredMode(m_bSquaredMode);
+    aGridItem.SetDisplayGrid(m_xDisplayCB->get_active());
+    aGridItem.SetPrintGrid(m_xPrintCB->get_active());
+    aGridItem.SetColor(m_xColorLB->GetSelectEntryColor());
+    rSet.Put(aGridItem);
 
-        SwView * pView = ::GetActiveView();
-        if (pView && aGridItem.GetGridType() != GRID_NONE)
+    SwView * pView = ::GetActiveView();
+    if (pView && aGridItem.GetGridType() != GRID_NONE)
+    {
+        if ( aGridItem.GetGridType() == GRID_LINES_CHARS )
         {
-            if ( aGridItem.GetGridType() == GRID_LINES_CHARS )
-            {
-                m_bHRulerChanged = true;
-            }
-            m_bVRulerChanged = true;
-            pView->GetHRuler().SetCharWidth(m_xCharWidthMF->get_value(FieldUnit::MM));
-            pView->GetVRuler().SetLineHeight(m_xTextSizeMF->get_value(FieldUnit::MM));
+            m_bHRulerChanged = true;
         }
+        m_bVRulerChanged = true;
+        pView->GetHRuler().SetCharWidth(m_xCharWidthMF->get_value(FieldUnit::MM));
+        pView->GetVRuler().SetLineHeight(m_xTextSizeMF->get_value(FieldUnit::MM));
+    }
 }
 
 void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
