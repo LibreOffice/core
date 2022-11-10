@@ -669,159 +669,109 @@ Reference< frame::XModel > SAL_CALL SfxBaseController::getModel()
 
 //  SfxBaseController -> XDispatchProvider
 
+static css::uno::Reference<css::frame::XDispatch>
+GetSlotDispatchWithFallback(SfxViewFrame* pViewFrame, const css::util::URL& aURL,
+                            const OUString& sActCommand, bool bMasterCommand, const SfxSlot* pSlot)
+{
+    assert(pViewFrame);
+
+    if (pSlot && (!pViewFrame->GetFrame().IsInPlace() || !pSlot->IsMode(SfxSlotMode::CONTAINER)))
+        return pViewFrame->GetBindings().GetDispatch(pSlot, aURL, bMasterCommand);
+
+    // try to find parent SfxViewFrame
+    if (const auto& xOwnFrame = pViewFrame->GetFrame().GetFrameInterface())
+    {
+        if (const auto& xParentFrame = xOwnFrame->getCreator())
+        {
+            // TODO/LATER: in future probably SfxViewFrame hierarchy should be the same as XFrame hierarchy
+            // SfxViewFrame* pParentFrame = pViewFrame->GetParentViewFrame();
+
+            // search the related SfxViewFrame
+            SfxViewFrame* pParentFrame = nullptr;
+            for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+                 pFrame = SfxViewFrame::GetNext(*pFrame))
+            {
+                if (pFrame->GetFrame().GetFrameInterface() == xParentFrame)
+                {
+                    pParentFrame = pFrame;
+                    break;
+                }
+            }
+
+            if (pParentFrame)
+            {
+                const SfxSlotPool& rFrameSlotPool = SfxSlotPool::GetSlotPool(pParentFrame);
+                if (const SfxSlot* pSlot2 = rFrameSlotPool.GetUnoSlot(sActCommand))
+                    return pParentFrame->GetBindings().GetDispatch(pSlot2, aURL, bMasterCommand);
+            }
+        }
+    }
+
+    return {};
+}
 
 Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const   util::URL&             aURL            ,
                                                                     const   OUString&            sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    )
 {
     SolarMutexGuard aGuard;
-    Reference< frame::XDispatch >  xDisp;
-    if ( m_pData->m_pViewShell )
+
+    if (!m_pData->m_bDisposing && m_pData->m_pViewShell)
     {
         SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
-        if ( !m_pData->m_bDisposing )
+        if ( sTargetFrameName == "_beamer" )
         {
-            if ( sTargetFrameName == "_beamer" )
+            if ( eSearchFlags & frame::FrameSearchFlag::CREATE )
+                pAct->SetChildWindow( SID_BROWSER, true );
+            if (SfxChildWindow* pChildWin = pAct->GetChildWindow(SID_BROWSER))
             {
-                SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
-                if ( eSearchFlags & frame::FrameSearchFlag::CREATE )
-                    pFrame->SetChildWindow( SID_BROWSER, true );
-                SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
-                Reference < frame::XFrame > xFrame;
-                if ( pChildWin )
-                    xFrame = pChildWin->GetFrame();
-                if ( xFrame.is() )
-                    xFrame->setName( sTargetFrameName );
-
-                Reference< XDispatchProvider > xProv( xFrame, uno::UNO_QUERY );
-                if ( xProv.is() )
-                    return xProv->queryDispatch( aURL, sTargetFrameName, frame::FrameSearchFlag::SELF );
-            }
-
-            if ( aURL.Protocol == ".uno:" )
-            {
-                OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
-                bool     bMasterCommand( !aMasterCommand.isEmpty() );
-
-                pAct = m_pData->m_pViewShell->GetViewFrame() ;
-                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
-
-                const SfxSlot* pSlot( nullptr );
-                if ( bMasterCommand )
-                    pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
-                else
-                    pSlot = rSlotPool.GetUnoSlot( aURL.Path );
-                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SfxSlotMode::CONTAINER ) ) )
-                    return pAct->GetBindings().GetDispatch( pSlot, aURL, bMasterCommand );
-                else
+                if (Reference<frame::XFrame> xFrame{ pChildWin->GetFrame() })
                 {
-                    // try to find parent SfxViewFrame
-                    Reference< frame::XFrame > xParentFrame;
-                    Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
-                    if ( xOwnFrame.is() )
-                        xParentFrame = xOwnFrame->getCreator();
-
-                    if ( xParentFrame.is() )
-                    {
-                        // TODO/LATER: in future probably SfxViewFrame hierarchy should be the same as XFrame hierarchy
-                        // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
-
-                        // search the related SfxViewFrame
-                        SfxViewFrame* pParentFrame = nullptr;
-                        for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
-                                pFrame;
-                                pFrame = SfxViewFrame::GetNext( *pFrame ) )
-                        {
-                            if ( pFrame->GetFrame().GetFrameInterface() == xParentFrame )
-                            {
-                                pParentFrame = pFrame;
-                                break;
-                            }
-                        }
-
-                        if ( pParentFrame )
-                        {
-                            SfxSlotPool& rFrameSlotPool = SfxSlotPool::GetSlotPool( pParentFrame );
-                            const SfxSlot* pSlot2( nullptr );
-                            if ( bMasterCommand )
-                                pSlot2 = rFrameSlotPool.GetUnoSlot( aMasterCommand );
-                            else
-                                pSlot2 = rFrameSlotPool.GetUnoSlot( aURL.Path );
-
-                            if ( pSlot2 )
-                                return pParentFrame->GetBindings().GetDispatch( pSlot2, aURL, bMasterCommand );
-                        }
-                    }
+                    xFrame->setName(sTargetFrameName);
+                    if (Reference<XDispatchProvider> xProv{ xFrame, uno::UNO_QUERY })
+                        return xProv->queryDispatch(aURL, sTargetFrameName, frame::FrameSearchFlag::SELF);
                 }
             }
-            else if ( aURL.Protocol == "slot:" )
+        }
+
+        if ( aURL.Protocol == ".uno:" )
+        {
+            OUString aActCommand = SfxOfficeDispatch::GetMasterUnoCommand(aURL);
+            bool bMasterCommand(!aActCommand.isEmpty());
+            if (!bMasterCommand)
+                aActCommand = aURL.Path;
+            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pAct).GetUnoSlot(aActCommand);
+            return GetSlotDispatchWithFallback(pAct, aURL, aActCommand, bMasterCommand, pSlot);
+        }
+        else if ( aURL.Protocol == "slot:" )
+        {
+            sal_uInt16 nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
+
+            if (nId >= SID_VERB_START && nId <= SID_VERB_END)
             {
-                sal_uInt16 nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
-
-                pAct = m_pData->m_pViewShell->GetViewFrame() ;
-                if (nId >= SID_VERB_START && nId <= SID_VERB_END)
-                {
-                    const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
-                    if ( pSlot )
-                        return pAct->GetBindings().GetDispatch( pSlot, aURL, false );
-                }
-
-                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
-                const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
-                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SfxSlotMode::CONTAINER ) ) )
+                const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
+                if ( pSlot )
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, false );
-                else
-                {
-                    // try to find parent SfxViewFrame
-                    Reference< frame::XFrame > xParentFrame;
-                    Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
-                    if ( xOwnFrame.is() )
-                        xParentFrame = xOwnFrame->getCreator();
-
-                    if ( xParentFrame.is() )
-                    {
-                        // TODO/LATER: in future probably SfxViewFrame hierarchy should be the same as XFrame hierarchy
-                        // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
-
-                        // search the related SfxViewFrame
-                        SfxViewFrame* pParentFrame = nullptr;
-                        for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
-                                pFrame;
-                                pFrame = SfxViewFrame::GetNext( *pFrame ) )
-                        {
-                            if ( pFrame->GetFrame().GetFrameInterface() == xParentFrame )
-                            {
-                                pParentFrame = pFrame;
-                                break;
-                            }
-                        }
-
-                        if ( pParentFrame )
-                        {
-                            SfxSlotPool& rSlotPool2 = SfxSlotPool::GetSlotPool( pParentFrame );
-                            const SfxSlot* pSlot2 = rSlotPool2.GetUnoSlot( aURL.Path );
-                            if ( pSlot2 )
-                                return pParentFrame->GetBindings().GetDispatch( pSlot2, aURL, false );
-                        }
-                    }
-                }
             }
-            else if( sTargetFrameName == "_self" || sTargetFrameName.isEmpty() )
+
+            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pAct).GetSlot(nId);
+            return GetSlotDispatchWithFallback(pAct, aURL, aURL.Path, false, pSlot);
+        }
+        else if( sTargetFrameName == "_self" || sTargetFrameName.isEmpty() )
+        {
+            // check for already loaded URL ... but with additional jumpmark!
+            Reference< frame::XModel > xModel = getModel();
+            if( xModel.is() && !aURL.Mark.isEmpty() )
             {
-                // check for already loaded URL ... but with additional jumpmark!
-                Reference< frame::XModel > xModel = getModel();
-                if( xModel.is() && !aURL.Mark.isEmpty() )
-                {
-                    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
-                    const SfxSlot* pSlot = rSlotPool.GetSlot( SID_JUMPTOMARK );
-                    if( !aURL.Main.isEmpty() && aURL.Main == xModel->getURL() && pSlot )
-                        return Reference< frame::XDispatch >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot, aURL) );
-                }
+                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
+                const SfxSlot* pSlot = rSlotPool.GetSlot( SID_JUMPTOMARK );
+                if( !aURL.Main.isEmpty() && aURL.Main == xModel->getURL() && pSlot )
+                    return Reference< frame::XDispatch >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot, aURL) );
             }
         }
     }
 
-    return xDisp;
+    return {};
 }
 
 
