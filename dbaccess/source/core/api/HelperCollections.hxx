@@ -83,7 +83,7 @@ namespace dbaccess
             return nullptr;
         }
     public:
-        OPrivateTables( const OSQLTables& _rTables,
+        OPrivateTables( OSQLTables _rTables,
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
