@@ -3513,6 +3513,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Select</value>
+            <value xml:lang="es">.uno:Open</value>
           </prop>
         </node>
         <node oor:name="F3" oor:op="replace">
