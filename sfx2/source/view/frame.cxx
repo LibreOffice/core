@@ -584,10 +584,7 @@ tools::Rectangle SfxFrame::GetTopOuterRectPixel_Impl() const
 
 SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
 {
-    if ( m_pImpl->pWorkWin )
-        return m_pImpl->pWorkWin;
-    else
-        return nullptr;
+    return m_pImpl->pWorkWin;
 }
 
 void SfxFrame::CreateWorkWindow_Impl()
