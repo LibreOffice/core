@@ -468,20 +468,43 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::Toggleable&, rButton, void)
     if (!rButton.get_active())
         return;
 
-    const bool bNoGrid = m_xNoGridRB.get() == &rButton;
-    m_xLayoutFL->set_sensitive(!bNoGrid);
-    m_xDisplayFL->set_sensitive(!bNoGrid);
-
-    //one special case
-    if (!bNoGrid)
-        DisplayGridHdl(*m_xDisplayCB);
-
-    bool bEnable = m_xCharsGridRB.get() == &rButton;
-    m_xSnapToCharsCB->set_sensitive(bEnable);
-
-    bEnable = m_xLinesGridRB.get() == &rButton;
-    if (bEnable && !m_bSquaredMode)
+    if (m_xNoGridRB.get() == &rButton)
     {
+        // GRID_NONE mode:
+        //   "Layout" and "Display" sections should all be disabled.
+        m_xLayoutFL->set_sensitive(false);
+        m_xDisplayFL->set_sensitive(false);
+    }
+    else
+    {
+        // GRID_LINES_ONLY or GRID_LINES_CHARS mode:
+        //   "Layout" and "Display" sections should all be enabled;
+        //   DisplayGridHdl should be executed;
+        m_xLayoutFL->set_sensitive(true);
+        m_xDisplayFL->set_sensitive(true);
+        DisplayGridHdl(*m_xDisplayCB);
+    }
+
+    if (m_xCharsGridRB.get() == &rButton)
+    {
+        // GRID_LINES_CHARS mode:
+        //   "Snap to character" should be enabled;
+        //   "Characters per line" should be enabled;
+        //   "Characters range" should be enabled;
+        m_xSnapToCharsCB->set_sensitive(true);
+        m_xCharsPerLineFT->set_sensitive(true);
+        m_xCharsPerLineNF->set_sensitive(true);
+        m_xCharsRangeFT->set_sensitive(true);
+        m_xCharWidthFT->set_sensitive(true);
+        m_xCharWidthMF->set_sensitive(true);
+    }
+    else
+    {
+        // GRID_NONE or GRID_LINES_ONLY mode:
+        //   "Snap to character" should be disabled;
+        //   "Characters per line" should be disabled;
+        //   "Characters range" should be disabled;
+        m_xSnapToCharsCB->set_sensitive(false);
         m_xCharsPerLineFT->set_sensitive(false);
         m_xCharsPerLineNF->set_sensitive(false);
         m_xCharsRangeFT->set_sensitive(false);
@@ -489,9 +512,12 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, weld::Toggleable&, rButton, void)
         m_xCharWidthMF->set_sensitive(false);
     }
 
-    //recalc which dependencies are sensitive
-    if (!bNoGrid)
+    if (m_xNoGridRB.get() != &rButton)
+    {
+        // GRID_LINES_ONLY or GRID_LINES_CHARS mode: (additionally)
+        //   TextSizeChangedHdl should be executed to recalculate which dependencies are sensitive.
         TextSizeChangedHdl(*m_xTextSizeMF);
+    }
 
     GridModifyHdl();
 }
