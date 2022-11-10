@@ -34,6 +34,7 @@ public:
     virtual void tearDown() override;
 
     OUString createFileURL(std::u16string_view aFileBase);
+    OUString createFilePath(std::u16string_view aFileBase);
     void load(const OUString& rURL, const char* pPassword = nullptr);
     OUString loadFromURL(std::u16string_view aFileBase, const char* pPassword = nullptr);
 

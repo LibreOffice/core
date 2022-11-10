@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	sc \
 	sfx \
 	sot \
+	subsequenttest \
 	svl \
 	svt \
 	svx \

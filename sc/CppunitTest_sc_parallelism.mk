@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_parallelism, \
     sb \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \

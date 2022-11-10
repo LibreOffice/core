@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_opencl_test, \
 	boost_headers \
     $(call gb_Helper_optional,OPENCL,clew) \
 	mdds_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_opencl_test, \

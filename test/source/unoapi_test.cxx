@@ -57,6 +57,11 @@ OUString UnoApiTest::createFileURL(std::u16string_view aFileBase)
     return m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
 }
 
+OUString UnoApiTest::createFilePath(std::u16string_view aFileBase)
+{
+    return m_directories.getSrcRootPath() + "/" + m_aBaseString + "/" + aFileBase;
+}
+
 void UnoApiTest::setTestInteractionHandler(const char* pPassword,
                                            std::vector<beans::PropertyValue>& rFilterOptions)
 {

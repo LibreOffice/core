@@ -313,6 +313,120 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,2,3,1,2)), rRange3);
 }
 
+void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sFormat)
+{
+    //test Sheet1 with csv file
+    OUString aCSVFileName = pTest->createFilePath(u"contentCSV/numberFormat.csv");
+    testFile(aCSVFileName, *pDoc, 0, StringType::PureString);
+    //need to test the color of B3
+    //it's not a font color!
+    //formatting for B5: # ??/100 gets lost during import
+
+    //test Sheet2
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 1);
+    vcl::Font aFont;
+    pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", tools::Long(200), aFont.GetFontSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor());
+    pPattern = pDoc->GetPattern(0,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", tools::Long(240), aFont.GetFontSize().getHeight());
+    pPattern = pDoc->GetPattern(0,2,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalic());
+    pPattern = pDoc->GetPattern(0,4,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    pPattern = pDoc->GetPattern(1,0,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aFont.GetColor());
+    pPattern = pDoc->GetPattern(1,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
+    //some tests on sheet2 only for ods
+    if (sFormat == u"calc8")
+    {
+        pPattern = pDoc->GetPattern(1,2,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
+        pPattern = pDoc->GetPattern(1,3,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", LINESTYLE_DOTTED, aFont.GetUnderline());
+        //check row height import
+        //disable for now until we figure out cause of win tinderboxes test failures
+        //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(256), pDoc->GetRowHeight(0,1) ); //0.178in
+        //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(304), pDoc->GetRowHeight(1,1) ); //0.211in
+        //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(477), pDoc->GetRowHeight(5,1) ); //0.3311in
+        //check column width import
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(555), pDoc->GetColWidth(4,1) );  //0.3854in
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(1280), pDoc->GetColWidth(5,1) ); //0.889in
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(4153), pDoc->GetColWidth(6,1) ); //2.8839in
+        //test case for i53253 where a cell has text with different styles and space between the text.
+        OUString aTestStr = pDoc->GetString(3,0,1);
+        OUString aKnownGoodStr("text14 space");
+        CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
+        //test case for cell text with line breaks.
+        aTestStr = pDoc->GetString(3,5,1);
+        aKnownGoodStr = "Hello,\nCalc!";
+        CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
+    }
+    pPattern = pDoc->GetPattern(1,4,1);
+    Color aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", COL_LIGHTGREEN, aColor);
+    pPattern = pDoc->GetPattern(2,0,1);
+    SvxCellHorJustify eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
+    //test alignment
+    pPattern = pDoc->GetPattern(2,1,1);
+    eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned right horizontally", SvxCellHorJustify::Right, eHorJustify);
+    pPattern = pDoc->GetPattern(2,2,1);
+    eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SvxCellHorJustify::Block, eHorJustify);
+
+    //test Sheet3 only for ods and xlsx
+    if ( sFormat == u"calc8" || sFormat == u"Calc Office Open XML" )
+    {
+        aCSVFileName = pTest->createFilePath(u"contentCSV/conditionalFormatting.csv");
+        testCondFile(aCSVFileName, pDoc, 2);
+        // test parent cell style import ( fdo#55198 )
+        if ( sFormat == u"Calc Office Open XML" )
+        {
+            pPattern = pDoc->GetPattern(1,1,3);
+            ScStyleSheet* pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
+            // check parent style name
+            OUString sExpected("Excel Built-in Date");
+            OUString sResult = pStyleSheet->GetName();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
+            // check  align of style
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            eHorJustify = rItemSet.Get( ATTR_HOR_JUSTIFY ).GetValue();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
+            // check date format ( should be just month e.g. 29 )
+            sResult =pDoc->GetString( 1,1,3 );
+            sExpected = "29";
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
+
+            // check actual align applied to cell, should be the same as
+            // the style
+            eHorJustify = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
+        }
+    }
+
+    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0,0,2);
+    const ScRangeList& rRange = pCondFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,2,3,0,2)), rRange);
+
+    pCondFormat = pDoc->GetCondFormat(0,1,2);
+    const ScRangeList& rRange2 = pCondFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,1,2,0,1,2)), rRange2);
+
+    pCondFormat = pDoc->GetCondFormat(1,1,2);
+    const ScRangeList& rRange3 = pCondFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,2,3,1,2)), rRange3);
+}
+
 const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
 {
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
@@ -787,18 +901,6 @@ ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 n
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile )
-{
-    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    OUString aPass("test");
-
-    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile, &aPass);
-
-    CPPUNIT_ASSERT(xDocSh.is());
-    return xDocSh;
-}
-
 std::shared_ptr<utl::TempFileNamed> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat, bool bValidate )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
@@ -910,6 +1012,70 @@ void ScSimpleBootstrapFixture::tearDown()
     m_xDocShell.clear();
 
     test::BootstrapFixture::tearDown();
+}
+
+void ScModelTestBase::createScDoc(const char* pName, const char* pPassword)
+{
+    if (!pName)
+        load("private:factory/scalc");
+    else
+        loadFromURL(OUString::createFromAscii(pName), pPassword);
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
+}
+
+ScDocument* ScModelTestBase::getScDoc()
+{
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    return pModelObj->GetDocument();
+}
+
+ScDocShell* ScModelTestBase::getScDocShell()
+{
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    return pDocSh;
+}
+
+void ScModelTestBase::miscRowHeightsTest( TestParam2 const * aTestValues, unsigned int numElems)
+{
+    for ( unsigned int index=0; index<numElems; ++index )
+    {
+        const std::u16string_view sFileName = aTestValues[ index ].sTestDoc;
+        const OUString sExportType =  aTestValues[ index ].sExportType;
+        loadFromURL(sFileName);
+
+        if ( !sExportType.isEmpty() )
+            saveAndReload(sExportType);
+
+        ScDocument* pDoc = getScDoc();
+
+        for (int i=0; i<aTestValues[ index ].nRowData; ++i)
+        {
+            SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
+            SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
+            SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
+            int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
+            if ( nExpectedHeight == -1 )
+                nExpectedHeight = convertTwipToMm100(ScGlobal::GetStandardRowHeight());
+            bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
+            for ( ; nRow <= nEndRow; ++nRow )
+            {
+                SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
+                int nHeight = convertTwipToMm100(pDoc->GetRowHeight(nRow, nTab, false));
+                if ( bCheckOpt )
+                {
+                    bool bOpt = !(pDoc->GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);
+                    CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
+                }
+                CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
+            }
+        }
+    }
 }
 
 std::string to_std_string(const OUString& rStr)

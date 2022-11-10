@@ -14,6 +14,7 @@
 
 #include <cppunit/SourceLine.h>
 
+#include <test/unoapixml_test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -70,7 +71,6 @@ class SdrOle2Obj;
 class ScRangeList;
 class ScTokenArray;
 
-
 // data format for row height tests
 struct TestParam
 {
@@ -86,6 +86,23 @@ struct TestParam
     const char* sTestDoc;
     int nImportType;
     int nExportType; // -1 for import test, otherwise this is an export test
+    int nRowData;
+    RowData const * pData;
+};
+
+struct TestParam2
+{
+    struct RowData
+    {
+        SCROW nStartRow;
+        SCROW nEndRow;
+        SCTAB nTab;
+        int nExpectedHeight; // -1 for default height
+        int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
+        bool bOptimal;
+    };
+    const std::u16string_view sTestDoc;
+    const OUString sExportType; // empty for import test, otherwise this is an export test
     int nRowData;
     RowData const * pData;
 };
@@ -224,7 +241,6 @@ public:
     std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr, const OUString* pPassword = nullptr, bool bClose = true );
 
     ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr );
-    ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFileNamed>* pTempFile = nullptr );
 
     std::shared_ptr<utl::TempFileNamed> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
 
@@ -245,6 +261,20 @@ protected:
     ScDocument* m_pDoc;
 };
 
+class SCQAHELPER_DLLPUBLIC ScModelTestBase : public UnoApiXmlTest
+{
+public:
+    ScModelTestBase(OUString path)
+        : UnoApiXmlTest(path)
+    {
+    }
+
+    void createScDoc(const char* pName = nullptr, const char* pPassword = nullptr);
+    ScDocument* getScDoc();
+    ScDocShell* getScDocShell();
+    void miscRowHeightsTest( TestParam2 const * aTestValues, unsigned int numElems);
+};
+
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \
     CPPUNIT_ASSERT_DOUBLES_EQUAL( (expected), (result), 1e-14 )
 
@@ -258,6 +288,8 @@ SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
     checkFormula(doc, pos, expected, msg, CPPUNIT_SOURCELINE())
 
 SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat);
+
+SCQAHELPER_DLLPUBLIC void testFormats(ScModelTestBase* pTest, ScDocument* pDoc,std::u16string_view sFormat);
 
 SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);
 

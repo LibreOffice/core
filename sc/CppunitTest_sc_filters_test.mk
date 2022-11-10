@@ -24,6 +24,7 @@ endif
 $(eval $(call gb_CppunitTest_use_externals,sc_filters_test, \
 	boost_headers \
 	mdds_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_filters_test, \
