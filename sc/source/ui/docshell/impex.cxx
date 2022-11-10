@@ -1919,7 +1919,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     }
     if ( bMergeSeps )           // skip following delimiters
     {
-        while (!lcl_isFieldEnd( *p, pSeps))
+        while (*p && ScGlobal::UnicodeStrChr( pSeps, *p))
             p++;
     }
     return p;
