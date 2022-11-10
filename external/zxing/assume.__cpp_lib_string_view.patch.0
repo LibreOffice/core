@@ -1,0 +1,25 @@
+--- ./core/src/ByteArray.h	2022-12-05 10:05:07.330193204 +0000
++++ ./core/src/ByteArray.h	2022-12-05 10:05:13.897892011 +0000
+@@ -11,9 +11,7 @@
+ #include <string>
+ #include <vector>
+ 
+-#ifdef __cpp_lib_string_view
+ #include <string_view>
+-#endif
+ 
+ namespace ZXing {
+ 
+@@ -30,12 +28,10 @@
+ 
+ 	void append(const ByteArray& other) { insert(end(), other.begin(), other.end()); }
+ 
+-#ifdef __cpp_lib_string_view
+ 	std::string_view asString(size_t pos = 0, size_t len = std::string_view::npos) const
+ 	{
+ 		return std::string_view(reinterpret_cast<const char*>(data()), size()).substr(pos, len);
+ 	}
+-#endif
+ };
+ 
+ inline std::string ToHex(const ByteArray& bytes)

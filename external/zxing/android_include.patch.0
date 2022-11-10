@@ -1,0 +1,10 @@
+--- core/src/pdf417/PDFEncoder.cpp	2022-12-07 14:21:15.860189207 +0900
++++ core/src/pdf417/PDFEncoder.cpp	2022-12-07 14:21:20.856361002 +0900
+@@ -8,6 +8,7 @@
+ #include "PDFEncoder.h"
+ #include "PDFHighLevelEncoder.h"
+ #include <array>
++#include <cmath>
+ #include <vector>
+ #include <stdexcept>
+ 
