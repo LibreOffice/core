@@ -4797,11 +4797,9 @@ namespace
         return load_icon_from_stream(*xMemStm);
     }
 
-    std::unique_ptr<utl::TempFileNamed> get_icon_stream_as_file(const OUString& rIconName)
+    std::unique_ptr<utl::TempFileNamed> get_icon_stream_as_file_by_name_theme_lang(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
     {
-        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
-        uno::Reference<io::XInputStream> xInputStream = ImageTree::get().getImageXInputStream(rIconName, sIconTheme, sUILang);
+        uno::Reference<io::XInputStream> xInputStream = ImageTree::get().getImageXInputStream(rIconName, rIconTheme, rUILang);
         if (!xInputStream)
             return nullptr;
 
@@ -4821,6 +4819,13 @@ namespace
         xRet->CloseStream();
 
         return xRet;
+    }
+
+    std::unique_ptr<utl::TempFileNamed> get_icon_stream_as_file(const OUString& rIconName)
+    {
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+        return get_icon_stream_as_file_by_name_theme_lang(rIconName, sIconTheme, sUILang);
     }
 }
 
@@ -5040,13 +5045,44 @@ namespace
     }
 #endif
 
+    GtkWidget* image_new_from_xgraphic(const css::uno::Reference<css::graphic::XGraphic>& rIcon, bool bMirror)
+    {
+        GtkWidget* pImage = nullptr;
+        if (auto xTempFile = getImageFile(rIcon, bMirror))
+            pImage = gtk_image_new_from_file(OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        return pImage;
+    }
+
+    GtkWidget* image_new_from_icon_name(const OUString& rIconName)
+    {
+        GtkWidget* pImage = nullptr;
+        if (auto xTempFile = get_icon_stream_as_file(rIconName))
+            pImage = gtk_image_new_from_file(OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        return pImage;
+    }
+
+    GtkWidget* image_new_from_icon_name_theme_lang(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        GtkWidget* pImage = nullptr;
+        if (auto xTempFile = get_icon_stream_as_file_by_name_theme_lang(rIconName, rIconTheme, rUILang))
+            pImage = gtk_image_new_from_file(OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        return pImage;
+    }
+
     void image_set_from_icon_name(GtkImage* pImage, const OUString& rIconName)
     {
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-        gtk_image_set_from_pixbuf(pImage, pixbuf);
-        if (!pixbuf)
-            return;
-        g_object_unref(pixbuf);
+        if (auto xTempFile = get_icon_stream_as_file(rIconName))
+            gtk_image_set_from_file(pImage, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        else
+            gtk_image_set_from_pixbuf(pImage, nullptr);
+    }
+
+    void image_set_from_icon_name_theme_lang(GtkImage* pImage, const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        if (auto xTempFile = get_icon_stream_as_file_by_name_theme_lang(rIconName, rIconTheme, rUILang))
+            gtk_image_set_from_file(pImage, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        else
+            gtk_image_set_from_pixbuf(pImage, nullptr);
     }
 
     void image_set_from_virtual_device(GtkImage* pImage, const VirtualDevice* pDevice)
@@ -5060,19 +5096,27 @@ namespace
 
     void image_set_from_xgraphic(GtkImage* pImage, const css::uno::Reference<css::graphic::XGraphic>& rImage)
     {
-        GdkPixbuf* pixbuf = getPixbuf(rImage);
-        gtk_image_set_from_pixbuf(pImage, pixbuf);
-        if (pixbuf)
-            g_object_unref(pixbuf);
+        if (auto xTempFile = getImageFile(rImage, false))
+            gtk_image_set_from_file(pImage, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        else
+            gtk_image_set_from_pixbuf(pImage, nullptr);
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     void picture_set_from_icon_name(GtkPicture* pPicture, const OUString& rIconName)
     {
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-        gtk_picture_set_pixbuf(pPicture, pixbuf);
-        if (pixbuf)
-            g_object_unref(pixbuf);
+        if (auto xTempFile = get_icon_stream_as_file(rIconName))
+            gtk_picture_set_filename(pPicture, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        else
+            gtk_picture_set_pixbuf(pPicture, nullptr);
+    }
+
+    void picture_set_from_icon_name_theme_lang(GtkPicture* pPicture, const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        if (auto xTempFile = get_icon_stream_as_file_by_name_theme_lang(rIconName, rIconTheme, rUILang))
+            gtk_picture_set_filename(pPicture, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        else
+            gtk_picture_set_pixbuf(pPicture, nullptr);
     }
 
     void picture_set_from_virtual_device(GtkPicture* pPicture, const VirtualDevice* pDevice)
@@ -5085,10 +5129,10 @@ namespace
 
     void picture_set_from_xgraphic(GtkPicture* pPicture, const css::uno::Reference<css::graphic::XGraphic>& rPicture)
     {
-        GdkPixbuf* pixbuf = getPixbuf(rPicture);
-        gtk_picture_set_pixbuf(pPicture, pixbuf);
-        if (pixbuf)
-            g_object_unref(pixbuf);
+        if (auto xTempFile = getImageFile(rPicture, false))
+            gtk_picture_set_filename(pPicture, OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        else
+            gtk_picture_set_pixbuf(pPicture, nullptr);
     }
 #endif
 
@@ -5101,15 +5145,7 @@ namespace
             return;
         }
 
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
-        GtkWidget* pImage;
-        if (!pixbuf)
-            pImage = nullptr;
-        else
-        {
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
-        }
+        GtkWidget* pImage = image_new_from_icon_name(rIconName);
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_button_set_child(pButton, pImage);
 #else
@@ -5140,15 +5176,7 @@ namespace
             return;
         }
 
-        GdkPixbuf* pixbuf = getPixbuf(rImage);
-        GtkWidget* pImage;
-        if (!pixbuf)
-            pImage = nullptr;
-        else
-        {
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
-        }
+        GtkWidget* pImage = image_new_from_xgraphic(rImage, false);
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_button_set_child(pButton, pImage);
 #else
@@ -5424,14 +5452,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pImage = nullptr;
         if (pIconName && !pIconName->isEmpty())
-        {
-            GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
-            if (!pixbuf)
-            {
-                pImage = gtk_image_new_from_pixbuf(pixbuf);
-                g_object_unref(pixbuf);
-            }
-        }
+            pImage = image_new_from_icon_name(*pIconName);
         else if (pImageSurface)
             pImage = image_new_from_virtual_device(*pImageSurface);
 
@@ -11505,24 +11526,14 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pImage = nullptr;
         if (pIconName)
-        {
-            if (GdkPixbuf* pixbuf = load_icon_by_name(*pIconName))
-            {
-                pImage = gtk_image_new_from_pixbuf(pixbuf);
-                g_object_unref(pixbuf);
-            }
-        }
+            pImage = image_new_from_icon_name(*pIconName);
         else if (pImageSurface)
         {
             pImage = image_new_from_virtual_device(*pImageSurface);
         }
         else if (rGraphic)
         {
-            if (GdkPixbuf* pixbuf = getPixbuf(rGraphic))
-            {
-                pImage = gtk_image_new_from_pixbuf(pixbuf);
-                g_object_unref(pixbuf);
-            }
+            pImage = image_new_from_xgraphic(rGraphic, false);
         }
 
         GtkWidget *pItem;
@@ -11892,14 +11903,9 @@ private:
     static void set_item_image(GtkWidget* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon, bool bMirror)
 #endif
     {
-        GtkWidget* pImage = nullptr;
-
-        if (auto xTempFile = getImageFile(rIcon, bMirror))
-        {
-            pImage = gtk_image_new_from_file(OUStringToOString(xTempFile->GetFileName(), osl_getThreadTextEncoding()).getStr());
+        GtkWidget* pImage = image_new_from_xgraphic(rIcon, bMirror);
+        if (pImage)
             gtk_widget_show(pImage);
-        }
-
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_tool_button_set_icon_widget(pItem, pImage);
 #else
@@ -12249,14 +12255,9 @@ public:
             return;
 #endif
 
-        GtkWidget* pImage = nullptr;
-
-        if (GdkPixbuf* pixbuf = getPixbuf(rIconName))
-        {
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
+        GtkWidget* pImage = image_new_from_icon_name(rIconName);
+        if (pImage)
             gtk_widget_show(pImage);
-        }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
@@ -23360,13 +23361,7 @@ private:
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 if (!IsAllowedBuiltInIcon(aIconName))
-                {
-                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
-                    {
-                        gtk_image_set_from_pixbuf(pImage, pixbuf);
-                        g_object_unref(pixbuf);
-                    }
-                }
+                    image_set_from_icon_name_theme_lang(pImage, aIconName, m_aIconTheme, m_aUILang);
             }
         }
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -23380,11 +23375,7 @@ private:
                 g_free(icon_name);
                 assert(aIconName.startsWith("private:///graphicrepository/"));
                 aIconName.startsWith("private:///graphicrepository/", &aIconName);
-                if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
-                {
-                    gtk_picture_set_pixbuf(GTK_PICTURE(pWidget), pixbuf);
-                    g_object_unref(pixbuf);
-                }
+                picture_set_from_icon_name_theme_lang(GTK_PICTURE(pWidget), aIconName, m_aIconTheme, m_aUILang);
             }
         }
 #endif
@@ -23397,10 +23388,8 @@ private:
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 if (!IsAllowedBuiltInIcon(aIconName))
                 {
-                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    if (GtkWidget* pImage = image_new_from_icon_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
                     {
-                        GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
-                        g_object_unref(pixbuf);
                         gtk_tool_button_set_icon_widget(pToolButton, pImage);
                         gtk_widget_show(pImage);
                     }
@@ -23423,12 +23412,10 @@ private:
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 if (!IsAllowedBuiltInIcon(aIconName))
                 {
-                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    if (GtkWidget* pImage = image_new_from_icon_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
                     {
-                        GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
                         gtk_widget_set_halign(pImage, GTK_ALIGN_CENTER);
                         gtk_widget_set_valign(pImage, GTK_ALIGN_CENTER);
-                        g_object_unref(pixbuf);
                         gtk_button_set_child(pButton, pImage);
                         gtk_widget_show(pImage);
                     }
@@ -23443,12 +23430,10 @@ private:
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 if (!IsAllowedBuiltInIcon(aIconName))
                 {
-                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    if (GtkWidget* pImage = image_new_from_icon_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
                     {
-                        GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
                         gtk_widget_set_halign(pImage, GTK_ALIGN_CENTER);
                         gtk_widget_set_valign(pImage, GTK_ALIGN_CENTER);
-                        g_object_unref(pixbuf);
                         // TODO after gtk 4.6 is released require that version and drop this
                         static auto menu_button_set_child = reinterpret_cast<void (*) (GtkMenuButton*, GtkWidget*)>(dlsym(nullptr, "gtk_menu_button_set_child"));
                         if (menu_button_set_child)
