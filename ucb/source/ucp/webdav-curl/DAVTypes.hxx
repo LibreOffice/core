@@ -191,8 +191,8 @@ namespace http_dav_ucp
         css::uno::Any const       value;
 
         ProppatchValue( const ProppatchOperation o,
-                        const OUString n,
-                        const css::uno::Any v )
+                        OUString n,
+                        css::uno::Any v )
             : operation( o ), name( std::move(n) ), value( std::move(v) ) {}
     };
 } // namespace http_dav_ucp
