@@ -156,7 +156,8 @@ public:
 };
 
 /// UNO wrapper around SwContentControlManager.
-class SwXContentControls final : public SwSimpleIndexAccessBaseClass, public SwUnoCollection
+class SwXContentControls final : public cppu::WeakImplHelper<css::container::XIndexAccess>,
+                                 public SwUnoCollection
 {
     ~SwXContentControls() override;
 
@@ -170,11 +171,6 @@ public:
     // XElementAccess
     css::uno::Type SAL_CALL getElementType() override;
     sal_Bool SAL_CALL hasElements() override;
-
-    // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

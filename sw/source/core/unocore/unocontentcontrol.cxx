@@ -1359,16 +1359,4 @@ sal_Bool SwXContentControls::hasElements()
     return !GetDoc()->GetContentControlManager().IsEmpty();
 }
 
-OUString SwXContentControls::getImplementationName() { return "SwXContentControls"; }
-
-sal_Bool SwXContentControls::supportsService(const OUString& rServiceName)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence<OUString> SwXContentControls::getSupportedServiceNames()
-{
-    return { "com.sun.star.text.ContentControls" };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
